@@ -57,7 +57,7 @@ def import_ontos(onto) -> None:
 
 def usd_to_owl(onto_file : str, usd_file: str) -> None:
     rospack = rospkg.RosPack()
-    upper_onto_path = rospack.get_path('mujoco_sim') + '/model/owl/'
+    upper_onto_path = os.path.dirname(onto_file)
     onto_path.append(upper_onto_path)
 
     for file in os.listdir(upper_onto_path):

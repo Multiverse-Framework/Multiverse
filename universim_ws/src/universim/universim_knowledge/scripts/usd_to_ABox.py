@@ -115,14 +115,12 @@ def import_ontos(onto) -> None:
     return None
 
 
-def usd_to_owl(usd_file : str, onto_file : str) -> None:
+def usd_to_owl(in_usd_file : str, in_onto_file : str, out_onto_file: str) -> None:
     rospack = rospkg.RosPack()
 
-    onto_path.append(rospack.get_path('mujoco_sim') + '/model/owl/')
+    onto_path.append(os.path.dirname(in_onto_file))
 
-    save_path = os.path.splitext(os.path.basename(usd_file))[0]
-    save_path = os.path.join(os.path.dirname(usd_file), save_path)
-    save_path += '.owl'
+    save_path = out_onto_file
     ABox_onto = get_ontology('file://' + save_path)
 
     dul_onto = get_ontology('http://www.ontologydesignpatterns.org/ont/dul/DUL.owl')
@@ -132,7 +130,7 @@ def usd_to_owl(usd_file : str, onto_file : str) -> None:
     usd_onto = get_ontology('https://ease-crc.org/ont/USD.owl')
     onto_map[usd_onto.base_iri] = usd_onto
 
-    TBox_onto = get_ontology('file://' + onto_file)
+    TBox_onto = get_ontology('file://' + in_onto_file)
     TBox_onto.load()
     onto_map[TBox_onto.base_iri] = TBox_onto
 
@@ -142,7 +140,7 @@ def usd_to_owl(usd_file : str, onto_file : str) -> None:
 
     prim_dict = dict()
 
-    stage = Usd.Stage.Open(usd_file)
+    stage = Usd.Stage.Open(in_usd_file)
     with ABox_onto:
         for prim in stage.Traverse():
             prim_inst = usd_onto.Prim(prim.GetName(), namespace=usd_onto)
@@ -373,16 +371,16 @@ def usd_to_owl(usd_file : str, onto_file : str) -> None:
                 prim_inst.hasQuality.append(jointValue_inst)
                 jointValue_inst.hasJointValue = [float64(0.5)]
 
-    print(f'Save usd stage that represents {onto_file} to {save_path}')
+    print(f'Save usd stage that represents {in_onto_file} to {save_path}')
     ABox_onto.save(save_path)
 
     return None
 
 
 if __name__ == '__main__':
-    if len(sys.argv) >= 3:
-        (usd_file, onto_file) = (sys.argv[1], sys.argv[2])
+    if len(sys.argv) >= 4:
+        (in_usd_file, in_onto_file, out_onto_file) = (sys.argv[1], sys.argv[2] , sys.argv[3])
     else:
-        print('Usage: in_usd.usda in_onto.owl')
+        print('Usage: in_usd.usda in_onto.owl out_onto.owl')
         sys.exit(1)
-    usd_to_owl(usd_file, onto_file)
+    usd_to_owl(in_usd_file, in_onto_file, out_onto_file)

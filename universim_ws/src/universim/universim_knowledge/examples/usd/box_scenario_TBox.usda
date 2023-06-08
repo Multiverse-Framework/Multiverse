@@ -1,5 +1,377 @@
 #usda 1.0
 
+class "_class_boxscenarioTBox_namespace" (
+    prepend apiSchemas = ["RdfAPI"]
+)
+{
+    string rdf:namespace = "https://ease-crc.org/ont/usd/box_scenario_TBox.owl#"
+}
+
+def "boxscenarioTBox"
+{
+    class "_class_Box" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Box"
+    }
+
+    class "_class_Openability" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Openability"
+    }
+
+    class "_class_Closed" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Closed"
+    }
+
+    class "_class_Opened" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Opened"
+    }
+
+    class "_class_ClosedBox" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "ClosedBox"
+    }
+
+    class "_class_Corpus" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Corpus"
+    }
+
+    class "_class_Flap" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Flap"
+    }
+
+    class "_class_OpenedBox" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "OpenedBox"
+    }
+
+    class "_class_Table" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Table"
+    }
+
+    class "_class_Cat" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Cat"
+    }
+}
+
+class "_class_USD_namespace" (
+    prepend apiSchemas = ["RdfAPI"]
+)
+{
+    string rdf:namespace = "https://ease-crc.org/ont/USD.owl#"
+}
+
+def "USD"
+{
+    class "_class_Joint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "Joint"
+    }
+
+    class "_class_Prim" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "Prim"
+    }
+
+    class "_class_APISchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "APISchema"
+    }
+
+    class "_class_Color" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "Color"
+    }
+
+    class "_class_Scene" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "Scene"
+    }
+
+    class "_class_Physics" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "Physics"
+    }
+
+    class "_class_Schema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "Schema"
+    }
+
+    class "_class_Shape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "Shape"
+    }
+
+    class "_class_TypedSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "TypedSchema"
+    }
+
+    class "_class_JointState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "JointState"
+    }
+
+    class "_class_BoundableSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "BoundableSchema"
+    }
+
+    class "_class_XformableSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "XformableSchema"
+    }
+
+    class "_class_CollisionAPI" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "CollisionAPI"
+    }
+
+    class "_class_CubeSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "CubeSchema"
+    }
+
+    class "_class_GprimSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "GprimSchema"
+    }
+
+    class "_class_CubeShape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "CubeShape"
+    }
+
+    class "_class_CylinderSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "CylinderSchema"
+    }
+
+    class "_class_CylinderShape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "CylinderShape"
+    }
+
+    class "_class_WithDisplayColor" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "WithDisplayColor"
+    }
+
+    class "_class_MassAPI" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "MassAPI"
+    }
+
+    class "_class_PhysicsJointSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicsJointSchema"
+    }
+
+    class "_class_WithJointPhysics" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "WithJointPhysics"
+    }
+
+    class "_class_PhysicsPrismaticJointSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicsPrismaticJointSchema"
+    }
+
+    class "_class_PrismaticJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "PrismaticJoint"
+    }
+
+    class "_class_WithJointLimits" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "WithJointLimits"
+    }
+
+    class "_class_PhysicsRevoluteJointSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicsRevoluteJointSchema"
+    }
+
+    class "_class_RevoluteJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "RevoluteJoint"
+    }
+
+    class "_class_PhysicsSceneSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicsSceneSchema"
+    }
+
+    class "_class_RigidBodyAPI" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "RigidBodyAPI"
+    }
+
+    class "_class_SphereSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "SphereSchema"
+    }
+
+    class "_class_SphereShape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "SphereShape"
+    }
+
+    class "_class_Stage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "Stage"
+    }
+
+    class "_class_WithXform" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "WithXform"
+    }
+
+    class "_class_XformSchema" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_USD_namespace>
+    )
+    {
+        string rdf:conceptName = "XformSchema"
+    }
+}
+
 class "_class_owl_namespace" (
     prepend apiSchemas = ["RdfAPI"]
 )
@@ -649,378 +1021,6 @@ def "DUL"
     )
     {
         string rdf:conceptName = "WorkflowExecution"
-    }
-}
-
-class "_class_USD_namespace" (
-    prepend apiSchemas = ["RdfAPI"]
-)
-{
-    string rdf:namespace = "https://ease-crc.org/ont/USD.owl#"
-}
-
-def "USD"
-{
-    class "_class_Joint" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "Joint"
-    }
-
-    class "_class_Prim" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "Prim"
-    }
-
-    class "_class_APISchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "APISchema"
-    }
-
-    class "_class_Color" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "Color"
-    }
-
-    class "_class_Scene" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "Scene"
-    }
-
-    class "_class_Physics" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "Physics"
-    }
-
-    class "_class_Schema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "Schema"
-    }
-
-    class "_class_Shape" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "Shape"
-    }
-
-    class "_class_TypedSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "TypedSchema"
-    }
-
-    class "_class_JointState" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "JointState"
-    }
-
-    class "_class_BoundableSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "BoundableSchema"
-    }
-
-    class "_class_XformableSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "XformableSchema"
-    }
-
-    class "_class_CollisionAPI" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "CollisionAPI"
-    }
-
-    class "_class_CubeSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "CubeSchema"
-    }
-
-    class "_class_GprimSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "GprimSchema"
-    }
-
-    class "_class_CubeShape" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "CubeShape"
-    }
-
-    class "_class_CylinderSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "CylinderSchema"
-    }
-
-    class "_class_CylinderShape" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "CylinderShape"
-    }
-
-    class "_class_WithDisplayColor" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "WithDisplayColor"
-    }
-
-    class "_class_MassAPI" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "MassAPI"
-    }
-
-    class "_class_PhysicsJointSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicsJointSchema"
-    }
-
-    class "_class_WithJointPhysics" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "WithJointPhysics"
-    }
-
-    class "_class_PhysicsPrismaticJointSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicsPrismaticJointSchema"
-    }
-
-    class "_class_PrismaticJoint" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "PrismaticJoint"
-    }
-
-    class "_class_WithJointLimits" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "WithJointLimits"
-    }
-
-    class "_class_PhysicsRevoluteJointSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicsRevoluteJointSchema"
-    }
-
-    class "_class_RevoluteJoint" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "RevoluteJoint"
-    }
-
-    class "_class_PhysicsSceneSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicsSceneSchema"
-    }
-
-    class "_class_RigidBodyAPI" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "RigidBodyAPI"
-    }
-
-    class "_class_SphereSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "SphereSchema"
-    }
-
-    class "_class_SphereShape" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "SphereShape"
-    }
-
-    class "_class_Stage" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "Stage"
-    }
-
-    class "_class_WithXform" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "WithXform"
-    }
-
-    class "_class_XformSchema" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_USD_namespace>
-    )
-    {
-        string rdf:conceptName = "XformSchema"
-    }
-}
-
-class "_class_boxscenarioTBox_namespace" (
-    prepend apiSchemas = ["RdfAPI"]
-)
-{
-    string rdf:namespace = "https://ease-crc.org/ont/usd/box_scenario_TBox.owl#"
-}
-
-def "boxscenarioTBox"
-{
-    class "_class_Box" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Box"
-    }
-
-    class "_class_Openability" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Openability"
-    }
-
-    class "_class_Closed" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Closed"
-    }
-
-    class "_class_Opened" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Opened"
-    }
-
-    class "_class_ClosedBox" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "ClosedBox"
-    }
-
-    class "_class_Corpus" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Corpus"
-    }
-
-    class "_class_Flap" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Flap"
-    }
-
-    class "_class_OpenedBox" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "OpenedBox"
-    }
-
-    class "_class_Table" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Table"
-    }
-
-    class "_class_Cat" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Cat"
     }
 }
 
