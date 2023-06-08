@@ -3,12 +3,9 @@
 import os
 import sys
 import xml.etree.ElementTree as ET
-import csv
-from math import degrees
 import numpy
 import rospy
-from std_srvs.srv import Trigger, TriggerResponse
-from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
+from pxr import Usd, UsdGeom, Sdf, Gf
 import mujoco
 
 
@@ -38,6 +35,7 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
             mesh_dir = os.path.dirname(mesh_dir) + '/usd'
             xml_mesh_dict[mesh_name] = os.path.join(
                 usd_dir, mesh_dir, mesh_file)
+            xml_mesh_dict[mesh_name] = os.path.relpath(xml_mesh_dict[mesh_name], usd_dir)
 
     mj_model = mujoco.MjModel.from_xml_path(xml_path)
     mj_data = mujoco.MjData(mj_model)
@@ -101,7 +99,7 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
     body_path = root_path
     body_paths = {}
     body_paths[0] = body_path
-    for body_id, body_element in enumerate(xml_tree.iter('body')):
+    for body_id, _ in enumerate(xml_tree.iter('body')):
         body_id += 1
         body = mj_model.body(body_id)
         if body_id != 0:

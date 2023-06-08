@@ -7,7 +7,6 @@ import csv
 from math import degrees
 import numpy
 import rospy
-from std_srvs.srv import Trigger, TriggerResponse
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 import mujoco
 
@@ -64,6 +63,7 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
             mesh_dir = os.path.dirname(mesh_dir) + '/usd'
             xml_mesh_dict[mesh_name] = os.path.join(
                 usd_dir, mesh_dir, mesh_file)
+            xml_mesh_dict[mesh_name] = os.path.relpath(xml_mesh_dict[mesh_name], usd_dir)
 
     for body_id, xml_body in enumerate(xml_root.findall('body')):
         xml_body_gravcomp_dict[body_id] = float(

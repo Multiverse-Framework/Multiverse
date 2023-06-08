@@ -58,7 +58,7 @@ def Xform "world"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Mesh "geom_6" (
-                prepend references = @/home/giangnguyen/UniverSim/universim_ws/src/universim/universim_parser/examples/mjcf_to_usd/usd/box/usd/BoxFlap1.usda@
+                prepend references = @box/usd/BoxFlap1.usda@
             )
             {
                 color3f[] primvars:displayColor = [(1, 0.8, 0)]
@@ -74,7 +74,7 @@ def Xform "world"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Mesh "geom_7" (
-                prepend references = @/home/giangnguyen/UniverSim/universim_ws/src/universim/universim_parser/examples/mjcf_to_usd/usd/box/usd/BoxFlap2.usda@
+                prepend references = @box/usd/BoxFlap2.usda@
             )
             {
                 color3f[] primvars:displayColor = [(1, 0.8, 0)]
@@ -91,7 +91,7 @@ def Xform "world"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_8" (
-            prepend references = @/home/giangnguyen/UniverSim/universim_ws/src/universim/universim_parser/examples/mjcf_to_usd/usd/cat/usd/cat.usda@
+            prepend references = @cat/usd/cat.usda@
         )
         {
             color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
