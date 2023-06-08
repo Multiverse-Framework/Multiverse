@@ -1,0 +1,19 @@
+<launch>
+
+  <arg name="screen" default="box_scenario" />
+
+  <arg name="ABox_usda" default="$(find universim_knowledge)/examples/usd/$(arg screen)_ABox.usda" />
+
+  <arg name="TBox_usda" default="$(find universim_knowledge)/examples/usd/$(arg screen)_TBox.usda" />
+
+  <node name="auto_sem_tag" pkg="universim_knowledge"
+    type="auto_sem_tag.py" output="screen"
+    args="$(arg ABox_usda) $(arg TBox_usda)"
+    launch-prefix="bash -c 'sleep 0; $0 $@' " />
+
+  <node name="usd_to_ABox" pkg="universim_knowledge"
+    type="usd_to_ABox.py" output="screen"
+    args="$(arg ABox_usda) $(arg TBox_usda)"
+    launch-prefix="bash -c 'sleep 1; $0 $@' " />
+
+</launch>

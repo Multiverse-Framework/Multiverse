@@ -1,0 +1,42 @@
+<mujoco model="MuJoCo Model">
+    <compiler angle="radian" autolimits="true" boundmass="0.000001" boundinertia="0.000001"/>
+    <option timestep="0.005" integrator="RK4" noslip_iterations="5">
+        <flag energy="enable"/>
+    </option>
+    <asset>
+        <texture type="2d" name="cat" file="cat/obj/cat.png"/>
+        <texture type="2d" name="grid" builtin="checker" rgb1="0.1 0.2 0.3" rgb2="0.2 0.3 0.4" width="512" height="512"/>
+        <material name="cat" texture="cat"/>
+        <material name="grid" texture="grid" texuniform="true" reflectance="0.2"/>
+        <mesh name="BoxFlap1" file="box/stl/BoxFlap1.stl"/>
+        <mesh name="BoxFlap2" file="box/stl/BoxFlap2.stl"/>
+        <mesh name="cat_0" file="cat/obj/cat.obj" scale="0.005 0.005 0.005"/>
+    </asset>
+    <worldbody>
+        <geom name="floor" size="0 0 0.05" type="plane" condim="4" friction="2 0.05 0.01" material="grid"/>
+        <light pos="0 0 5" dir="0 0 -1" diffuse="0.5 0.5 0.5"/>
+        <body name="box" pos="0 0 0.17" gravcomp="1">
+            <geom size="0.17 0.16 0.0025" pos="0 0 -0.1675" type="box" rgba="1 0.8 0 1"/>
+            <geom size="0.002578 0.16 0.1675" pos="0.167578 0 -0.0025" type="box" rgba="1 0.8 0 1"/>
+            <geom size="0.002578 0.16 0.1675" pos="-0.167578 0 -0.0025" type="box" rgba="1 0.8 0 1"/>
+            <geom size="0.170156 0.0025 0.1675" pos="0 0.1575 -0.0025" type="box" rgba="1 0.8 0 1"/>
+            <geom size="0.170156 0.0025 0.1675" pos="0 -0.1575 -0.0025" type="box" rgba="1 0.8 0 1"/>
+            <body name="box_flap_1" pos="0.17 0 0.166" gravcomp="1">
+                <joint name="box_flap_1_joint" pos="0 0 0" axis="0 1 0" range="-1.57 4.7"/>
+                <geom type="mesh" rgba="1 0.8 0 1" mesh="BoxFlap1"/>
+            </body>
+            <body name="box_flap_2" pos="-0.17 0 0.168" gravcomp="1">
+                <joint name="box_flap_2_joint" pos="0 0 0" axis="0 -1 0" range="-1.57 4.7"/>
+                <geom type="mesh" rgba="1 0.8 0 1" mesh="BoxFlap2"/>
+            </body>
+        </body>
+        <body name="cat" pos="-0.09594 0.193951 0.5">
+            <joint type="free"/>
+            <geom type="mesh" material="cat" mesh="cat_0"/>
+        </body>
+    </worldbody>
+    <contact>
+        <exclude body1="box" body2="box_flap_1"/>
+        <exclude body1="box" body2="box_flap_2"/>
+    </contact>
+</mujoco>

@@ -1,0 +1,104 @@
+#usda 1.0
+(
+    defaultPrim = "world"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "world"
+{
+    def Xform "box"
+    {
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0.17, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Cube "geom_1"
+        {
+            color3f[] primvars:displayColor = [(1, 0.8, 0)]
+            float[] primvars:displayOpacity = [1]
+            matrix4d xformOp:transform = ( (0.17, 0, 0, 0), (0, 0.16, 0, 0), (0, 0, 0.0025, 0), (0, 0, -0.1675, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+        }
+
+        def Cube "geom_2"
+        {
+            color3f[] primvars:displayColor = [(1, 0.8, 0)]
+            float[] primvars:displayOpacity = [1]
+            matrix4d xformOp:transform = ( (0.002578, 0, 0, 0), (0, 0.16, 0, 0), (0, 0, 0.1675, 0), (0.167578, 0, -0.0025, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+        }
+
+        def Cube "geom_3"
+        {
+            color3f[] primvars:displayColor = [(1, 0.8, 0)]
+            float[] primvars:displayOpacity = [1]
+            matrix4d xformOp:transform = ( (0.002578, 0, 0, 0), (0, 0.16, 0, 0), (0, 0, 0.1675, 0), (-0.167578, 0, -0.0025, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+        }
+
+        def Cube "geom_4"
+        {
+            color3f[] primvars:displayColor = [(1, 0.8, 0)]
+            float[] primvars:displayOpacity = [1]
+            matrix4d xformOp:transform = ( (0.170156, 0, 0, 0), (0, 0.0025, 0, 0), (0, 0, 0.1675, 0), (0, 0.1575, -0.0025, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+        }
+
+        def Cube "geom_5"
+        {
+            color3f[] primvars:displayColor = [(1, 0.8, 0)]
+            float[] primvars:displayOpacity = [1]
+            matrix4d xformOp:transform = ( (0.170156, 0, 0, 0), (0, 0.0025, 0, 0), (0, 0, 0.1675, 0), (0, -0.1575, -0.0025, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+        }
+
+        def Xform "box_flap_1"
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0.17, 0, 0.166, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            def Mesh "geom_6" (
+                prepend references = @/home/giangnguyen/UniverSim/universim_ws/src/universim/universim_parser/examples/mjcf_to_usd/usd/box/usd/BoxFlap1.usda@
+            )
+            {
+                color3f[] primvars:displayColor = [(1, 0.8, 0)]
+                float[] primvars:displayOpacity = [1]
+                matrix4d xformOp:transform = ( (-2.220446049250313e-16, 0, 1.0000000000000002, 0), (0, -1.0000000000000004, 0, 0), (1.0000000000000002, 0, -2.220446049250313e-16, 0), (-0.1700000072951671, -1.5240807574521301e-9, -3.3097549890378998e-9, 1) )
+                uniform token[] xformOpOrder = ["xformOp:transform"]
+            }
+        }
+
+        def Xform "box_flap_2"
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-0.17, 0, 0.168, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            def Mesh "geom_7" (
+                prepend references = @/home/giangnguyen/UniverSim/universim_ws/src/universim/universim_parser/examples/mjcf_to_usd/usd/box/usd/BoxFlap2.usda@
+            )
+            {
+                color3f[] primvars:displayColor = [(1, 0.8, 0)]
+                float[] primvars:displayOpacity = [1]
+                matrix4d xformOp:transform = ( (-2.220446049250313e-16, 0, 1.0000000000000002, 0), (0, -1.0000000000000004, 0, 0), (1.0000000000000002, 0, -2.220446049250313e-16, 0), (0.17000000947241017, -3.853585327311238e-10, -1.7394634132564953e-12, 1) )
+                uniform token[] xformOpOrder = ["xformOp:transform"]
+            }
+        }
+    }
+
+    def Xform "cat"
+    {
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-0.09594, 0.193951, 0.5, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Mesh "geom_8" (
+            prepend references = @/home/giangnguyen/UniverSim/universim_ws/src/universim/universim_parser/examples/mjcf_to_usd/usd/cat/usd/cat.usda@
+        )
+        {
+            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
+            float[] primvars:displayOpacity = [1]
+            matrix4d xformOp:transform = ( (0.9999999999934279, -0.000003400104312257195, 0.0000012583493548569828, 0), (2.117582368135751e-22, 0.3470842744659124, 0.9378339439466196, 0), (-0.0000036254865098492593, -0.937833943940456, 0.3470842744636313, 0), (1.1589759504366095e-7, -0.0030464363770440228, 0.09314732677864689, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+        }
+    }
+}
+
