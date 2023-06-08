@@ -1,0 +1,5 @@
+float64 time_since_epoch
+string object_name
+string data_name
+int32 data_length
+bool is_available

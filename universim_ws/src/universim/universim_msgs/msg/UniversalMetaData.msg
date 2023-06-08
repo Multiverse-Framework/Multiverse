@@ -1,5 +1,4 @@
 string simulator
-string timeUnit
-string[] name
-universim_msgs/SendMetaData send
-universim_msgs/ReceiveMetaData receive
+string time_unit
+universim_msgs/MetaData[] send
+universim_msgs/MetaData[] receive
