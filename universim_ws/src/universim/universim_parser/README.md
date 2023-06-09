@@ -4,7 +4,7 @@ This package provides support for converting various scene descriptions to USD f
 
 ## Usage
 
-From MJCF to USD:
+### From MJCF to USD
 
 No physics, only visual
 
