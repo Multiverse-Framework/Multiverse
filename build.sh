@@ -1,5 +1,8 @@
 #!/usr/bin/env sh
 
+# Update the submodules to make sure everything is there
+git submodule update --init
+
 # Specify the folder path to create
 BUILD_PATH="build"
 
@@ -15,3 +18,6 @@ else
 fi
 
 python3 src/USD/build_scripts/build_usd.py $USD_BUILD_PATH
+
+# Build the workspace
+cd universim_ws && source /opt/ros/$ROS_DISTRO/setup.sh && catkin build
