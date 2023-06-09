@@ -3,6 +3,8 @@
 # Update the submodules to make sure everything is there
 git submodule update --init
 
+pip3 install pyside6 pyopengl mujoco wheel Cython owlready2 
+
 # Specify the folder path to create
 BUILD_PATH="build"
 
