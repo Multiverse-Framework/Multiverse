@@ -3,6 +3,15 @@
 # Update package lists
 apt update
 
+# Install ROS
+sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+apt install curl # if you haven't already installed curl
+curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+apt install ros-noetic-desktop-full
+
+# Update package lists
+apt update
+
 # Install python3-pip
 apt install -y python3-pip
 
@@ -11,6 +20,9 @@ apt install -y python3-dev
 
 # Install python3-catkin-tools
 apt install -y python3-catkin-tools
+
+# Install python3-rosdep
+apt install -y python3-rosdep
 
 # Install libglfw3
 apt install -y libglfw3
@@ -21,10 +33,25 @@ apt install -y libglfw3-dev
 # Install doxygen
 apt install -y doxygen
 
-# Install git
-apt install -y git
-
 # Install additional packages
 apt install -y libgl1-mesa-dev
 apt install -y libglu1-mesa-dev
 apt install -y libxt-dev
+
+# Install PySide6
+pip3 install pyside6
+
+# Install PyOpenGL
+pip3 install pyopengl
+
+# Install MuJoCo
+pip3 install mujoco-py
+
+# Install wheel
+pip3 install wheel
+
+# Install Cython
+pip3 install cython
+
+# Install owlready2
+pip3 install owlready2

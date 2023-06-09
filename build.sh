@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
+cd $(dirname $0)
+
 # Update the submodules to make sure everything is there
 git submodule update --init
-
-pip3 install pyside6 pyopengl mujoco wheel Cython owlready2 
 
 # Specify the folder path to create
 BUILD_PATH="build"
@@ -22,4 +22,5 @@ fi
 python3 src/USD/build_scripts/build_usd.py $USD_BUILD_PATH
 
 # Build the workspace
-# cd universim_ws && . /opt/ros/$ROS_DISTRO/setup.sh && catkin build
+rosdep init
+(cd universim_ws; . /opt/ros/noetic/setup.sh; catkin build)
