@@ -20,4 +20,4 @@ fi
 python3 src/USD/build_scripts/build_usd.py $USD_BUILD_PATH
 
 # Build the workspace
-cd universim_ws && . /opt/ros/$ROS_DISTRO/setup.sh && catkin build
+# cd universim_ws && . /opt/ros/$ROS_DISTRO/setup.sh && catkin build
