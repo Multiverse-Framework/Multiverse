@@ -17,5 +17,5 @@ jobs:
       with:
         ros-version: 'noetic'
         build-tool: 'catkin_tools'
-        workspace: '$GITHUB_WORKSPACE'
-    - run: cd universim_ws && catkin build
+        workspace: $GITHUB_WORKSPACE/universim_ws
+    - run: catkin build
