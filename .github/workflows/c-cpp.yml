@@ -13,4 +13,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - run: ./build.sh
+
+    - name: Run install.sh
+      run: |
+          chmod +x install.sh
+          ./install.sh
+
+    - name: Run build.sh
+      run: |
+          chmod +x build.sh
+          ./build.sh
