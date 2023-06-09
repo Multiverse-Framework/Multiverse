@@ -10,6 +10,14 @@ else
 
     cp -r USD/plugin $USD_SRC_PATH
 
+    # Loop through each folder in the directory
+    for USD_PLUGIN in $USD_SRC_PATH/plugin/*; do
+        if [ -d "$USD_PLUGIN" ]; then
+            # Execute your command within each folder
+            (cd "$USD_PLUGIN" && $USD_BUILD_PATH/bin/usdGenSchema schema.usda)
+        fi
+    done
+
     # Specify the file path
     USD_CMAKE_PATH="$USD_SRC_PATH/CMakeLists.txt"
 
