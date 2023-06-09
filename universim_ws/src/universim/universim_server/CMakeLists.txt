@@ -102,7 +102,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
- INCLUDE_DIRS include/universim_server
+#  INCLUDE_DIRS include/universim_server
 #  LIBRARIES universim_server
  CATKIN_DEPENDS roscpp universim_msgs
 #  DEPENDS system_lib
