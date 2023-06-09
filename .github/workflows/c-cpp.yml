@@ -13,5 +13,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: setup
-      run: ./setup.sh
+    - name: build
+      run: ./build.sh
