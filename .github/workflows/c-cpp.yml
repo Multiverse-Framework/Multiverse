@@ -13,9 +13,4 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - uses: betwo/github-setup-catkin@master
-      with:
-        ros-version: 'noetic'
-        build-tool: 'catkin_tools'
-        workspace: $GITHUB_WORKSPACE/universim_ws
-    - run: catkin build
+    - run: ./setup.sh
