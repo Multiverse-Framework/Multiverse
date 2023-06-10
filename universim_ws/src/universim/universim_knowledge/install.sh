@@ -14,7 +14,7 @@ else
     for USD_PLUGIN in $USD_SRC_PATH/plugin/*; do
         if [ -d "$USD_PLUGIN" ]; then
             # Execute your command within each folder
-            (cd "$USD_PLUGIN" && $USD_BUILD_PATH/bin/usdGenSchema schema.usda)
+            (cd "$USD_PLUGIN" && usdGenSchema schema.usda)
         fi
     done
 
