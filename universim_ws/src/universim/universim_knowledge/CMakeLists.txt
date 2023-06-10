@@ -113,8 +113,6 @@ catkin_package(
 
 set(ENV{USD_SRC_PATH} "${PROJECT_SOURCE_DIR}/../../../../src/USD")
 set(ENV{USD_BUILD_PATH} "${PROJECT_SOURCE_DIR}/../../../../build/USD")
-set(ENV{PATH} "$ENV{PATH}:$ENV{USD_BUILD_PATH}/bin")
-set(ENV{PYTHONPATH} "$ENV{PYTHONPATH}:$ENV{USD_BUILD_PATH}/lib/python")
 
 # Execute the shell file during CMake configuration
 execute_process(

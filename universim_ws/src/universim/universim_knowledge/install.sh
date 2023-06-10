@@ -8,6 +8,9 @@ else
     echo "USD_SRC_PATH is set to: $USD_SRC_PATH"
     echo "USD_BUILD_PATH is set to: $USD_BUILD_PATH"
 
+    export PATH=$PATH:$USD_BUILD_PATH/bin
+    export PYTHONPATH=$PYTHONPATH:$USD_BUILD_PATH/lib/python
+
     cp -r USD/plugin $USD_SRC_PATH
 
     # Loop through each folder in the directory
