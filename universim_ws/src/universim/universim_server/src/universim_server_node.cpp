@@ -48,7 +48,8 @@ std::map<std::string, std::vector<double>> attribute_map =
 {
     {"position", {0.0, 0.0, 0.0}},
     {"quaternion", {1.0, 0.0, 0.0, 0.0}},
-    {"joint_1D", {0.0}}
+    {"joint_position", {0.0}},
+    {"joint_quaternion", {1.0, 0.0, 0.0, 0.0}}
 };
 
 class StateHandle
