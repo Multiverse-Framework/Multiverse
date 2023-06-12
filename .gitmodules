@@ -1,9 +1,6 @@
-[submodule "universim_ws/src/mujoco/mujoco_msgs"]
-	path = universim_ws/src/mujoco/mujoco_msgs
-	url = https://github.com/Universal-Simulation-Framework/mujoco_msgs.git
 [submodule "src/USD"]
 	path = src/USD
 	url = https://github.com/PixarAnimationStudios/USD.git
 [submodule "universim_ws/src/mujoco/mujoco_sim"]
-	path = universim_ws/src/mujoco/mujoco_sim
+	path = universim_ws/src/universim_connectors/universim_mujoco_connector
 	url = https://github.com/Universal-Simulation-Framework/mujoco_sim.git
