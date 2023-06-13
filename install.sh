@@ -57,3 +57,6 @@ pip3 install cython
 
 # Install owlready2
 pip3 install owlready2
+
+# Install jinja2
+pip3 install jinja2
