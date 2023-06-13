@@ -69,10 +69,10 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness
           {"lhs", {-1.0, 1.0, -1.0, 1.0}}}},
         {EAttribute::JointRvalue,
          {{"rhs", {1.0}},
-          {"lhs", {1.0}}}},
+          {"lhs", {-1.0}}}},
         {EAttribute::JointTvalue,
          {{"rhs", {1.0}},
-          {"lhs", {1.0}}}},
+          {"lhs", {-1.0}}}},
         {EAttribute::JointPosition,
          {{"rhs", {1.0, 1.0, 1.0}},
           {"lhs", {1.0, -1.0, 1.0}}}},
@@ -190,7 +190,7 @@ public:
                 }
                 else
                 {
-                    ROS_INFO("Continue state on socker %s", socket_addr.c_str());
+                    ROS_INFO("Continue state [%s - %s] on socket %s", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
                     objects[object_name][attribute_name].second = false;
                 }
