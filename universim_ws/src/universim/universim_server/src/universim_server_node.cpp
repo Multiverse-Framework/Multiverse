@@ -39,7 +39,9 @@ enum class EAttribute : unsigned char
     JointRvalue,
     JointTvalue,
     JointPosition,
-    JointQuaternion
+    JointQuaternion,
+    Force,
+    Torque
 };
 
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
@@ -49,7 +51,9 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
         {"joint_rvalue", {EAttribute::JointRvalue, {0.0}}},
         {"joint_tvalue", {EAttribute::JointTvalue, {0.0}}},
         {"joint_position", {EAttribute::JointPosition, {0.0, 0.0, 0.0}}},
-        {"joint_quaternion", {EAttribute::JointQuaternion, {1.0, 0.0, 0.0, 0.0}}}};
+        {"joint_quaternion", {EAttribute::JointQuaternion, {1.0, 0.0, 0.0, 0.0}}},
+        {"force", {EAttribute::Force, {0.0, 0.0, 0.0}}},
+        {"torque", {EAttribute::Torque, {0.0, 0.0, 0.0}}}};
 
 std::map<std::string, std::vector<double>> unit_scale =
     {
@@ -57,7 +61,10 @@ std::map<std::string, std::vector<double>> unit_scale =
         {"m", {1.0, 1.0, 1.0}},
         {"cm", {0.01, 0.01, 0.01}},
         {"rad", {1.0}},
-        {"deg", {M_PI / 180.0}}};
+        {"deg", {M_PI / 180.0}},
+        {"N", {1.0, 1.0, 1.0}},
+        {"Nm", {1.0, 1.0, 1.0}},
+        {"Ncm", {0.01, 0.01, 0.01}}};
 
 std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness =
     {
@@ -78,7 +85,13 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness
           {"lhs", {1.0, -1.0, 1.0}}}},
         {EAttribute::JointQuaternion,
          {{"rhs", {1.0, 1.0, 1.0, 1.0}},
-          {"lhs", {1.0, 1.0, -1.0, 1.0}}}}};
+          {"lhs", {1.0, 1.0, -1.0, 1.0}}}},
+        {EAttribute::Force,
+         {{"rhs", {1.0, 1.0, 1.0}},
+          {"lhs", {1.0, -1.0, 1.0}}}},
+        {EAttribute::Torque,
+         {{"rhs", {1.0, 1.0, 1.0}},
+          {"lhs", {1.0, -1.0, 1.0}}}}};
 
 std::vector<std::thread> workers;
 
@@ -154,13 +167,17 @@ public:
         const std::string length_unit = meta_data_json["length_unit"].asString();
         const std::string angle_unit = meta_data_json["angle_unit"].asString();
         const std::string handedness = meta_data_json["handedness"].asString();
-        
+        const std::string force_unit = meta_data_json["force_unit"].asString();
+        const std::string torque_unit = force_unit + length_unit;
+
         conversion_map[EAttribute::Position] = unit_scale[length_unit];
         conversion_map[EAttribute::Quaternion] = unit_scale["quat_unit"];
         conversion_map[EAttribute::JointRvalue] = unit_scale[angle_unit];
         conversion_map[EAttribute::JointTvalue] = {unit_scale[length_unit][0]};
         conversion_map[EAttribute::JointPosition] = unit_scale[length_unit];
         conversion_map[EAttribute::JointQuaternion] = unit_scale["quat_unit"];
+        conversion_map[EAttribute::Force] = unit_scale[force_unit];
+        conversion_map[EAttribute::Torque] = unit_scale[torque_unit];
 
         for (std::pair<const EAttribute, std::vector<double>> &conversion_element : conversion_map)
         {
@@ -180,6 +197,8 @@ public:
             {
                 objects[object_name] = {};
             }
+            objects[object_name]["force"] = {attribute_map["force"].second, false};
+            objects[object_name]["torque"] = {attribute_map["force"].second, false};
 
             for (const Json::Value &attribute_json : *send_object_it)
             {
@@ -187,19 +206,31 @@ public:
                 if (objects[object_name].count(attribute_name) == 0)
                 {
                     objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
+                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                    {
+                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                    }
+                }
+                else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
+                {
+                    objects[object_name][attribute_name].first.insert(objects[object_name][attribute_name].first.end(), attribute_map[attribute_name].second.begin(),  attribute_map[attribute_name].second.end());
+                    for (size_t i = 0; i < 3; i++)
+                    {
+                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[objects[object_name][attribute_name].first.size() - 3 + i], conversion_map[attribute_map[attribute_name].first][i]);
+                    }
                 }
                 else
                 {
                     ROS_INFO("Continue state [%s - %s] on socket %s", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
                     objects[object_name][attribute_name].second = false;
-                }
-
-                for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
-                {
-                    send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                    {
+                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                    }
                 }
             }
+
             mtx.unlock();
         }
 
@@ -227,10 +258,21 @@ public:
             {
                 const std::string attribute_name = attribute_json.asString();
                 mtx.lock();
-                for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
-                    receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                    for (size_t i = 0; i < 3; i++)
+                    {
+                        receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                    }
                 }
+                else
+                {
+                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                    {
+                        receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                    }
+                }
+                
                 mtx.unlock();
             }
         }
@@ -360,6 +402,22 @@ public:
             if (should_shut_down)
             {
                 receive_buffer[0] = -1.0;
+            }
+
+            for (std::pair<const std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)
+            {
+                for (const std::string &effort : {"force", "torque"})
+                {
+                    object.second[effort].first[0] = 0.0;
+                    object.second[effort].first[1] = 0.0;
+                    object.second[effort].first[2] = 0.0;
+                    for (size_t i = 3; i < object.second[effort].first.size(); i+=3)
+                    {
+                        object.second[effort].first[0] += object.second[effort].first[i];
+                        object.second[effort].first[1] += object.second[effort].first[i + 1];
+                        object.second[effort].first[2] += object.second[effort].first[i + 2];
+                    }
+                }
             }
 
             for (size_t i = 0; i < receive_buffer_size - 1; i++)
