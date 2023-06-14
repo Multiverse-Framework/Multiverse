@@ -192,6 +192,7 @@ public:
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
         {
             const std::string object_name = send_object_it.key().asString();
+            
             mtx.lock();
             if (objects.count(object_name) == 0)
             {
@@ -230,10 +231,9 @@ public:
                     }
                 }
             }
-
             mtx.unlock();
         }
-
+        
         Json::Value receive_objects_json = meta_data_json["receive"];
 
         for (auto it = receive_objects_json.begin(); it != receive_objects_json.end(); ++it)
@@ -253,13 +253,13 @@ public:
                     }
                 }
             }
-
+            
             for (const Json::Value &attribute_json : *it)
             {
                 const std::string attribute_name = attribute_json.asString();
                 mtx.lock();
                 if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
-                {
+                {                    
                     for (size_t i = 0; i < 3; i++)
                     {
                         receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
@@ -272,7 +272,6 @@ public:
                         receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
                     }
                 }
-                
                 mtx.unlock();
             }
         }
@@ -404,6 +403,7 @@ public:
                 receive_buffer[0] = -1.0;
             }
 
+            mtx.lock();
             for (std::pair<const std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)
             {
                 for (const std::string &effort : {"force", "torque"})
@@ -419,6 +419,7 @@ public:
                     }
                 }
             }
+            mtx.unlock();
 
             for (size_t i = 0; i < receive_buffer_size - 1; i++)
             {
