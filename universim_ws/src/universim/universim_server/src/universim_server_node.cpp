@@ -27,6 +27,7 @@
 #include <jsoncpp/json/reader.h>
 #include <mutex>
 #include <string>
+#include <list>
 #include <thread>
 #include <zmq.hpp>
 
@@ -44,7 +45,7 @@ enum class EAttribute : unsigned char
     Torque
 };
 
-std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
+std::map<std::string, std::pair<EAttribute, std::list<double>>> attribute_map =
     {
         {"position", {EAttribute::Position, {0.0, 0.0, 0.0}}},
         {"quaternion", {EAttribute::Quaternion, {1.0, 0.0, 0.0, 0.0}}},
@@ -55,7 +56,7 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
         {"force", {EAttribute::Force, {0.0, 0.0, 0.0}}},
         {"torque", {EAttribute::Torque, {0.0, 0.0, 0.0}}}};
 
-std::map<std::string, std::vector<double>> unit_scale =
+std::map<std::string, std::list<double>> unit_scale =
     {
         {"quat_unit", {1.0, 1.0, 1.0, 1.0}},
         {"m", {1.0, 1.0, 1.0}},
@@ -66,7 +67,7 @@ std::map<std::string, std::vector<double>> unit_scale =
         {"Nm", {1.0, 1.0, 1.0}},
         {"Ncm", {0.01, 0.01, 0.01}}};
 
-std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness =
+std::map<EAttribute, std::map<std::string, std::list<double>>> unit_handedness =
     {
         {EAttribute::Position,
          {{"rhs", {1.0, 1.0, 1.0}},
@@ -97,7 +98,7 @@ std::vector<std::thread> workers;
 
 std::mutex mtx;
 
-std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> objects;
+std::map<std::string, std::map<std::string, std::pair<std::list<double>, bool>>> objects;
 
 bool should_shut_down = false;
 
@@ -136,9 +137,9 @@ public:
 public:
     void communicate()
     {
-        std::vector<std::pair<double *, double>> send_data_vec;
-        std::vector<std::pair<double *, double>> receive_data_vec;
-        std::map<EAttribute, std::vector<double>> conversion_map;
+        std::vector<std::pair<std::list<double>::iterator, double>> send_data_vec;
+        std::vector<std::pair<std::list<double>::iterator, double>> receive_data_vec;
+        std::map<EAttribute, std::list<double>> conversion_map;
         bool is_received_data_sent;
         bool continue_state = false;
 
@@ -173,33 +174,38 @@ public:
         conversion_map[EAttribute::Position] = unit_scale[length_unit];
         conversion_map[EAttribute::Quaternion] = unit_scale["quat_unit"];
         conversion_map[EAttribute::JointRvalue] = unit_scale[angle_unit];
-        conversion_map[EAttribute::JointTvalue] = {unit_scale[length_unit][0]};
+        conversion_map[EAttribute::JointTvalue] = {unit_scale[length_unit].front()};
         conversion_map[EAttribute::JointPosition] = unit_scale[length_unit];
         conversion_map[EAttribute::JointQuaternion] = unit_scale["quat_unit"];
         conversion_map[EAttribute::Force] = unit_scale[force_unit];
         conversion_map[EAttribute::Torque] = unit_scale[torque_unit];
 
-        for (std::pair<const EAttribute, std::vector<double>> &conversion_element : conversion_map)
+        for (std::pair<const EAttribute, std::list<double>> &conversion_element : conversion_map)
         {
+            std::list<double>::iterator conversion_element_it = conversion_element.second.begin();
+            std::list<double>::iterator handedness_it = unit_handedness[conversion_element.first][handedness].begin();
             for (size_t i = 0; i < conversion_element.second.size(); i++)
             {
-                conversion_element.second[i] *= unit_handedness[conversion_element.first][handedness][i];
+                *(conversion_element_it++) *= *(handedness_it++);
             }
         }
 
-        Json::Value send_objects_json = meta_data_json["send"];
+        const Json::Value send_objects_json_tmp = meta_data_json["send"];
+        const Json::Value send_objects_json = send_objects_json_tmp;
+
+        std::map<std::string, std::map<std::string, std::list<double>::iterator>> effort_index_starts;
 
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
         {
             const std::string object_name = send_object_it.key().asString();
-            
+
             mtx.lock();
             if (objects.count(object_name) == 0)
             {
                 objects[object_name] = {};
+                objects[object_name]["force"] = {attribute_map["force"].second, false};
+                objects[object_name]["torque"] = {attribute_map["force"].second, false};
             }
-            objects[object_name]["force"] = {attribute_map["force"].second, false};
-            objects[object_name]["torque"] = {attribute_map["force"].second, false};
 
             for (const Json::Value &attribute_json : *send_object_it)
             {
@@ -207,34 +213,53 @@ public:
                 if (objects[object_name].count(attribute_name) == 0)
                 {
                     objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
+
+                    std::list<double>::iterator object_data_it = objects[object_name][attribute_name].first.begin();
+                    std::list<double>::iterator conversion_it = conversion_map[attribute_map[attribute_name].first].begin();
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
-                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                        send_data_vec.emplace_back(object_data_it++, *(conversion_it++));
                     }
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
-                    objects[object_name][attribute_name].first.insert(objects[object_name][attribute_name].first.end(), attribute_map[attribute_name].second.begin(),  attribute_map[attribute_name].second.end());
+                    effort_index_starts[object_name][attribute_name] = objects[object_name][attribute_name].first.end();
+                    objects[object_name][attribute_name].first.insert(effort_index_starts[object_name][attribute_name], attribute_map[attribute_name].second.begin(), attribute_map[attribute_name].second.end());
+                    
+                    std::list<double>::iterator object_data_it = std::next(objects[object_name][attribute_name].first.begin(), 3);
+
+                    std::list<double>::iterator conversion_it = conversion_map[attribute_map[attribute_name].first].begin();
                     for (size_t i = 0; i < 3; i++)
                     {
-                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[objects[object_name][attribute_name].first.size() - 3 + i], conversion_map[attribute_map[attribute_name].first][i]);
+                        send_data_vec.emplace_back(std::next(objects[object_name][attribute_name].first.begin(), i+3), *(conversion_it++));
                     }
+
+                    for (std::list<double>::iterator object_data_it = objects[object_name][attribute_name].first.begin(); object_data_it != objects[object_name][attribute_name].first.end(); object_data_it++)
+                    {
+                        ROS_INFO("%s - %p - %f", socket_addr.c_str(), &*object_data_it, *object_data_it);
+                    }
+                    std::list<double>::iterator effort_it0 = objects[object_name][attribute_name].first.begin();
+                    ROS_WARN("%s - [%p %p %p %p %p %p]", socket_addr.c_str(), &*effort_it0++, &*effort_it0++, &*effort_it0++, &*effort_it0++, &*effort_it0++, &*effort_it0++);
                 }
                 else
                 {
                     ROS_INFO("Continue state [%s - %s] on socket %s", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
                     objects[object_name][attribute_name].second = false;
+
+                    std::list<double>::iterator object_data_it = objects[object_name][attribute_name].first.begin();
+                    std::list<double>::iterator conversion_it = conversion_map[attribute_map[attribute_name].first].begin();
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
-                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                        send_data_vec.emplace_back(object_data_it++, *(conversion_it++));
                     }
                 }
             }
             mtx.unlock();
         }
-        
-        Json::Value receive_objects_json = meta_data_json["receive"];
+
+        const Json::Value receive_objects_json_tmp = meta_data_json["receive"];
+        const Json::Value receive_objects_json = receive_objects_json_tmp;
 
         for (auto it = receive_objects_json.begin(); it != receive_objects_json.end(); ++it)
         {
@@ -253,23 +278,25 @@ public:
                     }
                 }
             }
-            
+
             for (const Json::Value &attribute_json : *it)
             {
                 const std::string attribute_name = attribute_json.asString();
                 mtx.lock();
+                std::list<double>::iterator object_data_it = objects[object_name][attribute_name].first.begin();
+                std::list<double>::iterator conversion_it = conversion_map[attribute_map[attribute_name].first].begin();
                 if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
-                {                    
+                {
                     for (size_t i = 0; i < 3; i++)
                     {
-                        receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                        receive_data_vec.emplace_back(object_data_it++, 1.0 / *(conversion_it++));
                     }
                 }
                 else
                 {
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
-                        receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                        receive_data_vec.emplace_back(object_data_it++, 1.0 / *(conversion_it++));
                     }
                 }
                 mtx.unlock();
@@ -343,6 +370,26 @@ public:
 
                 send_data_vec.clear();
                 receive_data_vec.clear();
+                for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
+                {
+                    const std::string object_name = send_object_it.key().asString();
+                    if (effort_index_starts.count(object_name) != 0)
+                    {
+                        for (const Json::Value &attribute_json : *send_object_it)
+                        {
+                            const std::string attribute_name = attribute_json.asString();
+                            if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque"))
+                            {
+                                // mtx.lock();
+                                // objects[object_name][attribute_name].first.erase(effort_index_starts[object_name][attribute_name]);
+                                // objects[object_name][attribute_name].first.erase(effort_index_starts[object_name][attribute_name]);
+                                // objects[object_name][attribute_name].first.erase(effort_index_starts[object_name][attribute_name]);
+                                // mtx.unlock();
+                            }
+                        }
+                    }
+                }
+
                 if (request_data.to_string()[1] == '}')
                 {
                     goto send_meta_data;
@@ -357,10 +404,13 @@ public:
 
             const double delay_ms = (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now().time_since_epoch()).count() - send_buffer[0]) / 1000.0;
 
+            mtx.lock();
             for (size_t i = 0; i < send_buffer_size - 1; i++)
             {
                 *send_data_vec[i].first = send_buffer[i + 1] * send_data_vec[i].second;
+                // ROS_WARN("%s, %ld - %p - %f", socket_addr.c_str(), i, &*send_data_vec[i].first, *send_data_vec[i].first);
             }
+            mtx.unlock();
 
             if (!is_received_data_sent)
             {
@@ -396,7 +446,6 @@ public:
 
                 is_received_data_sent = true;
             }
-
             *receive_buffer = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
             if (should_shut_down)
             {
@@ -404,27 +453,41 @@ public:
             }
 
             mtx.lock();
-            for (std::pair<const std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)
+            for (std::pair<const std::string, std::map<std::string, std::pair<std::list<double>, bool>>> &object : objects)
             {
-                for (const std::string &effort : {"force", "torque"})
+                for (const std::string &effort : {"force"})
                 {
-                    object.second[effort].first[0] = 0.0;
-                    object.second[effort].first[1] = 0.0;
-                    object.second[effort].first[2] = 0.0;
-                    for (size_t i = 3; i < object.second[effort].first.size(); i+=3)
-                    {
-                        object.second[effort].first[0] += object.second[effort].first[i];
-                        object.second[effort].first[1] += object.second[effort].first[i + 1];
-                        object.second[effort].first[2] += object.second[effort].first[i + 2];
-                    }
+                    double a[3] = {0.0, 0.0, 0.0};
+                    std::list<double>::iterator effort_it0 = object.second[effort].first.begin();
+                    // ROS_WARN("%s - [%p %p %p %p %p %p]", socket_addr.c_str(), &*effort_it0++, &*effort_it0++, &*effort_it0++, &*effort_it0++, &*effort_it0++, &*effort_it0++);
+                    effort_it0 = object.second[effort].first.begin();
+                    // ROS_INFO("%s - [%f %f %f %f %f %f]", socket_addr.c_str(), *effort_it0++, *effort_it0++, *effort_it0++, *effort_it0++, *effort_it0++, *effort_it0++);
+                    // for (std::list<double>::iterator effort_it = object.second[effort].first.begin(); effort_it != object.second[effort].first.end();)
+                    // {
+                    //     if (effort_it == object.second[effort].first.begin())
+                    //     {
+                    //         *(effort_it++) = 0.0;
+                    //         *(effort_it++) = 0.0;
+                    //         *(effort_it++) = 0.0;
+                    //     }
+                    //     else
+                    //     {
+                    //         std::list<double>::iterator start_effort_it = object.second[effort].first.begin();
+                    //         a[0] = *(effort_it++);
+                    //         a[1] = *(effort_it++);
+                    //         a[2] = *(effort_it++);
+                    //     }
+                    // }
+                    std::list<double>::iterator effort_it = object.second[effort].first.begin();
+                    // ROS_INFO("%s - [%f %f %f]", socket_addr.c_str(), a[0], a[1], a[2]);
                 }
             }
-            mtx.unlock();
 
             for (size_t i = 0; i < receive_buffer_size - 1; i++)
             {
                 receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
             }
+            mtx.unlock();
 
             // Send receive_data over ZMQ
             zmq::message_t reply_data(receive_buffer_size * sizeof(double));
