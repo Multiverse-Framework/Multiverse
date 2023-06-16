@@ -35,6 +35,7 @@ enum class EAttribute : unsigned char
 {
     Position,
     Quaternion,
+    RelativeVelocity,
     JointRvalue,
     JointTvalue,
     JointPosition,
@@ -47,6 +48,7 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
     {
         {"position", {EAttribute::Position, {0.0, 0.0, 0.0}}},
         {"quaternion", {EAttribute::Quaternion, {1.0, 0.0, 0.0, 0.0}}},
+        {"relative_velocity", {EAttribute::RelativeVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
         {"joint_rvalue", {EAttribute::JointRvalue, {0.0}}},
         {"joint_tvalue", {EAttribute::JointTvalue, {0.0}}},
         {"joint_position", {EAttribute::JointPosition, {0.0, 0.0, 0.0}}},
@@ -56,16 +58,15 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
 
 std::map<std::string, std::vector<double>> unit_scale =
     {
+        {"s", {1.0}},
         {"quat_unit", {1.0, 1.0, 1.0, 1.0}},
         {"m", {1.0, 1.0, 1.0}},
         {"cm", {0.01, 0.01, 0.01}},
         {"rad", {1.0}},
         {"deg", {M_PI / 180.0}},
-        {"N", {1.0, 1.0, 1.0}},
-        {"Nm", {1.0, 1.0, 1.0}},
-        {"Ncm", {0.01, 0.01, 0.01}}};
+        {"N", {1.0, 1.0, 1.0}}};
 
-std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness =
+std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scale =
     {
         {EAttribute::Position,
          {{"rhs", {1.0, 1.0, 1.0}},
@@ -73,6 +74,9 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness
         {EAttribute::Quaternion,
          {{"rhs", {1.0, 1.0, 1.0, 1.0}},
           {"lhs", {-1.0, 1.0, -1.0, 1.0}}}},
+        {EAttribute::RelativeVelocity,
+         {{"rhs", {1.0, 1.0, 1.0, 1.0, 1.0, 1.0}},
+          {"lhs", {1.0, 1.0, 1.0, 1.0, 1.0, 1.0}}}},
         {EAttribute::JointRvalue,
          {{"rhs", {1.0}},
           {"lhs", {-1.0}}}},
@@ -168,7 +172,7 @@ public:
         const std::string angle_unit = meta_data_json["angle_unit"].asString();
         const std::string handedness = meta_data_json["handedness"].asString();
         const std::string force_unit = meta_data_json["force_unit"].asString();
-        const std::string torque_unit = force_unit + length_unit;
+        const std::string time_unit = meta_data_json["time_unit"].asString();
 
         conversion_map[EAttribute::Position] = unit_scale[length_unit];
         conversion_map[EAttribute::Quaternion] = unit_scale["quat_unit"];
@@ -177,15 +181,28 @@ public:
         conversion_map[EAttribute::JointPosition] = unit_scale[length_unit];
         conversion_map[EAttribute::JointQuaternion] = unit_scale["quat_unit"];
         conversion_map[EAttribute::Force] = unit_scale[force_unit];
-        conversion_map[EAttribute::Torque] = unit_scale[torque_unit];
-
-        for (std::pair<const EAttribute, std::vector<double>> &conversion_element : conversion_map)
+        conversion_map[EAttribute::Torque] = std::vector<double>(3, 0.0);
+        for (size_t i = 0; i < 3; i++)
         {
-            std::vector<double>::iterator conversion_element_it = conversion_element.second.begin();
-            std::vector<double>::iterator handedness_it = unit_handedness[conversion_element.first][handedness].begin();
-            for (size_t i = 0; i < conversion_element.second.size(); i++)
+            conversion_map[EAttribute::Torque][i] = unit_scale[force_unit][i] * unit_scale[length_unit][i];
+        }
+        conversion_map[EAttribute::RelativeVelocity] = std::vector<double>(6, 0.0);
+        for (size_t i = 0; i < 3; i++)
+        {
+            conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[length_unit][i] / unit_scale[time_unit][i];
+        }
+        for (size_t i = 3; i < 6; i++)
+        {
+            conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[angle_unit][i - 3] / unit_scale[time_unit][i - 3];
+        }
+
+        for (std::pair<const EAttribute, std::vector<double>> &conversion_scale : conversion_map)
+        {
+            std::vector<double>::iterator conversion_scale_it = conversion_scale.second.begin();
+            std::vector<double>::iterator handedness_scale_it = handedness_scale[conversion_scale.first][handedness].begin();
+            for (size_t i = 0; i < conversion_scale.second.size(); i++)
             {
-                *(conversion_element_it++) *= *(handedness_it++);
+                *(conversion_scale_it++) *= *(handedness_scale_it++);
             }
         }
 
@@ -307,14 +324,14 @@ public:
 
             for (size_t i = 0; i < send_buffer_size - 1; i++)
             {
-                buffer[i + 3] = *send_data_vec[i].first * send_data_vec[i].second;
+                buffer[i + 3] = *send_data_vec[i].first / send_data_vec[i].second;
             }
 
             continue_state = false;
         }
         else
         {
-            buffer[2] = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+            buffer[2] = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
         }
 
         // Send buffer sizes and send_data (if exists) over ZMQ
@@ -367,8 +384,6 @@ public:
 
             memcpy(send_buffer, request_data.data(), send_buffer_size * sizeof(double));
 
-            const double delay_ms = (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now().time_since_epoch()).count() - send_buffer[0]) / 1000.0;
-
             mtx.lock();
             for (size_t i = 0; i < send_buffer_size - 1; i++)
             {
@@ -410,7 +425,7 @@ public:
 
                 is_received_data_sent = true;
             }
-            *receive_buffer = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+            *receive_buffer = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
             if (should_shut_down)
             {
                 receive_buffer[0] = -1.0;
@@ -444,7 +459,7 @@ public:
             {
                 receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
             }
-            
+
             mtx.unlock();
 
             // Send receive_data over ZMQ
