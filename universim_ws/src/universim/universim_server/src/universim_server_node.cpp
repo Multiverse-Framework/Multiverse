@@ -56,15 +56,14 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
         {"force", {EAttribute::Force, {0.0, 0.0, 0.0}}},
         {"torque", {EAttribute::Torque, {0.0, 0.0, 0.0}}}};
 
-std::map<std::string, std::vector<double>> unit_scale =
+std::map<std::string, double> unit_scale =
     {
-        {"s", {1.0}},
-        {"quat_unit", {1.0, 1.0, 1.0, 1.0}},
-        {"m", {1.0, 1.0, 1.0}},
-        {"cm", {0.01, 0.01, 0.01}},
-        {"rad", {1.0}},
-        {"deg", {M_PI / 180.0}},
-        {"N", {1.0, 1.0, 1.0}}};
+        {"s", 1.0},
+        {"m", 1.0},
+        {"cm", 0.01},
+        {"rad", 1.0},
+        {"deg", M_PI / 180.0},
+        {"N", 1.0}};
 
 std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scale =
     {
@@ -101,6 +100,8 @@ std::vector<std::thread> workers;
 std::mutex mtx;
 
 std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> objects;
+
+std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>> send_efforts;
 
 bool should_shut_down = false;
 
@@ -144,7 +145,6 @@ public:
         std::map<EAttribute, std::vector<double>> conversion_map;
         bool is_received_data_sent;
         bool continue_state = false;
-        std::map<std::string, std::map<std::string, std::vector<double>::iterator>> effort_iterator_begin;
 
     request_meta_data:
         is_received_data_sent = false;
@@ -174,26 +174,50 @@ public:
         const std::string force_unit = meta_data_json["force_unit"].asString();
         const std::string time_unit = meta_data_json["time_unit"].asString();
 
-        conversion_map[EAttribute::Position] = unit_scale[length_unit];
-        conversion_map[EAttribute::Quaternion] = unit_scale["quat_unit"];
-        conversion_map[EAttribute::JointRvalue] = unit_scale[angle_unit];
-        conversion_map[EAttribute::JointTvalue] = {unit_scale[length_unit].front()};
-        conversion_map[EAttribute::JointPosition] = unit_scale[length_unit];
-        conversion_map[EAttribute::JointQuaternion] = unit_scale["quat_unit"];
-        conversion_map[EAttribute::Force] = unit_scale[force_unit];
-        conversion_map[EAttribute::Torque] = std::vector<double>(3, 0.0);
-        for (size_t i = 0; i < 3; i++)
+        for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
         {
-            conversion_map[EAttribute::Torque][i] = unit_scale[force_unit][i] * unit_scale[length_unit][i];
+            conversion_map.emplace(attribute.second);
         }
-        conversion_map[EAttribute::RelativeVelocity] = std::vector<double>(6, 0.0);
+
+        std::for_each(conversion_map[EAttribute::Position].begin(), conversion_map[EAttribute::Position].end(),
+                      [length_unit](double &position)
+                      { position = unit_scale[length_unit]; });
+
+        std::for_each(conversion_map[EAttribute::Quaternion].begin(), conversion_map[EAttribute::Quaternion].end(),
+                      [](double &quaternion)
+                      { quaternion = 1.0; });
+
+        std::for_each(conversion_map[EAttribute::JointRvalue].begin(), conversion_map[EAttribute::JointRvalue].end(),
+                      [angle_unit](double &joint_rvalue)
+                      { joint_rvalue = unit_scale[angle_unit]; });
+
+        std::for_each(conversion_map[EAttribute::JointTvalue].begin(), conversion_map[EAttribute::JointTvalue].end(),
+                      [length_unit](double &joint_tvalue)
+                      { joint_tvalue = unit_scale[length_unit]; });
+
+        std::for_each(conversion_map[EAttribute::JointPosition].begin(), conversion_map[EAttribute::JointPosition].end(),
+                      [length_unit](double &joint_position)
+                      { joint_position = unit_scale[length_unit]; });
+
+        std::for_each(conversion_map[EAttribute::JointQuaternion].begin(), conversion_map[EAttribute::JointQuaternion].end(),
+                      [](double &joint_quaternion)
+                      { joint_quaternion = 1.0; });
+
+        std::for_each(conversion_map[EAttribute::Force].begin(), conversion_map[EAttribute::Force].end(),
+                      [force_unit](double &force)
+                      { force = unit_scale[force_unit]; });
+
+        std::for_each(conversion_map[EAttribute::Torque].begin(), conversion_map[EAttribute::Torque].end(),
+                      [force_unit, length_unit](double &torque)
+                      { torque = unit_scale[force_unit] * unit_scale[length_unit]; });
+
         for (size_t i = 0; i < 3; i++)
         {
-            conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[length_unit][i] / unit_scale[time_unit][i];
+            conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[length_unit] / unit_scale[time_unit];
         }
         for (size_t i = 3; i < 6; i++)
         {
-            conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[angle_unit][i - 3] / unit_scale[time_unit][i - 3];
+            conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[angle_unit] / unit_scale[time_unit];
         }
 
         for (std::pair<const EAttribute, std::vector<double>> &conversion_scale : conversion_map)
@@ -218,7 +242,7 @@ public:
             {
                 objects[object_name] = {};
                 objects[object_name]["force"] = {attribute_map["force"].second, false};
-                objects[object_name]["torque"] = {attribute_map["force"].second, false};
+                objects[object_name]["torque"] = {attribute_map["torque"].second, false};
             }
 
             for (const Json::Value &attribute_json : *send_object_it)
@@ -235,15 +259,11 @@ public:
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
-                    if (effort_iterator_begin[object_name].count(attribute_name) == 0)
-                    {
-                        effort_iterator_begin[object_name][attribute_name] = objects[object_name][attribute_name].first.end();
-                        objects[object_name][attribute_name].first.insert(effort_iterator_begin[object_name][attribute_name], attribute_map[attribute_name].second.begin(), attribute_map[attribute_name].second.end());
-                    }
+                    send_efforts[object_name][socket_addr][attribute_name] = attribute_map[attribute_name].second;
 
-                    for (size_t i = 0; i < 3; i++)
+                    for (size_t i = 0; i < attribute_map[attribute_name].second.size(); i++)
                     {
-                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[objects[object_name][attribute_name].first.size() - 3 + i], conversion_map[attribute_map[attribute_name].first][i]);
+                        send_data_vec.emplace_back(&send_efforts[object_name][socket_addr][attribute_name][i], conversion_map[attribute_map[attribute_name].first][i]);
                     }
                 }
                 else
@@ -436,31 +456,21 @@ public:
             {
                 for (const std::string &effort : {"force", "torque"})
                 {
-                    for (std::vector<double>::iterator effort_it = object.second[effort].first.begin(); effort_it != object.second[effort].first.end();)
+                    for (size_t i = 0; i < 3; i++)
                     {
-                        if (effort_it == object.second[effort].first.begin())
+                        for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &data : send_efforts[object.first])
                         {
-                            *(effort_it++) = 0.0;
-                            *(effort_it++) = 0.0;
-                            *(effort_it++) = 0.0;
-                        }
-                        else
-                        {
-                            std::vector<double>::iterator start_effort_it = object.second[effort].first.begin();
-                            *(start_effort_it++) += *(effort_it++);
-                            *(start_effort_it++) += *(effort_it++);
-                            *(start_effort_it++) += *(effort_it++);
+                            object.second[effort].first[i] = data.second[effort][i];
                         }
                     }
                 }
             }
+            mtx.unlock();
 
             for (size_t i = 0; i < receive_buffer_size - 1; i++)
             {
                 receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
             }
-
-            mtx.unlock();
 
             // Send receive_data over ZMQ
             zmq::message_t reply_data(receive_buffer_size * sizeof(double));
