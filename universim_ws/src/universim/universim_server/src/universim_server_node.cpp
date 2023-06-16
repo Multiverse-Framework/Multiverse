@@ -26,7 +26,6 @@
 #include <jsoncpp/json/json.h>
 #include <jsoncpp/json/reader.h>
 #include <mutex>
-#include <string>
 #include <thread>
 #include <zmq.hpp>
 
@@ -36,30 +35,38 @@ enum class EAttribute : unsigned char
 {
     Position,
     Quaternion,
+    RelativeVelocity,
     JointRvalue,
     JointTvalue,
     JointPosition,
-    JointQuaternion
+    JointQuaternion,
+    Force,
+    Torque
 };
 
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
     {
         {"position", {EAttribute::Position, {0.0, 0.0, 0.0}}},
         {"quaternion", {EAttribute::Quaternion, {1.0, 0.0, 0.0, 0.0}}},
+        {"relative_velocity", {EAttribute::RelativeVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
         {"joint_rvalue", {EAttribute::JointRvalue, {0.0}}},
         {"joint_tvalue", {EAttribute::JointTvalue, {0.0}}},
         {"joint_position", {EAttribute::JointPosition, {0.0, 0.0, 0.0}}},
-        {"joint_quaternion", {EAttribute::JointQuaternion, {1.0, 0.0, 0.0, 0.0}}}};
+        {"joint_quaternion", {EAttribute::JointQuaternion, {1.0, 0.0, 0.0, 0.0}}},
+        {"force", {EAttribute::Force, {0.0, 0.0, 0.0}}},
+        {"torque", {EAttribute::Torque, {0.0, 0.0, 0.0}}}};
 
 std::map<std::string, std::vector<double>> unit_scale =
     {
+        {"s", {1.0}},
         {"quat_unit", {1.0, 1.0, 1.0, 1.0}},
         {"m", {1.0, 1.0, 1.0}},
         {"cm", {0.01, 0.01, 0.01}},
         {"rad", {1.0}},
-        {"deg", {M_PI / 180.0}}};
+        {"deg", {M_PI / 180.0}},
+        {"N", {1.0, 1.0, 1.0}}};
 
-std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness =
+std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scale =
     {
         {EAttribute::Position,
          {{"rhs", {1.0, 1.0, 1.0}},
@@ -67,6 +74,9 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness
         {EAttribute::Quaternion,
          {{"rhs", {1.0, 1.0, 1.0, 1.0}},
           {"lhs", {-1.0, 1.0, -1.0, 1.0}}}},
+        {EAttribute::RelativeVelocity,
+         {{"rhs", {1.0, 1.0, 1.0, 1.0, 1.0, 1.0}},
+          {"lhs", {1.0, 1.0, 1.0, 1.0, 1.0, 1.0}}}},
         {EAttribute::JointRvalue,
          {{"rhs", {1.0}},
           {"lhs", {-1.0}}}},
@@ -78,7 +88,13 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> unit_handedness
           {"lhs", {1.0, -1.0, 1.0}}}},
         {EAttribute::JointQuaternion,
          {{"rhs", {1.0, 1.0, 1.0, 1.0}},
-          {"lhs", {1.0, 1.0, -1.0, 1.0}}}}};
+          {"lhs", {1.0, 1.0, -1.0, 1.0}}}},
+        {EAttribute::Force,
+         {{"rhs", {1.0, 1.0, 1.0}},
+          {"lhs", {1.0, -1.0, 1.0}}}},
+        {EAttribute::Torque,
+         {{"rhs", {1.0, 1.0, 1.0}},
+          {"lhs", {1.0, -1.0, 1.0}}}}};
 
 std::vector<std::thread> workers;
 
@@ -123,11 +139,12 @@ public:
 public:
     void communicate()
     {
-        std::vector<std::pair<double *, double>> send_data_vec;
-        std::vector<std::pair<double *, double>> receive_data_vec;
+        std::vector<std::pair<std::vector<double>::iterator, double>> send_data_vec;
+        std::vector<std::pair<std::vector<double>::iterator, double>> receive_data_vec;
         std::map<EAttribute, std::vector<double>> conversion_map;
         bool is_received_data_sent;
         bool continue_state = false;
+        std::map<std::string, std::map<std::string, std::vector<double>::iterator>> effort_iterator_begin;
 
     request_meta_data:
         is_received_data_sent = false;
@@ -154,31 +171,54 @@ public:
         const std::string length_unit = meta_data_json["length_unit"].asString();
         const std::string angle_unit = meta_data_json["angle_unit"].asString();
         const std::string handedness = meta_data_json["handedness"].asString();
-        
+        const std::string force_unit = meta_data_json["force_unit"].asString();
+        const std::string time_unit = meta_data_json["time_unit"].asString();
+
         conversion_map[EAttribute::Position] = unit_scale[length_unit];
         conversion_map[EAttribute::Quaternion] = unit_scale["quat_unit"];
         conversion_map[EAttribute::JointRvalue] = unit_scale[angle_unit];
-        conversion_map[EAttribute::JointTvalue] = {unit_scale[length_unit][0]};
+        conversion_map[EAttribute::JointTvalue] = {unit_scale[length_unit].front()};
         conversion_map[EAttribute::JointPosition] = unit_scale[length_unit];
         conversion_map[EAttribute::JointQuaternion] = unit_scale["quat_unit"];
-
-        for (std::pair<const EAttribute, std::vector<double>> &conversion_element : conversion_map)
+        conversion_map[EAttribute::Force] = unit_scale[force_unit];
+        conversion_map[EAttribute::Torque] = std::vector<double>(3, 0.0);
+        for (size_t i = 0; i < 3; i++)
         {
-            for (size_t i = 0; i < conversion_element.second.size(); i++)
+            conversion_map[EAttribute::Torque][i] = unit_scale[force_unit][i] * unit_scale[length_unit][i];
+        }
+        conversion_map[EAttribute::RelativeVelocity] = std::vector<double>(6, 0.0);
+        for (size_t i = 0; i < 3; i++)
+        {
+            conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[length_unit][i] / unit_scale[time_unit][i];
+        }
+        for (size_t i = 3; i < 6; i++)
+        {
+            conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[angle_unit][i - 3] / unit_scale[time_unit][i - 3];
+        }
+
+        for (std::pair<const EAttribute, std::vector<double>> &conversion_scale : conversion_map)
+        {
+            std::vector<double>::iterator conversion_scale_it = conversion_scale.second.begin();
+            std::vector<double>::iterator handedness_scale_it = handedness_scale[conversion_scale.first][handedness].begin();
+            for (size_t i = 0; i < conversion_scale.second.size(); i++)
             {
-                conversion_element.second[i] *= unit_handedness[conversion_element.first][handedness][i];
+                *(conversion_scale_it++) *= *(handedness_scale_it++);
             }
         }
 
-        Json::Value send_objects_json = meta_data_json["send"];
+        const Json::Value send_objects_json_tmp = meta_data_json["send"];
+        const Json::Value send_objects_json = send_objects_json_tmp;
 
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
         {
             const std::string object_name = send_object_it.key().asString();
+
             mtx.lock();
             if (objects.count(object_name) == 0)
             {
                 objects[object_name] = {};
+                objects[object_name]["force"] = {attribute_map["force"].second, false};
+                objects[object_name]["torque"] = {attribute_map["force"].second, false};
             }
 
             for (const Json::Value &attribute_json : *send_object_it)
@@ -187,23 +227,42 @@ public:
                 if (objects[object_name].count(attribute_name) == 0)
                 {
                     objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
+
+                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                    {
+                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                    }
+                }
+                else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
+                {
+                    if (effort_iterator_begin[object_name].count(attribute_name) == 0)
+                    {
+                        effort_iterator_begin[object_name][attribute_name] = objects[object_name][attribute_name].first.end();
+                        objects[object_name][attribute_name].first.insert(effort_iterator_begin[object_name][attribute_name], attribute_map[attribute_name].second.begin(), attribute_map[attribute_name].second.end());
+                    }
+
+                    for (size_t i = 0; i < 3; i++)
+                    {
+                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[objects[object_name][attribute_name].first.size() - 3 + i], conversion_map[attribute_map[attribute_name].first][i]);
+                    }
                 }
                 else
                 {
                     ROS_INFO("Continue state [%s - %s] on socket %s", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
                     objects[object_name][attribute_name].second = false;
-                }
 
-                for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
-                {
-                    send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                    {
+                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                    }
                 }
             }
             mtx.unlock();
         }
 
-        Json::Value receive_objects_json = meta_data_json["receive"];
+        const Json::Value receive_objects_json_tmp = meta_data_json["receive"];
+        const Json::Value receive_objects_json = receive_objects_json_tmp;
 
         for (auto it = receive_objects_json.begin(); it != receive_objects_json.end(); ++it)
         {
@@ -227,9 +286,19 @@ public:
             {
                 const std::string attribute_name = attribute_json.asString();
                 mtx.lock();
-                for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
-                    receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                    for (size_t i = 0; i < 3; i++)
+                    {
+                        receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                    }
+                }
+                else
+                {
+                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                    {
+                        receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                    }
                 }
                 mtx.unlock();
             }
@@ -255,14 +324,14 @@ public:
 
             for (size_t i = 0; i < send_buffer_size - 1; i++)
             {
-                buffer[i + 3] = *send_data_vec[i].first * send_data_vec[i].second;
+                buffer[i + 3] = *send_data_vec[i].first / send_data_vec[i].second;
             }
 
             continue_state = false;
         }
         else
         {
-            buffer[2] = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+            buffer[2] = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
         }
 
         // Send buffer sizes and send_data (if exists) over ZMQ
@@ -302,6 +371,7 @@ public:
 
                 send_data_vec.clear();
                 receive_data_vec.clear();
+
                 if (request_data.to_string()[1] == '}')
                 {
                     goto send_meta_data;
@@ -314,12 +384,12 @@ public:
 
             memcpy(send_buffer, request_data.data(), send_buffer_size * sizeof(double));
 
-            const double delay_ms = (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now().time_since_epoch()).count() - send_buffer[0]) / 1000.0;
-
+            mtx.lock();
             for (size_t i = 0; i < send_buffer_size - 1; i++)
             {
                 *send_data_vec[i].first = send_buffer[i + 1] * send_data_vec[i].second;
             }
+            mtx.unlock();
 
             if (!is_received_data_sent)
             {
@@ -355,17 +425,42 @@ public:
 
                 is_received_data_sent = true;
             }
-
-            *receive_buffer = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+            *receive_buffer = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
             if (should_shut_down)
             {
                 receive_buffer[0] = -1.0;
+            }
+
+            mtx.lock();
+            for (std::pair<const std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)
+            {
+                for (const std::string &effort : {"force", "torque"})
+                {
+                    for (std::vector<double>::iterator effort_it = object.second[effort].first.begin(); effort_it != object.second[effort].first.end();)
+                    {
+                        if (effort_it == object.second[effort].first.begin())
+                        {
+                            *(effort_it++) = 0.0;
+                            *(effort_it++) = 0.0;
+                            *(effort_it++) = 0.0;
+                        }
+                        else
+                        {
+                            std::vector<double>::iterator start_effort_it = object.second[effort].first.begin();
+                            *(start_effort_it++) += *(effort_it++);
+                            *(start_effort_it++) += *(effort_it++);
+                            *(start_effort_it++) += *(effort_it++);
+                        }
+                    }
+                }
             }
 
             for (size_t i = 0; i < receive_buffer_size - 1; i++)
             {
                 receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
             }
+
+            mtx.unlock();
 
             // Send receive_data over ZMQ
             zmq::message_t reply_data(receive_buffer_size * sizeof(double));
