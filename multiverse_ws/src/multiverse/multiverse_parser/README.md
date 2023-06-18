@@ -1,4 +1,4 @@
-# multiverse Parser
+# Multiverse Parser
 
 This package provides support for converting various scene descriptions to USD format and vice versa
 

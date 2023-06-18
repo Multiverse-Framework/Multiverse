@@ -1,4 +1,4 @@
-# multiverse Knowledge
+# Multiverse Knowledge
 
 This package offers functionality to translate USD (Universal Scene Description) files into knowledge graphs using the OWL (Web Ontology Language) format.
 
