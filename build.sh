@@ -23,4 +23,4 @@ python3 src/USD/build_scripts/build_usd.py $USD_BUILD_PATH
 
 # Build the workspace
 rosdep init
-(cd universim_ws; . /opt/ros/noetic/setup.sh; catkin build)
+(cd multiverse_ws; . /opt/ros/noetic/setup.sh; catkin build)
