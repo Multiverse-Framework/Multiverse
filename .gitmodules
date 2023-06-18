@@ -1,6 +1,6 @@
 [submodule "src/USD"]
 	path = src/USD
 	url = https://github.com/PixarAnimationStudios/USD.git
-[submodule "multiverse_ws/src/mujoco/mujoco_sim"]
+[submodule "multiverse_ws/src/multiverse_connectors/multiverse_mujoco_connector"]
 	path = multiverse_ws/src/multiverse_connectors/multiverse_mujoco_connector
-	url = https://github.com/Universal-Simulation-Framework/mujoco_sim.git
+	url = https://github.com/Multiverse-Framework/Multiverse-MuJoCo-Connector.git
