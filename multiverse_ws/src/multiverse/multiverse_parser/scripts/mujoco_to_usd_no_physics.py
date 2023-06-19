@@ -24,15 +24,15 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
         if compiler.attrib.get('meshdir') is not None:
             mesh_root_dir = compiler.attrib.get('meshdir')
             break
-
+            
     for xml_asset in xml_root.findall('asset'):
         for xml_mesh in xml_asset.findall('mesh'):
             mesh_name = xml_mesh.attrib.get('name')
-            mesh_dir = os.path.dirname(xml_mesh.attrib.get('file'))
+            mesh_dir = os.path.join(mesh_root_dir, os.path.dirname(xml_mesh.attrib.get('file')))
             mesh_file = os.path.basename(xml_mesh.attrib.get('file'))
             mesh_file = mesh_file.replace('stl', 'usda')
             mesh_file = mesh_file.replace('obj', 'usda')
-            mesh_dir = os.path.dirname(mesh_dir) + '/usd'
+            mesh_dir = os.path.dirname(mesh_dir) + '/../usd'
             xml_mesh_dict[mesh_name] = os.path.join(
                 usd_dir, mesh_dir, mesh_file)
             xml_mesh_dict[mesh_name] = os.path.relpath(xml_mesh_dict[mesh_name], usd_dir)
