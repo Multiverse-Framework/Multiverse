@@ -79,7 +79,7 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
         if os.path.exists(xml_mesh_dict[mj_mesh.name]):
             continue
         
-        stage = Usd.Stage.CreateNew(xml_mesh_dict[mj_mesh.name])
+        stage = Usd.Stage.CreateNew(os.path.join(usd_dir, xml_mesh_dict[mj_mesh.name]))
 
         UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
         UsdGeom.SetStageMetersPerUnit(stage, UsdGeom.LinearUnits.meters)
