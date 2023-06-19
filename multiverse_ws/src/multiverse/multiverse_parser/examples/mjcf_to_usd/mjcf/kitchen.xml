@@ -1,0 +1,843 @@
+<mujoco model="kitchen">
+    <compiler meshdir="kitchen/stl/" />
+    <asset>
+        <mesh name="SinkArea0" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.273.stl" />
+        <mesh name="SinkArea1" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.274.stl" />
+        <mesh name="SinkArea2" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.275.stl" />
+        <mesh name="SinkArea3" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.276.stl" />
+        <mesh name="SinkArea4" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.277.stl" />
+        <mesh name="SinkArea5" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.278.stl" />
+        <mesh name="SinkArea6" file="Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.279.stl" />
+        <mesh name="SinkArea7" file="Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.280.stl" />
+        <mesh name="SinkArea8" file="Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.281.stl" />
+        <mesh name="SinkArea9" file="Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.282.stl" />
+        <mesh name="SinkArea10" file="Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.283.stl" />
+        <mesh name="SinkArea11" file="Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.284.stl" />
+        <mesh name="SinkArea12" file="Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.285.stl" />
+        <mesh name="SinkArea13" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.272.stl" />
+        <mesh name="Sink0" file="Shape_IndexedFaceSet.044.stl" />
+        <mesh name="Sink1" file="Shape_IndexedFaceSet.045.stl" />
+        <mesh name="Sink2" file="Shape_IndexedFaceSet.046.stl" />
+        <mesh name="Sink3" file="Shape_IndexedFaceSet.047.stl" />
+        <mesh name="Sink4" file="Shape_IndexedFaceSet.048.stl" />
+        <mesh name="Sink5" file="Shape_IndexedFaceSet.049.stl" />
+        <mesh name="Sink6" file="Shape_IndexedFaceSet.050.stl" />
+        <mesh name="Sink7" file="Shape_IndexedFaceSet.051.stl" />
+        <mesh name="Sink8" file="Shape_IndexedFaceSet.052.stl" />
+        <mesh name="Sink9" file="Shape_IndexedFaceSet.053.stl" />
+        <mesh name="Sink10" file="Shape_IndexedFaceSet.054.stl" />
+        <mesh name="Sink11" file="Shape_IndexedFaceSet.055.stl" />
+        <mesh name="Sink12" file="Shape_IndexedFaceSet.056.stl" />
+        <mesh name="Sink13" file="Shape_IndexedFaceSet.057.stl" />
+        <mesh name="Sink14" file="Shape_IndexedFaceSet.058.stl" />
+        <mesh name="Sink15" file="Shape_IndexedFaceSet.059.stl" />
+        <mesh name="Sink16" file="Shape_IndexedFaceSet.060.stl" />
+        <mesh name="Sink17" file="Shape_IndexedFaceSet.061.stl" />
+        <mesh name="Sink18" file="Shape_IndexedFaceSet.062.stl" />
+        <mesh name="Sink19" file="Shape_IndexedFaceSet.063.stl" />
+        <mesh name="Sink20" file="Shape_IndexedFaceSet.064.stl" />
+        <mesh name="Sink21" file="Shape_IndexedFaceSet.065.stl" />
+        <mesh name="Panel_600" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.140.stl" />
+        <mesh name="Drawer_60_580" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.007.stl" />
+        <mesh name="Drawer_60_581" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.007.stl" />
+        <mesh name="Drawer_60_582" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.007.stl" />
+        <mesh name="Drawer_60_583" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.007.stl" />
+        <mesh name="Drawer_60_584" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.124.stl" />
+        <mesh name="Drawer_60_585" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.007.stl" />
+        <mesh name="Handle600" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.stl" />
+        <mesh name="Handle601" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.stl" />
+        <mesh name="Handle602" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.stl" />
+        <mesh name="Drawer_80_140" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.126.stl" />
+        <mesh name="Drawer_80_141" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.127.stl" />
+        <mesh name="Drawer_80_142" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.128.stl" />
+        <mesh name="Drawer_80_143" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.129.stl" />
+        <mesh name="Drawer_80_144" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.125.stl" />
+        <mesh name="Handle800" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.147.stl" />
+        <mesh name="Handle801" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.148.stl" />
+        <mesh name="Handle802" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.146.stl" />
+        <mesh name="Drawer_80_290" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.008.stl" />
+        <mesh name="Drawer_80_291" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.008.stl" />
+        <mesh name="Drawer_80_292" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.008.stl" />
+        <mesh name="Drawer_80_293" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.008.stl" />
+        <mesh name="Drawer_80_294" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.008.stl" />
+        <mesh name="DishWasher0" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.174.stl" />
+        <mesh name="DishWasher1" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.175.stl" />
+        <mesh name="DishWasher2" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.176.stl" />
+        <mesh name="DishWasher3" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.177.stl" />
+        <mesh name="DishWasher4" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.178.stl" />
+        <mesh name="DishWasher5" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.179.stl" />
+        <mesh name="DishWasher6" file="Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.180.stl" />
+        <mesh name="DishWasher7" file="Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.181.stl" />
+        <mesh name="DishWasher8" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.173.stl" />
+        <mesh name="DishWasherDoor0" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.182.stl" />
+        <mesh name="OvenArea0" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.265.stl" />
+        <mesh name="OvenArea1" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.266.stl" />
+        <mesh name="OvenArea2" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.267.stl" />
+        <mesh name="OvenArea3" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.268.stl" />
+        <mesh name="OvenArea4" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.269.stl" />
+        <mesh name="OvenArea5" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.270.stl" />
+        <mesh name="OvenArea6" file="Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.271.stl" />
+        <mesh name="OvenArea7" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.264.stl" />
+        <mesh name="OvenMain0" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.240.stl" />
+        <mesh name="OvenMain1" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.241.stl" />
+        <mesh name="OvenMain2" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.242.stl" />
+        <mesh name="OvenMain3" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.243.stl" />
+        <mesh name="OvenMain4" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.244.stl" />
+        <mesh name="OvenMain5" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.245.stl" />
+        <mesh name="OvenMain6" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.239.stl" />
+        <mesh name="OvenDoor0" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.238.stl" />
+        <mesh name="OvenPanel0" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.246.stl" />
+        <mesh name="Knob0" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.stl" />
+        <mesh name="Knob1" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.stl" />
+        <mesh name="Knob2" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.stl" />
+        <mesh name="Knob3" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.stl" />
+        <mesh name="Knob4" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.stl" />
+        <mesh name="Knob5" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.stl" />
+        <mesh name="Knob6" file="Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.stl" />
+        <mesh name="Knob7" file="Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.stl" />
+        <mesh name="Knob8" file="Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.stl" />
+        <mesh name="Knob9" file="Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.stl" />
+        <mesh name="Knob10" file="Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.stl" />
+        <mesh name="Knob11" file="Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.stl" />
+        <mesh name="Knob12" file="Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.stl" />
+        <mesh name="Knob13" file="Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.stl" />
+        <mesh name="Knob14" file="Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.stl" />
+        <mesh name="Knob15" file="Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.stl" />
+        <mesh name="Knob16" file="Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="Knob17" file="Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="Knob18" file="Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="Knob19" file="Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="Knob20" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.stl" />
+        <mesh name="Drawer_60_140" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.011.stl" />
+        <mesh name="Drawer_60_141" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.011.stl" />
+        <mesh name="Drawer_60_142" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.009.stl" />
+        <mesh name="Drawer_60_143" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.009.stl" />
+        <mesh name="Drawer_60_144" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.011.stl" />
+        <mesh name="VHandle1300" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.159.stl" />
+        <mesh name="VHandle1301" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.158.stl" />
+        <mesh name="VHandle1302" file="VHandle130.001.stl" />
+        <mesh name="IslandArea0" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.256.stl" />
+        <mesh name="IslandArea1" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.257.stl" />
+        <mesh name="IslandArea2" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.258.stl" />
+        <mesh name="IslandArea3" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.259.stl" />
+        <mesh name="IslandArea4" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.260.stl" />
+        <mesh name="IslandArea5" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.261.stl" />
+        <mesh name="IslandArea6" file="Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.262.stl" />
+        <mesh name="IslandArea7" file="Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.263.stl" />
+        <mesh name="IslandArea8" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.255.stl" />
+        <mesh name="Stove0" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.216.stl" />
+        <mesh name="Drawer_60_290" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.stl" />
+        <mesh name="Drawer_60_291" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.stl" />
+        <mesh name="Drawer_60_292" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.stl" />
+        <mesh name="Drawer_60_293" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.stl" />
+        <mesh name="Drawer_60_294" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.stl" />
+        <mesh name="Drawer_60_295" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.stl" />
+        <mesh name="Drawer_60_296" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.stl" />
+        <mesh name="Panel_1000" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.141.stl" />
+        <mesh name="Drawer_100_290" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.136.stl" />
+        <mesh name="Drawer_100_291" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.137.stl" />
+        <mesh name="Drawer_100_292" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.138.stl" />
+        <mesh name="Drawer_100_293" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.139.stl" />
+        <mesh name="Drawer_100_294" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.135.stl" />
+        <mesh name="Handle1000" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.153.stl" />
+        <mesh name="Handle1001" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.154.stl" />
+        <mesh name="Handle1002" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.152.stl" />
+        <mesh name="FridgeArea0" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.249.stl" />
+        <mesh name="FridgeArea1" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.250.stl" />
+        <mesh name="FridgeArea2" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.251.stl" />
+        <mesh name="FridgeArea3" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.252.stl" />
+        <mesh name="FridgeArea4" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.253.stl" />
+        <mesh name="FridgeArea5" file="Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.254.stl" />
+        <mesh name="FridgeArea6" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.247.stl" />
+        <mesh name="Fridge0" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.184.stl" />
+        <mesh name="Fridge1" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.185.stl" />
+        <mesh name="Fridge2" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.186.stl" />
+        <mesh name="Fridge3" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.187.stl" />
+        <mesh name="Fridge4" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.188.stl" />
+        <mesh name="Fridge5" file="Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.189.stl" />
+        <mesh name="Fridge6" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.183.stl" />
+        <mesh name="FridgeDoor0" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.018.stl" />
+        <mesh name="VHandle900" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.012.stl" />
+        <mesh name="VHandle901" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.012.stl" />
+        <mesh name="VHandle902" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.012.stl" />
+        <mesh name="big_table_10" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="big_table_11" file="Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="big_table_12" file="Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="big_table_13" file="Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="big_table_14" file="Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="big_table_15" file="Shape_IndexedFaceSet_Shape_IndexedFaceSet.000.stl" />
+        <mesh name="JokkmokkTable0" file="JokkmokkTable_hull_1.stl" />
+        <mesh name="JokkmokkTable1" file="JokkmokkTable_hull_2.stl" />
+        <mesh name="JokkmokkTable2" file="JokkmokkTable_hull_3.stl" />
+        <mesh name="JokkmokkTable3" file="JokkmokkTable_hull_4.stl" />
+        <mesh name="JokkmokkTable4" file="JokkmokkTable_hull_5.stl" />
+        <mesh name="JokkmokkTable5" file="JokkmokkTable_hull_6.stl" />
+        <mesh name="JokkmokkTable6" file="JokkmokkTable_hull_7.stl" />
+        <mesh name="JokkmokkTable7" file="JokkmokkTable_hull_8.stl" />
+        <mesh name="JokkmokkTable8" file="JokkmokkTable_hull_9.stl" />
+        <mesh name="JokkmokkChair0" file="JokkmokkChair_hull_1.stl" />
+        <mesh name="JokkmokkChair1" file="JokkmokkChair_hull_10.stl" />
+        <mesh name="JokkmokkChair2" file="JokkmokkChair_hull_11.stl" />
+        <mesh name="JokkmokkChair3" file="JokkmokkChair_hull_12.stl" />
+        <mesh name="JokkmokkChair4" file="JokkmokkChair_hull_13.stl" />
+        <mesh name="JokkmokkChair5" file="JokkmokkChair_hull_2.stl" />
+        <mesh name="JokkmokkChair6" file="JokkmokkChair_hull_3.stl" />
+        <mesh name="JokkmokkChair7" file="JokkmokkChair_hull_4.stl" />
+        <mesh name="JokkmokkChair8" file="JokkmokkChair_hull_5.stl" />
+        <mesh name="JokkmokkChair9" file="JokkmokkChair_hull_6.stl" />
+        <mesh name="JokkmokkChair10" file="JokkmokkChair_hull_7.stl" />
+        <mesh name="JokkmokkChair11" file="JokkmokkChair_hull_8.stl" />
+        <mesh name="JokkmokkChair12" file="JokkmokkChair_hull_9.stl" />
+    </asset>
+    <option timestep="0.005" />
+
+    <asset>
+        <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3"
+            rgb2=".2 .3 .4" />
+        <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2" />
+    </asset>
+
+    <worldbody>
+        <geom name="floor" size="0 0 .05" type="plane" material="grid" condim="3" />
+        <light diffuse=".5 .5 .5" pos="0 0 5" dir="0 0 -1" />
+    </worldbody>
+
+    <worldbody>
+        <body name="kitchen">
+            <geom size="0.2875 0.8 0.01" pos="1.565 0.525 0.84" quat="0 0 0 1" type="box" />
+            <geom size="0.4 1.225 0.01" pos="-1.0655 1.7492 0.841" type="box" />
+            <geom size="0.145 0.25 0.005" pos="1.565 -1 1" quat="0 0 0 1" type="box" />
+            <geom size="0.28 0.25 0.065" pos="1.555 -1 1.43" quat="0 0 0 1" type="box" />
+            <geom size="0.5688 0.075 1.25" pos="1.42151 -1.836 1.25" quat="1.32679e-06 0 0 1"
+                type="box" />
+            <geom size="2.591 0.075 1.25" pos="1.91551 0.68 1.25" quat="0.707105 0 0 0.707108"
+                type="box" />
+            <geom size="2.9505 0.075 1.25" pos="-0.96 3.196 1.25" quat="1.32679e-06 0 0 1"
+                type="box" />
+            <geom size="2.125 0.075 0.35" pos="-3.83549 1.146 0.35" quat="0.707105 0 0 -0.707108"
+                type="box" />
+            <geom size="1.13664 0.075 0.35" pos="-2.77385 -1.02376 0.35" quat="1 0 0 7.85e-05"
+                type="box" />
+            <geom size="0.5 0.075 0.35" pos="-1.61 -1.44851 0.35" quat="0.707105 0 0 -0.707108"
+                type="box" />
+            <geom size="0.8 0.075 0.375" pos="0.05271 -1.876 0.375" quat="1.32679e-06 0 0 1"
+                type="box" />
+            <body name="sink_area_trash_drawer_main" pos="1.555 -0.4 0.395" quat="0 0 0 1">
+                <inertial pos="0.185 0 0.125" quat="0.624471 0.331716 0.331716 0.624471" mass="2"
+                    diaginertia="2.0997 2.0997 2" />
+                <joint name="sink_area_trash_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_60_580" />
+                <geom type="mesh" mesh="Drawer_60_581" />
+                <geom type="mesh" mesh="Drawer_60_582" />
+                <geom type="mesh" mesh="Drawer_60_583" />
+                <geom type="mesh" mesh="Drawer_60_584" />
+                <geom type="mesh" mesh="Drawer_60_585" />
+                <geom pos="0.37 0 0.25" type="mesh" mesh="Handle600" />
+                <geom pos="0.37 0 0.25" type="mesh" mesh="Handle601" />
+                <geom pos="0.37 0 0.25" type="mesh" mesh="Handle602" />
+            </body>
+            <body name="sink_area_left_upper_drawer_main" pos="1.555 0.9 0.755" quat="0 0 0 1">
+                <inertial pos="0.17625 0 0.00875" quat="0 0.689353 0 0.724425" mass="2"
+                    diaginertia="2.06228 2.06228 2" />
+                <joint name="sink_area_left_upper_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_80_140" />
+                <geom type="mesh" mesh="Drawer_80_141" />
+                <geom type="mesh" mesh="Drawer_80_142" />
+                <geom type="mesh" mesh="Drawer_80_143" />
+                <geom type="mesh" mesh="Drawer_80_144" />
+                <geom pos="0.3525 0 0.0175" type="mesh" mesh="Handle800" />
+                <geom pos="0.3525 0 0.0175" type="mesh" mesh="Handle801" />
+                <geom pos="0.3525 0 0.0175" type="mesh" mesh="Handle802" />
+            </body>
+            <body name="sink_area_left_middle_drawer_main" pos="1.555 0.9 0.53" quat="0 0 0 1">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="sink_area_left_middle_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_80_290" />
+                <geom type="mesh" mesh="Drawer_80_291" />
+                <geom type="mesh" mesh="Drawer_80_292" />
+                <geom type="mesh" mesh="Drawer_80_293" />
+                <geom type="mesh" mesh="Drawer_80_294" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle800" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle801" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle802" />
+            </body>
+            <body name="sink_area_left_bottom_drawer_main" pos="1.555 0.9 0.23" quat="0 0 0 1">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="sink_area_left_bottom_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_80_290" />
+                <geom type="mesh" mesh="Drawer_80_291" />
+                <geom type="mesh" mesh="Drawer_80_292" />
+                <geom type="mesh" mesh="Drawer_80_293" />
+                <geom type="mesh" mesh="Drawer_80_294" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle800" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle801" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle802" />
+            </body>
+            <body name="sink_area_dish_washer_door" pos="1.285 0.2 0.185"
+                quat="0 0 -0.707107 0.707107">
+                <inertial pos="0.0425 -0.2875 0" quat="0.705204 0.705204 0.0518421 0.0518421"
+                    mass="2" diaginertia="2.16892 2.16892 2" />
+                <joint name="sink_area_dish_washer_door_joint" pos="0 0 0" axis="0 0 1"
+                    limited="true" range="0 1.5708" />
+                <geom pos="0 0.055 0" quat="0.707107 0.707107 0 0" type="mesh"
+                    mesh="DishWasherDoor0" />
+                <geom pos="0.085 -0.575 0" quat="0.707107 -0.707107 0 0" type="mesh"
+                    mesh="Handle600" />
+                <geom pos="0.085 -0.575 0" quat="0.707107 -0.707107 0 0" type="mesh"
+                    mesh="Handle601" />
+                <geom pos="0.085 -0.575 0" quat="0.707107 -0.707107 0 0" type="mesh"
+                    mesh="Handle602" />
+            </body>
+            <body name="sink_area_dish_washer_tray_bottom" pos="1.635 0.2 0.62" quat="0 0 0 1">
+                <joint name="sink_area_dish_washer_tray_main" pos="0 0 0" axis="1 0 0" type="slide"
+                    limited="true" range="0 0.48" />
+                <geom size="0.16 0.25 0.025" type="box" />
+                <geom size="0.16 0.0025 0.085" pos="0 -0.25 0.075" type="box" />
+                <geom size="0.16 0.0025 0.085" pos="0 0.25 0.075" type="box" />
+                <geom size="0.0025 0.25 0.085" pos="-0.16 0 0.075" type="box" />
+                <geom size="0.0025 0.25 0.085" pos="0.16 0 0.075" type="box" />
+                <geom size="0.005 0.1 0.005" pos="0.22 -0.1 0.055" type="box" />
+                <geom size="0.015 0.005 0.005" pos="0.21 -0.2 0.055" type="box" />
+                <geom size="0.015 0.005 0.005" pos="0.21 0 0.055" type="box" />
+            </body>
+            <body name="oven_area_oven_door" pos="1.2813 1.93 0.9086" quat="0 0 -0.707107 0.707107">
+                <inertial pos="0.02938 -0.199015 0" quat="0.705209 0.705209 0.0517734 0.0517734"
+                    mass="2" diaginertia="2.08094 2.08094 2" />
+                <joint name="oven_area_oven_door_joint" pos="0 0 0" axis="0 0 1" limited="true"
+                    range="0 1.5708" damping="100.1" />
+                <geom quat="0.707107 0.707107 0 0" type="mesh" mesh="OvenDoor0" />
+                <geom pos="0.05876 -0.39803 0" quat="0.707107 -0.707107 0 0" type="mesh"
+                    mesh="Handle600" />
+                <geom pos="0.05876 -0.39803 0" quat="0.707107 -0.707107 0 0" type="mesh"
+                    mesh="Handle601" />
+                <geom pos="0.05876 -0.39803 0" quat="0.707107 -0.707107 0 0" type="mesh"
+                    mesh="Handle602" />
+            </body>
+            <body name="oven_area_oven_knob_stove_2" pos="1.285 2.07 1.4149"
+                quat="0 0.707107 0 0.707107">
+                <inertial pos="0 0 0" mass="1" diaginertia="1 1 1" />
+                <joint name="oven_area_oven_knob_stove_2_joint" pos="0 0 0" axis="0 0 1"
+                    limited="true" range="0 3.14159" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob0" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob1" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob2" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob3" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob4" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob5" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob6" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob7" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob8" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob9" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob10" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob11" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob12" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob13" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob14" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob15" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob16" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob17" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob18" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob19" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob20" />
+            </body>
+            <body name="oven_area_oven_knob_stove_1" pos="1.285 2.14 1.4149"
+                quat="0 0.707107 0 0.707107">
+                <inertial pos="0 0 0" mass="1" diaginertia="1 1 1" />
+                <joint name="oven_area_oven_knob_stove_1_joint" pos="0 0 0" axis="0 0 1"
+                    limited="true" range="0 3.14159" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob0" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob1" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob2" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob3" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob4" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob5" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob6" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob7" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob8" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob9" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob10" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob11" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob12" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob13" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob14" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob15" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob16" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob17" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob18" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob19" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob20" />
+            </body>
+            <body name="oven_area_oven_knob_stove_3" pos="1.285 2 1.4149"
+                quat="0 0.707107 0 0.707107">
+                <inertial pos="0 0 0" mass="1" diaginertia="1 1 1" />
+                <joint name="oven_area_oven_knob_stove_3_joint" pos="0 0 0" axis="0 0 1"
+                    limited="true" range="0 3.14159" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob0" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob1" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob2" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob3" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob4" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob5" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob6" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob7" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob8" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob9" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob10" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob11" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob12" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob13" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob14" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob15" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob16" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob17" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob18" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob19" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob20" />
+            </body>
+            <body name="oven_area_oven_knob_stove_4" pos="1.285 1.93 1.4149"
+                quat="0 0.707107 0 0.707107">
+                <inertial pos="0 0 0" mass="1" diaginertia="1 1 1" />
+                <joint name="oven_area_oven_knob_stove_4_joint" pos="0 0 0" axis="0 0 1"
+                    limited="true" range="0 3.14159" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob0" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob1" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob2" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob3" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob4" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob5" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob6" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob7" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob8" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob9" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob10" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob11" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob12" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob13" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob14" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob15" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob16" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob17" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob18" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob19" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob20" />
+            </body>
+            <body name="oven_area_oven_knob_oven" pos="1.285 1.77 1.4149"
+                quat="0 0.707107 0 0.707107">
+                <inertial pos="0 0 0" mass="1" diaginertia="1 1 1" />
+                <joint name="oven_area_oven_knob_oven_joint" pos="0 0 0" axis="0 0 1" limited="true"
+                    range="0 3.14159" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob0" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob1" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob2" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob3" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob4" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob5" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob6" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob7" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob8" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob9" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob10" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob11" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob12" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob13" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob14" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob15" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob16" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob17" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob18" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob19" />
+                <geom quat="0.707107 0 0.707107 0" type="mesh" mesh="Knob20" />
+            </body>
+            <body name="oven_area_area_middle_upper_drawer_main" pos="1.555 1.93 0.8" quat="0 0 0 1">
+                <inertial pos="0.17625 0 0.00875" quat="0 0.689353 0 0.724425" mass="2"
+                    diaginertia="2.06228 2.06228 2" />
+                <joint name="oven_area_area_middle_upper_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_60_140" />
+                <geom type="mesh" mesh="Drawer_60_141" />
+                <geom type="mesh" mesh="Drawer_60_142" />
+                <geom type="mesh" mesh="Drawer_60_143" />
+                <geom type="mesh" mesh="Drawer_60_144" />
+                <geom pos="0.3525 0 0.0175" type="mesh" mesh="Handle600" />
+                <geom pos="0.3525 0 0.0175" type="mesh" mesh="Handle601" />
+                <geom pos="0.3525 0 0.0175" type="mesh" mesh="Handle602" />
+            </body>
+            <body name="oven_area_area_middle_lower_drawer_main" pos="1.555 1.93 0.44"
+                quat="0 0 0 1">
+                <inertial pos="0.185 0 0.125" quat="0.624471 0.331716 0.331716 0.624471" mass="2"
+                    diaginertia="2.0997 2.0997 2" />
+                <joint name="oven_area_area_middle_lower_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_60_580" />
+                <geom type="mesh" mesh="Drawer_60_581" />
+                <geom type="mesh" mesh="Drawer_60_582" />
+                <geom type="mesh" mesh="Drawer_60_583" />
+                <geom type="mesh" mesh="Drawer_60_584" />
+                <geom type="mesh" mesh="Drawer_60_585" />
+                <geom pos="0.37 0 0.25" type="mesh" mesh="Handle600" />
+                <geom pos="0.37 0 0.25" type="mesh" mesh="Handle601" />
+                <geom pos="0.37 0 0.25" type="mesh" mesh="Handle602" />
+            </body>
+            <body name="oven_area_area_left_drawer_main" pos="1.265 2.38 0.825" quat="0 0 0 1">
+                <inertial pos="-0.255684 0 -0.0718947" quat="0.706914 0.0165194 0.0165194 0.706914"
+                    mass="19" diaginertia="21.5967 21.2668 19.5131" />
+                <joint name="oven_area_area_left_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom size="0.0125 0.15 0.665" type="box" rgba="0.7 0.7 0.7 1" />
+                <geom size="0.03 0.15 0.665" pos="-0.03 0 0" type="box" />
+                <geom size="0.245 0.125 0.018" pos="-0.25 0 -0.6" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 -0.107 -0.568" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 0.107 -0.568" type="box" />
+                <geom size="0.018 0.125 0.05" pos="-0.477 0 -0.568" type="box" />
+                <geom size="0.245 0.125 0.018" pos="-0.25 0 -0.28" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 -0.107 -0.248" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 0.107 -0.248" type="box" />
+                <geom size="0.018 0.125 0.05" pos="-0.477 0 -0.248" type="box" />
+                <geom size="0.245 0.125 0.018" pos="-0.25 0 0.05" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 -0.107 0.082" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 0.107 0.082" type="box" />
+                <geom size="0.018 0.125 0.05" pos="-0.477 0 0.082" type="box" />
+                <geom size="0.245 0.125 0.018" pos="-0.25 0 0.38" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 -0.107 0.412" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 0.107 0.412" type="box" />
+                <geom size="0.018 0.125 0.05" pos="-0.477 0 0.412" type="box" />
+                <geom pos="0.08 0 0.05" type="mesh" mesh="VHandle1300" />
+                <geom pos="0.08 0 0.05" type="mesh" mesh="VHandle1301" />
+                <geom pos="0.08 0 0.05" type="mesh" mesh="VHandle1302" />
+            </body>
+            <body name="oven_area_area_right_drawer_main" pos="1.265 1.48 0.825" quat="0 0 0 1">
+                <inertial pos="-0.255684 0 -0.0718947" quat="0.706914 0.0165194 0.0165194 0.706914"
+                    mass="19" diaginertia="21.5967 21.2668 19.5131" />
+                <joint name="oven_area_area_right_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom size="0.0125 0.15 0.665" type="box" rgba="0.7 0.7 0.7 1" />
+                <geom size="0.03 0.15 0.665" pos="-0.03 0 0" type="box" />
+                <geom size="0.245 0.125 0.018" pos="-0.25 0 -0.6" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 -0.107 -0.568" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 0.107 -0.568" type="box" />
+                <geom size="0.018 0.125 0.05" pos="-0.477 0 -0.568" type="box" />
+                <geom size="0.245 0.125 0.018" pos="-0.25 0 -0.28" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 -0.107 -0.248" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 0.107 -0.248" type="box" />
+                <geom size="0.018 0.125 0.05" pos="-0.477 0 -0.248" type="box" />
+                <geom size="0.245 0.125 0.018" pos="-0.25 0 0.05" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 -0.107 0.082" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 0.107 0.082" type="box" />
+                <geom size="0.018 0.125 0.05" pos="-0.477 0 0.082" type="box" />
+                <geom size="0.245 0.125 0.018" pos="-0.25 0 0.38" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 -0.107 0.412" type="box" />
+                <geom size="0.245 0.018 0.05" pos="-0.25 0.107 0.412" type="box" />
+                <geom size="0.018 0.125 0.05" pos="-0.477 0 0.412" type="box" />
+                <geom pos="0.08 0 0.05" type="mesh" mesh="VHandle1300" />
+                <geom pos="0.08 0 0.05" type="mesh" mesh="VHandle1301" />
+                <geom pos="0.08 0 0.05" type="mesh" mesh="VHandle1302" />
+            </body>
+            <body name="kitchen_island_left_upper_drawer_main" pos="-1.063 0.9492 0.535">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="kitchen_island_left_upper_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_60_290" />
+                <geom type="mesh" mesh="Drawer_60_291" />
+                <geom type="mesh" mesh="Drawer_60_292" />
+                <geom type="mesh" mesh="Drawer_60_293" />
+                <geom type="mesh" mesh="Drawer_60_294" />
+                <geom type="mesh" mesh="Drawer_60_295" />
+                <geom type="mesh" mesh="Drawer_60_296" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle600" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle601" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle602" />
+            </body>
+            <body name="kitchen_island_left_lower_drawer_main" pos="-1.063 0.9492 0.245">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="kitchen_island_left_lower_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_60_290" />
+                <geom type="mesh" mesh="Drawer_60_291" />
+                <geom type="mesh" mesh="Drawer_60_292" />
+                <geom type="mesh" mesh="Drawer_60_293" />
+                <geom type="mesh" mesh="Drawer_60_294" />
+                <geom type="mesh" mesh="Drawer_60_295" />
+                <geom type="mesh" mesh="Drawer_60_296" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle600" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle601" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle602" />
+            </body>
+            <body name="kitchen_island_middle_upper_drawer_main" pos="-1.063 1.7492 0.535">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="kitchen_island_middle_upper_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_100_290" />
+                <geom type="mesh" mesh="Drawer_100_291" />
+                <geom type="mesh" mesh="Drawer_100_292" />
+                <geom type="mesh" mesh="Drawer_100_293" />
+                <geom type="mesh" mesh="Drawer_100_294" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle1000" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle1001" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle1002" />
+            </body>
+            <body name="kitchen_island_middle_lower_drawer_main" pos="-1.063 1.7492 0.245">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="kitchen_island_middle_lower_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_100_290" />
+                <geom type="mesh" mesh="Drawer_100_291" />
+                <geom type="mesh" mesh="Drawer_100_292" />
+                <geom type="mesh" mesh="Drawer_100_293" />
+                <geom type="mesh" mesh="Drawer_100_294" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle1000" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle1001" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle1002" />
+            </body>
+            <body name="kitchen_island_right_upper_drawer_main" pos="-1.063 2.5492 0.535">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="kitchen_island_right_upper_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_60_290" />
+                <geom type="mesh" mesh="Drawer_60_291" />
+                <geom type="mesh" mesh="Drawer_60_292" />
+                <geom type="mesh" mesh="Drawer_60_293" />
+                <geom type="mesh" mesh="Drawer_60_294" />
+                <geom type="mesh" mesh="Drawer_60_295" />
+                <geom type="mesh" mesh="Drawer_60_296" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle600" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle601" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle602" />
+            </body>
+            <body name="kitchen_island_right_lower_drawer_main" pos="-1.063 2.5492 0.245">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="kitchen_island_right_lower_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_60_290" />
+                <geom type="mesh" mesh="Drawer_60_291" />
+                <geom type="mesh" mesh="Drawer_60_292" />
+                <geom type="mesh" mesh="Drawer_60_293" />
+                <geom type="mesh" mesh="Drawer_60_294" />
+                <geom type="mesh" mesh="Drawer_60_295" />
+                <geom type="mesh" mesh="Drawer_60_296" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle600" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle601" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle602" />
+            </body>
+            <body name="fridge_area_lower_drawer_main" pos="1.555 -1 0.3225" quat="0 0 0 1">
+                <inertial pos="0.17625 0 0.055" quat="0.569625 0.41896 0.41896 0.569625" mass="2"
+                    diaginertia="2.06818 2.06818 2" />
+                <joint name="fridge_area_lower_drawer_main_joint" pos="0 0 0" axis="1 0 0"
+                    type="slide" limited="true" range="0 0.48" />
+                <geom type="mesh" mesh="Drawer_60_290" />
+                <geom type="mesh" mesh="Drawer_60_291" />
+                <geom type="mesh" mesh="Drawer_60_292" />
+                <geom type="mesh" mesh="Drawer_60_293" />
+                <geom type="mesh" mesh="Drawer_60_294" />
+                <geom type="mesh" mesh="Drawer_60_295" />
+                <geom type="mesh" mesh="Drawer_60_296" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle600" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle601" />
+                <geom pos="0.3525 0 0.11" type="mesh" mesh="Handle602" />
+            </body>
+            <body name="iai_fridge_door" pos="1.265 -1.3 0.99" quat="0 0 0 1">
+                <inertial pos="-0.0376957 -0.271113 -0.0142711"
+                    quat="0.999879 0.000483665 0.00486854 0.0147369" mass="26.9596"
+                    diaginertia="4.3785 3.62753 2.84647" />
+                <joint name="iai_fridge_door_joint" pos="0 0 0" axis="0 0 1" limited="true"
+                    range="0 1.5708" />
+                <geom size="0.02 0.2615 0.44" pos="-0.025 -0.27 -0.01" type="box" />
+                <geom size="0.03 0.0075 0.365" pos="-0.0675 -0.4925 0" type="box" />
+                <geom size="0.03 0.0075 0.365" pos="-0.0675 -0.0475 0" type="box" />
+                <geom size="0.0225 0.23 0.005" pos="-0.055 -0.27 0.36" type="box" />
+                <geom size="0.05 0.175 0.005" pos="-0.095 -0.27 -0.3625" type="box" />
+                <geom size="0.0575 0.03 0.05" pos="-0.0975 -0.47 -0.3175" type="box" />
+                <geom size="0.0575 0.03 0.05" pos="-0.0975 -0.07 -0.3175" type="box" />
+                <geom size="0.005 0.175 0.05" pos="-0.145 -0.27 -0.3175" type="box" />
+                <geom size="0.05 0.175 0.005" pos="-0.095 -0.27 0.01" type="box" />
+                <geom size="0.0575 0.03 0.0325" pos="-0.0975 -0.47 0.0375" type="box" />
+                <geom size="0.0575 0.03 0.0325" pos="-0.0975 -0.07 0.0375" type="box" />
+                <geom size="0.005 0.175 0.0325" pos="-0.145 -0.27 0.0375" type="box" />
+                <geom size="0.05 0.175 0.005" pos="-0.095 -0.27 0.22" type="box" />
+                <geom size="0.0575 0.03 0.0325" pos="-0.0975 -0.47 0.2475" type="box" />
+                <geom size="0.0575 0.03 0.0325" pos="-0.0975 -0.07 0.2475" type="box" />
+                <geom size="0.005 0.175 0.0325" pos="-0.145 -0.27 0.2475" type="box" />
+                <geom type="mesh" mesh="FridgeDoor0" />
+                <geom pos="0.07 -0.57 0" type="mesh" mesh="VHandle900" />
+                <geom pos="0.07 -0.57 0" type="mesh" mesh="VHandle901" />
+                <geom pos="0.07 -0.57 0" type="mesh" mesh="VHandle902" />
+            </body>
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea0" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea1" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea2" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea3" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea4" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea5" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea6" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea7" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea8" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea9" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea10" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea11" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea12" />
+            <geom pos="1.565 0.3 0.41" quat="0 0 0 1" type="mesh" mesh="SinkArea13" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink0" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink1" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink2" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink3" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink4" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink5" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink6" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink7" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink8" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink9" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink10" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink11" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink12" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink13" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink14" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink15" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink16" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink17" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink18" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink19" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink20" />
+            <geom pos="1.56 -0.17 0.8514" quat="0 0 0 1" type="mesh" mesh="Sink21" />
+            <geom pos="1.285 -0.4 0.765" quat="0 0 0 1" type="mesh" mesh="Panel_600" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher0" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher1" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher2" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher3" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher4" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher5" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher6" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher7" />
+            <geom pos="1.555 0.2 0.47" quat="0 0 0 1" type="mesh" mesh="DishWasher8" />
+            <geom pos="1.555 1.93 0.755" quat="0 0 0 1" type="mesh" mesh="OvenArea0" />
+            <geom pos="1.555 1.93 0.755" quat="0 0 0 1" type="mesh" mesh="OvenArea1" />
+            <geom pos="1.555 1.93 0.755" quat="0 0 0 1" type="mesh" mesh="OvenArea2" />
+            <geom pos="1.555 1.93 0.755" quat="0 0 0 1" type="mesh" mesh="OvenArea3" />
+            <geom pos="1.555 1.93 0.755" quat="0 0 0 1" type="mesh" mesh="OvenArea4" />
+            <geom pos="1.555 1.93 0.755" quat="0 0 0 1" type="mesh" mesh="OvenArea5" />
+            <geom pos="1.555 1.93 0.755" quat="0 0 0 1" type="mesh" mesh="OvenArea6" />
+            <geom pos="1.555 1.93 0.755" quat="0 0 0 1" type="mesh" mesh="OvenArea7" />
+            <geom pos="1.555 1.93 1.17" quat="0 0 0 1" type="mesh" mesh="OvenMain0" />
+            <geom pos="1.555 1.93 1.17" quat="0 0 0 1" type="mesh" mesh="OvenMain1" />
+            <geom pos="1.555 1.93 1.17" quat="0 0 0 1" type="mesh" mesh="OvenMain2" />
+            <geom pos="1.555 1.93 1.17" quat="0 0 0 1" type="mesh" mesh="OvenMain3" />
+            <geom pos="1.555 1.93 1.17" quat="0 0 0 1" type="mesh" mesh="OvenMain4" />
+            <geom pos="1.555 1.93 1.17" quat="0 0 0 1" type="mesh" mesh="OvenMain5" />
+            <geom pos="1.555 1.93 1.17" quat="0 0 0 1" type="mesh" mesh="OvenMain6" />
+            <geom pos="1.285 1.93 1.4149" quat="0 0 0 1" type="mesh" mesh="OvenPanel0" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea0" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea1" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea2" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea3" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea4" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea5" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea6" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea7" />
+            <geom pos="-1.0655 1.7492 0.421" type="mesh" mesh="IslandArea8" />
+            <geom pos="-1.0655 2.515 0.8525" type="mesh" mesh="Stove0" />
+            <geom pos="-0.793 0.9492 0.75" type="mesh" mesh="Panel_600" />
+            <geom pos="-0.793 1.7492 0.75" type="mesh" mesh="Panel_1000" />
+            <geom pos="-0.793 2.5492 0.75" type="mesh" mesh="Panel_600" />
+            <geom pos="1.555 -1 0.75" quat="0 0 0 1" type="mesh" mesh="FridgeArea0" />
+            <geom pos="1.555 -1 0.75" quat="0 0 0 1" type="mesh" mesh="FridgeArea1" />
+            <geom pos="1.555 -1 0.75" quat="0 0 0 1" type="mesh" mesh="FridgeArea2" />
+            <geom pos="1.555 -1 0.75" quat="0 0 0 1" type="mesh" mesh="FridgeArea3" />
+            <geom pos="1.555 -1 0.75" quat="0 0 0 1" type="mesh" mesh="FridgeArea4" />
+            <geom pos="1.555 -1 0.75" quat="0 0 0 1" type="mesh" mesh="FridgeArea5" />
+            <geom pos="1.555 -1 0.75" quat="0 0 0 1" type="mesh" mesh="FridgeArea6" />
+            <geom pos="1.555 -1 0.99" quat="0 0 0 1" type="mesh" mesh="Fridge0" />
+            <geom pos="1.555 -1 0.99" quat="0 0 0 1" type="mesh" mesh="Fridge1" />
+            <geom pos="1.555 -1 0.99" quat="0 0 0 1" type="mesh" mesh="Fridge2" />
+            <geom pos="1.555 -1 0.99" quat="0 0 0 1" type="mesh" mesh="Fridge3" />
+            <geom pos="1.555 -1 0.99" quat="0 0 0 1" type="mesh" mesh="Fridge4" />
+            <geom pos="1.555 -1 0.99" quat="0 0 0 1" type="mesh" mesh="Fridge5" />
+            <geom pos="1.555 -1 0.99" quat="0 0 0 1" type="mesh" mesh="Fridge6" />
+            <geom pos="-2.4 -1.47 0.3619" quat="0 0 0 1" type="mesh" mesh="big_table_10" />
+            <geom pos="-2.4 -1.47 0.3619" quat="0 0 0 1" type="mesh" mesh="big_table_11" />
+            <geom pos="-2.4 -1.47 0.3619" quat="0 0 0 1" type="mesh" mesh="big_table_12" />
+            <geom pos="-2.4 -1.47 0.3619" quat="0 0 0 1" type="mesh" mesh="big_table_13" />
+            <geom pos="-2.4 -1.47 0.3619" quat="0 0 0 1" type="mesh" mesh="big_table_14" />
+            <geom pos="-2.4 -1.47 0.3619" quat="0 0 0 1" type="mesh" mesh="big_table_15" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable0" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable1" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable2" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable3" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable4" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable5" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable6" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable7" />
+            <geom pos="-3.38 0.31 0.35" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkTable8" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair0" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair1" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair2" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair3" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair4" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair5" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair6" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair7" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair8" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair9" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair10" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair11" />
+            <geom pos="-3.38 -0.69 0.5535" quat="0.707107 0 0 0.707107" type="mesh"
+                mesh="JokkmokkChair12" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair0" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair1" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair2" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair3" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair4" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair5" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair6" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair7" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair8" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair9" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair10" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair11" />
+            <geom pos="-3.38 1.31 0.5535" quat="0.707107 0 0 -0.707107" type="mesh"
+                mesh="JokkmokkChair12" />
+        </body>
+    </worldbody>
+</mujoco>
