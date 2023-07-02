@@ -140,7 +140,7 @@ def Xform "world"
 
         def Mesh "geom_12" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.273.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.273.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -153,7 +153,7 @@ def Xform "world"
 
         def Mesh "geom_13" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.274.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.274.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -166,7 +166,7 @@ def Xform "world"
 
         def Mesh "geom_14" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.275.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.275.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -179,7 +179,7 @@ def Xform "world"
 
         def Mesh "geom_15" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.276.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.276.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -192,7 +192,7 @@ def Xform "world"
 
         def Mesh "geom_16" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.277.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.277.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -205,7 +205,7 @@ def Xform "world"
 
         def Mesh "geom_17" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.278.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.278.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -218,7 +218,7 @@ def Xform "world"
 
         def Mesh "geom_18" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.279.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.279.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -231,7 +231,7 @@ def Xform "world"
 
         def Mesh "geom_19" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.280.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.280.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -244,7 +244,7 @@ def Xform "world"
 
         def Mesh "geom_20" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.281.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.281.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -257,7 +257,7 @@ def Xform "world"
 
         def Mesh "geom_21" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.282.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.282.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -270,7 +270,7 @@ def Xform "world"
 
         def Mesh "geom_22" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.283.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.283.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -283,7 +283,7 @@ def Xform "world"
 
         def Mesh "geom_23" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.284.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.284.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -296,7 +296,7 @@ def Xform "world"
 
         def Mesh "geom_24" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.285.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.285.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -309,7 +309,7 @@ def Xform "world"
 
         def Mesh "geom_25" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.272.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.272.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -322,7 +322,7 @@ def Xform "world"
 
         def Mesh "geom_26" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.044.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.044.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -335,7 +335,7 @@ def Xform "world"
 
         def Mesh "geom_27" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.045.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.045.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -348,7 +348,7 @@ def Xform "world"
 
         def Mesh "geom_28" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.046.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.046.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -361,7 +361,7 @@ def Xform "world"
 
         def Mesh "geom_29" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.047.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.047.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -374,7 +374,7 @@ def Xform "world"
 
         def Mesh "geom_30" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.048.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.048.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -387,7 +387,7 @@ def Xform "world"
 
         def Mesh "geom_31" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.049.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.049.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -400,7 +400,7 @@ def Xform "world"
 
         def Mesh "geom_32" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.050.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.050.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -413,7 +413,7 @@ def Xform "world"
 
         def Mesh "geom_33" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.051.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.051.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -426,7 +426,7 @@ def Xform "world"
 
         def Mesh "geom_34" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.052.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.052.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -439,7 +439,7 @@ def Xform "world"
 
         def Mesh "geom_35" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.053.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.053.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -452,7 +452,7 @@ def Xform "world"
 
         def Mesh "geom_36" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.054.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.054.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -465,7 +465,7 @@ def Xform "world"
 
         def Mesh "geom_37" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.055.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.055.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -478,7 +478,7 @@ def Xform "world"
 
         def Mesh "geom_38" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.056.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.056.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -491,7 +491,7 @@ def Xform "world"
 
         def Mesh "geom_39" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.057.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.057.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -504,7 +504,7 @@ def Xform "world"
 
         def Mesh "geom_40" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.058.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.058.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -517,7 +517,7 @@ def Xform "world"
 
         def Mesh "geom_41" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.059.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.059.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -530,7 +530,7 @@ def Xform "world"
 
         def Mesh "geom_42" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.060.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.060.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -543,7 +543,7 @@ def Xform "world"
 
         def Mesh "geom_43" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.061.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.061.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -556,7 +556,7 @@ def Xform "world"
 
         def Mesh "geom_44" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.062.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.062.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -569,7 +569,7 @@ def Xform "world"
 
         def Mesh "geom_45" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.063.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.063.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -582,7 +582,7 @@ def Xform "world"
 
         def Mesh "geom_46" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.064.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.064.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -595,7 +595,7 @@ def Xform "world"
 
         def Mesh "geom_47" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.065.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.065.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -608,7 +608,7 @@ def Xform "world"
 
         def Mesh "geom_48" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.140.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.140.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -621,7 +621,7 @@ def Xform "world"
 
         def Mesh "geom_49" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.174.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.174.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -634,7 +634,7 @@ def Xform "world"
 
         def Mesh "geom_50" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.175.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.175.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -647,7 +647,7 @@ def Xform "world"
 
         def Mesh "geom_51" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.176.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.176.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -660,7 +660,7 @@ def Xform "world"
 
         def Mesh "geom_52" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.177.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.177.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -673,7 +673,7 @@ def Xform "world"
 
         def Mesh "geom_53" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.178.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.178.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -686,7 +686,7 @@ def Xform "world"
 
         def Mesh "geom_54" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.179.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.179.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -699,7 +699,7 @@ def Xform "world"
 
         def Mesh "geom_55" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.180.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.180.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -712,7 +712,7 @@ def Xform "world"
 
         def Mesh "geom_56" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.181.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.181.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -725,7 +725,7 @@ def Xform "world"
 
         def Mesh "geom_57" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.173.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.173.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -738,7 +738,7 @@ def Xform "world"
 
         def Mesh "geom_58" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.265.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.265.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -751,7 +751,7 @@ def Xform "world"
 
         def Mesh "geom_59" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.266.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.266.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -764,7 +764,7 @@ def Xform "world"
 
         def Mesh "geom_60" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.267.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.267.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -777,7 +777,7 @@ def Xform "world"
 
         def Mesh "geom_61" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.268.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.268.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -790,7 +790,7 @@ def Xform "world"
 
         def Mesh "geom_62" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.269.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.269.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -803,7 +803,7 @@ def Xform "world"
 
         def Mesh "geom_63" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.270.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.270.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -816,7 +816,7 @@ def Xform "world"
 
         def Mesh "geom_64" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.271.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.271.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -829,7 +829,7 @@ def Xform "world"
 
         def Mesh "geom_65" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.264.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.264.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -842,7 +842,7 @@ def Xform "world"
 
         def Mesh "geom_66" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.240.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.240.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -855,7 +855,7 @@ def Xform "world"
 
         def Mesh "geom_67" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.241.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.241.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -868,7 +868,7 @@ def Xform "world"
 
         def Mesh "geom_68" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.242.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.242.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -881,7 +881,7 @@ def Xform "world"
 
         def Mesh "geom_69" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.243.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.243.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -894,7 +894,7 @@ def Xform "world"
 
         def Mesh "geom_70" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.244.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.244.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -907,7 +907,7 @@ def Xform "world"
 
         def Mesh "geom_71" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.245.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.245.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -920,7 +920,7 @@ def Xform "world"
 
         def Mesh "geom_72" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.239.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.239.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -933,7 +933,7 @@ def Xform "world"
 
         def Mesh "geom_73" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.246.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.246.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -946,7 +946,7 @@ def Xform "world"
 
         def Mesh "geom_74" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.256.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.256.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -959,7 +959,7 @@ def Xform "world"
 
         def Mesh "geom_75" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.257.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.257.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -972,7 +972,7 @@ def Xform "world"
 
         def Mesh "geom_76" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.258.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.258.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -985,7 +985,7 @@ def Xform "world"
 
         def Mesh "geom_77" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.259.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.259.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -998,7 +998,7 @@ def Xform "world"
 
         def Mesh "geom_78" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.260.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.260.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1011,7 +1011,7 @@ def Xform "world"
 
         def Mesh "geom_79" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.261.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.261.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1024,7 +1024,7 @@ def Xform "world"
 
         def Mesh "geom_80" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.262.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.262.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1037,7 +1037,7 @@ def Xform "world"
 
         def Mesh "geom_81" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.263.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.263.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1050,7 +1050,7 @@ def Xform "world"
 
         def Mesh "geom_82" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.255.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.255.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1063,7 +1063,7 @@ def Xform "world"
 
         def Mesh "geom_83" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.216.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.216.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1076,7 +1076,7 @@ def Xform "world"
 
         def Mesh "geom_84" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.140.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.140.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1089,7 +1089,7 @@ def Xform "world"
 
         def Mesh "geom_85" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.141.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.141.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1102,7 +1102,7 @@ def Xform "world"
 
         def Mesh "geom_86" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.140.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.140.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1115,7 +1115,7 @@ def Xform "world"
 
         def Mesh "geom_87" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.249.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.249.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1128,7 +1128,7 @@ def Xform "world"
 
         def Mesh "geom_88" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.250.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.250.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1141,7 +1141,7 @@ def Xform "world"
 
         def Mesh "geom_89" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.251.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.251.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1154,7 +1154,7 @@ def Xform "world"
 
         def Mesh "geom_90" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.252.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.252.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1167,7 +1167,7 @@ def Xform "world"
 
         def Mesh "geom_91" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.253.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.253.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1180,7 +1180,7 @@ def Xform "world"
 
         def Mesh "geom_92" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.254.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.254.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1193,7 +1193,7 @@ def Xform "world"
 
         def Mesh "geom_93" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.247.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.247.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1206,7 +1206,7 @@ def Xform "world"
 
         def Mesh "geom_94" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.184.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.184.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1219,7 +1219,7 @@ def Xform "world"
 
         def Mesh "geom_95" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.185.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.185.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1232,7 +1232,7 @@ def Xform "world"
 
         def Mesh "geom_96" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.186.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.186.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1245,7 +1245,7 @@ def Xform "world"
 
         def Mesh "geom_97" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.187.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.187.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1258,7 +1258,7 @@ def Xform "world"
 
         def Mesh "geom_98" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.188.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.188.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1271,7 +1271,7 @@ def Xform "world"
 
         def Mesh "geom_99" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.189.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.189.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1284,7 +1284,7 @@ def Xform "world"
 
         def Mesh "geom_100" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.183.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.183.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1297,7 +1297,7 @@ def Xform "world"
 
         def Mesh "geom_101" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1310,7 +1310,7 @@ def Xform "world"
 
         def Mesh "geom_102" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1323,7 +1323,7 @@ def Xform "world"
 
         def Mesh "geom_103" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1336,7 +1336,7 @@ def Xform "world"
 
         def Mesh "geom_104" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1349,7 +1349,7 @@ def Xform "world"
 
         def Mesh "geom_105" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1362,7 +1362,7 @@ def Xform "world"
 
         def Mesh "geom_106" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1375,7 +1375,7 @@ def Xform "world"
 
         def Mesh "geom_107" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_1.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_1.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1388,7 +1388,7 @@ def Xform "world"
 
         def Mesh "geom_108" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_2.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_2.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1401,7 +1401,7 @@ def Xform "world"
 
         def Mesh "geom_109" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_3.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_3.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1414,7 +1414,7 @@ def Xform "world"
 
         def Mesh "geom_110" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_4.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_4.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1427,7 +1427,7 @@ def Xform "world"
 
         def Mesh "geom_111" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_5.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_5.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1440,7 +1440,7 @@ def Xform "world"
 
         def Mesh "geom_112" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_6.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_6.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1453,7 +1453,7 @@ def Xform "world"
 
         def Mesh "geom_113" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_7.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_7.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1466,7 +1466,7 @@ def Xform "world"
 
         def Mesh "geom_114" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_8.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_8.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1479,7 +1479,7 @@ def Xform "world"
 
         def Mesh "geom_115" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkTable_hull_9.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkTable_hull_9.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1492,7 +1492,7 @@ def Xform "world"
 
         def Mesh "geom_116" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_1.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_1.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1505,7 +1505,7 @@ def Xform "world"
 
         def Mesh "geom_117" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_10.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_10.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1518,7 +1518,7 @@ def Xform "world"
 
         def Mesh "geom_118" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_11.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_11.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1531,7 +1531,7 @@ def Xform "world"
 
         def Mesh "geom_119" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_12.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_12.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1544,7 +1544,7 @@ def Xform "world"
 
         def Mesh "geom_120" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_13.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_13.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1557,7 +1557,7 @@ def Xform "world"
 
         def Mesh "geom_121" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_2.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_2.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1570,7 +1570,7 @@ def Xform "world"
 
         def Mesh "geom_122" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_3.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_3.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1583,7 +1583,7 @@ def Xform "world"
 
         def Mesh "geom_123" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_4.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_4.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1596,7 +1596,7 @@ def Xform "world"
 
         def Mesh "geom_124" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_5.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_5.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1609,7 +1609,7 @@ def Xform "world"
 
         def Mesh "geom_125" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_6.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_6.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1622,7 +1622,7 @@ def Xform "world"
 
         def Mesh "geom_126" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_7.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_7.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1635,7 +1635,7 @@ def Xform "world"
 
         def Mesh "geom_127" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_8.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_8.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1648,7 +1648,7 @@ def Xform "world"
 
         def Mesh "geom_128" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_9.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_9.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1661,7 +1661,7 @@ def Xform "world"
 
         def Mesh "geom_129" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_1.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_1.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1674,7 +1674,7 @@ def Xform "world"
 
         def Mesh "geom_130" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_10.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_10.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1687,7 +1687,7 @@ def Xform "world"
 
         def Mesh "geom_131" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_11.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_11.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1700,7 +1700,7 @@ def Xform "world"
 
         def Mesh "geom_132" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_12.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_12.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1713,7 +1713,7 @@ def Xform "world"
 
         def Mesh "geom_133" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_13.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_13.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1726,7 +1726,7 @@ def Xform "world"
 
         def Mesh "geom_134" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_2.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_2.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1739,7 +1739,7 @@ def Xform "world"
 
         def Mesh "geom_135" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_3.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_3.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1752,7 +1752,7 @@ def Xform "world"
 
         def Mesh "geom_136" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_4.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_4.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1765,7 +1765,7 @@ def Xform "world"
 
         def Mesh "geom_137" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_5.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_5.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1778,7 +1778,7 @@ def Xform "world"
 
         def Mesh "geom_138" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_6.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_6.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1791,7 +1791,7 @@ def Xform "world"
 
         def Mesh "geom_139" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_7.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_7.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1804,7 +1804,7 @@ def Xform "world"
 
         def Mesh "geom_140" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_8.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_8.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -1817,7 +1817,7 @@ def Xform "world"
 
         def Mesh "geom_141" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/JokkmokkChair_hull_9.usda@
+            prepend references = @./kitchen_with_physics/usd/JokkmokkChair_hull_9.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2173,12 +2173,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.0997, 2.0997, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.6, -0.4, 0.4, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.555, -0.4, 0.395, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_142" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2191,7 +2191,7 @@ def Xform "world"
 
         def Mesh "geom_143" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2204,7 +2204,7 @@ def Xform "world"
 
         def Mesh "geom_144" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2217,7 +2217,7 @@ def Xform "world"
 
         def Mesh "geom_145" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2230,7 +2230,7 @@ def Xform "world"
 
         def Mesh "geom_146" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.124.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.124.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2243,7 +2243,7 @@ def Xform "world"
 
         def Mesh "geom_147" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2256,7 +2256,7 @@ def Xform "world"
 
         def Mesh "geom_148" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2269,7 +2269,7 @@ def Xform "world"
 
         def Mesh "geom_149" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2282,7 +2282,7 @@ def Xform "world"
 
         def Mesh "geom_150" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2302,12 +2302,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06228, 2.06228, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.6, 0.9, 0.76, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.555, 0.9, 0.755, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_151" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.126.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.126.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2320,7 +2320,7 @@ def Xform "world"
 
         def Mesh "geom_152" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.127.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.127.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2333,7 +2333,7 @@ def Xform "world"
 
         def Mesh "geom_153" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.128.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.128.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2346,7 +2346,7 @@ def Xform "world"
 
         def Mesh "geom_154" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.129.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.129.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2359,7 +2359,7 @@ def Xform "world"
 
         def Mesh "geom_155" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.125.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.125.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2372,7 +2372,7 @@ def Xform "world"
 
         def Mesh "geom_156" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.147.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.147.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2385,7 +2385,7 @@ def Xform "world"
 
         def Mesh "geom_157" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.148.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.148.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2398,7 +2398,7 @@ def Xform "world"
 
         def Mesh "geom_158" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.146.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.146.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2418,12 +2418,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.6, 0.9, 0.53, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.555, 0.9, 0.53, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_159" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2436,7 +2436,7 @@ def Xform "world"
 
         def Mesh "geom_160" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2449,7 +2449,7 @@ def Xform "world"
 
         def Mesh "geom_161" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2462,7 +2462,7 @@ def Xform "world"
 
         def Mesh "geom_162" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2475,7 +2475,7 @@ def Xform "world"
 
         def Mesh "geom_163" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2488,7 +2488,7 @@ def Xform "world"
 
         def Mesh "geom_164" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.147.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.147.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2501,7 +2501,7 @@ def Xform "world"
 
         def Mesh "geom_165" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.148.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.148.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2514,7 +2514,7 @@ def Xform "world"
 
         def Mesh "geom_166" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.146.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.146.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2534,12 +2534,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.6, 0.9, 0.23, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.555, 0.9, 0.23, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_167" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2552,7 +2552,7 @@ def Xform "world"
 
         def Mesh "geom_168" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2565,7 +2565,7 @@ def Xform "world"
 
         def Mesh "geom_169" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2578,7 +2578,7 @@ def Xform "world"
 
         def Mesh "geom_170" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2591,7 +2591,7 @@ def Xform "world"
 
         def Mesh "geom_171" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.008.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.008.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2604,7 +2604,7 @@ def Xform "world"
 
         def Mesh "geom_172" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.147.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.147.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2617,7 +2617,7 @@ def Xform "world"
 
         def Mesh "geom_173" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.148.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.148.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2630,7 +2630,7 @@ def Xform "world"
 
         def Mesh "geom_174" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.146.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.146.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2650,12 +2650,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.16892, 2.16892, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (-0, 0, -1, 0), (0, -1, 0, 0), (1.3, 0.2, 0.18, 1) )
+        matrix4d xformOp:transform = ( (-1.0000000000000004, 0, 0, 0), (-0, -2.220446049250313e-16, -1.0000000000000002, 0), (0, -1.0000000000000002, -2.220446049250313e-16, 0), (1.285, 0.2, 0.185, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_175" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.182.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.182.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2668,7 +2668,7 @@ def Xform "world"
 
         def Mesh "geom_176" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2681,7 +2681,7 @@ def Xform "world"
 
         def Mesh "geom_177" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2694,7 +2694,7 @@ def Xform "world"
 
         def Mesh "geom_178" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2714,7 +2714,7 @@ def Xform "world"
         float3 physics:diagonalInertia = (0.31466332, 0.23051567, 0.1076494)
         float physics:mass = 9.42
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.6, 0.2, 0.62, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.635, 0.2, 0.62, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Cube "geom_179" (
@@ -2814,12 +2814,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.08094, 2.08094, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (-0, 0, -1, 0), (0, -1, 0, 0), (1.3, 1.9, 0.91, 1) )
+        matrix4d xformOp:transform = ( (-1.0000000000000004, 0, 0, 0), (-0, -2.220446049250313e-16, -1.0000000000000002, 0), (0, -1.0000000000000002, -2.220446049250313e-16, 0), (1.2813, 1.93, 0.9086, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_187" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.238.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.238.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2832,7 +2832,7 @@ def Xform "world"
 
         def Mesh "geom_188" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2845,7 +2845,7 @@ def Xform "world"
 
         def Mesh "geom_189" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2858,7 +2858,7 @@ def Xform "world"
 
         def Mesh "geom_190" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2878,12 +2878,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (1, 1, 1)
         float physics:mass = 1
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (0, 0, 1, 0), (0, -1, 0, 0), (1, 0, 0, 0), (1.3, 2.1, 1.4, 1) )
+        matrix4d xformOp:transform = ( (-2.220446049250313e-16, 0, 1.0000000000000002, 0), (0, -1.0000000000000004, 0, 0), (1.0000000000000002, 0, -2.220446049250313e-16, 0), (1.285, 2.07, 1.4149, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_191" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2896,7 +2896,7 @@ def Xform "world"
 
         def Mesh "geom_192" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2909,7 +2909,7 @@ def Xform "world"
 
         def Mesh "geom_193" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2922,7 +2922,7 @@ def Xform "world"
 
         def Mesh "geom_194" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2935,7 +2935,7 @@ def Xform "world"
 
         def Mesh "geom_195" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2948,7 +2948,7 @@ def Xform "world"
 
         def Mesh "geom_196" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2961,7 +2961,7 @@ def Xform "world"
 
         def Mesh "geom_197" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2974,7 +2974,7 @@ def Xform "world"
 
         def Mesh "geom_198" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -2987,7 +2987,7 @@ def Xform "world"
 
         def Mesh "geom_199" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3000,7 +3000,7 @@ def Xform "world"
 
         def Mesh "geom_200" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3013,7 +3013,7 @@ def Xform "world"
 
         def Mesh "geom_201" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3026,7 +3026,7 @@ def Xform "world"
 
         def Mesh "geom_202" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3039,7 +3039,7 @@ def Xform "world"
 
         def Mesh "geom_203" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3052,7 +3052,7 @@ def Xform "world"
 
         def Mesh "geom_204" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3065,7 +3065,7 @@ def Xform "world"
 
         def Mesh "geom_205" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3078,7 +3078,7 @@ def Xform "world"
 
         def Mesh "geom_206" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3091,7 +3091,7 @@ def Xform "world"
 
         def Mesh "geom_207" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3104,7 +3104,7 @@ def Xform "world"
 
         def Mesh "geom_208" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3117,7 +3117,7 @@ def Xform "world"
 
         def Mesh "geom_209" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3130,7 +3130,7 @@ def Xform "world"
 
         def Mesh "geom_210" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3143,7 +3143,7 @@ def Xform "world"
 
         def Mesh "geom_211" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3163,12 +3163,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (1, 1, 1)
         float physics:mass = 1
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (0, 0, 1, 0), (0, -1, 0, 0), (1, 0, 0, 0), (1.3, 2.1, 1.4, 1) )
+        matrix4d xformOp:transform = ( (-2.220446049250313e-16, 0, 1.0000000000000002, 0), (0, -1.0000000000000004, 0, 0), (1.0000000000000002, 0, -2.220446049250313e-16, 0), (1.285, 2.14, 1.4149, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_212" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3181,7 +3181,7 @@ def Xform "world"
 
         def Mesh "geom_213" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3194,7 +3194,7 @@ def Xform "world"
 
         def Mesh "geom_214" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3207,7 +3207,7 @@ def Xform "world"
 
         def Mesh "geom_215" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3220,7 +3220,7 @@ def Xform "world"
 
         def Mesh "geom_216" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3233,7 +3233,7 @@ def Xform "world"
 
         def Mesh "geom_217" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3246,7 +3246,7 @@ def Xform "world"
 
         def Mesh "geom_218" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3259,7 +3259,7 @@ def Xform "world"
 
         def Mesh "geom_219" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3272,7 +3272,7 @@ def Xform "world"
 
         def Mesh "geom_220" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3285,7 +3285,7 @@ def Xform "world"
 
         def Mesh "geom_221" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3298,7 +3298,7 @@ def Xform "world"
 
         def Mesh "geom_222" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3311,7 +3311,7 @@ def Xform "world"
 
         def Mesh "geom_223" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3324,7 +3324,7 @@ def Xform "world"
 
         def Mesh "geom_224" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3337,7 +3337,7 @@ def Xform "world"
 
         def Mesh "geom_225" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3350,7 +3350,7 @@ def Xform "world"
 
         def Mesh "geom_226" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3363,7 +3363,7 @@ def Xform "world"
 
         def Mesh "geom_227" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3376,7 +3376,7 @@ def Xform "world"
 
         def Mesh "geom_228" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3389,7 +3389,7 @@ def Xform "world"
 
         def Mesh "geom_229" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3402,7 +3402,7 @@ def Xform "world"
 
         def Mesh "geom_230" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3415,7 +3415,7 @@ def Xform "world"
 
         def Mesh "geom_231" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3428,7 +3428,7 @@ def Xform "world"
 
         def Mesh "geom_232" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3448,12 +3448,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (1, 1, 1)
         float physics:mass = 1
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (0, 0, 1, 0), (0, -1, 0, 0), (1, 0, 0, 0), (1.3, 2, 1.4, 1) )
+        matrix4d xformOp:transform = ( (-2.220446049250313e-16, 0, 1.0000000000000002, 0), (0, -1.0000000000000004, 0, 0), (1.0000000000000002, 0, -2.220446049250313e-16, 0), (1.285, 2, 1.4149, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_233" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3466,7 +3466,7 @@ def Xform "world"
 
         def Mesh "geom_234" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3479,7 +3479,7 @@ def Xform "world"
 
         def Mesh "geom_235" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3492,7 +3492,7 @@ def Xform "world"
 
         def Mesh "geom_236" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3505,7 +3505,7 @@ def Xform "world"
 
         def Mesh "geom_237" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3518,7 +3518,7 @@ def Xform "world"
 
         def Mesh "geom_238" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3531,7 +3531,7 @@ def Xform "world"
 
         def Mesh "geom_239" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3544,7 +3544,7 @@ def Xform "world"
 
         def Mesh "geom_240" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3557,7 +3557,7 @@ def Xform "world"
 
         def Mesh "geom_241" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3570,7 +3570,7 @@ def Xform "world"
 
         def Mesh "geom_242" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3583,7 +3583,7 @@ def Xform "world"
 
         def Mesh "geom_243" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3596,7 +3596,7 @@ def Xform "world"
 
         def Mesh "geom_244" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3609,7 +3609,7 @@ def Xform "world"
 
         def Mesh "geom_245" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3622,7 +3622,7 @@ def Xform "world"
 
         def Mesh "geom_246" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3635,7 +3635,7 @@ def Xform "world"
 
         def Mesh "geom_247" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3648,7 +3648,7 @@ def Xform "world"
 
         def Mesh "geom_248" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3661,7 +3661,7 @@ def Xform "world"
 
         def Mesh "geom_249" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3674,7 +3674,7 @@ def Xform "world"
 
         def Mesh "geom_250" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3687,7 +3687,7 @@ def Xform "world"
 
         def Mesh "geom_251" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3700,7 +3700,7 @@ def Xform "world"
 
         def Mesh "geom_252" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3713,7 +3713,7 @@ def Xform "world"
 
         def Mesh "geom_253" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3733,12 +3733,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (1, 1, 1)
         float physics:mass = 1
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (0, 0, 1, 0), (0, -1, 0, 0), (1, 0, 0, 0), (1.3, 1.9, 1.4, 1) )
+        matrix4d xformOp:transform = ( (-2.220446049250313e-16, 0, 1.0000000000000002, 0), (0, -1.0000000000000004, 0, 0), (1.0000000000000002, 0, -2.220446049250313e-16, 0), (1.285, 1.93, 1.4149, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_254" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3751,7 +3751,7 @@ def Xform "world"
 
         def Mesh "geom_255" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3764,7 +3764,7 @@ def Xform "world"
 
         def Mesh "geom_256" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3777,7 +3777,7 @@ def Xform "world"
 
         def Mesh "geom_257" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3790,7 +3790,7 @@ def Xform "world"
 
         def Mesh "geom_258" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3803,7 +3803,7 @@ def Xform "world"
 
         def Mesh "geom_259" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3816,7 +3816,7 @@ def Xform "world"
 
         def Mesh "geom_260" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3829,7 +3829,7 @@ def Xform "world"
 
         def Mesh "geom_261" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3842,7 +3842,7 @@ def Xform "world"
 
         def Mesh "geom_262" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3855,7 +3855,7 @@ def Xform "world"
 
         def Mesh "geom_263" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3868,7 +3868,7 @@ def Xform "world"
 
         def Mesh "geom_264" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3881,7 +3881,7 @@ def Xform "world"
 
         def Mesh "geom_265" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3894,7 +3894,7 @@ def Xform "world"
 
         def Mesh "geom_266" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3907,7 +3907,7 @@ def Xform "world"
 
         def Mesh "geom_267" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3920,7 +3920,7 @@ def Xform "world"
 
         def Mesh "geom_268" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3933,7 +3933,7 @@ def Xform "world"
 
         def Mesh "geom_269" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3946,7 +3946,7 @@ def Xform "world"
 
         def Mesh "geom_270" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3959,7 +3959,7 @@ def Xform "world"
 
         def Mesh "geom_271" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3972,7 +3972,7 @@ def Xform "world"
 
         def Mesh "geom_272" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3985,7 +3985,7 @@ def Xform "world"
 
         def Mesh "geom_273" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -3998,7 +3998,7 @@ def Xform "world"
 
         def Mesh "geom_274" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4018,12 +4018,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (1, 1, 1)
         float physics:mass = 1
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (0, 0, 1, 0), (0, -1, 0, 0), (1, 0, 0, 0), (1.3, 1.8, 1.4, 1) )
+        matrix4d xformOp:transform = ( (-2.220446049250313e-16, 0, 1.0000000000000002, 0), (0, -1.0000000000000004, 0, 0), (1.0000000000000002, 0, -2.220446049250313e-16, 0), (1.285, 1.77, 1.4149, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_275" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4036,7 +4036,7 @@ def Xform "world"
 
         def Mesh "geom_276" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4049,7 +4049,7 @@ def Xform "world"
 
         def Mesh "geom_277" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4062,7 +4062,7 @@ def Xform "world"
 
         def Mesh "geom_278" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4075,7 +4075,7 @@ def Xform "world"
 
         def Mesh "geom_279" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4088,7 +4088,7 @@ def Xform "world"
 
         def Mesh "geom_280" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4101,7 +4101,7 @@ def Xform "world"
 
         def Mesh "geom_281" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.007_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4114,7 +4114,7 @@ def Xform "world"
 
         def Mesh "geom_282" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.008_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4127,7 +4127,7 @@ def Xform "world"
 
         def Mesh "geom_283" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.009_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4140,7 +4140,7 @@ def Xform "world"
 
         def Mesh "geom_284" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.010_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4153,7 +4153,7 @@ def Xform "world"
 
         def Mesh "geom_285" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.011_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4166,7 +4166,7 @@ def Xform "world"
 
         def Mesh "geom_286" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.012_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4179,7 +4179,7 @@ def Xform "world"
 
         def Mesh "geom_287" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.013_Shape_IndexedFaceSet.004.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4192,7 +4192,7 @@ def Xform "world"
 
         def Mesh "geom_288" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.014_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4205,7 +4205,7 @@ def Xform "world"
 
         def Mesh "geom_289" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.015_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4218,7 +4218,7 @@ def Xform "world"
 
         def Mesh "geom_290" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.016_Shape_IndexedFaceSet.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4231,7 +4231,7 @@ def Xform "world"
 
         def Mesh "geom_291" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.017_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4244,7 +4244,7 @@ def Xform "world"
 
         def Mesh "geom_292" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.018_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4257,7 +4257,7 @@ def Xform "world"
 
         def Mesh "geom_293" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.019_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4270,7 +4270,7 @@ def Xform "world"
 
         def Mesh "geom_294" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.020_Shape_IndexedFaceSet.000.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4283,7 +4283,7 @@ def Xform "world"
 
         def Mesh "geom_295" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.005.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4303,12 +4303,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06228, 2.06228, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.6, 1.9, 0.8, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.555, 1.93, 0.8, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_296" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.011.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.011.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4321,7 +4321,7 @@ def Xform "world"
 
         def Mesh "geom_297" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.011.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.011.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4334,7 +4334,7 @@ def Xform "world"
 
         def Mesh "geom_298" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.009.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.009.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4347,7 +4347,7 @@ def Xform "world"
 
         def Mesh "geom_299" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.009.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.009.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4360,7 +4360,7 @@ def Xform "world"
 
         def Mesh "geom_300" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.011.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.011.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4373,7 +4373,7 @@ def Xform "world"
 
         def Mesh "geom_301" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4386,7 +4386,7 @@ def Xform "world"
 
         def Mesh "geom_302" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4399,7 +4399,7 @@ def Xform "world"
 
         def Mesh "geom_303" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4419,12 +4419,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.0997, 2.0997, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.6, 1.9, 0.44, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.555, 1.93, 0.44, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_304" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4437,7 +4437,7 @@ def Xform "world"
 
         def Mesh "geom_305" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4450,7 +4450,7 @@ def Xform "world"
 
         def Mesh "geom_306" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4463,7 +4463,7 @@ def Xform "world"
 
         def Mesh "geom_307" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4476,7 +4476,7 @@ def Xform "world"
 
         def Mesh "geom_308" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.124.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.124.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4489,7 +4489,7 @@ def Xform "world"
 
         def Mesh "geom_309" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.007.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.007.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4502,7 +4502,7 @@ def Xform "world"
 
         def Mesh "geom_310" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4515,7 +4515,7 @@ def Xform "world"
 
         def Mesh "geom_311" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4528,7 +4528,7 @@ def Xform "world"
 
         def Mesh "geom_312" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4548,7 +4548,7 @@ def Xform "world"
         float3 physics:diagonalInertia = (21.5967, 21.2668, 19.5131)
         float physics:mass = 19
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.3, 2.4, 0.82, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.265, 2.38, 0.825, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Cube "geom_313" (
@@ -4751,7 +4751,7 @@ def Xform "world"
 
         def Mesh "geom_331" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.159.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.159.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4764,7 +4764,7 @@ def Xform "world"
 
         def Mesh "geom_332" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.158.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.158.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4777,7 +4777,7 @@ def Xform "world"
 
         def Mesh "geom_333" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/VHandle130.001.usda@
+            prepend references = @./kitchen_with_physics/usd/VHandle130.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -4797,7 +4797,7 @@ def Xform "world"
         float3 physics:diagonalInertia = (21.5967, 21.2668, 19.5131)
         float physics:mass = 19
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.3, 1.5, 0.82, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.265, 1.48, 0.825, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Cube "geom_334" (
@@ -5000,7 +5000,7 @@ def Xform "world"
 
         def Mesh "geom_352" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.159.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.159.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5013,7 +5013,7 @@ def Xform "world"
 
         def Mesh "geom_353" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.158.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.158.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5026,7 +5026,7 @@ def Xform "world"
 
         def Mesh "geom_354" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/VHandle130.001.usda@
+            prepend references = @./kitchen_with_physics/usd/VHandle130.001.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5046,12 +5046,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.1, 0.95, 0.54, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.063, 0.9492, 0.535, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_355" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5064,7 +5064,7 @@ def Xform "world"
 
         def Mesh "geom_356" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5077,7 +5077,7 @@ def Xform "world"
 
         def Mesh "geom_357" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5090,7 +5090,7 @@ def Xform "world"
 
         def Mesh "geom_358" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5103,7 +5103,7 @@ def Xform "world"
 
         def Mesh "geom_359" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5116,7 +5116,7 @@ def Xform "world"
 
         def Mesh "geom_360" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5129,7 +5129,7 @@ def Xform "world"
 
         def Mesh "geom_361" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5142,7 +5142,7 @@ def Xform "world"
 
         def Mesh "geom_362" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5155,7 +5155,7 @@ def Xform "world"
 
         def Mesh "geom_363" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5168,7 +5168,7 @@ def Xform "world"
 
         def Mesh "geom_364" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5188,12 +5188,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.1, 0.95, 0.24, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.063, 0.9492, 0.245, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_365" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5206,7 +5206,7 @@ def Xform "world"
 
         def Mesh "geom_366" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5219,7 +5219,7 @@ def Xform "world"
 
         def Mesh "geom_367" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5232,7 +5232,7 @@ def Xform "world"
 
         def Mesh "geom_368" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5245,7 +5245,7 @@ def Xform "world"
 
         def Mesh "geom_369" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5258,7 +5258,7 @@ def Xform "world"
 
         def Mesh "geom_370" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5271,7 +5271,7 @@ def Xform "world"
 
         def Mesh "geom_371" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5284,7 +5284,7 @@ def Xform "world"
 
         def Mesh "geom_372" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5297,7 +5297,7 @@ def Xform "world"
 
         def Mesh "geom_373" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5310,7 +5310,7 @@ def Xform "world"
 
         def Mesh "geom_374" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5330,12 +5330,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.1, 1.7, 0.54, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.063, 1.7492, 0.535, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_375" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.136.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.136.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5348,7 +5348,7 @@ def Xform "world"
 
         def Mesh "geom_376" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.137.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.137.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5361,7 +5361,7 @@ def Xform "world"
 
         def Mesh "geom_377" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.138.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.138.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5374,7 +5374,7 @@ def Xform "world"
 
         def Mesh "geom_378" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.139.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.139.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5387,7 +5387,7 @@ def Xform "world"
 
         def Mesh "geom_379" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.135.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.135.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5400,7 +5400,7 @@ def Xform "world"
 
         def Mesh "geom_380" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.153.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.153.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5413,7 +5413,7 @@ def Xform "world"
 
         def Mesh "geom_381" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.154.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.154.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5426,7 +5426,7 @@ def Xform "world"
 
         def Mesh "geom_382" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.152.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.152.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5446,12 +5446,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.1, 1.7, 0.24, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.063, 1.7492, 0.245, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_383" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.136.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.136.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5464,7 +5464,7 @@ def Xform "world"
 
         def Mesh "geom_384" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.137.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.137.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5477,7 +5477,7 @@ def Xform "world"
 
         def Mesh "geom_385" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.138.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.138.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5490,7 +5490,7 @@ def Xform "world"
 
         def Mesh "geom_386" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.139.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.139.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5503,7 +5503,7 @@ def Xform "world"
 
         def Mesh "geom_387" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.135.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.135.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5516,7 +5516,7 @@ def Xform "world"
 
         def Mesh "geom_388" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.153.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.153.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5529,7 +5529,7 @@ def Xform "world"
 
         def Mesh "geom_389" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.154.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.154.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5542,7 +5542,7 @@ def Xform "world"
 
         def Mesh "geom_390" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.152.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.152.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5562,12 +5562,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.1, 2.5, 0.54, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.063, 2.5492, 0.535, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_391" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5580,7 +5580,7 @@ def Xform "world"
 
         def Mesh "geom_392" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5593,7 +5593,7 @@ def Xform "world"
 
         def Mesh "geom_393" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5606,7 +5606,7 @@ def Xform "world"
 
         def Mesh "geom_394" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5619,7 +5619,7 @@ def Xform "world"
 
         def Mesh "geom_395" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5632,7 +5632,7 @@ def Xform "world"
 
         def Mesh "geom_396" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5645,7 +5645,7 @@ def Xform "world"
 
         def Mesh "geom_397" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5658,7 +5658,7 @@ def Xform "world"
 
         def Mesh "geom_398" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5671,7 +5671,7 @@ def Xform "world"
 
         def Mesh "geom_399" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5684,7 +5684,7 @@ def Xform "world"
 
         def Mesh "geom_400" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5704,12 +5704,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.1, 2.5, 0.24, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-1.063, 2.5492, 0.245, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_401" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5722,7 +5722,7 @@ def Xform "world"
 
         def Mesh "geom_402" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5735,7 +5735,7 @@ def Xform "world"
 
         def Mesh "geom_403" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5748,7 +5748,7 @@ def Xform "world"
 
         def Mesh "geom_404" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5761,7 +5761,7 @@ def Xform "world"
 
         def Mesh "geom_405" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5774,7 +5774,7 @@ def Xform "world"
 
         def Mesh "geom_406" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5787,7 +5787,7 @@ def Xform "world"
 
         def Mesh "geom_407" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5800,7 +5800,7 @@ def Xform "world"
 
         def Mesh "geom_408" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5813,7 +5813,7 @@ def Xform "world"
 
         def Mesh "geom_409" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5826,7 +5826,7 @@ def Xform "world"
 
         def Mesh "geom_410" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5846,12 +5846,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (2.06818, 2.06818, 2)
         float physics:mass = 2
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.6, -1, 0.32, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.555, -1, 0.3225, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_411" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.125.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5864,7 +5864,7 @@ def Xform "world"
 
         def Mesh "geom_412" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.126.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5877,7 +5877,7 @@ def Xform "world"
 
         def Mesh "geom_413" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.003_Shape_IndexedFaceSet.127.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5890,7 +5890,7 @@ def Xform "world"
 
         def Mesh "geom_414" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.004_Shape_IndexedFaceSet.128.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5903,7 +5903,7 @@ def Xform "world"
 
         def Mesh "geom_415" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.005_Shape_IndexedFaceSet.129.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5916,7 +5916,7 @@ def Xform "world"
 
         def Mesh "geom_416" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.006_Shape_IndexedFaceSet.130.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5929,7 +5929,7 @@ def Xform "world"
 
         def Mesh "geom_417" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.124.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5942,7 +5942,7 @@ def Xform "world"
 
         def Mesh "geom_418" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5955,7 +5955,7 @@ def Xform "world"
 
         def Mesh "geom_419" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5968,7 +5968,7 @@ def Xform "world"
 
         def Mesh "geom_420" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.010.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -5988,7 +5988,7 @@ def Xform "world"
         float3 physics:diagonalInertia = (4.3785, 3.62753, 2.84647)
         float physics:mass = 26.9596
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.3, -1.3, 0.99, 1) )
+        matrix4d xformOp:transform = ( (-1, 0, 0, 0), (0, -1, 0, 0), (0, 0, 1, 0), (1.265, -1.3, 0.99, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Cube "geom_421" (
@@ -6169,7 +6169,7 @@ def Xform "world"
 
         def Mesh "geom_437" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.018.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.018.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -6182,7 +6182,7 @@ def Xform "world"
 
         def Mesh "geom_438" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.012.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.012.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -6195,7 +6195,7 @@ def Xform "world"
 
         def Mesh "geom_439" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.012.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet.002_Shape_IndexedFaceSet.012.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -6208,7 +6208,7 @@ def Xform "world"
 
         def Mesh "geom_440" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @kitchen/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.012.usda@
+            prepend references = @./kitchen_with_physics/usd/Shape_IndexedFaceSet_Shape_IndexedFaceSet.012.usda@
         )
         {
             uniform token physics:approximation = "convexHull"

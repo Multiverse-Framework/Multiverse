@@ -32,10 +32,9 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
             mesh_file = os.path.basename(xml_mesh.attrib.get('file'))
             mesh_file = mesh_file.replace('stl', 'usda')
             mesh_file = mesh_file.replace('obj', 'usda')
-            mesh_dir = os.path.dirname(mesh_dir) + '/../usd'
-            xml_mesh_dict[mesh_name] = os.path.join(
-                usd_dir, mesh_dir, mesh_file)
-            xml_mesh_dict[mesh_name] = os.path.relpath(xml_mesh_dict[mesh_name], usd_dir)
+            mesh_dir = os.path.basename(usd_file)
+            mesh_dir = mesh_dir.replace('.usda', '')
+            xml_mesh_dict[mesh_name] = './' + os.path.join(mesh_dir, 'usd', mesh_file)
 
     mj_model = mujoco.MjModel.from_xml_path(xml_path)
     mj_data = mujoco.MjData(mj_model)

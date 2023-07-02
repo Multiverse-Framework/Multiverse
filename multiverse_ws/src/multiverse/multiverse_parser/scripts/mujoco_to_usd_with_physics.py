@@ -19,28 +19,8 @@ def get_sum_mass(body_element: ET.Element) -> float:
     return mass
 
 
-def get_data(data, key: list, i: int, length: int) -> None:
-    i += 1
-    while True:
-        try:
-            if length == 3:
-                key.append(Gf.Vec3d(float(data[i][0]), float(
-                    data[i][1]), float(data[i][2])))
-            elif length == 9:
-                key.append(Gf.Matrix3d(float(data[i][0]), float(data[i][3]), float(data[i][6]),
-                                       float(data[i][1]), float(
-                                           data[i][4]), float(data[i][7]),
-                                       float(data[i][2]), float(data[i][5]), float(data[i][8])))
-            i += 1
-        except (IndexError, ValueError):
-            return None
-
-
 def mjcf_to_usd_handle(xml_path: str, usd_file: str):
     usd_dir = os.path.dirname(usd_file)
-    if usd_file is None:
-        usd_file = os.path.basename(xml_path)
-        usd_file = usd_file.replace('xml', 'usda')
 
     xml_mesh_dict = {}
     xml_body_gravcomp_dict = {}
@@ -56,14 +36,12 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
     for xml_asset in xml_root.findall('asset'):
         for xml_mesh in xml_asset.findall('mesh'):
             mesh_name = xml_mesh.attrib.get('name')
-            mesh_dir = os.path.join(mesh_root_dir, os.path.dirname(xml_mesh.attrib.get('file')))
             mesh_file = os.path.basename(xml_mesh.attrib.get('file'))
             mesh_file = mesh_file.replace('stl', 'usda')
             mesh_file = mesh_file.replace('obj', 'usda')
-            mesh_dir = os.path.dirname(mesh_dir) + '/../usd'
-            xml_mesh_dict[mesh_name] = os.path.join(
-                usd_dir, mesh_dir, mesh_file)
-            xml_mesh_dict[mesh_name] = os.path.relpath(xml_mesh_dict[mesh_name], usd_dir)
+            mesh_dir = os.path.basename(usd_file)
+            mesh_dir = mesh_dir.replace('.usda', '')
+            xml_mesh_dict[mesh_name] = './' + os.path.join(mesh_dir, 'usd', mesh_file)
 
     for body_id, xml_body in enumerate(xml_root.findall('body')):
         xml_body_gravcomp_dict[body_id] = float(
@@ -120,28 +98,6 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
 
         stage.Save()
 
-    xpos = []
-    xmat = []
-
-    data_dir = os.path.dirname(xml_path)
-    data_file = os.path.basename(xml_path)
-    data_file = data_file.replace('.xml', '_data.txt')
-
-    with open(os.path.join(data_dir, data_file), newline='', encoding='utf-8') as csvfile:
-        reader = csv.reader(
-            csvfile, delimiter=' ', skipinitialspace=True, quoting=csv.QUOTE_NONE
-        )
-        data = [row for row in reader]
-
-    for i, _ in enumerate(data):
-        if len(data[i]) == 0:
-            continue
-        if data[i][0] == 'XPOS':
-            get_data(data, xpos, i, 3)
-
-        elif data[i][0] == 'XMAT':
-            get_data(data, xmat, i, 9)
-
     stage = Usd.Stage.CreateNew(os.path.join(usd_dir, usd_file))
 
     UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
@@ -179,25 +135,21 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
             body_prim = UsdGeom.Xform.Define(stage, body_path)
             transform = body_prim.AddTransformOp()
             mat = Gf.Matrix4d()
-            if body.jntnum[0] == 0:
-                mat.SetTranslateOnly(
-                    Gf.Vec3d(
-                        body.pos[0],
-                        body.pos[1],
-                        body.pos[2],
-                    )
+            mat.SetTranslateOnly(
+                Gf.Vec3d(
+                    mj_data.xpos[body_id][0],
+                    mj_data.xpos[body_id][1],
+                    mj_data.xpos[body_id][2],
                 )
-                mat.SetRotateOnly(
-                    Gf.Quatd(
-                        body.quat[0],
-                        body.quat[1],
-                        body.quat[2],
-                        body.quat[3],
-                    )
+            )
+            mat.SetRotateOnly(
+                Gf.Quatd(
+                    mj_data.xquat[body_id][0],
+                    mj_data.xquat[body_id][1],
+                    mj_data.xquat[body_id][2],
+                    mj_data.xquat[body_id][3],
                 )
-            else:
-                mat.SetTranslateOnly(xpos[body_id])
-                mat.SetRotateOnly(xmat[body_id])
+            )
             transform.Set(mat)
 
             if body.geomnum[0] > 0:

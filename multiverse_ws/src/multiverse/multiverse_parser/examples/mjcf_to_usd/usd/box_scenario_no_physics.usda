@@ -58,7 +58,7 @@ def Xform "world"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Mesh "geom_6" (
-                prepend references = @box/usd/BoxFlap1.usda@
+                prepend references = @./box_scenario_no_physics/usd/BoxFlap1.usda@
             )
             {
                 color3f[] primvars:displayColor = [(1, 0.8, 0)]
@@ -74,7 +74,7 @@ def Xform "world"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Mesh "geom_7" (
-                prepend references = @box/usd/BoxFlap2.usda@
+                prepend references = @./box_scenario_no_physics/usd/BoxFlap2.usda@
             )
             {
                 color3f[] primvars:displayColor = [(1, 0.8, 0)]
@@ -91,7 +91,7 @@ def Xform "world"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_8" (
-            prepend references = @cat/usd/cat.usda@
+            prepend references = @./box_scenario_no_physics/usd/cat.usda@
         )
         {
             color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
