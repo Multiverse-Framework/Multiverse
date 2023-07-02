@@ -35,4 +35,7 @@ else
     fi
 
     python3 $USD_SRC_PATH/build_scripts/build_usd.py $USD_BUILD_PATH
+
+    echo "export PATH=$PATH:$USD_BUILD_PATH/bin" >> ../../../devel/.private/catkin_tools_prebuild/setup.sh
+    echo "export PYTHONPATH=$PYTHONPATH:$USD_BUILD_PATH/lib/python" >> ../../../devel/.private/catkin_tools_prebuild/setup.sh
 fi
