@@ -11,9 +11,6 @@ import mujoco
 
 def mjcf_to_usd_handle(xml_path: str, usd_file: str):
     usd_dir = os.path.dirname(usd_file)
-    if usd_file is None:
-        usd_file = os.path.basename(xml_path)
-        usd_file = usd_file.replace('xml', 'usda')
 
     xml_mesh_dict = {}
     xml_tree = ET.parse(xml_path)
