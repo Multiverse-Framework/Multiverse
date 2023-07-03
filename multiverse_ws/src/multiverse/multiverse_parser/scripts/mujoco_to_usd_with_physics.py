@@ -67,8 +67,8 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
 
         points = numpy.empty(
             shape=[mj_model.mesh(mesh_id).vertnum[0], 3], dtype=float)
-        normals = numpy.empty(
-            shape=[mj_model.mesh(mesh_id).vertnum[0], 3], dtype=float)
+        # normals = numpy.empty(
+        #     shape=[mj_model.mesh(mesh_id).vertnum[0], 3], dtype=float)
 
         face_vertex_counts = numpy.empty(
             shape=mj_model.mesh(mesh_id).facenum[0], dtype=float
@@ -82,8 +82,11 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
             vert_id = mj_model.mesh(mesh_id).vertadr[0] + i
             if vert_id < mj_model.nmeshvert:
                 points[i] = mj_model.mesh_vert[vert_id]
-            if vert_id < mj_model.nmeshnormal:
-                normals[i] = mj_model.mesh_normal[vert_id]
+                
+        # for i in range(mj_model.mesh(mesh_id).normalnum[0]):
+        #     normal_id = mj_model.mesh(mesh_id).normaladr[0] + i
+        #     if normal_id < mj_model.nmeshnormal:
+        #         normals[i] = mj_model.mesh_normal[normal_id]
 
         for i in range(mj_model.mesh(mesh_id).facenum[0]):
             faceid = mj_model.mesh(mesh_id).faceadr[0] + i
@@ -92,7 +95,7 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
             face_vertex_indices[3 * i + 2] = mj_model.mesh_face[faceid][2]
 
         usd_mesh.CreatePointsAttr(points)
-        usd_mesh.CreateNormalsAttr(normals)
+        # usd_mesh.CreateNormalsAttr(normals)
         usd_mesh.CreateFaceVertexCountsAttr(face_vertex_counts)
         usd_mesh.CreateFaceVertexIndicesAttr(face_vertex_indices)
 
