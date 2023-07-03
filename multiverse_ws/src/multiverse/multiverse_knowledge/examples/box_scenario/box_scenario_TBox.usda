@@ -1,5 +1,95 @@
 #usda 1.0
 
+class "_class_boxscenarioTBox_namespace" (
+    prepend apiSchemas = ["RdfAPI"]
+)
+{
+    string rdf:namespace = "https://ease-crc.org/ont/usd/box_scenario_TBox.owl#"
+}
+
+def "boxscenarioTBox"
+{
+    class "_class_Box" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Box"
+    }
+
+    class "_class_Openability" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Openability"
+    }
+
+    class "_class_Closed" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Closed"
+    }
+
+    class "_class_Opened" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Opened"
+    }
+
+    class "_class_ClosedBox" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "ClosedBox"
+    }
+
+    class "_class_Corpus" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Corpus"
+    }
+
+    class "_class_Flap" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Flap"
+    }
+
+    class "_class_OpenedBox" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "OpenedBox"
+    }
+
+    class "_class_Table" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Table"
+    }
+
+    class "_class_Cat" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_boxscenarioTBox_namespace>
+    )
+    {
+        string rdf:conceptName = "Cat"
+    }
+}
+
 class "_class_USD_namespace" (
     prepend apiSchemas = ["RdfAPI"]
 )
@@ -279,96 +369,6 @@ def "USD"
     )
     {
         string rdf:conceptName = "XformSchema"
-    }
-}
-
-class "_class_boxscenarioTBox_namespace" (
-    prepend apiSchemas = ["RdfAPI"]
-)
-{
-    string rdf:namespace = "https://ease-crc.org/ont/usd/box_scenario_TBox.owl#"
-}
-
-def "boxscenarioTBox"
-{
-    class "_class_Box" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Box"
-    }
-
-    class "_class_Openability" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Openability"
-    }
-
-    class "_class_Closed" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Closed"
-    }
-
-    class "_class_Opened" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Opened"
-    }
-
-    class "_class_ClosedBox" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "ClosedBox"
-    }
-
-    class "_class_Corpus" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Corpus"
-    }
-
-    class "_class_Flap" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Flap"
-    }
-
-    class "_class_OpenedBox" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "OpenedBox"
-    }
-
-    class "_class_Table" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Table"
-    }
-
-    class "_class_Cat" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxscenarioTBox_namespace>
-    )
-    {
-        string rdf:conceptName = "Cat"
     }
 }
 

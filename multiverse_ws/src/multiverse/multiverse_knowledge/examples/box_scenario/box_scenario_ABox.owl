@@ -12,11 +12,11 @@
   <owl:imports rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl"/>
 </owl:Ontology>
 
-<USD.:Prim rdf:about="https://ease-crc.org/ont/USD.owl#USD">
+<USD.:Prim rdf:about="https://ease-crc.org/ont/USD.owl#boxscenarioTBox">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
 </USD.:Prim>
 
-<USD.:Prim rdf:about="https://ease-crc.org/ont/USD.owl#boxscenarioTBox">
+<USD.:Prim rdf:about="https://ease-crc.org/ont/USD.owl#USD">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
 </USD.:Prim>
 
@@ -430,7 +430,7 @@
 
 <DUL.:Quality rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOp_transform">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <USD.:xformOp_transform rdf:datatype="https://ease-crc.org/ont/USD.owl#matrix4d">[[-0.8, 0.0, -0.6, 0.0], [0.0, 1.0, 0.0, 0.0], [0.6, 0.0, -0.8, 0.0], [0.17, 0.0, 0.34, 1.0]]</USD.:xformOp_transform>
+  <USD.:xformOp_transform rdf:datatype="https://ease-crc.org/ont/USD.owl#matrix4d">[[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.17, 0.0, 0.336, 1.0]]</USD.:xformOp_transform>
 </DUL.:Quality>
 
 <USD.:Prim rdf:about="https://ease-crc.org/ont/USD.owl#geom_6">
@@ -523,7 +523,7 @@
 
 <DUL.:Quality rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOp_transform">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <USD.:xformOp_transform rdf:datatype="https://ease-crc.org/ont/USD.owl#matrix4d">[[-0.77, 0.0, 0.64, 0.0], [-0.0, 1.0, 0.0, 0.0], [-0.64, -0.0, -0.77, 0.0], [-0.17, 0.0, 0.34, 1.0]]</USD.:xformOp_transform>
+  <USD.:xformOp_transform rdf:datatype="https://ease-crc.org/ont/USD.owl#matrix4d">[[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [-0.17, 0.0, 0.338, 1.0]]</USD.:xformOp_transform>
 </DUL.:Quality>
 
 <USD.:Prim rdf:about="https://ease-crc.org/ont/USD.owl#geom_7">
@@ -617,7 +617,7 @@
 
 <DUL.:Quality rdf:about="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#cat_xformOp_transform">
   <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
-  <USD.:xformOp_transform rdf:datatype="https://ease-crc.org/ont/USD.owl#matrix4d">[[0.033, 0.0065, -1.0, 0.0], [-0.31, -0.95, -0.017, 0.0], [-0.95, 0.31, -0.029, 0.0], [0.1, 0.46, 0.032, 1.0]]</USD.:xformOp_transform>
+  <USD.:xformOp_transform rdf:datatype="https://ease-crc.org/ont/USD.owl#matrix4d">[[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [-0.09594, 0.193951, 0.5, 1.0]]</USD.:xformOp_transform>
 </DUL.:Quality>
 
 <USD.:Prim rdf:about="https://ease-crc.org/ont/USD.owl#geom_8">

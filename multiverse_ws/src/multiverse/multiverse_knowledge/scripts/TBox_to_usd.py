@@ -6,14 +6,13 @@ import shutil
 from pxr import Usd, UsdOntology
 from owlready2 import onto_path, get_ontology
 import re
-import rospkg
 
 onto_set = set()
 
 N = 1
 
 
-def create_path(name: str, is_ns: bool, prefix = '/_class_') -> str:
+def create_path(name: str, is_ns: bool, prefix='/_class_') -> str:
     usd_path = name.replace('https://', '')
     usd_path = usd_path.replace('http://', '')
     usd_path = usd_path.replace('www', '')
@@ -55,8 +54,7 @@ def import_ontos(onto) -> None:
     return None
 
 
-def usd_to_owl(onto_file : str, usd_file: str) -> None:
-    rospack = rospkg.RosPack()
+def usd_to_owl(onto_file: str, usd_file: str) -> None:
     upper_onto_path = os.path.dirname(onto_file)
     onto_path.append(upper_onto_path)
 
@@ -77,8 +75,6 @@ def usd_to_owl(onto_file : str, usd_file: str) -> None:
         owl_to_usd_impl(stage, list(onto.classes()))
 
     stage.GetRootLayer().Save()
-
-
 
     return None
 

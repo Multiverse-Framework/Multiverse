@@ -2,6 +2,7 @@
 
 import sys
 import shutil
+import os
 from pxr import Usd, UsdOntology
 
 
@@ -14,6 +15,9 @@ sem_TBox = {}
 
 
 def auto_sem_tag(in_usd_ABox_file: str, in_usd_TBox_file: str, out_usd_ABox_file: str) -> None:
+    in_mesh_dir = in_usd_ABox_file.replace('.usda', '')
+    out_mesh_dir = os.path.join(os.path.dirname(out_usd_ABox_file), os.path.basename(in_usd_ABox_file.replace('.usda', '')))
+    shutil.copytree(in_mesh_dir, out_mesh_dir, dirs_exist_ok=True)
     shutil.copy(in_usd_ABox_file, out_usd_ABox_file)
 
     stage_TBox = Usd.Stage.Open(in_usd_TBox_file)
@@ -22,7 +26,7 @@ def auto_sem_tag(in_usd_ABox_file: str, in_usd_TBox_file: str, out_usd_ABox_file
             sem_TBox[prim_class.GetName()] = prim_class.GetPrimPath()
 
     stage_ABox = Usd.Stage.Open(out_usd_ABox_file)
-    stage_ABox.GetRootLayer().subLayerPaths = [in_usd_TBox_file]
+    stage_ABox.GetRootLayer().subLayerPaths = ['./' + os.path.relpath(in_usd_TBox_file, os.path.dirname(out_usd_ABox_file))]
 
     for prim in stage_ABox.Traverse():
         if prim.GetName() in sem_labels:

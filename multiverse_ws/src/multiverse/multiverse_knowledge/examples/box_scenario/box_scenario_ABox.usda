@@ -3,7 +3,7 @@
     defaultPrim = "world"
     metersPerUnit = 1
     subLayers = [
-        @/media/giang/Storage/Multiverse/multiverse_ws/src/multiverse/multiverse_knowledge/examples/box_scenario/box_scenario_TBox.usda@
+        @./box_scenario_TBox.usda@
     ]
     upAxis = "Z"
 )
@@ -113,12 +113,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (0.0039196294, 0.0020787641, 0.0018410094)
         float physics:mass = 0.21652657
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-0.8, 0, -0.6, 0), (0, 1, 0, 0), (0.6, 0, -0.8, 0), (0.17, 0, 0.34, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0.17, 0, 0.336, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_6" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @box/usd/BoxFlap1.usda@
+            prepend references = @./box_scenario_with_physics/usd/BoxFlap1.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -138,12 +138,12 @@ def Xform "world"
         float3 physics:diagonalInertia = (0.0039196294, 0.0020787637, 0.0018410094)
         float physics:mass = 0.21652657
         bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (-0.77, 0, 0.64, 0), (-0, 1, 0, 0), (-0.64, -0, -0.77, 0), (-0.17, 0, 0.34, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-0.17, 0, 0.338, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_7" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @box/usd/BoxFlap2.usda@
+            prepend references = @./box_scenario_with_physics/usd/BoxFlap2.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -164,12 +164,12 @@ def Xform "world"
         float physics:mass = 1.1450002
         bool physics:rigidBodyEnabled = 1
         prepend rel semanticTag:semanticLabel = </boxscenarioTBox/_class_Cat>
-        matrix4d xformOp:transform = ( (0.033, 0.0065, -1, 0), (-0.31, -0.95, -0.017, 0), (-0.95, 0.31, -0.029, 0), (0.1, 0.46, 0.032, 1) )
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-0.09594, 0.193951, 0.5, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "geom_8" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @cat/usd/cat.usda@
+            prepend references = @./box_scenario_with_physics/usd/cat.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
