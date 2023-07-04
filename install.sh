@@ -60,3 +60,6 @@ pip3 install owlready2
 
 # Install jinja2
 pip3 install jinja2
+
+# Install numpy-stl
+pip3 install numpy-stl
