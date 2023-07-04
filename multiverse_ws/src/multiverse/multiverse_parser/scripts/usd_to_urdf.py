@@ -5,7 +5,7 @@ import os
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 from urdf_parser_py.urdf import URDF, Link, Joint, Pose, JointLimit, Inertial, Inertia, Visual, Collision, Box, Cylinder, Sphere, Mesh
 import tf
-import math
+from math import radians
 import stl.mesh
 import numpy
 import rospkg
@@ -60,9 +60,9 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
             if UsdPhysics.RevoluteJoint(prim):
                 usd_joint = UsdPhysics.RevoluteJoint(prim)
                 urdf_joint.joint_type = 'revolute'
-                limit.lower = math.radians(
+                limit.lower = radians(
                     usd_joint.GetLowerLimitAttr().Get())
-                limit.upper = math.radians(
+                limit.upper = radians(
                     usd_joint.GetUpperLimitAttr().Get())
             elif UsdPhysics.PrismaticJoint(prim):
                 usd_joint = UsdPhysics.PrismaticJoint(prim)

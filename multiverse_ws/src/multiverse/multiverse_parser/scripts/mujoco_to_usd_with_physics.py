@@ -3,7 +3,6 @@
 import os
 import sys
 import xml.etree.ElementTree as ET
-import csv
 from math import degrees
 import numpy
 import rospy
