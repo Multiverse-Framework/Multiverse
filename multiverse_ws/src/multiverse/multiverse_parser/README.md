@@ -23,3 +23,14 @@ Examples
 ```bash
 roslaunch multiverse_parser mjcf_to_usd.launch
 ```
+### From USD to URDF
+
+```bash
+rosrun multiverse_parser usd_to_urdf.py <in_usd.usda> <out_urdf.urdf>
+```
+
+Examples
+
+```bash
+roslaunch multiverse_parser usd_to_urdf.launch
+```
