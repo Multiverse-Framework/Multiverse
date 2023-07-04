@@ -1,0 +1,17 @@
+<launch>
+
+    <arg name="in_usd" default="$(find multiverse_parser)/examples/usd_to_urdf/usd/box_scenario_with_physics.usda"/>
+
+    <arg name="out_urdf" default="$(find multiverse_parser)/examples/usd_to_urdf/urdf/box_scenario.urdf"/>
+
+    <node pkg="multiverse_parser" type="usd_to_urdf.py" name="usd_to_urdf" output="screen" args="$(arg in_usd) $(arg out_urdf)"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro '$(arg out_urdf)'" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find multiverse_parser)/examples/rviz_config/rviz.rviz"/>
+
+</launch>
