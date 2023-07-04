@@ -52,36 +52,48 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
         stage.SetDefaultPrim(usd_mesh.GetPrim())
 
         points = numpy.empty(
-            shape=[mj_model.mesh(mesh_id).vertnum[0], 3], dtype=float)
-        # normals = numpy.empty(
-        #     shape=[mj_model.mesh(mesh_id).vertnum[0], 3], dtype=float)
+            shape=[mj_model.mesh_vertnum[mesh_id], 3], dtype=float)
+
+        normals = numpy.empty(
+            shape=[mj_model.mesh_facenum[mesh_id], 3], dtype=float)
 
         face_vertex_counts = numpy.empty(
-            shape=mj_model.mesh(mesh_id).facenum[0], dtype=float
-        )
+            shape=mj_model.mesh_facenum[mesh_id], dtype=float)
         face_vertex_counts.fill(3)
-        face_vertex_indices = numpy.empty(
-            shape=mj_model.mesh(mesh_id).facenum[0] * 3, dtype=float
-        )
-        
-        for i in range(mj_model.mesh(mesh_id).vertnum[0]):
-            vert_id = mj_model.mesh(mesh_id).vertadr[0] + i
-            if vert_id < mj_model.nmeshvert:
-                points[i] = mj_model.mesh_vert[vert_id]
-                
-        # for i in range(mj_model.mesh(mesh_id).normalnum[0]):
-        #     normal_id = mj_model.mesh(mesh_id).normaladr[0] + i
-        #     if normal_id < mj_model.nmeshnormal:
-        #         normals[i] = mj_model.mesh_normal[normal_id]
 
-        for i in range(mj_model.mesh(mesh_id).facenum[0]):
-            faceid = mj_model.mesh(mesh_id).faceadr[0] + i
-            face_vertex_indices[3 * i] = mj_model.mesh_face[faceid][0]
-            face_vertex_indices[3 * i + 1] = mj_model.mesh_face[faceid][1]
-            face_vertex_indices[3 * i + 2] = mj_model.mesh_face[faceid][2]
+        face_vertex_indices = numpy.empty(
+            shape=mj_model.mesh_facenum[mesh_id] * 3, dtype=float)
+
+        vert_adr = mj_model.mesh_vertadr[mesh_id]
+        for i in range(mj_model.mesh_vertnum[mesh_id]):
+            vert_id = vert_adr + i
+            points[i] = mj_model.mesh_vert[vert_id]
+
+        face_adr = mj_model.mesh_faceadr[mesh_id]
+        normal_adr = mj_model.mesh_normaladr[mesh_id]
+        for i in range(mj_model.mesh_facenum[mesh_id]):
+            face_id = face_adr + i
+            face_normals = mj_model.mesh_normal[normal_adr +
+                                                mj_model.mesh_facenormal[face_id]]
+
+            p1 = face_normals[0]
+            p2 = face_normals[1]
+            p3 = face_normals[2]
+
+            v1 = p2 - p1
+            v2 = p3 - p1
+            normal = numpy.cross(v1, v2)
+            norm = numpy.linalg.norm(normal)
+            if norm != 0:
+                normal = normal / norm
+            normals[i] = normal
+
+            face_vertex_indices[3 * i] = mj_model.mesh_face[face_id][0]
+            face_vertex_indices[3 * i + 1] = mj_model.mesh_face[face_id][1]
+            face_vertex_indices[3 * i + 2] = mj_model.mesh_face[face_id][2]
 
         usd_mesh.CreatePointsAttr(points)
-        # usd_mesh.CreateNormalsAttr(normals)
+        usd_mesh.CreateNormalsAttr(normals)
         usd_mesh.CreateFaceVertexCountsAttr(face_vertex_counts)
         usd_mesh.CreateFaceVertexIndicesAttr(face_vertex_indices)
 

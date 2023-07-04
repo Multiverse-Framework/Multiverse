@@ -27,12 +27,15 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
     xml_tree = ET.parse(xml_path)
     xml_root = xml_tree.getroot()
 
+    angle = 'degree'
+
     mesh_root_dir = os.path.dirname(xml_path)
     for compiler in xml_root.findall('compiler'):
         if compiler.attrib.get('meshdir') is not None:
             mesh_root_dir = compiler.attrib.get('meshdir')
-            break
-        
+        if compiler.attrib.get('angle') is not None:
+            angle = compiler.attrib.get('angle')
+
     for xml_asset in xml_root.findall('asset'):
         for xml_mesh in xml_asset.findall('mesh'):
             mesh_name = xml_mesh.attrib.get('name')
@@ -41,7 +44,8 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
             mesh_file = mesh_file.replace('obj', 'usda')
             mesh_dir = os.path.basename(usd_file)
             mesh_dir = mesh_dir.replace('.usda', '')
-            xml_mesh_dict[mesh_name] = './' + os.path.join(mesh_dir, 'usd', mesh_file)
+            xml_mesh_dict[mesh_name] = './' + \
+                os.path.join(mesh_dir, 'usd', mesh_file)
 
     for body_id, xml_body in enumerate(xml_root.findall('body')):
         xml_body_gravcomp_dict[body_id] = float(
@@ -56,8 +60,9 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
 
         if os.path.exists(xml_mesh_dict[mj_mesh.name]):
             continue
-        
-        stage = Usd.Stage.CreateNew(os.path.join(usd_dir, xml_mesh_dict[mj_mesh.name]))
+
+        stage = Usd.Stage.CreateNew(os.path.join(
+            usd_dir, xml_mesh_dict[mj_mesh.name]))
 
         UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
         UsdGeom.SetStageMetersPerUnit(stage, UsdGeom.LinearUnits.meters)
@@ -66,36 +71,48 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
         stage.SetDefaultPrim(usd_mesh.GetPrim())
 
         points = numpy.empty(
-            shape=[mj_model.mesh(mesh_id).vertnum[0], 3], dtype=float)
-        # normals = numpy.empty(
-        #     shape=[mj_model.mesh(mesh_id).vertnum[0], 3], dtype=float)
+            shape=[mj_model.mesh_vertnum[mesh_id], 3], dtype=float)
+
+        normals = numpy.empty(
+            shape=[mj_model.mesh_facenum[mesh_id], 3], dtype=float)
 
         face_vertex_counts = numpy.empty(
-            shape=mj_model.mesh(mesh_id).facenum[0], dtype=float
-        )
+            shape=mj_model.mesh_facenum[mesh_id], dtype=float)
         face_vertex_counts.fill(3)
-        face_vertex_indices = numpy.empty(
-            shape=mj_model.mesh(mesh_id).facenum[0] * 3, dtype=float
-        )
-        
-        for i in range(mj_model.mesh(mesh_id).vertnum[0]):
-            vert_id = mj_model.mesh(mesh_id).vertadr[0] + i
-            if vert_id < mj_model.nmeshvert:
-                points[i] = mj_model.mesh_vert[vert_id]
-                
-        # for i in range(mj_model.mesh(mesh_id).normalnum[0]):
-        #     normal_id = mj_model.mesh(mesh_id).normaladr[0] + i
-        #     if normal_id < mj_model.nmeshnormal:
-        #         normals[i] = mj_model.mesh_normal[normal_id]
 
-        for i in range(mj_model.mesh(mesh_id).facenum[0]):
-            faceid = mj_model.mesh(mesh_id).faceadr[0] + i
-            face_vertex_indices[3 * i] = mj_model.mesh_face[faceid][0]
-            face_vertex_indices[3 * i + 1] = mj_model.mesh_face[faceid][1]
-            face_vertex_indices[3 * i + 2] = mj_model.mesh_face[faceid][2]
+        face_vertex_indices = numpy.empty(
+            shape=mj_model.mesh_facenum[mesh_id] * 3, dtype=float)
+
+        vert_adr = mj_model.mesh_vertadr[mesh_id]
+        for i in range(mj_model.mesh_vertnum[mesh_id]):
+            vert_id = vert_adr + i
+            points[i] = mj_model.mesh_vert[vert_id]
+
+        face_adr = mj_model.mesh_faceadr[mesh_id]
+        normal_adr = mj_model.mesh_normaladr[mesh_id]
+        for i in range(mj_model.mesh_facenum[mesh_id]):
+            face_id = face_adr + i
+            face_normals = mj_model.mesh_normal[normal_adr +
+                                                mj_model.mesh_facenormal[face_id]]
+
+            p1 = face_normals[0]
+            p2 = face_normals[1]
+            p3 = face_normals[2]
+
+            v1 = p2 - p1
+            v2 = p3 - p1
+            normal = numpy.cross(v1, v2)
+            norm = numpy.linalg.norm(normal)
+            if norm != 0:
+                normal = normal / norm
+            normals[i] = normal
+
+            face_vertex_indices[3 * i] = mj_model.mesh_face[face_id][0]
+            face_vertex_indices[3 * i + 1] = mj_model.mesh_face[face_id][1]
+            face_vertex_indices[3 * i + 2] = mj_model.mesh_face[face_id][2]
 
         usd_mesh.CreatePointsAttr(points)
-        # usd_mesh.CreateNormalsAttr(normals)
+        usd_mesh.CreateNormalsAttr(normals)
         usd_mesh.CreateFaceVertexCountsAttr(face_vertex_counts)
         usd_mesh.CreateFaceVertexIndicesAttr(face_vertex_indices)
 
@@ -285,10 +302,14 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
                         joint_prim = UsdPhysics.RevoluteJoint.Define(
                             stage, joint_path)
                         if joint.limited[0]:
-                            joint_prim.CreateLowerLimitAttr(
-                                degrees(joint.range[0]))
-                            joint_prim.CreateUpperLimitAttr(
-                                degrees(joint.range[1]))
+                            if angle == 'radian':
+                                joint_prim.CreateLowerLimitAttr(
+                                    degrees(joint.range[0]))
+                                joint_prim.CreateUpperLimitAttr(
+                                    degrees(joint.range[1]))
+                            elif angle == 'degree':
+                                joint_prim.CreateLowerLimitAttr(joint.range[0])
+                                joint_prim.CreateUpperLimitAttr(joint.range[1])
                     elif joint.type == mujoco.mjtJoint.mjJNT_SLIDE:
                         joint_prim = UsdPhysics.PrismaticJoint.Define(
                             stage, joint_path)

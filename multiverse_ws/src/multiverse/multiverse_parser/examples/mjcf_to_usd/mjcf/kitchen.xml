@@ -1,4 +1,5 @@
 <mujoco model="kitchen">
+    <compiler angle="radian" autolimits="true" boundmass="0.000001" boundinertia="0.000001"/>
     <compiler meshdir="kitchen/stl/" />
     <asset>
         <mesh name="SinkArea0" file="Shape_IndexedFaceSet.001_Shape_IndexedFaceSet.273.stl" />

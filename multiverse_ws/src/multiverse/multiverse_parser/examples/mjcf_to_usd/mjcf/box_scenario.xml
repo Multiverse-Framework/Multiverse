@@ -1,4 +1,4 @@
-<mujoco model="MuJoCo Model">
+<mujoco model="box_scenario">
     <compiler angle="radian" autolimits="true" boundmass="0.000001" boundinertia="0.000001"/>
     <option timestep="0.005" integrator="RK4" noslip_iterations="5">
         <flag energy="enable"/>

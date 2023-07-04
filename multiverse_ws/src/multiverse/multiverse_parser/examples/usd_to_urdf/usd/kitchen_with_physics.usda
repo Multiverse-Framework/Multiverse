@@ -1895,7 +1895,7 @@ def Xform "world"
             quatf physics:localRot0 = (0, 0, -0.70710677, 0.70710677)
             quatf physics:localRot1 = (1, 0, 0, 0)
             float physics:lowerLimit = 0
-            float physics:upperLimit = 1.5708
+            float physics:upperLimit = 90.00021
         }
 
         def PhysicsPrismaticJoint "sink_area_dish_washer_tray_main"
@@ -1923,7 +1923,7 @@ def Xform "world"
             quatf physics:localRot0 = (0, 0, -0.70710677, 0.70710677)
             quatf physics:localRot1 = (1, 0, 0, 0)
             float physics:lowerLimit = 0
-            float physics:upperLimit = 1.5708
+            float physics:upperLimit = 90.00021
         }
 
         def PhysicsRevoluteJoint "oven_area_oven_knob_stove_2_joint"
@@ -1937,7 +1937,7 @@ def Xform "world"
             quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
             quatf physics:localRot1 = (1, 0, 0, 0)
             float physics:lowerLimit = 0
-            float physics:upperLimit = 3.14159
+            float physics:upperLimit = 179.99985
         }
 
         def PhysicsRevoluteJoint "oven_area_oven_knob_stove_1_joint"
@@ -1951,7 +1951,7 @@ def Xform "world"
             quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
             quatf physics:localRot1 = (1, 0, 0, 0)
             float physics:lowerLimit = 0
-            float physics:upperLimit = 3.14159
+            float physics:upperLimit = 179.99985
         }
 
         def PhysicsRevoluteJoint "oven_area_oven_knob_stove_3_joint"
@@ -1965,7 +1965,7 @@ def Xform "world"
             quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
             quatf physics:localRot1 = (1, 0, 0, 0)
             float physics:lowerLimit = 0
-            float physics:upperLimit = 3.14159
+            float physics:upperLimit = 179.99985
         }
 
         def PhysicsRevoluteJoint "oven_area_oven_knob_stove_4_joint"
@@ -1979,7 +1979,7 @@ def Xform "world"
             quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
             quatf physics:localRot1 = (1, 0, 0, 0)
             float physics:lowerLimit = 0
-            float physics:upperLimit = 3.14159
+            float physics:upperLimit = 179.99985
         }
 
         def PhysicsRevoluteJoint "oven_area_oven_knob_oven_joint"
@@ -1993,7 +1993,7 @@ def Xform "world"
             quatf physics:localRot0 = (0, 0.70710677, 0, 0.70710677)
             quatf physics:localRot1 = (1, 0, 0, 0)
             float physics:lowerLimit = 0
-            float physics:upperLimit = 3.14159
+            float physics:upperLimit = 179.99985
         }
 
         def PhysicsPrismaticJoint "oven_area_area_middle_upper_drawer_main_joint"
@@ -2161,7 +2161,7 @@ def Xform "world"
             quatf physics:localRot0 = (0, 0, 0, 1)
             quatf physics:localRot1 = (1, 0, 0, 0)
             float physics:lowerLimit = 0
-            float physics:upperLimit = 1.5708
+            float physics:upperLimit = 90.00021
         }
     }
 
