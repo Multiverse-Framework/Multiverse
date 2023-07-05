@@ -54,6 +54,7 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
     mj_data = mujoco.MjData(mj_model)
     mujoco.mj_step1(mj_model, mj_data)
 
+
     for mesh_id in range(mj_model.nmesh):
         mj_mesh = mj_model.mesh(mesh_id)
 
@@ -154,21 +155,40 @@ def mjcf_to_usd_handle(xml_path: str, usd_file: str):
             body_prim = UsdGeom.Xform.Define(stage, body_path)
             transform = body_prim.AddTransformOp()
             mat = Gf.Matrix4d()
-            mat.SetTranslateOnly(
-                Gf.Vec3d(
-                    mj_data.xpos[body_id][0],
-                    mj_data.xpos[body_id][1],
-                    mj_data.xpos[body_id][2],
+
+            if body.jntnum[0] == 0:
+                mat.SetTranslateOnly(
+                    Gf.Vec3d(
+                        body.pos[0],
+                        body.pos[1],
+                        body.pos[2],
+                    )
                 )
-            )
-            mat.SetRotateOnly(
-                Gf.Quatd(
-                    mj_data.xquat[body_id][0],
-                    mj_data.xquat[body_id][1],
-                    mj_data.xquat[body_id][2],
-                    mj_data.xquat[body_id][3],
+                mat.SetRotateOnly(
+                    Gf.Quatd(
+                        body.quat[0],
+                        body.quat[1],
+                        body.quat[2],
+                        body.quat[3],
+                    )
                 )
-            )
+            else:
+                mat.SetTranslateOnly(
+                    Gf.Vec3d(
+                        mj_data.xpos[body_id][0],
+                        mj_data.xpos[body_id][1],
+                        mj_data.xpos[body_id][2],
+                    )
+                )
+                mat.SetRotateOnly(
+                    Gf.Quatd(
+                        mj_data.xquat[body_id][0],
+                        mj_data.xquat[body_id][1],
+                        mj_data.xquat[body_id][2],
+                        mj_data.xquat[body_id][3],
+                    )
+                )
+
             transform.Set(mat)
 
             if body.geomnum[0] > 0:

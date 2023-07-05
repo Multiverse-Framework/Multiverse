@@ -33,8 +33,6 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
                 continue
         break
 
-    print(urdf_pkg_path, urdf_pkg)
-
     urdf_dir = os.path.dirname(urdf_file)
     robot_name = os.path.basename(urdf_file.replace('.urdf', ''))
     stl_mesh_dir = os.path.join(urdf_dir, robot_name, 'stl')
@@ -107,7 +105,7 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
             if prim_pose.get(prim.GetName()) is None and prim.GetName() != 'world':
                 xformable = UsdGeom.Xformable(prim)
                 transform = xformable.GetLocalTransformation()
-
+                #UsdGeom.Xformable(prim.GetParent()).GetLocalTransformation().GetInverse()
                 origin = Pose()
                 origin.xyz = transform.ExtractTranslation()
                 origin.rpy = usd_quat_to_urdf_rpy(
