@@ -110,13 +110,13 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
 
             if prim_transform.get(prim.GetName()) is None and prim.GetName() != 'world':
                 xformable = UsdGeom.Xformable(prim)
-                
-                if urdf_link_transform.get(prim.GetParent().GetName()) is not None:
-                    transform = (urdf_link_transform[prim.GetParent().GetName()].GetInverse().GetTranspose() * xform_cache.GetLocalToWorldTransform(prim).GetTranspose()).GetTranspose()
-                else:
-                    transform = xformable.GetLocalTransformation()
 
                 urdf_link_transform[prim.GetName()] = xform_cache.GetLocalToWorldTransform(prim)
+                
+                if urdf_link_transform.get(prim.GetParent().GetName()) is not None:
+                    transform = (urdf_link_transform[prim.GetParent().GetName()].GetInverse().GetTranspose() * urdf_link_transform[prim.GetName()].GetTranspose()).GetTranspose()
+                else:
+                    transform = xformable.GetLocalTransformation()
                     
                 origin = Pose()
                 origin.xyz = transform.ExtractTranslation()
@@ -232,19 +232,10 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
                 usd_joint.GetBody1Rel().GetTargets()[0])
             
             origin = Pose()
-            # if urdf_link_transform.get(parent_prim.GetName()) is not None:
-            #     transform = (urdf_link_transform[parent_prim.GetName()].GetInverse().GetTranspose() * xform_cache.GetLocalToWorldTransform(child_prim).GetTranspose()).GetTranspose()
-            #     origin.xyz = transform.ExtractTranslation()
-            #     origin.rpy = usd_quat_to_urdf_rpy(
-            #         transform.ExtractRotation().GetQuat())
-                
-            #     print(prim.GetName(), parent_prim.GetName(), child_prim.GetName())
-            #     print('Soll: ', xform_cache.GetLocalToWorldTransform(child_prim))
-            #     print('Ab: ', urdf_link_transform[parent_prim.GetName()])
-            #     print('Result: ', transform)
-            # else:
-            origin.xyz = usd_joint.GetLocalPos0Attr().Get()
-            origin.rpy = usd_quat_to_urdf_rpy(usd_joint.GetLocalRot0Attr().Get())
+            transform = (urdf_link_transform[parent_prim.GetName()].GetInverse().GetTranspose() * urdf_link_transform[child_prim.GetName()].GetTranspose()).GetTranspose()
+            origin.xyz = transform.ExtractTranslation()
+            origin.rpy = usd_quat_to_urdf_rpy(
+                transform.ExtractRotation().GetQuat())
             urdf_joint.origin = origin
 
     with open(urdf_file, "w") as file:
