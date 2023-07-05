@@ -45,7 +45,10 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
     
     robot = URDF(robot_name)
 
-    prim_pose = {}
+    prim_transform = {}
+    urdf_link_transform = {}
+
+    xform_cache = UsdGeom.XformCache()
 
     for prim in stage.Traverse():
         if UsdPhysics.RevoluteJoint(prim) or UsdPhysics.PrismaticJoint(prim):
@@ -78,15 +81,18 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
                 usd_joint.GetBody1Rel().GetTargets()[0])
             urdf_joint.child = child_prim.GetName()
 
-            origin = Pose()
-            origin.xyz = usd_joint.GetLocalPos0Attr().Get()
-            origin.rpy = usd_quat_to_urdf_rpy(usd_joint.GetLocalRot0Attr().Get())
-            urdf_joint.origin = origin
-
             mat = Gf.Matrix4d()
             mat.SetTranslateOnly(Gf.Vec3d(-usd_joint.GetLocalPos1Attr().Get()))
             mat.SetRotateOnly(usd_joint.GetLocalRot1Attr().Get().GetInverse())
-            prim_pose[urdf_joint.child] = mat
+            prim_transform[urdf_joint.child] = mat
+
+            joint_pos = xform_cache.GetLocalToWorldTransform(child_prim).ExtractTranslation()
+            joint_rot = xform_cache.GetLocalToWorldTransform(parent_prim).ExtractRotation().GetQuat() * usd_joint.GetLocalRot0Attr().Get()
+
+            mat = Gf.Matrix4d()
+            mat.SetTranslateOnly(joint_pos)
+            mat.SetRotateOnly(joint_rot)
+            urdf_link_transform[urdf_joint.child] = mat
 
             axis = usd_joint.GetAxisAttr().Get()
             if axis == 'X':
@@ -102,10 +108,16 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
         if UsdGeom.Xform(prim):
             urdf_link = Link(name=prim.GetName())
 
-            if prim_pose.get(prim.GetName()) is None and prim.GetName() != 'world':
+            if prim_transform.get(prim.GetName()) is None and prim.GetName() != 'world':
                 xformable = UsdGeom.Xformable(prim)
-                transform = xformable.GetLocalTransformation()
-                #UsdGeom.Xformable(prim.GetParent()).GetLocalTransformation().GetInverse()
+                
+                if urdf_link_transform.get(prim.GetParent().GetName()) is not None:
+                    transform = (urdf_link_transform[prim.GetParent().GetName()].GetInverse().GetTranspose() * xform_cache.GetLocalToWorldTransform(prim).GetTranspose()).GetTranspose()
+                else:
+                    transform = xformable.GetLocalTransformation()
+
+                urdf_link_transform[prim.GetName()] = xform_cache.GetLocalToWorldTransform(prim)
+                    
                 origin = Pose()
                 origin.xyz = transform.ExtractTranslation()
                 origin.rpy = usd_quat_to_urdf_rpy(
@@ -147,8 +159,8 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
                     for i in range(3):
                         scale[i] = transform.GetRow(i).GetLength()
                         transform.SetRow(i, transform.GetRow(i).GetNormalized())
-                    if prim_pose.get(prim.GetName()) is not None:
-                        transform *= prim_pose[prim.GetName()]
+                    if prim_transform.get(prim.GetName()) is not None:
+                        transform *= prim_transform[prim.GetName()]
 
                     origin = Pose()
                     origin.xyz = transform.ExtractTranslation()
@@ -208,6 +220,32 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
                         urdf_link.collision = collision
 
             robot.add_link(urdf_link)
+
+    for prim in stage.Traverse():
+        if UsdPhysics.RevoluteJoint(prim) or UsdPhysics.PrismaticJoint(prim):
+            urdf_joint = robot.joint_map[prim.GetName()]
+            usd_joint = UsdPhysics.RevoluteJoint(prim)
+            
+            parent_prim = stage.GetPrimAtPath(
+                usd_joint.GetBody0Rel().GetTargets()[0])
+            child_prim = stage.GetPrimAtPath(
+                usd_joint.GetBody1Rel().GetTargets()[0])
+            
+            origin = Pose()
+            # if urdf_link_transform.get(parent_prim.GetName()) is not None:
+            #     transform = (urdf_link_transform[parent_prim.GetName()].GetInverse().GetTranspose() * xform_cache.GetLocalToWorldTransform(child_prim).GetTranspose()).GetTranspose()
+            #     origin.xyz = transform.ExtractTranslation()
+            #     origin.rpy = usd_quat_to_urdf_rpy(
+            #         transform.ExtractRotation().GetQuat())
+                
+            #     print(prim.GetName(), parent_prim.GetName(), child_prim.GetName())
+            #     print('Soll: ', xform_cache.GetLocalToWorldTransform(child_prim))
+            #     print('Ab: ', urdf_link_transform[parent_prim.GetName()])
+            #     print('Result: ', transform)
+            # else:
+            origin.xyz = usd_joint.GetLocalPos0Attr().Get()
+            origin.rpy = usd_quat_to_urdf_rpy(usd_joint.GetLocalRot0Attr().Get())
+            urdf_joint.origin = origin
 
     with open(urdf_file, "w") as file:
         file.write(robot.to_xml_string())
