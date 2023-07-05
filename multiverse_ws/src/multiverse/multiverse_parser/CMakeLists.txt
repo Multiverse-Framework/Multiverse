@@ -159,8 +159,8 @@ include_directories(
 # # Mark executable scripts (Python etc.) for installation
 # # in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-  scripts/mujoco_to_usd_no_physics.py
-  scripts/mujoco_to_usd_with_physics.py
+  scripts/mjcf_to_usd_no_physics.py
+  scripts/mjcf_to_usd_with_physics.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
