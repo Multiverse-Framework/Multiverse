@@ -10,7 +10,12 @@ import stl.mesh
 import numpy
 import rospkg
 
-def usd_quat_to_urdf_rpy(usd_quat):
+
+def multiply_transform(transform_A: Gf.Matrix4d, transform_B: Gf.Matrix4d):
+    return (transform_A.GetTranspose() * transform_B.GetTranspose()).GetTranspose()
+
+
+def usd_quat_to_urdf_rpy(usd_quat: Gf.Quatf):
     w = usd_quat.GetReal()
     [x, y, z] = usd_quat.GetImaginary()
     return tf.transformations.euler_from_quaternion([x, y, z, w])
@@ -42,8 +47,8 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
     stl_mesh_dir_rel = 'package://' + urdf_pkg + '/' + stl_mesh_dir_rel
 
     stage = Usd.Stage.Open(usd_file)
-    
-    robot = URDF(robot_name)
+
+    urdf_robot = URDF(robot_name)
 
     prim_transform = {}
     urdf_link_transform = {}
@@ -54,24 +59,27 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
         if UsdPhysics.RevoluteJoint(prim) or UsdPhysics.PrismaticJoint(prim):
             urdf_joint = Joint(name=prim.GetName())
 
-            limit = JointLimit()
-            limit.effort = 1000
-            limit.velocity = 1000
+            urdf_limit = JointLimit()
+            urdf_limit.effort = 1000
+            urdf_limit.velocity = 1000
 
             if UsdPhysics.RevoluteJoint(prim):
                 usd_joint = UsdPhysics.RevoluteJoint(prim)
                 urdf_joint.joint_type = 'revolute'
-                limit.lower = radians(
+                urdf_limit.lower = radians(
                     usd_joint.GetLowerLimitAttr().Get())
-                limit.upper = radians(
+                urdf_limit.upper = radians(
                     usd_joint.GetUpperLimitAttr().Get())
             elif UsdPhysics.PrismaticJoint(prim):
                 usd_joint = UsdPhysics.PrismaticJoint(prim)
                 urdf_joint.joint_type = 'prismatic'
-                limit.lower = usd_joint.GetLowerLimitAttr().Get()
-                limit.upper = usd_joint.GetUpperLimitAttr().Get()
+                urdf_limit.lower = usd_joint.GetLowerLimitAttr().Get()
+                urdf_limit.upper = usd_joint.GetUpperLimitAttr().Get()
+            else:
+                print(f'Joint {str(prim)} not supported')
+                continue
 
-            urdf_joint.limit = limit
+            urdf_joint.limit = urdf_limit
 
             parent_prim = stage.GetPrimAtPath(
                 usd_joint.GetBody0Rel().GetTargets()[0])
@@ -81,28 +89,28 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
                 usd_joint.GetBody1Rel().GetTargets()[0])
             urdf_joint.child = child_prim.GetName()
 
-            mat = Gf.Matrix4d()
-            mat.SetTranslateOnly(Gf.Vec3d(-usd_joint.GetLocalPos1Attr().Get()))
-            mat.SetRotateOnly(usd_joint.GetLocalRot1Attr().Get().GetInverse())
-            prim_transform[urdf_joint.child] = mat
+            prim_rot = Gf.Rotation(
+                usd_joint.GetLocalRot1Attr().Get().GetInverse())
+            prim_pos = Gf.Vec3d(-usd_joint.GetLocalPos1Attr().Get())
+            prim_transform[urdf_joint.child] = Gf.Matrix4d(prim_rot, prim_pos)
 
-            joint_pos = xform_cache.GetLocalToWorldTransform(child_prim).ExtractTranslation()
-            joint_rot = xform_cache.GetLocalToWorldTransform(parent_prim).ExtractRotation().GetQuat() * usd_joint.GetLocalRot0Attr().Get()
+            urdf_link_pos = xform_cache.GetLocalToWorldTransform(
+                child_prim).ExtractTranslation()
+            urdf_link_rot = Gf.Rotation(xform_cache.GetLocalToWorldTransform(
+                parent_prim).ExtractRotation().GetQuat() * usd_joint.GetLocalRot0Attr().Get())
 
-            mat = Gf.Matrix4d()
-            mat.SetTranslateOnly(joint_pos)
-            mat.SetRotateOnly(joint_rot)
-            urdf_link_transform[urdf_joint.child] = mat
+            urdf_link_transform[urdf_joint.child] = Gf.Matrix4d(
+                urdf_link_rot, urdf_link_pos)
 
-            axis = usd_joint.GetAxisAttr().Get()
-            if axis == 'X':
+            usd_joint_axis = usd_joint.GetAxisAttr().Get()
+            if usd_joint_axis == 'X':
                 urdf_joint.axis = [1, 0, 0]
-            if axis == 'Y':
+            elif usd_joint_axis == 'Y':
                 urdf_joint.axis = [0, 1, 0]
-            if axis == 'Z':
+            elif usd_joint_axis == 'Z':
                 urdf_joint.axis = [0, 0, 1]
 
-            robot.add_joint(urdf_joint)
+            urdf_robot.add_joint(urdf_joint)
 
     for prim in stage.Traverse():
         if UsdGeom.Xform(prim):
@@ -111,135 +119,146 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
             if prim_transform.get(prim.GetName()) is None and prim.GetName() != 'world':
                 xformable = UsdGeom.Xformable(prim)
 
-                urdf_link_transform[prim.GetName()] = xform_cache.GetLocalToWorldTransform(prim)
-                
+                urdf_link_transform[prim.GetName(
+                )] = xform_cache.GetLocalToWorldTransform(prim)
+
                 if urdf_link_transform.get(prim.GetParent().GetName()) is not None:
-                    transform = (urdf_link_transform[prim.GetParent().GetName()].GetInverse().GetTranspose() * urdf_link_transform[prim.GetName()].GetTranspose()).GetTranspose()
+                    urdf_joint_transform = multiply_transform(urdf_link_transform[prim.GetParent(
+                    ).GetName()].GetInverse(), urdf_link_transform[prim.GetName()])
                 else:
-                    transform = xformable.GetLocalTransformation()
-                    
-                origin = Pose()
-                origin.xyz = transform.ExtractTranslation()
-                origin.rpy = usd_quat_to_urdf_rpy(
-                    transform.ExtractRotation().GetQuat())
+                    urdf_joint_transform = xformable.GetLocalTransformation()
+
+                urdf_origin = Pose()
+                urdf_origin.xyz = urdf_joint_transform.ExtractTranslation()
+                urdf_origin.rpy = usd_quat_to_urdf_rpy(
+                    urdf_joint_transform.ExtractRotation().GetQuat())
 
                 urdf_joint = Joint(name=prim.GetName() + '_joint')
                 urdf_joint.joint_type = 'fixed'
-                urdf_joint.origin = origin
+                urdf_joint.origin = urdf_origin
                 urdf_joint.parent = prim.GetParent().GetName()
                 urdf_joint.child = prim.GetName()
 
-                robot.add_joint(urdf_joint)
+                urdf_robot.add_joint(urdf_joint)
 
             if prim.HasAPI(UsdPhysics.MassAPI):
                 physics_mass_api = UsdPhysics.MassAPI(prim)
                 physics_mass_api.Apply(prim)
 
-                inertial = Inertial()
-                inertial.mass = physics_mass_api.GetMassAttr().Get()
+                urdf_inertial = Inertial()
+                urdf_inertial.mass = physics_mass_api.GetMassAttr().Get()
 
-                origin = Pose()
-                origin.xyz = physics_mass_api.GetCenterOfMassAttr().Get()
-                inertial.origin = origin
+                inertial_origin = Pose()
+                inertial_origin.xyz = physics_mass_api.GetCenterOfMassAttr().Get()
+                urdf_inertial.origin = inertial_origin
 
-                inertia = Inertia()
+                urdf_inertia = Inertia()
                 usd_inertia = physics_mass_api.GetDiagonalInertiaAttr().Get()
-                inertia.ixx = usd_inertia[0]
-                inertia.iyy = usd_inertia[1]
-                inertia.izz = usd_inertia[2]
-                inertial.inertia = inertia
+                urdf_inertia.ixx = usd_inertia[0]
+                urdf_inertia.iyy = usd_inertia[1]
+                urdf_inertia.izz = usd_inertia[2]
+                urdf_inertial.inertia = urdf_inertia
 
-                urdf_link.inertial = inertial
+                urdf_link.inertial = urdf_inertial
 
             for child_prim in prim.GetChildren():
                 if UsdGeom.Gprim(child_prim):
                     geom_prim = UsdGeom.Gprim(child_prim)
-                    transform = geom_prim.GetLocalTransformation()
-                    scale = numpy.zeros((3), dtype=numpy.float64)
-                    for i in range(3):
-                        scale[i] = transform.GetRow(i).GetLength()
-                        transform.SetRow(i, transform.GetRow(i).GetNormalized())
-                    if prim_transform.get(prim.GetName()) is not None:
-                        transform *= prim_transform[prim.GetName()]
+                    geom_transform = geom_prim.GetLocalTransformation()
+                    geom_scale = numpy.array(
+                        [geom_transform.GetRow(i).GetLength() for i in range(3)])
+                    geom_transform = geom_transform.RemoveScaleShear()
 
-                    origin = Pose()
-                    origin.xyz = transform.ExtractTranslation()
-                    origin.rpy = usd_quat_to_urdf_rpy(
-                        transform.ExtractRotationQuat())
+                    if prim_transform.get(prim.GetName()) is not None:
+                        geom_transform = multiply_transform(
+                            prim_transform[prim.GetName()], geom_transform)
+
+                    geom_origin = Pose()
+                    geom_origin.xyz = geom_transform.ExtractTranslation()
+                    geom_origin.rpy = usd_quat_to_urdf_rpy(
+                        geom_transform.ExtractRotationQuat())
                     if child_prim.HasAPI(UsdPhysics.CollisionAPI):
-                        collision = Collision()
-                        collision.origin = origin
+                        urdf_collision = Collision()
+                        urdf_collision.origin = geom_origin
 
                         if UsdGeom.Cube(child_prim):
-                            box = Box()
-                            box.size = scale * 2
-
-                            collision.geometry = box
+                            urdf_box = Box()
+                            urdf_box.size = geom_scale * 2
+                            urdf_collision.geometry = urdf_box
 
                         elif UsdGeom.Sphere(child_prim):
-                            sphere = Sphere()
-                            sphere.radius = UsdGeom.Sphere(child_prim).GetRadiusAttr().Get()
-
-                            collision.geometry = sphere
+                            urdf_sphere = Sphere()
+                            urdf_sphere.radius = UsdGeom.Sphere(
+                                child_prim).GetRadiusAttr().Get()
+                            urdf_collision.geometry = urdf_sphere
 
                         elif UsdGeom.Cylinder(child_prim):
-                            cylinder = Cylinder()
-                            cylinder.radius = UsdGeom.Cylinder(child_prim).GetRadiusAttr().Get()
-                            cylinder.length = UsdGeom.Cylinder(child_prim).GetHeightAttr().Get()
+                            urdf_cylinder = Cylinder()
+                            urdf_cylinder.radius = UsdGeom.Cylinder(
+                                child_prim).GetRadiusAttr().Get()
+                            urdf_cylinder.length = UsdGeom.Cylinder(
+                                child_prim).GetHeightAttr().Get()
 
-                            collision.geometry = cylinder
+                            urdf_collision.geometry = urdf_cylinder
 
                         elif UsdGeom.Mesh(child_prim):
                             usd_mesh = UsdGeom.Mesh(child_prim)
-                            points = numpy.array(usd_mesh.GetPointsAttr().Get())
-                            normals = numpy.array(usd_mesh.GetNormalsAttr().Get())
-                            face_vertex_indices = usd_mesh.GetFaceVertexIndicesAttr().Get()
-                            faces = []
+                            mesh_points = numpy.array(
+                                usd_mesh.GetPointsAttr().Get())
+                            mesh_normals = numpy.array(
+                                usd_mesh.GetNormalsAttr().Get())
+                            mesh_face_vertex_indices = usd_mesh.GetFaceVertexIndicesAttr().Get()
+                            mesh_faces = []
                             index = 0
                             for face_vertex_counts in usd_mesh.GetFaceVertexCountsAttr().Get():
                                 face = []
-                                for _ in range(face_vertex_counts):   
-                                    face.append(face_vertex_indices[index])
+                                for _ in range(face_vertex_counts):
+                                    face.append(
+                                        mesh_face_vertex_indices[index])
                                     index += 1
-                                
-                                faces.append(face)
-                            
-                            faces = numpy.array(faces, dtype=numpy.int32)
-                            stl_mesh = stl.mesh.Mesh(numpy.zeros(faces.shape[0], dtype=stl.mesh.Mesh.dtype))
-                            stl_mesh.vectors = points[faces]
-                            stl_mesh.normals = normals
+                                mesh_faces.append(face)
+
+                            mesh_faces = numpy.array(
+                                mesh_faces, dtype=numpy.int32)
+                            stl_mesh = stl.mesh.Mesh(numpy.zeros(
+                                mesh_faces.shape[0], dtype=stl.mesh.Mesh.dtype))
+                            stl_mesh.vectors = mesh_points[mesh_faces]
+                            stl_mesh.normals = mesh_normals
                             stl_mesh_name = child_prim.GetName() + '.stl'
-                            stl_mesh.save(os.path.join(stl_mesh_dir, stl_mesh_name))
+                            stl_mesh.save(os.path.join(
+                                stl_mesh_dir, stl_mesh_name))
 
                             urdf_mesh = Mesh()
-                            urdf_mesh.filename = os.path.join(stl_mesh_dir_rel, stl_mesh_name)
-                            urdf_mesh.scale = scale
+                            urdf_mesh.filename = os.path.join(
+                                stl_mesh_dir_rel, stl_mesh_name)
+                            urdf_mesh.scale = geom_scale
 
-                            collision.geometry = urdf_mesh
+                            urdf_collision.geometry = urdf_mesh
 
-                        urdf_link.collision = collision
+                        urdf_link.collision = urdf_collision
 
-            robot.add_link(urdf_link)
+            urdf_robot.add_link(urdf_link)
 
     for prim in stage.Traverse():
         if UsdPhysics.RevoluteJoint(prim) or UsdPhysics.PrismaticJoint(prim):
-            urdf_joint = robot.joint_map[prim.GetName()]
+            urdf_joint = urdf_robot.joint_map[prim.GetName()]
             usd_joint = UsdPhysics.RevoluteJoint(prim)
-            
+
             parent_prim = stage.GetPrimAtPath(
                 usd_joint.GetBody0Rel().GetTargets()[0])
             child_prim = stage.GetPrimAtPath(
                 usd_joint.GetBody1Rel().GetTargets()[0])
-            
-            origin = Pose()
-            transform = (urdf_link_transform[parent_prim.GetName()].GetInverse().GetTranspose() * urdf_link_transform[child_prim.GetName()].GetTranspose()).GetTranspose()
-            origin.xyz = transform.ExtractTranslation()
-            origin.rpy = usd_quat_to_urdf_rpy(
-                transform.ExtractRotation().GetQuat())
-            urdf_joint.origin = origin
+
+            urdf_joint_origin = Pose()
+            urdf_joint_transform = multiply_transform(urdf_link_transform[parent_prim.GetName(
+            )].GetInverse(), urdf_link_transform[child_prim.GetName()])
+            urdf_joint_origin.xyz = urdf_joint_transform.ExtractTranslation()
+            urdf_joint_origin.rpy = usd_quat_to_urdf_rpy(
+                urdf_joint_transform.ExtractRotation().GetQuat())
+            urdf_joint.origin = urdf_joint_origin
 
     with open(urdf_file, "w") as file:
-        file.write(robot.to_xml_string())
+        file.write(urdf_robot.to_xml_string())
 
 
 if __name__ == '__main__':

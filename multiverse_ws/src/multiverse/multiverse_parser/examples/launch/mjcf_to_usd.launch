@@ -6,8 +6,8 @@
 
     <arg name="out_usd_with_physics" default="$(find multiverse_parser)/examples/mjcf_to_usd/usd/box_scenario_with_physics.usda"/>
 
-    <node pkg="multiverse_parser" type="mujoco_to_usd_no_physics.py" name="mujoco_to_usd_no_physics" output="screen" args="$(arg in_mjcf) $(arg out_usd_no_physics)"/>
+    <node pkg="multiverse_parser" type="mjcf_to_usd_no_physics.py" name="mjcf_to_usd_no_physics" output="screen" args="$(arg in_mjcf) $(arg out_usd_no_physics)"/>
 
-    <node pkg="multiverse_parser" type="mujoco_to_usd_with_physics.py" name="mujoco_to_usd_with_physics" output="screen" args="$(arg in_mjcf) $(arg out_usd_with_physics)"/>
+    <node pkg="multiverse_parser" type="mjcf_to_usd_with_physics.py" name="mjcf_to_usd_with_physics" output="screen" args="$(arg in_mjcf) $(arg out_usd_with_physics)"/>
 
 </launch>
