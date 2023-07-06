@@ -22,24 +22,23 @@ attribute_map = {
     "torque":  [0.0, 0.0, 0.0]
 }
 
+host = "tcp://127.0.0.1"
+port = "7400"
+
 
 class MultiverseClient:
-    def __init__(self, host, port) -> None:
+    def __init__(self) -> None:
         self.host = host
         self.port = port
         self.socket_addr = self.host + ":" + self.port
         self.is_enabled = False
-        self.send_buffer_size = 1
-        self.receive_buffer_size = 1
 
-    def send_meta_data(self, meta_data_req: QueryDataRequest):
-        if not meta_data_req.meta_data.send and not meta_data_req.meta_data.receive:
+    def send_meta_data(self, meta_data: QueryDataRequest):
+        if not meta_data.receive:
             return
-        
-        send_buffer_size = 1
+
         receive_buffer_size = 1
 
-        meta_data = meta_data_req.meta_data
         meta_data_json = {}
         meta_data_json["simulator"] = meta_data.simulator
         meta_data_json["length_unit"] = meta_data.length_unit
@@ -47,13 +46,6 @@ class MultiverseClient:
         meta_data_json["force_unit"] = meta_data.force_unit
         meta_data_json["time_unit"] = meta_data.time_unit
         meta_data_json["handedness"] = meta_data.handedness
-
-        meta_data_json["send"] = {}
-        data: Attribute
-        for data in meta_data.send:
-            meta_data_json["send"][data.object_name] = data.attribute
-            for attribute in data.attribute:
-                send_buffer_size += len(attribute_map[attribute])
 
         meta_data_json["receive"] = {}
         data: Attribute
@@ -64,7 +56,7 @@ class MultiverseClient:
 
         self.context = zmq.Context()
         self.socket_client = self.context.socket(zmq.REQ)
-        
+
         rospy.loginfo(f"Open the socket connection on {self.socket_addr}")
         self.socket_client.connect(self.socket_addr)
 
@@ -83,9 +75,9 @@ class MultiverseClient:
             else:
                 break
 
-        if int(buffer[0]) != send_buffer_size and int(buffer[1]) != receive_buffer_size:
+        if int(buffer[1]) != receive_buffer_size:
             rospy.logerr(
-                f"Failed to initialize the socket at {self.socket_addr}: send_buffer_size(server = {buffer[0]}, client = 1), receive_buffer_size({buffer[1]}, client = 1).")
+                f"Failed to initialize the socket at {self.socket_addr}: receive_buffer_size({buffer[1]}, client = 1).")
             self.socket_client.disconnect(self.socket_addr)
         else:
             self.is_enabled = True
@@ -112,7 +104,7 @@ class MultiverseClient:
 def query_data_handle(req: QueryDataRequest):
     res = QueryDataResponse()
 
-    multiverse_client = MultiverseClient(host, port)
+    multiverse_client = MultiverseClient()
     multiverse_client.send_meta_data(req)
     res.data = multiverse_client.communicate()
     multiverse_client.deinit()
@@ -128,6 +120,6 @@ def start_multiverse_client() -> None:
 
 
 if __name__ == "__main__":
-    host = "tcp://127.0.0.1"
-    port = "7400"
+    if len(sys.argv) > 1:
+        port = sys.argv[1]
     start_multiverse_client()

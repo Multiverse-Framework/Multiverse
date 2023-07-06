@@ -109,6 +109,11 @@ std::map<std::string, bool> sockets_need_clean_up;
 
 zmq::context_t context{1};
 
+static double get_time_now()
+{
+    return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
+}
+
 class StateHandle
 {
 public:
@@ -290,10 +295,10 @@ public:
             for (const Json::Value &attribute_json : *it)
             {
                 const std::string attribute_name = attribute_json.asString();
-                int start = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                int start = get_time_now();
                 while ((objects.count(object_name) == 0 || objects[object_name].count(attribute_name) == 0) && !should_shut_down)
                 {
-                    const int now = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                    const int now = get_time_now();
                     if (now - start > 1)
                     {
                         ROS_INFO("[Socket %s]: Waiting for [%s][%s] to be declared", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
@@ -351,7 +356,7 @@ public:
         }
         else
         {
-            buffer[2] = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+            buffer[2] = get_time_now();
         }
 
         // Send buffer sizes and send_data (if exists) over ZMQ
@@ -413,7 +418,7 @@ public:
 
             if (!is_received_data_sent)
             {
-                int start = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                int start = get_time_now();
                 for (auto it = send_objects_json.begin(); it != send_objects_json.end(); ++it)
                 {
                     const std::string object_name = it.key().asString();
@@ -430,10 +435,10 @@ public:
                     for (const Json::Value &attribute_json : *it)
                     {
                         const std::string attribute_name = attribute_json.asString();
-                        int start = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                        int start = get_time_now();
                         while ((objects.count(object_name) == 0 || objects[object_name].count(attribute_name) == 0 || !objects[object_name][attribute_name].second) && !should_shut_down)
                         {
-                            const int now = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+                            const int now = get_time_now();
                             if (now - start > 1)
                             {
                                 ROS_INFO("[Socket %s]: Waiting for data of [%s][%s] to be sent", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
@@ -445,7 +450,7 @@ public:
 
                 is_received_data_sent = true;
             }
-            *receive_buffer = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count();
+            *receive_buffer = get_time_now();
             if (should_shut_down)
             {
                 receive_buffer[0] = -1.0;
