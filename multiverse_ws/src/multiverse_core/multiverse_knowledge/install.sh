@@ -36,6 +36,13 @@ else
 
     python3 $USD_SRC_PATH/build_scripts/build_usd.py $USD_BUILD_PATH
 
-    echo "export PATH=$PATH:$USD_BUILD_PATH/bin" >> ../../../devel/.private/catkin_tools_prebuild/setup.sh
-    echo "export PYTHONPATH=$PYTHONPATH:$USD_BUILD_PATH/lib/python" >> ../../../devel/.private/catkin_tools_prebuild/setup.sh
+    SETUP_PATH="../../../devel/.private/catkin_tools_prebuild/setup.sh"
+
+    # Check if the line already exists in the file
+    if ! grep -Fxq "export PATH=" "$SETUP_PATH"; then
+
+        # Add the line to the file
+        echo "export PATH=$PATH" >> $SETUP_PATH
+        echo "export PYTHONPATH=$PYTHONPATH" >> $SETUP_PATH
+    fi
 fi
