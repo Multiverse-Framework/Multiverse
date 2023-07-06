@@ -63,3 +63,6 @@ pip3 install jinja2
 
 # Install numpy-stl
 pip3 install numpy-stl
+
+# Install pyzmq
+pip3 install pyzmq
