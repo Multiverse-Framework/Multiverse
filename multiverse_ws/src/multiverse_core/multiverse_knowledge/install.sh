@@ -8,6 +8,10 @@ else
     echo "USD_SRC_PATH is set to: $USD_SRC_PATH"
     echo "USD_BUILD_PATH is set to: $USD_BUILD_PATH"
 
+    DEVEL_PATH="$(dirname $0)/../../../devel"
+    PYTHONPATH=$PYTHONPATH:$DEVEL_PATH/lib/python3/dist-packages
+    SETUP_PATH="$DEVEL_PATH/.private/catkin_tools_prebuild/setup.sh"
+
     export PATH=$PATH:$USD_BUILD_PATH/bin
     export PYTHONPATH=$PYTHONPATH:$USD_BUILD_PATH/lib/python
 
@@ -35,8 +39,6 @@ else
     fi
 
     python3 $USD_SRC_PATH/build_scripts/build_usd.py $USD_BUILD_PATH
-
-    SETUP_PATH="../../../devel/.private/catkin_tools_prebuild/setup.sh"
 
     # Check if the line already exists in the file
     if ! grep -Fxq "export PATH=" "$SETUP_PATH"; then
