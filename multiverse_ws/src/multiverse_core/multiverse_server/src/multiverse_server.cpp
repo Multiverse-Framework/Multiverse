@@ -244,8 +244,7 @@ public:
         response_json["time_unit"] = time_unit;
         response_json["handedness"] = handedness;
 
-        Json::Value send_objects_json_tmp = meta_data_json["send"];
-        const Json::Value send_objects_json = send_objects_json_tmp;
+        const Json::Value send_objects_json = meta_data_json["send"];
 
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
         {
