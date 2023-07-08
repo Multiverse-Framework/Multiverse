@@ -157,11 +157,10 @@ public:
         is_received_data_sent = false;
 
         // Receive JSON string over ZMQ
-        zmq::message_t request_message;
         try
         {
             sockets_need_clean_up[socket_addr] = false;
-            socket_server.recv(request_message, zmq::recv_flags::none);
+            socket_server.recv(message, zmq::recv_flags::none);
             sockets_need_clean_up[socket_addr] = true;
         }
         catch (const zmq::error_t &e)
@@ -171,15 +170,16 @@ public:
         }
 
         Json::Reader reader;
-        reader.parse(request_message.to_string(), meta_data_json);
-        Json::Value meta_data_json_tmp = meta_data_json;
-        ROS_INFO("%s", meta_data_json_tmp.toStyledString().c_str());
+        reader.parse(message.to_string(), meta_data_json);
 
-        const std::string length_unit = meta_data_json_tmp["length_unit"].asString();
-        const std::string angle_unit = meta_data_json_tmp["angle_unit"].asString();
-        const std::string handedness = meta_data_json_tmp["handedness"].asString();
-        const std::string force_unit = meta_data_json_tmp["force_unit"].asString();
-        const std::string time_unit = meta_data_json_tmp["time_unit"].asString();
+    received_meta_data:
+        ROS_INFO("%s", meta_data_json.toStyledString().c_str());
+
+        const std::string length_unit = meta_data_json["length_unit"].asString();
+        const std::string angle_unit = meta_data_json["angle_unit"].asString();
+        const std::string handedness = meta_data_json["handedness"].asString();
+        const std::string force_unit = meta_data_json["force_unit"].asString();
+        const std::string time_unit = meta_data_json["time_unit"].asString();
 
         for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
         {
@@ -244,7 +244,7 @@ public:
         response_json["time_unit"] = time_unit;
         response_json["handedness"] = handedness;
 
-        Json::Value send_objects_json_tmp = meta_data_json_tmp["send"];
+        Json::Value send_objects_json_tmp = meta_data_json["send"];
         const Json::Value send_objects_json = send_objects_json_tmp;
 
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
@@ -304,8 +304,8 @@ public:
             mtx.unlock();
         }
 
-        Json::Value receive_objects_json_tmp = meta_data_json_tmp["receive"];
-        for (auto receive_object_it = meta_data_json_tmp["receive"].begin(); receive_object_it != meta_data_json_tmp["receive"].end(); ++receive_object_it)
+        Json::Value receive_objects_json_tmp = meta_data_json["receive"];
+        for (auto receive_object_it = meta_data_json["receive"].begin(); receive_object_it != meta_data_json["receive"].end(); ++receive_object_it)
         {
             const std::string object_name = receive_object_it.key().asString();
             if (!object_name.empty())
@@ -406,33 +406,39 @@ public:
         while (!should_shut_down)
         {
             // Receive send_data over ZMQ
-            zmq::message_t request_data;
             try
             {
-                socket_server.recv(request_data, zmq::recv_flags::none);
+                socket_server.recv(message, zmq::recv_flags::none);
             }
             catch (const zmq::error_t &e)
             {
                 ROS_INFO("%s, server socket %s prepares to close", e.what(), socket_addr.c_str());
             }
 
-            if (request_data.to_string()[0] == '{')
+            const std::string request_data_str = message.to_string();
+            if (request_data_str[0] == '{')
             {
-                Json::Reader reader;
-                reader.parse(request_data.to_string(), meta_data_json_tmp);
-                std::cout << meta_data_json_tmp.toStyledString() << std::endl;
+                reader.parse(request_data_str, meta_data_json);
 
                 send_data_vec.clear();
                 receive_data_vec.clear();
 
-                if (request_data.to_string()[1] == '}')
+                if (request_data_str[1] == '}')
                 {
                     goto send_meta_data;
+                }
+                else if (!meta_data_json.empty())
+                {
+                    goto received_meta_data;
+                }
+                else
+                {
+                    ROS_WARN("Received %s from %s", request_data_str.c_str(), socket_addr.c_str());
                 }
             }
             else
             {
-                memcpy(send_buffer, request_data.data(), send_buffer_size * sizeof(double));
+                memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
             }
 
             mtx.lock();
@@ -518,6 +524,8 @@ public:
     }
 
 private:
+    zmq::message_t message;
+
     std::string socket_addr;
 
     zmq::socket_t socket_server;

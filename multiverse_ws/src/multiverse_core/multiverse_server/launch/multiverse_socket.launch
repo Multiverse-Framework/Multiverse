@@ -10,6 +10,6 @@
 
     <node pkg="multiverse_server" type="multiverse_client.py" name="multiverse_client"
         output="screen" args="7300">
-        <rosparam command="load" file="(arg config)" />
+        <rosparam command="load" file="$(arg config)" />
     </node>
 </launch>
