@@ -59,6 +59,8 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
 std::map<std::string, double> unit_scale =
     {
         {"s", 1.0},
+        {"ms", 0.001},
+        {"us", 0.00001},
         {"m", 1.0},
         {"cm", 0.01},
         {"rad", 1.0},
@@ -155,11 +157,11 @@ public:
         is_received_data_sent = false;
 
         // Receive JSON string over ZMQ
-        zmq::message_t request_meta_data;
+        zmq::message_t request_message;
         try
         {
             sockets_need_clean_up[socket_addr] = false;
-            socket_server.recv(request_meta_data, zmq::recv_flags::none);
+            socket_server.recv(request_message, zmq::recv_flags::none);
             sockets_need_clean_up[socket_addr] = true;
         }
         catch (const zmq::error_t &e)
@@ -169,15 +171,15 @@ public:
         }
 
         Json::Reader reader;
-        reader.parse(request_meta_data.to_string(), meta_data_json);
-        ROS_INFO("%s", meta_data_json.toStyledString().c_str());
+        reader.parse(request_message.to_string(), meta_data_json);
+        Json::Value meta_data_json_tmp = meta_data_json;
+        ROS_INFO("%s", meta_data_json_tmp.toStyledString().c_str());
 
-    receive_meta_data:
-        const std::string length_unit = meta_data_json["length_unit"].asString();
-        const std::string angle_unit = meta_data_json["angle_unit"].asString();
-        const std::string handedness = meta_data_json["handedness"].asString();
-        const std::string force_unit = meta_data_json["force_unit"].asString();
-        const std::string time_unit = meta_data_json["time_unit"].asString();
+        const std::string length_unit = meta_data_json_tmp["length_unit"].asString();
+        const std::string angle_unit = meta_data_json_tmp["angle_unit"].asString();
+        const std::string handedness = meta_data_json_tmp["handedness"].asString();
+        const std::string force_unit = meta_data_json_tmp["force_unit"].asString();
+        const std::string time_unit = meta_data_json_tmp["time_unit"].asString();
 
         for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
         {
@@ -235,7 +237,14 @@ public:
             }
         }
 
-        const Json::Value send_objects_json_tmp = meta_data_json["send"];
+        Json::Value response_json;
+        response_json["time"] = get_time_now() * unit_scale[time_unit];
+        response_json["angle_unit"] = angle_unit;
+        response_json["force_unit"] = force_unit;
+        response_json["time_unit"] = time_unit;
+        response_json["handedness"] = handedness;
+
+        Json::Value send_objects_json_tmp = meta_data_json_tmp["send"];
         const Json::Value send_objects_json = send_objects_json_tmp;
 
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
@@ -256,10 +265,13 @@ public:
                 if (objects[object_name].count(attribute_name) == 0)
                 {
                     objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
-
+                    
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
-                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                        double *data = &objects[object_name][attribute_name].first[i];
+                        const double conversion = conversion_map[attribute_map[attribute_name].first][i];
+                        send_data_vec.emplace_back(data, conversion);
+                        response_json["send"][object_name][attribute_name].append(std::numeric_limits<double>::quiet_NaN());
                     }
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
@@ -268,7 +280,10 @@ public:
 
                     for (size_t i = 0; i < attribute_map[attribute_name].second.size(); i++)
                     {
-                        send_data_vec.emplace_back(&send_efforts[object_name][socket_addr][attribute_name][i], conversion_map[attribute_map[attribute_name].first][i]);
+                        double *data = &send_efforts[object_name][socket_addr][attribute_name][i];
+                        const double conversion = conversion_map[attribute_map[attribute_name].first][i];
+                        send_data_vec.emplace_back(data, conversion);
+                        response_json["send"][object_name][attribute_name].append(*data * conversion);
                     }
                 }
                 else
@@ -279,20 +294,43 @@ public:
 
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
-                        send_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], conversion_map[attribute_map[attribute_name].first][i]);
+                        double *data = &objects[object_name][attribute_name].first[i];
+                        const double conversion = conversion_map[attribute_map[attribute_name].first][i];
+                        send_data_vec.emplace_back(data, conversion);
+                        response_json["send"][object_name][attribute_name].append(*data * conversion);
                     }
                 }
             }
             mtx.unlock();
         }
 
-        const Json::Value receive_objects_json_tmp = meta_data_json["receive"];
+        Json::Value receive_objects_json_tmp = meta_data_json_tmp["receive"];
+        for (auto receive_object_it = meta_data_json_tmp["receive"].begin(); receive_object_it != meta_data_json_tmp["receive"].end(); ++receive_object_it)
+        {
+            const std::string object_name = receive_object_it.key().asString();
+            if (!object_name.empty())
+            {
+                continue;
+            }
+            for (const Json::Value &attribute_json : *receive_object_it)
+            {
+                for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)
+                {
+                    const std::string attribute_name = attribute_json.asString();
+                    if (object.second.count(attribute_name) != 0)
+                    {
+                        receive_objects_json_tmp[object.first].append(attribute_name);
+                    }
+                }
+            }
+            receive_objects_json_tmp.removeMember("");
+        }
         const Json::Value receive_objects_json = receive_objects_json_tmp;
 
-        for (auto it = receive_objects_json.begin(); it != receive_objects_json.end(); ++it)
+        for (auto receive_object_it = receive_objects_json.begin(); receive_object_it != receive_objects_json.end(); ++receive_object_it)
         {
-            const std::string object_name = it.key().asString();
-            for (const Json::Value &attribute_json : *it)
+            const std::string object_name = receive_object_it.key().asString();
+            for (const Json::Value &attribute_json : *receive_object_it)
             {
                 const std::string attribute_name = attribute_json.asString();
                 int start = get_time_now();
@@ -307,7 +345,7 @@ public:
                 }
             }
 
-            for (const Json::Value &attribute_json : *it)
+            for (const Json::Value &attribute_json : *receive_object_it)
             {
                 const std::string attribute_name = attribute_json.asString();
                 mtx.lock();
@@ -315,14 +353,20 @@ public:
                 {
                     for (size_t i = 0; i < 3; i++)
                     {
-                        receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                        double *data = &objects[object_name][attribute_name].first[i];
+                        const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
+                        receive_data_vec.emplace_back(data, conversion);
+                        response_json["receive"][object_name][attribute_name].append(*data * conversion);
                     }
                 }
                 else
                 {
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
-                        receive_data_vec.emplace_back(&objects[object_name][attribute_name].first[i], 1.0 / conversion_map[attribute_map[attribute_name].first][i]);
+                        double *data = &objects[object_name][attribute_name].first[i];
+                        const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
+                        receive_data_vec.emplace_back(data, conversion);
+                        response_json["receive"][object_name][attribute_name].append(*data * conversion);
                     }
                 }
                 mtx.unlock();
@@ -333,39 +377,23 @@ public:
         const size_t send_buffer_size = 1 + send_data_vec.size();
         const size_t receive_buffer_size = 1 + receive_data_vec.size();
 
-        double *buffer = (double *)calloc(send_buffer_size + 2, sizeof(double));
-        buffer[0] = send_buffer_size;
-        buffer[1] = receive_buffer_size;
-
         if (should_shut_down)
         {
-            buffer[0] = -1.0;
-            buffer[1] = -1.0;
+            response_json["time"] = -1.0;
         }
 
         if (continue_state)
         {
-            buffer[2] = -1.0;
-
-            for (size_t i = 0; i < send_buffer_size - 1; i++)
-            {
-                buffer[i + 3] = *send_data_vec[i].first / send_data_vec[i].second;
-            }
-
             continue_state = false;
         }
-        else
-        {
-            buffer[2] = get_time_now();
-        }
+
+        const std::string response_str = response_json.toStyledString();
 
         // Send buffer sizes and send_data (if exists) over ZMQ
-        zmq::message_t reply_data((send_buffer_size + 2) * sizeof(double));
-        memcpy(reply_data.data(), buffer, (send_buffer_size + 2) * sizeof(double));
-        socket_server.send(reply_data, zmq::send_flags::none);
-
-        free(buffer);
-
+        zmq::message_t response_message(response_str.size());
+        memcpy(response_message.data(), response_str.data(), response_str.size());
+        socket_server.send(response_message, zmq::send_flags::none);
+        
         if (send_buffer_size == 1 && receive_buffer_size == 1)
         {
             goto request_meta_data;
@@ -391,8 +419,8 @@ public:
             if (request_data.to_string()[0] == '{')
             {
                 Json::Reader reader;
-                reader.parse(request_data.to_string(), meta_data_json);
-                std::cout << meta_data_json.toStyledString() << std::endl;
+                reader.parse(request_data.to_string(), meta_data_json_tmp);
+                std::cout << meta_data_json_tmp.toStyledString() << std::endl;
 
                 send_data_vec.clear();
                 receive_data_vec.clear();
@@ -401,13 +429,11 @@ public:
                 {
                     goto send_meta_data;
                 }
-                else
-                {
-                    goto receive_meta_data;
-                }
             }
-
-            memcpy(send_buffer, request_data.data(), send_buffer_size * sizeof(double));
+            else
+            {
+                memcpy(send_buffer, request_data.data(), send_buffer_size * sizeof(double));
+            }
 
             mtx.lock();
             for (size_t i = 0; i < send_buffer_size - 1; i++)

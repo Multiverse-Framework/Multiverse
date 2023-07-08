@@ -1,9 +1,8 @@
-string simulator
 string length_unit
 string angle_unit
 string force_unit
 string time_unit
 string handedness
-multiverse_msgs/Attribute[] receive
+multiverse_msgs/ObjectAttribute[] receive
 ---
-float64[] data
+multiverse_msgs/ObjectData[] receive
