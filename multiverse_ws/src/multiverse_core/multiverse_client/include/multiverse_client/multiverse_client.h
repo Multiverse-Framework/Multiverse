@@ -65,7 +65,7 @@ protected:
 public:
     /**
      * @brief Send the meta data and receive the response from server
-     * 
+     *
      */
     void send_and_receive_meta_data();
 

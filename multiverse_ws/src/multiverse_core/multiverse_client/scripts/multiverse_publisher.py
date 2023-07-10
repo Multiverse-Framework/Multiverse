@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
-import zmq
+
 import rospy
 import tf2_ros
 from geometry_msgs.msg import TransformStamped, Transform
 import sys
-from json import dumps
-from struct import unpack, pack
 import threading
-from multiverse_msgs.msg import ObjectAttribute, ObjectData
-from multiverse_client import MultiverseQueryData
+import os
+sys.path.append(os.path.dirname(os.path.dirname(sys.argv[0])))
+from multiverse_socket import MultiverseSocket  # noqa
 
 attribute_map = {
     "": [],
@@ -24,127 +23,90 @@ attribute_map = {
     "torque":  [0.0, 0.0, 0.0]
 }
 
-host = "tcp://127.0.0.1"
-port = "7300"
-
-
-class MultiversePublish:
-    def __init__(self) -> None:
-        self.host = host
-        self.port = port
-        self.socket_addr = self.host + ":" + self.port
-
-    def send_meta_data(self, meta_data_json) -> dict:
-        self.context = zmq.Context()
-        self.socket_client = self.context.socket(zmq.REQ)
-        rospy.loginfo(f"Open the socket connection on {self.socket_addr}")
-        self.socket_client.connect(self.socket_addr)
-
-        # Send JSON string over ZMQ
-        self.socket_client.send_string(dumps(meta_data_json), flags=0)
-
-        # Receive buffer sizes over ZMQ
-        try:
-            receive_json = self.socket_client.recv_json()
-        except zmq.error.ContextTerminated:
-            receive_json = {}
-        return receive_json
-
-    def communicate(self) -> list:
-        time_in_sec = rospy.Time().now().to_sec()
-        self.socket_client.send(bytearray(pack('d', time_in_sec)), flags=0)
-
-        try:
-            receive_message = self.socket_client.recv()
-            data = list(
-                unpack('d' * (len(receive_message) // 8), receive_message))
-        except zmq.error.ContextTerminated:
-            data = []
-        return data
-
-    def deinit(self) -> None:
-        rospy.loginfo(f"Closing the socket client on {self.socket_addr}")
-        self.socket_client.send_string("\{\}")
-        self.socket_client.disconnect(self.socket_addr)
-        self.context.destroy()
-
 
 def set_meta_data_json() -> dict:
     meta_data_json = {}
+    meta_data_json["world"] = rospy.get_param(
+        '~multiverse/world') if rospy.has_param('~multiverse/world') else "world"
     meta_data_json["length_unit"] = rospy.get_param(
-        "~length_unit") if rospy.has_param("~length_unit") else "m"
+        "~multiverse/length_unit") if rospy.has_param("~multiverse/length_unit") else "m"
     meta_data_json["angle_unit"] = rospy.get_param(
-        "~angle_unit") if rospy.has_param("~angle_unit") else "rad"
+        "~multiverse/angle_unit") if rospy.has_param("~multiverse/angle_unit") else "rad"
     meta_data_json["force_unit"] = rospy.get_param(
-        "~force_unit") if rospy.has_param("~force_unit") else "N"
+        "~multiverse/force_unit") if rospy.has_param("~multiverse/force_unit") else "N"
     meta_data_json["time_unit"] = rospy.get_param(
-        "~time_unit") if rospy.has_param("~time_unit") else "s"
+        "~multiverse/time_unit") if rospy.has_param("~multiverse/time_unit") else "s"
     meta_data_json["handedness"] = rospy.get_param(
-        "~handedness") if rospy.has_param("~handedness") else "rhs"
+        "~multiverse/handedness") if rospy.has_param("~multiverse/handedness") else "rhs"
+    meta_data_json["send"] = {}
     meta_data_json["receive"] = {}
+
     return meta_data_json
 
 
 def start_publish_tf():
+    multiverse_socket = MultiverseSocket()
+
     meta_data_json = set_meta_data_json()
     meta_data_json["receive"][""] = ["position", "quaternion"]
 
-    multiverse_publisher = MultiversePublish()
+    host = rospy.get_param(
+        '~multiverse/host') if rospy.has_param('~multiverse/host') else "tcp://127.0.0.1"
+    port = int(rospy.get_param(
+        '~multiverse/publish/tf/port')) if rospy.has_param('~multiverse/publish/tf/port') else 7300
+    rate = int(rospy.get_param(
+        '~multiverse/publish/tf/rate')) if rospy.has_param('~multiverse/publish/tf/rate') else 60
 
-    receive = multiverse_publisher.send_meta_data(meta_data_json)
-
-    if receive.get("receive") is None:
-        return
+    multiverse_socket.init(host, port)
+    multiverse_socket.set_meta_data(meta_data_json)
+    multiverse_socket.connect()
+    meta_data_response = multiverse_socket.get_meta_data_response()
 
     object_name: str
     tf_broadcaster = tf2_ros.TransformBroadcaster()
     tf_msgs = []
     root_frame_id = rospy.get_param(
         '~root_frame_id') if rospy.has_param('~root_frame_id') else "map"
-    object_names = receive["receive"].keys()
+    object_names = meta_data_response["receive"].keys()
     for object_name in object_names:
         tf_msg = TransformStamped()
         tf_msg.header.frame_id = root_frame_id
         tf_msg.child_frame_id = object_name
         tf_msgs.append(tf_msg)
 
-    rate = rospy.Rate(60)
-    while not rospy.is_shutdown():
-        data = multiverse_publisher.communicate()
-        if len(data) == 0:
-            break
+    rate = rospy.Rate(rate)
 
-        data.pop(0)
+    while not rospy.is_shutdown():
+        multiverse_socket.set_send_data([rospy.Time.now().to_sec()])
+        multiverse_socket.communicate()
+        data = multiverse_socket.get_receive_data()
+        # print(data)
+
         for i, object_name in enumerate(object_names):
-            tf_msgs[i].header.stamp = rospy.Time.now()
-            tf_msgs[i].transform.translation.x = data.pop(0)
-            tf_msgs[i].transform.translation.y = data.pop(0)
-            tf_msgs[i].transform.translation.z = data.pop(0)
-            tf_msgs[i].transform.rotation.w = data.pop(0)
-            tf_msgs[i].transform.rotation.x = data.pop(0)
-            tf_msgs[i].transform.rotation.y = data.pop(0)
-            tf_msgs[i].transform.rotation.z = data.pop(0)
+            tf_msgs[i].header.stamp = rospy.Time.from_sec(data[0])
+            tf_msgs[i].transform.translation.x = data[7 * i + 1]
+            tf_msgs[i].transform.translation.y = data[7 * i + 2]
+            tf_msgs[i].transform.translation.z = data[7 * i + 3]
+            tf_msgs[i].transform.rotation.w = data[7 * i + 4]
+            tf_msgs[i].transform.rotation.x = data[7 * i + 5]
+            tf_msgs[i].transform.rotation.y = data[7 * i + 6]
+            tf_msgs[i].transform.rotation.z = data[7 * i + 7]
 
         tf_broadcaster.sendTransform(tf_msgs)
         rate.sleep()
 
-    multiverse_publisher.deinit()
+    multiverse_socket.disconnect()
 
 
 def start_multiverse_publisher() -> None:
     rospy.init_node('multiverse_publisher')
-    if rospy.has_param('~publish/tf'):
-        thread = threading.Thread(target=start_publish_tf)
-        thread.start()
+    if not rospy.has_param('~multiverse/publish/tf'):
+        return
 
-    while not rospy.is_shutdown():
-        continue
-
-    if thread is not None:
-        thread.join()
+    thread = threading.Thread(target=start_publish_tf)
+    thread.start()
+    thread.join()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 2 and sys.argv[1].isnumeric():
-        port = sys.argv[1]
     start_multiverse_publisher()

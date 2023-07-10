@@ -154,11 +154,18 @@ public:
         bool continue_state = false;
 
     request_meta_data:
+        send_buffer_size = 1;
+        receive_buffer_size = 1;
+
+        send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
+        receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
+
         if (should_shut_down)
         {
+            sockets_need_clean_up[socket_addr] = false;
             return;
         }
-        
+
         is_received_data_sent = false;
 
         // Receive JSON string over ZMQ
@@ -175,16 +182,25 @@ public:
         }
 
         Json::Reader reader;
-        if (!reader.parse(message.to_string(), meta_data_json))
+        const std::string message_str = message.to_string();
+        if (message_str.empty() ||
+            message_str[0] != '{' ||
+            (message_str[0] == '{' && message_str[1] == '}') ||
+            !reader.parse(message_str, meta_data_json))
         {
+            receive_buffer[0] = get_time_now();
+
             zmq::message_t response_message;
+            memcpy(response_message.data(), receive_buffer, receive_buffer_size * sizeof(double));
             socket_server.send(response_message, zmq::send_flags::none);
+
             goto request_meta_data;
         }
 
     bind_objects:
         ROS_INFO("%s", meta_data_json.toStyledString().c_str());
 
+        const std::string world = meta_data_json["world"].asString();
         const std::string length_unit = meta_data_json["length_unit"].asString();
         const std::string angle_unit = meta_data_json["angle_unit"].asString();
         const std::string handedness = meta_data_json["handedness"].asString();
@@ -255,7 +271,6 @@ public:
         response_json["handedness"] = handedness;
 
         const Json::Value send_objects_json = meta_data_json["send"];
-
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
         {
             const std::string object_name = send_object_it.key().asString();
@@ -274,7 +289,7 @@ public:
                 if (objects[object_name].count(attribute_name) == 0)
                 {
                     objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
-                    
+
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
                         double *data = &objects[object_name][attribute_name].first[i];
@@ -383,8 +398,8 @@ public:
         }
 
     send_meta_data_response:
-        const size_t send_buffer_size = 1 + send_data_vec.size();
-        const size_t receive_buffer_size = 1 + receive_data_vec.size();
+        send_buffer_size = 1 + send_data_vec.size();
+        receive_buffer_size = 1 + receive_data_vec.size();
 
         if (should_shut_down)
         {
@@ -402,7 +417,7 @@ public:
         zmq::message_t response_message(response_str.size());
         memcpy(response_message.data(), response_str.data(), response_str.size());
         socket_server.send(response_message, zmq::send_flags::none);
-        
+
         if (send_buffer_size == 1 && receive_buffer_size == 1)
         {
             goto request_meta_data;
@@ -412,6 +427,8 @@ public:
         receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
 
         sockets_need_clean_up[socket_addr] = true;
+
+    communicate:
         while (!should_shut_down)
         {
             // Receive send_data over ZMQ
@@ -541,6 +558,10 @@ private:
 
     Json::Value meta_data_json;
 
+    size_t send_buffer_size = 1;
+
+    size_t receive_buffer_size = 1;
+
     double *send_buffer;
 
     double *receive_buffer;
@@ -557,7 +578,8 @@ int main(int argc, char **argv)
     // register signal SIGINT and signal handler
     signal(SIGINT, [](int signum)
            {
-        ROS_INFO("Interrupt signal (%d) received.", signum);
+        ROS_INFO("Interrupt signal (%d) received, wait for 1s then shutdown.", signum);
+        zmq_sleep(1);
         should_shut_down = true; });
 
     ros::init(argc, argv, "state_server");

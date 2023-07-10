@@ -23,7 +23,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/chrono.h>
-#include <thread>
 
 std::map<std::string, size_t> attribute_map = {
     {"", 0},
@@ -90,7 +89,14 @@ public:
 
     void set_send_data(const pybind11::list &in_send_data)
     {
-        send_data = in_send_data;
+        if (in_send_data.size() != send_buffer_size)
+        {
+            printf("Size doesn't match with send_buffer_size = %ld", send_buffer_size);
+        }
+        else
+        {
+            send_data = in_send_data;
+        }
     }
 
     pybind11::list get_receive_data() const
@@ -105,20 +111,15 @@ private:
 
     pybind11::dict meta_data_dict;
 
-    std::thread meta_data_thread;
-
 private:
     void start_meta_data_thread() override
     {
-        MultiverseSocket::send_and_receive_meta_data();
+        MultiverseClient::send_and_receive_meta_data();
     }
 
     void stop_meta_data_thread() override
     {
-        if (meta_data_thread.joinable())
-        {
-            meta_data_thread.join();
-        }
+        
     }
 
     void init_objects() override
@@ -153,13 +154,13 @@ private:
 
     void bind_object_data() override
     {
-        
+        send_data = pybind11::list(send_buffer_size);
+
+        receive_data = pybind11::list(receive_buffer_size);
     }
 
     void clean_up() override
     {
-        meta_data_json.clear();
-
         send_data = pybind11::list();
 
         receive_data = pybind11::list();
@@ -190,8 +191,7 @@ PYBIND11_MODULE(multiverse_socket, handle)
         .def("init", &MultiverseClient::init)
         .def("connect", &MultiverseClient::connect)
         .def("communicate", &MultiverseClient::communicate)
-        .def("disconnect", &MultiverseClient::disconnect)
-        .def("send_and_receive_meta_data", &MultiverseClient::send_and_receive_meta_data);
+        .def("disconnect", &MultiverseClient::disconnect);
 
     pybind11::class_<MultiverseSocket, MultiverseClient>(handle, "MultiverseSocket", pybind11::is_final())
         .def(pybind11::init<>())

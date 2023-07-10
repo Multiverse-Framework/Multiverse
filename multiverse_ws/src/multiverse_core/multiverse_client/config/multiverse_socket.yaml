@@ -1,0 +1,15 @@
+multiverse:
+  length_unit: m
+  angle_unit: rad
+  force_unit: N
+  time_unit: s
+  handedness: rhs
+  root_frame_id: map
+
+  publish:
+    tf:
+      port: 7400
+      rate: 60
+    visualization_marker_array:
+      port: 7401
+      rate: 60

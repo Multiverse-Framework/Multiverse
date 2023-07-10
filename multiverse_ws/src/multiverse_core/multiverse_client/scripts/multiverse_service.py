@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 
-import zmq
 import rospy
 import sys
-from json import dumps
 from multiverse_msgs.srv import Socket, SocketRequest, SocketResponse
 from multiverse_msgs.msg import ObjectAttribute, ObjectData
 import os
@@ -46,9 +44,10 @@ def query_data_handle(req: SocketRequest):
     for data in req.receive:
         meta_data_json["receive"][data.object_name] = data.attribute_names
 
-    multiverse_socket.init(host, int(port))
+    multiverse_socket.init(host, port)
     multiverse_socket.set_meta_data(meta_data_json)
     multiverse_socket.connect()
+
     meta_data_response = multiverse_socket.get_meta_data_response()
 
     res.world = meta_data_response["world"]
@@ -67,14 +66,14 @@ def query_data_handle(req: SocketRequest):
     return res
 
 
-def start_multiverse_socket() -> None:
-    rospy.init_node('multiverse_socket')
+def start_multiverse_service() -> None:
+    rospy.init_node('multiverse_service')
     rospy.Service('/multiverse/query_data', Socket, query_data_handle)
     rospy.loginfo("Start service /multiverse/query_data")
     rospy.spin()
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2 and sys.argv[1].isnumeric():
         port = int(sys.argv[1])
-    start_multiverse_socket()
+    start_multiverse_service()
