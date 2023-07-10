@@ -1,0 +1,6 @@
+<launch>
+
+    <node pkg="multiverse_server" type="multiverse_server" name="multiverse_server" output="screen"
+        args="7300 7400 7500 7501 7502 7503" />
+
+</launch>

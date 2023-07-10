@@ -10,7 +10,7 @@ else
 
     DEVEL_PATH="$(dirname $0)/../../../devel"
     PYTHONPATH=$PYTHONPATH:$DEVEL_PATH/lib/python3/dist-packages
-    SETUP_PATH="$DEVEL_PATH/.private/catkin_tools_prebuild/setup.sh"
+    SETUP_PATH="$DEVEL_PATH/setup.sh"
 
     export PATH=$PATH:$USD_BUILD_PATH/bin
     export PYTHONPATH=$PYTHONPATH:$USD_BUILD_PATH/lib/python

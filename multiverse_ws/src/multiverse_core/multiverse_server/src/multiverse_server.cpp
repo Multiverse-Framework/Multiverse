@@ -116,10 +116,10 @@ static double get_time_now()
     return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
 }
 
-class StateHandle
+class MultiverseServer
 {
 public:
-    StateHandle(const std::string &socket_addr) : socket_addr(socket_addr)
+    MultiverseServer(const std::string &socket_addr) : socket_addr(socket_addr)
     {
         socket_server = zmq::socket_t(context, zmq::socket_type::rep);
         socket_server.bind(socket_addr);
@@ -127,7 +127,7 @@ public:
         ROS_INFO("Bind server socket to address %s", socket_addr.c_str());
     }
 
-    ~StateHandle()
+    ~MultiverseServer()
     {
         ROS_INFO("Close server socket %s", socket_addr.c_str());
 
@@ -145,7 +145,7 @@ public:
     }
 
 public:
-    void communicate()
+    void start()
     {
         std::vector<std::pair<std::vector<double>::iterator, double>> send_data_vec;
         std::vector<std::pair<std::vector<double>::iterator, double>> receive_data_vec;
@@ -154,6 +154,11 @@ public:
         bool continue_state = false;
 
     request_meta_data:
+        if (should_shut_down)
+        {
+            return;
+        }
+        
         is_received_data_sent = false;
 
         // Receive JSON string over ZMQ
@@ -170,9 +175,14 @@ public:
         }
 
         Json::Reader reader;
-        reader.parse(message.to_string(), meta_data_json);
+        if (!reader.parse(message.to_string(), meta_data_json))
+        {
+            zmq::message_t response_message;
+            socket_server.send(response_message, zmq::send_flags::none);
+            goto request_meta_data;
+        }
 
-    received_meta_data:
+    bind_objects:
         ROS_INFO("%s", meta_data_json.toStyledString().c_str());
 
         const std::string length_unit = meta_data_json["length_unit"].asString();
@@ -372,7 +382,7 @@ public:
             }
         }
 
-    send_meta_data:
+    send_meta_data_response:
         const size_t send_buffer_size = 1 + send_data_vec.size();
         const size_t receive_buffer_size = 1 + receive_data_vec.size();
 
@@ -424,11 +434,11 @@ public:
 
                 if (request_data_str[1] == '}')
                 {
-                    goto send_meta_data;
+                    goto send_meta_data_response;
                 }
                 else if (!meta_data_json.empty())
                 {
-                    goto received_meta_data;
+                    goto bind_objects;
                 }
                 else
                 {
@@ -536,10 +546,10 @@ private:
     double *receive_buffer;
 };
 
-void start_state_handle(int port)
+void start_multiverse_server(int port)
 {
-    StateHandle state_handle("tcp://127.0.0.1:" + std::to_string(port));
-    state_handle.communicate();
+    MultiverseServer multiverse_server("tcp://127.0.0.1:" + std::to_string(port));
+    multiverse_server.start();
 }
 
 int main(int argc, char **argv)
@@ -554,7 +564,7 @@ int main(int argc, char **argv)
 
     for (size_t thread_num = 0; thread_num < argc - 1; thread_num++)
     {
-        workers.emplace_back(start_state_handle, std::stoi(argv[thread_num + 1]));
+        workers.emplace_back(start_multiverse_server, std::stoi(argv[thread_num + 1]));
     }
 
     while (!should_shut_down)

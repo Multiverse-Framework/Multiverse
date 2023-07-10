@@ -6,6 +6,9 @@ import sys
 from json import dumps
 from multiverse_msgs.srv import QueryData, QueryDataRequest, QueryDataResponse
 from multiverse_msgs.msg import ObjectAttribute, ObjectData
+import os
+sys.path.append(os.path.dirname(os.path.dirname(sys.argv[0]))) 
+from multiverse_client import MultiverseQueryData
 
 attribute_map = {
     "": [],
@@ -21,7 +24,7 @@ attribute_map = {
 }
 
 host = "tcp://127.0.0.1"
-port = "7400"
+port = 7400
 
 
 class MultiverseService:
@@ -63,26 +66,35 @@ class MultiverseService:
 
     def deinit(self) -> None:
         rospy.loginfo(f"Closing the socket client on {self.socket_addr}")
-        self.socket_client.send_string("{}")
+        self.socket_client.send_string("\{\}")
         self.socket_client.disconnect(self.socket_addr)
-        self.is_enabled = False
         self.context.destroy()
 
 
 def query_data_handle(req: QueryDataRequest):
     res = QueryDataResponse()
 
-    multiverse_service = MultiverseService()
-    receive = multiverse_service.send_meta_data(req)
-    multiverse_service.deinit()
+    multiverse_service = MultiverseQueryData()
 
-    if receive.get("receive") is not None:
-        object_name: str
-        object_data: dict
-        for object_name, object_data in receive["receive"].items():
-            for attribute_name, data in object_data.items():
-                res.receive.append(ObjectData(
-                    object_name, attribute_name, data))
+    meta_data_json = {}
+    meta_data_json["length_unit"] = "m" if req.length_unit == "" else req.length_unit
+    meta_data_json["angle_unit"] = "rad" if req.angle_unit == "" else req.angle_unit
+    meta_data_json["force_unit"] = "N" if req.force_unit == "" else req.force_unit
+    meta_data_json["time_unit"] = "s" if req.time_unit == "" else req.time_unit
+    meta_data_json["handedness"] = "rhs" if req.handedness == "" else req.handedness
+
+    meta_data_json["receive"] = {}
+    data: ObjectAttribute
+    for data in req.receive:
+        meta_data_json["receive"][data.object_name] = data.attribute_names
+
+    multiverse_service.init(host, port)
+    multiverse_service.set_meta_data(meta_data_json)
+    multiverse_service.connect()
+    
+    multiverse_service.communicate()
+    receive_data = multiverse_service.get_receive_data()
+    multiverse_service.disconnect()
 
     return res
 

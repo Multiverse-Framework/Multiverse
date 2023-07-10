@@ -8,8 +8,8 @@ import sys
 from json import dumps
 from struct import unpack, pack
 import threading
-from multiverse_msgs.srv import QueryData, QueryDataRequest, QueryDataResponse
 from multiverse_msgs.msg import ObjectAttribute, ObjectData
+from multiverse_client import MultiverseQueryData
 
 attribute_map = {
     "": [],
@@ -27,17 +27,16 @@ attribute_map = {
 host = "tcp://127.0.0.1"
 port = "7300"
 
-context = zmq.Context()
 
-
-class MultiverseService:
+class MultiversePublish:
     def __init__(self) -> None:
         self.host = host
         self.port = port
         self.socket_addr = self.host + ":" + self.port
 
     def send_meta_data(self, meta_data_json) -> dict:
-        self.socket_client = context.socket(zmq.REQ)
+        self.context = zmq.Context()
+        self.socket_client = self.context.socket(zmq.REQ)
         rospy.loginfo(f"Open the socket connection on {self.socket_addr}")
         self.socket_client.connect(self.socket_addr)
 
@@ -65,8 +64,9 @@ class MultiverseService:
 
     def deinit(self) -> None:
         rospy.loginfo(f"Closing the socket client on {self.socket_addr}")
-        self.socket_client.send_string("{}")
+        self.socket_client.send_string("\{\}")
         self.socket_client.disconnect(self.socket_addr)
+        self.context.destroy()
 
 
 def set_meta_data_json() -> dict:
@@ -89,17 +89,18 @@ def start_publish_tf():
     meta_data_json = set_meta_data_json()
     meta_data_json["receive"][""] = ["position", "quaternion"]
 
-    multiverse_client = MultiverseService()
+    multiverse_publisher = MultiversePublish()
 
-    receive = multiverse_client.send_meta_data(meta_data_json)
+    receive = multiverse_publisher.send_meta_data(meta_data_json)
 
     if receive.get("receive") is None:
         return
-        
+
     object_name: str
     tf_broadcaster = tf2_ros.TransformBroadcaster()
     tf_msgs = []
-    root_frame_id = rospy.get_param('~root_frame_id') if rospy.has_param('~root_frame_id') else "map"
+    root_frame_id = rospy.get_param(
+        '~root_frame_id') if rospy.has_param('~root_frame_id') else "map"
     object_names = receive["receive"].keys()
     for object_name in object_names:
         tf_msg = TransformStamped()
@@ -109,7 +110,7 @@ def start_publish_tf():
 
     rate = rospy.Rate(60)
     while not rospy.is_shutdown():
-        data = multiverse_client.communicate()
+        data = multiverse_publisher.communicate()
         if len(data) == 0:
             break
 
@@ -126,23 +127,24 @@ def start_publish_tf():
 
         tf_broadcaster.sendTransform(tf_msgs)
         rate.sleep()
-        
-    multiverse_client.deinit()
+
+    multiverse_publisher.deinit()
 
 
-def start_multiverse_client() -> None:
-    rospy.init_node('multiverse_client')
-    threads = []
+def start_multiverse_publisher() -> None:
+    rospy.init_node('multiverse_publisher')
     if rospy.has_param('~publish/tf'):
         thread = threading.Thread(target=start_publish_tf)
         thread.start()
-        threads.append(thread)
 
-    for thread in threads:
+    while not rospy.is_shutdown():
+        continue
+
+    if thread is not None:
         thread.join()
 
 
 if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[1].isnumeric():
         port = sys.argv[1]
-    start_multiverse_client()
+    start_multiverse_publisher()
