@@ -35,5 +35,5 @@ fi
 (cd $PYBIND11_BUILD_PATH; cmake ../../src/pybind11 -DCMAKE_INSTALL_PREFIX=$BUILD_PATH; make install)
 
 # Build the workspace
-# rosdep init
-# (cd multiverse_ws; . /opt/ros/noetic/setup.sh; catkin build)
+rosdep init
+(cd multiverse_ws; . /opt/ros/noetic/setup.sh; catkin build)
