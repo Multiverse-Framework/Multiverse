@@ -128,13 +128,9 @@ add_library(${PROJECT_NAME}_lib
   src/multiverse_client.cpp
 )
 
-add_library(multiverse_query_data_lib
-  src/multiverse_query_data.cpp
+add_library(multiverse_socket_lib
+  src/multiverse_socket.cpp
 )
-
-# add_library(multiverse_query_data_lib
-#   src/multiverse_query_data.cpp
-# )
 
 # # Add cmake target dependencies of the library
 # # as an example, code may need to be generated before libraries
@@ -163,7 +159,7 @@ target_link_libraries(${PROJECT_NAME}_lib
   jsoncpp
 )
 
-target_link_libraries(multiverse_query_data_lib
+target_link_libraries(multiverse_socket_lib
   ${catkin_LIBRARIES}
   ${PROJECT_NAME}_lib
 )
@@ -197,7 +193,7 @@ install(TARGETS ${PROJECT_NAME}_lib
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
 )
 
-install(TARGETS multiverse_query_data_lib
+install(TARGETS multiverse_socket_lib
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
@@ -229,5 +225,5 @@ install(DIRECTORY include/${PROJECT_NAME}/
 # # Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-pybind11_add_module(multiverse_client src/multiverse_query_data.cpp)
-target_link_libraries(multiverse_client PRIVATE ${PROJECT_NAME}_lib)
+pybind11_add_module(multiverse_socket src/multiverse_socket.cpp)
+target_link_libraries(multiverse_socket PRIVATE ${PROJECT_NAME}_lib)

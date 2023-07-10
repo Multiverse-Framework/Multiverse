@@ -1,4 +1,4 @@
-string simulator
+string world
 string length_unit
 string angle_unit
 string force_unit

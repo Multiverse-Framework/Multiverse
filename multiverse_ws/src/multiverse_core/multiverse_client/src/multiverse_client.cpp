@@ -20,6 +20,7 @@
 
 #include "multiverse_client.h"
 
+#include <chrono>
 #include <zmq.h>
 
 void MultiverseClient::init(const std::string &in_host, const int in_port)
@@ -94,6 +95,11 @@ void MultiverseClient::disconnect()
     stop_meta_data_thread();
 }
 
+double MultiverseClient::get_time_now()
+{
+    return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
+}
+
 void MultiverseClient::send_and_receive_meta_data()
 {
     const std::string meta_data_str = meta_data_json.toStyledString();
@@ -160,8 +166,6 @@ void MultiverseClient::send_and_receive_meta_data()
         return;
     }
 
-    bind_object_data();
-
     send_buffer_size = response_buffer_sizes["send"];
     receive_buffer_size = response_buffer_sizes["receive"];
 
@@ -170,4 +174,6 @@ void MultiverseClient::send_and_receive_meta_data()
     send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
     receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
     is_enabled = true;
+
+    bind_object_data();
 }

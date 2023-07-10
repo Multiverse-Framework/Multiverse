@@ -22,6 +22,7 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/chrono.h>
 #include <thread>
 
 std::map<std::string, size_t> attribute_map = {
@@ -36,14 +37,14 @@ std::map<std::string, size_t> attribute_map = {
     {"force", 3},
     {"torque", 3}};
 
-class MultiverseQueryData final : public MultiverseClient
+class MultiverseSocket final : public MultiverseClient
 {
 public:
-    MultiverseQueryData()
+    MultiverseSocket()
     {
     }
 
-    ~MultiverseQueryData()
+    ~MultiverseSocket()
     {
     }
 
@@ -55,38 +56,53 @@ public:
     pybind11::dict get_meta_data_response() const
     {
         pybind11::dict meta_data_res_dict;
-        
-        meta_data_res_dict["simulator"] = meta_data_res_json["simulator"].asString();
+
+        meta_data_res_dict["world"] = meta_data_res_json["world"].asString();
         meta_data_res_dict["length_unit"] = meta_data_res_json["length_unit"].asString();
-        meta_data_res_dict["angle_unit"] = meta_data_res_json["angle_unit"].asString(); 
-        meta_data_res_dict["force_unit"] = meta_data_res_json["force_unit"].asString(); 
+        meta_data_res_dict["angle_unit"] = meta_data_res_json["angle_unit"].asString();
+        meta_data_res_dict["force_unit"] = meta_data_res_json["force_unit"].asString();
         meta_data_res_dict["time_unit"] = meta_data_res_json["time_unit"].asString();
-        meta_data_res_dict["handedness"] = meta_data_res_json["handedness"].asString(); 
-        
-        for (const std::string& object_name : meta_data_res_json["receive"].getMemberNames()) 
+        meta_data_res_dict["handedness"] = meta_data_res_json["handedness"].asString();
+
+        for (const std::string &send_receive : {"send", "receive"})
         {
-            
-            // for (const double object_data : meta_data_res_json["receive"][object_name])
-            // {
-            //     /* code */
-            // }
-            
-            // meta_data_res_dict["receive"][object_name] = meta_data_res_json["receive"][object_name];
+            meta_data_res_dict[send_receive.c_str()] = pybind11::dict();
+            const Json::Value objects_json = meta_data_res_json[send_receive];
+            for (const std::string &object_name : objects_json.getMemberNames())
+            {
+                meta_data_res_dict[send_receive.c_str()][object_name.c_str()] = pybind11::dict();
+                const Json::Value object_json = objects_json[object_name];
+                for (const std::string &attribute_name : object_json.getMemberNames())
+                {
+                    pybind11::list data_list;
+                    const Json::Value object_data_json = object_json[attribute_name];
+                    for (int i = 0; i < object_data_json.size(); i++)
+                    {
+                        data_list.append(object_data_json[i].asDouble());
+                    }
+                    meta_data_res_dict[send_receive.c_str()][object_name.c_str()][attribute_name.c_str()] = data_list;
+                }
+            }
         }
+
+        return meta_data_res_dict;
+    }
+
+    void set_send_data(const pybind11::list &in_send_data)
+    {
+        send_data = in_send_data;
     }
 
     pybind11::list get_receive_data() const
     {
-        pybind11::list receive_data;
-        for (size_t i = 0; i < receive_buffer_size; i++)
-        {
-            receive_data.append(receive_buffer[i]);
-        }
-
         return receive_data;
     }
 
 private:
+    pybind11::list send_data;
+
+    pybind11::list receive_data;
+
     pybind11::dict meta_data_dict;
 
     std::thread meta_data_thread;
@@ -94,7 +110,7 @@ private:
 private:
     void start_meta_data_thread() override
     {
-        MultiverseQueryData::send_and_receive_meta_data();
+        MultiverseSocket::send_and_receive_meta_data();
     }
 
     void stop_meta_data_thread() override
@@ -116,45 +132,57 @@ private:
     void construct_meta_data() override
     {
         meta_data_json.clear();
-        meta_data_json["simulator"] = "query_data";
+        meta_data_json["world"] = meta_data_dict["world"].cast<std::string>();
         meta_data_json["length_unit"] = meta_data_dict["length_unit"].cast<std::string>();
         meta_data_json["angle_unit"] = meta_data_dict["angle_unit"].cast<std::string>();
         meta_data_json["force_unit"] = meta_data_dict["force_unit"].cast<std::string>();
         meta_data_json["time_unit"] = meta_data_dict["time_unit"].cast<std::string>();
         meta_data_json["handedness"] = meta_data_dict["handedness"].cast<std::string>();
 
-        for (const std::pair<std::string, std::vector<std::string>> receive_objects : meta_data_dict["receive"].cast<std::map<std::string, std::vector<std::string>>>())
+        for (const std::string &send_receive : {"send", "receive"})
         {
-            for (const std::string &object_attribute : receive_objects.second)
+            for (const std::pair<std::string, std::vector<std::string>> receive_objects : meta_data_dict[send_receive.c_str()].cast<std::map<std::string, std::vector<std::string>>>())
             {
-                meta_data_json["receive"][receive_objects.first].append(object_attribute);
+                for (const std::string &object_attribute : receive_objects.second)
+                {
+                    meta_data_json[send_receive][receive_objects.first].append(object_attribute);
+                }
             }
         }
     }
 
     void bind_object_data() override
     {
+        
     }
 
     void clean_up() override
     {
-    }
+        meta_data_json.clear();
 
-    double get_time_now() override
-    {
-        return 0.0;
+        send_data = pybind11::list();
+
+        receive_data = pybind11::list();
     }
 
     void bind_send_data() override
     {
+        for (size_t i = 0; i < send_buffer_size; i++)
+        {
+            send_buffer[i] = send_data[i].cast<double>();
+        }
     }
 
     void bind_receive_data() override
     {
+        for (size_t i = 0; i < receive_buffer_size; i++)
+        {
+            receive_data[i] = receive_buffer[i];
+        }
     }
 };
 
-PYBIND11_MODULE(multiverse_client, handle)
+PYBIND11_MODULE(multiverse_socket, handle)
 {
     handle.doc() = "";
 
@@ -165,8 +193,10 @@ PYBIND11_MODULE(multiverse_client, handle)
         .def("disconnect", &MultiverseClient::disconnect)
         .def("send_and_receive_meta_data", &MultiverseClient::send_and_receive_meta_data);
 
-    pybind11::class_<MultiverseQueryData, MultiverseClient>(handle, "MultiverseQueryData", pybind11::is_final())
+    pybind11::class_<MultiverseSocket, MultiverseClient>(handle, "MultiverseSocket", pybind11::is_final())
         .def(pybind11::init<>())
-        .def("set_meta_data", &MultiverseQueryData::set_meta_data)
-        .def("get_receive_data", &MultiverseQueryData::get_receive_data);
+        .def("set_meta_data", &MultiverseSocket::set_meta_data)
+        .def("get_meta_data_response", &MultiverseSocket::get_meta_data_response)
+        .def("set_send_data", &MultiverseSocket::set_send_data)
+        .def("get_receive_data", &MultiverseSocket::get_receive_data);
 }

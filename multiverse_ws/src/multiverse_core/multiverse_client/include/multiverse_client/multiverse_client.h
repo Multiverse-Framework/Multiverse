@@ -69,6 +69,13 @@ public:
      */
     void send_and_receive_meta_data();
 
+    /**
+     * @brief Get the current time in time_unit
+     *
+     * @return double
+     */
+    virtual double get_time_now();
+
 protected:
     /**
      * @brief Start send and receive meta data thread
@@ -111,13 +118,6 @@ protected:
      *
      */
     virtual void clean_up() = 0;
-
-    /**
-     * @brief Get the current time in time_unit
-     *
-     * @return double
-     */
-    virtual double get_time_now() = 0;
 
     /**
      * @brief Bind send data to send buffer
