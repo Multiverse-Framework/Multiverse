@@ -1,0 +1,107 @@
+<?xml version="1.0" ?>
+<robot name="box_scenario" version="1.0">
+    <mujoco>
+        <compiler fusestatic="false" balanceinertia="true" discardvisual="true" boundmass="0.000001" boundinertia="0.000001" meshdir="/media/giangnguyen/Storage/Multiverse/multiverse_ws/src/multiverse_core/multiverse_parser/examples/urdf_to_mjcf/mjcf/box_scenario/stl" strippath="false"/>
+    </mujoco>
+    <joint name="box_flap_1_joint" type="revolute">
+        <origin xyz="0.17000000178813934 0.0 0.16599999368190765" rpy="-1.5707963267948966 0.0 0.0"/>
+        <axis xyz="0 0 1"/>
+        <parent link="box"/>
+        <child link="box_flap_1"/>
+        <limit effort="1000" lower="-1.570000041628963" upper="4.6999999549936415" velocity="1000"/>
+    </joint>
+    <joint name="box_flap_2_joint" type="revolute">
+        <origin xyz="-0.17000000178813934 0.0 0.1679999977350235" rpy="1.5707963267948966 -0.0 0.0"/>
+        <axis xyz="0 0 1"/>
+        <parent link="box"/>
+        <child link="box_flap_2"/>
+        <limit effort="1000" lower="-1.570000041628963" upper="4.6999999549936415" velocity="1000"/>
+    </joint>
+    <link name="world"/>
+    <joint name="box_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.17" rpy="0.0 -0.0 0.0"/>
+        <parent link="world"/>
+        <child link="box"/>
+    </joint>
+    <link name="box">
+        <inertial>
+            <origin xyz="0.0 0.0 -0.034677907824516296" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="0.08964705467224121" ixy="0.0" ixz="0.0" iyy="0.08021242171525955" iyz="0.0" izz="0.07528116554021835"/>
+        </inertial>
+        <collision>
+            <origin xyz="0.0 0.0 -0.1675" rpy="0.0 -0.0 0.0"/>
+            <geometry>
+                <box size="0.34 0.32 0.005"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin xyz="0.167578 0.0 -0.0025" rpy="0.0 -0.0 0.0"/>
+            <geometry>
+                <box size="0.005156 0.32 0.335"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin xyz="-0.167578 0.0 -0.0025" rpy="0.0 -0.0 0.0"/>
+            <geometry>
+                <box size="0.005156 0.32 0.335"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin xyz="0.0 0.1575 -0.0025" rpy="0.0 -0.0 0.0"/>
+            <geometry>
+                <box size="0.340312 0.005 0.335"/>
+            </geometry>
+        </collision>
+        <collision>
+            <origin xyz="0.0 -0.1575 -0.0025" rpy="0.0 -0.0 0.0"/>
+            <geometry>
+                <box size="0.340312 0.005 0.335"/>
+            </geometry>
+        </collision>
+    </link>
+    <link name="box_flap_1">
+        <inertial>
+            <origin xyz="-0.17000000178813934 -1.5240807504923737e-09 -3.309754914582186e-09" rpy="0 0 0"/>
+            <mass value="0.2165265679359436"/>
+            <inertia ixx="0.003919629380106926" ixy="0.0" ixz="0.0" iyy="0.0020787641406059265" iyz="0.0" izz="0.0018410093616694212"/>
+        </inertial>
+        <collision>
+            <origin xyz="-0.1700000072951671 3.309754823582751e-09 -1.5240808185731551e-09" rpy="-1.5707963267948963 -6.845708383496081e-08 -1.5707963267948966"/>
+            <geometry>
+                <mesh filename="geom_6.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+            </geometry>
+        </collision>
+    </link>
+    <link name="box_flap_2">
+        <inertial>
+            <origin xyz="0.17000001668930054 -3.853585228696943e-10 -1.7394633910344792e-12" rpy="0 0 0"/>
+            <mass value="0.2165265679359436"/>
+            <inertia ixx="0.003919629380106926" ixy="0.0" ixz="0.0" iyy="0.002078763674944639" iyz="0.0" izz="0.0018410093616694212"/>
+        </inertial>
+        <collision>
+            <origin xyz="0.17000000947241017 -1.7394765439778366e-12 3.853585194813239e-10" rpy="1.5707963267948963 -6.845708383496081e-08 1.5707963267948966"/>
+            <geometry>
+                <mesh filename="geom_7.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+            </geometry>
+        </collision>
+    </link>
+    <joint name="cat_joint" type="fixed">
+        <origin xyz="-0.09594 0.193951 0.5" rpy="0.0 -0.0 0.0"/>
+        <parent link="world"/>
+        <child link="cat"/>
+    </joint>
+    <link name="cat">
+        <inertial>
+            <origin xyz="1.1589759196795058e-07 -0.003046436468139291 0.09314732998609543" rpy="0 0 0"/>
+            <mass value="1.1450002193450928"/>
+            <inertia ixx="0.005019803997129202" ixy="0.0" ixz="0.0" iyy="0.0038922601379454136" iyz="0.0" izz="0.0015858749393373728"/>
+        </inertial>
+        <collision>
+            <origin xyz="1.1589759504366095e-07 -0.0030464363770440228 0.09314732677864689" rpy="1.2163360186527825 -1.2583493548573155e-06 -3.4001043122664387e-06"/>
+            <geometry>
+                <mesh filename="geom_8.stl" scale="1.0 1.0 1.0"/>
+            </geometry>
+        </collision>
+    </link>
+</robot>

@@ -1,0 +1,42 @@
+<mujoco model="box_scenario">
+    <compiler angle="radian" meshdir="/media/giangnguyen/Storage/Multiverse/multiverse_ws/src/multiverse_core/multiverse_parser/examples/urdf_to_mjcf/mjcf/box_scenario/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="true" boundmass="0.000001" boundinertia="0.000001"/>
+    <statistic meansize="0.270405" extent="1.03653" center="0 0.00352188 0.2873"/>
+    <asset>
+        <mesh name="geom_6" file="geom_6.stl" scale="1 1 1"/>
+        <mesh name="geom_7" file="geom_7.stl" scale="1 1 1"/>
+        <mesh name="geom_8" file="geom_8.stl"/>
+    </asset>
+    <worldbody>
+        <body name="box_scenario">
+            <body name="box" pos="0 0 0.17">
+                <inertial pos="0 0 -0.0346779" mass="1e-06" diaginertia="0.0896471 0.0802124 0.0752812"/>
+                <geom size="0.17 0.16 0.0025" pos="0 0 -0.1675" type="box"/>
+                <geom size="0.002578 0.16 0.1675" pos="0.167578 0 -0.0025" type="box"/>
+                <geom size="0.002578 0.16 0.1675" pos="-0.167578 0 -0.0025" type="box"/>
+                <geom size="0.170156 0.0025 0.1675" pos="0 0.1575 -0.0025" type="box"/>
+                <geom size="0.170156 0.0025 0.1675" pos="0 -0.1575 -0.0025" type="box"/>
+                <body name="box_flap_1" pos="0.17 0 0.166" quat="0.707107 -0.707107 0 0">
+                    <inertial pos="-0.17 -1.52408e-09 -3.30975e-09" mass="0.216527" diaginertia="0.00391963 0.00207876 0.00184101"/>
+                    <joint name="box_flap_1_joint" pos="0 0 0" axis="0 0 1" range="-1.57 4.7"/>
+                    <geom pos="-0.17 3.30975e-09 -1.52408e-09" quat="0.5 -0.5 0.5 -0.5" type="mesh" mesh="geom_6"/>
+                </body>
+                <body name="box_flap_2" pos="-0.17 0 0.168" quat="0.707107 0.707107 0 0">
+                    <inertial pos="0.17 -3.85359e-10 -1.73946e-12" mass="0.216527" diaginertia="0.00391963 0.00207876 0.00184101"/>
+                    <joint name="box_flap_2_joint" pos="0 0 0" axis="0 0 1" range="-1.57 4.7"/>
+                    <geom pos="0.17 -1.73948e-12 3.85359e-10" quat="0.5 0.5 0.5 0.5" type="mesh" mesh="geom_7"/>
+                </body>
+            </body>
+            <body name="cat" pos="-0.09594 0.193951 0.5">
+                <inertial pos="1.15898e-07 -0.00304644 0.0931473" mass="1.145" diaginertia="0.0050198 0.00389226 0.00158587"/>
+                <geom pos="1.15898e-07 -0.00304644 0.0931473" quat="0.820696 0.571365 -1.48771e-06 -1.03574e-06" type="mesh" mesh="geom_8"/>
+            </body>
+        </body>
+    </worldbody>
+    <equality/>
+    <contact>
+        <exclude body1="box_scenario" body2="box"/>
+        <exclude body1="box" body2="box_flap_1"/>
+        <exclude body1="box" body2="box_flap_2"/>
+        <exclude body1="box_scenario" body2="cat"/>
+    </contact>
+</mujoco>

@@ -1,0 +1,2992 @@
+<?xml version="1.0" ?>
+<robot name="kitchen" version="1.0">
+  <joint name="sink_area_trash_drawer_main_joint" type="prismatic">
+    <origin xyz="1.5549999475479126 -0.4000000059604645 0.39500001072883606" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="sink_area_trash_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="sink_area_left_upper_drawer_main_joint" type="prismatic">
+    <origin xyz="1.5549999475479126 0.8999999761581421 0.7549999952316284" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="sink_area_left_upper_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="sink_area_left_middle_drawer_main_joint" type="prismatic">
+    <origin xyz="1.5549999475479126 0.8999999761581421 0.5299999713897705" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="sink_area_left_middle_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="sink_area_left_bottom_drawer_main_joint" type="prismatic">
+    <origin xyz="1.5549999475479126 0.8999999761581421 0.23000000417232513" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="sink_area_left_bottom_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="sink_area_dish_washer_door_joint" type="revolute">
+    <origin xyz="1.284999966621399 0.20000000298023224 0.1850000023841858" rpy="-1.5707963267948966 -0.0 3.141592653589793"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="sink_area_dish_washer_door"/>
+    <limit effort="1000" lower="0.0" upper="1.5708000552204227" velocity="1000"/>
+  </joint>
+  <joint name="sink_area_dish_washer_tray_main" type="prismatic">
+    <origin xyz="1.6349999904632568 0.20000000298023224 0.6200000047683716" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="sink_area_dish_washer_tray_bottom"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_oven_door_joint" type="revolute">
+    <origin xyz="1.2812999486923218 1.9299999475479126 0.9085999727249146" rpy="-1.5707963267948966 -0.0 3.141592653589793"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_oven_door"/>
+    <limit effort="1000" lower="0.0" upper="1.5708000552204227" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_oven_knob_stove_2_joint" type="revolute">
+    <origin xyz="1.284999966621399 2.069999933242798 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_oven_knob_stove_2"/>
+    <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_oven_knob_stove_1_joint" type="revolute">
+    <origin xyz="1.284999966621399 2.140000104904175 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_oven_knob_stove_1"/>
+    <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_oven_knob_stove_3_joint" type="revolute">
+    <origin xyz="1.284999966621399 2.0 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_oven_knob_stove_3"/>
+    <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_oven_knob_stove_4_joint" type="revolute">
+    <origin xyz="1.284999966621399 1.9299999475479126 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_oven_knob_stove_4"/>
+    <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_oven_knob_oven_joint" type="revolute">
+    <origin xyz="1.284999966621399 1.7699999809265137 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_oven_knob_oven"/>
+    <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_area_middle_upper_drawer_main_joint" type="prismatic">
+    <origin xyz="1.5549999475479126 1.9299999475479126 0.800000011920929" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_area_middle_upper_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_area_middle_lower_drawer_main_joint" type="prismatic">
+    <origin xyz="1.5549999475479126 1.9299999475479126 0.4399999976158142" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_area_middle_lower_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_area_left_drawer_main_joint" type="prismatic">
+    <origin xyz="1.2649999856948853 2.380000114440918 0.824999988079071" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_area_left_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="oven_area_area_right_drawer_main_joint" type="prismatic">
+    <origin xyz="1.2649999856948853 1.4800000190734863 0.824999988079071" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="oven_area_area_right_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="kitchen_island_left_upper_drawer_main_joint" type="prismatic">
+    <origin xyz="-1.062999963760376 0.9491999745368958 0.5350000262260437" rpy="-0.0 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="kitchen_island_left_upper_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="kitchen_island_left_lower_drawer_main_joint" type="prismatic">
+    <origin xyz="-1.062999963760376 0.9491999745368958 0.24500000476837158" rpy="-0.0 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="kitchen_island_left_lower_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="kitchen_island_middle_upper_drawer_main_joint" type="prismatic">
+    <origin xyz="-1.062999963760376 1.7491999864578247 0.5350000262260437" rpy="-0.0 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="kitchen_island_middle_upper_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="kitchen_island_middle_lower_drawer_main_joint" type="prismatic">
+    <origin xyz="-1.062999963760376 1.7491999864578247 0.24500000476837158" rpy="-0.0 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="kitchen_island_middle_lower_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="kitchen_island_right_upper_drawer_main_joint" type="prismatic">
+    <origin xyz="-1.062999963760376 2.5492000579833984 0.5350000262260437" rpy="-0.0 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="kitchen_island_right_upper_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="kitchen_island_right_lower_drawer_main_joint" type="prismatic">
+    <origin xyz="-1.062999963760376 2.5492000579833984 0.24500000476837158" rpy="-0.0 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="kitchen_island_right_lower_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="fridge_area_lower_drawer_main_joint" type="prismatic">
+    <origin xyz="1.5549999475479126 -1.0 0.32249999046325684" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="fridge_area_lower_drawer_main"/>
+    <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
+  </joint>
+  <joint name="iai_fridge_door_joint" type="revolute">
+    <origin xyz="1.2649999856948853 -1.2999999523162842 0.9900000095367432" rpy="0.0 -0.0 3.141592653589793"/>
+    <axis xyz="0 0 1"/>
+    <parent link="kitchen"/>
+    <child link="iai_fridge_door"/>
+    <limit effort="1000" lower="0.0" upper="1.5708000552204227" velocity="1000"/>
+  </joint>
+  <link name="world"/>
+  <joint name="kitchen_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+    <parent link="world"/>
+    <child link="kitchen"/>
+  </joint>
+  <link name="kitchen">
+    <inertial>
+      <origin xyz="0.02871396765112877 1.2261531352996826 0.9945118427276611" rpy="0 0 0"/>
+      <mass value="0.0"/>
+      <inertia ixx="53549.55078125" ixy="0.0" ixz="0.0" iyy="36894.26953125" iyz="0.0" izz="23144.2421875"/>
+    </inertial>
+    <collision>
+      <origin xyz="1.565 0.525 0.84" rpy="0.0 -0.0 3.141592653589793"/>
+      <geometry>
+        <box size="0.575 1.6 0.02"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.0655 1.7492 0.841" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.8 2.45 0.02"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.565 -1.0 1.0" rpy="0.0 -0.0 3.141592653589793"/>
+      <geometry>
+        <box size="0.29 0.5 0.01"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.555 -1.0 1.43" rpy="0.0 -0.0 3.141592653589793"/>
+      <geometry>
+        <box size="0.56 0.5 0.13"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.42151 -1.836 1.25" rpy="0.0 -0.0 3.1415900000097934"/>
+      <geometry>
+        <box size="1.1376 0.15 2.5"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.91551 0.68 1.25" rpy="0.0 -0.0 1.5708005694372704"/>
+      <geometry>
+        <box size="5.182000000000001 0.15000000000000002 2.5"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.96 3.196 1.25" rpy="0.0 -0.0 3.1415900000097934"/>
+      <geometry>
+        <box size="5.901 0.15 2.5"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.83549 1.146 0.35" rpy="0.0 -0.0 -1.5708005694372709"/>
+      <geometry>
+        <box size="4.250000000000001 0.15000000000000002 0.7"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.77385 -1.02376 0.35" rpy="0.0 -0.0 0.000156999999677509"/>
+      <geometry>
+        <box size="2.27328 0.15 0.7"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.61 -1.44851 0.35" rpy="0.0 -0.0 -1.5708005694372704"/>
+      <geometry>
+        <box size="1.0 0.15000000000000002 0.7"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.05271 -1.876 0.375" rpy="0.0 -0.0 3.1415900000097934"/>
+      <geometry>
+        <box size="1.6 0.15 0.75"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5646649345099484 1.3144529220771068 0.4390023823591454" rpy="-0.001035982695124803 -0.004484241935293942 -1.5707994274835804"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_12.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5646645003557205 0.9533215045928953 0.09332298845052728" rpy="-1.5707963267948968 -1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_13.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5646645174930474 -0.712623292960826 0.30598845004583936" rpy="1.5680847537668312 0.014104363282255073 -1.5708108781330592"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_14.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.8261793355315035 -0.1695970883345922 0.8363519586828145" rpy="1.5737833482476287 -1.55868036768079 3.1389030950687586"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_15.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5646639883485225 1.263295624962559 0.8342349999111178" rpy="-1.5707963267949006 -1.5420633169038556 1.5707963267949023"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_16.stl" scale="1.0000000000000002 0.9999999999999999 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5750334882736206 0.5004700005054474 0.45967249743640415" rpy="0.0 -0.0 -1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_17.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5649922379883563 0.7012563320741781 0.8346188063633174" rpy="-0.12824241819455626 -1.569087138525318 -1.4418329777006988"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_18.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5646639784096072 -0.7120973839110829 0.710669839209719" rpy="1.5707963267948968 -0.025153740587600733 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_19.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5705565825359762 0.39687836043047736 0.09534256296285187" rpy="1.6198377123652288 -1.5660593900652868 -1.5945946820574977"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_20.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.3011161962290834 -0.23672573185935747 0.8363914292129211" rpy="-1.5806618359556184 -1.5630135190721584 0.013279432551345362"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_21.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5704219321695925 -0.24924424367484194 0.09527339700561721" rpy="0.05074857401906447 -1.5689122804068885 -1.6325667577891187"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_22.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5749751995612211 -0.10093950182083783 0.4662724120038202" rpy="0.0012815303970618577 3.252606517456513e-19 -1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_23.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.59854201773324 -0.6278800168135756 0.8364342871740685" rpy="-1.512561335559737 -1.5701885580361474 1.519770973024398"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_24.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5646635019779205 0.3 0.041472490727901434" rpy="-1.5707963267948968 -1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_25.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5593387970917587 -0.25016204217442306 0.7950923787243251" rpy="1.5699958739243494 -8.249230617689864e-06 -1.5708139437548407"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_26.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.7630077319869641 -0.25747637425517617 0.7413110551726839" rpy="-0.07978589981988274 -0.025367269930426605 -1.7682214013965134"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_27.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.351562538171468 -0.2554311755642136 0.7772019103316914" rpy="0.12395495521205793 -0.034528082968370594 -1.4973637521288818"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_28.stl" scale="1.0 1.0000000000000002 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.3119865706509213 -0.1702426530031538 0.8365224646146029" rpy="1.5708279716692943 -0.0 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_29.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.8055651546069413 -0.10729119251895018 0.8394285996217823" rpy="1.5631875042237864 0.22091366573468896 -3.1397913341652552"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_30.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.7646158254788156 -0.40564948807938683 0.7363900092027411" rpy="1.5707963267948966 -0.0960331254269406 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_31.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5737479977055193 0.25784918454254924 0.8373889878942897" rpy="1.5658498035132624 0.029679555552335733 -1.5728408373370857"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_32.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.3540389425306847 -0.4069025036171017 0.7604175913176724" rpy="1.5783387992451179 0.09569960514874515 3.141585681751259"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_33.stl" scale="0.9999999999999999 0.9999999999999999 0.9999999999999998"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.7738739175854343 -0.3929537019293672 0.8350266922149692" rpy="1.5777658688052292 -0.21137333572293648 -3.136023984934185"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_34.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5488685374591176 -0.5634445853908276 0.833855039944229" rpy="1.565691655175982 0.17627551324693008 -1.5750211299874828"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_35.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5464292917720648 -0.5806660715685876 0.8535138037368213" rpy="-1.576449047658753 -1.565238653188828 1.5617783813688246"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_36.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5622034866458416 -0.557156695666198 0.7348546315371518" rpy="1.5707963267948968 0.061819699989759495 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_37.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5549190001934767 0.007368501201271999 0.8535324998451747" rpy="-1.5707963267948968 -1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_38.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5597740052640436 -0.4056494925916196 0.6688999989569189" rpy="-0.0 -1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_39.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5576692236131635 -0.24370668404721296 0.8433200106494355" rpy="1.5698021022334037 -0.09949121588861971 -1.5708170819982783"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_40.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.7670244122982925 -0.557911852169543 0.7785790624626939" rpy="-0.036956543981373234 -0.07391889724860175 2.901375768622101"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_41.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.3569009229133244 -0.5562117182510015 0.7590630513332824" rpy="0.03300647158977352 0.05513196890716077 -1.9836709997030024"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_42.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5544692018002961 -0.59538679679863 0.8388078057607005" rpy="1.5616188692766184 -0.13775620954274187 -1.57415798783618"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_43.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.7943470054344401 -0.5735823033562216 0.8413144964517579" rpy="0.14949651034535505 -1.0314805882984672 -0.048306808884824956"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_44.stl" scale="1.0 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.3330741533239654 -0.40646487140646603 0.8519533695068237" rpy="-1.5712433987613932 -1.472209094233199 0.0013054564444205127"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_45.stl" scale="0.9999999999999999 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5597740025515294 -0.25698073914353226 0.712419802726056" rpy="1.5707963267948968 -0.043137314411977906 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_46.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.799556467594459 -0.400790997307618 0.8519557266937382" rpy="-1.5707963267948988 -1.4715456423805413 4.481774099617502e-15"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_47.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000004"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.2847202910819648 -0.40000122435825725 0.765223939485193" rpy="1.5707977449909447 -3.1363316148276084e-06 3.1415879512831593"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_48.stl" scale="1.0000000000000007 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5634931646968326 0.31793666922817687 0.7942742241810452" rpy="-1.1432620617620086 -1.5672907103556886 1.1331341391055358"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_49.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.547598995566368 -0.04060099944472306 0.32355200385674837" rpy="1.5707963267948968 -0.0 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_50.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5631389440006342 -0.03902968081368302 0.6491850631567064" rpy="1.5590327505621067 -0.002715418322837773 -1.5692834220360083"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_51.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.8248331485636966 0.32005111531717656 0.4699874112103589" rpy="0.0 -0.0 -3.1343264268390114"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_52.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5475955086946487 0.44085050262510783 0.46998700618743894" rpy="0.0 -0.0 -1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_53.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5475955086946487 0.07838799832388754 0.7958469998836517" rpy="-0.0 -1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_54.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.8248660511049157 0.07847835814955767 0.6517577167832669" rpy="0.0009328956305152662 0.005946184365824723 -3.1412718900096284"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_55.stl" scale="0.9999999999999998 0.9999999999999997 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.8248056050768078 0.06051665328026393 0.32355200223597264" rpy="0.0 -0.0 3.133041779128745"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_56.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.560410000681877 0.19919450283050538 0.14597949504852298" rpy="-0.0 -1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_57.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5576971300439344 2.5185412224431 0.70897390757731" rpy="0.010309914105788078 -0.0022766924592004024 -1.5714031477906072"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_58.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5596970763467717 1.3450600335340095 0.6662625161996257" rpy="0.013660889832084891 0.006884778324084572 -1.5690963706531595"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_59.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5902817277524548 1.9362810025825943 0.07665200023679075" rpy="1.619090313909937 -1.570104949746348 3.093302830734434"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_60.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.6030124996975064 2.220256500244141 0.7775854814052582" rpy="0.0 -0.0 -1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_61.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5681733366869801 2.22025469823082 1.460312251613466" rpy="1.5520747532626598 2.6866402576332293e-05 -1.5707968298350008"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_62.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5542817187433569 2.39187930333678 1.4921147070866594" rpy="-1.5928928665942848 -1.5590306375436234 1.5922166496941847"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_63.stl" scale="0.9999999999999999 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.6030124996975064 1.6427124965190887 0.8098504851758482" rpy="0.0 -0.0 -1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_64.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5553752543509223 1.740675815711389 1.4892977601246362" rpy="-0.08094328219247757 -1.5628709826786096 -1.4891302040225027"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_65.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.559391998052597 1.929163493514061 1.410702997893095" rpy="-0.0 -1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_66.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5454135018587112 1.8173654952913056 0.8837135043740273" rpy="-0.0 -1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_67.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5454274940490722 1.687615003734827 1.161182000376284" rpy="1.5707963267948968 -0.0 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_68.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5454259857712318 2.0598994720994854 0.8848333223402073" rpy="1.5707963267949094 -1.5621228977445192 -1.5707963267949094"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_69.stl" scale="0.9999999999999999 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.545417485180323 2.1706845416393064 1.125255132195089" rpy="1.5709445055550786 -5.551115123125783e-17 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_70.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5454259936241581 1.6889133082538372 0.9201758117433632" rpy="1.5707963267948968 0.023006192849924417 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_71.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.8228913009948353 1.9291665179600759 1.109284087856334" rpy="1.5703710551284946 -7.964529241752032e-10 3.1415907807801537"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_72.stl" scale="1.0000000000000004 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.284896040145194 1.9300016579320727 1.4200149412496053" rpy="1.5708012045074156 1.7339111896568595e-06 -3.141590529028976"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_73.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.0822252265582137 1.1801719591239284 0.052077130648421566" rpy="0.9982168156240822 -1.5686410964780415 0.6228212892260163"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_74.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.0821107084135462 2.349195328222574 0.05210010303679846" rpy="2.175466386401078 -1.5687430490195469 -0.6597529393539799"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_75.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.079830103964431 0.6372899546149349 0.4593749957332587" rpy="0.0 -0.0 1.5568809817103697"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_76.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.071847131811733 2.8631287211230445 0.4591628246465166" rpy="0.0020415785089405855 0.00011944298289791959 1.5776225478047856"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_77.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.3504977814945351 1.2264517867819815 0.45937500166167433" rpy="1.5707963267948968 -0.0 -0.0001796307066843509"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_78.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.0867180064991115 1.2493884996891023 0.45937499581277363" rpy="0.0 -0.0 1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_79.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.3504783037743031 2.3063797931433703 0.45937500375037416" rpy="1.5707963267948972 -2.710505431213761e-20 0.0004687605661541333"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_80.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.0867180064991115 2.252763992679119 0.45937499581277363" rpy="0.0 -0.0 1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_81.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.0662872560470804 1.7454213786295725 0.8347015702965987" rpy="1.47511649539682 -1.570681568644366 0.09567549360894519"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_82.stl" scale="1.0000000000000004 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.065469497323036 2.515 0.8526229999470525" rpy="1.5707963267948968 -1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_83.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.7927202910819651 0.9492012243582573 0.750223939485193" rpy="1.5707977449909452 -3.136331614827611e-06 -4.702306633850679e-06"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_84.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.7928316916936358 1.7492041954293542 0.75004405099878" rpy="1.5707922597332058 2.056684157510184e-06 -8.364661347519969e-12"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_85.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.7927202910819651 2.5492012243582574 0.750223939485193" rpy="1.5707977449909452 -3.136331614827611e-06 -4.702306633850679e-06"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_86.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.555258469199077 -0.8462351897986191 1.494511663674255" rpy="-1.570796326794919 -1.5608908881406347 1.5707963267949134"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_87.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.558311835254026 -1.2889850882421414 0.8109065647914591" rpy="0.002013142632596621 0.0005959195184521133 -1.5691159463134097"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_88.stl" scale="1.0000000000000002 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5552404686086323 -1.1582357464575666 1.4945092886054852" rpy="1.5707963267949185 -1.5606954980224024 -1.5707963267949185"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_89.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5886850231091831 -0.8671514030338838 0.0752170751303548" rpy="-1.289152900356441 -1.5707560206274827 1.2891843805947294"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_90.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5763356395903483 -1.156694741650653 0.07768162851270233" rpy="-1.0951719519243748 -1.5457687792455808 1.1215415518486824"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_91.stl" scale="0.9999999999999998 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.6332655017683282 -1.0008725076913834 0.5154074989259244" rpy="-1.5707963267948968 -1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_92.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5591603619062766 -0.7132585013234849 0.7210113243746495" rpy="0.00864384143010067 -0.001601756132135164 -1.5720095812564956"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_93.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5243075162304878 -0.9944567759675979 1.463034436813606" rpy="3.141592653589793 -1.5661493165909295 1.5707963267949325"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_94.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.524307505424952 -1.161844109743995 0.553146634701662" rpy="-1.5707963267949454 -1.561697750374936 1.5707963267949454"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_95.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.524310002401471 -1.283284492790699 0.7868604962807149" rpy="1.5707963267948968 -0.0 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_96.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.524307509379085 -0.8747722847413186 0.5531467481410592" rpy="1.5707963267949088 -1.5616972969803182 -1.5707963267949088"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_97.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.5243075073882935 -0.7533314898610114 1.0080414915084839" rpy="0.0 -0.0 -1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_98.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.524312483314657 -1.2820176345589833 1.2464741539217776" rpy="1.301059479369921e-18 -0.005092782860701242 -1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_99.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="1.7731605891170028 -1.018299538156982 1.0080303042926602" rpy="-3.934680323545471e-05 -3.513176971728389e-06 -3.1415824411866655"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_100.stl" scale="1.0000000000000004 1.0000000000000004 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.400087893144784 -1.7593593711290862 0.7058116371002952" rpy="1.5716968095885544 -1.5626220346037976 -1.5717110483571426"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_101.stl" scale="1.0000000000000002 0.9999999999999999 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.6501800400572852 -1.1162315501294944 0.34253699814308525" rpy="0.0 0.0 -0.8631229126349879"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_102.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.149819956962855 -1.116231549642301 0.3425370016200904" rpy="0.0 -0.0 -2.278470502774153"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_103.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.650192539662035 -1.8239092174730667 0.3414251091644482" rpy="-0.00022927787941265387 0.0007147263982224499 -2.0613234667379525"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_104.stl" scale="0.9999999999999999 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.1498074584963653 -1.8239092177831542 0.34364888511545894" rpy="-0.00022927777947904002 -0.0007147279553614906 -1.0802685530587406"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_105.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-2.4000222972189977 -1.3490519277353328 0.7059611477997321" rpy="-1.5714067568659882 -1.5671089833003606 1.571294785542481"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_106.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.7531757049150447 -0.3022631694001369 0.29952748583983346" rpy="1.4919160655382926e-06 -1.782158130471622e-06 -3.119880618008596"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_107.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.7531757036613653 0.9222628186976685 0.2995274855874328" rpy="1.4916673265018877e-06 -1.7837361679834916e-06 -3.119675270687195"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_108.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.0050691627931814 -0.3031013271229332 0.36802803891447505" rpy="0.0021954275094140377 -0.0020041252681142043 1.540310959305925"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_109.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.0022733202844902 0.3100067446064119 0.7030566975539723" rpy="1.5707939587757977 0.035012632081323276 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_110.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.4156062235480067 0.9256105720617793 0.6985902385639409" rpy="1.5658877847262282 0.0192753482188469 1.5808059757199855"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_111.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.0050667948351313 0.9230985940545842 0.368168338655422" rpy="0.0012381981993261583 0.0026588240812352205 1.2043154626131618"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_112.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.43517479679302 -0.3053140294729377 0.6984572765473536" rpy="1.5662820283540926 -0.02381538950555059 1.5607136655708713"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_113.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.3861894958980994 0.3099462897726679 0.7454612459122673" rpy="-1.5708405742217542 -1.5707963267948966 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_114.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.762365815781268 0.3443053793369833 0.6985852575062378" rpy="1.5730782020295342 0.04761824224317494 -3.141192127151497"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_115.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.177763887942057 -0.914325428023137 0.29569795657715464" rpy="0.10860342584753761 0.0023142418209679944 3.133637749108783"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_116.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.5941763913141243 -0.6558603079134571 0.5150250018830068" rpy="1.5602100912861514 -0.01109096356604752 -3.1013742657600716"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_117.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.1541138132074655 -0.4516684985243636 0.2362534449962338" rpy="0.0 -0.0 1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_118.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.379964653182232 -0.4463749083621804 0.5138952299705465" rpy="1.570718357014436 0.2212034859469468 1.5707373419281296"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_119.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.6059518213203883 -0.45166849229399175 0.23625780122834006" rpy="-4.1533361611409e-06 -0.0 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_120.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.1778670595780296 -0.8949124336286834 0.811821375864898" rpy="-0.014992831903656691 0.003208423556401816 -2.9876910218495123"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_121.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.3800327304324824 -0.8926140610095279 0.5163156518257873" rpy="1.5707963267948968 0.14609524114426645 1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_122.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.380041233785006 -0.8965398012908496 1.0656006052485907" rpy="1.570824744625915 1.743484888788238e-05 1.5707943117189507"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_123.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.582861798198455 -0.9139480453570417 0.29919865411814206" rpy="0.10854222181042221 -0.004963438960356827 -3.136203353109313"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_124.stl" scale="1.0000000000000002 1.0000000000000002 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.5822020163846595 -0.8947927665970644 0.8114462972841575" rpy="-0.01553208163652665 -0.002493820026222389 3.0391187731000175"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_125.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.165123386510049 -0.6682661571240647 0.5024213854585643" rpy="1.5708368245877622 0.00014974592077699286 3.0889480214653244"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_126.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.352558636003253 -0.6662841959050395 0.5422466918664423" rpy="-2.9364475969967776 -1.5689613148392865 -0.035913604330104355"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_127.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.3800328818124017 -0.8898176742509981 0.8322984923948917" rpy="1.570796326794897 -0.011811053662621104 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_128.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.582236112057943 1.534325428023137 0.29569795657715464" rpy="0.10860342584753763 0.0023142418209679953 -0.007954904481010591"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_129.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.1658236086858755 1.2758603079134572 0.5150250018830068" rpy="1.5602100912861516 -0.011090963566047536 0.04021838782972156"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_130.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.6058861867925343 1.0716684985243636 0.2362534449962338" rpy="0.0 -0.0 -1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_131.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.3800353468177677 1.0663749083621805 0.5138952299705465" rpy="1.570718357014436 0.22120348594694692 -1.5708553116616637"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_132.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.1540481786796115 1.0716684922939919 0.23625780122834006" rpy="-4.1533361611409e-06 -0.0 -1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_133.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.58213294042197 1.5149124336286837 0.811821375864898" rpy="-0.014992831903656688 0.0032084235564018167 0.1539016317402811"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_134.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.3799672695675174 1.512614061009528 0.5163156518257873" rpy="1.5707963267948966 0.14609524114426645 -1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_135.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.379958766214994 1.5165398012908498 1.0656006052485907" rpy="1.5708247446259151 1.7434848887937885e-05 -1.5707983418708427"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_136.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.1771382018015446 1.5339480453570418 0.29919865411814206" rpy="0.10854222181042221 -0.004963438960356827 0.0053893004804800556"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_137.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.1777979836153403 1.5147927665970644 0.8114462972841575" rpy="-0.015532081636526645 -0.0024938200262223896 -0.1024738804897756"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_138.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.5948766134899506 1.2882661571240648 0.5024213854585643" rpy="1.5708368245877622 0.00014974592077699297 -0.052644632124469015"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_139.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.407441363996747 1.2862841959050397 0.5422466918664423" rpy="-2.9364475969968233 -1.5689613148392862 3.1056790492597077"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_140.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-3.379967118187598 1.5098176742509983 0.8322984923948917" rpy="1.5707963267948966 -0.011811053662620995 -1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_141.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="sink_area_trash_drawer_main">
+    <inertial>
+      <origin xyz="0.1850000023841858 0.0 0.125" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0996999740600586" ixy="0.0" ixz="0.0" iyy="2.0996999740600586" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.001447235140874226 -2.1724529278830938e-05 -0.26803076033868356" rpy="1.124087888303712 -1.5707911141216375 -1.124009028661345"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_142.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013419502872978165 0.23936751019209618 0.0004025106117209089" rpy="-0.7853981149909799 -0.0 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_143.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.2540335697747714 -0.14992898374303656 0.0004024952114241805" rpy="3.088810167181654e-10 -3.4227148653018363e-08 3.132568453674493"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_144.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013419502872978157 -0.2393675111234188 0.00040251061172091" rpy="-0.7853981149909799 -0.0 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_145.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.25406310136688426 0.10828851543319462 0.0004089769646452345" rpy="-2.1387598724310306e-10 -3.4227874159234405e-08 -3.1353441438890384"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_146.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0001660375621670749 -3.4068918352717786e-06 0.26901748338583076" rpy="-1.533223643600734 -1.5707534671468104 3.104067321867765"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_147.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.24991047862072682 -4.973571768656001e-06 0.37008799561475186" rpy="-1.5707984407650286 -3.422854214245444e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_148.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.2499104793937993 0.24492175754218537 0.3475199615335611" rpy="-0.005188383086518271 -3.4228542364499044e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_149.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.24991047939281566 -0.24492175754218537 0.3475199615335611" rpy="0.005188380394221428 -3.4228542364499044e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_150.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="sink_area_left_upper_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.008750000037252903" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0622799396514893" ixy="0.0" ixz="0.0" iyy="2.0622799396514893" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-9.409120663261445e-05 -0.013717058503167063 -0.2686137688079441" rpy="-1.4717578877605566 -1.5638403806472891 3.041079808714302"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_151.stl" scale="1.0 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-5.2899019536265986e-05 0.3386695930636814 -0.013905454890332188" rpy="0.00208655256588557 0.0008755044180985252 1.5639970034626316"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_152.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0005446511667228348 -0.3389808491354087 0.0008100049762342527" rpy="3.422386941052616e-08 -5.655749018098035e-10 1.5873205665660493"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_153.stl" scale="1.0 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.034159999218496793 -5.761504001918976e-06 0.0008062051758809086" rpy="-1.5707963267948966 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_154.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0004602360489712487 -5.883103122521672e-06 0.26906656099915627" rpy="1.5707963267948966 -1.5707962583378132 1.6217796153917532e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_155.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.017580487323143972 -1.65026213397435e-05 0.35245248900072507" rpy="3.1262468432249158 -1.5707918656673139 -1.5554505163934573"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_156.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01758044005531932 0.34473520672830715 0.3299183688116114" rpy="-0.005781806461923098 -2.331283752095239e-06 3.141195367806421"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_157.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.017580488142463522 -0.3447349775495235 0.3299182887086714" rpy="0.005784103953645148 -3.422854236449903e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_158.stl" scale="0.9999999999999999 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="sink_area_left_middle_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.0011190878692123496 -0.33853938887783436 -0.015541257565100178" rpy="0.007940953790145292 -0.0012471520208808989 1.573684367773266"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_159.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0009966209239204615 0.015009047724075386 -0.26807368786820235" rpy="-1.8909651896146493 -1.5676858585937936 -2.816358735684676"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_160.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.002816526660407655 0.33899616743361044 0.0006774919133143918" rpy="3.4227769750167315e-08 2.3001201786404726e-10 1.56407639333978"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_161.stl" scale="1.0 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1106394994615646 -1.0676973543057951e-05 0.0006691662016960098" rpy="-1.5709931296162032 -3.422854214245443e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_162.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00011356456577023966 5.307448780726466e-06 0.26940222900930705" rpy="1.5708044292058483 -1.5707962583378132 -2.43266942308763e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_163.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.11008048415700385 -1.65026213397435e-05 0.3524524921668652" rpy="3.1262468432249158 -1.5707918656673139 -1.5554505163934573"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_164.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.11008043688917922 0.34473520672830715 0.3299183719777515" rpy="-0.005781806461923098 -2.331283752095239e-06 3.141195367806421"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_165.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.1100804849763234 -0.3447349775495235 0.32991829187481153" rpy="0.005784103953645148 -3.422854236449903e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_166.stl" scale="0.9999999999999999 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="sink_area_left_bottom_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.0011190878692123496 -0.33853938887783436 -0.015541257565100178" rpy="0.007940953790145292 -0.0012471520208808989 1.573684367773266"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_167.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0009966209239204615 0.015009047724075386 -0.26807368786820235" rpy="-1.8909651896146493 -1.5676858585937936 -2.816358735684676"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_168.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.002816526660407655 0.33899616743361044 0.0006774919133143918" rpy="3.4227769750167315e-08 2.3001201786404726e-10 1.56407639333978"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_169.stl" scale="1.0 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1106394994615646 -1.0676973543057951e-05 0.0006691662016960098" rpy="-1.5709931296162032 -3.422854214245443e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_170.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00011356456577023966 5.307448780726466e-06 0.26940222900930705" rpy="1.5708044292058483 -1.5707962583378132 -2.43266942308763e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_171.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.11008048415700385 -1.65026213397435e-05 0.3524524921668652" rpy="3.1262468432249158 -1.5707918656673139 -1.5554505163934573"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_172.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.11008043688917922 0.34473520672830715 0.3299183719777515" rpy="-0.005781806461923098 -2.331283752095239e-06 3.141195367806421"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_173.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.1100804849763234 -0.3447349775495235 0.32991829187481153" rpy="0.005784103953645148 -3.422854236449903e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_174.stl" scale="0.9999999999999999 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="sink_area_dish_washer_door">
+    <inertial>
+      <origin xyz="0.042500000447034836 -0.2874999940395355 0.0" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.1689200401306152" ixy="0.0" ixz="0.0" iyy="2.1689200401306152" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.00013799797493587417 -0.2699999529048033 -0.00040540028968482267" rpy="1.570678797500267 -2.3892096234038545e-06 2.80802123053775e-10"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_175.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.08508799972825241 -0.5750895001576286 4.973571768656e-06" rpy="-2.1139701318615775e-06 -0.0 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_176.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.06251996487459072 -0.5750895001570271 -0.24492175754218531" rpy="1.5656079437083783 1.1102230246251565e-16 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_177.stl" scale="0.9999999999999999 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.06251996487459072 -0.5750895001580107 0.24492175754218531" rpy="1.5759847071891182 1.6653345369377348e-16 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_178.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="sink_area_dish_washer_tray_bottom">
+    <inertial>
+      <origin xyz="0.0006008492782711983 -0.0002760085044428706 0.011250530369579792" rpy="0 0 0"/>
+      <mass value="9.420000076293945"/>
+      <inertia ixx="0.3146633207798004" ixy="0.0" ixz="0.0" iyy="0.23051567375659943" iyz="0.0" izz="0.10764940083026886"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.32 0.5 0.05"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.07499999743285936 -0.25 2.567140633402687e-09" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.32 0.005 0.17"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.07499999743285936 0.25 2.567140633402687e-09" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.32 0.005 0.17"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.07500000290942604 0.0 -0.1599999919562927" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.005 0.5 0.17"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.07499999195629267 0.0 0.15999999709057397" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.005 0.5 0.17"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.054999990587151014 -0.1 0.21999999435229062" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.01 0.2 0.01"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.05499999092943643 -0.2 0.209999994694576" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.03 0.01 0.01"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.05499999092943643 0.0 0.209999994694576" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.03 0.01 0.01"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_oven_door">
+    <inertial>
+      <origin xyz="0.02937999926507473 -0.19901500642299652 0.0" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.080940008163452" ixy="0.0" ixz="0.0" iyy="2.080940008163452" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.003988021518965109 -0.20457825748796818 -0.0002630591572248464" rpy="-3.1351510959547957 -3.0186640209870775e-06 -1.9445167223012333e-08"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_187.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.058847999728252415 -0.39811950015762865 4.973571768656e-06" rpy="-2.1139701318615775e-06 -0.0 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_188.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.03627996487459071 -0.3981195001570271 -0.24492175754218531" rpy="1.5656079437083783 1.1102230246251565e-16 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_189.stl" scale="0.9999999999999999 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.03627996487459071 -0.39811950015801073 0.24492175754218531" rpy="1.5759847071891182 1.6653345369377348e-16 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_190.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_oven_knob_stove_2">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.011612951572973963 0.005248180822328753 -0.018759437006364697" rpy="1.4691367294262234 0.023049555008349272 1.4827096394584272"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_191.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01910917477277984 0.0004402765118380206 -0.01202198393057298" rpy="3.1077283404041527 -0.003581828330991508 -0.0061605893763283515"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_192.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.019144112938263184 -0.0004247009987060155 -0.01047229241275299" rpy="-3.0938461179134364 0.001106124876637465 -0.00520245785631571"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_193.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013639816190570161 -0.013470165740966876 -0.0072748412505656505" rpy="1.587854511608503 1.1102230246251565e-16 0.7853658382810488"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_194.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0006734905521435127 -0.019157235333091563 -0.007280500073607433" rpy="1.5707963267948968 -0.0 1.564317359808579"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_195.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.009144191517021796 0.004876623195874251 -0.015125983085322656" rpy="1.5707963267948997 1.464168043450555 1.5364992826297013"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_196.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013524725185824702 -0.013584836998691228 -0.007288548637725382" rpy="1.5830114049974173 -0.0 -0.7853195123563722"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_197.stl" scale="1.0 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00040839088627330145 0.0038081780146136677 -0.018840188462614052" rpy="1.5812455577671842 1.6653345369377348e-16 1.4071180202915408"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_198.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.002424118092114495 -0.005421049921875226 -0.015114235533326638" rpy="-1.51774617876961 1.4833080553204017 -1.4769407780094688"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_199.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013737946878556668 -0.0051120086240376665 -0.01989444867246663" rpy="1.4818795219590213 -0.04064465428906615 1.628531177122035"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_200.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012373595475752756 0.0003557983926384086 -0.022327880757801642" rpy="3.1356909690440893 1.5129583960222495 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_201.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013445404737728737 0.013664520665764802 -0.007274204307039771" rpy="1.5534516744301234 2.7755575615628914e-16 -0.7853513878644188"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_202.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006123076035945432 0.01915768713346157 -0.007280500057668957" rpy="1.570796326794897 -1.6653345369377346e-16 1.5643483406530412"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_203.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012275993894503592 -0.0025705601268304623 -0.018865970920531275" rpy="1.5315602679178444 -0.029013386132833788 1.5901969753108889"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_204.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0007201305312548509 0.011847296503256001 -0.014770104848550958" rpy="-0.05644705048324448 1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_205.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.000696576974230396 -0.003834353260145664 -0.019034220496820152" rpy="1.5163966636494446 -1.1102230246251565e-16 1.725905475811233"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_206.stl" scale="0.9999999999999999 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013885421807134937 0.013187741289979368 -0.007280500090289275" rpy="1.5707963267948968 -0.0 0.782228324240786"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_207.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012075846590553148 0.00251113772923197 -0.018896003343390116" rpy="1.5756027288950094 -1.1102230246251563e-16 1.5336222083142563"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_208.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.012562324629750151 0.00031168096248944025 -0.02288045673076754" rpy="-0.0 1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_209.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0004366745064021723 -8.227116168900259e-05 -0.022353874754230826" rpy="-0.016664841713636722 1.495096973350251 2.293786247240221e-17"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_210.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="9.510687906599058e-07 -0.012787414578699958 -0.014768707608826764" rpy="0.0016517731189641 1.5707963267948966 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_211.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_oven_knob_stove_1">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.011612951572973963 0.005248180822328753 -0.018759437006364697" rpy="1.4691367294262234 0.023049555008349272 1.4827096394584272"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_212.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01910917477277984 0.0004402765118380206 -0.01202198393057298" rpy="3.1077283404041527 -0.003581828330991508 -0.0061605893763283515"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_213.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.019144112938263184 -0.0004247009987060155 -0.01047229241275299" rpy="-3.0938461179134364 0.001106124876637465 -0.00520245785631571"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_214.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013639816190570161 -0.013470165740966876 -0.0072748412505656505" rpy="1.587854511608503 1.1102230246251565e-16 0.7853658382810488"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_215.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0006734905521435127 -0.019157235333091563 -0.007280500073607433" rpy="1.5707963267948968 -0.0 1.564317359808579"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_216.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.009144191517021796 0.004876623195874251 -0.015125983085322656" rpy="1.5707963267948997 1.464168043450555 1.5364992826297013"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_217.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013524725185824702 -0.013584836998691228 -0.007288548637725382" rpy="1.5830114049974173 -0.0 -0.7853195123563722"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_218.stl" scale="1.0 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00040839088627330145 0.0038081780146136677 -0.018840188462614052" rpy="1.5812455577671842 1.6653345369377348e-16 1.4071180202915408"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_219.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.002424118092114495 -0.005421049921875226 -0.015114235533326638" rpy="-1.51774617876961 1.4833080553204017 -1.4769407780094688"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_220.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013737946878556668 -0.0051120086240376665 -0.01989444867246663" rpy="1.4818795219590213 -0.04064465428906615 1.628531177122035"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_221.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012373595475752756 0.0003557983926384086 -0.022327880757801642" rpy="3.1356909690440893 1.5129583960222495 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_222.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013445404737728737 0.013664520665764802 -0.007274204307039771" rpy="1.5534516744301234 2.7755575615628914e-16 -0.7853513878644188"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_223.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006123076035945432 0.01915768713346157 -0.007280500057668957" rpy="1.570796326794897 -1.6653345369377346e-16 1.5643483406530412"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_224.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012275993894503592 -0.0025705601268304623 -0.018865970920531275" rpy="1.5315602679178444 -0.029013386132833788 1.5901969753108889"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_225.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0007201305312548509 0.011847296503256001 -0.014770104848550958" rpy="-0.05644705048324448 1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_226.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.000696576974230396 -0.003834353260145664 -0.019034220496820152" rpy="1.5163966636494446 -1.1102230246251565e-16 1.725905475811233"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_227.stl" scale="0.9999999999999999 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013885421807134937 0.013187741289979368 -0.007280500090289275" rpy="1.5707963267948968 -0.0 0.782228324240786"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_228.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012075846590553148 0.00251113772923197 -0.018896003343390116" rpy="1.5756027288950094 -1.1102230246251563e-16 1.5336222083142563"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_229.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.012562324629750151 0.00031168096248944025 -0.02288045673076754" rpy="-0.0 1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_230.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0004366745064021723 -8.227116168900259e-05 -0.022353874754230826" rpy="-0.016664841713636722 1.495096973350251 2.293786247240221e-17"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_231.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="9.510687906599058e-07 -0.012787414578699958 -0.014768707608826764" rpy="0.0016517731189641 1.5707963267948966 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_232.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_oven_knob_stove_3">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.011612951572973963 0.005248180822328753 -0.018759437006364697" rpy="1.4691367294262234 0.023049555008349272 1.4827096394584272"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_233.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01910917477277984 0.0004402765118380206 -0.01202198393057298" rpy="3.1077283404041527 -0.003581828330991508 -0.0061605893763283515"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_234.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.019144112938263184 -0.0004247009987060155 -0.01047229241275299" rpy="-3.0938461179134364 0.001106124876637465 -0.00520245785631571"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_235.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013639816190570161 -0.013470165740966876 -0.0072748412505656505" rpy="1.587854511608503 1.1102230246251565e-16 0.7853658382810488"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_236.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0006734905521435127 -0.019157235333091563 -0.007280500073607433" rpy="1.5707963267948968 -0.0 1.564317359808579"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_237.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.009144191517021796 0.004876623195874251 -0.015125983085322656" rpy="1.5707963267948997 1.464168043450555 1.5364992826297013"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_238.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013524725185824702 -0.013584836998691228 -0.007288548637725382" rpy="1.5830114049974173 -0.0 -0.7853195123563722"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_239.stl" scale="1.0 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00040839088627330145 0.0038081780146136677 -0.018840188462614052" rpy="1.5812455577671842 1.6653345369377348e-16 1.4071180202915408"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_240.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.002424118092114495 -0.005421049921875226 -0.015114235533326638" rpy="-1.51774617876961 1.4833080553204017 -1.4769407780094688"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_241.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013737946878556668 -0.0051120086240376665 -0.01989444867246663" rpy="1.4818795219590213 -0.04064465428906615 1.628531177122035"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_242.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012373595475752756 0.0003557983926384086 -0.022327880757801642" rpy="3.1356909690440893 1.5129583960222495 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_243.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013445404737728737 0.013664520665764802 -0.007274204307039771" rpy="1.5534516744301234 2.7755575615628914e-16 -0.7853513878644188"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_244.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006123076035945432 0.01915768713346157 -0.007280500057668957" rpy="1.570796326794897 -1.6653345369377346e-16 1.5643483406530412"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_245.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012275993894503592 -0.0025705601268304623 -0.018865970920531275" rpy="1.5315602679178444 -0.029013386132833788 1.5901969753108889"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_246.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0007201305312548509 0.011847296503256001 -0.014770104848550958" rpy="-0.05644705048324448 1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_247.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.000696576974230396 -0.003834353260145664 -0.019034220496820152" rpy="1.5163966636494446 -1.1102230246251565e-16 1.725905475811233"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_248.stl" scale="0.9999999999999999 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013885421807134937 0.013187741289979368 -0.007280500090289275" rpy="1.5707963267948968 -0.0 0.782228324240786"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_249.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012075846590553148 0.00251113772923197 -0.018896003343390116" rpy="1.5756027288950094 -1.1102230246251563e-16 1.5336222083142563"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_250.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.012562324629750151 0.00031168096248944025 -0.02288045673076754" rpy="-0.0 1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_251.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0004366745064021723 -8.227116168900259e-05 -0.022353874754230826" rpy="-0.016664841713636722 1.495096973350251 2.293786247240221e-17"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_252.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="9.510687906599058e-07 -0.012787414578699958 -0.014768707608826764" rpy="0.0016517731189641 1.5707963267948966 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_253.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_oven_knob_stove_4">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.011612951572973963 0.005248180822328753 -0.018759437006364697" rpy="1.4691367294262234 0.023049555008349272 1.4827096394584272"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_254.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01910917477277984 0.0004402765118380206 -0.01202198393057298" rpy="3.1077283404041527 -0.003581828330991508 -0.0061605893763283515"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_255.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.019144112938263184 -0.0004247009987060155 -0.01047229241275299" rpy="-3.0938461179134364 0.001106124876637465 -0.00520245785631571"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_256.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013639816190570161 -0.013470165740966876 -0.0072748412505656505" rpy="1.587854511608503 1.1102230246251565e-16 0.7853658382810488"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_257.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0006734905521435127 -0.019157235333091563 -0.007280500073607433" rpy="1.5707963267948968 -0.0 1.564317359808579"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_258.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.009144191517021796 0.004876623195874251 -0.015125983085322656" rpy="1.5707963267948997 1.464168043450555 1.5364992826297013"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_259.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013524725185824702 -0.013584836998691228 -0.007288548637725382" rpy="1.5830114049974173 -0.0 -0.7853195123563722"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_260.stl" scale="1.0 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00040839088627330145 0.0038081780146136677 -0.018840188462614052" rpy="1.5812455577671842 1.6653345369377348e-16 1.4071180202915408"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_261.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.002424118092114495 -0.005421049921875226 -0.015114235533326638" rpy="-1.51774617876961 1.4833080553204017 -1.4769407780094688"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_262.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013737946878556668 -0.0051120086240376665 -0.01989444867246663" rpy="1.4818795219590213 -0.04064465428906615 1.628531177122035"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_263.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012373595475752756 0.0003557983926384086 -0.022327880757801642" rpy="3.1356909690440893 1.5129583960222495 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_264.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013445404737728737 0.013664520665764802 -0.007274204307039771" rpy="1.5534516744301234 2.7755575615628914e-16 -0.7853513878644188"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_265.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006123076035945432 0.01915768713346157 -0.007280500057668957" rpy="1.570796326794897 -1.6653345369377346e-16 1.5643483406530412"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_266.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012275993894503592 -0.0025705601268304623 -0.018865970920531275" rpy="1.5315602679178444 -0.029013386132833788 1.5901969753108889"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_267.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0007201305312548509 0.011847296503256001 -0.014770104848550958" rpy="-0.05644705048324448 1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_268.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.000696576974230396 -0.003834353260145664 -0.019034220496820152" rpy="1.5163966636494446 -1.1102230246251565e-16 1.725905475811233"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_269.stl" scale="0.9999999999999999 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013885421807134937 0.013187741289979368 -0.007280500090289275" rpy="1.5707963267948968 -0.0 0.782228324240786"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_270.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012075846590553148 0.00251113772923197 -0.018896003343390116" rpy="1.5756027288950094 -1.1102230246251563e-16 1.5336222083142563"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_271.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.012562324629750151 0.00031168096248944025 -0.02288045673076754" rpy="-0.0 1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_272.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0004366745064021723 -8.227116168900259e-05 -0.022353874754230826" rpy="-0.016664841713636722 1.495096973350251 2.293786247240221e-17"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_273.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="9.510687906599058e-07 -0.012787414578699958 -0.014768707608826764" rpy="0.0016517731189641 1.5707963267948966 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_274.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_oven_knob_oven">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.011612951572973963 0.005248180822328753 -0.018759437006364697" rpy="1.4691367294262234 0.023049555008349272 1.4827096394584272"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_275.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01910917477277984 0.0004402765118380206 -0.01202198393057298" rpy="3.1077283404041527 -0.003581828330991508 -0.0061605893763283515"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_276.stl" scale="0.9999999999999999 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.019144112938263184 -0.0004247009987060155 -0.01047229241275299" rpy="-3.0938461179134364 0.001106124876637465 -0.00520245785631571"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_277.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013639816190570161 -0.013470165740966876 -0.0072748412505656505" rpy="1.587854511608503 1.1102230246251565e-16 0.7853658382810488"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_278.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0006734905521435127 -0.019157235333091563 -0.007280500073607433" rpy="1.5707963267948968 -0.0 1.564317359808579"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_279.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.009144191517021796 0.004876623195874251 -0.015125983085322656" rpy="1.5707963267948997 1.464168043450555 1.5364992826297013"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_280.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013524725185824702 -0.013584836998691228 -0.007288548637725382" rpy="1.5830114049974173 -0.0 -0.7853195123563722"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_281.stl" scale="1.0 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00040839088627330145 0.0038081780146136677 -0.018840188462614052" rpy="1.5812455577671842 1.6653345369377348e-16 1.4071180202915408"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_282.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.002424118092114495 -0.005421049921875226 -0.015114235533326638" rpy="-1.51774617876961 1.4833080553204017 -1.4769407780094688"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_283.stl" scale="1.0 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013737946878556668 -0.0051120086240376665 -0.01989444867246663" rpy="1.4818795219590213 -0.04064465428906615 1.628531177122035"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_284.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012373595475752756 0.0003557983926384086 -0.022327880757801642" rpy="3.1356909690440893 1.5129583960222495 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_285.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013445404737728737 0.013664520665764802 -0.007274204307039771" rpy="1.5534516744301234 2.7755575615628914e-16 -0.7853513878644188"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_286.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006123076035945432 0.01915768713346157 -0.007280500057668957" rpy="1.570796326794897 -1.6653345369377346e-16 1.5643483406530412"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_287.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012275993894503592 -0.0025705601268304623 -0.018865970920531275" rpy="1.5315602679178444 -0.029013386132833788 1.5901969753108889"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_288.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0007201305312548509 0.011847296503256001 -0.014770104848550958" rpy="-0.05644705048324448 1.5707963267948963 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_289.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.000696576974230396 -0.003834353260145664 -0.019034220496820152" rpy="1.5163966636494446 -1.1102230246251565e-16 1.725905475811233"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_290.stl" scale="0.9999999999999999 0.9999999999999999 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.013885421807134937 0.013187741289979368 -0.007280500090289275" rpy="1.5707963267948968 -0.0 0.782228324240786"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_291.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.012075846590553148 0.00251113772923197 -0.018896003343390116" rpy="1.5756027288950094 -1.1102230246251563e-16 1.5336222083142563"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_292.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.012562324629750151 0.00031168096248944025 -0.02288045673076754" rpy="-0.0 1.5707963267948961 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_293.stl" scale="1.0000000000000002 1.0 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0004366745064021723 -8.227116168900259e-05 -0.022353874754230826" rpy="-0.016664841713636722 1.495096973350251 2.293786247240221e-17"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_294.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="9.510687906599058e-07 -0.012787414578699958 -0.014768707608826764" rpy="0.0016517731189641 1.5707963267948966 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_295.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_area_middle_upper_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.008750000037252903" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0622799396514893" ixy="0.0" ixz="0.0" iyy="2.0622799396514893" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.00028500902936403255 -5.7871165185682444e-18 -0.2687024978119929" rpy="1.5707963267948966 -1.5707962583378132 1.6217796153917532e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_296.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006205383200530362 0.23896299244090222 -7.40008380560006e-05" rpy="3.4224016095956036e-08 5.56627938615635e-10 1.554533511115285"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_297.stl" scale="0.9999999999999999 0.9999999999999999 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006205383200531497 -0.23896299244090222 -7.39975323357647e-05" rpy="3.422401609595594e-08 -5.566279386212565e-10 1.5870591424746727"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_298.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.034862499885253785 2.591603749942895e-18 -7.400035724833317e-05" rpy="0.0 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_299.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.00028522245532199366 5.599810771409883e-06 0.26882627338836307" rpy="-2.2625775833350104 -1.5707939304399257 -2.4498113970705817"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_300.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01741048717786227 -4.973571768656001e-06 0.3525879882556153" rpy="-1.5707984407650286 -3.422854214245444e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_301.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01741048795093473 0.24492175754218537 0.33001995417442453" rpy="-0.005188383086518271 -3.4228542364499044e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_302.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.01741048794995109 -0.24492175754218537 0.33001995417442453" rpy="0.005188380394221428 -3.4228542364499044e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_303.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_area_middle_lower_drawer_main">
+    <inertial>
+      <origin xyz="0.1850000023841858 0.0 0.125" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0996999740600586" ixy="0.0" ixz="0.0" iyy="2.0996999740600586" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.001447235140874226 -2.1724529278830938e-05 -0.26803076033868356" rpy="1.124087888303712 -1.5707911141216375 -1.124009028661345"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_304.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013419502872978165 0.23936751019209618 0.0004025106117209089" rpy="-0.7853981149909799 -0.0 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_305.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.2540335697747714 -0.14992898374303656 0.0004024952114241805" rpy="3.088810167181654e-10 -3.4227148653018363e-08 3.132568453674493"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_306.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.013419502872978157 -0.2393675111234188 0.00040251061172091" rpy="-0.7853981149909799 -0.0 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_307.stl" scale="1.0000000000000002 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.25406310136688426 0.10828851543319462 0.0004089769646452345" rpy="-2.1387598724310306e-10 -3.4227874159234405e-08 -3.1353441438890384"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_308.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0001660375621670749 -3.4068918352717786e-06 0.26901748338583076" rpy="-1.533223643600734 -1.5707534671468104 3.104067321867765"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_309.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.24991047862072682 -4.973571768656001e-06 0.37008799561475186" rpy="-1.5707984407650286 -3.422854214245444e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_310.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.2499104793937993 0.24492175754218537 0.3475199615335611" rpy="-0.005188383086518271 -3.4228542364499044e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_311.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.24991047939281566 -0.24492175754218537 0.3475199615335611" rpy="0.005188380394221428 -3.4228542364499044e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_312.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_area_left_drawer_main">
+    <inertial>
+      <origin xyz="-0.2556839883327484 0.0 -0.07189469784498215" rpy="0 0 0"/>
+      <mass value="19.0"/>
+      <inertia ixx="21.59670066833496" ixy="0.0" ixz="0.0" iyy="21.266799926757812" iyz="0.0" izz="19.513099670410156"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.025 0.3 1.33"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.0268562533610747e-09 0.0 -0.029999998973143746" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.06 0.3 1.33"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5999999709057394 0.0 -0.2500000119799896" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.25 0.036"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5679999720010528 -0.107 -0.25000001088467627" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5679999720010528 0.107 -0.25000001088467627" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5679999642311738 0.0 -0.4770000031147973" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.036 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.27999998185887287 0.0 -0.25000000102685627" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.25 0.036"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.24799998295418618 -0.107 -0.24999999993154293" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.24799998295418618 0.107 -0.24999999993154293" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.2479999751843072 0.0 -0.47699999216166394" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.036 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.05000000684570836 0.0 -0.24999998973143747" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.25 0.036"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.08200000575039502 -0.107 -0.24999998863612413" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.08200000575039502 0.107 -0.24999998863612413" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.08200001352027401 0.0 -0.4769999808662451" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.036 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.37999999555028957 0.0 -0.24999997843601868" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.25 0.036"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.4119999944549762 -0.107 -0.24999997734070534" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.4119999944549762 0.107 -0.24999997734070534" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.41200000222485517 0.0 -0.47699996957082635" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.036 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.04999999547992253 8.37501374450196e-05 0.08205624883731455" rpy="1.5707959002381924 -1.4096116384829964 -1.5707959057672851"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_331.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5596876429319213 8.324426895953173e-05 0.05956057885070508" rpy="-0.0071194098461803 -1.7380425519336658e-05 1.5703736946327305"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_332.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.04999999609214021 3.1144115284279785e-20 0.06416962419555025" rpy="-1.5707962583378128 2.2204460492503136e-16 1.5707963267948963"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_333.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="oven_area_area_right_drawer_main">
+    <inertial>
+      <origin xyz="-0.2556839883327484 0.0 -0.07189469784498215" rpy="0 0 0"/>
+      <mass value="19.0"/>
+      <inertia ixx="21.59670066833496" ixy="0.0" ixz="0.0" iyy="21.266799926757812" iyz="0.0" izz="19.513099670410156"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.025 0.3 1.33"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-1.0268562533610747e-09 0.0 -0.029999998973143746" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.06 0.3 1.33"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5999999709057394 0.0 -0.2500000119799896" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.25 0.036"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5679999720010528 -0.107 -0.25000001088467627" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5679999720010528 0.107 -0.25000001088467627" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5679999642311738 0.0 -0.4770000031147973" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.036 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.27999998185887287 0.0 -0.25000000102685627" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.25 0.036"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.24799998295418618 -0.107 -0.24999999993154293" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.24799998295418618 0.107 -0.24999999993154293" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.2479999751843072 0.0 -0.47699999216166394" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.036 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.05000000684570836 0.0 -0.24999998973143747" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.25 0.036"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.08200000575039502 -0.107 -0.24999998863612413" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.08200000575039502 0.107 -0.24999998863612413" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.08200001352027401 0.0 -0.4769999808662451" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.036 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.37999999555028957 0.0 -0.24999997843601868" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.25 0.036"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.4119999944549762 -0.107 -0.24999997734070534" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.4119999944549762 0.107 -0.24999997734070534" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.49 0.036 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.41200000222485517 0.0 -0.47699996957082635" rpy="0.0 -1.5707962583378132 0.0"/>
+      <geometry>
+        <box size="0.036 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.04999999547992253 8.37501374450196e-05 0.08205624883731455" rpy="1.5707959002381924 -1.4096116384829964 -1.5707959057672851"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_352.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.5596876429319213 8.324426895953173e-05 0.05956057885070508" rpy="-0.0071194098461803 -1.7380425519336658e-05 1.5703736946327305"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_353.stl" scale="1.0 1.0 0.9999999999999999"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.04999999609214021 3.1144115284279785e-20 0.06416962419555025" rpy="-1.5707962583378128 2.2204460492503136e-16 1.5707963267948963"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_354.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="kitchen_island_left_upper_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.11436500540700441 -0.12861326209034232 -0.01455050187850974" rpy="-0.0070110522415795865 -0.001172770454384172 3.1388853613577443"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_355.stl" scale="1.0000000000000002 1.0000000000000007 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0019618457263226616 0.23819818478626661 -0.014549032105070688" rpy="0.0072698713155636835 0.0011787725034463454 1.5681472174989182"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_356.stl" scale="1.0 1.0 0.9999999999999998"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916511458894113 -0.13009789038991265 -0.2692924838866996" rpy="1.0939289657729683e-05 -1.5645578362332295 1.570785387718138"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_357.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916498694253536 -0.23941650614142418 0.000499993953468704" rpy="3.422854236449903e-08 -0.0 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_358.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0034743227498773037 0.11051149388113066 -0.26929506536389086" rpy="3.141592653589793 -1.5647128506098071 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_359.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1155834978170501 0.11051149561535537 0.000499989589329593" rpy="0.0 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_360.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0005164528160043596 1.9138253285753772e-05 0.2698494637208964" rpy="1.5707963267972813 -1.5706799387779073 -4.76949026132662e-13"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_361.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048401172215 -4.973571768656001e-06 0.35258799142175545" rpy="-1.5707984407650286 -3.422854214245444e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_362.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478479462 0.24492175754218537 0.33001995734056466" rpy="-0.005188383086518271 -3.4228542364499044e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_363.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478381098 -0.24492175754218537 0.33001995734056466" rpy="0.005188380394221428 -3.4228542364499044e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_364.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="kitchen_island_left_lower_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.11436500540700441 -0.12861326209034232 -0.01455050187850974" rpy="-0.0070110522415795865 -0.001172770454384172 3.1388853613577443"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_365.stl" scale="1.0000000000000002 1.0000000000000007 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0019618457263226616 0.23819818478626661 -0.014549032105070688" rpy="0.0072698713155636835 0.0011787725034463454 1.5681472174989182"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_366.stl" scale="1.0 1.0 0.9999999999999998"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916511458894113 -0.13009789038991265 -0.2692924838866996" rpy="1.0939289657729683e-05 -1.5645578362332295 1.570785387718138"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_367.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916498694253536 -0.23941650614142418 0.000499993953468704" rpy="3.422854236449903e-08 -0.0 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_368.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0034743227498773037 0.11051149388113066 -0.26929506536389086" rpy="3.141592653589793 -1.5647128506098071 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_369.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1155834978170501 0.11051149561535537 0.000499989589329593" rpy="0.0 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_370.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0005164528160043596 1.9138253285753772e-05 0.2698494637208964" rpy="1.5707963267972813 -1.5706799387779073 -4.76949026132662e-13"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_371.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048401172215 -4.973571768656001e-06 0.35258799142175545" rpy="-1.5707984407650286 -3.422854214245444e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_372.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478479462 0.24492175754218537 0.33001995734056466" rpy="-0.005188383086518271 -3.4228542364499044e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_373.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478381098 -0.24492175754218537 0.33001995734056466" rpy="0.005188380394221428 -3.4228542364499044e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_374.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="kitchen_island_middle_upper_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.0006009918889010641 0.0 -0.26803298124221575" rpy="1.5707963267948966 -1.5707962583378132 1.6217796153917532e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_375.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.003614640574790591 0.4384160956573368 0.0003779976227991477" rpy="3.422761599440852e-08 2.5185499427546814e-10 1.5634382265812927"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_376.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.003614640574790593 -0.43841609565733664 0.000377997615885136" rpy="3.422761577382559e-08 -2.518547948124771e-10 1.5781544276682486"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_377.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.11514599600975421 -5.242932405367009e-18 0.0003734936512598505" rpy="-1.5707963267948966 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_378.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006008933860297771 1.9191427722533325e-05 0.2689534582495862" rpy="1.5707963267948966 -1.5707962583378132 1.6217796153917532e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_379.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.11009895542640932 7.550063433841148e-07 0.35258294670069945" rpy="1.5707963267948966 -1.5707962583378132 1.6217796153917532e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_380.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.11009898514100076 0.44720028750424334 0.3300069047614158" rpy="-0.006233192144254811 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_381.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.1100989849911597 -0.4472212897995038 0.3300068930775217" rpy="0.006232904161169143 -3.4228542364499024e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_382.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="kitchen_island_middle_lower_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.0006009918889010641 0.0 -0.26803298124221575" rpy="1.5707963267948966 -1.5707962583378132 1.6217796153917532e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_383.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.003614640574790591 0.4384160956573368 0.0003779976227991477" rpy="3.422761599440852e-08 2.5185499427546814e-10 1.5634382265812927"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_384.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.003614640574790593 -0.43841609565733664 0.000377997615885136" rpy="3.422761577382559e-08 -2.518547948124771e-10 1.5781544276682486"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_385.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.11514599600975421 -5.242932405367009e-18 0.0003734936512598505" rpy="-1.5707963267948966 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_386.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0006008933860297771 1.9191427722533325e-05 0.2689534582495862" rpy="1.5707963267948966 -1.5707962583378132 1.6217796153917532e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_387.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.11009895542640932 7.550063433841148e-07 0.35258294670069945" rpy="1.5707963267948966 -1.5707962583378132 1.6217796153917532e-09"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_388.stl" scale="1.0 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.11009898514100076 0.44720028750424334 0.3300069047614158" rpy="-0.006233192144254811 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_389.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.1100989849911597 -0.4472212897995038 0.3300068930775217" rpy="0.006232904161169143 -3.4228542364499024e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_390.stl" scale="1.0 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="kitchen_island_right_upper_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.11436500540700441 -0.12861326209034232 -0.01455050187850974" rpy="-0.0070110522415795865 -0.001172770454384172 3.1388853613577443"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_391.stl" scale="1.0000000000000002 1.0000000000000007 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0019618457263226616 0.23819818478626661 -0.014549032105070688" rpy="0.0072698713155636835 0.0011787725034463454 1.5681472174989182"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_392.stl" scale="1.0 1.0 0.9999999999999998"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916511458894113 -0.13009789038991265 -0.2692924838866996" rpy="1.0939289657729683e-05 -1.5645578362332295 1.570785387718138"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_393.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916498694253536 -0.23941650614142418 0.000499993953468704" rpy="3.422854236449903e-08 -0.0 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_394.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0034743227498773037 0.11051149388113066 -0.26929506536389086" rpy="3.141592653589793 -1.5647128506098071 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_395.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1155834978170501 0.11051149561535537 0.000499989589329593" rpy="0.0 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_396.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0005164528160043596 1.9138253285753772e-05 0.2698494637208964" rpy="1.5707963267972813 -1.5706799387779073 -4.76949026132662e-13"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_397.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048401172215 -4.973571768656001e-06 0.35258799142175545" rpy="-1.5707984407650286 -3.422854214245444e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_398.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478479462 0.24492175754218537 0.33001995734056466" rpy="-0.005188383086518271 -3.4228542364499044e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_399.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478381098 -0.24492175754218537 0.33001995734056466" rpy="0.005188380394221428 -3.4228542364499044e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_400.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="kitchen_island_right_lower_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.11436500540700441 -0.12861326209034232 -0.01455050187850974" rpy="-0.0070110522415795865 -0.001172770454384172 3.1388853613577443"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_401.stl" scale="1.0000000000000002 1.0000000000000007 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0019618457263226616 0.23819818478626661 -0.014549032105070688" rpy="0.0072698713155636835 0.0011787725034463454 1.5681472174989182"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_402.stl" scale="1.0 1.0 0.9999999999999998"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916511458894113 -0.13009789038991265 -0.2692924838866996" rpy="1.0939289657729683e-05 -1.5645578362332295 1.570785387718138"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_403.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916498694253536 -0.23941650614142418 0.000499993953468704" rpy="3.422854236449903e-08 -0.0 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_404.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0034743227498773037 0.11051149388113066 -0.26929506536389086" rpy="3.141592653589793 -1.5647128506098071 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_405.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1155834978170501 0.11051149561535537 0.000499989589329593" rpy="0.0 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_406.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0005164528160043596 1.9138253285753772e-05 0.2698494637208964" rpy="1.5707963267972813 -1.5706799387779073 -4.76949026132662e-13"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_407.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048401172215 -4.973571768656001e-06 0.35258799142175545" rpy="-1.5707984407650286 -3.422854214245444e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_408.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478479462 0.24492175754218537 0.33001995734056466" rpy="-0.005188383086518271 -3.4228542364499044e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_409.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478381098 -0.24492175754218537 0.33001995734056466" rpy="0.005188380394221428 -3.4228542364499044e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_410.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="fridge_area_lower_drawer_main">
+    <inertial>
+      <origin xyz="0.17624999582767487 0.0 0.054999999701976776" rpy="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="2.0681800842285156" ixy="0.0" ixz="0.0" iyy="2.0681800842285156" iyz="0.0" izz="2.0"/>
+    </inertial>
+    <collision>
+      <origin xyz="0.11436500540700441 -0.12861326209034232 -0.01455050187850974" rpy="-0.0070110522415795865 -0.001172770454384172 3.1388853613577443"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_411.stl" scale="1.0000000000000002 1.0000000000000007 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0019618457263226616 0.23819818478626661 -0.014549032105070688" rpy="0.0072698713155636835 0.0011787725034463454 1.5681472174989182"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_412.stl" scale="1.0 1.0 0.9999999999999998"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916511458894113 -0.13009789038991265 -0.2692924838866996" rpy="1.0939289657729683e-05 -1.5645578362332295 1.570785387718138"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_413.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.011916498694253536 -0.23941650614142418 0.000499993953468704" rpy="3.422854236449903e-08 -0.0 1.5707963267948968"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_414.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.0034743227498773037 0.11051149388113066 -0.26929506536389086" rpy="3.141592653589793 -1.5647128506098071 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_415.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.1155834978170501 0.11051149561535537 0.000499989589329593" rpy="0.0 -3.422854236449903e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_416.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0005164528160043596 1.9138253285753772e-05 0.2698494637208964" rpy="1.5707963267972813 -1.5706799387779073 -4.76949026132662e-13"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_417.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048401172215 -4.973571768656001e-06 0.35258799142175545" rpy="-1.5707984407650286 -3.422854214245444e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_418.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478479462 0.24492175754218537 0.33001995734056466" rpy="-0.005188383086518271 -3.4228542364499044e-08 -3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_419.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.10991048478381098 -0.24492175754218537 0.33001995734056466" rpy="0.005188380394221428 -3.4228542364499044e-08 3.141592653589793"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_420.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="iai_fridge_door">
+    <inertial>
+      <origin xyz="-0.03769569844007492 -0.27111300826072693 -0.014271100051701069" rpy="0 0 0"/>
+      <mass value="26.9596004486084"/>
+      <inertia ixx="4.378499984741211" ixy="0.0" ixz="0.0" iyy="3.627530097961426" iyz="0.0" izz="2.8464701175689697"/>
+    </inertial>
+    <collision>
+      <origin xyz="-0.025 -0.27 -0.01" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.04 0.523 0.88"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0675 -0.4925 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.06 0.015 0.73"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0675 -0.0475 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.06 0.015 0.73"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.055 -0.27 0.36" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.045 0.46 0.01"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.095 -0.27 -0.3625" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.35 0.01"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0975 -0.47 -0.3175" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.115 0.06 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0975 -0.07 -0.3175" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.115 0.06 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.145 -0.27 -0.3175" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.35 0.1"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.095 -0.27 0.01" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.35 0.01"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0975 -0.47 0.0375" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.115 0.06 0.065"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0975 -0.07 0.0375" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.115 0.06 0.065"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.145 -0.27 0.0375" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.35 0.065"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.095 -0.27 0.22" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.35 0.01"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0975 -0.47 0.2475" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.115 0.06 0.065"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0975 -0.07 0.2475" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.115 0.06 0.065"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.145 -0.27 0.2475" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.01 0.35 0.065"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="-0.0053930059123885234 -0.3004182837220443 -2.657546008975449e-06" rpy="1.637308780424933e-05 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_437.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.06998457689121997 -0.5699523202793483 -4.355835151786922e-06" rpy="0.0 -0.0 1.570796326794897"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_438.stl" scale="1.0000000000000002 1.0000000000000002 1.0"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.04754096838030757 -0.5699520000163247 -0.4298514539188993" rpy="1.5647265696051886 -5.551115123125783e-17 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_439.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+    <collision>
+      <origin xyz="0.04754096839701248 -0.5699520000168974 0.42985145456550644" rpy="1.576866073609092 5.551115123125783e-17 1.5707963267948966"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/kitchen/stl/geom_440.stl" scale="1.0000000000000002 1.0000000000000002 1.0000000000000002"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
