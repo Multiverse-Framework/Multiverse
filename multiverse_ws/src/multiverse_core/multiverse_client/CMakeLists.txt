@@ -7,14 +7,14 @@ project(multiverse_client)
 # # Find catkin macros and libraries
 # # if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 # # is used, also find other catkin packages
-
-set(pybind11_DIR ../../../../build/pybind11/build/share/cmake/pybind11)
 find_package(catkin REQUIRED COMPONENTS
   multiverse_msgs
   roscpp
   rospy
-  pybind11
 )
+
+include_directories(${PYTHON_INCLUDE_DIRS})
+add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../src/pybind11 build)
 
 # # System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
