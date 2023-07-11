@@ -6,4 +6,4 @@
 	url = https://github.com/Multiverse-Framework/Multiverse-MuJoCo-Connector.git
 [submodule "src/pybind11"]
 	path = src/pybind11
-	url = git@github.com:pybind/pybind11.git
+	url = https://github.com/pybind/pybind11.git
