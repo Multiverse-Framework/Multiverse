@@ -80,7 +80,6 @@ def start_publish_tf():
         multiverse_socket.set_send_data([rospy.Time.now().to_sec()])
         multiverse_socket.communicate()
         data = multiverse_socket.get_receive_data()
-        # print(data)
 
         for i, object_name in enumerate(object_names):
             tf_msgs[i].header.stamp = rospy.Time.from_sec(data[0])

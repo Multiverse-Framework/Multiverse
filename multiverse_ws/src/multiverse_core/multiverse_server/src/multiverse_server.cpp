@@ -435,36 +435,32 @@ public:
             try
             {
                 socket_server.recv(message, zmq::recv_flags::none);
+                memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
             }
             catch (const zmq::error_t &e)
             {
                 ROS_INFO("%s, server socket %s prepares to close", e.what(), socket_addr.c_str());
             }
 
-            const std::string request_data_str = message.to_string();
-            if (request_data_str[0] == '{')
+            if (message.to_string()[0] == '{')
             {
-                reader.parse(request_data_str, meta_data_json);
-
-                send_data_vec.clear();
-                receive_data_vec.clear();
-
+                const std::string request_data_str = message.to_string();
                 if (request_data_str[1] == '}')
                 {
+                    send_data_vec.clear();
+                    receive_data_vec.clear();
                     goto send_meta_data_response;
                 }
-                else if (!meta_data_json.empty())
+                else if (reader.parse(request_data_str, meta_data_json) && !meta_data_json.empty())
                 {
+                    send_data_vec.clear();
+                    receive_data_vec.clear();
                     goto bind_objects;
                 }
-                else
+                else if (isnan(send_buffer[0]))
                 {
                     ROS_WARN("Received %s from %s", request_data_str.c_str(), socket_addr.c_str());
                 }
-            }
-            else
-            {
-                memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
             }
 
             mtx.lock();
@@ -508,11 +504,7 @@ public:
 
                 is_received_data_sent = true;
             }
-            *receive_buffer = get_time_now();
-            if (should_shut_down)
-            {
-                receive_buffer[0] = -1.0;
-            }
+            receive_buffer[0] = should_shut_down ? -1.0 : get_time_now();
 
             mtx.lock();
             for (std::pair<const std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)

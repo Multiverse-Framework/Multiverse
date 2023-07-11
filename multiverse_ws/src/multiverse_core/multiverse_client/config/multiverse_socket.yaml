@@ -8,8 +8,8 @@ multiverse:
 
   publish:
     tf:
-      port: 7400
+      port: 7300
       rate: 60
     visualization_marker_array:
-      port: 7401
+      port: 7301
       rate: 60

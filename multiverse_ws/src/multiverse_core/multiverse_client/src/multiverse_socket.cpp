@@ -20,9 +20,9 @@
 
 #include "multiverse_client.h"
 
+#include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/chrono.h>
 
 std::map<std::string, size_t> attribute_map = {
     {"", 0},
@@ -119,7 +119,6 @@ private:
 
     void stop_meta_data_thread() override
     {
-        
     }
 
     void init_objects() override
@@ -140,6 +139,7 @@ private:
         meta_data_json["time_unit"] = meta_data_dict["time_unit"].cast<std::string>();
         meta_data_json["handedness"] = meta_data_dict["handedness"].cast<std::string>();
 
+        std::map<std::string, size_t> buffer_sizes = {{"send", 1.0}, {"receive", 1.0}};
         for (const std::string &send_receive : {"send", "receive"})
         {
             for (const std::pair<std::string, std::vector<std::string>> receive_objects : meta_data_dict[send_receive.c_str()].cast<std::map<std::string, std::vector<std::string>>>())
@@ -147,9 +147,18 @@ private:
                 for (const std::string &object_attribute : receive_objects.second)
                 {
                     meta_data_json[send_receive][receive_objects.first].append(object_attribute);
+                    buffer_sizes[send_receive] += attribute_map[object_attribute];
                 }
             }
         }
+
+        if (meta_data_json.isMember("receive") && meta_data_json["receive"].isMember(""))
+        {
+            buffer_sizes["receive"] = 0;
+        }
+
+        send_buffer_size = buffer_sizes["send"];
+        receive_buffer_size = buffer_sizes["receive"];
     }
 
     void bind_object_data() override
