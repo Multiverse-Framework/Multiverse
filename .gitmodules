@@ -7,3 +7,6 @@
 [submodule "src/pybind11"]
 	path = src/pybind11
 	url = https://github.com/pybind/pybind11.git
+[submodule "src/mujoco"]
+	path = src/mujoco
+	url = https://github.com/deepmind/mujoco.git

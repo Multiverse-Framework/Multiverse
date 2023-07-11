@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
 )
 
-include_directories(${PYTHON_INCLUDE_DIRS})
+include_directories(/usr/include/python3.9)
 add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../src/pybind11 build)
 
 # # System dependencies are found with CMake's conventions

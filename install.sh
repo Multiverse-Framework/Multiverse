@@ -17,8 +17,8 @@ apt install ros-noetic-desktop-full
 # Install python3-pip
 apt install -y python3-pip
 
-# Install python3-dev
-apt install -y python3-dev
+# Install python3.9-dev
+apt install -y python3.9-dev
 
 # Install python3-catkin-tools
 apt install -y python3-catkin-tools
