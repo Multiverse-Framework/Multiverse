@@ -14,7 +14,8 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 include_directories(/usr/include/python3.9)
-add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../src/pybind11 build)
+set(PYBIND11_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../../../../src/pybind11)
+add_subdirectory(${PYBIND11_SOURCE_DIR} build)
 
 # # System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -104,12 +105,11 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/../../../../src/pybind11 build)
 # # LIBRARIES: libraries you create in this project that dependent projects also need
 # # CATKIN_DEPENDS: catkin_packages dependent projects also need
 # # DEPENDS: system dependencies of this project that dependent projects also need
+set(pybind11_INCLUDE_DIRS ${PYBIND11_SOURCE_DIR}/include)
 catkin_package(
   INCLUDE_DIRS include
   LIBRARIES ${PROJECT_NAME}_lib
-
   CATKIN_DEPENDS multiverse_msgs roscpp rospy
-  # DEPENDS
 )
 
 # ##########
@@ -121,6 +121,7 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/
+  ${pybind11_INCLUDE_DIRS}
 )
 
 # # Declare a C++ library

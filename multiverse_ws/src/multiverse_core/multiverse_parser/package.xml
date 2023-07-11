@@ -56,6 +56,8 @@
   <exec_depend>rospy</exec_depend>
   <exec_depend>rpscpp</exec_depend>
 
+  <build_depend>mujoco_sim</build_depend>
+
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

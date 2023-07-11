@@ -183,9 +183,9 @@ public:
 
         Json::Reader reader;
         const std::string message_str = message.to_string();
-        if (message_str.empty() ||
-            message_str[0] != '{' ||
-            (message_str[0] == '{' && message_str[1] == '}') ||
+        if (message_str[0] != '{' ||
+            message_str[0] == '{' && message_str[1] == '}' ||
+            message_str.empty() ||
             !reader.parse(message_str, meta_data_json))
         {
             receive_buffer[0] = get_time_now();
@@ -341,7 +341,9 @@ public:
                 for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)
                 {
                     const std::string attribute_name = attribute_json.asString();
-                    if (object.second.count(attribute_name) != 0)
+                    if (object.second.count(attribute_name) != 0 &&
+                        (strcmp(attribute_name.c_str(), "force") != 0 && strcmp(attribute_name.c_str(), "torque") != 0 ||
+                         object.second.at(attribute_name).first.size() > 3))
                     {
                         receive_objects_json_tmp[object.first].append(attribute_name);
                     }
@@ -373,25 +375,13 @@ public:
             {
                 const std::string attribute_name = attribute_json.asString();
                 mtx.lock();
-                if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
+                const size_t data_size = (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0) ? 3 : objects[object_name][attribute_name].first.size();
+                for (size_t i = 0; i < data_size; i++)
                 {
-                    for (size_t i = 0; i < 3; i++)
-                    {
-                        double *data = &objects[object_name][attribute_name].first[i];
-                        const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
-                        receive_data_vec.emplace_back(data, conversion);
-                        response_json["receive"][object_name][attribute_name].append(*data * conversion);
-                    }
-                }
-                else
-                {
-                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
-                    {
-                        double *data = &objects[object_name][attribute_name].first[i];
-                        const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
-                        receive_data_vec.emplace_back(data, conversion);
-                        response_json["receive"][object_name][attribute_name].append(*data * conversion);
-                    }
+                    double *data = &objects[object_name][attribute_name].first[i];
+                    const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
+                    receive_data_vec.emplace_back(data, conversion);
+                    response_json["receive"][object_name][attribute_name].append(*data * conversion);
                 }
                 mtx.unlock();
             }
