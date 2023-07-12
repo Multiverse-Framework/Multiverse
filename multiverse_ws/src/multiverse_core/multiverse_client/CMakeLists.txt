@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
 )
 
-include_directories(/usr/include/python3.9)
+include_directories(/usr/include/python3.8)
 set(PYBIND11_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../../../../src/pybind11)
 add_subdirectory(${PYBIND11_SOURCE_DIR} build)
 
@@ -121,7 +121,6 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/
-  ${pybind11_INCLUDE_DIRS}
 )
 
 # # Declare a C++ library
