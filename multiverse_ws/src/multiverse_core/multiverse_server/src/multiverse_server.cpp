@@ -113,9 +113,9 @@ std::vector<std::thread> workers;
 
 std::mutex mtx;
 
-std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> objects;
+std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
 
-std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>> send_efforts;
+std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>>> send_efforts;
 
 bool should_shut_down = false;
 
@@ -136,12 +136,12 @@ public:
         socket_server = zmq::socket_t(context, zmq::socket_type::rep);
         socket_server.bind(socket_addr);
         sockets_need_clean_up[socket_addr] = false;
-        ROS_INFO("Bind server socket to %s", socket_addr.c_str());
+        ROS_INFO("Bind server socket to [%s].", socket_addr.c_str());
     }
 
     ~MultiverseServer()
     {
-        ROS_INFO("Close server socket at %s", socket_addr.c_str());
+        ROS_INFO("Close server socket at [%s].", socket_addr.c_str());
 
         if (send_buffer != nullptr)
         {
@@ -164,7 +164,6 @@ public:
             switch (flag)
             {
             case EFlag::RequestSendMetaData:
-                ROS_INFO("RequestSendMetaData");
                 request_send_meta_data();
                 message_str = message.to_string();
                 if (message_str[0] != '{' ||
@@ -182,21 +181,19 @@ public:
                 break;
 
             case EFlag::ConstructReceiveMetaData:
-                ROS_INFO("ConstructReceiveMetaData");
                 construct_receive_meta_data();
                 flag = EFlag::BindObjects;
                 break;
 
             case EFlag::BindObjects:
-                ROS_INFO("BindObjects");
                 mtx.lock();
                 bind_send_objects();
                 mtx.unlock();
-                ROS_INFO("validate_receive_meta_data");
+
                 validate_receive_meta_data();
-                ROS_INFO("wait_for_objects");
+                
                 wait_for_objects();
-                ROS_INFO("bind_receive_objects");
+                
                 mtx.lock();
                 bind_receive_objects();
                 mtx.unlock();
@@ -204,7 +201,6 @@ public:
                 flag = EFlag::ResponseReceiveMetaData;
 
             case EFlag::ResponseReceiveMetaData:
-                ROS_INFO("ResponseReceiveMetaData");
                 response_meta_data();
                 if (send_buffer_size == 1 && receive_buffer_size == 1)
                 {
@@ -218,7 +214,6 @@ public:
                 break;
 
             case EFlag::RequestSendData:
-                ROS_INFO("RequestSendData");
                 request_send_data();
                 if (message.to_string()[0] == '{')
                 {
@@ -237,7 +232,7 @@ public:
                     }
                     else if (isnan(send_buffer[0]))
                     {
-                        ROS_WARN("Received %s from %s", message_str.c_str(), socket_addr.c_str());
+                        ROS_WARN("Received [%s] from [%s].", message_str.c_str(), socket_addr.c_str());
                         flag = EFlag::BindReceiveData;
                     }
                     else
@@ -252,7 +247,6 @@ public:
                 break;
 
             case EFlag::BindSendData:
-                ROS_INFO("BindSendData");
                 mtx.lock();
                 for (size_t i = 0; i < send_buffer_size - 1; i++)
                 {
@@ -263,7 +257,6 @@ public:
                 break;
 
             case EFlag::BindReceiveData:
-                ROS_INFO("BindReceiveData");
                 wait_for_receive_data();
 
                 compute_cumulative_data();
@@ -275,7 +268,6 @@ public:
                 flag = EFlag::ResponseReceiveData;
 
             case EFlag::ResponseReceiveData:
-                ROS_INFO("ResponseReceiveData");
                 response_receive_data();
                 flag = EFlag::RequestSendData;
                 break;
@@ -292,7 +284,7 @@ public:
                 response_receive_data();
             }
 
-            ROS_INFO("Unbind server socket from %s", socket_addr.c_str());
+            ROS_INFO("Unbind server socket from [%s].", socket_addr.c_str());
             socket_server.unbind(socket_addr);
         }
     }
@@ -318,7 +310,7 @@ private:
         catch (const zmq::error_t &e)
         {
             should_shut_down = true;
-            ROS_INFO("%s, server socket %s prepares to close", e.what(), socket_addr.c_str());
+            ROS_INFO("%s, server socket at [%s] prepares to close.", e.what(), socket_addr.c_str());
         }
     }
 
@@ -326,7 +318,7 @@ private:
     {
         ROS_INFO("%s", send_meta_data_json.toStyledString().c_str());
 
-        const std::string world = send_meta_data_json["world"].asString();
+        world_name = send_meta_data_json["world"].asString();
         const std::string length_unit = send_meta_data_json["length_unit"].asString();
         const std::string angle_unit = send_meta_data_json["angle_unit"].asString();
         const std::string handedness = send_meta_data_json["handedness"].asString();
@@ -390,6 +382,7 @@ private:
         }
 
         receive_meta_data_json.clear();
+        receive_meta_data_json["world"] = world_name;
         receive_meta_data_json["time"] = get_time_now() * unit_scale[time_unit];
         receive_meta_data_json["angle_unit"] = angle_unit;
         receive_meta_data_json["force_unit"] = force_unit;
@@ -400,6 +393,7 @@ private:
     void bind_send_objects()
     {
         send_objects_json = send_meta_data_json["send"];
+        std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &objects = worlds[world_name];
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
         {
             const std::string object_name = send_object_it.key().asString();
@@ -428,11 +422,11 @@ private:
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
-                    send_efforts[object_name][socket_addr][attribute_name] = attribute_map[attribute_name].second;
+                    send_efforts[world_name][object_name][socket_addr][attribute_name] = attribute_map[attribute_name].second;
 
                     for (size_t i = 0; i < attribute_map[attribute_name].second.size(); i++)
                     {
-                        double *data = &send_efforts[object_name][socket_addr][attribute_name][i];
+                        double *data = &send_efforts[world_name][object_name][socket_addr][attribute_name][i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
                         receive_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
@@ -468,12 +462,12 @@ private:
             }
             for (const Json::Value &attribute_json : *receive_object_it)
             {
-                for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)
+                for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : worlds[world_name])
                 {
                     const std::string attribute_name = attribute_json.asString();
                     if (object.second.count(attribute_name) != 0 &&
                         (strcmp(attribute_name.c_str(), "force") != 0 && strcmp(attribute_name.c_str(), "torque") != 0 ||
-                         object.second.at(attribute_name).first.size() > 3))
+                            object.second.at(attribute_name).first.size() > 3))
                     {
                         receive_objects_json[object.first].append(attribute_name);
                     }
@@ -488,7 +482,7 @@ private:
         int start = get_time_now();
         int now = get_time_now();
         bool found_all_objects = true;
-        do 
+        do
         {
             found_all_objects = true;
             now = get_time_now();
@@ -498,12 +492,12 @@ private:
                 for (const Json::Value &attribute_json : *receive_object_it)
                 {
                     const std::string attribute_name = attribute_json.asString();
-                    if ((objects.count(object_name) == 0 || objects[object_name].count(attribute_name) == 0))
+                    if ((worlds[world_name].count(object_name) == 0 || worlds[world_name][object_name].count(attribute_name) == 0))
                     {
                         found_all_objects = false;
                         if (now - start > 1)
                         {
-                            ROS_INFO("[Socket %s]: Waiting for [%s][%s] to be declared", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
+                            ROS_INFO("Socket [%s] is waiting for [%s][%s] to be declared.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
                         }
                     }
                 }
@@ -524,10 +518,10 @@ private:
             {
                 const std::string attribute_name = attribute_json.asString();
 
-                const size_t data_size = (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0) ? 3 : objects[object_name][attribute_name].first.size();
+                const size_t data_size = (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0) ? 3 : worlds[world_name][object_name][attribute_name].first.size();
                 for (size_t i = 0; i < data_size; i++)
                 {
-                    double *data = &objects[object_name][attribute_name].first[i];
+                    double *data = &worlds[world_name][object_name][attribute_name].first[i];
                     const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
                     receive_data_vec.emplace_back(data, conversion);
                     receive_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
@@ -575,7 +569,7 @@ private:
         catch (const zmq::error_t &e)
         {
             should_shut_down = true;
-            ROS_INFO("%s, server socket %s prepares to close", e.what(), socket_addr.c_str());
+            ROS_INFO("%s, server socket at [%s] prepares to close.", e.what(), socket_addr.c_str());
         }
     }
 
@@ -583,30 +577,29 @@ private:
     {
         if (!is_receive_data_sent)
         {
-            int start = get_time_now();
-            for (auto it = send_objects_json.begin(); it != send_objects_json.end(); ++it)
+            for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
             {
-                const std::string object_name = it.key().asString();
-                for (const Json::Value &attribute_json : *it)
+                const std::string object_name = send_object_it.key().asString();
+                for (const Json::Value &attribute_json : *send_object_it)
                 {
                     const std::string attribute_name = attribute_json.asString();
-                    objects[object_name][attribute_name].second = true;
+                    worlds[world_name][object_name][attribute_name].second = true;
                 }
             }
 
-            for (auto it = receive_objects_json.begin(); it != receive_objects_json.end(); ++it)
+            for (auto receive_object_it = receive_objects_json.begin(); receive_object_it != receive_objects_json.end(); ++receive_object_it)
             {
-                const std::string object_name = it.key().asString();
-                for (const Json::Value &attribute_json : *it)
+                const std::string object_name = receive_object_it.key().asString();
+                for (const Json::Value &attribute_json : *receive_object_it)
                 {
                     const std::string attribute_name = attribute_json.asString();
                     int start = get_time_now();
-                    while ((objects.count(object_name) == 0 || objects[object_name].count(attribute_name) == 0 || !objects[object_name][attribute_name].second) && !should_shut_down)
+                    while ((worlds[world_name].count(object_name) == 0 || worlds[world_name][object_name].count(attribute_name) == 0 || !worlds[world_name][object_name][attribute_name].second) && !should_shut_down)
                     {
                         const int now = get_time_now();
                         if (now - start > 1)
                         {
-                            ROS_INFO("[Socket %s]: Waiting for data of [%s][%s] to be sent", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
+                            ROS_INFO("Socket at [%s] is waiting for data of [%s][%s] to be sent.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
                             start = now;
                         }
                     }
@@ -629,7 +622,7 @@ private:
                     continue;
                 }
 
-                for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &send_effort : send_efforts[object_name])
+                for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &send_effort : send_efforts[world_name][object_name])
                 {
                     for (size_t i = 0; i < 3; i++)
                     {
@@ -638,7 +631,7 @@ private:
                             send_effort.second[effort][i] += send_effort.second[effort][j];
                         }
 
-                        objects[object_name][effort].first[i] = send_effort.second[effort][i];
+                        worlds[world_name][object_name][effort].first[i] = send_effort.second[effort][i];
                     }
                 }
             }
@@ -687,6 +680,8 @@ private:
     std::vector<std::pair<std::vector<double>::iterator, double>> receive_data_vec;
 
     std::map<EAttribute, std::vector<double>> conversion_map;
+
+    std::string world_name;
 
     Json::Reader reader;
 
