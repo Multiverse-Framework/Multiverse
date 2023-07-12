@@ -60,7 +60,7 @@ public:
         }
     }
 
-    pybind11::dict get_receive_meta_data() const
+    pybind11::dict get_receive_meta_data()
     {
         pybind11::dict meta_data_res_dict;
 
@@ -99,7 +99,7 @@ public:
     {
         if (in_send_data.size() != send_buffer_size)
         {
-            printf("Size doesn't match with send_buffer_size = %ld", send_buffer_size);
+            printf("[Client %s] Size doesn't match with send_buffer_size = %ld", port.c_str(), send_buffer_size);
         }
         else
         {
@@ -134,7 +134,7 @@ private:
         }
     }
 
-    void stop_meta_data_thread() override
+    void wait_for_meta_data_thread_finish() override
     {
         if (use_thread && meta_data_thread.joinable())
         {

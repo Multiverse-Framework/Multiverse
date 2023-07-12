@@ -19,15 +19,20 @@ def start_publish_tf():
 
     host = rospy.get_param(
         '~multiverse/host') if rospy.has_param('~multiverse/host') else "tcp://127.0.0.1"
-    port = int(rospy.get_param(
-        '~multiverse/publish/tf/port')) if rospy.has_param('~multiverse/publish/tf/port') else 7300
+    port = str(rospy.get_param(
+        '~multiverse/publish/tf/port')) if rospy.has_param('~multiverse/publish/tf/port') else "7300"
     rate = int(rospy.get_param(
         '~multiverse/publish/tf/rate')) if rospy.has_param('~multiverse/publish/tf/rate') else 60
 
     multiverse_socket.init(host, port)
     multiverse_socket.set_send_meta_data(send_meta_data_dict)
     multiverse_socket.connect()
-    receive_meta_data_dict = multiverse_socket.get_receive_meta_data()
+
+    while not rospy.is_shutdown():
+        receive_meta_data_dict: dict
+        receive_meta_data_dict = multiverse_socket.get_receive_meta_data()
+        if receive_meta_data_dict.get("world") is not None and receive_meta_data_dict["world"] != "":
+            break
 
     object_name: str
     tf_broadcaster = tf2_ros.TransformBroadcaster()
@@ -35,6 +40,7 @@ def start_publish_tf():
     root_frame_id = rospy.get_param(
         '~root_frame_id') if rospy.has_param('~root_frame_id') else "map"
     object_names = receive_meta_data_dict["receive"].keys()
+
     for object_name in object_names:
         tf_msg = TransformStamped()
         tf_msg.header.frame_id = root_frame_id
@@ -59,6 +65,7 @@ def start_publish_tf():
             tf_msgs[i].transform.rotation.z = receive_data[7 * i + 7]
 
         tf_broadcaster.sendTransform(tf_msgs)
+
         rate.sleep()
 
     multiverse_socket.disconnect()
@@ -68,7 +75,7 @@ def start_multiverse_publisher() -> None:
     rospy.init_node('multiverse_publisher')
     if not rospy.has_param('~multiverse/publish/tf'):
         return
-    
+
     threads = []
     if rospy.has_param('~multiverse/publish/tf'):
         thread = threading.Thread(target=start_publish_tf)
@@ -77,6 +84,7 @@ def start_multiverse_publisher() -> None:
 
     for thread in threads:
         thread.join()
+
 
 if __name__ == "__main__":
     start_multiverse_publisher()

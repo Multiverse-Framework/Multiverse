@@ -23,7 +23,7 @@ attribute_map = {
 }
 
 host = "tcp://127.0.0.1"
-port = 7400
+port = "7400"
 
 worlds = {}
 
@@ -127,5 +127,5 @@ def start_multiverse_service() -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[1].isnumeric():
-        port = int(sys.argv[1])
+        port = str(sys.argv[1])
     start_multiverse_service()
