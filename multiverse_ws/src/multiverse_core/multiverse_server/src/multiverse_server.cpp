@@ -191,9 +191,9 @@ public:
                 mtx.unlock();
 
                 validate_receive_meta_data();
-                
+
                 wait_for_objects();
-                
+
                 mtx.lock();
                 bind_receive_objects();
                 mtx.unlock();
@@ -318,12 +318,12 @@ private:
     {
         ROS_INFO("%s", send_meta_data_json.toStyledString().c_str());
 
-        world_name = send_meta_data_json["world"].asString();
-        const std::string length_unit = send_meta_data_json["length_unit"].asString();
-        const std::string angle_unit = send_meta_data_json["angle_unit"].asString();
-        const std::string handedness = send_meta_data_json["handedness"].asString();
-        const std::string force_unit = send_meta_data_json["force_unit"].asString();
-        const std::string time_unit = send_meta_data_json["time_unit"].asString();
+        world_name = send_meta_data_json.isMember("world") ? send_meta_data_json["world"].asString() : "world";
+        const std::string length_unit = send_meta_data_json.isMember("length_unit") ? send_meta_data_json["length_unit"].asString() : "m";
+        const std::string angle_unit = send_meta_data_json.isMember("angle_unit") ? send_meta_data_json["angle_unit"].asString() : "rad";
+        const std::string handedness = send_meta_data_json.isMember("handedness") ? send_meta_data_json["handedness"].asString() : "rhs";
+        const std::string force_unit = send_meta_data_json.isMember("force_unit") ? send_meta_data_json["force_unit"].asString() : "N";
+        const std::string time_unit = send_meta_data_json.isMember("time_unit") ? send_meta_data_json["time_unit"].asString() : "s";
 
         for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
         {
@@ -453,27 +453,70 @@ private:
     void validate_receive_meta_data()
     {
         receive_objects_json = send_meta_data_json["receive"];
-        for (auto receive_object_it = send_meta_data_json["receive"].begin(); receive_object_it != send_meta_data_json["receive"].end(); ++receive_object_it)
+        
+        if (receive_objects_json.isMember("") &&
+            std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
         {
-            const std::string object_name = receive_object_it.key().asString();
-            if (!object_name.empty())
+            receive_objects_json = {};
+            for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : worlds[world_name])
             {
-                continue;
-            }
-            for (const Json::Value &attribute_json : *receive_object_it)
-            {
-                for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : worlds[world_name])
+                for (const std::pair<std::string, std::pair<std::vector<double>, bool>> &attribute : object.second)
                 {
-                    const std::string attribute_name = attribute_json.asString();
-                    if (object.second.count(attribute_name) != 0 &&
-                        (strcmp(attribute_name.c_str(), "force") != 0 && strcmp(attribute_name.c_str(), "torque") != 0 ||
-                            object.second.at(attribute_name).first.size() > 3))
+                    if ((strcmp(attribute.first.c_str(), "force") != 0 && strcmp(attribute.first.c_str(), "torque") != 0 ||
+                             attribute.second.first.size() > 3))
                     {
-                        receive_objects_json[object.first].append(attribute_name);
+                        receive_objects_json[object.first].append(attribute.first);
                     }
                 }
             }
-            receive_objects_json.removeMember("");
+
+            return;
+        }
+
+        for (const std::string &object_name : send_meta_data_json["receive"].getMemberNames())
+        {
+            if (!object_name.empty())
+            {
+                for (const Json::Value &attribute_json : send_meta_data_json["receive"][object_name])
+                {
+                    const std::string attribute_name = attribute_json.asString();
+                    if (!attribute_name.empty())
+                    {
+                        continue;
+                    }
+                    
+                    receive_objects_json[object_name] = {};
+                    for (const std::pair<std::string, std::pair<std::vector<double>, bool>> &attribute : worlds[world_name][object_name])
+                    {
+                        if ((strcmp(attribute.first.c_str(), "force") != 0 && strcmp(attribute.first.c_str(), "torque") != 0 ||
+                             attribute.second.first.size() > 3) &&
+                            std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), attribute.first) == receive_objects_json[object_name].end())
+                        {
+                            receive_objects_json[object_name].append(attribute.first);
+                        }
+                    }
+                    break;
+                }
+            }
+            else
+            {
+                for (const Json::Value &attribute_json : send_meta_data_json["receive"][object_name])
+                {
+                    const std::string attribute_name = attribute_json.asString();
+                    for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : worlds[world_name])
+                    {
+                        if (object.second.count(attribute_name) != 0 &&
+                            (strcmp(attribute_name.c_str(), "force") != 0 && strcmp(attribute_name.c_str(), "torque") != 0 ||
+                             object.second.at(attribute_name).first.size() > 3) &&
+                            std::find(receive_objects_json[object.first].begin(), receive_objects_json[object.first].end(), attribute_name) == receive_objects_json[object.first].end())
+                        {
+                            receive_objects_json[object.first].append(attribute_name);
+                        }
+                    }
+                }
+                receive_objects_json.removeMember(object_name);
+                break;
+            }
         }
     }
 

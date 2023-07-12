@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
 )
 
+set(PYBIND11_PYTHON_VERSION "3.8")
 include_directories(/usr/include/python3.8)
 set(PYBIND11_SOURCE_DIR ${PROJECT_SOURCE_DIR}/../../../../src/pybind11)
 add_subdirectory(${PYBIND11_SOURCE_DIR} build)

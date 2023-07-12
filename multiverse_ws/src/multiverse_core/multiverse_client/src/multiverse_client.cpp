@@ -20,8 +20,21 @@
 
 #include "multiverse_client.h"
 
+#include <algorithm>
 #include <chrono>
 #include <zmq.h>
+
+std::map<std::string, size_t> attribute_map = {
+    {"", 0},
+    {"position", 3},
+    {"quaternion", 4},
+    {"relative_velocity", 6},
+    {"joint_rvalue", 1},
+    {"joint_tvalue", 1},
+    {"joint_position", 3},
+    {"joint_quaternion", 4},
+    {"force", 3},
+    {"torque", 3}};
 
 void MultiverseClient::init(const std::string &in_host, const int in_port)
 {
@@ -42,7 +55,7 @@ void MultiverseClient::connect()
     zmq_disconnect(socket_client, socket_addr.c_str());
     zmq_connect(socket_client, socket_addr.c_str());
     clean_up();
-    construct_meta_data();
+    construct_send_meta_data();
     start_meta_data_thread();
 }
 
@@ -74,7 +87,7 @@ void MultiverseClient::communicate()
 void MultiverseClient::disconnect()
 {
     should_shut_down = true;
-    
+
     if (is_enabled)
     {
         printf("Closing the socket client on %s.\n", socket_addr.c_str());
@@ -104,6 +117,18 @@ double MultiverseClient::get_time_now()
 
 void MultiverseClient::send_and_receive_meta_data()
 {
+    std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
+    for (const std::string &send_receive : {"send", "receive"})
+    {
+        for (const std::string &object_name : meta_data_json[send_receive].getMemberNames())
+        {
+            for (const Json::Value &attribute : meta_data_json[send_receive][object_name])
+            {
+                request_buffer_sizes[send_receive] += attribute_map[attribute.asString()];
+            }
+        }
+    }
+
     const std::string meta_data_str = meta_data_json.toStyledString();
     printf("%s", meta_data_str.c_str());
 
@@ -123,8 +148,8 @@ void MultiverseClient::send_and_receive_meta_data()
 
         std::string response_message_str(static_cast<char *>(zmq_msg_data(&response_message)), zmq_msg_size(&response_message));
 
-        double* buffer = static_cast<double*>(zmq_msg_data(&response_message));
-        
+        double *buffer = static_cast<double *>(zmq_msg_data(&response_message));
+
         if (response_message_str.empty() || !reader.parse(response_message_str, meta_data_res_json) || meta_data_res_json["time"].asDouble() < 0)
         {
             zmq_msg_init(&response_message);
@@ -153,14 +178,16 @@ void MultiverseClient::send_and_receive_meta_data()
         }
     }
 
-    if (!meta_data_json["receive"].isMember("") && (response_buffer_sizes["send"] != send_buffer_size || response_buffer_sizes["receive"] != receive_buffer_size))
+    if (!meta_data_json["receive"].isMember("") &&
+        std::find(meta_data_json["receive"].begin(), meta_data_json["receive"].end(), "") == meta_data_json["receive"].end() &&
+        (response_buffer_sizes["send"] != request_buffer_sizes["send"] || response_buffer_sizes["receive"] != request_buffer_sizes["receive"]))
     {
         printf("Failed to initialize the socket at %s: send_buffer_size(server = %ld, client = %ld), receive_buffer_size(server = %ld, client = %ld).\n",
-            socket_addr.c_str(),
-            response_buffer_sizes["send"],
-            send_buffer_size,
-            response_buffer_sizes["receive"],
-            receive_buffer_size);
+               socket_addr.c_str(),
+               response_buffer_sizes["send"],
+               request_buffer_sizes["send"],
+               response_buffer_sizes["receive"],
+               request_buffer_sizes["receive"]);
         zmq_disconnect(socket_client, socket_addr.c_str());
         return;
     }

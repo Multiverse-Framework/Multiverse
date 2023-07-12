@@ -92,7 +92,7 @@ protected:
      * @brief Construct the meta data from the objects
      *
      */
-    virtual void construct_meta_data() = 0;
+    virtual void construct_send_meta_data() = 0;
 
     /**
      * @brief Bind object data to send and receive data

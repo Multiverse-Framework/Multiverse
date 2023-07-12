@@ -24,18 +24,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-std::map<std::string, size_t> attribute_map = {
-    {"", 0},
-    {"position", 3},
-    {"quaternion", 3},
-    {"relative_velocity", 6},
-    {"joint_rvalue", 1},
-    {"joint_tvalue", 1},
-    {"joint_position", 3},
-    {"joint_quaternion", 4},
-    {"force", 3},
-    {"torque", 3}};
-
 class MultiverseSocket final : public MultiverseClient
 {
 public:
@@ -47,12 +35,30 @@ public:
     {
     }
 
-    void set_meta_data(const pybind11::dict &in_meta_data_dict)
+    void set_send_meta_data(const pybind11::dict &meta_data_dict)
     {
-        meta_data_dict = in_meta_data_dict;
+        meta_data_json.clear();
+        
+        meta_data_json["world"] = meta_data_dict.contains("world") ? meta_data_dict["world"].cast<std::string>() : "world";
+        meta_data_json["length_unit"] = meta_data_dict.contains("length_unit") ? meta_data_dict["length_unit"].cast<std::string>() : "N";
+        meta_data_json["angle_unit"] = meta_data_dict.contains("angle_unit") ? meta_data_dict["angle_unit"].cast<std::string>() : "rad";
+        meta_data_json["force_unit"] = meta_data_dict.contains("force_unit") ? meta_data_dict["force_unit"].cast<std::string>() : "N";
+        meta_data_json["time_unit"] = meta_data_dict.contains("time_unit") ? meta_data_dict["time_unit"].cast<std::string>() : "s";
+        meta_data_json["handedness"] = meta_data_dict.contains("handedness") ? meta_data_dict["handedness"].cast<std::string>() : "rhs";
+
+        for (const std::string &send_receive : {"send", "receive"})
+        {
+            for (const std::pair<std::string, std::vector<std::string>> receive_objects : meta_data_dict[send_receive.c_str()].cast<std::map<std::string, std::vector<std::string>>>())
+            {
+                for (const std::string &object_attribute : receive_objects.second)
+                {
+                    meta_data_json[send_receive][receive_objects.first].append(object_attribute);
+                }
+            }
+        }
     }
 
-    pybind11::dict get_meta_data_response() const
+    pybind11::dict get_receive_meta_data() const
     {
         pybind11::dict meta_data_res_dict;
 
@@ -109,8 +115,6 @@ private:
 
     pybind11::list receive_data;
 
-    pybind11::dict meta_data_dict;
-
 private:
     void start_meta_data_thread() override
     {
@@ -129,36 +133,9 @@ private:
     {
     }
 
-    void construct_meta_data() override
+    void construct_send_meta_data() override
     {
-        meta_data_json.clear();
-        meta_data_json["world"] = meta_data_dict["world"].cast<std::string>();
-        meta_data_json["length_unit"] = meta_data_dict["length_unit"].cast<std::string>();
-        meta_data_json["angle_unit"] = meta_data_dict["angle_unit"].cast<std::string>();
-        meta_data_json["force_unit"] = meta_data_dict["force_unit"].cast<std::string>();
-        meta_data_json["time_unit"] = meta_data_dict["time_unit"].cast<std::string>();
-        meta_data_json["handedness"] = meta_data_dict["handedness"].cast<std::string>();
-
-        std::map<std::string, size_t> buffer_sizes = {{"send", 1.0}, {"receive", 1.0}};
-        for (const std::string &send_receive : {"send", "receive"})
-        {
-            for (const std::pair<std::string, std::vector<std::string>> receive_objects : meta_data_dict[send_receive.c_str()].cast<std::map<std::string, std::vector<std::string>>>())
-            {
-                for (const std::string &object_attribute : receive_objects.second)
-                {
-                    meta_data_json[send_receive][receive_objects.first].append(object_attribute);
-                    buffer_sizes[send_receive] += attribute_map[object_attribute];
-                }
-            }
-        }
-
-        if (meta_data_json.isMember("receive") && meta_data_json["receive"].isMember(""))
-        {
-            buffer_sizes["receive"] = 0;
-        }
-
-        send_buffer_size = buffer_sizes["send"];
-        receive_buffer_size = buffer_sizes["receive"];
+        
     }
 
     void bind_object_data() override
@@ -204,8 +181,8 @@ PYBIND11_MODULE(multiverse_socket, handle)
 
     pybind11::class_<MultiverseSocket, MultiverseClient>(handle, "MultiverseSocket", pybind11::is_final())
         .def(pybind11::init<>())
-        .def("set_meta_data", &MultiverseSocket::set_meta_data)
-        .def("get_meta_data_response", &MultiverseSocket::get_meta_data_response)
+        .def("set_send_meta_data", &MultiverseSocket::set_send_meta_data)
+        .def("get_receive_meta_data", &MultiverseSocket::get_receive_meta_data)
         .def("set_send_data", &MultiverseSocket::set_send_data)
         .def("get_receive_data", &MultiverseSocket::get_receive_data);
 }

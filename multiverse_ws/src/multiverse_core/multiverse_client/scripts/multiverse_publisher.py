@@ -24,7 +24,7 @@ attribute_map = {
 }
 
 
-def set_meta_data_json() -> dict:
+def set_send_meta_data_json() -> dict:
     meta_data_json = {}
     meta_data_json["world"] = rospy.get_param(
         '~multiverse/world') if rospy.has_param('~multiverse/world') else "world"
@@ -47,7 +47,7 @@ def set_meta_data_json() -> dict:
 def start_publish_tf():
     multiverse_socket = MultiverseSocket()
 
-    meta_data_json = set_meta_data_json()
+    meta_data_json = set_send_meta_data_json()
     meta_data_json["receive"][""] = ["position", "quaternion"]
 
     host = rospy.get_param(
@@ -58,9 +58,9 @@ def start_publish_tf():
         '~multiverse/publish/tf/rate')) if rospy.has_param('~multiverse/publish/tf/rate') else 60
 
     multiverse_socket.init(host, port)
-    multiverse_socket.set_meta_data(meta_data_json)
+    multiverse_socket.set_send_meta_data(meta_data_json)
     multiverse_socket.connect()
-    meta_data_response = multiverse_socket.get_meta_data_response()
+    meta_data_response = multiverse_socket.get_receive_meta_data()
 
     object_name: str
     tf_broadcaster = tf2_ros.TransformBroadcaster()
