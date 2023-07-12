@@ -29,7 +29,7 @@ worlds = {}
 
 
 def get_receive_meta_data(send_meta_data_dict: dict):
-    multiverse_socket = MultiverseSocket()
+    multiverse_socket = MultiverseSocket(False)
     multiverse_socket.init(host, port)
     multiverse_socket.set_send_meta_data(send_meta_data_dict)
     multiverse_socket.connect()

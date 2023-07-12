@@ -192,6 +192,11 @@ void MultiverseClient::send_and_receive_meta_data()
         return;
     }
 
+    if (should_shut_down)
+    {
+        return;
+    }
+
     send_buffer_size = response_buffer_sizes["send"];
     receive_buffer_size = response_buffer_sizes["receive"];
 

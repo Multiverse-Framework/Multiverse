@@ -12,7 +12,7 @@ from multiverse_socket import MultiverseSocket  # noqa
 
 
 def start_publish_tf():
-    multiverse_socket = MultiverseSocket()
+    multiverse_socket = MultiverseSocket(True)
 
     send_meta_data_dict = set_send_meta_data_json()
     send_meta_data_dict["receive"][""] = ["position", "quaternion"]
@@ -74,8 +74,6 @@ def start_multiverse_publisher() -> None:
         thread = threading.Thread(target=start_publish_tf)
         thread.start()
         threads.append(thread)
-        
-    rospy.spin()
 
     for thread in threads:
         thread.join()
