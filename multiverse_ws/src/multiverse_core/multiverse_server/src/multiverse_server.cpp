@@ -394,10 +394,8 @@ private:
     {
         send_objects_json = send_meta_data_json["send"];
         std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &objects = worlds[world_name];
-        for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
+        for (const std::string &object_name : send_objects_json.getMemberNames())
         {
-            const std::string object_name = send_object_it.key().asString();
-
             if (objects.count(object_name) == 0)
             {
                 objects[object_name] = {};
@@ -405,7 +403,7 @@ private:
                 objects[object_name]["torque"] = {attribute_map["torque"].second, false};
             }
 
-            for (const Json::Value &attribute_json : *send_object_it)
+            for (const Json::Value &attribute_json : send_objects_json[object_name])
             {
                 const std::string attribute_name = attribute_json.asString();
                 if (objects[object_name].count(attribute_name) == 0)
@@ -453,7 +451,7 @@ private:
     void validate_receive_meta_data()
     {
         receive_objects_json = send_meta_data_json["receive"];
-        
+
         if (receive_objects_json.isMember("") &&
             std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
         {
@@ -463,7 +461,7 @@ private:
                 for (const std::pair<std::string, std::pair<std::vector<double>, bool>> &attribute : object.second)
                 {
                     if ((strcmp(attribute.first.c_str(), "force") != 0 && strcmp(attribute.first.c_str(), "torque") != 0 ||
-                             attribute.second.first.size() > 3))
+                         attribute.second.first.size() > 3))
                     {
                         receive_objects_json[object.first].append(attribute.first);
                     }
@@ -484,7 +482,7 @@ private:
                     {
                         continue;
                     }
-                    
+
                     receive_objects_json[object_name] = {};
                     for (const std::pair<std::string, std::pair<std::vector<double>, bool>> &attribute : worlds[world_name][object_name])
                     {
@@ -529,10 +527,9 @@ private:
         {
             found_all_objects = true;
             now = get_time_now();
-            for (auto receive_object_it = receive_objects_json.begin(); receive_object_it != receive_objects_json.end(); ++receive_object_it)
+            for (const std::string &object_name : receive_objects_json.getMemberNames())
             {
-                const std::string object_name = receive_object_it.key().asString();
-                for (const Json::Value &attribute_json : *receive_object_it)
+                for (const Json::Value &attribute_json : receive_objects_json[object_name])
                 {
                     const std::string attribute_name = attribute_json.asString();
                     if ((worlds[world_name].count(object_name) == 0 || worlds[world_name][object_name].count(attribute_name) == 0))
@@ -554,10 +551,9 @@ private:
 
     void bind_receive_objects()
     {
-        for (auto receive_object_it = receive_objects_json.begin(); receive_object_it != receive_objects_json.end(); ++receive_object_it)
+        for (const std::string &object_name : receive_objects_json.getMemberNames())
         {
-            const std::string object_name = receive_object_it.key().asString();
-            for (const Json::Value &attribute_json : *receive_object_it)
+            for (const Json::Value &attribute_json : receive_objects_json[object_name])
             {
                 const std::string attribute_name = attribute_json.asString();
 
@@ -620,20 +616,18 @@ private:
     {
         if (!is_receive_data_sent)
         {
-            for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
+            for (const std::string &object_name : send_objects_json.getMemberNames())
             {
-                const std::string object_name = send_object_it.key().asString();
-                for (const Json::Value &attribute_json : *send_object_it)
+                for (const Json::Value &attribute_json : send_objects_json[object_name])
                 {
                     const std::string attribute_name = attribute_json.asString();
                     worlds[world_name][object_name][attribute_name].second = true;
                 }
             }
 
-            for (auto receive_object_it = receive_objects_json.begin(); receive_object_it != receive_objects_json.end(); ++receive_object_it)
+            for (const std::string object_name : receive_objects_json.getMemberNames())
             {
-                const std::string object_name = receive_object_it.key().asString();
-                for (const Json::Value &attribute_json : *receive_object_it)
+                for (const Json::Value &attribute_json : receive_objects_json[object_name])
                 {
                     const std::string attribute_name = attribute_json.asString();
                     int start = get_time_now();
