@@ -108,7 +108,7 @@ catkin_python_setup()
 # # DEPENDS: system dependencies of this project that dependent projects also need
 set(pybind11_INCLUDE_DIRS ${PYBIND11_SOURCE_DIR}/include)
 catkin_package(
-  INCLUDE_DIRS include
+  INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/include
   LIBRARIES ${PROJECT_NAME}_lib
   CATKIN_DEPENDS multiverse_msgs roscpp rospy
 )
@@ -121,7 +121,7 @@ catkin_package(
 # # Your package locations should be listed before other locations
 include_directories(
   ${catkin_INCLUDE_DIRS}
-  ${PROJECT_SOURCE_DIR}/include/${PROJECT_NAME}/
+  ${PROJECT_SOURCE_DIR}/include/
 )
 
 # # Declare a C++ library
@@ -225,8 +225,6 @@ install(DIRECTORY include/${PROJECT_NAME}/
 
 # # Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
-
-catkin_package()
 
 pybind11_add_module(multiverse_socket src/${PROJECT_NAME}/multiverse_socket.cpp)
 target_link_libraries(multiverse_socket PRIVATE ${PROJECT_NAME}_lib)

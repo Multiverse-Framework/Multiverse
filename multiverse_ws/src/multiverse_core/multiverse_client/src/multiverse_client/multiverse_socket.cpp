@@ -18,7 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "multiverse_client.h"
+#include "multiverse_client/multiverse_client.h"
 
 #include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
