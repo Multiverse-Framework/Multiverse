@@ -24,7 +24,7 @@ add_subdirectory(${PYBIND11_SOURCE_DIR} build)
 # # Uncomment this if the package has a setup.py. This macro ensures
 # # modules and global scripts declared therein get installed
 # # See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 # ###############################################
 # # Declare ROS messages, services and actions ##
@@ -126,11 +126,11 @@ include_directories(
 
 # # Declare a C++ library
 add_library(${PROJECT_NAME}_lib
-  src/multiverse_client.cpp
+  src/${PROJECT_NAME}/multiverse_client.cpp
 )
 
 add_library(multiverse_socket_lib
-  src/multiverse_socket.cpp
+  src/${PROJECT_NAME}/multiverse_socket.cpp
 )
 
 # # Add cmake target dependencies of the library
@@ -226,5 +226,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 # # Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 
-pybind11_add_module(multiverse_socket src/multiverse_socket.cpp)
+catkin_package()
+
+pybind11_add_module(multiverse_socket src/${PROJECT_NAME}/multiverse_socket.cpp)
 target_link_libraries(multiverse_socket PRIVATE ${PROJECT_NAME}_lib)

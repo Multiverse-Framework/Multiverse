@@ -36,6 +36,7 @@
 build
 devel
 logs
+__pycache__
 
 # VSC
 .vscode
