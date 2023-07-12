@@ -122,6 +122,7 @@ catkin_package(
 include_directories(
   ${catkin_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/include/
+  ${pybind11_INCLUDE_DIRS}
 )
 
 # # Declare a C++ library
