@@ -29,7 +29,7 @@ public:
      * @brief Initialize the socket with host and port
      *
      */
-    void init(const std::string &in_host, const int in_port);
+    void init(const std::string &in_host, const std::string &in_port);
 
     /**
      * @brief Connect the socket
@@ -71,10 +71,10 @@ protected:
     virtual void start_meta_data_thread() = 0;
 
     /**
-     * @brief Stop send and receive meta data thread
+     * @brief Wait for send and receive meta data thread to finish
      *
      */
-    virtual void stop_meta_data_thread() = 0;
+    virtual void wait_for_meta_data_thread_finish() = 0;
 
     /**
      * @brief Initalize the objects from configuration
@@ -119,6 +119,10 @@ protected:
     virtual void bind_receive_data() = 0;
 
 protected:
+    std::string host;
+
+    std::string port;
+    
     size_t send_buffer_size = 1;
 
     size_t receive_buffer_size = 1;
@@ -132,10 +136,6 @@ protected:
     Json::Value meta_data_res_json;
 
 private:
-    std::string host;
-
-    int port;
-
     bool is_enabled = false;
 
     void *context;

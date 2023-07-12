@@ -36,7 +36,7 @@ std::map<std::string, size_t> attribute_map = {
     {"force", 3},
     {"torque", 3}};
 
-void MultiverseClient::init(const std::string &in_host, const int in_port)
+void MultiverseClient::init(const std::string &in_host, const std::string &in_port)
 {
     host = in_host;
     port = in_port;
@@ -49,9 +49,9 @@ void MultiverseClient::connect()
     context = zmq_ctx_new();
 
     socket_client = zmq_socket(context, ZMQ_REQ);
-    socket_addr = host + ":" + std::to_string(port);
+    socket_addr = host + ":" + port;
 
-    printf("Open the socket connection on %s\n", socket_addr.c_str());
+    printf("[Client %s] Open the socket connection on %s\n", port.c_str(), socket_addr.c_str());
     zmq_disconnect(socket_client, socket_addr.c_str());
     zmq_connect(socket_client, socket_addr.c_str());
     clean_up();
@@ -72,8 +72,8 @@ void MultiverseClient::communicate()
         if (*receive_buffer < 0)
         {
             is_enabled = false;
-            printf("The socket server at %s has been terminated, returning to resend the meta data.\n", socket_addr.c_str());
-            stop_meta_data_thread();
+            printf("[Client %s] The socket server at %s has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
+            wait_for_meta_data_thread_finish();
             zmq_disconnect(socket_client, socket_addr.c_str());
             zmq_connect(socket_client, socket_addr.c_str());
             start_meta_data_thread();
@@ -90,7 +90,7 @@ void MultiverseClient::disconnect()
 
     if (is_enabled)
     {
-        printf("Closing the socket client on %s.\n", socket_addr.c_str());
+        printf("[Client %s] Closing the socket client on %s.\n", port.c_str(), socket_addr.c_str());
         const std::string close_data = "{}";
 
         zmq_send(socket_client, close_data.c_str(), close_data.size(), 0);
@@ -107,7 +107,7 @@ void MultiverseClient::disconnect()
 
     zmq_ctx_shutdown(context);
 
-    stop_meta_data_thread();
+    wait_for_meta_data_thread_finish();
 }
 
 double MultiverseClient::get_time_now()
@@ -130,7 +130,7 @@ void MultiverseClient::send_and_receive_meta_data()
     }
 
     const std::string meta_data_str = meta_data_json.toStyledString();
-    printf("%s", meta_data_str.c_str());
+    printf("[Client %s] Send meta data:\n%s", port.c_str(), meta_data_str.c_str());
 
     zmq_msg_t response_message;
     zmq_msg_init(&response_message);
@@ -153,7 +153,7 @@ void MultiverseClient::send_and_receive_meta_data()
         if (response_message_str.empty() || !reader.parse(response_message_str, meta_data_res_json) || meta_data_res_json["time"].asDouble() < 0)
         {
             zmq_msg_init(&response_message);
-            printf("The socket server at %s has been terminated, resending the meta data\n", socket_addr.c_str());
+            printf("[Client %s] The socket server at %s has been terminated, resending the meta data\n", port.c_str(), socket_addr.c_str());
             zmq_disconnect(socket_client, socket_addr.c_str());
             zmq_connect(socket_client, socket_addr.c_str());
         }
@@ -179,10 +179,11 @@ void MultiverseClient::send_and_receive_meta_data()
     }
 
     if (!meta_data_json["receive"].isMember("") &&
-        std::find(meta_data_json["receive"].begin(), meta_data_json["receive"].end(), "") == meta_data_json["receive"].end() &&
+        std::find(meta_data_json["receive"].begin(), meta_data_json["receive"].end(), "") != meta_data_json["receive"].end() &&
         (response_buffer_sizes["send"] != request_buffer_sizes["send"] || response_buffer_sizes["receive"] != request_buffer_sizes["receive"]))
     {
-        printf("Failed to initialize the socket at %s: send_buffer_size(server = %ld, client = %ld), receive_buffer_size(server = %ld, client = %ld).\n",
+        printf("[Client %s] Failed to initialize the socket at %s: send_buffer_size(server = %ld, client = %ld), receive_buffer_size(server = %ld, client = %ld).\n",
+               port.c_str(),
                socket_addr.c_str(),
                response_buffer_sizes["send"],
                request_buffer_sizes["send"],
@@ -192,14 +193,20 @@ void MultiverseClient::send_and_receive_meta_data()
         return;
     }
 
+    if (should_shut_down)
+    {
+        return;
+    }
+
     send_buffer_size = response_buffer_sizes["send"];
     receive_buffer_size = response_buffer_sizes["receive"];
 
-    printf("Initialized the socket at %s successfully.\n", socket_addr.c_str());
-    printf("Start communication on %s (send: %ld, receive: %ld)\n", socket_addr.c_str(), send_buffer_size, receive_buffer_size);
+    printf("[Client %s] Initialized the socket at %s successfully.\n", port.c_str(), socket_addr.c_str());
+    printf("[Client %s] Start communication on %s (send: %ld, receive: %ld)\n", port.c_str(), socket_addr.c_str(), send_buffer_size, receive_buffer_size);
     send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
     receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
-    is_enabled = true;
-
+    
     bind_object_data();
+
+    is_enabled = true;
 }

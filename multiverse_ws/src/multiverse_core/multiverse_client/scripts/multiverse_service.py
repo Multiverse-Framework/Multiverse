@@ -23,13 +23,13 @@ attribute_map = {
 }
 
 host = "tcp://127.0.0.1"
-port = 7400
+port = "7400"
 
 worlds = {}
 
 
 def get_receive_meta_data(send_meta_data_dict: dict):
-    multiverse_socket = MultiverseSocket()
+    multiverse_socket = MultiverseSocket(False)
     multiverse_socket.init(host, port)
     multiverse_socket.set_send_meta_data(send_meta_data_dict)
     multiverse_socket.connect()
@@ -127,5 +127,5 @@ def start_multiverse_service() -> None:
 
 if __name__ == "__main__":
     if len(sys.argv) > 2 and sys.argv[1].isnumeric():
-        port = int(sys.argv[1])
+        port = str(sys.argv[1])
     start_multiverse_service()
