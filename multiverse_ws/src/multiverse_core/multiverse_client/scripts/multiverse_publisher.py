@@ -68,11 +68,17 @@ def start_multiverse_publisher() -> None:
     rospy.init_node('multiverse_publisher')
     if not rospy.has_param('~multiverse/publish/tf'):
         return
+    
+    threads = []
+    if rospy.has_param('~multiverse/publish/tf'):
+        thread = threading.Thread(target=start_publish_tf)
+        thread.start()
+        threads.append(thread)
+        
+    rospy.spin()
 
-    thread = threading.Thread(target=start_publish_tf)
-    thread.start()
-    thread.join()
-
+    for thread in threads:
+        thread.join()
 
 if __name__ == "__main__":
     start_multiverse_publisher()

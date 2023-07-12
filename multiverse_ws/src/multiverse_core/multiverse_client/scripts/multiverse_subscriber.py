@@ -3,7 +3,7 @@
 from multiverse_client.utils.multiverse_utils import set_send_meta_data_json
 import rospy
 import tf2_ros
-from geometry_msgs.msg import TransformStamped
+from geometry_msgs.msg import Twist
 import sys
 import threading
 import os
@@ -11,18 +11,22 @@ sys.path.append(os.path.dirname(os.path.dirname(sys.argv[0])))
 from multiverse_socket import MultiverseSocket  # noqa
 
 
-def start_publish_tf():
+def cmd_vel_callback(twist_msg: Twist) -> None:
     multiverse_socket = MultiverseSocket()
 
     send_meta_data_dict = set_send_meta_data_json()
-    send_meta_data_dict["receive"][""] = ["position", "quaternion"]
+
+    if not rospy.has_param('~multiverse/subscribe/cmd_vel/body'):
+        return
+
+    object_name = rospy.get_param('~multiverse/subscribe/cmd_vel/body')
+    send_meta_data_dict["send"][object_name] = ["relative_velocity"]
+    send_meta_data_dict["receive"] = {}
 
     host = rospy.get_param(
         '~multiverse/host') if rospy.has_param('~multiverse/host') else "tcp://127.0.0.1"
     port = int(rospy.get_param(
-        '~multiverse/publish/tf/port')) if rospy.has_param('~multiverse/publish/tf/port') else 7300
-    rate = int(rospy.get_param(
-        '~multiverse/publish/tf/rate')) if rospy.has_param('~multiverse/publish/tf/rate') else 60
+        '~multiverse/subscribe/cmd_vel/port')) if rospy.has_param('~multiverse/subscribe/cmd_vel/port') else 7200
 
     multiverse_socket.init(host, port)
     multiverse_socket.set_send_meta_data(send_meta_data_dict)
@@ -64,15 +68,47 @@ def start_publish_tf():
     multiverse_socket.disconnect()
 
 
-def start_multiverse_publisher() -> None:
-    rospy.init_node('multiverse_publisher')
-    if not rospy.has_param('~multiverse/publish/tf'):
+def start_subscribe_cmd_vel() -> None:
+    multiverse_socket = MultiverseSocket()
+
+    send_meta_data_dict = set_send_meta_data_json()
+
+    if not rospy.has_param('~multiverse/subscribe/cmd_vel/body'):
         return
 
-    thread = threading.Thread(target=start_publish_tf)
-    thread.start()
-    thread.join()
+    object_name = rospy.get_param('~multiverse/subscribe/cmd_vel/body')
+    send_meta_data_dict["send"][object_name] = ["relative_velocity"]
+    send_meta_data_dict["receive"] = {}
+
+    host = rospy.get_param(
+        '~multiverse/host') if rospy.has_param('~multiverse/host') else "tcp://127.0.0.1"
+    port = int(rospy.get_param(
+        '~multiverse/subscribe/cmd_vel/port')) if rospy.has_param('~multiverse/subscribe/cmd_vel/port') else 7200
+
+    multiverse_socket.init(host, port)
+    multiverse_socket.set_send_meta_data(send_meta_data_dict)
+    multiverse_socket.connect()
+    receive_meta_data_dict = multiverse_socket.get_receive_meta_data()
+
+
+def start_multiverse_subscriber() -> None:
+    rospy.init_node('multiverse_subscriber')
+    if not rospy.has_param('~multiverse/subscribe'):
+        return
+
+    threads = []
+
+    if rospy.has_param('~multiverse/subscribe/cmd_vel'):
+        rospy.Subscriber("chatter", Twist, cmd_vel_callback)
+        thread = threading.Thread(target=start_subscribe_cmd_vel)
+        thread.start()
+        threads.append(thread)
+
+    rospy.spin()
+
+    for thread in threads:
+        thread.join()
 
 
 if __name__ == "__main__":
-    start_multiverse_publisher()
+    start_multiverse_subscriber()
