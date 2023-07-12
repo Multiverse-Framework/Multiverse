@@ -18,11 +18,11 @@ def start_publish_tf():
     send_meta_data_dict["receive"][""] = ["position", "quaternion"]
 
     host = rospy.get_param(
-        '~multiverse/host') if rospy.has_param('~multiverse/host') else "tcp://127.0.0.1"
+        'multiverse/host') if rospy.has_param('multiverse/host') else "tcp://127.0.0.1"
     port = str(rospy.get_param(
-        '~multiverse/publish/tf/port')) if rospy.has_param('~multiverse/publish/tf/port') else "7300"
+        'multiverse/publish/tf/port')) if rospy.has_param('multiverse/publish/tf/port') else "7300"
     rate = int(rospy.get_param(
-        '~multiverse/publish/tf/rate')) if rospy.has_param('~multiverse/publish/tf/rate') else 60
+        'multiverse/publish/tf/rate')) if rospy.has_param('multiverse/publish/tf/rate') else 60
 
     multiverse_socket.init(host, port)
     multiverse_socket.set_send_meta_data(send_meta_data_dict)
@@ -73,11 +73,11 @@ def start_publish_tf():
 
 def start_multiverse_publisher() -> None:
     rospy.init_node('multiverse_publisher')
-    if not rospy.has_param('~multiverse/publish/tf'):
+    if not rospy.has_param('multiverse/publish/tf'):
         return
 
     threads = []
-    if rospy.has_param('~multiverse/publish/tf'):
+    if rospy.has_param('multiverse/publish/tf'):
         thread = threading.Thread(target=start_publish_tf)
         thread.start()
         threads.append(thread)
