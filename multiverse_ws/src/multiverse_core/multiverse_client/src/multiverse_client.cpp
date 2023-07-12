@@ -73,6 +73,8 @@ void MultiverseClient::communicate()
 
 void MultiverseClient::disconnect()
 {
+    should_shut_down = true;
+    
     if (is_enabled)
     {
         printf("Closing the socket client on %s.\n", socket_addr.c_str());

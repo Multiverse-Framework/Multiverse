@@ -63,9 +63,6 @@ public:
      */
     virtual double get_time_now();
 
-public:
-    bool should_shut_down = false;
-
 protected:
     /**
      * @brief Start send and receive meta data thread
@@ -146,4 +143,6 @@ private:
     void *socket_client;
 
     std::string socket_addr;
+
+    bool should_shut_down = false;
 };
