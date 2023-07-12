@@ -111,7 +111,7 @@ void MultiverseClient::send_and_receive_meta_data()
     std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
 
     Json::Reader reader;
-    do
+    while (!should_shut_down)
     {
         // Send JSON string over ZMQ
         zmq_send(socket_client, meta_data_str.c_str(), meta_data_str.size(), 0);
@@ -121,12 +121,9 @@ void MultiverseClient::send_and_receive_meta_data()
 
         std::string response_message_str(static_cast<char *>(zmq_msg_data(&response_message)), zmq_msg_size(&response_message));
 
-        if (response_message_str.empty() || !reader.parse(response_message_str, meta_data_res_json))
-        {
-            break;
-        }
-
-        if (meta_data_res_json["time"].asDouble() < 0)
+        double* buffer = static_cast<double*>(zmq_msg_data(&response_message));
+        
+        if (response_message_str.empty() || !reader.parse(response_message_str, meta_data_res_json) || meta_data_res_json["time"].asDouble() < 0)
         {
             zmq_msg_init(&response_message);
             printf("The socket server at %s has been terminated, resending the meta data\n", socket_addr.c_str());
@@ -152,7 +149,7 @@ void MultiverseClient::send_and_receive_meta_data()
 
             break;
         }
-    } while (is_enabled);
+    }
 
     if (!meta_data_json["receive"].isMember("") && (response_buffer_sizes["send"] != send_buffer_size || response_buffer_sizes["receive"] != receive_buffer_size))
     {

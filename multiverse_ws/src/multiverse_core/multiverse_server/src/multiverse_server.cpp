@@ -44,6 +44,18 @@ enum class EAttribute : unsigned char
     Torque
 };
 
+enum class EFlag : unsigned char
+{
+    RequestSendMetaData,
+    ConstructReceiveMetaData,
+    BindObjects,
+    ResponseReceiveMetaData,
+    RequestSendData,
+    BindSendData,
+    BindReceiveData,
+    ResponseReceiveData,
+};
+
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
     {
         {"position", {EAttribute::Position, {0.0, 0.0, 0.0}}},
@@ -124,12 +136,12 @@ public:
         socket_server = zmq::socket_t(context, zmq::socket_type::rep);
         socket_server.bind(socket_addr);
         sockets_need_clean_up[socket_addr] = false;
-        ROS_INFO("Bind server socket to address %s", socket_addr.c_str());
+        ROS_INFO("Bind server socket to %s", socket_addr.c_str());
     }
 
     ~MultiverseServer()
     {
-        ROS_INFO("Close server socket %s", socket_addr.c_str());
+        ROS_INFO("Close server socket at %s", socket_addr.c_str());
 
         if (send_buffer != nullptr)
         {
@@ -147,26 +159,154 @@ public:
 public:
     void start()
     {
-        std::vector<std::pair<std::vector<double>::iterator, double>> send_data_vec;
-        std::vector<std::pair<std::vector<double>::iterator, double>> receive_data_vec;
-        std::map<EAttribute, std::vector<double>> conversion_map;
-        bool is_received_data_sent;
-        bool continue_state = false;
+        while (!should_shut_down)
+        {
+            switch (flag)
+            {
+            case EFlag::RequestSendMetaData:
+                ROS_INFO("RequestSendMetaData");
+                request_send_meta_data();
+                message_str = message.to_string();
+                if (message_str[0] != '{' ||
+                    message_str[0] == '{' && message_str[1] == '}' ||
+                    message_str.empty() ||
+                    !reader.parse(message_str, send_meta_data_json))
+                {
+                    flag = EFlag::BindReceiveData;
+                }
+                else
+                {
+                    sockets_need_clean_up[socket_addr] = false;
+                    flag = EFlag::ConstructReceiveMetaData;
+                }
+                break;
 
-    request_meta_data:
+            case EFlag::ConstructReceiveMetaData:
+                ROS_INFO("ConstructReceiveMetaData");
+                construct_receive_meta_data();
+                flag = EFlag::BindObjects;
+                break;
+
+            case EFlag::BindObjects:
+                ROS_INFO("BindObjects");
+                mtx.lock();
+                bind_send_objects();
+                mtx.unlock();
+                ROS_INFO("validate_receive_meta_data");
+                validate_receive_meta_data();
+                ROS_INFO("wait_for_objects");
+                wait_for_objects();
+                ROS_INFO("bind_receive_objects");
+                mtx.lock();
+                bind_receive_objects();
+                mtx.unlock();
+
+                flag = EFlag::ResponseReceiveMetaData;
+
+            case EFlag::ResponseReceiveMetaData:
+                ROS_INFO("ResponseReceiveMetaData");
+                response_meta_data();
+                if (send_buffer_size == 1 && receive_buffer_size == 1)
+                {
+                    flag = EFlag::RequestSendMetaData;
+                }
+                else
+                {
+                    flag = EFlag::RequestSendData;
+                    sockets_need_clean_up[socket_addr] = true;
+                }
+                break;
+
+            case EFlag::RequestSendData:
+                ROS_INFO("RequestSendData");
+                request_send_data();
+                if (message.to_string()[0] == '{')
+                {
+                    message_str = message.to_string();
+                    if (message_str[1] == '}')
+                    {
+                        send_data_vec.clear();
+                        receive_data_vec.clear();
+                        flag = EFlag::ResponseReceiveMetaData;
+                    }
+                    else if (reader.parse(message_str, send_meta_data_json) && !send_meta_data_json.empty())
+                    {
+                        send_data_vec.clear();
+                        receive_data_vec.clear();
+                        flag = EFlag::ConstructReceiveMetaData;
+                    }
+                    else if (isnan(send_buffer[0]))
+                    {
+                        ROS_WARN("Received %s from %s", message_str.c_str(), socket_addr.c_str());
+                        flag = EFlag::BindReceiveData;
+                    }
+                    else
+                    {
+                        flag = EFlag::BindSendData;
+                    }
+                }
+                else
+                {
+                    flag = EFlag::BindSendData;
+                }
+                break;
+
+            case EFlag::BindSendData:
+                ROS_INFO("BindSendData");
+                mtx.lock();
+                for (size_t i = 0; i < send_buffer_size - 1; i++)
+                {
+                    *send_data_vec[i].first = send_buffer[i + 1] * send_data_vec[i].second;
+                }
+                mtx.unlock();
+                flag = EFlag::BindReceiveData;
+                break;
+
+            case EFlag::BindReceiveData:
+                ROS_INFO("BindReceiveData");
+                wait_for_receive_data();
+
+                compute_cumulative_data();
+
+                for (size_t i = 0; i < receive_buffer_size - 1; i++)
+                {
+                    receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
+                }
+                flag = EFlag::ResponseReceiveData;
+
+            case EFlag::ResponseReceiveData:
+                ROS_INFO("ResponseReceiveData");
+                response_receive_data();
+                flag = EFlag::RequestSendData;
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        if (sockets_need_clean_up[socket_addr])
+        {
+            if (flag != EFlag::RequestSendData && flag != EFlag::RequestSendMetaData)
+            {
+                response_receive_data();
+            }
+
+            ROS_INFO("Unbind server socket from %s", socket_addr.c_str());
+            socket_server.unbind(socket_addr);
+        }
+    }
+
+private:
+    void request_send_meta_data()
+    {
         send_buffer_size = 1;
         receive_buffer_size = 1;
 
         send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
         receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
 
-        if (should_shut_down)
-        {
-            sockets_need_clean_up[socket_addr] = false;
-            return;
-        }
-
-        is_received_data_sent = false;
+        is_receive_data_sent = false;
 
         // Receive JSON string over ZMQ
         try
@@ -177,35 +317,21 @@ public:
         }
         catch (const zmq::error_t &e)
         {
+            should_shut_down = true;
             ROS_INFO("%s, server socket %s prepares to close", e.what(), socket_addr.c_str());
-            return;
         }
+    }
 
-        Json::Reader reader;
-        const std::string message_str = message.to_string();
-        if (message_str[0] != '{' ||
-            message_str[0] == '{' && message_str[1] == '}' ||
-            message_str.empty() ||
-            !reader.parse(message_str, meta_data_json))
-        {
-            receive_buffer[0] = get_time_now();
+    void construct_receive_meta_data()
+    {
+        ROS_INFO("%s", send_meta_data_json.toStyledString().c_str());
 
-            zmq::message_t response_message;
-            memcpy(response_message.data(), receive_buffer, receive_buffer_size * sizeof(double));
-            socket_server.send(response_message, zmq::send_flags::none);
-
-            goto request_meta_data;
-        }
-
-    bind_objects:
-        ROS_INFO("%s", meta_data_json.toStyledString().c_str());
-
-        const std::string world = meta_data_json["world"].asString();
-        const std::string length_unit = meta_data_json["length_unit"].asString();
-        const std::string angle_unit = meta_data_json["angle_unit"].asString();
-        const std::string handedness = meta_data_json["handedness"].asString();
-        const std::string force_unit = meta_data_json["force_unit"].asString();
-        const std::string time_unit = meta_data_json["time_unit"].asString();
+        const std::string world = send_meta_data_json["world"].asString();
+        const std::string length_unit = send_meta_data_json["length_unit"].asString();
+        const std::string angle_unit = send_meta_data_json["angle_unit"].asString();
+        const std::string handedness = send_meta_data_json["handedness"].asString();
+        const std::string force_unit = send_meta_data_json["force_unit"].asString();
+        const std::string time_unit = send_meta_data_json["time_unit"].asString();
 
         for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
         {
@@ -263,19 +389,21 @@ public:
             }
         }
 
-        Json::Value response_json;
-        response_json["time"] = get_time_now() * unit_scale[time_unit];
-        response_json["angle_unit"] = angle_unit;
-        response_json["force_unit"] = force_unit;
-        response_json["time_unit"] = time_unit;
-        response_json["handedness"] = handedness;
+        receive_meta_data_json.clear();
+        receive_meta_data_json["time"] = get_time_now() * unit_scale[time_unit];
+        receive_meta_data_json["angle_unit"] = angle_unit;
+        receive_meta_data_json["force_unit"] = force_unit;
+        receive_meta_data_json["time_unit"] = time_unit;
+        receive_meta_data_json["handedness"] = handedness;
+    }
 
-        const Json::Value send_objects_json = meta_data_json["send"];
+    void bind_send_objects()
+    {
+        send_objects_json = send_meta_data_json["send"];
         for (auto send_object_it = send_objects_json.begin(); send_object_it != send_objects_json.end(); ++send_object_it)
         {
             const std::string object_name = send_object_it.key().asString();
 
-            mtx.lock();
             if (objects.count(object_name) == 0)
             {
                 objects[object_name] = {};
@@ -295,7 +423,7 @@ public:
                         double *data = &objects[object_name][attribute_name].first[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
-                        response_json["send"][object_name][attribute_name].append(std::numeric_limits<double>::quiet_NaN());
+                        receive_meta_data_json["send"][object_name][attribute_name].append(std::numeric_limits<double>::quiet_NaN());
                     }
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
@@ -307,7 +435,7 @@ public:
                         double *data = &send_efforts[object_name][socket_addr][attribute_name][i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
-                        response_json["send"][object_name][attribute_name].append(*data * conversion);
+                        receive_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
                     }
                 }
                 else
@@ -321,15 +449,17 @@ public:
                         double *data = &objects[object_name][attribute_name].first[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
-                        response_json["send"][object_name][attribute_name].append(*data * conversion);
+                        receive_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
                     }
                 }
             }
-            mtx.unlock();
         }
+    }
 
-        Json::Value receive_objects_json_tmp = meta_data_json["receive"];
-        for (auto receive_object_it = meta_data_json["receive"].begin(); receive_object_it != meta_data_json["receive"].end(); ++receive_object_it)
+    void validate_receive_meta_data()
+    {
+        receive_objects_json = send_meta_data_json["receive"];
+        for (auto receive_object_it = send_meta_data_json["receive"].begin(); receive_object_it != send_meta_data_json["receive"].end(); ++receive_object_it)
         {
             const std::string object_name = receive_object_it.key().asString();
             if (!object_name.empty())
@@ -345,55 +475,75 @@ public:
                         (strcmp(attribute_name.c_str(), "force") != 0 && strcmp(attribute_name.c_str(), "torque") != 0 ||
                          object.second.at(attribute_name).first.size() > 3))
                     {
-                        receive_objects_json_tmp[object.first].append(attribute_name);
+                        receive_objects_json[object.first].append(attribute_name);
                     }
                 }
             }
-            receive_objects_json_tmp.removeMember("");
+            receive_objects_json.removeMember("");
         }
-        const Json::Value receive_objects_json = receive_objects_json_tmp;
+    }
 
+    void wait_for_objects()
+    {
+        int start = get_time_now();
+        int now = get_time_now();
+        bool found_all_objects = true;
+        do 
+        {
+            found_all_objects = true;
+            now = get_time_now();
+            for (auto receive_object_it = receive_objects_json.begin(); receive_object_it != receive_objects_json.end(); ++receive_object_it)
+            {
+                const std::string object_name = receive_object_it.key().asString();
+                for (const Json::Value &attribute_json : *receive_object_it)
+                {
+                    const std::string attribute_name = attribute_json.asString();
+                    if ((objects.count(object_name) == 0 || objects[object_name].count(attribute_name) == 0))
+                    {
+                        found_all_objects = false;
+                        if (now - start > 1)
+                        {
+                            ROS_INFO("[Socket %s]: Waiting for [%s][%s] to be declared", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
+                        }
+                    }
+                }
+            }
+            if (now - start > 1)
+            {
+                start = now;
+            }
+        } while (!should_shut_down && !found_all_objects);
+    }
+
+    void bind_receive_objects()
+    {
         for (auto receive_object_it = receive_objects_json.begin(); receive_object_it != receive_objects_json.end(); ++receive_object_it)
         {
             const std::string object_name = receive_object_it.key().asString();
             for (const Json::Value &attribute_json : *receive_object_it)
             {
                 const std::string attribute_name = attribute_json.asString();
-                int start = get_time_now();
-                while ((objects.count(object_name) == 0 || objects[object_name].count(attribute_name) == 0) && !should_shut_down)
-                {
-                    const int now = get_time_now();
-                    if (now - start > 1)
-                    {
-                        ROS_INFO("[Socket %s]: Waiting for [%s][%s] to be declared", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
-                        start = now;
-                    }
-                }
-            }
 
-            for (const Json::Value &attribute_json : *receive_object_it)
-            {
-                const std::string attribute_name = attribute_json.asString();
-                mtx.lock();
                 const size_t data_size = (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0) ? 3 : objects[object_name][attribute_name].first.size();
                 for (size_t i = 0; i < data_size; i++)
                 {
                     double *data = &objects[object_name][attribute_name].first[i];
                     const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
                     receive_data_vec.emplace_back(data, conversion);
-                    response_json["receive"][object_name][attribute_name].append(*data * conversion);
+                    receive_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
                 }
-                mtx.unlock();
             }
         }
+    }
 
-    send_meta_data_response:
+    void response_meta_data()
+    {
         send_buffer_size = 1 + send_data_vec.size();
         receive_buffer_size = 1 + receive_data_vec.size();
 
         if (should_shut_down)
         {
-            response_json["time"] = -1.0;
+            receive_meta_data_json["time"] = -1.0;
         }
 
         if (continue_state)
@@ -401,144 +551,128 @@ public:
             continue_state = false;
         }
 
-        const std::string response_str = response_json.toStyledString();
+        const std::string message_str = receive_meta_data_json.toStyledString();
 
         // Send buffer sizes and send_data (if exists) over ZMQ
-        zmq::message_t response_message(response_str.size());
-        memcpy(response_message.data(), response_str.data(), response_str.size());
+        zmq::message_t response_message(message_str.size());
+        memcpy(response_message.data(), message_str.data(), message_str.size());
         socket_server.send(response_message, zmq::send_flags::none);
-
-        if (send_buffer_size == 1 && receive_buffer_size == 1)
-        {
-            goto request_meta_data;
-        }
 
         send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
         receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
+    }
 
-        sockets_need_clean_up[socket_addr] = true;
-
-    communicate:
-        while (!should_shut_down)
+    void request_send_data()
+    {
+        // Receive send_data over ZMQ
+        try
         {
-            // Receive send_data over ZMQ
-            try
-            {
-                socket_server.recv(message, zmq::recv_flags::none);
-                memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
-            }
-            catch (const zmq::error_t &e)
-            {
-                ROS_INFO("%s, server socket %s prepares to close", e.what(), socket_addr.c_str());
-            }
-
-            if (message.to_string()[0] == '{')
-            {
-                const std::string request_data_str = message.to_string();
-                if (request_data_str[1] == '}')
-                {
-                    send_data_vec.clear();
-                    receive_data_vec.clear();
-                    goto send_meta_data_response;
-                }
-                else if (reader.parse(request_data_str, meta_data_json) && !meta_data_json.empty())
-                {
-                    send_data_vec.clear();
-                    receive_data_vec.clear();
-                    goto bind_objects;
-                }
-                else if (isnan(send_buffer[0]))
-                {
-                    ROS_WARN("Received %s from %s", request_data_str.c_str(), socket_addr.c_str());
-                }
-            }
-
-            mtx.lock();
-            for (size_t i = 0; i < send_buffer_size - 1; i++)
-            {
-                *send_data_vec[i].first = send_buffer[i + 1] * send_data_vec[i].second;
-            }
-            mtx.unlock();
-
-            if (!is_received_data_sent)
-            {
-                int start = get_time_now();
-                for (auto it = send_objects_json.begin(); it != send_objects_json.end(); ++it)
-                {
-                    const std::string object_name = it.key().asString();
-                    for (const Json::Value &attribute_json : *it)
-                    {
-                        const std::string attribute_name = attribute_json.asString();
-                        objects[object_name][attribute_name].second = true;
-                    }
-                }
-
-                for (auto it = receive_objects_json.begin(); it != receive_objects_json.end(); ++it)
-                {
-                    const std::string object_name = it.key().asString();
-                    for (const Json::Value &attribute_json : *it)
-                    {
-                        const std::string attribute_name = attribute_json.asString();
-                        int start = get_time_now();
-                        while ((objects.count(object_name) == 0 || objects[object_name].count(attribute_name) == 0 || !objects[object_name][attribute_name].second) && !should_shut_down)
-                        {
-                            const int now = get_time_now();
-                            if (now - start > 1)
-                            {
-                                ROS_INFO("[Socket %s]: Waiting for data of [%s][%s] to be sent", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
-                                start = now;
-                            }
-                        }
-                    }
-                }
-
-                is_received_data_sent = true;
-            }
-            receive_buffer[0] = should_shut_down ? -1.0 : get_time_now();
-
-            mtx.lock();
-            for (std::pair<const std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : objects)
-            {
-                for (const std::string &effort : {"force", "torque"})
-                {
-                    for (size_t i = 0; i < 3; i++)
-                    {
-                        for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &data : send_efforts[object.first])
-                        {
-                            object.second[effort].first[i] = data.second[effort][i];
-                        }
-                    }
-                }
-            }
-            mtx.unlock();
-
-            for (size_t i = 0; i < receive_buffer_size - 1; i++)
-            {
-                receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
-            }
-
-            // Send receive_data over ZMQ
-            zmq::message_t reply_data(receive_buffer_size * sizeof(double));
-            memcpy(reply_data.data(), receive_buffer, receive_buffer_size * sizeof(double));
-            socket_server.send(reply_data, zmq::send_flags::none);
-
-            if (should_shut_down)
-            {
-                socket_server.unbind(socket_addr);
-                ROS_INFO("Unbind server socket from address %s", socket_addr.c_str());
-                return;
-            }
+            sockets_need_clean_up[socket_addr] = false;
+            socket_server.recv(message, zmq::recv_flags::none);
+            sockets_need_clean_up[socket_addr] = true;
+            memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
+        }
+        catch (const zmq::error_t &e)
+        {
+            should_shut_down = true;
+            ROS_INFO("%s, server socket %s prepares to close", e.what(), socket_addr.c_str());
         }
     }
 
+    void wait_for_receive_data()
+    {
+        if (!is_receive_data_sent)
+        {
+            int start = get_time_now();
+            for (auto it = send_objects_json.begin(); it != send_objects_json.end(); ++it)
+            {
+                const std::string object_name = it.key().asString();
+                for (const Json::Value &attribute_json : *it)
+                {
+                    const std::string attribute_name = attribute_json.asString();
+                    objects[object_name][attribute_name].second = true;
+                }
+            }
+
+            for (auto it = receive_objects_json.begin(); it != receive_objects_json.end(); ++it)
+            {
+                const std::string object_name = it.key().asString();
+                for (const Json::Value &attribute_json : *it)
+                {
+                    const std::string attribute_name = attribute_json.asString();
+                    int start = get_time_now();
+                    while ((objects.count(object_name) == 0 || objects[object_name].count(attribute_name) == 0 || !objects[object_name][attribute_name].second) && !should_shut_down)
+                    {
+                        const int now = get_time_now();
+                        if (now - start > 1)
+                        {
+                            ROS_INFO("[Socket %s]: Waiting for data of [%s][%s] to be sent", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
+                            start = now;
+                        }
+                    }
+                }
+            }
+
+            is_receive_data_sent = true;
+        }
+    }
+
+    void compute_cumulative_data()
+    {
+        mtx.lock();
+        for (const std::string &object_name : receive_objects_json.getMemberNames())
+        {
+            for (const std::string &effort : {"force", "torque"})
+            {
+                if (std::find(receive_objects_json.begin(), receive_objects_json.end(), effort) == receive_objects_json.end())
+                {
+                    continue;
+                }
+
+                for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &send_effort : send_efforts[object_name])
+                {
+                    for (size_t i = 0; i < 3; i++)
+                    {
+                        for (size_t j = 3; j < send_effort.second[effort].size() / 3; j += 3)
+                        {
+                            send_effort.second[effort][i] += send_effort.second[effort][j];
+                        }
+
+                        objects[object_name][effort].first[i] = send_effort.second[effort][i];
+                    }
+                }
+            }
+        }
+        mtx.unlock();
+    }
+
+    void response_receive_data()
+    {
+        // Send receive_data over ZMQ
+        receive_buffer[0] = should_shut_down ? -1.0 : get_time_now();
+        zmq::message_t reply_data(receive_buffer_size * sizeof(double));
+        memcpy(reply_data.data(), receive_buffer, receive_buffer_size * sizeof(double));
+        socket_server.send(reply_data, zmq::send_flags::none);
+    }
+
 private:
+    EFlag flag = EFlag::RequestSendMetaData;
+
     zmq::message_t message;
+
+    std::string message_str;
 
     std::string socket_addr;
 
     zmq::socket_t socket_server;
 
-    Json::Value meta_data_json;
+    Json::Value send_meta_data_json;
+
+    Json::Value send_objects_json;
+
+    Json::Value receive_meta_data_json;
+
+    Json::Value receive_objects_json;
 
     size_t send_buffer_size = 1;
 
@@ -547,6 +681,18 @@ private:
     double *send_buffer;
 
     double *receive_buffer;
+
+    std::vector<std::pair<std::vector<double>::iterator, double>> send_data_vec;
+
+    std::vector<std::pair<std::vector<double>::iterator, double>> receive_data_vec;
+
+    std::map<EAttribute, std::vector<double>> conversion_map;
+
+    Json::Reader reader;
+
+    bool is_receive_data_sent;
+
+    bool continue_state = false;
 };
 
 void start_multiverse_server(int port)
@@ -561,7 +707,6 @@ int main(int argc, char **argv)
     signal(SIGINT, [](int signum)
            {
         ROS_INFO("Interrupt signal (%d) received, wait for 1s then shutdown.", signum);
-        zmq_sleep(1);
         should_shut_down = true; });
 
     ros::init(argc, argv, "state_server");
@@ -588,6 +733,8 @@ int main(int argc, char **argv)
             }
         }
     } while (!can_shut_down);
+
+    zmq_sleep(1);
 
     context.shutdown();
 

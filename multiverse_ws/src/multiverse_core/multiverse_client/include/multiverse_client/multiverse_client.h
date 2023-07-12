@@ -49,19 +49,6 @@ public:
      */
     void disconnect();
 
-protected:
-    size_t send_buffer_size = 1;
-
-    size_t receive_buffer_size = 1;
-
-    double *send_buffer;
-
-    double *receive_buffer;
-
-    Json::Value meta_data_json;
-
-    Json::Value meta_data_res_json;
-
 public:
     /**
      * @brief Send the meta data and receive the response from server
@@ -75,6 +62,9 @@ public:
      * @return double
      */
     virtual double get_time_now();
+
+public:
+    bool should_shut_down = false;
 
 protected:
     /**
@@ -130,6 +120,19 @@ protected:
      *
      */
     virtual void bind_receive_data() = 0;
+
+protected:
+    size_t send_buffer_size = 1;
+
+    size_t receive_buffer_size = 1;
+
+    double *send_buffer;
+
+    double *receive_buffer;
+
+    Json::Value meta_data_json;
+
+    Json::Value meta_data_res_json;
 
 private:
     std::string host;
