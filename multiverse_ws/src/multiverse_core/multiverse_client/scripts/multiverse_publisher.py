@@ -66,6 +66,7 @@ def start_publish_tf():
 
 def start_multiverse_publisher() -> None:
     rospy.init_node('multiverse_publisher')
+
     if not rospy.has_param('~multiverse/publish/tf'):
         return
     

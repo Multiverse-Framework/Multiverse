@@ -1,6 +1,6 @@
 <launch>
 
-    <arg name="config" default="$(find multiverse_client)/config/multiverse_socket.yaml" />
+    <arg name="config" default="$(find multiverse_client)/config/multiverse_params.yaml" />
 
     <node pkg="multiverse_client" type="multiverse_service.py" name="multiverse_service"
         output="screen" args="7400" />
