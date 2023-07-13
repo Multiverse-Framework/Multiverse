@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 import rospy
-from typing import List, Dict
+from typing import List
 from tf2_ros import TransformBroadcaster
-from geometry_msgs.msg import TransformStamped, Transform
+from geometry_msgs.msg import TransformStamped
 from .ros_publisher import MultiverseRosPublisher
-
+import numpy
 
 class tf_publisher(MultiverseRosPublisher):
     def __init__(self, **kwargs) -> None:
@@ -36,10 +36,12 @@ class tf_publisher(MultiverseRosPublisher):
             self.__tf_msgs[i].transform.translation.x = receive_data[7 * i + 1]
             self.__tf_msgs[i].transform.translation.y = receive_data[7 * i + 2]
             self.__tf_msgs[i].transform.translation.z = receive_data[7 * i + 3]
-            self.__tf_msgs[i].transform.rotation.w = receive_data[7 * i + 4]
-            self.__tf_msgs[i].transform.rotation.x = receive_data[7 * i + 5]
-            self.__tf_msgs[i].transform.rotation.y = receive_data[7 * i + 6]
-            self.__tf_msgs[i].transform.rotation.z = receive_data[7 * i + 7]
+            quat = numpy.array([receive_data[7 * i + 4], receive_data[7 * i + 5], receive_data[7 * i + 6], receive_data[7 * i + 7]])
+            quat = quat / numpy.linalg.norm(quat)
+            self.__tf_msgs[i].transform.rotation.w = quat[0]
+            self.__tf_msgs[i].transform.rotation.x = quat[1]
+            self.__tf_msgs[i].transform.rotation.y = quat[2]
+            self.__tf_msgs[i].transform.rotation.z = quat[3]
 
     def _publish(self) -> None:
         self.__tf_broadcaster.sendTransform(self.__tf_msgs)
