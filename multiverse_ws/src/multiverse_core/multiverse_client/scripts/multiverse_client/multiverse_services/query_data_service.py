@@ -8,19 +8,19 @@ import rospy
 
 
 class query_data_service(MultiverseRosServiceServer):
-    def __init__(self, host: str, port: str, **kwargs) -> None:
-        super().__init__(host, port)
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
         self._service_name = "/multiverse/query_data"
         self._service_class = Socket
         self.__worlds = {}
 
     def update_world(self) -> None:
         self._init_send_meta_data()
-        self._send_meta_data_dict["receive"][""] = [""]
+        self._send_meta_data_dict["receive"][""] = ["position", "quaternion"]
         self._init_multiverse_socket()
-        self._assign_send_meta_data()
+        self._set_send_meta_data()
         self._connect()
-        if self._retrieve_receive_meta_data():
+        if self._get_receive_meta_data():
             world_name = self._receive_meta_data_dict["world"]
             self.__worlds[world_name] = {}
             self.__worlds[world_name][""] = {""}

@@ -14,9 +14,9 @@ class MultiverseRosBase:
     _send_meta_data_dict = {}
     _receive_meta_data_dict = {}
 
-    def __init__(self, host: str, port: str, **kwargs) -> None:
-        self.host = host
-        self.port = port
+    def __init__(self, **kwargs) -> None:
+        self.host = kwargs.get('host', 'tcp://127.0.0.1')
+        self.port = str(kwargs.get('port'))
         self.use_thread = True
         self._init_send_meta_data()
 
@@ -31,12 +31,13 @@ class MultiverseRosBase:
         self._send_meta_data_dict = constuct_send_meta_data_dict()
 
     def _connect(self) -> None:
+        rospy.logwarn("HEREHERE")
         self.__multiverse_socket.connect()
 
-    def _assign_send_meta_data(self):
+    def _set_send_meta_data(self):
         self.__multiverse_socket.set_send_meta_data(self._send_meta_data_dict)
 
-    def _retrieve_receive_meta_data(self, time_out=1) -> bool:
+    def _get_receive_meta_data(self, time_out=1) -> bool:
         start = rospy.Time.now()
         while not rospy.is_shutdown():
             self._receive_meta_data_dict = self.__multiverse_socket.get_receive_meta_data()
@@ -46,11 +47,11 @@ class MultiverseRosBase:
                 return False
         return False
 
-    def _send_data(self, send_data: List[float]) -> None:
+    def _set_send_data(self, send_data: List[float]) -> None:
         self.__multiverse_socket.set_send_data(send_data)
         self.__multiverse_socket.communicate()
 
-    def _receive_data(self) -> List[float]:
+    def _get_receive_data(self) -> List[float]:
         return self.__multiverse_socket.get_receive_data()
 
     def _disconnect(self) -> None:

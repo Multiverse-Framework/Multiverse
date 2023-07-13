@@ -9,8 +9,8 @@ class MultiverseRosServiceServer(MultiverseRosBase):
     _service_name = ""
     _service_class = None
 
-    def __init__(self, host: str, port: str, **kwargs) -> None:
-        super().__init__(host, port)
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
         self.use_thread = False
 
     def start(self) -> None:
@@ -21,9 +21,9 @@ class MultiverseRosServiceServer(MultiverseRosBase):
     def _service_handle(self, request) -> Any:
         self._bind_send_meta_data(request)
         self._init_multiverse_socket()
-        self._assign_send_meta_data()
+        self._set_send_meta_data()
         self._connect()
-        self._retrieve_receive_meta_data()
+        self._get_receive_meta_data()
         self._disconnect()
         return self._bind_response()
 
