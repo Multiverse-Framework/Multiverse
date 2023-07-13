@@ -31,7 +31,6 @@ class MultiverseRosBase:
         self._send_meta_data_dict = constuct_send_meta_data_dict()
 
     def _connect(self) -> None:
-        rospy.logwarn("HEREHERE")
         self.__multiverse_socket.connect()
 
     def _set_send_meta_data(self):

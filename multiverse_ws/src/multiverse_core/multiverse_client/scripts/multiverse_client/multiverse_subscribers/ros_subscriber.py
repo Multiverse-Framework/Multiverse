@@ -23,7 +23,7 @@ class MultiverseRosSubscriber(MultiverseRosBase):
         self._get_receive_meta_data()
         self._init_send_data()
         self._set_send_data(self._send_data)
-        self.receive_data = self._get_receive_data()
+        self._receive_data = self._get_receive_data()
         rospy.Subscriber(self._topic_name, self._data_class, self._subscriber_callback)
         rospy.loginfo(f"Start subscriber {self._topic_name}")
         rospy.spin()
@@ -33,6 +33,7 @@ class MultiverseRosSubscriber(MultiverseRosBase):
         self._bind_send_data(data)
         self._set_send_data(self._send_data)
         self._receive_data = self._get_receive_data()
+
 
     def _init_send_data(self) -> None:
         pass

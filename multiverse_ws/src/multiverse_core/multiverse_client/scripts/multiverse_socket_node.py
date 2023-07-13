@@ -12,6 +12,18 @@ class MultiverseRosSocket:
         self.threads = {}
 
     def start(self):
+        subscribers = rospy.get_param("multiverse/subscribers", default={})
+        for subscriber_name, subscriber_prop in subscribers.items():
+            subscriber_name += "_subscriber"
+            exec(f"from multiverse_client.multiverse_subscribers.{subscriber_name} import {subscriber_name}")
+
+            subscriber = eval(subscriber_name)(**subscriber_prop)
+            self.subscribers.append(subscriber)
+
+            subscriber_thread = threading.Thread(target=subscriber.start)
+            subscriber_thread.start()
+            self.threads[subscriber] = subscriber_thread
+            
         publishers = rospy.get_param("multiverse/publishers", default={})
         for publisher_name, publisher_prop in publishers.items():
             if publisher_prop.get('port') is None:
@@ -27,18 +39,6 @@ class MultiverseRosSocket:
             publisher_thread.start()
             self.threads[publisher] = publisher_thread
 
-        subscribers = rospy.get_param("multiverse/subscribers", default={})
-        for subscriber_name, subscriber_prop in subscribers.items():
-            subscriber_name += "_subscriber"
-            exec(f"from multiverse_client.multiverse_subscribers.{subscriber_name} import {subscriber_name}")
-
-            subscriber = eval(subscriber_name)(**subscriber_prop)
-            self.subscribers.append(subscriber)
-
-            subscriber_thread = threading.Thread(target=subscriber.start)
-            subscriber_thread.start()
-            self.threads[subscriber] = subscriber_thread
-
         services = rospy.get_param("multiverse/services", default={})
         for service_name, service_prop in services.items():
             service_name += "_service"
@@ -50,6 +50,9 @@ class MultiverseRosSocket:
             service_thread = threading.Thread(target=service.start)
             service_thread.start()
             self.threads[service] = service_thread
+
+        for subscriber in self.subscribers:
+            self.threads[subscriber].join()
 
         for publisher in self.publishers:
             self.threads[publisher].join()
