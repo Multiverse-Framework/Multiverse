@@ -64,6 +64,11 @@ public:
     {
         pybind11::dict meta_data_res_dict;
 
+        if (!is_enable())
+        {
+            return meta_data_res_dict;
+        }
+
         meta_data_res_dict["world"] = meta_data_res_json["world"].asString();
         meta_data_res_dict["length_unit"] = meta_data_res_json["length_unit"].asString();
         meta_data_res_dict["angle_unit"] = meta_data_res_json["angle_unit"].asString();
