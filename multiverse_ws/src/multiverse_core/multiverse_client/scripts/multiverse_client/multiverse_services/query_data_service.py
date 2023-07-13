@@ -1,23 +1,9 @@
 #!/usr/bin/env python3
 
-import rospy
-from typing import List, Any
+from typing import Any
 from .ros_service_server import MultiverseRosServiceServer
 from multiverse_msgs.msg import ObjectAttribute, ObjectData
 from multiverse_msgs.srv import Socket, SocketRequest, SocketResponse
-
-attribute_map = {
-    "": [],
-    "position":  [0.0, 0.0, 0.0],
-    "quaternion":  [1.0, 0.0, 0.0, 0.0],
-    "relative_velocity":  [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-    "joint_rvalue":  [0.0],
-    "joint_tvalue":  [0.0],
-    "joint_position":  [0.0, 0.0, 0.0],
-    "joint_quaternion":  [1.0, 0.0, 0.0, 0.0],
-    "force":  [0.0, 0.0, 0.0],
-    "torque":  [0.0, 0.0, 0.0]
-}
 
 
 class query_data_service(MultiverseRosServiceServer):
@@ -28,10 +14,12 @@ class query_data_service(MultiverseRosServiceServer):
         self.__worlds = {}
 
     def update_world(self) -> None:
-        self._init_send_meta_data()
         self._send_meta_data_dict["receive"][""] = [""]
+
         self._assign_send_meta_data()
+
         self._connect()
+
         if self._retrieve_receive_meta_data():
             world_name = self._receive_meta_data_dict["world"]
             self.__worlds[world_name] = {}
@@ -42,9 +30,9 @@ class query_data_service(MultiverseRosServiceServer):
                     self.__worlds[world_name][""].append(attribute_name)
                     self.__worlds[world_name][object_name].append(attribute_name)
                     self.__worlds[world_name][object_name].append("")
-        self._disconnect()
+                
 
-    def _bind_send_meta_data(self, request) -> None:
+    def _bind_send_meta_data(self, request: SocketRequest) -> None:
         self._send_meta_data_dict = {}
         world_name = "world" if request.world == "" else request.world
 
@@ -68,8 +56,7 @@ class query_data_service(MultiverseRosServiceServer):
                 if self.__worlds[world_name].get(object_attribute.object_name) is None:
                     world_need_update = True
                     break
-                self._send_meta_data_dict["receive"][object_attribute.object_name] = [
-                ]
+                self._send_meta_data_dict["receive"][object_attribute.object_name] = []
                 for attribute_name in object_attribute.attribute_names:
                     if self.__worlds[world_name][object_attribute.object_name].count(attribute_name) == 0:
                         world_need_update = True
@@ -81,8 +68,7 @@ class query_data_service(MultiverseRosServiceServer):
         for object_attribute in request.receive:
             if self.__worlds[world_name].get(object_attribute.object_name) is None:
                 break
-            self._send_meta_data_dict["receive"][object_attribute.object_name] = [
-            ]
+            self._send_meta_data_dict["receive"][object_attribute.object_name] = []
             for attribute_name in object_attribute.attribute_names:
                 if self.__worlds[world_name][object_attribute.object_name].count(attribute_name) == 0:
                     break

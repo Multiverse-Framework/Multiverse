@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import rospy
-from typing import List, Any
+from typing import Any
 from multiverse_client.multiverse_ros_base import MultiverseRosBase
 
 
@@ -14,13 +14,13 @@ class MultiverseRosServiceServer(MultiverseRosBase):
         self.use_thread = False
 
     def start(self) -> None:
-        super().start()
         rospy.Service(self._service_name, self._service_class,
                       self._service_handle)
         rospy.loginfo(f"Start service {self._service_name}")
         rospy.spin()
 
     def _service_handle(self, request) -> Any:
+        self._init_multiverse_socket()
         self._bind_send_meta_data(request)
         self._assign_send_meta_data()
         self._connect()

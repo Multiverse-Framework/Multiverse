@@ -20,6 +20,9 @@ class MultiverseRosBase:
         self._init_send_meta_data()
 
     def start(self) -> None:
+        pass
+
+    def _init_multiverse_socket(self):
         self.__multiverse_socket = MultiverseSocket(self.use_thread)
         self.__multiverse_socket.init(self.host, self.port)
 
@@ -32,13 +35,13 @@ class MultiverseRosBase:
     def _assign_send_meta_data(self):
         self.__multiverse_socket.set_send_meta_data(self._send_meta_data_dict)
 
-    def _retrieve_receive_meta_data(self, time_out=5) -> bool:
+    def _retrieve_receive_meta_data(self, time_out=1) -> bool:
         start = rospy.Time.now()
         while not rospy.is_shutdown():
             self._receive_meta_data_dict = self.__multiverse_socket.get_receive_meta_data()
             if self._receive_meta_data_dict:
                 return True
-            if (rospy.Time.now() - start).to_sec() > time_out:
+            elif (rospy.Time.now() - start).to_sec() > time_out:
                 return False
         return False
 

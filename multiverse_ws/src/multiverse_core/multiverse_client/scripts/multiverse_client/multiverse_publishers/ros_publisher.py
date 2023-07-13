@@ -12,7 +12,7 @@ class MultiverseRosPublisher(MultiverseRosBase):
         self._prepare_send_meta_data()
 
     def start(self) -> None:
-        super().start()
+        self._init_multiverse_socket()
         self._assign_send_meta_data()
         self._connect()
 
@@ -39,5 +39,5 @@ class MultiverseRosPublisher(MultiverseRosBase):
     def _bind_rosmsg(self, receive_data: List[float]) -> None:
         pass
 
-    def _publish() -> None:
+    def _publish(self) -> None:
         pass
