@@ -6,7 +6,11 @@ multiverse:
   handedness: rhs
   root_frame_id: map
 
-  publish:
+  services:
+    query_data:
+      port: 7400
+
+  publishers:
     tf:
       port: 7300
       rate: 60

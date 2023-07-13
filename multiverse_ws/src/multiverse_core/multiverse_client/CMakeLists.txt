@@ -176,8 +176,7 @@ target_link_libraries(multiverse_socket_lib
 # # Mark executable scripts (Python etc.) for installation
 # # in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-  scripts/multiverse_publisher.py
-  scripts/multiverse_service.py
+  scripts/multiverse_socket_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

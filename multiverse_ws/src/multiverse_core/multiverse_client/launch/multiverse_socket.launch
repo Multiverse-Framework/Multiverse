@@ -4,10 +4,7 @@
 
     <rosparam command="load" file="$(arg config)" />
 
-    <node pkg="multiverse_client" type="multiverse_service.py" name="multiverse_service"
-        output="screen" args="7400" />
-
-    <node pkg="multiverse_client" type="multiverse_publisher.py" name="multiverse_publisher"
+    <node pkg="multiverse_client" type="multiverse_socket_node.py" name="multiverse_socket"
         output="screen">
     </node>
 

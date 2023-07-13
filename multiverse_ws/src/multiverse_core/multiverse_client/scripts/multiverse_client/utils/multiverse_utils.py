@@ -1,6 +1,6 @@
 import rospy
 
-def set_send_meta_data_json() -> dict:
+def constuct_send_meta_data_dict() -> dict:
     send_meta_data_dict = {}
     send_meta_data_dict["world"] = rospy.get_param(
         'multiverse/world') if rospy.has_param('multiverse/world') else "world"
