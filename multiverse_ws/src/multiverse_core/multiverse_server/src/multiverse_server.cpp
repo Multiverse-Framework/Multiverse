@@ -188,9 +188,8 @@ public:
             case EFlag::BindObjects:
                 mtx.lock();
                 bind_send_objects();
-                mtx.unlock();
-
                 validate_receive_meta_data();
+                mtx.unlock();
 
                 wait_for_objects();
 
@@ -259,7 +258,9 @@ public:
             case EFlag::BindReceiveData:
                 wait_for_receive_data();
 
+                mtx.lock();
                 compute_cumulative_data();
+                mtx.unlock();
 
                 for (size_t i = 0; i < receive_buffer_size - 1; i++)
                 {
@@ -467,7 +468,6 @@ private:
                     }
                 }
             }
-
             return;
         }
 
@@ -649,7 +649,6 @@ private:
 
     void compute_cumulative_data()
     {
-        mtx.lock();
         for (const std::string &object_name : receive_objects_json.getMemberNames())
         {
             for (const std::string &effort : {"force", "torque"})
@@ -673,7 +672,6 @@ private:
                 }
             }
         }
-        mtx.unlock();
     }
 
     void response_receive_data()
