@@ -20,11 +20,10 @@ class tf_publisher(MultiverseRosPublisher):
         self.object_names: List[str]
         if self._receive_meta_data_dict.get("receive") is None:
             return
-        
+
         self.object_names = self._receive_meta_data_dict["receive"].keys()
-        root_frame_id = rospy.get_param(
-            'multiverse/root_frame_id') if rospy.has_param('multiverse/root_frame_id') else "map"
-        
+        root_frame_id = rospy.get_param("multiverse/root_frame_id") if rospy.has_param("multiverse/root_frame_id") else "map"
+
         for object_name in self.object_names:
             tf_msg = TransformStamped()
             tf_msg.header.frame_id = root_frame_id

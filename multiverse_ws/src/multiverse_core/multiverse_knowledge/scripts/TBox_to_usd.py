@@ -12,17 +12,17 @@ onto_set = set()
 N = 1
 
 
-def create_path(name: str, is_ns: bool, prefix='/_class_') -> str:
-    usd_path = name.replace('https://', '')
-    usd_path = usd_path.replace('http://', '')
-    usd_path = usd_path.replace('www', '')
-    usd_path = usd_path.replace('.owl', '')
-    usd_path = re.sub(r'[^a-zA-Z/]+', '', usd_path)
-    words = usd_path.split('/')[-N:]
+def create_path(name: str, is_ns: bool, prefix="/_class_") -> str:
+    usd_path = name.replace("https://", "")
+    usd_path = usd_path.replace("http://", "")
+    usd_path = usd_path.replace("www", "")
+    usd_path = usd_path.replace(".owl", "")
+    usd_path = re.sub(r"[^a-zA-Z/]+", "", usd_path)
+    words = usd_path.split("/")[-N:]
     if is_ns:
-        usd_path = prefix + '/'.join(words) + '_namespace'
+        usd_path = prefix + "/".join(words) + "_namespace"
     else:
-        usd_path = prefix + '/'.join(words)
+        usd_path = prefix + "/".join(words)
     return usd_path
 
 
@@ -36,8 +36,7 @@ def owl_to_usd_impl(stage: Usd.Stage, concepts: list) -> None:
             rdfAPI.CreateRdfNamespaceAttr().Set(iri_prefix)
             S[iri_prefix] = prim
 
-        prim_child = stage.CreateClassPrim(create_path(
-            iri_prefix, False, '/') + create_path(iri_name, False))
+        prim_child = stage.CreateClassPrim(create_path(iri_prefix, False, "/") + create_path(iri_name, False))
         prim_child.GetInherits().AddInherit(S.get(iri_prefix).GetPrimPath())
 
         rdfAPI = UsdOntology.RdfAPI.Apply(prim_child)
@@ -63,7 +62,7 @@ def usd_to_owl(onto_file: str, usd_file: str) -> None:
         dst_file = os.path.join(os.path.dirname(usd_file), file)
         shutil.copy(src_file, dst_file)
 
-    TBox_onto = get_ontology('file://' + onto_file)
+    TBox_onto = get_ontology("file://" + onto_file)
     TBox_onto.load()
     onto_set.add(TBox_onto)
 
@@ -79,10 +78,10 @@ def usd_to_owl(onto_file: str, usd_file: str) -> None:
     return None
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) >= 3:
         (onto_file, usd_file) = (sys.argv[1], sys.argv[2])
     else:
-        print('Usage: in_onto.owl out_usd.usda')
+        print("Usage: in_onto.owl out_usd.usda")
         sys.exit(1)
     usd_to_owl(onto_file, usd_file)

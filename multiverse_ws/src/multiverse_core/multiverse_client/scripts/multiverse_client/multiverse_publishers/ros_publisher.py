@@ -4,11 +4,12 @@ import rospy
 from typing import List
 from multiverse_client.multiverse_ros_base import MultiverseRosBase
 
+
 class MultiverseRosPublisher(MultiverseRosBase):
     def __init__(self, host: str, port: str, **kwargs) -> None:
         super().__init__(host, port)
         self.use_thread = True
-        self.rate = rospy.Rate(float(kwargs.get('rate', 60)))
+        self.rate = rospy.Rate(float(kwargs.get("rate", 60)))
         self._prepare_send_meta_data()
 
     def start(self) -> None:
@@ -27,7 +28,7 @@ class MultiverseRosPublisher(MultiverseRosBase):
             self._bind_rosmsg(receive_data)
             self._publish()
             self.rate.sleep()
-        
+
         self._disconnect()
 
     def _prepare_send_meta_data(self) -> None:

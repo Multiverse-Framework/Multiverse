@@ -14,14 +14,13 @@ class MultiverseRosServiceServer(MultiverseRosBase):
         self.use_thread = False
 
     def start(self) -> None:
-        rospy.Service(self._service_name, self._service_class,
-                      self._service_handle)
-        rospy.loginfo(f"Start service {self._service_name}")
+        rospy.Service(self._service_name, self._service_class, self._service_handle)
+        rospy.loginfo(f"Start service at {self._service_name}")
         rospy.spin()
 
     def _service_handle(self, request) -> Any:
-        self._init_multiverse_socket()
         self._bind_send_meta_data(request)
+        self._init_multiverse_socket()
         self._assign_send_meta_data()
         self._connect()
         self._retrieve_receive_meta_data()

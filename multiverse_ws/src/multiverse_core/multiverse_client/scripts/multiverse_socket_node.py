@@ -14,12 +14,11 @@ class MultiverseRosSocket:
     def start(self):
         publishers = rospy.get_param("multiverse/publishers", default={})
         for publisher_name, publisher_prop in publishers.items():
-            publisher_name += '_publisher'
+            publisher_name += "_publisher"
             publisher_prop: dict
-            host = str(publisher_prop.get('host', 'tcp://127.0.0.1'))
-            port = str(publisher_prop.get('port'))
-            exec(
-                f'from multiverse_client.multiverse_publishers.{publisher_name} import {publisher_name}')
+            host = str(publisher_prop.get("host", "tcp://127.0.0.1"))
+            port = str(publisher_prop.get("port"))
+            exec(f"from multiverse_client.multiverse_publishers.{publisher_name} import {publisher_name}")
 
             publisher = eval(publisher_name)(host, port)
             self.publishers.append(publisher)
@@ -30,12 +29,11 @@ class MultiverseRosSocket:
 
         services = rospy.get_param("multiverse/services", default={})
         for service_name, service_prop in services.items():
-            service_name += '_service'
+            service_name += "_service"
             service_prop: dict
-            host = str(service_prop.get('host', 'tcp://127.0.0.1'))
-            port = str(service_prop.get('port'))
-            exec(
-                f'from multiverse_client.multiverse_services.{service_name} import {service_name}')
+            host = str(service_prop.get("host", "tcp://127.0.0.1"))
+            port = str(service_prop.get("port"))
+            exec(f"from multiverse_client.multiverse_services.{service_name} import {service_name}")
 
             service = eval(service_name)(host, port)
             self.services.append(service)
@@ -49,6 +47,7 @@ class MultiverseRosSocket:
 
         for service in self.services:
             self.threads[service].join()
+
 
 if __name__ == "__main__":
     rospy.init_node("multiverse_socket")
