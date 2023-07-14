@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cmath>
 #include <zmq.h>
 
 std::map<std::string, size_t> attribute_map = {
@@ -36,78 +37,40 @@ std::map<std::string, size_t> attribute_map = {
     {"force", 3},
     {"torque", 3}};
 
+std::map<EMultiverseClientState, std::string> flag_map =
+    {
+        {EMultiverseClientState::StartConnection, "StartConnection"},
+        {EMultiverseClientState::BindSendMetaData, "BindSendMetaData"},
+        {EMultiverseClientState::SendMetaData, "SendMetaData"},
+        {EMultiverseClientState::ReceiveMetaData, "ReceiveMetaData"},
+        {EMultiverseClientState::BindReceiveMetaData, "BindReceiveMetaData"},
+        {EMultiverseClientState::InitSendAndReceiveData, "InitSendAndReceiveData"},
+        {EMultiverseClientState::BindSendData, "BindSendData"},
+        {EMultiverseClientState::SendData, "SendData"},
+        {EMultiverseClientState::ReceiveData, "ReceiveData"},
+        {EMultiverseClientState::BindReceiveData, "BindReceiveData"}};
+
 void MultiverseClient::init(const std::string &in_host, const std::string &in_port)
 {
+    clean_up();
+
     host = in_host;
     port = in_port;
-
-    init_objects();
-}
-
-void MultiverseClient::connect()
-{
-    context = zmq_ctx_new();
-
-    socket_client = zmq_socket(context, ZMQ_REQ);
     socket_addr = host + ":" + port;
 
-    printf("[Client %s] Open the socket connection on %s\n", port.c_str(), socket_addr.c_str());
-    zmq_disconnect(socket_client, socket_addr.c_str());
-    zmq_connect(socket_client, socket_addr.c_str());
-    clean_up();
-    construct_send_meta_data();
-    start_meta_data_thread();
-}
-
-void MultiverseClient::communicate()
-{
-    if (is_enabled)
+    if (!init_objects())
     {
-        bind_send_data();
-
-        zmq_send(socket_client, send_buffer, send_buffer_size * sizeof(double), 0);
-
-        zmq_recv(socket_client, receive_buffer, receive_buffer_size * sizeof(double), 0);
-
-        if (*receive_buffer < 0)
-        {
-            is_enabled = false;
-            printf("[Client %s] The socket server at %s has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
-            wait_for_meta_data_thread_finish();
-            zmq_disconnect(socket_client, socket_addr.c_str());
-            zmq_connect(socket_client, socket_addr.c_str());
-            start_meta_data_thread();
-            return;
-        }
-
-        bind_receive_data();
-    }
-}
-
-void MultiverseClient::disconnect()
-{
-    should_shut_down = true;
-
-    if (is_enabled)
-    {
-        printf("[Client %s] Closing the socket client on %s.\n", port.c_str(), socket_addr.c_str());
-        const std::string close_data = "{}";
-
-        zmq_send(socket_client, close_data.c_str(), close_data.size(), 0);
-
-        free(send_buffer);
-        free(receive_buffer);
-
-        clean_up();
-
-        zmq_disconnect(socket_client, socket_addr.c_str());
-
-        is_enabled = false;
+        return;
     }
 
-    zmq_ctx_shutdown(context);
+    context = zmq_ctx_new();
+    socket_client = zmq_socket(context, ZMQ_REQ);
 
-    wait_for_meta_data_thread_finish();
+    flag = EMultiverseClientState::StartConnection;
+
+    printf("[Client %s] Opened the socket %s.\n", port.c_str(), socket_addr.c_str());
+
+    connect();
 }
 
 double MultiverseClient::get_time_now()
@@ -115,98 +78,247 @@ double MultiverseClient::get_time_now()
     return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
 }
 
-void MultiverseClient::send_and_receive_meta_data()
+void MultiverseClient::run()
 {
-    std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
-    for (const std::string &send_receive : {"send", "receive"})
-    {
-        for (const std::string &object_name : meta_data_json[send_receive].getMemberNames())
-        {
-            for (const Json::Value &attribute : meta_data_json[send_receive][object_name])
-            {
-                request_buffer_sizes[send_receive] += attribute_map[attribute.asString()];
-            }
-        }
-    }
-
-    const std::string meta_data_str = meta_data_json.toStyledString();
-    printf("[Client %s] Send meta data:\n%s", port.c_str(), meta_data_str.c_str());
-
-    zmq_msg_t response_message;
-    zmq_msg_init(&response_message);
-
-    std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
-
-    Json::Reader reader;
     while (!should_shut_down)
     {
-        // Send JSON string over ZMQ
-        zmq_send(socket_client, meta_data_str.c_str(), meta_data_str.size(), 0);
-
-        // Receive response over ZMQ
-        zmq_msg_recv(&response_message, socket_client, 0);
-
-        std::string response_message_str(static_cast<char *>(zmq_msg_data(&response_message)), zmq_msg_size(&response_message));
-
-        double *buffer = static_cast<double *>(zmq_msg_data(&response_message));
-
-        if (response_message_str.empty() || !reader.parse(response_message_str, meta_data_res_json) || meta_data_res_json["time"].asDouble() < 0)
+        printf("[Client %s] STATE: %s\n", socket_addr.c_str(), flag_map[flag].c_str());
+        switch (flag)
         {
-            zmq_msg_init(&response_message);
-            printf("[Client %s] The socket server at %s has been terminated, resending the meta data\n", port.c_str(), socket_addr.c_str());
+        case EMultiverseClientState::StartConnection:
             zmq_disconnect(socket_client, socket_addr.c_str());
             zmq_connect(socket_client, socket_addr.c_str());
-        }
-        else
-        {
-            for (std::pair<const std::string, size_t> &response_buffer_size : response_buffer_sizes)
+
+            flag = EMultiverseClientState::BindSendMetaData;
+            break;
+
+        case EMultiverseClientState::BindSendMetaData:
+            send_meta_data_json = Json::Value();
+            bind_send_meta_data();
+
+            send_meta_data_str = send_meta_data_json.toStyledString();
+            printf("[Client %s] Sending meta data to the server:\n%s", port.c_str(), send_meta_data_str.c_str());
+
+            start_meta_data_thread();
+
+            // TODO: CHANGE HERE!!!
+            flag = EMultiverseClientState::BindReceiveMetaData;
+            return;
+
+        case EMultiverseClientState::SendMetaData:
+            send_meta_data();
+
+            flag = EMultiverseClientState::ReceiveMetaData;
+            break;
+
+        case EMultiverseClientState::ReceiveMetaData:
+            receive_meta_data();
+
+            if (check_buffer_size())
             {
-                const Json::Value json_object = meta_data_res_json[response_buffer_size.first];
-                for (auto object_it = json_object.begin(); object_it != json_object.end(); ++object_it)
-                {
-                    const std::string object_name = object_it.key().asString();
-                    const Json::Value json_object_data = json_object[object_name];
-                    for (auto object_data_it = json_object_data.begin(); object_data_it != json_object_data.end(); ++object_data_it)
-                    {
-                        const std::string attribute_name = object_data_it.key().asString();
-                        response_buffer_size.second += json_object_data[attribute_name].size();
-                    }
-                }
+                init_buffer();
+                flag = EMultiverseClientState::BindReceiveMetaData;
+                printf("AAAAAAAAAAAAAAAAAAFFFFFFFFFFFFFFFFFF\n");
+                return;
+            }
+            else
+            {
+                flag = EMultiverseClientState::StartConnection;
+                break;
+            }
+
+        case EMultiverseClientState::BindReceiveMetaData:
+            printf("AAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+            wait_for_meta_data_thread_finish();
+            printf("BBBBBBBBBBBBBBBBBBBBBBBBBBB\n");
+            bind_receive_meta_data();
+
+            flag = EMultiverseClientState::InitSendAndReceiveData;
+            break;
+
+        case EMultiverseClientState::InitSendAndReceiveData:
+            init_send_and_receive_data();
+
+            flag = EMultiverseClientState::BindSendData;
+            break;
+
+        case EMultiverseClientState::BindSendData:
+            bind_send_data();
+
+            flag = EMultiverseClientState::SendData;
+            break;
+
+        case EMultiverseClientState::SendData:
+            zmq_send(socket_client, send_buffer, send_buffer_size * sizeof(double), 0);
+
+            flag = EMultiverseClientState::ReceiveData;
+            break;
+
+        case EMultiverseClientState::ReceiveData:
+            zmq_recv(socket_client, receive_buffer, receive_buffer_size * sizeof(double), 0);
+
+            if (std::isnan(*receive_buffer) || *receive_buffer < 0)
+            {
+                printf("[Client %s] The socket %s from the server has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
+                flag = EMultiverseClientState::StartConnection;
+            }
+            else
+            {
+                flag = EMultiverseClientState::BindReceiveData;
             }
 
             break;
+
+        case EMultiverseClientState::BindReceiveData:
+            bind_receive_data();
+
+            flag = EMultiverseClientState::BindSendData;
+            return;
         }
     }
 
-    if (!meta_data_json["receive"].isMember("") &&
-        std::find(meta_data_json["receive"].begin(), meta_data_json["receive"].end(), "") != meta_data_json["receive"].end() &&
+    if (flag != EMultiverseClientState::ReceiveMetaData && flag != EMultiverseClientState::ReceiveData)
+    {
+        printf("[Client %s] Closing the socket %s.\n", port.c_str(), socket_addr.c_str());
+
+        if (flag == EMultiverseClientState::BindSendMetaData ||
+            flag == EMultiverseClientState::SendMetaData)
+        {
+            const std::string close_data = "{}";
+            zmq_send(socket_client, close_data.c_str(), close_data.size(), 0);
+        }
+        else if (flag == EMultiverseClientState::BindReceiveMetaData ||
+                 flag == EMultiverseClientState::InitSendAndReceiveData ||
+                 flag == EMultiverseClientState::BindSendData ||
+                 flag == EMultiverseClientState::SendData ||
+                 flag == EMultiverseClientState::BindReceiveData)
+        {
+            send_buffer[0] = -1.0;
+            zmq_send(socket_client, send_buffer, send_buffer_size * sizeof(double), 0);
+            free(send_buffer);
+            free(receive_buffer);
+        }
+
+        clean_up();
+
+        zmq_disconnect(socket_client, socket_addr.c_str());
+    }
+}
+
+void MultiverseClient::connect()
+{
+    flag = EMultiverseClientState::StartConnection;
+
+    run();
+
+    printf("[Client %s] Starting the communication (send: %ld, receive: %ld).\n", port.c_str(), send_buffer_size, receive_buffer_size);
+}
+
+void MultiverseClient::send_and_receive_meta_data()
+{
+    flag = EMultiverseClientState::SendMetaData;
+
+    run();
+}
+
+void MultiverseClient::send_meta_data()
+{
+    zmq_send(socket_client, send_meta_data_str.c_str(), send_meta_data_str.size(), 0);
+}
+
+void MultiverseClient::receive_meta_data()
+{
+    zmq_msg_t message;
+
+    zmq_msg_init(&message);
+
+    zmq_msg_recv(&message, socket_client, 0);
+
+    std::string receive_meta_data_str(static_cast<char *>(zmq_msg_data(&message)), zmq_msg_size(&message));
+
+    zmq_msg_close(&message);
+
+    if (!receive_meta_data_str.empty())
+    {
+        reader.parse(receive_meta_data_str, receive_meta_data_json);
+    }
+}
+
+bool MultiverseClient::check_buffer_size()
+{
+    if (receive_meta_data_json.empty())
+    {
+        printf("[Client %s] The socket %s from the server has been terminated, resending the meta data.\n", port.c_str(), socket_addr.c_str());
+        return false;
+    }
+
+    std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
+    for (std::pair<const std::string, size_t> &request_buffer_size : request_buffer_sizes)
+    {
+        for (const std::string &object_name : send_meta_data_json[request_buffer_size.first].getMemberNames())
+        {
+            for (const Json::Value &attribute : send_meta_data_json[request_buffer_size.first][object_name])
+            {
+                request_buffer_size.second += attribute_map[attribute.asString()];
+            }
+        }
+    }
+
+    std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
+    for (std::pair<const std::string, size_t> &response_buffer_size : response_buffer_sizes)
+    {
+        for (const std::string &object_name : receive_meta_data_json[response_buffer_size.first].getMemberNames())
+        {
+            for (const std::string &attribute_name : receive_meta_data_json[response_buffer_size.first][object_name].getMemberNames())
+            {
+                response_buffer_size.second += receive_meta_data_json[response_buffer_size.first][object_name][attribute_name].size();
+            }
+        }
+    }
+
+    if (!send_meta_data_json["receive"].isMember("") &&
         (response_buffer_sizes["send"] != request_buffer_sizes["send"] || response_buffer_sizes["receive"] != request_buffer_sizes["receive"]))
     {
-        printf("[Client %s] Failed to initialize the socket at %s: send_buffer_size(server = %ld, client = %ld), receive_buffer_size(server = %ld, client = %ld).\n",
+        printf("[Client %s] Failed to initialize the buffers %s: send_buffer_size(server = %ld, client = %ld), receive_buffer_size(server = %ld, client = %ld).\n",
                port.c_str(),
                socket_addr.c_str(),
                response_buffer_sizes["send"],
                request_buffer_sizes["send"],
                response_buffer_sizes["receive"],
                request_buffer_sizes["receive"]);
-        zmq_disconnect(socket_client, socket_addr.c_str());
-        return;
-    }
-
-    if (should_shut_down)
-    {
-        return;
+        return false;
     }
 
     send_buffer_size = response_buffer_sizes["send"];
     receive_buffer_size = response_buffer_sizes["receive"];
+    return true;
+}
 
-    printf("[Client %s] Initialized the socket at %s successfully.\n", port.c_str(), socket_addr.c_str());
-    printf("[Client %s] Start communication on %s (send: %ld, receive: %ld)\n", port.c_str(), socket_addr.c_str(), send_buffer_size, receive_buffer_size);
+void MultiverseClient::init_buffer()
+{
     send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
     receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
-    
-    bind_object_data();
+}
 
-    is_enabled = true;
+void MultiverseClient::communicate(const bool resend_meta_data)
+{
+    if (resend_meta_data && flag == EMultiverseClientState::SendData)
+    {
+        clean_up();
+        flag = EMultiverseClientState::BindSendMetaData;
+        run();
+    }
+    else if (!resend_meta_data && flag == EMultiverseClientState::SendData)
+    {
+        run();
+    }
+}
+
+void MultiverseClient::disconnect()
+{
+    should_shut_down = true;
+
+    zmq_ctx_shutdown(context);
+
+    wait_for_meta_data_thread_finish();
 }

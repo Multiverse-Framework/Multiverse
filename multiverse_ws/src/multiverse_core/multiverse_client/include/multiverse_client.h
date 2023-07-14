@@ -22,6 +22,20 @@
 
 #include <jsoncpp/json/json.h>
 
+enum class EMultiverseClientState : unsigned char
+{
+    StartConnection,
+    BindSendMetaData,
+    SendMetaData,
+    ReceiveMetaData,
+    BindReceiveMetaData,
+    InitSendAndReceiveData,
+    BindSendData,
+    SendData,
+    ReceiveData,
+    BindReceiveData
+};
+
 class MultiverseClient
 {
 public:
@@ -38,10 +52,16 @@ public:
     void connect();
 
     /**
+     * @brief Send the meta data and receive the response from server
+     *
+     */
+    void send_and_receive_meta_data();
+
+    /**
      * @brief Communicate with the server
      *
      */
-    void communicate();
+    void communicate(const bool resend_meta_data = false);
 
     /**
      * @brief Send close signal to the server
@@ -50,21 +70,6 @@ public:
     void disconnect();
 
 public:
-    /**
-     * @brief Send the meta data and receive the response from server
-     *
-     */
-    void send_and_receive_meta_data();
-    
-    /**
-     * @brief Get is_enabled
-     * 
-     */
-    const bool is_enable() const
-    {
-        return is_enabled;
-    }
-
     /**
      * @brief Get the current time in time_unit
      *
@@ -89,25 +94,37 @@ protected:
      * @brief Initalize the objects from configuration
      *
      */
-    virtual void init_objects() = 0;
+    virtual bool init_objects() = 0;
 
     /**
-     * @brief Validate the objects with the current state
+     * @brief Bind the meta data from the objects
      *
      */
-    virtual void validate_objects() = 0;
+    virtual void bind_send_meta_data() = 0;
 
     /**
-     * @brief Construct the meta data from the objects
+     * @brief Bind the objects from the receive meta data
      *
      */
-    virtual void construct_send_meta_data() = 0;
+    virtual void bind_receive_meta_data() = 0;
 
     /**
-     * @brief Bind object data to send and receive data
+     * @brief Initialize the send and receive data
+     * 
+     */
+    virtual void init_send_and_receive_data() = 0;
+
+    /**
+     * @brief Bind the send buffer from the send data
      *
      */
-    virtual void bind_object_data() = 0;
+    virtual void bind_send_data() = 0;
+
+    /**
+     * @brief Bind the receive data from the receive buffer
+     *
+     */
+    virtual void bind_receive_data() = 0;
 
     /**
      * @brief Clean up pointer
@@ -115,23 +132,22 @@ protected:
      */
     virtual void clean_up() = 0;
 
-    /**
-     * @brief Bind send data to send buffer
-     *
-     */
-    virtual void bind_send_data() = 0;
+private:
+    void run();
 
-    /**
-     * @brief Bind receive data from receive buffer
-     *
-     */
-    virtual void bind_receive_data() = 0;
+    void send_meta_data();
+
+    void receive_meta_data();
+
+    bool check_buffer_size();
+
+    void init_buffer();
 
 protected:
     std::string host;
 
     std::string port;
-    
+
     size_t send_buffer_size = 1;
 
     size_t receive_buffer_size = 1;
@@ -140,18 +156,22 @@ protected:
 
     double *receive_buffer;
 
-    Json::Value meta_data_json;
+    Json::Value send_meta_data_json;
 
-    Json::Value meta_data_res_json;
+    std::string send_meta_data_str;
+
+    Json::Value receive_meta_data_json;
 
 private:
-    bool is_enabled = false;
+    std::string socket_addr;
+
+    EMultiverseClientState flag;
 
     void *context;
 
     void *socket_client;
 
-    std::string socket_addr;
+    Json::Reader reader;
 
     bool should_shut_down = false;
 };
