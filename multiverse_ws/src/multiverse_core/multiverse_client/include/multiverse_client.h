@@ -40,22 +40,10 @@ class MultiverseClient
 {
 public:
     /**
-     * @brief Initialize the socket with host and port
-     *
-     */
-    void init(const std::string &in_host, const std::string &in_port);
-
-    /**
      * @brief Connect the socket
      *
      */
-    void connect();
-
-    /**
-     * @brief Send the meta data and receive the response from server
-     *
-     */
-    void send_and_receive_meta_data();
+    void connect(const std::string &in_host, const std::string &in_port);
 
     /**
      * @brief Communicate with the server
@@ -76,6 +64,13 @@ public:
      * @return double
      */
     virtual double get_time_now();
+
+protected:
+    /**
+     * @brief Send the meta data and receive the response from server
+     *
+     */
+    void send_and_receive_meta_data();
 
 protected:
     /**
@@ -161,6 +156,8 @@ protected:
     std::string send_meta_data_str;
 
     Json::Value receive_meta_data_json;
+
+    std::string receive_meta_data_str;
 
 private:
     std::string socket_addr;

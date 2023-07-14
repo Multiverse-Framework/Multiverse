@@ -13,7 +13,8 @@ class tf_publisher(MultiverseRosPublisher):
         self.__tf_msgs = []
         self.__tf_broadcaster = TransformBroadcaster()
 
-    def _prepare_send_meta_data(self) -> None:
+    def _init_send_meta_data(self) -> None:
+        super()._init_send_meta_data()
         self._send_meta_data_dict["receive"][""] = ["position", "quaternion"]
 
     def _construct_rosmsg(self) -> None:

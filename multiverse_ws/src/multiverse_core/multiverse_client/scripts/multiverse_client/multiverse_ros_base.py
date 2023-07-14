@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from multiverse_client.utils.multiverse_utils import constuct_send_meta_data_dict
+from multiverse_client.utils.multiverse_utils import init_send_meta_data_dict
 import rospy
 import sys
 import os
@@ -25,13 +25,15 @@ class MultiverseRosBase:
 
     def _init_multiverse_socket(self):
         self.__multiverse_socket = MultiverseSocket(self.use_thread)
-        self.__multiverse_socket.init(self.host, self.port)
 
     def _init_send_meta_data(self) -> None:
-        self._send_meta_data_dict = constuct_send_meta_data_dict()
+        self._send_meta_data_dict = init_send_meta_data_dict()
 
     def _connect(self) -> None:
-        self.__multiverse_socket.connect()
+        self.__multiverse_socket.connect(self.host, self.port)
+
+    def _disconnect(self) -> None:
+        self.__multiverse_socket.disconnect()
 
     def _set_send_meta_data(self):
         self.__multiverse_socket.set_send_meta_data(self._send_meta_data_dict)
@@ -43,19 +45,19 @@ class MultiverseRosBase:
             if self._receive_meta_data_dict:
                 return True
             elif (rospy.Time.now() - start).to_sec() > time_out:
+                rospy.logwarn(f"Could not receive meta data from the server for {self.__class__.__name__}.")
                 return False
         return False
 
     def _set_send_data(self, send_data: List[float]) -> None:
         self.__multiverse_socket.set_send_data(send_data)
-        self.__multiverse_socket.communicate()
+
+    def _communicate(self, resend_meta_data: bool=False) -> None:
+        self.__multiverse_socket.communicate(resend_meta_data)
 
     def _get_receive_data(self) -> List[float]:
         return self.__multiverse_socket.get_receive_data()
-
-    def _disconnect(self) -> None:
-        self.__multiverse_socket.disconnect()
-
+    
     def _restart(self) -> None:
-        self.disconnect()
-        self.connect()
+        self._disconnect()
+        self._connect()

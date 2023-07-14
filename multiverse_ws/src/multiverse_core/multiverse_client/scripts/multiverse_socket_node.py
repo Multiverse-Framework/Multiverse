@@ -16,7 +16,6 @@ class MultiverseRosSocket:
         for subscriber_name, subscriber_prop in subscribers.items():
             subscriber_name += "_subscriber"
             exec(f"from multiverse_client.multiverse_subscribers.{subscriber_name} import {subscriber_name}")
-
             subscriber = eval(subscriber_name)(**subscriber_prop)
             self.subscribers.append(subscriber)
 

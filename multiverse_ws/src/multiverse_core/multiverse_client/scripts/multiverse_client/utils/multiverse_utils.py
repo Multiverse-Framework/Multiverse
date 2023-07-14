@@ -1,7 +1,7 @@
 import rospy
 
 
-def constuct_send_meta_data_dict() -> dict:
+def init_send_meta_data_dict() -> dict:
     send_meta_data_dict = {}
     send_meta_data_dict["world"] = rospy.get_param("multiverse/world") if rospy.has_param("multiverse/world") else "world"
     send_meta_data_dict["length_unit"] = rospy.get_param("multiverse/length_unit") if rospy.has_param("multiverse/length_unit") else "m"

@@ -18,7 +18,8 @@ class odom_publisher(MultiverseRosPublisher):
         self.__odom_msg = Odometry()
         
 
-    def _prepare_send_meta_data(self) -> None:
+    def _init_send_meta_data(self) -> None:
+        super()._init_send_meta_data()
         self._send_meta_data_dict["receive"][self.__body_name] = ["position", "relative_velocity"]
 
     def _construct_rosmsg(self) -> None:

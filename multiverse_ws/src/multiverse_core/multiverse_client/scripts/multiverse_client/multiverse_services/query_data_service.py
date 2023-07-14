@@ -15,9 +15,8 @@ class query_data_service(MultiverseRosServiceServer):
         self.__worlds = {}
 
     def update_world(self) -> None:
-        self._init_send_meta_data()
+        super()._init_send_meta_data()
         self._send_meta_data_dict["receive"][""] = ["position", "quaternion"]
-        self._init_multiverse_socket()
         self._set_send_meta_data()
         self._connect()
         if self._get_receive_meta_data():

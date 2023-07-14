@@ -51,7 +51,7 @@ public:
     {
         if (in_send_data.size() != send_buffer_size)
         {
-            printf("[Client %s] Size doesn't match with send_buffer_size = %ld", port.c_str(), send_buffer_size);
+            printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).", port.c_str(), in_send_data.size(), send_buffer_size);
         }
         else
         {
@@ -82,11 +82,11 @@ private:
     {
         if (use_thread)
         {
-            meta_data_thread = std::thread(&MultiverseClient::send_and_receive_meta_data, this);
+            meta_data_thread = std::thread(&MultiverseSocket::send_and_receive_meta_data, this);
         }
         else
         {
-            MultiverseClient::send_and_receive_meta_data();
+            MultiverseSocket::send_and_receive_meta_data();
         }
     }
 
@@ -106,7 +106,7 @@ private:
     void bind_send_meta_data() override
     {
         send_meta_data_json.clear();
-        
+
         send_meta_data_json["world"] = send_meta_data_dict.contains("world") ? send_meta_data_dict["world"].cast<std::string>() : "world";
         send_meta_data_json["length_unit"] = send_meta_data_dict.contains("length_unit") ? send_meta_data_dict["length_unit"].cast<std::string>() : "N";
         send_meta_data_json["angle_unit"] = send_meta_data_dict.contains("angle_unit") ? send_meta_data_dict["angle_unit"].cast<std::string>() : "rad";
@@ -120,7 +120,12 @@ private:
             {
                 for (const std::string &object_attribute : receive_objects.second)
                 {
-                    send_meta_data_json[send_receive][receive_objects.first].append(object_attribute);
+                    if (std::find(send_meta_data_json[send_receive][receive_objects.first].begin(),
+                                  send_meta_data_json[send_receive][receive_objects.first].end(),
+                                  object_attribute) == send_meta_data_json[send_receive][receive_objects.first].end())
+                    {
+                        send_meta_data_json[send_receive][receive_objects.first].append(object_attribute);
+                    }
                 }
             }
         }
@@ -175,17 +180,27 @@ private:
 
     void init_send_and_receive_data() override
     {
-        pybind11::gil_scoped_acquire acquire;
+        send_data = pybind11::list();
+        for (size_t i = 0; i < send_buffer_size; i++)
+        {
+            send_data.append(0.0);
+        }
 
-        send_data = pybind11::list(send_buffer_size);
-
-        receive_data = pybind11::list(receive_buffer_size);
-
-        pybind11::gil_scoped_release release;
+        receive_data = pybind11::list();
+        for (size_t i = 0; i < receive_buffer_size; i++)
+        {
+            receive_data.append(0.0);
+        }
     }
 
     void bind_send_data() override
     {
+        if (send_buffer_size != send_data.size())
+        {
+            printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).", port.c_str(), send_data.size(), send_buffer_size);
+            return;
+        }
+
         for (size_t i = 0; i < send_buffer_size; i++)
         {
             send_buffer[i] = send_data[i].cast<double>();
@@ -206,7 +221,6 @@ PYBIND11_MODULE(multiverse_socket, handle)
     handle.doc() = "";
 
     pybind11::class_<MultiverseClient>(handle, "MultiverseClient")
-        .def("init", &MultiverseClient::init)
         .def("connect", &MultiverseClient::connect)
         .def("communicate", &MultiverseClient::communicate)
         .def("disconnect", &MultiverseClient::disconnect);
