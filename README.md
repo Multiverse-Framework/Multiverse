@@ -10,3 +10,9 @@ Multiverse is a simulation framework designed to integrate multiple advanced phy
 sudo ./install.sh # Install all prerequisites
 ./build.sh        # Build the software
 ```
+# Test
+
+```
+roslaunch mujoco_sim multi_mujoco_sim_ref.launch     # Start 4 instances of MuJoCo
+roslaunch multiverse_server multiverse_server.launch # Start the server
+```
