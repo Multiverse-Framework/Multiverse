@@ -135,12 +135,12 @@ public:
         socket_server = zmq::socket_t(context, zmq::socket_type::rep);
         socket_server.bind(socket_addr);
         sockets_need_clean_up[socket_addr] = false;
-        ROS_INFO("[Server] Bind server socket to [%s].", socket_addr.c_str());
+        ROS_INFO("[Server] Bind to socket [%s].", socket_addr.c_str());
     }
 
     ~MultiverseServer()
     {
-        ROS_INFO("[Server] Close server socket at [%s].", socket_addr.c_str());
+        ROS_INFO("[Server] Close socket [%s].", socket_addr.c_str());
 
         if (send_buffer != nullptr)
         {
@@ -281,7 +281,7 @@ public:
                 response_receive_data();
             }
 
-            ROS_INFO("[Server] Unbind server socket from [%s].", socket_addr.c_str());
+            ROS_INFO("[Server] Unbind from socket %s.", socket_addr.c_str());
             socket_server.unbind(socket_addr);
         }
     }
@@ -307,13 +307,13 @@ private:
         catch (const zmq::error_t &e)
         {
             should_shut_down = true;
-            ROS_INFO("[Server] %s, server socket at [%s] prepares to close.", e.what(), socket_addr.c_str());
+            ROS_INFO("[Server] %s, socket %s prepares to close.", e.what(), socket_addr.c_str());
         }
     }
 
     void init_receive_meta_data()
     {
-        ROS_INFO("[Server] Receive meta data from %s:\n%s", socket_addr.c_str(), send_meta_data_json.toStyledString().c_str());
+        ROS_INFO("[Server] Receive meta data from socket %s:\n%s", socket_addr.c_str(), send_meta_data_json.toStyledString().c_str());
 
         world_name = send_meta_data_json.isMember("world") ? send_meta_data_json["world"].asString() : "world";
         const std::string length_unit = send_meta_data_json.isMember("length_unit") ? send_meta_data_json["length_unit"].asString() : "m";
@@ -429,7 +429,7 @@ private:
                 }
                 else
                 {
-                    ROS_INFO("[Server] Continue state [%s - %s] on client socket %s", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
+                    ROS_INFO("[Server] Continue state [%s - %s] on socket %s", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
                     objects[object_name][attribute_name].second = false;
 
@@ -533,7 +533,7 @@ private:
                         found_all_objects = false;
                         if (now - start > 1)
                         {
-                            ROS_INFO("[Server] Server socket [%s] is waiting for [%s][%s] to be declared.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
+                            ROS_INFO("[Server] Socket [%s] is waiting for [%s][%s] to be declared.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
                         }
                     }
                 }
@@ -604,7 +604,7 @@ private:
         catch (const zmq::error_t &e)
         {
             should_shut_down = true;
-            ROS_INFO("[Server] %s, server socket at [%s] prepares to close.", e.what(), socket_addr.c_str());
+            ROS_INFO("[Server] %s, socket at [%s] prepares to close.", e.what(), socket_addr.c_str());
         }
     }
 
@@ -632,7 +632,7 @@ private:
                         const int now = get_time_now();
                         if (now - start > 1)
                         {
-                            ROS_INFO("[Server] Server socket at [%s] is waiting for data of [%s][%s] to be sent.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
+                            ROS_INFO("[Server] Socket at [%s] is waiting for data of [%s][%s] to be sent.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
                             start = now;
                         }
                     }
