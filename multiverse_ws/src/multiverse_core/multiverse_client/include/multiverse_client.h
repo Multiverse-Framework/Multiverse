@@ -55,6 +55,15 @@ public:
      *
      */
     void send_and_receive_meta_data();
+    
+    /**
+     * @brief Get is_enabled
+     * 
+     */
+    const bool is_enable() const
+    {
+        return is_enabled;
+    }
 
     /**
      * @brief Get the current time in time_unit
