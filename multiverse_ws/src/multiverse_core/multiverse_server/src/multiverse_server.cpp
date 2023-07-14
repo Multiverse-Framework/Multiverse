@@ -47,7 +47,6 @@ enum class EAttribute : unsigned char
 enum class EFlag : unsigned char
 {
     RequestSendMetaData,
-    ConstructReceiveMetaData,
     BindObjects,
     ResponseReceiveMetaData,
     RequestSendData,
@@ -176,16 +175,13 @@ public:
                 else
                 {
                     sockets_need_clean_up[socket_addr] = false;
-                    flag = EFlag::ConstructReceiveMetaData;
+                    flag = EFlag::BindObjects;
                 }
                 break;
 
-            case EFlag::ConstructReceiveMetaData:
-                construct_receive_meta_data();
-                flag = EFlag::BindObjects;
-                break;
-
             case EFlag::BindObjects:
+                init_receive_meta_data();
+
                 mtx.lock();
                 bind_send_objects();
                 validate_receive_meta_data();
@@ -227,7 +223,7 @@ public:
                     {
                         send_data_vec.clear();
                         receive_data_vec.clear();
-                        flag = EFlag::ConstructReceiveMetaData;
+                        flag = EFlag::BindObjects;
                     }
                     else if (isnan(send_buffer[0]))
                     {
@@ -315,7 +311,7 @@ private:
         }
     }
 
-    void construct_receive_meta_data()
+    void init_receive_meta_data()
     {
         ROS_INFO("[Server] Receive meta data from %s:\n%s", socket_addr.c_str(), send_meta_data_json.toStyledString().c_str());
 

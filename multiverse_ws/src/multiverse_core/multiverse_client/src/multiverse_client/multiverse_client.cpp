@@ -37,19 +37,6 @@ std::map<std::string, size_t> attribute_map = {
     {"force", 3},
     {"torque", 3}};
 
-std::map<EMultiverseClientState, std::string> flag_map =
-    {
-        {EMultiverseClientState::StartConnection, "StartConnection"},
-        {EMultiverseClientState::BindSendMetaData, "BindSendMetaData"},
-        {EMultiverseClientState::SendMetaData, "SendMetaData"},
-        {EMultiverseClientState::ReceiveMetaData, "ReceiveMetaData"},
-        {EMultiverseClientState::BindReceiveMetaData, "BindReceiveMetaData"},
-        {EMultiverseClientState::InitSendAndReceiveData, "InitSendAndReceiveData"},
-        {EMultiverseClientState::BindSendData, "BindSendData"},
-        {EMultiverseClientState::SendData, "SendData"},
-        {EMultiverseClientState::ReceiveData, "ReceiveData"},
-        {EMultiverseClientState::BindReceiveData, "BindReceiveData"}};
-
 void MultiverseClient::connect(const std::string &in_host, const std::string &in_port)
 {
     clean_up();
