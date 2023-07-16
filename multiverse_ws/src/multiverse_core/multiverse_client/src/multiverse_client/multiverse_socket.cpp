@@ -20,8 +20,6 @@
 
 #include "multiverse_client.h"
 
-#include <thread>
-
 #include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -29,8 +27,9 @@
 class MultiverseSocket final : public MultiverseClient
 {
 public:
-    MultiverseSocket(const bool use_thread) : use_thread(use_thread)
+    MultiverseSocket(const bool use_thread, const std::string &in_server_socket_addr = "tcp:127.0.0.1:7000") : use_thread(use_thread)
     {
+        server_socket_addr = in_server_socket_addr;
     }
 
     ~MultiverseSocket()
@@ -105,6 +104,7 @@ private:
 
     void bind_send_meta_data() override
     {
+        pybind11::gil_scoped_acquire acquire;
         send_meta_data_json.clear();
 
         send_meta_data_json["world"] = send_meta_data_dict.contains("world") ? send_meta_data_dict["world"].cast<std::string>() : "world";
@@ -129,6 +129,7 @@ private:
                 }
             }
         }
+        pybind11::gil_scoped_release release;
     }
 
     void bind_receive_meta_data() override
@@ -226,7 +227,7 @@ PYBIND11_MODULE(multiverse_socket, handle)
         .def("disconnect", &MultiverseClient::disconnect);
 
     pybind11::class_<MultiverseSocket, MultiverseClient>(handle, "MultiverseSocket", pybind11::is_final())
-        .def(pybind11::init<bool>())
+        .def(pybind11::init<bool, const std::string &>())
         .def("set_send_meta_data", &MultiverseSocket::set_send_meta_data)
         .def("get_receive_meta_data", &MultiverseSocket::get_receive_meta_data)
         .def("set_send_data", &MultiverseSocket::set_send_data)

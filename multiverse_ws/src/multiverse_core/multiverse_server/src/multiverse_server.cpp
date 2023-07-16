@@ -108,8 +108,6 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
          {{"rhs", {1.0, 1.0, 1.0}},
           {"lhs", {1.0, -1.0, 1.0}}}}};
 
-std::vector<std::thread> workers;
-
 std::mutex mtx;
 
 std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
@@ -132,15 +130,15 @@ class MultiverseServer
 public:
     MultiverseServer(const std::string &socket_addr) : socket_addr(socket_addr)
     {
-        socket_server = zmq::socket_t(context, zmq::socket_type::rep);
-        socket_server.bind(socket_addr);
+        socket = zmq::socket_t(context, zmq::socket_type::rep);
+        socket.bind(socket_addr);
         sockets_need_clean_up[socket_addr] = false;
-        ROS_INFO("[Server] Bind to socket [%s].", socket_addr.c_str());
+        ROS_INFO("[Server] Bind to socket %s.", socket_addr.c_str());
     }
 
     ~MultiverseServer()
     {
-        ROS_INFO("[Server] Close socket [%s].", socket_addr.c_str());
+        ROS_INFO("[Server] Close socket %s.", socket_addr.c_str());
 
         if (send_buffer != nullptr)
         {
@@ -282,7 +280,7 @@ public:
             }
 
             ROS_INFO("[Server] Unbind from socket %s.", socket_addr.c_str());
-            socket_server.unbind(socket_addr);
+            socket.unbind(socket_addr);
         }
     }
 
@@ -301,7 +299,7 @@ private:
         try
         {
             sockets_need_clean_up[socket_addr] = false;
-            socket_server.recv(message, zmq::recv_flags::none);
+            socket.recv(message, zmq::recv_flags::none);
             sockets_need_clean_up[socket_addr] = true;
         }
         catch (const zmq::error_t &e)
@@ -585,7 +583,7 @@ private:
         // Send buffer sizes and send_data (if exists) over ZMQ
         zmq::message_t response_message(message_str.size());
         memcpy(response_message.data(), message_str.data(), message_str.size());
-        socket_server.send(response_message, zmq::send_flags::none);
+        socket.send(response_message, zmq::send_flags::none);
 
         send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
         receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
@@ -597,14 +595,14 @@ private:
         try
         {
             sockets_need_clean_up[socket_addr] = false;
-            socket_server.recv(message, zmq::recv_flags::none);
+            socket.recv(message, zmq::recv_flags::none);
             sockets_need_clean_up[socket_addr] = true;
             memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
         }
         catch (const zmq::error_t &e)
         {
             should_shut_down = true;
-            ROS_INFO("[Server] %s, socket at [%s] prepares to close.", e.what(), socket_addr.c_str());
+            ROS_INFO("[Server] %s, socket at %s prepares to close.", e.what(), socket_addr.c_str());
         }
     }
 
@@ -632,7 +630,7 @@ private:
                         const int now = get_time_now();
                         if (now - start > 1)
                         {
-                            ROS_INFO("[Server] Socket at [%s] is waiting for data of [%s][%s] to be sent.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
+                            ROS_INFO("[Server] Socket at %s is waiting for data of [%s][%s] to be sent.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
                             start = now;
                         }
                     }
@@ -676,7 +674,7 @@ private:
         receive_buffer[0] = should_shut_down ? -1.0 : get_time_now();
         zmq::message_t reply_data(receive_buffer_size * sizeof(double));
         memcpy(reply_data.data(), receive_buffer, receive_buffer_size * sizeof(double));
-        socket_server.send(reply_data, zmq::send_flags::none);
+        socket.send(reply_data, zmq::send_flags::none);
     }
 
 private:
@@ -688,7 +686,7 @@ private:
 
     std::string socket_addr;
 
-    zmq::socket_t socket_server;
+    zmq::socket_t socket;
 
     Json::Value send_meta_data_json;
 
@@ -721,10 +719,44 @@ private:
     bool continue_state = false;
 };
 
-void start_multiverse_server(int port)
+void start_multiverse_server(const std::string &server_socket_addr)
 {
-    MultiverseServer multiverse_server("tcp://127.0.0.1:" + std::to_string(port));
-    multiverse_server.start();
+    std::map<std::string, std::thread> workers;
+    zmq::socket_t socket = zmq::socket_t(context, zmq::socket_type::rep);
+    socket.bind(server_socket_addr);
+    ROS_INFO("[Server] Create server socket %s.", server_socket_addr.c_str());
+
+    zmq::message_t message;
+    std::string message_str;
+    while (!should_shut_down)
+    {
+        try
+        {
+            socket.recv(message, zmq::recv_flags::none);
+            message_str = message.to_string();
+        }
+        catch (const zmq::error_t &e)
+        {
+            should_shut_down = true;
+            ROS_INFO("[Server] %s, server socket %s prepares to close.", e.what(), server_socket_addr.c_str());
+            break;
+        }
+
+        if (workers.count(message_str) == 0)
+        {
+            workers[message_str] = std::thread([&]()
+                                               { MultiverseServer multiverse_server(message_str); multiverse_server.start(); });
+        }
+
+        socket.send(message, zmq::send_flags::none);
+
+        zmq_sleep(0.1);
+    }
+
+    for (std::pair<const std::string, std::thread> &worker : workers)
+    {
+        worker.second.join();
+    }
 }
 
 int main(int argc, char **argv)
@@ -735,12 +767,9 @@ int main(int argc, char **argv)
         ROS_INFO("[Server] Interrupt signal (%d) received, wait for 1s then shutdown.", signum);
         should_shut_down = true; });
 
-    ros::init(argc, argv, "state_server");
+    ros::init(argc, argv, "multiverse_server");
 
-    for (size_t thread_num = 0; thread_num < argc - 1; thread_num++)
-    {
-        workers.emplace_back(start_multiverse_server, std::stoi(argv[thread_num + 1]));
-    }
+    std::thread multiverse_server_thread(start_multiverse_server, std::string(argv[1]));
 
     while (!should_shut_down)
     {
@@ -764,8 +793,8 @@ int main(int argc, char **argv)
 
     context.shutdown();
 
-    for (std::thread &worker : workers)
+    if (multiverse_server_thread.joinable())
     {
-        worker.join();
+        multiverse_server_thread.join();
     }
 }

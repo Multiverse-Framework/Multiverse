@@ -16,9 +16,9 @@ class query_data_service(MultiverseRosServiceServer):
 
     def update_world(self) -> None:
         super()._init_send_meta_data()
-        self._send_meta_data_dict["receive"][""] = ["position", "quaternion"]
+        self._send_meta_data_dict["receive"][""] = [""]
         self._set_send_meta_data()
-        self._connect()
+        self._communicate(True)
         if self._get_receive_meta_data():
             world_name = self._receive_meta_data_dict["world"]
             self.__worlds[world_name] = {}
@@ -28,7 +28,6 @@ class query_data_service(MultiverseRosServiceServer):
                 for attribute_name in object_data:
                     self.__worlds[world_name][""].add(attribute_name)
                     self.__worlds[world_name][object_name].add(attribute_name)
-        self._disconnect()
 
     def _bind_send_meta_data(self, request: SocketRequest) -> None:
         world_name = "world" if request.world == "" else request.world
