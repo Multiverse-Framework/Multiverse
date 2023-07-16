@@ -377,6 +377,7 @@ void MultiverseClient::communicate(const bool resend_meta_data)
 
     if (resend_meta_data)
     {
+        init_objects();
         if (flag == EMultiverseClientState::BindSendData)
         {
             clean_up();
