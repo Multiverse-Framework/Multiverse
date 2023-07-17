@@ -20,28 +20,15 @@
 
 #pragma once
 
-#include <jsoncpp/json/json.h>
+#include <string>
 
-enum class EMultiverseClientState : unsigned char
-{
-    None,
-    StartConnection,
-    BindSendMetaData,
-    SendMetaData,
-    ReceiveMetaData,
-    BindReceiveMetaData,
-    InitSendAndReceiveData,
-    BindSendData,
-    SendData,
-    ReceiveData,
-    BindReceiveData
-};
+enum class EMultiverseClientState : unsigned char;
 
 class MultiverseClient
 {
 public:
     /**
-     * @brief Connect the socket
+     * @brief Connect the socket with host and port
      *
      */
     void connect(const std::string &in_host, const std::string &in_port);
@@ -62,7 +49,7 @@ public:
     /**
      * @brief Get the current time in time_unit
      *
-     * @return double
+     * @return double current time in time_unit
      */
     virtual double get_time_now();
 
@@ -82,7 +69,7 @@ protected:
 protected:
     /**
      * @brief Start connect_to_server thread
-     * 
+     *
      */
     virtual void start_connect_to_server_thread() = 0;
 
@@ -117,6 +104,30 @@ protected:
     virtual void bind_send_meta_data() = 0;
 
     /**
+     * @brief Compute receive_meta_data from receive_meta_data_str
+     *
+     * @return true
+     * @return false
+     */
+    virtual bool compute_receive_meta_data() = 0;
+
+    /**
+     * @brief Compute request buffer sizes
+     *
+     * @param send_buffer_size
+     * @param receive_buffer_size
+     */
+    virtual void compute_request_buffer_sizes(size_t &req_send_buffer_size, size_t &req_receive_buffer_size) const = 0;
+
+    /**
+     * @brief Compute response buffer sizes
+     *
+     * @param send_buffer_size
+     * @param receive_buffer_size
+     */
+    virtual void compute_response_buffer_sizes(size_t &res_send_buffer_size, size_t &res_receive_buffer_size) const = 0;
+
+    /**
      * @brief Bind the objects from the receive meta data
      *
      */
@@ -124,7 +135,7 @@ protected:
 
     /**
      * @brief Initialize the send and receive data
-     * 
+     *
      */
     virtual void init_send_and_receive_data() = 0;
 
@@ -144,7 +155,7 @@ protected:
      * @brief Clean up pointer
      *
      */
-    virtual void clean_up() = 0;
+    virtual void clean_up() = 0;    
 
 private:
     void run();
@@ -158,11 +169,11 @@ private:
     void init_buffer();
 
 protected:
-    std::string server_socket_addr = "tcp://127.0.0.1:7000";
-
     std::string host;
 
     std::string port;
+    
+    std::string server_socket_addr = "tcp://127.0.0.1:7000";
 
     size_t send_buffer_size = 1;
 
@@ -172,11 +183,7 @@ protected:
 
     double *receive_buffer;
 
-    Json::Value send_meta_data_json;
-
     std::string send_meta_data_str;
-
-    Json::Value receive_meta_data_json;
 
     std::string receive_meta_data_str;
 
@@ -188,8 +195,6 @@ private:
     void *context;
 
     void *socket_client;
-
-    Json::Reader reader;
 
     bool should_shut_down = false;
 };

@@ -31,6 +31,7 @@ class MultiverseRosBase:
 
     def _connect(self) -> None:
         self.__multiverse_socket.connect(self.host, self.port)
+        rospy.sleep(0.1) # Wait for multiverse_client to establish a connection with the server.
 
     def _disconnect(self) -> None:
         self.__multiverse_socket.disconnect()

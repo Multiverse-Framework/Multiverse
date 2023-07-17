@@ -382,6 +382,7 @@ private:
         receive_meta_data_json["world"] = world_name;
         receive_meta_data_json["time"] = get_time_now() * unit_scale[time_unit];
         receive_meta_data_json["angle_unit"] = angle_unit;
+        receive_meta_data_json["length_unit"] = length_unit;
         receive_meta_data_json["force_unit"] = force_unit;
         receive_meta_data_json["time_unit"] = time_unit;
         receive_meta_data_json["handedness"] = handedness;

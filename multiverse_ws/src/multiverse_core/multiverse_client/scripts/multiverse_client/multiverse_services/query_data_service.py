@@ -71,12 +71,16 @@ class query_data_service(MultiverseRosServiceServer):
 
     def _bind_response(self) -> SocketResponse:
         response = SocketResponse()
+        self._receive_meta_data_dict: dict
         response.world = self._receive_meta_data_dict["world"]
         response.length_unit = self._receive_meta_data_dict["length_unit"]
         response.angle_unit = self._receive_meta_data_dict["angle_unit"]
         response.force_unit = self._receive_meta_data_dict["force_unit"]
         response.time_unit = self._receive_meta_data_dict["time_unit"]
         response.handedness = self._receive_meta_data_dict["handedness"]
+
+        if self._receive_meta_data_dict.get("receive") is None:
+            return response
 
         for object_name, object_data in self._receive_meta_data_dict["receive"].items():
             for attribute_name, attribute_data in object_data.items():

@@ -109,7 +109,7 @@ catkin_python_setup()
 set(pybind11_INCLUDE_DIRS ${PYBIND11_SOURCE_DIR}/include)
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}_lib
+  LIBRARIES ${PROJECT_NAME}_lib ${PROJECT_NAME}_json_lib
   CATKIN_DEPENDS multiverse_msgs roscpp rospy
 )
 
@@ -127,7 +127,11 @@ include_directories(
 
 # # Declare a C++ library
 add_library(${PROJECT_NAME}_lib
-  src/${PROJECT_NAME}/multiverse_client.cpp
+  src/${PROJECT_NAME}/${PROJECT_NAME}.cpp
+)
+
+add_library(${PROJECT_NAME}_json_lib
+  src/${PROJECT_NAME}/${PROJECT_NAME}_json.cpp
 )
 
 add_library(multiverse_socket_lib
