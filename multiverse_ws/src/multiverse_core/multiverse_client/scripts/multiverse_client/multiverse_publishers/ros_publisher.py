@@ -26,7 +26,8 @@ class MultiverseRosPublisher(MultiverseRosBase):
             self._communicate()
             receive_data = self._get_receive_data()
             self._bind_rosmsg(receive_data)
-            self._publish()
+            if not rospy.is_shutdown():
+                self._publish()
             self.rate.sleep()
         
         self._disconnect()

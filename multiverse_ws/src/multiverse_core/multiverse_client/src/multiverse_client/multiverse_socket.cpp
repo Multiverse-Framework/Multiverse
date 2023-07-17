@@ -20,6 +20,7 @@
 
 #include "multiverse_client.h"
 
+#include <thread>
 #include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -72,11 +73,33 @@ private:
 
     pybind11::list receive_data;
 
+    std::thread connect_to_server_thread;
+
     std::thread meta_data_thread;
 
     bool use_thread = true;
 
 private:
+    void start_connect_to_server_thread() override
+    {
+        if (use_thread)
+        {
+            connect_to_server_thread = std::thread(&MultiverseSocket::connect_to_server, this);
+        }
+        else
+        {
+            MultiverseSocket::connect_to_server();
+        }
+    }
+
+    void wait_for_connect_to_server_thread_finish() override
+    {
+        if (use_thread && connect_to_server_thread.joinable())
+        {
+            connect_to_server_thread.join();
+        }
+    }
+
     void start_meta_data_thread() override
     {
         if (use_thread)
@@ -174,24 +197,20 @@ private:
 
     void clean_up() override
     {
+        pybind11::gil_scoped_acquire acquire;
         send_data = pybind11::list();
 
         receive_data = pybind11::list();
+        pybind11::gil_scoped_release release;
     }
 
     void init_send_and_receive_data() override
     {
-        send_data = pybind11::list();
-        for (size_t i = 0; i < send_buffer_size; i++)
-        {
-            send_data.append(0.0);
-        }
+        pybind11::gil_scoped_acquire acquire;
+        send_data = pybind11::cast(std::vector<double>(send_buffer_size, 0.0));
 
-        receive_data = pybind11::list();
-        for (size_t i = 0; i < receive_buffer_size; i++)
-        {
-            receive_data.append(0.0);
-        }
+        receive_data = pybind11::cast(std::vector<double>(receive_buffer_size, 0.0));
+        pybind11::gil_scoped_release release;
     }
 
     void bind_send_data() override
