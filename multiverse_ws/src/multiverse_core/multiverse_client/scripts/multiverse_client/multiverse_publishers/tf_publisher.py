@@ -32,7 +32,7 @@ class tf_publisher(MultiverseRosPublisher):
 
     def _bind_rosmsg(self, receive_data: List[float]) -> None:
         for i, _ in enumerate(self.object_names):
-            self.__tf_msgs[i].header.stamp = rospy.Time.from_sec(receive_data[0])
+            self.__tf_msgs[i].header.stamp = rospy.Time.now()
             self.__tf_msgs[i].header.seq += 1
             self.__tf_msgs[i].transform.translation.x = receive_data[7 * i + 1]
             self.__tf_msgs[i].transform.translation.y = receive_data[7 * i + 2]

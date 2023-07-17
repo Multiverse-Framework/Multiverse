@@ -113,7 +113,6 @@ void MultiverseClient::connect(const std::string &in_host, const std::string &in
     socket_client = zmq_socket(context, ZMQ_REQ);
 
     wait_for_connect_to_server_thread_finish();
-
     start_connect_to_server_thread();
 }
 
@@ -138,8 +137,8 @@ void MultiverseClient::run()
         case EMultiverseClientState::BindSendMetaData:
             send_meta_data_json = Json::Value();
             bind_send_meta_data();
-
             send_meta_data_str = send_meta_data_json.toStyledString();
+
             printf("[Client %s] Sending meta data to the server:\n%s", port.c_str(), send_meta_data_str.c_str());
 
             start_meta_data_thread();
@@ -153,6 +152,12 @@ void MultiverseClient::run()
 
         case EMultiverseClientState::ReceiveMetaData:
             receive_meta_data();
+
+            if (should_shut_down)
+            {
+                flag = EMultiverseClientState::BindReceiveMetaData;
+                break;
+            }
 
             if (receive_meta_data_str.empty() ||
                 !reader.parse(receive_meta_data_str, receive_meta_data_json) ||
@@ -181,6 +186,7 @@ void MultiverseClient::run()
             return;
 
         case EMultiverseClientState::InitSendAndReceiveData:
+            wait_for_connect_to_server_thread_finish();
             wait_for_meta_data_thread_finish();
             init_send_and_receive_data();
 
@@ -205,12 +211,17 @@ void MultiverseClient::run()
         case EMultiverseClientState::ReceiveData:
             zmq_recv(socket_client, receive_buffer, receive_buffer_size * sizeof(double), 0);
 
+            if (should_shut_down)
+            {
+                flag = EMultiverseClientState::BindReceiveData;
+                break;
+            }
+
             if (std::isnan(*receive_buffer) || *receive_buffer < 0)
             {
                 printf("[Client %s] The socket %s from the server has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
 
                 wait_for_connect_to_server_thread_finish();
-
                 start_connect_to_server_thread();
 
                 return;

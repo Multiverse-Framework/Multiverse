@@ -232,7 +232,7 @@ public:
                     }
                     else
                     {
-                        flag = EFlag::ResponseReceiveMetaData;
+                        flag = EFlag::BindSendData;
                     }
                 }
                 else
@@ -724,7 +724,6 @@ private:
 void start_multiverse_server(const std::string &server_socket_addr)
 {
     std::map<std::string, std::thread> workers;
-
     zmq::socket_t server_socket = zmq::socket_t(server_context, zmq::socket_type::rep);
     server_socket.bind(server_socket_addr);
     ROS_INFO("[Server] Create server socket %s.", server_socket_addr.c_str());
@@ -753,7 +752,7 @@ void start_multiverse_server(const std::string &server_socket_addr)
 
         server_socket.send(message, zmq::send_flags::none);
 
-        zmq_sleep(0.2);
+        zmq_sleep(0.1);
     }
 
     for (std::pair<const std::string, std::thread> &worker : workers)
@@ -769,11 +768,11 @@ int main(int argc, char **argv)
            {
         ROS_INFO("[Server] Interrupt signal (%d) received, wait for 1s then shutdown.", signum);
         should_shut_down = true; 
-        server_context.shutdown(); });
+        server_context.shutdown();});
 
     ros::init(argc, argv, "multiverse_server");
 
-    start_multiverse_server(std::string(argv[1]));
+    std::thread multiverse_server_thread(start_multiverse_server, std::string(argv[1]));
 
     while (!should_shut_down)
     {
@@ -793,7 +792,12 @@ int main(int argc, char **argv)
         }
     } while (!can_shut_down);
 
-    zmq_sleep(0.5);
+    zmq_sleep(1);
 
     context.shutdown();
+
+    if (multiverse_server_thread.joinable())
+    {
+        multiverse_server_thread.join();
+    }
 }
