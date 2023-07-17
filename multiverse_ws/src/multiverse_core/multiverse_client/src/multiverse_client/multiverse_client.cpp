@@ -37,13 +37,18 @@ std::map<std::string, size_t> attribute_map = {
     {"force", 3},
     {"torque", 3}};
 
-bool MultiverseClient::connect_to_server()
+void MultiverseClient::connect_to_server()
 {
     zmq_disconnect(socket_client, socket_addr.c_str());
 
     if (should_shut_down)
     {
-        return false;
+        return;
+    }
+
+    if (flag == EMultiverseClientState::ReceiveData || flag == EMultiverseClientState::ReceiveMetaData)
+    {
+        zmq_sleep(1);
     }
 
     zmq_connect(socket_client, server_socket_addr.c_str());
@@ -67,7 +72,26 @@ bool MultiverseClient::connect_to_server()
 
     zmq_disconnect(socket_client, server_socket_addr.c_str());
 
-    return socket_addr.compare(receive_socket_addr) == 0;
+    if (socket_addr.compare(receive_socket_addr) != 0)
+    {
+        flag = EMultiverseClientState::None;
+        return;
+    }
+
+    if (flag == EMultiverseClientState::None || flag == EMultiverseClientState::ReceiveData)
+    {
+        flag = EMultiverseClientState::StartConnection;
+
+        printf("[Client %s] Opened the socket %s.\n", port.c_str(), socket_addr.c_str());
+
+        run();
+    }
+    else if (flag == EMultiverseClientState::ReceiveMetaData)
+    {
+        zmq_connect(socket_client, socket_addr.c_str());
+
+        flag = EMultiverseClientState::SendMetaData;
+    }
 }
 
 void MultiverseClient::connect(const std::string &in_host, const std::string &in_port)
@@ -88,23 +112,9 @@ void MultiverseClient::connect(const std::string &in_host, const std::string &in
     context = zmq_ctx_new();
     socket_client = zmq_socket(context, ZMQ_REQ);
 
-    if (connect_to_server_thread.joinable())
-    {
-        connect_to_server_thread.join();
-    }
+    wait_for_connect_to_server_thread_finish();
 
-    connect_to_server_thread = std::thread([&]()
-                                           {
-        if (!connect_to_server())
-        {
-            return;
-        }
-        
-        flag = EMultiverseClientState::StartConnection;
-
-        printf("[Client %s] Opened the socket %s.\n", port.c_str(), socket_addr.c_str());
-
-        run(); });
+    start_connect_to_server_thread();
 }
 
 double MultiverseClient::get_time_now()
@@ -151,17 +161,7 @@ void MultiverseClient::run()
             {
                 printf("[Client %s] The socket %s from the server has been terminated, resending the meta data.\n", port.c_str(), socket_addr.c_str());
 
-                zmq_sleep(1); // Wait for the server to terminate completely
-
-                if (connect_to_server())
-                {
-                    zmq_connect(socket_client, socket_addr.c_str());
-                    flag = EMultiverseClientState::SendMetaData;
-                }
-                else
-                {
-                    flag = EMultiverseClientState::None;
-                }
+                connect_to_server();
             }
             else if (check_buffer_size())
             {
@@ -170,17 +170,7 @@ void MultiverseClient::run()
             }
             else
             {
-                zmq_sleep(1); // Wait for the server to terminate completely
-
-                if (connect_to_server())
-                {
-                    zmq_connect(socket_client, socket_addr.c_str());
-                    flag = EMultiverseClientState::SendMetaData;
-                }
-                else
-                {
-                    flag = EMultiverseClientState::None;
-                }
+                connect_to_server();
             }
             break;
 
@@ -219,25 +209,9 @@ void MultiverseClient::run()
             {
                 printf("[Client %s] The socket %s from the server has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
 
-                if (connect_to_server_thread.joinable())
-                {
-                    connect_to_server_thread.join();
-                }
+                wait_for_connect_to_server_thread_finish();
 
-                connect_to_server_thread = std::thread([&]()
-                                                       {
-                    zmq_sleep(1); // Wait for the server to terminate completely
-
-                    if (!connect_to_server())
-                    {
-                        return;
-                    }
-                    
-                    flag = EMultiverseClientState::StartConnection;
-
-                    wait_for_meta_data_thread_finish();
-
-                    run(); });
+                start_connect_to_server_thread();
 
                 return;
             }
@@ -263,19 +237,15 @@ void MultiverseClient::run()
         printf("[Client %s] Closing the socket %s.\n", port.c_str(), socket_addr.c_str());
 
         if (flag == EMultiverseClientState::BindSendMetaData ||
-            flag == EMultiverseClientState::SendMetaData)
+            flag == EMultiverseClientState::SendMetaData ||
+            flag == EMultiverseClientState::BindReceiveMetaData ||
+            flag == EMultiverseClientState::InitSendAndReceiveData ||
+            flag == EMultiverseClientState::BindSendData ||
+            flag == EMultiverseClientState::SendData ||
+            flag == EMultiverseClientState::BindReceiveData)
         {
             const std::string close_data = "{}";
             zmq_send(socket_client, close_data.c_str(), close_data.size(), 0);
-        }
-        else if (flag == EMultiverseClientState::BindReceiveMetaData ||
-                 flag == EMultiverseClientState::InitSendAndReceiveData ||
-                 flag == EMultiverseClientState::BindSendData ||
-                 flag == EMultiverseClientState::SendData ||
-                 flag == EMultiverseClientState::BindReceiveData)
-        {
-            send_buffer[0] = -1.0;
-            zmq_send(socket_client, send_buffer, send_buffer_size * sizeof(double), 0);
             free(send_buffer);
             free(receive_buffer);
         }
@@ -405,12 +375,11 @@ void MultiverseClient::disconnect()
 {
     should_shut_down = true;
 
+    run();
+
     zmq_ctx_shutdown(context);
 
     wait_for_meta_data_thread_finish();
 
-    if (connect_to_server_thread.joinable())
-    {
-        connect_to_server_thread.join();
-    }
+    wait_for_connect_to_server_thread_finish();
 }

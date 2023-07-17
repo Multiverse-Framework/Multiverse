@@ -20,6 +20,7 @@
 
 #include "multiverse_client.h"
 
+#include <thread>
 #include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -72,11 +73,33 @@ private:
 
     pybind11::list receive_data;
 
+    std::thread connect_to_server_thread;
+
     std::thread meta_data_thread;
 
     bool use_thread = true;
 
 private:
+    void start_connect_to_server_thread() override
+    {
+        if (use_thread)
+        {
+            connect_to_server_thread = std::thread(&MultiverseSocket::connect_to_server, this);
+        }
+        else
+        {
+            MultiverseSocket::connect_to_server();
+        }
+    }
+
+    void wait_for_connect_to_server_thread_finish() override
+    {
+        if (use_thread && connect_to_server_thread.joinable())
+        {
+            connect_to_server_thread.join();
+        }
+    }
+
     void start_meta_data_thread() override
     {
         if (use_thread)

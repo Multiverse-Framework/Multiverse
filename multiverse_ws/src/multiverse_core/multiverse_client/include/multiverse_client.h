@@ -21,7 +21,6 @@
 #pragma once
 
 #include <jsoncpp/json/json.h>
-#include <thread>
 
 enum class EMultiverseClientState : unsigned char
 {
@@ -74,7 +73,25 @@ protected:
      */
     void send_and_receive_meta_data();
 
+    /**
+     * @brief Send request to the server to open a socket
+     *
+     */
+    void connect_to_server();
+
 protected:
+    /**
+     * @brief Start connect_to_server thread
+     * 
+     */
+    virtual void start_connect_to_server_thread() = 0;
+
+    /**
+     * @brief Wait for connect_to_server thread to finish
+     *
+     */
+    virtual void wait_for_connect_to_server_thread_finish() = 0;
+
     /**
      * @brief Start send and receive meta data thread
      *
@@ -130,8 +147,6 @@ protected:
     virtual void clean_up() = 0;
 
 private:
-    bool connect_to_server();
-
     void run();
 
     void send_meta_data();
@@ -166,8 +181,6 @@ protected:
     std::string receive_meta_data_str;
 
 private:
-    std::thread connect_to_server_thread;
-
     std::string socket_addr;
 
     EMultiverseClientState flag;
