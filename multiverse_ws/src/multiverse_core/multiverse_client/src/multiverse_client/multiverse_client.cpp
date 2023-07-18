@@ -102,7 +102,12 @@ void MultiverseClient::connect(const std::string &in_host, const std::string &in
     host = in_host;
 
     port = in_port;
-    
+
+    connect();
+}
+
+void MultiverseClient::connect()
+{
     flag = EMultiverseClientState::None;
 
     socket_addr = host + ":" + port;

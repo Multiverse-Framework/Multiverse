@@ -18,7 +18,7 @@ class tf_publisher(MultiverseRosPublisher):
         self._send_meta_data_dict["receive"][""] = ["position", "quaternion"]
 
     def _construct_rosmsg(self) -> None:
-        self.object_names: List[str]
+        self.object_names = []
         if self._receive_meta_data_dict.get("receive") is None:
             return
         self.object_names = self._receive_meta_data_dict["receive"].keys()

@@ -34,6 +34,12 @@ public:
     void connect(const std::string &in_host, const std::string &in_port);
 
     /**
+     * @brief Connect the socket
+     *
+     */
+    void connect();
+
+    /**
      * @brief Communicate with the server
      *
      */
@@ -52,6 +58,11 @@ public:
      * @return double current time in time_unit
      */
     virtual double get_time_now();
+
+public:
+    std::string host;
+
+    std::string port;
 
 protected:
     /**
@@ -169,10 +180,6 @@ private:
     void init_buffer();
 
 protected:
-    std::string host;
-
-    std::string port;
-    
     std::string server_socket_addr = "tcp://127.0.0.1:7000";
 
     size_t send_buffer_size = 1;
