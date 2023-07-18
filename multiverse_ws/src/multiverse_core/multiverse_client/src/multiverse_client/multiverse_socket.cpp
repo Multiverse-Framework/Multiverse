@@ -20,10 +20,22 @@
 
 #include "multiverse_client.h"
 
-#include <thread>
 #include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <thread>
+
+std::map<std::string, size_t> attribute_map = {
+    {"", 0},
+    {"position", 3},
+    {"quaternion", 4},
+    {"relative_velocity", 6},
+    {"joint_rvalue", 1},
+    {"joint_tvalue", 1},
+    {"joint_position", 3},
+    {"joint_quaternion", 4},
+    {"force", 3},
+    {"torque", 3}};
 
 class MultiverseSocket final : public MultiverseClient
 {
@@ -39,7 +51,7 @@ public:
 
     inline void set_send_meta_data(const pybind11::dict &in_send_meta_data_dict)
     {
-        send_meta_data_dict = in_send_meta_data_dict;
+        send_meta_data_dict = in_send_meta_data_dict;        
     }
 
     inline pybind11::dict get_receive_meta_data() const
@@ -80,6 +92,95 @@ private:
     bool use_thread = true;
 
 private:
+    bool compute_receive_meta_data() override
+    {
+        if (receive_meta_data_str.empty())
+        {
+            pybind11::gil_scoped_acquire acquire;
+            receive_meta_data_dict = pybind11::dict();
+            pybind11::gil_scoped_release release;
+            return false;
+        }
+        
+        pybind11::gil_scoped_acquire acquire;
+        pybind11::module json_module = pybind11::module::import("json");
+        
+        pybind11::object json_loads = json_module.attr("loads");
+
+        pybind11::object parsed_dict = json_loads(receive_meta_data_str);
+        
+        receive_meta_data_dict = parsed_dict.cast<pybind11::dict>();
+        const bool result = receive_meta_data_dict.contains("time") && receive_meta_data_dict["time"].cast<double>() > 0;
+        pybind11::gil_scoped_release release;
+        return result;
+    }
+
+    void compute_request_buffer_sizes(size_t &req_send_buffer_size, size_t &req_receive_buffer_size) const override
+    {
+        std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
+
+        pybind11::gil_scoped_acquire acquire;
+        for (std::pair<const std::string, size_t> &request_buffer_size : request_buffer_sizes)
+        {
+            if (!send_meta_data_dict.contains(request_buffer_size.first.c_str()))
+            {
+                continue;
+            }
+
+            for (const auto &send_objects : send_meta_data_dict[request_buffer_size.first.c_str()].cast<pybind11::dict>())
+            {
+                const std::string object_name = send_objects.first.cast<std::string>();
+                if (object_name.compare("") == 0 || request_buffer_size.second == -1)
+                {
+                    request_buffer_size.second = -1;
+                    break;
+                }
+
+                const pybind11::list attributes = send_objects.second.cast<pybind11::list>();
+                for (size_t i = 0; i < pybind11::len(attributes); i++)
+                {
+                    if (attributes[i].cast<std::string>().compare("") == 0)
+                    {
+                        request_buffer_size.second = -1;
+                        break;
+                    }
+                    request_buffer_size.second += attribute_map[attributes[i].cast<std::string>()];
+                }
+            }
+        }
+        pybind11::gil_scoped_release release;
+        
+        req_send_buffer_size = request_buffer_sizes["send"];
+        req_receive_buffer_size = request_buffer_sizes["receive"];
+    }
+
+    void compute_response_buffer_sizes(size_t &res_send_buffer_size, size_t &res_receive_buffer_size) const override
+    {
+        std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
+
+        pybind11::gil_scoped_acquire acquire;
+        for (std::pair<const std::string, size_t> &response_buffer_size : response_buffer_sizes)
+        {
+            if (!receive_meta_data_dict.contains(response_buffer_size.first.c_str()))
+            {
+                continue;
+            }
+            
+            for (const auto &receive_objects : receive_meta_data_dict[response_buffer_size.first.c_str()].cast<pybind11::dict>())
+            {
+                const pybind11::dict attributes = receive_objects.second.cast<pybind11::dict>();
+                for (const auto &attribute : attributes)
+                {
+                    response_buffer_size.second += attribute.second.cast<pybind11::list>().size();
+                }
+            }
+        }
+        pybind11::gil_scoped_release release;
+        
+        res_send_buffer_size = response_buffer_sizes["send"];
+        res_receive_buffer_size = response_buffer_sizes["receive"];
+    }
+
     void start_connect_to_server_thread() override
     {
         if (use_thread)
@@ -128,71 +229,13 @@ private:
     void bind_send_meta_data() override
     {
         pybind11::gil_scoped_acquire acquire;
-        send_meta_data_json.clear();
-
-        send_meta_data_json["world"] = send_meta_data_dict.contains("world") ? send_meta_data_dict["world"].cast<std::string>() : "world";
-        send_meta_data_json["length_unit"] = send_meta_data_dict.contains("length_unit") ? send_meta_data_dict["length_unit"].cast<std::string>() : "N";
-        send_meta_data_json["angle_unit"] = send_meta_data_dict.contains("angle_unit") ? send_meta_data_dict["angle_unit"].cast<std::string>() : "rad";
-        send_meta_data_json["force_unit"] = send_meta_data_dict.contains("force_unit") ? send_meta_data_dict["force_unit"].cast<std::string>() : "N";
-        send_meta_data_json["time_unit"] = send_meta_data_dict.contains("time_unit") ? send_meta_data_dict["time_unit"].cast<std::string>() : "s";
-        send_meta_data_json["handedness"] = send_meta_data_dict.contains("handedness") ? send_meta_data_dict["handedness"].cast<std::string>() : "rhs";
-
-        for (const std::string &send_receive : {"send", "receive"})
-        {
-            for (const std::pair<std::string, std::vector<std::string>> receive_objects : send_meta_data_dict[send_receive.c_str()].cast<std::map<std::string, std::vector<std::string>>>())
-            {
-                for (const std::string &object_attribute : receive_objects.second)
-                {
-                    if (std::find(send_meta_data_json[send_receive][receive_objects.first].begin(),
-                                  send_meta_data_json[send_receive][receive_objects.first].end(),
-                                  object_attribute) == send_meta_data_json[send_receive][receive_objects.first].end())
-                    {
-                        send_meta_data_json[send_receive][receive_objects.first].append(object_attribute);
-                    }
-                }
-            }
-        }
+        send_meta_data_str = pybind11::str(send_meta_data_dict).cast<std::string>();
+        std::replace(send_meta_data_str.begin(), send_meta_data_str.end(), '\'', '"');
         pybind11::gil_scoped_release release;
     }
 
     void bind_receive_meta_data() override
     {
-        if (receive_meta_data_json.empty())
-        {
-            return;
-        }
-
-        pybind11::gil_scoped_acquire acquire;
-
-        receive_meta_data_dict["world"] = receive_meta_data_json["world"].asString();
-        receive_meta_data_dict["length_unit"] = receive_meta_data_json["length_unit"].asString();
-        receive_meta_data_dict["angle_unit"] = receive_meta_data_json["angle_unit"].asString();
-        receive_meta_data_dict["force_unit"] = receive_meta_data_json["force_unit"].asString();
-        receive_meta_data_dict["time_unit"] = receive_meta_data_json["time_unit"].asString();
-        receive_meta_data_dict["handedness"] = receive_meta_data_json["handedness"].asString();
-
-        for (const std::string &send_receive : {"send", "receive"})
-        {
-            receive_meta_data_dict[send_receive.c_str()] = pybind11::dict();
-            const Json::Value objects_json = receive_meta_data_json[send_receive];
-            for (const std::string &object_name : objects_json.getMemberNames())
-            {
-                receive_meta_data_dict[send_receive.c_str()][object_name.c_str()] = pybind11::dict();
-                const Json::Value object_json = objects_json[object_name];
-                for (const std::string &attribute_name : object_json.getMemberNames())
-                {
-                    pybind11::list data_list;
-                    const Json::Value object_data_json = object_json[attribute_name];
-                    for (int i = 0; i < object_data_json.size(); i++)
-                    {
-                        data_list.append(object_data_json[i].asDouble());
-                    }
-                    receive_meta_data_dict[send_receive.c_str()][object_name.c_str()][attribute_name.c_str()] = data_list;
-                }
-            }
-        }
-
-        pybind11::gil_scoped_release release;
     }
 
     void clean_up() override
@@ -241,7 +284,7 @@ PYBIND11_MODULE(multiverse_socket, handle)
     handle.doc() = "";
 
     pybind11::class_<MultiverseClient>(handle, "MultiverseClient")
-        .def("connect", &MultiverseClient::connect)
+        .def("connect", static_cast<void (MultiverseClient::*)(const std::string &, const std::string &)>(&MultiverseClient::connect))
         .def("communicate", &MultiverseClient::communicate)
         .def("disconnect", &MultiverseClient::disconnect);
 

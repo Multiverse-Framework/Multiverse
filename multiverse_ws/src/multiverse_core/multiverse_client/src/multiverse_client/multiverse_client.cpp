@@ -20,22 +20,25 @@
 
 #include "multiverse_client.h"
 
-#include <algorithm>
 #include <chrono>
 #include <cmath>
+#include <map>
 #include <zmq.hpp>
 
-std::map<std::string, size_t> attribute_map = {
-    {"", 0},
-    {"position", 3},
-    {"quaternion", 4},
-    {"relative_velocity", 6},
-    {"joint_rvalue", 1},
-    {"joint_tvalue", 1},
-    {"joint_position", 3},
-    {"joint_quaternion", 4},
-    {"force", 3},
-    {"torque", 3}};
+enum class EMultiverseClientState : unsigned char
+{
+    None,
+    StartConnection,
+    BindSendMetaData,
+    SendMetaData,
+    ReceiveMetaData,
+    BindReceiveMetaData,
+    InitSendAndReceiveData,
+    BindSendData,
+    SendData,
+    ReceiveData,
+    BindReceiveData
+};
 
 void MultiverseClient::connect_to_server()
 {
@@ -96,10 +99,12 @@ void MultiverseClient::connect_to_server()
 
 void MultiverseClient::connect(const std::string &in_host, const std::string &in_port)
 {
+    host = in_host;
+
+    port = in_port;
+    
     flag = EMultiverseClientState::None;
 
-    host = in_host;
-    port = in_port;
     socket_addr = host + ":" + port;
 
     clean_up();
@@ -135,11 +140,9 @@ void MultiverseClient::run()
             break;
 
         case EMultiverseClientState::BindSendMetaData:
-            send_meta_data_json = Json::Value();
             bind_send_meta_data();
-            send_meta_data_str = send_meta_data_json.toStyledString();
 
-            printf("[Client %s] Sending meta data to the server:\n%s", port.c_str(), send_meta_data_str.c_str());
+            printf("[Client %s] Sending meta data to the server:%s\n", port.c_str(), send_meta_data_str.c_str());
 
             start_meta_data_thread();
             return;
@@ -156,25 +159,15 @@ void MultiverseClient::run()
             if (should_shut_down)
             {
                 flag = EMultiverseClientState::BindReceiveMetaData;
-                break;
             }
-
-            if (receive_meta_data_str.empty() ||
-                !reader.parse(receive_meta_data_str, receive_meta_data_json) ||
-                !receive_meta_data_json.isMember("time") ||
-                receive_meta_data_json["time"].asDouble() < 0)
-            {
-                printf("[Client %s] The socket %s from the server has been terminated, resending the meta data.\n", port.c_str(), socket_addr.c_str());
-
-                connect_to_server();
-            }
-            else if (check_buffer_size())
+            else if (compute_receive_meta_data() && check_buffer_size())
             {
                 init_buffer();
                 flag = EMultiverseClientState::BindReceiveMetaData;
             }
             else
             {
+                printf("[Client %s] The socket %s from the server has been terminated, resending the meta data.\n", port.c_str(), socket_addr.c_str());
                 connect_to_server();
             }
             break;
@@ -283,49 +276,19 @@ void MultiverseClient::receive_meta_data()
     zmq_msg_t message;
     zmq_msg_init(&message);
     zmq_msg_recv(&message, socket_client, 0);
-    receive_meta_data_str = static_cast<char *>(zmq_msg_data(&message)), zmq_msg_size(&message);
+    receive_meta_data_str = std::string(static_cast<char *>(zmq_msg_data(&message)), zmq_msg_size(&message));
     zmq_msg_close(&message);
 }
 
 bool MultiverseClient::check_buffer_size()
 {
-    bool skip_compare = false;
-
     std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
-    for (std::pair<const std::string, size_t> &request_buffer_size : request_buffer_sizes)
-    {
-        for (const std::string &object_name : send_meta_data_json[request_buffer_size.first].getMemberNames())
-        {
-            if (strcmp(object_name.c_str(), "") == 0)
-            {
-                skip_compare = true;
-                break;
-            }
-            for (const Json::Value &attribute : send_meta_data_json[request_buffer_size.first][object_name])
-            {
-                if (strcmp(attribute.asString().c_str(), "") == 0)
-                {
-                    skip_compare = true;
-                    break;
-                }
-                request_buffer_size.second += attribute_map[attribute.asString()];
-            }
-        }
-    }
-
+    compute_request_buffer_sizes(request_buffer_sizes["send"], request_buffer_sizes["receive"]);
+    
     std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
-    for (std::pair<const std::string, size_t> &response_buffer_size : response_buffer_sizes)
-    {
-        for (const std::string &object_name : receive_meta_data_json[response_buffer_size.first].getMemberNames())
-        {
-            for (const std::string &attribute_name : receive_meta_data_json[response_buffer_size.first][object_name].getMemberNames())
-            {
-                response_buffer_size.second += receive_meta_data_json[response_buffer_size.first][object_name][attribute_name].size();
-            }
-        }
-    }
-
-    if (!skip_compare &&
+    compute_response_buffer_sizes(response_buffer_sizes["send"], response_buffer_sizes["receive"]);
+    
+    if (request_buffer_sizes["receive"] != -1 &&
         (response_buffer_sizes["send"] != request_buffer_sizes["send"] || response_buffer_sizes["receive"] != request_buffer_sizes["receive"]))
     {
         printf("[Client %s] Failed to initialize the buffers %s: send_buffer_size(server = %ld, client = %ld), receive_buffer_size(server = %ld, client = %ld).\n",
@@ -337,7 +300,7 @@ bool MultiverseClient::check_buffer_size()
                request_buffer_sizes["receive"]);
         return false;
     }
-
+    
     send_buffer_size = response_buffer_sizes["send"];
     receive_buffer_size = response_buffer_sizes["receive"];
     return true;
