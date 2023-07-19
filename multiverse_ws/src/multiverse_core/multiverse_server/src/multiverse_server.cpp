@@ -29,6 +29,8 @@
 #include <thread>
 #include <zmq.hpp>
 
+#define STRING_SIZE 200
+
 using namespace std::chrono_literals;
 
 enum class EAttribute : unsigned char
@@ -180,7 +182,7 @@ public:
                 break;
 
             case EFlag::BindObjects:
-                ROS_INFO("[Server] Receive meta data from socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
+                ROS_INFO("[Server] Receive meta data from socket %s:\n%*.*s", socket_addr.c_str(), STRING_SIZE, STRING_SIZE, request_meta_data_json.toStyledString().c_str());
                 init_response_meta_data();
 
                 mtx.lock();
@@ -198,7 +200,7 @@ public:
 
             case EFlag::SendResponseMetaData:
                 send_response_meta_data();
-                ROS_INFO("[Server] Send meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
+                ROS_INFO("[Server] Send meta data to socket %s:\n%*.*s", socket_addr.c_str(), STRING_SIZE, STRING_SIZE, response_meta_data_json.toStyledString().c_str());
                 if (send_buffer_size == 1 && receive_buffer_size == 1)
                 {
                     flag = EFlag::ReceiveRequestMetaData;

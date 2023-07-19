@@ -25,6 +25,8 @@
 #include <map>
 #include <zmq.hpp>
 
+#define STRING_SIZE 200
+
 enum class EMultiverseClientState : unsigned char
 {
     None,
@@ -147,7 +149,7 @@ void MultiverseClient::run()
         case EMultiverseClientState::BindRequestMetaData:
             bind_request_meta_data();
 
-            printf("[Client %s] Sent meta data to the server:%s\n", port.c_str(), request_meta_data_str.c_str());
+            printf("[Client %s] Sent meta data to the server:%*.*s\n", port.c_str(), STRING_SIZE, STRING_SIZE, request_meta_data_str.c_str());
 
             start_meta_data_thread();
             return;
@@ -161,7 +163,7 @@ void MultiverseClient::run()
         case EMultiverseClientState::ReceiveResponseMetaData:
             receive_response_meta_data();
 
-            printf("[Client %s] Received meta data from the server:%s\n", port.c_str(), response_meta_data_str.c_str());
+            printf("[Client %s] Received meta data from the server:%*.*s\n", port.c_str(), STRING_SIZE, STRING_SIZE, response_meta_data_str.c_str());
 
             if (should_shut_down)
             {
@@ -292,10 +294,10 @@ bool MultiverseClient::check_buffer_size()
 {
     std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
     compute_request_buffer_sizes(request_buffer_sizes["send"], request_buffer_sizes["receive"]);
-    
+
     std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
     compute_response_buffer_sizes(response_buffer_sizes["send"], response_buffer_sizes["receive"]);
-    
+
     if (request_buffer_sizes["receive"] != -1 &&
         (response_buffer_sizes["send"] != request_buffer_sizes["send"] || response_buffer_sizes["receive"] != request_buffer_sizes["receive"]))
     {
@@ -308,7 +310,7 @@ bool MultiverseClient::check_buffer_size()
                request_buffer_sizes["receive"]);
         return false;
     }
-    
+
     send_buffer_size = response_buffer_sizes["send"];
     receive_buffer_size = response_buffer_sizes["receive"];
     return true;
