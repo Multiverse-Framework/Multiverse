@@ -57,13 +57,13 @@ enum class EFlag : unsigned char
 
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
     {
-        {"position", {EAttribute::Position, {0.0, 0.0, 0.0}}},
-        {"quaternion", {EAttribute::Quaternion, {1.0, 0.0, 0.0, 0.0}}},
+        {"position", {EAttribute::Position, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
+        {"quaternion", {EAttribute::Quaternion, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
         {"relative_velocity", {EAttribute::RelativeVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
-        {"joint_rvalue", {EAttribute::JointRvalue, {0.0}}},
-        {"joint_tvalue", {EAttribute::JointTvalue, {0.0}}},
-        {"joint_position", {EAttribute::JointPosition, {0.0, 0.0, 0.0}}},
-        {"joint_quaternion", {EAttribute::JointQuaternion, {1.0, 0.0, 0.0, 0.0}}},
+        {"joint_rvalue", {EAttribute::JointRvalue, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_tvalue", {EAttribute::JointTvalue, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_position", {EAttribute::JointPosition, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_quaternion", {EAttribute::JointQuaternion, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
         {"force", {EAttribute::Force, {0.0, 0.0, 0.0}}},
         {"torque", {EAttribute::Torque, {0.0, 0.0, 0.0}}}};
 
@@ -180,6 +180,7 @@ public:
                 break;
 
             case EFlag::BindObjects:
+                ROS_INFO("[Server] Receive meta data from socket %s:\n%s", socket_addr.c_str(), send_meta_data_json.toStyledString().c_str());
                 init_receive_meta_data();
 
                 mtx.lock();
@@ -196,7 +197,7 @@ public:
                 flag = EFlag::ResponseReceiveMetaData;
 
             case EFlag::ResponseReceiveMetaData:
-                response_meta_data();
+                response_receive_meta_data();
                 if (send_buffer_size == 1 && receive_buffer_size == 1)
                 {
                     flag = EFlag::RequestSendMetaData;
@@ -313,8 +314,6 @@ private:
 
     void init_receive_meta_data()
     {
-        ROS_INFO("[Server] Receive meta data from socket %s:\n%s", socket_addr.c_str(), send_meta_data_json.toStyledString().c_str());
-
         world_name = send_meta_data_json.isMember("world") ? send_meta_data_json["world"].asString() : "world";
         const std::string length_unit = send_meta_data_json.isMember("length_unit") ? send_meta_data_json["length_unit"].asString() : "m";
         const std::string angle_unit = send_meta_data_json.isMember("angle_unit") ? send_meta_data_json["angle_unit"].asString() : "rad";
@@ -397,8 +396,6 @@ private:
             if (objects.count(object_name) == 0)
             {
                 objects[object_name] = {};
-                objects[object_name]["force"] = {attribute_map["force"].second, false};
-                objects[object_name]["torque"] = {attribute_map["torque"].second, false};
             }
 
             for (const Json::Value &attribute_json : send_objects_json[object_name])
@@ -413,11 +410,16 @@ private:
                         double *data = &objects[object_name][attribute_name].first[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
-                        receive_meta_data_json["send"][object_name][attribute_name].append(std::numeric_limits<double>::quiet_NaN());
+                        receive_meta_data_json["send"][object_name][attribute_name].append(attribute_map[attribute_name].second[i]);
                     }
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
+                    if (objects[object_name].count(attribute_name) == 0)
+                    {
+                        objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
+                    }
+
                     send_efforts[world_name][object_name][socket_addr][attribute_name] = attribute_map[attribute_name].second;
 
                     for (size_t i = 0; i < attribute_map[attribute_name].second.size(); i++)
@@ -554,7 +556,17 @@ private:
             {
                 const std::string attribute_name = attribute_json.asString();
 
-                const size_t data_size = (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0) ? 3 : worlds[world_name][object_name][attribute_name].first.size();
+                size_t data_size;
+                if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
+                {
+                    data_size = 3;
+                    worlds[world_name][object_name][attribute_name].second = true;
+                }
+                else
+                {
+                    data_size = worlds[world_name][object_name][attribute_name].first.size();
+                }
+
                 for (size_t i = 0; i < data_size; i++)
                 {
                     double *data = &worlds[world_name][object_name][attribute_name].first[i];
@@ -566,7 +578,7 @@ private:
         }
     }
 
-    void response_meta_data()
+    void response_receive_meta_data()
     {
         send_buffer_size = 1 + send_data_vec.size();
         receive_buffer_size = 1 + receive_data_vec.size();
@@ -650,7 +662,7 @@ private:
         {
             for (const std::string &effort : {"force", "torque"})
             {
-                if (std::find(receive_objects_json.begin(), receive_objects_json.end(), effort) == receive_objects_json.end())
+                if (std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), effort) == receive_objects_json[object_name].end())
                 {
                     continue;
                 }
@@ -659,7 +671,7 @@ private:
                 {
                     for (size_t i = 0; i < 3; i++)
                     {
-                        for (size_t j = 3; j < send_effort.second[effort].size() / 3; j += 3)
+                        for (size_t j = 3; j < send_effort.second[effort].size(); j += 3)
                         {
                             send_effort.second[effort][i] += send_effort.second[effort][j];
                         }
@@ -769,7 +781,7 @@ int main(int argc, char **argv)
            {
         ROS_INFO("[Server] Interrupt signal (%d) received, wait for 1s then shutdown.", signum);
         should_shut_down = true; 
-        server_context.shutdown();});
+        server_context.shutdown(); });
 
     ros::init(argc, argv, "multiverse_server");
 
