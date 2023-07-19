@@ -10,8 +10,8 @@ import numpy
 class tf_publisher(MultiverseRosPublisher):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.__tf_msgs = []
         self.__tf_broadcaster = TransformBroadcaster()
+        self.__refresh_time = rospy.Time.now()
 
     def _init_request_meta_data(self) -> None:
         super()._init_request_meta_data()
@@ -24,6 +24,7 @@ class tf_publisher(MultiverseRosPublisher):
         self.object_names = self._response_meta_data_dict["receive"].keys()
         root_frame_id = rospy.get_param("multiverse/root_frame_id") if rospy.has_param("multiverse/root_frame_id") else "map"
 
+        self.__tf_msgs = []
         for object_name in self.object_names:
             tf_msg = TransformStamped()
             tf_msg.header.frame_id = root_frame_id
@@ -46,3 +47,7 @@ class tf_publisher(MultiverseRosPublisher):
 
     def _publish(self) -> None:
         self.__tf_broadcaster.sendTransform(self.__tf_msgs)
+        if rospy.Time.now().to_sec() - self.__refresh_time.to_sec() > 1:
+            self._communicate(True)
+            self._construct_rosmsg()
+            self.__refresh_time = rospy.Time.now()
