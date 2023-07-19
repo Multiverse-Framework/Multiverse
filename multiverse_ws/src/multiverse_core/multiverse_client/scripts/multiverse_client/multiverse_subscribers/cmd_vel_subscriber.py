@@ -15,11 +15,11 @@ class cmd_vel_subscriber(MultiverseRosSubscriber):
         self._topic_name = "/cmd_vel"
         self._data_class = Twist
 
-    def _init_send_meta_data(self):
-        super()._init_send_meta_data()
-        self._send_meta_data_dict["send"] = {}
-        self._send_meta_data_dict["send"][self.__body] = ["relative_velocity"]
-        self._send_meta_data_dict["receive"] = {}
+    def _init_request_meta_data(self):
+        super()._init_request_meta_data()
+        self._request_meta_data_dict["send"] = {}
+        self._request_meta_data_dict["send"][self.__body] = ["relative_velocity"]
+        self._request_meta_data_dict["receive"] = {}
 
     def _init_send_data(self) -> None:
         self._send_data = [0.0] * 7

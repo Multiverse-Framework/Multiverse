@@ -43,7 +43,7 @@ public:
      * @brief Communicate with the server
      *
      */
-    void communicate(const bool resend_meta_data = false);
+    void communicate(const bool resend_request_meta_data = false);
 
     /**
      * @brief Send close signal to the server
@@ -112,15 +112,15 @@ protected:
      * @brief Bind the meta data from the objects
      *
      */
-    virtual void bind_send_meta_data() = 0;
+    virtual void bind_request_meta_data() = 0;
 
     /**
-     * @brief Compute receive_meta_data from receive_meta_data_str
+     * @brief Compute receive_response_meta_data from response_meta_data_str
      *
      * @return true
      * @return false
      */
-    virtual bool compute_receive_meta_data() = 0;
+    virtual bool compute_response_meta_data() = 0;
 
     /**
      * @brief Compute request buffer sizes
@@ -142,7 +142,7 @@ protected:
      * @brief Bind the objects from the receive meta data
      *
      */
-    virtual void bind_receive_meta_data() = 0;
+    virtual void bind_response_meta_data() = 0;
 
     /**
      * @brief Initialize the send and receive data
@@ -171,9 +171,9 @@ protected:
 private:
     void run();
 
-    void send_meta_data();
+    void send_request_meta_data();
 
-    void receive_meta_data();
+    void receive_response_meta_data();
 
     bool check_buffer_size();
 
@@ -190,9 +190,9 @@ protected:
 
     double *receive_buffer;
 
-    std::string send_meta_data_str;
+    std::string request_meta_data_str;
 
-    std::string receive_meta_data_str;
+    std::string response_meta_data_str;
 
 private:
     std::string socket_addr;

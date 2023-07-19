@@ -34,12 +34,12 @@ std::map<std::string, size_t> attribute_map = {
     {"torque", 3}};
 
 
-bool MultiverseClientJson::compute_receive_meta_data()
+bool MultiverseClientJson::compute_response_meta_data()
 {
-    return !receive_meta_data_str.empty() &&
-           reader.parse(receive_meta_data_str, receive_meta_data_json) &&
-           receive_meta_data_json.isMember("time") &&
-           receive_meta_data_json["time"].asDouble() > 0;
+    return !response_meta_data_str.empty() &&
+           reader.parse(response_meta_data_str, response_meta_data_json) &&
+           response_meta_data_json.isMember("time") &&
+           response_meta_data_json["time"].asDouble() > 0;
 }
 
 void MultiverseClientJson::compute_request_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const
@@ -47,14 +47,14 @@ void MultiverseClientJson::compute_request_buffer_sizes(size_t &send_buffer_size
     std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
     for (std::pair<const std::string, size_t> &request_buffer_size : request_buffer_sizes)
     {
-        for (const std::string &object_name : send_meta_data_json[request_buffer_size.first].getMemberNames())
+        for (const std::string &object_name : request_meta_data_json[request_buffer_size.first].getMemberNames())
         {
             if (object_name.compare("") == 0 || request_buffer_size.second == -1)
             {
                 request_buffer_size.second = -1;
                 break;
             }
-            for (const Json::Value &attribute : send_meta_data_json[request_buffer_size.first][object_name])
+            for (const Json::Value &attribute : request_meta_data_json[request_buffer_size.first][object_name])
             {
                 if (attribute.asString().compare("") == 0)
                 {
@@ -75,11 +75,11 @@ void MultiverseClientJson::compute_response_buffer_sizes(size_t &send_buffer_siz
     std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
     for (std::pair<const std::string, size_t> &response_buffer_size : response_buffer_sizes)
     {
-        for (const std::string &object_name : receive_meta_data_json[response_buffer_size.first].getMemberNames())
+        for (const std::string &object_name : response_meta_data_json[response_buffer_size.first].getMemberNames())
         {
-            for (const std::string &attribute_name : receive_meta_data_json[response_buffer_size.first][object_name].getMemberNames())
+            for (const std::string &attribute_name : response_meta_data_json[response_buffer_size.first][object_name].getMemberNames())
             {
-                response_buffer_size.second += receive_meta_data_json[response_buffer_size.first][object_name][attribute_name].size();
+                response_buffer_size.second += response_meta_data_json[response_buffer_size.first][object_name][attribute_name].size();
             }
         }
     }

@@ -26,16 +26,16 @@
 class MultiverseClientJson : public MultiverseClient
 {
 protected:
-    bool compute_receive_meta_data() override final;
+    bool compute_response_meta_data() override final;
 
     void compute_request_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const override final;
 
     void compute_response_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const override final;
 
 protected:
-    Json::Value send_meta_data_json;
+    Json::Value request_meta_data_json;
 
-    Json::Value receive_meta_data_json;
+    Json::Value response_meta_data_json;
 
     Json::Reader reader;
 };

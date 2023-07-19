@@ -13,15 +13,15 @@ class tf_publisher(MultiverseRosPublisher):
         self.__tf_msgs = []
         self.__tf_broadcaster = TransformBroadcaster()
 
-    def _init_send_meta_data(self) -> None:
-        super()._init_send_meta_data()
-        self._send_meta_data_dict["receive"][""] = ["position", "quaternion"]
+    def _init_request_meta_data(self) -> None:
+        super()._init_request_meta_data()
+        self._request_meta_data_dict["receive"][""] = ["position", "quaternion"]
 
     def _construct_rosmsg(self) -> None:
         self.object_names = []
-        if self._receive_meta_data_dict.get("receive") is None:
+        if self._response_meta_data_dict.get("receive") is None:
             return
-        self.object_names = self._receive_meta_data_dict["receive"].keys()
+        self.object_names = self._response_meta_data_dict["receive"].keys()
         root_frame_id = rospy.get_param("multiverse/root_frame_id") if rospy.has_param("multiverse/root_frame_id") else "map"
 
         for object_name in self.object_names:
