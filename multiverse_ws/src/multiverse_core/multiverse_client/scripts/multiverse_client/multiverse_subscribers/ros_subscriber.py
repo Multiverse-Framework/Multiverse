@@ -17,9 +17,9 @@ class MultiverseRosSubscriber(MultiverseRosBase):
 
     def start(self) -> None:
         self._init_multiverse_socket()
-        self._set_send_meta_data()
+        self._set_request_meta_data()
         self._connect()
-        self._get_receive_meta_data()
+        self._get_response_meta_data()
         self._init_send_data()
         self._set_send_data(self._send_data)
         self._communicate()

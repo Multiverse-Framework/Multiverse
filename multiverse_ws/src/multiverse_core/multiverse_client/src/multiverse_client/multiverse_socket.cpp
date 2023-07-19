@@ -49,14 +49,14 @@ public:
     {
     }
 
-    inline void set_send_meta_data(const pybind11::dict &in_send_meta_data_dict)
+    inline void set_request_meta_data(const pybind11::dict &in_request_meta_data_dict)
     {
-        send_meta_data_dict = in_send_meta_data_dict;        
+        request_meta_data_dict = in_request_meta_data_dict;        
     }
 
-    inline pybind11::dict get_receive_meta_data() const
+    inline pybind11::dict get_response_meta_data() const
     {
-        return receive_meta_data_dict;
+        return response_meta_data_dict;
     }
 
     inline void set_send_data(const pybind11::list &in_send_data)
@@ -77,9 +77,9 @@ public:
     }
 
 private:
-    pybind11::dict send_meta_data_dict;
+    pybind11::dict request_meta_data_dict;
 
-    pybind11::dict receive_meta_data_dict;
+    pybind11::dict response_meta_data_dict;
 
     pybind11::list send_data;
 
@@ -92,12 +92,12 @@ private:
     bool use_thread = true;
 
 private:
-    bool compute_receive_meta_data() override
+    bool compute_response_meta_data() override
     {
-        if (receive_meta_data_str.empty())
+        if (response_meta_data_str.empty())
         {
             pybind11::gil_scoped_acquire acquire;
-            receive_meta_data_dict = pybind11::dict();
+            response_meta_data_dict = pybind11::dict();
             pybind11::gil_scoped_release release;
             return false;
         }
@@ -107,10 +107,10 @@ private:
         
         pybind11::object json_loads = json_module.attr("loads");
 
-        pybind11::object parsed_dict = json_loads(receive_meta_data_str);
+        pybind11::object parsed_dict = json_loads(response_meta_data_str);
         
-        receive_meta_data_dict = parsed_dict.cast<pybind11::dict>();
-        const bool result = receive_meta_data_dict.contains("time") && receive_meta_data_dict["time"].cast<double>() > 0;
+        response_meta_data_dict = parsed_dict.cast<pybind11::dict>();
+        const bool result = response_meta_data_dict.contains("time") && response_meta_data_dict["time"].cast<double>() > 0;
         pybind11::gil_scoped_release release;
         return result;
     }
@@ -122,12 +122,12 @@ private:
         pybind11::gil_scoped_acquire acquire;
         for (std::pair<const std::string, size_t> &request_buffer_size : request_buffer_sizes)
         {
-            if (!send_meta_data_dict.contains(request_buffer_size.first.c_str()))
+            if (!request_meta_data_dict.contains(request_buffer_size.first.c_str()))
             {
                 continue;
             }
 
-            for (const auto &send_objects : send_meta_data_dict[request_buffer_size.first.c_str()].cast<pybind11::dict>())
+            for (const auto &send_objects : request_meta_data_dict[request_buffer_size.first.c_str()].cast<pybind11::dict>())
             {
                 const std::string object_name = send_objects.first.cast<std::string>();
                 if (object_name.compare("") == 0 || request_buffer_size.second == -1)
@@ -161,12 +161,12 @@ private:
         pybind11::gil_scoped_acquire acquire;
         for (std::pair<const std::string, size_t> &response_buffer_size : response_buffer_sizes)
         {
-            if (!receive_meta_data_dict.contains(response_buffer_size.first.c_str()))
+            if (!response_meta_data_dict.contains(response_buffer_size.first.c_str()))
             {
                 continue;
             }
             
-            for (const auto &receive_objects : receive_meta_data_dict[response_buffer_size.first.c_str()].cast<pybind11::dict>())
+            for (const auto &receive_objects : response_meta_data_dict[response_buffer_size.first.c_str()].cast<pybind11::dict>())
             {
                 const pybind11::dict attributes = receive_objects.second.cast<pybind11::dict>();
                 for (const auto &attribute : attributes)
@@ -226,15 +226,15 @@ private:
         return true;
     }
 
-    void bind_send_meta_data() override
+    void bind_request_meta_data() override
     {
         pybind11::gil_scoped_acquire acquire;
-        send_meta_data_str = pybind11::str(send_meta_data_dict).cast<std::string>();
-        std::replace(send_meta_data_str.begin(), send_meta_data_str.end(), '\'', '"');
+        request_meta_data_str = pybind11::str(request_meta_data_dict).cast<std::string>();
+        std::replace(request_meta_data_str.begin(), request_meta_data_str.end(), '\'', '"');
         pybind11::gil_scoped_release release;
     }
 
-    void bind_receive_meta_data() override
+    void bind_response_meta_data() override
     {
     }
 
@@ -290,8 +290,8 @@ PYBIND11_MODULE(multiverse_socket, handle)
 
     pybind11::class_<MultiverseSocket, MultiverseClient>(handle, "MultiverseSocket", pybind11::is_final())
         .def(pybind11::init<bool, const std::string &>())
-        .def("set_send_meta_data", &MultiverseSocket::set_send_meta_data)
-        .def("get_receive_meta_data", &MultiverseSocket::get_receive_meta_data)
+        .def("set_request_meta_data", &MultiverseSocket::set_request_meta_data)
+        .def("get_response_meta_data", &MultiverseSocket::get_response_meta_data)
         .def("set_send_data", &MultiverseSocket::set_send_data)
         .def("get_receive_data", &MultiverseSocket::get_receive_data);
 }

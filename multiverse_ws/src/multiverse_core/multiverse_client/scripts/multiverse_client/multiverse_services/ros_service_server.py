@@ -15,8 +15,8 @@ class MultiverseRosServiceServer(MultiverseRosBase):
 
     def start(self) -> None:
         self._init_multiverse_socket()
-        self._init_send_meta_data()
-        self._set_send_meta_data()
+        self._init_request_meta_data()
+        self._set_request_meta_data()
         self._connect()
         rospy.Service(self._service_name, self._service_class, self._service_handle)
         rospy.loginfo(f"Start service at {self._service_name}")
@@ -24,13 +24,13 @@ class MultiverseRosServiceServer(MultiverseRosBase):
         self._disconnect()
 
     def _service_handle(self, request) -> Any:
-        self._bind_send_meta_data(request)
-        self._set_send_meta_data()
+        self._bind_request_meta_data(request)
+        self._set_request_meta_data()
         self._communicate(True)
-        self._get_receive_meta_data()
+        self._get_response_meta_data()
         return self._bind_response()
 
-    def _bind_send_meta_data(self, request):
+    def _bind_request_meta_data(self, request):
         pass
 
     def _bind_response(self) -> Any:

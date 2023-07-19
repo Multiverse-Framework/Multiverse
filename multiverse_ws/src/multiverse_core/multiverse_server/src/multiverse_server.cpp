@@ -46,13 +46,13 @@ enum class EAttribute : unsigned char
 
 enum class EFlag : unsigned char
 {
-    RequestSendMetaData,
+    ReceiveRequestMetaData,
     BindObjects,
-    ResponseReceiveMetaData,
-    RequestSendData,
+    SendResponseMetaData,
+    ReceiveSendData,
     BindSendData,
     BindReceiveData,
-    ResponseReceiveData,
+    SendReceiveData,
 };
 
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
@@ -112,7 +112,7 @@ std::mutex mtx;
 
 std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
 
-std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>>> send_efforts;
+std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>>> efforts;
 
 bool should_shut_down = false;
 
@@ -162,13 +162,13 @@ public:
         {
             switch (flag)
             {
-            case EFlag::RequestSendMetaData:
-                request_send_meta_data();
+            case EFlag::ReceiveRequestMetaData:
+                receive_request_meta_data();
                 message_str = message.to_string();
                 if (message_str[0] != '{' ||
                     message_str[0] == '{' && message_str[1] == '}' ||
                     message_str.empty() ||
-                    !reader.parse(message_str, send_meta_data_json))
+                    !reader.parse(message_str, request_meta_data_json))
                 {
                     flag = EFlag::BindReceiveData;
                 }
@@ -180,12 +180,12 @@ public:
                 break;
 
             case EFlag::BindObjects:
-                ROS_INFO("[Server] Receive meta data from socket %s:\n%s", socket_addr.c_str(), send_meta_data_json.toStyledString().c_str());
-                init_receive_meta_data();
+                ROS_INFO("[Server] Receive meta data from socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
+                init_response_meta_data();
 
                 mtx.lock();
                 bind_send_objects();
-                validate_receive_meta_data();
+                validate_response_meta_data();
                 mtx.unlock();
 
                 wait_for_objects();
@@ -194,23 +194,24 @@ public:
                 bind_receive_objects();
                 mtx.unlock();
 
-                flag = EFlag::ResponseReceiveMetaData;
+                flag = EFlag::SendResponseMetaData;
 
-            case EFlag::ResponseReceiveMetaData:
-                response_receive_meta_data();
+            case EFlag::SendResponseMetaData:
+                send_response_meta_data();
+                ROS_INFO("[Server] Send meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
                 if (send_buffer_size == 1 && receive_buffer_size == 1)
                 {
-                    flag = EFlag::RequestSendMetaData;
+                    flag = EFlag::ReceiveRequestMetaData;
                 }
                 else
                 {
-                    flag = EFlag::RequestSendData;
+                    flag = EFlag::ReceiveSendData;
                     sockets_need_clean_up[socket_addr] = true;
                 }
                 break;
 
-            case EFlag::RequestSendData:
-                request_send_data();
+            case EFlag::ReceiveSendData:
+                receive_send_data();
                 if (message.to_string()[0] == '{')
                 {
                     message_str = message.to_string();
@@ -218,9 +219,9 @@ public:
                     {
                         send_data_vec.clear();
                         receive_data_vec.clear();
-                        flag = EFlag::ResponseReceiveMetaData;
+                        flag = EFlag::SendResponseMetaData;
                     }
-                    else if (reader.parse(message_str, send_meta_data_json) && !send_meta_data_json.empty())
+                    else if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
                     {
                         send_data_vec.clear();
                         receive_data_vec.clear();
@@ -263,11 +264,11 @@ public:
                 {
                     receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
                 }
-                flag = EFlag::ResponseReceiveData;
+                flag = EFlag::SendReceiveData;
 
-            case EFlag::ResponseReceiveData:
-                response_receive_data();
-                flag = EFlag::RequestSendData;
+            case EFlag::SendReceiveData:
+                send_receive_data();
+                flag = EFlag::ReceiveSendData;
                 break;
 
             default:
@@ -277,9 +278,9 @@ public:
 
         if (sockets_need_clean_up[socket_addr])
         {
-            if (flag != EFlag::RequestSendData && flag != EFlag::RequestSendMetaData)
+            if (flag != EFlag::ReceiveSendData && flag != EFlag::ReceiveRequestMetaData)
             {
-                response_receive_data();
+                send_receive_data();
             }
 
             ROS_INFO("[Server] Unbind from socket %s.", socket_addr.c_str());
@@ -288,7 +289,7 @@ public:
     }
 
 private:
-    void request_send_meta_data()
+    void receive_request_meta_data()
     {
         send_buffer_size = 1;
         receive_buffer_size = 1;
@@ -312,14 +313,14 @@ private:
         }
     }
 
-    void init_receive_meta_data()
+    void init_response_meta_data()
     {
-        world_name = send_meta_data_json.isMember("world") ? send_meta_data_json["world"].asString() : "world";
-        const std::string length_unit = send_meta_data_json.isMember("length_unit") ? send_meta_data_json["length_unit"].asString() : "m";
-        const std::string angle_unit = send_meta_data_json.isMember("angle_unit") ? send_meta_data_json["angle_unit"].asString() : "rad";
-        const std::string handedness = send_meta_data_json.isMember("handedness") ? send_meta_data_json["handedness"].asString() : "rhs";
-        const std::string force_unit = send_meta_data_json.isMember("force_unit") ? send_meta_data_json["force_unit"].asString() : "N";
-        const std::string time_unit = send_meta_data_json.isMember("time_unit") ? send_meta_data_json["time_unit"].asString() : "s";
+        world_name = request_meta_data_json.isMember("world") ? request_meta_data_json["world"].asString() : "world";
+        const std::string length_unit = request_meta_data_json.isMember("length_unit") ? request_meta_data_json["length_unit"].asString() : "m";
+        const std::string angle_unit = request_meta_data_json.isMember("angle_unit") ? request_meta_data_json["angle_unit"].asString() : "rad";
+        const std::string handedness = request_meta_data_json.isMember("handedness") ? request_meta_data_json["handedness"].asString() : "rhs";
+        const std::string force_unit = request_meta_data_json.isMember("force_unit") ? request_meta_data_json["force_unit"].asString() : "N";
+        const std::string time_unit = request_meta_data_json.isMember("time_unit") ? request_meta_data_json["time_unit"].asString() : "s";
 
         for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
         {
@@ -377,19 +378,19 @@ private:
             }
         }
 
-        receive_meta_data_json.clear();
-        receive_meta_data_json["world"] = world_name;
-        receive_meta_data_json["time"] = get_time_now() * unit_scale[time_unit];
-        receive_meta_data_json["angle_unit"] = angle_unit;
-        receive_meta_data_json["length_unit"] = length_unit;
-        receive_meta_data_json["force_unit"] = force_unit;
-        receive_meta_data_json["time_unit"] = time_unit;
-        receive_meta_data_json["handedness"] = handedness;
+        response_meta_data_json.clear();
+        response_meta_data_json["world"] = world_name;
+        response_meta_data_json["time"] = get_time_now() * unit_scale[time_unit];
+        response_meta_data_json["angle_unit"] = angle_unit;
+        response_meta_data_json["length_unit"] = length_unit;
+        response_meta_data_json["force_unit"] = force_unit;
+        response_meta_data_json["time_unit"] = time_unit;
+        response_meta_data_json["handedness"] = handedness;
     }
 
     void bind_send_objects()
     {
-        send_objects_json = send_meta_data_json["send"];
+        send_objects_json = request_meta_data_json["send"];
         std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &objects = worlds[world_name];
         for (const std::string &object_name : send_objects_json.getMemberNames())
         {
@@ -410,7 +411,7 @@ private:
                         double *data = &objects[object_name][attribute_name].first[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
-                        receive_meta_data_json["send"][object_name][attribute_name].append(attribute_map[attribute_name].second[i]);
+                        response_meta_data_json["send"][object_name][attribute_name].append(attribute_map[attribute_name].second[i]);
                     }
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
@@ -420,14 +421,14 @@ private:
                         objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
                     }
 
-                    send_efforts[world_name][object_name][socket_addr][attribute_name] = attribute_map[attribute_name].second;
+                    efforts[world_name][object_name][socket_addr][attribute_name] = attribute_map[attribute_name].second;
 
                     for (size_t i = 0; i < attribute_map[attribute_name].second.size(); i++)
                     {
-                        double *data = &send_efforts[world_name][object_name][socket_addr][attribute_name][i];
+                        double *data = &efforts[world_name][object_name][socket_addr][attribute_name][i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
-                        receive_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                        response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
                     }
                 }
                 else
@@ -441,16 +442,16 @@ private:
                         double *data = &objects[object_name][attribute_name].first[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
-                        receive_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                        response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
                     }
                 }
             }
         }
     }
 
-    void validate_receive_meta_data()
+    void validate_response_meta_data()
     {
-        receive_objects_json = send_meta_data_json["receive"];
+        receive_objects_json = request_meta_data_json["receive"];
 
         if (receive_objects_json.isMember("") &&
             std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
@@ -470,11 +471,11 @@ private:
             return;
         }
 
-        for (const std::string &object_name : send_meta_data_json["receive"].getMemberNames())
+        for (const std::string &object_name : request_meta_data_json["receive"].getMemberNames())
         {
             if (!object_name.empty())
             {
-                for (const Json::Value &attribute_json : send_meta_data_json["receive"][object_name])
+                for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
                 {
                     const std::string attribute_name = attribute_json.asString();
                     if (!attribute_name.empty())
@@ -497,7 +498,7 @@ private:
             }
             else
             {
-                for (const Json::Value &attribute_json : send_meta_data_json["receive"][object_name])
+                for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
                 {
                     const std::string attribute_name = attribute_json.asString();
                     for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : worlds[world_name])
@@ -572,20 +573,20 @@ private:
                     double *data = &worlds[world_name][object_name][attribute_name].first[i];
                     const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
                     receive_data_vec.emplace_back(data, conversion);
-                    receive_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
+                    response_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
                 }
             }
         }
     }
 
-    void response_receive_meta_data()
+    void send_response_meta_data()
     {
         send_buffer_size = 1 + send_data_vec.size();
         receive_buffer_size = 1 + receive_data_vec.size();
 
         if (should_shut_down)
         {
-            receive_meta_data_json["time"] = -1.0;
+            response_meta_data_json["time"] = -1.0;
         }
 
         if (continue_state)
@@ -593,7 +594,7 @@ private:
             continue_state = false;
         }
 
-        const std::string message_str = receive_meta_data_json.toStyledString();
+        const std::string message_str = response_meta_data_json.toStyledString();
 
         // Send buffer sizes and send_data (if exists) over ZMQ
         zmq::message_t response_message(message_str.size());
@@ -604,7 +605,7 @@ private:
         receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
     }
 
-    void request_send_data()
+    void receive_send_data()
     {
         // Receive send_data over ZMQ
         try
@@ -660,30 +661,30 @@ private:
     {
         for (const std::string &object_name : receive_objects_json.getMemberNames())
         {
-            for (const std::string &effort : {"force", "torque"})
+            for (const std::string &effort_str : {"force", "torque"})
             {
-                if (std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), effort) == receive_objects_json[object_name].end())
+                if (std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), effort_str) == receive_objects_json[object_name].end())
                 {
                     continue;
                 }
 
-                for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &send_effort : send_efforts[world_name][object_name])
+                for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &effort : efforts[world_name][object_name])
                 {
                     for (size_t i = 0; i < 3; i++)
                     {
-                        for (size_t j = 3; j < send_effort.second[effort].size(); j += 3)
+                        for (size_t j = 3; j < effort.second[effort_str].size(); j += 3)
                         {
-                            send_effort.second[effort][i] += send_effort.second[effort][j];
+                            effort.second[effort_str][i] += effort.second[effort_str][j];
                         }
 
-                        worlds[world_name][object_name][effort].first[i] = send_effort.second[effort][i];
+                        worlds[world_name][object_name][effort_str].first[i] = effort.second[effort_str][i];
                     }
                 }
             }
         }
     }
 
-    void response_receive_data()
+    void send_receive_data()
     {
         // Send receive_data over ZMQ
         receive_buffer[0] = should_shut_down ? -1.0 : get_time_now();
@@ -693,7 +694,7 @@ private:
     }
 
 private:
-    EFlag flag = EFlag::RequestSendMetaData;
+    EFlag flag = EFlag::ReceiveRequestMetaData;
 
     zmq::message_t message;
 
@@ -703,11 +704,11 @@ private:
 
     zmq::socket_t socket;
 
-    Json::Value send_meta_data_json;
+    Json::Value request_meta_data_json;
 
     Json::Value send_objects_json;
 
-    Json::Value receive_meta_data_json;
+    Json::Value response_meta_data_json;
 
     Json::Value receive_objects_json;
 

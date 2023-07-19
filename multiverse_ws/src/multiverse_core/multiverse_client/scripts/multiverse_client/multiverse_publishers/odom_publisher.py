@@ -18,12 +18,12 @@ class odom_publisher(MultiverseRosPublisher):
         self.__odom_msg = Odometry()
         
 
-    def _init_send_meta_data(self) -> None:
-        super()._init_send_meta_data()
-        self._send_meta_data_dict["receive"][self.__body_name] = ["position", "relative_velocity"]
+    def _init_request_meta_data(self) -> None:
+        super()._init_request_meta_data()
+        self._request_meta_data_dict["receive"][self.__body_name] = ["position", "relative_velocity"]
 
     def _construct_rosmsg(self) -> None:
-        if self._receive_meta_data_dict.get("receive") is None:
+        if self._response_meta_data_dict.get("receive") is None:
             return
         self.__odom_msg.header.frame_id = rospy.get_param("multiverse/root_frame_id") if rospy.has_param("multiverse/root_frame_id") else "map"
         self.__odom_msg.child_frame_id = self.__body_name

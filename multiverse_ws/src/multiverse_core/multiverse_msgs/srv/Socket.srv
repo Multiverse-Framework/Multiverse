@@ -4,7 +4,7 @@ string angle_unit
 string force_unit
 string time_unit
 string handedness
-multiverse_msgs/ObjectAttribute[] send
+multiverse_msgs/ObjectData[] send
 multiverse_msgs/ObjectAttribute[] receive
 ---
 string world
