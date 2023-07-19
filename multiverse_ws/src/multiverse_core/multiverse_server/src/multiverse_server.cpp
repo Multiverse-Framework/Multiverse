@@ -303,7 +303,7 @@ private:
         try
         {
             sockets_need_clean_up[socket_addr] = false;
-            socket.recv(message, zmq::recv_flags::none);
+            zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
             sockets_need_clean_up[socket_addr] = true;
         }
         catch (const zmq::error_t &e)
@@ -611,7 +611,7 @@ private:
         try
         {
             sockets_need_clean_up[socket_addr] = false;
-            socket.recv(message, zmq::recv_flags::none);
+            zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
             sockets_need_clean_up[socket_addr] = true;
             memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
         }
@@ -748,7 +748,7 @@ void start_multiverse_server(const std::string &server_socket_addr)
     {
         try
         {
-            server_socket.recv(message, zmq::recv_flags::none);
+            zmq::recv_result_t recv_result_t = server_socket.recv(message, zmq::recv_flags::none);
             message_str = message.to_string();
         }
         catch (const zmq::error_t &e)

@@ -40,6 +40,11 @@ apt install -y libgl1-mesa-dev
 apt install -y libglu1-mesa-dev
 apt install -y libxt-dev
 
+# Install packages for creating shared library
+apt install -y clang
+apt install -y libc++-dev
+apt install -y libc++abi-dev
+
 # Install PySide6
 pip3 install pyside6
 
