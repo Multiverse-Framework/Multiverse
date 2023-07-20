@@ -23,7 +23,6 @@
 #include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <thread>
 
 std::map<std::string, size_t> attribute_map = {
     {"", 0},
@@ -40,7 +39,7 @@ std::map<std::string, size_t> attribute_map = {
 class MultiverseSocket final : public MultiverseClient
 {
 public:
-    MultiverseSocket(const bool use_thread, const std::string &in_server_socket_addr = "tcp:127.0.0.1:7000") : use_thread(use_thread)
+    MultiverseSocket(const std::string &in_server_socket_addr = "tcp:127.0.0.1:7000")
     {
         server_socket_addr = in_server_socket_addr;
     }
@@ -51,11 +50,11 @@ public:
 
     inline void set_request_meta_data(const pybind11::dict &in_request_meta_data_dict)
     {
-        request_meta_data_dict = in_request_meta_data_dict;        
+        request_meta_data_dict = in_request_meta_data_dict;
     }
 
-    inline pybind11::dict get_response_meta_data() const
-    {        
+    inline pybind11::dict get_response_meta_data()
+    {
         return response_meta_data_dict;
     }
 
@@ -85,33 +84,24 @@ private:
 
     pybind11::list receive_data;
 
-    std::thread connect_to_server_thread;
-
-    std::thread meta_data_thread;
-
-    bool use_thread = true;
-
 private:
     bool compute_response_meta_data() override
     {
         if (response_meta_data_str.empty())
         {
-            pybind11::gil_scoped_acquire acquire;
             response_meta_data_dict = pybind11::dict();
-            pybind11::gil_scoped_release release;
             return false;
         }
-        
-        pybind11::gil_scoped_acquire acquire;
+
         pybind11::module json_module = pybind11::module::import("json");
-        
+
         pybind11::object json_loads = json_module.attr("loads");
 
         pybind11::object parsed_dict = json_loads(response_meta_data_str);
-        
+
         response_meta_data_dict = parsed_dict.cast<pybind11::dict>();
         const bool result = response_meta_data_dict.contains("time") && response_meta_data_dict["time"].cast<double>() > 0;
-        pybind11::gil_scoped_release release;
+        
         return result;
     }
 
@@ -119,7 +109,6 @@ private:
     {
         std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
 
-        pybind11::gil_scoped_acquire acquire;
         for (std::pair<const std::string, size_t> &request_buffer_size : request_buffer_sizes)
         {
             if (!request_meta_data_dict.contains(request_buffer_size.first.c_str()))
@@ -148,8 +137,7 @@ private:
                 }
             }
         }
-        pybind11::gil_scoped_release release;
-        
+
         req_send_buffer_size = request_buffer_sizes["send"];
         req_receive_buffer_size = request_buffer_sizes["receive"];
     }
@@ -158,14 +146,13 @@ private:
     {
         std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
 
-        pybind11::gil_scoped_acquire acquire;
         for (std::pair<const std::string, size_t> &response_buffer_size : response_buffer_sizes)
         {
             if (!response_meta_data_dict.contains(response_buffer_size.first.c_str()))
             {
                 continue;
             }
-            
+
             for (const auto &receive_objects : response_meta_data_dict[response_buffer_size.first.c_str()].cast<pybind11::dict>())
             {
                 const pybind11::dict attributes = receive_objects.second.cast<pybind11::dict>();
@@ -175,50 +162,29 @@ private:
                 }
             }
         }
-        pybind11::gil_scoped_release release;
-        
+
         res_send_buffer_size = response_buffer_sizes["send"];
         res_receive_buffer_size = response_buffer_sizes["receive"];
     }
 
     void start_connect_to_server_thread() override
     {
-        if (use_thread)
-        {
-            connect_to_server_thread = std::thread(&MultiverseSocket::connect_to_server, this);
-        }
-        else
-        {
-            MultiverseSocket::connect_to_server();
-        }
+        MultiverseSocket::connect_to_server();
     }
 
     void wait_for_connect_to_server_thread_finish() override
     {
-        if (use_thread && connect_to_server_thread.joinable())
-        {
-            connect_to_server_thread.join();
-        }
+        
     }
 
     void start_meta_data_thread() override
     {
-        if (use_thread)
-        {
-            meta_data_thread = std::thread(&MultiverseSocket::send_and_receive_meta_data, this);
-        }
-        else
-        {
-            MultiverseSocket::send_and_receive_meta_data();
-        }
+        MultiverseSocket::send_and_receive_meta_data();
     }
 
     void wait_for_meta_data_thread_finish() override
     {
-        if (use_thread && meta_data_thread.joinable())
-        {
-            meta_data_thread.join();
-        }
+        
     }
 
     bool init_objects() override
@@ -228,10 +194,8 @@ private:
 
     void bind_request_meta_data() override
     {
-        pybind11::gil_scoped_acquire acquire;
         request_meta_data_str = pybind11::str(request_meta_data_dict).cast<std::string>();
         std::replace(request_meta_data_str.begin(), request_meta_data_str.end(), '\'', '"');
-        pybind11::gil_scoped_release release;
     }
 
     void bind_response_meta_data() override
@@ -240,20 +204,16 @@ private:
 
     void clean_up() override
     {
-        pybind11::gil_scoped_acquire acquire;
         send_data = pybind11::list();
 
         receive_data = pybind11::list();
-        pybind11::gil_scoped_release release;
     }
 
     void init_send_and_receive_data() override
     {
-        pybind11::gil_scoped_acquire acquire;
         send_data = pybind11::cast(std::vector<double>(send_buffer_size, 0.0));
 
         receive_data = pybind11::cast(std::vector<double>(receive_buffer_size, 0.0));
-        pybind11::gil_scoped_release release;
     }
 
     void bind_send_data() override
@@ -290,7 +250,7 @@ PYBIND11_MODULE(multiverse_socket, handle)
         .def("disconnect", &MultiverseClient::disconnect);
 
     pybind11::class_<MultiverseSocket, MultiverseClient>(handle, "MultiverseSocket", pybind11::is_final())
-        .def(pybind11::init<bool, const std::string &>())
+        .def(pybind11::init<const std::string &>())
         .def("set_request_meta_data", &MultiverseSocket::set_request_meta_data)
         .def("get_response_meta_data", &MultiverseSocket::get_response_meta_data)
         .def("set_send_data", &MultiverseSocket::set_send_data)

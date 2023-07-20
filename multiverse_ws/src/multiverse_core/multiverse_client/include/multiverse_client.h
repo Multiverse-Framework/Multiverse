@@ -21,22 +21,9 @@
 #pragma once
 
 #include <string>
+#include <atomic>
 
-enum class EMultiverseClientState : unsigned char
-{
-    None,
-    StartConnection,
-    BindRequestMetaData,
-    SendRequestMetaData,
-    ReceiveResponseMetaData,
-    BindResponseMetaData,
-    InitSendAndReceiveData,
-    BindSendData,
-    SendData,
-    ReceiveData,
-    BindReceiveData
-};
-
+enum class EMultiverseClientState : unsigned char;
 class MultiverseClient
 {
 public:
@@ -56,29 +43,19 @@ public:
      * @brief start the client
      * 
      */
-    void start(const bool wait_for_server = false);
+    void start();
 
     /**
      * @brief Communicate with the server
      *
      */
-    void communicate(const bool resend_request_meta_data = false);
+    virtual void communicate(const bool resend_request_meta_data = false);
 
     /**
      * @brief Send close signal to the server
      *
      */
     void disconnect();
-
-    /**
-     * @brief Get the State
-     * 
-     * @return EMultiverseClientState 
-     */
-    EMultiverseClientState GetState() const
-    {
-        return flag;
-    }
 
 public:
     /**
@@ -223,10 +200,10 @@ protected:
 
     std::string response_meta_data_str;
 
+    std::atomic<EMultiverseClientState> flag;
+
 private:
     std::string socket_addr;
-
-    EMultiverseClientState flag;
 
     void *context;
 

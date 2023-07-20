@@ -1,36 +1,42 @@
 #!/usr/bin/env python3
 
 import rospy
-from typing import List
+from typing import List, Dict, Any
 from multiverse_client.multiverse_ros_base import MultiverseRosBase
 
 
 class MultiverseRosPublisher(MultiverseRosBase):
+    _use_meta_data = False
+
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.use_thread = True
         self.rate = rospy.Rate(float(kwargs.get("rate", 60)))
 
     def start(self) -> None:
         self._init_multiverse_socket()
         self._set_request_meta_data()
         self._connect()
+        if self._use_meta_data:
+            while not rospy.is_shutdown():
+                self._communicate(True)
+                self._construct_rosmsg(self._get_response_meta_data())
+                if not rospy.is_shutdown():
+                    self._publish()
+                self.rate.sleep()
 
-        response_meta_data = self._get_response_meta_data()
+        else:
+            self._construct_rosmsg(self._get_response_meta_data())
 
-        self._construct_rosmsg(response_meta_data)
-
-        while not rospy.is_shutdown():
-            self._communicate()
-            receive_data = self._get_receive_data()
-            self._bind_rosmsg(receive_data)
-            if not rospy.is_shutdown():
-                self._publish()
-            self.rate.sleep()
+            while not rospy.is_shutdown():
+                self._communicate()
+                self._bind_rosmsg(self._get_receive_data())
+                if not rospy.is_shutdown():
+                    self._publish()
+                self.rate.sleep()
         
         self._disconnect()
 
-    def _construct_rosmsg(self, response_meta_data_dict: dict) -> None:
+    def _construct_rosmsg(self, response_meta_data_dict: Dict) -> None:
         pass
 
     def _bind_rosmsg(self, receive_data: List[float]) -> None:
