@@ -16,11 +16,9 @@ class MultiverseRosPublisher(MultiverseRosBase):
         self._set_request_meta_data()
         self._connect()
 
-        if not self._get_response_meta_data():
-            self._disconnect()
-            return
+        response_meta_data = self._get_response_meta_data()
 
-        self._construct_rosmsg()
+        self._construct_rosmsg(response_meta_data)
 
         while not rospy.is_shutdown():
             self._communicate()
@@ -32,7 +30,7 @@ class MultiverseRosPublisher(MultiverseRosBase):
         
         self._disconnect()
 
-    def _construct_rosmsg(self) -> None:
+    def _construct_rosmsg(self, response_meta_data_dict: dict) -> None:
         pass
 
     def _bind_rosmsg(self, receive_data: List[float]) -> None:

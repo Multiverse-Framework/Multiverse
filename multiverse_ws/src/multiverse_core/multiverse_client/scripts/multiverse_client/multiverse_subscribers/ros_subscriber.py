@@ -23,7 +23,10 @@ class MultiverseRosSubscriber(MultiverseRosBase):
         self._init_send_data()
         self._set_send_data(self._send_data)
         self._communicate()
-        self._receive_data = self._get_receive_data()
+        while not rospy.is_shutdown():
+            self._receive_data = self._get_receive_data()
+            if len(self._receive_data) > 0:
+                break
         rospy.Subscriber(self._topic_name, self._data_class, self._subscriber_callback)
         rospy.loginfo(f"Start subscriber {self._topic_name}")
         rospy.spin()

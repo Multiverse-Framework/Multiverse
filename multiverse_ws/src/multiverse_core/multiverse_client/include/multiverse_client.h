@@ -22,7 +22,20 @@
 
 #include <string>
 
-enum class EMultiverseClientState : unsigned char;
+enum class EMultiverseClientState : unsigned char
+{
+    None,
+    StartConnection,
+    BindRequestMetaData,
+    SendRequestMetaData,
+    ReceiveResponseMetaData,
+    BindResponseMetaData,
+    InitSendAndReceiveData,
+    BindSendData,
+    SendData,
+    ReceiveData,
+    BindReceiveData
+};
 
 class MultiverseClient
 {
@@ -40,6 +53,12 @@ public:
     void connect();
 
     /**
+     * @brief start the client
+     * 
+     */
+    void start(const bool wait_for_server = false);
+
+    /**
      * @brief Communicate with the server
      *
      */
@@ -50,6 +69,16 @@ public:
      *
      */
     void disconnect();
+
+    /**
+     * @brief Get the State
+     * 
+     * @return EMultiverseClientState 
+     */
+    EMultiverseClientState GetState() const
+    {
+        return flag;
+    }
 
 public:
     /**
@@ -201,7 +230,7 @@ private:
 
     void *context;
 
-    void *socket_client;
+    void *client_socket;
 
     bool should_shut_down = false;
 };

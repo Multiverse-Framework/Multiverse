@@ -55,7 +55,7 @@ public:
     }
 
     inline pybind11::dict get_response_meta_data() const
-    {
+    {        
         return response_meta_data_dict;
     }
 
@@ -285,6 +285,7 @@ PYBIND11_MODULE(multiverse_socket, handle)
 
     pybind11::class_<MultiverseClient>(handle, "MultiverseClient")
         .def("connect", static_cast<void (MultiverseClient::*)(const std::string &, const std::string &)>(&MultiverseClient::connect))
+        .def("start", &MultiverseClient::start)
         .def("communicate", &MultiverseClient::communicate)
         .def("disconnect", &MultiverseClient::disconnect);
 

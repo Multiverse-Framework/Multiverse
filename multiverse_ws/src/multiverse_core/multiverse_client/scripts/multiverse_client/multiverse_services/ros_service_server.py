@@ -27,8 +27,7 @@ class MultiverseRosServiceServer(MultiverseRosBase):
         self._bind_request_meta_data(request)
         self._set_request_meta_data()
         self._communicate(True)
-        self._get_response_meta_data()
-        return self._bind_response()
+        return self._bind_response(self._get_response_meta_data())
 
     def _bind_request_meta_data(self, request):
         pass

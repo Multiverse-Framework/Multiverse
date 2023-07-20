@@ -22,8 +22,8 @@ class odom_publisher(MultiverseRosPublisher):
         super()._init_request_meta_data()
         self._request_meta_data_dict["receive"][self.__body_name] = ["position", "relative_velocity"]
 
-    def _construct_rosmsg(self) -> None:
-        if self._response_meta_data_dict.get("receive") is None:
+    def _construct_rosmsg(self, response_meta_data_dict) -> None:
+        if response_meta_data_dict.get("receive") is None:
             return
         self.__odom_msg.header.frame_id = rospy.get_param("multiverse/root_frame_id") if rospy.has_param("multiverse/root_frame_id") else "map"
         self.__odom_msg.child_frame_id = self.__body_name

@@ -762,13 +762,11 @@ void start_multiverse_server(const std::string &server_socket_addr)
 
         if (workers.count(message_str) == 0)
         {
-            workers[message_str] = std::thread([&]()
+            workers[message_str] = std::thread([message_str]()
                                                { MultiverseServer multiverse_server(message_str); multiverse_server.start(); });
         }
-
+        
         server_socket.send(message, zmq::send_flags::none);
-
-        zmq_sleep(0.1);
     }
 
     for (std::pair<const std::string, std::thread> &worker : workers)

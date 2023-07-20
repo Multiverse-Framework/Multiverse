@@ -8,7 +8,6 @@ from multiverse_socket import MultiverseSocket  # noqa
 
 class MultiverseRosBase:
     _request_meta_data_dict = {}
-    _response_meta_data_dict = {}
 
     def __init__(self, **kwargs) -> None:
         self.host = kwargs.get("host", "tcp://127.0.0.1")
@@ -20,14 +19,16 @@ class MultiverseRosBase:
         pass
 
     def _init_multiverse_socket(self):
-        self.__multiverse_socket = MultiverseSocket(self.use_thread, "tcp://127.0.0.1:7000")
+        self.__multiverse_socket = MultiverseSocket(
+            self.use_thread, "tcp://127.0.0.1:7000"
+        )
 
     def _init_request_meta_data(self) -> None:
         self._request_meta_data_dict = init_request_meta_data_dict()
 
     def _connect(self) -> None:
         self.__multiverse_socket.connect(self.host, self.port)
-        rospy.sleep(0.1)  # Wait for multiverse_client to establish a connection with the server.
+        self.__multiverse_socket.start(True)
 
     def _disconnect(self) -> None:
         self.__multiverse_socket.disconnect()
@@ -35,16 +36,8 @@ class MultiverseRosBase:
     def _set_request_meta_data(self):
         self.__multiverse_socket.set_request_meta_data(self._request_meta_data_dict)
 
-    def _get_response_meta_data(self, time_out=float("inf")) -> bool:
-        start = rospy.Time.now()
-        while not rospy.is_shutdown():
-            self._response_meta_data_dict = self.__multiverse_socket.get_response_meta_data()
-            if self._response_meta_data_dict:
-                return True
-            elif (rospy.Time.now() - start).to_sec() > time_out:
-                rospy.logwarn(f"Could not receive meta data from the server for {self.__class__.__name__}.")
-                return False
-        return False
+    def _get_response_meta_data(self) -> dict:
+        return self.__multiverse_socket.get_response_meta_data()
 
     def _set_send_data(self, send_data: List[float]) -> None:
         self.__multiverse_socket.set_send_data(send_data)
@@ -52,16 +45,8 @@ class MultiverseRosBase:
     def _communicate(self, resend_request_meta_data: bool = False) -> None:
         self.__multiverse_socket.communicate(resend_request_meta_data)
 
-    def _get_receive_data(self,  time_out=float("inf")) -> List[float]:
-        start = rospy.Time.now()
-        while not rospy.is_shutdown():
-            if len(self.__multiverse_socket.get_receive_data()) > 0:
-                return self.__multiverse_socket.get_receive_data()
-            elif (rospy.Time.now() - start).to_sec() > time_out:
-                rospy.logwarn(f"Could not receive meta data from the server for {self.__class__.__name__}.")
-                return []
-        return []
-        
+    def _get_receive_data(self) -> List[float]:
+        return self.__multiverse_socket.get_receive_data()
 
     def _restart(self) -> None:
         self._disconnect()

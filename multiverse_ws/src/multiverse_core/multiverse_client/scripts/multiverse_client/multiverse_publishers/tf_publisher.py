@@ -12,16 +12,17 @@ class tf_publisher(MultiverseRosPublisher):
         super().__init__(**kwargs)
         self.__tf_broadcaster = TransformBroadcaster()
         self.__refresh_time = rospy.Time.now()
+        self.__tf_msgs = []
 
     def _init_request_meta_data(self) -> None:
         super()._init_request_meta_data()
         self._request_meta_data_dict["receive"][""] = ["position", "quaternion"]
 
-    def _construct_rosmsg(self) -> None:
+    def _construct_rosmsg(self, response_meta_data_dict: dict) -> None:
         self.object_names = []
-        if self._response_meta_data_dict.get("receive") is None:
+        if response_meta_data_dict.get("receive") is None:
             return
-        self.object_names = self._response_meta_data_dict["receive"].keys()
+        self.object_names = response_meta_data_dict["receive"].keys()
         root_frame_id = rospy.get_param("multiverse/root_frame_id") if rospy.has_param("multiverse/root_frame_id") else "map"
 
         self.__tf_msgs = []
@@ -47,7 +48,8 @@ class tf_publisher(MultiverseRosPublisher):
 
     def _publish(self) -> None:
         self.__tf_broadcaster.sendTransform(self.__tf_msgs)
-        if rospy.Time.now().to_sec() - self.__refresh_time.to_sec() > 1:
-            self._communicate(True)
-            self._construct_rosmsg()
-            self.__refresh_time = rospy.Time.now()
+        # if rospy.Time.now().to_sec() - self.__refresh_time.to_sec() > 1:
+        #     self._communicate(True)
+        #     response_meta_data_dict = self._get_response_meta_data()
+        #     self._construct_rosmsg(response_meta_data_dict)
+        #     self.__refresh_time = rospy.Time.now()

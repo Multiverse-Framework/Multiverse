@@ -19,11 +19,12 @@ class query_data_service(MultiverseRosServiceServer):
         self._request_meta_data_dict["receive"][""] = [""]
         self._set_request_meta_data()
         self._communicate(True)
-        if self._get_response_meta_data():
-            world_name = self._response_meta_data_dict["world"]
+        response_meta_data_dict = self._get_response_meta_data()
+        if response_meta_data_dict:
+            world_name = response_meta_data_dict["world"]
             self.__worlds[world_name] = {}
             self.__worlds[world_name][""] = {""}
-            for object_name, object_data in self._response_meta_data_dict["receive"].items():
+            for object_name, object_data in response_meta_data_dict["receive"].items():
                 self.__worlds[world_name][object_name] = {""}
                 for attribute_name in object_data:
                     self.__worlds[world_name][""].add(attribute_name)
@@ -69,20 +70,19 @@ class query_data_service(MultiverseRosServiceServer):
                     continue
                 self._request_meta_data_dict["receive"][object_attribute.object_name].append(attribute_name)
 
-    def _bind_response(self) -> SocketResponse:
+    def _bind_response(self, response_meta_data_dict: dict) -> SocketResponse:
         response = SocketResponse()
-        self._response_meta_data_dict: dict
-        response.world = self._response_meta_data_dict["world"]
-        response.length_unit = self._response_meta_data_dict["length_unit"]
-        response.angle_unit = self._response_meta_data_dict["angle_unit"]
-        response.force_unit = self._response_meta_data_dict["force_unit"]
-        response.time_unit = self._response_meta_data_dict["time_unit"]
-        response.handedness = self._response_meta_data_dict["handedness"]
+        response.world = response_meta_data_dict["world"]
+        response.length_unit = response_meta_data_dict["length_unit"]
+        response.angle_unit = response_meta_data_dict["angle_unit"]
+        response.force_unit = response_meta_data_dict["force_unit"]
+        response.time_unit = response_meta_data_dict["time_unit"]
+        response.handedness = response_meta_data_dict["handedness"]
 
-        if self._response_meta_data_dict.get("receive") is None:
+        if response_meta_data_dict.get("receive") is None:
             return response
 
-        for object_name, object_data in self._response_meta_data_dict["receive"].items():
+        for object_name, object_data in response_meta_data_dict["receive"].items():
             for attribute_name, attribute_data in object_data.items():
                 response.receive.append(ObjectData(object_name, attribute_name, attribute_data))
 
