@@ -106,7 +106,7 @@ void MultiverseClient::connect(const std::string &in_host, const std::string &in
 
 void MultiverseClient::start()
 {
-    flag == EMultiverseClientState::StartConnection;
+    flag = EMultiverseClientState::StartConnection;
     printf("[Client %s] Start.\n", port.c_str());
     run();
 }
