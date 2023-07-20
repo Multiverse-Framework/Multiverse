@@ -38,7 +38,6 @@ class MultiverseRosSubscriber(MultiverseRosBase):
         self._communicate()
         self._receive_data = self._get_receive_data()
 
-
     def _init_send_data(self) -> None:
         pass
 

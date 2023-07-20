@@ -22,11 +22,11 @@ class MultiverseRosSocket:
             subscriber_thread = threading.Thread(target=subscriber.start)
             subscriber_thread.start()
             self.threads[subscriber] = subscriber_thread
-            
+
         publishers = rospy.get_param("multiverse/publishers", default={})
         for publisher_name, publisher_prop in publishers.items():
-            if publisher_prop.get('port') is None:
-                rospy.logwarn(f'Ignore {publisher_name} because port is not found in rosparam')
+            if publisher_prop.get("port") is None:
+                rospy.logwarn(f"Ignore {publisher_name} because port is not found in rosparam")
                 continue
             publisher_name += "_publisher"
             exec(f"from multiverse_client.multiverse_publishers.{publisher_name} import {publisher_name}")

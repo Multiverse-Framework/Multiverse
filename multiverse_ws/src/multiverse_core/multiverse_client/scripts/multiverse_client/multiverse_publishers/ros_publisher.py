@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import rospy
-from typing import List, Dict, Any
+from typing import List, Dict
 from multiverse_client.multiverse_ros_base import MultiverseRosBase
 
 
@@ -33,7 +33,7 @@ class MultiverseRosPublisher(MultiverseRosBase):
                 if not rospy.is_shutdown():
                     self._publish()
                 self.rate.sleep()
-        
+
         self._disconnect()
 
     def _construct_rosmsg(self, response_meta_data_dict: Dict) -> None:

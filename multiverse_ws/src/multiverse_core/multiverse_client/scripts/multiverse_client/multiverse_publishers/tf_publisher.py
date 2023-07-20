@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import rospy
-from typing import List
+from typing import Dict
 from tf2_ros import TransformBroadcaster
 from geometry_msgs.msg import TransformStamped
 from .ros_publisher import MultiverseRosPublisher
 import numpy
+
 
 class tf_publisher(MultiverseRosPublisher):
     def __init__(self, **kwargs) -> None:
@@ -21,14 +22,14 @@ class tf_publisher(MultiverseRosPublisher):
         super()._init_request_meta_data()
         self._request_meta_data_dict["receive"][""] = ["position", "quaternion"]
 
-    def _construct_rosmsg(self, response_meta_data_dict: dict) -> None:
+    def _construct_rosmsg(self, response_meta_data_dict: Dict) -> None:
         self.object_names = []
         if response_meta_data_dict.get("receive") is None:
             return
-        
+
         self.object_names = response_meta_data_dict["receive"].keys()
         self.__tf_msgs = []
-        
+
         for object_name in self.object_names:
             tf_data = response_meta_data_dict["receive"][object_name]
             tf_msg = TransformStamped()
@@ -36,7 +37,7 @@ class tf_publisher(MultiverseRosPublisher):
             tf_msg.header.stamp = rospy.Time.now()
             tf_msg.header.seq = self.__seq
             tf_msg.child_frame_id = object_name
-             
+
             tf_msg.transform.translation.x = tf_data["position"][0]
             tf_msg.transform.translation.y = tf_data["position"][1]
             tf_msg.transform.translation.z = tf_data["position"][2]

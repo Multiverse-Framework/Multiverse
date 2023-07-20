@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-from typing import Any
+from typing import Dict
 from .ros_service_server import MultiverseRosServiceServer
 from multiverse_msgs.msg import ObjectAttribute, ObjectData
 from multiverse_msgs.srv import Socket, SocketRequest, SocketResponse
-import rospy
 
 
 class query_data_service(MultiverseRosServiceServer):
@@ -70,7 +69,7 @@ class query_data_service(MultiverseRosServiceServer):
                     continue
                 self._request_meta_data_dict["receive"][object_attribute.object_name].append(attribute_name)
 
-    def _bind_response(self, response_meta_data_dict: dict) -> SocketResponse:
+    def _bind_response(self, response_meta_data_dict: Dict) -> SocketResponse:
         response = SocketResponse()
         response.world = response_meta_data_dict["world"]
         response.length_unit = response_meta_data_dict["length_unit"]

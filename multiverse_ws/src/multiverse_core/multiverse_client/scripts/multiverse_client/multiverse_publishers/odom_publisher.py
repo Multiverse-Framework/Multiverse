@@ -16,7 +16,6 @@ class odom_publisher(MultiverseRosPublisher):
         super().__init__(**kwargs)
         self.__odom_publisher = rospy.Publisher("odom", Odometry, queue_size=0)
         self.__odom_msg = Odometry()
-        
 
     def _init_request_meta_data(self) -> None:
         super()._init_request_meta_data()
