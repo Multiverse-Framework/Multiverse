@@ -2,14 +2,20 @@ cmake_minimum_required(VERSION 2.8...3.14)
 project(multiverse_parser)
 
 add_compile_options(-std=c++17)
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
+
+# # Find catkin macros and libraries
+# # if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
+# # is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   mujoco_sim
 )
+
+# # Uncomment this if the package has a setup.py. This macro ensures
+# # modules and global scripts declared therein get installed
+# # See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
+# catkin_python_setup()
 
 # ##################################
 # # catkin specific configuration ##
@@ -38,8 +44,8 @@ include_directories(
 set(URDF_TO_MUJOCO_NODE urdf_to_mjcf)
 add_executable(${URDF_TO_MUJOCO_NODE} urdf_to_mjcf/src/urdf_to_mjcf.cpp)
 target_link_libraries(${URDF_TO_MUJOCO_NODE}
-	${catkin_LIBRARIES}
-	$ENV{ROS_ROOT}/../../lib/liburdf.so
+  ${catkin_LIBRARIES}
+  $ENV{ROS_ROOT}/../../lib/liburdf.so
   tinyxml2
 )
 
@@ -55,5 +61,6 @@ target_link_libraries(${URDF_TO_MUJOCO_NODE}
 catkin_install_python(PROGRAMS
   mjcf_to_usd/scripts/mjcf_to_usd_no_physics.py
   mjcf_to_usd/scripts/mjcf_to_usd_with_physics.py
+  # sdf_to_urdf/scripts/sdf_to_urdf.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

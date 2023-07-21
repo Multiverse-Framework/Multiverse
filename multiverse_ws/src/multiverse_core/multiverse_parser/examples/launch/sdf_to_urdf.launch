@@ -1,0 +1,12 @@
+<launch>
+
+    <arg name="in_sdf"
+        default="$(find multiverse_parser)/examples/sdf_to_urdf/sdf/pr2/model.sdf" />
+
+    <arg name="out_urdf"
+        default="$(find multiverse_parser)/examples/sdf_to_urdf/urdf/pr2.urdf" />
+
+    <node pkg="multiverse_parser" type="sdf_to_urdf.py" name="sdf_to_urdf" output="screen"
+        args="$(arg in_sdf) $(arg out_urdf)" />
+
+</launch>
