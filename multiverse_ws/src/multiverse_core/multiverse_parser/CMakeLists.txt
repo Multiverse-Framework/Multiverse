@@ -36,7 +36,7 @@ include_directories(
 )
 
 set(URDF_TO_MUJOCO_NODE urdf_to_mjcf)
-add_executable(${URDF_TO_MUJOCO_NODE} src/urdf_to_mjcf.cpp)
+add_executable(${URDF_TO_MUJOCO_NODE} urdf_to_mjcf/src/urdf_to_mjcf.cpp)
 target_link_libraries(${URDF_TO_MUJOCO_NODE}
 	${catkin_LIBRARIES}
 	$ENV{ROS_ROOT}/../../lib/liburdf.so
@@ -53,7 +53,7 @@ target_link_libraries(${URDF_TO_MUJOCO_NODE}
 # # Mark executable scripts (Python etc.) for installation
 # # in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-  scripts/mjcf_to_usd_no_physics.py
-  scripts/mjcf_to_usd_with_physics.py
+  mjcf_to_usd/scripts/mjcf_to_usd_no_physics.py
+  mjcf_to_usd/scripts/mjcf_to_usd_with_physics.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
