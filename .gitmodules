@@ -10,3 +10,6 @@
 [submodule "src/mujoco"]
 	path = src/mujoco
 	url = https://github.com/deepmind/mujoco.git
+[submodule "src/sdformat"]
+	path = src/sdformat
+	url = https://github.com/gazebosim/sdformat.git

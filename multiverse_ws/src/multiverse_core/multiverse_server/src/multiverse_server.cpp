@@ -46,7 +46,7 @@ enum class EAttribute : unsigned char
     Torque
 };
 
-enum class EFlag : unsigned char
+enum class EMultiverseServerState : unsigned char
 {
     ReceiveRequestMetaData,
     BindObjects,
@@ -164,7 +164,7 @@ public:
         {
             switch (flag)
             {
-            case EFlag::ReceiveRequestMetaData:
+            case EMultiverseServerState::ReceiveRequestMetaData:
                 receive_request_meta_data();
                 message_str = message.to_string();
                 if (message_str[0] != '{' ||
@@ -172,16 +172,16 @@ public:
                     message_str.empty() ||
                     !reader.parse(message_str, request_meta_data_json))
                 {
-                    flag = EFlag::BindReceiveData;
+                    flag = EMultiverseServerState::BindReceiveData;
                 }
                 else
                 {
                     sockets_need_clean_up[socket_addr] = false;
-                    flag = EFlag::BindObjects;
+                    flag = EMultiverseServerState::BindObjects;
                 }
                 break;
 
-            case EFlag::BindObjects:
+            case EMultiverseServerState::BindObjects:
                 // ROS_INFO("[Server] Receive meta data from socket %s:\n%*.*s", socket_addr.c_str(), STRING_SIZE, STRING_SIZE, request_meta_data_json.toStyledString().c_str());
                 init_response_meta_data();
 
@@ -196,66 +196,67 @@ public:
                 bind_receive_objects();
                 mtx.unlock();
 
-                flag = EFlag::SendResponseMetaData;
+                flag = EMultiverseServerState::SendResponseMetaData;
 
-            case EFlag::SendResponseMetaData:
+            case EMultiverseServerState::SendResponseMetaData:
                 send_response_meta_data();
                 // ROS_INFO("[Server] Send meta data to socket %s:\n%*.*s", socket_addr.c_str(), STRING_SIZE, STRING_SIZE, response_meta_data_json.toStyledString().c_str());
                 if (send_buffer_size == 1 && receive_buffer_size == 1)
                 {
-                    flag = EFlag::ReceiveRequestMetaData;
+                    flag = EMultiverseServerState::ReceiveRequestMetaData;
                 }
                 else
                 {
-                    flag = EFlag::ReceiveSendData;
+                    flag = EMultiverseServerState::ReceiveSendData;
                     sockets_need_clean_up[socket_addr] = true;
                 }
                 break;
 
-            case EFlag::ReceiveSendData:
+            case EMultiverseServerState::ReceiveSendData:
                 receive_send_data();
                 if (message.to_string()[0] == '{')
                 {
                     message_str = message.to_string();
                     if (message_str[1] == '}')
                     {
+                        ROS_INFO("[Server] Received close signal from socket %s.", socket_addr.c_str());
                         send_data_vec.clear();
                         receive_data_vec.clear();
-                        flag = EFlag::SendResponseMetaData;
+                        flag = EMultiverseServerState::SendResponseMetaData;
                     }
                     else if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
                     {
                         send_data_vec.clear();
                         receive_data_vec.clear();
-                        flag = EFlag::BindObjects;
+                        flag = EMultiverseServerState::BindObjects;
                     }
                     else if (isnan(send_buffer[0]))
                     {
-                        ROS_WARN("Received [%s] from [%s].", message_str.c_str(), socket_addr.c_str());
-                        flag = EFlag::BindReceiveData;
+                        ROS_WARN("[Server] Received [%s] from socket %s.", message_str.c_str(), socket_addr.c_str());
+                        flag = EMultiverseServerState::BindReceiveData;
                     }
                     else
                     {
-                        flag = EFlag::BindSendData;
+                        flag = EMultiverseServerState::BindSendData;
                     }
                 }
                 else
                 {
-                    flag = EFlag::BindSendData;
+                    flag = EMultiverseServerState::BindSendData;
                 }
                 break;
 
-            case EFlag::BindSendData:
+            case EMultiverseServerState::BindSendData:
                 mtx.lock();
                 for (size_t i = 0; i < send_buffer_size - 1; i++)
                 {
                     *send_data_vec[i].first = send_buffer[i + 1] * send_data_vec[i].second;
                 }
                 mtx.unlock();
-                flag = EFlag::BindReceiveData;
+                flag = EMultiverseServerState::BindReceiveData;
                 break;
 
-            case EFlag::BindReceiveData:
+            case EMultiverseServerState::BindReceiveData:
                 wait_for_receive_data();
 
                 mtx.lock();
@@ -266,11 +267,11 @@ public:
                 {
                     receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
                 }
-                flag = EFlag::SendReceiveData;
+                flag = EMultiverseServerState::SendReceiveData;
 
-            case EFlag::SendReceiveData:
+            case EMultiverseServerState::SendReceiveData:
                 send_receive_data();
-                flag = EFlag::ReceiveSendData;
+                flag = EMultiverseServerState::ReceiveSendData;
                 break;
 
             default:
@@ -280,7 +281,7 @@ public:
 
         if (sockets_need_clean_up[socket_addr])
         {
-            if (flag != EFlag::ReceiveSendData && flag != EFlag::ReceiveRequestMetaData)
+            if (flag != EMultiverseServerState::ReceiveSendData && flag != EMultiverseServerState::ReceiveRequestMetaData)
             {
                 send_receive_data();
             }
@@ -539,7 +540,7 @@ private:
                         found_all_objects = false;
                         if (now - start > 1)
                         {
-                            ROS_INFO("[Server] Socket [%s] is waiting for [%s][%s] to be declared.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
+                            ROS_INFO("[Server] Socket %s is waiting for [%s][%s] to be declared.", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
                         }
                     }
                 }
@@ -620,7 +621,7 @@ private:
         catch (const zmq::error_t &e)
         {
             should_shut_down = true;
-            ROS_INFO("[Server] %s, socket at %s prepares to close.", e.what(), socket_addr.c_str());
+            ROS_INFO("[Server] %s, socket %s prepares to close.", e.what(), socket_addr.c_str());
         }
     }
 
@@ -696,7 +697,7 @@ private:
     }
 
 private:
-    EFlag flag = EFlag::ReceiveRequestMetaData;
+    EMultiverseServerState flag = EMultiverseServerState::ReceiveRequestMetaData;
 
     zmq::message_t message;
 
@@ -742,7 +743,7 @@ void start_multiverse_server(const std::string &server_socket_addr)
     std::map<std::string, std::thread> workers;
     zmq::socket_t server_socket = zmq::socket_t(server_context, zmq::socket_type::rep);
     server_socket.bind(server_socket_addr);
-    ROS_INFO("[Server] Create server socket %s.", server_socket_addr.c_str());
+    ROS_INFO("[Server] Create server socket %s, waiting for client...", server_socket_addr.c_str());
 
     zmq::message_t message;
     std::string message_str;
