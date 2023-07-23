@@ -125,7 +125,7 @@ void MultiverseClient::connect()
     {
         return;
     }
-
+    
     context = zmq_ctx_new();
     client_socket = zmq_socket(context, ZMQ_REQ);
 
@@ -325,7 +325,7 @@ void MultiverseClient::init_buffer()
 
 void MultiverseClient::communicate(const bool resend_request_meta_data)
 {
-    if (should_shut_down)
+    if (should_shut_down || flag == EMultiverseClientState::None)
     {
         return;
     }
