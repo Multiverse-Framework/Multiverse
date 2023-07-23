@@ -32,7 +32,7 @@ if not catkin_ws_path_exists:
     print("----------------------------------------------------------")
     print("Path (%s) does not exist." % catkin_ws_path)
     print("Please either set/change %s, or change " % mesh_path_env_name)
-    print("the catkin_ws_path variable inside pysdf/parse.py")
+    print("the catkin_ws_path variable inside sdf_to_urdf/parse.py")
     print("----------------------------------------------------------")
     sys.exit(1)
 

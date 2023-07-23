@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
 # # Uncomment this if the package has a setup.py. This macro ensures
 # # modules and global scripts declared therein get installed
 # # See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+catkin_python_setup()
 
 # ##################################
 # # catkin specific configuration ##
@@ -61,6 +61,6 @@ target_link_libraries(${URDF_TO_MUJOCO_NODE}
 catkin_install_python(PROGRAMS
   mjcf_to_usd/scripts/mjcf_to_usd_no_physics.py
   mjcf_to_usd/scripts/mjcf_to_usd_with_physics.py
-  # sdf_to_urdf/scripts/sdf_to_urdf.py
+  sdf_to_urdf/scripts/sdf_to_urdf_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
