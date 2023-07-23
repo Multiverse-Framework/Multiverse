@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 <robot name="box_scenario" version="1.0">
   <joint name="box_flap_1_joint" type="revolute">
-    <origin xyz="0.17000000178813934 0.0 0.16599999368190765" rpy="-1.5707963267948966 0.0 0.0"/>
+    <origin xyz="0.17 0.0 0.166" rpy="-1.5707961924360403 0.0 0.0"/>
     <axis xyz="0 0 1"/>
     <parent link="box"/>
     <child link="box_flap_1"/>
     <limit effort="1000" lower="-1.570000041628963" upper="4.6999999549936415" velocity="1000"/>
   </joint>
   <joint name="box_flap_2_joint" type="revolute">
-    <origin xyz="-0.17000000178813934 0.0 0.1679999977350235" rpy="1.5707963267948966 -0.0 0.0"/>
+    <origin xyz="-0.17 0.0 0.168" rpy="1.5707961924360403 -0.0 0.0"/>
     <axis xyz="0 0 1"/>
     <parent link="box"/>
     <child link="box_flap_2"/>
@@ -64,7 +64,7 @@
       <inertia ixx="0.003919629380106926" ixy="0.0" ixz="0.0" iyy="0.0020787641406059265" iyz="0.0" izz="0.0018410093616694212"/>
     </inertial>
     <collision>
-      <origin xyz="-0.1700000072951671 3.309754823582751e-09 -1.5240808185731551e-09" rpy="-1.5707963267948963 -6.845708383496081e-08 -1.5707963267948966"/>
+      <origin xyz="-0.1700000072951671 3.3097550412049596e-09 -1.5240806441640422e-09" rpy="-1.5707963267948968 3.4228541723191335e-08 -1.5707963267948968"/>
       <geometry>
         <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/box_scenario/stl/geom_6.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
       </geometry>
@@ -77,7 +77,7 @@
       <inertia ixx="0.003919629380106926" ixy="0.0" ixz="0.0" iyy="0.002078763674944639" iyz="0.0" izz="0.0018410093616694212"/>
     </inertial>
     <collision>
-      <origin xyz="0.17000000947241017 -1.7394765439778366e-12 3.853585194813239e-10" rpy="1.5707963267948963 -6.845708383496081e-08 1.5707963267948966"/>
+      <origin xyz="0.17000000947241017 -1.7394502229958568e-12 3.853585327906628e-10" rpy="1.5707963267948968 3.4228541723191335e-08 1.5707963267948968"/>
       <geometry>
         <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/box_scenario/stl/geom_7.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
       </geometry>
@@ -95,7 +95,7 @@
       <inertia ixx="0.005019803997129202" ixy="0.0" ixz="0.0" iyy="0.0038922601379454136" iyz="0.0" izz="0.0015858749393373728"/>
     </inertial>
     <collision>
-      <origin xyz="1.1589759504366095e-07 -0.0030464363770440228 0.09314732677864689" rpy="1.2163360186527825 -1.2583493548573155e-06 -3.4001043122664387e-06"/>
+      <origin xyz="1.1589759504366095e-07 -0.0030464363770440228 0.09314732677864689" rpy="1.2163360186527825 -1.258349354916212e-06 -3.4001043122446416e-06"/>
       <geometry>
         <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/box_scenario/stl/geom_8.stl" scale="1.0 1.0 1.0"/>
       </geometry>

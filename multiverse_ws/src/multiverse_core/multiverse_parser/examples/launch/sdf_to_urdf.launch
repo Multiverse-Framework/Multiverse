@@ -1,12 +1,16 @@
 <launch>
 
+    <arg name="mesh_path" default="$(find multiverse_parser)/examples/sdf_to_urdf/sdf/pr2" />
+
     <arg name="in_sdf"
-        default="$(find multiverse_parser)/examples/sdf_to_urdf/sdf/pr2/model.sdf" />
+        default="$(arg mesh_path)/model.sdf" />
 
     <arg name="out_urdf"
         default="$(find multiverse_parser)/examples/sdf_to_urdf/urdf/pr2.urdf" />
 
-    <node pkg="multiverse_parser" type="sdf_to_urdf.py" name="sdf_to_urdf" output="screen"
+    <env name="MESH_WORKSPACE_PATH" value="$(arg mesh_path)" />
+
+    <node pkg="multiverse_parser" type="sdf_to_urdf_node.py" name="sdf_to_urdf" output="screen"
         args="$(arg in_sdf) $(arg out_urdf)" />
 
 </launch>

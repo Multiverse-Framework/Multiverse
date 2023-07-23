@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import sys
 import os
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 from urdf_parser_py.urdf import URDF, Link, Joint, Pose, JointLimit, Inertial, Inertia, Visual, Collision, Box, Cylinder, Sphere, Mesh
@@ -237,13 +236,3 @@ def usd_to_urdf_handle(usd_file: str, urdf_file: str):
 
     with open(urdf_file, "w") as file:
         file.write(urdf_robot.to_xml_string())
-
-
-if __name__ == "__main__":
-    if len(sys.argv) >= 3:
-        (usd_file, urdf_file) = (sys.argv[1], sys.argv[2])
-    else:
-        print("Usage: in_usd.usda out_urdf.urdf")
-        sys.exit(1)
-
-    usd_to_urdf_handle(usd_file, urdf_file)
