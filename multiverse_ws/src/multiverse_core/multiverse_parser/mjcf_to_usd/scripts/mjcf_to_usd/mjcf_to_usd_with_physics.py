@@ -17,7 +17,7 @@ def get_sum_mass(body_element: ET.Element) -> float:
     return mass
 
 
-def mjcf_to_usd_with_physics_handle(xml_path: str, usd_file: str):
+def mjcf_to_usd_with_physics(xml_path: str, usd_file: str):
     usd_dir = os.path.dirname(usd_file)
 
     xml_mesh_dict = {}

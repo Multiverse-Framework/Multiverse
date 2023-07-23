@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from usd_to_urdf import usd_to_urdf_handle
+from usd_to_urdf import usd_to_urdf
 
 
 if __name__ == "__main__":
@@ -11,4 +11,4 @@ if __name__ == "__main__":
         print("Usage: in_usd.usda out_urdf.urdf")
         sys.exit(1)
 
-    usd_to_urdf_handle(usd_file, urdf_file)
+    usd_to_urdf(usd_file, urdf_file)

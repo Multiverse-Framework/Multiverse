@@ -8,7 +8,7 @@ from pxr import Usd, UsdGeom, Sdf, Gf
 import mujoco
 
 
-def mjcf_to_usd_no_physics_handle(xml_path: str, usd_file: str):
+def mjcf_to_usd_no_physics(xml_path: str, usd_file: str):
     usd_dir = os.path.dirname(usd_file)
 
     xml_mesh_dict = {}

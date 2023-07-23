@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
+from pxr import Usd, UsdGeom, Gf, UsdPhysics
 from urdf_parser_py.urdf import URDF, Link, Joint, Pose, JointLimit, Inertial, Inertia, Visual, Collision, Box, Cylinder, Sphere, Mesh
 import tf
 from math import radians
@@ -20,7 +20,7 @@ def usd_quat_to_urdf_rpy(usd_quat: Gf.Quatf):
     return tf.transformations.euler_from_quaternion([x, y, z, w])
 
 
-def usd_to_urdf_handle(usd_file: str, urdf_file: str):
+def usd_to_urdf(usd_file: str, urdf_file: str):
     rospack = rospkg.RosPack()
 
     urdf_pkg_path = os.path.dirname(os.path.dirname(urdf_file))

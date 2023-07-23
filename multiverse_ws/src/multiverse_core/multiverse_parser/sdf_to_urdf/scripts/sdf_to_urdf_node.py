@@ -2,11 +2,11 @@
 
 import sys
 
-import sdf_to_urdf
+from sdf_to_urdf import SDF
 
 
-def sdf_to_urdf_handle(sdf_file, urdf_file):
-    sdf = sdf_to_urdf.SDF(file=sdf_file)
+def sdf_to_urdf(sdf_file, urdf_file):
+    sdf = SDF(file=sdf_file)
     world = sdf.world
     if len(world.models) != 1:
         print("SDF contains %s instead of exactly one model. Aborting." % len(world.models))
@@ -22,4 +22,4 @@ if __name__ == "__main__":
     else:
         print("Usage: in_sdf.sdf out_urdf.urdf")
         sys.exit(1)
-    sdf_to_urdf_handle(sdf_file, urdf_file)
+    sdf_to_urdf(sdf_file, urdf_file)
