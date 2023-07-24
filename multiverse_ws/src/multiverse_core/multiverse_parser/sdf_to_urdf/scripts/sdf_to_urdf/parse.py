@@ -13,6 +13,10 @@ from tf.transformations import *
 from sdf_to_urdf.naming import *
 from sdf_to_urdf.conversions import *
 
+import rospkg
+   
+rospack = rospkg.RosPack()
+
 models_paths = [os.path.expanduser("~/.gazebo/models/")]
 
 if "GAZEBO_MODEL_PATH" in os.environ:
@@ -846,8 +850,16 @@ class LinkPart(SpatialEntity):
             spherenode = ET.SubElement(geometrynode, "sphere", {"radius": self.geometry_data["radius"]})
         elif self.geometry_type == "mesh":
             mesh_file = "/".join(self.geometry_data["uri"].split("/")[3:])
+            if part_type == "collision" and mesh_file.endswith("dae"):
+                mesh_file = mesh_file.replace("dae", "stl")
             mesh_found = find_mesh_in_catkin_ws(mesh_file)
             if mesh_found:
+                try:
+                    package_name = mesh_found.split('/')[0]
+                    package_path = rospack.get_path(package_name)
+                    dae_file = os.path.dirname(package_path) + '/' + mesh_found
+                except rospkg.ResourceNotFound:
+                    print(f"Package '{package_name}' not found.")
                 mesh_path = "package://" + mesh_found
             else:
                 print("Could not find mesh %s in %s" % (mesh_file, catkin_ws_path))

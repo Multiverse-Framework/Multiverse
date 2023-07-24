@@ -1,0 +1,36 @@
+<sdf version="1.5">
+  <model name="coke_can">
+    <link name="link">
+      <inertial>
+        <pose>-0.005 -0.005 0.06 0 0 0</pose>
+        <mass>0.390</mass>
+        <inertia>
+          <ixx>0.001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.001</iyy>
+          <iyz>0</iyz>
+          <izz>0.00035</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <pose>0 0 -0.25 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://coke_can/meshes/coke_can.dae</uri>
+            <scale>0.5 0.5 0.5</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <pose>0 0 -0.25 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://coke_can/meshes/coke_can.dae</uri>
+            <scale>0.5 0.5 0.5</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

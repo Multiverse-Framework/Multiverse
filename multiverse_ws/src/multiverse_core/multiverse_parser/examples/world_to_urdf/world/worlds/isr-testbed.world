@@ -1,0 +1,367 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+
+<!-- Instituto Superior Tecnico [2017] -->
+
+<world name="isr-testbed">
+
+    <!-- enable/disable shadows, control ambient light -->
+    <scene>
+        <ambient>0.4 0.4 0.4 1.0</ambient>
+        <shadows>0</shadows>
+    </scene>
+
+    <!-- ground -->
+    <include>
+        <uri>model://ground_plane</uri>
+        <material>
+            <script>
+                <uri>file://media/materials/scripts/gazebo.material</uri>
+            </script>
+        </material>
+    </include>
+
+    <!-- Global light source -->
+    <include>
+        <uri>model://sun</uri>
+    </include>
+
+    <!-- Directional light source -->
+    <light type="directional" name="directional">
+      <pose>0 0 8 0 0 0</pose>
+      <diffuse>0.3 0.3 0.3 1</diffuse>
+      <specular>.1 .1 .1 1</specular>
+      <attenuation>
+        <range>20</range>
+        <linear>0.01</linear>
+        <constant>0.2</constant>
+        <quadratic>0.0</quadratic>
+      </attenuation>
+      <direction>0 0 -1</direction>
+      <cast_shadows>true</cast_shadows>
+    </light>
+
+    <!-- Walls apartment -->
+    <include>
+        <uri>file://isr-testbed/walls</uri>
+        <pose>0.491830 0.433522 0 0 0 0</pose>
+    </include>
+
+    <!-- Walls outside -->
+    <include>
+        <uri>file://isr-testbed/wall</uri>
+        <pose>-1.19 1.86 0 0 0 0</pose>
+    </include>
+
+    <!-- Floor -->
+    <!--include>
+        <uri>file://isr-testbed/floor</uri>
+        <pose>0 1.0 0 0 0 0</pose>
+    </include-->
+
+    <!-- :::   Models   ::: -->
+
+        <!-- Car -->
+        <!--include>
+            <name>car</name>
+            <uri>file://isr-testbed/prius_hybrid</uri>
+            <pose>-7.7 1 0 0 0 0</pose>
+        </include-->
+
+        <!-- Cone 1 -->
+        <include>
+            <name>cone1</name>
+            <uri>file://isr-testbed/construction_cone</uri>
+            <pose>-5.94 2.97 0 0 0 0</pose>
+        </include>
+     
+        <!-- Cone 2 -->
+        <include>
+            <name>cone2</name>
+            <uri>file://isr-testbed/construction_cone</uri>
+            <pose>-4.54 2.97 0 0 0 0</pose>
+        </include>
+
+       <!-- Cone 3 -->
+        <include>
+            <name>cone3</name>
+            <uri>file://isr-testbed/construction_cone</uri>
+            <pose>3.03 6.84 0 0 0 0</pose>
+        </include>
+
+        <!-- Cone 4 -->
+        <include>
+            <name>cone4</name>
+            <uri>file://isr-testbed/construction_cone</uri>
+            <pose>3.03 8.33 0 0 0 0</pose>
+        </include>
+
+        <!-- Table -->
+        <include>
+            <name>table_outside</name>
+            <uri>file://isr-testbed/cafe_table</uri>
+            <pose>-5.25 3.77 0 0 0 0</pose>
+        </include>
+
+        <!-- Fire Hydrant 1 -->
+        <include>
+            <name>hydrant1</name>
+            <uri>file://isr-testbed/fire_hydrant</uri>
+            <pose>1.01 9.45 0 0 0 0</pose>
+        </include>
+
+        <!-- Fire Hydrant 2 -->
+        <include>
+            <name>hydrant2</name>
+            <uri>file://isr-testbed/fire_hydrant</uri>
+            <pose>-4.0 9.45 0 0 0 0</pose>
+        </include>
+
+        <!-- Tree 1 -->
+        <include>
+            <name>tree1</name>
+            <uri>file://isr-testbed/pine_tree</uri>
+            <pose>-6.0 9.45 0 0 0 0</pose>
+        </include>
+
+        <!-- Tree 2 -->
+        <include>
+            <name>tree2</name>
+            <uri>file://isr-testbed/pine_tree</uri>
+            <pose>-9.11 6.25 0 0 0 0</pose>
+        </include>
+
+        <!-- Person >
+        <include>
+            <name>human</name>
+            <uri>file://isr-testbed/homem</uri>
+            <pose>-0.57 -3.92 0 0 0 2.12</pose>
+        </include -->
+ 
+        <!-- Person -->
+        <include>
+            <name>human</name>
+            <uri>file://isr-testbed/person_standing</uri>
+            <pose>-2.04 2.41 0 0 0 0</pose>
+        </include>
+
+        <!-- Wardrobe -->
+        <include>
+            <uri>file://isr-testbed/wardrobe</uri>
+            <pose>-2.65 2.44 0 1.57 0 1.57</pose>
+        </include>
+
+        <!-- Pizza box -->
+        <include>
+            <uri>file://isr-testbed/pizza_box</uri>
+            <pose>2.0 -0.15 0.8 0 0 1</pose>
+        </include>
+
+        <!-- Rice Box -->
+        <include>
+            <uri>file://isr-testbed/basmati_rice</uri>
+            <pose>-2.85 0.5 0.8 0 0 0</pose>
+        </include>
+
+        <!-- Tea box -->
+        <include>
+            <uri>file://isr-testbed/tea_box</uri>
+            <pose>-2.85 0.9 0.85 0 0 0</pose>
+        </include>
+
+        <!-- Beer -->
+        <include>
+            <uri>file://isr-testbed/beer</uri>
+            <pose>-2.73 -2.64 0.6 0 0 1</pose>
+        </include>
+        
+        <!-- Plastic Cup -->
+        <include>
+            <name>cup1</name>
+            <uri>file://isr-testbed/plastic_cup</uri>
+            <pose>-2.85 -2.40 0.45 0 0 1</pose>
+        </include>
+
+        <!-- Plastic Cup -->
+        <include>
+            <name>cup2</name>
+            <uri>file://isr-testbed/plastic_cup</uri>
+            <pose>1.83 -0.48 0.80 0 0 1</pose>
+        </include>
+
+        <!-- Shelf -->
+        <include>
+            <uri>file://isr-testbed/shelf</uri>
+            <pose>-2.85 1.0 0 0 0 1.56</pose>
+        </include>
+
+        <!-- Lamp ikea larstid -->
+        <include>
+            <uri>file://isr-testbed/lamp_ikea_arstid</uri>
+            <pose>-2.85 -2.0 0 0 0 1.56</pose>
+        </include>
+
+        <!-- Plant floor small -->
+        <include>
+            <uri>file://isr-testbed/plant_floor_small</uri>
+            <pose>-2.84 -3.05 0 0 0 0</pose>
+        </include>
+
+        <!-- Apple Juice box -->
+        <include>
+            <uri>file://isr-testbed/apple_juice_box</uri>
+            <pose>-2.84 1.64 1 0 0 0</pose>
+        </include>
+
+        <!-- Table bedside -->
+        <include>
+            <uri>file://isr-testbed/table_bedside</uri>
+            <pose>-2.82 -2.48 0 0 0 0</pose>
+        </include>
+
+        <!-- bed -->
+        <include>
+            <uri>file://isr-testbed/bed</uri>
+            <pose>-1.94933 4.30992 0 0 0 0</pose>
+        </include>
+
+        <!-- bedroom nightstand -->
+        <include>
+            <uri>file://isr-testbed/bedroom_nightstand</uri>
+            <name>nightstand1</name>
+            <pose>-0.69 5.0 0 0 0 0</pose>
+        </include>
+
+        <!-- bedroom nightstand 2-->
+        <include>
+            <uri>file://isr-testbed/bedroom_nightstand</uri>
+            <name>nightstand2</name>
+            <pose>-2.89 5.03713 0 0 0 0</pose>
+        </include>
+
+        <!-- dinning room table  -->
+        <include>
+            <uri>file://isr-testbed/dinning_room_table</uri>
+            <pose>2.05802 -2.30976 0 0 0 0</pose>
+        </include>
+
+        <!-- kitchen table -->
+        <include>
+            <uri>file://isr-testbed/table_living_room</uri>
+            <pose>2.0 -0.156695 0 0 0 -1.56643</pose>
+        </include>
+
+        <!-- Kitchen cabinet -->
+        <include>
+            <uri>file://isr-testbed/cabinet_diamondback</uri>
+            <pose>0.91 1.69 0 0 0 -1.56643</pose>
+        </include>
+
+        <!-- Kitchen cabinet 2-->
+        <include>
+            <uri>file://isr-testbed/cabinet_ikea_galant</uri>
+            <pose>1.80 1.68 0 0 0 0</pose>
+        </include>
+
+        <!-- Kitchen cabinet Plate  -->
+        <include>
+            <uri>file://isr-testbed/tray_blue_white</uri>
+            <pose>2.12 1.67 1 0 0 -1.54</pose>
+        </include>
+
+        <!-- erl board which goes on top of kitchen table for FBM1 test -->
+        <!--include>
+            <uri>file://isr-testbed/erl_board</uri>
+            <pose>2.0 -0.05 0.75 0 0 -1.56643</pose>
+        </include-->
+
+        <!-- simple chair 1D (used in dinning room) -->
+        <include>
+            <uri>file://isr-testbed/simple_chair</uri>
+            <name>chair_dinning_room_1</name>
+            <pose>1.91 -3.05 0 0 0 0</pose>
+        </include>
+
+        <!-- simple chair 2D (used in dinning room) -->
+        <include>
+            <uri>file://isr-testbed/simple_chair</uri>
+            <name>chair_dinning_room_2</name>
+            <pose>2.96 -2.52 0 0 0 1.54796</pose>
+        </include>
+
+        <!-- simple chair 1K (used in kitchen) -->
+        <include>
+            <uri>file://isr-testbed/simple_chair</uri>
+            <name>chair_kitchen_1</name>
+            <pose>1.57 -0.98 0 0 0 0</pose>
+        </include>
+
+        <!-- simple chair 2K (used in kitchen) -->
+        <include>
+            <uri>file://isr-testbed/simple_chair</uri>
+            <name>chair_kitchen_2</name>
+            <pose>2.26 -0.97 0 0 0 0</pose>
+        </include>
+
+        <!-- simple chair 3K (used in kitchen) -->
+        <include>
+            <uri>file://isr-testbed/simple_chair</uri>
+            <name>chair_kitchen_3</name>
+            <pose>2.88 -0.26 0 0 0 1.59</pose>
+        </include>
+
+        <!-- sofa -->
+        <include>
+            <uri>file://isr-testbed/sofa</uri>
+            <pose>-0.76 -0.90 0 0 0 0</pose>
+        </include>
+
+        <!-- TV chair 1 -->
+        <include>
+            <uri>file://isr-testbed/tv_chair</uri>
+            <name>chair1</name>
+            <pose>-0.73 -2.05 0 0 0 -1.57</pose>
+        </include>
+
+        <!-- TV chair 2 -->
+        <include>
+            <uri>file://isr-testbed/tv_chair</uri>
+            <name>chair2</name>
+            <pose>-0.73 0.57 0 0 0 -1.57</pose>
+        </include>
+
+        <!-- TV -->
+        <include>
+            <uri>file://isr-testbed/tv</uri>
+            <pose>-2.85 -0.94 0.035264 0 0 -0.026</pose>
+        </include>
+
+        <!-- TV table -->
+        <include>
+            <uri>file://isr-testbed/tv_table</uri>
+            <pose>-2.81 -0.98 0 0 0 0</pose>
+        </include>
+
+        <!-- living room table -->
+        <!--include>
+            <uri>file://isr-testbed/living_room_table</uri>
+            <pose>-1.81751 -0.866819 0 0 0 0</pose>
+        </include-->
+
+        <!-- aruco marker 0 -->
+        <include>
+            <uri>file://isr-testbed/aruco_marker_0</uri>
+            <pose>1.5 1.96 0.8 0 0 -1.5707963267948966</pose>
+        </include>
+
+    <!-- focus camera to view the whole testbed at startup -->
+    <gui fullscreen='0'>
+        <camera name='user_camera'>
+            <pose frame=''>6.75942 -8.32467 9.76061 0 0.739643 2.1722</pose>
+            <view_controller>orbit</view_controller>
+            <projection_type>perspective</projection_type>
+        </camera>
+    </gui>
+
+</world>
+</sdf>

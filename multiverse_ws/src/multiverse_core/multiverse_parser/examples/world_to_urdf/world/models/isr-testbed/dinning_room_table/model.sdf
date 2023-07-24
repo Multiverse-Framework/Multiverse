@@ -1,0 +1,85 @@
+<?xml version='1.0'?>
+<sdf version='1.6'>
+  <model name='dinning_room_table'>
+    <link name='base_link'>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose frame=''>-0.04 0.015 0.75 0 0 0</pose>
+        <mass>10</mass>
+        <inertia>
+          <ixx>0.68333306</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1.4166661</iyy>
+          <iyz>0</iyz>
+          <izz>2.0833325</izz>
+        </inertia>
+      </inertial>
+      <visual name='visual'>
+        <pose frame=''>-4.8 -1.2 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>file://isr-testbed/dinning_room_table/dinning_room_table.dae</uri>
+            <scale>1 1 1</scale>
+          </mesh>
+        </geometry>
+        <transparency>0</transparency>
+      </visual>
+      <collision name='base_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose frame=''>-0.04 0.015 0.75 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>1.3 0.9 0.1</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name='leg1_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose frame=''>-0.65 -0.4 0.45 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>.05</radius>
+            <length>0.7</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <collision name='leg2_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose frame=''>0.55 -0.4 0.45 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>.05</radius>
+            <length>0.7</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <collision name='leg3_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose frame=''>0.55 0.4 0.45 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>.05</radius>
+            <length>0.7</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <collision name='leg4_collision'>
+        <laser_retro>0</laser_retro>
+        <max_contacts>10</max_contacts>
+        <pose frame=''>-0.65 0.4 0.45 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>.05</radius>
+            <length>0.7</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+    <static>0</static>
+  </model>
+</sdf>

@@ -1,0 +1,37 @@
+<sdf version='1.6'>
+  <model name='tea_box'>
+    <link name='base_link'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.081</mass>
+        <inertia>
+          <ixx>0.000204477668209</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>6.27614748954e-05</iyy>
+          <iyz>0</iyz>
+          <izz>0.000195297671881</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.063 0.158 0.073</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>/opt/ros/kinetic/share/cob_gazebo_objects/Media/models/tea_box.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <static>0</static>
+  </model>
+</sdf>

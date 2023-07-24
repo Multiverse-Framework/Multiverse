@@ -1,0 +1,37 @@
+<sdf version='1.6'>
+  <model name='cabinet_ikea_galant'>
+    <link name='base_link'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>20</mass>
+        <inertia>
+          <ixx>3.389998644</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>5.7206643784</iyy>
+          <iyz>0</iyz>
+          <izz>3.3026653456</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose frame=''>0 0 0.0 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>1.30 0.54 1.32</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose frame=''>0 0 0 0 0 -1.5708</pose>
+        <geometry>
+          <mesh>
+            <scale>1.2 0.8 0.8</scale>
+            <uri>/opt/ros/kinetic/share/cob_gazebo_objects/Media/models/cabinet_ikea_galant.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <static>1</static>
+  </model>
+</sdf>

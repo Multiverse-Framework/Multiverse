@@ -1,0 +1,38 @@
+<sdf version='1.6'>
+  <model name='plant_floor_small'>
+    <link name='base_link'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0.38 0 -0 0</pose>
+        <mass>10</mass>
+        <inertia>
+          <ixx>0.6143330876</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.6143330876</iyy>
+          <iyz>0</iyz>
+          <izz>0.162</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>file://isr-testbed/plant_floor_small/plant_floor_small.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>/opt/ros/kinetic/share/cob_gazebo_objects/Media/models/plant_floor_small.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <static>0</static>
+  </model>
+</sdf>

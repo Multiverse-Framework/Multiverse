@@ -1,0 +1,77 @@
+<sdf version='1.6'>
+  <model name='table_living_room'>
+    <link name='base_link'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.03 0.025 0.75 0 -0 0</pose>
+        <mass>5</mass>
+        <inertia>
+          <ixx>0.9401662906</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.46204148185</iyy>
+          <iyz>0</iyz>
+          <izz>1.39687444125</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_collision'>
+        <pose frame=''>-0.03 0.025 0.75 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>1.05 1.5 0.08</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name='base_inferior_link_collision'>
+        <pose frame=''>-0.03 0.025 0.35 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.8 1.3 0.05</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name='leg1_link_collision'>
+        <pose frame=''>-0.4 0.63 0.39 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.12 0.12 0.75</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name='leg2_link_collision'>
+        <pose frame=''>0.35 0.63 0.39 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.12 0.12 0.75</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name='leg3_link_collision'>
+        <pose frame=''>0.35 -0.59 0.39 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.12 0.12 0.75</size>
+          </box>
+        </geometry>
+      </collision>
+      <collision name='leg4_link_collision'>
+        <pose frame=''>-0.4 -0.59 0.39 0 -0 0</pose>
+        <geometry>
+          <box>
+            <size>0.12 0.12 0.75</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name='base_link_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1.5 1.2 1.4</scale>
+            <uri>/opt/ros/kinetic/share/cob_gazebo_objects/Media/models/table_living_room.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <static>0</static>
+  </model>
+</sdf>

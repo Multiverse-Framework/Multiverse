@@ -1,0 +1,29 @@
+<?xml version='1.0'?>
+<sdf version='1.4'>
+  <model name='floor'>
+    <link name='Floor'>
+      <pose>0.3 0 0.01 0 0 0</pose>
+      <visual name='Floor'>
+        <pose>0 0 0 0 0 0</pose>
+        <transparency>0.2</transparency>
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>8.5 9.0</size>
+          </plane>
+        </geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/WoodFloor</name>
+          </script>
+        </material>
+      </visual>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+    </link>
+    <static>1</static>
+  </model>
+</sdf>
