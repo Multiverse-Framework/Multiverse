@@ -787,7 +787,19 @@ int main(int argc, char **argv)
 
     ros::init(argc, argv, "multiverse_server");
 
-    std::thread multiverse_server_thread(start_multiverse_server, std::string(argv[1]));
+    std::string server_socket_host = "tcp://127.0.0.1";
+    int server_socket_port = 7000;
+    std::string server_socket_addr;
+    if (!(ros::param::get("/multiverse/server_socket_host", server_socket_host) && ros::param::get("/multiverse/server_socket_port", server_socket_port)) && argc > 1)
+    {
+        server_socket_addr = std::string(argv[1]);
+    }
+    else
+    {
+        server_socket_addr = server_socket_host + ":" + std::to_string(server_socket_port);
+    }
+
+    std::thread multiverse_server_thread(start_multiverse_server, server_socket_addr);
 
     while (!should_shut_down)
     {

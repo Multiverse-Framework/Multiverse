@@ -1,5 +1,6 @@
 <launch>
 
+    <rosparam command="load" file="$(find multiverse_server)/config/multiverse_params.yaml"/>
     <node pkg="multiverse_server" type="multiverse_server" name="multiverse_server" output="screen"
         args="tcp://127.0.0.1:7000" />
 

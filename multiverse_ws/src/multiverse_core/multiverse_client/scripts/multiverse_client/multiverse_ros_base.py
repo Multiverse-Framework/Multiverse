@@ -18,7 +18,11 @@ class MultiverseRosBase:
         pass
 
     def _init_multiverse_socket(self) -> None:
-        self.__multiverse_socket = MultiverseSocket("tcp://127.0.0.1:7000")
+        if rospy.has_param("/multiverse/server_socket_host") and rospy.has_param("/multiverse/server_socket_port"):
+            server_socket_addr = rospy.get_param("/multiverse/server_socket_host") + ":" + str(rospy.get_param("/multiverse/server_socket_port"))
+        else:
+            server_socket_addr = "tcp://127.0.0.1:7000"
+        self.__multiverse_socket = MultiverseSocket(server_socket_addr)
 
     def _init_request_meta_data(self) -> None:
         self._request_meta_data_dict = init_request_meta_data_dict()
