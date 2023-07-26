@@ -132,9 +132,10 @@ static double get_time_now()
 class MultiverseServer
 {
 public:
-    MultiverseServer(const std::string &socket_addr) : socket_addr(socket_addr)
+    MultiverseServer(const std::string &port)
     {
         socket = zmq::socket_t(context, zmq::socket_type::rep);
+        socket_addr = "tcp://*:" + port;
         socket.bind(socket_addr);
         sockets_need_clean_up[socket_addr] = false;
         ROS_INFO("[Server] Bind to socket %s.", socket_addr.c_str());
@@ -740,19 +741,19 @@ private:
 
 void start_multiverse_server(const std::string &server_socket_addr)
 {
-    std::map<std::string, std::thread> workers;
+    std::map<int, std::thread> workers;
     zmq::socket_t server_socket = zmq::socket_t(server_context, zmq::socket_type::rep);
     server_socket.bind(server_socket_addr);
     ROS_INFO("[Server] Create server socket %s, waiting for client...", server_socket_addr.c_str());
 
-    zmq::message_t message;
-    std::string message_str;
+    int receive_port;
     while (!should_shut_down)
     {
         try
         {
-            zmq::recv_result_t recv_result_t = server_socket.recv(message, zmq::recv_flags::none);
-            message_str = message.to_string();
+            zmq::message_t request;
+            zmq::recv_result_t recv_result_t = server_socket.recv(request, zmq::recv_flags::none);
+            receive_port = *reinterpret_cast<int*>(request.data());
         }
         catch (const zmq::error_t &e)
         {
@@ -761,16 +762,18 @@ void start_multiverse_server(const std::string &server_socket_addr)
             break;
         }
 
-        if (workers.count(message_str) == 0)
+        if (workers.count(receive_port) == 0)
         {
-            workers[message_str] = std::thread([message_str]()
-                                               { MultiverseServer multiverse_server(message_str); multiverse_server.start(); });
+            workers[receive_port] = std::thread([receive_port]()
+                                               { MultiverseServer multiverse_server(std::to_string(receive_port)); multiverse_server.start(); });
         }
         
-        server_socket.send(message, zmq::send_flags::none);
+        zmq::message_t response(sizeof(int));
+        memcpy(response.data(), &receive_port, sizeof(int));
+        server_socket.send(response, zmq::send_flags::none);
     }
 
-    for (std::pair<const std::string, std::thread> &worker : workers)
+    for (std::pair<const int, std::thread> &worker : workers)
     {
         worker.second.join();
     }
@@ -787,16 +790,15 @@ int main(int argc, char **argv)
 
     ros::init(argc, argv, "multiverse_server");
 
-    std::string server_socket_host = "tcp://127.0.0.1";
     int server_socket_port = 7000;
     std::string server_socket_addr;
-    if (!(ros::param::get("/multiverse/server_socket_host", server_socket_host) && ros::param::get("/multiverse/server_socket_port", server_socket_port)) && argc > 1)
+    if (!ros::param::get("/multiverse/server_socket_port", server_socket_port) && argc > 1)
     {
         server_socket_addr = std::string(argv[1]);
     }
     else
     {
-        server_socket_addr = server_socket_host + ":" + std::to_string(server_socket_port);
+        server_socket_addr = "tcp://*:" + std::to_string(server_socket_port);
     }
 
     std::thread multiverse_server_thread(start_multiverse_server, server_socket_addr);

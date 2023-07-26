@@ -58,16 +58,20 @@ void MultiverseClient::connect_to_server()
 
     zmq_connect(client_socket, server_socket_addr.c_str());
 
-    zmq_send(client_socket, socket_addr.c_str(), socket_addr.size(), 0);
+    zmq_msg_t request;
+    zmq_msg_init_size(&request, sizeof(int));
+    *reinterpret_cast<int*>(zmq_msg_data(&request)) = std::stoi(port);
+    zmq_msg_send(&request, client_socket, 0);
+    zmq_msg_close(&request);
 
-    std::string receive_socket_addr;
+    std::string receive_port;
     try
     {
-        zmq_msg_t message;
-        zmq_msg_init(&message);
-        zmq_msg_recv(&message, client_socket, 0);
-        receive_socket_addr = static_cast<char *>(zmq_msg_data(&message)), zmq_msg_size(&message);
-        zmq_msg_close(&message);
+        zmq_msg_t response;
+        zmq_msg_init(&response);
+        zmq_msg_recv(&response, client_socket, 0);
+        receive_port = std::to_string(*reinterpret_cast<int*>(zmq_msg_data(&response)));
+        zmq_msg_close(&response);
     }
     catch (const zmq::error_t &e)
     {
@@ -77,7 +81,7 @@ void MultiverseClient::connect_to_server()
 
     zmq_disconnect(client_socket, server_socket_addr.c_str());
 
-    if (socket_addr.compare(receive_socket_addr) != 0)
+    if (port.compare(receive_port) != 0)
     {
         flag = EMultiverseClientState::None;
     }
