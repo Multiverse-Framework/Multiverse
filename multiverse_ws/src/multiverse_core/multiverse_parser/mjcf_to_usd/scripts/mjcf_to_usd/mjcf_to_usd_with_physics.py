@@ -121,21 +121,23 @@ def mjcf_to_usd_with_physics(xml_path: str, usd_file: str):
     for body_id, body_element in enumerate(xml_tree.iter("body")):
         body_id += 1
         body = mj_model.body(body_id)
+        body_name = body.name.replace(" ", "")
+        body_name = body_name.replace("-", "_")
         if body_id != 0:
             parent_body_id = body.parentid[0]
             parent_body = mj_model.body(parent_body_id)
             parent_body_path = body_paths[parent_body_id]
 
             if body.jntnum[0] == 0:
-                if body.name == "":
+                if body_name == "":
                     body_path = parent_body_path.AppendPath("body_" + str(body_id))
                 else:
-                    body_path = parent_body_path.AppendPath(body.name.replace("-", "_"))
+                    body_path = parent_body_path.AppendPath(body_name)
             else:
-                if body.name == "":
+                if body_name == "":
                     body_path = root_path.AppendPath("body_" + str(body_id))
                 else:
-                    body_path = root_path.AppendPath(body.name.replace("-", "_"))
+                    body_path = root_path.AppendPath(body_name)
             body_paths[body_id] = body_path
 
             body_prim = UsdGeom.Xform.Define(stage, body_path)
@@ -195,10 +197,12 @@ def mjcf_to_usd_with_physics(xml_path: str, usd_file: str):
         for i in range(body.geomnum[0]):
             geom_id = body.geomadr[0] + i
             geom = mj_model.geom(geom_id)
-            if geom.name == "":
+            geom_name = geom.name.replace(" ", "")
+            geom_name = geom_name.replace("-", "_")
+            if geom_name == "":
                 geom_path = body_path.AppendPath("geom_" + str(geom_id))
             else:
-                geom_path = body_path.AppendPath(geom.name.replace("-", "_"))
+                geom_path = body_path.AppendPath(geom_name.replace("-", "_"))
 
             mat = Gf.Matrix4d()
             mat.SetTranslateOnly(Gf.Vec3d(geom.pos[0], geom.pos[1], geom.pos[2]))

@@ -107,10 +107,12 @@ def mjcf_to_usd_no_physics(xml_path: str, usd_file: str):
         if body_id != 0:
             parent_body_id = body.parentid[0]
 
-            if body.name == "":
+            body_name = body.name.replace(" ", "")
+            body_name = body_name.replace("-", "_")
+            if body_name == "":
                 body_path = body_paths[parent_body_id].AppendPath("/body_" + str(body_id))
             else:
-                body_path = body_paths[parent_body_id].AppendPath(body.name.replace("-", "_"))
+                body_path = body_paths[parent_body_id].AppendPath(body_name.replace("-", "_"))
 
             body_paths[body_id] = body_path
 
@@ -137,10 +139,12 @@ def mjcf_to_usd_no_physics(xml_path: str, usd_file: str):
         for i in range(body.geomnum[0]):
             geom_id = body.geomadr[0] + i
             geom = mj_model.geom(geom_id)
-            if geom.name == "":
+            geom_name = geom.name.replace(" ", "")
+            geom_name = geom_name.replace("-", "_")
+            if geom_name == "":
                 geom_path = body_path.AppendPath("geom_" + str(geom_id))
             else:
-                geom_path = body_path.AppendPath(geom.name.replace("-", "_"))
+                geom_path = body_path.AppendPath(geom_name.replace("-", "_"))
 
             mat = Gf.Matrix4d()
             mat.SetTranslateOnly(Gf.Vec3d(geom.pos[0], geom.pos[1], geom.pos[2]))
