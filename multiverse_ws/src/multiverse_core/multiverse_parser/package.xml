@@ -13,7 +13,7 @@
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <exec_depend>rospy</exec_depend>
-  <exec_depend>rpscpp</exec_depend>
+  <exec_depend>roscpp</exec_depend>
 
   <build_depend>mujoco_sim</build_depend>
   

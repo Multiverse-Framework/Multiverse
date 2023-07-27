@@ -1,7 +1,11 @@
 #!/usr/bin/env sh
 
-# Update the submodules to make sure everything is there
-git submodule update --init
+if command -v git &>/dev/null; then
+    # Update the submodules to make sure everything is there
+    git submodule update --init
+else
+    echo "Git is not installed."
+fi
 
 SRC_DIR="$(dirname $0)/src"
 
@@ -25,4 +29,4 @@ fi
 
 # Build the workspace
 rosdep init
-(cd multiverse_ws; . /opt/ros/noetic/setup.sh; catkin build)
+(cd multiverse_ws; rosdep install --from-paths src --ignore-src -r -y; . /opt/ros/noetic/setup.sh; catkin build)
