@@ -744,7 +744,7 @@
     </visual>
   </link>
   <joint name="wardrobe__wardrobe__base_link_joint" type="fixed">
-    <origin xyz="-2.65 2.44 0.0" rpy="1.57 0.0 1.57"/>
+    <origin xyz="-2.65 2.44 0.0" rpy="0.0 0.0 0.0"/>
     <parent link="world"/>
     <child link="wardrobe__wardrobe__base_link"/>
   </joint>
@@ -755,13 +755,13 @@
       <inertia ixx="7.5306636544" ixy="0.0" ixz="0.0" iyy="2.5306656544" iyz="0.0" izz="8.33333"/>
     </inertial>
     <collision name="wardrobe__wardrobe__base_link_visual">
-      <origin xyz="0.0 1.1 0.0" rpy="0.0 0.0 0.0"/>
+      <origin xyz="0.0 0.2 1.0" rpy="0.0 0.0 1.57"/>
       <geometry>
-        <box size="1.0 2.0 0.72"/>
+        <box size="1.0 0.72 2.0"/>
       </geometry>
     </collision>
     <visual name="wardrobe__wardrobe__base_link_collision">
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <origin xyz="0.0 0.2 0.0" rpy="0.0 0.0 1.57"/>
       <geometry>
         <mesh filename="package://multiverse_parser/examples/world_to_urdf/world/models/isr-testbed/wardrobe/3d-model.dae" scale="1.0 1.0 1.0"/>
       </geometry>

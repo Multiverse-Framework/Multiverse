@@ -148,7 +148,7 @@
         <!-- Wardrobe -->
         <include>
             <uri>file://isr-testbed/wardrobe</uri>
-            <pose>-2.65 2.44 0 1.57 0 1.57</pose>
+            <pose>-2.65 2.44 0 0 0 0</pose>
         </include>
 
         <!-- Pizza box -->

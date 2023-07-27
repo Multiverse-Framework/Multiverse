@@ -15,7 +15,7 @@
         </inertia>
       </inertial>
       <visual name='base_link_collision'>
-        <pose frame=''>0 0 0 0 -0 0</pose>
+        <pose frame=''>0.0 0.2 0.0 0.0 0.0 1.57</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
@@ -30,10 +30,10 @@
         </material>
       </visual>
       <collision name='base_link_visual'>
-        <pose frame=''>0 1.1 0 0 -0 0</pose>
+        <pose frame=''>0.0 0.2 1.0 0.0 0.0 1.57</pose>
         <geometry>
           <box>
-            <size>1 2 0.72</size>
+            <size>1.0 0.72 2.0</size>
           </box>
         </geometry>
       </collision>
