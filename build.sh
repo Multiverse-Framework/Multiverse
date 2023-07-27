@@ -29,4 +29,4 @@ fi
 
 # Build the workspace
 rosdep init
-(cd multiverse_ws; . /opt/ros/noetic/setup.sh; catkin build)
+(cd multiverse_ws; rosdep install --from-paths src --ignore-src -r -y; . /opt/ros/noetic/setup.sh; catkin build)
