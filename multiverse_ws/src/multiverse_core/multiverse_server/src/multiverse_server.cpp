@@ -439,7 +439,7 @@ private:
                 {
                     ROS_INFO("[Server] Continue state [%s - %s] on socket %s", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
-                    objects[object_name][attribute_name].second = false;
+                    objects[object_name][attribute_name].second = true;
 
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
