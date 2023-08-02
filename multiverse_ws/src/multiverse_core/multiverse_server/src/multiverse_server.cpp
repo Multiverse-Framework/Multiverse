@@ -288,7 +288,14 @@ public:
             }
 
             ROS_INFO("[Server] Unbind from socket %s.", socket_addr.c_str());
-            socket.unbind(socket_addr);
+            try
+            {
+                socket.unbind(socket_addr);
+            }
+            catch (const zmq::error_t &e)
+            {
+                ROS_WARN("[Server] %s, socket %s can not be unbinded.", e.what(), socket_addr.c_str());
+            }
         }
     }
 
