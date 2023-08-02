@@ -617,7 +617,10 @@ private:
             sockets_need_clean_up[socket_addr] = false;
             zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
             sockets_need_clean_up[socket_addr] = true;
-            memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
+            if (message.to_string()[0] != '{' && message.to_string()[1] != '{')
+            {
+                memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
+            }
         }
         catch (const zmq::error_t &e)
         {
