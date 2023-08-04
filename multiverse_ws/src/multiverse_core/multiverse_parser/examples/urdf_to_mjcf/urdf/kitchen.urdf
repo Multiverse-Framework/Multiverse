@@ -3,168 +3,168 @@
   <joint name="sink_area_trash_drawer_main_joint" type="prismatic">
     <origin xyz="1.5549999475479126 -0.4000000059604645 0.39500001072883606" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="sink_area_trash_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="sink_area_left_upper_drawer_main_joint" type="prismatic">
     <origin xyz="1.5549999475479126 0.8999999761581421 0.7549999952316284" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="sink_area_left_upper_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="sink_area_left_middle_drawer_main_joint" type="prismatic">
     <origin xyz="1.5549999475479126 0.8999999761581421 0.5299999713897705" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="sink_area_left_middle_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="sink_area_left_bottom_drawer_main_joint" type="prismatic">
     <origin xyz="1.5549999475479126 0.8999999761581421 0.23000000417232513" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="sink_area_left_bottom_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="sink_area_dish_washer_door_joint" type="revolute">
     <origin xyz="1.284999966621399 0.20000000298023224 0.1850000023841858" rpy="-1.5707963267948966 -0.0 3.141592653589793"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="sink_area_dish_washer_door"/>
     <limit effort="1000" lower="0.0" upper="1.5708000552204227" velocity="1000"/>
   </joint>
   <joint name="sink_area_dish_washer_tray_main" type="prismatic">
     <origin xyz="1.6349999904632568 0.20000000298023224 0.6200000047683716" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="sink_area_dish_washer_tray_bottom"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="oven_area_oven_door_joint" type="revolute">
     <origin xyz="1.2812999486923218 1.9299999475479126 0.9085999727249146" rpy="-1.5707963267948966 -0.0 3.141592653589793"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_oven_door"/>
     <limit effort="1000" lower="0.0" upper="1.5708000552204227" velocity="1000"/>
   </joint>
   <joint name="oven_area_oven_knob_stove_2_joint" type="revolute">
     <origin xyz="1.284999966621399 2.069999933242798 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_oven_knob_stove_2"/>
     <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
   </joint>
   <joint name="oven_area_oven_knob_stove_1_joint" type="revolute">
     <origin xyz="1.284999966621399 2.140000104904175 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_oven_knob_stove_1"/>
     <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
   </joint>
   <joint name="oven_area_oven_knob_stove_3_joint" type="revolute">
     <origin xyz="1.284999966621399 2.0 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_oven_knob_stove_3"/>
     <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
   </joint>
   <joint name="oven_area_oven_knob_stove_4_joint" type="revolute">
     <origin xyz="1.284999966621399 1.9299999475479126 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_oven_knob_stove_4"/>
     <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
   </joint>
   <joint name="oven_area_oven_knob_oven_joint" type="revolute">
     <origin xyz="1.284999966621399 1.7699999809265137 1.4148999452590942" rpy="-3.141592653589793 -1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_oven_knob_oven"/>
     <limit effort="1000" lower="0.0" upper="3.1415899904287032" velocity="1000"/>
   </joint>
   <joint name="oven_area_area_middle_upper_drawer_main_joint" type="prismatic">
     <origin xyz="1.5549999475479126 1.9299999475479126 0.800000011920929" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_area_middle_upper_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="oven_area_area_middle_lower_drawer_main_joint" type="prismatic">
     <origin xyz="1.5549999475479126 1.9299999475479126 0.4399999976158142" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_area_middle_lower_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="oven_area_area_left_drawer_main_joint" type="prismatic">
     <origin xyz="1.2649999856948853 2.380000114440918 0.824999988079071" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_area_left_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="oven_area_area_right_drawer_main_joint" type="prismatic">
     <origin xyz="1.2649999856948853 1.4800000190734863 0.824999988079071" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="oven_area_area_right_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="kitchen_island_left_upper_drawer_main_joint" type="prismatic">
     <origin xyz="-1.062999963760376 0.9491999745368958 0.5350000262260437" rpy="-0.0 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="kitchen_island_left_upper_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="kitchen_island_left_lower_drawer_main_joint" type="prismatic">
     <origin xyz="-1.062999963760376 0.9491999745368958 0.24500000476837158" rpy="-0.0 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="kitchen_island_left_lower_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="kitchen_island_middle_upper_drawer_main_joint" type="prismatic">
     <origin xyz="-1.062999963760376 1.7491999864578247 0.5350000262260437" rpy="-0.0 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="kitchen_island_middle_upper_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="kitchen_island_middle_lower_drawer_main_joint" type="prismatic">
     <origin xyz="-1.062999963760376 1.7491999864578247 0.24500000476837158" rpy="-0.0 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="kitchen_island_middle_lower_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="kitchen_island_right_upper_drawer_main_joint" type="prismatic">
     <origin xyz="-1.062999963760376 2.5492000579833984 0.5350000262260437" rpy="-0.0 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="kitchen_island_right_upper_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="kitchen_island_right_lower_drawer_main_joint" type="prismatic">
     <origin xyz="-1.062999963760376 2.5492000579833984 0.24500000476837158" rpy="-0.0 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="kitchen_island_right_lower_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="fridge_area_lower_drawer_main_joint" type="prismatic">
     <origin xyz="1.5549999475479126 -1.0 0.32249999046325684" rpy="-3.141592653589793 1.5707963267948966 0.0"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="fridge_area_lower_drawer_main"/>
     <limit effort="1000" lower="0.0" upper="0.47999998927116394" velocity="1000"/>
   </joint>
   <joint name="iai_fridge_door_joint" type="revolute">
     <origin xyz="1.2649999856948853 -1.2999999523162842 0.9900000095367432" rpy="0.0 -0.0 3.141592653589793"/>
     <axis xyz="0 0 1"/>
-    <parent link="kitchen"/>
+    <parent link="kitchen_root"/>
     <child link="iai_fridge_door"/>
     <limit effort="1000" lower="0.0" upper="1.5708000552204227" velocity="1000"/>
   </joint>
@@ -172,9 +172,9 @@
   <joint name="kitchen_joint" type="fixed">
     <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
     <parent link="world"/>
-    <child link="kitchen"/>
+    <child link="kitchen_root"/>
   </joint>
-  <link name="kitchen">
+  <link name="kitchen_root">
     <inertial>
       <origin xyz="0.02871396765112877 1.2261531352996826 0.9945118427276611" rpy="0 0 0"/>
       <mass value="0.0"/>

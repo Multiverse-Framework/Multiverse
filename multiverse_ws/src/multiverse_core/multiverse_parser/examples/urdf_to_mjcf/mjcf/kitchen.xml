@@ -1,5 +1,5 @@
 <mujoco model="kitchen">
-    <compiler angle="radian" meshdir="/media/giangnguyen/Storage/Multiverse/multiverse_ws/src/multiverse_core/multiverse_parser/examples/urdf_to_mjcf/mjcf/kitchen/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="true" boundmass="0.000001" boundinertia="0.000001"/>
+    <compiler angle="radian" meshdir="kitchen/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="true" boundmass="0.000001" boundinertia="0.000001"/>
     <statistic meansize="0.809444" extent="10.7837" center="-0.598586 1.59493 1.25"/>
     <asset>
         <mesh name="geom_12" file="geom_12.stl"/>
@@ -374,7 +374,7 @@
     </asset>
     <worldbody>
         <body name="kitchen">
-            <body name="kitchen">
+            <body name="kitchen_root">
                 <inertial pos="0.028714 1.22615 0.994512" mass="1e-06" diaginertia="53549.6 36894.3 23144.2"/>
                 <geom size="0.2875 0.8 0.01" pos="1.565 0.525 0.84" quat="0 0 0 1" type="box"/>
                 <geom size="0.4 1.225 0.01" pos="-1.0655 1.7492 0.841" type="box"/>
@@ -917,30 +917,29 @@
     </worldbody>
     <equality/>
     <contact>
-        <exclude body1="kitchen" body2="kitchen"/>
-        <exclude body1="kitchen" body2="sink_area_trash_drawer_main"/>
-        <exclude body1="kitchen" body2="sink_area_left_upper_drawer_main"/>
-        <exclude body1="kitchen" body2="sink_area_left_middle_drawer_main"/>
-        <exclude body1="kitchen" body2="sink_area_left_bottom_drawer_main"/>
-        <exclude body1="kitchen" body2="sink_area_dish_washer_door"/>
-        <exclude body1="kitchen" body2="sink_area_dish_washer_tray_bottom"/>
-        <exclude body1="kitchen" body2="oven_area_oven_door"/>
-        <exclude body1="kitchen" body2="oven_area_oven_knob_stove_2"/>
-        <exclude body1="kitchen" body2="oven_area_oven_knob_stove_1"/>
-        <exclude body1="kitchen" body2="oven_area_oven_knob_stove_3"/>
-        <exclude body1="kitchen" body2="oven_area_oven_knob_stove_4"/>
-        <exclude body1="kitchen" body2="oven_area_oven_knob_oven"/>
-        <exclude body1="kitchen" body2="oven_area_area_middle_upper_drawer_main"/>
-        <exclude body1="kitchen" body2="oven_area_area_middle_lower_drawer_main"/>
-        <exclude body1="kitchen" body2="oven_area_area_left_drawer_main"/>
-        <exclude body1="kitchen" body2="oven_area_area_right_drawer_main"/>
-        <exclude body1="kitchen" body2="kitchen_island_left_upper_drawer_main"/>
-        <exclude body1="kitchen" body2="kitchen_island_left_lower_drawer_main"/>
-        <exclude body1="kitchen" body2="kitchen_island_middle_upper_drawer_main"/>
-        <exclude body1="kitchen" body2="kitchen_island_middle_lower_drawer_main"/>
-        <exclude body1="kitchen" body2="kitchen_island_right_upper_drawer_main"/>
-        <exclude body1="kitchen" body2="kitchen_island_right_lower_drawer_main"/>
-        <exclude body1="kitchen" body2="fridge_area_lower_drawer_main"/>
-        <exclude body1="kitchen" body2="iai_fridge_door"/>
+        <exclude body1="sink_area_trash_drawer_main" body2="kitchen_root"/>
+        <exclude body1="sink_area_left_upper_drawer_main" body2="kitchen_root"/>
+        <exclude body1="sink_area_left_middle_drawer_main" body2="kitchen_root"/>
+        <exclude body1="sink_area_left_bottom_drawer_main" body2="kitchen_root"/>
+        <exclude body1="sink_area_dish_washer_door" body2="kitchen_root"/>
+        <exclude body1="sink_area_dish_washer_tray_bottom" body2="kitchen_root"/>
+        <exclude body1="oven_area_oven_door" body2="kitchen_root"/>
+        <exclude body1="oven_area_oven_knob_stove_2" body2="kitchen_root"/>
+        <exclude body1="oven_area_oven_knob_stove_1" body2="kitchen_root"/>
+        <exclude body1="oven_area_oven_knob_stove_3" body2="kitchen_root"/>
+        <exclude body1="oven_area_oven_knob_stove_4" body2="kitchen_root"/>
+        <exclude body1="oven_area_oven_knob_oven" body2="kitchen_root"/>
+        <exclude body1="oven_area_area_middle_upper_drawer_main" body2="kitchen_root"/>
+        <exclude body1="oven_area_area_middle_lower_drawer_main" body2="kitchen_root"/>
+        <exclude body1="oven_area_area_left_drawer_main" body2="kitchen_root"/>
+        <exclude body1="oven_area_area_right_drawer_main" body2="kitchen_root"/>
+        <exclude body1="kitchen_island_left_upper_drawer_main" body2="kitchen_root"/>
+        <exclude body1="kitchen_island_left_lower_drawer_main" body2="kitchen_root"/>
+        <exclude body1="kitchen_island_middle_upper_drawer_main" body2="kitchen_root"/>
+        <exclude body1="kitchen_island_middle_lower_drawer_main" body2="kitchen_root"/>
+        <exclude body1="kitchen_island_right_upper_drawer_main" body2="kitchen_root"/>
+        <exclude body1="kitchen_island_right_lower_drawer_main" body2="kitchen_root"/>
+        <exclude body1="fridge_area_lower_drawer_main" body2="kitchen_root"/>
+        <exclude body1="iai_fridge_door" body2="kitchen_root"/>
     </contact>
 </mujoco>
