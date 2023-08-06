@@ -10,3 +10,6 @@
 [submodule "src/mujoco"]
 	path = src/mujoco
 	url = https://github.com/deepmind/mujoco.git
+[submodule "src/blender"]
+	path = src/blender
+	url = https://projects.blender.org/blender/blender.git
