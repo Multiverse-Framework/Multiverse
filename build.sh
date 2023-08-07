@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+git submodule update --init
+
 SRC_DIR="$(dirname $0)/src"
 
 # Specify the folder path to create
@@ -8,8 +10,8 @@ BUILD_DIR="$(dirname $0)/build"
 # Build USD
 
 # Check if the folder already exists
-USD_BUILD_DIR="$BUILD_DIR/USD"
-USD_SRC_DIR="$SRC_DIR/USD"
+USD_BUILD_DIR=$BUILD_DIR/USD
+USD_SRC_DIR=$SRC_DIR/USD
 if [ ! -d "$USD_BUILD_DIR" ]; then
     # Create the folder if it doesn't exist
     mkdir -p "$USD_BUILD_DIR"
@@ -23,8 +25,8 @@ fi
 # Build MuJoCo
 
 # Check if the folder already exists
-MUJOCO_BUILD_DIR="$BUILD_DIR/mujoco"
-MUJOCO_SRC_DIR="$SRC_DIR/mujoco"
+MUJOCO_BUILD_DIR=$BUILD_DIR/mujoco
+MUJOCO_SRC_DIR=$SRC_DIR/mujoco
 if [ ! -d "$MUJOCO_BUILD_DIR" ]; then
     # Create the folder if it doesn't exist
     mkdir -p "$MUJOCO_BUILD_DIR"
@@ -38,10 +40,21 @@ cmake -S $MUJOCO_SRC_DIR -B $MUJOCO_BUILD_DIR
 
 # Build blender
 
-if [ ! -d "$SRC_DIR/blender-git/lib" ]; then
-    (cd $SRC_DIR/blender-git; mkdir lib; cd lib; svn checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/linux_x86_64_glibc_228)
-    (cd $SRC_DIR/blender-git/blender; make update)
+# Check if the folder already exists
+BLENDER_BUILD_DIR=$BUILD_DIR/blender
+BLENDER_SRC_DIR=$SRC_DIR/blender-git
+if [ ! -d "$BLENDER_BUILD_DIR" ]; then
+    # Create the folder if it doesn't exist
+    mkdir -p "$BLENDER_BUILD_DIR"
+    echo "Folder created: $BLENDER_BUILD_DIR"
+else
+    echo "Folder already exists: $BLENDER_BUILD_DIR"
 fi
 
-(cd $SRC_DIR/blender-git/blender && make BUILD_DIR=../../../build/blender/build_linux)
-(cd $SRC_DIR/blender-git/blender && make bpy BUILD_DIR=../../../build/blender/build_linux_bpy)
+if [ ! -d "$BLENDER_SRC_DIR/lib" ]; then
+    (cd $BLENDER_SRC_DIR; mkdir lib; cd lib; svn checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/linux_x86_64_glibc_228)
+    (cd $BLENDER_SRC_DIR/blender; make update)
+fi
+
+(cd $BLENDER_SRC_DIR/blender && make BUILD_DIR=$BLENDER_BUILD_DIR/build_linux)
+(cd $BLENDER_SRC_DIR/blender && make bpy BUILD_DIR=$BLENDER_BUILD_DIR/build_linux_bpy)

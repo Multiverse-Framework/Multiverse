@@ -12,13 +12,15 @@ curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo ap
 apt update
 
 # Install ROS
-apt install ros-noetic-desktop-full
+apt install -y ros-noetic-desktop-full
 
 # Install python3-pip
 apt install -y python3-pip
 
 # Install python3.8
+update-alternatives --remove-all python3
 apt install -y python3.8-dev
+update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
 
 # Install python3.10
 add-apt-repository --yes ppa:deadsnakes/ppa
