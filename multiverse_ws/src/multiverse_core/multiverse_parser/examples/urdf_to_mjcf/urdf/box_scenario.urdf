@@ -66,7 +66,7 @@
     <collision>
       <origin xyz="-0.1700000072951671 3.309754823582751e-09 -1.5240808185731551e-09" rpy="-1.5707963267948963 -6.845708383496081e-08 -1.5707963267948966"/>
       <geometry>
-        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/box_scenario/stl/geom_6.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+        <mesh filename="package://multiverse_parser/examples/urdf_to_mjcf/urdf/box_scenario/stl/geom_6.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
       </geometry>
     </collision>
   </link>
@@ -79,7 +79,7 @@
     <collision>
       <origin xyz="0.17000000947241017 -1.7394765439778366e-12 3.853585194813239e-10" rpy="1.5707963267948963 -6.845708383496081e-08 1.5707963267948966"/>
       <geometry>
-        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/box_scenario/stl/geom_7.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
+        <mesh filename="package://multiverse_parser/examples/urdf_to_mjcf/urdf/box_scenario/stl/geom_7.stl" scale="1.0000000000000002 1.0000000000000004 1.0000000000000002"/>
       </geometry>
     </collision>
   </link>
@@ -97,7 +97,7 @@
     <collision>
       <origin xyz="1.1589759504366095e-07 -0.0030464363770440228 0.09314732677864689" rpy="1.2163360186527825 -1.2583493548573155e-06 -3.4001043122664387e-06"/>
       <geometry>
-        <mesh filename="package://multiverse_parser/examples/usd_to_urdf/urdf/box_scenario/stl/geom_8.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="package://multiverse_parser/examples/urdf_to_mjcf/urdf/box_scenario/stl/geom_8.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>

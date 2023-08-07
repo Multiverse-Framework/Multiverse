@@ -1,0 +1,1 @@
+from urdf_to_fbx.urdf_to_fbx import urdf_to_fbx
