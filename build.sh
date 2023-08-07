@@ -27,6 +27,14 @@ fi
 
 (python3 $USD_SRC_DIR/build_scripts/build_usd.py $USD_BUILD_DIR)
 
+# Build blender
+
+if [ ! -d "$SRC_DIR/blender-git/lib" ]; then
+    (cd $SRC_DIR/blender-git; mkdir lib; cd lib; svn checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/linux_x86_64_glibc_228)
+fi
+
+(cd $SRC_DIR/blender-git/blender; make update; make bpy BUILD_DIR=../../../build/blender)
+
 # Build the workspace
 rosdep init
-(cd multiverse_ws; rosdep update; rosdep install --from-paths src --ignore-src -r -y; . /opt/ros/noetic/setup.sh; catkin build)
+(cd $(dirname $0)/multiverse_ws; rosdep update; rosdep install --from-paths src --ignore-src -r -y; . /opt/ros/noetic/setup.sh; catkin build)

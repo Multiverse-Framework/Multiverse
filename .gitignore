@@ -37,6 +37,7 @@ build
 devel
 logs
 __pycache__
+src/blender-git/lib
 
 # VSC
 .vscode
