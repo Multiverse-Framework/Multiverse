@@ -56,5 +56,5 @@ if [ ! -d "$BLENDER_SRC_DIR/lib" ]; then
     (cd $BLENDER_SRC_DIR/blender; make update)
 fi
 
-(cd $BLENDER_SRC_DIR/blender && make BUILD_DIR=$BLENDER_BUILD_DIR/build_linux)
-(cd $BLENDER_SRC_DIR/blender && make bpy BUILD_DIR=$BLENDER_BUILD_DIR/build_linux_bpy)
+(cd $BLENDER_SRC_DIR/blender && make BUILD_DIR=../../../build/blender/build_linux)
+(cd $BLENDER_SRC_DIR/blender && make bpy BUILD_DIR=../../../build/blender/build_linux_bpy)
