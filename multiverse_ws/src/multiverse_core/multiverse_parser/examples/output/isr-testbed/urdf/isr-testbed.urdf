@@ -1,0 +1,1796 @@
+<?xml version="1.0" ?>
+<robot name="world" version="1.0">
+  <link name="world"/>
+  <joint name="walls_joint" type="fixed">
+    <origin xyz="0.49183 0.433522 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="walls"/>
+  </joint>
+  <joint name="walls__walls__Door_4_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Door_4"/>
+  </joint>
+  <joint name="walls__walls__Wall_19_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_19"/>
+  </joint>
+  <joint name="walls__walls__Wall_21_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_21"/>
+  </joint>
+  <joint name="walls__walls__Wall_22_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_22"/>
+  </joint>
+  <joint name="walls__walls__Wall_23_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_23"/>
+  </joint>
+  <joint name="walls__walls__Wall_24_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_24"/>
+  </joint>
+  <joint name="walls__walls__Wall_25_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_25"/>
+  </joint>
+  <joint name="walls__walls__Wall_26_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_26"/>
+  </joint>
+  <joint name="walls__walls__Wall_27_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_27"/>
+  </joint>
+  <joint name="walls__walls__Wall_36_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_36"/>
+  </joint>
+  <joint name="walls__walls__Wall_48_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_48"/>
+  </joint>
+  <joint name="walls__walls__Wall_49_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_49"/>
+  </joint>
+  <joint name="walls__walls__Wall_50_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_50"/>
+  </joint>
+  <joint name="walls__walls__Wall_51_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_51"/>
+  </joint>
+  <joint name="walls__walls__Wall_53_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_53"/>
+  </joint>
+  <joint name="walls__walls__Wall_58_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_58"/>
+  </joint>
+  <joint name="walls__walls__Wall_61_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_61"/>
+  </joint>
+  <joint name="walls__walls__Wall_63_joint" type="fixed">
+    <parent link="walls"/>
+    <child link="walls__walls__Wall_63"/>
+  </joint>
+  <link name="walls__walls__Door_4">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Door_4_Collision">
+      <origin xyz="-0.44425 -3.76409 0.6" rpy="0.0 0.0 -0.00096"/>
+      <geometry>
+        <box size="0.906 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Door_4_Visual">
+      <origin xyz="-0.44425 -3.76409 0.6" rpy="0.0 0.0 -0.00096"/>
+      <geometry>
+        <box size="0.906 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_19">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_19_Collision">
+      <origin xyz="-2.66199 1.59399 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="1.9 0.05 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_19_Visual">
+      <origin xyz="-2.66199 1.59399 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="1.9 0.05 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_21">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_21_Collision">
+      <origin xyz="-0.022 -4.882 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="2.15 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_21_Visual">
+      <origin xyz="-0.022 -4.882 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="2.15 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_22">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_22_Collision">
+      <origin xyz="1.028 -4.332 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="1.15 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_22_Visual">
+      <origin xyz="1.028 -4.332 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="1.15 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_23">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_23_Collision">
+      <origin xyz="2.078 -3.782 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="2.15 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_23_Visual">
+      <origin xyz="2.078 -3.782 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="2.15 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_24">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_24_Collision">
+      <origin xyz="3.128 -3.232 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="1.15 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_24_Visual">
+      <origin xyz="3.128 -3.232 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="1.15 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_25">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_25_Collision">
+      <origin xyz="3.428 -2.682 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.65 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_25_Visual">
+      <origin xyz="3.428 -2.682 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.65 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_26">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_26_Collision">
+      <origin xyz="3.728 -1.757 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="1.9 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_26_Visual">
+      <origin xyz="3.728 -1.757 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="1.9 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_27">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_27_Collision">
+      <origin xyz="3.303 -0.832 0.6" rpy="0.0 0.0 3.14159"/>
+      <geometry>
+        <box size="0.9 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_27_Visual">
+      <origin xyz="3.303 -0.832 0.6" rpy="0.0 0.0 3.14159"/>
+      <geometry>
+        <box size="0.9 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_36">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_36_Collision">
+      <origin xyz="1.117 1.66399 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="1.9 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_36_Visual">
+      <origin xyz="1.117 1.66399 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="1.9 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_48">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_48_Collision">
+      <origin xyz="-3.58099 0.669 0.6" rpy="0.0 0.0 1.57215"/>
+      <geometry>
+        <box size="8.90001 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_48_Visual">
+      <origin xyz="-3.58099 0.669 0.6" rpy="0.0 0.0 1.57215"/>
+      <geometry>
+        <box size="8.90001 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_49">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_49_Collision">
+      <origin xyz="-1.28699 5.09399 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="4.65 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_49_Visual">
+      <origin xyz="-1.28699 5.09399 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="4.65 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_50">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_50_Collision">
+      <origin xyz="1.01299 3.91899 0.6" rpy="0.0 0.0 -1.5708"/>
+      <geometry>
+        <box size="2.4 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_50_Visual">
+      <origin xyz="1.01299 3.91899 0.6" rpy="0.0 0.0 -1.5708"/>
+      <geometry>
+        <box size="2.4 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_51">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_51_Collision">
+      <origin xyz="0.588 2.74399 0.6" rpy="0.0 0.0 3.14159"/>
+      <geometry>
+        <box size="0.9 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_51_Visual">
+      <origin xyz="0.588 2.74399 0.6" rpy="0.0 0.0 3.14159"/>
+      <geometry>
+        <box size="0.9 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_53">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_53_Collision">
+      <origin xyz="-0.765 3.24799 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="3.4 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_53_Visual">
+      <origin xyz="-0.765 3.24799 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="3.4 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_58">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_58_Collision">
+      <origin xyz="2.042 3.33899 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="3.4 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_58_Visual">
+      <origin xyz="2.042 3.33899 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="3.4 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_61">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_61_Collision">
+      <origin xyz="-2.27499 -3.756 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="2.65 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_61_Visual">
+      <origin xyz="-2.27499 -3.756 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="2.65 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls__walls__Wall_63">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="walls__walls__Wall_63_Collision">
+      <origin xyz="2.878 0.843 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="3.4 0.05 1.2"/>
+      </geometry>
+    </collision>
+    <visual name="walls__walls__Wall_63_Visual">
+      <origin xyz="2.878 0.843 0.6" rpy="0.0 0.0 1.5708"/>
+      <geometry>
+        <box size="3.4 0.05 1.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="walls"/>
+  <joint name="wall_joint" type="fixed">
+    <origin xyz="-1.19 1.86 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="wall"/>
+  </joint>
+  <joint name="wall__wall__Wall_0_joint" type="fixed">
+    <parent link="wall"/>
+    <child link="wall__wall__Wall_0"/>
+  </joint>
+  <joint name="wall__wall__Wall_2_joint" type="fixed">
+    <parent link="wall"/>
+    <child link="wall__wall__Wall_2"/>
+  </joint>
+  <link name="wall__wall__Wall_0">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="wall__wall__Wall_0_Collision">
+      <origin xyz="-9.98 1.805 1.25" rpy="0.0 0.0 -1.5708"/>
+      <geometry>
+        <box size="16.5 0.15 2.5"/>
+      </geometry>
+    </collision>
+    <visual name="wall__wall__Wall_0_Visual">
+      <origin xyz="-9.98 1.805 1.25" rpy="0.0 0.0 -1.5708"/>
+      <geometry>
+        <box size="16.5 0.15 2.5"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="wall__wall__Wall_2">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="wall__wall__Wall_2_Collision">
+      <origin xyz="-1.26581 9.97568 1.25" rpy="0.0 0.0 -0.00049"/>
+      <geometry>
+        <box size="17.5784 0.15 2.5"/>
+      </geometry>
+    </collision>
+    <visual name="wall__wall__Wall_2_Visual">
+      <origin xyz="-1.26581 9.97568 1.25" rpy="0.0 0.0 -0.00049"/>
+      <geometry>
+        <box size="17.5784 0.15 2.5"/>
+      </geometry>
+    </visual>
+  </link>
+  <link name="wall"/>
+  <joint name="cone1__Construction Cone__link_joint" type="fixed">
+    <origin xyz="-5.94 2.97 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="cone1__Construction Cone__link"/>
+  </joint>
+  <link name="cone1__Construction Cone__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="cone1__Construction Cone__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/construction_cone/meshes/construction_cone.stl" scale="10.0 10.0 10.0"/>
+      </geometry>
+    </collision>
+    <visual name="cone1__Construction Cone__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/construction_cone/meshes/construction_cone.dae" scale="10.0 10.0 10.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="cone2__Construction Cone__link_joint" type="fixed">
+    <origin xyz="-4.54 2.97 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="cone2__Construction Cone__link"/>
+  </joint>
+  <link name="cone2__Construction Cone__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="cone2__Construction Cone__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/construction_cone/meshes/construction_cone.stl" scale="10.0 10.0 10.0"/>
+      </geometry>
+    </collision>
+    <visual name="cone2__Construction Cone__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/construction_cone/meshes/construction_cone.dae" scale="10.0 10.0 10.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="cone3__Construction Cone__link_joint" type="fixed">
+    <origin xyz="3.03 6.84 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="cone3__Construction Cone__link"/>
+  </joint>
+  <link name="cone3__Construction Cone__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="cone3__Construction Cone__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/construction_cone/meshes/construction_cone.stl" scale="10.0 10.0 10.0"/>
+      </geometry>
+    </collision>
+    <visual name="cone3__Construction Cone__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/construction_cone/meshes/construction_cone.dae" scale="10.0 10.0 10.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="cone4__Construction Cone__link_joint" type="fixed">
+    <origin xyz="3.03 8.33 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="cone4__Construction Cone__link"/>
+  </joint>
+  <link name="cone4__Construction Cone__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="cone4__Construction Cone__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/construction_cone/meshes/construction_cone.stl" scale="10.0 10.0 10.0"/>
+      </geometry>
+    </collision>
+    <visual name="cone4__Construction Cone__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/construction_cone/meshes/construction_cone.dae" scale="10.0 10.0 10.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="table_outside__cafe_table__link_joint" type="fixed">
+    <origin xyz="-5.25 3.77 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="table_outside__cafe_table__link"/>
+  </joint>
+  <link name="table_outside__cafe_table__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="table_outside__cafe_table__surface">
+      <origin xyz="0.0 0.0 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.913 0.913 0.035"/>
+      </geometry>
+    </collision>
+    <collision name="table_outside__cafe_table__column">
+      <origin xyz="0.0 0.0 0.37" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.042 0.042 0.15"/>
+      </geometry>
+    </collision>
+    <collision name="table_outside__cafe_table__base">
+      <origin xyz="0.0 0.0 0.02" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.56 0.56 0.04"/>
+      </geometry>
+    </collision>
+    <visual name="table_outside__cafe_table__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/cafe_table/meshes/cafe_table.dae" scale="1.0 1.0 0.6"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="hydrant1__fire_hydrant__link_joint" type="fixed">
+    <origin xyz="1.01 9.45 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="hydrant1__fire_hydrant__link"/>
+  </joint>
+  <link name="hydrant1__fire_hydrant__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="hydrant1__fire_hydrant__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/fire_hydrant/meshes/fire_hydrant.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="hydrant1__fire_hydrant__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/fire_hydrant/meshes/fire_hydrant.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="hydrant2__fire_hydrant__link_joint" type="fixed">
+    <origin xyz="-4.0 9.45 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="hydrant2__fire_hydrant__link"/>
+  </joint>
+  <link name="hydrant2__fire_hydrant__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="hydrant2__fire_hydrant__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/fire_hydrant/meshes/fire_hydrant.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="hydrant2__fire_hydrant__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/fire_hydrant/meshes/fire_hydrant.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="tree1__pine_tree__link_joint" type="fixed">
+    <origin xyz="-6.0 9.45 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="tree1__pine_tree__link"/>
+  </joint>
+  <link name="tree1__pine_tree__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="tree1__pine_tree__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/pine_tree/meshes/pine_tree.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="tree1__pine_tree__branch">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/pine_tree/meshes/pine_tree.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <visual name="tree1__pine_tree__bark">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/pine_tree/meshes/pine_tree.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="tree2__pine_tree__link_joint" type="fixed">
+    <origin xyz="-9.11 6.25 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="tree2__pine_tree__link"/>
+  </joint>
+  <link name="tree2__pine_tree__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="tree2__pine_tree__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/pine_tree/meshes/pine_tree.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="tree2__pine_tree__branch">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/pine_tree/meshes/pine_tree.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <visual name="tree2__pine_tree__bark">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/pine_tree/meshes/pine_tree.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="human__person_standing__link_joint" type="fixed">
+    <origin xyz="-2.04 2.41 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="human__person_standing__link"/>
+  </joint>
+  <link name="human__person_standing__link">
+    <inertial>
+      <origin xyz="0.0 -0.1 0.95" rpy="0.0 0.0 0.0"/>
+      <mass value="80.0"/>
+      <inertia ixx="24.88" ixy="0.0" ixz="0.0" iyy="25.73" iyz="0.0" izz="2.48"/>
+    </inertial>
+    <collision name="human__person_standing__bottom">
+      <origin xyz="0.0 -0.1 0.01" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.35 0.02"/>
+      </geometry>
+    </collision>
+    <collision name="human__person_standing__person">
+      <origin xyz="0.0 0.0 0.02" rpy="0.04 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/person_standing/meshes/standing.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="human__person_standing__visual">
+      <origin xyz="0.0 0.0 0.02" rpy="0.04 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/person_standing/meshes/standing.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="wardrobe__wardrobe__base_link_joint" type="fixed">
+    <origin xyz="-2.65 2.44 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="wardrobe__wardrobe__base_link"/>
+  </joint>
+  <link name="wardrobe__wardrobe__base_link">
+    <inertial>
+      <origin xyz="0.0 1.1 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="20.0"/>
+      <inertia ixx="7.5306636544" ixy="0.0" ixz="0.0" iyy="2.5306656544" iyz="0.0" izz="8.33333"/>
+    </inertial>
+    <collision name="wardrobe__wardrobe__base_link_visual">
+      <origin xyz="0.0 0.2 1.0" rpy="0.0 0.0 1.57"/>
+      <geometry>
+        <box size="1.0 0.72 2.0"/>
+      </geometry>
+    </collision>
+    <visual name="wardrobe__wardrobe__base_link_collision">
+      <origin xyz="0.0 0.2 0.0" rpy="0.0 0.0 1.57"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/wardrobe/3d-model.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="pizza_box__pizza_box__base_link_joint" type="fixed">
+    <origin xyz="2.0 -0.15 0.8" rpy="0.0 0.0 1.0"/>
+    <parent link="world"/>
+    <child link="pizza_box__pizza_box__base_link"/>
+  </joint>
+  <link name="pizza_box__pizza_box__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0175" rpy="0.0 0.0 0.0"/>
+      <mass value="0.7"/>
+      <inertia ixx="0.0210714499047" ixy="0.0" ixz="0.0" iyy="0.00987728771575" iyz="0.0" izz="0.030805821011"/>
+    </inertial>
+    <collision name="pizza_box__pizza_box__base_link_collision">
+      <origin xyz="0.0 0.0 0.0175" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.41 0.6 0.035"/>
+      </geometry>
+    </collision>
+    <visual name="pizza_box__pizza_box__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/pizza_box.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="basmati_rice__basmati_rice__base_link_joint" type="fixed">
+    <origin xyz="-2.85 0.5 0.8" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="basmati_rice__basmati_rice__base_link"/>
+  </joint>
+  <link name="basmati_rice__basmati_rice__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.269"/>
+      <inertia ixx="0.000981490940737" ixy="0.0" ixz="0.0" iyy="0.000666693816656" iyz="0.0" izz="0.000352501942333"/>
+    </inertial>
+    <collision name="basmati_rice__basmati_rice__base_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.041 0.122 0.17"/>
+      </geometry>
+    </collision>
+    <visual name="basmati_rice__basmati_rice__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/basmati_rice.dae" scale="1.5 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="tea_box__tea_box__base_link_joint" type="fixed">
+    <origin xyz="-2.85 0.9 0.85" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="tea_box__tea_box__base_link"/>
+  </joint>
+  <link name="tea_box__tea_box__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.081"/>
+      <inertia ixx="0.000204477668209" ixy="0.0" ixz="0.0" iyy="6.27614748954e-05" iyz="0.0" izz="0.000195297671881"/>
+    </inertial>
+    <collision name="tea_box__tea_box__base_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.063 0.158 0.073"/>
+      </geometry>
+    </collision>
+    <visual name="tea_box__tea_box__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/tea_box.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="beer__beer__link_joint" type="fixed">
+    <origin xyz="-2.73 -2.64 0.6" rpy="0.0 0.0 1.0"/>
+    <parent link="world"/>
+    <child link="beer__beer__link"/>
+  </joint>
+  <link name="beer__beer__link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.39"/>
+      <inertia ixx="0.00058" ixy="0.0" ixz="0.0" iyy="0.00058" iyz="0.0" izz="0.00025"/>
+    </inertial>
+    <collision name="beer__beer__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.035" length="0.12"/>
+      </geometry>
+    </collision>
+    <visual name="beer__beer__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.035" length="0.12"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="cup1__plastic_cup__link_joint" type="fixed">
+    <origin xyz="-2.85 -2.4 0.45" rpy="0.0 0.0 1.0"/>
+    <parent link="world"/>
+    <child link="cup1__plastic_cup__link"/>
+  </joint>
+  <link name="cup1__plastic_cup__link">
+    <inertial>
+      <origin xyz="0.0 0.01 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0599"/>
+      <inertia ixx="0.0001028961527030333" ixy="0.0" ixz="0.0" iyy="0.0001028961527030333" iyz="0.0" izz="3.2876352372798436e-05"/>
+    </inertial>
+    <collision name="cup1__plastic_cup__collision">
+      <origin xyz="0.0 0.0 0.065" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/plastic_cup/meshes/plastic_cup.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="cup1__plastic_cup__visual">
+      <origin xyz="0.0 0.0 0.065" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/plastic_cup/meshes/plastic_cup.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="cup2__plastic_cup__link_joint" type="fixed">
+    <origin xyz="1.83 -0.48 0.8" rpy="0.0 0.0 1.0"/>
+    <parent link="world"/>
+    <child link="cup2__plastic_cup__link"/>
+  </joint>
+  <link name="cup2__plastic_cup__link">
+    <inertial>
+      <origin xyz="0.0 0.01 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0599"/>
+      <inertia ixx="0.0001028961527030333" ixy="0.0" ixz="0.0" iyy="0.0001028961527030333" iyz="0.0" izz="3.2876352372798436e-05"/>
+    </inertial>
+    <collision name="cup2__plastic_cup__collision">
+      <origin xyz="0.0 0.0 0.065" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/plastic_cup/meshes/plastic_cup.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="cup2__plastic_cup__visual">
+      <origin xyz="0.0 0.0 0.065" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/plastic_cup/meshes/plastic_cup.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="shelf__shelf__base_link_joint" type="fixed">
+    <origin xyz="-2.85 1.0 0.0" rpy="0.0 0.0 1.56"/>
+    <parent link="world"/>
+    <child link="shelf__shelf__base_link"/>
+  </joint>
+  <link name="shelf__shelf__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="2.0"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+    <collision name="shelf__shelf__base_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/shelf.stl" scale="0.15 0.2 0.2"/>
+      </geometry>
+    </collision>
+    <visual name="shelf__shelf__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/shelf.stl" scale="0.15 0.2 0.2"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="lamp_ikea_arstid__lamp_ikea_arstid__base_link_joint" type="fixed">
+    <origin xyz="-2.85 -2.0 0.0" rpy="0.0 0.0 1.56"/>
+    <parent link="world"/>
+    <child link="lamp_ikea_arstid__lamp_ikea_arstid__base_link"/>
+  </joint>
+  <link name="lamp_ikea_arstid__lamp_ikea_arstid__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.52" rpy="0.0 0.0 0.0"/>
+      <mass value="10.0"/>
+      <inertia ixx="1.0893328976" ixy="0.0" ixz="0.0" iyy="1.0893328976" iyz="0.0" izz="0.162"/>
+    </inertial>
+    <collision name="lamp_ikea_arstid__lamp_ikea_arstid__column_lamp">
+      <origin xyz="0.0 0.0 0.42" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.8"/>
+      </geometry>
+    </collision>
+    <collision name="lamp_ikea_arstid__lamp_ikea_arstid__base_lamp">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.18" length="0.02"/>
+      </geometry>
+    </collision>
+    <collision name="lamp_ikea_arstid__lamp_ikea_arstid__top_lamp">
+      <origin xyz="0.0 0.0 0.9" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.13" length="0.5"/>
+      </geometry>
+    </collision>
+    <visual name="lamp_ikea_arstid__lamp_ikea_arstid__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/lamp_ikea_arstid.dae" scale="1.0 1.0 2.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="plant_floor_small__plant_floor_small__base_link_joint" type="fixed">
+    <origin xyz="-2.84 -3.05 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="plant_floor_small__plant_floor_small__base_link"/>
+  </joint>
+  <link name="plant_floor_small__plant_floor_small__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.38" rpy="0.0 0.0 0.0"/>
+      <mass value="10.0"/>
+      <inertia ixx="0.6143330876" ixy="0.0" ixz="0.0" iyy="0.6143330876" iyz="0.0" izz="0.162"/>
+    </inertial>
+    <collision name="plant_floor_small__plant_floor_small__base_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/plant_floor_small/plant_floor_small.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="plant_floor_small__plant_floor_small__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/plant_floor_small.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="apple_juice_box__apple_juice__base_link_joint" type="fixed">
+    <origin xyz="-2.84 1.64 1.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="apple_juice_box__apple_juice__base_link"/>
+  </joint>
+  <link name="apple_juice_box__apple_juice__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.1"/>
+      <inertia ixx="0.00059868309386" ixy="0.0" ixz="0.0" iyy="0.00059868309386" iyz="0.0" izz="7.934996826e-05"/>
+    </inertial>
+    <collision name="apple_juice_box__apple_juice__base_link_collision">
+      <origin xyz="0.0 0.0 0.0055" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.069 0.069 0.259"/>
+      </geometry>
+    </collision>
+    <visual name="apple_juice_box__apple_juice__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/apple_juice_box.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="table_bedside__table_bedside__base_link_joint" type="fixed">
+    <origin xyz="-2.82 -2.48 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="table_bedside__table_bedside__base_link"/>
+  </joint>
+  <link name="table_bedside__table_bedside__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="5.0"/>
+      <inertia ixx="0.4" ixy="0.0" ixz="0.0" iyy="0.4" iyz="0.0" izz="0.3"/>
+    </inertial>
+    <collision name="table_bedside__table_bedside__base_link_collision">
+      <origin xyz="0.0 0.0 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.6 0.6 0.4"/>
+      </geometry>
+    </collision>
+    <visual name="table_bedside__table_bedside__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/table_bedside.dae" scale="1.7 1.7 0.9"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="bed__bed__link_0_joint" type="fixed">
+    <origin xyz="-1.94933 4.30992 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="bed__bed__link_0"/>
+  </joint>
+  <link name="bed__bed__link_0">
+    <inertial>
+      <origin xyz="0.2 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="30.0"/>
+      <inertia ixx="12.9999948" ixy="0.0" ixz="0.0" iyy="7.29999708" iyz="0.0" izz="18.4999926"/>
+    </inertial>
+    <collision name="bed__bed__collision">
+      <origin xyz="0.2 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="1.6 2.2 0.6"/>
+      </geometry>
+    </collision>
+    <visual name="bed__bed__visual">
+      <origin xyz="-1.35 -8.0 -0.3" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/bed/bed.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="nightstand1__bedroom_nightstand__link_0_joint" type="fixed">
+    <origin xyz="-0.69 5.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="nightstand1__bedroom_nightstand__link_0"/>
+  </joint>
+  <link name="nightstand1__bedroom_nightstand__link_0">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="5.0"/>
+      <inertia ixx="0.166667" ixy="0.0" ixz="0.0" iyy="0.166667" iyz="0.0" izz="0.166667"/>
+    </inertial>
+    <collision name="nightstand1__bedroom_nightstand__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/bedroom_nightstand/bedroom_nightstand.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="nightstand1__bedroom_nightstand__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/bedroom_nightstand/bedroom_nightstand.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="nightstand2__bedroom_nightstand__link_0_joint" type="fixed">
+    <origin xyz="-2.89 5.03713 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="nightstand2__bedroom_nightstand__link_0"/>
+  </joint>
+  <link name="nightstand2__bedroom_nightstand__link_0">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="5.0"/>
+      <inertia ixx="0.166667" ixy="0.0" ixz="0.0" iyy="0.166667" iyz="0.0" izz="0.166667"/>
+    </inertial>
+    <collision name="nightstand2__bedroom_nightstand__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/bedroom_nightstand/bedroom_nightstand.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="nightstand2__bedroom_nightstand__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/bedroom_nightstand/bedroom_nightstand.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="dinning_room_table__dinning_room_table__base_link_joint" type="fixed">
+    <origin xyz="2.05802 -2.30976 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="dinning_room_table__dinning_room_table__base_link"/>
+  </joint>
+  <link name="dinning_room_table__dinning_room_table__base_link">
+    <inertial>
+      <origin xyz="-0.04 0.015 0.75" rpy="0.0 0.0 0.0"/>
+      <mass value="10.0"/>
+      <inertia ixx="0.68333306" ixy="0.0" ixz="0.0" iyy="1.4166661" iyz="0.0" izz="2.0833325"/>
+    </inertial>
+    <collision name="dinning_room_table__dinning_room_table__base_collision">
+      <origin xyz="-0.04 0.015 0.75" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="1.3 0.9 0.1"/>
+      </geometry>
+    </collision>
+    <collision name="dinning_room_table__dinning_room_table__leg1_collision">
+      <origin xyz="-0.65 -0.4 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.7"/>
+      </geometry>
+    </collision>
+    <collision name="dinning_room_table__dinning_room_table__leg2_collision">
+      <origin xyz="0.55 -0.4 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.7"/>
+      </geometry>
+    </collision>
+    <collision name="dinning_room_table__dinning_room_table__leg3_collision">
+      <origin xyz="0.55 0.4 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.7"/>
+      </geometry>
+    </collision>
+    <collision name="dinning_room_table__dinning_room_table__leg4_collision">
+      <origin xyz="-0.65 0.4 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.7"/>
+      </geometry>
+    </collision>
+    <visual name="dinning_room_table__dinning_room_table__visual">
+      <origin xyz="-4.8 -1.2 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/dinning_room_table/dinning_room_table.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="table_living_room__table_living_room__base_link_joint" type="fixed">
+    <origin xyz="2.0 -0.156695 0.0" rpy="0.0 0.0 -1.56643"/>
+    <parent link="world"/>
+    <child link="table_living_room__table_living_room__base_link"/>
+  </joint>
+  <link name="table_living_room__table_living_room__base_link">
+    <inertial>
+      <origin xyz="-0.03 0.025 0.75" rpy="0.0 0.0 0.0"/>
+      <mass value="5.0"/>
+      <inertia ixx="0.9401662906" ixy="0.0" ixz="0.0" iyy="0.46204148185" iyz="0.0" izz="1.39687444125"/>
+    </inertial>
+    <collision name="table_living_room__table_living_room__base_link_collision">
+      <origin xyz="-0.03 0.025 0.75" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="1.05 1.5 0.08"/>
+      </geometry>
+    </collision>
+    <collision name="table_living_room__table_living_room__base_inferior_link_collision">
+      <origin xyz="-0.03 0.025 0.35" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.8 1.3 0.05"/>
+      </geometry>
+    </collision>
+    <collision name="table_living_room__table_living_room__leg1_link_collision">
+      <origin xyz="-0.4 0.63 0.39" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.12 0.12 0.75"/>
+      </geometry>
+    </collision>
+    <collision name="table_living_room__table_living_room__leg2_link_collision">
+      <origin xyz="0.35 0.63 0.39" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.12 0.12 0.75"/>
+      </geometry>
+    </collision>
+    <collision name="table_living_room__table_living_room__leg3_link_collision">
+      <origin xyz="0.35 -0.59 0.39" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.12 0.12 0.75"/>
+      </geometry>
+    </collision>
+    <collision name="table_living_room__table_living_room__leg4_link_collision">
+      <origin xyz="-0.4 -0.59 0.39" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.12 0.12 0.75"/>
+      </geometry>
+    </collision>
+    <visual name="table_living_room__table_living_room__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/table_living_room.dae" scale="1.5 1.2 1.4"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="cabinet_diamondback__cabinet_diamondback__base_link_joint" type="fixed">
+    <origin xyz="0.91 1.69 0.0" rpy="0.0 0.0 -1.56643"/>
+    <parent link="world"/>
+    <child link="cabinet_diamondback__cabinet_diamondback__base_link"/>
+  </joint>
+  <link name="cabinet_diamondback__cabinet_diamondback__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="20.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+    <collision name="cabinet_diamondback__cabinet_diamondback__base_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/cabinet_diamondback/cabinet_diamondback.stl" scale="1.8 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <visual name="cabinet_diamondback__cabinet_diamondback__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/cabinet_diamondback.dae" scale="1.8 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="cabinet_ikea_galant__cabinet_ikea_galant__base_link_joint" type="fixed">
+    <origin xyz="1.8 1.68 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="cabinet_ikea_galant__cabinet_ikea_galant__base_link"/>
+  </joint>
+  <link name="cabinet_ikea_galant__cabinet_ikea_galant__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="20.0"/>
+      <inertia ixx="3.389998644" ixy="0.0" ixz="0.0" iyy="5.7206643784" iyz="0.0" izz="3.3026653456"/>
+    </inertial>
+    <collision name="cabinet_ikea_galant__cabinet_ikea_galant__base_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="1.3 0.54 1.32"/>
+      </geometry>
+    </collision>
+    <visual name="cabinet_ikea_galant__cabinet_ikea_galant__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -1.5708"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/cabinet_ikea_galant.dae" scale="1.2 0.8 0.8"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="tray_blue_white__tray_blue_white__base_link_joint" type="fixed">
+    <origin xyz="2.12 1.67 1.0" rpy="0.0 0.0 -1.54"/>
+    <parent link="world"/>
+    <child link="tray_blue_white__tray_blue_white__base_link"/>
+  </joint>
+  <link name="tray_blue_white__tray_blue_white__base_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.4"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+    <collision name="tray_blue_white__tray_blue_white__base_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.23 0.3 0.016"/>
+      </geometry>
+    </collision>
+    <visual name="tray_blue_white__tray_blue_white__base_link_visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://cob_gazebo_objects/Media/models/tray_blue_white.dae" scale="0.6 0.6 0.8"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="chair_dinning_room_1__simple_chair__link_0_joint" type="fixed">
+    <origin xyz="1.91 -3.05 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="chair_dinning_room_1__simple_chair__link_0"/>
+  </joint>
+  <link name="chair_dinning_room_1__simple_chair__link_0">
+    <inertial>
+      <origin xyz="0.12 -0.05 0.35" rpy="0.0 0.0 0.0"/>
+      <mass value="1.5"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <collision name="chair_dinning_room_1__simple_chair__collision_base">
+      <origin xyz="0.15 -0.05 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.45 0.05"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_1__simple_chair__collision_back">
+      <origin xyz="0.15 -0.22 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.075 0.38"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_1__simple_chair__collision_leg1">
+      <origin xyz="0.33 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_1__simple_chair__collision_leg2">
+      <origin xyz="0.33 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_1__simple_chair__collision_leg3">
+      <origin xyz="-0.05 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_1__simple_chair__collision_leg4">
+      <origin xyz="-0.05 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <visual name="chair_dinning_room_1__simple_chair__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/simple_chair/simple_chair.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="chair_dinning_room_2__simple_chair__link_0_joint" type="fixed">
+    <origin xyz="2.96 -2.52 0.0" rpy="0.0 0.0 1.54796"/>
+    <parent link="world"/>
+    <child link="chair_dinning_room_2__simple_chair__link_0"/>
+  </joint>
+  <link name="chair_dinning_room_2__simple_chair__link_0">
+    <inertial>
+      <origin xyz="0.12 -0.05 0.35" rpy="0.0 0.0 0.0"/>
+      <mass value="1.5"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <collision name="chair_dinning_room_2__simple_chair__collision_base">
+      <origin xyz="0.15 -0.05 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.45 0.05"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_2__simple_chair__collision_back">
+      <origin xyz="0.15 -0.22 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.075 0.38"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_2__simple_chair__collision_leg1">
+      <origin xyz="0.33 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_2__simple_chair__collision_leg2">
+      <origin xyz="0.33 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_2__simple_chair__collision_leg3">
+      <origin xyz="-0.05 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_dinning_room_2__simple_chair__collision_leg4">
+      <origin xyz="-0.05 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <visual name="chair_dinning_room_2__simple_chair__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/simple_chair/simple_chair.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="chair_kitchen_1__simple_chair__link_0_joint" type="fixed">
+    <origin xyz="1.57 -0.98 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="chair_kitchen_1__simple_chair__link_0"/>
+  </joint>
+  <link name="chair_kitchen_1__simple_chair__link_0">
+    <inertial>
+      <origin xyz="0.12 -0.05 0.35" rpy="0.0 0.0 0.0"/>
+      <mass value="1.5"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <collision name="chair_kitchen_1__simple_chair__collision_base">
+      <origin xyz="0.15 -0.05 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.45 0.05"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_1__simple_chair__collision_back">
+      <origin xyz="0.15 -0.22 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.075 0.38"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_1__simple_chair__collision_leg1">
+      <origin xyz="0.33 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_1__simple_chair__collision_leg2">
+      <origin xyz="0.33 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_1__simple_chair__collision_leg3">
+      <origin xyz="-0.05 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_1__simple_chair__collision_leg4">
+      <origin xyz="-0.05 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <visual name="chair_kitchen_1__simple_chair__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/simple_chair/simple_chair.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="chair_kitchen_2__simple_chair__link_0_joint" type="fixed">
+    <origin xyz="2.26 -0.97 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="chair_kitchen_2__simple_chair__link_0"/>
+  </joint>
+  <link name="chair_kitchen_2__simple_chair__link_0">
+    <inertial>
+      <origin xyz="0.12 -0.05 0.35" rpy="0.0 0.0 0.0"/>
+      <mass value="1.5"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <collision name="chair_kitchen_2__simple_chair__collision_base">
+      <origin xyz="0.15 -0.05 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.45 0.05"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_2__simple_chair__collision_back">
+      <origin xyz="0.15 -0.22 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.075 0.38"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_2__simple_chair__collision_leg1">
+      <origin xyz="0.33 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_2__simple_chair__collision_leg2">
+      <origin xyz="0.33 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_2__simple_chair__collision_leg3">
+      <origin xyz="-0.05 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_2__simple_chair__collision_leg4">
+      <origin xyz="-0.05 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <visual name="chair_kitchen_2__simple_chair__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/simple_chair/simple_chair.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="chair_kitchen_3__simple_chair__link_0_joint" type="fixed">
+    <origin xyz="2.88 -0.26 0.0" rpy="0.0 0.0 1.59"/>
+    <parent link="world"/>
+    <child link="chair_kitchen_3__simple_chair__link_0"/>
+  </joint>
+  <link name="chair_kitchen_3__simple_chair__link_0">
+    <inertial>
+      <origin xyz="0.12 -0.05 0.35" rpy="0.0 0.0 0.0"/>
+      <mass value="1.5"/>
+      <inertia ixx="0.1" ixy="0.0" ixz="0.0" iyy="0.1" iyz="0.0" izz="0.1"/>
+    </inertial>
+    <collision name="chair_kitchen_3__simple_chair__collision_base">
+      <origin xyz="0.15 -0.05 0.45" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.45 0.05"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_3__simple_chair__collision_back">
+      <origin xyz="0.15 -0.22 0.6" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.5 0.075 0.38"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_3__simple_chair__collision_leg1">
+      <origin xyz="0.33 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_3__simple_chair__collision_leg2">
+      <origin xyz="0.33 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_3__simple_chair__collision_leg3">
+      <origin xyz="-0.05 -0.25 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="chair_kitchen_3__simple_chair__collision_leg4">
+      <origin xyz="-0.05 0.15 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.08 0.08 0.5"/>
+      </geometry>
+    </collision>
+    <visual name="chair_kitchen_3__simple_chair__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/simple_chair/simple_chair.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="sofa__sofa__link_0_joint" type="fixed">
+    <origin xyz="-0.76 -0.9 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="sofa__sofa__link_0"/>
+  </joint>
+  <link name="sofa__sofa__link_0">
+    <inertial>
+      <origin xyz="0.05 0.02 0.35" rpy="0.0 0.0 0.0"/>
+      <mass value="20.0"/>
+      <inertia ixx="6.5189973924" ixy="0.0" ixz="0.0" iyy="2.3789990484" iyz="0.0" izz="7.0229971908"/>
+    </inertial>
+    <collision name="sofa__sofa__collision">
+      <origin xyz="0.05 0.0 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.93 1.83 0.37"/>
+      </geometry>
+    </collision>
+    <collision name="sofa__sofa__collision_back">
+      <origin xyz="0.35 0.0 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.3 1.83 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="sofa__sofa__collision_arm_left">
+      <origin xyz="0.0 -0.8 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.8 0.25 0.5"/>
+      </geometry>
+    </collision>
+    <collision name="sofa__sofa__collision_arm_right">
+      <origin xyz="0.0 0.8 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.8 0.25 0.5"/>
+      </geometry>
+    </collision>
+    <visual name="sofa__sofa__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/sofa/sofa.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="chair1__tv_chair__link_0_joint" type="fixed">
+    <origin xyz="-0.73 -2.05 0.0" rpy="0.0 0.0 -1.57"/>
+    <parent link="world"/>
+    <child link="chair1__tv_chair__link_0"/>
+  </joint>
+  <link name="chair1__tv_chair__link_0">
+    <inertial>
+      <origin xyz="0.0 0.0 0.5" rpy="0.0 0.0 0.0"/>
+      <mass value="10.0"/>
+      <inertia ixx="1.0833329" ixy="0.0" ixz="0.0" iyy="1.0833329" iyz="0.0" izz="0.81666634"/>
+    </inertial>
+    <collision name="chair1__tv_chair__collision_seat">
+      <origin xyz="0.0 -0.2 0.35" rpy="-0.28 0.0 0.0"/>
+      <geometry>
+        <box size="0.7 0.5 0.1"/>
+      </geometry>
+    </collision>
+    <collision name="chair1__tv_chair__collision_base">
+      <origin xyz="0.0 -0.1 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.7 0.6 0.05"/>
+      </geometry>
+    </collision>
+    <collision name="chair1__tv_chair__collision_back">
+      <origin xyz="0.0 0.18 0.65" rpy="-0.4 0.0 0.0"/>
+      <geometry>
+        <box size="0.6 0.2 0.85"/>
+      </geometry>
+    </collision>
+    <collision name="chair1__tv_chair__collision_leg1">
+      <origin xyz="0.33 -0.33 0.3" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.1 0.45"/>
+      </geometry>
+    </collision>
+    <collision name="chair1__tv_chair__collision_leg2">
+      <origin xyz="-0.33 -0.33 0.3" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.1 0.45"/>
+      </geometry>
+    </collision>
+    <collision name="chair1__tv_chair__collision_arm1">
+      <origin xyz="-0.33 -0.1 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.45 0.1"/>
+      </geometry>
+    </collision>
+    <collision name="chair1__tv_chair__collision_arm2">
+      <origin xyz="0.33 -0.1 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.45 0.1"/>
+      </geometry>
+    </collision>
+    <visual name="chair1__tv_chair__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/tv_chair/tv_chair.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="chair2__tv_chair__link_0_joint" type="fixed">
+    <origin xyz="-0.73 0.57 0.0" rpy="0.0 0.0 -1.57"/>
+    <parent link="world"/>
+    <child link="chair2__tv_chair__link_0"/>
+  </joint>
+  <link name="chair2__tv_chair__link_0">
+    <inertial>
+      <origin xyz="0.0 0.0 0.5" rpy="0.0 0.0 0.0"/>
+      <mass value="10.0"/>
+      <inertia ixx="1.0833329" ixy="0.0" ixz="0.0" iyy="1.0833329" iyz="0.0" izz="0.81666634"/>
+    </inertial>
+    <collision name="chair2__tv_chair__collision_seat">
+      <origin xyz="0.0 -0.2 0.35" rpy="-0.28 0.0 0.0"/>
+      <geometry>
+        <box size="0.7 0.5 0.1"/>
+      </geometry>
+    </collision>
+    <collision name="chair2__tv_chair__collision_base">
+      <origin xyz="0.0 -0.1 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.7 0.6 0.05"/>
+      </geometry>
+    </collision>
+    <collision name="chair2__tv_chair__collision_back">
+      <origin xyz="0.0 0.18 0.65" rpy="-0.4 0.0 0.0"/>
+      <geometry>
+        <box size="0.6 0.2 0.85"/>
+      </geometry>
+    </collision>
+    <collision name="chair2__tv_chair__collision_leg1">
+      <origin xyz="0.33 -0.33 0.3" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.1 0.45"/>
+      </geometry>
+    </collision>
+    <collision name="chair2__tv_chair__collision_leg2">
+      <origin xyz="-0.33 -0.33 0.3" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.1 0.45"/>
+      </geometry>
+    </collision>
+    <collision name="chair2__tv_chair__collision_arm1">
+      <origin xyz="-0.33 -0.1 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.45 0.1"/>
+      </geometry>
+    </collision>
+    <collision name="chair2__tv_chair__collision_arm2">
+      <origin xyz="0.33 -0.1 0.5" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.1 0.45 0.1"/>
+      </geometry>
+    </collision>
+    <visual name="chair2__tv_chair__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/tv_chair/tv_chair.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="tv__tv__link_0_joint" type="fixed">
+    <origin xyz="-2.85 -0.94 0.035264" rpy="0.0 0.0 -0.026"/>
+    <parent link="world"/>
+    <child link="tv__tv__link_0"/>
+  </joint>
+  <link name="tv__tv__link_0">
+    <inertial>
+      <origin xyz="0.0 -0.07 0.8" rpy="0.0 0.0 0.05"/>
+      <mass value="10.0"/>
+      <inertia ixx="1.73333264" ixy="0.0" ixz="0.0" iyy="0.60833309" iyz="0.0" izz="1.27499949"/>
+    </inertial>
+    <collision name="tv__tv__collision">
+      <origin xyz="0.05 -0.08 0.8" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.3 1.2 0.8"/>
+      </geometry>
+    </collision>
+    <visual name="tv__tv__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/tv/tv.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="tv_table__tv_table__link_0_joint" type="fixed">
+    <origin xyz="-2.81 -0.98 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="world"/>
+    <child link="tv_table__tv_table__link_0"/>
+  </joint>
+  <link name="tv_table__tv_table__link_0">
+    <inertial>
+      <origin xyz="-0.05 0.05 0.2" rpy="0.0 0.0 0.0"/>
+      <mass value="30.0"/>
+      <inertia ixx="7.4312470275" ixy="0.0" ixz="0.0" iyy="1.02499959" iyz="0.0" izz="7.2062471175"/>
+    </inertial>
+    <collision name="tv_table__tv_table__collision">
+      <origin xyz="-0.05 0.05 0.2" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.4 1.65 0.5"/>
+      </geometry>
+    </collision>
+    <visual name="tv_table__tv_table__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/tv_table/tv_table.dae" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="aruco_marker_0__aruco_marker_0__link_0_joint" type="fixed">
+    <origin xyz="1.5 1.96 0.8" rpy="0.0 0.0 -1.5707963267948966"/>
+    <parent link="world"/>
+    <child link="aruco_marker_0__aruco_marker_0__link_0"/>
+  </joint>
+  <link name="aruco_marker_0__aruco_marker_0__link_0">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+    <collision name="aruco_marker_0__aruco_marker_0__collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/aruco_marker_0/aruco_marker_0.stl" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <visual name="aruco_marker_0__aruco_marker_0__visual">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="package://multiverse_parser/examples/input/isr-testbed/world/isr-testbed/aruco_marker_0/aruco_marker_0.dae" scale="0.1 0.1 0.1"/>
+      </geometry>
+    </visual>
+  </link>
+</robot>

@@ -1,4 +1,4 @@
-#!/usr/bin/python3.10
+#!/usr/bin/env python3.10
 
 import argparse
 from urdf_to_fbx import urdf_to_fbx

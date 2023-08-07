@@ -56,5 +56,12 @@ if [ ! -d "$BLENDER_SRC_DIR/lib" ]; then
     (cd $BLENDER_SRC_DIR/blender; make update)
 fi
 
-(cd $BLENDER_SRC_DIR/blender && make BUILD_DIR=../../../build/blender/build_linux)
-(cd $BLENDER_SRC_DIR/blender && make bpy BUILD_DIR=../../../build/blender/build_linux_bpy)
+(cd $BLENDER_SRC_DIR/blender && make BUILD_DIR=../../../build/blender)
+(cd $BLENDER_BUILD_DIR/bin/3.6/python/bin;
+./python3.10 -m pip install --upgrade pip;
+./python3.10 -m pip install mujoco numpy-stl;
+./python3.10 -m pip install bpy)
+
+# Initialize rosdep
+
+rosdep init

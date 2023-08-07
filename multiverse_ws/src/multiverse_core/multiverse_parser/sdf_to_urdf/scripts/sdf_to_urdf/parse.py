@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import itertools
 import os
 import sys
 import xml.etree.ElementTree as ET

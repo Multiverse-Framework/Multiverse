@@ -22,10 +22,6 @@ update-alternatives --remove-all python3
 apt install -y python3.8-dev
 update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
 
-# Install python3.10
-add-apt-repository --yes ppa:deadsnakes/ppa
-apt install -y python3.10-dev
-
 # Install catkin-tools
 apt install -y python3-catkin-tools
 
@@ -64,9 +60,6 @@ pip3 install pyside6
 # Install PyOpenGL
 pip3 install pyopengl
 
-# Install MuJoCo
-pip3 install mujoco
-
 # Install wheel
 pip3 install wheel
 
@@ -78,9 +71,6 @@ pip3 install owlready2
 
 # Install jinja2
 pip3 install jinja2
-
-# Install numpy-stl
-pip3 install numpy-stl
 
 # Install pybind11
 pip3 install pybind11

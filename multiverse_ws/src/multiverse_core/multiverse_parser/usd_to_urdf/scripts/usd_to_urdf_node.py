@@ -1,14 +1,17 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.10
 
-import sys
+import argparse
 from usd_to_urdf import usd_to_urdf
 
 
-if __name__ == "__main__":
-    if len(sys.argv) >= 3:
-        (usd_file, urdf_file) = (sys.argv[1], sys.argv[2])
-    else:
-        print("Usage: in_usd.usda out_urdf.urdf")
-        sys.exit(1)
+def main():
+    parser = argparse.ArgumentParser(description="Convert from USD to URDF")
+    parser.add_argument("--in_usd", type=str, required=True, help="Input USD")
+    parser.add_argument("--out_urdf", type=str, required=True, help="Output URDF")
 
-    usd_to_urdf(usd_file, urdf_file)
+    args = parser.parse_args()
+    usd_to_urdf(args.in_usd, args.out_urdf)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,9 +1,0 @@
-<launch>
-
-    <arg name="in_usd" default="$(find multiverse_parser)/examples/usd_to_urdf/usd/box_scenario_with_physics.usda"/>
-
-    <arg name="out_urdf" default="$(find multiverse_parser)/examples/usd_to_urdf/urdf/box_scenario.urdf"/>
-
-    <node pkg="multiverse_parser" type="usd_to_urdf_node.py" name="usd_to_urdf" output="screen" args="$(arg in_usd) $(arg out_urdf)"/>
-
-</launch>

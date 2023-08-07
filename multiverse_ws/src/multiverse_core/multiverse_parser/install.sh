@@ -8,27 +8,22 @@ else
     echo "BLENDER_BUILD_DIR is set to: $BLENDER_BUILD_DIR"
     
     SETUP_PATH="$CATKIN_DEVEL_DIR/setup.sh"
+
+    PATH_TO_ADD=$BLENDER_BUILD_DIR/bin:$BLENDER_BUILD_DIR/bin/3.6/python/bin
     
-    if ! echo "$PATH" | grep -q "$BLENDER_BUILD_DIR/build_linux/bin"; then
-        export PATH=$PATH:$BLENDER_BUILD_DIR/build_linux/bin
+    if ! echo "$PATH" | grep -q "$PATH_TO_ADD"; then
+        export PATH=$PATH:$PATH_TO_ADD
     fi
     
-    if ! echo "$PYTHONPATH" | grep -q "$BLENDER_BUILD_DIR/build_linux_bpy/bin"; then
-        export PYTHONPATH=$PYTHONPATH:$BLENDER_BUILD_DIR/build_linux_bpy/bin
+    if ! echo "$PYTHONPATH" | grep -q "$PYTHONPATH_TO_ADD"; then
+        export PYTHONPATH=$PYTHONPATH:$PYTHONPATH_TO_ADD
     fi
     
-    PATH_TO_ADD="if ! echo \"\$PATH\" | grep -q \"$BLENDER_BUILD_DIR/build_linux/bin\"; then\n  export PATH=\$PATH:$BLENDER_BUILD_DIR/build_linux/bin\nfi"
+    PATH_TO_ADD="if ! echo \"\$PATH\" | grep -q \"$PATH_TO_ADD\"; then\n  export PATH=\$PATH:$PATH_TO_ADD\nfi"
     
     # Check if the line already exists in the file
     if ! grep -Fxq "$PATH_TO_ADD" "$SETUP_PATH"; then
         # Add the line to the file
         echo "$PATH_TO_ADD" >> $SETUP_PATH
-    fi
-    
-    PYTHONPATH_TO_ADD="if ! echo \"\$PYTHONPATH\" | grep -q \"$BLENDER_BUILD_DIR/build_linux_bpy/bin\"; then\n  export PYTHONPATH=\$PYTHONPATH:$BLENDER_BUILD_DIR/build_linux_bpy/bin\nfi"
-    # Check if the line already exists in the file
-    if ! grep -Fxq "$PYTHONPATH_TO_ADD" "$SETUP_PATH"; then
-        # Add the line to the file
-        echo "$PYTHONPATH_TO_ADD" >> $SETUP_PATH
     fi
 fi

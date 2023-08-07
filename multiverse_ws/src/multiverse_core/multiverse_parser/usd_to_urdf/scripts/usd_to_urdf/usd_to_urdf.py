@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.10
 
 import os
 from pxr import Usd, UsdGeom, Gf, UsdPhysics

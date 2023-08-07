@@ -9,13 +9,17 @@ else
     echo "USD_BUILD_DIR is set to: $USD_BUILD_DIR"
     
     SETUP_PATH="$CATKIN_DEVEL_DIR/setup.sh"
+
+    PATH_TO_ADD=$USD_BUILD_DIR/bin
     
-    if ! echo "$PATH" | grep -q "$USD_BUILD_DIR/bin"; then
-        export PATH=$PATH:$USD_BUILD_DIR/bin
+    if ! echo "$PATH" | grep -q "$PATH_TO_ADD"; then
+        export PATH=$PATH:$PATH_TO_ADD
     fi
+
+    PYTHONPATH_TO_ADD=$USD_BUILD_DIR/lib/python
     
-    if ! echo "$PYTHONPATH" | grep -q "$USD_BUILD_DIR/lib/python"; then
-        export PYTHONPATH=$PYTHONPATH:$USD_BUILD_DIR/lib/python
+    if ! echo "$PYTHONPATH" | grep -q "$PYTHONPATH_TO_ADD"; then
+        export PYTHONPATH=$PYTHONPATH:$PYTHONPATH_TO_ADD
     fi
     
     cp -r USD/plugin $USD_SRC_DIR
@@ -42,7 +46,7 @@ else
     
     python3 $USD_SRC_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
     
-    PATH_TO_ADD="if ! echo \"\$PATH\" | grep -q \"$USD_BUILD_DIR/bin\"; then\n  export PATH=\$PATH:$USD_BUILD_DIR/bin\nfi"
+    PATH_TO_ADD="if ! echo \"\$PATH\" | grep -q \"$PATH_TO_ADD\"; then\n  export PATH=\$PATH:$PATH_TO_ADD\nfi"
     
     # Check if the line already exists in the file
     if ! grep -Fxq "$PATH_TO_ADD" "$SETUP_PATH"; then
@@ -50,7 +54,7 @@ else
         echo "$PATH_TO_ADD" >> $SETUP_PATH
     fi
     
-    PYTHONPATH_TO_ADD="if ! echo \"\$PYTHONPATH\" | grep -q \"$USD_BUILD_DIR/lib/python\"; then\n  export PYTHONPATH=\$PYTHONPATH:$USD_BUILD_DIR/lib/python\nfi"
+    PYTHONPATH_TO_ADD="if ! echo \"\$PYTHONPATH\" | grep -q \"$PYTHONPATH_TO_ADD\"; then\n  export PYTHONPATH=\$PYTHONPATH:$PYTHONPATH_TO_ADD\nfi"
     # Check if the line already exists in the file
     if ! grep -Fxq "$PYTHONPATH_TO_ADD" "$SETUP_PATH"; then
         # Add the line to the file
