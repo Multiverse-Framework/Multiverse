@@ -52,6 +52,17 @@ target_link_libraries(${URDF_TO_MUJOCO_NODE}
 # ############
 # # Install ##
 # ############
+if(IS_DIRECTORY ${CATKIN_DEVEL_PREFIX}/../../.private)
+  set(ENV{CATKIN_DEVEL_DIR} ${CATKIN_DEVEL_PREFIX}/../../../devel)
+  set(ENV{BLENDER_BUILD_DIR} $ENV{CATKIN_DEVEL_DIR}/../../build/blender)
+endif()
+
+# Execute the shell file during CMake configuration
+execute_process(
+  COMMAND sh ${PROJECT_SOURCE_DIR}/install.sh
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  RESULT_VARIABLE INSTALL_RESULT
+)
 
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html

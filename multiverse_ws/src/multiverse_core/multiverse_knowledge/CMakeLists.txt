@@ -30,8 +30,6 @@ if(IS_DIRECTORY ${CATKIN_DEVEL_PREFIX}/../../.private)
   set(ENV{USD_BUILD_DIR} $ENV{CATKIN_DEVEL_DIR}/../../build/USD)
 endif()
 
-
-
 # Execute the shell file during CMake configuration
 execute_process(
   COMMAND sh ${PROJECT_SOURCE_DIR}/install.sh

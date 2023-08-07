@@ -17,28 +17,27 @@ apt install ros-noetic-desktop-full
 # Install python3-pip
 apt install -y python3-pip
 
-# Install python3.8-dev
+# Install python3.8
 apt install -y python3.8-dev
 
-# Install python3.10-dev
+# Install python3.10
+add-apt-repository --yes ppa:deadsnakes/ppa
 apt install -y python3.10-dev
 
-# Install python3-catkin-tools
+# Install catkin-tools
 apt install -y python3-catkin-tools
 
-# Install python3-rosdep
+# Install rosdep
 apt install -y python3-rosdep
 
-# Install libglfw3
+# Install glfw3
 apt install -y libglfw3
-
-# Install libglfw3-dev
 apt install -y libglfw3-dev
 
 # Install doxygen
 apt install -y doxygen
 
-# Install additional packages
+# Install additional packages for MuJoCo
 apt install -y libgl1-mesa-dev
 apt install -y libglu1-mesa-dev
 apt install -y libxt-dev
@@ -48,6 +47,15 @@ apt install -y clang
 apt install -y libc++-dev
 apt install -y libc++abi-dev
 
+# Install and link gcc-11
+update-alternatives --remove-all gcc
+apt install gcc-11
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 1
+
+# Install additional packages for blender
+apt install -y build-essential git subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
+apt install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
+
 # Install PySide6
 pip3 install pyside6
 
@@ -55,7 +63,7 @@ pip3 install pyside6
 pip3 install pyopengl
 
 # Install MuJoCo
-pip3 install mujoco-py
+pip3 install mujoco
 
 # Install wheel
 pip3 install wheel
