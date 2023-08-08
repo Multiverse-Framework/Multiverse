@@ -7,8 +7,9 @@ Multiverse is a simulation framework designed to integrate multiple advanced phy
 # Installation
 
 ```
-sudo ./install.sh # Install all prerequisites
-./build.sh        # Build the software
+sudo ./install.sh       # Install all prerequisites
+sudo ./build.sh         # Build the software
+./build_ws.sh           # Build the ROS workspace
 ```
 # Test
 
