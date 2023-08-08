@@ -19,12 +19,9 @@ jobs:
           chmod +x install.sh
           sudo ./install.sh
 
-    - name: Run build.sh
+    - name: Run build.sh and build_ws.sh
       run: |
           chmod +x build.sh
           sudo ./build.sh
-
-    - name: Run build_ws.sh
-      run: |
           chmod +x build_ws.sh
           ./build_ws.sh
