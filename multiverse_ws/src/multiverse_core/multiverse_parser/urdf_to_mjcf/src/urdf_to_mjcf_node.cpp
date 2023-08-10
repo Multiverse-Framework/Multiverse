@@ -169,6 +169,25 @@ void add_mujoco_tags(const boost::filesystem::path &model_path)
              link_element != nullptr;
              link_element = link_element->NextSiblingElement("link"))
         {
+            for (tinyxml2::XMLElement *visual_element = link_element->FirstChildElement("visual");
+                 visual_element != nullptr;
+                 visual_element = visual_element->NextSiblingElement("visual"))
+            {
+                for (tinyxml2::XMLElement *geometry_element = visual_element->FirstChildElement("geometry");
+                     geometry_element != nullptr;
+                     geometry_element = geometry_element->NextSiblingElement("geometry"))
+                {
+                    for (tinyxml2::XMLElement *mesh_element = geometry_element->FirstChildElement("mesh");
+                         mesh_element != nullptr;
+                         mesh_element = mesh_element->NextSiblingElement("mesh"))
+                    {
+                        boost::filesystem::path mesh_path = mesh_element->Attribute("filename");
+
+                        mesh_element->SetAttribute("filename", mesh_path.filename().c_str());
+                    }
+                }
+            }
+
             for (tinyxml2::XMLElement *collision_element = link_element->FirstChildElement("collision");
                  collision_element != nullptr;
                  collision_element = collision_element->NextSiblingElement("collision"))
@@ -269,7 +288,7 @@ void disable_parent_child_collision(const boost::filesystem::path &model_path, c
             {
                 continue;
             }
-            
+
             int body_parent_id = body_id;
             const std::string body_name = mj_id2name(m, mjOBJ_BODY, body_id);
             for (int k = 0; k < disable_parent_child_collision_level; k++)
@@ -311,7 +330,7 @@ void disable_parent_child_collision(const boost::filesystem::path &model_path, c
                     {
                         continue;
                     }
-                    
+
                     int other_body_parent_id = other_body_id;
 
                     const std::string other_body_name = mj_id2name(m, mjOBJ_BODY, other_body_id);
@@ -319,14 +338,14 @@ void disable_parent_child_collision(const boost::filesystem::path &model_path, c
                     {
                         continue;
                     }
-                    
+
                     int k = 0;
                     do
                     {
                         if (m->body_jntnum[other_body_parent_id] != 0)
                         {
                             k++;
-                        }                        
+                        }
                         other_body_parent_id = m->body_parentid[other_body_parent_id];
                     } while (other_body_parent_id != 0 && other_body_parent_id != body_parent_id && k <= disable_parent_child_collision_level);
 
@@ -334,7 +353,7 @@ void disable_parent_child_collision(const boost::filesystem::path &model_path, c
                     {
                         continue;
                     }
-                    
+
                     if (body_parent_id == 0)
                     {
                         break;
@@ -363,9 +382,10 @@ void load_urdf(const char *input, const char *output)
     if (!model.initFile(input_file_path.c_str()))
     {
         ROS_ERROR("Couldn't read file in [%s]\n", input);
+        return;
     }
 
-    meshes_path_string = output_file_path.stem().string() + "/stl";
+    meshes_path_string = output_file_path.stem().string() + "/meshes";
 
     boost::filesystem::create_directories(output_file_path.parent_path() / meshes_path_string);
     boost::filesystem::path meshes_path = output_file_path.parent_path() / meshes_path_string;
@@ -389,7 +409,6 @@ void load_urdf(const char *input, const char *output)
                 urdf::Mesh &mesh = dynamic_cast<urdf::Mesh &>(*visual->geometry);
                 mesh.filename.erase(0, 9);
                 boost::filesystem::path mesh_path = mesh.filename;
-
                 std::string file_name = mesh_path.filename().string();
                 boost::filesystem::path ros_pkg = mesh_path;
                 while (ros_pkg.has_parent_path() && ros_pkg.parent_path().has_parent_path())
@@ -407,6 +426,10 @@ void load_urdf(const char *input, const char *output)
                 else
                 {
                     boost::filesystem::copy_file(mesh_path, meshes_path / mesh_path.filename());
+                    if (strcmp(mesh_path.extension().c_str(), ".obj") == 0)
+                    {
+                        boost::filesystem::copy_file(mesh_path.replace_extension(".mtl"), meshes_path / mesh_path.filename().replace_extension(".mtl"));
+                    }
                 }
             }
         }
@@ -438,7 +461,7 @@ void load_urdf(const char *input, const char *output)
             }
         }
     }
-
+    
     add_mujoco_tags(model_urdf_path);
 
     // load model
@@ -518,8 +541,6 @@ int main(int argc, char **argv)
     add_mimic_joints(output);
 
     disable_parent_child_collision(output, disable_parent_child_collision_level);
-
-    add_mujoco_tags(output);
 
     // finalize
     return finish("Done");
