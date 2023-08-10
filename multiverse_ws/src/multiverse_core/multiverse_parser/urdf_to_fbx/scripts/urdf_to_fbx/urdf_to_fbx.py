@@ -146,9 +146,9 @@ def clear_data(data: BlendData, scale_unit: float) -> None:
     mesh: Mesh
     for mesh in data.meshes:
         data.meshes.remove(mesh)
-    object: Object
-    for object in data.objects:
-        data.objects.remove(object)
+    selected_object: Object
+    for selected_object in data.objects:
+        data.objects.remove(selected_object)
     material: Material
     for material in data.materials:
         data.materials.remove(material)
@@ -171,9 +171,9 @@ def clear_data(data: BlendData, scale_unit: float) -> None:
 
 def merge_materials(should_check_material_name: bool) -> None:
     mat_uniques: List[Material] = []
-    object: Object
-    for object in bpy.data.objects:
-        for material_slot in object.material_slots:
+    selected_object: Object
+    for selected_object in bpy.data.objects:
+        for material_slot in selected_object.material_slots:
             mat = material_slot.material
             if mat is None or not mat.use_nodes:
                 continue
@@ -220,7 +220,7 @@ def merge_materials(should_check_material_name: bool) -> None:
                     if [i for i in mat_base_color.default_value] == [
                         i for i in mat_unique_base_color.default_value
                     ]:
-                        object.material_slots[mat.name].material = mat_unique
+                        selected_object.material_slots[mat.name].material = mat_unique
                         bpy.data.materials.remove(mat)
                         is_mat_unique = False
                         break
@@ -230,7 +230,7 @@ def merge_materials(should_check_material_name: bool) -> None:
                         mat_base_color.links[0].from_node.image.name
                         == mat_unique_base_color.links[0].from_node.image.name
                     ):
-                        object.material_slots[mat.name].material = mat_unique
+                        selected_object.material_slots[mat.name].material = mat_unique
                         bpy.data.materials.remove(mat)
                         is_mat_unique = False
                         break
@@ -269,12 +269,12 @@ def merge_materials(should_check_material_name: bool) -> None:
                             is_mat_unique_equal_mat = True
 
                     if is_mat_unique_equal_mat:
-                        object.material_slots[mat.name].material = mat_unique
+                        selected_object.material_slots[mat.name].material = mat_unique
                         bpy.data.materials.remove(mat)
                         mat_uniques.append(mat_unique)
                     else:
                         mat_uniques.append(mat)
-        object.select_set(False)
+        selected_object.select_set(False)
     return None
 
 
@@ -285,8 +285,8 @@ def fix_alpha() -> None:
 
 
 def rename_materials(base_name: str) -> None:
-    for object in bpy.data.objects:
-        for material_slot in object.material_slots:
+    for selected_object in bpy.data.objects:
+        for material_slot in selected_object.material_slots:
             if material_slot.material is not None:
                 material_slot.material.name = "M_" + base_name
     return None
@@ -376,7 +376,9 @@ class RobotBuilder:
         link_pos=Vector(),
         link_rot=Euler(),
     ) -> Object:
+        apply_scale_unit = True
         if isinstance(file_path, list):
+            apply_scale_unit = False
             if file_path[0] == "cylinder":
                 bpy.ops.mesh.primitive_cylinder_add(
                     depth=file_path[1], radius=file_path[2], scale=(1, 1, 1)
@@ -390,13 +392,13 @@ class RobotBuilder:
             else:
                 print("Object type", file_path[0], "is not supported")
                 return None
-            object = bpy.context.object
+            selected_object = bpy.context.object
 
             if material is None:
                 material = bpy.data.materials.get("Material")
                 if material is None:
                     material = bpy.data.materials.new(name="Material")
-            object.data.materials.append(material)
+            selected_object.data.materials.append(material)
 
         elif file_path:
             file_ext = os.path.splitext(file_path)[1].lower()
@@ -406,6 +408,7 @@ class RobotBuilder:
                 )
                 bpy.ops.wm.collada_import(filepath=file_path)
             elif file_ext == ".obj":
+                apply_scale_unit = False
                 bpy.ops.import_scene.obj(
                     filepath=file_path, axis_forward="Y", axis_up="Z"
                 )
@@ -428,25 +431,33 @@ class RobotBuilder:
                 bpy.ops.object.join()
             if not bpy.context.object.data.uv_layers:
                 bpy.ops.mesh.uv_texture_add()
-            object = bpy.context.object
+            selected_object = bpy.context.object
             if self.apply_weld:
-                object.modifiers.new("Weld", "WELD")
+                selected_object.modifiers.new("Weld", "WELD")
                 bpy.ops.object.modifier_apply(modifier="Weld")
             if material is not None:
-                object.data.materials.append(material)
+                selected_object.data.materials.append(material)
 
         else:
             mesh = bpy.data.meshes.new(mesh_name)
             mesh.uv_layers.new()
-            object = bpy.data.objects.new(mesh_name, mesh)
-            bpy.context.scene.collection.objects.link(object)
+            selected_object = bpy.data.objects.new(mesh_name, mesh)
+            bpy.context.scene.collection.objects.link(selected_object)
 
-        object.name = mesh_name
-        object.rotation_mode = "XYZ"
-        object.rotation_euler.rotate(rotation)
-        object.location.rotate(rotation)
-        object.location += location
-        object.scale *= scale
+        selected_object.name = mesh_name
+        selected_object.rotation_mode = "XYZ"
+        selected_object.rotation_euler.rotate(rotation)
+        selected_object.location.rotate(rotation)
+        selected_object.location += location
+        selected_object.scale *= scale
+        if not apply_scale_unit:
+            selected_object.scale /= self.scale_unit
+
+        if selected_object.scale[0] * selected_object.scale[1] * selected_object.scale[2] < 0:
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.mesh.select_all(action='SELECT')
+            bpy.ops.mesh.flip_normals()
+            bpy.ops.object.mode_set(mode='OBJECT')
 
         # Change origin of mesh to link_pos and link_rot
         bpy.context.scene.cursor.location = link_pos
@@ -456,11 +467,11 @@ class RobotBuilder:
         bpy.context.scene.cursor.rotation_euler = Euler()
 
         # Apply 0.01 scale
-        # object.scale *= 100
+        # selected_object.scale *= 100
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-        # object.scale /= 100
+        # selected_object.scale /= 100
 
-        return object
+        return selected_object
 
     def set_link_origin(self, link: Link) -> None:
         if hasattr(link, "origin") and link.origin is not None:
@@ -553,12 +564,12 @@ class RobotBuilder:
     def bind_mesh_to_bone(self, mesh_name: str, bone_name: str) -> None:
         bpy.ops.object.mode_set(mode="POSE")
 
-        object = bpy.context.scene.objects.get(mesh_name)
-        object.select_set(True)
+        selected_object = bpy.context.scene.objects.get(mesh_name)
+        selected_object.select_set(True)
         self.arm_bones.active = self.arm_bones[bone_name]
         self.arm_bones[bone_name].select = True
         bpy.ops.object.parent_set(type="BONE")
-        object.select_set(False)
+        selected_object.select_set(False)
         self.arm_bones[bone_name].select = False
 
         bpy.ops.object.mode_set(mode="OBJECT")
@@ -635,7 +646,7 @@ class RobotBuilder:
                 rot_tmp.rotate(visual_rot)
                 visual_rot = rot_tmp
 
-                object = self.add_mesh(
+                selected_object = self.add_mesh(
                     mesh_name,
                     material,
                     file_path,
@@ -645,10 +656,10 @@ class RobotBuilder:
                     self.link_pose[root_link.name][0],
                     self.link_pose[root_link.name][1],
                 )
-                objects.append(object)
+                objects.append(selected_object)
 
-            for object in objects:
-                object.select_set(True)
+            for selected_object in objects:
+                selected_object.select_set(True)
 
             if len(bpy.context.selected_objects) > 1:
                 bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
@@ -710,7 +721,7 @@ class RobotBuilder:
                                 ) = self.get_link_data(
                                     child_pos, child_rot, child_link, visual
                                 )
-                                object = self.add_mesh(
+                                selected_object = self.add_mesh(
                                     mesh_name,
                                     material,
                                     file_path,
@@ -720,10 +731,10 @@ class RobotBuilder:
                                     self.link_pose[child_link.name][0],
                                     self.link_pose[child_link.name][1],
                                 )
-                                objects.append(object)
+                                objects.append(selected_object)
 
-                            for object in objects:
-                                object.select_set(True)
+                            for selected_object in objects:
+                                selected_object.select_set(True)
 
                             if len(bpy.context.selected_objects) > 1:
                                 bpy.context.view_layer.objects.active = (

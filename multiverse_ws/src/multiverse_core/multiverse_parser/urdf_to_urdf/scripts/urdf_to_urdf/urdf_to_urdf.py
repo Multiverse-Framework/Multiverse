@@ -14,8 +14,9 @@ from bpy.types import (
     Object,
 )
 import rospkg
+import xml.etree.ElementTree as ET
 
-SCALE_LENGTH = 0.01
+material_dict = {}
 
 rospack = rospkg.RosPack()
 
@@ -58,7 +59,7 @@ def import_obj(in_obj: str) -> None:
 
 def import_stl(in_stl: str) -> None:
     clear_data(bpy.data)
-    bpy.ops.import_mesh.stl(filepath=in_stl, global_scale=1 / SCALE_LENGTH)
+    bpy.ops.import_mesh.stl(filepath=in_stl)
 
 
 def clean_up_mesh(mesh_name: str) -> None:
@@ -75,12 +76,30 @@ def clean_up_mesh(mesh_name: str) -> None:
 
     selected_object = bpy.context.object
     selected_object.name = mesh_name
-    selected_object.scale *= SCALE_LENGTH
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 
+def set_material(mesh_name: str, urdf_material: urdf.Material) -> None:
+    mesh = bpy.data.objects.get(mesh_name)
 
-def export_obj(out_obj: str) -> None:
-    mesh_name = "SM_" + os.path.splitext(os.path.basename(out_obj))[0]
+    # Get the material or create a new one if the mesh has no materials
+    if mesh.material_slots:
+        material = mesh.material_slots[0].material
+        material.name = "M_" + urdf_material.name
+    else:
+        material = bpy.data.materials.new(name="M_" + urdf_material.name)
+        mesh.data.materials.append(material)
+
+    material.use_nodes = True
+    nodes = material.node_tree.nodes
+
+    principled_bsdf = nodes.get('Principled BSDF')
+
+    if principled_bsdf:
+        principled_bsdf.inputs['Base Color'].default_value = material_dict.get(urdf_material.name, (0, 0, 0, 1))
+    else:
+        print(f"No Principled BSDF node found for mesh {mesh_name}")
+
+def export_obj(out_obj: str, mesh_name: str) -> None:
     clean_up_mesh(mesh_name)
     os.makedirs(os.path.dirname(out_obj), exist_ok=True)
     bpy.ops.export_scene.obj(
@@ -88,8 +107,7 @@ def export_obj(out_obj: str) -> None:
     )
 
 
-def export_stl(out_stl: str) -> None:
-    mesh_name = "SM_" + os.path.splitext(os.path.basename(out_stl))[0]
+def export_stl(out_stl: str, mesh_name: str) -> None:
     clean_up_mesh(mesh_name)
     selected_object = bpy.context.object
     selected_object.modifiers.new("Weld", "WELD")
@@ -100,7 +118,7 @@ def export_stl(out_stl: str) -> None:
     )
 
 
-def convert_geometry(geometry: urdf.Mesh, out_urdf:str, out_mesh_format: str) -> None:
+def convert_geometry(geometry: urdf.Mesh, out_urdf:str, out_mesh_format: str, material: urdf.Material) -> None:
     mesh_filename = geometry.filename
     mesh_filename = mesh_filename.replace("package://", "")
     package_name = mesh_filename.split("/", 2)[0]
@@ -133,11 +151,15 @@ def convert_geometry(geometry: urdf.Mesh, out_urdf:str, out_mesh_format: str) ->
         import_stl(in_mesh_path_abs)
     else:
         raise TypeError(f"File extension {file_extension} not implemented")
+    
+    mesh_name = os.path.splitext(os.path.basename(out_mesh_path_abs))[0]
+    if material is not None and material.name is not None:
+        set_material(mesh_name=mesh_name, urdf_material=material)
 
     if out_mesh_format == "obj":
-        export_obj(out_mesh_path_abs)
+        export_obj(out_obj=out_mesh_path_abs, mesh_name=mesh_name)
     elif out_mesh_format == "stl":
-        export_stl(out_mesh_path_abs)
+        export_stl(out_stl=out_mesh_path_abs, mesh_name=mesh_name)
     else:
         raise TypeError(f"Mesh format {out_mesh_format} not implemented")
 
@@ -145,9 +167,8 @@ def convert_geometry(geometry: urdf.Mesh, out_urdf:str, out_mesh_format: str) ->
 
 
 def urdf_to_urdf(in_urdf: str, out_urdf: str) -> None:
-    unit_settings = bpy.context.scene.unit_settings
-    unit_settings.scale_length = SCALE_LENGTH
-    bpy.context.view_layer.update()
+    for urdf_material in ET.parse(in_urdf).getroot().findall('material'):
+        material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
 
     in_robot: urdf.Robot = urdf.URDF.from_xml_file(in_urdf)
 
@@ -163,16 +184,24 @@ def urdf_to_urdf(in_urdf: str, out_urdf: str) -> None:
         for visual in link.visuals:
             if type(visual.geometry) != urdf.Mesh:
                 continue
-            convert_geometry(geometry=visual.geometry, out_urdf=out_urdf, out_mesh_format="obj")
+            convert_geometry(geometry=visual.geometry, out_urdf=out_urdf, out_mesh_format="obj", material=visual.material)
 
         collision: urdf.Collision
         for collision in link.collisions:
             if type(collision.geometry) != urdf.Mesh:
                 continue
-            convert_geometry(geometry=collision.geometry, out_urdf=out_urdf, out_mesh_format="stl")
+            convert_geometry(geometry=collision.geometry, out_urdf=out_urdf, out_mesh_format="stl", material=visual.material)
 
         out_robot.add_link(link)
 
     xml_string = out_robot.to_xml_string()
+
     with open(out_urdf, "w") as file:
         file.write(xml_string)
+
+    tree = ET.parse(out_urdf)
+    for parent in tree.getroot().findall('.//'):
+        for material in parent.findall('material'):
+            parent.remove(material)
+
+    tree.write(out_urdf)
