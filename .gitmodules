@@ -1,15 +1,15 @@
-[submodule "src/USD"]
-	path = src/USD
+[submodule "multiverse/external/USD"]
+	path = multiverse/external/USD
 	url = https://github.com/PixarAnimationStudios/USD.git
 [submodule "multiverse_ws/src/multiverse_connectors/multiverse_mujoco_connector"]
 	path = multiverse_ws/src/multiverse_connectors/multiverse_mujoco_connector
 	url = https://github.com/Multiverse-Framework/Multiverse-MuJoCo-Connector.git
-[submodule "src/pybind11"]
-	path = src/pybind11
+[submodule "multiverse/external/pybind11"]
+	path = multiverse/external/pybind11
 	url = https://github.com/pybind/pybind11.git
-[submodule "src/mujoco"]
-	path = src/mujoco
+[submodule "multiverse/external/mujoco"]
+	path = multiverse/external/mujoco
 	url = https://github.com/deepmind/mujoco.git
-[submodule "src/blender"]
-	path = src/blender-git/blender
+[submodule "multiverse/external/blender-git/blender"]
+	path = multiverse/external/blender-git/blender
 	url = https://projects.blender.org/blender/blender.git
