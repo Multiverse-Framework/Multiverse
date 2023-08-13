@@ -1,0 +1,3 @@
+add_subdirectory(multiverse_server)
+
+add_subdirectory(multiverse_client)

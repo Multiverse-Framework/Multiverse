@@ -26,8 +26,8 @@ catkin_package()
 # ##########
 if(IS_DIRECTORY ${CATKIN_DEVEL_PREFIX}/../../.private)
   set(ENV{CATKIN_DEVEL_DIR} ${CATKIN_DEVEL_PREFIX}/../../../devel)
-  set(ENV{USD_SRC_DIR} $ENV{CATKIN_DEVEL_DIR}/../../src/USD)
-  set(ENV{USD_BUILD_DIR} $ENV{CATKIN_DEVEL_DIR}/../../build/USD)
+  set(ENV{USD_SRC_DIR} $ENV{CATKIN_DEVEL_DIR}/../../multiverse/external/USD)
+  set(ENV{USD_BUILD_DIR} $ENV{CATKIN_DEVEL_DIR}/../../multiverse/build/USD)
 endif()
 
 # Execute the shell file during CMake configuration

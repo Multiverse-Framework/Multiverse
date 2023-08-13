@@ -1,0 +1,25 @@
+set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+
+set(CMAKE_CXX_FLAGS "-std=c++17 -fPIC -stdlib=libstdc++")
+
+set(MULTIVERSE_CLIENT multiverse_client)
+add_library(${MULTIVERSE_CLIENT} SHARED src/${MULTIVERSE_CLIENT}.cpp)
+target_include_directories(${MULTIVERSE_CLIENT} PRIVATE include)
+target_link_directories(${MULTIVERSE_CLIENT} PRIVATE include)
+target_link_libraries(${MULTIVERSE_CLIENT} c++abi zmq)
+install(TARGETS ${MULTIVERSE_CLIENT} DESTINATION lib)
+
+set(MULTIVERSE_CLIENT_JSON multiverse_client_json)
+add_library(${MULTIVERSE_CLIENT_JSON} SHARED src/${MULTIVERSE_CLIENT_JSON}.cpp)
+target_include_directories(${MULTIVERSE_CLIENT_JSON} PRIVATE include)
+target_link_directories(${MULTIVERSE_CLIENT_JSON} PRIVATE include)
+target_link_libraries(${MULTIVERSE_CLIENT_JSON} ${MULTIVERSE_CLIENT} jsoncpp)
+install(TARGETS ${MULTIVERSE_CLIENT_JSON} DESTINATION lib)
+
+find_package(pybind11 REQUIRED)
+set(MULTIVERSE_CLIENT_PYBIND multiverse_client_pybind)
+pybind11_add_module(${MULTIVERSE_CLIENT_PYBIND} MODULE src/${MULTIVERSE_CLIENT_PYBIND}.cpp)
+target_include_directories(${MULTIVERSE_CLIENT_PYBIND} PRIVATE include)
+target_link_directories(${MULTIVERSE_CLIENT_PYBIND} PRIVATE include)
+target_link_libraries(${MULTIVERSE_CLIENT_PYBIND} PRIVATE ${MULTIVERSE_CLIENT})
+install(TARGETS ${MULTIVERSE_CLIENT_PYBIND} DESTINATION lib/python)

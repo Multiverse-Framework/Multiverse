@@ -19,12 +19,17 @@ jobs:
           chmod +x install.sh
           sudo ./install.sh
 
-    - name: Run build.sh
+    - name: Run build_third_parties.sh
       run: |
-          chmod +x build.sh
-          sudo ./build.sh
+          chmod +x build_third_parties.sh
+          ./build_third_parties.sh
 
-    - name: Run build_ws.sh
+    - name: Run build_multiverse.sh
       run: |
-          chmod +x build_ws.sh
-          sudo ./build_ws.sh
+          chmod +x build_multiverse.sh
+          ./build_multiverse.sh
+
+    - name: Run build_multiverse_ws.sh
+      run: |
+          chmod +x build_multiverse_ws.sh
+          ./build_multiverse_ws.sh
