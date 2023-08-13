@@ -54,6 +54,9 @@ update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 1
 apt install -y build-essential git subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
 apt install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
 
+# Install pybind11
+apt install -y pybind11-dev
+
 # Install PySide6
 pip3 install pyside6
 
