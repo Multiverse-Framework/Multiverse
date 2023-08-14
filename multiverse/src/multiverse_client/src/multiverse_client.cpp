@@ -146,7 +146,8 @@ void MultiverseClient::run()
 {
     while (!should_shut_down)
     {
-        switch (flag)
+        EMultiverseClientState current_flag = flag.load();
+        switch (current_flag)
         {
         case EMultiverseClientState::StartConnection:
             zmq_disconnect(client_socket, socket_addr.c_str());

@@ -1,6 +1,7 @@
 set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
-
 set(CMAKE_CXX_FLAGS "-std=c++17 -fPIC -stdlib=libstdc++")
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(MULTIVERSE_CLIENT multiverse_client)
 add_library(${MULTIVERSE_CLIENT} SHARED src/${MULTIVERSE_CLIENT}.cpp)
