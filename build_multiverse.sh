@@ -37,5 +37,4 @@ fi
 
 cd $CURRENT_DIR
 
-exec bash # Reload ~/.bashrc
-
+# exec bash # Reload ~/.bashrc
