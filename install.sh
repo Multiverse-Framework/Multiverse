@@ -27,7 +27,7 @@ apt install -y python3-catkin-tools
 
 # Install rosdep
 apt install -y python3-rosdep
-rosdep update
+rosdep init
 
 # Install glfw3
 apt install -y libglfw3
