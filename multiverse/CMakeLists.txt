@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.5.0)
 
 project(Multiverse)
 
-set(ENV{USD_SRC_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/external/USD)
+set(EXT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
 
-set(ENV{USD_BUILD_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/build/USD)
+set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
+
+set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 add_subdirectory(src)
 

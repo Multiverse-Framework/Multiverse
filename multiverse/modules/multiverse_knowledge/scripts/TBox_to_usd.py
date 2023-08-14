@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
+import argparse
 import os
 import shutil
 from pxr import Usd, UsdOntology
@@ -53,14 +53,15 @@ def import_ontos(onto) -> None:
     return None
 
 
-def usd_to_owl(onto_file: str, usd_file: str) -> None:
+def usd_to_owl(onto_file: str, usd_file: str, onto_dir_copy: str) -> None:
     upper_onto_path = os.path.dirname(onto_file)
     onto_path.append(upper_onto_path)
 
-    for file in os.listdir(upper_onto_path):
-        src_file = os.path.join(upper_onto_path, file)
-        dst_file = os.path.join(os.path.dirname(usd_file), file)
-        shutil.copy(src_file, dst_file)
+    if onto_dir_copy is not None:
+        os.makedirs(os.path.dirname(onto_dir_copy), exist_ok=True)
+        for file in os.listdir(upper_onto_path):
+            src_file = os.path.join(upper_onto_path, file)
+            shutil.copy(src_file, onto_dir_copy)
 
     TBox_onto = get_ontology("file://" + onto_file)
     TBox_onto.load()
@@ -78,10 +79,14 @@ def usd_to_owl(onto_file: str, usd_file: str) -> None:
     return None
 
 
+def main():
+    parser = argparse.ArgumentParser(description="Converting the TBox ontology from OWL to USD, which represents the TBox")
+    parser.add_argument("--in_owl", type=str, required=True, help="Input OWL")
+    parser.add_argument("--out_usd", type=str, required=True, help="Output USD")
+    parser.add_argument("--out_owl", type=str, default=None, required=False, help="Output OWL (copy from input OWL)")
+    args = parser.parse_args()
+    usd_to_owl(args.in_owl, args.out_usd, args.out_owl)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) >= 3:
-        (onto_file, usd_file) = (sys.argv[1], sys.argv[2])
-    else:
-        print("Usage: in_onto.owl out_usd.usda")
-        sys.exit(1)
-    usd_to_owl(onto_file, usd_file)
+    main()

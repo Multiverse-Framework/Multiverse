@@ -41,6 +41,7 @@ multiverse/bin
 multiverse/lib
 multiverse/build
 multiverse/external/blender-git/lib
+multiverse/test/**/output
 
 # VSC
 .vscode

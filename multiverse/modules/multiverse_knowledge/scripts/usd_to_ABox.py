@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import sys
+import argparse
 import os
 from pxr import Usd, UsdOntology, UsdGeom, UsdPhysics, Gf, Vt
 from owlready2 import onto_path, get_ontology, declare_datatype
@@ -309,16 +309,21 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
                 prim_inst.hasQuality.append(jointValue_inst)
                 jointValue_inst.hasJointValue = [float64(0.5)]
 
-    print(f"Save usd stage that represents {in_onto_file} to {save_path}")
+    print(f"Save ABox ontology to {save_path}")
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
     ABox_onto.save(save_path)
 
     return None
 
 
+def main():
+    parser = argparse.ArgumentParser(description="Convert from USD to ABox ontology using the TBox ontology")
+    parser.add_argument("--in_usd", type=str, required=True, help="Input USD")
+    parser.add_argument("--in_owl", type=str, required=True, help="Input OWL")
+    parser.add_argument("--out_owl", type=str, required=True, help="Output OWL")
+    args = parser.parse_args()
+    usd_to_owl(args.in_usd, args.in_owl, args.out_owl)
+
+
 if __name__ == "__main__":
-    if len(sys.argv) >= 4:
-        (in_usd_file, in_onto_file, out_onto_file) = (sys.argv[1], sys.argv[2], sys.argv[3])
-    else:
-        print("Usage: in_usd.usda in_onto.owl out_onto.owl")
-        sys.exit(1)
-    usd_to_owl(in_usd_file, in_onto_file, out_onto_file)
+    main()
