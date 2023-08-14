@@ -86,16 +86,24 @@ cmake -S $MUJOCO_EXT_DIR -B $MUJOCO_BUILD_DIR
 ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
 ln -sf $MUJOCO_BUILD_DIR/lib/libmujoco.so $LIB_DIR
 
+RELOAD=false
+
 PATH_TO_ADD="export PATH=\$PATH:$BIN_DIR"
 if ! grep -Fxq "$PATH_TO_ADD" ~/.bashrc; then
     echo "$PATH_TO_ADD" >> ~/.bashrc
+    echo "Add $PATH_TO_ADD to ~/.bashrc"
+    RELOAD=true
 fi
 
 PYTHONPATH_TO_ADD="export PYTHONPATH=\$PYTHONPATH:$USD_BUILD_DIR/lib/python"
 if ! grep -Fxq "$PYTHONPATH_TO_ADD" ~/.bashrc; then
     echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
+    echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
+    RELOAD=true
 fi
 
 cd $CURRENT_DIR
 
-exec bash # Reload ~/.bashrc
+if [ "$RELOAD" = true ]; then
+    exec bash # Reload ~/.bashrc
+fi
