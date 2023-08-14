@@ -5,7 +5,7 @@ set(MULTIVERSE_CLIENT multiverse_client)
 add_library(${MULTIVERSE_CLIENT} SHARED src/${MULTIVERSE_CLIENT}.cpp)
 target_include_directories(${MULTIVERSE_CLIENT} PRIVATE include)
 target_link_directories(${MULTIVERSE_CLIENT} PRIVATE include)
-target_link_libraries(${MULTIVERSE_CLIENT} c++abi zmq)
+target_link_libraries(${MULTIVERSE_CLIENT} c++abi zmq atomic)
 install(TARGETS ${MULTIVERSE_CLIENT} DESTINATION lib)
 
 set(MULTIVERSE_CLIENT_JSON multiverse_client_json)
