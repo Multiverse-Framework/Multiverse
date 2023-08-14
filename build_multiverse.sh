@@ -12,11 +12,6 @@ if [ ! -d "$LIB_DIR" ]; then
     mkdir -p $LIB_DIR
 fi
 
-# Build multiverse_server
-cmake -S $PWD/multiverse -B $BUILD_DIR -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse
-make -C $BUILD_DIR
-cmake --install $BUILD_DIR
-
 RELOAD=false
 
 # Add to PATH
@@ -48,3 +43,8 @@ cd $CURRENT_DIR
 if [ "$RELOAD" = true ]; then
     exec bash # Reload ~/.bashrc
 fi
+
+# Build multiverse_server
+cmake -S $PWD/multiverse -B $BUILD_DIR -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse
+make -C $BUILD_DIR
+cmake --install $BUILD_DIR
