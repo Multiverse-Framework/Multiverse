@@ -1,6 +1,8 @@
 set(ENV{USD_SRC_DIR} ${EXT_DIR}/USD)
 set(ENV{USD_BUILD_DIR} ${BUILD_DIR}/USD)
 
+set(ENV{PYTHONPATH} $ENV{PYTHONPATH}:$ENV{USD_BUILD_DIR}/lib/python)
+
 # Execute the shell file during CMake configuration
 execute_process(
   COMMAND sh install.sh
