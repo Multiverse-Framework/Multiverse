@@ -1,17 +1,18 @@
 #!/usr/bin/env python3.10
 
-from multiverse_parser import UsdWorld, GeomType
+from multiverse_parser import WorldBuilder, GeomType
 import mujoco
 import numpy
 
-def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> UsdWorld:
+
+def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBuilder:
     try:
         mj_model = mujoco.MjModel.from_xml_path(mjcf_file_path)
     except ValueError as error:
         print(f"{error}. Failed to import MJCF.")
         return None
 
-    usd_world = UsdWorld()
+    world_builder = WorldBuilder()
 
     usd_meshes = {}
 
@@ -20,15 +21,15 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> UsdWorld
         body_name = mj_body.name if mj_body.name != "" else "body_" + str(body_id)
         if body_id == 0:
             root_body_name = body_name
-            usd_body = usd_world.add_body(body_name=root_body_name)
+            body_builder = world_builder.add_body(body_name=root_body_name)
         else:
             mj_body_parent = mj_model.body(mj_body.parentid)
             parent_body_name = mj_body_parent.name if mj_body_parent.name != "" else "body_" + str(mj_body.parentid)
             if mj_body.jntnum[0] > 0 and with_physics:
-                usd_body = usd_world.add_body(body_name=body_name, parent_body_name=root_body_name)
+                body_builder = world_builder.add_body(body_name=body_name, parent_body_name=root_body_name)
             else:
-                usd_body = usd_world.add_body(body_name=body_name, parent_body_name=parent_body_name)
-            usd_body.set_transform(
+                body_builder = world_builder.add_body(body_name=body_name, parent_body_name=parent_body_name)
+            body_builder.set_transform(
                 pos=tuple(mj_body.pos),
                 quat=tuple(mj_body.quat),
                 relative_to=parent_body_name,
@@ -41,37 +42,41 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> UsdWorld
                 geom_name = "geom_" + str(geom_id)
 
             if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE:
-                usd_geom = usd_body.add_geom(geom_name=geom_name, geom_type=GeomType.PLANE)
+                geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.PLANE)
             elif mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX:
-                usd_geom = usd_body.add_geom(geom_name=geom_name, geom_type=GeomType.CUBE)
+                geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CUBE)
             elif mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE:
-                usd_geom = usd_body.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE)
+                geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE)
             elif mj_geom.type == mujoco.mjtGeom.mjGEOM_CYLINDER:
-                usd_geom = usd_body.add_geom(geom_name=geom_name, geom_type=GeomType.CYLINDER)
+                geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CYLINDER)
             elif mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH:
-                usd_geom = usd_body.add_geom(geom_name=geom_name, geom_type=GeomType.MESH)
+                geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.MESH)
             else:
                 print(f"Geom type {str(mj_geom.type)} not supported.")
                 continue
 
             if mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX:
-                usd_geom.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat), size=tuple(mj_geom.size))
+                geom_builder.set_transform(
+                    pos=tuple(mj_geom.pos),
+                    quat=tuple(mj_geom.quat),
+                    scale=tuple(mj_geom.size),
+                )
             elif mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE:
-                usd_geom.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat), size=(50, 50, 1))
+                geom_builder.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat), scale=(50, 50, 1))
             else:
-                usd_geom.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat))
+                geom_builder.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat))
                 if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE:
-                    usd_geom.set_attribute(radius=mj_geom.size[0])
+                    geom_builder.set_attribute(radius=mj_geom.size[0])
                 elif mj_geom.type == mujoco.mjtGeom.mjGEOM_CYLINDER:
-                    usd_geom.set_attribute(radius=mj_geom.size[0], height=mj_geom.size[1] * 2)
+                    geom_builder.set_attribute(radius=mj_geom.size[0], height=mj_geom.size[1] * 2)
                 elif mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH:
                     mesh_id = mj_geom.dataid[0]
                     mesh_name = mj_model.mesh(mesh_id).name.replace(" ", "").replace("-", "_")
                     if mesh_name == "":
                         mesh_name = "mesh_" + str(mesh_id)
-                    usd_mesh = usd_geom.add_mesh(mesh_name)
+                    mesh_builder = geom_builder.add_mesh(mesh_name)
 
-                    if usd_mesh not in usd_meshes:
+                    if mesh_builder not in usd_meshes:
                         vert_adr = mj_model.mesh_vertadr[mesh_id]
                         vert_num = mj_model.mesh_vertnum[mesh_id]
 
@@ -92,7 +97,8 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> UsdWorld
 
                         face_adr = mj_model.mesh_faceadr[mesh_id]
                         normal_adr = mj_model.mesh_normaladr[mesh_id]
-                        for face_id in range(face_adr, face_adr + face_num):
+                        for i in range(face_num):
+                            face_id = face_adr + i
                             face_normals = mj_model.mesh_normal[normal_adr + mj_model.mesh_facenormal[face_id]]
 
                             p1 = face_normals[0]
@@ -110,12 +116,16 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> UsdWorld
                             face_vertex_indices[3 * i] = mj_model.mesh_face[face_id][0]
                             face_vertex_indices[3 * i + 1] = mj_model.mesh_face[face_id][1]
                             face_vertex_indices[3 * i + 2] = mj_model.mesh_face[face_id][2]
-                        usd_mesh.build(points, normals, face_vertex_counts, face_vertex_indices)
-                        usd_mesh.save()
+                        mesh_builder.build(points, normals, face_vertex_counts, face_vertex_indices)
+                        mesh_builder.save()
 
-            usd_geom.set_attribute(prefix="primvars", displayColor=mj_geom.rgba[:3])
-            usd_geom.set_attribute(prefix="primvars", displayOpacity=mj_geom.rgba[3])
+            geom_builder.set_attribute(prefix="primvars", displayColor=mj_geom.rgba[:3])
+            geom_builder.set_attribute(prefix="primvars", displayOpacity=mj_geom.rgba[3])
 
-            
+            geom_builder.compute_extent()
 
-    return usd_world
+        if with_physics:
+            body_builder.enable_collision()
+            body_builder.set_inertial(mj_body.mass[0], tuple(mj_body.ipos), tuple(mj_body.inertia))
+
+    return world_builder

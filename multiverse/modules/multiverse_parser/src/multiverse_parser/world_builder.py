@@ -3,8 +3,9 @@
 import importlib.util
 import os, shutil
 import random, string
-from pxr import Usd, UsdGeom, Sdf, Gf, Tf
+from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 from enum import Enum
+import numpy
 
 multiverse_parser_path = os.path.dirname(importlib.util.find_spec("multiverse_parser").origin)
 
@@ -44,7 +45,7 @@ class GeomType(Enum):
     MESH = 4
 
 
-class Mesh:
+class MeshBuilder:
     def __init__(self, name: str, usd_file_path: str) -> None:
         mesh_dict[name] = self
         self.stage = Usd.Stage.CreateNew(usd_file_path)
@@ -63,63 +64,94 @@ class Mesh:
         self.stage.Save()
 
 
-class Geom:
-    def __init__(self, stage: Usd.Stage, name: str, body_path: Sdf.Path, type: GeomType) -> None:
+class GeomBuilder:
+    def __init__(self, stage: Usd.Stage, name: str, body_path: Sdf.Path, geom_type: GeomType) -> None:
         geom_dict[name] = self
         self.stage = stage
         self.usd_file_dir = os.path.dirname(self.stage.GetRootLayer().realPath)
         self.path = body_path.AppendPath(name)
-        self.set_prim(type)
+        self.type = geom_type
+        self.set_prim()
+        self.pos = (0.0, 0.0, 0.0)
+        self.quat = (1.0, 0.0, 0.0, 0.0)
+        self.scale = (1.0, 1.0, 1.0)
 
-    def set_prim(self, type: GeomType) -> None:
-        if type == GeomType.PLANE:
+    def set_prim(self) -> None:
+        if self.type == GeomType.PLANE:
             self.prim = UsdGeom.Mesh.Define(self.stage, self.path)
             self.prim.CreatePointsAttr([(-0.5, -0.5, 0), (0.5, -0.5, 0), (-0.5, 0.5, 0), (0.5, 0.5, 0)])
-            self.prim.CreateExtentAttr([(-0.5, -0.5, 0), (0.5, 0.5, 0)])
             self.prim.CreateNormalsAttr([(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)])
             self.prim.CreateFaceVertexCountsAttr([4])
             self.prim.CreateFaceVertexIndicesAttr([0, 1, 3, 2])
-        elif type == GeomType.CUBE:
+        elif self.type == GeomType.CUBE:
             self.prim = UsdGeom.Cube.Define(self.stage, self.path)
-        elif type == GeomType.SPHERE:
+        elif self.type == GeomType.SPHERE:
             self.prim = UsdGeom.Sphere.Define(self.stage, self.path)
-        elif type == GeomType.CYLINDER:
+        elif self.type == GeomType.CYLINDER:
             self.prim = UsdGeom.Cylinder.Define(self.stage, self.path)
-        elif type == GeomType.MESH:
+        elif self.type == GeomType.MESH:
             self.prim = UsdGeom.Mesh.Define(self.stage, self.path)
 
     def set_transform(
         self,
         pos: tuple = (0.0, 0.0, 0.0),
         quat: tuple = (1.0, 0.0, 0.0, 0.0),
-        size: tuple = (1.0, 1.0, 1.0),
+        scale: tuple = (1.0, 1.0, 1.0),
     ):
+        self.pos = pos
+        self.quat = quat
+        self.scale = scale
         mat = Gf.Matrix4d()
-        mat.SetTranslateOnly(Gf.Vec3d(pos))
-        mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
+        mat.SetTranslateOnly(Gf.Vec3d(self.pos))
+        mat.SetRotateOnly(Gf.Quatd(self.quat[0], Gf.Vec3d(self.quat[1], self.quat[2], self.quat[3])))
         mat_scale = Gf.Matrix4d()
-        mat_scale.SetScale(Gf.Vec3d(size))
+        mat_scale.SetScale(Gf.Vec3d(self.scale))
         mat = mat_scale * mat
         self.prim.AddTransformOp().Set(mat)
 
-    def set_attribute(self, prefix: str = None, **kwargs):
+    def set_attribute(self, prefix: str = None, **kwargs) -> None:
         for key, value in kwargs.items():
             attr = prefix + ":" + key if prefix is not None else key
             if self.prim.GetPrim().HasAttribute(attr):
                 self.prim.GetPrim().GetAttribute(attr).Set(value)
 
-    def add_mesh(self, mesh_name: str) -> Mesh:
+    def compute_extent(self) -> None:
+        if self.type == GeomType.PLANE:
+            self.prim.CreateExtentAttr([(-0.5, -0.5, 0), (0.5, 0.5, 0)])
+        elif self.type == GeomType.CUBE:
+            self.prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
+        elif self.type == GeomType.SPHERE:
+            radius = self.prim.GetRadiusAttr().Get()
+            self.prim.CreateExtentAttr(((-radius, -radius, -radius), (radius, radius, radius)))
+        elif self.type == GeomType.CYLINDER:
+            radius = self.prim.GetRadiusAttr().Get()
+            height = self.prim.GetHeightAttr().Get()
+            self.prim.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
+        elif self.type == GeomType.MESH:
+            self.prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
+
+    def add_mesh(self, mesh_name: str) -> MeshBuilder:
         mesh_dir = os.path.join(TMP_DIR, mesh_name + ".usda")
         mesh_ref = "./" + mesh_dir
         if mesh_name in mesh_dict:
             mesh = mesh_dict[mesh_name]
         else:
-            mesh = Mesh(mesh_name, os.path.join(self.usd_file_dir, TMP_DIR, mesh_name + ".usda"))
+            mesh = MeshBuilder(mesh_name, os.path.join(self.usd_file_dir, TMP_DIR, mesh_name + ".usda"))
         self.prim.GetPrim().GetReferences().AddReference(mesh_ref)
         return mesh
 
+    def enable_collision(self) -> None:
+        physics_collision_api = UsdPhysics.CollisionAPI(self.prim)
+        physics_collision_api.CreateCollisionEnabledAttr(True)
+        physics_collision_api.Apply(self.prim.GetPrim())
 
-class Body:
+        if self.type == GeomType.MESH:
+            physics_mesh_collision_api = UsdPhysics.MeshCollisionAPI(self.prim)
+            physics_mesh_collision_api.CreateApproximationAttr("convexHull")
+            physics_mesh_collision_api.Apply(self.prim.GetPrim())
+
+
+class BodyBuilder:
     def __init__(self, stage: Usd.Stage, name: str, parent_name: str = None) -> None:
         body_dict[name] = self
         if parent_name is not None:
@@ -134,19 +166,26 @@ class Body:
         self.stage = stage
         self.usd_file_dir = os.path.dirname(self.stage.GetRootLayer().realPath)
         self.prim = UsdGeom.Xform.Define(self.stage, self.path)
+        self.pos = (0.0, 0.0, 0.0)
+        self.quat = (1.0, 0.0, 0.0, 0.0)
+        self.scale = (1.0, 1.0, 1.0)
+        self.geoms = set()
 
     def set_transform(
         self,
         pos: tuple = (0.0, 0.0, 0.0),
         quat: tuple = (1.0, 0.0, 0.0, 0.0),
-        size: tuple = (1.0, 1.0, 1.0),
+        scale: tuple = (1.0, 1.0, 1.0),
         relative_to: str = None,
     ):
+        self.pos = pos
+        self.quat = quat
+        self.scale = scale
         mat = Gf.Matrix4d()
-        mat.SetTranslateOnly(Gf.Vec3d(pos))
-        mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
+        mat.SetTranslateOnly(Gf.Vec3d(self.pos))
+        mat.SetRotateOnly(Gf.Quatd(self.quat[0], Gf.Vec3d(self.quat[1], self.quat[2], self.quat[3])))
         mat_scale = Gf.Matrix4d()
-        mat_scale.SetScale(Gf.Vec3d(size))
+        mat_scale.SetScale(Gf.Vec3d(self.scale))
         mat = mat_scale * mat
         if relative_to is not None:
             relative_prim = body_dict[relative_to].prim.GetPrim()
@@ -160,15 +199,37 @@ class Body:
 
         self.prim.AddTransformOp().Set(mat)
 
-    def add_geom(self, geom_name: str, geom_type: GeomType) -> Geom:
+    def add_geom(self, geom_name: str, geom_type: GeomType) -> GeomBuilder:
         if geom_name in geom_dict:
             print(f"Geom {geom_name} already exists.")
-            return geom_dict[geom_name]
+            geom = geom_dict[geom_name]
+        else:
+            geom = GeomBuilder(self.stage, geom_name, self.path, geom_type)
+        self.geoms.add(geom)
+        return geom
 
-        return Geom(self.stage, geom_name, self.path, geom_type)
+    def enable_collision(self) -> None:
+        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.prim)
+        physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
+        physics_rigid_body_api.Apply(self.prim.GetPrim())
+
+        for geom in self.geoms:
+            geom.enable_collision()
+
+    def set_inertial(
+        self,
+        mass: float = 1e-9,
+        com: tuple = (0.0, 0.0, 0.0),
+        diagonal_inertia: tuple = (0.0, 0.0, 0.0),
+    ) -> None:
+        physics_mass_api = UsdPhysics.MassAPI(self.prim)
+        physics_mass_api.CreateMassAttr(mass)
+        physics_mass_api.CreateCenterOfMassAttr(Gf.Vec3f(com))
+        physics_mass_api.CreateDiagonalInertiaAttr(Gf.Vec3f(diagonal_inertia))
+        physics_mass_api.Apply(self.prim.GetPrim())
 
 
-class UsdWorld:
+class WorldBuilder:
     def __init__(self) -> None:
         random_string = "".join(random.choices(string.ascii_letters + string.digits, k=10))
         self.usd_file_path = os.path.join(multiverse_parser_path, ".cache", random_string, TMP + ".usda")
@@ -178,17 +239,17 @@ class UsdWorld:
         UsdGeom.SetStageUpAxis(self.stage, UsdGeom.Tokens.z)
         UsdGeom.SetStageMetersPerUnit(self.stage, UsdGeom.LinearUnits.meters)
 
-    def add_body(self, body_name: str, parent_body_name: str = None) -> Body:
+    def add_body(self, body_name: str, parent_body_name: str = None) -> BodyBuilder:
         if body_name in body_dict:
             print(f"Body {body_name} already exists.")
             return body_dict[body_name]
 
         if parent_body_name is None:
-            self.root_body = Body(self.stage, body_name)
+            self.root_body = BodyBuilder(self.stage, body_name)
             self.stage.SetDefaultPrim(self.root_body.prim.GetPrim())
             return self.root_body
         else:
-            return Body(self.stage, body_name, parent_body_name)
+            return BodyBuilder(self.stage, body_name, parent_body_name)
 
     def export(self, usd_file_path: str = None) -> None:
         self.stage.Save()
@@ -208,14 +269,14 @@ class UsdWorld:
                 shutil.rmtree(new_mesh_dir)
             os.rename(tmp_mesh_dir, new_mesh_dir)
 
-            with open(usd_file_path, 'r', encoding='utf-8') as file:
+            with open(usd_file_path, "r", encoding="utf-8") as file:
                 file_contents = file.read()
-            
+
             tmp_path = "prepend references = @./" + TMP + "/usd/"
             new_path = "prepend references = @./" + usd_file_name + "/usd/"
             file_contents = file_contents.replace(tmp_path, new_path)
-            
-            with open(usd_file_path, 'w', encoding='utf-8') as file:
+
+            with open(usd_file_path, "w", encoding="utf-8") as file:
                 file.write(file_contents)
 
     def clean_up(self) -> None:
