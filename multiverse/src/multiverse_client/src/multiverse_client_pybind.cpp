@@ -249,7 +249,7 @@ PYBIND11_MODULE(multiverse_client_pybind, handle)
         .def("communicate", &MultiverseClient::communicate)
         .def("disconnect", &MultiverseClient::disconnect);
 
-    pybind11::class_<MultiverseClientPybind, MultiverseClient>(handle, "MultiverseClientPybind", pybind11::is_final())
+    pybind11::class_<MultiverseClientPybind, MultiverseClient>(handle, "MultiverseClientPybind")
         .def(pybind11::init<const std::string &>())
         .def("set_request_meta_data", &MultiverseClientPybind::set_request_meta_data)
         .def("get_response_meta_data", &MultiverseClientPybind::get_response_meta_data)
