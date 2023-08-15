@@ -1,8 +1,15 @@
 #!/usr/bin/env python3.10
 
-from multiverse_parser import WorldBuilder, GeomType
+from multiverse_parser import WorldBuilder, GeomType, JointType
 import mujoco
 import numpy
+
+
+def modify_name(in_name: str, prefix: str, name_id: str) -> str:
+    out_name = in_name.replace(" ", "").replace("-", "_")
+    if out_name == "":
+        out_name = prefix + str(name_id)
+    return out_name
 
 
 def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBuilder:
@@ -18,13 +25,14 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
 
     for body_id in range(mj_model.nbody):
         mj_body = mj_model.body(body_id)
-        body_name = mj_body.name if mj_body.name != "" else "body_" + str(body_id)
+        body_name = modify_name(mj_body.name, "body_", body_id)
+
         if body_id == 0:
             root_body_name = body_name
             body_builder = world_builder.add_body(body_name=root_body_name)
         else:
             mj_body_parent = mj_model.body(mj_body.parentid)
-            parent_body_name = mj_body_parent.name if mj_body_parent.name != "" else "body_" + str(mj_body.parentid)
+            parent_body_name = modify_name(mj_body_parent.name, "body_", mj_body.parentid)
             if mj_body.jntnum[0] > 0 and with_physics:
                 body_builder = world_builder.add_body(body_name=body_name, parent_body_name=root_body_name)
             else:
@@ -37,9 +45,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
 
         for geom_id in range(mj_body.geomadr[0], mj_body.geomadr[0] + mj_body.geomnum[0]):
             mj_geom = mj_model.geom(geom_id)
-            geom_name = mj_geom.name.replace(" ", "").replace("-", "_")
-            if geom_name == "":
-                geom_name = "geom_" + str(geom_id)
+            geom_name = modify_name(mj_geom.name, "geom_", geom_id)
 
             if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE:
                 geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.PLANE)
@@ -71,11 +77,9 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                     geom_builder.set_attribute(radius=mj_geom.size[0], height=mj_geom.size[1] * 2)
                 elif mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH:
                     mesh_id = mj_geom.dataid[0]
-                    mesh_name = mj_model.mesh(mesh_id).name.replace(" ", "").replace("-", "_")
-                    if mesh_name == "":
-                        mesh_name = "mesh_" + str(mesh_id)
-                    mesh_builder = geom_builder.add_mesh(mesh_name)
+                    mesh_name = modify_name(mj_model.mesh(mesh_id).name, "mesh_", mesh_id)
 
+                    mesh_builder = geom_builder.add_mesh(mesh_name)
                     if mesh_builder not in usd_meshes:
                         vert_adr = mj_model.mesh_vertadr[mesh_id]
                         vert_num = mj_model.mesh_vertnum[mesh_id]
@@ -127,5 +131,50 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
         if with_physics:
             body_builder.enable_collision()
             body_builder.set_inertial(mj_body.mass[0], tuple(mj_body.ipos), tuple(mj_body.inertia))
+
+            for i in range(mj_body.jntnum[0]):
+                if mj_model.joint(mj_body.jntadr[i]).type == mujoco.mjtJoint.mjJNT_FREE:
+                    continue
+
+                joint_id = mj_body.jntadr[i]
+                mj_joint = mj_model.joint(joint_id)
+                joint_name = modify_name(mj_joint.name, "joint_", joint_id)
+                if mj_joint.type == mujoco.mjtJoint.mjJNT_HINGE:
+                    joint_type = JointType.REVOLUTE
+                elif mj_joint.type == mujoco.mjtJoint.mjJNT_SLIDE:
+                    joint_type = JointType.PRISMATIC
+                elif mj_joint.type == mujoco.mjtJoint.mjJNT_BALL:
+                    joint_type = JointType.SPHERICAL
+                else:
+                    print(f"Joint {joint_name} type {str(mj_joint.type)} not supported.")
+                    continue
+
+                if numpy.array_equal(mj_joint.axis, [1, 0, 0]):
+                    joint_axis = "X"
+                elif numpy.array_equal(mj_joint.axis, [0, 1, 0]):
+                    joint_axis = "Y"
+                elif numpy.array_equal(mj_joint.axis, [0, 0, 1]):
+                    joint_axis = "Z"
+                elif numpy.array_equal(mj_joint.axis, [-1, 0, 0]):
+                    joint_axis = "-X"
+                elif numpy.array_equal(mj_joint.axis, [0, -1, 0]):
+                    joint_axis = "-Y"
+                elif numpy.array_equal(mj_joint.axis, [0, 0, -1]):
+                    joint_axis = "-Z"
+                else:
+                    print(f"Joint {joint_name} axis {str(mj_joint.axis)} not supported.")
+                    continue
+
+                joint_builder = body_builder.add_joint(
+                    joint_name,
+                    body_name,
+                    parent_body_name,
+                    joint_type,
+                    tuple(mj_joint.pos),
+                    joint_axis,
+                )
+
+                if mj_joint.type == mujoco.mjtJoint.mjJNT_HINGE or mj_joint.type == mujoco.mjtJoint.mjJNT_SLIDE:
+                    joint_builder.set_limit(mj_joint.range[0], mj_joint.range[1])
 
     return world_builder
