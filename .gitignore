@@ -32,11 +32,12 @@
 *.app
 
 # Built files
+__pycache__
+*.egg-info
 multiverse_ws/.catkin_tools
 multiverse_ws/build
 multiverse_ws/devel
 multiverse_ws/logs
-__pycache__
 multiverse/bin
 multiverse/lib
 multiverse/build
