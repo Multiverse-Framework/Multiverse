@@ -3,7 +3,7 @@
 from __future__ import print_function
 import argparse
 import os
-from multiverse_parser import import_mjcf
+from multiverse_parser import import_from_mjcf
 
 def main():
     parser = argparse.ArgumentParser(description="Multiverse parser")
@@ -20,7 +20,7 @@ def main():
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
     if in_extension == '.xml':
-        usd_world = import_mjcf(args.input, args.physics)
+        usd_world = import_from_mjcf(args.input, args.physics)
     else:
         print(f"Input extension [{in_extension}] not supported.")
 

@@ -6,16 +6,21 @@ import random, string
 from pxr import Usd, UsdGeom, Sdf, Gf, Tf
 from enum import Enum
 
-multiverse_parser_path = os.path.dirname(
-    importlib.util.find_spec("multiverse_parser").origin
-)
+multiverse_parser_path = os.path.dirname(importlib.util.find_spec("multiverse_parser").origin)
 
 mesh_dict = {}
 body_dict = {}
 geom_dict = {}
 
+TMP = "tmp"
+TMP_DIR = "tmp/usd"
+
+xform_cache = UsdGeom.XformCache()
+
 
 def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
+    os.makedirs(name=destination_folder, exist_ok=True)
+
     # Iterate through all files and folders in the source folder
     for item in os.listdir(source_folder):
         source_item = os.path.join(source_folder, item)
@@ -40,25 +45,36 @@ class GeomType(Enum):
 
 
 class Mesh:
-    def __init__(self, stage: Usd.Stage, name: str) -> None:
+    def __init__(self, name: str, usd_file_path: str) -> None:
         mesh_dict[name] = self
+        self.stage = Usd.Stage.CreateNew(usd_file_path)
+        UsdGeom.SetStageUpAxis(self.stage, UsdGeom.Tokens.z)
+        UsdGeom.SetStageMetersPerUnit(self.stage, UsdGeom.LinearUnits.meters)
+        self.prim = UsdGeom.Mesh.Define(self.stage, "/Mesh_" + name)
+        self.stage.SetDefaultPrim(self.prim.GetPrim())
+
+    def build(self, points, normals, face_vertex_counts, face_vertex_indices):
+        self.prim.CreatePointsAttr(points)
+        self.prim.CreateNormalsAttr(normals)
+        self.prim.CreateFaceVertexCountsAttr(face_vertex_counts)
+        self.prim.CreateFaceVertexIndicesAttr(face_vertex_indices)
+
+    def save(self):
+        self.stage.Save()
 
 
 class Geom:
-    def __init__(
-        self, stage: Usd.Stage, name: str, body_path: Sdf.Path, type: GeomType
-    ) -> None:
+    def __init__(self, stage: Usd.Stage, name: str, body_path: Sdf.Path, type: GeomType) -> None:
         geom_dict[name] = self
         self.stage = stage
+        self.usd_file_dir = os.path.dirname(self.stage.GetRootLayer().realPath)
         self.path = body_path.AppendPath(name)
         self.set_prim(type)
 
     def set_prim(self, type: GeomType) -> None:
         if type == GeomType.PLANE:
             self.prim = UsdGeom.Mesh.Define(self.stage, self.path)
-            self.prim.CreatePointsAttr(
-                [(-0.5, -0.5, 0), (0.5, -0.5, 0), (-0.5, 0.5, 0), (0.5, 0.5, 0)]
-            )
+            self.prim.CreatePointsAttr([(-0.5, -0.5, 0), (0.5, -0.5, 0), (-0.5, 0.5, 0), (0.5, 0.5, 0)])
             self.prim.CreateExtentAttr([(-0.5, -0.5, 0), (0.5, 0.5, 0)])
             self.prim.CreateNormalsAttr([(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)])
             self.prim.CreateFaceVertexCountsAttr([4])
@@ -78,27 +94,29 @@ class Geom:
         quat: tuple = (1.0, 0.0, 0.0, 0.0),
         size: tuple = (1.0, 1.0, 1.0),
     ):
-        transform = self.prim.AddTransformOp()
         mat = Gf.Matrix4d()
         mat.SetTranslateOnly(Gf.Vec3d(pos))
         mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
         mat_scale = Gf.Matrix4d()
         mat_scale.SetScale(Gf.Vec3d(size))
         mat = mat_scale * mat
-        transform.Set(mat)
+        self.prim.AddTransformOp().Set(mat)
 
-    def set_attribute(self, **kwargs):
-        if (
-            kwargs.get("size") is not None
-            and isinstance(kwargs["size"], tuple)
-            and UsdGeom.Cube(self.prim)
-        ):
-            self.prim.AddScaleOp().Set(Gf.Vec3d(kwargs["size"][0], kwargs["size"][1], kwargs["size"][2]))
-            xformOpOrder = self.prim.GetXformOpOrderAttr().Get()
-            new_xformOpOrder = ["xformOp:scale"]
-            for xformOp in xformOpOrder:
-                new_xformOpOrder.append(xformOp)
-            self.prim.CreateXformOpOrderAttr().Set(new_xformOpOrder)
+    def set_attribute(self, prefix: str = None, **kwargs):
+        for key, value in kwargs.items():
+            attr = prefix + ":" + key if prefix is not None else key
+            if self.prim.GetPrim().HasAttribute(attr):
+                self.prim.GetPrim().GetAttribute(attr).Set(value)
+
+    def add_mesh(self, mesh_name: str) -> Mesh:
+        mesh_dir = os.path.join(TMP_DIR, mesh_name + ".usda")
+        mesh_ref = "./" + mesh_dir
+        if mesh_name in mesh_dict:
+            mesh = mesh_dict[mesh_name]
+        else:
+            mesh = Mesh(mesh_name, os.path.join(self.usd_file_dir, TMP_DIR, mesh_name + ".usda"))
+        self.prim.GetPrim().GetReferences().AddReference(mesh_ref)
+        return mesh
 
 
 class Body:
@@ -114,29 +132,33 @@ class Body:
         else:
             self.path = Sdf.Path("/").AppendPath(name)
         self.stage = stage
-        self.usd_file_dir = os.path.dirname(stage.GetRootLayer().realPath)
+        self.usd_file_dir = os.path.dirname(self.stage.GetRootLayer().realPath)
         self.prim = UsdGeom.Xform.Define(self.stage, self.path)
 
-    def set_pose(
+    def set_transform(
         self,
         pos: tuple = (0.0, 0.0, 0.0),
         quat: tuple = (1.0, 0.0, 0.0, 0.0),
+        size: tuple = (1.0, 1.0, 1.0),
         relative_to: str = None,
     ):
-        transform = self.prim.AddTransformOp()
         mat = Gf.Matrix4d()
         mat.SetTranslateOnly(Gf.Vec3d(pos))
         mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
+        mat_scale = Gf.Matrix4d()
+        mat_scale.SetScale(Gf.Vec3d(size))
+        mat = mat_scale * mat
         if relative_to is not None:
-            prim = body_dict[relative_to].prim
-            if prim:
-                xformable = UsdGeom.Xformable(prim)
-                mat = (
-                    xformable.ComputeLocalToWorldTransform(Usd.TimeCode.Default()) * mat
-                )
+            relative_prim = body_dict[relative_to].prim.GetPrim()
+            if relative_prim:
+                parent_prim = self.prim.GetPrim().GetParent()
+                if parent_prim and parent_prim != relative_prim:
+                    parent_to_relative_mat, _ = xform_cache.ComputeRelativeTransform(relative_prim, parent_prim)
+                    mat = mat * parent_to_relative_mat
             else:
                 print(f"Prim at path {relative_to} not found.")
-        transform.Set(mat)
+
+        self.prim.AddTransformOp().Set(mat)
 
     def add_geom(self, geom_name: str, geom_type: GeomType) -> Geom:
         if geom_name in geom_dict:
@@ -148,12 +170,8 @@ class Body:
 
 class UsdWorld:
     def __init__(self) -> None:
-        random_string = "".join(
-            random.choices(string.ascii_letters + string.digits, k=10)
-        )
-        self.usd_file_path = os.path.join(
-            multiverse_parser_path, ".cache", random_string, "tmp.usda"
-        )
+        random_string = "".join(random.choices(string.ascii_letters + string.digits, k=10))
+        self.usd_file_path = os.path.join(multiverse_parser_path, ".cache", random_string, TMP + ".usda")
         print(f"Create {self.usd_file_path}")
         os.makedirs(os.path.dirname(self.usd_file_path))
         self.stage = Usd.Stage.CreateNew(self.usd_file_path)
@@ -171,25 +189,34 @@ class UsdWorld:
             return self.root_body
         else:
             return Body(self.stage, body_name, parent_body_name)
-        
-    def add_mesh(self, mesh_name: str) -> Mesh:
-        if mesh_name in mesh_dict:
-            return mesh_dict[mesh_name]
 
-        stage = Usd.Stage.CreateNew(os.path.join(os.path.dirname(self.usd_file_path), 'tmp', 'usd', mesh_name + '.usda'))
-        return Mesh(stage, mesh_name)
-
-    def export(self, usd_file_path: str) -> None:
+    def export(self, usd_file_path: str = None) -> None:
         self.stage.Save()
-        copy_and_overwrite(
-            os.path.dirname(self.usd_file_path), os.path.dirname(usd_file_path)
-        )
-        os.rename(
-            os.path.join(
-                os.path.dirname(usd_file_path), os.path.basename(self.usd_file_path)
-            ),
-            usd_file_path,
-        )
+
+        if usd_file_path is not None:
+            usd_file_dir = os.path.dirname(usd_file_path)
+            usd_file_name = os.path.splitext(os.path.basename(usd_file_path))[0]
+
+            copy_and_overwrite(os.path.dirname(self.usd_file_path), usd_file_dir)
+
+            tmp_usd_file_path = os.path.join(usd_file_dir, os.path.basename(self.usd_file_path))
+            os.rename(tmp_usd_file_path, usd_file_path)
+
+            tmp_mesh_dir = os.path.join(usd_file_dir, TMP)
+            new_mesh_dir = os.path.join(usd_file_dir, usd_file_name)
+            if os.path.exists(new_mesh_dir):
+                shutil.rmtree(new_mesh_dir)
+            os.rename(tmp_mesh_dir, new_mesh_dir)
+
+            with open(usd_file_path, 'r', encoding='utf-8') as file:
+                file_contents = file.read()
+            
+            tmp_path = "prepend references = @./" + TMP + "/usd/"
+            new_path = "prepend references = @./" + usd_file_name + "/usd/"
+            file_contents = file_contents.replace(tmp_path, new_path)
+            
+            with open(usd_file_path, 'w', encoding='utf-8') as file:
+                file.write(file_contents)
 
     def clean_up(self) -> None:
         print(f"Remove {os.path.dirname(self.usd_file_path)}")
@@ -197,3 +224,4 @@ class UsdWorld:
         body_dict.clear()
         geom_dict.clear()
         mesh_dict.clear()
+        xform_cache.Clear()

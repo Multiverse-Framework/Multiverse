@@ -23,3 +23,21 @@ if(result EQUAL 0)
 else()
     message(WARNING "Failed to create symbolic link with error code: ${result}")
 endif()
+
+enable_testing()
+
+add_test(
+  NAME mjcf_importer1
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/mjcf/apartment.xml
+          --output=${TEST_DIR}/multiverse_parser/output/mjcf_importer/usd/with_physics/apartment.usda
+          --physics
+)
+
+add_test(
+  NAME mjcf_importer2
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/mjcf/apartment.xml
+          --output=${TEST_DIR}/multiverse_parser/output/mjcf_importer/usd/no_physics/apartment.usda
+          --no-physics
+)
