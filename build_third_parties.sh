@@ -47,7 +47,7 @@ fi
 
 (cd $BLENDER_EXT_DIR/blender && make BUILD_DIR=../../../build/blender)
 (cd $BLENDER_BUILD_DIR/bin/3.6/python/bin;
-./python3.10 -m pip install --upgrade pip;
+./python3.10 -m pip install --upgrade pip build;
 ./python3.10 -m pip install mujoco numpy-stl;
 ./python3.10 -m pip install bpy)
 ln -sf $BLENDER_BUILD_DIR/bin/blender $BIN_DIR

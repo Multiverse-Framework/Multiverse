@@ -1,1 +1,3 @@
 add_subdirectory(multiverse_knowledge)
+
+add_subdirectory(multiverse_parser)

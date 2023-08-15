@@ -5,7 +5,7 @@ set(ENV{PYTHONPATH} $ENV{PYTHONPATH}:$ENV{USD_BUILD_DIR}/lib/python)
 
 # Execute the shell file during CMake configuration
 execute_process(
-  COMMAND sh install.sh
+  COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/install.sh
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   RESULT_VARIABLE INSTALL_RESULT
 )
