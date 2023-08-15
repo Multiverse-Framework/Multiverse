@@ -6,7 +6,7 @@ apt-get update
 # Setup your sources.list
 sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt-get/sources.list.d/ros-latest.list'
 apt-get install curl # if you haven't already installed curl
-curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-get-key add -
+curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
 # Update package lists
 apt-get update
@@ -28,6 +28,7 @@ apt-get install -y python3-catkin-tools
 # Install rosdep
 apt-get install -y python3-rosdep
 rosdep init
+rosdep fix-permissions
 
 # Install glfw3
 apt-get install -y libglfw3
