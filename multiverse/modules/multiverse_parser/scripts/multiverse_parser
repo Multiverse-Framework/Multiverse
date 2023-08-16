@@ -3,7 +3,7 @@
 from __future__ import print_function
 import argparse
 import os
-from multiverse_parser import import_from_mjcf
+from multiverse_parser import import_from_urdf, import_from_mjcf
 
 def main():
     parser = argparse.ArgumentParser(description="Multiverse parser")
@@ -19,18 +19,20 @@ def main():
     args = parser.parse_args()
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
-    if in_extension == '.xml':
+    if in_extension == '.urdf':
+        usd_world = import_from_urdf(args.input, args.physics)
+    elif in_extension == '.xml':
         usd_world = import_from_mjcf(args.input, args.physics)
     else:
         print(f"Input extension [{in_extension}] not supported.")
+        return
 
     if out_extension == '.usd' or out_extension == '.usda' or out_extension == '.usdc':
         usd_world.export(args.output)
     else:
         print(f"Input extension [{in_extension}] not supported.")
-
-    if usd_world is not None:
-        usd_world.clean_up()
+        
+    usd_world.clean_up()
 
 if __name__=="__main__":
     main()

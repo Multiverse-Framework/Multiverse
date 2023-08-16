@@ -21,7 +21,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
 
     world_builder = WorldBuilder()
 
-    mesh_builders = set()
+    mesh_names = set()
 
     for body_id in range(mj_model.nbody):
         mj_body = mj_model.body(body_id)
@@ -79,10 +79,11 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                     mesh_id = mj_geom.dataid[0]
                     mesh_name = modify_name(mj_model.mesh(mesh_id).name, "mesh_", mesh_id)
 
-                    mesh_builder = geom_builder.add_mesh(mesh_name)
-                    if mesh_builder not in mesh_builders:
-                        mesh_builders.add(mesh_builder)
-                        
+                    mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, collision=True)
+                    
+                    if mesh_name not in mesh_names:
+                        mesh_names.add(mesh_name)
+
                         vert_adr = mj_model.mesh_vertadr[mesh_id]
                         vert_num = mj_model.mesh_vertnum[mesh_id]
 
@@ -123,6 +124,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                             face_vertex_indices[3 * i + 1] = mj_model.mesh_face[face_id][1]
                             face_vertex_indices[3 * i + 2] = mj_model.mesh_face[face_id][2]
                         mesh_builder.build(points, normals, face_vertex_counts, face_vertex_indices)
+                    
                         mesh_builder.save()
 
             geom_builder.set_attribute(prefix="primvars", displayColor=mj_geom.rgba[:3])
@@ -132,7 +134,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
 
         if with_physics:
             body_builder.enable_collision()
-            body_builder.set_inertial(mj_body.mass[0], tuple(mj_body.ipos), tuple(mj_body.inertia))
+            body_builder.set_inertial(mass=mj_body.mass[0], com=tuple(mj_body.ipos), diagonal_inertia=tuple(mj_body.inertia))
 
             for i in range(mj_body.jntnum[0]):
                 if mj_model.joint(mj_body.jntadr[i]).type == mujoco.mjtJoint.mjJNT_FREE:
@@ -150,7 +152,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                 else:
                     print(f"Joint {joint_name} type {str(mj_joint.type)} not supported.")
                     continue
-
+                joint_axis = "Z"
                 if numpy.array_equal(mj_joint.axis, [1, 0, 0]):
                     joint_axis = "X"
                 elif numpy.array_equal(mj_joint.axis, [0, 1, 0]):
@@ -168,15 +170,15 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                     continue
 
                 joint_builder = body_builder.add_joint(
-                    joint_name,
-                    body_name,
-                    parent_body_name,
-                    joint_type,
-                    tuple(mj_joint.pos),
-                    joint_axis,
+                    joint_name=joint_name,
+                    parent_name=parent_body_name,
+                    child_name=body_name,
+                    joint_type=joint_type,
+                    joint_pos=tuple(mj_joint.pos),
+                    joint_axis=joint_axis,
                 )
 
                 if mj_joint.type == mujoco.mjtJoint.mjJNT_HINGE or mj_joint.type == mujoco.mjtJoint.mjJNT_SLIDE:
-                    joint_builder.set_limit(mj_joint.range[0], mj_joint.range[1])
+                    joint_builder.set_limit(lower=mj_joint.range[0], upper=mj_joint.range[1])
 
     return world_builder

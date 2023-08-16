@@ -41,9 +41,10 @@ fi
 
 (cd $BLENDER_EXT_DIR/blender && make BUILD_DIR=../../../build/blender)
 (cd $BLENDER_BUILD_DIR/bin/3.6/python/bin;
-./python3.10 -m pip install --upgrade pip build;
-./python3.10 -m pip install mujoco numpy-stl;
-./python3.10 -m pip install bpy)
+./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
+./python3.10 -m pip install mujoco numpy-stl --no-warn-script-location; # For MuJoCo
+./python3.10 -m pip install bpy --no-warn-script-location; # For blender
+./python3.10 -m pip install rospkg pyyaml --no-warn-script-location) # For URDF
 ln -sf $BLENDER_BUILD_DIR/bin/blender $BIN_DIR
 ln -sf $BLENDER_BUILD_DIR/bin/3.6/python/bin/python3.10 $BIN_DIR
 

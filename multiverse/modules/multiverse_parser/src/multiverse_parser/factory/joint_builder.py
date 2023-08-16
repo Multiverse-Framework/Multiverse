@@ -23,7 +23,7 @@ class JointBuilder:
         child_body,
         joint_type: JointType,
         pos: tuple = (0.0, 0.0, 0.0),
-        axis: str = "Z",
+        axis: tuple = "Z",
     ) -> None:
         joint_dict[name] = self
         self.stage = stage

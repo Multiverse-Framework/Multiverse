@@ -4,14 +4,10 @@ import importlib.util
 import os, shutil
 import random, string
 from pxr import Usd, UsdGeom
-
+from multiverse_parser.factory import TMP, TMP_DIR
 from .body_builder import BodyBuilder, body_dict
 
 multiverse_parser_path = os.path.dirname(importlib.util.find_spec("multiverse_parser").origin)
-
-
-TMP = "tmp"
-TMP_DIR = "tmp/usd"
 
 
 def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
@@ -70,17 +66,19 @@ class WorldBuilder:
             new_mesh_dir = os.path.join(usd_file_dir, usd_file_name)
             if os.path.exists(new_mesh_dir):
                 shutil.rmtree(new_mesh_dir)
-            os.rename(tmp_mesh_dir, new_mesh_dir)
 
-            with open(usd_file_path, "r", encoding="utf-8") as file:
-                file_contents = file.read()
+            if os.path.exists(tmp_mesh_dir):
+                os.rename(tmp_mesh_dir, new_mesh_dir)
 
-            tmp_path = "prepend references = @./" + TMP + "/usd/"
-            new_path = "prepend references = @./" + usd_file_name + "/usd/"
-            file_contents = file_contents.replace(tmp_path, new_path)
+                with open(usd_file_path, "r", encoding="utf-8") as file:
+                    file_contents = file.read()
 
-            with open(usd_file_path, "w", encoding="utf-8") as file:
-                file.write(file_contents)
+                tmp_path = "prepend references = @./" + TMP_DIR
+                new_path = "prepend references = @./" + usd_file_name + "/usd/"
+                file_contents = file_contents.replace(tmp_path, new_path)
+
+                with open(usd_file_path, "w", encoding="utf-8") as file:
+                    file.write(file_contents)
 
     def clean_up(self) -> None:
         print(f"Remove {os.path.dirname(self.usd_file_path)}")

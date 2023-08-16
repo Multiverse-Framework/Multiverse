@@ -86,6 +86,3 @@ pip3 install jinja2
 
 # Install pybind11
 pip3 install pybind11
-
-# Install mujoco
-pip3 install mujoco

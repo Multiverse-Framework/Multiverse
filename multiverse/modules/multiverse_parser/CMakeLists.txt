@@ -30,7 +30,7 @@ add_test(
   NAME mjcf_importer1
   COMMAND multiverse_parser
           --input=${TEST_DIR}/multiverse_parser/input/apartment/mjcf/apartment.xml
-          --output=${TEST_DIR}/multiverse_parser/output/mjcf_importer/usd/with_physics/apartment.usda
+          --output=${TEST_DIR}/multiverse_parser/output/from_mjcf/to_usd/with_physics/apartment.usda
           --physics
 )
 
@@ -38,6 +38,22 @@ add_test(
   NAME mjcf_importer2
   COMMAND multiverse_parser
           --input=${TEST_DIR}/multiverse_parser/input/apartment/mjcf/apartment.xml
-          --output=${TEST_DIR}/multiverse_parser/output/mjcf_importer/usd/no_physics/apartment.usda
+          --output=${TEST_DIR}/multiverse_parser/output/from_mjcf/to_usd/no_physics/apartment.usda
+          --no-physics
+)
+
+add_test(
+  NAME urdf_importer1
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/urdf/apartment.urdf
+          --output=${TEST_DIR}/multiverse_parser/output/from_urdf/to_usd/with_physics/apartment.usda
+          --physics
+)
+
+add_test(
+  NAME urdf_importer2
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/urdf/apartment.urdf
+          --output=${TEST_DIR}/multiverse_parser/output/from_urdf/to_usd/no_physics/apartment.usda
           --no-physics
 )

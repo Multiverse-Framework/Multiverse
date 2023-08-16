@@ -4,7 +4,8 @@ import os
 from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf
 from enum import Enum
 
-from .mesh_builder import MeshBuilder, mesh_dict
+from multiverse_parser.factory import TMP_DIR
+from .mesh_builder import MeshBuilder, VisualMeshBuilder, CollisionMeshBuilder, mesh_dict
 
 geom_dict = {}
 
@@ -84,15 +85,17 @@ class GeomBuilder:
         elif self.type == GeomType.MESH:
             self.prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
 
-    def add_mesh(self, mesh_name: str) -> MeshBuilder:
-        from .world_builder import TMP_DIR
-
+    def add_mesh(self, mesh_name: str, collision: bool = True) -> MeshBuilder:
         mesh_dir = os.path.join(TMP_DIR, mesh_name + ".usda")
         mesh_ref = "./" + mesh_dir
         if mesh_name in mesh_dict:
             mesh = mesh_dict[mesh_name]
         else:
-            mesh = MeshBuilder(mesh_name, os.path.join(self.usd_file_dir, TMP_DIR, mesh_name + ".usda"))
+            if not collision:
+                mesh = VisualMeshBuilder(mesh_name, os.path.join(self.usd_file_dir, TMP_DIR, mesh_name + ".usda"))
+            else:
+                mesh = CollisionMeshBuilder(mesh_name, os.path.join(self.usd_file_dir, TMP_DIR, mesh_name + ".usda"))
+
         self.prim.GetPrim().GetReferences().AddReference(mesh_ref)
         return mesh
 
