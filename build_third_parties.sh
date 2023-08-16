@@ -14,12 +14,6 @@ if [ ! -d "$BIN_DIR" ]; then
     mkdir -p $BIN_DIR
 fi
 
-LIB_DIR=$MULTIVERSE_DIR/lib
-if [ ! -d "$LIB_DIR" ]; then
-    # Create the folder if it doesn't exist
-    mkdir -p $LIB_DIR
-fi
-
 EXT_DIR=$MULTIVERSE_DIR/external
 
 BUILD_DIR=$MULTIVERSE_DIR/build
@@ -84,19 +78,18 @@ fi
 cmake -S $MUJOCO_EXT_DIR -B $MUJOCO_BUILD_DIR
 (cd $MUJOCO_BUILD_DIR && make)
 ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
-ln -sf $MUJOCO_BUILD_DIR/lib/libmujoco.so $LIB_DIR
 
 RELOAD=false
 
-PATH_TO_ADD="export PATH=\$PATH:$BIN_DIR"
-if ! grep -Fxq "$PATH_TO_ADD" ~/.bashrc; then
+PATH_TO_ADD="export PATH=$PATH:$BIN_DIR"
+if ! grep -Fxq ":$BIN_DIR" ~/.bashrc; then
     echo "$PATH_TO_ADD" >> ~/.bashrc
     echo "Add $PATH_TO_ADD to ~/.bashrc"
     RELOAD=true
 fi
 
-PYTHONPATH_TO_ADD="export PYTHONPATH=\$PYTHONPATH:$USD_BUILD_DIR/lib/python"
-if ! grep -Fxq "$PYTHONPATH_TO_ADD" ~/.bashrc; then
+PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH:$USD_BUILD_DIR/lib/python"
+if ! grep -Fxq ":$USD_BUILD_DIR/lib/python" ~/.bashrc; then
     echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
     echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
     RELOAD=true
