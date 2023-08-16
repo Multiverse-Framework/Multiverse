@@ -21,7 +21,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
 
     world_builder = WorldBuilder()
 
-    usd_meshes = {}
+    mesh_builders = set()
 
     for body_id in range(mj_model.nbody):
         mj_body = mj_model.body(body_id)
@@ -80,7 +80,9 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                     mesh_name = modify_name(mj_model.mesh(mesh_id).name, "mesh_", mesh_id)
 
                     mesh_builder = geom_builder.add_mesh(mesh_name)
-                    if mesh_builder not in usd_meshes:
+                    if mesh_builder not in mesh_builders:
+                        mesh_builders.add(mesh_builder)
+                        
                         vert_adr = mj_model.mesh_vertadr[mesh_id]
                         vert_num = mj_model.mesh_vertnum[mesh_id]
 
