@@ -35,10 +35,10 @@ apt-get install -y libglfw3
 apt-get install -y libglfw3-dev
 
 # Install jsoncpp
-apt-get install libjsoncpp-dev
+apt-get install -y libjsoncpp-dev
 
 # Install zmqpp
-apt-get install libzmqpp-dev
+apt-get install -y libzmqpp-dev
 
 # Install doxygen
 apt-get install -y doxygen
