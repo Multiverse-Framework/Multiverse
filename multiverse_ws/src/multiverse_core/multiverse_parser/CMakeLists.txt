@@ -34,11 +34,13 @@ catkin_package(
 # ##########
 # # Build ##
 # ##########
+set(MULTIVERSE_DIR ${CATKIN_DEVEL_PREFIX}/../../../../multiverse)
 
 # # Specify additional locations of header files
 # # Your package locations should be listed before other locations
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${MULTIVERSE_DIR}/external/mujoco/include
 )
 
 set(URDF_TO_MJCF_NODE urdf_to_mjcf_node)
@@ -46,8 +48,8 @@ add_executable(${URDF_TO_MJCF_NODE} urdf_to_mjcf/src/urdf_to_mjcf_node.cpp)
 target_link_libraries(${URDF_TO_MJCF_NODE}
   ${catkin_LIBRARIES}
   $ENV{ROS_ROOT}/../../lib/liburdf.so
-  mujoco
   tinyxml2
+  ${MULTIVERSE_DIR}/build/mujoco/lib/libmujoco.so
 )
 
 # ############
