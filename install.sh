@@ -50,7 +50,7 @@ apt-get install -y libxt-dev
 
 # Install and link clang-11 for creating shared library
 apt-get install -y clang-11
-apt-get install -y libc++-11-dev libc++abi-11-dev
+apt-get install -y libc++-11-dev libstdc++-11-dev libc++abi-11-dev
 update-alternatives --remove-all clang++
 update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
 
