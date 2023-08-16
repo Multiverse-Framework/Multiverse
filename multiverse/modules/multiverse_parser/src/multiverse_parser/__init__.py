@@ -1,2 +1,4 @@
-from multiverse_parser.world_builder import WorldBuilder, GeomType, JointType
-from multiverse_parser.importer.mjcf_importer import import_from_mjcf
+from multiverse_parser.factory.world_builder import WorldBuilder
+from multiverse_parser.factory.geom_builder import GeomType
+from multiverse_parser.factory.joint_builder import JointType
+from multiverse_parser.importer import import_from_mjcf

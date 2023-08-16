@@ -11,9 +11,9 @@ material_dict = {}
 
 rospack = rospkg.RosPack()
 
+
 def import_from_urdf(urdf_file_path: str, with_physics: bool = True) -> WorldBuilder:
-    for urdf_material in ET.parse(urdf_file_path).getroot().findall('material'):
+    for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
         material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
 
     in_robot = urdf.URDF.from_xml_file(urdf_file_path)
-
