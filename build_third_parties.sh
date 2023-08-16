@@ -82,15 +82,15 @@ ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
 
 RELOAD=false
 
-PATH_TO_ADD="export PATH=$PATH:$BIN_DIR"
-if ! grep -Fxq ":$BIN_DIR" ~/.bashrc; then
+if ! echo "$PATH" | grep -q "$BIN_DIR"; then
+    PATH_TO_ADD="export PATH=$PATH:$BIN_DIR"
     echo "$PATH_TO_ADD" >> ~/.bashrc
     echo "Add $PATH_TO_ADD to ~/.bashrc"
     RELOAD=true
 fi
 
-PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH:$USD_BUILD_DIR/lib/python"
-if ! grep -Fxq ":$USD_BUILD_DIR/lib/python" ~/.bashrc; then
+if ! echo "$PYTHONPATH" | grep -q "$USD_BUILD_DIR/lib/python"; then
+    PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH:$USD_BUILD_DIR/lib/python"
     echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
     echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
     RELOAD=true

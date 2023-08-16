@@ -15,7 +15,7 @@ fi
 RELOAD=false
 
 PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH:$LIB_DIR/python"
-if ! grep -Fxq ":$LIB_DIR/python" ~/.bashrc; then
+if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/python"; then
     echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
     echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
     RELOAD=true
