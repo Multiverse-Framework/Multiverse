@@ -102,11 +102,11 @@ def build_geom(
 
             clear_data()
             if file_extension == ".dae":
-                import_dae(mesh_path_abs)
+                import_dae(in_dae=mesh_path_abs)
             elif file_extension == ".obj":
-                import_obj(mesh_path_abs)
+                import_obj(in_obj=mesh_path_abs)
             elif file_extension == ".stl":
-                import_stl(mesh_path_abs)
+                import_stl(in_stl=mesh_path_abs)
             else:
                 print(f"File extension {file_extension} not implemented")
                 return
@@ -126,24 +126,25 @@ def build_geom(
         mesh_builder.save()
 
     if not visual:
-        geom_builder.set_attribute(prefix="primvars", displayColor=[(1, 0, 0)])
-        geom_builder.set_attribute(prefix="primvars", displayOpacity=[0.5])
+        from multiverse_parser.factory import COLLISION_MESH_COLOR, COLLISION_MESH_OPACITY
+
+        geom_builder.set_attribute(prefix="primvars", displayColor=COLLISION_MESH_COLOR)
+        geom_builder.set_attribute(prefix="primvars", displayOpacity=COLLISION_MESH_OPACITY)
 
     geom_builder.compute_extent()
 
 
-def import_from_urdf(urdf_file_path: str, with_physics: bool = True) -> WorldBuilder:
+def import_from_urdf(urdf_file_path: str, with_physics: bool = True, visual: bool = True, collision: bool = True) -> WorldBuilder:
     for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
         material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
 
-    robot: urdf.Robot = urdf.URDF.from_xml_file(urdf_file_path)
+    robot = urdf.URDF.from_xml_file(urdf_file_path)
 
     world_builder = WorldBuilder()
 
     root_link_name = robot.get_root().replace(" ", "").replace("-", "_")
 
     world_builder.add_body(body_name=root_link_name)
-    urdf_joint: urdf.Joint
     for urdf_joint in robot.joints:
         parent_link_name = urdf_joint.parent.replace(" ", "").replace("-", "_")
         child_link_name = urdf_joint.child.replace(" ", "").replace("-", "_")
@@ -165,27 +166,29 @@ def import_from_urdf(urdf_file_path: str, with_physics: bool = True) -> WorldBui
         body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to=parent_link_name)
 
         urdf_link = robot.link_map[child_link_name]
-        for visual in urdf_link.visuals:
-            geom_name = child_link_name + "_visual_"
-            build_geom(
-                os.path.dirname(os.path.dirname(urdf_file_path)),
-                body_builder,
-                geom_name,
-                visual.geometry,
-                visual.origin,
-                True,
-            )
+        if visual:
+            for urdf_visual in urdf_link.visuals:
+                geom_name = child_link_name + "_visual_"
+                build_geom(
+                    source_file_dir=os.path.dirname(os.path.dirname(urdf_file_path)),
+                    body_builder=body_builder,
+                    geom_name=geom_name,
+                    geometry=urdf_visual.geometry,
+                    origin=urdf_visual.origin,
+                    visual=True,
+                )
 
-        for collision in urdf_link.collisions:
-            geom_name = child_link_name + "_collision_"
-            build_geom(
-                os.path.dirname(os.path.dirname(urdf_file_path)),
-                body_builder,
-                geom_name,
-                collision.geometry,
-                collision.origin,
-                False,
-            )
+        if collision:
+            for urdf_collision in urdf_link.collisions:
+                geom_name = child_link_name + "_collision_"
+                build_geom(
+                    source_file_dir=os.path.dirname(os.path.dirname(urdf_file_path)),
+                    body_builder=body_builder,
+                    geom_name=geom_name,
+                    geometry=urdf_collision.geometry,
+                    origin=urdf_collision.origin,
+                    visual=False,
+                )
 
         if with_physics:
             body_builder.enable_collision()
@@ -204,7 +207,7 @@ def import_from_urdf(urdf_file_path: str, with_physics: bool = True) -> WorldBui
                 print(f"Joint {joint_name} type {urdf_joint.type} not supported.")
                 continue
 
-            if hasattr(urdf_joint, "axis") and urdf_joint.axis is not None:
+            if urdf_joint.axis is not None:
                 joint_axis = list(urdf_joint.axis)
             else:
                 joint_axis = [0, 0, 1]

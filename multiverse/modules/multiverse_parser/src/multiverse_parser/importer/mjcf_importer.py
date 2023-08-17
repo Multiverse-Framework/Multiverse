@@ -12,7 +12,7 @@ def modify_name(in_name: str, prefix: str, name_id: str) -> str:
     return out_name
 
 
-def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBuilder:
+def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True, visual: bool = True, collision: bool = True) -> WorldBuilder:
     try:
         mj_model = mujoco.MjModel.from_xml_path(mjcf_file_path)
     except ValueError as error:

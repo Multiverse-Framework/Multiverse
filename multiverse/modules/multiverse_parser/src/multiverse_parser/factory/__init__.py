@@ -12,6 +12,9 @@ TMP_USD_FILE_DIR = os.path.join(
 TMP_USD_FILE_PATH = os.path.join(TMP_USD_FILE_DIR, TMP + ".usda")
 TMP_USD_MESH_PATH = os.path.join(TMP_USD_FILE_DIR, TMP_DIR)
 
+COLLISION_MESH_COLOR = [(1.0, 0.0, 0.0)]
+COLLISION_MESH_OPACITY = [0.5]
+
 
 def clear_data() -> None:
     from bpy import data

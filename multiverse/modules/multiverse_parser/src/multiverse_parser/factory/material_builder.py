@@ -7,8 +7,8 @@ material_dict = {}
 
 
 class MaterialBuilder:
-    def __init__(self, name: str, usd_file_path: str) -> None:
-        material_dict[name] = self
+    def __init__(self, material_name: str, usd_file_path: str) -> None:
+        material_dict[material_name] = self
         material_root_paths = [Sdf.Path("/").AppendPath("Materials"), Sdf.Path("/").AppendPath("_materials")]
 
         self.root_prim = None
@@ -33,7 +33,7 @@ class MaterialBuilder:
         if len(self.material_prims) == 0:
             if os.path.exists(usd_file_path):
                 print(f"Material prim not found in {usd_file_path}, create one.")
-            self.material_prims = [UsdShade.Material.Define(self.stage, self.root_prim.GetPath().AppendPath(name))]
+            self.material_prims = [UsdShade.Material.Define(self.stage, self.root_prim.GetPath().AppendPath(material_name))]
 
     def save(self):
         self.stage.Save()

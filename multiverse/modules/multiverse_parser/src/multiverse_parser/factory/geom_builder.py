@@ -24,10 +24,10 @@ class GeomType(Enum):
 
 
 class GeomBuilder:
-    def __init__(self, stage: Usd.Stage, name: str, body_path: Sdf.Path, geom_type: GeomType) -> None:
-        geom_dict[name] = self
+    def __init__(self, stage: Usd.Stage, geom_name: str, body_path: Sdf.Path, geom_type: GeomType) -> None:
+        geom_dict[geom_name] = self
         self.stage = stage
-        self.name = name
+        self.name = geom_name
         self.path = body_path.AppendPath(self.name)
         self.type = geom_type
         self.set_prim()
@@ -114,7 +114,7 @@ class GeomBuilder:
         if visual:
             if material_name is None:
                 material_name = "M_" + mesh_name.replace("SM_", "", 1)
-            material = mesh.add_material(material_name)
+            material = mesh.add_material(material_name=material_name)
 
             self.geom_prim = self.stage.OverridePrim(self.path.AppendPath(mesh.mesh_prim.GetPrim().GetName()))
 

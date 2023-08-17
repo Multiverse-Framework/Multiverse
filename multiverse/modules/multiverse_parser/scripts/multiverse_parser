@@ -30,14 +30,26 @@ def main():
         help="Whether to include physics properties or not",
     )
     parser.set_defaults(physics=True)
+    parser.add_argument(
+        "--visual",
+        action=argparse.BooleanOptionalAction,
+        help="Whether to include visual meshes or not",
+    )
+    parser.set_defaults(visual=True)
+    parser.add_argument(
+        "--collision",
+        action=argparse.BooleanOptionalAction,
+        help="Whether to include collision meshes or not",
+    )
+    parser.set_defaults(collision=True)
 
     args = parser.parse_args()
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
     if in_extension == ".urdf":
-        usd_world = import_from_urdf(args.input, args.physics)
+        usd_world = import_from_urdf(urdf_file_path=args.input, with_physics=args.physics, visual=args.visual, collision=args.collision)
     elif in_extension == ".xml":
-        usd_world = import_from_mjcf(args.input, args.physics)
+        usd_world = import_from_mjcf(mjcf_file_path=args.input, with_physics=args.physics, visual=args.visual, collision=args.collision)
     else:
         print(f"Input extension [{in_extension}] not supported.")
         return
