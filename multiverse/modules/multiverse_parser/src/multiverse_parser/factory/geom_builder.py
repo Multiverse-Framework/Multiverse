@@ -1,11 +1,16 @@
 #!/usr/bin/env python3.10
 
 import os
-from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf
+from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf, UsdShade
 from enum import Enum
 
 from multiverse_parser.factory import TMP_DIR
-from .mesh_builder import MeshBuilder, VisualMeshBuilder, CollisionMeshBuilder, mesh_dict
+from .mesh_builder import (
+    MeshBuilder,
+    VisualMeshBuilder,
+    CollisionMeshBuilder,
+    mesh_dict,
+)
 
 geom_dict = {}
 
@@ -22,7 +27,8 @@ class GeomBuilder:
     def __init__(self, stage: Usd.Stage, name: str, body_path: Sdf.Path, geom_type: GeomType) -> None:
         geom_dict[name] = self
         self.stage = stage
-        self.path = body_path.AppendPath(name)
+        self.name = name
+        self.path = body_path.AppendPath(self.name)
         self.type = geom_type
         self.set_prim()
         self.pos = Gf.Vec3d(0.0, 0.0, 0.0)
@@ -44,7 +50,7 @@ class GeomBuilder:
         elif self.type == GeomType.CYLINDER:
             self.geom_prim = UsdGeom.Cylinder.Define(self.stage, self.path.AppendPath("Cylinder"))
         elif self.type == GeomType.MESH:
-            self.geom_prim = UsdGeom.Mesh.Define(self.stage, self.path.AppendPath("Mesh"))
+            self.geom_prim = None
 
     def set_transform(
         self,
@@ -82,12 +88,14 @@ class GeomBuilder:
             radius = self.geom_prim.GetRadiusAttr().Get()
             height = self.geom_prim.GetHeightAttr().Get()
             self.geom_prim.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
-        elif self.type == GeomType.MESH:
-            self.geom_prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
-    
-    def add_mesh(self, mesh_name: str, visual: bool = True) -> MeshBuilder:
+
+    def add_mesh(self, mesh_name: str = None, visual: bool = True, material_name: str = None) -> MeshBuilder:
+        if mesh_name is None:
+            mesh_name = "SM_" + self.name
+
         mesh_path = os.path.join(TMP_DIR, "visual" if visual else "collision", mesh_name + ".usda")
         mesh_ref = "./" + mesh_path
+
         if mesh_name in mesh_dict:
             mesh = mesh_dict[mesh_name]
         else:
@@ -96,12 +104,50 @@ class GeomBuilder:
             usd_file_path = os.path.join(TMP_USD_FILE_DIR, mesh_path)
             if visual:
                 mesh = VisualMeshBuilder(mesh_name, usd_file_path)
-                material = mesh.add_material("M_" + mesh_name.replace("SM_", "", 1))
-
-                self.root_prim.GetPrim().GetReferences().AddReference(mesh_ref, mesh.root_prim)
-                self.stage.GetPseudoRoot().GetReferences().AddReference(mesh_ref, material.root_prim)
             else:
                 mesh = CollisionMeshBuilder(mesh_name, usd_file_path)
+
+        self.geom_prim = self.stage.OverridePrim(self.path.AppendPath(mesh.mesh_prim.GetPrim().GetName()))
+
+        self.root_prim.GetPrim().GetReferences().AddReference(mesh_ref, mesh.root_prim.GetPath())
+
+        if visual:
+            if material_name is None:
+                material_name = "M_" + mesh_name.replace("SM_", "", 1)
+            material = mesh.add_material(material_name)
+
+            self.geom_prim = self.stage.OverridePrim(self.path.AppendPath(mesh.mesh_prim.GetPrim().GetName()))
+
+            paths = mesh.root_prim.GetPrim().FindAllRelationshipTargetPaths()
+            if len(paths) > 0 and mesh.mesh_prim.GetPrim().HasAPI(UsdShade.MaterialBindingAPI):
+                material_binding_API = UsdShade.MaterialBindingAPI.Apply(self.geom_prim.GetPrim())
+                for path in paths:
+                    if UsdShade.Material(mesh.stage.GetPrimAtPath(path)):
+                        material_binding_API.Bind(UsdShade.Material(mesh.stage.GetPrimAtPath(path)))
+
+            prims_with_material = [
+                prim
+                for prim in mesh.stage.TraverseAll()
+                if prim != self.geom_prim.GetPrim() and len(prim.FindAllRelationshipTargetPaths()) > 0 and prim.HasAPI(UsdShade.MaterialBindingAPI)
+            ]
+            for prim_with_material in prims_with_material:
+                parent_prim = prim_with_material
+                prim_path = prim_with_material.GetName()
+                while not self.stage.GetPrimAtPath(self.path.AppendPath(prim_path)).IsValid() and parent_prim.IsValid():
+                    parent_prim = parent_prim.GetParent()
+                    prim_path = parent_prim.GetName() + "/" + prim_path
+
+                prim = self.stage.OverridePrim(self.path.AppendPath(prim_path))
+                material_binding_API = UsdShade.MaterialBindingAPI.Apply(prim)
+                for path in prim_with_material.FindAllRelationshipTargetPaths():
+                    if UsdShade.Material(mesh.stage.GetPrimAtPath(path)):
+                        material_binding_API.Bind(UsdShade.Material(mesh.stage.GetPrimAtPath(path)))
+
+            material_root_prim = self.stage.GetPrimAtPath(material.root_prim.GetPath())
+            if not material_root_prim.IsValid():
+                material_root_prim = self.stage.DefinePrim(material.root_prim.GetPath())
+
+            material_root_prim.GetReferences().AddReference(mesh_ref, material.root_prim.GetPath())
 
         return mesh
 

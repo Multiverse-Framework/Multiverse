@@ -12,6 +12,7 @@ TMP_USD_FILE_DIR = os.path.join(
 TMP_USD_FILE_PATH = os.path.join(TMP_USD_FILE_DIR, TMP + ".usda")
 TMP_USD_MESH_PATH = os.path.join(TMP_USD_FILE_DIR, TMP_DIR)
 
+
 def clear_data() -> None:
     from bpy import data
 

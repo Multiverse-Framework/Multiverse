@@ -3,7 +3,7 @@
 import os
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
-from .geom_builder import GeomBuilder, GeomType, geom_dict
+from .geom_builder import GeomBuilder, GeomType
 from .joint_builder import JointBuilder, JointType, joint_dict
 
 body_dict = {}
@@ -62,12 +62,8 @@ class BodyBuilder:
         self.prim.AddTransformOp().Set(mat)
 
     def add_geom(self, geom_name: str, geom_type: GeomType) -> GeomBuilder:
-        if geom_name in geom_dict:
-            print(f"Geom {geom_name} already exists.")
-            geom = geom_dict[geom_name]
-        else:
-            geom = GeomBuilder(self.stage, geom_name, self.path, geom_type)
-            self.geoms.add(geom)
+        geom = GeomBuilder(self.stage, geom_name, self.path, geom_type)
+        self.geoms.add(geom)
         return geom
 
     def add_joint(

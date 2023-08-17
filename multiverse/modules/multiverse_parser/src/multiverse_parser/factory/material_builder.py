@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.10
 
 import os
-from pxr import Usd, UsdSchade, Gf, UsdPhysics, Sdf
+from pxr import Usd, UsdShade, Sdf
 
 material_dict = {}
 
@@ -12,7 +12,7 @@ class MaterialBuilder:
         material_root_paths = [Sdf.Path("/").AppendPath("Materials"), Sdf.Path("/").AppendPath("_materials")]
 
         self.root_prim = None
-        self.material_prim = None
+        self.material_prims = []
         if os.path.exists(usd_file_path):
             self.stage = Usd.Stage.Open(usd_file_path)
         else:
@@ -27,14 +27,13 @@ class MaterialBuilder:
             self.root_prim = self.stage.DefinePrim(material_root_paths[0])
 
         for prim in self.root_prim.GetChildren():
-            if UsdSchade.Material(prim):
-                self.material_prim = UsdSchade.Material(prim)
-                break
+            if UsdShade.Material(prim):
+                self.material_prims.append(UsdShade.Material(prim))
 
-        if self.material_prim is None:
+        if len(self.material_prims) == 0:
             if os.path.exists(usd_file_path):
                 print(f"Material prim not found in {usd_file_path}, create one.")
-            self.material_prim = UsdSchade.Material.Define(self.stage, self.root_prim.GetPath().AppendPath("M_" + name))
+            self.material_prims = [UsdShade.Material.Define(self.stage, self.root_prim.GetPath().AppendPath(name))]
 
     def save(self):
         self.stage.Save()

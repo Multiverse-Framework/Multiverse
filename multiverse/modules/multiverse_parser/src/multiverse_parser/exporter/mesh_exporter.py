@@ -14,6 +14,5 @@ def export_usd(out_usd: str) -> None:
     join_meshes()
     selected_object = bpy.context.object
     selected_object.name = os.path.splitext(os.path.basename(out_usd))[0]
-    bpy.ops.wm.usd_export(
-        filepath=out_usd, selected_objects_only=True, overwrite_textures=True
-    )
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    bpy.ops.wm.usd_export(filepath=out_usd, selected_objects_only=True, overwrite_textures=True)

@@ -20,7 +20,12 @@ class MeshBuilder:
         else:
             self.stage = Usd.Stage.CreateNew(usd_file_path)
 
-        if self.stage.GetDefaultPrim() and self.stage.GetDefaultPrim().GetPath() == root_path and UsdGeom.Xform(self.stage.GetDefaultPrim()) and len(self.stage.GetPseudoRoot().GetChildren()) == 1:
+        if (
+            self.stage.GetDefaultPrim()
+            and self.stage.GetDefaultPrim().GetPath() == root_path
+            and UsdGeom.Xform(self.stage.GetDefaultPrim())
+            and len(self.stage.GetPseudoRoot().GetChildren()) == 1
+        ):
             self.root_prim = UsdGeom.Xform(self.stage.GetDefaultPrim())
         else:
             self.root_prim = UsdGeom.Xform.Define(self.stage, root_path)
@@ -34,7 +39,7 @@ class MeshBuilder:
         if self.mesh_prim is None:
             if os.path.exists(usd_file_path):
                 print(f"Mesh prim not found in {usd_file_path}, create one.")
-            self.mesh_prim = UsdGeom.Mesh.Define(self.stage, root_path.AppendPath("SM_" + name))
+            self.mesh_prim = UsdGeom.Mesh.Define(self.stage, root_path.AppendPath(name))
 
         UsdGeom.SetStageUpAxis(self.stage, UsdGeom.Tokens.z)
         UsdGeom.SetStageMetersPerUnit(self.stage, UsdGeom.LinearUnits.meters)
@@ -53,7 +58,7 @@ class VisualMeshBuilder(MeshBuilder):
             material = material_dict[material_name]
         else:
             material = MaterialBuilder(material_name, self.usd_file_path)
-        
+
         return material
 
 
