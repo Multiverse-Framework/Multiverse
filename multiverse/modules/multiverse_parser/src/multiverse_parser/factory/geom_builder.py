@@ -30,20 +30,21 @@ class GeomBuilder:
         self.scale = Gf.Vec3d(1.0, 1.0, 1.0)
 
     def set_prim(self) -> None:
+        self.root_prim = UsdGeom.Xform.Define(self.stage, self.path)
         if self.type == GeomType.PLANE:
-            self.prim = UsdGeom.Mesh.Define(self.stage, self.path)
-            self.prim.CreatePointsAttr([(-0.5, -0.5, 0), (0.5, -0.5, 0), (-0.5, 0.5, 0), (0.5, 0.5, 0)])
-            self.prim.CreateNormalsAttr([(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)])
-            self.prim.CreateFaceVertexCountsAttr([4])
-            self.prim.CreateFaceVertexIndicesAttr([0, 1, 3, 2])
+            self.geom_prim = UsdGeom.Mesh.Define(self.stage, self.path.AppendPath("Plane"))
+            self.geom_prim.CreatePointsAttr([(-0.5, -0.5, 0), (0.5, -0.5, 0), (-0.5, 0.5, 0), (0.5, 0.5, 0)])
+            self.geom_prim.CreateNormalsAttr([(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)])
+            self.geom_prim.CreateFaceVertexCountsAttr([4])
+            self.geom_prim.CreateFaceVertexIndicesAttr([0, 1, 3, 2])
         elif self.type == GeomType.CUBE:
-            self.prim = UsdGeom.Cube.Define(self.stage, self.path)
+            self.geom_prim = UsdGeom.Cube.Define(self.stage, self.path.AppendPath("Cube"))
         elif self.type == GeomType.SPHERE:
-            self.prim = UsdGeom.Sphere.Define(self.stage, self.path)
+            self.geom_prim = UsdGeom.Sphere.Define(self.stage, self.path.AppendPath("Sphere"))
         elif self.type == GeomType.CYLINDER:
-            self.prim = UsdGeom.Cylinder.Define(self.stage, self.path)
+            self.geom_prim = UsdGeom.Cylinder.Define(self.stage, self.path.AppendPath("Cylinder"))
         elif self.type == GeomType.MESH:
-            self.prim = UsdGeom.Mesh.Define(self.stage, self.path)
+            self.geom_prim = UsdGeom.Mesh.Define(self.stage, self.path.AppendPath("Mesh"))
 
     def set_transform(
         self,
@@ -61,31 +62,31 @@ class GeomBuilder:
         mat_scale = Gf.Matrix4d()
         mat_scale.SetScale(self.scale)
         mat = mat_scale * mat
-        self.prim.AddTransformOp().Set(mat)
+        self.root_prim.AddTransformOp().Set(mat)
 
     def set_attribute(self, prefix: str = None, **kwargs) -> None:
         for key, value in kwargs.items():
             attr = prefix + ":" + key if prefix is not None else key
-            if self.prim.GetPrim().HasAttribute(attr):
-                self.prim.GetPrim().GetAttribute(attr).Set(value)
+            if self.geom_prim.GetPrim().HasAttribute(attr):
+                self.geom_prim.GetPrim().GetAttribute(attr).Set(value)
 
     def compute_extent(self) -> None:
         if self.type == GeomType.PLANE:
-            self.prim.CreateExtentAttr([(-0.5, -0.5, 0), (0.5, 0.5, 0)])
+            self.geom_prim.CreateExtentAttr([(-0.5, -0.5, 0), (0.5, 0.5, 0)])
         elif self.type == GeomType.CUBE:
-            self.prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
+            self.geom_prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
         elif self.type == GeomType.SPHERE:
-            radius = self.prim.GetRadiusAttr().Get()
-            self.prim.CreateExtentAttr(((-radius, -radius, -radius), (radius, radius, radius)))
+            radius = self.geom_prim.GetRadiusAttr().Get()
+            self.geom_prim.CreateExtentAttr(((-radius, -radius, -radius), (radius, radius, radius)))
         elif self.type == GeomType.CYLINDER:
-            radius = self.prim.GetRadiusAttr().Get()
-            height = self.prim.GetHeightAttr().Get()
-            self.prim.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
+            radius = self.geom_prim.GetRadiusAttr().Get()
+            height = self.geom_prim.GetHeightAttr().Get()
+            self.geom_prim.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
         elif self.type == GeomType.MESH:
-            self.prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
-
-    def add_mesh(self, mesh_name: str, collision: bool = True) -> MeshBuilder:
-        mesh_path = os.path.join(TMP_DIR, "collision" if collision else "visual", mesh_name + ".usda")
+            self.geom_prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
+    
+    def add_mesh(self, mesh_name: str, visual: bool = True) -> MeshBuilder:
+        mesh_path = os.path.join(TMP_DIR, "visual" if visual else "collision", mesh_name + ".usda")
         mesh_ref = "./" + mesh_path
         if mesh_name in mesh_dict:
             mesh = mesh_dict[mesh_name]
@@ -93,20 +94,23 @@ class GeomBuilder:
             from multiverse_parser.factory import TMP_USD_FILE_DIR
 
             usd_file_path = os.path.join(TMP_USD_FILE_DIR, mesh_path)
-            if not collision:
+            if visual:
                 mesh = VisualMeshBuilder(mesh_name, usd_file_path)
+                material = mesh.add_material("M_" + mesh_name.replace("SM_", "", 1))
+
+                self.root_prim.GetPrim().GetReferences().AddReference(mesh_ref, mesh.root_prim)
+                self.stage.GetPseudoRoot().GetReferences().AddReference(mesh_ref, material.root_prim)
             else:
                 mesh = CollisionMeshBuilder(mesh_name, usd_file_path)
 
-        self.prim.GetPrim().GetReferences().AddReference(mesh_ref)
         return mesh
 
     def enable_collision(self) -> None:
-        physics_collision_api = UsdPhysics.CollisionAPI(self.prim)
+        physics_collision_api = UsdPhysics.CollisionAPI(self.geom_prim)
         physics_collision_api.CreateCollisionEnabledAttr(True)
-        physics_collision_api.Apply(self.prim.GetPrim())
+        physics_collision_api.Apply(self.geom_prim.GetPrim())
 
         if self.type == GeomType.MESH:
-            physics_mesh_collision_api = UsdPhysics.MeshCollisionAPI(self.prim)
+            physics_mesh_collision_api = UsdPhysics.MeshCollisionAPI(self.geom_prim)
             physics_mesh_collision_api.CreateApproximationAttr("convexHull")
-            physics_mesh_collision_api.Apply(self.prim.GetPrim())
+            physics_mesh_collision_api.Apply(self.geom_prim.GetPrim())
