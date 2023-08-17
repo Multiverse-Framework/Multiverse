@@ -1,0 +1,11 @@
+<launch>
+
+    <arg name="config" default="$(find multiverse_socket)/config/multiverse_socket.yaml" />
+
+    <rosparam command="load" file="$(arg config)" />
+
+    <node pkg="multiverse_socket" type="multiverse_socket_node.py" name="multiverse_socket"
+        output="screen">
+    </node>
+
+</launch>

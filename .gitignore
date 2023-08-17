@@ -32,12 +32,17 @@
 *.app
 
 # Built files
-*.catkin_tools
-build
-devel
-logs
 __pycache__
-src/blender-git/lib
+*.egg-info
+multiverse_ws/.catkin_tools
+multiverse_ws/build
+multiverse_ws/devel
+multiverse_ws/logs
+multiverse/bin
+multiverse/lib
+multiverse/build
+multiverse/external/blender-git/lib
+multiverse/tests/**/output
 
 # VSC
 .vscode

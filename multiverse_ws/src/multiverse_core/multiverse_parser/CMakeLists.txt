@@ -34,11 +34,13 @@ catkin_package(
 # ##########
 # # Build ##
 # ##########
+set(MULTIVERSE_DIR ${CATKIN_DEVEL_PREFIX}/../../../../multiverse)
 
 # # Specify additional locations of header files
 # # Your package locations should be listed before other locations
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${MULTIVERSE_DIR}/external/mujoco/include
 )
 
 set(URDF_TO_MJCF_NODE urdf_to_mjcf_node)
@@ -47,25 +49,12 @@ target_link_libraries(${URDF_TO_MJCF_NODE}
   ${catkin_LIBRARIES}
   $ENV{ROS_ROOT}/../../lib/liburdf.so
   tinyxml2
+  ${MULTIVERSE_DIR}/build/mujoco/lib/libmujoco.so
 )
 
 # ############
 # # Install ##
 # ############
-if(IS_DIRECTORY ${CATKIN_DEVEL_PREFIX}/../../.private)
-  set(ENV{CATKIN_DEVEL_DIR} ${CATKIN_DEVEL_PREFIX}/../../../devel)
-  set(ENV{BLENDER_BUILD_DIR} $ENV{CATKIN_DEVEL_DIR}/../../build/blender)
-endif()
-
-# Execute the shell file during CMake configuration
-execute_process(
-  COMMAND sh ${PROJECT_SOURCE_DIR}/install.sh
-  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  RESULT_VARIABLE INSTALL_RESULT
-)
-
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
 # # Mark executable scripts (Python etc.) for installation
 # # in contrast to setup.py, you can choose the destination

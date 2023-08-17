@@ -1,0 +1,30 @@
+set(MULTIVERSE_CLIENT multiverse_client)
+set(MULTIVERSE_CLIENT_JSON multiverse_client_json)
+set(MULTIVERSE_CLIENT_PYBIND multiverse_client_pybind)
+set(STDLIBS "libc++" "libstdc++")
+
+set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+set(CMAKE_CXX_STANDARD 11)
+
+foreach(STDLIB IN LISTS STDLIBS)
+    set(CMAKE_CXX_FLAGS "-fPIC -stdlib=${STDLIB}")
+
+    add_library(${MULTIVERSE_CLIENT}_${STDLIB} STATIC ${CMAKE_CURRENT_SOURCE_DIR}/src/${MULTIVERSE_CLIENT}.cpp)
+    target_include_directories(${MULTIVERSE_CLIENT}_${STDLIB} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    target_link_directories(${MULTIVERSE_CLIENT}_${STDLIB} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    target_link_libraries(${MULTIVERSE_CLIENT}_${STDLIB} c++abi zmq atomic)
+    install(TARGETS ${MULTIVERSE_CLIENT}_${STDLIB} DESTINATION ${LIB_DIR}/${STDLIB})
+
+    add_library(${MULTIVERSE_CLIENT_JSON}_${STDLIB} SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/${MULTIVERSE_CLIENT_JSON}.cpp)
+    target_include_directories(${MULTIVERSE_CLIENT_JSON}_${STDLIB} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    target_link_directories(${MULTIVERSE_CLIENT_JSON}_${STDLIB} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+    target_link_libraries(${MULTIVERSE_CLIENT_JSON}_${STDLIB} ${MULTIVERSE_CLIENT}_${STDLIB} jsoncpp)
+    install(TARGETS ${MULTIVERSE_CLIENT_JSON}_${STDLIB} DESTINATION ${LIB_DIR}/${STDLIB})
+endforeach()
+
+find_package(pybind11 REQUIRED)
+pybind11_add_module(${MULTIVERSE_CLIENT_PYBIND} MODULE ${CMAKE_CURRENT_SOURCE_DIR}/src/${MULTIVERSE_CLIENT_PYBIND}.cpp)
+target_include_directories(${MULTIVERSE_CLIENT_PYBIND} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_directories(${MULTIVERSE_CLIENT_PYBIND} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(${MULTIVERSE_CLIENT_PYBIND} PRIVATE ${MULTIVERSE_CLIENT}_libstdc++)
+install(TARGETS ${MULTIVERSE_CLIENT_PYBIND} DESTINATION ${LIB_DIR}/python)

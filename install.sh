@@ -1,58 +1,70 @@
 #!/usr/bin/env sh
 
 # Update package lists
-apt update
+apt-get update
 
 # Setup your sources.list
 sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-apt install curl # if you haven't already installed curl
+apt-get install curl # if you haven't already installed curl
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
 # Update package lists
-apt update
+apt-get update
 
 # Install ROS
-apt install -y ros-noetic-desktop-full
+apt-get install -y ros-noetic-desktop-full
 
 # Install python3-pip
-apt install -y python3-pip
+apt-get install -y python3-pip
 
 # Install python3.8
+apt-get install -y python3.8-dev
 update-alternatives --remove-all python3
-apt install -y python3.8-dev
-update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1
+update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 100
 
 # Install catkin-tools
-apt install -y python3-catkin-tools
+apt-get install -y python3-catkin-tools
 
 # Install rosdep
-apt install -y python3-rosdep
+apt-get install -y python3-rosdep
+rosdep init
+rosdep fix-permissions
 
 # Install glfw3
-apt install -y libglfw3
-apt install -y libglfw3-dev
+apt-get install -y libglfw3
+apt-get install -y libglfw3-dev
+
+# Install jsoncpp
+apt-get install -y libjsoncpp-dev
+
+# Install zmqpp
+apt-get install -y libzmqpp-dev
 
 # Install doxygen
-apt install -y doxygen
+apt-get install -y doxygen
 
 # Install additional packages for MuJoCo
-apt install -y libgl1-mesa-dev
-apt install -y libglu1-mesa-dev
-apt install -y libxt-dev
+apt-get install -y libgl1-mesa-dev
+apt-get install -y libglu1-mesa-dev
+apt-get install -y libxt-dev
 
-# Install packages for creating shared library
-apt install -y clang
-apt install -y libc++-dev
-apt install -y libc++abi-dev
+# Install and link clang-11 for creating shared library
+apt-get install -y clang-11
+apt-get install -y libc++-11-dev libstdc++-11-dev libc++abi-11-dev
+update-alternatives --remove-all clang++
+update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
 
 # Install and link gcc-11
+apt-get install gcc-11
 update-alternatives --remove-all gcc
-apt install gcc-11
-update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 1
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100
 
 # Install additional packages for blender
-apt install -y build-essential git subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
-apt install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
+apt-get install -y build-essential git subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
+apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
+
+# Install pybind11
+apt-get install -y pybind11-dev
 
 # Install PySide6
 pip3 install pyside6

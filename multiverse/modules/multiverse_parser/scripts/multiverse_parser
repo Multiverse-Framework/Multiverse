@@ -1,0 +1,54 @@
+#!/usr/bin/env python3.10
+
+from __future__ import print_function
+import sys
+
+sys.path = [sys_path for sys_path in sys.path if "USD/lib/python" not in sys_path]
+
+import argparse
+import os
+from multiverse_parser import import_from_urdf, import_from_mjcf
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Multiverse parser")
+    parser.add_argument(
+        "--input",
+        type=str,
+        required=True,
+        help="Import scene description as (URDF, MJCF, WORLD or USD)",
+    )
+    parser.add_argument(
+        "--output",
+        type=str,
+        required=True,
+        help="Export scene description as (URDF, MJCF, WORLD or USD)",
+    )
+    parser.add_argument(
+        "--physics",
+        action=argparse.BooleanOptionalAction,
+        help="Whether to include physics properties or not",
+    )
+    parser.set_defaults(physics=True)
+
+    args = parser.parse_args()
+    in_extension = os.path.splitext(args.input)[1]
+    out_extension = os.path.splitext(args.output)[1]
+    if in_extension == ".urdf":
+        usd_world = import_from_urdf(args.input, args.physics)
+    elif in_extension == ".xml":
+        usd_world = import_from_mjcf(args.input, args.physics)
+    else:
+        print(f"Input extension [{in_extension}] not supported.")
+        return
+
+    if out_extension == ".usd" or out_extension == ".usda" or out_extension == ".usdc":
+        usd_world.export(args.output)
+    else:
+        print(f"Input extension [{in_extension}] not supported.")
+
+    usd_world.clean_up()
+
+
+if __name__ == "__main__":
+    main()
