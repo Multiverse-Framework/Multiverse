@@ -22,7 +22,6 @@ class GeomBuilder:
     def __init__(self, stage: Usd.Stage, name: str, body_path: Sdf.Path, geom_type: GeomType) -> None:
         geom_dict[name] = self
         self.stage = stage
-        self.usd_file_dir = os.path.dirname(self.stage.GetRootLayer().realPath)
         self.path = body_path.AppendPath(name)
         self.type = geom_type
         self.set_prim()
@@ -86,15 +85,18 @@ class GeomBuilder:
             self.prim.CreateExtentAttr(((-1, -1, -1), (1, 1, 1)))
 
     def add_mesh(self, mesh_name: str, collision: bool = True) -> MeshBuilder:
-        mesh_dir = os.path.join(TMP_DIR, mesh_name + ".usda")
-        mesh_ref = "./" + mesh_dir
+        mesh_path = os.path.join(TMP_DIR, "collision" if collision else "visual", mesh_name + ".usda")
+        mesh_ref = "./" + mesh_path
         if mesh_name in mesh_dict:
             mesh = mesh_dict[mesh_name]
         else:
+            from multiverse_parser.factory import TMP_USD_FILE_DIR
+
+            usd_file_path = os.path.join(TMP_USD_FILE_DIR, mesh_path)
             if not collision:
-                mesh = VisualMeshBuilder(mesh_name, os.path.join(self.usd_file_dir, TMP_DIR, mesh_name + ".usda"))
+                mesh = VisualMeshBuilder(mesh_name, usd_file_path)
             else:
-                mesh = CollisionMeshBuilder(mesh_name, os.path.join(self.usd_file_dir, TMP_DIR, mesh_name + ".usda"))
+                mesh = CollisionMeshBuilder(mesh_name, usd_file_path)
 
         self.prim.GetPrim().GetReferences().AddReference(mesh_ref)
         return mesh

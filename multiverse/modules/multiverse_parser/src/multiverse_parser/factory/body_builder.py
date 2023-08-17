@@ -24,7 +24,6 @@ class BodyBuilder:
         else:
             self.path = Sdf.Path("/").AppendPath(name)
         self.stage = stage
-        self.usd_file_dir = os.path.dirname(self.stage.GetRootLayer().realPath)
         self.prim = UsdGeom.Xform.Define(self.stage, self.path)
         self.pos = Gf.Vec3d(0.0, 0.0, 0.0)
         self.quat = Gf.Quatd(1.0, 0.0, 0.0, 0.0)

@@ -18,20 +18,48 @@ mesh_dict = {}
 rospack = rospkg.RosPack()
 
 
-def build_geom(body_builder, geom_name: str, geometry: urdf.Mesh, collision: bool):
+def build_geom(source_file_dir: str, body_builder, geom_name: str, geometry: urdf.Mesh, collision: bool):
     if type(geometry) == urdf.Mesh:
         geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.MESH)
         mesh_path = geometry.filename
         if mesh_path not in mesh_dict:
-            from multiverse_parser.factory import TMP_DIR
+            from multiverse_parser.factory import TMP_USD_MESH_PATH, clear_data
 
-            mesh_path = mesh_path.replace("package://", "")
-            package_name = mesh_path.split("/", 2)[0]
-            package_path = os.path.dirname(rospack.get_path(package_name))
-            mesh_path_abs = os.path.join(package_path, mesh_path)
+            file = os.path.basename(mesh_path)
+            mesh_name, file_extension = os.path.splitext(file)
 
-            file_name = os.path.splitext(os.path.basename(mesh_path_abs))[0]
-            file_extension = os.path.splitext(os.path.basename(mesh_path_abs))[1]
+            if mesh_path.find("package://") != -1:
+                mesh_path = mesh_path.replace("package://", "")
+                package_name = mesh_path.split("/", 2)[0]
+                try:
+                    package_path = os.path.dirname(rospack.get_path(package_name))
+                    mesh_path_abs = os.path.join(package_path, mesh_path)
+                except rospkg.common.ResourceNotFound:
+                    print(f"Package {package_name} not found, searching for {file} in {source_file_dir}...")
+                    file_paths = []
+                    for root, _, files in os.walk(source_file_dir):
+                        if file in files:
+                            file_paths.append(os.path.join(root, file))
+
+                    if len(file_paths) == 0:
+                        print(f"Mesh file {file} not found in {source_file_dir}.")
+                        return
+                    elif len(file_paths) == 1:
+                        print(f"Found {file_paths[0]}")
+                    elif len(file_paths) > 1:
+                        print(f"Found {str(len(file_paths))} meshes {file} in {source_file_dir}, take the first one {file_paths[0]}.")
+
+                    mesh_path_abs = file_paths[0]
+                
+            elif mesh_path.find("file://") != -1:
+                mesh_path_abs = mesh_path.replace("file://", "")
+                if not os.path.isabs(mesh_path_abs):
+                    mesh_path_abs = os.path.join(source_file_dir, mesh_path_abs)
+                    if os.path.exists(mesh_path_abs):
+                        print(f"Mesh file {mesh_path_abs} not found.")
+                        return
+            
+            clear_data()
             if file_extension == ".dae":
                 import_dae(mesh_path_abs)
             elif file_extension == ".obj":
@@ -42,14 +70,12 @@ def build_geom(body_builder, geom_name: str, geometry: urdf.Mesh, collision: boo
                 print(f"File extension {file_extension} not implemented")
                 return
 
-            usd_file_path = os.path.join(body_builder.usd_file_dir, TMP_DIR, file_name + ".usda")
-            export_usd(out_usd=usd_file_path)
-            mesh_name = "mesh_" + str(len(mesh_dict) + 1)
-            mesh_dict[mesh_path] = (mesh_name, usd_file_path)
+            export_usd(out_usd=os.path.join(TMP_USD_MESH_PATH, "collision" if collision else "visual", mesh_name + ".usda"))
+            mesh_dict[geometry.filename] = mesh_name
         else:
-            mesh_name, usd_file_path = mesh_dict[mesh_path]
+            mesh_name = mesh_dict[geometry.filename]
 
-        mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, usd_file_path=usd_file_path, collision=collision)
+        mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, collision=collision)
         mesh_builder.save()
 
 
@@ -75,7 +101,8 @@ def import_from_urdf(urdf_file_path: str, with_physics: bool = True) -> WorldBui
         else:
             joint_pos = (0.0, 0.0, 0.0)
             joint_rot = (0.0, 0.0, 0.0)
-        joint_quat = tuple(tf.transformations.quaternion_from_euler(joint_rot[0], joint_rot[1], joint_rot[2]))
+        joint_quat = tf.transformations.quaternion_from_euler(joint_rot[0], joint_rot[1], joint_rot[2])
+        joint_quat = (joint_quat[3], joint_quat[0], joint_quat[1], joint_quat[2])
 
         if urdf_joint.type != JointType.FIXED and with_physics:
             body_builder = world_builder.add_body(body_name=child_link_name, parent_body_name=root_link_name)
@@ -87,11 +114,11 @@ def import_from_urdf(urdf_file_path: str, with_physics: bool = True) -> WorldBui
         urdf_link = robot.link_map[child_link_name]
         for visual in urdf_link.visuals:
             geom_name = child_link_name + "_visual"
-            build_geom(body_builder, geom_name, visual.geometry, False)
+            build_geom(os.path.dirname(os.path.dirname(urdf_file_path)), body_builder, geom_name, visual.geometry, False)
 
         for collision in urdf_link.collisions:
-            geom_name = child_link_name + "_visual"
-            build_geom(body_builder, geom_name, collision.geometry, True)
+            geom_name = child_link_name + "_collision"
+            build_geom(os.path.dirname(os.path.dirname(urdf_file_path)), body_builder, geom_name, collision.geometry, True)
 
         if with_physics:
             body_builder.enable_collision()

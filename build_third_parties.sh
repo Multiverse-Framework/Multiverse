@@ -63,6 +63,7 @@ fi
 python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
 ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
 ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
+ln -sf $USD_BUILD_DIR/bin/usdcat $BIN_DIR
 
 # Build MuJoCo
 

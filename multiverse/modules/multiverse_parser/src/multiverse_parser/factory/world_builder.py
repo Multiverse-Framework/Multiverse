@@ -1,13 +1,10 @@
 #!/usr/bin/env python3.10
 
-import importlib.util
 import os, shutil
-import random, string
 from pxr import Usd, UsdGeom
-from multiverse_parser.factory import TMP, TMP_DIR
-from .body_builder import BodyBuilder, body_dict
 
-multiverse_parser_path = os.path.dirname(importlib.util.find_spec("multiverse_parser").origin)
+from multiverse_parser.factory import TMP, TMP_USD_FILE_DIR, TMP_USD_FILE_PATH
+from .body_builder import BodyBuilder, body_dict
 
 
 def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
@@ -30,11 +27,9 @@ def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
 
 class WorldBuilder:
     def __init__(self) -> None:
-        random_string = "".join(random.choices(string.ascii_letters + string.digits, k=10))
-        self.usd_file_path = os.path.join(multiverse_parser_path, ".cache", random_string, TMP + ".usda")
-        print(f"Create {self.usd_file_path}")
-        os.makedirs(os.path.dirname(self.usd_file_path))
-        self.stage = Usd.Stage.CreateNew(self.usd_file_path)
+        print(f"Create {TMP_USD_FILE_PATH}")
+        os.makedirs(TMP_USD_FILE_DIR)
+        self.stage = Usd.Stage.CreateNew(TMP_USD_FILE_PATH)
         UsdGeom.SetStageUpAxis(self.stage, UsdGeom.Tokens.z)
         UsdGeom.SetStageMetersPerUnit(self.stage, UsdGeom.LinearUnits.meters)
 
@@ -54,32 +49,40 @@ class WorldBuilder:
         self.stage.Save()
 
         if usd_file_path is not None:
-            usd_file_dir = os.path.dirname(usd_file_path)
-            usd_file_name = os.path.splitext(os.path.basename(usd_file_path))[0]
+            usd_file = os.path.basename(usd_file_path)
+            usd_file_name, usd_file_extension = os.path.splitext(usd_file)
+            print(usd_file_path, usd_file_extension)
 
-            copy_and_overwrite(os.path.dirname(self.usd_file_path), usd_file_dir)
+            if usd_file_extension == ".usda":
+                usd_file_dir = os.path.dirname(usd_file_path)
+                copy_and_overwrite(TMP_USD_FILE_DIR, usd_file_dir)
 
-            tmp_usd_file_path = os.path.join(usd_file_dir, os.path.basename(self.usd_file_path))
-            os.rename(tmp_usd_file_path, usd_file_path)
+                os.rename(
+                    os.path.join(usd_file_dir, os.path.basename(TMP_USD_FILE_PATH)),
+                    usd_file_path,
+                )
 
-            tmp_mesh_dir = os.path.join(usd_file_dir, TMP)
-            new_mesh_dir = os.path.join(usd_file_dir, usd_file_name)
-            if os.path.exists(new_mesh_dir):
-                shutil.rmtree(new_mesh_dir)
+                tmp_mesh_dir = os.path.join(usd_file_dir, TMP)
+                new_mesh_dir = os.path.join(usd_file_dir, usd_file_name)
+                if os.path.exists(new_mesh_dir):
+                    shutil.rmtree(new_mesh_dir)
 
-            if os.path.exists(tmp_mesh_dir):
-                os.rename(tmp_mesh_dir, new_mesh_dir)
+                if os.path.exists(tmp_mesh_dir):
+                    os.rename(tmp_mesh_dir, new_mesh_dir)
 
-                with open(usd_file_path, "r", encoding="utf-8") as file:
-                    file_contents = file.read()
+                    with open(usd_file_path, "r", encoding="utf-8") as file:
+                        file_contents = file.read()
 
-                tmp_path = "prepend references = @./" + TMP_DIR
-                new_path = "prepend references = @./" + usd_file_name + "/usd/"
-                file_contents = file_contents.replace(tmp_path, new_path)
+                    tmp_path = "prepend references = @./" + TMP
+                    new_path = "prepend references = @./" + usd_file_name
+                    file_contents = file_contents.replace(tmp_path, new_path)
 
-                with open(usd_file_path, "w", encoding="utf-8") as file:
-                    file.write(file_contents)
+                    with open(usd_file_path, "w", encoding="utf-8") as file:
+                        file.write(file_contents)
+            else:
+                self.stage.GetRootLayer().Export(usd_file_path)
+
 
     def clean_up(self) -> None:
-        print(f"Remove {os.path.dirname(self.usd_file_path)}")
-        shutil.rmtree(os.path.dirname(self.usd_file_path))
+        print(f"Remove {TMP_USD_FILE_DIR}")
+        shutil.rmtree(TMP_USD_FILE_DIR)
