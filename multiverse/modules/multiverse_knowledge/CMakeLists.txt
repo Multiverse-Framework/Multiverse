@@ -60,7 +60,7 @@ add_test(
 add_test(
   NAME usd_to_ABox_apartment
   COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/usd_to_ABox.py
-          --in_usd=${TEST_DIR}/multiverse_knowledge/input/apartment/usd/apartment.usda
+          --in_usd=${TEST_DIR}/multiverse_knowledge/input/apartment/usd/apartment.usdc
           --in_owl=${TEST_DIR}/multiverse_knowledge/input/apartment/owl/USD.owl
           --out_owl=${TEST_DIR}/multiverse_knowledge/output/apartment/owl/apartment_ABox.owl
 )
