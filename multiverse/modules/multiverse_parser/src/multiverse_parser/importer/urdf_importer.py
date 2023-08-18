@@ -134,7 +134,7 @@ def build_geom(
     geom_builder.compute_extent()
 
 
-def import_from_urdf(urdf_file_path: str, with_physics: bool = True, visual: bool = True, collision: bool = True) -> WorldBuilder:
+def import_from_urdf(urdf_file_path: str, with_physics: bool = True, with_visual: bool = True, with_collision: bool = True) -> WorldBuilder:
     for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
         material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
 
@@ -166,7 +166,7 @@ def import_from_urdf(urdf_file_path: str, with_physics: bool = True, visual: boo
         body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to=parent_link_name)
 
         urdf_link = robot.link_map[child_link_name]
-        if visual:
+        if with_visual:
             for urdf_visual in urdf_link.visuals:
                 geom_name = child_link_name + "_visual_"
                 build_geom(
@@ -178,7 +178,7 @@ def import_from_urdf(urdf_file_path: str, with_physics: bool = True, visual: boo
                     visual=True,
                 )
 
-        if collision:
+        if with_collision:
             for urdf_collision in urdf_link.collisions:
                 geom_name = child_link_name + "_collision_"
                 build_geom(

@@ -47,9 +47,9 @@ def main():
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
     if in_extension == ".urdf":
-        usd_world = import_from_urdf(urdf_file_path=args.input, with_physics=args.physics, visual=args.visual, collision=args.collision)
+        usd_world = import_from_urdf(urdf_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
     elif in_extension == ".xml":
-        usd_world = import_from_mjcf(mjcf_file_path=args.input, with_physics=args.physics, visual=args.visual, collision=args.collision)
+        usd_world = import_from_mjcf(mjcf_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
     else:
         print(f"Input extension [{in_extension}] not supported.")
         return
