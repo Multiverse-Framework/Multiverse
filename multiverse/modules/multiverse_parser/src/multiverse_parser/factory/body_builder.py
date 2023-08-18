@@ -1,9 +1,8 @@
 #!/usr/bin/env python3.10
 
-import os
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
-from .geom_builder import GeomBuilder, GeomType, geom_dict
+from .geom_builder import GeomBuilder, GeomType
 from .joint_builder import JointBuilder, JointType, joint_dict
 
 body_dict = {}
@@ -16,7 +15,7 @@ class BodyBuilder:
         body_dict[name] = self
         if parent_name is not None:
             parent_prim = body_dict.get(parent_name).prim
-            if parent_prim is not None:
+            if parent_prim.GetPrim().IsValid():
                 self.path = parent_prim.GetPath().AppendPath(name)
             else:
                 print(f"Parent prim with name {parent_name} not found.")
@@ -53,7 +52,7 @@ class BodyBuilder:
             relative_prim = body_dict[relative_to].prim.GetPrim()
             if relative_prim:
                 parent_prim = self.prim.GetPrim().GetParent()
-                if parent_prim and parent_prim != relative_prim:
+                if parent_prim.IsValid() and parent_prim != relative_prim:
                     parent_to_relative_mat, _ = xform_cache.ComputeRelativeTransform(relative_prim, parent_prim)
                     mat = mat * parent_to_relative_mat
             else:
@@ -62,12 +61,8 @@ class BodyBuilder:
         self.prim.AddTransformOp().Set(mat)
 
     def add_geom(self, geom_name: str, geom_type: GeomType) -> GeomBuilder:
-        if geom_name in geom_dict:
-            print(f"Geom {geom_name} already exists.")
-            geom = geom_dict[geom_name]
-        else:
-            geom = GeomBuilder(self.stage, geom_name, self.path, geom_type)
-            self.geoms.add(geom)
+        geom = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type)
+        self.geoms.add(geom)
         return geom
 
     def add_joint(

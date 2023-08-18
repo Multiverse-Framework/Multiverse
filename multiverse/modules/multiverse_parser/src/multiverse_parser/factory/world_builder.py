@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.10
 
-import os, shutil
+import os, shutil, re
 from pxr import Usd, UsdGeom
 
 from multiverse_parser.factory import TMP, TMP_USD_FILE_DIR, TMP_USD_FILE_PATH
@@ -51,7 +51,6 @@ class WorldBuilder:
         if usd_file_path is not None:
             usd_file = os.path.basename(usd_file_path)
             usd_file_name, usd_file_extension = os.path.splitext(usd_file)
-            print(usd_file_path, usd_file_extension)
 
             if usd_file_extension == ".usda":
                 usd_file_dir = os.path.dirname(usd_file_path)
@@ -73,15 +72,14 @@ class WorldBuilder:
                     with open(usd_file_path, "r", encoding="utf-8") as file:
                         file_contents = file.read()
 
-                    tmp_path = "prepend references = @./" + TMP
-                    new_path = "prepend references = @./" + usd_file_name
+                    tmp_path = "@./" + TMP
+                    new_path = "@./" + usd_file_name
                     file_contents = file_contents.replace(tmp_path, new_path)
 
                     with open(usd_file_path, "w", encoding="utf-8") as file:
                         file.write(file_contents)
             else:
                 self.stage.GetRootLayer().Export(usd_file_path)
-
 
     def clean_up(self) -> None:
         print(f"Remove {TMP_USD_FILE_DIR}")

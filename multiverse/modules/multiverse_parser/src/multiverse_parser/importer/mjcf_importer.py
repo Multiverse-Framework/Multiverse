@@ -12,7 +12,7 @@ def modify_name(in_name: str, prefix: str, name_id: str) -> str:
     return out_name
 
 
-def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBuilder:
+def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True, with_visual: bool = True, with_collision: bool = True) -> WorldBuilder:
     try:
         mj_model = mujoco.MjModel.from_xml_path(mjcf_file_path)
     except ValueError as error:
@@ -25,14 +25,14 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
 
     for body_id in range(mj_model.nbody):
         mj_body = mj_model.body(body_id)
-        body_name = modify_name(mj_body.name, "body_", body_id)
+        body_name = modify_name(mj_body.name, "Body_", body_id)
 
         if body_id == 0:
             root_body_name = body_name
             body_builder = world_builder.add_body(body_name=root_body_name)
         else:
             mj_body_parent = mj_model.body(mj_body.parentid)
-            parent_body_name = modify_name(mj_body_parent.name, "body_", mj_body.parentid)
+            parent_body_name = modify_name(mj_body_parent.name, "Body_", mj_body.parentid)
             if mj_body.jntnum[0] > 0 and with_physics:
                 body_builder = world_builder.add_body(body_name=body_name, parent_body_name=root_body_name)
             else:
@@ -45,12 +45,18 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
 
         for geom_id in range(mj_body.geomadr[0], mj_body.geomadr[0] + mj_body.geomnum[0]):
             mj_geom = mj_model.geom(geom_id)
-            geom_name = modify_name(mj_geom.name, "geom_", geom_id)
+            geom_name = modify_name(mj_geom.name, "Geom_", geom_id)
 
             if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE:
                 geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.PLANE)
+                geom_builder.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat), scale=(50, 50, 1))
             elif mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX:
                 geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CUBE)
+                geom_builder.set_transform(
+                    pos=tuple(mj_geom.pos),
+                    quat=tuple(mj_geom.quat),
+                    scale=tuple(mj_geom.size),
+                )
             elif mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE:
                 geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE)
             elif mj_geom.type == mujoco.mjtGeom.mjGEOM_CYLINDER:
@@ -61,15 +67,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                 print(f"Geom type {str(mj_geom.type)} not supported.")
                 continue
 
-            if mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX:
-                geom_builder.set_transform(
-                    pos=tuple(mj_geom.pos),
-                    quat=tuple(mj_geom.quat),
-                    scale=tuple(mj_geom.size),
-                )
-            elif mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE:
-                geom_builder.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat), scale=(50, 50, 1))
-            else:
+            if mj_geom.type != mujoco.mjtGeom.mjGEOM_BOX and mj_geom.type != mujoco.mjtGeom.mjGEOM_PLANE:
                 geom_builder.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat))
                 if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE:
                     geom_builder.set_attribute(radius=mj_geom.size[0])
@@ -77,10 +75,10 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                     geom_builder.set_attribute(radius=mj_geom.size[0], height=mj_geom.size[1] * 2)
                 elif mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH:
                     mesh_id = mj_geom.dataid[0]
-                    mesh_name = modify_name(mj_model.mesh(mesh_id).name, "mesh_", mesh_id)
+                    mesh_name = modify_name(mj_model.mesh(mesh_id).name, "Mesh_", mesh_id)
 
-                    mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, collision=True)
-                    
+                    mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, visual=False)
+
                     if mesh_name not in mesh_names:
                         mesh_names.add(mesh_name)
 
@@ -124,7 +122,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
                             face_vertex_indices[3 * i + 1] = mj_model.mesh_face[face_id][1]
                             face_vertex_indices[3 * i + 2] = mj_model.mesh_face[face_id][2]
                         mesh_builder.build(points, normals, face_vertex_counts, face_vertex_indices)
-                    
+
                         mesh_builder.save()
 
             geom_builder.set_attribute(prefix="primvars", displayColor=mj_geom.rgba[:3])
@@ -142,7 +140,7 @@ def import_from_mjcf(mjcf_file_path: str, with_physics: bool = True) -> WorldBui
 
                 joint_id = mj_body.jntadr[i]
                 mj_joint = mj_model.joint(joint_id)
-                joint_name = modify_name(mj_joint.name, "joint_", joint_id)
+                joint_name = modify_name(mj_joint.name, "Joint_", joint_id)
                 if mj_joint.type == mujoco.mjtJoint.mjJNT_HINGE:
                     joint_type = JointType.REVOLUTE
                 elif mj_joint.type == mujoco.mjtJoint.mjJNT_SLIDE:
