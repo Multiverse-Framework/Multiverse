@@ -51,7 +51,6 @@ class WorldBuilder:
         if usd_file_path is not None:
             usd_file = os.path.basename(usd_file_path)
             usd_file_name, usd_file_extension = os.path.splitext(usd_file)
-            print(usd_file_path, usd_file_extension)
 
             if usd_file_extension == ".usda":
                 usd_file_dir = os.path.dirname(usd_file_path)

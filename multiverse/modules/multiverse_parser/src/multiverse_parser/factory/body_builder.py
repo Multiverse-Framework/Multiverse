@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.10
 
-import os
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
 from .geom_builder import GeomBuilder, GeomType

@@ -7,9 +7,11 @@ import rospkg
 import xml.etree.ElementTree as ET
 import numpy
 import tf
+from scipy.spatial.transform import Rotation
 
 from multiverse_parser.importer.mesh_importer import import_dae, import_obj, import_stl
 from multiverse_parser.exporter.mesh_exporter import export_usd
+from multiverse_parser.utils import diagonalize_inertia
 
 material_dict = {}
 
@@ -24,8 +26,8 @@ def build_geom(
     source_file_dir: str,
     body_builder,
     geom_name: str,
-    geometry,
     origin: urdf.Pose,
+    geometry,
     visual: bool,
 ):
     if geom_name in geom_dict:
@@ -126,15 +128,25 @@ def build_geom(
         mesh_builder.save()
 
     if not visual:
-        from multiverse_parser.factory import COLLISION_MESH_COLOR, COLLISION_MESH_OPACITY
+        from multiverse_parser.factory import (
+            COLLISION_MESH_COLOR,
+            COLLISION_MESH_OPACITY,
+        )
 
         geom_builder.set_attribute(prefix="primvars", displayColor=COLLISION_MESH_COLOR)
         geom_builder.set_attribute(prefix="primvars", displayOpacity=COLLISION_MESH_OPACITY)
 
     geom_builder.compute_extent()
 
+    return geom_builder
 
-def import_from_urdf(urdf_file_path: str, with_physics: bool = True, with_visual: bool = True, with_collision: bool = True) -> WorldBuilder:
+
+def import_from_urdf(
+    urdf_file_path: str,
+    with_physics: bool = True,
+    with_visual: bool = True,
+    with_collision: bool = True,
+) -> WorldBuilder:
     for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
         material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
 
@@ -173,22 +185,47 @@ def import_from_urdf(urdf_file_path: str, with_physics: bool = True, with_visual
                     source_file_dir=os.path.dirname(os.path.dirname(urdf_file_path)),
                     body_builder=body_builder,
                     geom_name=geom_name,
-                    geometry=urdf_visual.geometry,
                     origin=urdf_visual.origin,
+                    geometry=urdf_visual.geometry,
                     visual=True,
                 )
 
         if with_collision:
             for urdf_collision in urdf_link.collisions:
                 geom_name = child_link_name + "_collision_"
-                build_geom(
+                geom_builder = build_geom(
                     source_file_dir=os.path.dirname(os.path.dirname(urdf_file_path)),
                     body_builder=body_builder,
                     geom_name=geom_name,
-                    geometry=urdf_collision.geometry,
                     origin=urdf_collision.origin,
+                    geometry=urdf_collision.geometry,
                     visual=False,
                 )
+                if with_physics:
+                    if hasattr(urdf_collision, "inertial"):
+                        inertial = urdf_collision.inertial
+                        mass = inertial.mass
+                        com = tuple(inertial.origin.xyz)
+
+                        origin_rot = Rotation.from_euler("zyx", urdf_collision.origin.rpy).as_matrix()
+                        inertia = numpy.array(
+                            [
+                                [inertial.ixx, inertial.ixy, inertial.ixz],
+                                [inertial.ixy, inertial.iyy, inertial.iyz],
+                                [inertial.ixz, inertial.iyz, inertial.izz],
+                            ]
+                        )
+                        inertia = inertia @ origin_rot.T
+                        diagonal_inertia, principal_axes = diagonalize_inertia(inertia)
+
+                        geom_builder.set_inertial(
+                            mass=mass,
+                            com=com,
+                            diagonal_inertia=diagonal_inertia,
+                            principal_axes=principal_axes,
+                        )
+                    else:
+                        geom_builder.compute_inertial()
 
         if with_physics:
             body_builder.enable_collision()
