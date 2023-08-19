@@ -66,7 +66,7 @@ class CollisionMeshBuilder(MeshBuilder):
     def __init__(self, name: str, usd_file_path: str) -> None:
         super().__init__(name, usd_file_path)
 
-    def build(self, points, normals, face_vertex_counts, face_vertex_indices):
+    def build(self, points, normals, face_vertex_counts, face_vertex_indices) -> None:
         if self.mesh_prim is not None:
             self.mesh_prim.CreatePointsAttr(points)
             self.mesh_prim.CreateNormalsAttr(normals)

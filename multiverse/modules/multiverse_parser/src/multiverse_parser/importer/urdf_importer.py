@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.10
 
-from multiverse_parser import WorldBuilder, GeomType, JointType
 import os
 from urdf_parser_py import urdf
 import rospkg
@@ -9,8 +8,9 @@ import numpy
 import tf
 from scipy.spatial.transform import Rotation
 
-from multiverse_parser.importer.mesh_importer import import_dae, import_obj, import_stl
-from multiverse_parser.exporter.mesh_exporter import export_usd
+from multiverse_parser import WorldBuilder, GeomType, JointType
+from multiverse_parser.importer import import_dae, import_obj, import_stl
+from multiverse_parser.exporter import export_usd
 from multiverse_parser.utils import diagonalize_inertia, clear_meshes, modify_name
 
 

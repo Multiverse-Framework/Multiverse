@@ -23,7 +23,7 @@ class MjcfImporter():
         self.mesh_names = set()
         self.build_everyting()
 
-    def build_everyting(self):
+    def build_everyting(self) -> None:
         for body_id in range(self.mj_model.nbody):
             mj_body = self.mj_model.body(body_id)
             body_name = modify_name(in_name=mj_body.name, replacement="Body_" + str(body_id))

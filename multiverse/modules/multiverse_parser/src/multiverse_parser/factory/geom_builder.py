@@ -26,7 +26,7 @@ class GeomType(Enum):
     MESH = 4
 
 
-def inertia_of_triangle(v1, v2, v3, density):
+def inertia_of_triangle(v1, v2, v3, density) -> Matrix:
     # Compute the area of the triangle
     area = 0.5 * ((v2 - v1).cross(v3 - v1)).length
     # Compute the inertia tensor of the triangle
@@ -93,7 +93,7 @@ class GeomBuilder:
         pos: tuple = (0.0, 0.0, 0.0),
         quat: tuple = (1.0, 0.0, 0.0, 0.0),
         scale: tuple = (1.0, 1.0, 1.0),
-    ):
+    ) -> None:
         self.pos = Gf.Vec3d(pos)
         self.quat = Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3]))
         self.scale = Gf.Vec3d(scale)

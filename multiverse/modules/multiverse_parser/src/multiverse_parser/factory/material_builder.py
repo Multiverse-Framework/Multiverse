@@ -35,5 +35,5 @@ class MaterialBuilder:
                 print(f"Material prim not found in {usd_file_path}, create one.")
             self.material_prims = [UsdShade.Material.Define(self.stage, self.root_prim.GetPath().AppendPath(material_name))]
 
-    def save(self):
+    def save(self) -> None:
         self.stage.Save()

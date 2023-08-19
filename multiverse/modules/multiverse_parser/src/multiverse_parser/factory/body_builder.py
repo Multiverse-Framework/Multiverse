@@ -37,7 +37,7 @@ class BodyBuilder:
         quat: tuple = (1.0, 0.0, 0.0, 0.0),
         scale: tuple = (1.0, 1.0, 1.0),
         relative_to: str = None,
-    ):
+    ) -> None:
         self.pos = Gf.Vec3d(pos)
         self.quat = Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3]))
         self.scale = Gf.Vec3d(scale)

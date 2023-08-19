@@ -14,8 +14,15 @@ function(build_multiverse_client library_type)
     target_link_directories(${MULTIVERSE_CLIENT_LIB} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
     target_link_libraries(${MULTIVERSE_CLIENT_LIB} PRIVATE c++abi zmq atomic)
     target_compile_options(${MULTIVERSE_CLIENT_LIB} PRIVATE ${BUILD_FLAGS})
-    set_target_properties(${MULTIVERSE_CLIENT_LIB} PROPERTIES OUTPUT_NAME ${MULTIVERSE_CLIENT})
-    install(TARGETS ${MULTIVERSE_CLIENT_LIB} DESTINATION ${LIB_DIR}/${STDLIB})
+    if(${library_type} STREQUAL STATIC)
+        install(
+            PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/lib${MULTIVERSE_CLIENT_LIB}.a DESTINATION ${LIB_DIR}/${STDLIB} RENAME lib${MULTIVERSE_CLIENT}.a
+        )
+    elseif(${library_type} STREQUAL SHARED)
+        install(
+            PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/lib${MULTIVERSE_CLIENT_LIB}.so DESTINATION ${LIB_DIR}/${STDLIB} RENAME lib${MULTIVERSE_CLIENT}.so
+        )
+    endif()
 endfunction()
 
 function(build_multiverse_client_json)
@@ -25,8 +32,9 @@ function(build_multiverse_client_json)
     target_link_directories(${MULTIVERSE_CLIENT_JSON_LIB} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
     target_link_libraries(${MULTIVERSE_CLIENT_JSON_LIB} PRIVATE ${MULTIVERSE_CLIENT}_${STDLIB}_STATIC jsoncpp)
     target_compile_options(${MULTIVERSE_CLIENT_JSON_LIB} PRIVATE ${BUILD_FLAGS})
-    set_target_properties(${MULTIVERSE_CLIENT_JSON_LIB} PROPERTIES OUTPUT_NAME ${MULTIVERSE_CLIENT_JSON})
-    install(TARGETS ${MULTIVERSE_CLIENT_JSON_LIB} DESTINATION ${LIB_DIR}/libc++)
+    install(
+        PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/lib${MULTIVERSE_CLIENT_JSON_LIB}.so DESTINATION ${LIB_DIR}/${STDLIB} RENAME lib${MULTIVERSE_CLIENT_JSON}.so
+    )
 endfunction()
 
 foreach(STDLIB IN LISTS STDLIBS)
