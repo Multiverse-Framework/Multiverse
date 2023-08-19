@@ -56,8 +56,10 @@ def main():
 
     if out_extension == ".usd" or out_extension == ".usda" or out_extension == ".usdc":
         usd_world.export(args.output)
+    elif out_extension == ".usdz":
+        print(f"Output extension [{out_extension}] not supported, try .usd, .usda or .usdc instead.")
     else:
-        print(f"Input extension [{in_extension}] not supported.")
+        print(f"Output extension [{out_extension}] not supported.")
 
     usd_world.clean_up()
 

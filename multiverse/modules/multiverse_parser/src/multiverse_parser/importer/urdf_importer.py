@@ -42,27 +42,39 @@ def build_geom(
     else:
         geom_pos = (0.0, 0.0, 0.0)
         geom_rot = (0.0, 0.0, 0.0)
-    geom_quat = tf.transformations.quaternion_from_euler(geom_rot[0], geom_rot[1], geom_rot[2])
+    geom_quat = tf.transformations.quaternion_from_euler(
+        geom_rot[0], geom_rot[1], geom_rot[2]
+    )
     geom_quat = (geom_quat[3], geom_quat[0], geom_quat[1], geom_quat[2])
 
     if type(geometry) == urdf.Box:
-        geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CUBE)
+        geom_builder = body_builder.add_geom(
+            geom_name=geom_name, geom_type=GeomType.CUBE
+        )
         geom_builder.set_transform(
             pos=geom_pos,
             quat=geom_quat,
             scale=(geometry.size[0] / 2, geometry.size[1] / 2, geometry.size[2] / 2),
         )
     elif type(geometry) == urdf.Sphere:
-        geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE)
+        geom_builder = body_builder.add_geom(
+            geom_name=geom_name, geom_type=GeomType.SPHERE
+        )
         geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
         geom_builder.set_attribute(radius=geometry.radius)
     elif type(geometry) == urdf.Cylinder:
-        geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CYLINDER)
+        geom_builder = body_builder.add_geom(
+            geom_name=geom_name, geom_type=GeomType.CYLINDER
+        )
         geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
         geom_builder.set_attribute(radius=geometry.radius, height=geometry.length)
     elif type(geometry) == urdf.Mesh:
-        geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.MESH)
-        geom_scale = (1.0, 1.0, 1.0) if geometry.scale is None else tuple(geometry.scale)
+        geom_builder = body_builder.add_geom(
+            geom_name=geom_name, geom_type=GeomType.MESH
+        )
+        geom_scale = (
+            (1.0, 1.0, 1.0) if geometry.scale is None else tuple(geometry.scale)
+        )
         geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
         mesh_path = geometry.filename
         if mesh_path not in mesh_dict:
@@ -78,7 +90,9 @@ def build_geom(
                     package_path = os.path.dirname(rospack.get_path(package_name))
                     mesh_path_abs = os.path.join(package_path, mesh_path)
                 except rospkg.common.ResourceNotFound:
-                    print(f"Package {package_name} not found, searching for {file} in {source_file_dir}...")
+                    print(
+                        f"Package {package_name} not found, searching for {file} in {source_file_dir}..."
+                    )
                     file_paths = []
                     for root, _, files in os.walk(source_file_dir):
                         if file in files:
@@ -90,7 +104,9 @@ def build_geom(
                     elif len(file_paths) == 1:
                         print(f"Found {file_paths[0]}")
                     elif len(file_paths) > 1:
-                        print(f"Found {str(len(file_paths))} meshes {file} in {source_file_dir}, take the first one {file_paths[0]}.")
+                        print(
+                            f"Found {str(len(file_paths))} meshes {file} in {source_file_dir}, take the first one {file_paths[0]}."
+                        )
 
                     mesh_path_abs = file_paths[0]
 
@@ -113,6 +129,7 @@ def build_geom(
                 print(f"File extension {file_extension} not implemented")
                 return
 
+            mesh_name = mesh_name.replace(" ", "").replace("-", "_")
             export_usd(
                 out_usd=os.path.join(
                     TMP_USD_MESH_PATH,
@@ -120,6 +137,7 @@ def build_geom(
                     mesh_name + ".usda",
                 )
             )
+            
             mesh_dict[geometry.filename] = mesh_name
         else:
             mesh_name = mesh_dict[geometry.filename]
@@ -134,32 +152,32 @@ def build_geom(
         )
 
         geom_builder.set_attribute(prefix="primvars", displayColor=COLLISION_MESH_COLOR)
-        geom_builder.set_attribute(prefix="primvars", displayOpacity=COLLISION_MESH_OPACITY)
+        geom_builder.set_attribute(
+            prefix="primvars", displayOpacity=COLLISION_MESH_OPACITY
+        )
 
     geom_builder.compute_extent()
 
     return geom_builder
 
 
-def import_from_urdf(
+def build_body_and_joint(
+    robot: urdf.Robot,
+    world_builder: WorldBuilder,
+    urdf_link_name: str,
+    root_link_name: str,
     urdf_file_path: str,
-    with_physics: bool = True,
-    with_visual: bool = True,
-    with_collision: bool = True,
-) -> WorldBuilder:
-    for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
-        material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
+    with_physics: bool,
+    with_visual: bool,
+    with_collision: bool,
+) -> None:
+    if urdf_link_name not in robot.child_map:
+        return
 
-    robot = urdf.URDF.from_xml_file(urdf_file_path)
-
-    world_builder = WorldBuilder()
-
-    root_link_name = robot.get_root().replace(" ", "").replace("-", "_")
-
-    world_builder.add_body(body_name=root_link_name)
-    for urdf_joint in robot.joints:
-        parent_link_name = urdf_joint.parent.replace(" ", "").replace("-", "_")
-        child_link_name = urdf_joint.child.replace(" ", "").replace("-", "_")
+    parent_link_name = urdf_link_name.replace(" ", "").replace("-", "_")
+    for child_joint_name, urdf_child_link_name in robot.child_map[urdf_link_name]:
+        child_link_name = urdf_child_link_name.replace(" ", "").replace("-", "_")
+        urdf_joint = robot.joint_map[child_joint_name]
 
         if hasattr(urdf_joint, "origin") and urdf_joint.origin is not None:
             joint_pos = tuple(urdf_joint.origin.xyz)
@@ -167,20 +185,30 @@ def import_from_urdf(
         else:
             joint_pos = (0.0, 0.0, 0.0)
             joint_rot = (0.0, 0.0, 0.0)
-        joint_quat = tf.transformations.quaternion_from_euler(joint_rot[0], joint_rot[1], joint_rot[2])
+        joint_quat = tf.transformations.quaternion_from_euler(
+            joint_rot[0], joint_rot[1], joint_rot[2]
+        )
         joint_quat = (joint_quat[3], joint_quat[0], joint_quat[1], joint_quat[2])
 
         if urdf_joint.type != JointType.FIXED and with_physics:
-            body_builder = world_builder.add_body(body_name=child_link_name, parent_body_name=root_link_name)
+            body_builder = world_builder.add_body(
+                body_name=child_link_name, parent_body_name=root_link_name
+            )
         else:
-            body_builder = world_builder.add_body(body_name=child_link_name, parent_body_name=parent_link_name)
+            body_builder = world_builder.add_body(
+                body_name=child_link_name, parent_body_name=parent_link_name
+            )
 
-        body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to=parent_link_name)
+        body_builder.set_transform(
+            pos=joint_pos, quat=joint_quat, relative_to=parent_link_name
+        )
 
         urdf_link = robot.link_map[child_link_name]
         if with_visual:
             for urdf_visual in urdf_link.visuals:
-                geom_name = child_link_name + "_visual_"
+                geom_name = (
+                    child_link_name.replace(" ", "").replace("-", "_") + "_visual_"
+                )
                 build_geom(
                     source_file_dir=os.path.dirname(os.path.dirname(urdf_file_path)),
                     body_builder=body_builder,
@@ -192,7 +220,9 @@ def import_from_urdf(
 
         if with_collision:
             for urdf_collision in urdf_link.collisions:
-                geom_name = child_link_name + "_collision_"
+                geom_name = (
+                    child_link_name.replace(" ", "").replace("-", "_") + "_collision_"
+                )
                 geom_builder = build_geom(
                     source_file_dir=os.path.dirname(os.path.dirname(urdf_file_path)),
                     body_builder=body_builder,
@@ -207,7 +237,9 @@ def import_from_urdf(
                         mass = inertial.mass
                         com = tuple(inertial.origin.xyz)
 
-                        origin_rot = Rotation.from_euler("zyx", urdf_collision.origin.rpy).as_matrix()
+                        origin_rot = Rotation.from_euler(
+                            "zyx", urdf_collision.origin.rpy
+                        ).as_matrix()
                         inertia = numpy.array(
                             [
                                 [inertial.ixx, inertial.ixy, inertial.ixz],
@@ -230,48 +262,93 @@ def import_from_urdf(
         if with_physics:
             body_builder.enable_collision()
 
-            if urdf_joint.type == "fixed":
-                continue
-
             joint_name = urdf_joint.name.replace(" ", "").replace("-", "_")
-            if urdf_joint.type == "revolute":
+
+            if urdf_joint.type == "fixed":
+                joint_type = JointType.FIXED
+            elif urdf_joint.type == "revolute":
                 joint_type = JointType.REVOLUTE
             elif urdf_joint.type == "continuous":
                 joint_type = JointType.CONTINUOUS
             elif urdf_joint.type == "prismatic":
                 joint_type = JointType.PRISMATIC
             else:
+                joint_type = JointType.NONE
                 print(f"Joint {joint_name} type {urdf_joint.type} not supported.")
-                continue
 
-            if urdf_joint.axis is not None:
-                joint_axis = list(urdf_joint.axis)
-            else:
-                joint_axis = [0, 0, 1]
+            if joint_type != JointType.FIXED and joint_type != JointType.NONE:
+                if urdf_joint.axis is not None:
+                    joint_axis = list(urdf_joint.axis)
+                else:
+                    joint_axis = [0, 0, 1]
 
-            if numpy.array_equal(joint_axis, [1, 0, 0]):
-                joint_axis = "X"
-            elif numpy.array_equal(joint_axis, [0, 1, 0]):
-                joint_axis = "Y"
-            elif numpy.array_equal(joint_axis, [0, 0, 1]):
-                joint_axis = "Z"
-            elif numpy.array_equal(joint_axis, [-1, 0, 0]):
-                joint_axis = "-X"
-            elif numpy.array_equal(joint_axis, [0, -1, 0]):
-                joint_axis = "-Y"
-            elif numpy.array_equal(joint_axis, [0, 0, -1]):
-                joint_axis = "-Z"
-            else:
-                print(f"Joint {joint_name} axis {str(joint_axis)} not supported.")
-                return
+                if numpy.array_equal(joint_axis, [1, 0, 0]):
+                    joint_axis = "X"
+                elif numpy.array_equal(joint_axis, [0, 1, 0]):
+                    joint_axis = "Y"
+                elif numpy.array_equal(joint_axis, [0, 0, 1]):
+                    joint_axis = "Z"
+                elif numpy.array_equal(joint_axis, [-1, 0, 0]):
+                    joint_axis = "-X"
+                elif numpy.array_equal(joint_axis, [0, -1, 0]):
+                    joint_axis = "-Y"
+                elif numpy.array_equal(joint_axis, [0, 0, -1]):
+                    joint_axis = "-Z"
+                else:
+                    print(f"Joint {joint_name} axis {str(joint_axis)} not supported.")
+                    return
 
-            joint_builder = body_builder.add_joint(
-                joint_name=joint_name,
-                parent_name=parent_link_name,
-                child_name=child_link_name,
-                joint_type=joint_type,
-                joint_pos=joint_pos,
-                joint_axis=joint_axis,
-            )
+                joint_builder = body_builder.add_joint(
+                    joint_name=joint_name,
+                    parent_name=parent_link_name,
+                    child_name=child_link_name,
+                    joint_type=joint_type,
+                    joint_pos=joint_pos,
+                    joint_axis=joint_axis,
+                )
+
+        build_body_and_joint(
+            robot,
+            world_builder,
+            urdf_child_link_name,
+            root_link_name,
+            urdf_file_path,
+            with_physics,
+            with_visual,
+            with_collision,
+        )
+
+
+def import_from_urdf(
+    urdf_file_path: str,
+    with_physics: bool = True,
+    with_visual: bool = True,
+    with_collision: bool = True,
+) -> WorldBuilder:
+    for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
+        material_dict[urdf_material.get("name")] = tuple(
+            map(float, urdf_material.find("color").get("rgba").split())
+        )
+
+    robot = urdf.URDF.from_xml_file(urdf_file_path)
+
+    world_builder = WorldBuilder()
+
+    root_link_name = robot.get_root().replace(" ", "").replace("-", "_")
+
+    world_builder.add_body(body_name=root_link_name)
+
+    urdf_link_name = robot.get_root()
+
+    build_body_and_joint(
+        robot,
+        world_builder,
+        urdf_link_name,
+        root_link_name,
+        urdf_file_path,
+        with_physics,
+        with_visual,
+        with_collision,
+    )
 
     return world_builder

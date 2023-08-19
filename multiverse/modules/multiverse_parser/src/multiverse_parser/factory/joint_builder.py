@@ -7,11 +7,12 @@ joint_dict = {}
 
 
 class JointType(Enum):
-    FIXED = 0
-    REVOLUTE = 1
-    CONTINUOUS = 2
-    PRISMATIC = 3
-    SPHERICAL = 4
+    NONE = 0
+    FIXED = 1
+    REVOLUTE = 2
+    CONTINUOUS = 3
+    PRISMATIC = 4
+    SPHERICAL = 5
 
 
 class JointBuilder:
