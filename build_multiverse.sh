@@ -15,14 +15,15 @@ fi
 RELOAD=false
 
 PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH:$LIB_DIR/python"
-if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/python"; then
+if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/libstdc++/python"; then
     echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
     echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
     RELOAD=true
 fi
 
-# Build multiverse_server
-cmake -S $PWD/multiverse -B $BUILD_DIR -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse
+# Build multiverse
+# cmake -S $PWD/multiverse -B $BUILD_DIR -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++
+cmake -S $PWD/multiverse -B $BUILD_DIR -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=SHARED -DSTDLIB=libc++
 make -C $BUILD_DIR
 cmake --install $BUILD_DIR
 

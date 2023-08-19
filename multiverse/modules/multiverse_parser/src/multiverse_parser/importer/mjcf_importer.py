@@ -7,7 +7,7 @@ from multiverse_parser import WorldBuilder, GeomType, JointType
 from multiverse_parser.utils import clear_meshes, modify_name
 
 
-class MjcfImporter():
+class MjcfImporter:
     def __init__(self, mjcf_file_path: str, with_physics: bool, with_visual: bool, with_collision: bool) -> None:
         try:
             self.mj_model = mujoco.MjModel.from_xml_path(mjcf_file_path)
@@ -15,7 +15,7 @@ class MjcfImporter():
             print(f"{error}. Failed to import MJCF.")
             self.world_builder = None
             return
-        
+
         self.with_physics = with_physics
         self.with_visual = with_visual
         self.with_collision = with_collision

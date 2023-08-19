@@ -9,8 +9,8 @@ import tf
 from scipy.spatial.transform import Rotation
 
 from multiverse_parser import WorldBuilder, GeomType, JointType
-from multiverse_parser.importer import import_dae, import_obj, import_stl
-from multiverse_parser.exporter import export_usd
+from multiverse_parser.utils import import_dae, import_obj, import_stl
+from multiverse_parser.utils import export_usd
 from multiverse_parser.utils import diagonalize_inertia, clear_meshes, modify_name
 
 
