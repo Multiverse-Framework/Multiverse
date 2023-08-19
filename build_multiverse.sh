@@ -14,7 +14,7 @@ fi
 
 RELOAD=false
 
-PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH:$LIB_DIR/python"
+PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH:$LIB_DIR/libstdc++/python"
 if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/libstdc++/python"; then
     echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
     echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
