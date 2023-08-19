@@ -12,10 +12,7 @@ def clean_up_meshes(obj_name: str) -> None:
     selected_object = bpy.context.object
     selected_object.name = obj_name
 
-    if (
-        selected_object.scale[0] * selected_object.scale[1] * selected_object.scale[2]
-        < 0
-    ):
+    if selected_object.scale[0] * selected_object.scale[1] * selected_object.scale[2] < 0:
         bpy.ops.object.mode_set(mode="EDIT")
         bpy.ops.mesh.select_all(action="SELECT")
         bpy.ops.mesh.flip_normals()
@@ -26,6 +23,4 @@ def clean_up_meshes(obj_name: str) -> None:
 
 def export_usd(out_usd: str) -> None:
     clean_up_meshes(os.path.splitext(os.path.basename(out_usd))[0])
-    bpy.ops.wm.usd_export(
-        filepath=out_usd, selected_objects_only=True, overwrite_textures=True
-    )
+    bpy.ops.wm.usd_export(filepath=out_usd, selected_objects_only=True, overwrite_textures=True)

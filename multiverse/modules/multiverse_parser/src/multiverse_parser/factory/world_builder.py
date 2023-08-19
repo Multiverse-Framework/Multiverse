@@ -4,6 +4,7 @@ import os, shutil, re
 from pxr import Usd, UsdGeom
 
 from multiverse_parser.factory import TMP, TMP_USD_FILE_DIR, TMP_USD_FILE_PATH
+from multiverse_parser.utils import modify_name
 from .body_builder import BodyBuilder, body_dict
 
 
@@ -34,6 +35,7 @@ class WorldBuilder:
         UsdGeom.SetStageMetersPerUnit(self.stage, UsdGeom.LinearUnits.meters)
 
     def add_body(self, body_name: str, parent_body_name: str = None) -> BodyBuilder:
+        body_name = modify_name(in_name=body_name)
         if body_name in body_dict:
             print(f"Body {body_name} already exists.")
             return body_dict[body_name]

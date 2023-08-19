@@ -5,9 +5,9 @@ from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf, UsdShade
 import bpy, bmesh
 from enum import Enum
 from mathutils import Matrix
-from scipy.spatial.transform import Rotation
 
 from multiverse_parser.factory import TMP_DIR
+from multiverse_parser.utils import modify_name
 from .mesh_builder import (
     MeshBuilder,
     VisualMeshBuilder,
@@ -126,6 +126,7 @@ class GeomBuilder:
             self.geom_prim.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
 
     def add_mesh(self, mesh_name: str = None, visual: bool = True, material_name: str = None) -> MeshBuilder:
+        mesh_name = modify_name(in_name=mesh_name)
         if mesh_name is None:
             mesh_name = "SM_" + self.name
 

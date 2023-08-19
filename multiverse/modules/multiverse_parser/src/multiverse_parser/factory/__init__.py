@@ -14,24 +14,3 @@ TMP_USD_MESH_PATH = os.path.join(TMP_USD_FILE_DIR, TMP_DIR)
 
 COLLISION_MESH_COLOR = [(1.0, 0.0, 0.0)]
 COLLISION_MESH_OPACITY = [0.5]
-
-
-def clear_data() -> None:
-    from bpy import data
-
-    for armature in data.armatures:
-        data.armatures.remove(armature)
-    for mesh in data.meshes:
-        data.meshes.remove(mesh)
-    for object in data.objects:
-        data.objects.remove(object)
-    for material in data.materials:
-        data.materials.remove(material)
-    for camera in data.cameras:
-        data.cameras.remove(camera)
-    for light in data.lights:
-        data.lights.remove(light)
-    for image in data.images:
-        data.images.remove(image)
-
-    return None

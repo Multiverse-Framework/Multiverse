@@ -2,6 +2,7 @@
 
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
+from multiverse_parser.utils import modify_name
 from .geom_builder import GeomBuilder, GeomType
 from .joint_builder import JointBuilder, JointType, joint_dict
 
@@ -61,6 +62,7 @@ class BodyBuilder:
         self.prim.AddTransformOp().Set(mat)
 
     def add_geom(self, geom_name: str, geom_type: GeomType) -> GeomBuilder:
+        goem_name = modify_name(in_name=geom_name)
         geom = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type)
         self.geoms.add(geom)
         return geom
@@ -74,6 +76,7 @@ class BodyBuilder:
         joint_pos: tuple = (0.0, 0.0, 0.0),
         joint_axis: str = "Z",
     ) -> JointBuilder:
+        joint_name = modify_name(in_name=joint_name)
         if joint_name in joint_dict:
             print(f"Joint {joint_name} already exists.")
             joint = joint_dict[joint_name]
