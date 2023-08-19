@@ -48,7 +48,6 @@ class UrdfImporter:
         if urdf_link_name not in self.robot.child_map:
             return
 
-        parent_link_name = urdf_link_name
         for child_joint_name, urdf_child_link_name in self.robot.child_map[urdf_link_name]:
             child_link_name = urdf_child_link_name.replace(" ", "").replace("-", "_")
             urdf_joint = self.robot.joint_map[child_joint_name]
@@ -65,9 +64,9 @@ class UrdfImporter:
             if urdf_joint.type != JointType.FIXED and self.with_physics:
                 body_builder = self.world_builder.add_body(body_name=child_link_name, parent_body_name=self.root_link_name)
             else:
-                body_builder = self.world_builder.add_body(body_name=child_link_name, parent_body_name=parent_link_name)
+                body_builder = self.world_builder.add_body(body_name=child_link_name, parent_body_name=urdf_link_name)
 
-            body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to=parent_link_name)
+            body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to=urdf_link_name)
 
             urdf_link = self.robot.link_map[child_link_name]
             if self.with_visual:
@@ -151,17 +150,18 @@ class UrdfImporter:
                     elif numpy.array_equal(joint_axis, [0, 0, -1]):
                         joint_axis = "-Z"
                     else:
-                        joint_axis = "Z"
+                        joint_axis = None
                         print(f"Joint {urdf_joint.name} axis {str(joint_axis)} not supported.")
 
-                    joint_builder = body_builder.add_joint(
-                        joint_name=urdf_joint.name,
-                        parent_name=parent_link_name,
-                        child_name=child_link_name,
-                        joint_type=joint_type,
-                        joint_pos=joint_pos,
-                        joint_axis=joint_axis,
-                    )
+                    if joint_axis is not None:
+                        joint_builder = body_builder.add_joint(
+                            joint_name=urdf_joint.name,
+                            parent_name=urdf_link_name,
+                            child_name=child_link_name,
+                            joint_type=joint_type,
+                            joint_pos=joint_pos,
+                            joint_axis=joint_axis,
+                        )
 
             self.import_body_and_joint(urdf_link_name=urdf_child_link_name)
 

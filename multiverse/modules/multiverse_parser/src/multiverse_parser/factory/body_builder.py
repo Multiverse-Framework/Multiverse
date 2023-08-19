@@ -81,6 +81,8 @@ class BodyBuilder:
             print(f"Joint {joint_name} already exists.")
             joint = joint_dict[joint_name]
         else:
+            parent_name = modify_name(parent_name)
+            child_name = modify_name(child_name)
             if body_dict.get(parent_name) is None or body_dict.get(child_name) is None:
                 return None
 

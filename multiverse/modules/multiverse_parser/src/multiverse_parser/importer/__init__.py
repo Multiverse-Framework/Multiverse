@@ -1,2 +1,2 @@
-from .mjcf_importer import import_from_mjcf
+from .mjcf_importer import MjcfImporter
 from .urdf_importer import UrdfImporter
