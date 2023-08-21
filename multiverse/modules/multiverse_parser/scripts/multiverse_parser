@@ -7,7 +7,7 @@ sys.path = [sys_path for sys_path in sys.path if "USD/lib/python" not in sys_pat
 
 import argparse
 import os
-from multiverse_parser import UrdfImporter, MjcfImporter
+from multiverse_parser import UrdfImporter, MjcfImporter, UrdfExporter
 
 
 def main():
@@ -58,6 +58,8 @@ def main():
 
     if out_extension == ".usd" or out_extension == ".usda" or out_extension == ".usdc":
         world_builder.export(args.output)
+    elif out_extension == ".urdf":
+        UrdfExporter(urdf_file_path=args.output, world_builder=world_builder, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
     elif out_extension == ".usdz":
         print(f"Output extension [{out_extension}] not supported, try .usd, .usda or .usdc instead.")
     else:

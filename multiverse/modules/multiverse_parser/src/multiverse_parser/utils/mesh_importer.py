@@ -3,6 +3,10 @@
 import bpy
 
 
+def import_usd(in_usd: str) -> None:
+    bpy.ops.wm.usd_import(filepath=in_usd, scale=1.0)
+
+
 def import_dae(in_dae: str) -> None:
     bpy.ops.wm.collada_import(filepath=in_dae)
 

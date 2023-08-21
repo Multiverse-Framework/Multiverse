@@ -9,9 +9,12 @@ import tf
 from scipy.spatial.transform import Rotation
 
 from multiverse_parser import WorldBuilder, GeomType, JointType
+from multiverse_parser.factory.body_builder import body_dict
 from multiverse_parser.utils import import_dae, import_obj, import_stl
 from multiverse_parser.utils import export_usd
 from multiverse_parser.utils import diagonalize_inertia, clear_meshes, modify_name
+from multiverse_parser.utils import xform_cache
+from pxr import Gf
 
 
 class UrdfImporter:
@@ -53,20 +56,20 @@ class UrdfImporter:
             urdf_joint = self.robot.joint_map[child_joint_name]
 
             if hasattr(urdf_joint, "origin") and urdf_joint.origin is not None:
-                joint_pos = tuple(urdf_joint.origin.xyz)
-                joint_rot = tuple(urdf_joint.origin.rpy)
+                urdf_joint_pos = tuple(urdf_joint.origin.xyz)
+                urdf_joint_rot = tuple(urdf_joint.origin.rpy)
             else:
-                joint_pos = (0.0, 0.0, 0.0)
-                joint_rot = (0.0, 0.0, 0.0)
-            joint_quat = tf.transformations.quaternion_from_euler(joint_rot[0], joint_rot[1], joint_rot[2])
-            joint_quat = (joint_quat[3], joint_quat[0], joint_quat[1], joint_quat[2])
+                urdf_joint_pos = (0.0, 0.0, 0.0)
+                urdf_joint_rot = (0.0, 0.0, 0.0)
+            urdf_joint_quat = tf.transformations.quaternion_from_euler(urdf_joint_rot[0], urdf_joint_rot[1], urdf_joint_rot[2])
+            urdf_joint_quat = (urdf_joint_quat[3], urdf_joint_quat[0], urdf_joint_quat[1], urdf_joint_quat[2])
 
-            if urdf_joint.type != JointType.FIXED and self.with_physics:
+            if urdf_joint.type != "fixed" and self.with_physics:
                 body_builder = self.world_builder.add_body(body_name=child_link_name, parent_body_name=self.root_link_name)
             else:
                 body_builder = self.world_builder.add_body(body_name=child_link_name, parent_body_name=urdf_link_name)
 
-            body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to=urdf_link_name)
+            body_builder.set_transform(pos=urdf_joint_pos, quat=urdf_joint_quat, relative_to=urdf_link_name)
 
             urdf_link = self.robot.link_map[child_link_name]
             if self.with_visual:
@@ -154,6 +157,18 @@ class UrdfImporter:
                         print(f"Joint {urdf_joint.name} axis {str(joint_axis)} not supported.")
 
                     if joint_axis is not None:
+                        parent_prim = body_dict[urdf_link_name].xform.GetPrim()
+                        child_prim = body_dict[child_link_name].xform.GetPrim()
+
+                        body1_transform = xform_cache.GetLocalToWorldTransform(parent_prim)
+                        body1_rot = body1_transform.ExtractRotationQuat()
+
+                        body2_transform = xform_cache.GetLocalToWorldTransform(child_prim)
+                        body1_to_body2_transform = body2_transform * body1_transform.GetInverse()
+                        body1_to_body2_pos = body1_to_body2_transform.ExtractTranslation()
+
+                        joint_pos = body1_rot.GetInverse().Transform(Gf.Vec3d(urdf_joint_pos) - body1_to_body2_pos)
+
                         joint_builder = body_builder.add_joint(
                             joint_name=urdf_joint.name,
                             parent_name=urdf_link_name,
@@ -162,6 +177,9 @@ class UrdfImporter:
                             joint_pos=joint_pos,
                             joint_axis=joint_axis,
                         )
+
+                    if joint_type == JointType.REVOLUTE or joint_type == JointType.PRISMATIC:
+                        joint_builder.set_limit(lower=urdf_joint.limit.lower, upper=urdf_joint.limit.upper)
 
             self.import_body_and_joint(urdf_link_name=urdf_child_link_name)
 

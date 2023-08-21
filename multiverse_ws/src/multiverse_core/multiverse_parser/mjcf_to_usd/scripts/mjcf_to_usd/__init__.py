@@ -1,2 +1,0 @@
-from mjcf_to_usd.mjcf_to_usd_no_physics import mjcf_to_usd_no_physics
-from mjcf_to_usd.mjcf_to_usd_with_physics import mjcf_to_usd_with_physics

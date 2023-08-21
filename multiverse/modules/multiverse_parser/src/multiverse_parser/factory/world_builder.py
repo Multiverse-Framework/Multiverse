@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.10
 
-import os, shutil, re
+import os, shutil
 from pxr import Usd, UsdGeom
 
 from multiverse_parser.factory import TMP, TMP_USD_FILE_DIR, TMP_USD_FILE_PATH
@@ -33,17 +33,20 @@ class WorldBuilder:
         self.stage = Usd.Stage.CreateNew(TMP_USD_FILE_PATH)
         UsdGeom.SetStageUpAxis(self.stage, UsdGeom.Tokens.z)
         UsdGeom.SetStageMetersPerUnit(self.stage, UsdGeom.LinearUnits.meters)
+        self.body_names = set()
 
     def add_body(self, body_name: str, parent_body_name: str = None) -> BodyBuilder:
         body_name = modify_name(in_name=body_name)
+
         if body_name in body_dict:
             print(f"Body {body_name} already exists.")
             return body_dict[body_name]
 
+        self.body_names.add(body_name)
         if parent_body_name is None:
-            self.root_body = BodyBuilder(self.stage, body_name)
-            self.stage.SetDefaultPrim(self.root_body.prim.GetPrim())
-            return self.root_body
+            body_builder = BodyBuilder(self.stage, body_name)
+            self.stage.SetDefaultPrim(body_builder.xform.GetPrim())
+            return body_builder
         else:
             return BodyBuilder(self.stage, body_name, parent_body_name)
 
@@ -56,7 +59,7 @@ class WorldBuilder:
 
             if usd_file_extension == ".usda":
                 usd_file_dir = os.path.dirname(usd_file_path)
-                copy_and_overwrite(TMP_USD_FILE_DIR, usd_file_dir)
+                copy_and_overwrite(source_folder=TMP_USD_FILE_DIR, destination_folder=usd_file_dir)
 
                 os.rename(
                     os.path.join(usd_file_dir, os.path.basename(TMP_USD_FILE_PATH)),
@@ -80,8 +83,6 @@ class WorldBuilder:
 
                     with open(usd_file_path, "w", encoding="utf-8") as file:
                         file.write(file_contents)
-            else:
-                self.stage.GetRootLayer().Export(usd_file_path)
 
     def clean_up(self) -> None:
         print(f"Remove {TMP_USD_FILE_DIR}")

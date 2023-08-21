@@ -2,34 +2,29 @@
 
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
-from multiverse_parser.utils import modify_name
-from .geom_builder import GeomBuilder, GeomType
+from multiverse_parser.utils import modify_name, xform_cache
+from .geom_builder import GeomBuilder, GeomType, geom_dict
 from .joint_builder import JointBuilder, JointType, joint_dict
 
 body_dict = {}
-
-xform_cache = UsdGeom.XformCache()
 
 
 class BodyBuilder:
     def __init__(self, stage: Usd.Stage, name: str, parent_name: str = None) -> None:
         body_dict[name] = self
         if parent_name is not None:
-            parent_prim = body_dict.get(parent_name).prim
-            if parent_prim.GetPrim().IsValid():
-                self.path = parent_prim.GetPath().AppendPath(name)
+            parent_xform = body_dict.get(parent_name).xform
+            if parent_xform.GetPrim().IsValid():
+                self.path = parent_xform.GetPath().AppendPath(name)
             else:
-                print(f"Parent prim with name {parent_name} not found.")
+                print(f"Parent xform with name {parent_name} not found.")
                 return
         else:
             self.path = Sdf.Path("/").AppendPath(name)
         self.stage = stage
-        self.prim = UsdGeom.Xform.Define(self.stage, self.path)
-        self.pos = Gf.Vec3d(0.0, 0.0, 0.0)
-        self.quat = Gf.Quatd(1.0, 0.0, 0.0, 0.0)
-        self.scale = Gf.Vec3d(1.0, 1.0, 1.0)
-        self.geoms = set()
-        self.joints = set()
+        self.xform = UsdGeom.Xform.Define(self.stage, self.path)
+        self.geom_names = set()
+        self.joint_names = set()
 
     def set_transform(
         self,
@@ -38,33 +33,34 @@ class BodyBuilder:
         scale: tuple = (1.0, 1.0, 1.0),
         relative_to: str = None,
     ) -> None:
-        self.pos = Gf.Vec3d(pos)
-        self.quat = Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3]))
-        self.scale = Gf.Vec3d(scale)
-
         mat = Gf.Matrix4d()
-        mat.SetTranslateOnly(self.pos)
-        mat.SetRotateOnly(self.quat)
+        mat.SetTranslateOnly(pos)
+        mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
         mat_scale = Gf.Matrix4d()
-        mat_scale.SetScale(Gf.Vec3d(self.scale))
+        mat_scale.SetScale(Gf.Vec3d(scale))
         mat = mat_scale * mat
 
         if relative_to is not None:
-            relative_prim = body_dict[relative_to].prim.GetPrim()
+            relative_prim = body_dict[relative_to].xform.GetPrim()
             if relative_prim:
-                parent_prim = self.prim.GetPrim().GetParent()
+                parent_prim = self.xform.GetPrim().GetParent()
                 if parent_prim.IsValid() and parent_prim != relative_prim:
                     parent_to_relative_mat, _ = xform_cache.ComputeRelativeTransform(relative_prim, parent_prim)
                     mat = mat * parent_to_relative_mat
             else:
                 print(f"Prim at path {relative_to} not found.")
 
-        self.prim.AddTransformOp().Set(mat)
+        self.xform.AddTransformOp().Set(mat)
 
     def add_geom(self, geom_name: str, geom_type: GeomType) -> GeomBuilder:
         goem_name = modify_name(in_name=geom_name)
-        geom = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type)
-        self.geoms.add(geom)
+
+        if goem_name in geom_dict:
+            print(f"Geom {goem_name} already exists.")
+            geom = geom_dict[goem_name]
+        else:
+            self.geom_names.add(geom_name)
+            geom = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type)
         return geom
 
     def add_joint(
@@ -77,10 +73,12 @@ class BodyBuilder:
         joint_axis: str = "Z",
     ) -> JointBuilder:
         joint_name = modify_name(in_name=joint_name)
+
         if joint_name in joint_dict:
             print(f"Joint {joint_name} already exists.")
             joint = joint_dict[joint_name]
         else:
+            self.joint_names.add(joint_name)
             parent_name = modify_name(parent_name)
             child_name = modify_name(child_name)
             if body_dict.get(parent_name) is None or body_dict.get(child_name) is None:
@@ -89,31 +87,35 @@ class BodyBuilder:
             joint = JointBuilder(
                 self.stage,
                 joint_name,
-                body_dict[parent_name],
-                body_dict[child_name],
+                body_dict[parent_name].xform,
+                body_dict[child_name].xform,
                 joint_type,
                 joint_pos,
                 joint_axis,
             )
-            self.joints.add(joint)
+
         return joint
 
     def enable_collision(self) -> None:
-        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.prim)
+        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
         physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
-        physics_rigid_body_api.Apply(self.prim.GetPrim())
+        physics_rigid_body_api.Apply(self.xform.GetPrim())
 
-        for geom in self.geoms:
-            geom.enable_collision()
+        for geom_name in self.geom_names:
+            geom_dict[geom_name].enable_collision()
 
     def set_inertial(
         self,
-        mass: float = 1e-9,
+        mass: float = 1e-1,
         com: tuple = (0.0, 0.0, 0.0),
-        diagonal_inertia: tuple = (0.0, 0.0, 0.0),
+        diagonal_inertia: tuple = (1e-3, 1e-3, 1e-3),
+        density: float = 100,
+        principal_axes: tuple = (1, 0, 0, 0),
     ) -> None:
-        physics_mass_api = UsdPhysics.MassAPI(self.prim)
+        physics_mass_api = UsdPhysics.MassAPI(self.xform)
         physics_mass_api.CreateMassAttr(mass)
         physics_mass_api.CreateCenterOfMassAttr(Gf.Vec3f(com))
         physics_mass_api.CreateDiagonalInertiaAttr(Gf.Vec3f(diagonal_inertia))
-        physics_mass_api.Apply(self.prim.GetPrim())
+        physics_mass_api.CreateDensityAttr(density)
+        physics_mass_api.CreatePrincipalAxesAttr(Gf.Quatf(principal_axes[0], Gf.Vec3f(principal_axes[1], principal_axes[2], principal_axes[3])))
+        physics_mass_api.Apply(self.xform.GetPrim())

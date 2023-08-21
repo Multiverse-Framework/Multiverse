@@ -1,7 +1,9 @@
 #!/usr/bin/env python3.10
 
-from pxr import Usd, Gf, UsdPhysics
+from pxr import Usd, UsdGeom, Gf, UsdPhysics
 from enum import Enum
+
+from multiverse_parser.utils import xform_cache
 
 joint_dict = {}
 
@@ -20,68 +22,72 @@ class JointBuilder:
         self,
         stage: Usd.Stage,
         name: str,
-        parent_body,
-        child_body,
+        parent_xform: UsdGeom.Xform,
+        child_xform: UsdGeom.Xform,
         joint_type: JointType,
         pos: tuple = (0.0, 0.0, 0.0),
         axis: tuple = "Z",
     ) -> None:
         joint_dict[name] = self
         self.stage = stage
-        self.parent_body = parent_body
-        self.child_body = child_body
-        self.path = self.parent_body.prim.GetPath().AppendPath(name)
+        self.parent_xform = parent_xform
+        self.child_xform = child_xform
+        self.path = self.parent_xform.GetPath().AppendPath(name)
         self.type = joint_type
-        self.set_prim()
-        self.pos = Gf.Vec3f(pos)
-        self.set_axis(axis)
+        self.pos = Gf.Vec3d(pos)
+        self.axis = axis
+        self.set_joint()
+        self.set_axis()
 
-        self.prim.CreateCollisionEnabledAttr(False)
+        self.joint.CreateCollisionEnabledAttr(False)
 
-        self.prim.GetBody0Rel().SetTargets([self.parent_body.prim.GetPath()])
-        self.prim.GetBody1Rel().SetTargets([self.child_body.prim.GetPath()])
+        self.joint.GetBody0Rel().SetTargets([self.parent_xform.GetPath()])
+        self.joint.GetBody1Rel().SetTargets([self.child_xform.GetPath()])
 
-        body1_rot = Gf.Quatf(self.parent_body.quat)
+        body1_transform = xform_cache.GetLocalToWorldTransform(self.parent_xform.GetPrim())
+        body1_rot = body1_transform.ExtractRotationQuat()
 
-        body2_pos = Gf.Vec3f(self.child_body.pos)
-        body2_rot = Gf.Quatf(self.child_body.quat)
+        body2_transform = xform_cache.GetLocalToWorldTransform(self.child_xform.GetPrim())
+        body1_to_body2_transform = body2_transform * body1_transform.GetInverse()
+        body1_to_body2_pos = body1_to_body2_transform.ExtractTranslation()
+        body1_to_body2_rot = body1_to_body2_transform.ExtractRotationQuat()
 
-        self.prim.CreateLocalPos0Attr(body2_pos + body1_rot.Transform(self.pos))
-        self.prim.CreateLocalPos1Attr(Gf.Vec3f())
+        self.joint.CreateLocalPos0Attr(body1_rot.Transform(self.pos) + body1_to_body2_pos)
+        self.joint.CreateLocalPos1Attr(Gf.Vec3d())
 
-        self.prim.CreateLocalRot0Attr(body2_rot * self.quat)
-        self.prim.CreateLocalRot1Attr(self.quat)
+        self.joint.CreateLocalRot0Attr(Gf.Quatf(body1_to_body2_rot * self.quat))
+        self.joint.CreateLocalRot1Attr(Gf.Quatf(self.quat))
 
-    def set_prim(self) -> None:
+    def set_joint(self) -> None:
         if self.type == JointType.FIXED:
-            self.prim = UsdPhysics.FixedJoint.Define(self.stage, self.path)
+            self.joint = UsdPhysics.FixedJoint.Define(self.stage, self.path)
         elif self.type == JointType.REVOLUTE or self.type == JointType.CONTINUOUS:
-            self.prim = UsdPhysics.RevoluteJoint.Define(self.stage, self.path)
+            self.joint = UsdPhysics.RevoluteJoint.Define(self.stage, self.path)
         elif self.type == JointType.PRISMATIC:
-            self.prim = UsdPhysics.PrismaticJoint.Define(self.stage, self.path)
+            self.joint = UsdPhysics.PrismaticJoint.Define(self.stage, self.path)
         elif self.type == JointType.SPHERICAL:
-            self.prim = UsdPhysics.SphericalJoint.Define(self.stage, self.path)
+            self.joint = UsdPhysics.SphericalJoint.Define(self.stage, self.path)
 
     def set_limit(self, lower: float = None, upper: float = None) -> None:
         if self.type == JointType.REVOLUTE or self.type == JointType.PRISMATIC:
             if lower is not None:
-                self.prim.CreateLowerLimitAttr(lower)
+                self.joint.CreateLowerLimitAttr(lower)
             if upper is not None:
-                self.prim.CreateUpperLimitAttr(upper)
+                self.joint.CreateUpperLimitAttr(upper)
         else:
             print(f"Joint type {str(self.type)} does not have limits.")
 
-    def set_axis(self, axis: str) -> None:
-        self.prim.CreateAxisAttr("Z")
-        if axis == "X":
-            self.quat = Gf.Quatf(0.7071068, 0, 0.7071068, 0)
-        elif axis == "Y":
-            self.quat = Gf.Quatf(0.7071068, -0.7071068, 0, 0)
-        elif axis == "Z":
-            self.quat = Gf.Quatf(1, 0, 0, 0)
-        elif axis == "-X":
-            self.quat = Gf.Quatf(0.7071068, 0, -0.7071068, 0)
-        elif axis == "-Y":
-            self.quat = Gf.Quatf(0.7071068, 0.7071068, 0, 0)
-        elif axis == "-Z":
-            self.quat = Gf.Quatf(0, 0, 1, 0)
+    def set_axis(self) -> None:
+        self.joint.CreateAxisAttr("Z")
+        if self.axis == "X":
+            self.quat = Gf.Quatd(0.7071068, 0, 0.7071068, 0)
+        elif self.axis == "Y":
+            self.quat = Gf.Quatd(0.7071068, -0.7071068, 0, 0)
+        elif self.axis == "Z":
+            self.quat = Gf.Quatd(1, 0, 0, 0)
+        elif self.axis == "-X":
+            self.quat = Gf.Quatd(0.7071068, 0, -0.7071068, 0)
+        elif self.axis == "-Y":
+            self.quat = Gf.Quatd(0.7071068, 0.7071068, 0, 0)
+        elif self.axis == "-Z":
+            self.quat = Gf.Quatd(0, 0, 1, 0)

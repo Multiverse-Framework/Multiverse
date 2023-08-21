@@ -1,15 +1,28 @@
 import numpy
 from scipy.spatial.transform import Rotation
 import bpy
+import tf
+from pxr import UsdGeom, Gf
+
+xform_cache = UsdGeom.XformCache()
 
 
 def diagonalize_inertia(inertia_tensor):
     eigenvalues, eigenvectors = numpy.linalg.eigh(inertia_tensor)
     eigenvectors = eigenvectors / numpy.linalg.norm(eigenvectors, axis=0)
     rotation_quat = Rotation.from_matrix(eigenvectors).as_quat()
-    rotation_quat = (rotation_quat[3], rotation_quat[0], rotation_quat[1], rotation_quat[2])
+    rotation_quat = (
+        rotation_quat[3],
+        rotation_quat[0],
+        rotation_quat[1],
+        rotation_quat[2],
+    )
     diagonal_inertia = numpy.diag(eigenvalues)
-    diagonal_inertia = (diagonal_inertia[0][0], diagonal_inertia[1][1], diagonal_inertia[2][2])
+    diagonal_inertia = (
+        diagonal_inertia[0][0],
+        diagonal_inertia[1][1],
+        diagonal_inertia[2][2],
+    )
 
     return diagonal_inertia, rotation_quat
 
@@ -38,3 +51,21 @@ def modify_name(in_name: str, replacement: str = None) -> str:
     if out_name == "" and replacement is not None:
         out_name = replacement
     return out_name
+
+
+def quat_to_rpy(quat) -> tuple:
+    if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):
+        real = quat.GetReal()
+        imaginary = quat.GetImaginary()
+        quat = (imaginary[0], imaginary[1], imaginary[2], real)
+    return tf.transformations.euler_from_quaternion(quat)
+
+
+def transform(xyz: tuple = (0.0, 0.0, 0.0), rpy: tuple = (0.0, 0.0, 0.0), scale: tuple = (1.0, 1.0, 1.0)) -> None:
+    bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
+    selected_object = bpy.context.object
+    selected_object.location = xyz
+    selected_object.rotation_euler = rpy
+    selected_object.scale = scale
+
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
