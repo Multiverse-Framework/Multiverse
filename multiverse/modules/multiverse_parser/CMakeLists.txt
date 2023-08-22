@@ -89,3 +89,35 @@ add_test(
           --output=${TEST_DIR}/multiverse_parser/output/from_urdf/to_urdf/no_physics/apartment.urdf
           --no-physics
 )
+
+add_test(
+  NAME mjcf_to_mjcf1
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/mjcf/apartment.xml
+          --output=${TEST_DIR}/multiverse_parser/output/from_mjcf/to_mjcf/with_physics/apartment.xml
+          --physics
+)
+
+add_test(
+  NAME mjcf_to_mjcf2
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/mjcf/apartment.xml
+          --output=${TEST_DIR}/multiverse_parser/output/from_mjcf/to_mjcf/no_physics/apartment.xml
+          --no-physics
+)
+
+# add_test(
+#   NAME urdf_to_mjcf1
+#   COMMAND multiverse_parser
+#           --input=/media/giang/Storage/Multiverse/multiverse_ws/src/multiverse_robots/pal_robotics/tiago_dual_description/urdf/tiago_dual.urdf
+#           --output=${TEST_DIR}/multiverse_parser/output/from_urdf/to_mjcf/with_physics/tiago.xml
+#           --physics
+# )
+
+# add_test(
+#   NAME mjcf_to_mjcf2
+#   COMMAND multiverse_parser
+#           --input=${TEST_DIR}/multiverse_parser/input/apartment/mjcf/apartment.xml
+#           --output=${TEST_DIR}/multiverse_parser/output/from_mjcf/to_mjcf/no_physics/apartment.xml
+#           --no-physics
+# )

@@ -5,6 +5,7 @@ from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 from multiverse_parser.utils import modify_name, xform_cache
 from .geom_builder import GeomBuilder, GeomType, geom_dict
 from .joint_builder import JointBuilder, JointType, joint_dict
+from .mesh_builder import CollisionMeshBuilder, VisualMeshBuilder
 
 body_dict = {}
 
@@ -97,12 +98,16 @@ class BodyBuilder:
         return joint
 
     def enable_collision(self) -> None:
-        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
-        physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
-        physics_rigid_body_api.Apply(self.xform.GetPrim())
-
+        is_visual = True
         for geom_name in self.geom_names:
-            geom_dict[geom_name].enable_collision()
+            geom_builder = geom_dict[geom_name]
+            if any([isinstance(mesh_builder, CollisionMeshBuilder) for mesh_builder in geom_builder.mesh_builders]):
+                is_visual = False
+                geom_builder.enable_collision()
+        if not is_visual:
+            physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
+            physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
+            physics_rigid_body_api.Apply(self.xform.GetPrim())
 
     def set_inertial(
         self,

@@ -5,16 +5,11 @@ import numpy
 from urdf_parser_py import urdf
 from pxr import UsdPhysics
 from multiverse_parser import WorldBuilder, GeomType, JointType
-from multiverse_parser.utils import quat_to_rpy
 from multiverse_parser.factory.body_builder import body_dict
 from multiverse_parser.factory.joint_builder import joint_dict
 from multiverse_parser.factory.geom_builder import geom_dict
-from multiverse_parser.factory.mesh_builder import (
-    VisualMeshBuilder,
-    CollisionMeshBuilder,
-    mesh_dict,
-)
-from multiverse_parser.utils import clear_meshes, import_usd, export_obj, export_stl, transform
+from multiverse_parser.factory.mesh_builder import VisualMeshBuilder, CollisionMeshBuilder
+from multiverse_parser.utils import *
 
 
 class UrdfExporter:
@@ -186,7 +181,7 @@ class UrdfExporter:
 
                 transform(xyz=xyz, rpy=rpy)
 
-                if self.with_visual and isinstance(mesh_builder, VisualMeshBuilder):
+                if self.with_visual and is_visual:
                     mesh_rel_path = os.path.join(
                         "obj",
                         os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0] + ".obj",
@@ -204,7 +199,7 @@ class UrdfExporter:
                     )
                     link.visual = visual
 
-                if self.with_collision and isinstance(mesh_builder, CollisionMeshBuilder):
+                if self.with_collision and not is_visual:
                     mesh_rel_path = os.path.join(
                         "stl",
                         os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0] + ".stl",

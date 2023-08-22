@@ -33,7 +33,7 @@ class WorldBuilder:
         self.stage = Usd.Stage.CreateNew(TMP_USD_FILE_PATH)
         UsdGeom.SetStageUpAxis(self.stage, UsdGeom.Tokens.z)
         UsdGeom.SetStageMetersPerUnit(self.stage, UsdGeom.LinearUnits.meters)
-        self.body_names = set()
+        self.body_names = []
 
     def add_body(self, body_name: str, parent_body_name: str = None) -> BodyBuilder:
         body_name = modify_name(in_name=body_name)
@@ -42,7 +42,7 @@ class WorldBuilder:
             print(f"Body {body_name} already exists.")
             return body_dict[body_name]
 
-        self.body_names.add(body_name)
+        self.body_names.append(body_name)
         if parent_body_name is None:
             body_builder = BodyBuilder(self.stage, body_name)
             self.stage.SetDefaultPrim(body_builder.xform.GetPrim())

@@ -7,7 +7,7 @@ sys.path = [sys_path for sys_path in sys.path if "USD/lib/python" not in sys_pat
 
 import argparse
 import os
-from multiverse_parser import UrdfImporter, MjcfImporter, UrdfExporter
+from multiverse_parser import UrdfImporter, MjcfImporter, UrdfExporter, MjcfExporter
 
 
 def main():
@@ -42,6 +42,12 @@ def main():
         help="Whether to include collision meshes or not",
     )
     parser.set_defaults(collision=True)
+    parser.add_argument(
+        "--keepusd",
+        action=argparse.BooleanOptionalAction,
+        help="Whether to keep the USD file or not",
+    )
+    parser.set_defaults(keepusd=False)
 
     args = parser.parse_args()
     in_extension = os.path.splitext(args.input)[1]
@@ -56,16 +62,20 @@ def main():
 
     world_builder = importer.world_builder
 
+    if args.keepusd:
+        world_builder.export(os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda"))
     if out_extension == ".usd" or out_extension == ".usda" or out_extension == ".usdc":
         world_builder.export(args.output)
     elif out_extension == ".urdf":
         UrdfExporter(urdf_file_path=args.output, world_builder=world_builder, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
+    elif out_extension == ".xml":
+        MjcfExporter(mjcf_file_path=args.output, world_builder=world_builder, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
     elif out_extension == ".usdz":
         print(f"Output extension [{out_extension}] not supported, try .usd, .usda or .usdc instead.")
     else:
         print(f"Output extension [{out_extension}] not supported.")
 
-    world_builder.clean_up()
+    # world_builder.clean_up()
 
 
 if __name__ == "__main__":
