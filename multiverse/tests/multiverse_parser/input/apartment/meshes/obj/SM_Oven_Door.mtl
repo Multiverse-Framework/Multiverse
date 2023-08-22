@@ -1,0 +1,44 @@
+# Blender MTL File: 'None'
+# Material Count: 4
+
+newmtl _Game_Materials_Laborraum_M_Glass_Oven_Door_M_Glass_Oven_Do
+Ns 250.000000
+Ka 0.500000 0.500000 0.500000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl _Game_Materials_Laborraum_M_Glass_Oven_M_Glass_Oven_001
+Ns 250.000000
+Ka 0.500000 0.500000 0.500000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 3
+
+newmtl _Game_Materials_Laborraum_M_OvenBase_M_OvenBase_001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/M_OvenBase_M_OvenBase_D.jpg
+
+newmtl _Game_Materials_Laborraum_M_Rubber_Plastic_M_Rubber_Plastic_002
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/M_Rubber_Plastic_M_Rubber_Plastic_D.jpg
