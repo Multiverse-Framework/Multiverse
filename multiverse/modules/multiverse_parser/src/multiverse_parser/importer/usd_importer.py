@@ -45,24 +45,32 @@ class UsdImporter:
 
     def build_body(self, parent_prim):
         for xform_prim in [xform_prim for xform_prim in parent_prim.GetChildren() if xform_prim.IsA(UsdGeom.Xform)]:
-            body_builder = self.world_builder.add_body(xform_prim.GetName(), parent_prim.GetName())
-            self.build_body(xform_prim)
-        for geom_prim in [geom_prim for geom_prim in parent_prim.GetChildren() if geom_prim.IsA(UsdGeom.Gprim)]:
-            if geom_prim.IsA(UsdGeom.Cube):
-                geom_type = GeomType.CUBE
-            elif geom_prim.IsA(UsdGeom.Sphere):
-                geom_type = GeomType.SPHERE
-            elif geom_prim.IsA(UsdGeom.Cylinder):
-                geom_type = GeomType.CYLINDER
-            elif geom_prim.IsA(UsdGeom.Mesh):
-                geom_type = GeomType.MESH
+            child_geom_prims = [geom_prim for geom_prim in xform_prim.GetChildren() if geom_prim.IsA(UsdGeom.Gprim)]
+            
+            if len(child_geom_prims) == 0:
+                body_builder = self.world_builder.add_body(xform_prim.GetName(), parent_prim.GetName())
+                self.build_body(xform_prim)
             else:
-                print(f"Geom type {geom_prim} not supported.")
-                continue
+                if len(child_geom_prims) > 1:
+                    print(f"More than one child geom for {xform_prim.GetName()}, take the first one.")
+                geom_prim = child_geom_prims[0]
+                if geom_prim.IsA(UsdGeom.Cube):
+                    geom_type = GeomType.CUBE
+                elif geom_prim.IsA(UsdGeom.Sphere):
+                    geom_type = GeomType.SPHERE
+                elif geom_prim.IsA(UsdGeom.Cylinder):
+                    geom_type = GeomType.CYLINDER
+                elif geom_prim.IsA(UsdGeom.Mesh):
+                    geom_type = GeomType.MESH
+                else:
+                    print(f"Geom type {geom_prim} not supported.")
+                    continue
+                
+                print(xform_prim, geom_prim)
+                body_builder = body_dict[parent_prim.GetName()]
+                geom_builder = body_builder.add_geom(geom_name=xform_prim.GetName(), geom_type=geom_type)
 
-            body_builder = body_dict[parent_prim.GetName()]
-            geom_builder = body_builder.add_geom(geom_name=geom_prim.GetName(), geom_type=geom_type)
 
-            if geom_type == GeomType.MESH:
-                for mesh_prim in [mesh_prim for mesh_prim in geom_prim.GetChildren() if mesh_prim.IsA(UsdGeom.Mesh)]:
-                    geom_builder.add_mesh(mesh_name=mesh_prim.GetName(), is_visual=True)
+                # for mesh_prim in [mesh_prim for mesh_prim in geom_prim.GetChildren() if mesh_prim.IsA(UsdGeom.Mesh)]:
+                #     geom_builder.add_mesh(mesh_name=mesh_prim.GetName(), is_visual=True)
+                #     geom_builder.save()
