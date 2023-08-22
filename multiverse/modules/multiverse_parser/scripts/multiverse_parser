@@ -75,7 +75,7 @@ def main():
     else:
         print(f"Output extension [{out_extension}] not supported.")
 
-    # world_builder.clean_up()
+    world_builder.clean_up()
 
 
 if __name__ == "__main__":

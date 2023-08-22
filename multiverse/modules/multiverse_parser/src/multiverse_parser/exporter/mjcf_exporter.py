@@ -45,7 +45,45 @@ class MjcfExporter:
         self.compiler.set("boundmass", "0.000001")
         self.compiler.set("boundinertia", "0.000001")
 
+        self.default = ET.SubElement(self.root, "default")
+        default_visual = ET.SubElement(self.default, "default")
+        default_visual.set("class", "visual")
+        default_visual_geom = ET.SubElement(default_visual, "geom")
+        default_visual_geom.set("contype", "0")
+        default_visual_geom.set("conaffinity", "0")
+
+        default_collision = ET.SubElement(self.default, "default")
+        default_collision.set("class", "collision")
+        default_collision_geom = ET.SubElement(default_collision, "geom")
+        default_collision_geom.set("rgba", "1.0 0.0 0.0 0.5")
+
         self.asset = ET.SubElement(self.root, "asset")
+        floor_texture = ET.SubElement(self.asset, "texture")
+        floor_texture.set("name", "grid")
+        floor_texture.set("type", "2d")
+        floor_texture.set("builtin", "checker")
+        floor_texture.set("width", "512")
+        floor_texture.set("height", "512")
+        floor_texture.set("rgb1", ".1 .2 .3")
+        floor_texture.set("rgb2", ".2 .3 .4")
+        floor_material = ET.SubElement(self.asset, "material")
+        floor_material.set("name", "grid")
+        floor_material.set("texture", "grid")
+        floor_material.set("texrepeat", "1 1")
+        floor_material.set("texuniform", "true")
+
+        worldbody = ET.SubElement(self.root, "worldbody")
+        floor_geom = ET.SubElement(worldbody, "geom")
+        floor_geom.set("name", "floor")
+        floor_geom.set("size", "0 0 0.05")
+        floor_geom.set("type", "plane")
+        floor_geom.set("material", "grid")
+        floor_geom.set("condim", "4")
+        floor_geom.set("friction", "2 0.05 0.01")
+        light = ET.SubElement(worldbody, "light")
+        light.set("diffuse", ".5 .5 .5")
+        light.set("pos", "0 0 5")
+        light.set("dir", "0 0 -1")
 
         self.body_dict = {}
 
@@ -145,7 +183,10 @@ class MjcfExporter:
                     ),
                 )
 
-            is_visual = not geom_builder.geom.GetPrim().HasAPI(UsdPhysics.CollisionAPI)
+            if geom_builder.is_visual:
+                geom.set("class", "visual")
+            else:
+                geom.set("class", "collision")
 
             if geom_builder.type == GeomType.CUBE:
                 geom.set("type", "box")
@@ -190,7 +231,7 @@ class MjcfExporter:
                 transform(xyz=geom_xyz, rpy=geom_rpy)
 
                 mesh_file_name = os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0]
-                if self.with_visual and is_visual:
+                if self.with_visual and geom_builder.is_visual:
                     mesh_rel_path = os.path.join(
                         "obj",
                         mesh_file_name + ".obj",
@@ -206,6 +247,7 @@ class MjcfExporter:
                             texture_file_name = texture_file_names[0]
                             texture = ET.SubElement(self.asset, "texture")
                             texture.set("name", mesh_file_name_visual)
+                            texture.set("type", "2d")
                             texture.set("file", texture_file_name)
 
                             material = ET.SubElement(self.asset, "material")
@@ -220,7 +262,7 @@ class MjcfExporter:
 
                     geom.set("mesh", mesh_file_name_visual)
 
-                if self.with_collision and not is_visual:
+                if self.with_collision and not geom_builder.is_visual:
                     mesh_rel_path = os.path.join(
                         "stl",
                         mesh_file_name + ".stl",

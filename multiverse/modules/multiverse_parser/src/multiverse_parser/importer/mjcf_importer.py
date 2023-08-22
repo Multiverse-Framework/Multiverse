@@ -46,6 +46,10 @@ class MjcfImporter:
 
             for geom_id in range(mj_body.geomadr[0], mj_body.geomadr[0] + mj_body.geomnum[0]):
                 mj_geom = self.mj_model.geom(geom_id)
+                is_visual = (mj_geom.contype == 0) and (mj_geom.conaffinity == 0)
+                if is_visual:
+                    continue #TODO: Implement then remove this
+
                 geom_name = modify_name(in_name=mj_geom.name, replacement="Geom_" + str(geom_id))
 
                 if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE:
@@ -67,7 +71,7 @@ class MjcfImporter:
                 else:
                     print(f"Geom type {str(mj_geom.type)} not supported.")
                     continue
-
+                
                 if mj_geom.type != mujoco.mjtGeom.mjGEOM_BOX and mj_geom.type != mujoco.mjtGeom.mjGEOM_PLANE:
                     geom_builder.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat))
                     if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE:
@@ -79,53 +83,59 @@ class MjcfImporter:
                         mesh_name = modify_name(in_name=self.mj_model.mesh(mesh_id).name, replacement="Mesh_" + str(mesh_id))
 
                         clear_meshes()
-                        mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, visual=False)
 
-                        if mesh_name not in self.mesh_names:
-                            self.mesh_names.add(mesh_name)
+                        is_visual = (mj_geom.contype == 0) and (mj_geom.conaffinity == 0)
+                        
+                        if is_visual:
+                            pass #TODO: Implement
+                        else:
+                            mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, is_visual=False)
 
-                            vert_adr = self.mj_model.mesh_vertadr[mesh_id]
-                            vert_num = self.mj_model.mesh_vertnum[mesh_id]
+                            if mesh_name not in self.mesh_names:
+                                self.mesh_names.add(mesh_name)
 
-                            face_adr = self.mj_model.mesh_faceadr[mesh_id]
-                            face_num = self.mj_model.mesh_facenum[mesh_id]
-                            points = numpy.empty(shape=[vert_num, 3], dtype=float)
+                                vert_adr = self.mj_model.mesh_vertadr[mesh_id]
+                                vert_num = self.mj_model.mesh_vertnum[mesh_id]
 
-                            normals = numpy.empty(shape=[self.mj_model.mesh_facenum[mesh_id], 3], dtype=float)
+                                face_adr = self.mj_model.mesh_faceadr[mesh_id]
+                                face_num = self.mj_model.mesh_facenum[mesh_id]
+                                points = numpy.empty(shape=[vert_num, 3], dtype=float)
 
-                            face_vertex_counts = numpy.empty(shape=self.mj_model.mesh_facenum[mesh_id], dtype=float)
-                            face_vertex_counts.fill(3)
+                                normals = numpy.empty(shape=[self.mj_model.mesh_facenum[mesh_id], 3], dtype=float)
 
-                            face_vertex_indices = numpy.empty(shape=self.mj_model.mesh_facenum[mesh_id] * 3, dtype=float)
+                                face_vertex_counts = numpy.empty(shape=self.mj_model.mesh_facenum[mesh_id], dtype=float)
+                                face_vertex_counts.fill(3)
 
-                            for i in range(vert_num):
-                                vert_id = vert_adr + i
-                                points[i] = self.mj_model.mesh_vert[vert_id]
+                                face_vertex_indices = numpy.empty(shape=self.mj_model.mesh_facenum[mesh_id] * 3, dtype=float)
 
-                            face_adr = self.mj_model.mesh_faceadr[mesh_id]
-                            normal_adr = self.mj_model.mesh_normaladr[mesh_id]
-                            for i in range(face_num):
-                                face_id = face_adr + i
-                                face_normals = self.mj_model.mesh_normal[normal_adr + self.mj_model.mesh_facenormal[face_id]]
+                                for i in range(vert_num):
+                                    vert_id = vert_adr + i
+                                    points[i] = self.mj_model.mesh_vert[vert_id]
 
-                                p1 = face_normals[0]
-                                p2 = face_normals[1]
-                                p3 = face_normals[2]
+                                face_adr = self.mj_model.mesh_faceadr[mesh_id]
+                                normal_adr = self.mj_model.mesh_normaladr[mesh_id]
+                                for i in range(face_num):
+                                    face_id = face_adr + i
+                                    face_normals = self.mj_model.mesh_normal[normal_adr + self.mj_model.mesh_facenormal[face_id]]
 
-                                v1 = p2 - p1
-                                v2 = p3 - p1
-                                normal = numpy.cross(v1, v2)
-                                norm = numpy.linalg.norm(normal)
-                                if norm != 0:
-                                    normal = normal / norm
-                                normals[i] = normal
+                                    p1 = face_normals[0]
+                                    p2 = face_normals[1]
+                                    p3 = face_normals[2]
 
-                                face_vertex_indices[3 * i] = self.mj_model.mesh_face[face_id][0]
-                                face_vertex_indices[3 * i + 1] = self.mj_model.mesh_face[face_id][1]
-                                face_vertex_indices[3 * i + 2] = self.mj_model.mesh_face[face_id][2]
-                            mesh_builder.build(points, normals, face_vertex_counts, face_vertex_indices)
+                                    v1 = p2 - p1
+                                    v2 = p3 - p1
+                                    normal = numpy.cross(v1, v2)
+                                    norm = numpy.linalg.norm(normal)
+                                    if norm != 0:
+                                        normal = normal / norm
+                                    normals[i] = normal
 
-                            mesh_builder.save()
+                                    face_vertex_indices[3 * i] = self.mj_model.mesh_face[face_id][0]
+                                    face_vertex_indices[3 * i + 1] = self.mj_model.mesh_face[face_id][1]
+                                    face_vertex_indices[3 * i + 2] = self.mj_model.mesh_face[face_id][2]
+                                mesh_builder.build(points, normals, face_vertex_counts, face_vertex_indices)
+
+                                mesh_builder.save()
 
                 geom_builder.set_attribute(prefix="primvars", displayColor=mj_geom.rgba[:3])
                 geom_builder.set_attribute(prefix="primvars", displayOpacity=mj_geom.rgba[3])

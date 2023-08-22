@@ -1842,11 +1842,78 @@
     <child link="fridge_base"/>
   </joint>
   <link name="fridge_base">
-    <visual>
+    <!-- <visual>
       <geometry>
         <mesh filename="package://multiverse_parser/examples/input/apartment/meshes/dae/SM_Fridge_Base.dae"/>
       </geometry>
+    </visual> -->
+    <visual>
+      <origin xyz="0.016051 -0.257778 0.0"/>
+      <geometry>
+        <box size="0.483652 0.043244 1.75881"/>
+      </geometry>
     </visual>
+    <visual>
+      <origin xyz="0.016051 0.257778 0.0"/>
+      <geometry>
+        <box size="0.483652 0.043244 1.75881"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.029351 -0.223235 -0.561142"/>
+      <geometry>
+        <box size="0.392848 0.024554 0.636392"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.029351 0.223235 -0.561142"/>
+      <geometry>
+        <box size="0.392848 0.024554 0.636392"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.011034 0.0 0.855407"/>
+      <geometry>
+        <box size="0.49339 0.556434 0.047996"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.029351 0.0 0.839695"/>
+      <geometry>
+        <box size="0.392848 0.469566 0.07542"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.029351 0.0 0.224975"/>
+      <geometry>
+        <box size="0.392848 0.469566 0.025"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.029351 0.0 -0.18398"/>
+      <geometry>
+        <box size="0.392848 0.469566 0.11793"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.029351 0.0 -0.842617"/>
+      <geometry>
+        <box size="0.392848 0.469566 0.073576"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.159364 0.0 0.339754"/>
+      <geometry>
+        <box size="0.01564 0.469566 0.929316"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.199778 0.0 -0.524221"/>
+      <geometry>
+        <box size="0.116796 0.469566 0.56255"/>
+      </geometry>
+    </visual>
+    
     <collision>
       <origin xyz="0.016051 -0.257778 0.0"/>
       <geometry>
@@ -3293,114 +3360,6 @@
       </geometry>
     </collision>
   </link>
-  <joint name="dishwasher_tray1_joint" type="prismatic">
-    <origin rpy="0.0 0.0 0.0" xyz="0.22401426 0.00735926 0.22713593"/>
-    <parent link="dishwasher"/>
-    <child link="dishwasher_tray1"/>
-    <axis xyz="-1 0 0"/>
-    <limit effort="1000.0" lower="0.0" upper="0.5" velocity="0.5"/>
-  </joint>
-  <link name="dishwasher_tray1">
-    <visual>
-      <geometry>
-        <mesh filename="package://multiverse_parser/examples/input/apartment/meshes/dae/SM_Dishwasher_Tray_01.dae"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="-0.03859 0.0 -0.144673"/>
-      <geometry>
-        <box size="0.48427 0.538406 0.014224"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin xyz="-0.03859 0.255159 -0.035299"/>
-      <geometry>
-        <box size="0.48427 0.010896 0.232972"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin xyz="-0.03859 -0.255159 -0.035299"/>
-      <geometry>
-        <box size="0.48427 0.010896 0.232972"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin xyz="0.193489 0.0 -0.035299"/>
-      <geometry>
-        <box size="0.008578 0.538406 0.232972"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin xyz="-0.280937 0.0 -0.035299"/>
-      <geometry>
-        <box size="0.008578 0.538406 0.232972"/>
-      </geometry>
-    </collision>
-  </link>
-  <joint name="dishwasher_tray2_joint" type="prismatic">
-    <origin rpy="0.0 0.0 0.0" xyz="0.20742002 0.00735798 0.40232784"/>
-    <parent link="dishwasher"/>
-    <child link="dishwasher_tray2"/>
-    <axis xyz="-1 0 0"/>
-    <limit effort="1000.0" lower="0.0" upper="0.3" velocity="0.3"/>
-  </joint>
-  <link name="dishwasher_tray2">
-    <visual>
-      <geometry>
-        <mesh filename="package://multiverse_parser/examples/input/apartment/meshes/dae/SM_Dishwasher_Tray_02.dae"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0.0 0.0 -0.051928"/>
-      <geometry>
-        <box size="0.462628 0.47464 0.027588"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin xyz="0.0 -0.243352 0.023995"/>
-      <geometry>
-        <box size="0.462628 0.017148 0.175624"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin xyz="0.0 0.243352 0.023995"/>
-      <geometry>
-        <box size="0.462628 0.017148 0.175624"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin xyz="-0.225859 0.0 0.023995"/>
-      <geometry>
-        <box size="0.008364 0.47464 0.175624"/>
-      </geometry>
-    </collision>
-    <collision>
-      <origin xyz="0.225859 0.0 0.023995"/>
-      <geometry>
-        <box size="0.008364 0.47464 0.175624"/>
-      </geometry>
-    </collision>
-  </link>
-  <joint name="dishwasher_tray3_joint" type="prismatic">
-    <origin rpy="0.0 0.0 0.0" xyz="0.22787212 0.01312525 0.61131351"/>
-    <parent link="dishwasher"/>
-    <child link="dishwasher_tray3"/>
-    <axis xyz="-1 0 0"/>
-    <limit effort="1000.0" lower="0.0" upper="0.3" velocity="0.3"/>
-  </joint>
-  <link name="dishwasher_tray3">
-    <visual>
-      <geometry>
-        <mesh filename="package://multiverse_parser/examples/input/apartment/meshes/dae/SM_Dishwasher_Tray_03.dae"/>
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0.0 0.0 0.0"/>
-      <geometry>
-        <box size="0.44 0.54 0.072"/>
-      </geometry>
-    </collision>
-  </link>
   <!-- Cabinet8 -->
   <joint name="cabinet8_joint" type="fixed">
     <origin rpy="0.0 0.0 0.0" xyz="2.49268082 3.37232117 0.49448143"/>
@@ -3452,11 +3411,209 @@
     <limit effort="1000.0" lower="0.0" upper="0.45" velocity="0.45"/>
   </joint>
   <link name="sink_drawer1">
-    <visual>
+    <!-- <visual>
       <geometry>
         <mesh filename="package://multiverse_parser/examples/input/apartment/meshes/dae/SM_Kitchen_08_Sink_Drawer_01.dae"/>
       </geometry>
+    </visual> -->
+
+    <visual>
+      <origin xyz="-0.233976 0.0 0.0"/>
+      <geometry>
+        <box size="0.018776 0.596516 0.794026"/>
+      </geometry>
     </visual>
+    <visual>
+      <origin xyz="0.259483 0.0 -0.288887"/>
+      <geometry>
+        <box size="0.018034 0.539508 0.169484"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.025012 -0.268047 -0.08949"/>
+      <geometry>
+        <box size="0.498056 0.015 0.084"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.025012 0.268047 -0.08949"/>
+      <geometry>
+        <box size="0.498056 0.015 0.084"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.025012 -0.268047 -0.208727"/>
+      <geometry>
+        <box size="0.498056 0.015 0.023296"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.025012 0.268047 -0.208727"/>
+      <geometry>
+        <box size="0.498056 0.015 0.023296"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.025012 -0.268047 -0.33085"/>
+      <geometry>
+        <box size="0.498056 0.015 0.087218"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.025012 0.268047 -0.33085"/>
+      <geometry>
+        <box size="0.498056 0.015 0.087218"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.025012 -0.246033 -0.04"/>
+      <geometry>
+        <box size="0.498056 0.062024 0.016"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.025012 0.246033 -0.04"/>
+      <geometry>
+        <box size="0.498056 0.062024 0.016"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.213959 0.0 -0.04"/>
+      <geometry>
+        <box size="0.021008 0.554092 0.016"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.21583 0.0 -0.04"/>
+      <geometry>
+        <box size="0.117306 0.554092 0.016"/>
+      </geometry>
+    </visual>
+    <!-- Trash can 1 -->
+    <visual>
+      <origin xyz="0.086505 0.00535 -0.198155 "/>
+      <geometry>
+        <box size="0.149578 0.016852 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.086505 0.211412 -0.198155"/>
+      <geometry>
+        <box size="0.149578 0.016852 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.152938 0.109826 -0.198155"/>
+      <geometry>
+        <box size="0.016712 0.219652 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.02 0.109826 -0.198155"/>
+      <geometry>
+        <box size="0.016712 0.219652 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.086505 0.109826 -0.372315"/>
+      <geometry>
+        <box size="0.149578 0.219652 0.0017"/>
+      </geometry>
+    </visual>
+    <!-- Trash can 2 -->
+    <visual>
+      <origin xyz="0.086505 -0.00535 -0.198155 "/>
+      <geometry>
+        <box size="0.149578 0.016852 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.086505 -0.211412 -0.198155"/>
+      <geometry>
+        <box size="0.149578 0.016852 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.152938 -0.109826 -0.198155"/>
+      <geometry>
+        <box size="0.016852 0.219652 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.02 -0.109826 -0.198155"/>
+      <geometry>
+        <box size="0.016852 0.219652 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.086505 -0.109826 -0.372315"/>
+      <geometry>
+        <box size="0.149578 0.219652 0.0017"/>
+      </geometry>
+    </visual>
+    <!-- Trash can 3 -->
+    <visual>
+      <origin xyz="-0.098209 0.221355 -0.198155"/>
+      <geometry>
+        <box size="0.219458 0.016852 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.098209 0.088435 -0.198155"/>
+      <geometry>
+        <box size="0.219458 0.016852 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.003041 0.155 -0.198155 "/>
+      <geometry>
+        <box size="0.016852 0.149382 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.199821 0.155 -0.198155"/>
+      <geometry>
+        <box size="0.016852 0.149382 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.098209 0.155 -0.372315"/>
+      <geometry>
+        <box size="0.219458 0.149382  0.0017"/>
+      </geometry>
+    </visual>
+    <!-- Trash can 4 -->
+    <visual>
+      <origin xyz="-0.098209 -0.221355 -0.198155"/>
+      <geometry>
+        <box size="0.219458 0.016852 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.098209 0.071323 -0.198155"/>
+      <geometry>
+        <box size="0.219458 0.016852 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="0.003041 -0.075302 -0.198155 "/>
+      <geometry>
+        <box size="0.016852 0.309498 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.199821 -0.075302 -0.198155"/>
+      <geometry>
+        <box size="0.016852 0.309498 0.34661"/>
+      </geometry>
+    </visual>
+    <visual>
+      <origin xyz="-0.098209 -0.075302 -0.372315"/>
+      <geometry>
+        <box size="0.219458 0.309498 0.0017"/>
+      </geometry>
+    </visual>
+
     <collision>
       <origin xyz="-0.233976 0.0 0.0"/>
       <geometry>

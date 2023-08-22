@@ -68,6 +68,7 @@ class GeomBuilder:
         self.type = geom_type
         self.set_prim()
         self.mesh_builders = []
+        self.is_visual = False
 
     def set_prim(self) -> None:
         self.xform = UsdGeom.Xform.Define(self.stage, self.path)
@@ -119,13 +120,15 @@ class GeomBuilder:
             height = self.geom.GetHeightAttr().Get()
             self.geom.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
 
-    def add_mesh(self, mesh_name: str = None, visual: bool = True, material_name: str = None) -> MeshBuilder:
+    def add_mesh(self, mesh_name: str = None, is_visual: bool = True, material_name: str = None) -> MeshBuilder:
         mesh_name = modify_name(in_name=mesh_name)
+
+        self.is_visual = is_visual
 
         if mesh_name is None:
             mesh_name = "SM_" + self.name
 
-        mesh_path = os.path.join(TMP_DIR, "visual" if visual else "collision", mesh_name + ".usda")
+        mesh_path = os.path.join(TMP_DIR, "visual" if is_visual else "collision", mesh_name + ".usda")
         mesh_ref = "./" + mesh_path
 
         usd_file_path = os.path.join(TMP_USD_FILE_DIR, mesh_path)
@@ -133,7 +136,7 @@ class GeomBuilder:
         if usd_file_path in mesh_dict:
             mesh_builder = mesh_dict[usd_file_path]
         else:
-            if visual:
+            if is_visual:
                 mesh_builder = VisualMeshBuilder(name=mesh_name, usd_file_path=usd_file_path)
             else:
                 mesh_builder = CollisionMeshBuilder(name=mesh_name, usd_file_path=usd_file_path)
@@ -144,7 +147,7 @@ class GeomBuilder:
 
         self.xform.GetPrim().GetReferences().AddReference(mesh_ref, mesh_builder.xform.GetPath())
 
-        if visual:
+        if is_visual:
             if material_name is None:
                 material_name = "M_" + mesh_name.replace("SM_", "", 1)
             material_builder = mesh_builder.add_material(material_name=material_name)

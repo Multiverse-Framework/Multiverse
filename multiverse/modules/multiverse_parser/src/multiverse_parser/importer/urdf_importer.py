@@ -291,7 +291,7 @@ class UrdfImporter:
             else:
                 mesh_name = self.mesh_dict[urdf_geom.filename]
 
-            mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, visual=visual)
+            mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, is_visual=visual)
             mesh_builder.save()
 
         if not visual:
