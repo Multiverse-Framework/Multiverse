@@ -24,7 +24,7 @@ class UrdfImporter:
         with_physics: bool,
         with_visual: bool,
         with_collision: bool,
-    ) -> WorldBuilder:
+    ) -> None:
         self.material_dict = {}
         self.mesh_dict = {}
         self.geom_dict = {}

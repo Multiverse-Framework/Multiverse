@@ -7,7 +7,8 @@ sys.path = [sys_path for sys_path in sys.path if "USD/lib/python" not in sys_pat
 
 import argparse
 import os
-from multiverse_parser import UrdfImporter, MjcfImporter, UrdfExporter, MjcfExporter
+from multiverse_parser import UrdfImporter, MjcfImporter, UsdImporter
+from multiverse_parser import UrdfExporter, MjcfExporter
 
 
 def main():
@@ -52,27 +53,30 @@ def main():
     args = parser.parse_args()
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
-    if in_extension == ".urdf":
-        importer = UrdfImporter(urdf_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
+    if in_extension in [".usd", ".usda", ".usdc"]:
+        importer = UsdImporter(usd_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision) 
+    elif in_extension == ".urdf":
+        importer = UrdfImporter(urdf_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision) 
     elif in_extension == ".xml":
         importer = MjcfImporter(mjcf_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
     else:
         print(f"Input extension [{in_extension}] not supported.")
         return
-
+    
     world_builder = importer.world_builder
 
-    if args.keepusd:
-        world_builder.export(os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda"))
-    if out_extension == ".usd" or out_extension == ".usda" or out_extension == ".usdc":
-        world_builder.export(args.output)
-    elif out_extension == ".urdf":
+    if args.keepusd or out_extension in [".usd", ".usda", ".usdc"]:
+        if out_extension not in [".usd", ".usda", ".usdc"]:
+            out_extension = ".usda"
+        usd_file_path = os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + out_extension)
+        world_builder.export(usd_file_path)
+    if out_extension == ".urdf":
         UrdfExporter(urdf_file_path=args.output, world_builder=world_builder, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
     elif out_extension == ".xml":
         MjcfExporter(mjcf_file_path=args.output, world_builder=world_builder, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
     elif out_extension == ".usdz":
         print(f"Output extension [{out_extension}] not supported, try .usd, .usda or .usdc instead.")
-    else:
+    elif out_extension not in [".usd", ".usda", ".usdc"]:
         print(f"Output extension [{out_extension}] not supported.")
 
     world_builder.clean_up()

@@ -48,7 +48,7 @@ class MjcfImporter:
                 mj_geom = self.mj_model.geom(geom_id)
                 is_visual = (mj_geom.contype == 0) and (mj_geom.conaffinity == 0)
                 if is_visual:
-                    continue #TODO: Implement then remove this
+                    continue  # TODO: Implement then remove this
 
                 geom_name = modify_name(in_name=mj_geom.name, replacement="Geom_" + str(geom_id))
 
@@ -71,7 +71,7 @@ class MjcfImporter:
                 else:
                     print(f"Geom type {str(mj_geom.type)} not supported.")
                     continue
-                
+
                 if mj_geom.type != mujoco.mjtGeom.mjGEOM_BOX and mj_geom.type != mujoco.mjtGeom.mjGEOM_PLANE:
                     geom_builder.set_transform(pos=tuple(mj_geom.pos), quat=tuple(mj_geom.quat))
                     if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE:
@@ -85,9 +85,9 @@ class MjcfImporter:
                         clear_meshes()
 
                         is_visual = (mj_geom.contype == 0) and (mj_geom.conaffinity == 0)
-                        
+
                         if is_visual:
-                            pass #TODO: Implement
+                            pass  # TODO: Implement
                         else:
                             mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, is_visual=False)
 

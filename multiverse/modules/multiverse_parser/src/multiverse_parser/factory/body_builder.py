@@ -13,7 +13,7 @@ body_dict = {}
 class BodyBuilder:
     def __init__(self, stage: Usd.Stage, name: str, parent_name: str = None) -> None:
         body_dict[name] = self
-        if parent_name is not None:
+        if isinstance(parent_name, str):
             parent_xform = body_dict.get(parent_name).xform
             if parent_xform.GetPrim().IsValid():
                 self.path = parent_xform.GetPath().AppendPath(name)

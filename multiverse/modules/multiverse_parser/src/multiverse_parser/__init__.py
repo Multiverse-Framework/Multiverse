@@ -1,5 +1,5 @@
 from multiverse_parser.factory.world_builder import WorldBuilder
 from multiverse_parser.factory.geom_builder import GeomType
 from multiverse_parser.factory.joint_builder import JointType
-from multiverse_parser.importer import UrdfImporter, MjcfImporter
+from multiverse_parser.importer import UrdfImporter, MjcfImporter, UsdImporter
 from multiverse_parser.exporter import UrdfExporter, MjcfExporter
