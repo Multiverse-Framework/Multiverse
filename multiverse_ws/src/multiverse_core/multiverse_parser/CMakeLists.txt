@@ -59,8 +59,6 @@ target_link_libraries(${URDF_TO_MJCF_NODE}
 # # Mark executable scripts (Python etc.) for installation
 # # in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-  mjcf_to_usd/scripts/mjcf_to_usd_node.py
-  usd_to_urdf/scripts/usd_to_urdf_node.py
   sdf_to_urdf/scripts/sdf_to_urdf_node.py
   urdf_to_fbx/scripts/urdf_to_fbx_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
