@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.10
 
 import os
+from math import radians
 from xml.etree import ElementTree as ET
 from xml.dom import minidom
 from pxr import UsdPhysics
@@ -90,25 +91,29 @@ class MjcfExporter:
         self.worldbody = ET.SubElement(self.root, "worldbody")
         self.body_dict[self.world_builder.body_names[0]] = self.worldbody
 
+        body_names = self.world_builder.body_names
+        reduces_body_names = body_names
+
         stop = False
         while not stop:
             stop = True
-            for body_name in self.world_builder.body_names:
+            for body_name in body_names:
                 body_builder = body_dict[body_name]
                 parent_body_name = body_builder.xform.GetPrim().GetParent().GetName()
                 if parent_body_name in self.body_dict and body_name not in self.body_dict and len(body_builder.joint_names) == 0:
                     stop = False
                     self.build_link(body_name=body_name, parent_body_name=parent_body_name)
-
+                    reduces_body_names.remove(body_name)
             for joint_name, joint_builder in joint_dict.items():
                 parent_body_name = joint_builder.parent_xform.GetPrim().GetName()
                 child_body_name = joint_builder.child_xform.GetPrim().GetName()
                 if parent_body_name in self.body_dict and child_body_name not in self.body_dict:
                     stop = False
                     self.build_link(body_name=child_body_name, parent_body_name=parent_body_name)
-
                     if with_physics:
                         self.build_joint(joint_name=joint_name, body_name=child_body_name)
+                    reduces_body_names.remove(child_body_name)
+            body_names = reduces_body_names
 
         self.export()
 
@@ -218,12 +223,11 @@ class MjcfExporter:
                 )
             elif geom_builder.type == GeomType.MESH:
                 geom.set("type", "mesh")
-                if len(geom_builder.mesh_builders) > 1:
-                    print(f"More than 1 mesh exists in geom {geom_name}, take the first one.")
-                elif len(geom_builder.mesh_builders) == 0:
-                    print(f"Mesh not found in geom {geom_name}")
+                if geom_builder.mesh_builder is None:
+                    print(f"Mesh builder for {str(geom_builder)} not found.")
+                    continue
 
-                mesh_builder = geom_builder.mesh_builders[0]
+                mesh_builder = geom_builder.mesh_builder
                 clear_meshes()
 
                 import_usd(mesh_builder.usd_file_path)
@@ -289,10 +293,12 @@ class MjcfExporter:
         if joint_builder.type == JointType.PRISMATIC or joint_builder.type == JointType.REVOLUTE:
             if joint_builder.type == JointType.PRISMATIC:
                 joint.set("type", "slide")
+                lower = joint_builder.joint.GetLowerLimitAttr().Get()
+                upper = joint_builder.joint.GetUpperLimitAttr().Get()
             elif joint_builder.type == JointType.REVOLUTE:
                 joint.set("type", "hinge")
-            lower = joint_builder.joint.GetLowerLimitAttr().Get()
-            upper = joint_builder.joint.GetUpperLimitAttr().Get()
+                lower = radians(joint_builder.joint.GetLowerLimitAttr().Get())
+                upper = radians(joint_builder.joint.GetUpperLimitAttr().Get())
             joint.set("range", str(lower) + " " + str(upper))
         elif joint_builder.type == JointType.SPHERICAL:
             joint.set("type", "ball")

@@ -2,6 +2,7 @@
 
 import os
 import numpy
+from math import radians
 from urdf_parser_py import urdf
 from pxr import UsdPhysics
 from multiverse_parser import WorldBuilder, GeomType, JointType
@@ -81,8 +82,13 @@ class UrdfExporter:
                 limit = urdf.JointLimit()
                 limit.effort = 1000
                 limit.velocity = 1000
-                limit.lower = joint_builder.joint.GetLowerLimitAttr().Get()
-                limit.upper = joint_builder.joint.GetUpperLimitAttr().Get()
+
+                if joint_builder.type == JointType.REVOLUTE:
+                    limit.lower = radians(joint_builder.joint.GetLowerLimitAttr().Get())
+                    limit.upper = radians(joint_builder.joint.GetUpperLimitAttr().Get())
+                else:
+                    limit.lower = joint_builder.joint.GetLowerLimitAttr().Get()
+                    limit.upper = joint_builder.joint.GetUpperLimitAttr().Get()
 
                 if joint_builder.type == JointType.PRISMATIC:
                     joint.type = "prismatic"
@@ -174,7 +180,8 @@ class UrdfExporter:
                     collision = urdf.Collision(geometry=geometry, origin=origin, name=geom_builder.name)
                     link.collision = collision
 
-            for mesh_builder in geom_builder.mesh_builders:
+            if geom_builder.mesh_builder is not None:
+                mesh_builder = geom_builder.mesh_builder
                 clear_meshes()
 
                 import_usd(mesh_builder.usd_file_path)

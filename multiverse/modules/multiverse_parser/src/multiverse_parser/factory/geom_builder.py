@@ -60,15 +60,15 @@ def inertia_of_triangle(v1, v2, v3, density) -> Matrix:
 
 
 class GeomBuilder:
-    def __init__(self, stage: Usd.Stage, geom_name: str, body_path: Sdf.Path, geom_type: GeomType) -> None:
+    def __init__(self, stage: Usd.Stage, geom_name: str, body_path: Sdf.Path, geom_type: GeomType, is_visual: bool) -> None:
         geom_dict[geom_name] = self
         self.stage = stage
         self.name = geom_name
-        self.path = body_path.AppendPath(self.name)
         self.type = geom_type
+        self.path = body_path.AppendPath(self.name)
         self.set_prim()
-        self.mesh_builders = []
-        self.is_visual = False
+        self.mesh_builder = None
+        self.is_visual = is_visual
 
     def set_prim(self) -> None:
         self.xform = UsdGeom.Xform.Define(self.stage, self.path)
@@ -120,15 +120,13 @@ class GeomBuilder:
             height = self.geom.GetHeightAttr().Get()
             self.geom.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
 
-    def add_mesh(self, mesh_name: str = None, is_visual: bool = True, material_name: str = None) -> MeshBuilder:
+    def add_mesh(self, mesh_name: str = None, material_name: str = None) -> MeshBuilder:
         mesh_name = modify_name(in_name=mesh_name)
-
-        self.is_visual = is_visual
 
         if mesh_name is None:
             mesh_name = "SM_" + self.name
 
-        mesh_path = os.path.join(TMP_DIR, "visual" if is_visual else "collision", mesh_name + ".usda")
+        mesh_path = os.path.join(TMP_DIR, "visual" if self.is_visual else "collision", mesh_name + ".usda")
         mesh_ref = "./" + mesh_path
 
         usd_file_path = os.path.join(TMP_USD_FILE_DIR, mesh_path)
@@ -136,18 +134,18 @@ class GeomBuilder:
         if usd_file_path in mesh_dict:
             mesh_builder = mesh_dict[usd_file_path]
         else:
-            if is_visual:
+            if self.is_visual:
                 mesh_builder = VisualMeshBuilder(name=mesh_name, usd_file_path=usd_file_path)
             else:
                 mesh_builder = CollisionMeshBuilder(name=mesh_name, usd_file_path=usd_file_path)
 
-        self.mesh_builders.append(mesh_builder)
+        self.mesh_builder = mesh_builder
 
         self.geom = self.stage.OverridePrim(self.path.AppendPath(mesh_builder.mesh.GetPrim().GetName()))
 
         self.xform.GetPrim().GetReferences().AddReference(mesh_ref, mesh_builder.xform.GetPath())
 
-        if is_visual:
+        if self.is_visual:
             if material_name is None:
                 material_name = "M_" + mesh_name.replace("SM_", "", 1)
             material_builder = mesh_builder.add_material(material_name=material_name)
@@ -218,6 +216,8 @@ class GeomBuilder:
                 inertia[i][j] = 0
 
         for face in mesh.faces:
+            if len(face.verts) != 3:
+                continue
             v1, v2, v3 = [v.co for v in face.verts]
             inertia_add = inertia_of_triangle(v1, v2, v3, density)
             for i in range(3):

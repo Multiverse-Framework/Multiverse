@@ -5,7 +5,6 @@ from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 from multiverse_parser.utils import modify_name, xform_cache
 from .geom_builder import GeomBuilder, GeomType, geom_dict
 from .joint_builder import JointBuilder, JointType, joint_dict
-from .mesh_builder import CollisionMeshBuilder, VisualMeshBuilder
 
 body_dict = {}
 
@@ -53,7 +52,7 @@ class BodyBuilder:
 
         self.xform.AddTransformOp().Set(mat)
 
-    def add_geom(self, geom_name: str, geom_type: GeomType) -> GeomBuilder:
+    def add_geom(self, geom_name: str, geom_type: GeomType, is_visual: bool) -> GeomBuilder:
         goem_name = modify_name(in_name=geom_name)
 
         if goem_name in geom_dict:
@@ -61,7 +60,7 @@ class BodyBuilder:
             geom = geom_dict[goem_name]
         else:
             self.geom_names.add(geom_name)
-            geom = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type)
+            geom = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type, is_visual=is_visual)
         return geom
 
     def add_joint(
@@ -97,17 +96,10 @@ class BodyBuilder:
 
         return joint
 
-    def enable_collision(self) -> None:
-        is_visual = True
-        for geom_name in self.geom_names:
-            geom_builder = geom_dict[geom_name]
-            if any([isinstance(mesh_builder, CollisionMeshBuilder) for mesh_builder in geom_builder.mesh_builders]):
-                is_visual = False
-                geom_builder.enable_collision()
-        if not is_visual:
-            physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
-            physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
-            physics_rigid_body_api.Apply(self.xform.GetPrim())
+    def enable_rigid_body(self) -> None:
+        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
+        physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
+        physics_rigid_body_api.Apply(self.xform.GetPrim())
 
     def set_inertial(
         self,

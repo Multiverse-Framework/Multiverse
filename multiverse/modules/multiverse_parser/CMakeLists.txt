@@ -121,3 +121,19 @@ add_test(
           --output=${TEST_DIR}/multiverse_parser/output/from_urdf/to_mjcf/no_physics/apartment.xml
           --no-physics
 )
+
+# add_test(
+#   NAME usd_to_usd1
+#   COMMAND multiverse_parser
+#           --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
+#           --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_usd/with_physics/apartment.usda
+#           --physics
+# )
+
+# add_test(
+#   NAME usd_to_usd2
+#   COMMAND multiverse_parser
+#           --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
+#           --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_usd/no_physics/apartment.usda
+#           --no-physics
+# )

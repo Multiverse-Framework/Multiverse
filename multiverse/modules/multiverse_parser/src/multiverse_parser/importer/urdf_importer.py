@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 import numpy
 import tf
 from scipy.spatial.transform import Rotation
+from math import degrees
 
 from multiverse_parser import WorldBuilder, GeomType, JointType
 from multiverse_parser.factory.body_builder import body_dict
@@ -66,6 +67,7 @@ class UrdfImporter:
 
             if urdf_joint.type != "fixed" and self.with_physics:
                 body_builder = self.world_builder.add_body(body_name=child_link_name, parent_body_name=self.root_link_name)
+                body_builder.enable_rigid_body()
             else:
                 body_builder = self.world_builder.add_body(body_name=child_link_name, parent_body_name=urdf_link_name)
 
@@ -80,7 +82,7 @@ class UrdfImporter:
                         geom_name=geom_name,
                         geom_origin=urdf_visual.origin,
                         urdf_geom=urdf_visual.geometry,
-                        visual=True,
+                        is_visual=True,
                     )
 
             if self.with_collision:
@@ -91,9 +93,10 @@ class UrdfImporter:
                         geom_name=geom_name,
                         geom_origin=urdf_collision.origin,
                         urdf_geom=urdf_collision.geometry,
-                        visual=False,
+                        is_visual=False,
                     )
                     if self.with_physics:
+                        geom_builder.enable_collision()
                         if hasattr(urdf_collision, "inertial"):
                             inertial = urdf_collision.inertial
                             mass = inertial.mass
@@ -120,8 +123,6 @@ class UrdfImporter:
                             geom_builder.compute_inertial()
 
             if self.with_physics:
-                body_builder.enable_collision()
-
                 if urdf_joint.type == "fixed":
                     joint_type = JointType.FIXED
                 elif urdf_joint.type == "revolute":
@@ -179,7 +180,10 @@ class UrdfImporter:
                         )
 
                     if joint_type == JointType.REVOLUTE or joint_type == JointType.PRISMATIC:
-                        joint_builder.set_limit(lower=urdf_joint.limit.lower, upper=urdf_joint.limit.upper)
+                        if joint_type == JointType.REVOLUTE:
+                            joint_builder.set_limit(lower=degrees(urdf_joint.limit.lower), upper=degrees(urdf_joint.limit.upper))
+                        else:
+                            joint_builder.set_limit(lower=urdf_joint.limit.lower, upper=urdf_joint.limit.upper)
 
             self.import_body_and_joint(urdf_link_name=urdf_child_link_name)
 
@@ -189,7 +193,7 @@ class UrdfImporter:
         geom_name: str,
         geom_origin: urdf.Pose,
         urdf_geom,
-        visual: bool,
+        is_visual: bool,
     ) -> None:
         if geom_name in self.geom_dict:
             self.geom_dict[geom_name] += 1
@@ -207,7 +211,7 @@ class UrdfImporter:
         geom_quat = (geom_quat[3], geom_quat[0], geom_quat[1], geom_quat[2])
 
         if type(urdf_geom) == urdf.Box:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CUBE)
+            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CUBE, is_visual=is_visual)
             geom_builder.set_transform(
                 pos=geom_pos,
                 quat=geom_quat,
@@ -218,15 +222,15 @@ class UrdfImporter:
                 ),
             )
         elif type(urdf_geom) == urdf.Sphere:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE)
+            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE, is_visual=is_visual)
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             geom_builder.set_attribute(radius=urdf_geom.radius)
         elif type(urdf_geom) == urdf.Cylinder:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CYLINDER)
+            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CYLINDER, is_visual=is_visual)
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             geom_builder.set_attribute(radius=urdf_geom.radius, height=urdf_geom.length)
         elif type(urdf_geom) == urdf.Mesh:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.MESH)
+            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.MESH, is_visual=is_visual)
             geom_scale = (1.0, 1.0, 1.0) if urdf_geom.scale is None else tuple(urdf_geom.scale)
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
             mesh_path = urdf_geom.filename
@@ -282,7 +286,7 @@ class UrdfImporter:
                 export_usd(
                     out_usd=os.path.join(
                         TMP_USD_MESH_PATH,
-                        "visual" if visual else "collision",
+                        "visual" if is_visual else "collision",
                         modify_name(in_name=mesh_name) + ".usda",
                     )
                 )
@@ -291,10 +295,10 @@ class UrdfImporter:
             else:
                 mesh_name = self.mesh_dict[urdf_geom.filename]
 
-            mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, is_visual=visual)
+            mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name)
             mesh_builder.save()
 
-        if not visual:
+        if not is_visual:
             from multiverse_parser.factory import (
                 COLLISION_MESH_COLOR,
                 COLLISION_MESH_OPACITY,
