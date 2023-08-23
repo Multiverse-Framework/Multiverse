@@ -26,6 +26,7 @@ class JointBuilder:
         child_xform: UsdGeom.Xform,
         joint_type: JointType,
         pos: tuple = (0.0, 0.0, 0.0),
+        quat: tuple = None,
         axis: tuple = "Z",
     ) -> None:
         joint_dict[name] = self
@@ -37,7 +38,11 @@ class JointBuilder:
         self.pos = Gf.Vec3d(pos)
         self.axis = axis
         self.set_joint()
-        self.set_axis()
+        if quat is None:
+            self.set_axis()
+        else:
+            self.joint.CreateAxisAttr(axis)
+            self.quat = quat
 
         self.joint.CreateCollisionEnabledAttr(False)
 

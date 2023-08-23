@@ -122,18 +122,50 @@ add_test(
           --no-physics
 )
 
-# add_test(
-#   NAME usd_to_usd1
-#   COMMAND multiverse_parser
-#           --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
-#           --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_usd/with_physics/apartment.usda
-#           --physics
-# )
+add_test(
+  NAME usd_to_usd1
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
+          --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_usd/with_physics/apartment.usda
+          --physics
+)
 
-# add_test(
-#   NAME usd_to_usd2
-#   COMMAND multiverse_parser
-#           --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
-#           --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_usd/no_physics/apartment.usda
-#           --no-physics
-# )
+add_test(
+  NAME usd_to_usd2
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
+          --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_usd/no_physics/apartment.usda
+          --no-physics
+)
+
+add_test(
+  NAME usd_to_urdf1
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
+          --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_urdf/with_physics/apartment.urdf
+          --physics
+)
+
+add_test(
+  NAME usd_to_urdf2
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
+          --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_urdf/no_physics/apartment.urdf
+          --no-physics
+)
+
+add_test(
+  NAME usd_to_mjcf1
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
+          --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_mjcf/with_physics/apartment.xml
+          --physics
+)
+
+add_test(
+  NAME usd_to_mjcf2
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/apartment/usd/apartment.usda
+          --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_mjcf/no_physics/apartment.xml
+          --no-physics
+)

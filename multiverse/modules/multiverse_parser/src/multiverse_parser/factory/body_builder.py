@@ -57,11 +57,11 @@ class BodyBuilder:
 
         if goem_name in geom_dict:
             print(f"Geom {goem_name} already exists.")
-            geom = geom_dict[goem_name]
+            geom_builder = geom_dict[goem_name]
         else:
             self.geom_names.add(geom_name)
-            geom = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type, is_visual=is_visual)
-        return geom
+            geom_builder = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type, is_visual=is_visual)
+        return geom_builder
 
     def add_joint(
         self,
@@ -70,13 +70,14 @@ class BodyBuilder:
         child_name: str,
         joint_type: JointType,
         joint_pos: tuple = (0.0, 0.0, 0.0),
+        joint_quat: tuple = None,
         joint_axis: str = "Z",
     ) -> JointBuilder:
         joint_name = modify_name(in_name=joint_name)
 
         if joint_name in joint_dict:
             print(f"Joint {joint_name} already exists.")
-            joint = joint_dict[joint_name]
+            joint_builer = joint_dict[joint_name]
         else:
             self.joint_names.add(joint_name)
             parent_name = modify_name(parent_name)
@@ -84,17 +85,18 @@ class BodyBuilder:
             if body_dict.get(parent_name) is None or body_dict.get(child_name) is None:
                 return None
 
-            joint = JointBuilder(
-                self.stage,
-                joint_name,
-                body_dict[parent_name].xform,
-                body_dict[child_name].xform,
-                joint_type,
-                joint_pos,
-                joint_axis,
+            joint_builer = JointBuilder(
+                stage=self.stage,
+                name=joint_name,
+                parent_xform=body_dict[parent_name].xform,
+                child_xform=body_dict[child_name].xform,
+                joint_type=joint_type,
+                pos=joint_pos,
+                quat=joint_quat,
+                axis=joint_axis,
             )
 
-        return joint
+        return joint_builer
 
     def enable_rigid_body(self) -> None:
         physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
