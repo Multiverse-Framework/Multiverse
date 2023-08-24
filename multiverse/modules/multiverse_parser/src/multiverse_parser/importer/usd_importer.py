@@ -208,7 +208,6 @@ class UsdImporter:
                 joint_builder = body_builder.add_joint(
                     joint_name=joint_name,
                     parent_name=parent_name,
-                    child_name=child_name,
                     joint_type=joint_type,
                     joint_pos=joint_pos,
                     joint_quat=joint_quat,

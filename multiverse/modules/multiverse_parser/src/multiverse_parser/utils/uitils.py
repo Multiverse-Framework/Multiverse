@@ -53,12 +53,27 @@ def modify_name(in_name: str, replacement: str = None) -> str:
     return out_name
 
 
-def quat_to_rpy(quat) -> tuple:
+def convert_quat(quat) -> tuple:
     if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):
         real = quat.GetReal()
         imaginary = quat.GetImaginary()
         quat = (imaginary[0], imaginary[1], imaginary[2], real)
+    return quat
+
+
+def quat_to_rpy(quat) -> tuple:
+    quat = convert_quat(quat)
     return tf.transformations.euler_from_quaternion(quat)
+
+
+def rotate_vector_by_quat(vector, quat) -> tuple:
+    quat = convert_quat(quat)
+    point = numpy.array(list(vector) + [1.0])
+    matrix = tf.transformations.quaternion_matrix(quat)
+    rotated_point = numpy.dot(matrix, point)
+    rotated_vector = rotated_point[:3] / rotated_point[3]
+
+    return tuple(rotated_vector)
 
 
 def transform(xyz: tuple = (0.0, 0.0, 0.0), rpy: tuple = (0.0, 0.0, 0.0), scale: tuple = (1.0, 1.0, 1.0)) -> None:

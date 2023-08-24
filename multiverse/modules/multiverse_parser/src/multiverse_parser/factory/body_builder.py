@@ -67,7 +67,6 @@ class BodyBuilder:
         self,
         joint_name: str,
         parent_name: str,
-        child_name: str,
         joint_type: JointType,
         joint_pos: tuple = (0.0, 0.0, 0.0),
         joint_quat: tuple = None,
@@ -81,15 +80,14 @@ class BodyBuilder:
         else:
             self.joint_names.add(joint_name)
             parent_name = modify_name(parent_name)
-            child_name = modify_name(child_name)
-            if body_dict.get(parent_name) is None or body_dict.get(child_name) is None:
+            if body_dict.get(parent_name) is None:
                 return None
 
             joint_builer = JointBuilder(
                 stage=self.stage,
                 name=joint_name,
                 parent_xform=body_dict[parent_name].xform,
-                child_xform=body_dict[child_name].xform,
+                child_xform=self.xform,
                 joint_type=joint_type,
                 pos=joint_pos,
                 quat=joint_quat,

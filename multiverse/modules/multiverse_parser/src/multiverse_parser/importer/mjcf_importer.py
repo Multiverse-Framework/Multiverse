@@ -181,7 +181,6 @@ class MjcfImporter:
                     joint_builder = body_builder.add_joint(
                         joint_name=joint_name,
                         parent_name=parent_body_name,
-                        child_name=body_name,
                         joint_type=joint_type,
                         joint_pos=tuple(mj_joint.pos),
                         joint_axis=joint_axis,

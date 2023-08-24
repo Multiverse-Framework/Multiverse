@@ -173,7 +173,6 @@ class UrdfImporter:
                         joint_builder = body_builder.add_joint(
                             joint_name=urdf_joint.name,
                             parent_name=urdf_link_name,
-                            child_name=child_link_name,
                             joint_type=joint_type,
                             joint_pos=joint_pos,
                             joint_axis=joint_axis,

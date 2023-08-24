@@ -40,9 +40,10 @@ class JointBuilder:
         self.set_joint()
         if quat is None:
             self.set_axis()
-        else:
-            self.joint.CreateAxisAttr(axis)
+        elif self.axis == "Z":
             self.quat = quat
+        else:
+            pass  # TODO: Convert quat to axis, then set axis to Z again
 
         self.joint.CreateCollisionEnabledAttr(False)
 
