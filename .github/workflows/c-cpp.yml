@@ -14,6 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@v1.2.0
+
     - name: Run install.sh
       run: |
           chmod +x install.sh
