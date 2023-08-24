@@ -172,17 +172,14 @@ class UsdImporter:
 
     def build_joint(self, parent_prim):
         for xform_prim in [xform_prim for xform_prim in parent_prim.GetChildren() if xform_prim.IsA(UsdGeom.Xform)]:
-            body_builder = body_dict.get(xform_prim.GetName())
-            if body_builder is None:
-                continue
-
             joint_prims = [joint_prim for joint_prim in xform_prim.GetChildren() if joint_prim.IsA(UsdPhysics.Joint)]
             for joint_prim in joint_prims:
                 joint = UsdPhysics.Joint(joint_prim)
                 joint_name = joint.GetPrim().GetName()
                 parent_name = Sdf.Path(joint.GetBody0Rel().GetTargets()[0]).name
                 child_name = Sdf.Path(joint.GetBody1Rel().GetTargets()[0]).name
-                body_dict[child_name].enable_rigid_body()
+                body_builder = body_dict[child_name]
+                body_builder.enable_rigid_body()
 
                 joint_axis = "Z"
                 if joint_prim.IsA(UsdPhysics.FixedJoint):

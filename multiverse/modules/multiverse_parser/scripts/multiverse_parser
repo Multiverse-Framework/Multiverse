@@ -9,7 +9,7 @@ import argparse
 import os
 from multiverse_parser import UrdfImporter, MjcfImporter, UsdImporter
 from multiverse_parser import UrdfExporter, MjcfExporter
-
+from multiverse_parser import COLLISION_MESH_COLOR, COLLISION_MESH_OPACITY
 
 def main():
     parser = argparse.ArgumentParser(description="Multiverse parser")
@@ -49,10 +49,24 @@ def main():
         help="Whether to keep the USD file or not",
     )
     parser.set_defaults(keepusd=False)
+    parser.add_argument(
+        "--collisionrgba",
+        nargs="+",
+        type=float,
+        help="The color of the collision meshes, if they exist",
+    )
+    parser.set_defaults(collisionrgba=[COLLISION_MESH_COLOR[0][0], COLLISION_MESH_COLOR[0][1], COLLISION_MESH_COLOR[0][2], COLLISION_MESH_OPACITY[0]])
 
     args = parser.parse_args()
+    
+    if len(args.collisionrgba) != 4 or any(x < 0 or x > 1 for x in args.collisionrgba):
+        print(f"Invalid collision rgba, set to default {str([COLLISION_MESH_COLOR[0][0], COLLISION_MESH_COLOR[0][1], COLLISION_MESH_COLOR[0][2], COLLISION_MESH_OPACITY[0]])}")
+    else:
+        COLLISION_MESH_COLOR[0] = tuple(args.collisionrgba[:3])
+        COLLISION_MESH_OPACITY[0] = args.collisionrgba[3]
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
+
     if in_extension in [".usd", ".usda", ".usdc"]:
         importer = UsdImporter(usd_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision) 
     elif in_extension == ".urdf":

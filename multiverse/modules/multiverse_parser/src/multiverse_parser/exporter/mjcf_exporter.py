@@ -6,6 +6,7 @@ from xml.etree import ElementTree as ET
 from xml.dom import minidom
 from pxr import UsdPhysics
 from multiverse_parser import WorldBuilder, GeomType, JointType
+from multiverse_parser.factory import COLLISION_MESH_COLOR, COLLISION_MESH_OPACITY
 from multiverse_parser.factory.body_builder import body_dict
 from multiverse_parser.factory.joint_builder import joint_dict
 from multiverse_parser.factory.geom_builder import geom_dict
@@ -56,7 +57,20 @@ class MjcfExporter:
         default_collision = ET.SubElement(self.default, "default")
         default_collision.set("class", "collision")
         default_collision_geom = ET.SubElement(default_collision, "geom")
-        default_collision_geom.set("rgba", "1.0 0.0 0.0 0.5")
+        default_collision_geom.set(
+            "rgba",
+            " ".join(
+                map(
+                    str,
+                    (
+                        COLLISION_MESH_COLOR[0][0],
+                        COLLISION_MESH_COLOR[0][1],
+                        COLLISION_MESH_COLOR[0][2],
+                        COLLISION_MESH_OPACITY[0],
+                    ),
+                )
+            ),
+        )
 
         self.asset = ET.SubElement(self.root, "asset")
         floor_texture = ET.SubElement(self.asset, "texture")
@@ -100,18 +114,31 @@ class MjcfExporter:
             for body_name in body_names:
                 body_builder = body_dict[body_name]
                 parent_body_name = body_builder.xform.GetPrim().GetParent().GetName()
-                if parent_body_name in self.body_dict and body_name not in self.body_dict and len(body_builder.joint_names) == 0:
+                if (
+                    parent_body_name in self.body_dict
+                    and body_name not in self.body_dict
+                    and len(body_builder.joint_names) == 0
+                ):
                     stop = False
-                    self.build_link(body_name=body_name, parent_body_name=parent_body_name)
+                    self.build_link(
+                        body_name=body_name, parent_body_name=parent_body_name
+                    )
                     reduces_body_names.remove(body_name)
             for joint_name, joint_builder in joint_dict.items():
                 parent_body_name = joint_builder.parent_xform.GetPrim().GetName()
                 child_body_name = joint_builder.child_xform.GetPrim().GetName()
-                if parent_body_name in self.body_dict and child_body_name not in self.body_dict:
+                if (
+                    parent_body_name in self.body_dict
+                    and child_body_name not in self.body_dict
+                ):
                     stop = False
-                    self.build_link(body_name=child_body_name, parent_body_name=parent_body_name)
+                    self.build_link(
+                        body_name=child_body_name, parent_body_name=parent_body_name
+                    )
                     if with_physics:
-                        self.build_joint(joint_name=joint_name, body_name=child_body_name)
+                        self.build_joint(
+                            joint_name=joint_name, body_name=child_body_name
+                        )
                     reduces_body_names.remove(child_body_name)
             body_names = reduces_body_names
 
@@ -125,14 +152,19 @@ class MjcfExporter:
         body.set("name", body_name)
 
         body_builder = body_dict[body_name]
-        if self.with_physics and body_builder.xform.GetPrim().HasAPI(UsdPhysics.MassAPI):
+        if self.with_physics and body_builder.xform.GetPrim().HasAPI(
+            UsdPhysics.MassAPI
+        ):
             inertial = ET.SubElement(body, "inertial")
             physics_mass_api = UsdPhysics.MassAPI(body_builder.xform)
 
             if physics_mass_api.GetCenterOfMassAttr().Get() is None:
                 inertial.set("pos", "0 0 0")
             else:
-                inertial.set("pos", " ".join(map(str, physics_mass_api.GetCenterOfMassAttr().Get())))
+                inertial.set(
+                    "pos",
+                    " ".join(map(str, physics_mass_api.GetCenterOfMassAttr().Get())),
+                )
             if physics_mass_api.GetMassAttr().Get() is not None:
                 inertial.set("mass", str(physics_mass_api.GetMassAttr().Get()))
             if physics_mass_api.GetDiagonalInertiaAttr().Get() is not None:
@@ -141,9 +173,15 @@ class MjcfExporter:
                     " ".join(map(str, physics_mass_api.GetDiagonalInertiaAttr().Get())),
                 )
 
-        parent_body_transform = xform_cache.GetLocalToWorldTransform(body_dict[parent_body_name].xform.GetPrim())
-        body_transformation = xform_cache.GetLocalToWorldTransform(body_dict[body_name].xform.GetPrim())
-        body_relative_transform = body_transformation * parent_body_transform.GetInverse()
+        parent_body_transform = xform_cache.GetLocalToWorldTransform(
+            body_dict[parent_body_name].xform.GetPrim()
+        )
+        body_transformation = xform_cache.GetLocalToWorldTransform(
+            body_dict[body_name].xform.GetPrim()
+        )
+        body_relative_transform = (
+            body_transformation * parent_body_transform.GetInverse()
+        )
         body_relative_xyz = body_relative_transform.ExtractTranslation()
         body_relative_quat = body_relative_transform.ExtractRotationQuat()
         body.set("pos", " ".join(map(str, body_relative_xyz)))
@@ -200,7 +238,12 @@ class MjcfExporter:
                     " ".join(
                         map(
                             str,
-                            [geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)],
+                            [
+                                geom_builder.xform.GetLocalTransformation()
+                                .GetRow(i)
+                                .GetLength()
+                                for i in range(3)
+                            ],
                         )
                     ),
                 )
@@ -234,7 +277,9 @@ class MjcfExporter:
                 geom_rpy = quat_to_rpy(geom_quat)
                 transform(xyz=geom_xyz, rpy=geom_rpy)
 
-                mesh_file_name = os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0]
+                mesh_file_name = os.path.splitext(
+                    os.path.basename(mesh_builder.usd_file_path)
+                )[0]
                 if self.with_visual and geom_builder.is_visual:
                     mesh_rel_path = os.path.join(
                         "obj",
@@ -244,7 +289,9 @@ class MjcfExporter:
                     mesh_file_name_visual = mesh_file_name + "_visual"
 
                     if mesh_rel_path not in self.mesh_rel_paths:
-                        texture_file_names = export_obj(os.path.join(self.mjcf_file_dir, mesh_rel_path))
+                        texture_file_names = export_obj(
+                            os.path.join(self.mjcf_file_dir, mesh_rel_path)
+                        )
                         self.mesh_rel_paths.add(mesh_rel_path)
 
                         if len(texture_file_names) > 0:
@@ -285,12 +332,18 @@ class MjcfExporter:
         joint.set("name", joint_name)
 
         joint_builder = joint_dict[joint_name]
-        if joint_builder.type == JointType.NONE or joint_builder.type == JointType.FIXED:
+        if (
+            joint_builder.type == JointType.NONE
+            or joint_builder.type == JointType.FIXED
+        ):
             return
 
         joint.set("pos", " ".join(map(str, joint_builder.pos)))
 
-        if joint_builder.type == JointType.PRISMATIC or joint_builder.type == JointType.REVOLUTE:
+        if (
+            joint_builder.type == JointType.PRISMATIC
+            or joint_builder.type == JointType.REVOLUTE
+        ):
             if joint_builder.type == JointType.PRISMATIC:
                 joint.set("type", "slide")
                 lower = joint_builder.joint.GetLowerLimitAttr().Get()
