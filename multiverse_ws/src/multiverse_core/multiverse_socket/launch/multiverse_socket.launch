@@ -1,8 +1,15 @@
 <launch>
 
+    <arg name="server_host" default="tcp://127.0.0.1"/>
+    <arg name="server_port" default="7000"/>
     <arg name="config" default="$(find multiverse_socket)/config/multiverse_socket.yaml" />
 
     <rosparam command="load" file="$(arg config)" />
+
+    <rosparam ns="multiverse" subst_value="true">
+        host: $(arg server_host)
+        port: $(arg server_port)
+    </rosparam>
 
     <node pkg="multiverse_socket" type="multiverse_socket_node.py" name="multiverse_socket"
         output="screen">
