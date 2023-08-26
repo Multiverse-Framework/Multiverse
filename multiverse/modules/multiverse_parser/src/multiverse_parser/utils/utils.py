@@ -82,5 +82,3 @@ def transform(xyz: tuple = (0.0, 0.0, 0.0), rpy: tuple = (0.0, 0.0, 0.0), scale:
     selected_object.location = xyz
     selected_object.rotation_euler = rpy
     selected_object.scale = scale
-
-    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)

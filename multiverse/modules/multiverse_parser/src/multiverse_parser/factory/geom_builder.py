@@ -65,6 +65,7 @@ class GeomBuilder:
         self.stage = stage
         self.name = geom_name
         self.type = geom_type
+        self.scale = (1.0, 1.0, 1.0)
         self.path = body_path.AppendPath(self.name)
         self.set_prim()
         self.mesh_builder = None
@@ -93,6 +94,7 @@ class GeomBuilder:
         quat: tuple = (1.0, 0.0, 0.0, 0.0),
         scale: tuple = (1.0, 1.0, 1.0),
     ) -> None:
+        self.scale = scale
         mat = Gf.Matrix4d()
         mat.SetTranslateOnly(pos)
         mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))

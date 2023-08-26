@@ -98,19 +98,21 @@ class UrdfExporter:
 
                 joint.limit = limit
 
-            if joint_builder.type != JointType.FIXED:
-                if joint_builder.axis == "X":
-                    joint.axis = (1, 0, 0)
-                elif joint_builder.axis == "Y":
-                    joint.axis = (0, 1, 0)
-                elif joint_builder.axis == "Z":
-                    joint.axis = (0, 0, 1)
-                elif joint_builder.axis == "-X":
-                    joint.axis = (-1, 0, 0)
-                elif joint_builder.axis == "-Y":
-                    joint.axis = (0, -1, 0)
-                elif joint_builder.axis == "-Z":
-                    joint.axis = (0, 0, -1)
+            elif joint_builder.type == JointType.CONTINUOUS:
+                joint.type = "continuous"
+
+            if joint_builder.axis == "X":
+                joint.axis = (1, 0, 0)
+            elif joint_builder.axis == "Y":
+                joint.axis = (0, 1, 0)
+            elif joint_builder.axis == "Z":
+                joint.axis = (0, 0, 1)
+            elif joint_builder.axis == "-X":
+                joint.axis = (-1, 0, 0)
+            elif joint_builder.axis == "-Y":
+                joint.axis = (0, -1, 0)
+            elif joint_builder.axis == "-Z":
+                joint.axis = (0, 0, -1)
 
             joint.parent = joint_builder.parent_xform.GetPrim().GetName()
             joint.child = joint_builder.child_xform.GetPrim().GetName()
@@ -186,7 +188,7 @@ class UrdfExporter:
 
                 import_usd(mesh_builder.usd_file_path)
 
-                transform(xyz=xyz, rpy=rpy)
+                # transform(xyz=xyz, rpy=rpy)
 
                 if self.with_visual and is_visual:
                     mesh_rel_path = os.path.join(
@@ -195,9 +197,8 @@ class UrdfExporter:
                     )
                     export_obj(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
-                    geometry = urdf.Mesh(filename=filename, scale=(1.0, 1.0, 1.0))
-
-                    origin = urdf.Pose()
+                    geometry = urdf.Mesh(filename=filename, scale=rotate_vector_by_quat(vector=geom_builder.scale, quat=quat))
+                    
                     visual = urdf.Visual(
                         geometry=geometry,
                         material=None,
@@ -214,9 +215,8 @@ class UrdfExporter:
 
                     export_stl(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
-                    geometry = urdf.Mesh(filename=filename, scale=(1.0, 1.0, 1.0))
+                    geometry = urdf.Mesh(filename=filename, scale=rotate_vector_by_quat(vector=geom_builder.scale, quat=quat))
 
-                    origin = urdf.Pose()
                     collision = urdf.Collision(
                         geometry=geometry,
                         origin=origin,
