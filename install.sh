@@ -5,7 +5,7 @@ apt-get update
 
 # Setup your sources.list
 sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-apt-get install curl # if you haven't already installed curl
+apt-get install -y curl # if you haven't already installed curl
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 add-apt-repository ppa:ubuntu-toolchain-r/test
 
@@ -56,7 +56,7 @@ update-alternatives --remove-all clang++
 update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
 
 # Install and link gcc-11
-apt-get install gcc-11
+apt-get install -y gcc-11
 update-alternatives --remove-all gcc
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100
 
