@@ -55,34 +55,33 @@ class WorldBuilder:
 
         if usd_file_path is not None:
             usd_file = os.path.basename(usd_file_path)
-            usd_file_name, usd_file_extension = os.path.splitext(usd_file)
+            usd_file_name, _ = os.path.splitext(usd_file)
 
-            if usd_file_extension == ".usda":
-                usd_file_dir = os.path.dirname(usd_file_path)
-                copy_and_overwrite(source_folder=TMP_USD_FILE_DIR, destination_folder=usd_file_dir)
+            usd_file_dir = os.path.dirname(usd_file_path)
+            copy_and_overwrite(source_folder=TMP_USD_FILE_DIR, destination_folder=usd_file_dir)
 
-                os.rename(
-                    os.path.join(usd_file_dir, os.path.basename(TMP_USD_FILE_PATH)),
-                    usd_file_path,
-                )
+            os.rename(
+                os.path.join(usd_file_dir, os.path.basename(TMP_USD_FILE_PATH)),
+                usd_file_path,
+            )
 
-                tmp_mesh_dir = os.path.join(usd_file_dir, TMP)
-                new_mesh_dir = os.path.join(usd_file_dir, usd_file_name)
-                if os.path.exists(new_mesh_dir):
-                    shutil.rmtree(new_mesh_dir)
+            tmp_mesh_dir = os.path.join(usd_file_dir, TMP)
+            new_mesh_dir = os.path.join(usd_file_dir, usd_file_name)
+            if os.path.exists(new_mesh_dir):
+                shutil.rmtree(new_mesh_dir)
 
-                if os.path.exists(tmp_mesh_dir):
-                    os.rename(tmp_mesh_dir, new_mesh_dir)
+            if os.path.exists(tmp_mesh_dir):
+                os.rename(tmp_mesh_dir, new_mesh_dir)
 
-                    with open(usd_file_path, "r", encoding="utf-8") as file:
-                        file_contents = file.read()
+                with open(usd_file_path, "r", encoding="utf-8") as file:
+                    file_contents = file.read()
 
-                    tmp_path = "@./" + TMP
-                    new_path = "@./" + usd_file_name
-                    file_contents = file_contents.replace(tmp_path, new_path)
+                tmp_path = "@./" + TMP
+                new_path = "@./" + usd_file_name
+                file_contents = file_contents.replace(tmp_path, new_path)
 
-                    with open(usd_file_path, "w", encoding="utf-8") as file:
-                        file.write(file_contents)
+                with open(usd_file_path, "w", encoding="utf-8") as file:
+                    file.write(file_contents)
 
     def clean_up(self) -> None:
         print(f"Remove {TMP_USD_FILE_DIR}")
