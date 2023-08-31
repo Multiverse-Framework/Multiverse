@@ -111,9 +111,16 @@ class UsdImporter:
                     elif geom_type == GeomType.MESH:
                         from multiverse_parser.factory import TMP_USD_MESH_PATH
 
-                        prepended_items = xform_prim.GetPrim().GetPrimStack()[0].referenceList.prependedItems
-                        if len(prepended_items) > 0:
-                            usd_mesh_path = prepended_items[0].assetPath
+                        xform_prepended_items = xform_prim.GetPrim().GetPrimStack()[0].referenceList.prependedItems
+                        geom_prepended_items = geom_prim.GetPrim().GetPrimStack()[0].referenceList.prependedItems
+                        if len(xform_prepended_items) > 0:
+                            usd_mesh_path = xform_prepended_items[0].assetPath
+                        elif len(geom_prepended_items) > 0:
+                            usd_mesh_path = geom_prepended_items[0].assetPath
+                        else:
+                            usd_mesh_path = None
+
+                        if usd_mesh_path is not None:
                             if usd_mesh_path.startswith("./"):
                                 usd_mesh_path = usd_mesh_path[2:]
                             if not os.path.isabs(usd_mesh_path):
@@ -140,7 +147,7 @@ class UsdImporter:
                             mesh_builder = geom_builder.add_mesh(mesh_name=geom_prim.GetName())
                             mesh_builder.save()
 
-                    if self.with_physics:
+                    if self.with_physics and not is_visual:
                         geom_builder.enable_collision()
                         if not body_has_mass:
                             if geom_builder.xform.GetPrim().HasAPI(UsdPhysics.MassAPI):

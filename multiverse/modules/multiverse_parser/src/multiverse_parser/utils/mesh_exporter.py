@@ -8,7 +8,7 @@ from PIL import Image
 
 def clean_up_meshes(file_path: str) -> None:
     bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
-    if len(bpy.context.selected_objects) > 1:
+    if len([selected_object for selected_object in bpy.context.selected_objects if selected_object.type == "MESH"]) > 1:
         bpy.ops.object.join()
 
     selected_object = bpy.context.object

@@ -201,6 +201,9 @@ class GeomBuilder:
         from multiverse_parser.utils import diagonalize_inertia
 
         obj = bpy.context.object
+        if obj.type == "EMPTY":
+            return
+        
         mesh = bmesh.new()
         mesh.from_mesh(obj.data)
         volume = mesh.calc_volume()
