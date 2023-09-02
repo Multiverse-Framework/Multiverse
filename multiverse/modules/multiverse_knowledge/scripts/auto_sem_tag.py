@@ -6,14 +6,48 @@ import os
 from pxr import Usd, UsdOntology
 
 
-sem_labels = {"box": ["_class_Box"], "cat": ["_class_Cat"]}
+sem_labels = {"box": ["_class_Box"], "cat": ["_class_Cat"], 
+              "kitchen": ["_class_Kitchen"], 
+              "cabinet1": ["_class_KitchenCabinet"],
+              "cabinet2": ["_class_KitchenCabinet"],
+              "cabinet3": ["_class_KitchenCabinet"],
+              "cabinet4": ["_class_KitchenCabinet"],
+              "cabinet5": ["_class_KitchenCabinet"],
+              "cabinet6": ["_class_KitchenCabinet"],
+              "cabinet8": ["_class_KitchenCabinet"],
+              "cabinet9": ["_class_KitchenCabinet"],
+              "cabinet10": ["_class_KitchenCabinet"],
+              "cabinet11": ["_class_KitchenCabinet"],
+              "cabinet1_drawer1": ["_class_Drawer"],
+              "cabinet1_drawer2": ["_class_Drawer"],
+              "cabinet2_drawer1": ["_class_Drawer"],
+              "cabinet2_drawer2": ["_class_Drawer"],
+              "cabinet2_drawer3": ["_class_Drawer"],
+              "cabinet2_drawer4": ["_class_Drawer"],
+              "cabinet2_drawer5": ["_class_Drawer"],
+              "cabinet2_drawer6": ["_class_Drawer"],
+              "cabinet5_drawer1": ["_class_Drawer"],
+              "cabinet5_drawer2": ["_class_Drawer"],
+              "cabinet5_drawer3": ["_class_Drawer"],
+              "cabinet6_drawer1": ["_class_Drawer"],
+              "cabinet6_drawer2": ["_class_Drawer"],
+              "cabinet6_drawer3": ["_class_Drawer"],
+              "cabinet9_drawer1": ["_class_Drawer"],
+              "cabinet9_drawer2": ["_class_Drawer"],
+              "cabinet9_drawer3": ["_class_Drawer"],
+              "cabinet10_drawer1": ["_class_Drawer"],
+              "cabinet10_drawer2": ["_class_Drawer"],
+              "cabinet10_drawer3": ["_class_Drawer"],
+              "cabinet11_drawer1": ["_class_Drawer"],
+              "cabinet11_drawer2": ["_class_Drawer"],
+              "cabinet11_drawer3": ["_class_Drawer"]}
 
 sem_TBox = {}
 
 
 def auto_sem_tag(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_usd_file: str) -> None:
-    in_mesh_dir = in_ABox_usd_file.replace(".usda", "")
-    out_mesh_dir = os.path.join(os.path.dirname(out_ABox_usd_file), os.path.basename(in_ABox_usd_file.replace(".usda", "")))
+    in_mesh_dir = in_ABox_usd_file.replace(".usda", "").replace(".usdc", "")
+    out_mesh_dir = os.path.join(os.path.dirname(out_ABox_usd_file), os.path.basename(in_ABox_usd_file.replace(".usda", "").replace(".usdc", "")))
     shutil.copytree(in_mesh_dir, out_mesh_dir, dirs_exist_ok=True)
     shutil.copy(in_ABox_usd_file, out_ABox_usd_file)
 

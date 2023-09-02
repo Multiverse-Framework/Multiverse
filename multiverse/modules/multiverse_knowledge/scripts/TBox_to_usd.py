@@ -16,6 +16,7 @@ def create_path(name: str, is_ns: bool, prefix="/_class_") -> str:
     usd_path = name.replace("https://", "")
     usd_path = usd_path.replace("http://", "")
     usd_path = usd_path.replace("www", "")
+    usd_path = usd_path.replace(".owl/", ".owl#")
     usd_path = usd_path.replace(".owl", "")
     usd_path = re.sub(r"[^a-zA-Z/]+", "", usd_path)
     words = usd_path.split("/")[-N:]
@@ -30,6 +31,9 @@ def owl_to_usd_impl(stage: Usd.Stage, concepts: list) -> None:
     S = dict()
     for concept in concepts:
         (iri_prefix, iri_name) = (concept.namespace.base_iri, concept.name)
+        if iri_prefix == "https://ease-crc.org/ont/USD.owl#":
+            continue
+
         if S.get(iri_prefix) == None:
             prim = stage.CreateClassPrim(create_path(iri_prefix, True))
             rdfAPI = UsdOntology.RdfAPI.Apply(prim)

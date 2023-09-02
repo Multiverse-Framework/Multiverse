@@ -26,13 +26,13 @@ class UrdfImporter:
         with_visual: bool,
         with_collision: bool,
     ) -> None:
-        self.material_dict = {}
+        # self.material_dict = {}
         self.mesh_dict = {}
         self.geom_dict = {}
         self.rospack = rospkg.RosPack()
 
-        for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
-            self.material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
+        # for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
+        #     self.material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
 
         self.urdf_file_path = urdf_file_path
         self.source_file_dir = os.path.dirname(os.path.dirname(self.urdf_file_path))
