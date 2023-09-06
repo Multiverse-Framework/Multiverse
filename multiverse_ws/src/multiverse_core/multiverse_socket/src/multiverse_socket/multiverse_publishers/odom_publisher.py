@@ -19,7 +19,7 @@ class odom_publisher(MultiverseRosPublisher):
 
     def _init_request_meta_data(self) -> None:
         super()._init_request_meta_data()
-        self._request_meta_data_dict["receive"][self.__body_name] = ["position", "relative_velocity"]
+        self._request_meta_data_dict["receive"][self.__body_name] = ["position", "quaternion", "relative_velocity"]
 
     def _construct_rosmsg(self, response_meta_data_dict) -> None:
         if response_meta_data_dict.get("receive") is None:
@@ -35,12 +35,16 @@ class odom_publisher(MultiverseRosPublisher):
         self.__odom_msg.pose.pose.position.x = receive_data[1]
         self.__odom_msg.pose.pose.position.y = receive_data[2]
         self.__odom_msg.pose.pose.position.z = receive_data[3]
-        self.__odom_msg.twist.twist.linear.x = receive_data[4]
-        self.__odom_msg.twist.twist.linear.y = receive_data[5]
-        self.__odom_msg.twist.twist.linear.z = receive_data[6]
-        self.__odom_msg.twist.twist.angular.x = receive_data[7]
-        self.__odom_msg.twist.twist.angular.y = receive_data[8]
-        self.__odom_msg.twist.twist.angular.z = receive_data[9]
+        self.__odom_msg.pose.pose.orientation.w = receive_data[4]
+        self.__odom_msg.pose.pose.orientation.x = receive_data[5]
+        self.__odom_msg.pose.pose.orientation.y = receive_data[6]
+        self.__odom_msg.pose.pose.orientation.z = receive_data[7]
+        self.__odom_msg.twist.twist.linear.x = receive_data[8]
+        self.__odom_msg.twist.twist.linear.y = receive_data[9]
+        self.__odom_msg.twist.twist.linear.z = receive_data[10]
+        self.__odom_msg.twist.twist.angular.x = receive_data[11]
+        self.__odom_msg.twist.twist.angular.y = receive_data[12]
+        self.__odom_msg.twist.twist.angular.z = receive_data[13]
 
     def _publish(self) -> None:
         self.__odom_publisher.publish(self.__odom_msg)
