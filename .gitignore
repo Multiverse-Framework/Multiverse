@@ -46,3 +46,7 @@ multiverse/tests/**/output
 
 # VSC
 .vscode
+
+# Additional workspaces
+cram_ws
+giskard_ws
