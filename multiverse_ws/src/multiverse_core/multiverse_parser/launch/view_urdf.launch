@@ -1,6 +1,6 @@
 <launch>
 
-    <arg name="urdf" default="$(find multiverse_parser)/examples/usd_to_urdf/urdf/kitchen.urdf"/>
+    <arg name="urdf"/>
 
     <param name="robot_description" command="$(find xacro)/xacro '$(arg urdf)'" />
 
@@ -8,6 +8,6 @@
 
     <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
 
-    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find multiverse_parser)/examples/rviz_config/rviz.rviz"/>
+    <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find multiverse_parser)/examples/rviz_config/rviz.rviz" required="true"/>
 
 </launch>

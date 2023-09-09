@@ -46,7 +46,9 @@ multiverse/tests/**/output
 
 # VSC
 .vscode
+.ipynb_checkpoints
 
 # Additional workspaces
 cram_ws
 giskard_ws
+tutorial_ws

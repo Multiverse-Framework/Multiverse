@@ -40,13 +40,14 @@ class UrdfImporter:
         self.with_visual = with_visual
         self.with_collision = with_collision
 
-        self.robot = urdf.URDF.from_xml_file(urdf_file_path)
+        self.robot: urdf.URDF = urdf.URDF.from_xml_file(urdf_file_path)
         self.world_builder = WorldBuilder()
 
-        self.root_link_name = self.robot.get_root()
+        self.root_link_name = self.robot.name
         self.world_builder.add_body(body_name=self.root_link_name)
+        self.world_builder.add_body(body_name=self.robot.get_root(), parent_body_name=self.root_link_name)
 
-        self.import_body_and_joint(urdf_link_name=self.root_link_name)
+        self.import_body_and_joint(urdf_link_name=self.robot.get_root())
 
     def import_body_and_joint(self, urdf_link_name) -> None:
         if urdf_link_name not in self.robot.child_map:
