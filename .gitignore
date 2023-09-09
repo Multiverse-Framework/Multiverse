@@ -41,7 +41,7 @@ multiverse_ws/logs
 multiverse/bin
 multiverse/lib
 multiverse/build
-multiverse/external/blender-git/lib
+multiverse/external
 multiverse/tests/**/output
 
 # VSC

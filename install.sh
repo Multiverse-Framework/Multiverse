@@ -86,4 +86,5 @@ pip3 install jinja2
 pip3 install pybind11
 
 # Install additional packages for Jupyter Notebook
-pip3 install panel jupyter-server
+pip3 install panel jupyter-server bash_kernel
+python3 -m bash_kernel.install
