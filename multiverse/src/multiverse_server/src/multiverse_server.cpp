@@ -265,7 +265,7 @@ public:
 
                 for (size_t i = 0; i < receive_buffer_size - 1; i++)
                 {
-                    receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;
+                    receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;                    
                 }
                 flag = EMultiverseServerState::SendReceiveData;
 
@@ -637,18 +637,18 @@ private:
 
     void wait_for_receive_data()
     {
+        for (const std::string &object_name : send_objects_json.getMemberNames())
+        {
+            for (const Json::Value &attribute_json : send_objects_json[object_name])
+            {
+                const std::string attribute_name = attribute_json.asString();
+                worlds[world_name][object_name][attribute_name].second = true;
+            }
+        }
+
         if (!is_receive_data_sent)
         {
-            for (const std::string &object_name : send_objects_json.getMemberNames())
-            {
-                for (const Json::Value &attribute_json : send_objects_json[object_name])
-                {
-                    const std::string attribute_name = attribute_json.asString();
-                    worlds[world_name][object_name][attribute_name].second = true;
-                }
-            }
-
-            for (const std::string object_name : receive_objects_json.getMemberNames())
+            for (const std::string &object_name : receive_objects_json.getMemberNames())
             {
                 for (const Json::Value &attribute_json : receive_objects_json[object_name])
                 {
