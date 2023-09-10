@@ -2,9 +2,9 @@
 
 Multiverse is a simulation framework designed to integrate multiple advanced physics engines such as [MuJoCo](https://mujoco.readthedocs.io/), [Project Chrono](https://projectchrono.org/), and [SOFA](https://www.sofa-framework.org/) along with various photo-realistic graphics engines like [Unreal Engine](https://www.unrealengine.com/) and [Omniverse](https://developer.nvidia.com/omniverse). Additionally, Multiverse provides the capability to generate knowledge graphs dynamically during runtime.
 
-[Demo](https://github.com/Universal-Simulation-Framework/multiverse/assets/64316740/19a3281f-ddd7-4430-b5ad-8219f9d17a92)
+[Demo1](https://github.com/Universal-Simulation-Framework/multiverse/assets/64316740/19a3281f-ddd7-4430-b5ad-8219f9d17a92)
 
-[Demo](https://github.com/Multiverse-Framework/Multiverse/assets/64316740/96cf0797-833d-4e52-8422-18c2597a477d)
+[Demo2](https://github.com/Multiverse-Framework/Multiverse/assets/64316740/c7840e4d-1555-419a-a63c-708467c62ad8)
 
 # Installation
 
