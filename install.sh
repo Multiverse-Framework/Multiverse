@@ -64,6 +64,9 @@ apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-d
 # Install pybind11
 apt-get install -y pybind11-dev
 
+# Upgrade pip
+pip3 install --upgrade pip
+
 # Install PySide6
 pip3 install pyside6
 
