@@ -80,7 +80,7 @@ pip3 install cython
 pip3 install owlready2
 
 # Install jinja2
-pip3 install jinja2
+pip3 install markupsafe==2.0.1 jinja2
 
 # Install pybind11
 pip3 install pybind11
