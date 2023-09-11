@@ -64,6 +64,9 @@ apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-d
 # Install pybind11
 apt-get install -y pybind11-dev
 
+# Install jupyter-notebook
+apt-get install -y jupyter-notebook
+
 # Upgrade pip
 pip3 install --upgrade pip
 
@@ -89,5 +92,5 @@ pip3 install markupsafe==2.0.1 jinja2
 pip3 install pybind11
 
 # Install additional packages for Jupyter Notebook
-pip3 install jupyter-notebook panel jupyter-server bash_kernel
+pip3 install panel jupyter-server bash_kernel
 python3 -m bash_kernel.install
