@@ -89,5 +89,5 @@ pip3 install markupsafe==2.0.1 jinja2
 pip3 install pybind11
 
 # Install additional packages for Jupyter Notebook
-pip3 install panel jupyter-server bash_kernel
+pip3 install jupyter-notebook panel jupyter-server bash_kernel
 python3 -m bash_kernel.install
