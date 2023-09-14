@@ -2,7 +2,7 @@
 
 import argparse
 import os
-from pxr import Usd, UsdOntology, UsdGeom, UsdPhysics, Gf, Vt
+from pxr import Usd, UsdOntology, UsdGeom, UsdPhysics, UsdShade, Gf, Vt
 from owlready2 import onto_path, get_ontology, declare_datatype
 from numpy import float32, float64
 import rospkg
@@ -132,10 +132,21 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
 
     prim_dict = dict()
 
+    other_nums = 0
+
     stage = Usd.Stage.Open(in_usd_file)
     with ABox_onto:
         for prim in stage.Traverse():
-            prim_inst = usd_onto.Prim(prim.GetName(), namespace=usd_onto)
+            if not prim.IsA(Usd.SchemaBase) or prim.IsA(UsdShade.Material) or prim.IsA(UsdShade.Shader) or prim.IsA(UsdGeom.Subset):
+                other_nums += 1
+                continue
+
+            if prim.IsA(UsdGeom.Gprim):
+                prim_name = prim.GetParent().GetName() + "_" + prim.GetName()
+            else:
+                prim_name = prim.GetName()
+
+            prim_inst = usd_onto.Prim(prim_name, namespace=usd_onto)
             prim_dict[prim] = prim_inst
 
             if prim.HasAPI(UsdOntology.SemanticTagAPI):
@@ -312,7 +323,21 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
                 prim_inst.hasQuality.append(jointValue_inst)
                 jointValue_inst.hasJointValue = [float64(0.5)]
 
-    print(f"Save ABox ontology to {save_path}")
+    prim_nums = len(prim_dict) + other_nums
+    xform_nums = 0
+    gprim_nums = 0
+    joint_nums = 0
+    for prim in prim_dict.keys():
+        if prim.IsA(UsdGeom.Xform):
+            xform_nums += 1
+        elif prim.IsA(UsdGeom.Gprim):
+            gprim_nums += 1
+        elif prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint):
+            joint_nums += 1
+        else:
+            other_nums += 1
+
+    print(f"Save ABox ontology to {save_path}, from {prim_nums} prims to {xform_nums} xforms, {gprim_nums} gprims, {joint_nums} joints and excludes {other_nums} others")
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     ABox_onto.save(save_path)
 
