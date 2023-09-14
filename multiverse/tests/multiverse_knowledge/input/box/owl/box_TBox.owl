@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#"
-     xml:base="https://ease-crc.org/ont/usd/box_scenario_TBox.owl"
+<rdf:RDF xmlns="https://ease-crc.org/ont/usd/box_TBox.owl#"
+     xml:base="https://ease-crc.org/ont/usd/box_TBox.owl"
      xmlns:dc="http://purl.org/dc/elements/1.1/"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -9,7 +9,7 @@
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:swrl="http://www.w3.org/2003/11/swrl#"
      xmlns:swrlb="http://www.w3.org/2003/11/swrlb#">
-    <owl:Ontology rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl">
+    <owl:Ontology rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl">
         <owl:imports rdf:resource="https://ease-crc.org/ont/USD.owl"/>
     </owl:Ontology>
     
@@ -26,37 +26,37 @@
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Box -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#Box -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Box">
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Box">
         <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality"/>
                 <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Openability"/>
+                <owl:onClass rdf:resource="https://ease-crc.org/ont/usd/box_TBox.owl#Openability"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Closed -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#Closed -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Closed">
-        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Openability"/>
-        <owl:disjointWith rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Opened"/>
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Closed">
+        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/usd/box_TBox.owl#Openability"/>
+        <owl:disjointWith rdf:resource="https://ease-crc.org/ont/usd/box_TBox.owl#Opened"/>
     </owl:Class>
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#ClosedBox -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#ClosedBox -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#ClosedBox">
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#ClosedBox">
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Box"/>
+                    <rdf:Description rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Box"/>
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPart"/>
                         <owl:someValuesFrom>
@@ -93,56 +93,56 @@
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Box"/>
+        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/usd/box_TBox.owl#Box"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality"/>
-                <owl:someValuesFrom rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Closed"/>
+                <owl:someValuesFrom rdf:resource="https://ease-crc.org/ont/usd/box_TBox.owl#Closed"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Corpus -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#Corpus -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Corpus">
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Corpus">
         <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
     </owl:Class>
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Flap -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#Flap -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Flap">
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Flap">
         <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
     </owl:Class>
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Openability -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#Openability -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Openability">
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Openability">
         <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
     </owl:Class>
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Opened -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#Opened -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Opened">
-        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Openability"/>
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Opened">
+        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/usd/box_TBox.owl#Openability"/>
     </owl:Class>
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#OpenedBox -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#OpenedBox -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#OpenedBox">
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#OpenedBox">
         <owl:equivalentClass>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Box"/>
+                    <rdf:Description rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Box"/>
                     <owl:Restriction>
                         <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasPart"/>
                         <owl:someValuesFrom>
@@ -179,26 +179,26 @@
                 </owl:intersectionOf>
             </owl:Class>
         </owl:equivalentClass>
-        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Box"/>
+        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/usd/box_TBox.owl#Box"/>
         <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality"/>
-                <owl:someValuesFrom rdf:resource="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Opened"/>
+                <owl:someValuesFrom rdf:resource="https://ease-crc.org/ont/usd/box_TBox.owl#Opened"/>
             </owl:Restriction>
         </rdfs:subClassOf>
     </owl:Class>
     
 
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Table -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#Table -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Table">
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Table">
         <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
     </owl:Class>
 
-    <!-- https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Cat -->
+    <!-- https://ease-crc.org/ont/usd/box_TBox.owl#Cat -->
 
-    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_scenario_TBox.owl#Cat">
+    <owl:Class rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl#Cat">
         <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
     </owl:Class>
 </rdf:RDF>

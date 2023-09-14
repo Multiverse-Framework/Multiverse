@@ -3,7 +3,7 @@
 import argparse
 import shutil
 import os
-from pxr import Usd, UsdOntology
+from pxr import Usd, UsdGeom, UsdOntology
 
 
 sem_labels = {"box": ["_class_Box"], "cat": ["_class_Cat"], 
@@ -46,20 +46,43 @@ sem_TBox = {}
 
 
 def auto_sem_tag(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_usd_file: str) -> None:
-    in_mesh_dir = in_ABox_usd_file.replace(".usda", "").replace(".usdc", "")
-    out_mesh_dir = os.path.join(os.path.dirname(out_ABox_usd_file), os.path.basename(in_ABox_usd_file.replace(".usda", "").replace(".usdc", "")))
-    shutil.copytree(in_mesh_dir, out_mesh_dir, dirs_exist_ok=True)
-    shutil.copy(in_ABox_usd_file, out_ABox_usd_file)
+    tmp_out_ABox_usd_file = os.path.join(os.path.dirname(in_ABox_usd_file), "tmp.usda")
+    shutil.copy(src=in_ABox_usd_file, dst=tmp_out_ABox_usd_file)
 
     stage_TBox = Usd.Stage.Open(in_TBox_Usd_file)
     for prim in stage_TBox.Traverse():
         for prim_class in prim.GetAllChildren():
             sem_TBox[prim_class.GetName()] = prim_class.GetPrimPath()
 
-    stage_ABox = Usd.Stage.Open(out_ABox_usd_file)
-    stage_ABox.GetRootLayer().subLayerPaths = ["./" + os.path.relpath(in_TBox_Usd_file, os.path.dirname(out_ABox_usd_file))]
+    stage_ABox = Usd.Stage.Open(tmp_out_ABox_usd_file)
+    stage_ABox.GetRootLayer().subLayerPaths = [in_TBox_Usd_file]
 
     for prim in stage_ABox.Traverse():
+        prepended_items = prim.GetPrim().GetPrimStack()[0].referenceList.prependedItems
+        if len(prepended_items) == 1:
+            prim.GetPrim().GetReferences().ClearReferences()
+            mesh_dir_abs_path = prepended_items[0].assetPath
+            prim_path = prepended_items[0].primPath
+            if not os.path.isabs(mesh_dir_abs_path):
+                if mesh_dir_abs_path[:2] == "./":
+                    mesh_dir_abs_path = mesh_dir_abs_path[2:]
+                mesh_dir_abs_path = os.path.join(os.path.dirname(in_ABox_usd_file), mesh_dir_abs_path)
+            prim.GetPrim().GetReferences().AddReference(mesh_dir_abs_path, prim_path)
+        elif len(prepended_items) > 1:
+            mesh_dir_abs_paths = []
+            prim_paths = []
+            for prepended_item in prepended_items:
+                mesh_dir_abs_path = prepended_item.assetPath
+                prim_paths.append(prepended_item.primPath)
+                if not os.path.isabs(mesh_dir_abs_path):
+                    if mesh_dir_abs_path[:2] == "./":
+                        mesh_dir_abs_path = mesh_dir_abs_path[2:]
+                    mesh_dir_abs_path = os.path.join(os.path.dirname(in_ABox_usd_file), mesh_dir_abs_path)
+                mesh_dir_abs_paths.append(mesh_dir_abs_path)
+            prim.GetPrim().GetReferences().ClearReferences()
+            for mesh_dir_abs_path, prim_path in zip(mesh_dir_abs_paths, prim_paths):
+                prim.GetPrim().GetReferences().AddReference(mesh_dir_abs_path, prim_path)
+
         if prim.GetName() in sem_labels:
             semanticTagAPI = UsdOntology.SemanticTagAPI.Apply(prim)
             for sem_class in sem_labels[prim.GetName()]:
@@ -68,6 +91,7 @@ def auto_sem_tag(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_usd_file
 
     print(f"Save usd stage to {out_ABox_usd_file} that has semantic labels from {in_TBox_Usd_file}")
     stage_ABox.GetRootLayer().Save()
+    os.rename(tmp_out_ABox_usd_file, out_ABox_usd_file)
 
     return None
 

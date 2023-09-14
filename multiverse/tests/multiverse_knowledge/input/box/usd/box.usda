@@ -114,7 +114,7 @@ def Xform "world"
 
         def Mesh "geom_6" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @./box_scenario/usd/BoxFlap1.usda@
+            prepend references = @./box/usd/BoxFlap1.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -139,7 +139,7 @@ def Xform "world"
 
         def Mesh "geom_7" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @./box_scenario/usd/BoxFlap2.usda@
+            prepend references = @./box/usd/BoxFlap2.usda@
         )
         {
             uniform token physics:approximation = "convexHull"
@@ -147,31 +147,6 @@ def Xform "world"
             color3f[] primvars:displayColor = [(1, 0.8, 0)]
             float[] primvars:displayOpacity = [1]
             matrix4d xformOp:transform = ( (-2.220446049250313e-16, 0, 1.0000000000000002, 0), (0, -1.0000000000000004, 0, 0), (1.0000000000000002, 0, -2.220446049250313e-16, 0), (0.17000000947241017, -3.853585327311238e-10, -1.7394634132564953e-12, 1) )
-            uniform token[] xformOpOrder = ["xformOp:transform"]
-        }
-    }
-
-    def Xform "cat" (
-        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
-    )
-    {
-        point3f physics:centerOfMass = (1.1589759e-7, -0.0030464365, 0.09314733)
-        float3 physics:diagonalInertia = (0.005019804, 0.0038922601, 0.0015858749)
-        float physics:mass = 1.1450002
-        bool physics:rigidBodyEnabled = 1
-        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (-0.09594, 0.193951, 0.5, 1) )
-        uniform token[] xformOpOrder = ["xformOp:transform"]
-
-        def Mesh "geom_8" (
-            prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @./box_scenario/usd/cat.usda@
-        )
-        {
-            uniform token physics:approximation = "convexHull"
-            bool physics:collisionEnabled = 1
-            color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
-            float[] primvars:displayOpacity = [1]
-            matrix4d xformOp:transform = ( (0.9999999999934279, -0.000003400104312257195, 0.0000012583493548569828, 0), (2.117582368135751e-22, 0.3470842744659124, 0.9378339439466196, 0), (-0.0000036254865098492593, -0.937833943940456, 0.3470842744636313, 0), (1.1589759504366095e-7, -0.0030464363770440228, 0.09314732677864689, 1) )
             uniform token[] xformOpOrder = ["xformOp:transform"]
         }
     }

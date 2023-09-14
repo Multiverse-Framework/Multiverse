@@ -278,10 +278,13 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
                 if prim_child_inst is not None:
                     prim_inst.hasPart.append(prim_child_inst)
 
-            if prim.IsA(UsdPhysics.RevoluteJoint):
+            if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint):
                 prim_inst = prim_dict.get(prim)
-                hasRevoluteJointSchema_prop = usd_onto.hasTypedSchema
-                prim_inst.is_a.append(hasRevoluteJointSchema_prop.some(usd_onto.PhysicsRevoluteJointSchema))
+                hasJointSchema_prop = usd_onto.hasTypedSchema
+                if prim.IsA(UsdPhysics.RevoluteJoint):
+                    prim_inst.is_a.append(hasJointSchema_prop.some(usd_onto.PhysicsRevoluteJointSchema))
+                elif prim.IsA(UsdPhysics.PrismaticJoint):
+                    prim_inst.is_a.append(hasJointSchema_prop.some(usd_onto.PhysicsPrismaticJointSchema))
 
                 collisionEnabled_inst = dul_onto.Quality(prim.GetName() + "_collisionEnabled", namespace=dul_onto)
                 prim_inst.hasQuality.append(collisionEnabled_inst)
