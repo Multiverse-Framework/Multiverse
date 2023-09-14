@@ -337,7 +337,9 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
         else:
             other_nums += 1
 
-    print(f"Save ABox ontology to {save_path}, from {prim_nums} prims to {xform_nums} xforms, {gprim_nums} gprims, {joint_nums} joints and excludes {other_nums} others")
+    print(
+        f"Save ABox ontology to {save_path}, from {prim_nums} prims to {xform_nums} xforms, {gprim_nums} gprims, {joint_nums} joints and excludes {other_nums} others"
+    )
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     ABox_onto.save(save_path)
 
