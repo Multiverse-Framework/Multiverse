@@ -1,0 +1,1893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ontology xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2002/07/owl#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xsd="http://www.w3.org/2001/XMLSchema#">
+    <Prefix name="" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="owl" IRI="http://www.w3.org/2002/07/owl#"/>
+    <Prefix name="rdf" IRI="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+    <Prefix name="xml" IRI="http://www.w3.org/XML/1998/namespace"/>
+    <Prefix name="xsd" IRI="http://www.w3.org/2001/XMLSchema#"/>
+    <Prefix name="rdfs" IRI="http://www.w3.org/2000/01/rdf-schema#"/>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#world"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#world"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#world"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#world"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#world"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#ClosedFlap"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#ClosedFlap"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#Flap"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#Flap"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#Box"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#Box"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#ClosedBox"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#ClosedBox"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#OpenedFlap"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#OpenedFlap"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#DesignedArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/usd/box_TBox.owl#Flap"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_mass"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_mass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_mass"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_mass"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_mass"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_geom_6"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_geom_6"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_geom_6"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_geom_6"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_geom_6"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_geom_6"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_geom_6"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_rigidBodyEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_rigidBodyEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_rigidBodyEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_rigidBodyEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_rigidBodyEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_centerOfMass"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_centerOfMass"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithDisplayColor"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithDisplayColor"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_4"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithJointPhysics"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithJointPhysics"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Joint"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Joint"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#RevoluteJoint"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#RevoluteJoint"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithJointLimits"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithJointLimits"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_centerOfMass"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_centerOfMass"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithJointPhysics"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Joint"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#RevoluteJoint"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithJointLimits"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_mass"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_mass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_mass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_mass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_mass"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithDisplayColor"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_2"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithDisplayColor"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_1"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithDisplayColor"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_3"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithDisplayColor"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#WithXform"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalArtifact"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_geom_5"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_geom_7"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Scene"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_geom_7"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_geom_7"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_geom_7"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_geom_7"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Object"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_geom_7"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Prim"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_geom_7"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_centerOfMass"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_centerOfMass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_centerOfMass"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_mass"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_mass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_mass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_mass"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_mass"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_rigidBodyEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_rigidBodyEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_rigidBodyEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_rigidBodyEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_rigidBodyEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayOpacity"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayOpacity"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayOpacity"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_rigidCollisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayColor"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_6_dislayColor"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayColor"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayColor"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayOpacity"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_dislayOpacity"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_rigidCollisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_size"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_4_size"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_collisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_collisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_collisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_collisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_collisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos1"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos1"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint_jointValue"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#JointState"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#JointState"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint_jointValue"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint_jointValue"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint_jointValue"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_2_joint_jointValue"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos0"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_pos0"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot0"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot0"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot1"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_2_joint_rot1"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot1"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot1"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot0"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_rot0"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint_jointValue"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#JointState"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint_jointValue"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint_jointValue"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint_jointValue"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="https://ease-crc.org/ont/USD.owl#box_flap_1_joint_jointValue"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos0"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos0"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos0"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_collisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_collisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_collisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_collisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_collisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos1"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos1"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#box_flap_1_joint_pos1"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_size"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_size"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayColor"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayColor"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayOpacity"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_dislayOpacity"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_rigidCollisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_2_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayOpacity"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayOpacity"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_rigidCollisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_size"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_size"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayColor"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_dislayColor"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_1_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayOpacity"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayOpacity"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_rigidCollisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_size"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_size"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayColor"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_dislayColor"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_3_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_rigidCollisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_size"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_size"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_size"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayColor"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayColor"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#CubeShape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayOpacity"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_5_dislayOpacity"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayOpacity"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayOpacity"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayOpacity"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOpOrder"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOpOrder"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOpOrder"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_rigidCollisionEnabled"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_rigidCollisionEnabled"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOp_transform"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOp_transform"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Shape"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_xformOp_transform"/>
+    </ClassAssertion>
+    <Declaration>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayColor"/>
+    </Declaration>
+    <ClassAssertion>
+        <Class IRI="http://www.w3.org/2002/07/owl#Thing"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayColor"/>
+    </ClassAssertion>
+    <ClassAssertion>
+        <Class IRI="https://ease-crc.org/ont/USD.owl#Color"/>
+        <NamedIndividual IRI="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#geom_7_dislayColor"/>
+    </ClassAssertion>
+</Ontology>

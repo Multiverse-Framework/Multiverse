@@ -1,0 +1,746 @@
+Prefix(:=<https://ease-crc.org/ont/USD#>)
+Prefix(dc:=<http://purl.org/dc/elements/1.1/>)
+Prefix(DUL:=<http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+Prefix(xformOp:=<https://ease-crc.org/ont/USD#xformOp:>)
+
+
+Ontology(<https://ease-crc.org/ont/USD.owl>
+Import(<file://./DUL.owl>)
+Annotation(rdfs:comment "The purpose of the USD ontology is to establish a graph model of the USD language, and to support translation from USD to a KG representation of scene graphs. To this end, the core vocabulary of USD is defined in terms of an upper-level ontology. In addition, a set of re-usable built-in schemata that are used in the USD language to describe prims are defined. In order to fasciliate translation, the ontological model attempts to replicate the structure of USD as closely as possible while in addition entailing semantics of USD entities.")
+Annotation(rdfs:label "USD Ontology")
+Annotation(owl:versionInfo "0.1")
+Annotation(owl:versionInfo "0.1 created by Daniel Beßler. The scope of the ontology is limited to syntactic features of the USD language needed for a usecase scenario (box opening) investigated in the scope of a scientific article.")
+
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#APISchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#BoundableSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#CollisionAPI>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#Color>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#CubeSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#CubeShape>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#CylinderSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#CylinderShape>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#GprimSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#Joint>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#JointState>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#MassAPI>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#Physics>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#PhysicsJointSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#PhysicsPrismaticJointSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#PhysicsRevoluteJointSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#PhysicsSceneSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#Prim>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#PrismaticJoint>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#RevoluteJoint>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#RigidBodyAPI>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#Scene>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#Schema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#Shape>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#SphereSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#SphereShape>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#Stage>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#TypedSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#WithDisplayColor>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#WithJointLimits>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#WithJointPhysics>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#WithXform>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#XformSchema>))
+Declaration(Class(<https://ease-crc.org/ont/USD.owl#XformableSchema>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#contains>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#hasAPI>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#hasColor>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#hasConnection>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#hasDirectConnection>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#hasPhysics>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#hasSchema>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#hasShape>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#hasTypedSchema>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#isAPIOf>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#isColorOf>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#isContainedIn>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#isPhysicsOf>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#isSchemaOf>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#isShapeOf>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#isTypedSchemaOf>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#physics_body0>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#physics_body1>))
+Declaration(ObjectProperty(<https://ease-crc.org/ont/USD.owl#physics_simulationOwner>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#colorDataValue>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#hasJointValue>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#height>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physicsDataValue>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_angularVelocity>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_axis>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_centerOfMass>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_collisionEnabled>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_density>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_diagonalInertia>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_gravityDirection>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_gravityMagnitude>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_localPos0>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_localPos1>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_localRot0>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_localRot1>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_lowerLimit>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_mass>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_principalAxes>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_rigidBodyEnabled>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_upperLimit>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#physics_velocity>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#primvars_displayColor>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#primvars_displayOpacity>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#radius>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#shapeDataValue>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#simulatorDataValue>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#size>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#xformOpOrder>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#xformOp_rotate>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#xformOp_scale>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#xformOp_transform>))
+Declaration(DataProperty(<https://ease-crc.org/ont/USD.owl#xformOp_translate>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#color3f_array>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#double3>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#float3>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#float4>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#float_array>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#matrix4d>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#point3f>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#quatf>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#token>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#token_array>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#u_token>))
+Declaration(Datatype(<https://ease-crc.org/ont/USD.owl#vector3f>))
+
+############################
+#   Object Properties
+############################
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#contains> (<https://ease-crc.org/ont/USD.owl#contains>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#contains> "A schematic relation asserting containment, understood in a very broad sense, by one Entity of another.")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#contains> DUL:overlaps)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#contains> <https://ease-crc.org/ont/USD.owl#isContainedIn>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#contains> DUL:Entity)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#contains> DUL:Entity)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#hasAPI> (has api)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#hasAPI> "Links prims with API schemata applied to it.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#hasAPI> "has api")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#hasAPI> <https://ease-crc.org/ont/USD.owl#hasSchema>)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#hasAPI> <https://ease-crc.org/ont/USD.owl#isAPIOf>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasAPI> <https://ease-crc.org/ont/USD.owl#Prim>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#hasAPI> <https://ease-crc.org/ont/USD.owl#APISchema>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#hasColor> (<https://ease-crc.org/ont/USD.owl#hasColor>)
+
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#hasColor> DUL:hasQuality)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#hasColor> <https://ease-crc.org/ont/USD.owl#isColorOf>)
+FunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#hasColor>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasColor> DUL:Entity)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#hasColor> <https://ease-crc.org/ont/USD.owl#Color>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#hasConnection> (has connection)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#hasConnection> "A transitive and symmetric relation that expresses (indirect) connection between entities.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#hasConnection> "has connection")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#hasConnection> DUL:hasLocation)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#hasConnection> <https://ease-crc.org/ont/USD.owl#hasConnection>)
+SymmetricObjectProperty(<https://ease-crc.org/ont/USD.owl#hasConnection>)
+TransitiveObjectProperty(<https://ease-crc.org/ont/USD.owl#hasConnection>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasConnection> DUL:Entity)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#hasConnection> DUL:Entity)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#hasDirectConnection> (has direct connection)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#hasDirectConnection> "A symmetric relation that expresses direct connection between entities.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#hasDirectConnection> "has direct connection")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#hasDirectConnection> <https://ease-crc.org/ont/USD.owl#hasConnection>)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#hasDirectConnection> <https://ease-crc.org/ont/USD.owl#hasDirectConnection>)
+SymmetricObjectProperty(<https://ease-crc.org/ont/USD.owl#hasDirectConnection>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasDirectConnection> DUL:Entity)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#hasDirectConnection> DUL:Entity)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#hasPhysics> (<https://ease-crc.org/ont/USD.owl#hasPhysics>)
+
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#hasPhysics> DUL:hasQuality)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#hasPhysics> <https://ease-crc.org/ont/USD.owl#isPhysicsOf>)
+FunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#hasPhysics>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasPhysics> <https://ease-crc.org/ont/USD.owl#Scene>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#hasPhysics> <https://ease-crc.org/ont/USD.owl#Physics>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#hasSchema> (has schema)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#hasSchema> "Links prims with schemata applied to it.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#hasSchema> "has schema")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#hasSchema> DUL:isDescribedBy)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#hasSchema> <https://ease-crc.org/ont/USD.owl#isSchemaOf>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasSchema> <https://ease-crc.org/ont/USD.owl#Prim>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#hasSchema> <https://ease-crc.org/ont/USD.owl#Schema>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#hasShape> (<https://ease-crc.org/ont/USD.owl#hasShape>)
+
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#hasShape> DUL:hasQuality)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#hasShape> <https://ease-crc.org/ont/USD.owl#isShapeOf>)
+FunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#hasShape>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasShape> DUL:Entity)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#hasShape> <https://ease-crc.org/ont/USD.owl#Shape>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#hasTypedSchema> (has typed schema)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#hasTypedSchema> "Links prims with typed schemata applied to it.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#hasTypedSchema> "has typed schema")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#hasTypedSchema> <https://ease-crc.org/ont/USD.owl#hasSchema>)
+InverseObjectProperties(<https://ease-crc.org/ont/USD.owl#hasTypedSchema> <https://ease-crc.org/ont/USD.owl#isTypedSchemaOf>)
+FunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#hasTypedSchema>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasTypedSchema> <https://ease-crc.org/ont/USD.owl#Prim>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#hasTypedSchema> <https://ease-crc.org/ont/USD.owl#TypedSchema>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#isAPIOf> (is api of)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#isAPIOf> "Links prims with API schemata applied to it.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#isAPIOf> "is api of")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#isAPIOf> <https://ease-crc.org/ont/USD.owl#isSchemaOf>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#isAPIOf> <https://ease-crc.org/ont/USD.owl#APISchema>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#isAPIOf> <https://ease-crc.org/ont/USD.owl#Prim>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#isColorOf> (<https://ease-crc.org/ont/USD.owl#isColorOf>)
+
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#isColorOf> DUL:isQualityOf)
+InverseFunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#isColorOf>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#isColorOf> <https://ease-crc.org/ont/USD.owl#Color>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#isColorOf> DUL:Entity)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#isContainedIn> (<https://ease-crc.org/ont/USD.owl#isContainedIn>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#isContainedIn> "A schematic relation asserting containment, understood in a very broad sense, by one Entity of another.")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#isContainedIn> DUL:overlaps)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#isContainedIn> DUL:Entity)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#isContainedIn> DUL:Entity)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#isPhysicsOf> (<https://ease-crc.org/ont/USD.owl#isPhysicsOf>)
+
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#isPhysicsOf> DUL:isQualityOf)
+InverseFunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#isPhysicsOf>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#isPhysicsOf> <https://ease-crc.org/ont/USD.owl#Physics>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#isPhysicsOf> DUL:Entity)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#isSchemaOf> (is schema of)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#isSchemaOf> "Links prims with schemata applied to it.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#isSchemaOf> "is schema of")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#isSchemaOf> DUL:describes)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#Schema>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#Prim>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#isShapeOf> (<https://ease-crc.org/ont/USD.owl#isShapeOf>)
+
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#isShapeOf> DUL:isQualityOf)
+InverseFunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#isShapeOf>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#isShapeOf> <https://ease-crc.org/ont/USD.owl#Shape>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#isShapeOf> DUL:Entity)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#isTypedSchemaOf> (is typed schema of)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#isTypedSchemaOf> "Links prims with typed schemata applied to it.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#isTypedSchemaOf> "is typed schema of")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#isTypedSchemaOf> <https://ease-crc.org/ont/USD.owl#isSchemaOf>)
+InverseFunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#isTypedSchemaOf>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#isTypedSchemaOf> <https://ease-crc.org/ont/USD.owl#TypedSchema>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#isTypedSchemaOf> <https://ease-crc.org/ont/USD.owl#Prim>)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#physics_body0> (<https://ease-crc.org/ont/USD.owl#physics_body0>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_body0> "Relationship to body0")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_body0> <https://ease-crc.org/ont/USD.owl#hasDirectConnection>)
+FunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#physics_body0>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_body0> <https://ease-crc.org/ont/USD.owl#Joint>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_body0> DUL:PhysicalObject)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#physics_body1> (<https://ease-crc.org/ont/USD.owl#physics_body1>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_body1> "Relationship to body1")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_body1> <https://ease-crc.org/ont/USD.owl#hasDirectConnection>)
+FunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#physics_body1>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_body1> <https://ease-crc.org/ont/USD.owl#Joint>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_body1> DUL:PhysicalObject)
+
+# Object Property: <https://ease-crc.org/ont/USD.owl#physics_simulationOwner> (<https://ease-crc.org/ont/USD.owl#physics_simulationOwner>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_simulationOwner> "PhysicsScene that will simulate this body")
+SubObjectPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_simulationOwner> DUL:associatedWith)
+FunctionalObjectProperty(<https://ease-crc.org/ont/USD.owl#physics_simulationOwner>)
+ObjectPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_simulationOwner> <https://ease-crc.org/ont/USD.owl#Physics>)
+ObjectPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_simulationOwner> <https://ease-crc.org/ont/USD.owl#Scene>)
+
+
+############################
+#   Data Properties
+############################
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#colorDataValue> (<https://ease-crc.org/ont/USD.owl#colorDataValue>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#colorDataValue> "A data value of a color quality.")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#colorDataValue> DUL:hasDataValue)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#colorDataValue> <https://ease-crc.org/ont/USD.owl#Color>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#hasJointValue> (<https://ease-crc.org/ont/USD.owl#hasJointValue>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#hasJointValue> "The value of a joint.")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#hasJointValue> <https://ease-crc.org/ont/USD.owl#simulatorDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#hasJointValue> <https://ease-crc.org/ont/USD.owl#JointState>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#hasJointValue> xsd:double)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#height> (<https://ease-crc.org/ont/USD.owl#height>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#height> "Size of the cylinder’s spine")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#height> <https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#height> <https://ease-crc.org/ont/USD.owl#Shape>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#height> xsd:double)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physicsDataValue> (<https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physicsDataValue> "A data value of a physics quality.")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physicsDataValue> DUL:hasDataValue)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physicsDataValue> <https://ease-crc.org/ont/USD.owl#Physics>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_angularVelocity> (<https://ease-crc.org/ont/USD.owl#physics_angularVelocity>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_angularVelocity> "Angular velocity in the prim’s local space")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_angularVelocity> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_angularVelocity> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_angularVelocity> <https://ease-crc.org/ont/USD.owl#vector3f>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_axis> (<https://ease-crc.org/ont/USD.owl#physics_axis>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_axis> "Joint axis")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_axis> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_axis> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_axis> <https://ease-crc.org/ont/USD.owl#u_token>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_centerOfMass> (<https://ease-crc.org/ont/USD.owl#physics_centerOfMass>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_centerOfMass> "Center of mass in the prim’s local space")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_centerOfMass> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_centerOfMass> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_centerOfMass> <https://ease-crc.org/ont/USD.owl#point3f>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_collisionEnabled> (<https://ease-crc.org/ont/USD.owl#physics_collisionEnabled>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_collisionEnabled> "Determines if the PhysicsCollisionAPI is enabled")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_collisionEnabled> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_collisionEnabled> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_collisionEnabled> xsd:boolean)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_density> (<https://ease-crc.org/ont/USD.owl#physics_density>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_density> "Density of the object")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_density> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_density> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_density> xsd:float)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_diagonalInertia> (<https://ease-crc.org/ont/USD.owl#physics_diagonalInertia>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_diagonalInertia> "Diagonalized inertia tensor along the principal axes")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_diagonalInertia> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_diagonalInertia> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_diagonalInertia> <https://ease-crc.org/ont/USD.owl#float3>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_gravityDirection> (<https://ease-crc.org/ont/USD.owl#physics_gravityDirection>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_gravityDirection> "Gravity direction vector in simulation world space")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_gravityDirection> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_gravityDirection> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_gravityDirection> <https://ease-crc.org/ont/USD.owl#vector3f>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_gravityMagnitude> (<https://ease-crc.org/ont/USD.owl#physics_gravityMagnitude>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_gravityMagnitude> "Gravity acceleration magnitude in simulation world space")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_gravityMagnitude> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_gravityMagnitude> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_gravityMagnitude> xsd:float)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_localPos0> (<https://ease-crc.org/ont/USD.owl#physics_localPos0>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_localPos0> "Relative position of the joint frame to body0’s frame")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_localPos0> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_localPos0> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_localPos0> <https://ease-crc.org/ont/USD.owl#point3f>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_localPos1> (<https://ease-crc.org/ont/USD.owl#physics_localPos1>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_localPos1> "Relative position of the joint frame to body1’s frame")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_localPos1> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_localPos1> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_localPos1> <https://ease-crc.org/ont/USD.owl#point3f>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_localRot0> (<https://ease-crc.org/ont/USD.owl#physics_localRot0>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_localRot0> "Relative orientation of the joint frame to body0’s frame")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_localRot0> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_localRot0> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_localRot0> <https://ease-crc.org/ont/USD.owl#quatf>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_localRot1> (<https://ease-crc.org/ont/USD.owl#physics_localRot1>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_localRot1> "Relative orientation of the joint frame to body1’s frame")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_localRot1> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_localRot1> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_localRot1> <https://ease-crc.org/ont/USD.owl#quatf>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_lowerLimit> (<https://ease-crc.org/ont/USD.owl#physics_lowerLimit>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_lowerLimit> "Lower limit")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_lowerLimit> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_lowerLimit> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_lowerLimit> xsd:float)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_mass> (<https://ease-crc.org/ont/USD.owl#physics_mass>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_mass> "Mass of the object")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_mass> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_mass> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_mass> xsd:float)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_principalAxes> (<https://ease-crc.org/ont/USD.owl#physics_principalAxes>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_principalAxes> "Orientation of the inertia tensor’s principal axes in the prim’s local space")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_principalAxes> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_principalAxes> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_principalAxes> <https://ease-crc.org/ont/USD.owl#quatf>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_rigidBodyEnabled> (<https://ease-crc.org/ont/USD.owl#physics_rigidBodyEnabled>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_rigidBodyEnabled> "Determines if this PhysicsRigidBodyAPI is enabled")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_rigidBodyEnabled> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_rigidBodyEnabled> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_rigidBodyEnabled> xsd:boolean)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_upperLimit> (<https://ease-crc.org/ont/USD.owl#physics_upperLimit>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_upperLimit> "Upper limit")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_upperLimit> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_upperLimit> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_upperLimit> xsd:float)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#physics_velocity> (<https://ease-crc.org/ont/USD.owl#physics_velocity>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#physics_velocity> "Linear velocity in the prim’s local space")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#physics_velocity> <https://ease-crc.org/ont/USD.owl#physicsDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#physics_velocity> <https://ease-crc.org/ont/USD.owl#Physics>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#physics_velocity> <https://ease-crc.org/ont/USD.owl#vector3f>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#primvars_displayColor> (<https://ease-crc.org/ont/USD.owl#primvars_displayColor>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#primvars_displayColor> "Display or modeling color")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#primvars_displayColor> <https://ease-crc.org/ont/USD.owl#colorDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#primvars_displayColor> <https://ease-crc.org/ont/USD.owl#Color>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#primvars_displayColor> <https://ease-crc.org/ont/USD.owl#color3f_array>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#primvars_displayOpacity> (<https://ease-crc.org/ont/USD.owl#primvars_displayOpacity>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#primvars_displayOpacity> "Opacity")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#primvars_displayOpacity> <https://ease-crc.org/ont/USD.owl#colorDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#primvars_displayOpacity> <https://ease-crc.org/ont/USD.owl#Color>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#primvars_displayOpacity> <https://ease-crc.org/ont/USD.owl#float_array>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#radius> (<https://ease-crc.org/ont/USD.owl#radius>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#radius> "Radius of the cylinder")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#radius> <https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#radius> <https://ease-crc.org/ont/USD.owl#Shape>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#radius> xsd:double)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#shapeDataValue> (<https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#shapeDataValue> "A data value of a shape quality.")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#shapeDataValue> DUL:hasDataValue)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#shapeDataValue> <https://ease-crc.org/ont/USD.owl#Shape>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#simulatorDataValue> (<https://ease-crc.org/ont/USD.owl#simulatorDataValue>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#simulatorDataValue> "A data value computed by a simulator.")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#simulatorDataValue> DUL:hasDataValue)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#size> (<https://ease-crc.org/ont/USD.owl#size>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#size> "Length of each edge")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#size> <https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#size> <https://ease-crc.org/ont/USD.owl#Shape>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#size> xsd:double)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#xformOpOrder> (<https://ease-crc.org/ont/USD.owl#xformOpOrder>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#xformOpOrder> "Order of transformation operations")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#xformOpOrder> <https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#xformOpOrder> <https://ease-crc.org/ont/USD.owl#Shape>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#xformOpOrder> <https://ease-crc.org/ont/USD.owl#token_array>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#xformOp_rotate> (<https://ease-crc.org/ont/USD.owl#xformOp_rotate>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#xformOp_rotate> "Rotation as a quaternion")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#xformOp_rotate> <https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#xformOp_rotate> <https://ease-crc.org/ont/USD.owl#Shape>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#xformOp_rotate> <https://ease-crc.org/ont/USD.owl#float4>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#xformOp_scale> (<https://ease-crc.org/ont/USD.owl#xformOp_scale>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#xformOp_scale> "Scale factor")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#xformOp_scale> <https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#xformOp_scale> <https://ease-crc.org/ont/USD.owl#Shape>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#xformOp_scale> <https://ease-crc.org/ont/USD.owl#float3>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#xformOp_transform> (<https://ease-crc.org/ont/USD.owl#xformOp_transform>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#xformOp_transform> "3D transformation matrix")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#xformOp_transform> <https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#xformOp_transform> <https://ease-crc.org/ont/USD.owl#Shape>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#xformOp_transform> <https://ease-crc.org/ont/USD.owl#matrix4d>)
+
+# Data Property: <https://ease-crc.org/ont/USD.owl#xformOp_translate> (<https://ease-crc.org/ont/USD.owl#xformOp_translate>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#xformOp_translate> "Translation vector")
+SubDataPropertyOf(<https://ease-crc.org/ont/USD.owl#xformOp_translate> <https://ease-crc.org/ont/USD.owl#shapeDataValue>)
+DataPropertyDomain(<https://ease-crc.org/ont/USD.owl#xformOp_translate> <https://ease-crc.org/ont/USD.owl#Shape>)
+DataPropertyRange(<https://ease-crc.org/ont/USD.owl#xformOp_translate> <https://ease-crc.org/ont/USD.owl#double3>)
+
+
+############################
+#   Datatypes
+############################
+
+# Datatype: <https://ease-crc.org/ont/USD.owl#double3> (<https://ease-crc.org/ont/USD.owl#double3>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#double3> "A vector of three double values.")
+
+# Datatype: <https://ease-crc.org/ont/USD.owl#float3> (<https://ease-crc.org/ont/USD.owl#float3>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#float3> "A vector of three float values.")
+
+# Datatype: <https://ease-crc.org/ont/USD.owl#float4> (<https://ease-crc.org/ont/USD.owl#float4>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#float4> "A vector of four float values.")
+
+# Datatype: <https://ease-crc.org/ont/USD.owl#matrix4d> (<https://ease-crc.org/ont/USD.owl#matrix4d>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#matrix4d> "A 4x4 matrix with double elements.")
+
+# Datatype: <https://ease-crc.org/ont/USD.owl#quatf> (<https://ease-crc.org/ont/USD.owl#quatf>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#quatf> "A quaternion with float values.")
+
+
+############################
+#   Classes
+############################
+
+# Class: <https://ease-crc.org/ont/USD.owl#APISchema> (API schema)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#APISchema> "A schema that serves as a API for reading and writing related data.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#APISchema> "API schema")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#APISchema> <https://ease-crc.org/ont/USD.owl#Schema>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#BoundableSchema> (<https://ease-crc.org/ont/USD.owl#BoundableSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#BoundableSchema> "A schema of prims with a finite spatial extend.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#BoundableSchema> <https://ease-crc.org/ont/USD.owl#XformableSchema>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#CollisionAPI> (<https://ease-crc.org/ont/USD.owl#CollisionAPI>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#CollisionAPI> "An API used to toggle collision detection of a prim.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CollisionAPI> <https://ease-crc.org/ont/USD.owl#APISchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CollisionAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_collisionEnabled> rdfs:Literal))))
+
+# Class: <https://ease-crc.org/ont/USD.owl#Color> (<https://ease-crc.org/ont/USD.owl#Color>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#Color> "The quality of having a color. Note this notion should be defined in some external ontology. e.g. SOMA ontology defines a similar notion.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Color> DUL:Quality)
+
+# Class: <https://ease-crc.org/ont/USD.owl#CubeSchema> (<https://ease-crc.org/ont/USD.owl#CubeSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#CubeSchema> "The schema of a cube-shaped prim.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CubeSchema> <https://ease-crc.org/ont/USD.owl#GprimSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CubeSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasShape> <https://ease-crc.org/ont/USD.owl#CubeShape>)))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CubeSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasShape> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#size> rdfs:Literal))))
+
+# Class: <https://ease-crc.org/ont/USD.owl#CubeShape> (<https://ease-crc.org/ont/USD.owl#CubeShape>)
+
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CubeShape> <https://ease-crc.org/ont/USD.owl#Shape>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#CylinderSchema> (<https://ease-crc.org/ont/USD.owl#CylinderSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#CylinderSchema> "The schema of a cylinder-shaped prim.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CylinderSchema> <https://ease-crc.org/ont/USD.owl#GprimSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CylinderSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasShape> <https://ease-crc.org/ont/USD.owl#CylinderShape>)))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CylinderSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasShape> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#height> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CylinderSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasShape> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#radius> rdfs:Literal))))
+
+# Class: <https://ease-crc.org/ont/USD.owl#CylinderShape> (<https://ease-crc.org/ont/USD.owl#CylinderShape>)
+
+SubClassOf(<https://ease-crc.org/ont/USD.owl#CylinderShape> <https://ease-crc.org/ont/USD.owl#Shape>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#GprimSchema> (<https://ease-crc.org/ont/USD.owl#GprimSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#GprimSchema> "A schema that serves as a base class for all schemas of geometric primitives.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#GprimSchema> <https://ease-crc.org/ont/USD.owl#BoundableSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#GprimSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> DUL:PhysicalArtifact))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#GprimSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#WithDisplayColor>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#Joint> (<https://ease-crc.org/ont/USD.owl#Joint>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#Joint> "A joint constrains the motion of objects relative to each other.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Joint> DUL:PhysicalObject)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Joint> ObjectExactCardinality(1 DUL:hasQuality <https://ease-crc.org/ont/USD.owl#JointState>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#JointState> (<https://ease-crc.org/ont/USD.owl#JointState>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#JointState> "The state of a joint.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#JointState> DUL:Quality)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#JointState> ObjectAllValuesFrom(DUL:isQualityOf <https://ease-crc.org/ont/USD.owl#Joint>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#MassAPI> (<https://ease-crc.org/ont/USD.owl#MassAPI>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#MassAPI> "An API used to define properties related to the mass of a prim.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#MassAPI> <https://ease-crc.org/ont/USD.owl#APISchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#MassAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_centerOfMass> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#MassAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_density> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#MassAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_diagonalInertia> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#MassAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_mass> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#MassAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_principalAxes> rdfs:Literal))))
+
+# Class: <https://ease-crc.org/ont/USD.owl#Physics> (<https://ease-crc.org/ont/USD.owl#Physics>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#Physics> "The quality of having physical characteristics. Note this notion should be defined in some external ontology. e.g. SOMA ontology defines a similar notion.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Physics> DUL:Quality)
+
+# Class: <https://ease-crc.org/ont/USD.owl#PhysicsJointSchema> (<https://ease-crc.org/ont/USD.owl#PhysicsJointSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#PhysicsJointSchema> "Contains properties that are used to constrain the motion of prims.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsJointSchema> <https://ease-crc.org/ont/USD.owl#TypedSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsJointSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#Joint>))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsJointSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#WithJointPhysics>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#PhysicsPrismaticJointSchema> (<https://ease-crc.org/ont/USD.owl#PhysicsPrismaticJointSchema>)
+
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsPrismaticJointSchema> <https://ease-crc.org/ont/USD.owl#PhysicsJointSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsPrismaticJointSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#PrismaticJoint>))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsPrismaticJointSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#WithJointLimits>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#PhysicsRevoluteJointSchema> (<https://ease-crc.org/ont/USD.owl#PhysicsRevoluteJointSchema>)
+
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsRevoluteJointSchema> <https://ease-crc.org/ont/USD.owl#PhysicsJointSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsRevoluteJointSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#RevoluteJoint>))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsRevoluteJointSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#WithJointLimits>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#PhysicsSceneSchema> (<https://ease-crc.org/ont/USD.owl#PhysicsSceneSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#PhysicsSceneSchema> "A schema that models general properties used for simulation.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsSceneSchema> <https://ease-crc.org/ont/USD.owl#TypedSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsSceneSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#Scene>))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsSceneSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_gravityDirection> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PhysicsSceneSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_gravityMagnitude> rdfs:Literal))))
+
+# Class: <https://ease-crc.org/ont/USD.owl#Prim> (<https://ease-crc.org/ont/USD.owl#Prim>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#Prim> "Prims are the primary container objects in USD files. Prims may further contain sub-prims, attributes and relationships (properties). Attributes of prims have typed values that may change over time. Prims and attributes may also have meta data (constant over time). Each prim *may* have at most one typed schema that restricts what data it contains.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Prim> DUL:Object)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Prim> ObjectAllValuesFrom(DUL:hasPart <https://ease-crc.org/ont/USD.owl#Prim>))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Prim> ObjectMaxCardinality(1 DUL:hasQuality <https://ease-crc.org/ont/USD.owl#Color>))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Prim> ObjectMaxCardinality(1 DUL:hasQuality <https://ease-crc.org/ont/USD.owl#Physics>))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Prim> ObjectMaxCardinality(1 DUL:hasQuality <https://ease-crc.org/ont/USD.owl#Shape>))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Prim> ObjectMaxCardinality(1 <https://ease-crc.org/ont/USD.owl#hasTypedSchema> <https://ease-crc.org/ont/USD.owl#TypedSchema>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#PrismaticJoint> (<https://ease-crc.org/ont/USD.owl#PrismaticJoint>)
+
+SubClassOf(<https://ease-crc.org/ont/USD.owl#PrismaticJoint> <https://ease-crc.org/ont/USD.owl#Joint>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#RevoluteJoint> (<https://ease-crc.org/ont/USD.owl#RevoluteJoint>)
+
+SubClassOf(<https://ease-crc.org/ont/USD.owl#RevoluteJoint> <https://ease-crc.org/ont/USD.owl#Joint>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#RigidBodyAPI> (<https://ease-crc.org/ont/USD.owl#RigidBodyAPI>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#RigidBodyAPI> "An API used to define standard properties of rigid body dynamics.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#RigidBodyAPI> <https://ease-crc.org/ont/USD.owl#APISchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#RigidBodyAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_simulationOwner> DUL:Entity))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#RigidBodyAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_angularVelocity> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#RigidBodyAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_rigidBodyEnabled> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#RigidBodyAPI> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_velocity> rdfs:Literal))))
+
+# Class: <https://ease-crc.org/ont/USD.owl#Scene> (<https://ease-crc.org/ont/USD.owl#Scene>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#Scene> "A scene spatially encloses a set of physical objects.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Scene> DUL:PhysicalObject)
+
+# Class: <https://ease-crc.org/ont/USD.owl#Schema> (<https://ease-crc.org/ont/USD.owl#Schema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#Schema> "USD Schemas are used to establish concrete representations of data. They entail that a certain set of properties is used for describing some phenomena such as properties used to quantify the mass of an object. As such they describe objects where certain qualities of the object are quantified in a specific way. They may also imply type constraints for objects they describe.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Schema> DUL:Description)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Schema> ObjectAllValuesFrom(DUL:describes <https://ease-crc.org/ont/USD.owl#Prim>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#Shape> (<https://ease-crc.org/ont/USD.owl#Shape>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#Shape> "The quality of having a shape. Note this notion should be defined in some external ontology. e.g. SOMA ontology defines a similar notion.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Shape> DUL:Quality)
+
+# Class: <https://ease-crc.org/ont/USD.owl#SphereSchema> (<https://ease-crc.org/ont/USD.owl#SphereSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#SphereSchema> "The schema of a sphere-shaped prim.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#SphereSchema> <https://ease-crc.org/ont/USD.owl#GprimSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#SphereSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasShape> <https://ease-crc.org/ont/USD.owl#SphereShape>)))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#SphereSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasShape> DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#radius> rdfs:Literal))))
+
+# Class: <https://ease-crc.org/ont/USD.owl#SphereShape> (<https://ease-crc.org/ont/USD.owl#SphereShape>)
+
+SubClassOf(<https://ease-crc.org/ont/USD.owl#SphereShape> <https://ease-crc.org/ont/USD.owl#Shape>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#Stage> (<https://ease-crc.org/ont/USD.owl#Stage>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#Stage> "A scene graph represented in a USD file.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Stage> DUL:Collection)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#Stage> ObjectAllValuesFrom(DUL:hasMember <https://ease-crc.org/ont/USD.owl#Prim>))
+
+# Class: <https://ease-crc.org/ont/USD.owl#TypedSchema> (Typed schema)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#TypedSchema> "A schema used to define the role or purpose of a prim. Also called \"IsASchema\". Each prim may subscribe to at most one TypedSchema.")
+AnnotationAssertion(rdfs:label <https://ease-crc.org/ont/USD.owl#TypedSchema> "Typed schema")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#TypedSchema> <https://ease-crc.org/ont/USD.owl#Schema>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#WithDisplayColor> (<https://ease-crc.org/ont/USD.owl#WithDisplayColor>)
+
+EquivalentClasses(<https://ease-crc.org/ont/USD.owl#WithDisplayColor> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasColor> ObjectIntersectionOf(DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#primvars_displayColor> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#primvars_displayOpacity> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#WithDisplayColor> <https://ease-crc.org/ont/USD.owl#Prim>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#WithJointLimits> (<https://ease-crc.org/ont/USD.owl#WithJointLimits>)
+
+EquivalentClasses(<https://ease-crc.org/ont/USD.owl#WithJointLimits> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> ObjectIntersectionOf(DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_axis> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_lowerLimit> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_upperLimit> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#WithJointLimits> <https://ease-crc.org/ont/USD.owl#Prim>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#WithJointPhysics> (<https://ease-crc.org/ont/USD.owl#WithJointPhysics>)
+
+EquivalentClasses(<https://ease-crc.org/ont/USD.owl#WithJointPhysics> ObjectIntersectionOf(ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasPhysics> ObjectIntersectionOf(DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_collisionEnabled> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_localPos0> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_localPos1> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_localRot0> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_localRot1> rdfs:Literal))) ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_body0> DUL:Entity) ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#physics_body1> DUL:Entity)))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#WithJointPhysics> <https://ease-crc.org/ont/USD.owl#Prim>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#WithXform> (<https://ease-crc.org/ont/USD.owl#WithXform>)
+
+EquivalentClasses(<https://ease-crc.org/ont/USD.owl#WithXform> ObjectSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#hasShape> ObjectIntersectionOf(DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#xformOpOrder> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#xformOp_rotate> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#xformOp_scale> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#xformOp_transform> rdfs:Literal) DataSomeValuesFrom(<https://ease-crc.org/ont/USD.owl#xformOp_translate> rdfs:Literal))))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#WithXform> <https://ease-crc.org/ont/USD.owl#Prim>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#XformSchema> (<https://ease-crc.org/ont/USD.owl#XformSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#XformSchema> "A concrete Xformable schema, meaning that it refers to a concrete object in the scene.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#XformSchema> <https://ease-crc.org/ont/USD.owl#XformableSchema>)
+
+# Class: <https://ease-crc.org/ont/USD.owl#XformableSchema> (<https://ease-crc.org/ont/USD.owl#XformableSchema>)
+
+AnnotationAssertion(rdfs:comment <https://ease-crc.org/ont/USD.owl#XformableSchema> "A schema of prims that can be transformed in space.")
+SubClassOf(<https://ease-crc.org/ont/USD.owl#XformableSchema> <https://ease-crc.org/ont/USD.owl#TypedSchema>)
+SubClassOf(<https://ease-crc.org/ont/USD.owl#XformableSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> DUL:PhysicalObject))
+SubClassOf(<https://ease-crc.org/ont/USD.owl#XformableSchema> ObjectAllValuesFrom(<https://ease-crc.org/ont/USD.owl#isSchemaOf> <https://ease-crc.org/ont/USD.owl#WithXform>))
+
+
+)
