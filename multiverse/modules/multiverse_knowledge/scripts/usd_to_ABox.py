@@ -6,6 +6,7 @@ from pxr import Usd, UsdOntology, UsdGeom, UsdPhysics, UsdShade, Gf, Vt
 from owlready2 import onto_path, get_ontology, declare_datatype
 from numpy import float32, float64
 import rospkg
+from quantify import ontology_stats
 
 onto_map = dict()
 
@@ -342,6 +343,17 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
     )
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     ABox_onto.save(save_path)
+
+    ontology_stats(save_path)
+
+    with open(save_path, 'r') as file:
+        content = file.read()
+    
+    content = content.replace("<USD.", "<USD").replace("</USD.", "</USD").replace(":USD.", ":USD")
+    content = content.replace("<DUL.", "<DUL").replace("</DUL.", "</DUL").replace(":DUL.", ":DUL")
+    
+    with open(save_path, 'w') as file:
+        file.write(content)
 
     return None
 

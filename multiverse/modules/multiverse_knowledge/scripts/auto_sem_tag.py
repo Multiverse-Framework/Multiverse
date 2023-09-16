@@ -9,10 +9,12 @@ from pxr import Usd, UsdGeom, UsdOntology
 sem_labels = {
     "box": ["_class_Box"],
     "cat": ["_class_Cat"],
+    "spoon": ["_class_Spoon"],
+    "milk_box": ["_class_MilkBottle"],
     "kitchen": ["_class_Kitchen"],
     "cabinet1": ["_class_KitchenCabinet"],
     "cabinet2": ["_class_KitchenCabinet"],
-    "cabinet3": ["_class_KitchenCabinet"],
+    "cabinet3": ["_class_Refrigerator"],
     "cabinet4": ["_class_KitchenCabinet"],
     "cabinet5": ["_class_KitchenCabinet"],
     "cabinet6": ["_class_KitchenCabinet"],

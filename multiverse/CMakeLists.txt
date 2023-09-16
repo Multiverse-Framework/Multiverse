@@ -6,6 +6,8 @@ set(BIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
+set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)")
+
 set(EXT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
 
 set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)

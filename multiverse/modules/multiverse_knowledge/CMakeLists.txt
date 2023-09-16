@@ -17,6 +17,13 @@ else()
   message(FATAL_ERROR "Failed to execute install.sh.")
 endif()
 
+INSTALL(CODE "execute_process( \
+    COMMAND ${CMAKE_COMMAND} -E create_symlink \
+    ${CMAKE_CURRENT_SOURCE_DIR}/Konclude/src/queries/queries.py \
+    ${LIB_DIR}/${STDLIB}/python/multiverse_knowledge.py   \
+    )"
+)
+
 enable_testing()
 
 add_test(
@@ -51,6 +58,12 @@ add_test(
 )
 
 add_test(
+  NAME quantify_box
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/quantify.py
+          --in_owl=${TEST_DIR}/multiverse_knowledge/output/box/owl/box_ABox.owl
+)
+
+add_test(
   NAME TBox_to_usd_apartment
   COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/TBox_to_usd.py
           --in_owl=${TEST_DIR}/multiverse_knowledge/input/apartment/owl/SOMA-HOME.owl
@@ -71,4 +84,10 @@ add_test(
           --in_usd=${TEST_DIR}/multiverse_knowledge/output/apartment/usd/apartment_ABox.usda
           --in_owl=${TEST_DIR}/multiverse_knowledge/input/apartment/owl/SOMA-HOME.owl
           --out_owl=${TEST_DIR}/multiverse_knowledge/output/apartment/owl/apartment_ABox.owl
+)
+
+add_test(
+  NAME quantify_apartment
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/quantify.py
+          --in_owl=${TEST_DIR}/multiverse_knowledge/output/apartment/owl/apartment_ABox.owl
 )
