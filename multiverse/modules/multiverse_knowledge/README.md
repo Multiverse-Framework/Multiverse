@@ -32,4 +32,4 @@ python3 scripts/usd_to_ABox.py
 
 ## Examples
 
-Go to [`../../build/multiverse/modules/multiverse_knowledge`](multiverse_knowledge) and run `ctest`. The scene graph from [`../../tests/multiverse_knowledge/input`](multiverse_knowledge/input) will be translated in the `output` folder in [`../../tests/multiverse_knowledge`](multiverse_knowledge)
+Go to `../../build/multiverse/modules/multiverse_knowledge` and run `ctest`. The scene graph from [`../../tests/multiverse_knowledge/input`](https://github.com/Multiverse-Framework/Multiverse/tree/ICRA-2024/multiverse/tests/multiverse_knowledge/input) will be translated in the `output` folder in [`../../tests/multiverse_knowledge`](https://github.com/Multiverse-Framework/Multiverse/tree/ICRA-2024/multiverse/tests/multiverse_knowledge).
