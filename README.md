@@ -4,7 +4,7 @@ Multiverse is a simulation framework designed to integrate multiple advanced phy
 
 [Demo1](https://github.com/Universal-Simulation-Framework/multiverse/assets/64316740/19a3281f-ddd7-4430-b5ad-8219f9d17a92)
 
-[Demo2](https://github.com/Multiverse-Framework/Multiverse/assets/64316740/a02a4567-2e31-479a-b8cb-77dbff7a05fe)
+[Demo2](https://github.com/Multiverse-Framework/Multiverse/assets/64316740/732caaff-71db-4b8b-b193-6d904962b5c8)
 
 
 
