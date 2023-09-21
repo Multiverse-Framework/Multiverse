@@ -1,11 +1,15 @@
 @echo off
 
-set "CURRENT_DIR=%~dp0"
+set "MULTIVERSE_DIR=%~dp0multiverse"
 
-rmdir /s /q %CURRENT_DIR%multiverse\build
-cmake -S %CURRENT_DIR%multiverse -B %CURRENT_DIR%multiverse\build -DCMAKE_TOOLCHAIN_FILE=%CURRENT_DIR%multiverse\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%CURRENT_DIR%multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=SHARED -DSTDLIB=libc++
-cmake --build %CURRENT_DIR%multiverse\build
+rmdir /s /q %MULTIVERSE_DIR%\build
+cmake -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR%
+cmake --build %MULTIVERSE_DIR%\build
 
-rmdir /s /q %CURRENT_DIR%multiverse\bin
-mkdir %CURRENT_DIR%multiverse\bin
-mklink %CURRENT_DIR%multiverse\bin\multiverse_server.exe %CURRENT_DIR%multiverse\build\src\multiverse_server\Debug\multiverse_server.exe
+rmdir /s /q %MULTIVERSE_DIR%\bin
+mkdir %MULTIVERSE_DIR%\bin
+mklink %MULTIVERSE_DIR%\bin\multiverse_server.exe %MULTIVERSE_DIR%\build\src\multiverse_server\Debug\multiverse_server.exe
+
+rmdir /s /q %MULTIVERSE_DIR%\lib
+mkdir %MULTIVERSE_DIR%\lib
+copy %MULTIVERSE_DIR%\build\src\multiverse_client\Debug\multiverse_client.dll %MULTIVERSE_DIR%\lib
