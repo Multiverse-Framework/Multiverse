@@ -8,15 +8,25 @@ Multiverse is a simulation framework designed to integrate multiple advanced phy
 
 # Installation
 
-```
-sudo ./install.sh      # Install all prerequisites
+## Linux
+
+```bash
+sudo ./install.sh               # Install all prerequisites
 ./build_third_parties.sh        # Build the dependencies
 ./build_multiverse.sh           # Build the software
 ./build_multiverse_ws.sh        # Build the ROS workspace
 ```
+
+## Windows 11
+
+```bash
+install.bat                     # Install all prerequisites
+build_multiverse.bat            # Build the software
+```
+
 # Test
 
-```
+```bash
 source multiverse_ws/devel/setup.bash                # Source the ROS workspace
 multiverse_server                                    # Start the multiverse server
 roslaunch mujoco_sim multi_mujoco_sim_ref.launch     # Start 4 instances of MuJoCo
