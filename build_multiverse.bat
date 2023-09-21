@@ -12,4 +12,4 @@ mklink "%MULTIVERSE_DIR%\bin\multiverse_server.exe" "%MULTIVERSE_DIR%\build\src\
 
 rmdir /s /q "%MULTIVERSE_DIR%\lib"
 mkdir "%MULTIVERSE_DIR%\lib"
-copy "%MULTIVERSE_DIR%\build\src\multiverse_client\Debug\multiverse_client.dll" "%MULTIVERSE_DIR%\lib"
+copy "%MULTIVERSE_DIR%\build\src\multiverse_client\Debug\multiverse_client.dll" "%MULTIVERSE_DIR%\lib\libmultiverse_client.dll"
