@@ -205,7 +205,7 @@ void MultiverseClient::run()
             clean_up();
             init_send_and_receive_data();
 
-            printf("[Client %s] Starting the communication (send: %ld, receive: %ld).\n", port.c_str(), send_buffer_size, receive_buffer_size);
+            printf("[Client %s] Starting the communication (send: %zu, receive: %zu).\n", port.c_str(), send_buffer_size, receive_buffer_size);
 
             flag = EMultiverseClientState::BindSendData;
             break;
@@ -307,7 +307,7 @@ bool MultiverseClient::check_buffer_size()
     if (request_buffer_sizes["receive"] != -1 &&
         (response_buffer_sizes["send"] != request_buffer_sizes["send"] || response_buffer_sizes["receive"] != request_buffer_sizes["receive"]))
     {
-        printf("[Client %s] Failed to initialize the buffers %s: send_buffer_size(server = %ld, client = %ld), receive_buffer_size(server = %ld, client = %ld).\n",
+        printf("[Client %s] Failed to initialize the buffers %s: send_buffer_size(server = %zu, client = %zu), receive_buffer_size(server = %zu, client = %zu).\n",
                port.c_str(),
                socket_addr.c_str(),
                response_buffer_sizes["send"],

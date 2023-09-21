@@ -18,12 +18,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <chrono>
 #include <csignal>
 #include <iostream>
-#include <jsoncpp/json/json.h>
-#include <jsoncpp/json/reader.h>
+
+#ifdef __linux__
+    #include <jsoncpp/json/json.h>
+    #include <jsoncpp/json/reader.h>
+#elif _WIN32
+    #include <json/json.h>
+    #include <json/reader.h>
+#endif
+
 #include <mutex>
 #include <thread>
 #include <zmq.hpp>
@@ -530,8 +538,8 @@ private:
 
     void wait_for_objects()
     {
-        int start = get_time_now();
-        int now = get_time_now();
+        double start = get_time_now();
+        double now = get_time_now();
         bool found_all_objects = true;
         do
         {
@@ -653,10 +661,10 @@ private:
                 for (const Json::Value &attribute_json : receive_objects_json[object_name])
                 {
                     const std::string attribute_name = attribute_json.asString();
-                    int start = get_time_now();
+                    double start = get_time_now();
                     while ((worlds[world_name].count(object_name) == 0 || worlds[world_name][object_name].count(attribute_name) == 0 || !worlds[world_name][object_name][attribute_name].second) && !should_shut_down)
                     {
-                        const int now = get_time_now();
+                        const double now = get_time_now();
                         if (now - start > 1)
                         {
                             printf("[Server] Socket at %s is waiting for data of [%s][%s] to be sent.\n", socket_addr.c_str(), object_name.c_str(), attribute_name.c_str());
@@ -733,9 +741,9 @@ private:
 
     double *receive_buffer;
 
-    std::vector<std::pair<std::vector<double>::iterator, double>> send_data_vec;
+    std::vector<std::pair<double*, double>> send_data_vec;
 
-    std::vector<std::pair<std::vector<double>::iterator, double>> receive_data_vec;
+    std::vector<std::pair<double*, double>> receive_data_vec;
 
     std::map<EAttribute, std::vector<double>> conversion_map;
 
@@ -790,6 +798,8 @@ void start_multiverse_server(const std::string &server_socket_addr)
 
 int main(int argc, char **argv)
 {
+    printf("Start Multiverse Server...\n");
+
     // register signal SIGINT and signal handler
     signal(SIGINT, [](int signum)
            {
