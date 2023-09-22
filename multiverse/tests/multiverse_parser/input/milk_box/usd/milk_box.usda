@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "milk_box"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "milk_box"
+{
+    def Xform "milk_box_visual_0" (
+        prepend references = @./../meshes/usd/visual/milk_box.usda@</milk_box>
+    )
+    {
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        over "SM_MilkBox" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </_materials/M_MilkBox>
+        }
+    }
+
+    def Xform "milk_box_collision_0" (
+        prepend apiSchemas = ["PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float physics:density = 100
+        float3 physics:diagonalInertia = (-0.024632012, -0.019748664, 0.041776195)
+        float physics:mass = 0.114
+        quatf physics:principalAxes = (0.18200772, 0.96349853, 0.08531931, -0.17681739)
+        matrix4d xformOp:transform = ( (0.03, 0, 0, 0), (0, 0.0475, 0, 0), (0, 0, 0.1, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Cube "Cube" (
+            prepend apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+            bool physics:collisionEnabled = 1
+            color3f[] primvars:displayColor = [(1, 0, 0)]
+            float[] primvars:displayOpacity = [0.5]
+        }
+    }
+}
+
+def "_materials" (
+    prepend references = @./../meshes/usd/visual/milk_box.usda@</_materials>
+)
+{
+}
+
