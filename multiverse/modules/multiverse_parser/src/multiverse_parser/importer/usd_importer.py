@@ -119,6 +119,40 @@ class UsdImporter:
                             usd_mesh_path = geom_prepended_items[0].assetPath
                         else:
                             usd_mesh_path = None
+                            mesh_prim = UsdGeom.Mesh(geom_prim)
+                            mesh_path = os.path.join(
+                                TMP_USD_MESH_PATH,
+                                "visual" if is_visual else "collision",
+                                geom_prim.GetName() + ".usda",
+                            )
+                            mesh_stage = Usd.Stage.CreateNew(mesh_path)
+                            
+                            mesh_xform_path = Sdf.Path("/").AppendPath(geom_prim.GetName())
+                            mesh_geom_path = mesh_xform_path.AppendPath("SM_" + geom_prim.GetName())
+                            
+                            mesh_xform_prim = UsdGeom.Xform.Define(mesh_stage, mesh_xform_path)
+                            mesh_geom_prim = UsdGeom.Mesh.Define(mesh_stage, mesh_geom_path)
+
+                            for attr in xform_prim.GetAttributes():
+                                dest_attr = mesh_xform_prim.GetPrim().CreateAttribute(
+                                    name=attr.GetName(), 
+                                    typeName=attr.GetTypeName()
+                                )
+                                
+                                dest_attr.Set(attr.Get())
+
+                            for attr in geom_prim.GetAttributes():
+                                value = attr.Get()
+                                if value is not None:
+                                    dest_attr = mesh_geom_prim.GetPrim().CreateAttribute(
+                                        name=attr.GetName(), 
+                                        typeName=attr.GetTypeName()
+                                    )
+                                    dest_attr.Set(value)
+
+                            mesh_stage.Save()
+                            mesh_type = "visual" if is_visual else "collision"
+                            usd_mesh_path = f"./tmp/usd/{mesh_type}/{geom_prim.GetName()}.usda"
 
                         if usd_mesh_path is not None:
                             if usd_mesh_path.startswith("./"):

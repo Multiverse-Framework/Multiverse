@@ -101,11 +101,11 @@ class MjcfExporter:
         # light.set("dir", "0 0 -1")
 
         self.body_dict = {}
-
+        
         worldbody = ET.SubElement(self.root, "worldbody")
-        rootbody = ET.SubElement(worldbody, "body")
-        rootbody.set("name", self.world_builder.body_names[0])
-        self.body_dict[self.world_builder.body_names[0]] = rootbody
+        self.body_dict["worldbody"] = worldbody
+
+        self.build_link(body_name=self.world_builder.body_names[0], parent_body_name="worldbody")
 
         body_names = self.world_builder.body_names
         reduces_body_names = body_names
@@ -154,6 +154,7 @@ class MjcfExporter:
         body.set("name", body_name)
 
         body_builder = body_dict[body_name]
+
         if self.with_physics and body_builder.xform.GetPrim().HasAPI(
             UsdPhysics.MassAPI
         ):
@@ -175,15 +176,20 @@ class MjcfExporter:
                     " ".join(map(str, physics_mass_api.GetDiagonalInertiaAttr().Get())),
                 )
 
-        parent_body_transform = xform_cache.GetLocalToWorldTransform(
-            body_dict[parent_body_name].xform.GetPrim()
-        )
-        body_transformation = xform_cache.GetLocalToWorldTransform(
-            body_dict[body_name].xform.GetPrim()
-        )
-        body_relative_transform = (
-            body_transformation * parent_body_transform.GetInverse()
-        )
+        if parent_body_name == "worldbody":
+            body_relative_transform = xform_cache.GetLocalToWorldTransform(
+                body_dict[body_name].xform.GetPrim()
+            )
+        else:
+            parent_body_transform = xform_cache.GetLocalToWorldTransform(
+                body_dict[parent_body_name].xform.GetPrim()
+            )
+            body_transformation = xform_cache.GetLocalToWorldTransform(
+                body_dict[body_name].xform.GetPrim()
+            )
+            body_relative_transform = (
+                body_transformation * parent_body_transform.GetInverse()
+            )
         body_relative_xyz = body_relative_transform.ExtractTranslation()
         body_relative_quat = body_relative_transform.ExtractRotationQuat()
         body.set("pos", " ".join(map(str, body_relative_xyz)))
