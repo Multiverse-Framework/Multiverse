@@ -190,6 +190,7 @@ class MjcfExporter:
             body_relative_transform = (
                 body_transformation * parent_body_transform.GetInverse()
             )
+        body_relative_transform = body_relative_transform.RemoveScaleShear()
         body_relative_xyz = body_relative_transform.ExtractTranslation()
         body_relative_quat = body_relative_transform.ExtractRotationQuat()
         body.set("pos", " ".join(map(str, body_relative_xyz)))
@@ -210,7 +211,7 @@ class MjcfExporter:
 
         for geom_name in body_dict[body_name].geom_names:
             geom_builder = geom_dict[geom_name]
-            geom_transformation = geom_builder.xform.GetLocalTransformation()
+            geom_transformation = geom_builder.xform.GetLocalTransformation().RemoveScaleShear()
             geom_xyz = geom_transformation.ExtractTranslation()
             geom_quat = geom_transformation.ExtractRotationQuat()
 
@@ -303,7 +304,9 @@ class MjcfExporter:
                     if mesh_rel_path not in self.mesh_rel_paths:
                         self.mesh_rel_paths.add(mesh_rel_path)
 
-                        transform(scale=rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat))
+                        scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat)
+                        scale = tuple(abs(x) for x in scale)
+                        transform(scale=scale)
 
                         texture_file_names = export_obj(
                             os.path.join(self.mjcf_file_dir, mesh_rel_path)
@@ -343,8 +346,10 @@ class MjcfExporter:
                     if mesh_rel_path not in self.mesh_rel_paths:
                         self.mesh_rel_paths.add(mesh_rel_path)
 
-                        transform(scale=rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat))
-
+                        scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat)
+                        scale = tuple(abs(x) for x in scale)
+                        transform(scale=scale)
+                        
                         export_stl(os.path.join(self.mjcf_file_dir, mesh_rel_path))
 
                         mesh = ET.SubElement(self.asset, "mesh")
