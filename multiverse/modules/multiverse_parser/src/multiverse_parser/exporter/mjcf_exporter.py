@@ -29,6 +29,8 @@ class MjcfExporter:
             mjcf_file_name,
         )
         self.world_builder = world_builder
+        if "world" in self.world_builder.body_names:
+            self.world_builder.body_names.remove("world")
         self.with_physics = with_physics
         self.with_visual = with_visual
         self.with_collision = with_collision

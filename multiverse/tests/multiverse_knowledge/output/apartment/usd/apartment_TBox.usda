@@ -1,0 +1,5328 @@
+#usda 1.0
+
+class "_class_owl_namespace" (
+    prepend apiSchemas = ["RdfAPI"]
+)
+{
+    string rdf:namespace = "http://www.w3.org/2002/07/owl#"
+}
+
+def "owl"
+{
+    class "_class_Thing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_owl_namespace>
+    )
+    {
+        string rdf:conceptName = "Thing"
+    }
+}
+
+class "_class_DUL_namespace" (
+    prepend apiSchemas = ["RdfAPI"]
+)
+{
+    string rdf:namespace = "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#"
+}
+
+def "DUL"
+{
+    class "_class_DesignedArtifact" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedArtifact"
+    }
+
+    class "_class_Substance" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Substance"
+    }
+
+    class "_class_DesignedSubstance" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedSubstance"
+    }
+
+    class "_class_Description" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Description"
+    }
+
+    class "_class_EventType" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "EventType"
+    }
+
+    class "_class_Event" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Event"
+    }
+
+    class "_class_Action" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Action"
+    }
+
+    class "_class_Situation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Situation"
+    }
+
+    class "_class_Agent" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Agent"
+    }
+
+    class "_class_Role" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Role"
+    }
+
+    class "_class_Task" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Task"
+    }
+
+    class "_class_SocialObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "SocialObject"
+    }
+
+    class "_class_Region" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Region"
+    }
+
+    class "_class_InformationObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "InformationObject"
+    }
+
+    class "_class_InformationRealization" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "InformationRealization"
+    }
+
+    class "_class_PhysicalAgent" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalAgent"
+    }
+
+    class "_class_PhysicalObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalObject"
+    }
+
+    class "_class_Plan" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Plan"
+    }
+
+    class "_class_Transition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Transition"
+    }
+
+    class "_class_SocialAgent" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "SocialAgent"
+    }
+
+    class "_class_Entity" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Entity"
+    }
+
+    class "_class_Concept" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Concept"
+    }
+
+    class "_class_Collection" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Collection"
+    }
+
+    class "_class_Object" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Object"
+    }
+
+    class "_class_Parameter" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Parameter"
+    }
+
+    class "_class_Quality" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Quality"
+    }
+
+    class "_class_TimeInterval" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "TimeInterval"
+    }
+
+    class "_class_Abstract" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Abstract"
+    }
+
+    class "_class_Amount" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Amount"
+    }
+
+    class "_class_PhysicalAttribute" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalAttribute"
+    }
+
+    class "_class_SpaceRegion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "SpaceRegion"
+    }
+
+    class "_class_BiologicalObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "BiologicalObject"
+    }
+
+    class "_class_PhysicalBody" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalBody"
+    }
+
+    class "_class_ChemicalObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "ChemicalObject"
+    }
+
+    class "_class_Classification" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Classification"
+    }
+
+    class "_class_TimeIndexedRelation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "TimeIndexedRelation"
+    }
+
+    class "_class_Collective" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Collective"
+    }
+
+    class "_class_CollectiveAgent" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "CollectiveAgent"
+    }
+
+    class "_class_Community" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Community"
+    }
+
+    class "_class_Configuration" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Configuration"
+    }
+
+    class "_class_Contract" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Contract"
+    }
+
+    class "_class_Design" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Design"
+    }
+
+    class "_class_PhysicalArtifact" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalArtifact"
+    }
+
+    class "_class_FunctionalSubstance" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "FunctionalSubstance"
+    }
+
+    class "_class_Diagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Diagnosis"
+    }
+
+    class "_class_FormalEntity" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "FormalEntity"
+    }
+
+    class "_class_Goal" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Goal"
+    }
+
+    class "_class_Group" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Group"
+    }
+
+    class "_class_InformationEntity" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "InformationEntity"
+    }
+
+    class "_class_LocalConcept" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "LocalConcept"
+    }
+
+    class "_class_Method" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Method"
+    }
+
+    class "_class_Narrative" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Narrative"
+    }
+
+    class "_class_NaturalPerson" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "NaturalPerson"
+    }
+
+    class "_class_Person" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Person"
+    }
+
+    class "_class_Norm" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Norm"
+    }
+
+    class "_class_ObjectAggregate" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "ObjectAggregate"
+    }
+
+    class "_class_Organism" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Organism"
+    }
+
+    class "_class_Organization" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Organization"
+    }
+
+    class "_class_Parthood" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Parthood"
+    }
+
+    class "_class_Pattern" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Pattern"
+    }
+
+    class "_class_Relation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Relation"
+    }
+
+    class "_class_Personification" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Personification"
+    }
+
+    class "_class_PhysicalPlace" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalPlace"
+    }
+
+    class "_class_Place" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Place"
+    }
+
+    class "_class_PlanExecution" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "PlanExecution"
+    }
+
+    class "_class_Process" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Process"
+    }
+
+    class "_class_Project" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Project"
+    }
+
+    class "_class_Right" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Right"
+    }
+
+    class "_class_Set" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Set"
+    }
+
+    class "_class_SocialObjectAttribute" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "SocialObjectAttribute"
+    }
+
+    class "_class_SocialPerson" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "SocialPerson"
+    }
+
+    class "_class_SocialRelation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "SocialRelation"
+    }
+
+    class "_class_SpatioTemporalRegion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "SpatioTemporalRegion"
+    }
+
+    class "_class_Theory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Theory"
+    }
+
+    class "_class_TypeCollection" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "TypeCollection"
+    }
+
+    class "_class_UnitOfMeasure" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "UnitOfMeasure"
+    }
+
+    class "_class_Workflow" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "Workflow"
+    }
+
+    class "_class_WorkflowExecution" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_DUL_namespace>
+    )
+    {
+        string rdf:conceptName = "WorkflowExecution"
+    }
+}
+
+class "_class_SOMA_namespace" (
+    prepend apiSchemas = ["RdfAPI"]
+)
+{
+    string rdf:namespace = "http://www.ease-crc.org/ont/SOMA.owl#"
+}
+
+def "SOMA"
+{
+    class "_class_KinoDynamicData" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "KinoDynamicData"
+    }
+
+    class "_class_MeshShapeData" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MeshShapeData"
+    }
+
+    class "_class_VideoData" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "VideoData"
+    }
+
+    class "_class_AssumingPose" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AssumingPose"
+    }
+
+    class "_class_Capability" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Capability"
+    }
+
+    class "_class_Message" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Message"
+    }
+
+    class "_class_Answer" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Answer"
+    }
+
+    class "_class_ExecutionStateRegion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExecutionStateRegion"
+    }
+
+    class "_class_SituationTransition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SituationTransition"
+    }
+
+    class "_class_NonmanifestedSituation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "NonmanifestedSituation"
+    }
+
+    class "_class_QueryingTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "QueryingTask"
+    }
+
+    class "_class_AbductiveReasoning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AbductiveReasoning"
+    }
+
+    class "_class_Reasoning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Reasoning"
+    }
+
+    class "_class_Actuating" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Actuating"
+    }
+
+    class "_class_PhysicalTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalTask"
+    }
+
+    class "_class_AnsweringTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AnsweringTask"
+    }
+
+    class "_class_IllocutionaryTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "IllocutionaryTask"
+    }
+
+    class "_class_CommandingTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CommandingTask"
+    }
+
+    class "_class_AreaSurveying" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AreaSurveying"
+    }
+
+    class "_class_Perceiving" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Perceiving"
+    }
+
+    class "_class_Arranging" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Arranging"
+    }
+
+    class "_class_Constructing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Constructing"
+    }
+
+    class "_class_Assembling" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Assembling"
+    }
+
+    class "_class_AssertionTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AssertionTask"
+    }
+
+    class "_class_AssumingArmPose" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AssumingArmPose"
+    }
+
+    class "_class_AttentionShift" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AttentionShift"
+    }
+
+    class "_class_MentalTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MentalTask"
+    }
+
+    class "_class_Avoiding" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Avoiding"
+    }
+
+    class "_class_Navigating" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Navigating"
+    }
+
+    class "_class_Catching" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Catching"
+    }
+
+    class "_class_PickingUp" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PickingUp"
+    }
+
+    class "_class_Channel" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Channel"
+    }
+
+    class "_class_CommunicationTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CommunicationTask"
+    }
+
+    class "_class_CheckingObjectPresence" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CheckingObjectPresence"
+    }
+
+    class "_class_Cleaning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cleaning"
+    }
+
+    class "_class_ModifyingPhysicalObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ModifyingPhysicalObject"
+    }
+
+    class "_class_Closing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Closing"
+    }
+
+    class "_class_Delivering" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Delivering"
+    }
+
+    class "_class_Fetching" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Fetching"
+    }
+
+    class "_class_Lifting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Lifting"
+    }
+
+    class "_class_Opening" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Opening"
+    }
+
+    class "_class_Pulling" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Pulling"
+    }
+
+    class "_class_Pushing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Pushing"
+    }
+
+    class "_class_Squeezing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Squeezing"
+    }
+
+    class "_class_CommunicationAction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CommunicationAction"
+    }
+
+    class "_class_LinguisticObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "LinguisticObject"
+    }
+
+    class "_class_CommunicationReport" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CommunicationReport"
+    }
+
+    class "_class_Receiver" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Receiver"
+    }
+
+    class "_class_Sender" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Sender"
+    }
+
+    class "_class_CommunicationTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CommunicationTopic"
+    }
+
+    class "_class_Conclusion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Conclusion"
+    }
+
+    class "_class_Knowledge" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Knowledge"
+    }
+
+    class "_class_Cutting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cutting"
+    }
+
+    class "_class_Deciding" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Deciding"
+    }
+
+    class "_class_DerivingInformation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DerivingInformation"
+    }
+
+    class "_class_DeductiveReasoning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DeductiveReasoning"
+    }
+
+    class "_class_InformationAcquisition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InformationAcquisition"
+    }
+
+    class "_class_Premise" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Premise"
+    }
+
+    class "_class_Dicing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Dicing"
+    }
+
+    class "_class_Discourse" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Discourse"
+    }
+
+    class "_class_Distancing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Distancing"
+    }
+
+    class "_class_Dreaming" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Dreaming"
+    }
+
+    class "_class_Dropping" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Dropping"
+    }
+
+    class "_class_Placing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Placing"
+    }
+
+    class "_class_EndEffectorPositioning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "EndEffectorPositioning"
+    }
+
+    class "_class_Manipulating" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Manipulating"
+    }
+
+    class "_class_PhysicalAcquiring" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalAcquiring"
+    }
+
+    class "_class_Flipping" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Flipping"
+    }
+
+    class "_class_Focusing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Focusing"
+    }
+
+    class "_class_ForgettingIncorrectInformation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ForgettingIncorrectInformation"
+    }
+
+    class "_class_InformationDismissal" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InformationDismissal"
+    }
+
+    class "_class_ForgettingIrrelevantInformation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ForgettingIrrelevantInformation"
+    }
+
+    class "_class_GetTaskParameter" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "GetTaskParameter"
+    }
+
+    class "_class_Planning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Planning"
+    }
+
+    class "_class_GraspTransfer" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "GraspTransfer"
+    }
+
+    class "_class_Grasping" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Grasping"
+    }
+
+    class "_class_Releasing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Releasing"
+    }
+
+    class "_class_Holding" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Holding"
+    }
+
+    class "_class_Imagining" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Imagining"
+    }
+
+    class "_class_InductiveReasoning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InductiveReasoning"
+    }
+
+    class "_class_InferenceRules" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InferenceRules"
+    }
+
+    class "_class_InformationRetrieval" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InformationRetrieval"
+    }
+
+    class "_class_InformationStorage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InformationStorage"
+    }
+
+    class "_class_Instructions" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Instructions"
+    }
+
+    class "_class_Interpreting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Interpreting"
+    }
+
+    class "_class_Introspecting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Introspecting"
+    }
+
+    class "_class_Labeling" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Labeling"
+    }
+
+    class "_class_Learning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Learning"
+    }
+
+    class "_class_LookingAt" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "LookingAt"
+    }
+
+    class "_class_LookingFor" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "LookingFor"
+    }
+
+    class "_class_Lowering" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Lowering"
+    }
+
+    class "_class_PhysicalAction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalAction"
+    }
+
+    class "_class_Memorizing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Memorizing"
+    }
+
+    class "_class_MentalAction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MentalAction"
+    }
+
+    class "_class_MetaCognitionEvaluationTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MetaCognitionEvaluationTopic"
+    }
+
+    class "_class_MetaCognitionTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MetaCognitionTopic"
+    }
+
+    class "_class_MetaCognitionMemoryTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MetaCognitionMemoryTopic"
+    }
+
+    class "_class_MetaCognitionPlanningTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MetaCognitionPlanningTopic"
+    }
+
+    class "_class_ThinkAloudTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudTopic"
+    }
+
+    class "_class_MetacognitiveControlling" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MetacognitiveControlling"
+    }
+
+    class "_class_MetacognitiveMonitoring" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MetacognitiveMonitoring"
+    }
+
+    class "_class_Mixing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Mixing"
+    }
+
+    class "_class_MonitoringJointState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MonitoringJointState"
+    }
+
+    class "_class_Proprioceiving" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Proprioceiving"
+    }
+
+    class "_class_MovingTo" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MovingTo"
+    }
+
+    class "_class_Orienting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Orienting"
+    }
+
+    class "_class_Positioning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Positioning"
+    }
+
+    class "_class_ParkingArms" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ParkingArms"
+    }
+
+    class "_class_Pouring" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Pouring"
+    }
+
+    class "_class_PouringInto" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PouringInto"
+    }
+
+    class "_class_PouringOnto" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PouringOnto"
+    }
+
+    class "_class_Prediction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Prediction"
+    }
+
+    class "_class_Prospecting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Prospecting"
+    }
+
+    class "_class_PushingAway" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PushingAway"
+    }
+
+    class "_class_PushingDown" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PushingDown"
+    }
+
+    class "_class_PuttingDown" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PuttingDown"
+    }
+
+    class "_class_Query" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Query"
+    }
+
+    class "_class_QueryAnsweringTask" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "QueryAnsweringTask"
+    }
+
+    class "_class_Reaching" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Reaching"
+    }
+
+    class "_class_Retracting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Retracting"
+    }
+
+    class "_class_Remembering" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Remembering"
+    }
+
+    class "_class_Retrospecting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Retrospecting"
+    }
+
+    class "_class_Replanning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Replanning"
+    }
+
+    class "_class_SelectingItem" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SelectingItem"
+    }
+
+    class "_class_SelfReflection" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SelfReflection"
+    }
+
+    class "_class_Serving" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Serving"
+    }
+
+    class "_class_SettingGripper" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SettingGripper"
+    }
+
+    class "_class_Simulating" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Simulating"
+    }
+
+    class "_class_Slicing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Slicing"
+    }
+
+    class "_class_Stirring" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Stirring"
+    }
+
+    class "_class_ThinkAloud" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloud"
+    }
+
+    class "_class_ThinkAloudActionTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudActionTopic"
+    }
+
+    class "_class_ThinkAloudGeneralKnowledgeTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudGeneralKnowledgeTopic"
+    }
+
+    class "_class_ThinkAloudKnowledgeTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudKnowledgeTopic"
+    }
+
+    class "_class_ThinkAloudObstructionTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudObstructionTopic"
+    }
+
+    class "_class_ThinkAloudOpinionTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudOpinionTopic"
+    }
+
+    class "_class_ThinkAloudPerceptionTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudPerceptionTopic"
+    }
+
+    class "_class_ThinkAloudPlanTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudPlanTopic"
+    }
+
+    class "_class_ThinkAloudSceneKnowledgeTopic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ThinkAloudSceneKnowledgeTopic"
+    }
+
+    class "_class_Throwing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Throwing"
+    }
+
+    class "_class_Transporting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Transporting"
+    }
+
+    class "_class_State" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "State"
+    }
+
+    class "_class_Patient" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Patient"
+    }
+
+    class "_class_Instrument" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Instrument"
+    }
+
+    class "_class_StateTransition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "StateTransition"
+    }
+
+    class "_class_Scene" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Scene"
+    }
+
+    class "_class_DeclarativeClause" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DeclarativeClause"
+    }
+
+    class "_class_CausedMotionTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CausedMotionTheory"
+    }
+
+    class "_class_ImageSchemaTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ImageSchemaTheory"
+    }
+
+    class "_class_SourcePathGoalTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SourcePathGoalTheory"
+    }
+
+    class "_class_ClausalObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ClausalObject"
+    }
+
+    class "_class_Phrase" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Phrase"
+    }
+
+    class "_class_ImperativeClause" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ImperativeClause"
+    }
+
+    class "_class_ContainmentTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ContainmentTheory"
+    }
+
+    class "_class_ControlTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ControlTheory"
+    }
+
+    class "_class_FunctionalSpatialSchemaTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FunctionalSpatialSchemaTheory"
+    }
+
+    class "_class_CoverageTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CoverageTheory"
+    }
+
+    class "_class_CoveringTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CoveringTheory"
+    }
+
+    class "_class_ExecutableSchematicTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExecutableSchematicTheory"
+    }
+
+    class "_class_CrackingTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CrackingTheory"
+    }
+
+    class "_class_ESTSchemaTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ESTSchemaTheory"
+    }
+
+    class "_class_SchematicTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SchematicTheory"
+    }
+
+    class "_class_InterrogativeClause" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InterrogativeClause"
+    }
+
+    class "_class_LocutionaryAction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "LocutionaryAction"
+    }
+
+    class "_class_MixingTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MixingTheory"
+    }
+
+    class "_class_PlacingTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PlacingTheory"
+    }
+
+    class "_class_ProximalTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ProximalTheory"
+    }
+
+    class "_class_SupportTheory" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SupportTheory"
+    }
+
+    class "_class_Binding" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Binding"
+    }
+
+    class "_class_Succedence" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Succedence"
+    }
+
+    class "_class_CounterfactualBinding" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CounterfactualBinding"
+    }
+
+    class "_class_FactualBinding" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FactualBinding"
+    }
+
+    class "_class_RoleFillerBinding" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RoleFillerBinding"
+    }
+
+    class "_class_RoleRoleBinding" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RoleRoleBinding"
+    }
+
+    class "_class_ConditionalSuccedence" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ConditionalSuccedence"
+    }
+
+    class "_class_StatusFailure" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "StatusFailure"
+    }
+
+    class "_class_TaskInvocation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TaskInvocation"
+    }
+
+    class "_class_Containment" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Containment"
+    }
+
+    class "_class_Item" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Item"
+    }
+
+    class "_class_Restrictor" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Restrictor"
+    }
+
+    class "_class_ConnectedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ConnectedObject"
+    }
+
+    class "_class_Container" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Container"
+    }
+
+    class "_class_LinkedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "LinkedObject"
+    }
+
+    class "_class_Supporter" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Supporter"
+    }
+
+    class "_class_StateType" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "StateType"
+    }
+
+    class "_class_Configuration" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Configuration"
+    }
+
+    class "_class_ContactState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ContactState"
+    }
+
+    class "_class_ContainmentState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ContainmentState"
+    }
+
+    class "_class_FunctionalControl" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FunctionalControl"
+    }
+
+    class "_class_LinkageState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "LinkageState"
+    }
+
+    class "_class_PhysicalAccessibility" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalAccessibility"
+    }
+
+    class "_class_PhysicalBlockage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalBlockage"
+    }
+
+    class "_class_PhysicalExistence" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalExistence"
+    }
+
+    class "_class_PhysicalState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalState"
+    }
+
+    class "_class_SocialState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SocialState"
+    }
+
+    class "_class_SupportState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SupportState"
+    }
+
+    class "_class_Affordance" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Affordance"
+    }
+
+    class "_class_AgentRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AgentRole"
+    }
+
+    class "_class_Appliance" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Appliance"
+    }
+
+    class "_class_DesignedComponent" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedComponent"
+    }
+
+    class "_class_DesignedContainer" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedContainer"
+    }
+
+    class "_class_BoxShape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BoxShape"
+    }
+
+    class "_class_Deposition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Deposition"
+    }
+
+    class "_class_RoomSurface" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RoomSurface"
+    }
+
+    class "_class_Linkage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Linkage"
+    }
+
+    class "_class_Insertion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Insertion"
+    }
+
+    class "_class_DesignedFurniture" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedFurniture"
+    }
+
+    class "_class_DesignedTool" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedTool"
+    }
+
+    class "_class_Shaping" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Shaping"
+    }
+
+    class "_class_Graspability" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Graspability"
+    }
+
+    class "_class_Destination" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Destination"
+    }
+
+    class "_class_Room" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Room"
+    }
+
+    class "_class_Surface" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Surface"
+    }
+
+    class "_class_Tempering" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Tempering"
+    }
+
+    class "_class_Disposition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Disposition"
+    }
+
+    class "_class_PathRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PathRole"
+    }
+
+    class "_class_Purification" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Purification"
+    }
+
+    class "_class_ResourceRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ResourceRole"
+    }
+
+    class "_class_CreatedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CreatedObject"
+    }
+
+    class "_class_Shifting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Shifting"
+    }
+
+    class "_class_DestroyedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DestroyedObject"
+    }
+
+    class "_class_StoredObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "StoredObject"
+    }
+
+    class "_class_Pourable" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Pourable"
+    }
+
+    class "_class_ExperiencerRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExperiencerRole"
+    }
+
+    class "_class_SelectedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SelectedObject"
+    }
+
+    class "_class_PerformerRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PerformerRole"
+    }
+
+    class "_class_Composing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Composing"
+    }
+
+    class "_class_AlteredObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AlteredObject"
+    }
+
+    class "_class_ShapedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ShapedObject"
+    }
+
+    class "_class_MovedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MovedObject"
+    }
+
+    class "_class_Limb" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Limb"
+    }
+
+    class "_class_PhysicalEffector" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalEffector"
+    }
+
+    class "_class_PrehensileEffector" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PrehensileEffector"
+    }
+
+    class "_class_Setpoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Setpoint"
+    }
+
+    class "_class_Joint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Joint"
+    }
+
+    class "_class_Color" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Color"
+    }
+
+    class "_class_Feature" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Feature"
+    }
+
+    class "_class_FrictionAttribute" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FrictionAttribute"
+    }
+
+    class "_class_JointLimit" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "JointLimit"
+    }
+
+    class "_class_JointState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "JointState"
+    }
+
+    class "_class_Localization" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Localization"
+    }
+
+    class "_class_MassAttribute" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MassAttribute"
+    }
+
+    class "_class_NetForce" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "NetForce"
+    }
+
+    class "_class_Shape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Shape"
+    }
+
+    class "_class_ShapeRegion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ShapeRegion"
+    }
+
+    class "_class_Transient" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Transient"
+    }
+
+    class "_class_ColorRegion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ColorRegion"
+    }
+
+    class "_class_ForceAttribute" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ForceAttribute"
+    }
+
+    class "_class_Accessor" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Accessor"
+    }
+
+    class "_class_AestheticDesign" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AestheticDesign"
+    }
+
+    class "_class_CausativeRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CausativeRole"
+    }
+
+    class "_class_Arm" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Arm"
+    }
+
+    class "_class_ArtificialAgent" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ArtificialAgent"
+    }
+
+    class "_class_AvoidedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AvoidedObject"
+    }
+
+    class "_class_Barrier" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Barrier"
+    }
+
+    class "_class_BeneficiaryRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BeneficiaryRole"
+    }
+
+    class "_class_GoalRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "GoalRole"
+    }
+
+    class "_class_Blockage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Blockage"
+    }
+
+    class "_class_BlockedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BlockedObject"
+    }
+
+    class "_class_CanCut" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CanCut"
+    }
+
+    class "_class_Variability" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Variability"
+    }
+
+    class "_class_Cutter" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cutter"
+    }
+
+    class "_class_CutObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CutObject"
+    }
+
+    class "_class_Capacity" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Capacity"
+    }
+
+    class "_class_Intrinsic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Intrinsic"
+    }
+
+    class "_class_CausalEventRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CausalEventRole"
+    }
+
+    class "_class_EventAdjacentRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "EventAdjacentRole"
+    }
+
+    class "_class_CircularCylinder" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CircularCylinder"
+    }
+
+    class "_class_CylinderShape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CylinderShape"
+    }
+
+    class "_class_Clean" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Clean"
+    }
+
+    class "_class_CleanlinessRegion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CleanlinessRegion"
+    }
+
+    class "_class_Cleanliness" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cleanliness"
+    }
+
+    class "_class_SocialQuality" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SocialQuality"
+    }
+
+    class "_class_Extrinsic" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Extrinsic"
+    }
+
+    class "_class_CommitedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CommitedObject"
+    }
+
+    class "_class_Connectivity" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Connectivity"
+    }
+
+    class "_class_IncludedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "IncludedObject"
+    }
+
+    class "_class_ContinuousJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ContinuousJoint"
+    }
+
+    class "_class_HingeJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "HingeJoint"
+    }
+
+    class "_class_Cover" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cover"
+    }
+
+    class "_class_Coverage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Coverage"
+    }
+
+    class "_class_CoveredObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CoveredObject"
+    }
+
+    class "_class_Cuttability" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cuttability"
+    }
+
+    class "_class_Tool" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Tool"
+    }
+
+    class "_class_DependentPlace" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DependentPlace"
+    }
+
+    class "_class_Deposit" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Deposit"
+    }
+
+    class "_class_DepositedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DepositedObject"
+    }
+
+    class "_class_FunctionalPart" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FunctionalPart"
+    }
+
+    class "_class_Location" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Location"
+    }
+
+    class "_class_DetectedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DetectedObject"
+    }
+
+    class "_class_DeviceState" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DeviceState"
+    }
+
+    class "_class_DeviceStateRange" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DeviceStateRange"
+    }
+
+    class "_class_DeviceTurnedOff" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DeviceTurnedOff"
+    }
+
+    class "_class_DeviceTurnedOn" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DeviceTurnedOn"
+    }
+
+    class "_class_Dirty" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Dirty"
+    }
+
+    class "_class_Effort" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Effort"
+    }
+
+    class "_class_EnclosedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "EnclosedObject"
+    }
+
+    class "_class_Enclosing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Enclosing"
+    }
+
+    class "_class_ExcludedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExcludedObject"
+    }
+
+    class "_class_ExistingObjectRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExistingObjectRole"
+    }
+
+    class "_class_RelationAdjacentRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RelationAdjacentRole"
+    }
+
+    class "_class_ExtractedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExtractedObject"
+    }
+
+    class "_class_PhysicalQuality" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicalQuality"
+    }
+
+    class "_class_Finger" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Finger"
+    }
+
+    class "_class_Hand" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Hand"
+    }
+
+    class "_class_FixedJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FixedJoint"
+    }
+
+    class "_class_MovableJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MovableJoint"
+    }
+
+    class "_class_FloatingJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FloatingJoint"
+    }
+
+    class "_class_FunctionalDesign" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FunctionalDesign"
+    }
+
+    class "_class_GreenColor" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "GreenColor"
+    }
+
+    class "_class_Gripper" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Gripper"
+    }
+
+    class "_class_HasQualityRegion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "HasQualityRegion"
+    }
+
+    class "_class_Head" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Head"
+    }
+
+    class "_class_Impediment" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Impediment"
+    }
+
+    class "_class_Obstacle" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Obstacle"
+    }
+
+    class "_class_RestrictedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RestrictedObject"
+    }
+
+    class "_class_InsertedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InsertedObject"
+    }
+
+    class "_class_KineticFrictionAttribute" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "KineticFrictionAttribute"
+    }
+
+    class "_class_Leg" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Leg"
+    }
+
+    class "_class_SpatioTemporalRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SpatioTemporalRole"
+    }
+
+    class "_class_LocatumRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "LocatumRole"
+    }
+
+    class "_class_SpatialRelationRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SpatialRelationRole"
+    }
+
+    class "_class_Material" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Material"
+    }
+
+    class "_class_MeshShape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MeshShape"
+    }
+
+    class "_class_Origin" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Origin"
+    }
+
+    class "_class_PlanarJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PlanarJoint"
+    }
+
+    class "_class_PouredObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PouredObject"
+    }
+
+    class "_class_PrismaticJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PrismaticJoint"
+    }
+
+    class "_class_Protector" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Protector"
+    }
+
+    class "_class_QualityTransition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "QualityTransition"
+    }
+
+    class "_class_RecipientRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RecipientRole"
+    }
+
+    class "_class_RedColor" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RedColor"
+    }
+
+    class "_class_RelatumRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RelatumRole"
+    }
+
+    class "_class_RelevantPart" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RelevantPart"
+    }
+
+    class "_class_RemovedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RemovedObject"
+    }
+
+    class "_class_ResultRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ResultRole"
+    }
+
+    class "_class_RevoluteJoint" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RevoluteJoint"
+    }
+
+    class "_class_DPose" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "6DPose"
+    }
+
+    class "_class_Sharpness" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Sharpness"
+    }
+
+    class "_class_Size" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Size"
+    }
+
+    class "_class_SourceMaterialRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SourceMaterialRole"
+    }
+
+    class "_class_SphereShape" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SphereShape"
+    }
+
+    class "_class_StaticFrictionAttribute" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "StaticFrictionAttribute"
+    }
+
+    class "_class_StimulusRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "StimulusRole"
+    }
+
+    class "_class_Storage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Storage"
+    }
+
+    class "_class_StructuralDesign" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "StructuralDesign"
+    }
+
+    class "_class_SupportedObject" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SupportedObject"
+    }
+
+    class "_class_Temperature" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Temperature"
+    }
+
+    class "_class_TemperatureRegion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TemperatureRegion"
+    }
+
+    class "_class_TimeRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TimeRole"
+    }
+
+    class "_class_DPosition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "3DPosition"
+    }
+
+    class "_class_System" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "System"
+    }
+
+    class "_class_SoftwareInstance" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SoftwareInstance"
+    }
+
+    class "_class_APISpecification" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "API_Specification"
+    }
+
+    class "_class_InterfaceSpecification" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InterfaceSpecification"
+    }
+
+    class "_class_Algorithm" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Algorithm"
+    }
+
+    class "_class_ArchiveFile" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ArchiveFile"
+    }
+
+    class "_class_DigitalFile" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Digital_File"
+    }
+
+    class "_class_ArchiveText" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ArchiveText"
+    }
+
+    class "_class_ArchiveFormat" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ArchiveFormat"
+    }
+
+    class "_class_Fileformat" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "File_format"
+    }
+
+    class "_class_StructuredText" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Structured_Text"
+    }
+
+    class "_class_FileConfiguration" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FileConfiguration"
+    }
+
+    class "_class_Classifier" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Classifier"
+    }
+
+    class "_class_StatisticalReasoner" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "StatisticalReasoner"
+    }
+
+    class "_class_ClientServerSpecification" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Client-Server_Specification"
+    }
+
+    class "_class_ClientRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ClientRole"
+    }
+
+    class "_class_ServerRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ServerRole"
+    }
+
+    class "_class_InterfaceComponentRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InterfaceComponentRole"
+    }
+
+    class "_class_CognitiveAgent" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CognitiveAgent"
+    }
+
+    class "_class_SubCognitiveAgent" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SubCognitiveAgent"
+    }
+
+    class "_class_ComputerLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Computer_Language"
+    }
+
+    class "_class_FormalLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FormalLanguage"
+    }
+
+    class "_class_ComputerProgram" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Computer_Program"
+    }
+
+    class "_class_ProgrammingLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Programming_Language"
+    }
+
+    class "_class_Database" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Database"
+    }
+
+    class "_class_SoftwareRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SoftwareRole"
+    }
+
+    class "_class_ExecutableFile" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExecutableFile"
+    }
+
+    class "_class_ExecutableCode" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Executable_Code"
+    }
+
+    class "_class_ExecutableFormat" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExecutableFormat"
+    }
+
+    class "_class_ExecutableSoftware" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ExecutableSoftware"
+    }
+
+    class "_class_Software" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Software"
+    }
+
+    class "_class_FaultySoftware" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FaultySoftware"
+    }
+
+    class "_class_Language" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Language"
+    }
+
+    class "_class_GraphDatabase" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "GraphDatabase"
+    }
+
+    class "_class_GraphQueryLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "GraphQueryLanguage"
+    }
+
+    class "_class_QueryLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "QueryLanguage"
+    }
+
+    class "_class_HostRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "HostRole"
+    }
+
+    class "_class_PluginSpecification" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PluginSpecification"
+    }
+
+    class "_class_HumanreadableProgrammingLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Human-readable_Programming_Language"
+    }
+
+    class "_class_SourceCode" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Source_Code"
+    }
+
+    class "_class_IncompatibleSoftware" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "IncompatibleSoftware"
+    }
+
+    class "_class_KnowledgeRepresentationLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "KnowledgeRepresentationLanguage"
+    }
+
+    class "_class_Text" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Text"
+    }
+
+    class "_class_MarkupLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Markup_Language"
+    }
+
+    class "_class_NaturalLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Natural_Language"
+    }
+
+    class "_class_NaturalLanguageText" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Natural_Language_Text"
+    }
+
+    class "_class_Ontology" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Ontology"
+    }
+
+    class "_class_OntologyLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Ontology_Language"
+    }
+
+    class "_class_PluginRole" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PluginRole"
+    }
+
+    class "_class_QueryEngine" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "QueryEngine"
+    }
+
+    class "_class_Reasoner" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Reasoner"
+    }
+
+    class "_class_RelationalDatabase" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RelationalDatabase"
+    }
+
+    class "_class_RelationalQueryLanguage" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RelationalQueryLanguage"
+    }
+
+    class "_class_SimulationReasoner" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Simulation_Reasoner"
+    }
+
+    class "_class_SoftwareConfiguration" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Software_Configuration"
+    }
+
+    class "_class_SoftwareLibrary" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SoftwareLibrary"
+    }
+
+    class "_class_SymbolicReasoner" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SymbolicReasoner"
+    }
+
+    class "_class_Triplestore" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Triplestore"
+    }
+
+    class "_class_UnavailableSoftware" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "UnavailableSoftware"
+    }
+
+    class "_class_ProcessType" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ProcessType"
+    }
+
+    class "_class_Agonist" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Agonist"
+    }
+
+    class "_class_Alteration" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Alteration"
+    }
+
+    class "_class_AlterativeInteraction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AlterativeInteraction"
+    }
+
+    class "_class_ForceInteraction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ForceInteraction"
+    }
+
+    class "_class_PreservativeInteraction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PreservativeInteraction"
+    }
+
+    class "_class_Antagonist" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Antagonist"
+    }
+
+    class "_class_Approaching" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Approaching"
+    }
+
+    class "_class_Locomotion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Locomotion"
+    }
+
+    class "_class_BodyMovement" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BodyMovement"
+    }
+
+    class "_class_Motion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Motion"
+    }
+
+    class "_class_Boiling" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Boiling"
+    }
+
+    class "_class_Vaporizing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Vaporizing"
+    }
+
+    class "_class_ChemicalProcess" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ChemicalProcess"
+    }
+
+    class "_class_Collision" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Collision"
+    }
+
+    class "_class_Creation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Creation"
+    }
+
+    class "_class_Deformation" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Deformation"
+    }
+
+    class "_class_FluidFlow" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FluidFlow"
+    }
+
+    class "_class_Destruction" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Destruction"
+    }
+
+    class "_class_DirectedMotion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DirectedMotion"
+    }
+
+    class "_class_UndirectedMotion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "UndirectedMotion"
+    }
+
+    class "_class_Driving" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Driving"
+    }
+
+    class "_class_Flying" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Flying"
+    }
+
+    class "_class_Swimming" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Swimming"
+    }
+
+    class "_class_Walking" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Walking"
+    }
+
+    class "_class_Fluid" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Fluid"
+    }
+
+    class "_class_GraspingMotion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "GraspingMotion"
+    }
+
+    class "_class_IntermediateGrasp" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "IntermediateGrasp"
+    }
+
+    class "_class_PowerGrasp" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PowerGrasp"
+    }
+
+    class "_class_PrecisionGrasp" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PrecisionGrasp"
+    }
+
+    class "_class_PrehensileMotion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PrehensileMotion"
+    }
+
+    class "_class_ReleasingMotion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ReleasingMotion"
+    }
+
+    class "_class_HeadMovement" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "HeadMovement"
+    }
+
+    class "_class_HeadTurning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "HeadTurning"
+    }
+
+    class "_class_Leaning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Leaning"
+    }
+
+    class "_class_PosturalMoving" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PosturalMoving"
+    }
+
+    class "_class_LimbMotion" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "LimbMotion"
+    }
+
+    class "_class_MovingAway" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MovingAway"
+    }
+
+    class "_class_PhaseTransition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhaseTransition"
+    }
+
+    class "_class_PhysicsProcess" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PhysicsProcess"
+    }
+
+    class "_class_ProcessFlow" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ProcessFlow"
+    }
+
+    class "_class_Progression" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Progression"
+    }
+
+    class "_class_Rubbing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Rubbing"
+    }
+
+    class "_class_Standing" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Standing"
+    }
+
+    class "_class_Tapping" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Tapping"
+    }
+
+    class "_class_Taxis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Taxis"
+    }
+
+    class "_class_Turning" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Turning"
+    }
+
+    class "_class_Accident" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Accident"
+    }
+
+    class "_class_ActionExecutionPlan" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ActionExecutionPlan"
+    }
+
+    class "_class_Status" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Status"
+    }
+
+    class "_class_Amateurish" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Amateurish"
+    }
+
+    class "_class_DexterityDiagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DexterityDiagnosis"
+    }
+
+    class "_class_Masterful" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Masterful"
+    }
+
+    class "_class_BehavioralDiagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BehavioralDiagnosis"
+    }
+
+    class "_class_Clumsiness" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Clumsiness"
+    }
+
+    class "_class_Episode" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Episode"
+    }
+
+    class "_class_FailedAttempt" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FailedAttempt"
+    }
+
+    class "_class_Unsuccessfulness" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Unsuccessfulness"
+    }
+
+    class "_class_SoftwareDiagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SoftwareDiagnosis"
+    }
+
+    class "_class_Foolishness" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Foolishness"
+    }
+
+    class "_class_FunctionalDiagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FunctionalDiagnosis"
+    }
+
+    class "_class_HardwareDiagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "HardwareDiagnosis"
+    }
+
+    class "_class_TechnicalDiagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TechnicalDiagnosis"
+    }
+
+    class "_class_HumanActivityRecording" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "HumanActivityRecording"
+    }
+
+    class "_class_RecordedEpisode" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RecordedEpisode"
+    }
+
+    class "_class_Inability" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Inability"
+    }
+
+    class "_class_Infeasibility" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Infeasibility"
+    }
+
+    class "_class_MedicalDiagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MedicalDiagnosis"
+    }
+
+    class "_class_Reification" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Reification"
+    }
+
+    class "_class_Sluggishness" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Sluggishness"
+    }
+
+    class "_class_SuccessDiagnosis" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SuccessDiagnosis"
+    }
+
+    class "_class_Successfulness" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Successfulness"
+    }
+
+    class "_class_Threshold" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Threshold"
+    }
+
+    class "_class_AffordsBeingSitOn" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "AffordsBeingSitOn"
+    }
+
+    class "_class_CanBeSatOn" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CanBeSatOn"
+    }
+
+    class "_class_SittingDestination" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SittingDestination"
+    }
+
+    class "_class_CanSit" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CanSit"
+    }
+
+    class "_class_Sitting" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Sitting"
+    }
+
+    class "_class_Armchair" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Armchair"
+    }
+
+    class "_class_DesignedChair" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedChair"
+    }
+
+    class "_class_BakedGood" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BakedGood"
+    }
+
+    class "_class_Dish" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Dish"
+    }
+
+    class "_class_BedsideTable" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BedsideTable"
+    }
+
+    class "_class_Table" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Table"
+    }
+
+    class "_class_Blade" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Blade"
+    }
+
+    class "_class_Bottle" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Bottle"
+    }
+
+    class "_class_Bowl" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Bowl"
+    }
+
+    class "_class_Crockery" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Crockery"
+    }
+
+    class "_class_Box" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Box"
+    }
+
+    class "_class_Bread" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Bread"
+    }
+
+    class "_class_BreadKnife" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BreadKnife"
+    }
+
+    class "_class_KitchenKnife" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "KitchenKnife"
+    }
+
+    class "_class_BreakfastPlate" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "BreakfastPlate"
+    }
+
+    class "_class_Plate" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Plate"
+    }
+
+    class "_class_Building" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Building"
+    }
+
+    class "_class_Carafe" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Carafe"
+    }
+
+    class "_class_Ceiling" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Ceiling"
+    }
+
+    class "_class_Floor" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Floor"
+    }
+
+    class "_class_Wall" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Wall"
+    }
+
+    class "_class_CeramicCooktop" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CeramicCooktop"
+    }
+
+    class "_class_ElectricCooktop" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ElectricCooktop"
+    }
+
+    class "_class_CerealBox" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CerealBox"
+    }
+
+    class "_class_ClosingDisposition" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "ClosingDisposition"
+    }
+
+    class "_class_CoffeeCarafe" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CoffeeCarafe"
+    }
+
+    class "_class_CoffeeTable" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CoffeeTable"
+    }
+
+    class "_class_CoilCooktop" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CoilCooktop"
+    }
+
+    class "_class_Compartment" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Compartment"
+    }
+
+    class "_class_Cooktop" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cooktop"
+    }
+
+    class "_class_Countertop" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Countertop"
+    }
+
+    class "_class_Tableware" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Tableware"
+    }
+
+    class "_class_Cup" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cup"
+    }
+
+    class "_class_DesignedHandle" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedHandle"
+    }
+
+    class "_class_Cupboard" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cupboard"
+    }
+
+    class "_class_Rack" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Rack"
+    }
+
+    class "_class_Cutlery" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Cutlery"
+    }
+
+    class "_class_CuttingTool" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "CuttingTool"
+    }
+
+    class "_class_DesignedSpade" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DesignedSpade"
+    }
+
+    class "_class_DessertFork" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DessertFork"
+    }
+
+    class "_class_Fork" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Fork"
+    }
+
+    class "_class_DinnerPlate" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DinnerPlate"
+    }
+
+    class "_class_Dishwasher" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Dishwasher"
+    }
+
+    class "_class_DishwasherTab" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "DishwasherTab"
+    }
+
+    class "_class_Dispenser" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Dispenser"
+    }
+
+    class "_class_Door" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Door"
+    }
+
+    class "_class_Drawer" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Drawer"
+    }
+
+    class "_class_FreezerCompartment" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "FreezerCompartment"
+    }
+
+    class "_class_GasCooktop" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "GasCooktop"
+    }
+
+    class "_class_Glass" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Glass"
+    }
+
+    class "_class_Hotplate" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Hotplate"
+    }
+
+    class "_class_InductionCooktop" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "InductionCooktop"
+    }
+
+    class "_class_JamJar" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "JamJar"
+    }
+
+    class "_class_Jar" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Jar"
+    }
+
+    class "_class_Kitchen" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Kitchen"
+    }
+
+    class "_class_KitchenCabinet" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "KitchenCabinet"
+    }
+
+    class "_class_Knife" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Knife"
+    }
+
+    class "_class_KitchenUnit" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "KitchenUnit"
+    }
+
+    class "_class_Lid" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Lid"
+    }
+
+    class "_class_MilkBottle" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MilkBottle"
+    }
+
+    class "_class_MilkPack" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "MilkPack"
+    }
+
+    class "_class_Pack" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Pack"
+    }
+
+    class "_class_NutellaJar" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "NutellaJar"
+    }
+
+    class "_class_Oven" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Oven"
+    }
+
+    class "_class_TemperingByHeating" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TemperingByHeating"
+    }
+
+    class "_class_Pan" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Pan"
+    }
+
+    class "_class_Pancake" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Pancake"
+    }
+
+    class "_class_PancakeMix" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PancakeMix"
+    }
+
+    class "_class_PastaBowl" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PastaBowl"
+    }
+
+    class "_class_PepperShaker" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "PepperShaker"
+    }
+
+    class "_class_Shaker" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Shaker"
+    }
+
+    class "_class_Pot" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Pot"
+    }
+
+    class "_class_RaspberryJamJar" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "RaspberryJamJar"
+    }
+
+    class "_class_Refrigerator" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Refrigerator"
+    }
+
+    class "_class_SaladBowl" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SaladBowl"
+    }
+
+    class "_class_SaltShaker" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SaltShaker"
+    }
+
+    class "_class_Sink" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Sink"
+    }
+
+    class "_class_Sofa" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Sofa"
+    }
+
+    class "_class_SoupPot" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SoupPot"
+    }
+
+    class "_class_Spatula" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Spatula"
+    }
+
+    class "_class_Spoon" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Spoon"
+    }
+
+    class "_class_Stove" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Stove"
+    }
+
+    class "_class_SugarDispenser" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "SugarDispenser"
+    }
+
+    class "_class_TableFork" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TableFork"
+    }
+
+    class "_class_TableKnife" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TableKnife"
+    }
+
+    class "_class_TableSpoon" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TableSpoon"
+    }
+
+    class "_class_TeaSpoon" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TeaSpoon"
+    }
+
+    class "_class_Tap" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Tap"
+    }
+
+    class "_class_TemperingByCooling" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TemperingByCooling"
+    }
+
+    class "_class_TrashContainer" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "TrashContainer"
+    }
+
+    class "_class_Wardrobe" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "Wardrobe"
+    }
+
+    class "_class_WaterBottle" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "WaterBottle"
+    }
+
+    class "_class_WaterGlass" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "WaterGlass"
+    }
+
+    class "_class_WineBottle" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "WineBottle"
+    }
+
+    class "_class_WineGlass" (
+        prepend apiSchemas = ["RdfAPI"]
+        prepend inherits = </_class_SOMA_namespace>
+    )
+    {
+        string rdf:conceptName = "WineGlass"
+    }
+}
+
