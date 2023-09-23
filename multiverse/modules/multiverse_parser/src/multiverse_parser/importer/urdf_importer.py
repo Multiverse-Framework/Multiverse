@@ -44,8 +44,59 @@ class UrdfImporter:
         self.world_builder = WorldBuilder()
 
         self.root_link_name = self.robot.name
-        self.world_builder.add_body(body_name=self.root_link_name)
-        self.world_builder.add_body(body_name=self.robot.get_root(), parent_body_name=self.root_link_name)
+        body_builder = self.world_builder.add_body(body_name=self.root_link_name)
+
+        if self.robot.name != self.robot.get_root():
+            body_builder = self.world_builder.add_body(body_name=self.robot.get_root(), parent_body_name=self.root_link_name)
+
+        urdf_link = self.robot.link_map[self.robot.get_root()]
+        if self.with_visual:
+            for urdf_visual in urdf_link.visuals:
+                geom_name = self.robot.get_root() + "_visual_"
+                geom_builder = self.import_geom_and_mesh(
+                    body_builder=body_builder,
+                    geom_name=geom_name,
+                    geom_origin=urdf_visual.origin,
+                    urdf_geom=urdf_visual.geometry,
+                    is_visual=True,
+                )
+
+        if self.with_collision:
+            for urdf_collision in urdf_link.collisions:
+                geom_name = self.robot.get_root() + "_collision_"
+                geom_builder = self.import_geom_and_mesh(
+                    body_builder=body_builder,
+                    geom_name=geom_name,
+                    geom_origin=urdf_collision.origin,
+                    urdf_geom=urdf_collision.geometry,
+                    is_visual=False,
+                )
+                if self.with_physics:
+                    geom_builder.enable_collision()
+                    if hasattr(urdf_collision, "inertial"):
+                        inertial = urdf_collision.inertial
+                        mass = inertial.mass
+                        com = tuple(inertial.origin.xyz)
+
+                        origin_rot = Rotation.from_euler("zyx", urdf_collision.origin.rpy).as_matrix()
+                        inertia = numpy.array(
+                            [
+                                [inertial.ixx, inertial.ixy, inertial.ixz],
+                                [inertial.ixy, inertial.iyy, inertial.iyz],
+                                [inertial.ixz, inertial.iyz, inertial.izz],
+                            ]
+                        )
+                        inertia = inertia @ origin_rot.T
+                        diagonal_inertia, principal_axes = diagonalize_inertia(inertia)
+
+                        geom_builder.set_inertial(
+                            mass=mass,
+                            com=com,
+                            diagonal_inertia=diagonal_inertia,
+                            principal_axes=principal_axes,
+                        )
+                    else:
+                        geom_builder.compute_inertial()
 
         self.import_body_and_joint(urdf_link_name=self.robot.get_root())
 

@@ -49,7 +49,7 @@ class MjcfImporter:
                 mj_geom = self.mj_model.geom(geom_id)
                 is_visual = (mj_geom.contype == 0) and (mj_geom.conaffinity == 0)
                 if is_visual and self.with_visual:
-                    pass  # TODO: Implement
+                    continue  # TODO: Implement
 
                 if not is_visual and self.with_collision:
                     geom_name = modify_name(in_name=mj_geom.name, replacement="Geom_" + str(geom_id))
@@ -134,7 +134,7 @@ class MjcfImporter:
                             mesh_builder.build(points, normals, face_vertex_counts, face_vertex_indices)
                             mesh_builder.save()
 
-                if self.with_physics:
+                if not is_visual and self.with_physics:
                     geom_builder.enable_collision()
 
                 geom_builder.set_attribute(prefix="primvars", displayColor=mj_geom.rgba[:3])

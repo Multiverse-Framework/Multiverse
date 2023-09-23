@@ -56,7 +56,7 @@ class UrdfExporter:
         body_builder = body_dict[child_link_name]
         parent_link_name = body_builder.xform.GetPrim().GetParent().GetName()
         if parent_link_name in body_dict:
-            transformation = body_builder.xform.GetLocalTransformation()
+            transformation = body_builder.xform.GetLocalTransformation().RemoveScaleShear()
             xyz = transformation.ExtractTranslation()
             quat = transformation.ExtractRotationQuat()
             rpy = quat_to_rpy(quat)
@@ -162,7 +162,7 @@ class UrdfExporter:
 
             is_visual = not geom_builder.geom.GetPrim().HasAPI(UsdPhysics.CollisionAPI)
 
-            transformation = geom_builder.xform.GetLocalTransformation()
+            transformation = geom_builder.xform.GetLocalTransformation().RemoveScaleShear()
             xyz = transformation.ExtractTranslation()
             quat = transformation.ExtractRotationQuat()
             rpy = quat_to_rpy(quat)
@@ -197,7 +197,10 @@ class UrdfExporter:
                     )
                     export_obj(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
-                    geometry = urdf.Mesh(filename=filename, scale=rotate_vector_by_quat(vector=geom_builder.scale, quat=quat))
+                    scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
+                    scale = tuple(abs(x) for x in scale)
+                    
+                    geometry = urdf.Mesh(filename=filename, scale=scale)
                     
                     visual = urdf.Visual(
                         geometry=geometry,
@@ -215,7 +218,10 @@ class UrdfExporter:
 
                     export_stl(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
-                    geometry = urdf.Mesh(filename=filename, scale=rotate_vector_by_quat(vector=geom_builder.scale, quat=quat))
+                    scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
+                    scale = tuple(abs(x) for x in scale)
+                    
+                    geometry = urdf.Mesh(filename=filename, scale=scale)
 
                     collision = urdf.Collision(
                         geometry=geometry,
