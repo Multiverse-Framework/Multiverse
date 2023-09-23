@@ -281,3 +281,31 @@ add_test(
           --output=${TEST_DIR}/multiverse_parser/output/from_usd/to_mjcf/with_physics/subsea_system.xml
           --physics
 )
+
+################
+## tiago_dual ##
+################
+
+add_test(
+  NAME urdf_to_usd4
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/tiago_dual/urdf/tiago_dual.urdf
+          --output=${TEST_DIR}/multiverse_parser/output/from_urdf/to_usd/with_physics/tiago_dual.usda
+          --physics
+)
+
+add_test(
+  NAME urdf_to_urdf4
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/tiago_dual/urdf/tiago_dual.urdf
+          --output=${TEST_DIR}/multiverse_parser/output/from_urdf/to_urdf/with_physics/tiago_dual.urdf
+          --physics --no-collision
+)
+
+add_test(
+  NAME urdf_to_mjcf4
+  COMMAND multiverse_parser
+          --input=${TEST_DIR}/multiverse_parser/input/tiago_dual/urdf/tiago_dual.urdf
+          --output=${TEST_DIR}/multiverse_parser/output/from_urdf/to_mjcf/with_physics/tiago_dual.xml
+          --physics --no-visual
+)

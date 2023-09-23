@@ -279,7 +279,11 @@ class MjcfExporter:
                     self.mesh_rel_paths.add(mesh_rel_path)
 
                     scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat)
-                    scale = tuple(abs(x) for x in scale)
+                    if not any(x < 0 for x in geom_builder.scale):
+                        scale = tuple(abs(x) for x in scale)
+                    if not any(x > 0 for x in geom_builder.scale):
+                        scale = tuple(-abs(x) for x in scale)
+
                     transform(scale=scale)
 
                     texture_file_names = export_obj(os.path.join(self.mjcf_file_dir, mesh_rel_path))
@@ -315,7 +319,11 @@ class MjcfExporter:
                     self.mesh_rel_paths.add(mesh_rel_path)
 
                     scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat)
-                    scale = tuple(abs(x) for x in scale)
+                    if not any(x < 0 for x in geom_builder.scale):
+                        scale = tuple(abs(x) for x in scale)
+                    if not any(x > 0 for x in geom_builder.scale):
+                        scale = tuple(-abs(x) for x in scale)
+                        
                     transform(scale=scale)
 
                     export_stl(os.path.join(self.mjcf_file_dir, mesh_rel_path))

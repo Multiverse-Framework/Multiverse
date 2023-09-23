@@ -2,7 +2,7 @@
 
     <arg name="urdf"/>
 
-    <arg name="headless" default="true"/>
+    <arg name="headless" default="false"/>
 
     <param name="robot_description" command="$(find xacro)/xacro '$(arg urdf)'" />
 
@@ -11,7 +11,7 @@
     <group unless="$(arg headless)">
         <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
 
-        <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find multiverse_parser)/examples/rviz_config/rviz.rviz" required="true"/>
+        <node pkg="rviz" type="rviz" name="rviz" output="screen" args="-d $(find multiverse_parser)/rviz_config/rviz.rviz" required="true"/>
     </group>
 
     <group if="$(arg headless)">
