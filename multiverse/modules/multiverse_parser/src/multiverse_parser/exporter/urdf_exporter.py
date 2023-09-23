@@ -198,7 +198,10 @@ class UrdfExporter:
                     export_obj(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
                     scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
-                    scale = tuple(abs(x) for x in scale)
+                    if not any(x < 0 for x in geom_builder.scale):
+                        scale = tuple(abs(x) for x in scale)
+                    if not any(x > 0 for x in geom_builder.scale):
+                        scale = tuple(-abs(x) for x in scale)
 
                     geometry = urdf.Mesh(filename=filename, scale=scale)
 
@@ -219,7 +222,10 @@ class UrdfExporter:
                     export_stl(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
                     scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
-                    scale = tuple(abs(x) for x in scale)
+                    if not any(x < 0 for x in geom_builder.scale):
+                        scale = tuple(abs(x) for x in scale)
+                    if not any(x > 0 for x in geom_builder.scale):
+                        scale = tuple(-abs(x) for x in scale)
 
                     geometry = urdf.Mesh(filename=filename, scale=scale)
 
