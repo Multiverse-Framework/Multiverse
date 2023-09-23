@@ -1,8 +1,11 @@
+#!/usr/bin/env python3.10
+
 import numpy
 from scipy.spatial.transform import Rotation
 import bpy
 import tf
-from pxr import UsdGeom, Gf
+import os, shutil
+from pxr import UsdGeom, Gf, UsdShade
 
 xform_cache = UsdGeom.XformCache()
 
@@ -82,3 +85,97 @@ def transform(xyz: tuple = (0.0, 0.0, 0.0), rpy: tuple = (0.0, 0.0, 0.0), scale:
     selected_object.location = xyz
     selected_object.rotation_euler = rpy
     selected_object.scale = scale
+
+
+def copy_prim(src_prim, dest_prim, prefix=None) -> None:
+    if type(src_prim) != type(dest_prim):
+        print(f"Types of {src_prim} and {dest_prim} are different")
+        return
+
+    src_stage = src_prim.GetStage()
+    dest_stage = dest_prim.GetStage()
+
+    src_file_path = src_stage.GetRootLayer().realPath
+    dest_file_path = dest_stage.GetRootLayer().realPath
+
+    for schema_api in src_prim.GetAppliedSchemas():
+        dest_prim.ApplyAPI(schema_api)
+
+    for src_rel in src_prim.GetRelationships():
+        src_rel_name = src_rel.GetName()
+        dest_rel = dest_prim.CreateRelationship(name=src_rel_name, custom=False)
+        targets = src_rel.GetTargets()
+        dest_rel.SetTargets(targets)
+
+        if src_stage == dest_stage:
+            continue
+
+        for target in targets:
+            src_rel_prim = src_stage.GetPrimAtPath(target)
+
+            if UsdShade.Material(src_rel_prim):
+                src_material = UsdShade.Material(src_rel_prim)
+                dest_material = UsdShade.Material.Define(dest_stage, target)
+
+                if src_material.GetSurfaceAttr().Get() is not None:
+                    dest_surface_attr = dest_material.CreateSurfaceAttr()
+                    dest_surface_attr.Set(src_material.GetSurfaceAttr().Get())
+
+                if src_material.GetSurfaceOutput() is not None:
+                    mesh_surface_output = dest_material.CreateSurfaceOutput()
+                    for connected_sources in src_material.GetSurfaceOutput().GetConnectedSources():
+                        for connected_source in connected_sources:
+                            mesh_surface_output.ConnectToSource(connected_source)
+
+                for src_rel_child_prim in src_rel_prim.GetChildren():
+                    if UsdShade.Shader(src_rel_child_prim):
+                        src_shader = UsdShade.Shader(src_rel_child_prim)
+                        dest_shader = UsdShade.Shader.Define(dest_stage, src_rel_child_prim.GetPath())
+
+                        for src_shader_input in src_shader.GetInputs():
+                            dest_shader_input = dest_shader.CreateInput(src_shader_input.GetBaseName(), src_shader_input.GetTypeName())
+                            for connected_sources in src_shader_input.GetConnectedSources():
+                                for connected_source in connected_sources:
+                                    dest_shader_input.ConnectToSource(connected_source)
+
+                        for src_shader_output in src_shader.GetOutputs():
+                            dest_shader_output = dest_shader.CreateOutput(src_shader_output.GetBaseName(), src_shader_output.GetTypeName())
+                            for connected_sources in src_shader_output.GetConnectedSources():
+                                for connected_source in connected_sources:
+                                    dest_shader_output.ConnectToSource(connected_source)
+
+                        for src_shader_attr in src_shader.GetPrim().GetAttributes():
+                            src_shader_attr_value = src_shader_attr.Get()
+                            if src_shader_attr.GetName() == "inputs:file":
+                                src_shader_file_path = src_shader_attr_value.resolvedPath
+                                dest_shader_file_path = os.path.join(os.path.dirname(dest_file_path), src_shader_attr_value.path)
+
+                                if not os.path.exists(os.path.dirname(dest_shader_file_path)):
+                                    os.makedirs(os.path.dirname(dest_shader_file_path))
+
+                                if not os.path.exists(dest_shader_file_path):
+                                    shutil.copy(src_shader_file_path, dest_shader_file_path)
+
+                        copy_prim(src_shader.GetPrim(), dest_shader.GetPrim())
+
+            else:
+                if prefix is not None:
+                    target = prefix.AppendPath(target)
+                dest_rel_prim = dest_stage.DefinePrim(target, src_rel_prim.GetTypeName())
+                copy_prim(src_rel_prim, dest_rel_prim)
+
+    for src_attr in src_prim.GetAttributes():
+        value = src_attr.Get()
+        if value is not None:
+            dest_attr = dest_prim.GetPrim().CreateAttribute(
+                name=src_attr.GetName(), typeName=src_attr.GetTypeName(), custom=src_attr.IsCustom(), variability=src_attr.GetVariability()
+            )
+            dest_attr.Set(value)
+            prim_var = UsdGeom.Primvar(src_attr)
+            if prim_var.HasValue():
+                mesh_prim_var = UsdGeom.Primvar(dest_attr)
+                mesh_prim_var.SetInterpolation(prim_var.GetInterpolation())
+
+    for src_child_prim in src_prim.GetChildren():
+        dest_child_prim = dest_prim.GetStage().DefinePrim(dest_prim.GetPath().AppendPath(src_child_prim.GetName()), src_child_prim.GetTypeName())
+        copy_prim(src_child_prim, dest_child_prim)

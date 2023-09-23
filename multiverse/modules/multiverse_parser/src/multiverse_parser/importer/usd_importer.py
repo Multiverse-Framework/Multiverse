@@ -7,7 +7,7 @@ from multiverse_parser import WorldBuilder, GeomType, JointType
 from multiverse_parser.factory.body_builder import body_dict
 from multiverse_parser.utils import xform_cache
 from multiverse_parser.utils import import_usd, export_usd
-from multiverse_parser.utils import clear_meshes
+from multiverse_parser.utils import clear_meshes, copy_prim
 
 
 class UsdImporter:
@@ -26,14 +26,15 @@ class UsdImporter:
         self.world_builder = WorldBuilder()
 
         self.stage = Usd.Stage.Open(self.usd_file_path)
+
+        self.clean_up()
+
         root_prim = self.stage.GetDefaultPrim()
         self.world_builder.add_body(root_prim.GetName())
 
         self.parent_map = {}
 
         self.usd_mesh_path_dict = {}
-
-        self.clean_up()
 
         for joint_prim in [joint_prim for joint_prim in self.stage.Traverse() if joint_prim.IsA(UsdPhysics.Joint)]:
             parent_prim = self.stage.GetPrimAtPath(UsdPhysics.Joint(joint_prim).GetBody0Rel().GetTargets()[0])
@@ -46,6 +47,16 @@ class UsdImporter:
             self.build_joint(root_prim)
 
     def clean_up(self):
+        xform_root_prims = [prim for prim in self.stage.GetPseudoRoot().GetChildren() if prim.IsA(UsdGeom.Xform)]
+        if len(xform_root_prims) > 1:
+            print("Multiple root prim found, add a default root prim")
+            world_prim = UsdGeom.Xform.Define(self.stage, "/world").GetPrim()
+            self.stage.SetDefaultPrim(world_prim)
+            for xform_root_prim in xform_root_prims:
+                xform_prim = UsdGeom.Xform.Define(self.stage, world_prim.GetPath().AppendPath(xform_root_prim.GetName())).GetPrim()
+                copy_prim(xform_root_prim, xform_prim, world_prim.GetPath())
+                self.stage.RemovePrim(xform_root_prim.GetPath())
+
         geom_prims_to_add_xform = {}
         for prim in [prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Xform)]:
             geom_prims = [geom_prim for geom_prim in prim.GetChildren() if geom_prim.IsA(UsdGeom.Gprim)]
@@ -54,8 +65,8 @@ class UsdImporter:
             if len(geom_prims) > 0 and len(xform_prims) > 0:
                 geom_prims_to_add_xform[prim.GetName()] = geom_prims
 
-        for i, (geom_prim_name, geom_prims) in enumerate(geom_prims_to_add_xform.items()):
-            for geom_prim in geom_prims:
+        for geom_prim_name, geom_prims in geom_prims_to_add_xform.items():
+            for i, geom_prim in enumerate(geom_prims):
                 new_xform_path = geom_prim.GetParent().GetPath().AppendPath(f"{geom_prim_name}_visual_{str(i)}")
                 new_xform_prim = UsdGeom.Xform.Define(self.stage, new_xform_path)
 
@@ -65,30 +76,8 @@ class UsdImporter:
                 new_geom_path = new_xform_path.AppendPath(geom_prim.GetName())
                 new_geom_prim = self.stage.DefinePrim(new_geom_path, geom_prim.GetTypeName())
 
-                for schema_api in geom_prim.GetAppliedSchemas():
-                    new_geom_prim.ApplyAPI(schema_api)
+                copy_prim(geom_prim, new_geom_prim)
 
-                for rel in geom_prim.GetRelationships():
-                    rel_name = rel.GetName()
-                    new_rel = new_geom_prim.CreateRelationship(name=rel_name, custom=False)
-                    targets = rel.GetTargets()
-                    new_rel.SetTargets(targets)
-
-                for attr in geom_prim.GetAttributes():
-                    value = attr.Get()
-                    if value is not None:
-                        new_attr = new_geom_prim.GetPrim().CreateAttribute(
-                            name=attr.GetName(), 
-                            typeName=attr.GetTypeName(),
-                            custom=attr.IsCustom(),
-                            variability=attr.GetVariability()
-                        )
-                        new_attr.Set(value)
-                        prim_var = UsdGeom.Primvar(attr)
-                        if prim_var.HasValue():
-                            mesh_prim_var = UsdGeom.Primvar(new_attr)
-                            mesh_prim_var.SetInterpolation(prim_var.GetInterpolation())
-                
                 self.stage.RemovePrim(geom_prim.GetPath())
 
     def build_body(self, parent_prim):
@@ -173,15 +162,12 @@ class UsdImporter:
                                 geom_prim.GetName() + ".usda",
                             )
                             mesh_stage = Usd.Stage.CreateNew(mesh_path)
-                            
+
                             mesh_xform_path = Sdf.Path("/").AppendPath(geom_prim.GetName())
                             mesh_geom_path = mesh_xform_path.AppendPath("SM_" + geom_prim.GetName())
-                            
+
                             mesh_xform = UsdGeom.Xform.Define(mesh_stage, mesh_xform_path)
                             mesh_geom = UsdGeom.Mesh.Define(mesh_stage, mesh_geom_path)
-
-                            for schema_api in geom_prim.GetAppliedSchemas():
-                                mesh_geom.GetPrim().ApplyAPI(schema_api)
 
                             for xform_attr in xform_prim.GetAttributes():
                                 if xform_attr.GetName() == "xformOp:transform" or xform_attr.GetName() == "xformOpOrder":
@@ -189,102 +175,11 @@ class UsdImporter:
                                 xform_attr_value = xform_attr.Get()
                                 if xform_attr_value is not None:
                                     mesh_xform_attr = mesh_xform.GetPrim().CreateAttribute(
-                                        name=xform_attr.GetName(), 
-                                        typeName=xform_attr.GetTypeName()
+                                        name=xform_attr.GetName(), typeName=xform_attr.GetTypeName()
                                     )
                                     mesh_xform_attr.Set(xform_attr_value)
 
-                            for geom_rel in geom_prim.GetRelationships():
-                                geom_rel_name = geom_rel.GetName()
-                                mesh_rel = mesh_geom.GetPrim().CreateRelationship(name=geom_rel_name, custom=False)
-                                geom_targets = geom_rel.GetTargets()
-                                mesh_rel.SetTargets(geom_targets)
-                                for geom_target in geom_targets:
-                                    mesh_rel_prim = self.stage.GetPrimAtPath(geom_target)
-
-                                    if UsdShade.Material(mesh_rel_prim):
-                                        geom_material = UsdShade.Material(mesh_rel_prim)
-                                        mesh_material = UsdShade.Material.Define(mesh_stage, geom_target)
-
-                                        if geom_material.GetSurfaceAttr().Get() is not None:
-                                            surface_attr = mesh_material.CreateSurfaceAttr()
-                                            surface_attr.Set(geom_material.GetSurfaceAttr().Get())
-                                        
-                                        if geom_material.GetSurfaceOutput() is not None:
-                                            mesh_surface_output = mesh_material.CreateSurfaceOutput()
-                                            for connected_sources in geom_material.GetSurfaceOutput().GetConnectedSources():
-                                                for connected_source in connected_sources:
-                                                    mesh_surface_output.ConnectToSource(connected_source)
-
-                                        for material_child_prim in mesh_rel_prim.GetChildren():
-                                            if UsdShade.Shader(material_child_prim):
-                                                geom_shader = UsdShade.Shader(material_child_prim)
-                                                mesh_shader = UsdShade.Shader.Define(mesh_stage, material_child_prim.GetPath())
-
-                                                for geom_shader_input in geom_shader.GetInputs():
-                                                    mesh_shader_input = mesh_shader.CreateInput(geom_shader_input.GetBaseName(), geom_shader_input.GetTypeName())
-                                                    for connected_sources in geom_shader_input.GetConnectedSources():
-                                                        for connected_source in connected_sources:
-                                                            mesh_shader_input.ConnectToSource(connected_source)
-
-                                                for geom_shader_output in geom_shader.GetOutputs():
-                                                    mesh_shader_output = mesh_shader.CreateOutput(geom_shader_output.GetBaseName(), geom_shader_output.GetTypeName())
-                                                    for connected_sources in geom_shader_output.GetConnectedSources():
-                                                        for connected_source in connected_sources:
-                                                            mesh_shader_output.ConnectToSource(connected_source)
-                                                
-                                                for geom_shader_attr in geom_shader.GetPrim().GetAttributes():
-                                                    geom_shader_attr_value = geom_shader_attr.Get()
-                                                    if geom_shader_attr_value is not None:
-                                                        mesh_shader_attr = mesh_shader.GetPrim().CreateAttribute(
-                                                            name=geom_shader_attr.GetName(), 
-                                                            typeName=geom_shader_attr.GetTypeName(),
-                                                            custom=geom_shader_attr.IsCustom(),
-                                                            variability=geom_shader_attr.GetVariability()
-                                                        )
-                                                        mesh_shader_attr.Set(geom_shader_attr_value)
-
-                                                        if geom_shader_attr.GetName() == "inputs:file":
-                                                            geom_shader_file = geom_shader_attr_value.resolvedPath
-                                                            mesh_shader_file = os.path.join(os.path.dirname(mesh_path), geom_shader_attr_value.path)
-
-                                                            if not os.path.exists(os.path.dirname(mesh_shader_file)):
-                                                                os.makedirs(os.path.dirname(mesh_shader_file))
-                                                            
-                                                            if not os.path.exists(mesh_shader_file):
-                                                                shutil.copy(geom_shader_file, mesh_shader_file)
-
-                                    else:
-                                        new_mesh_rel_prim = mesh_stage.DefinePrim(geom_target, mesh_rel_prim.GetTypeName())
-
-                                        for schema_api in mesh_rel_prim.GetAppliedSchemas():
-                                            new_mesh_rel_prim.ApplyAPI(schema_api)
-
-                                        for mesh_rel_attr in mesh_rel_prim.GetAttributes():
-                                            mesh_rel_attr_value = mesh_rel_attr.Get()
-                                            if mesh_rel_attr_value is not None:
-                                                new_mesh_rel_attr = mesh_rel_prim.CreateAttribute(
-                                                    name=mesh_rel_attr.GetName(), 
-                                                    typeName=mesh_rel_attr.GetTypeName(),
-                                                    custom=mesh_rel_attr.IsCustom(),
-                                                    variability=mesh_rel_attr.GetVariability()
-                                                )
-                                                new_mesh_rel_attr.Set(mesh_rel_attr_value)
-
-                            for attr in geom_prim.GetAttributes():
-                                value = attr.Get()
-                                if value is not None:
-                                    mesh_attr = mesh_geom.GetPrim().CreateAttribute(
-                                        name=attr.GetName(), 
-                                        typeName=attr.GetTypeName(),
-                                        custom=attr.IsCustom(),
-                                        variability=attr.GetVariability()
-                                    )
-                                    mesh_attr.Set(value)
-                                    prim_var = UsdGeom.Primvar(attr)
-                                    if prim_var.HasValue():
-                                        mesh_prim_var = UsdGeom.Primvar(mesh_attr)
-                                        mesh_prim_var.SetInterpolation(prim_var.GetInterpolation())
+                            copy_prim(geom_prim, mesh_geom.GetPrim())
 
                             mesh_stage.Save()
                             mesh_type = "visual" if is_visual else "collision"

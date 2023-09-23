@@ -203,7 +203,7 @@ class GeomBuilder:
         obj = bpy.context.object
         if obj.type == "EMPTY":
             return
-        
+
         mesh = bmesh.new()
         mesh.from_mesh(obj.data)
         volume = mesh.calc_volume()

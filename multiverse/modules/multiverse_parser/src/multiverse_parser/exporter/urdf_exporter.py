@@ -199,9 +199,9 @@ class UrdfExporter:
                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
                     scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
                     scale = tuple(abs(x) for x in scale)
-                    
+
                     geometry = urdf.Mesh(filename=filename, scale=scale)
-                    
+
                     visual = urdf.Visual(
                         geometry=geometry,
                         material=None,
@@ -220,7 +220,7 @@ class UrdfExporter:
                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
                     scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
                     scale = tuple(abs(x) for x in scale)
-                    
+
                     geometry = urdf.Mesh(filename=filename, scale=scale)
 
                     collision = urdf.Collision(

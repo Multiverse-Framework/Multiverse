@@ -29,8 +29,6 @@ class MjcfExporter:
             mjcf_file_name,
         )
         self.world_builder = world_builder
-        if "world" in self.world_builder.body_names:
-            self.world_builder.body_names.remove("world")
         self.with_physics = with_physics
         self.with_visual = with_visual
         self.with_collision = with_collision
@@ -103,11 +101,16 @@ class MjcfExporter:
         # light.set("dir", "0 0 -1")
 
         self.body_dict = {}
-        
+
         worldbody = ET.SubElement(self.root, "worldbody")
         self.body_dict["worldbody"] = worldbody
 
-        self.build_link(body_name=self.world_builder.body_names[0], parent_body_name="worldbody")
+        if self.world_builder.body_names[0] == "world":
+            self.body_dict["world"] = worldbody
+            for geom_name in body_dict["world"].geom_names:
+                self.build_geom(geom_name, worldbody)
+        else:
+            self.build_link(body_name=self.world_builder.body_names[0], parent_body_name="worldbody")
 
         body_names = self.world_builder.body_names
         reduces_body_names = body_names
@@ -118,31 +121,18 @@ class MjcfExporter:
             for body_name in body_names:
                 body_builder = body_dict[body_name]
                 parent_body_name = body_builder.xform.GetPrim().GetParent().GetName()
-                if (
-                    parent_body_name in self.body_dict
-                    and body_name not in self.body_dict
-                    and len(body_builder.joint_names) == 0
-                ):
+                if parent_body_name in self.body_dict and body_name not in self.body_dict and len(body_builder.joint_names) == 0:
                     stop = False
-                    self.build_link(
-                        body_name=body_name, parent_body_name=parent_body_name
-                    )
+                    self.build_link(body_name=body_name, parent_body_name=parent_body_name)
                     reduces_body_names.remove(body_name)
             for joint_name, joint_builder in joint_dict.items():
                 parent_body_name = joint_builder.parent_xform.GetPrim().GetName()
                 child_body_name = joint_builder.child_xform.GetPrim().GetName()
-                if (
-                    parent_body_name in self.body_dict
-                    and child_body_name not in self.body_dict
-                ):
+                if parent_body_name in self.body_dict and child_body_name not in self.body_dict:
                     stop = False
-                    self.build_link(
-                        body_name=child_body_name, parent_body_name=parent_body_name
-                    )
+                    self.build_link(body_name=child_body_name, parent_body_name=parent_body_name)
                     if with_physics:
-                        self.build_joint(
-                            joint_name=joint_name, body_name=child_body_name
-                        )
+                        self.build_joint(joint_name=joint_name, body_name=child_body_name)
                     reduces_body_names.remove(child_body_name)
             body_names = reduces_body_names
 
@@ -157,9 +147,7 @@ class MjcfExporter:
 
         body_builder = body_dict[body_name]
 
-        if self.with_physics and body_builder.xform.GetPrim().HasAPI(
-            UsdPhysics.MassAPI
-        ):
+        if self.with_physics and body_builder.xform.GetPrim().HasAPI(UsdPhysics.MassAPI):
             inertial = ET.SubElement(body, "inertial")
             physics_mass_api = UsdPhysics.MassAPI(body_builder.xform)
 
@@ -179,19 +167,11 @@ class MjcfExporter:
                 )
 
         if parent_body_name == "worldbody":
-            body_relative_transform = xform_cache.GetLocalToWorldTransform(
-                body_dict[body_name].xform.GetPrim()
-            )
+            body_relative_transform = xform_cache.GetLocalToWorldTransform(body_dict[body_name].xform.GetPrim())
         else:
-            parent_body_transform = xform_cache.GetLocalToWorldTransform(
-                body_dict[parent_body_name].xform.GetPrim()
-            )
-            body_transformation = xform_cache.GetLocalToWorldTransform(
-                body_dict[body_name].xform.GetPrim()
-            )
-            body_relative_transform = (
-                body_transformation * parent_body_transform.GetInverse()
-            )
+            parent_body_transform = xform_cache.GetLocalToWorldTransform(body_dict[parent_body_name].xform.GetPrim())
+            body_transformation = xform_cache.GetLocalToWorldTransform(body_dict[body_name].xform.GetPrim())
+            body_relative_transform = body_transformation * parent_body_transform.GetInverse()
         body_relative_transform = body_relative_transform.RemoveScaleShear()
         body_relative_xyz = body_relative_transform.ExtractTranslation()
         body_relative_quat = body_relative_transform.ExtractRotationQuat()
@@ -212,153 +192,139 @@ class MjcfExporter:
         )
 
         for geom_name in body_dict[body_name].geom_names:
-            geom_builder = geom_dict[geom_name]
-            geom_transformation = geom_builder.xform.GetLocalTransformation().RemoveScaleShear()
-            geom_xyz = geom_transformation.ExtractTranslation()
-            geom_quat = geom_transformation.ExtractRotationQuat()
+            self.build_geom(geom_name, body)
 
-            geom = ET.SubElement(body, "geom")
-            geom.set("name", geom_name)
-            
-            geom.set("pos", " ".join(map(str, geom_xyz)))
+    def build_geom(self, geom_name: str, body) -> None:
+        geom_builder = geom_dict[geom_name]
+        geom_transformation = geom_builder.xform.GetLocalTransformation().RemoveScaleShear()
+        geom_xyz = geom_transformation.ExtractTranslation()
+        geom_quat = geom_transformation.ExtractRotationQuat()
+
+        geom = ET.SubElement(body, "geom")
+        geom.set("name", geom_name)
+
+        geom.set("pos", " ".join(map(str, geom_xyz)))
+        geom.set(
+            "quat",
+            " ".join(
+                map(
+                    str,
+                    (
+                        geom_quat.GetReal(),
+                        geom_quat.GetImaginary()[0],
+                        geom_quat.GetImaginary()[1],
+                        geom_quat.GetImaginary()[2],
+                    ),
+                )
+            ),
+        )
+
+        if geom_builder.is_visual:
+            geom.set("class", "visual")
+        else:
+            geom.set("class", "collision")
+
+        if geom_builder.type == GeomType.CUBE:
+            geom.set("type", "box")
             geom.set(
-                "quat",
+                "size",
                 " ".join(
                     map(
                         str,
-                        (
-                            geom_quat.GetReal(),
-                            geom_quat.GetImaginary()[0],
-                            geom_quat.GetImaginary()[1],
-                            geom_quat.GetImaginary()[2],
-                        ),
+                        [geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)],
                     )
                 ),
             )
+        elif geom_builder.type == GeomType.SPHERE:
+            geom.set("type", "sphere")
+            geom.set("size", str(geom_builder.geom.GetRadiusAttr().Get()))
+        elif geom_builder.type == GeomType.CYLINDER:
+            geom.set("type", "cylinder")
+            geom.set(
+                "size",
+                " ".join(
+                    map(
+                        str,
+                        [
+                            geom_builder.geom.GetRadiusAttr().Get(),
+                            geom_builder.geom.GetHeightAttr().Get() / 2,
+                        ],
+                    )
+                ),
+            )
+        elif geom_builder.type == GeomType.MESH:
+            geom.set("type", "mesh")
+            if geom_builder.mesh_builder is None:
+                print(f"Mesh builder for {str(geom_builder)} not found.")
+                return
 
-            if geom_builder.is_visual:
-                geom.set("class", "visual")
-            else:
-                geom.set("class", "collision")
+            mesh_builder = geom_builder.mesh_builder
+            clear_meshes()
 
-            if geom_builder.type == GeomType.CUBE:
-                geom.set("type", "box")
-                geom.set(
-                    "size",
-                    " ".join(
-                        map(
-                            str,
-                            [
-                                geom_builder.xform.GetLocalTransformation()
-                                .GetRow(i)
-                                .GetLength()
-                                for i in range(3)
-                            ],
-                        )
-                    ),
+            import_usd(mesh_builder.usd_file_path)
+
+            mesh_file_name = os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0]
+
+            geom_suffix = "".join(map(str, geom_builder.scale)).replace(".", "d").replace("-", "_")
+
+            if self.with_visual and geom_builder.is_visual:
+                mesh_rel_path = os.path.join(
+                    "obj",
+                    mesh_file_name + geom_suffix + ".obj",
                 )
-            elif geom_builder.type == GeomType.SPHERE:
-                geom.set("type", "sphere")
-                geom.set("size", str(geom_builder.geom.GetRadiusAttr().Get()))
-            elif geom_builder.type == GeomType.CYLINDER:
-                geom.set("type", "cylinder")
-                geom.set(
-                    "size",
-                    " ".join(
-                        map(
-                            str,
-                            [
-                                geom_builder.geom.GetRadiusAttr().Get(),
-                                geom_builder.geom.GetHeightAttr().Get() / 2,
-                            ],
-                        )
-                    ),
+
+                mesh_file_name_visual = mesh_file_name + "_visual" + geom_suffix
+
+                if mesh_rel_path not in self.mesh_rel_paths:
+                    self.mesh_rel_paths.add(mesh_rel_path)
+
+                    scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat)
+                    scale = tuple(abs(x) for x in scale)
+                    transform(scale=scale)
+
+                    texture_file_names = export_obj(os.path.join(self.mjcf_file_dir, mesh_rel_path))
+
+                    if len(texture_file_names) > 0:
+                        texture_file_name = texture_file_names[0]
+                        texture = ET.SubElement(self.asset, "texture")
+                        texture.set("name", mesh_file_name_visual)
+                        texture.set("type", "2d")
+                        texture.set("file", texture_file_name)
+
+                        material = ET.SubElement(self.asset, "material")
+                        material.set("name", mesh_file_name_visual)
+                        material.set("texture", mesh_file_name_visual)
+
+                        geom.set("material", mesh_file_name_visual)
+
+                    mesh = ET.SubElement(self.asset, "mesh")
+                    mesh.set("name", mesh_file_name_visual)
+                    mesh.set("file", mesh_rel_path)
+
+                geom.set("mesh", mesh_file_name_visual)
+
+            if self.with_collision and not geom_builder.is_visual:
+                mesh_rel_path = os.path.join(
+                    "stl",
+                    mesh_file_name + geom_suffix + ".stl",
                 )
-            elif geom_builder.type == GeomType.MESH:
-                geom.set("type", "mesh")
-                if geom_builder.mesh_builder is None:
-                    print(f"Mesh builder for {str(geom_builder)} not found.")
-                    continue
 
-                mesh_builder = geom_builder.mesh_builder
-                clear_meshes()
+                mesh_file_name_collision = mesh_file_name + "_collision" + geom_suffix
 
-                import_usd(mesh_builder.usd_file_path)
+                if mesh_rel_path not in self.mesh_rel_paths:
+                    self.mesh_rel_paths.add(mesh_rel_path)
 
-                mesh_file_name = os.path.splitext(
-                    os.path.basename(mesh_builder.usd_file_path)
-                )[0]
+                    scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat)
+                    scale = tuple(abs(x) for x in scale)
+                    transform(scale=scale)
 
-                geom_suffix = "".join(map(str, geom_builder.scale)).replace(".", "d").replace("-", "_")
-                
-                if self.with_visual and geom_builder.is_visual:
-                    mesh_rel_path = os.path.join(
-                        "obj",
-                        mesh_file_name + geom_suffix + ".obj",
-                    )
+                    export_stl(os.path.join(self.mjcf_file_dir, mesh_rel_path))
 
-                    mesh_file_name_visual = (
-                        mesh_file_name
-                        + "_visual"
-                        + geom_suffix
-                    )
+                    mesh = ET.SubElement(self.asset, "mesh")
+                    mesh.set("name", mesh_file_name_collision)
+                    mesh.set("file", mesh_rel_path)
 
-                    if mesh_rel_path not in self.mesh_rel_paths:
-                        self.mesh_rel_paths.add(mesh_rel_path)
-
-                        scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat)
-                        scale = tuple(abs(x) for x in scale)
-                        transform(scale=scale)
-
-                        texture_file_names = export_obj(
-                            os.path.join(self.mjcf_file_dir, mesh_rel_path)
-                        )
-
-                        if len(texture_file_names) > 0:
-                            texture_file_name = texture_file_names[0]
-                            texture = ET.SubElement(self.asset, "texture")
-                            texture.set("name", mesh_file_name_visual)
-                            texture.set("type", "2d")
-                            texture.set("file", texture_file_name)
-
-                            material = ET.SubElement(self.asset, "material")
-                            material.set("name", mesh_file_name_visual)
-                            material.set("texture", mesh_file_name_visual)
-
-                            geom.set("material", mesh_file_name_visual)
-
-                        mesh = ET.SubElement(self.asset, "mesh")
-                        mesh.set("name", mesh_file_name_visual)
-                        mesh.set("file", mesh_rel_path)
-
-                    geom.set("mesh", mesh_file_name_visual)
-
-                if self.with_collision and not geom_builder.is_visual:
-                    mesh_rel_path = os.path.join(
-                        "stl",
-                        mesh_file_name + geom_suffix + ".stl",
-                    )                    
-
-                    mesh_file_name_collision = (
-                        mesh_file_name
-                        + "_collision"
-                        + geom_suffix
-                    )
-
-                    if mesh_rel_path not in self.mesh_rel_paths:
-                        self.mesh_rel_paths.add(mesh_rel_path)
-
-                        scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=geom_quat)
-                        scale = tuple(abs(x) for x in scale)
-                        transform(scale=scale)
-                        
-                        export_stl(os.path.join(self.mjcf_file_dir, mesh_rel_path))
-
-                        mesh = ET.SubElement(self.asset, "mesh")
-                        mesh.set("name", mesh_file_name_collision)
-                        mesh.set("file", mesh_rel_path)
-
-                    geom.set("mesh", mesh_file_name_collision)
+                geom.set("mesh", mesh_file_name_collision)
 
     def build_joint(self, joint_name: str, body_name: str) -> None:
         body = self.body_dict[body_name]
@@ -366,18 +332,12 @@ class MjcfExporter:
         joint.set("name", joint_name)
 
         joint_builder = joint_dict[joint_name]
-        if (
-            joint_builder.type == JointType.NONE
-            or joint_builder.type == JointType.FIXED
-        ):
+        if joint_builder.type == JointType.NONE or joint_builder.type == JointType.FIXED:
             return
 
         joint.set("pos", " ".join(map(str, joint_builder.pos)))
 
-        if (
-            joint_builder.type == JointType.PRISMATIC
-            or joint_builder.type == JointType.REVOLUTE
-        ):
+        if joint_builder.type == JointType.PRISMATIC or joint_builder.type == JointType.REVOLUTE:
             if joint_builder.type == JointType.PRISMATIC:
                 joint.set("type", "slide")
                 lower = joint_builder.joint.GetLowerLimitAttr().Get()
