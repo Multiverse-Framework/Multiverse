@@ -6,7 +6,7 @@ TMP = "tmp"
 TMP_DIR = TMP + "/usd"
 TMP_USD_FILE_DIR = os.path.join(
     "tmp",
-    ".cache",
+    "cache",
     "".join(random.choices(string.ascii_letters + string.digits, k=10)),
 )
 TMP_USD_FILE_PATH = os.path.join(TMP_USD_FILE_DIR, TMP + ".usda")
