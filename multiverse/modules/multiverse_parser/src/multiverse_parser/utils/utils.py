@@ -105,7 +105,11 @@ def copy_prim(src_prim, dest_prim, prefix=None) -> None:
         src_rel_name = src_rel.GetName()
         dest_rel = dest_prim.CreateRelationship(name=src_rel_name, custom=False)
         targets = src_rel.GetTargets()
-        dest_rel.SetTargets(targets)
+        if prefix is not None:
+            new_targets = []
+            for target in targets:
+                new_targets.append(target.ReplacePrefix(src_stage.GetDefaultPrim().GetPath(), prefix))
+            dest_rel.SetTargets(new_targets)
 
         if src_stage == dest_stage:
             continue
@@ -178,4 +182,4 @@ def copy_prim(src_prim, dest_prim, prefix=None) -> None:
 
     for src_child_prim in src_prim.GetChildren():
         dest_child_prim = dest_prim.GetStage().DefinePrim(dest_prim.GetPath().AppendPath(src_child_prim.GetName()), src_child_prim.GetTypeName())
-        copy_prim(src_child_prim, dest_child_prim)
+        copy_prim(src_child_prim, dest_child_prim, prefix)
