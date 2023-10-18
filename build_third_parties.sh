@@ -35,7 +35,7 @@ else
 fi
 
 if [ ! -d "$BLENDER_EXT_DIR/lib" ]; then
-    (cd $BLENDER_EXT_DIR; mkdir lib; cd lib; svn checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/linux_x86_64_glibc_228)
+    (cd $BLENDER_EXT_DIR; mkdir lib; cd lib; svn checkout -r 63459 https://svn.blender.org/svnroot/bf-blender/trunk/lib/linux_x86_64_glibc_228)
     (cd $BLENDER_EXT_DIR/blender; make update)
 fi
 
