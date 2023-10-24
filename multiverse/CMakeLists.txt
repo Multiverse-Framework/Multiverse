@@ -16,7 +16,7 @@ if(UNIX)
     set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)")
 endif()
 
-add_subdirectory(src)
+# add_subdirectory(src)
 
 if(UNIX)
     add_subdirectory(modules)
