@@ -18,6 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <unistd.h>
 #include <GLFW/glfw3.h>
 #include <cstdio>
 #include <cstring>
@@ -38,6 +39,8 @@ bool button_right = false;
 double lastx = 0;
 double lasty = 0;
 
+int site_id;
+
 // keyboard callback
 void keyboard(GLFWwindow *window, int key, int scancode, int act, int mods)
 {
@@ -56,6 +59,20 @@ void mouse_button(GLFWwindow *window, int button, int act, int mods)
     button_left = (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS);
     button_middle = (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS);
     button_right = (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS);
+
+    if (button_left || button_middle || button_right)
+    {
+        printf("Mouse pressed!\n");
+        m->site_rgba[4*site_id+2] = 1;
+        
+    }
+    else
+    {
+        printf("Mouse released!\n");
+        m->site_rgba[4*site_id+2] = 0;
+    }
+    mj_saveLastXML("test.xml", m, "abc", 1000);
+    mj_printData(m, d, "data.txt");
 
     // update mouse position
     glfwGetCursorPos(window, &lastx, &lasty);
@@ -135,6 +152,23 @@ int main(int argc, char **argv)
     {
         mju_error("Load model error: %s", error);
     }
+    
+    site_id = m->nsite;
+    m->nsite++;
+    m->site_type[site_id] = mjGEOM_SPHERE;
+    m->site_bodyid[site_id] = 0;
+    m->site_matid[site_id] = -1;
+    m->site_size[3*site_id] = 0.1;
+    m->site_size[3*site_id + 1] = 0.1;
+    m->site_size[3*site_id + 2] = 0.1;
+    m->site_pos[3*site_id] = 0;
+    m->site_pos[3*site_id + 1] = 0;
+    m->site_pos[3*site_id + 2] = 1;
+    m->site_quat[4*site_id] = 1;
+    m->site_rgba[4*site_id] = 1;
+    m->site_rgba[4*site_id + 1] = 1;
+    m->site_rgba[4*site_id + 2] = 0;
+    m->site_rgba[4*site_id + 3] = 1;
 
     // make data
     d = mj_makeData(m);
