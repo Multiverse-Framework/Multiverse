@@ -18,11 +18,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <unistd.h>
 #include <GLFW/glfw3.h>
 #include <cstdio>
 #include <cstring>
+#include <getopt.h>
 #include <mujoco/mujoco.h>
+#include <unistd.h>
 
 // MuJoCo data structures
 mjModel *m = NULL; // MuJoCo model
@@ -39,7 +40,7 @@ bool button_right = false;
 double lastx = 0;
 double lasty = 0;
 
-int site_id;
+int site_id = 0;
 
 // keyboard callback
 void keyboard(GLFWwindow *window, int key, int scancode, int act, int mods)
@@ -49,6 +50,14 @@ void keyboard(GLFWwindow *window, int key, int scancode, int act, int mods)
     {
         mj_resetData(m, d);
         mj_forward(m, d);
+    }
+
+    // s: save simulation
+    if (act == GLFW_PRESS && key == GLFW_KEY_S)
+    {
+        const char *filename = "save.mjb";
+        printf("Save as %s\n", filename);
+        mj_saveModel(m, filename, NULL, 1000);
     }
 }
 
@@ -63,16 +72,13 @@ void mouse_button(GLFWwindow *window, int button, int act, int mods)
     if (button_left || button_middle || button_right)
     {
         printf("Mouse pressed!\n");
-        m->site_rgba[4*site_id+2] = 1;
-        
+        // m->site_rgba[4*site_id+2] = 1;
     }
     else
     {
         printf("Mouse released!\n");
-        m->site_rgba[4*site_id+2] = 0;
+        // m->site_rgba[4*site_id+2] = 0;
     }
-    mj_saveLastXML("test.xml", m, "abc", 1000);
-    mj_printData(m, d, "data.txt");
 
     // update mouse position
     glfwGetCursorPos(window, &lastx, &lasty);
@@ -132,11 +138,29 @@ int main(int argc, char **argv)
     // print version, check compatibility
     printf("MuJoCo version %s\n", mj_versionString());
 
-    if (argc != 2)
+    int opt_long;
+    struct option long_options[] = {
+        {"world", required_argument, NULL, 'w'},
+        {"robot", required_argument, NULL, 'r'},
+        {NULL, 0, NULL, 0}};
+
+    while ((opt_long = getopt_long(argc, argv, "", long_options, NULL)) != -1)
     {
-        printf(" USAGE:  basic modelfile\n");
-        return 0;
+        switch (opt_long)
+        {
+        case 'w':
+            printf("World: %s\n", optarg);
+            break;
+        case 'r':
+            printf("Robot: %s\n", optarg);
+            break;
+        default:
+            fprintf(stderr, "Usage: %s --world=<value> --robot=<value>\n", argv[0]);
+            exit(EXIT_FAILURE);
+        }
     }
+
+    return 0;
 
     // load and compile model
     char error[1000] = "Could not load binary model";
@@ -152,23 +176,26 @@ int main(int argc, char **argv)
     {
         mju_error("Load model error: %s", error);
     }
-    
-    site_id = m->nsite;
-    m->nsite++;
-    m->site_type[site_id] = mjGEOM_SPHERE;
-    m->site_bodyid[site_id] = 0;
-    m->site_matid[site_id] = -1;
-    m->site_size[3*site_id] = 0.1;
-    m->site_size[3*site_id + 1] = 0.1;
-    m->site_size[3*site_id + 2] = 0.1;
-    m->site_pos[3*site_id] = 0;
-    m->site_pos[3*site_id + 1] = 0;
-    m->site_pos[3*site_id + 2] = 1;
-    m->site_quat[4*site_id] = 1;
-    m->site_rgba[4*site_id] = 1;
-    m->site_rgba[4*site_id + 1] = 1;
-    m->site_rgba[4*site_id + 2] = 0;
-    m->site_rgba[4*site_id + 3] = 1;
+
+    // site_id = m->nsite;
+    // m->nsite++;
+    // m->site_type[site_id] = mjGEOM_SPHERE;
+    // m->site_bodyid[site_id] = 0;
+    // m->site_matid[site_id] = -1;
+    // m->site_size[3*site_id] = 0.1;
+    // m->site_size[3*site_id + 1] = 0.1;
+    // m->site_size[3*site_id + 2] = 0.1;
+    // m->site_pos[3*site_id] = 0;
+    // m->site_pos[3*site_id + 1] = 0;
+    // m->site_pos[3*site_id + 2] = 1;
+    // m->site_quat[4*site_id] = 1;
+    // m->site_rgba[4*site_id] = 1;
+    // m->site_rgba[4*site_id + 1] = 1;
+    // m->site_rgba[4*site_id + 2] = 0;
+    // m->site_rgba[4*site_id + 3] = 1;
+
+    // mj_saveLastXML("test.xml", m, "abc", 1000);
+    // mj_printData(m, d, "data.txt");
 
     // make data
     d = mj_makeData(m);
@@ -180,7 +207,7 @@ int main(int argc, char **argv)
     }
 
     // create window, make OpenGL context current, request v-sync
-    GLFWwindow *window = glfwCreateWindow(1200, 900, "Demo", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(960, 540, "MuJoCo", NULL, NULL);
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
