@@ -1,0 +1,91 @@
+#!/usr/bin/env python3.10
+
+import json
+import argparse
+import shutil
+import os 
+import mujoco
+
+class Robot:
+    def __init__(self):
+        self.name = ""
+        self.path = ""
+        self.joint_state = {}
+        self.pos = [0.0, 0.0, 0.0]
+
+
+def parse_robot(data):
+    try:
+        root = json.loads(data)
+    except json.JSONDecodeError as e:
+        print(f"Robots: {data}")
+        print(f"Failed to parse JSON: {str(e)}")
+        return []
+
+    robots = []
+    for robot_name, robot_data in root.items():
+        robot = Robot()
+        robot.name = robot_name
+        robot.path = robot_data.get("path", "")
+        robot.pos = robot_data.get("pos", [0.0, 0.0, 0.0])
+        robot.joint_state = robot_data.get("joint_state", {})
+        robots.append(robot)
+
+    return robots
+
+
+def main():
+    # Initialize argument parser
+    parser = argparse.ArgumentParser(description="Compile MJCF from world and robots.")
+
+    # Define arguments
+    parser.add_argument("--world", help="Path to world MJCF", required=True)
+    parser.add_argument(
+        "--robots", help="JSON string with robots' data", required=False
+    )
+
+    # Parse arguments
+    args = parser.parse_args()
+
+    world_xml_path = args.world
+    print(f"World: {world_xml_path}")
+
+    scene_name, _ = os.path.splitext(os.path.basename(world_xml_path))
+
+    if args.robots:
+        robots_json_str = args.robots.replace("'", '"')
+        robots = parse_robot(robots_json_str)
+        print("Robots:")
+        for robot in robots:
+            print(f"- Name: {robot.name}")
+            print(f"  Path: {robot.path}")
+            print(f"  Position: {robot.pos}")
+            if robot.joint_state:
+                print("  Joint state:")
+                for joint_name, joint_value in robot.joint_state.items():
+                    print(f"   {joint_name}: {joint_value}")
+
+    save_dir_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "saved", scene_name)
+
+    if not os.path.exists(save_dir_path):
+        os.makedirs(save_dir_path)
+
+    shutil.copy(world_xml_path, save_dir_path)
+
+    save_xml_path = os.path.join(save_dir_path, os.path.basename(world_xml_path))
+
+    m = mujoco.MjModel.from_xml_path(save_xml_path)
+    if mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, 'cursor') == -1:
+        with open(save_xml_path, 'r') as file:
+            xml_string = file.read()
+
+        cursor = """\n\t<visual>\n\t\t<global azimuth="45" elevation="-30"/>\n\t</visual>\n\t<worldbody>\n\t\t<body name="cursor" mocap="true" pos="0 0 0" euler="0 0 0">\n\t\t\t<site name="cursor" size="0.05 0.01" type="cylinder" rgba="1 1 0 0.5"/>\n\t\t</body>\n\t</worldbody>\n"""
+        xml_string = xml_string.replace('</mujoco>', cursor + '</mujoco>')
+
+        with open(save_xml_path, 'w') as file:
+            file.write(xml_string)
+
+    print(f"Scene: {save_xml_path}")
+
+if __name__ == "__main__":
+    main()

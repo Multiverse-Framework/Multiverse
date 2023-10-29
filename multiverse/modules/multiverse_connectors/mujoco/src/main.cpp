@@ -21,8 +21,19 @@
 #include <GLFW/glfw3.h>
 #include <cstdio>
 #include <cstring>
+#include <string>
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/reader.h>
+#elif _WIN32
+#include <json/json.h>
+#include <json/reader.h>
+#endif
+#include <algorithm>
 #include <getopt.h>
+#include <map>
 #include <mujoco/mujoco.h>
+#include <sstream>
 #include <unistd.h>
 
 // MuJoCo data structures
@@ -37,10 +48,17 @@ mjrContext con;    // custom GPU context
 bool button_left = false;
 bool button_middle = false;
 bool button_right = false;
-double lastx = 0;
-double lasty = 0;
+double lastx = 0.0;
+double lasty = 0.0;
 
-int site_id = 0;
+int cursor_body_id = -1;
+int cursor_id = -1;
+int cursor_site_id = -1;
+
+mjtNum cursor_roll = 0.0;
+mjtNum cursor_yaw = 0.0;
+
+double cam_distance_0 = 2.0;
 
 // keyboard callback
 void keyboard(GLFWwindow *window, int key, int scancode, int act, int mods)
@@ -50,6 +68,9 @@ void keyboard(GLFWwindow *window, int key, int scancode, int act, int mods)
     {
         mj_resetData(m, d);
         mj_forward(m, d);
+        cam.distance = cam_distance_0;
+        cam.elevation = m->vis.global.elevation;
+        cam.azimuth = m->vis.global.azimuth;
     }
 
     // s: save simulation
@@ -72,12 +93,18 @@ void mouse_button(GLFWwindow *window, int button, int act, int mods)
     if (button_left || button_middle || button_right)
     {
         printf("Mouse pressed!\n");
-        // m->site_rgba[4*site_id+2] = 1;
+        if (cursor_site_id != -1)
+        {
+            m->site_rgba[4 * cursor_site_id + 3] = 0.5;
+        }
     }
     else
     {
         printf("Mouse released!\n");
-        // m->site_rgba[4*site_id+2] = 0;
+        if (cursor_site_id != -1)
+        {
+            m->site_rgba[4 * cursor_site_id + 3] = 0;
+        }
     }
 
     // update mouse position
@@ -103,34 +130,38 @@ void mouse_move(GLFWwindow *window, double xpos, double ypos)
     int width, height;
     glfwGetWindowSize(window, &width, &height);
 
-    // get shift key state
-    bool mod_shift = (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS ||
-                      glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS);
+    if (button_left)
+    {
+        cam.elevation += (-dy / height) / M_PI * 180.f;
+        cam.azimuth += (-dx / width) / M_PI * 180.f;
 
-    // determine action based on mouse button
-    mjtMouse action;
-    if (button_right)
-    {
-        action = mod_shift ? mjMOUSE_MOVE_H : mjMOUSE_MOVE_V;
-    }
-    else if (button_left)
-    {
-        action = mod_shift ? mjMOUSE_ROTATE_H : mjMOUSE_ROTATE_V;
-    }
-    else
-    {
-        action = mjMOUSE_ZOOM;
-    }
+        // double cy = mju_cos(cursor_yaw * 0.5);
+        // double sy = mju_sin(cursor_yaw * 0.5);
+        // double cr = mju_cos(cursor_roll * 0.5);
+        // double sr = mju_sin(cursor_roll * 0.5);
 
-    // move camera
-    mjv_moveCamera(m, action, dx / height, dy / height, &scn, &cam);
+        // mjtNum quat[4] = {cr * cy, sr * cy, sr * sy, cr * sy};
+        // d->mocap_quat[0] = quat[0];
+        // d->mocap_quat[1] = quat[1];
+        // d->mocap_quat[2] = quat[2];
+        // d->mocap_quat[3] = quat[3];
+    }
+    else if (button_middle)
+    {
+        double offset =  0.828f;
+        double dxx = dx / height * cam.distance * offset;
+        double dyy = -dy / height * cam.distance * offset * mju_sin(cam.elevation / 180.f * M_PI);
+        double dzz = dy / height * cam.distance * offset * mju_cos(cam.elevation / 180.f * M_PI) ;
+        d->mocap_pos[0] += -dxx * mju_sin(cam.azimuth / 180.f * M_PI) + dyy * mju_cos(cam.azimuth / 180.f * M_PI);
+        d->mocap_pos[1] += dxx * mju_cos(cam.azimuth / 180.f * M_PI) + dyy * mju_sin(cam.azimuth / 180.f * M_PI);
+        d->mocap_pos[2] += dzz;
+    }
 }
 
 // scroll callback
 void scroll(GLFWwindow *window, double xoffset, double yoffset)
 {
-    // emulate vertical mouse motion = 5% of window height
-    mjv_moveCamera(m, mjMOUSE_ZOOM, 0, -0.05 * yoffset, &scn, &cam);
+    cam.distance *= 1 + 0.05 * yoffset;
 }
 
 int main(int argc, char **argv)
@@ -138,37 +169,9 @@ int main(int argc, char **argv)
     // print version, check compatibility
     printf("MuJoCo version %s\n", mj_versionString());
 
-    int opt_long;
-    struct option long_options[] = {
-        {"world", required_argument, NULL, 'w'},
-        {"robot", required_argument, NULL, 'r'},
-        {NULL, 0, NULL, 0}};
-
-    while ((opt_long = getopt_long(argc, argv, "", long_options, NULL)) != -1)
-    {
-        switch (opt_long)
-        {
-        case 'w':
-            printf("World: %s\n", optarg);
-            break;
-        case 'r':
-            printf("Robot: %s\n", optarg);
-            break;
-        default:
-            fprintf(stderr, "Usage: %s --world=<value> --robot=<value>\n", argv[0]);
-            exit(EXIT_FAILURE);
-        }
-    }
-
-    return 0;
-
     // load and compile model
     char error[1000] = "Could not load binary model";
-    if (std::strlen(argv[1]) > 4 && !std::strcmp(argv[1] + std::strlen(argv[1]) - 4, ".mjb"))
-    {
-        m = mj_loadModel(argv[1], 0);
-    }
-    else
+    if (argc > 1)
     {
         m = mj_loadXML(argv[1], 0, error, 1000);
     }
@@ -177,25 +180,9 @@ int main(int argc, char **argv)
         mju_error("Load model error: %s", error);
     }
 
-    // site_id = m->nsite;
-    // m->nsite++;
-    // m->site_type[site_id] = mjGEOM_SPHERE;
-    // m->site_bodyid[site_id] = 0;
-    // m->site_matid[site_id] = -1;
-    // m->site_size[3*site_id] = 0.1;
-    // m->site_size[3*site_id + 1] = 0.1;
-    // m->site_size[3*site_id + 2] = 0.1;
-    // m->site_pos[3*site_id] = 0;
-    // m->site_pos[3*site_id + 1] = 0;
-    // m->site_pos[3*site_id + 2] = 1;
-    // m->site_quat[4*site_id] = 1;
-    // m->site_rgba[4*site_id] = 1;
-    // m->site_rgba[4*site_id + 1] = 1;
-    // m->site_rgba[4*site_id + 2] = 0;
-    // m->site_rgba[4*site_id + 3] = 1;
-
-    // mj_saveLastXML("test.xml", m, "abc", 1000);
-    // mj_printData(m, d, "data.txt");
+    cursor_body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, "cursor");
+    cursor_id = m->body_mocapid[cursor_body_id];
+    cursor_site_id = mj_name2id(m, mjtObj::mjOBJ_SITE, "cursor");
 
     // make data
     d = mj_makeData(m);
@@ -216,6 +203,34 @@ int main(int argc, char **argv)
     mjv_defaultOption(&opt);
     mjv_defaultScene(&scn);
     mjr_defaultContext(&con);
+
+    cam.type = mjCAMERA_FREE;
+
+    // mjtNum w = d->mocap_quat[4*cursor_id];
+    // mjtNum x = d->mocap_quat[4*cursor_id + 1];
+    // mjtNum y = d->mocap_quat[4*cursor_id + 2];
+    // mjtNum z = d->mocap_quat[4*cursor_id + 3];
+
+    // cam_elevation_0 = mju_atan2(2.f * (w * x + y * z), 1.f - 2.f * (x * x + y * y)) / M_PI * 180.f;
+    // cam_azimuth_0 = mju_atan2(2.f * (w * z + x * y), 1.f - 2.f * (y * y + z * z)) / M_PI * 180.f + 90.f;
+
+    cam.distance = cam_distance_0;
+    cam.elevation = m->vis.global.elevation;
+    cam.azimuth = m->vis.global.azimuth;
+
+    // cursor_roll = cam.elevation / 180.f * M_PI;
+    // cursor_yaw = cam.azimuth / 180.f * M_PI;
+
+    // double cy = mju_cos(cursor_yaw * 0.5);
+    // double sy = mju_sin(cursor_yaw * 0.5);
+    // double cr = mju_cos(cursor_roll * 0.5);
+    // double sr = mju_sin(cursor_roll * 0.5);
+
+    // mjtNum quat[4] = {cr * cy, sr * cy, sr * sy, cr * sy};
+    // d->mocap_quat[0] = quat[0];
+    // d->mocap_quat[1] = quat[1];
+    // d->mocap_quat[2] = quat[2];
+    // d->mocap_quat[3] = quat[3];
 
     // create scene and context
     mjv_makeScene(m, &scn, 2000);
@@ -240,6 +255,18 @@ int main(int argc, char **argv)
             mj_step(m, d);
         }
 
+        cam.lookat[0] = d->mocap_pos[3*cursor_id];
+        cam.lookat[1] = d->mocap_pos[3*cursor_id+1];
+        cam.lookat[2] = d->mocap_pos[3*cursor_id+2];
+        
+        // mjtNum w = d->mocap_quat[4*cursor_id];
+        // mjtNum x = d->mocap_quat[4*cursor_id + 1];
+        // mjtNum y = d->mocap_quat[4*cursor_id + 2];
+        // mjtNum z = d->mocap_quat[4*cursor_id + 3];
+
+        // cam.elevation = mju_atan2(2.f * (w * x + y * z), 1.f - 2.f * (x * x + y * y)) / M_PI * 180.f;
+        // cam.azimuth = mju_atan2(2.f * (w * z + x * y), 1.f - 2.f * (y * y + z * z)) / M_PI * 180.f + 90.f;
+        
         // get framebuffer viewport
         mjrRect viewport = {0, 0, 0, 0};
         glfwGetFramebufferSize(window, &viewport.width, &viewport.height);
