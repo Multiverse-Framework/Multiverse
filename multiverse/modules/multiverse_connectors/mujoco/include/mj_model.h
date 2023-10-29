@@ -18,61 +18,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef VISUAL
-#include "mj_visual.h"
-#endif
+#pragma once
 
-#include "mj_simulate.h"
-#ifdef __linux__
-#include <jsoncpp/json/json.h>
-#include <jsoncpp/json/reader.h>
-#elif _WIN32
-#include <json/json.h>
-#include <json/reader.h>
-#endif
-#include <thread>
-#include <csignal>
+#include <mujoco/mujoco.h>
 
-static MjSimulate &mj_simulate = MjSimulate::get_instance();
-#ifdef VISUAL
-static MjVisual &mj_visual = MjVisual::get_instance();
-#endif
+#include <boost/filesystem.hpp>
+#include <mutex>
 
-// Signal handler function
-void signal_handler(int signum) {
-    printf("Interrupt signal (%d) received.\n", signum);
-    
-    stop = true;
+// MuJoCo data structures
+extern mjModel *m; // MuJoCo model
+extern mjData *d;  // MuJoCo data
 
-    // Exit program
-    exit(signum);
-}
+extern std::mutex mtx;
 
-int main(int argc, char **argv)
-{
-    // Register signal handler for SIGINT
-    signal(SIGINT, signal_handler);
+extern boost::filesystem::path scene_xml_path;
 
-    // print version, check compatibility
-    printf("MuJoCo version %s\n", mj_versionString());
-
-    if (argc != 2)
-    {
-        mju_error("USAGE:  mujoco mjcf.xml\n");
-    }
-    scene_xml_path = argv[1];
-    
-    mj_simulate.init();
-#ifdef VISUAL
-    mj_visual.init();
-#endif
-
-    std::thread sim_thread(&MjSimulate::run, &mj_simulate);
-#ifdef VISUAL
-    mj_visual.run();
-#endif
-    
-    sim_thread.join();
-
-    return 0;
-}
+extern bool stop;

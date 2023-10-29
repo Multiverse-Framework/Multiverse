@@ -43,6 +43,7 @@ multiverse/lib
 multiverse/build
 multiverse/external
 multiverse/tests/**/output
+multiverse/saved
 
 # VSC
 .vscode

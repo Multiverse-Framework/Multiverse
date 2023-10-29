@@ -18,61 +18,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef VISUAL
-#include "mj_visual.h"
-#endif
-
 #include "mj_simulate.h"
-#ifdef __linux__
-#include <jsoncpp/json/json.h>
-#include <jsoncpp/json/reader.h>
-#elif _WIN32
-#include <json/json.h>
-#include <json/reader.h>
-#endif
-#include <thread>
-#include <csignal>
 
-static MjSimulate &mj_simulate = MjSimulate::get_instance();
-#ifdef VISUAL
-static MjVisual &mj_visual = MjVisual::get_instance();
-#endif
-
-// Signal handler function
-void signal_handler(int signum) {
-    printf("Interrupt signal (%d) received.\n", signum);
-    
-    stop = true;
-
-    // Exit program
-    exit(signum);
+MjSimulate::~MjSimulate()
+{
+    mj_deleteData(d);
+    mj_deleteModel(m);
 }
 
-int main(int argc, char **argv)
+void MjSimulate::init()
 {
-    // Register signal handler for SIGINT
-    signal(SIGINT, signal_handler);
+    // load and compile model
+    char error[1000] = "Could not load binary model";
 
-    // print version, check compatibility
-    printf("MuJoCo version %s\n", mj_versionString());
+    m = mj_loadXML(scene_xml_path.c_str(), 0, error, 1000);
 
-    if (argc != 2)
+    if (!m)
     {
-        mju_error("USAGE:  mujoco mjcf.xml\n");
+        mju_error("Load model error: %s", error);
     }
-    scene_xml_path = argv[1];
-    
-    mj_simulate.init();
-#ifdef VISUAL
-    mj_visual.init();
-#endif
 
-    std::thread sim_thread(&MjSimulate::run, &mj_simulate);
-#ifdef VISUAL
-    mj_visual.run();
-#endif
-    
-    sim_thread.join();
+    // make data
+    d = mj_makeData(m);
+}
 
-    return 0;
+void MjSimulate::run()
+{
+    while(!stop)
+    {
+        mj_step1(m, d);
+        mj_step2(m, d);
+    }
 }

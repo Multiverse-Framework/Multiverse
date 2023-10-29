@@ -1,7 +1,17 @@
-mujoco:
+sim_1:
+  simulator: mujoco
   world:
     path: floor/mjcf/floor.xml
   robots:
     tiago_dual:
       path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
       pos: [1, 2, 0]
+
+sim_2:
+  simulator: mujoco
+  world:
+    path: floor/mjcf/floor.xml
+  robots:
+    tiago_dual:
+      path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
+      pos: [-1, -2, 0]

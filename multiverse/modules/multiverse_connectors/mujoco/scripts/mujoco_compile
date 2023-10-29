@@ -3,8 +3,11 @@
 import json
 import argparse
 import shutil
-import os 
+import os
 import mujoco
+from typing import List
+import xml.etree.ElementTree as ET
+
 
 class Robot:
     def __init__(self):
@@ -14,12 +17,11 @@ class Robot:
         self.pos = [0.0, 0.0, 0.0]
 
 
-def parse_robot(data):
+def parse_robot(data: str) -> List[Robot]:
     try:
         root = json.loads(data)
     except json.JSONDecodeError as e:
-        print(f"Robots: {data}")
-        print(f"Failed to parse JSON: {str(e)}")
+        print(f"Failed to parse {data}: {str(e)}")
         return []
 
     robots = []
@@ -27,7 +29,7 @@ def parse_robot(data):
         robot = Robot()
         robot.name = robot_name
         robot.path = robot_data.get("path", "")
-        robot.pos = robot_data.get("pos", [0.0, 0.0, 0.0])
+        robot.pos = robot_data.get("pos", None)
         robot.joint_state = robot_data.get("joint_state", {})
         robots.append(robot)
 
@@ -39,18 +41,26 @@ def main():
     parser = argparse.ArgumentParser(description="Compile MJCF from world and robots.")
 
     # Define arguments
+    parser.add_argument("--name", help="Name of the simulation", required=True)
     parser.add_argument("--world", help="Path to world MJCF", required=True)
-    parser.add_argument(
-        "--robots", help="JSON string with robots' data", required=False
-    )
+    parser.add_argument("--robots", help="JSON string with robots' data", required=False)
 
     # Parse arguments
-    args = parser.parse_args()
+    args, _ = parser.parse_known_args()
 
     world_xml_path = args.world
     print(f"World: {world_xml_path}")
 
-    scene_name, _ = os.path.splitext(os.path.basename(world_xml_path))
+    scene_name = args.name
+
+    save_dir_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "saved", scene_name)
+
+    if not os.path.exists(save_dir_path):
+        os.makedirs(save_dir_path)
+
+    save_xml_path = os.path.join(save_dir_path, scene_name + ".xml")
+
+    shutil.copy(world_xml_path, save_xml_path)
 
     if args.robots:
         robots_json_str = args.robots.replace("'", '"')
@@ -65,27 +75,77 @@ def main():
                 for joint_name, joint_value in robot.joint_state.items():
                     print(f"   {joint_name}: {joint_value}")
 
-    save_dir_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "saved", scene_name)
+            robot_xml_file = robot.name + ".xml"
+            robot_xml_path = os.path.join(save_dir_path, robot_xml_file)
+            shutil.copy(robot.path, robot_xml_path)
 
-    if not os.path.exists(save_dir_path):
-        os.makedirs(save_dir_path)
+            tree = ET.parse(robot_xml_path)
+            root = tree.getroot()
+            for compiler_element in root.findall("compiler"):
+                if "meshdir" in compiler_element.attrib:
+                    meshdir = compiler_element.get("meshdir")
+                    del compiler_element.attrib["meshdir"]
+                    break
 
-    shutil.copy(world_xml_path, save_dir_path)
+            if not os.path.isabs(meshdir):
+                meshdir = os.path.join(os.path.dirname(robot.path), meshdir)
 
-    save_xml_path = os.path.join(save_dir_path, os.path.basename(world_xml_path))
+            for asset_element in root.findall("asset"):
+                for mesh_element in asset_element.findall("mesh"):
+                    if "file" in mesh_element.attrib:
+                        file = mesh_element.get("file")
+                        if not os.path.isabs(file):
+                            file = os.path.join(meshdir, file)
+                            mesh_element.set("file", file)
+
+            if robot.pos is not None:
+                for worldbody_element in root.findall("worldbody"):
+                    for body_element in worldbody_element.findall("body"):
+                        if body_element.get("name") == robot.name:
+                            body_element.set("pos", " ".join(map(str, robot.pos)))
+
+            tree.write(robot_xml_path, encoding="utf-8", xml_declaration=True)
+
+            tree = ET.parse(save_xml_path)
+            root = tree.getroot()
+            include_element = ET.Element("include", {"file": robot_xml_file})
+            root.append(include_element)
+            tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
     m = mujoco.MjModel.from_xml_path(save_xml_path)
-    if mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, 'cursor') == -1:
-        with open(save_xml_path, 'r') as file:
-            xml_string = file.read()
+    if mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, "cursor") == -1:
+        tree = ET.parse(save_xml_path)
+        root = tree.getroot()
+        visual_element = ET.Element("visual")
+        root.append(visual_element)
+        global_element = ET.Element("global", {"fovy": "45", "azimuth": "225", "elevation": "-30"})
+        visual_element.append(global_element)
+        worldbody_element = ET.Element("worldbody")
+        root.append(worldbody_element)
+        body_element = ET.Element("body", {"name": "cursor", "mocap": "true", "pos": "0 0 0", "euler": "0 0 0"})
+        worldbody_element.append(body_element)
+        body_element.append(
+            ET.Element(
+                "site",
+                {"name": "cursor_x", "pos": "0.1 0.0 0.0", "size": "0.01 0.1", "euler": "0.0 1.5708 0.0", "type": "cylinder", "rgba": "1 0 0 0.5"},
+            )
+        )
+        body_element.append(
+            ET.Element(
+                "site",
+                {"name": "cursor_y", "pos": "0.0 0.1 0.0", "size": "0.01 0.1", "euler": "1.5708 0.0 0.0", "type": "cylinder", "rgba": "0 1 0 0.5"},
+            )
+        )
+        body_element.append(
+            ET.Element(
+                "site",
+                {"name": "cursor_z", "pos": "0.0 0.0 0.1", "size": "0.01 0.1", "euler": "0.0 0.0 0.0", "type": "cylinder", "rgba": "0 0 1 0.5"},
+            )
+        )
+        tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
-        cursor = """\n\t<visual>\n\t\t<global azimuth="45" elevation="-30"/>\n\t</visual>\n\t<worldbody>\n\t\t<body name="cursor" mocap="true" pos="0 0 0" euler="0 0 0">\n\t\t\t<site name="cursor" size="0.05 0.01" type="cylinder" rgba="1 1 0 0.5"/>\n\t\t</body>\n\t</worldbody>\n"""
-        xml_string = xml_string.replace('</mujoco>', cursor + '</mujoco>')
+    print(f"Scene: {save_xml_path}", end="")
 
-        with open(save_xml_path, 'w') as file:
-            file.write(xml_string)
-
-    print(f"Scene: {save_xml_path}")
 
 if __name__ == "__main__":
     main()
