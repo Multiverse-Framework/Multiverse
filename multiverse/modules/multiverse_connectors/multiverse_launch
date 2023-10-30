@@ -11,102 +11,10 @@ MUV_FILE=$1
 
 # Check if the file exists
 if [ ! -f "$MUV_FILE" ]; then
-    echo "Error: File '$MUV_FILE' not found."
+    echo "Error: File $MUV_FILE not found."
     exit 1
 fi
 
-# Python script for parsing the MUV file
-python_script='
-import sys
-import yaml
-import os
-import subprocess
-import re
-import threading
+MULTIVERSE_PATH=$(dirname $(dirname $0))
 
-workers = []
-
-def run_subprocess(cmd):
-    cmd_str = " ".join(cmd)
-    print(f"Execute \"{cmd_str}\"")
-    subprocess.run(cmd)
-
-def parse_mujoco(mujoco_data):
-    world_xml_path = os.path.join(sys.argv[2], "world")
-    if "world" in mujoco_data and "path" in mujoco_data["world"]:
-        if os.path.isabs(mujoco_data["world"]["path"]):
-            world_xml_path = mujoco_data["world"]["path"]
-        else:
-            world_xml_path = os.path.join(world_xml_path, mujoco_data["world"]["path"])
-    else:
-        world_xml_path = os.path.join(world_xml_path, "floor/mjcf/floor.xml")
-    
-    mujoco_args = [f"--world={world_xml_path}"]
-
-    robots_xml_path = os.path.join(sys.argv[2], "robot")
-    if "robots" in mujoco_data:
-        for robot_name in mujoco_data["robots"]:
-            if "path" in mujoco_data["robots"][robot_name]:
-                if not os.path.isabs(mujoco_data["robots"][robot_name]["path"]):
-                    mujoco_data["robots"][robot_name]["path"] = os.path.join(robots_xml_path, mujoco_data["robots"][robot_name]["path"])
-        robots_dict = str(mujoco_data["robots"]).replace(" ", "")
-        mujoco_args.append(f"--robots={robots_dict}")
-
-    return mujoco_args
-
-def parse_simulator(simulator_data):
-    if simulator_data["simulator"] == "mujoco":
-        return parse_mujoco(simulator_data)
-    else:
-        return None
-
-def main(muv_file, resources_path, simulator):
-    try:
-        with open(muv_file, "r") as file:
-            data = yaml.safe_load(file)
-    except Exception as e:
-        print(f"Error reading MUV file: {e}")
-        sys.exit(1)
-
-    for name, simulator_data in data.items():
-        if "simulator" not in simulator_data or simulator_data["simulator"] != simulator:
-            continue
-
-        cmd = [f"mujoco_compile", f"--name={name}"]
-        cmd += parse_simulator(simulator_data)
-        cmd_str = " ".join(cmd)
-        print(f"Execute \"{cmd_str}\"")
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        if result.returncode == 0:
-            print(result.stdout)
-            scene_xml_path = re.search(r"Scene:\s*([^\n]+)", result.stdout).group(1)
-            if not simulator_data.get("headless", False):
-                worker = threading.Thread(target=run_subprocess, args=([f"mujoco", f"{scene_xml_path}"],))
-            else:
-                worker = threading.Thread(target=run_subprocess, args=([f"mujoco_headless", f"{scene_xml_path}"],))
-                
-            worker.start()
-            workers.append(worker)
-
-    try:
-        for worker in workers:
-            worker.join()
-    except KeyboardInterrupt:
-        print("Caught Ctrl+C. Exiting gracefully.")
-
-    for worker in workers:
-        worker.join()
-
-if __name__ == "__main__":
-    main(sys.argv[1], sys.argv[2], sys.argv[3])
-'
-
-extract_value_after_key() {
-    local key=$1
-    local params="$2"
-    echo "$params" | grep -oP "(?<=$key=)[^ ]+" | sed "s/'//g"
-}
-
-RESOURCES_PATH=$(dirname $(dirname $0))/resources
-
-python3 -c "$python_script" "$MUV_FILE" "$RESOURCES_PATH" "mujoco"
+python3 $MULTIVERSE_PATH/modules/multiverse_connectors/multiverse_launch.py "$MUV_FILE"

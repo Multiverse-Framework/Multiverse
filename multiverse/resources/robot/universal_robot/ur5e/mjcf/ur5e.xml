@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<mujoco model="ur5e">
+	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<option timestep="0.01" gravity="0 0 0">
+		<flag contact="disable"/>
+	</option>
+	<default>
+		<default class="visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="collision">
+			<geom rgba="1.0 0.0 0.0 0.5"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="base_collision1d01d01d0" file="stl/base1d01d01d0.stl"/>
+		<mesh name="shoulder_collision1d01d01d0" file="stl/shoulder1d01d01d0.stl"/>
+		<mesh name="upperarm_collision1d01d01d0" file="stl/upperarm1d01d01d0.stl"/>
+		<mesh name="forearm_collision1d01d01d0" file="stl/forearm1d01d01d0.stl"/>
+		<mesh name="wrist1_collision1d01d01d0" file="stl/wrist11d01d01d0.stl"/>
+		<mesh name="wrist2_collision1d01d01d0" file="stl/wrist21d01d01d0.stl"/>
+		<mesh name="wrist3_collision1d01d01d0" file="stl/wrist31d01d01d0.stl"/>
+	</asset>
+	<worldbody>
+		<body name="ur5e" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<body name="base_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<body name="base" pos="0.0 0.0 0.0" quat="6.123233995736766e-17 0.0 0.0 1.0"/>
+				<body name="base_link_inertia" pos="0.0 0.0 0.0" quat="6.123233995736766e-17 0.0 0.0 1.0">
+					<geom name="base_link_inertia_collision_0" pos="0.0 0.0 0.0" quat="6.123233995736766e-17 0.0 0.0 1.0" class="collision" type="mesh" mesh="base_collision1d01d01d0"/>
+					<body name="shoulder_link" pos="0.0 0.0 0.1625" quat="1.0 0.0 0.0 0.0">
+						<geom name="shoulder_link_collision_0" pos="0.0 0.0 0.0" quat="6.123233995736766e-17 0.0 0.0 1.0" class="collision" type="mesh" mesh="shoulder_collision1d01d01d0"/>
+						<joint name="shoulder_pan_joint" pos="0.0 0.0 0.0" type="hinge" range="0.0 3.141592653589793" axis="0.0 0.0 1.0"/>
+						<body name="upper_arm_link" pos="0.0 0.0 0.0" quat="0.7071067811140325 0.7071067812590626 0.0 0.0">
+							<geom name="upper_arm_link_collision_0" pos="0.0 0.0 0.138" quat="0.5000000000000001 0.5 -0.4999999999999999 -0.5" class="collision" type="mesh" mesh="upperarm_collision1d01d01d0"/>
+							<joint name="shoulder_lift_joint" pos="0.0 0.0 0.0" type="hinge" range="-3.141592653589793 0.0" axis="0.0 0.0 1.0"/>
+							<body name="forearm_link" pos="-0.425 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+								<geom name="forearm_link_collision_0" pos="0.0 0.0 0.007" quat="0.5000000000000001 0.5 -0.4999999999999999 -0.5" class="collision" type="mesh" mesh="forearm_collision1d01d01d0"/>
+								<joint name="elbow_joint" pos="0.0 0.0 0.0" type="hinge" range="0.0 2.792526803190927" axis="0.0 0.0 1.0"/>
+								<body name="wrist_1_link" pos="-0.39219999999999994 0.0 0.1333" quat="1.0 0.0 0.0 0.0">
+									<geom name="wrist_1_link_collision_0" pos="0.0 0.0 -0.127" quat="0.7071067811865476 0.7071067811865475 0.0 0.0" class="collision" type="mesh" mesh="wrist1_collision1d01d01d0"/>
+									<joint name="wrist_1_joint" pos="5.551115123125783e-17 -1.3943248149359506e-42 -6.798155367234455e-33" type="hinge" range="-3.141592653589793 1.3962634015954636" axis="0.0 0.0 1.0"/>
+									<body name="wrist_2_link" pos="0.0 -0.0997 -2.044880931251214e-11" quat="0.7071067811140325 0.7071067812590626 0.0 0.0">
+										<geom name="wrist_2_link_collision_0" pos="0.0 0.0 -0.0997" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="wrist2_collision1d01d01d0"/>
+										<joint name="wrist_2_joint" pos="2.1382117680737565e-50 -2.5104663791261076e-18 5.149054595376939e-28" type="hinge" range="-0.17453292519943295 6.283185307179586" axis="0.0 0.0 1.0"/>
+										<body name="wrist_3_link" pos="0.0 0.0996 -2.042829794213219e-11" quat="-0.7071067811140325 0.7071067812590626 -1.184881086872929e-16 -3.189250306608282e-17">
+											<geom name="wrist_3_link_collision_0" pos="0.0 0.0 -0.0989" quat="0.7071067811865476 0.7071067811865475 0.0 0.0" class="collision" type="mesh" mesh="wrist3_collision1d01d01d0"/>
+											<joint name="wrist_3_joint" pos="0.0 1.4513101558374102e-27 3.537994788930424e-18" type="hinge" range="-1.5707963267948966 1.5707963267948966" axis="0.0 0.0 1.0"/>
+											<body name="flange" pos="0.0 0.0 0.0" quat="0.5000000000000001 -0.4999999999999999 -0.5 -0.5">
+												<body name="tool0" pos="0.0 0.0 1.3877787807814457e-17" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
+													<body name="gripper_hand_e_base" pos="0.0 0.0 0.0" quat="0.7071067811865476 0.7071067811865475 -2.453269466693394e-18 4.906538933386799e-17">
+														<geom name="gripper_hand_e_base_collision_1" pos="0.0 0.101861 0.0" quat="0.7071067811865476 0.7071067811865475 0.0 0.0" class="collision" type="cylinder" size="0.0375 0.010939"/>
+														<geom name="gripper_hand_e_base_collision_2" pos="0.0 0.062011 0.0" quat="0.7071067811865476 0.7071067811865475 0.0 0.0" class="collision" type="cylinder" size="0.025 0.028911"/>
+														<geom name="gripper_hand_e_base_collision_0" pos="0.0 0.01655 0.0" quat="0.7071067811865476 0.7071067811865475 0.0 0.0" class="collision" type="cylinder" size="0.0375 0.01655"/>
+														<body name="gripper_hand_e_finger_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 2.8698592549372254e-42">
+															<geom name="gripper_hand_e_finger_1_collision_0" pos="0.0 0.13705 0.027498" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.01 0.02275 0.003"/>
+															<joint name="gripper_hand_e_finger_1_joint" pos="0.0 -0.0 0.0" type="slide" range="0.0 0.02500000037252903" axis="0.0 0.0 -1.0000000000000004"/>
+														</body>
+														<body name="gripper_hand_e_finger_2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 2.8698592549372254e-42">
+															<geom name="gripper_hand_e_finger_2_collision_0" pos="0.0 0.13705 -0.028502" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.01 0.02275 0.003"/>
+															<joint name="gripper_hand_e_finger_2_joint" pos="0.0 -0.0 0.0" type="slide" range="0.0 0.02500000037252903" axis="0.0 0.0 1.0"/>
+														</body>
+													</body>
+												</body>
+											</body>
+										</body>
+									</body>
+								</body>
+							</body>
+						</body>
+					</body>
+				</body>
+			</body>
+		</body>
+	</worldbody>
+</mujoco>

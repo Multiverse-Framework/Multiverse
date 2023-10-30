@@ -2,7 +2,7 @@
 
 import rospy
 from typing import Dict
-from tf2_ros import TransformBroadcaster
+from tf2_msgs.msg import TFMessage
 from geometry_msgs.msg import TransformStamped
 from multiverse_socket.multiverse_publishers import MultiverseRosPublisher
 import numpy
@@ -12,10 +12,9 @@ class tf_publisher(MultiverseRosPublisher):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self._use_meta_data = True
-        self.__tf_broadcaster = TransformBroadcaster()
-        self.__refresh_time = rospy.Time.now()
+        self.__tf_publisher = rospy.Publisher(self.topic, TFMessage, queue_size=100)
         self.__tf_msgs = []
-        self.__root_frame_id = rospy.get_param("multiverse/root_frame_id") if rospy.has_param("multiverse/root_frame_id") else "map"
+        self.__root_frame_id = rospy.get_param("/multiverse_client/ros/root_frame_id") if rospy.has_param("/multiverse_client/ros/root_frame_id") else "map"
         self.__seq = 0
 
     def _init_request_meta_data(self) -> None:
@@ -56,4 +55,4 @@ class tf_publisher(MultiverseRosPublisher):
         self.__seq += 1
 
     def _publish(self) -> None:
-        self.__tf_broadcaster.sendTransform(self.__tf_msgs)
+        self.__tf_publisher.publish(TFMessage(self.__tf_msgs))

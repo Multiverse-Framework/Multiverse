@@ -42,11 +42,8 @@ void MjSimulate::init()
     d = mj_makeData(m);
 }
 
-void MjSimulate::run()
+void MjSimulate::step()
 {
-    while(!stop)
-    {
-        mj_step1(m, d);
-        mj_step2(m, d);
-    }
+    mj_step1(m, d);
+    mj_step2(m, d);
 }

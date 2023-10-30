@@ -10,22 +10,23 @@ class MultiverseRosBase:
     _request_meta_data_dict = {}
 
     def __init__(self, **kwargs) -> None:
-        self.host = str(rospy.get_param(param_name="/multiverse/host", default="tcp://127.0.0.1"))
+        self.host = str(rospy.get_param(param_name="/multiverse_server/host", default="tcp://127.0.0.1"))
         self.port = str(kwargs.get("port"))
+        self.world = str(kwargs.get("world", ""))
         self._init_request_meta_data()
 
     def start(self) -> None:
         pass
 
     def _init_multiverse_socket(self) -> None:
-        if rospy.has_param("/multiverse/port"):
-            server_socket_addr = self.host + ":" + str(rospy.get_param("/multiverse/port"))
+        if rospy.has_param("/multiverse_server/port"):
+            server_socket_addr = self.host + ":" + str(rospy.get_param("/multiverse_server/port"))
         else:
             server_socket_addr = self.host + ":7000"
         self.__multiverse_socket = MultiverseClientPybind(server_socket_addr)
 
     def _init_request_meta_data(self) -> None:
-        self._request_meta_data_dict = init_request_meta_data_dict()
+        self._request_meta_data_dict = init_request_meta_data_dict(self.world)
 
     def _connect(self) -> None:
         self.__multiverse_socket.connect(self.host, self.port)

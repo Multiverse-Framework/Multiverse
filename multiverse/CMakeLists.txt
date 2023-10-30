@@ -4,11 +4,13 @@ project(Multiverse)
 
 set(BIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 set(EXT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
 
-set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
@@ -16,7 +18,7 @@ if(UNIX)
     set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)")
 endif()
 
-# add_subdirectory(src)
+add_subdirectory(src)
 
 if(UNIX)
     add_subdirectory(modules)

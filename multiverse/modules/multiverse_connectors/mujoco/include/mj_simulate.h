@@ -43,10 +43,10 @@ public:
     void init();
 
     /**
-     * @brief Run the simulation
+     * @brief Advance the simulation
      * 
      */
-    void run();
+    void step();
 
 private:
     MjSimulate() = default; // Singleton

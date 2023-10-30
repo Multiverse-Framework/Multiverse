@@ -804,6 +804,7 @@ int main(int argc, char **argv)
     signal(SIGINT, [](int signum)
            {
         printf("[Server] Interrupt signal (%d) received, wait for 1s then shutdown.\n", signum);
+        zmq_sleep(1);
         should_shut_down = true; 
         server_context.shutdown(); });
 

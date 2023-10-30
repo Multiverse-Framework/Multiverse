@@ -32,6 +32,7 @@
 	</asset>
 	<worldbody>
 		<body name="tiago_dual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<!-- <freejoint/> -->
 			<body name="base_footprint" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<body name="base_cover_link" pos="0.0 0.0 0.13" quat="1.0 0.0 0.0 0.0"/>
 				<body name="base_link" pos="0.0 0.0 0.0985" quat="1.0 0.0 0.0 0.0">

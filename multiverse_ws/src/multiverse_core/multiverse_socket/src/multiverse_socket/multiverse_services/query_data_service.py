@@ -13,16 +13,18 @@ class query_data_service(MultiverseRosServiceServer):
         self._service_class = Socket
         self.__worlds = {}
 
-    def update_world(self) -> None:
+    def update_world(self, world_name) -> None:
         super()._init_request_meta_data()
+        self._request_meta_data_dict["world"] = ""
         self._request_meta_data_dict["receive"][""] = [""]
         self._set_request_meta_data()
         self._communicate(True)
         response_meta_data_dict = self._get_response_meta_data()
         if response_meta_data_dict:
-            world_name = response_meta_data_dict["world"]
             self.__worlds[world_name] = {}
             self.__worlds[world_name][""] = {""}
+            if "receive" not in response_meta_data_dict:
+                return
             for object_name, object_data in response_meta_data_dict["receive"].items():
                 self.__worlds[world_name][object_name] = {""}
                 for attribute_name in object_data:
@@ -30,7 +32,7 @@ class query_data_service(MultiverseRosServiceServer):
                     self.__worlds[world_name][object_name].add(attribute_name)
 
     def _bind_request_meta_data(self, request: SocketRequest) -> None:
-        world_name = "world" if request.world == "" else request.world
+        world_name = request.world
         world_need_update = False
 
         if self.__worlds.get(world_name) is None:
@@ -47,7 +49,7 @@ class query_data_service(MultiverseRosServiceServer):
                         break
 
         if world_need_update:
-            self.update_world()
+            self.update_world(world_name)
 
         self._request_meta_data_dict = {}
         self._request_meta_data_dict["world"] = world_name
@@ -61,7 +63,7 @@ class query_data_service(MultiverseRosServiceServer):
         self._request_meta_data_dict["receive"] = {}
 
         for object_attribute in request.receive:
-            if self.__worlds[world_name].get(object_attribute.object_name) is None:
+            if world_name not in self.__worlds or object_attribute.object_name not in self.__worlds[world_name]:
                 continue
             self._request_meta_data_dict["receive"][object_attribute.object_name] = []
             for attribute_name in object_attribute.attribute_names:

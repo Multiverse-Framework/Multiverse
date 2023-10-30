@@ -10,6 +10,7 @@ class MultiverseRosPublisher(MultiverseRosBase):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
+        self.topic = str(kwargs.get("topic"))
         self.rate = rospy.Rate(float(kwargs.get("rate", 60)))
 
     def start(self) -> None:

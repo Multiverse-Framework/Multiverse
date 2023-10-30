@@ -15,3 +15,46 @@ sim_2:
     tiago_dual:
       path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
       pos: [-1, -2, 0]
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_client:
+  sim_1:
+    port: 7501
+    world: world_1
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue"]
+
+  sim_2:
+    port: 7502
+    world: world_2
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue"]
+
+  ros:
+    length_unit: m
+    angle_unit: rad
+    force_unit: N
+    time_unit: s
+    handedness: rhs
+
+    root_frame_id: map
+
+    services:
+      query_data:
+        port: 7400
+
+    publishers:
+      tf:
+        - world: world_1
+          topic: /tf
+          port: 7301
+          rate: 60
+        - world: world_2
+          topic: /tf
+          port: 7302
+          rate: 60

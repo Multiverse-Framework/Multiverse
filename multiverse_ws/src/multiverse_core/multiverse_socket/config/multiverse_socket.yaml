@@ -1,4 +1,8 @@
-multiverse:
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_client:
   length_unit: m
   angle_unit: rad
   force_unit: N
