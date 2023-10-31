@@ -7,7 +7,10 @@ import os
 import mujoco
 from typing import List
 import xml.etree.ElementTree as ET
+from xml.dom import minidom
 
+default_map = {}
+asset_map = {"mesh":{}}
 
 class Robot:
     def __init__(self):
@@ -15,6 +18,7 @@ class Robot:
         self.path = ""
         self.joint_state = {}
         self.pos = [0.0, 0.0, 0.0]
+        self.suffix = {"body": "", "mesh": ""}
 
 
 def parse_robot(data: str) -> List[Robot]:
@@ -30,11 +34,67 @@ def parse_robot(data: str) -> List[Robot]:
         robot.name = robot_name
         robot.path = robot_data.get("path", "")
         robot.pos = robot_data.get("pos", None)
+        robot.suffix = robot_data.get("suffix", {"body": ""})
         robot.joint_state = robot_data.get("joint_state", {})
         robots.append(robot)
 
     return robots
 
+
+def modify_robot(save_dir_path, robot: Robot) -> str:
+    print(f"- Name: {robot.name}")
+    print(f"  Path: {robot.path}")
+    print(f"  Position: {robot.pos}")
+    if robot.joint_state:
+        print("  Joint state:")
+        for joint_name, joint_value in robot.joint_state.items():
+            print(f"   {joint_name}: {joint_value}")
+
+    robot_xml_file = robot.name + ".xml"
+    robot_xml_path = os.path.join(save_dir_path, robot_xml_file)
+    shutil.copy(robot.path, robot_xml_path)
+
+    tree = ET.parse(robot_xml_path)
+    root = tree.getroot()
+    for compiler_element in root.findall("compiler"):
+        if "meshdir" in compiler_element.attrib:
+            meshdir = compiler_element.get("meshdir")
+            del compiler_element.attrib["meshdir"]
+            break
+
+    for default_element in root.findall("default"):
+        for default_child_element in default_element.findall("default"):
+            default_map[default_child_element.get("class")] = list(default_child_element)
+    root.remove(default_element)
+
+    if not os.path.isabs(meshdir):
+        meshdir = os.path.join(os.path.dirname(robot.path), meshdir)
+
+    for asset_element in root.findall("asset"):
+        for mesh_element in asset_element.findall("mesh"):
+            if "file" in mesh_element.attrib:
+                file = mesh_element.get("file")
+                if not os.path.isabs(file):
+                    file = os.path.join(meshdir, file)
+                    mesh_element.set("file", file)
+            asset_map["mesh"][mesh_element.get("name")] = mesh_element
+    root.remove(asset_element)
+
+    if robot.pos is not None:
+        for worldbody_element in root.findall("worldbody"):
+            for body_element in worldbody_element.findall("body"):
+                if body_element.get("name") == robot.name:
+                    body_element.set("pos", " ".join(map(str, robot.pos)))
+
+    body_suffix = robot.suffix["body"]
+    for body_id, body_element in enumerate(root.findall('.//body')):
+        body_name = body_element.get("name")
+        if body_name is None:
+            body_element.set("name", f"body_{body_id}")
+        body_element.set("name", f"{body_name}{body_suffix}")
+        
+    tree.write(robot_xml_path, encoding="utf-8", xml_declaration=True)
+    return robot_xml_path
 
 def main():
     # Initialize argument parser
@@ -43,7 +103,9 @@ def main():
     # Define arguments
     parser.add_argument("--name", help="Name of the simulation", required=True)
     parser.add_argument("--world", help="Path to world MJCF", required=True)
-    parser.add_argument("--robots", help="JSON string with robots' data", required=False)
+    parser.add_argument(
+        "--robots", help="JSON string with robots' data", required=False
+    )
 
     # Parse arguments
     args, _ = parser.parse_known_args()
@@ -53,7 +115,8 @@ def main():
 
     scene_name = args.name
 
-    save_dir_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "saved", scene_name)
+    save_dir_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "saved")
+    save_dir_path = os.path.join(save_dir_path, scene_name)
 
     if not os.path.exists(save_dir_path):
         os.makedirs(save_dir_path)
@@ -67,50 +130,28 @@ def main():
         robots = parse_robot(robots_json_str)
         print("Robots:")
         for robot in robots:
-            print(f"- Name: {robot.name}")
-            print(f"  Path: {robot.path}")
-            print(f"  Position: {robot.pos}")
-            if robot.joint_state:
-                print("  Joint state:")
-                for joint_name, joint_value in robot.joint_state.items():
-                    print(f"   {joint_name}: {joint_value}")
-
-            robot_xml_file = robot.name + ".xml"
-            robot_xml_path = os.path.join(save_dir_path, robot_xml_file)
-            shutil.copy(robot.path, robot_xml_path)
-
-            tree = ET.parse(robot_xml_path)
-            root = tree.getroot()
-            for compiler_element in root.findall("compiler"):
-                if "meshdir" in compiler_element.attrib:
-                    meshdir = compiler_element.get("meshdir")
-                    del compiler_element.attrib["meshdir"]
-                    break
-
-            if not os.path.isabs(meshdir):
-                meshdir = os.path.join(os.path.dirname(robot.path), meshdir)
-
-            for asset_element in root.findall("asset"):
-                for mesh_element in asset_element.findall("mesh"):
-                    if "file" in mesh_element.attrib:
-                        file = mesh_element.get("file")
-                        if not os.path.isabs(file):
-                            file = os.path.join(meshdir, file)
-                            mesh_element.set("file", file)
-
-            if robot.pos is not None:
-                for worldbody_element in root.findall("worldbody"):
-                    for body_element in worldbody_element.findall("body"):
-                        if body_element.get("name") == robot.name:
-                            body_element.set("pos", " ".join(map(str, robot.pos)))
-
-            tree.write(robot_xml_path, encoding="utf-8", xml_declaration=True)
+            robot_xml_file = modify_robot(save_dir_path, robot)
 
             tree = ET.parse(save_xml_path)
             root = tree.getroot()
-            include_element = ET.Element("include", {"file": robot_xml_file})
+            include_element = ET.Element("include", {"file": os.path.basename(robot_xml_file)})
             root.append(include_element)
             tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
+
+    tree = ET.parse(save_xml_path)
+    root = tree.getroot()
+    default_parent_element = ET.Element("default")
+    root.append(default_parent_element)
+    for class_name, default_elements in default_map.items():
+        default_child_element = ET.Element("default", {"class" : class_name})
+        default_parent_element.append(default_child_element)
+        for default_element in default_elements:
+            default_child_element.append(default_element)
+    asset_element = ET.Element("asset")
+    root.append(asset_element)
+    for _, mesh_element in asset_map["mesh"].items():
+        asset_element.append(mesh_element)
+    tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
     m = mujoco.MjModel.from_xml_path(save_xml_path)
     if mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, "cursor") == -1:
@@ -118,30 +159,58 @@ def main():
         root = tree.getroot()
         visual_element = ET.Element("visual")
         root.append(visual_element)
-        global_element = ET.Element("global", {"fovy": "45", "azimuth": "225", "elevation": "-30"})
+        global_element = ET.Element(
+            "global", {"fovy": "45", "azimuth": "225", "elevation": "-30"}
+        )
         visual_element.append(global_element)
         worldbody_element = ET.Element("worldbody")
         root.append(worldbody_element)
-        body_element = ET.Element("body", {"name": "cursor", "mocap": "true", "pos": "0 0 0", "euler": "0 0 0"})
+        body_element = ET.Element(
+            "body",
+            {"name": "cursor", "mocap": "true", "pos": "0 0 0", "euler": "0 0 0"},
+        )
         worldbody_element.append(body_element)
         body_element.append(
             ET.Element(
                 "site",
-                {"name": "cursor_x", "pos": "0.1 0.0 0.0", "size": "0.01 0.1", "euler": "0.0 1.5708 0.0", "type": "cylinder", "rgba": "1 0 0 0.5"},
+                {
+                    "name": "cursor_x",
+                    "pos": "0.1 0.0 0.0",
+                    "size": "0.01 0.1",
+                    "euler": "0.0 1.5708 0.0",
+                    "type": "cylinder",
+                    "rgba": "1 0 0 0.5",
+                },
             )
         )
         body_element.append(
             ET.Element(
                 "site",
-                {"name": "cursor_y", "pos": "0.0 0.1 0.0", "size": "0.01 0.1", "euler": "1.5708 0.0 0.0", "type": "cylinder", "rgba": "0 1 0 0.5"},
+                {
+                    "name": "cursor_y",
+                    "pos": "0.0 0.1 0.0",
+                    "size": "0.01 0.1",
+                    "euler": "1.5708 0.0 0.0",
+                    "type": "cylinder",
+                    "rgba": "0 1 0 0.5",
+                },
             )
         )
         body_element.append(
             ET.Element(
                 "site",
-                {"name": "cursor_z", "pos": "0.0 0.0 0.1", "size": "0.01 0.1", "euler": "0.0 0.0 0.0", "type": "cylinder", "rgba": "0 0 1 0.5"},
+                {
+                    "name": "cursor_z",
+                    "pos": "0.0 0.0 0.1",
+                    "size": "0.01 0.1",
+                    "euler": "0.0 0.0 0.0",
+                    "type": "cylinder",
+                    "rgba": "0 0 1 0.5",
+                },
             )
         )
+
+        ET.indent(tree, space="\t", level=0)
         tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
     print(f"Scene: {save_xml_path}", end="")

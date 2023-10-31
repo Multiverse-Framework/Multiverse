@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 # Check if an argument is provided
 if [ $# -eq 0 ]; then
@@ -16,5 +16,7 @@ if [ ! -f "$MUV_FILE" ]; then
 fi
 
 MULTIVERSE_PATH=$(dirname $(dirname $0))
+
+source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash
 
 python3 $MULTIVERSE_PATH/modules/multiverse_connectors/multiverse_launch.py "$MUV_FILE"

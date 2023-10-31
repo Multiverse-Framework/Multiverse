@@ -6,6 +6,13 @@ sim_1:
     tiago_dual:
       path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
       pos: [1, 2, 0]
+      suffix:
+        body: _0
+    ur5e:
+      path: universal_robot/ur5e/mjcf/ur5e.xml
+      pos: [0, 0, 1]
+      suffix:
+        body: _1
 
 sim_2:
   simulator: mujoco
