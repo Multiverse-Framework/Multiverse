@@ -12,15 +12,17 @@ class MultiverseRosSocket:
 
     def start(self):
         subscribers = rospy.get_param("/multiverse_client/ros/subscribers", default={})
-        for subscriber_name, subscriber_prop in subscribers.items():
-            subscriber_name += "_subscriber"
-            exec(f"from multiverse_socket.multiverse_subscribers.{subscriber_name} import {subscriber_name}")
-            subscriber = eval(subscriber_name)(**subscriber_prop)
-            self.subscribers.append(subscriber)
+        for subscriber_name, subscriber_props in subscribers.items():
+            for subscriber_prop in subscriber_props:
+                rospy.loginfo(f"Start subscriber [{subscriber_name}] with {subscriber_prop}")
 
-            subscriber_thread = threading.Thread(target=subscriber.start)
-            subscriber_thread.start()
-            self.threads[subscriber] = subscriber_thread
+                exec(f"from multiverse_socket.multiverse_subscribers import {subscriber_name}_subscriber")
+                subscriber = eval(f"{subscriber_name}_subscriber")(**subscriber_prop)
+                self.subscribers.append(subscriber)
+
+                subscriber_thread = threading.Thread(target=subscriber.start)
+                subscriber_thread.start()
+                self.threads[subscriber] = subscriber_thread
 
         publishers = rospy.get_param("/multiverse_client/ros/publishers", default={})
         for publisher_name, publisher_props in publishers.items():
@@ -39,10 +41,8 @@ class MultiverseRosSocket:
         for service_name, service_prop in services.items():
             rospy.loginfo(f"Start service server [{service_name}] with {service_prop}")
 
-            service_name += "_service"
-            exec(f"from multiverse_socket.multiverse_services.{service_name} import {service_name}")
-
-            service = eval(service_name)(**service_prop)
+            exec(f"from multiverse_socket.multiverse_services import {service_name}_service")
+            service = eval(f"{service_name}_service")(**service_prop)
             self.services.append(service)
 
             service_thread = threading.Thread(target=service.start)

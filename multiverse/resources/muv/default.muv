@@ -27,6 +27,8 @@ multiverse_client:
     send:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue"]
+    receive:
+      tiago_dual: ["relative_velocity"]
 
   sim_2:
     port: 7502
@@ -42,8 +44,6 @@ multiverse_client:
     time_unit: s
     handedness: rhs
 
-    root_frame_id: map
-
     services:
       query_data:
         port: 7400
@@ -54,7 +54,16 @@ multiverse_client:
           topic: /tf
           port: 7301
           rate: 60
+          root_frame_id: map
         - world: world_2
           topic: /tf
           port: 7302
           rate: 60
+          root_frame_id: map_2
+
+    subscribers:
+      cmd_vel:
+        - world: world_1
+          topic: /cmd_vel
+          port: 7200
+          body: tiago_dual

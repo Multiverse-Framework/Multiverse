@@ -12,7 +12,6 @@ class cmd_vel_subscriber(MultiverseRosSubscriber):
         elif not isinstance(self.__body, str):
             raise TypeError("Body is not a string.")
         super().__init__(**kwargs)
-        self._topic_name = "/cmd_vel"
         self._data_class = Twist
 
     def _init_request_meta_data(self) -> None:

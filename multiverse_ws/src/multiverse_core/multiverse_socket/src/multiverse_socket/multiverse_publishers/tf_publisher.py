@@ -14,7 +14,7 @@ class tf_publisher(MultiverseRosPublisher):
         self._use_meta_data = True
         self.__tf_publisher = rospy.Publisher(self.topic, TFMessage, queue_size=100)
         self.__tf_msgs = []
-        self.__root_frame_id = rospy.get_param("/multiverse_client/ros/root_frame_id") if rospy.has_param("/multiverse_client/ros/root_frame_id") else "map"
+        self.__root_frame_id = str(kwargs.get("root_frame_id", "map"))
         self.__seq = 0
 
     def _init_request_meta_data(self) -> None:

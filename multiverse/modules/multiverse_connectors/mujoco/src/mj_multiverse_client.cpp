@@ -544,12 +544,16 @@ void MjMultiverseClient::init_send_and_receive_data()
 				{
 					if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 					{
-						receive_data_vec.emplace_back(&d->qvel[dof_id]);
-						receive_data_vec.emplace_back(&d->qvel[dof_id + 1]);
-						receive_data_vec.emplace_back(&d->qvel[dof_id + 2]);
-						receive_data_vec.emplace_back(&d->qvel[dof_id + 3]);
-						receive_data_vec.emplace_back(&d->qvel[dof_id + 4]);
-						receive_data_vec.emplace_back(&d->qvel[dof_id + 5]);
+						if (odom_velocities.count(body_id) == 0)
+						{
+							odom_velocities[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
+							receive_data_vec.emplace_back(&odom_velocities[body_id][0]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][1]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][2]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][3]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][4]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][5]);
+						}
 					}
 					else if (m->body_dofnum[body_id] > 0 && m->body_jntadr[body_id] != 1)
 					{
@@ -653,6 +657,48 @@ void MjMultiverseClient::bind_receive_data()
 	}
 
 	mtx.lock();
+	for (std::pair<const int, mjtNum *> &odom_velocity : odom_velocities)
+	{
+		const int body_id = odom_velocity.first;
+		const int dof_adr = m->body_dofadr[body_id];
+		if (m->body_dofnum[body_id] == 6)
+		{
+			const int joint_id = m->body_jntadr[body_id];
+			const int qpos_id = m->jnt_qposadr[joint_id];
+
+			const mjtNum w = d->qpos[7 * qpos_id + 3];
+			const mjtNum x = d->qpos[7 * qpos_id + 4];
+			const mjtNum y = d->qpos[7 * qpos_id + 5];
+			const mjtNum z = d->qpos[7 * qpos_id + 6];
+
+			const mjtNum sinr_cosp = 2 * (w * x + y * z);
+			const mjtNum cosr_cosp = 1 - 2 * (x * x + y * y);
+			mjtNum odom_x_joint_pos = std::atan2(sinr_cosp, cosr_cosp);
+
+			const mjtNum sinp = 2 * (w * y - z * x);
+			mjtNum odom_y_joint_pos;
+			if (std::abs(sinp) >= 1)
+			{
+				odom_y_joint_pos = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+			}
+			else
+			{
+				odom_y_joint_pos = std::asin(sinp);
+			}
+
+			const mjtNum siny_cosp = 2 * (w * z + x * y);
+			const mjtNum cosy_cosp = 1 - 2 * (y * y + z * z);
+			mjtNum odom_z_joint_pos= std::atan2(siny_cosp, cosy_cosp);
+			
+			d->qvel[dof_adr] 	 = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) - mju_cos(odom_x_joint_pos) * mju_sin(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + mju_sin(odom_x_joint_pos) * mju_sin(odom_z_joint_pos));
+			d->qvel[dof_adr + 1] = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + mju_cos(odom_x_joint_pos) * mju_cos(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) - mju_sin(odom_x_joint_pos) * mju_cos(odom_z_joint_pos));
+			d->qvel[dof_adr + 2] = odom_velocity.second[0] * mju_sin(odom_y_joint_pos) + odom_velocity.second[1] * mju_sin(odom_x_joint_pos) * mju_cos(odom_y_joint_pos) + odom_velocity.second[2] * mju_cos(odom_x_joint_pos) * mju_cos(odom_y_joint_pos);
+			d->qvel[dof_adr + 3] = odom_velocity.second[3];
+			d->qvel[dof_adr + 4] = odom_velocity.second[4];
+			d->qvel[dof_adr + 5] = odom_velocity.second[5];
+		}
+	}
+
 	for (size_t i = 0; i < receive_buffer_size - 1; i++)
 	{
 		*receive_data_vec[i] = receive_buffer[i + 1];
