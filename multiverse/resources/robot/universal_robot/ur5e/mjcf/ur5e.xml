@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <mujoco model="ur5e">
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
-	<option timestep="0.01" gravity="0 0 0">
-		<flag contact="disable"/>
+	<option timestep="0.01" gravity="0 0 -9.81">
+		<flag contact="enable"/>
 	</option>
 	<default>
 		<default class="visual">
@@ -23,6 +23,7 @@
 	</asset>
 	<worldbody>
 		<body name="ur5e" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<freejoint/>
 			<body name="base_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<body name="base" pos="0.0 0.0 0.0" quat="6.123233995736766e-17 0.0 0.0 1.0"/>
 				<body name="base_link_inertia" pos="0.0 0.0 0.0" quat="6.123233995736766e-17 0.0 0.0 1.0">

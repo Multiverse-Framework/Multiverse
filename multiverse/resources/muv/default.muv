@@ -4,18 +4,24 @@ sim_1:
     path: floor/mjcf/floor.xml
   robots:
     tiago_dual_0:
-      robot_body: tiago_dual
       path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
-      pos: [1, 2, 0]
+      apply:
+        body:
+          tiago_dual_0:
+            pos: [1, 2, 0]
+          gravcomp: 1
       disable_self_collision: auto
+      gravcomp: 1
       suffix:
         body: _0
         geom: _0
         joint: _0
     tiago_dual_1:
-      robot_body: tiago_dual
       path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
-      pos: [-1, -2, 0]
+      apply:
+        body:
+          tiago_dual_1:
+            pos: [-1, -2, 0]
       disable_self_collision: auto
       suffix:
         body: _1
@@ -27,10 +33,10 @@ sim_2:
   world:
     path: floor/mjcf/floor.xml
   robots:
-    tiago_dual:
-      robot_body: tiago_dual
-      path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
-      pos: [0, 0, 0]
+    ur5e:
+      robot_body: ur5e
+      path: universal_robot/ur5e/mjcf/ur5e.xml
+      pos: [0, 0, 1]
       disable_self_collision: auto
 
 multiverse_server:
@@ -45,6 +51,7 @@ multiverse_client:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue"]
     receive:
+      tiago_dual_0: ["relative_velocity"]
       tiago_dual_1: ["relative_velocity"]
 
   sim_2:
@@ -82,5 +89,9 @@ multiverse_client:
       cmd_vel:
         - world: world_1
           topic: /cmd_vel
-          port: 7200
+          port: 7201
+          body: tiago_dual_0
+        - world: world_1
+          topic: /cmd_vel
+          port: 7202
           body: tiago_dual_1

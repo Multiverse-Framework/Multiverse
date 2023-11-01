@@ -555,15 +555,6 @@ void MjMultiverseClient::init_send_and_receive_data()
 							receive_data_vec.emplace_back(&odom_velocities[body_id][5]);
 						}
 					}
-					else if (m->body_dofnum[body_id] > 0 && m->body_jntadr[body_id] != 1)
-					{
-						// receive_data_vec.emplace_back(&MjSim::odom_vels[body_name + "_lin_odom_x_joint"]);
-						// receive_data_vec.emplace_back(&MjSim::odom_vels[body_name + "_lin_odom_y_joint"]);
-						// receive_data_vec.emplace_back(&MjSim::odom_vels[body_name + "_lin_odom_z_joint"]);
-						// receive_data_vec.emplace_back(&MjSim::odom_vels[body_name + "_ang_odom_x_joint"]);
-						// receive_data_vec.emplace_back(&MjSim::odom_vels[body_name + "_ang_odom_y_joint"]);
-						// receive_data_vec.emplace_back(&MjSim::odom_vels[body_name + "_ang_odom_z_joint"]);
-					}
 					else
 					{
 						printf("%s for %s not supported", attribute_name.c_str(), body_name.c_str());
@@ -666,10 +657,10 @@ void MjMultiverseClient::bind_receive_data()
 			const int joint_id = m->body_jntadr[body_id];
 			const int qpos_id = m->jnt_qposadr[joint_id];
 
-			const mjtNum w = d->qpos[7 * qpos_id + 3];
-			const mjtNum x = d->qpos[7 * qpos_id + 4];
-			const mjtNum y = d->qpos[7 * qpos_id + 5];
-			const mjtNum z = d->qpos[7 * qpos_id + 6];
+			const mjtNum w = (d->qpos + qpos_id)[3];
+			const mjtNum x = (d->qpos + qpos_id)[4];
+			const mjtNum y = (d->qpos + qpos_id)[5];
+			const mjtNum z = (d->qpos + qpos_id)[6];
 
 			const mjtNum sinr_cosp = 2 * (w * x + y * z);
 			const mjtNum cosr_cosp = 1 - 2 * (x * x + y * y);
@@ -690,12 +681,13 @@ void MjMultiverseClient::bind_receive_data()
 			const mjtNum cosy_cosp = 1 - 2 * (y * y + z * z);
 			mjtNum odom_z_joint_pos= std::atan2(siny_cosp, cosy_cosp);
 			
-			d->qvel[dof_adr] 	 = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) - mju_cos(odom_x_joint_pos) * mju_sin(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + mju_sin(odom_x_joint_pos) * mju_sin(odom_z_joint_pos));
-			d->qvel[dof_adr + 1] = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + mju_cos(odom_x_joint_pos) * mju_cos(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) - mju_sin(odom_x_joint_pos) * mju_cos(odom_z_joint_pos));
-			d->qvel[dof_adr + 2] = odom_velocity.second[0] * mju_sin(odom_y_joint_pos) + odom_velocity.second[1] * mju_sin(odom_x_joint_pos) * mju_cos(odom_y_joint_pos) + odom_velocity.second[2] * mju_cos(odom_x_joint_pos) * mju_cos(odom_y_joint_pos);
-			d->qvel[dof_adr + 3] = odom_velocity.second[3];
-			d->qvel[dof_adr + 4] = odom_velocity.second[4];
-			d->qvel[dof_adr + 5] = odom_velocity.second[5];
+			mjtNum *qvel = d->qvel + dof_adr;
+			qvel[0] = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) - mju_cos(odom_x_joint_pos) * mju_sin(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + mju_sin(odom_x_joint_pos) * mju_sin(odom_z_joint_pos));
+			qvel[1] = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + mju_cos(odom_x_joint_pos) * mju_cos(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) - mju_sin(odom_x_joint_pos) * mju_cos(odom_z_joint_pos));
+			qvel[2] = odom_velocity.second[0] * mju_sin(odom_y_joint_pos) + odom_velocity.second[1] * mju_sin(odom_x_joint_pos) * mju_cos(odom_y_joint_pos) + odom_velocity.second[2] * mju_cos(odom_x_joint_pos) * mju_cos(odom_y_joint_pos);
+			qvel[3] = odom_velocity.second[3];
+			qvel[4] = odom_velocity.second[4];
+			qvel[5] = odom_velocity.second[5];
 		}
 	}
 

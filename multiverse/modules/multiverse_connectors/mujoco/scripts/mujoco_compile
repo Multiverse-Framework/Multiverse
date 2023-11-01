@@ -18,7 +18,7 @@ class Robot:
         self.robot_body = ""
         self.path = ""
         self.joint_state = {}
-        self.pos = [0.0, 0.0, 0.0]
+        self.apply = {}
         self.disable_self_collision = "auto"
         self.suffix = {}
 
@@ -51,7 +51,7 @@ def parse_robot(data: str) -> List[Robot]:
         robot.name = robot_name
         robot.robot_body = robot_data.get("robot_body", robot_name)
         robot.path = robot_data.get("path", "")
-        robot.pos = robot_data.get("pos", None)
+        robot.apply = robot_data.get("apply", {})
         robot.suffix = robot_data.get("suffix", {"body": "", "joint": "", "geom": ""})
         robot.joint_state = robot_data.get("joint_state", {})
         robot.disable_self_collision = robot_data.get("disable_self_collision", "auto")
@@ -71,7 +71,7 @@ def update_element_name(elements: list, element_type: str, suffix: str):
 def modify_robot(save_dir_path: str, robot: Robot) -> str:
     print(f"- Name: {robot.name}")
     print(f"  Path: {robot.path}")
-    print(f"  Position: {robot.pos}")
+    print(f"  Apply: {robot.apply}")
     if robot.joint_state:
         print("  Joint state:")
         for joint_name, joint_value in robot.joint_state.items():
@@ -126,24 +126,35 @@ def modify_robot(save_dir_path: str, robot: Robot) -> str:
             asset_dict["mesh"][mesh_element.get("name")] = mesh_element
     root.remove(asset_element)
 
-    if robot.pos is not None:
-        for worldbody_element in root.findall("worldbody"):
-            for body_element in worldbody_element.findall("body"):
-                if body_element.get("name") == robot.robot_body:
-                    body_element.set("pos", " ".join(map(str, robot.pos)))
-
-    for element_name, element_suffix in robot.suffix.items():
+    for element_type, element_suffix in robot.suffix.items():
         update_element_name(
-            root.findall(f".//{element_name}"), element_name, element_suffix
+            root.findall(f".//{element_type}"), element_type, element_suffix
         )
 
     body_suffix = robot.suffix["body"]
     for contact_element in root.findall("contact"):
         for exclude_element in contact_element.findall("exclude"):
             body1_name = exclude_element.get("body1")
-            exclude_element.set("body1", f"{body1_name}{body_suffix}")
+            body1_name = f"{body1_name}{body_suffix}"
+            exclude_element.set("body1", body1_name)
             body2_name = exclude_element.get("body2")
-            exclude_element.set("body2", f"{body2_name}{body_suffix}")
+            body2_name = f"{body2_name}{body_suffix}"
+            exclude_element.set("body2", f"{body2_name}")
+            exclude_element.set("name", f"{body1_name}_{body2_name}")
+
+    for element_type, attributes in robot.apply.items():
+        for attribute_name, attribute_props in attributes.items():
+            if isinstance(attribute_props, dict):
+                for attribute_child_name, attribute_child_prop in attribute_props.items():
+                    for element in list(root.iter(element_type)):
+                        if element.get("name") == attribute_name:
+                            element.set(attribute_child_name, " ".join(map(str, attribute_child_prop)))
+            elif isinstance(attribute_props, list):
+                for element in list(root.iter(element_type)):
+                    element.set(attribute_name, " ".join(map(str, attribute_props)))
+            else:
+                for element in list(root.iter(element_type)):
+                    element.set(attribute_name, f"{attribute_props}")
 
     ET.indent(tree, space="\t", level=0)
     tree.write(robot_xml_path, encoding="utf-8", xml_declaration=True)
