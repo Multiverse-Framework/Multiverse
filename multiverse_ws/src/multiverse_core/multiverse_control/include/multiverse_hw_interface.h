@@ -27,18 +27,47 @@
 #include <hardware_interface/joint_state_interface.h>
 #include <hardware_interface/robot_hw.h>
 
-class MultiverseHWInterface : public hardware_interface::RobotHW
+class MultiverseHWInterface : public MultiverseClientJson, public hardware_interface::RobotHW
 {
 public:
-    MultiverseHWInterface(const std::map<std::string, double> &joint_states);
+    MultiverseHWInterface(const std::string &server_host, const std::string &server_port, const std::string &client_port, const std::map<std::string, std::string> &robot_joints, const std::string &in_world);
 
     ~MultiverseHWInterface();
 
 public:
-    void read();
+    void communicate(const bool resend_meta_data = false) override;
 
-    void write();
+private:
+    std::map<std::string, std::string> meta_data;
 
+    std::map<std::string, std::set<std::string>> send_objects;
+
+    std::map<std::string, std::set<std::string>> receive_objects;
+
+private:
+    void start_connect_to_server_thread() override;
+
+    void wait_for_connect_to_server_thread_finish() override;
+
+    void start_meta_data_thread() override;
+
+    void wait_for_meta_data_thread_finish() override;
+
+    bool init_objects() override;
+
+    void bind_request_meta_data() override;
+
+    void bind_response_meta_data() override;
+
+    void init_send_and_receive_data() override;
+
+    void bind_send_data() override;
+
+    void bind_receive_data() override;
+
+    void clean_up() override;
+
+public:
     void doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
                   const std::list<hardware_interface::ControllerInfo> &stop_list);
 
@@ -55,12 +84,8 @@ private:
     std::vector<std::string> joint_names;
 
     // States
-    std::vector<double> joint_positions;
-    std::vector<double> joint_velocities;
-    std::vector<double> joint_efforts;
+    std::map<std::string, double *> joint_states;
 
     // Commands
-    std::vector<double> joint_positions_command;
-    std::vector<double> joint_velocities_command;
-    std::vector<double> joint_efforts_command;
+    std::map<std::string, double *> joint_commands;
 };

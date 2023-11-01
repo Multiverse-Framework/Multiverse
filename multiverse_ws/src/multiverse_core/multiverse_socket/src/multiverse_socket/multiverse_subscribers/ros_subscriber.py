@@ -13,7 +13,6 @@ class MultiverseRosSubscriber(MultiverseRosBase):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.topic = str(kwargs.get("topic"))
-        self.use_thread = True
 
     def start(self) -> None:
         self._init_multiverse_socket()

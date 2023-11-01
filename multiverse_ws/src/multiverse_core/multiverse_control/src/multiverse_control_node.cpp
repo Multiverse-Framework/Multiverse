@@ -165,8 +165,22 @@ int main(int argc, char **argv)
     std::string world = multiverse_client_params_json["world"].toStyledString();
     world.erase(std::remove(world.begin(), world.end(), '\"'), world.end());
     world.erase(std::remove(world.begin(), world.end(), '\n'), world.end());
+    
+    const Json::Value robot_joints_json = multiverse_params_json["robot_joints"];
+    std::map<std::string, std::string> robot_joints;
+    for (std::string joint_name : robot_joints_json.getMemberNames())
+	{
+        std::string joint_type = robot_joints_json[joint_name].toStyledString();
+        joint_name.erase(std::remove(world.begin(), world.end(), '\"'), world.end());
+        joint_name.erase(std::remove(world.begin(), world.end(), '\n'), world.end());
+        joint_type.erase(std::remove(world.begin(), world.end(), '\"'), world.end());
+        joint_type.erase(std::remove(world.begin(), world.end(), '\n'), world.end());
+        robot_joints[joint_name] = joint_type;
+    }
 
-    // mj_multiverse_client.init(server_host, server_port, client_port, multiverse_client_params_json["send"], multiverse_client_params_json["receive"], world);
+    MultiverseHWInterface multiverse_hw_interface(server_host, server_port, client_port, robot_joints, world);
+
+    // // mj_multiverse_client.init(server_host, server_port, client_port, multiverse_client_params_json["send"], multiverse_client_params_json["receive"], world);
 
     return 0;
 }

@@ -75,7 +75,7 @@ def main():
     for simulator in simulators:
         processes[simulator] = []
 
-    robot_state = {}
+    robot_joints = {}
     for name, simulator_data in data.items():
         if (
             "simulator" not in simulator_data
@@ -92,7 +92,7 @@ def main():
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode == 0:
             print(result.stdout)
-            robot_state |= ast.literal_eval(re.search(r"Robot state:\s*([^\n]+)", result.stdout).group(1))
+            robot_joints |= ast.literal_eval(re.search(r"Robot joints:\s*([^\n]+)", result.stdout).group(1))
             scene_xml_path = re.search(r"Scene:\s*([^\n]+)", result.stdout).group(1)
             cmd = [f"{scene_xml_path}"]
 
@@ -127,10 +127,11 @@ def main():
     if multiverse_server_dict is not None and "multiverse_client" in data and "ros_control" in data["multiverse_client"]:
         for world, robots in data["multiverse_client"]["ros_control"].items():
             for robot, robot_params in robots.items():
-                if robot in robot_state:
+                if robot in robot_joints:
                     multiverse_dict = {
                         "multiverse_server": multiverse_server_dict,
                         "multiverse_client": robot_params["meta_data"] | {"world": world},
+                        "robot_joints": robot_joints[robot]
                     }
                     cmd = [
                         "rosrun",
@@ -139,7 +140,7 @@ def main():
                         f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"','\"'),
                     ]
                     process = run_subprocess(cmd)
-                    # processes["ros_control"].append(process)
+                    processes["ros_control"].append(process)
 
     try:
         processes["multiverse_server"][0].wait()

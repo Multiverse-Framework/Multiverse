@@ -20,34 +20,40 @@
 
 #include "multiverse_hw_interface.h"
 
-MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, double> &joint_states)
+MultiverseHWInterface::MultiverseHWInterface(const std::string &server_host, const std::string &server_port, const std::string &client_port, const std::map<std::string, std::string> &robot_joints, const std::string &in_world)
 {
-    for (const std::pair<std::string, double> joint_state : joint_states)
+    for (const std::pair<std::string, std::string> robot_joint : robot_joints)
     {
-        joint_names.push_back(joint_state.first);
-        joint_positions.push_back(joint_state.second);
+        if (robot_joint.second == "prismatic" || robot_joint.second == "revolute")
+        {
+            if (robot_joint.second == "prismatic")
+            {
+                receive_objects[robot_joint.first] = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
+                send_objects[robot_joint.first] = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
+            }
+            else if (robot_joint.second == "revolute")
+            {
+                receive_objects[robot_joint.first] = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
+                send_objects[robot_joint.first] = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
+            }
+            joint_names.push_back(robot_joint.first);
+            joint_states[robot_joint.first] = (double *)calloc(3, sizeof(double));
+            joint_commands[robot_joint.first] = (double *)calloc(3, sizeof(double));
+        }
     }
     
-    std::size_t num_joints = joint_names.size();
-    joint_velocities.resize(num_joints, 0.);
-    joint_efforts.resize(num_joints, 0.);
-
-    joint_positions_command.resize(num_joints, 0.);
-    joint_velocities_command.resize(num_joints, 0.);
-    joint_efforts_command.resize(num_joints, 0.);
-
-    for (std::size_t i = 0; i < num_joints; i++)
+    for (const std::string &joint_name : joint_names)
     {
-        hardware_interface::JointStateHandle joint_state_handle(joint_names[i], &joint_positions[i], &joint_velocities[i], &joint_efforts[i]);
+        hardware_interface::JointStateHandle joint_state_handle(joint_name, &joint_states[joint_name][0], &joint_states[joint_name][1], &joint_states[joint_name][2]);
         joint_state_interface.registerHandle(joint_state_handle);
 
-        hardware_interface::JointHandle joint_handle_position(joint_state_interface.getHandle(joint_names[i]), &joint_positions_command[i]);
+        hardware_interface::JointHandle joint_handle_position(joint_state_interface.getHandle(joint_name), &joint_commands[joint_name][0]);
         position_joint_interface.registerHandle(joint_handle_position);
 
-        hardware_interface::JointHandle joint_handle_velocity(joint_state_interface.getHandle(joint_names[i]), &joint_velocities_command[i]);
+        hardware_interface::JointHandle joint_handle_velocity(joint_state_interface.getHandle(joint_name), &joint_commands[joint_name][1]);
         velocity_joint_interface.registerHandle(joint_handle_velocity);
 
-        hardware_interface::JointHandle joint_handle_effort(joint_state_interface.getHandle(joint_names[i]), &joint_efforts_command[i]);
+        hardware_interface::JointHandle joint_handle_effort(joint_state_interface.getHandle(joint_name), &joint_commands[joint_name][2]);
         effort_joint_interface.registerHandle(joint_handle_effort);
     }
     registerInterface(&joint_state_interface);
@@ -60,42 +66,103 @@ MultiverseHWInterface::~MultiverseHWInterface()
 {
 }
 
-void MultiverseHWInterface::read()
+bool MultiverseHWInterface::init_objects()
 {
-    // mj_inverse(m, d);
-    // for (std::size_t i = 0; i < joint_names.size(); i++)
-    // {
-    //     const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, joint_names[i].c_str());
-    //     const int qpos_id = m->jnt_qposadr[joint_id];
-    //     const int dof_id = m->jnt_dofadr[joint_id];
-    //     joint_positions[i] = d->qpos[qpos_id];
-    //     joint_velocities[i] = d->qvel[dof_id];
-    //     joint_efforts[i] = d->qfrc_inverse[dof_id];
-    // }
+    return send_objects.size() > 0 || receive_objects.size() > 0;
 }
 
-void MultiverseHWInterface::write()
+void MultiverseHWInterface::start_connect_to_server_thread()
 {
-    // for (std::size_t i = 0; i < joint_names.size(); i++)
-    // {
-    //     if (MjSim::controlled_joints.find(joint_names[i]) != MjSim::controlled_joints.end())
-    //     {
-    //         const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, joint_names[i].c_str());
-    //         const int dof_id = m->jnt_dofadr[joint_id];
-    //         if (mju_abs(joint_velocities_command[i]) > mjMINVAL)
-    //         {
-    //             MjSim::dq[dof_id] = joint_velocities_command[i];
-    //         }
-    //         else
-    //         {
-    //             MjSim::ddq[dof_id] = joint_efforts_command[i];
-    //         }
-    //     }
-    // }
+    connect_to_server();
+}
+
+void MultiverseHWInterface::wait_for_connect_to_server_thread_finish()
+{
+}
+
+void MultiverseHWInterface::start_meta_data_thread()
+{
+    send_and_receive_meta_data();
+}
+
+void MultiverseHWInterface::wait_for_meta_data_thread_finish()
+{
+}
+
+void MultiverseHWInterface::bind_request_meta_data()
+{
+    // Create JSON object and populate it
+    request_meta_data_json.clear();
+    request_meta_data_json["world"] = meta_data["world"];
+    request_meta_data_json["length_unit"] = meta_data["length_unit"];
+    request_meta_data_json["angle_unit"] = meta_data["angle_unit"];
+    request_meta_data_json["mass_unit"] = meta_data["mass_unit"];
+    request_meta_data_json["time_unit"] = meta_data["time_unit"];
+    request_meta_data_json["handedness"] = meta_data["handedness"];
+
+    for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
+    {
+        for (const std::string &attribute_name : send_object.second)
+        {
+            request_meta_data_json["send"][send_object.first].append(attribute_name);
+        }
+    }
+
+    for (const std::pair<std::string, std::set<std::string>> &receive_object : receive_objects)
+    {
+        for (const std::string &attribute_name : receive_object.second)
+        {
+            request_meta_data_json["receive"][receive_object.first].append(attribute_name);
+        }
+    }
+
+    request_meta_data_str = request_meta_data_json.toStyledString();
+}
+
+void MultiverseHWInterface::bind_response_meta_data()
+{
+}
+
+void MultiverseHWInterface::init_send_and_receive_data()
+{
+    
+}
+
+void MultiverseHWInterface::bind_send_data()
+{
+    *send_buffer = get_time_now();
+
+    for (const std::string &joint_name : joint_names)
+    {
+        *send_buffer++ = joint_commands[joint_name][0];
+        *send_buffer++ = joint_commands[joint_name][1];
+        *send_buffer++ = joint_commands[joint_name][2];
+    }
+}
+
+void MultiverseHWInterface::bind_receive_data()
+{
+    receive_buffer++;
+    for (const std::string &joint_name : joint_names)
+    {
+        joint_states[joint_name][0] = *receive_buffer++;
+        joint_states[joint_name][1] = *receive_buffer++;
+        joint_states[joint_name][2] = *receive_buffer++;
+    }
+}
+
+void MultiverseHWInterface::clean_up()
+{
+
+}
+
+void MultiverseHWInterface::communicate(const bool resend_meta_data)
+{
+    MultiverseClient::communicate(resend_meta_data);
 }
 
 void MultiverseHWInterface::doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
-                             const std::list<hardware_interface::ControllerInfo> &stop_list)
+                                     const std::list<hardware_interface::ControllerInfo> &stop_list)
 {
     for (const hardware_interface::ControllerInfo &stop_controller : stop_list)
     {
@@ -103,11 +170,10 @@ void MultiverseHWInterface::doSwitch(const std::list<hardware_interface::Control
         {
             for (const std::string &joint_name : interface_resource.resources)
             {
-                std::vector<std::string>::iterator it = std::find(joint_names.begin(), joint_names.end(), joint_name);
-                if (it != joint_names.end())
+                if (std::find(joint_names.begin(), joint_names.end(), joint_name) != joint_names.end())
                 {
-                    joint_velocities_command[it - joint_names.begin()] = 0.;
-                    joint_efforts_command[it - joint_names.begin()] = 0.;
+                    joint_commands[joint_name][1] = 0.0;
+                    joint_commands[joint_name][2] = 0.0;
                 }
             }
         }

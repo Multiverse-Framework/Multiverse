@@ -11,7 +11,6 @@ class MultiverseRosServiceServer(MultiverseRosBase):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.use_thread = False
 
     def start(self) -> None:
         self._init_multiverse_socket()
