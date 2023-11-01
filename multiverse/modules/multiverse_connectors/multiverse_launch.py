@@ -5,11 +5,11 @@ import yaml
 import os
 import subprocess
 import re
-from time import sleep
 import signal
+import ast
 from typing import List
 
-processes = {"multiverse_server": [], "ros": []}
+processes = {"multiverse_server": [], "ros": [], "ros_control": []}
 simulators = {"mujoco"}
 multiverse_path = os.path.dirname(os.path.dirname(os.path.dirname(sys.argv[0])))
 resources_path = os.path.join(multiverse_path, "resources")
@@ -75,6 +75,7 @@ def main():
     for simulator in simulators:
         processes[simulator] = []
 
+    robot_state = {}
     for name, simulator_data in data.items():
         if (
             "simulator" not in simulator_data
@@ -91,6 +92,7 @@ def main():
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode == 0:
             print(result.stdout)
+            robot_state |= ast.literal_eval(re.search(r"Robot state:\s*([^\n]+)", result.stdout).group(1))
             scene_xml_path = re.search(r"Scene:\s*([^\n]+)", result.stdout).group(1)
             cmd = [f"{scene_xml_path}"]
 
@@ -122,10 +124,32 @@ def main():
         process = run_subprocess(cmd)
         processes["ros"] = [process]
 
+    if multiverse_server_dict is not None and "multiverse_client" in data and "ros_control" in data["multiverse_client"]:
+        for world, robots in data["multiverse_client"]["ros_control"].items():
+            for robot, robot_params in robots.items():
+                if robot in robot_state:
+                    multiverse_dict = {
+                        "multiverse_server": multiverse_server_dict,
+                        "multiverse_client": robot_params["meta_data"] | {"world": world},
+                    }
+                    cmd = [
+                        "rosrun",
+                        "multiverse_control",
+                        "multiverse_control_node",
+                        f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"','\"'),
+                    ]
+                    process = run_subprocess(cmd)
+                    # processes["ros_control"].append(process)
+
     try:
         processes["multiverse_server"][0].wait()
     except KeyboardInterrupt:
         print("CTRL+C detected in parent. Sending SIGINT to subprocess.")
+        for process in processes["ros_control"]:
+            print(f"Terminate ROS with PID {process.pid}")
+            process.send_signal(signal.SIGINT)
+            process.wait()
+
         for process in processes["ros"]:
             print(f"Terminate ROS with PID {process.pid}")
             process.send_signal(signal.SIGINT)

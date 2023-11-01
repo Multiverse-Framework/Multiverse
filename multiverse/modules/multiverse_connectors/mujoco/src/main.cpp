@@ -24,10 +24,8 @@
 #include "mj_multiverse_client.h"
 #include "mj_simulate.h"
 #ifdef __linux__
-#include <jsoncpp/json/json.h>
 #include <jsoncpp/json/reader.h>
 #elif _WIN32
-#include <json/json.h>
 #include <json/reader.h>
 #endif
 #include <thread>

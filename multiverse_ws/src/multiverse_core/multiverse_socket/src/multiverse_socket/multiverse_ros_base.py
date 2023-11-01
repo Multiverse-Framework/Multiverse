@@ -27,7 +27,6 @@ class MultiverseRosBase:
 
     def _init_request_meta_data(self) -> None:
         self._request_meta_data_dict = init_request_meta_data_dict(self.world)
-        print(self._request_meta_data_dict)
 
     def _connect(self) -> None:
         self.__multiverse_socket.connect(self.host, self.port)

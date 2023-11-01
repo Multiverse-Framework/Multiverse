@@ -5,7 +5,7 @@ multiverse_server:
 multiverse_client:
   length_unit: m
   angle_unit: rad
-  force_unit: N
+  mass_unit: kg
   time_unit: s
   handedness: rhs
   root_frame_id: map

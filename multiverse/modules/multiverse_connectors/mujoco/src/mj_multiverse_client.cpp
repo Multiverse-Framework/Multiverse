@@ -161,7 +161,7 @@ void MjMultiverseClient::bind_request_meta_data()
 	request_meta_data_json["world"] = world;
 	request_meta_data_json["length_unit"] = "m";
 	request_meta_data_json["angle_unit"] = "rad";
-	request_meta_data_json["force_unit"] = "N";
+	request_meta_data_json["mass_unit"] = "kg";
 	request_meta_data_json["time_unit"] = "s";
 	request_meta_data_json["handedness"] = "rhs";
 

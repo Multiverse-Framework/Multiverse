@@ -34,9 +34,12 @@ sim_2:
     path: floor/mjcf/floor.xml
   robots:
     ur5e:
-      robot_body: ur5e
       path: universal_robot/ur5e/mjcf/ur5e.xml
-      pos: [0, 0, 1]
+      apply:
+        body:
+          ur5e:
+            pos: [0, 0, 1]
+          gravcomp: 1
       disable_self_collision: auto
 
 multiverse_server:
@@ -64,7 +67,7 @@ multiverse_client:
   ros:
     length_unit: m
     angle_unit: rad
-    force_unit: N
+    mass_unit: kg
     time_unit: s
     handedness: rhs
 
@@ -95,3 +98,20 @@ multiverse_client:
           topic: /cmd_vel
           port: 7202
           body: tiago_dual_1
+
+  ros_control:
+    world_2:
+      ur5e:
+        meta_data:
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+          port: 7800
+        
+        config: universal_robot/ur5e/config/ros_control.yaml
+        controllers:
+          - joint_state_controller
+            joint_trajectory_controller
+            gripper_controller

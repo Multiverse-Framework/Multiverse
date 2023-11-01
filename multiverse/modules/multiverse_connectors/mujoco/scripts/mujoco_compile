@@ -49,7 +49,6 @@ def parse_robot(data: str) -> List[Robot]:
     for robot_name, robot_data in root.items():
         robot = Robot()
         robot.name = robot_name
-        robot.robot_body = robot_data.get("robot_body", robot_name)
         robot.path = robot_data.get("path", "")
         robot.apply = robot_data.get("apply", {})
         robot.suffix = robot_data.get("suffix", {"body": "", "joint": "", "geom": ""})
@@ -72,10 +71,6 @@ def modify_robot(save_dir_path: str, robot: Robot) -> str:
     print(f"- Name: {robot.name}")
     print(f"  Path: {robot.path}")
     print(f"  Apply: {robot.apply}")
-    if robot.joint_state:
-        print("  Joint state:")
-        for joint_name, joint_value in robot.joint_state.items():
-            print(f"   {joint_name}: {joint_value}")
 
     body_collision_dict = get_body_collision_dict(robot)
 
@@ -159,6 +154,15 @@ def modify_robot(save_dir_path: str, robot: Robot) -> str:
     ET.indent(tree, space="\t", level=0)
     tree.write(robot_xml_path, encoding="utf-8", xml_declaration=True)
     return robot_xml_path
+
+def get_all_descendants(m, body_id, descendants=None):
+    if descendants is None:
+        descendants = []
+    for i in range(m.nbody):
+        if m.body_parentid[i] == body_id:
+            descendants.append(i)
+            get_all_descendants(m, i, descendants)
+    return descendants
 
 
 def main():
@@ -281,6 +285,20 @@ def main():
 
         ET.indent(tree, space="\t", level=0)
         tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
+
+        robot_state = {}
+        for robot in robots:
+            robot_state[robot.name] = {}
+            robot_body_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, robot.name)
+            for child_body_id in get_all_descendants(m, robot_body_id):
+                if m.body_jntnum[child_body_id] == 1:
+                    joint_id = m.body_jntadr[child_body_id]
+                    joint = m.joint(joint_id)
+                    joint_name = joint.name
+                    joint_value = joint.qpos0[0]
+                    robot_state[robot.name][joint_name] = joint_value
+        robot_state_str = f"{robot_state}".replace(" ", "")
+        print(f"Robot state: {robot_state_str}")
 
     print(f"Scene: {save_xml_path}", end="")
 

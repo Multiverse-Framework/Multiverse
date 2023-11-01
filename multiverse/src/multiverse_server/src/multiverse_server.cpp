@@ -47,6 +47,16 @@ enum class EAttribute : unsigned char
     RelativeVelocity,
     JointRvalue,
     JointTvalue,
+    JointLinearVelocity,
+    JointAngularVelocity,
+    JointForce,
+    JointTorque,
+    CmdJointRvalue,
+    CmdJointTvalue,
+    CmdJointLinearVelocity,
+    CmdJointAngularVelocity,
+    CmdJointForce,
+    CmdJointTorque,
     JointPosition,
     JointQuaternion,
     Force,
@@ -71,6 +81,16 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
         {"relative_velocity", {EAttribute::RelativeVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
         {"joint_rvalue", {EAttribute::JointRvalue, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_tvalue", {EAttribute::JointTvalue, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_linear_velocity", {EAttribute::JointLinearVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_angular_velocity", {EAttribute::JointAngularVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_force", {EAttribute::JointForce, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_torque", {EAttribute::JointTorque, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"cmd_joint_rvalue", {EAttribute::CmdJointRvalue, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"cmd_joint_tvalue", {EAttribute::CmdJointTvalue, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"cmd_joint_linear_velocity", {EAttribute::CmdJointLinearVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"cmd_joint_angular_velocity", {EAttribute::CmdJointAngularVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"cmd_joint_force", {EAttribute::CmdJointForce, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"cmd_joint_torque", {EAttribute::CmdJointTorque, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_position", {EAttribute::JointPosition, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_quaternion", {EAttribute::JointQuaternion, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
         {"force", {EAttribute::Force, {0.0, 0.0, 0.0}}},
@@ -85,7 +105,9 @@ std::map<std::string, double> unit_scale =
         {"cm", 0.01},
         {"rad", 1.0},
         {"deg", M_PI / 180.0},
-        {"N", 1.0}};
+        {"mg", 0.00001},
+        {"g", 0.001},
+        {"kg", 1.0}};
 
 std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scale =
     {
@@ -104,6 +126,36 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
         {EAttribute::JointTvalue,
          {{"rhs", {1.0}},
           {"lhs", {-1.0}}}},
+        {EAttribute::JointLinearVelocity,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::JointAngularVelocity,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::JointForce,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::JointTorque,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::CmdJointRvalue,
+         {{"rhs", {1.0}},
+          {"lhs", {-1.0}}}},
+        {EAttribute::CmdJointTvalue,
+         {{"rhs", {1.0}},
+          {"lhs", {-1.0}}}},
+        {EAttribute::CmdJointLinearVelocity,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::CmdJointAngularVelocity,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::CmdJointForce,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::CmdJointTorque,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
         {EAttribute::JointPosition,
          {{"rhs", {1.0, 1.0, 1.0}},
           {"lhs", {1.0, -1.0, 1.0}}}},
@@ -337,7 +389,7 @@ private:
         const std::string length_unit = request_meta_data_json.isMember("length_unit") ? request_meta_data_json["length_unit"].asString() : "m";
         const std::string angle_unit = request_meta_data_json.isMember("angle_unit") ? request_meta_data_json["angle_unit"].asString() : "rad";
         const std::string handedness = request_meta_data_json.isMember("handedness") ? request_meta_data_json["handedness"].asString() : "rhs";
-        const std::string force_unit = request_meta_data_json.isMember("force_unit") ? request_meta_data_json["force_unit"].asString() : "N";
+        const std::string mass_unit = request_meta_data_json.isMember("mass_unit") ? request_meta_data_json["mass_unit"].asString() : "kg";
         const std::string time_unit = request_meta_data_json.isMember("time_unit") ? request_meta_data_json["time_unit"].asString() : "s";
 
         for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
@@ -361,6 +413,46 @@ private:
                       [length_unit](double &joint_tvalue)
                       { joint_tvalue = unit_scale[length_unit]; });
 
+        std::for_each(conversion_map[EAttribute::JointLinearVelocity].begin(), conversion_map[EAttribute::JointLinearVelocity].end(),
+                      [length_unit, time_unit](double &joint_linear_velocity)
+                      { joint_linear_velocity = unit_scale[length_unit] / unit_scale[time_unit]; });
+
+        std::for_each(conversion_map[EAttribute::JointAngularVelocity].begin(), conversion_map[EAttribute::JointAngularVelocity].end(),
+                      [angle_unit, time_unit](double &joint_angular_velocity)
+                      { joint_angular_velocity = unit_scale[angle_unit] / unit_scale[time_unit]; });
+
+        std::for_each(conversion_map[EAttribute::JointForce].begin(), conversion_map[EAttribute::JointForce].end(),
+                      [mass_unit, length_unit, time_unit](double &force)
+                      { force = unit_scale[mass_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
+
+        std::for_each(conversion_map[EAttribute::JointTorque].begin(), conversion_map[EAttribute::JointTorque].end(),
+                      [mass_unit, length_unit, time_unit](double &torque)
+                      { torque = unit_scale[mass_unit] * unit_scale[length_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
+
+        std::for_each(conversion_map[EAttribute::CmdJointRvalue].begin(), conversion_map[EAttribute::CmdJointRvalue].end(),
+                      [angle_unit](double &joint_rvalue)
+                      { joint_rvalue = unit_scale[angle_unit]; });
+
+        std::for_each(conversion_map[EAttribute::CmdJointTvalue].begin(), conversion_map[EAttribute::CmdJointTvalue].end(),
+                      [length_unit](double &joint_tvalue)
+                      { joint_tvalue = unit_scale[length_unit]; });
+
+        std::for_each(conversion_map[EAttribute::CmdJointLinearVelocity].begin(), conversion_map[EAttribute::CmdJointLinearVelocity].end(),
+                      [length_unit, time_unit](double &joint_linear_velocity)
+                      { joint_linear_velocity = unit_scale[length_unit] / unit_scale[time_unit]; });
+
+        std::for_each(conversion_map[EAttribute::CmdJointAngularVelocity].begin(), conversion_map[EAttribute::CmdJointAngularVelocity].end(),
+                      [angle_unit, time_unit](double &joint_angular_velocity)
+                      { joint_angular_velocity = unit_scale[angle_unit] / unit_scale[time_unit]; });
+
+        std::for_each(conversion_map[EAttribute::CmdJointForce].begin(), conversion_map[EAttribute::CmdJointForce].end(),
+                      [mass_unit, length_unit, time_unit](double &force)
+                      { force = unit_scale[mass_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
+
+        std::for_each(conversion_map[EAttribute::CmdJointTorque].begin(), conversion_map[EAttribute::CmdJointTorque].end(),
+                      [mass_unit, length_unit, time_unit](double &torque)
+                      { torque = unit_scale[mass_unit] * unit_scale[length_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
+
         std::for_each(conversion_map[EAttribute::JointPosition].begin(), conversion_map[EAttribute::JointPosition].end(),
                       [length_unit](double &joint_position)
                       { joint_position = unit_scale[length_unit]; });
@@ -370,12 +462,12 @@ private:
                       { joint_quaternion = 1.0; });
 
         std::for_each(conversion_map[EAttribute::Force].begin(), conversion_map[EAttribute::Force].end(),
-                      [force_unit](double &force)
-                      { force = unit_scale[force_unit]; });
+                      [mass_unit, length_unit, time_unit](double &force)
+                      { force = unit_scale[mass_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
 
         std::for_each(conversion_map[EAttribute::Torque].begin(), conversion_map[EAttribute::Torque].end(),
-                      [force_unit, length_unit](double &torque)
-                      { torque = unit_scale[force_unit] * unit_scale[length_unit]; });
+                      [mass_unit, length_unit, time_unit](double &torque)
+                      { torque = unit_scale[mass_unit] * unit_scale[length_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
 
         for (size_t i = 0; i < 3; i++)
         {
@@ -401,7 +493,7 @@ private:
         response_meta_data_json["time"] = get_time_now() * unit_scale[time_unit];
         response_meta_data_json["angle_unit"] = angle_unit;
         response_meta_data_json["length_unit"] = length_unit;
-        response_meta_data_json["force_unit"] = force_unit;
+        response_meta_data_json["mass_unit"] = mass_unit;
         response_meta_data_json["time_unit"] = time_unit;
         response_meta_data_json["handedness"] = handedness;
     }

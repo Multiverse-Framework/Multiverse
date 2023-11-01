@@ -55,7 +55,7 @@ class query_data_service(MultiverseRosServiceServer):
         self._request_meta_data_dict["world"] = world_name
         self._request_meta_data_dict["length_unit"] = "m" if request.length_unit == "" else request.length_unit
         self._request_meta_data_dict["angle_unit"] = "rad" if request.angle_unit == "" else request.angle_unit
-        self._request_meta_data_dict["force_unit"] = "N" if request.force_unit == "" else request.force_unit
+        self._request_meta_data_dict["mass_unit"] = "kg" if request.mass_unit == "" else request.mass_unit
         self._request_meta_data_dict["time_unit"] = "s" if request.time_unit == "" else request.time_unit
         self._request_meta_data_dict["handedness"] = "rhs" if request.handedness == "" else request.handedness
 
@@ -76,7 +76,7 @@ class query_data_service(MultiverseRosServiceServer):
         response.world = response_meta_data_dict["world"]
         response.length_unit = response_meta_data_dict["length_unit"]
         response.angle_unit = response_meta_data_dict["angle_unit"]
-        response.force_unit = response_meta_data_dict["force_unit"]
+        response.mass_unit = response_meta_data_dict["mass_unit"]
         response.time_unit = response_meta_data_dict["time_unit"]
         response.handedness = response_meta_data_dict["handedness"]
 
