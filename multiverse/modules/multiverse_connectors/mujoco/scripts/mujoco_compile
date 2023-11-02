@@ -286,31 +286,6 @@ def main():
         ET.indent(tree, space="\t", level=0)
         tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
-        robot_joints = {}
-        for robot in robots:
-            robot_joints[robot.name] = {}
-            robot_body_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, robot.name)
-            for child_body_id in get_all_descendants(m, robot_body_id):
-                if m.body_jntnum[child_body_id] == 1:
-                    joint_id = m.body_jntadr[child_body_id]
-                    joint = m.joint(joint_id)
-                    joint_name = joint.name
-
-                    if joint.type[0] == mujoco.mjtJoint.mjJNT_FREE:
-                        joint_type = "free"
-                    elif joint.type[0] == mujoco.mjtJoint.mjJNT_BALL:
-                        joint_type = "ball"
-                    elif joint.type[0] == mujoco.mjtJoint.mjJNT_SLIDE:
-                        joint_type = "prismatic"
-                    elif joint.type[0] == mujoco.mjtJoint.mjJNT_HINGE:
-                        joint_type = "revolute"
-                    else:
-                        joint_type = "unknown"
-                    
-                    robot_joints[robot.name][joint_name] = joint_type
-        robot_joints_str = f"{robot_joints}".replace(" ", "")
-        print(f"Robot joints: {robot_joints_str}")
-
     print(f"Scene: {save_xml_path}", end="")
 
 

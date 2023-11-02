@@ -24,18 +24,19 @@ MultiverseHWInterface::MultiverseHWInterface(const std::string &server_host, con
 {
     for (const std::pair<std::string, std::string> robot_joint : robot_joints)
     {
-        if (robot_joint.second == "prismatic" || robot_joint.second == "revolute")
+        if (strcmp(robot_joint.second.c_str(), "prismatic") == 0 || strcmp(robot_joint.second.c_str(), "revolute") == 0)
         {
-            if (robot_joint.second == "prismatic")
+            if (strcmp(robot_joint.second.c_str(), "prismatic") == 0)
             {
                 receive_objects[robot_joint.first] = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
                 send_objects[robot_joint.first] = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
             }
-            else if (robot_joint.second == "revolute")
+            else if (strcmp(robot_joint.second.c_str(), "revolute") == 0)
             {
                 receive_objects[robot_joint.first] = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
                 send_objects[robot_joint.first] = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
             }
+            ROS_INFO("%s\n", robot_joint.first.c_str());
             joint_names.push_back(robot_joint.first);
             joint_states[robot_joint.first] = (double *)calloc(3, sizeof(double));
             joint_commands[robot_joint.first] = (double *)calloc(3, sizeof(double));
@@ -153,7 +154,14 @@ void MultiverseHWInterface::bind_receive_data()
 
 void MultiverseHWInterface::clean_up()
 {
-
+    for (const std::string &joint_name : joint_names)
+    {
+        free(joint_states[joint_name]);
+        free(joint_commands[joint_name]);
+    }
+    joint_names.clear();
+    joint_states.clear();
+    joint_commands.clear();
 }
 
 void MultiverseHWInterface::communicate(const bool resend_meta_data)

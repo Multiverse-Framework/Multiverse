@@ -13,13 +13,13 @@
 		</default>
 	</default>
 	<asset>
-		<mesh name="base_collision1d01d01d0" file="stl/base1d01d01d0.stl"/>
-		<mesh name="shoulder_collision1d01d01d0" file="stl/shoulder1d01d01d0.stl"/>
-		<mesh name="upperarm_collision1d01d01d0" file="stl/upperarm1d01d01d0.stl"/>
-		<mesh name="forearm_collision1d01d01d0" file="stl/forearm1d01d01d0.stl"/>
-		<mesh name="wrist1_collision1d01d01d0" file="stl/wrist11d01d01d0.stl"/>
-		<mesh name="wrist2_collision1d01d01d0" file="stl/wrist21d01d01d0.stl"/>
-		<mesh name="wrist3_collision1d01d01d0" file="stl/wrist31d01d01d0.stl"/>
+		<mesh name="base_collision1d01d01d0" file="stl/base.stl"/>
+		<mesh name="shoulder_collision1d01d01d0" file="stl/shoulder.stl"/>
+		<mesh name="upperarm_collision1d01d01d0" file="stl/upperarm.stl"/>
+		<mesh name="forearm_collision1d01d01d0" file="stl/forearm.stl"/>
+		<mesh name="wrist1_collision1d01d01d0" file="stl/wrist1.stl"/>
+		<mesh name="wrist2_collision1d01d01d0" file="stl/wrist2.stl"/>
+		<mesh name="wrist3_collision1d01d01d0" file="stl/wrist3.stl"/>
 	</asset>
 	<worldbody>
 		<body name="ur5e" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">

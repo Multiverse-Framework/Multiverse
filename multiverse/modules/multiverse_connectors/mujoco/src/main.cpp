@@ -75,18 +75,18 @@ int main(int argc, char **argv)
         {
             const Json::Value multiverse_server_params_json = multiverse_params_json["multiverse_server"];
             std::string server_host = multiverse_server_params_json["host"].toStyledString();
-            server_host.erase(std::remove(server_host.begin(), server_host.end(), '\"'), server_host.end());
+            server_host.erase(std::remove(server_host.begin(), server_host.end(), '"'), server_host.end());
             server_host.erase(std::remove(server_host.begin(), server_host.end(), '\n'), server_host.end());
             std::string server_port = multiverse_server_params_json["port"].toStyledString();
-            server_port.erase(std::remove(server_port.begin(), server_port.end(), '\"'), server_port.end());
+            server_port.erase(std::remove(server_port.begin(), server_port.end(), '"'), server_port.end());
             server_port.erase(std::remove(server_port.begin(), server_port.end(), '\n'), server_port.end());
 
             const Json::Value multiverse_client_params_json = multiverse_params_json["multiverse_client"];
             std::string client_port = multiverse_client_params_json["port"].toStyledString();
-            client_port.erase(std::remove(client_port.begin(), client_port.end(), '\"'), client_port.end());
+            client_port.erase(std::remove(client_port.begin(), client_port.end(), '"'), client_port.end());
             client_port.erase(std::remove(client_port.begin(), client_port.end(), '\n'), client_port.end());
             std::string world = multiverse_client_params_json["world"].toStyledString();
-            world.erase(std::remove(world.begin(), world.end(), '\"'), world.end());
+            world.erase(std::remove(world.begin(), world.end(), '"'), world.end());
             world.erase(std::remove(world.begin(), world.end(), '\n'), world.end());
 
             mj_multiverse_client.init(server_host, server_port, client_port, multiverse_client_params_json["send"], multiverse_client_params_json["receive"], world);
