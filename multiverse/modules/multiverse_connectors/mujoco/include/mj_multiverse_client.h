@@ -40,7 +40,7 @@ public:
     }
 
 public:
-    void init(const std::string &server_host, const std::string &server_port, const std::string &client_port, const Json::Value &in_send_objects_json, const Json::Value &in_receive_objects_json, const std::string &in_world);
+    void init(const Json::Value &multiverse_params_json);
 
 public:
     void communicate(const bool resend_meta_data = false) override;

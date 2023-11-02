@@ -48,8 +48,10 @@ multiverse_server:
 
 multiverse_client:
   sim_1:
+    meta_data:
+      world: world_1
+    host: "tcp://127.0.0.1"
     port: 7501
-    world: world_1
     send:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue"]
@@ -58,31 +60,49 @@ multiverse_client:
       tiago_dual_1: ["relative_velocity"]
 
   sim_2:
+    meta_data:
+      world: world_2
+    host: "tcp://127.0.0.1"
     port: 7502
-    world: world_2
     send:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue"]
 
   ros:
-    length_unit: m
-    angle_unit: rad
-    mass_unit: kg
-    time_unit: s
-    handedness: rhs
-
     services:
       query_data:
+        meta_data:
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        host: "tcp://127.0.0.1"
         port: 7400
 
     publishers:
       tf:
-        - world: world_1
-          topic: /tf
+        - meta_data:
+            world: world_1
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
           port: 7301
+          topic: /tf
           rate: 60
           root_frame_id: map
-        - world: world_2
+          
+        - meta_data:
+            world: world_2
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
           topic: /tf
           port: 7302
           rate: 60
@@ -90,28 +110,44 @@ multiverse_client:
 
     subscribers:
       cmd_vel:
-        - world: world_1
-          topic: /cmd_vel
+        - meta_data:
+            world: world_1
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
           port: 7201
-          body: tiago_dual_0
-        - world: world_1
           topic: /cmd_vel
+          body: tiago_dual_0
+        - meta_data:
+            world: world_1
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
           port: 7202
+          topic: /cmd_vel
           body: tiago_dual_1
 
   ros_control:
     world_2:
       ur5e:
-        length_unit: m
-        angle_unit: rad
-        mass_unit: kg
-        time_unit: s
-        handedness: rhs
+        meta_data:
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        host: "tcp://127.0.0.1"
         port: 7800
-        
-        urdf: universal_robot/ur5e/urdf/ur5e.urdf
-        config: universal_robot/ur5e/config/ros_control.yaml
-        controllers:
-          - joint_state_controller
-            joint_trajectory_controller
-            gripper_controller
+        controller_manager:
+          urdf: multiverse_control/resources/universal_robot/ur5e/ur5e.urdf
+          config: universal_robot/ur5e/config/ros_control.yaml
+          controllers:
+            - joint_state_controller
+              joint_trajectory_controller
+              gripper_controller

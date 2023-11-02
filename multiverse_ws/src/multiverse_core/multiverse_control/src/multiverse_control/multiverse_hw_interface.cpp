@@ -19,24 +19,40 @@
 // SOFTWARE.
 
 #include "multiverse_hw_interface.h"
+#include <urdf/model.h>
 
-MultiverseHWInterface::MultiverseHWInterface(const std::string &server_host, const std::string &server_port, const std::string &client_port, const std::map<std::string, std::string> &robot_joints, const std::string &in_world)
+MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params)
 {
-    for (const std::pair<std::string, std::string> robot_joint : robot_joints)
+    meta_data["world"] = multiverse_params.at("world");
+    meta_data["length_unit"] = multiverse_params.at("length_unit");
+    meta_data["angle_unit"] = multiverse_params.at("angle_unit");
+    meta_data["mass_unit"] = multiverse_params.at("mass_unit");
+    meta_data["time_unit"] = multiverse_params.at("time_unit");
+    meta_data["handedness"] = multiverse_params.at("handedness");
+    
+    urdf::Model urdf_model;
+    const std::string robot_urdf_path = multiverse_params.at("urdf");
+    if (!urdf_model.initFile(robot_urdf_path))
     {
-        if (strcmp(robot_joint.second.c_str(), "prismatic") == 0 || strcmp(robot_joint.second.c_str(), "revolute") == 0)
+        return;
+    }
+    
+    for (const std::pair<std::string, urdf::JointSharedPtr> &robot_joint : urdf_model.joints_)
+    {
+        if (robot_joint.second->type == urdf::Joint::PRISMATIC || robot_joint.second->type == urdf::Joint::REVOLUTE)
         {
-            if (strcmp(robot_joint.second.c_str(), "prismatic") == 0)
+            if (robot_joint.second->type == urdf::Joint::PRISMATIC)
             {
                 receive_objects[robot_joint.first] = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
                 send_objects[robot_joint.first] = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
             }
-            else if (strcmp(robot_joint.second.c_str(), "revolute") == 0)
+            else if (robot_joint.second->type == urdf::Joint::REVOLUTE)
             {
                 receive_objects[robot_joint.first] = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
                 send_objects[robot_joint.first] = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
             }
             ROS_INFO("%s\n", robot_joint.first.c_str());
+            
             joint_names.push_back(robot_joint.first);
             joint_states[robot_joint.first] = (double *)calloc(3, sizeof(double));
             joint_commands[robot_joint.first] = (double *)calloc(3, sizeof(double));

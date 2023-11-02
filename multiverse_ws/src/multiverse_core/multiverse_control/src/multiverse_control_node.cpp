@@ -39,46 +39,35 @@ int main(int argc, char **argv)
         return 0;
     }
 
+    std::map<std::string, std::string> multiverse_params;
+
+    multiverse_params["robot"] = multiverse_params_json["robot"].toStyledString();
+
     const Json::Value multiverse_server_params_json = multiverse_params_json["multiverse_server"];
-    std::string server_host = multiverse_server_params_json["host"].toStyledString();
-    server_host.erase(std::remove(server_host.begin(), server_host.end(), '"'), server_host.end());
-    server_host.erase(std::remove(server_host.begin(), server_host.end(), '\n'), server_host.end());
-    std::string server_port = multiverse_server_params_json["port"].toStyledString();
-    server_port.erase(std::remove(server_port.begin(), server_port.end(), '"'), server_port.end());
-    server_port.erase(std::remove(server_port.begin(), server_port.end(), '\n'), server_port.end());
+    multiverse_params["server_host"] = multiverse_server_params_json["host"].toStyledString();
+    multiverse_params["server_port"] = multiverse_server_params_json["port"].toStyledString();
 
-    const Json::Value multiverse_client_params_json = multiverse_params_json["multiverse_client"];
-    std::string client_port = multiverse_client_params_json["port"].toStyledString();
-    client_port.erase(std::remove(client_port.begin(), client_port.end(), '"'), client_port.end());
-    client_port.erase(std::remove(client_port.begin(), client_port.end(), '\n'), client_port.end());
-    std::string world = multiverse_client_params_json["world"].toStyledString();
-    world.erase(std::remove(world.begin(), world.end(), '"'), world.end());
-    world.erase(std::remove(world.begin(), world.end(), '\n'), world.end());
-    
-    const Json::Value robot_joints_json = multiverse_params_json["robots"];
-    std::map<std::string, std::map<std::string, std::string>> robot_joints;
-    for (std::string robot_name : robot_joints_json.getMemberNames())
-	{
-        const Json::Value robot_json = robot_joints_json[robot_name];
-        for (std::string joint_name : robot_json.getMemberNames())
-        {
-            std::string joint_type = robot_json[joint_name].toStyledString();
-            joint_name.erase(std::remove(joint_name.begin(), joint_name.end(), '"'), joint_name.end());
-            joint_name.erase(std::remove(joint_name.begin(), joint_name.end(), '\n'), joint_name.end());
-            joint_type.erase(std::remove(joint_type.begin(), joint_type.end(), '"'), joint_type.end());
-            joint_type.erase(std::remove(joint_type.begin(), joint_type.end(), '\n'), joint_type.end());
-            robot_joints[robot_name][joint_name] = joint_type;
-        }
-    }
+    const Json::Value multiverse_client_params_json = multiverse_params_json["multiverse_client"]["meta_data"];
+    multiverse_params["client_host"] = multiverse_server_params_json["host"].toStyledString();
+    multiverse_params["client_port"] = multiverse_server_params_json["port"].toStyledString();
+    multiverse_params["world"] = multiverse_server_params_json["world"].toStyledString();
+    multiverse_params["length_unit"] = multiverse_server_params_json["length_unit"].toStyledString();
+    multiverse_params["angle_unit"] = multiverse_server_params_json["angle_unit"].toStyledString();
+    multiverse_params["mass_unit"] = multiverse_server_params_json["mass_unit"].toStyledString();
+    multiverse_params["time_unit"] = multiverse_server_params_json["time_unit"].toStyledString();
+    multiverse_params["handedness"] = multiverse_server_params_json["handedness"].toStyledString();
 
-    std::vector<MultiverseHWInterface *> multiverse_hw_interfaces;
-    std::vector<controller_manager::ControllerManager *> controller_managers;
-    for (const std::string &robot_name : robot_joints_json.getMemberNames())
+    const Json::Value controller_manager_params_json = multiverse_params_json["controller_manager"];
+    multiverse_params["urdf"] = controller_manager_params_json["urdf"].toStyledString();
+
+    for (std::pair<const std::string, std::string> &multiverse_param : multiverse_params)
     {
-        ROS_WARN("%s\n", robot_name.c_str());
-        multiverse_hw_interfaces.push_back(new MultiverseHWInterface(server_host, server_port, client_port, robot_joints[robot_name], world));
-        controller_managers.push_back(new controller_manager::ControllerManager(multiverse_hw_interfaces.back(), ros::NodeHandle(robot_name)));
+        multiverse_param.second.erase(std::remove(multiverse_param.second.begin(), multiverse_param.second.end(), '"'), multiverse_param.second.end());
+        multiverse_param.second.erase(std::remove(multiverse_param.second.begin(), multiverse_param.second.end(), '\n'), multiverse_param.second.end());
     }
+
+    MultiverseHWInterface multiverse_hw_interface(multiverse_params);
+    controller_manager::ControllerManager controller_manager(&multiverse_hw_interface, ros::NodeHandle(multiverse_params["robot"]));
 
     ros::AsyncSpinner spinner(3);
     spinner.start();
@@ -90,10 +79,7 @@ int main(int argc, char **argv)
     {
         time_now = ros::Time::now();
         ros::Duration duration = time_now - time_last;
-        for (controller_manager::ControllerManager *controller_manager : controller_managers)
-        {
-            controller_manager->update(time_now, duration);
-        }
+        controller_manager.update(time_now, duration);
         time_last = time_now;
     }
 

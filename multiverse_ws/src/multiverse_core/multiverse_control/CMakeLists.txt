@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
 	roscpp
 	std_msgs
 	controller_manager
+	urdf
 )
 
 # ##################################
@@ -34,11 +35,15 @@ include_directories(
 	${MULTIVERSE_DIR}/src/multiverse_client/include
   	${PROJECT_SOURCE_DIR}/include
 )
+link_directories($ENV{ROS_ROOT}/../../lib/)
 
 add_executable(${PROJECT_NAME}_node src/${PROJECT_NAME}_node.cpp)
 add_dependencies(${PROJECT_NAME}_node ${catkin_EXPORTED_TARGETS})
 add_library(multiverse_hw_interface
 	${PROJECT_SOURCE_DIR}/src/multiverse_control/multiverse_hw_interface.cpp
+)
+target_link_libraries(multiverse_hw_interface
+	urdf
 )
 target_link_libraries(${PROJECT_NAME}_node
 	${catkin_LIBRARIES}

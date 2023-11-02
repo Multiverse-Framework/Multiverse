@@ -191,10 +191,10 @@ static double get_time_now()
 class MultiverseServer
 {
 public:
-    MultiverseServer(const std::string &port)
+    MultiverseServer(const std::string &in_socket_addr)
     {
         socket = zmq::socket_t(context, zmq::socket_type::rep);
-        socket_addr = "tcp://*:" + port;
+        socket_addr = in_socket_addr;
         socket.bind(socket_addr);
         sockets_need_clean_up[socket_addr] = false;
         printf("[Server] Bind to socket %s.\n", socket_addr.c_str());
@@ -850,19 +850,19 @@ private:
 
 void start_multiverse_server(const std::string &server_socket_addr)
 {
-    std::map<int, std::thread> workers;
+    std::map<std::string, std::thread> workers;
     zmq::socket_t server_socket = zmq::socket_t(server_context, zmq::socket_type::rep);
     server_socket.bind(server_socket_addr);
     printf("[Server] Create server socket %s, waiting for client...\n", server_socket_addr.c_str());
 
-    int receive_port;
+    std::string receive_addr;
     while (!should_shut_down)
     {
         try
         {
             zmq::message_t request;
             zmq::recv_result_t recv_result_t = server_socket.recv(request, zmq::recv_flags::none);
-            receive_port = *reinterpret_cast<int*>(request.data());
+            receive_addr = request.to_string();
         }
         catch (const zmq::error_t &e)
         {
@@ -871,18 +871,18 @@ void start_multiverse_server(const std::string &server_socket_addr)
             break;
         }
 
-        if (workers.count(receive_port) == 0)
+        if (workers.count(receive_addr) == 0)
         {
-            workers[receive_port] = std::thread([receive_port]()
-                                               { MultiverseServer multiverse_server(std::to_string(receive_port)); multiverse_server.start(); });
+            workers[receive_addr] = std::thread([receive_addr]()
+                                               { MultiverseServer multiverse_server(receive_addr); multiverse_server.start(); });
         }
         
-        zmq::message_t response(sizeof(int));
-        memcpy(response.data(), &receive_port, sizeof(int));
+        zmq::message_t response(receive_addr.size());
+        memcpy(response.data(), receive_addr.c_str(), receive_addr.size());
         server_socket.send(response, zmq::send_flags::none);
     }
 
-    for (std::pair<const int, std::thread> &worker : workers)
+    for (std::pair<const std::string, std::thread> &worker : workers)
     {
         worker.second.join();
     }

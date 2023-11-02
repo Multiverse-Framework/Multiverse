@@ -6,7 +6,6 @@ import os
 import subprocess
 import re
 import signal
-import ast
 from typing import List
 
 processes = {"multiverse_server": [], "ros": [], "ros_control": []}
@@ -66,23 +65,25 @@ def main():
     multiverse_server_dict = data.get("multiverse_server", None)
     multiverse_client_dict = data.get("multiverse_client", None)
 
+    server_host = "tcp://127.0.0.1"
     server_port = "7000"
     if multiverse_server_dict is not None:
+        server_host = multiverse_server_dict.get("host", "tcp://127.0.0.1")
         server_port = multiverse_server_dict.get("port", "7000")
-    process = run_subprocess(["multiverse_server", f"tcp://*:{server_port}"])
+    process = run_subprocess(["multiverse_server", f"{server_host}:{server_port}"])
     processes["multiverse_server"] = [process]
 
     for simulator in simulators:
         processes[simulator] = []
 
-    for name, simulator_data in data.items():
+    for simulation_name, simulator_data in data.items():
         if (
             "simulator" not in simulator_data
             or simulator_data["simulator"] not in simulators
         ):
             continue
 
-        cmd = [f"mujoco_compile", f"--name={name}"]
+        cmd = [f"mujoco_compile", f"--name={simulation_name}"]
         cmd += parse_simulator(simulator_data)
 
         cmd_str = " ".join(cmd)
@@ -98,10 +99,10 @@ def main():
                 multiverse_server_dict is not None
                 and multiverse_client_dict is not None
             ):
-                if multiverse_client_dict.get(name, None) is not None:
+                if multiverse_client_dict.get(simulation_name, None) is not None:
                     multiverse_dict = {
                         "multiverse_server": multiverse_server_dict,
-                        "multiverse_client": multiverse_client_dict.get(name, None),
+                        "multiverse_client": multiverse_client_dict.get(simulation_name, None),
                     }
                     cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
             
@@ -112,33 +113,42 @@ def main():
             processes[cmd[0]].append(process)
 
     if "multiverse_client" in data and "ros" in data["multiverse_client"]:
-        cmd = [
-            "roslaunch",
+        cmd_1 = ["roscore"]
+        process_1 = run_subprocess(cmd_1)
+
+        ros_params_dict = data["multiverse_client"]["ros"]
+        ros_services_dict = ros_params_dict["services"]
+        ros_publishers_dict = ros_params_dict["publishers"]
+        ros_subscribers_dict = ros_params_dict["subscribers"]
+        cmd_2 = [
+            "rosrun",
             "multiverse_socket",
-            "multiverse_socket.launch",
-            f"config:={muv_file}",
+            "multiverse_socket_node.py",
+            f"--multiverse_server=\"{multiverse_server_dict}\"",
+            f"--services=\"{ros_services_dict}\"",
+            f"--publishers=\"{ros_publishers_dict}\"",
+            f"--subscribers=\"{ros_subscribers_dict}\""
         ]
+        process_2 = run_subprocess(cmd_2)
 
-        process = run_subprocess(cmd)
-        processes["ros"] = [process]
+        processes["ros"] = [process_1, process_2]
 
-    if multiverse_server_dict is not None and "multiverse_client" in data and "ros_control" in data["multiverse_client"]:
-        for world, robots in data["multiverse_client"]["ros_control"].items():
-            for robot, robot_params in robots.items():
-                # if robot in robot_joints:
-                #     multiverse_dict = {
-                #         "multiverse_server": multiverse_server_dict,
-                #         "multiverse_client": robot_params["meta_data"] | {"world": world},
-                #         "robot_joints": robot_joints[robot]
-                #     }
-                #     cmd = [
-                #         "rosrun",
-                #         "multiverse_control",
-                #         "multiverse_control_node",
-                #         f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"','\"'),
-                #     ]
-                #     process = run_subprocess(cmd)
-                #     processes["ros_control"].append(process)
+    # if multiverse_server_dict is not None and "multiverse_client" in data and "ros_control" in data["multiverse_client"]:
+    #     for world, robots in data["multiverse_client"]["ros_control"].items():
+    #         for robot, robot_params in robots.items():
+    #             multiverse_dict = {
+    #                 "multiverse_server": multiverse_server_dict,
+    #                 "multiverse_client": robot_params["meta_data"] | {"world": world},
+    #                 "robot": robot
+    #             }
+    #             cmd = [
+    #                 "rosrun",
+    #                 "multiverse_control",
+    #                 "multiverse_control_node",
+    #                 f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"','\"'),
+    #             ]
+    #             process = run_subprocess(cmd)
+    #             processes["ros_control"].append(process)
 
     try:
         processes["multiverse_server"][0].wait()

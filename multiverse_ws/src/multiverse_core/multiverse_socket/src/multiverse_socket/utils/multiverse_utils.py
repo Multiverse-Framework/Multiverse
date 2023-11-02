@@ -1,14 +1,14 @@
 import rospy
 
 
-def init_request_meta_data_dict(world: str) -> dict:
+def init_request_meta_data_dict(meta_data: dict) -> dict:
     request_meta_data_dict = {}
-    request_meta_data_dict["world"] = world
-    request_meta_data_dict["length_unit"] = rospy.get_param("/multiverse_client/ros/length_unit") if rospy.has_param("/multiverse_client/ros/length_unit") else "m"
-    request_meta_data_dict["angle_unit"] = rospy.get_param("/multiverse_client/ros/angle_unit") if rospy.has_param("/multiverse_client/ros/angle_unit") else "rad"
-    request_meta_data_dict["mass_unit"] = rospy.get_param("/multiverse_client/ros/mass_unit") if rospy.has_param("/multiverse_client/ros/mass_unit") else "kg"
-    request_meta_data_dict["time_unit"] = rospy.get_param("/multiverse_client/ros/time_unit") if rospy.has_param("/multiverse_client/ros/time_unit") else "s"
-    request_meta_data_dict["handedness"] = rospy.get_param("/multiverse_client/ros/handedness") if rospy.has_param("/multiverse_client/ros/handedness") else "rhs"
+    request_meta_data_dict["world"] = meta_data.get("world", "world")
+    request_meta_data_dict["length_unit"] = meta_data.get("length_unit", "m") 
+    request_meta_data_dict["angle_unit"] = meta_data.get("angle_unit", "rad") 
+    request_meta_data_dict["mass_unit"] = meta_data.get("mass_unit", "kg") 
+    request_meta_data_dict["time_unit"] = meta_data.get("time_unit", "s") 
+    request_meta_data_dict["handedness"] = meta_data.get("handedness", "rhs") 
     request_meta_data_dict["send"] = {}
     request_meta_data_dict["receive"] = {}
 

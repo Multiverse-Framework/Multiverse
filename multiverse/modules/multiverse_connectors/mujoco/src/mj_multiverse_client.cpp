@@ -26,16 +26,35 @@
 
 std::mutex MjMultiverseClient::mutex;
 
-void MjMultiverseClient::init(const std::string &server_host, const std::string &server_port, const std::string &client_port, const Json::Value &in_send_objects_json, const Json::Value &in_receive_objects_json, const std::string &in_world)
+void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 {
-	send_objects_json = in_send_objects_json;
-	receive_objects_json = in_receive_objects_json;
-	world = in_world;
+	std::map<std::string, std::string> multiverse_params;
 
-	host = server_host;
-	server_socket_addr = host + ":" + server_port;
+	const Json::Value multiverse_server_params_json = multiverse_params_json["multiverse_server"];
+	multiverse_params["server_host"] = multiverse_server_params_json.isMember("host") ? multiverse_server_params_json["host"].toStyledString() : "tcp://127.0.0.1";
+	multiverse_params["server_port"] = multiverse_server_params_json.isMember("port") ? multiverse_server_params_json["port"].toStyledString() : "7000";
 
-	port = client_port;
+	const Json::Value multiverse_client_params_json = multiverse_params_json["multiverse_client"];
+	multiverse_params["client_host"] = multiverse_client_params_json.isMember("host") ? multiverse_client_params_json["host"].toStyledString() : "tcp://127.0.0.1";
+	multiverse_params["client_port"] = multiverse_client_params_json["port"].toStyledString();
+
+	const Json::Value multiverse_client_meta_data_params_json = multiverse_client_params_json["meta_data"];
+	multiverse_params["world"] = multiverse_client_meta_data_params_json["world"].toStyledString();
+
+	for (std::pair<const std::string, std::string> &multiverse_param : multiverse_params)
+	{
+		multiverse_param.second.erase(std::remove(multiverse_param.second.begin(), multiverse_param.second.end(), '"'), multiverse_param.second.end());
+		multiverse_param.second.erase(std::remove(multiverse_param.second.begin(), multiverse_param.second.end(), '\n'), multiverse_param.second.end());
+	}
+
+	send_objects_json = multiverse_params_json["multiverse_client"]["send"];
+	receive_objects_json = multiverse_params_json["multiverse_client"]["receive"];
+	world = multiverse_params["world"];
+
+	server_socket_addr = multiverse_params["server_host"] + ":" + multiverse_params["server_port"];
+
+	host = multiverse_params["client_host"];
+	port = multiverse_params["client_port"];
 
 	connect();
 }
@@ -679,8 +698,8 @@ void MjMultiverseClient::bind_receive_data()
 
 			const mjtNum siny_cosp = 2 * (w * z + x * y);
 			const mjtNum cosy_cosp = 1 - 2 * (y * y + z * z);
-			mjtNum odom_z_joint_pos= std::atan2(siny_cosp, cosy_cosp);
-			
+			mjtNum odom_z_joint_pos = std::atan2(siny_cosp, cosy_cosp);
+
 			mjtNum *qvel = d->qvel + dof_adr;
 			qvel[0] = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) - mju_cos(odom_x_joint_pos) * mju_sin(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + mju_sin(odom_x_joint_pos) * mju_sin(odom_z_joint_pos));
 			qvel[1] = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + mju_cos(odom_x_joint_pos) * mju_cos(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) - mju_sin(odom_x_joint_pos) * mju_cos(odom_z_joint_pos));

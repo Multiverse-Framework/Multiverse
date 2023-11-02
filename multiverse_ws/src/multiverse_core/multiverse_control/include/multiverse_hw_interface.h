@@ -30,7 +30,7 @@
 class MultiverseHWInterface : public MultiverseClientJson, public hardware_interface::RobotHW
 {
 public:
-    MultiverseHWInterface(const std::string &server_host, const std::string &server_port, const std::string &client_port, const std::map<std::string, std::string> &robot_joints, const std::string &in_world);
+    MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params);
 
     ~MultiverseHWInterface();
 
