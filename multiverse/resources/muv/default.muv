@@ -39,7 +39,7 @@ sim_2:
         body:
           ur5e:
             pos: [0, 0, 1]
-          gravcomp: 1
+          # gravcomp: 0
       disable_self_collision: auto
 
 multiverse_server:
@@ -66,7 +66,7 @@ multiverse_client:
     port: 7502
     send:
       body: ["position", "quaternion"]
-      joint: ["joint_rvalue", "joint_tvalue"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
 
   ros:
     services:

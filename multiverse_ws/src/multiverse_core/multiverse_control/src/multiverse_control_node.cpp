@@ -46,8 +46,8 @@ int main(int argc, char **argv)
     multiverse_params["server_port"] = multiverse_server_params_json["port"].toStyledString();
 
     const Json::Value multiverse_client_params_json = multiverse_params_json["multiverse_client"];
-    multiverse_params["client_host"] = multiverse_server_params_json["host"].toStyledString();
-    multiverse_params["client_port"] = multiverse_server_params_json["port"].toStyledString();
+    multiverse_params["client_host"] = multiverse_client_params_json["host"].toStyledString();
+    multiverse_params["client_port"] = multiverse_client_params_json["port"].toStyledString();
 
     const Json::Value multiverse_client_meta_data_json = multiverse_client_params_json["meta_data"];
     multiverse_params["world"] = multiverse_client_meta_data_json["world"].toStyledString();
@@ -78,13 +78,12 @@ int main(int argc, char **argv)
 
     while (ros::ok())
     {
+        multiverse_hw_interface.communicate();
         time_now = ros::Time::now();
         ros::Duration duration = time_now - time_last;
         controller_manager.update(time_now, duration);
         time_last = time_now;
     }
-
-    // // mj_multiverse_client.init(server_host, server_port, client_port, multiverse_client_params_json["send"], multiverse_client_params_json["receive"], world);
 
     return 0;
 }

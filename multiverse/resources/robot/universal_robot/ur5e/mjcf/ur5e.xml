@@ -23,7 +23,7 @@
 	</asset>
 	<worldbody>
 		<body name="ur5e" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-			<freejoint/>
+			<!-- <freejoint/> -->
 			<body name="base_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<body name="base" pos="0.0 0.0 0.0" quat="6.123233995736766e-17 0.0 0.0 1.0"/>
 				<body name="base_link_inertia" pos="0.0 0.0 0.0" quat="6.123233995736766e-17 0.0 0.0 1.0">

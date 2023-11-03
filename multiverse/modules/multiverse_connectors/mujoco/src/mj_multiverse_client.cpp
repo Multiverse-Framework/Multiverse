@@ -62,7 +62,7 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 bool MjMultiverseClient::init_objects()
 {
 	std::set<std::string> body_attributes = {"position", "quaternion", "relative_velocity", "force", "torque"};
-	std::set<std::string> joint_attributes = {"joint_rvalue", "joint_tvalue", "joint_position", "joint_quaternion"};
+	std::set<std::string> receive_joint_attributes = {"cmd_joint_rvalue", "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_angular_velocity", "cmd_joint_force", "cmd_joint_torque"};
 
 	for (const std::string &object_name : receive_objects_json.getMemberNames())
 	{
@@ -76,16 +76,18 @@ bool MjMultiverseClient::init_objects()
 			{
 				receive_objects[object_name].insert(attribute_name);
 			}
-			else if (joint_attributes.count(attribute_name) != 0 && joint_id != -1)
+			else if (receive_joint_attributes.count(attribute_name) != 0 && joint_id != -1)
 			{
-				if ((m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE && strcmp(attribute_name.c_str(), "joint_rvalue") == 0) || (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE && strcmp(attribute_name.c_str(), "joint_tvalue") == 0))
-				{
-					receive_objects[object_name].insert(attribute_name);
-				}
+				// if ((m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE && strcmp(attribute_name.c_str(), "joint_rvalue") == 0) || (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE && strcmp(attribute_name.c_str(), "joint_tvalue") == 0))
+				// {
+				// 	receive_objects[object_name].insert(attribute_name);
+				// }
 			}
 		}
 	}
 
+	std::set<std::string> send_hinge_joint_attributes = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
+	std::set<std::string> send_slide_joint_attributes = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
 	for (const std::string &object_name : send_objects_json.getMemberNames())
 	{
 		for (const Json::Value &attribute_json : send_objects_json[object_name])
@@ -103,7 +105,7 @@ bool MjMultiverseClient::init_objects()
 			}
 			else if (strcmp(object_name.c_str(), "joint") == 0)
 			{
-				if (strcmp(attribute_name.c_str(), "joint_rvalue") == 0)
+				if (send_hinge_joint_attributes.count(attribute_name) != 0)
 				{
 					for (int joint_id = 0; joint_id < m->njnt; joint_id++)
 					{
@@ -113,7 +115,7 @@ bool MjMultiverseClient::init_objects()
 						}
 					}
 				}
-				else if (strcmp(attribute_name.c_str(), "joint_tvalue") == 0)
+				else if (send_slide_joint_attributes.count(attribute_name) != 0)
 				{
 					for (int joint_id = 0; joint_id < m->njnt; joint_id++)
 					{
@@ -132,12 +134,9 @@ bool MjMultiverseClient::init_objects()
 				{
 					send_objects[object_name].insert(attribute_name);
 				}
-				else if (joint_attributes.count(attribute_name) != 0 && joint_id != -1)
+				else if (joint_id != -1 && ((send_hinge_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (send_slide_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)))
 				{
-					if ((m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE && strcmp(attribute_name.c_str(), "joint_rvalue") == 0) || (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE && strcmp(attribute_name.c_str(), "joint_tvalue") == 0))
-					{
-						send_objects[object_name].insert(attribute_name);
-					}
+					send_objects[object_name].insert(attribute_name);
 				}
 			}
 		}
@@ -199,7 +198,6 @@ void MjMultiverseClient::bind_request_meta_data()
 		else if (joint_id != -1)
 		{
 			const std::string joint_name = send_object.first;
-			const int qpos_id = m->jnt_qposadr[joint_id];
 			for (const std::string &attribute_name : send_object.second)
 			{
 				request_meta_data_json["send"][joint_name].append(attribute_name);
@@ -253,28 +251,28 @@ void MjMultiverseClient::bind_response_meta_data()
 				{
 					if (strcmp(attribute_name.c_str(), "position") == 0)
 					{
-						const double x = response_meta_data_json["send"][send_object.first][attribute_name][0].asDouble();
-						const double y = response_meta_data_json["send"][send_object.first][attribute_name][1].asDouble();
-						const double z = response_meta_data_json["send"][send_object.first][attribute_name][2].asDouble();
-						if (std::isnan(x) && std::isnan(y) && std::isnan(z))
+						const Json::Value x_json = response_meta_data_json["send"][send_object.first][attribute_name][0];
+						const Json::Value y_json = response_meta_data_json["send"][send_object.first][attribute_name][1];
+						const Json::Value z_json = response_meta_data_json["send"][send_object.first][attribute_name][2];
+						if (!x_json.isNull() && !y_json.isNull() && !z_json.isNull())
 						{
-							xpos_desired[0] = x;
-							xpos_desired[1] = y;
-							xpos_desired[2] = z;
+							xpos_desired[0] = x_json.asDouble();
+							xpos_desired[1] = y_json.asDouble();
+							xpos_desired[2] = z_json.asDouble();
 						}
 					}
 					else if (strcmp(attribute_name.c_str(), "quaternion") == 0)
 					{
-						const double w = response_meta_data_json["send"][send_object.first][attribute_name][0].asDouble();
-						const double x = response_meta_data_json["send"][send_object.first][attribute_name][1].asDouble();
-						const double y = response_meta_data_json["send"][send_object.first][attribute_name][2].asDouble();
-						const double z = response_meta_data_json["send"][send_object.first][attribute_name][3].asDouble();
-						if (std::isnan(w) && std::isnan(x) && std::isnan(y) && std::isnan(z))
+						const Json::Value w_json = response_meta_data_json["send"][send_object.first][attribute_name][0];
+						const Json::Value x_json = response_meta_data_json["send"][send_object.first][attribute_name][1];
+						const Json::Value y_json = response_meta_data_json["send"][send_object.first][attribute_name][2];
+						const Json::Value z_json = response_meta_data_json["send"][send_object.first][attribute_name][3];
+						if (!w_json.isNull() && !x_json.isNull() && !y_json.isNull() && !z_json.isNull())
 						{
-							xquat_desired[0] = w;
-							xquat_desired[1] = x;
-							xquat_desired[2] = y;
-							xquat_desired[3] = z;
+							xquat_desired[0] = w_json.asDouble();
+							xquat_desired[1] = x_json.asDouble();
+							xquat_desired[2] = y_json.asDouble();
+							xquat_desired[3] = z_json.asDouble();
 						}
 					}
 				}
@@ -294,14 +292,14 @@ void MjMultiverseClient::bind_response_meta_data()
 				{
 					if (strcmp(attribute_name.c_str(), "quaternion") == 0)
 					{
-						const double w = response_meta_data_json["send"][send_object.first][attribute_name][0].asDouble();
-						const double x = response_meta_data_json["send"][send_object.first][attribute_name][1].asDouble();
-						const double y = response_meta_data_json["send"][send_object.first][attribute_name][2].asDouble();
-						const double z = response_meta_data_json["send"][send_object.first][attribute_name][3].asDouble();
+						const Json::Value w_json = response_meta_data_json["send"][send_object.first][attribute_name][0];
+						const Json::Value x_json = response_meta_data_json["send"][send_object.first][attribute_name][1];
+						const Json::Value y_json = response_meta_data_json["send"][send_object.first][attribute_name][2];
+						const Json::Value z_json = response_meta_data_json["send"][send_object.first][attribute_name][3];
 
-						if (std::isnan(w) && std::isnan(x) && std::isnan(y) && std::isnan(z))
+						if (!w_json.isNull() && !x_json.isNull() && !y_json.isNull() && !z_json.isNull())
 						{
-							const mjtNum xquat_desired[4] = {w, x, y, z};
+							const mjtNum xquat_desired[4] = {w_json.asDouble(), x_json.asDouble(), y_json.asDouble(), z_json.asDouble()};
 							mjtNum *xquat_current_neg = d->xquat + 4 * body_id;
 							mju_negQuat(xquat_current_neg, xquat_current_neg);
 
@@ -319,27 +317,37 @@ void MjMultiverseClient::bind_response_meta_data()
 				if ((strcmp(attribute_name.c_str(), "joint_rvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
 					(strcmp(attribute_name.c_str(), "joint_tvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
 				{
-					const double v = response_meta_data_json["send"][send_object.first][attribute_name][0].asDouble();
-					if (std::isnan(v))
+					const Json::Value v_json = response_meta_data_json["send"][send_object.first][attribute_name][0];
+					if (!v_json.isNull())
 					{
 						const int qpos_id = m->jnt_qposadr[joint_id];
-						d->qpos[qpos_id] = v;
+						d->qpos[qpos_id] = v_json.asDouble();
+					}
+				}
+				else if ((strcmp(attribute_name.c_str(), "joint_angular_velocity") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
+						 (strcmp(attribute_name.c_str(), "joint_linear_velocity") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
+				{
+					const Json::Value v_json = response_meta_data_json["send"][send_object.first][attribute_name][0];
+					if (!v_json.isNull())
+					{
+						const int dof_id = m->jnt_dofadr[joint_id];
+						d->qvel[dof_id] = v_json.asDouble();
 					}
 				}
 				else if ((strcmp(attribute_name.c_str(), "joint_quaternion") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL))
 				{
-					const double w = response_meta_data_json["send"][send_object.first][attribute_name][0].asDouble();
-					const double x = response_meta_data_json["send"][send_object.first][attribute_name][1].asDouble();
-					const double y = response_meta_data_json["send"][send_object.first][attribute_name][2].asDouble();
-					const double z = response_meta_data_json["send"][send_object.first][attribute_name][3].asDouble();
+					const Json::Value w_json = response_meta_data_json["send"][send_object.first][attribute_name][0];
+					const Json::Value x_json = response_meta_data_json["send"][send_object.first][attribute_name][1];
+					const Json::Value y_json = response_meta_data_json["send"][send_object.first][attribute_name][2];
+					const Json::Value z_json = response_meta_data_json["send"][send_object.first][attribute_name][3];
 
-					if (std::isnan(w) && std::isnan(x) && std::isnan(y) && std::isnan(z))
+					if (!w_json.isNull() && !x_json.isNull() && !y_json.isNull() && !z_json.isNull())
 					{
 						const int qpos_id = m->jnt_qposadr[joint_id];
-						d->qpos[qpos_id] = w;
-						d->qpos[qpos_id + 1] = x;
-						d->qpos[qpos_id + 2] = y;
-						d->qpos[qpos_id + 3] = z;
+						d->qpos[qpos_id] = w_json.asDouble();
+						d->qpos[qpos_id + 1] = x_json.asDouble();
+						d->qpos[qpos_id + 2] = y_json.asDouble();
+						d->qpos[qpos_id + 3] = z_json.asDouble();
 					}
 				}
 			}
@@ -375,57 +383,40 @@ void MjMultiverseClient::init_send_and_receive_data()
 					send_data_vec.emplace_back(&d->xquat[4 * body_id + 2]);
 					send_data_vec.emplace_back(&d->xquat[4 * body_id + 3]);
 				}
-				else if (strcmp(attribute_name.c_str(), "force") == 0)
+				else if (strcmp(attribute_name.c_str(), "force") == 0 && m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 				{
-					if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
+					if (contact_efforts.count(body_id) == 0)
 					{
-						if (contact_efforts.count(body_id) == 0)
-						{
-							contact_efforts[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
-						}
+						contact_efforts[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
+					}
 
-						send_data_vec.emplace_back(&contact_efforts[body_id][0]);
-						send_data_vec.emplace_back(&contact_efforts[body_id][1]);
-						send_data_vec.emplace_back(&contact_efforts[body_id][2]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), body_name.c_str());
-					}
+					send_data_vec.emplace_back(&contact_efforts[body_id][0]);
+					send_data_vec.emplace_back(&contact_efforts[body_id][1]);
+					send_data_vec.emplace_back(&contact_efforts[body_id][2]);
 				}
-				else if (strcmp(attribute_name.c_str(), "torque") == 0)
+				else if (strcmp(attribute_name.c_str(), "torque") == 0 && m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 				{
-					if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
+					if (contact_efforts.count(body_id) == 0)
 					{
-						if (contact_efforts.count(body_id) == 0)
-						{
-							contact_efforts[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
-						}
+						contact_efforts[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
+					}
 
-						send_data_vec.emplace_back(&contact_efforts[body_id][3]);
-						send_data_vec.emplace_back(&contact_efforts[body_id][4]);
-						send_data_vec.emplace_back(&contact_efforts[body_id][5]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), body_name.c_str());
-					}
+					send_data_vec.emplace_back(&contact_efforts[body_id][3]);
+					send_data_vec.emplace_back(&contact_efforts[body_id][4]);
+					send_data_vec.emplace_back(&contact_efforts[body_id][5]);
 				}
-				else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0)
+				else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0 && m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 				{
-					if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
-					{
-						send_data_vec.emplace_back(&d->qvel[dof_id]);
-						send_data_vec.emplace_back(&d->qvel[dof_id + 1]);
-						send_data_vec.emplace_back(&d->qvel[dof_id + 2]);
-						send_data_vec.emplace_back(&d->qvel[dof_id + 3]);
-						send_data_vec.emplace_back(&d->qvel[dof_id + 4]);
-						send_data_vec.emplace_back(&d->qvel[dof_id + 5]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), body_name.c_str());
-					}
+					send_data_vec.emplace_back(&d->qvel[dof_id]);
+					send_data_vec.emplace_back(&d->qvel[dof_id + 1]);
+					send_data_vec.emplace_back(&d->qvel[dof_id + 2]);
+					send_data_vec.emplace_back(&d->qvel[dof_id + 3]);
+					send_data_vec.emplace_back(&d->qvel[dof_id + 4]);
+					send_data_vec.emplace_back(&d->qvel[dof_id + 5]);
+				}
+				else
+				{
+					printf("%s for %s not supported", attribute_name.c_str(), body_name.c_str());
 				}
 			}
 		}
@@ -433,47 +424,35 @@ void MjMultiverseClient::init_send_and_receive_data()
 		{
 			const std::string joint_name = send_object.first;
 			const int qpos_id = m->jnt_qposadr[joint_id];
+			const int dof_id = m->jnt_dofadr[joint_id];
 			for (const std::string &attribute_name : send_object.second)
 			{
-				if (strcmp(attribute_name.c_str(), "joint_rvalue") == 0)
+				if ((strcmp(attribute_name.c_str(), "joint_rvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (strcmp(attribute_name.c_str(), "joint_tvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
 				{
-					if (m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE)
-					{
-						send_data_vec.emplace_back(&d->qpos[qpos_id]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
-					}
+					send_data_vec.emplace_back(&d->qpos[qpos_id]);
 				}
-				else if (strcmp(attribute_name.c_str(), "joint_tvalue") == 0)
+				else if ((strcmp(attribute_name.c_str(), "joint_angular_velocity") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (strcmp(attribute_name.c_str(), "joint_linear_velocity") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
 				{
-					if (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)
-					{
-						send_data_vec.emplace_back(&d->qpos[qpos_id]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
-					}
+					send_data_vec.emplace_back(&d->qvel[dof_id]);
+				}
+				else if ((strcmp(attribute_name.c_str(), "joint_torque") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (strcmp(attribute_name.c_str(), "joint_force") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
+				{
+					send_data_vec.emplace_back(&d->qfrc_inverse[dof_id]);
 				}
 				else if (strcmp(attribute_name.c_str(), "joint_position") == 0)
 				{
 					printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
 				}
-				else if (strcmp(attribute_name.c_str(), "joint_quaternion") == 0)
+				else if (strcmp(attribute_name.c_str(), "joint_quaternion") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL)
 				{
-					if (m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL)
-					{
-						send_data_vec.emplace_back(&d->qpos[qpos_id]);
-						send_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
-						send_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
-						send_data_vec.emplace_back(&d->qpos[qpos_id + 3]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
-					}
+					send_data_vec.emplace_back(&d->qpos[qpos_id]);
+					send_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
+					send_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
+					send_data_vec.emplace_back(&d->qpos[qpos_id + 3]);
+				}
+				else
+				{
+					printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
 				}
 			}
 		}
@@ -491,21 +470,15 @@ void MjMultiverseClient::init_send_and_receive_data()
 			const int dof_id = m->body_dofadr[body_id];
 			for (const std::string &attribute_name : receive_object.second)
 			{
-				if (strcmp(attribute_name.c_str(), "position") == 0)
+				if (strcmp(attribute_name.c_str(), "position") == 0 &&
+					(body_ref_id != -1 || m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
 				{
 					if (body_ref_id == -1)
 					{
-						if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
-						{
-							int qpos_id = m->jnt_qposadr[m->body_jntadr[body_id]];
-							receive_data_vec.emplace_back(&d->qpos[qpos_id]);
-							receive_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
-							receive_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
-						}
-						else
-						{
-							printf("%s for %s not supported", attribute_name.c_str(), body_name.c_str());
-						}
+						int qpos_id = m->jnt_qposadr[m->body_jntadr[body_id]];
+						receive_data_vec.emplace_back(&d->qpos[qpos_id]);
+						receive_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
+						receive_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
 					}
 					else
 					{
@@ -514,7 +487,10 @@ void MjMultiverseClient::init_send_and_receive_data()
 						receive_data_vec.emplace_back(&d->mocap_pos[3 * mocap_id + 2]);
 					}
 				}
-				else if (strcmp(attribute_name.c_str(), "quaternion") == 0)
+				else if (strcmp(attribute_name.c_str(), "quaternion") == 0 &&
+							 (body_ref_id != -1 ||
+							  m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE) ||
+						 (m->body_dofnum[body_id] == 3 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_BALL))
 				{
 					if (body_ref_id == -1)
 					{
@@ -533,10 +509,6 @@ void MjMultiverseClient::init_send_and_receive_data()
 							receive_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
 							receive_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
 							receive_data_vec.emplace_back(&d->qpos[qpos_id + 3]);
-						}
-						else
-						{
-							printf("%s for %s not supported", attribute_name.c_str(), body_name.c_str());
 						}
 					}
 					else
@@ -559,25 +531,17 @@ void MjMultiverseClient::init_send_and_receive_data()
 					receive_data_vec.emplace_back(&d->xfrc_applied[6 * body_id + 4]);
 					receive_data_vec.emplace_back(&d->xfrc_applied[6 * body_id + 5]);
 				}
-				else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0)
+				else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0 &&
+						 m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE &&
+						 odom_velocities.count(body_id) == 0)
 				{
-					if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
-					{
-						if (odom_velocities.count(body_id) == 0)
-						{
-							odom_velocities[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
-							receive_data_vec.emplace_back(&odom_velocities[body_id][0]);
-							receive_data_vec.emplace_back(&odom_velocities[body_id][1]);
-							receive_data_vec.emplace_back(&odom_velocities[body_id][2]);
-							receive_data_vec.emplace_back(&odom_velocities[body_id][3]);
-							receive_data_vec.emplace_back(&odom_velocities[body_id][4]);
-							receive_data_vec.emplace_back(&odom_velocities[body_id][5]);
-						}
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), body_name.c_str());
-					}
+					odom_velocities[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
+					receive_data_vec.emplace_back(&odom_velocities[body_id][0]);
+					receive_data_vec.emplace_back(&odom_velocities[body_id][1]);
+					receive_data_vec.emplace_back(&odom_velocities[body_id][2]);
+					receive_data_vec.emplace_back(&odom_velocities[body_id][3]);
+					receive_data_vec.emplace_back(&odom_velocities[body_id][4]);
+					receive_data_vec.emplace_back(&odom_velocities[body_id][5]);
 				}
 			}
 		}
@@ -589,44 +553,37 @@ void MjMultiverseClient::init_send_and_receive_data()
 			{
 				if (strcmp(attribute_name.c_str(), "joint_position") == 0)
 				{
-					printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
+					printf("%s for %s not supported yet", attribute_name.c_str(), joint_name.c_str());
 				}
-				else if (strcmp(attribute_name.c_str(), "joint_quaternion") == 0)
+				else if (strcmp(attribute_name.c_str(), "joint_quaternion") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL)
 				{
-					if (m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL)
-					{
-						receive_data_vec.emplace_back(&d->qpos[qpos_id]);
-						receive_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
-						receive_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
-						receive_data_vec.emplace_back(&d->qpos[qpos_id + 3]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
-					}
+					receive_data_vec.emplace_back(&d->qpos[qpos_id]);
+					receive_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
+					receive_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
+					receive_data_vec.emplace_back(&d->qpos[qpos_id + 3]);
 				}
-				else if (strcmp(attribute_name.c_str(), "joint_rvalue") == 0)
-				{
-					if (m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE)
-					{
-						receive_data_vec.emplace_back(&d->qpos[qpos_id]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
-					}
-				}
-				else if (strcmp(attribute_name.c_str(), "joint_tvalue") == 0)
-				{
-					if (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)
-					{
-						receive_data_vec.emplace_back(&d->qpos[qpos_id]);
-					}
-					else
-					{
-						printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
-					}
-				}
+				// else if (strcmp(attribute_name.c_str(), "joint_rvalue") == 0)
+				// {
+				// 	if (m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE)
+				// 	{
+				// 		receive_data_vec.emplace_back(&d->qpos[qpos_id]);
+				// 	}
+				// 	else
+				// 	{
+				// 		printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
+				// 	}
+				// }
+				// else if (strcmp(attribute_name.c_str(), "joint_tvalue") == 0)
+				// {
+				// 	if (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)
+				// 	{
+				// 		receive_data_vec.emplace_back(&d->qpos[qpos_id]);
+				// 	}
+				// 	else
+				// 	{
+				// 		printf("%s for %s not supported", attribute_name.c_str(), joint_name.c_str());
+				// 	}
+				// }
 			}
 		}
 	}

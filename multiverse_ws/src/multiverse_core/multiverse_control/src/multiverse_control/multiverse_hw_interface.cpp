@@ -42,8 +42,6 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
     
     host = multiverse_params.at("client_host");
 	port = multiverse_params.at("client_port");
-
-    connect();
     
     for (const std::pair<std::string, urdf::JointSharedPtr> &robot_joint : urdf_model.joints_)
     {
@@ -59,7 +57,7 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
                 receive_objects[robot_joint.first] = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
                 send_objects[robot_joint.first] = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
             }
-            
+
             joint_names.push_back(robot_joint.first);
             joint_states[robot_joint.first] = (double *)calloc(3, sizeof(double));
             joint_commands[robot_joint.first] = (double *)calloc(3, sizeof(double));
@@ -84,6 +82,8 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
     registerInterface(&position_joint_interface);
     registerInterface(&velocity_joint_interface);
     registerInterface(&effort_joint_interface);
+
+    connect();
 }
 
 MultiverseHWInterface::~MultiverseHWInterface()
@@ -155,37 +155,31 @@ void MultiverseHWInterface::init_send_and_receive_data()
 
 void MultiverseHWInterface::bind_send_data()
 {
-    *send_buffer = get_time_now();
+    double *send_buffer_addr = send_buffer + 1;
 
     for (const std::string &joint_name : joint_names)
     {
-        *send_buffer++ = joint_commands[joint_name][0];
-        *send_buffer++ = joint_commands[joint_name][1];
-        *send_buffer++ = joint_commands[joint_name][2];
+        *send_buffer_addr++ = joint_commands[joint_name][0];
+        *send_buffer_addr++ = joint_commands[joint_name][1];
+        *send_buffer_addr++ = joint_commands[joint_name][2];
     }
 }
 
 void MultiverseHWInterface::bind_receive_data()
 {
-    receive_buffer++;
+    double *receive_buffer_addr = receive_buffer + 1;
+
     for (const std::string &joint_name : joint_names)
     {
-        joint_states[joint_name][0] = *receive_buffer++;
-        joint_states[joint_name][1] = *receive_buffer++;
-        joint_states[joint_name][2] = *receive_buffer++;
+        joint_states[joint_name][0] = *receive_buffer_addr++;
+        joint_states[joint_name][1] = *receive_buffer_addr++;
+        joint_states[joint_name][2] = *receive_buffer_addr++;
     }
 }
 
 void MultiverseHWInterface::clean_up()
 {
-    for (const std::string &joint_name : joint_names)
-    {
-        free(joint_states[joint_name]);
-        free(joint_commands[joint_name]);
-    }
-    joint_names.clear();
-    joint_states.clear();
-    joint_commands.clear();
+
 }
 
 void MultiverseHWInterface::communicate(const bool resend_meta_data)
