@@ -37,6 +37,13 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
         ROS_WARN("Failed to load robot from %s\n", robot_description.c_str());
         return;
     }
+
+    server_socket_addr = multiverse_params.at("server_host") + ":" + multiverse_params.at("server_port");
+    
+    host = multiverse_params.at("client_host");
+	port = multiverse_params.at("client_port");
+
+    connect();
     
     for (const std::pair<std::string, urdf::JointSharedPtr> &robot_joint : urdf_model.joints_)
     {
@@ -81,6 +88,7 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
 
 MultiverseHWInterface::~MultiverseHWInterface()
 {
+    disconnect();
 }
 
 bool MultiverseHWInterface::init_objects()
