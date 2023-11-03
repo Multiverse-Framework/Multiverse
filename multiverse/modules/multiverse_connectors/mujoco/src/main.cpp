@@ -47,6 +47,69 @@ void signal_handler(int signum) {
     exit(signum);
 }
 
+double get_time_now()
+{
+    return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
+}
+
+void simulate(const double rtf_desired, const double max_time_step, const double min_time_step)
+{
+    double init_time_step = m->opt.timestep;
+    double start_time = get_time_now();
+    double last_real_time = get_time_now() - start_time;
+    int i = 0;
+    while (!stop)
+    {
+        mj_multiverse_client.communicate();
+        mj_simulate.step();
+
+        // Calculate real time factor
+        int num_step = mju_ceil(1 / m->opt.timestep);
+        static std::deque<double> last_sim_times;
+        static std::deque<double> last_real_times;
+        double error_time;
+        if (i == 0)
+        {
+            last_sim_times.clear();
+            last_real_times.clear();
+        }
+        do
+        {
+            real_time = get_time_now() - start_time;
+            error_time = real_time - d->time / rtf_desired;
+        } while (error_time < -1E-6 && i != 0);
+        
+        last_sim_times.push_front(d->time);
+        last_real_times.push_front(real_time);
+        if (i == num_step)
+        {
+            last_sim_times.pop_back();
+            last_real_times.pop_back();
+        }
+        else
+        {
+            i++;
+        }
+        rtf = (real_time - last_real_times.back()) / (d->time - last_sim_times.back());
+
+        // Change timestep when out of sync
+        if (error_time > 1E-3)
+        {
+            if (m->opt.timestep < max_time_step)
+            {
+                m->opt.timestep *= 2;
+            }
+        }
+        else
+        {
+            if (m->opt.timestep > min_time_step)
+            {
+                m->opt.timestep /= 2;
+            }
+        }
+    }
+}
+
 int main(int argc, char **argv)
 {
     // Register signal handler for SIGINT
@@ -77,13 +140,30 @@ int main(int argc, char **argv)
         }
     }
 
-    std::thread sim_thread([](){
-        while (!stop)
+    std::map<std::string, double> config_params_map = {
+        {"rtf_desired", 1.0},
+        {"max_time_step", 0.01},
+        {"min_time_step", 0.001}
+    };
+    
+    if (argc > 3)
+    {
+        const std::string config_params_str = argv[3];
+        Json::Value config_params_json;
+        Json::Reader reader;
+        if (reader.parse(config_params_str, config_params_json) && !config_params_json.empty())
         {
-            mj_multiverse_client.communicate();
-            mj_simulate.step();
+            for (std::pair<const std::string, double> &config_param : config_params_map)
+            {
+                if (config_params_json[config_param.first].isDouble())
+                {
+                    config_param.second = config_params_json[config_param.first].asDouble();
+                }
+            }
         }
-    });
+    }
+
+    std::thread sim_thread(&simulate, config_params_map["rtf_desired"], config_params_map["max_time_step"], config_params_map["min_time_step"]);
 #ifdef VISUAL
     mj_visual.run();
 #endif

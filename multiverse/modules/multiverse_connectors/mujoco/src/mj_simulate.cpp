@@ -44,6 +44,5 @@ void MjSimulate::init()
 
 void MjSimulate::step()
 {
-    mj_step1(m, d);
-    mj_step2(m, d);
+    mj_step(m, d);
 }

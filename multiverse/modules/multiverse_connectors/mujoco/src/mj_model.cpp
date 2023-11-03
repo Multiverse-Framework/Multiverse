@@ -28,3 +28,7 @@ std::mutex mtx;
 boost::filesystem::path scene_xml_path;
 
 bool stop = false;
+
+double rtf = 1.0;
+
+double real_time;

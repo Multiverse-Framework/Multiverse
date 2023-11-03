@@ -243,6 +243,24 @@ void MjVisual::render()
     oss << "[" << d->mocap_pos[3*cursor_id] << ", " << d->mocap_pos[3*cursor_id+1] << ", " << d->mocap_pos[3*cursor_id+2] << "]";
     mjr_text(mjFONT_NORMAL, oss.str().c_str(), &con, 0.5, 0.5, 1, 1, 1);
 
+    // print simulation time
+    mjrRect rect1 = {0, viewport.height - 50, 300, 50};
+    mjrRect rect2 = {0, viewport.height - 100, 300, 50};
+    mjrRect rect3 = {0, viewport.height - 150, 300, 50};
+    mjrRect rect4 = {0, viewport.height - 200, 300, 50};
+    mjrRect rect5 = {0, viewport.height - 250, 300, 50};
+    std::string real_time_text = "Real time: " + std::to_string(real_time);
+    std::string sim_time_text = "Simulation time: " + std::to_string(d->time);
+    std::string rtf_text = "Real-time factor: " + std::to_string(rtf);
+    std::string time_step_text = "Time step: " + std::to_string(m->opt.timestep);
+    std::string energy = "Total energy: " + std::to_string(d->energy[0] + d->energy[1]);
+
+    mjr_label(rect1, 0, real_time_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
+    mjr_label(rect2, 0, sim_time_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
+    mjr_label(rect3, 0, rtf_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
+    mjr_label(rect4, 0, time_step_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
+    mjr_label(rect5, 0, energy.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
+
     // swap OpenGL buffers (blocking call due to v-sync)
     glfwSwapBuffers(window);
 

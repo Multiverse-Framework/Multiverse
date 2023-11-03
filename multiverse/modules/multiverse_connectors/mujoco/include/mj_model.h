@@ -34,3 +34,7 @@ extern std::mutex mtx;
 extern boost::filesystem::path scene_xml_path;
 
 extern bool stop;
+
+extern double rtf;
+
+extern double real_time;

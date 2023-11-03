@@ -185,6 +185,7 @@ void MultiverseHWInterface::clean_up()
 void MultiverseHWInterface::communicate(const bool resend_meta_data)
 {
     MultiverseClient::communicate(resend_meta_data);
+    ROS_WARN("%f - %f - %f\n", joint_commands["shoulder_pan_joint"][0], joint_commands["shoulder_pan_joint"][1], joint_commands["shoulder_pan_joint"][2]);
 }
 
 void MultiverseHWInterface::doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,

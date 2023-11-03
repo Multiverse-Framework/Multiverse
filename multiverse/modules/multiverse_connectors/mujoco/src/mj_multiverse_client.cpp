@@ -62,7 +62,8 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 bool MjMultiverseClient::init_objects()
 {
 	std::set<std::string> body_attributes = {"position", "quaternion", "relative_velocity", "force", "torque"};
-	std::set<std::string> receive_joint_attributes = {"cmd_joint_rvalue", "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_angular_velocity", "cmd_joint_force", "cmd_joint_torque"};
+	std::set<std::string> receive_hinge_joint_attributes = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
+	std::set<std::string> receive_slide_joint_attributes = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
 
 	for (const std::string &object_name : receive_objects_json.getMemberNames())
 	{
@@ -76,12 +77,9 @@ bool MjMultiverseClient::init_objects()
 			{
 				receive_objects[object_name].insert(attribute_name);
 			}
-			else if (receive_joint_attributes.count(attribute_name) != 0 && joint_id != -1)
+			else if (joint_id != -1 && ((receive_hinge_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (receive_slide_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)))
 			{
-				// if ((m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE && strcmp(attribute_name.c_str(), "joint_rvalue") == 0) || (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE && strcmp(attribute_name.c_str(), "joint_tvalue") == 0))
-				// {
-				// 	receive_objects[object_name].insert(attribute_name);
-				// }
+				receive_objects[object_name].insert(attribute_name);
 			}
 		}
 	}
@@ -551,7 +549,17 @@ void MjMultiverseClient::init_send_and_receive_data()
 			const int qpos_id = m->jnt_qposadr[joint_id];
 			for (const std::string &attribute_name : receive_object.second)
 			{
-				if (strcmp(attribute_name.c_str(), "joint_position") == 0)
+				if ((strcmp(attribute_name.c_str(), "cmd_joint_rvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
+					(strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
+				{
+					receive_data_vec.emplace_back(&d->qpos[qpos_id]);
+				}
+				// else if ((strcmp(attribute_name.c_str(), "cmd_joint_rvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
+				// 	(strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
+				// {
+				// 	receive_data_vec.emplace_back(&d->qpos[qpos_id]);
+				// }
+				else if (strcmp(attribute_name.c_str(), "joint_position") == 0)
 				{
 					printf("%s for %s not supported yet", attribute_name.c_str(), joint_name.c_str());
 				}

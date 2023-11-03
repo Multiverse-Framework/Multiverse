@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <mujoco model="ur5e">
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
-	<option timestep="0.01" gravity="0 0 -9.81">
-		<flag contact="enable"/>
+	<option timestep="0.001" gravity="0 0 -9.81">
+		<flag contact="enable" energy="enable"/>
 	</option>
 	<default>
 		<default class="visual">

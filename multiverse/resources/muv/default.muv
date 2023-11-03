@@ -27,6 +27,10 @@ sim_1:
         body: _1
         geom: _1
         joint: _1
+  config:
+    rtf_desired: 1
+    max_time_step: 0.01
+    min_time_step: 0.001
 
 sim_2:
   simulator: mujoco
@@ -41,6 +45,10 @@ sim_2:
             pos: [0, 0, 1]
           # gravcomp: 0
       disable_self_collision: auto
+  config:
+    rtf_desired: 1
+    max_time_step: 0.01
+    min_time_step: 0.001
 
 multiverse_server:
   host: "tcp://127.0.0.1"
@@ -67,6 +75,13 @@ multiverse_client:
     send:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+    receive:
+      shoulder_pan_joint: ["cmd_joint_rvalue"]
+      # shoulder_lift_joint: ["cmd_joint_rvalue"]
+      # elbow_joint: ["cmd_joint_rvalue"]
+      # wrist_1_joint: ["cmd_joint_rvalue"]
+      # wrist_2_joint: ["cmd_joint_rvalue"]
+      # wrist_3_joint: ["cmd_joint_rvalue"]
 
   ros:
     services:
@@ -152,4 +167,4 @@ multiverse_client:
             spawn:
               - joint_state_controller
                 joint_trajectory_controller
-                gripper_controller
+                # gripper_controller

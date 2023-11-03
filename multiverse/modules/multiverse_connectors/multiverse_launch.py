@@ -109,6 +109,8 @@ def main():
                         ),
                     }
                     cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
+                config_dict = simulator_data["config"]
+                cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
 
             suffix = "_headless" if simulator_data.get("headless", False) else ""
             cmd = [f"{simulator}{suffix}"] + cmd
