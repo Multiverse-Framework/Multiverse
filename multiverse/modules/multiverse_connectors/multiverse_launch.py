@@ -7,6 +7,8 @@ import subprocess
 import re
 import signal
 from typing import List
+import rospy
+import xml.etree.ElementTree as ET
 
 processes = {"multiverse_server": [], "ros": [], "ros_control": []}
 simulators = {"mujoco"}
@@ -102,10 +104,12 @@ def main():
                 if multiverse_client_dict.get(simulation_name, None) is not None:
                     multiverse_dict = {
                         "multiverse_server": multiverse_server_dict,
-                        "multiverse_client": multiverse_client_dict.get(simulation_name, None),
+                        "multiverse_client": multiverse_client_dict.get(
+                            simulation_name, None
+                        ),
                     }
                     cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
-            
+
             suffix = "_headless" if simulator_data.get("headless", False) else ""
             cmd = [f"{simulator}{suffix}"] + cmd
 
@@ -124,31 +128,82 @@ def main():
             "rosrun",
             "multiverse_socket",
             "multiverse_socket_node.py",
-            f"--multiverse_server=\"{multiverse_server_dict}\"",
-            f"--services=\"{ros_services_dict}\"",
-            f"--publishers=\"{ros_publishers_dict}\"",
-            f"--subscribers=\"{ros_subscribers_dict}\""
+            f'--multiverse_server="{multiverse_server_dict}"',
+            f'--services="{ros_services_dict}"',
+            f'--publishers="{ros_publishers_dict}"',
+            f'--subscribers="{ros_subscribers_dict}"',
         ]
         process_2 = run_subprocess(cmd_2)
 
         processes["ros"] = [process_1, process_2]
 
-    # if multiverse_server_dict is not None and "multiverse_client" in data and "ros_control" in data["multiverse_client"]:
-    #     for world, robots in data["multiverse_client"]["ros_control"].items():
-    #         for robot, robot_params in robots.items():
-    #             multiverse_dict = {
-    #                 "multiverse_server": multiverse_server_dict,
-    #                 "multiverse_client": robot_params["meta_data"] | {"world": world},
-    #                 "robot": robot
-    #             }
-    #             cmd = [
-    #                 "rosrun",
-    #                 "multiverse_control",
-    #                 "multiverse_control_node",
-    #                 f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"','\"'),
-    #             ]
-    #             process = run_subprocess(cmd)
-    #             processes["ros_control"].append(process)
+    if (
+        multiverse_server_dict is not None
+        and "multiverse_client" in data
+        and "ros_control" in data["multiverse_client"]
+    ):
+        rospy.init_node(name="multiverse_launch")
+
+        robots_path = os.path.join(resources_path, "robot")
+        for world, ros_control_params in data["multiverse_client"][
+            "ros_control"
+        ].items():
+            for ros_control_param in ros_control_params:
+                controller_manager = ros_control_param["controller_manager"]
+                robot = controller_manager["robot"]
+                robot_description = controller_manager["robot_description"]
+                robot_urdf_path = controller_manager["urdf"]
+                if not os.path.isabs(robot_urdf_path):
+                    robot_urdf_path = os.path.join(robots_path, robot_urdf_path)
+
+                tree = ET.parse(robot_urdf_path)
+                root = tree.getroot()
+                robot_urdf_str = ET.tostring(root, encoding="unicode")
+                rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
+                multiverse_dict = {
+                    "multiverse_server": multiverse_server_dict,
+                    "multiverse_client": {
+                        "host": ros_control_param["host"],
+                        "port": ros_control_param["port"],
+                        "meta_data": ros_control_param["meta_data"] | {"world": world},
+                    },
+                    "controller_manager": {
+                        "robot": robot,
+                        "robot_description": robot_description,
+                    },
+                }
+                cmd = [
+                    "rosrun",
+                    "multiverse_control",
+                    "multiverse_control_node",
+                    f"{multiverse_dict}".replace(" ", "")
+                    .replace("'", '"')
+                    .replace('"', '"'),
+                ]
+                process = run_subprocess(cmd)
+                processes["ros_control"].append(process)
+
+                control_config_path = controller_manager["config"]
+                if not os.path.isabs(control_config_path):
+                    control_config_path = os.path.join(robots_path, control_config_path)
+                os.environ['ROS_NAMESPACE'] = f"{robot}"
+                cmd = [
+                    "rosparam",
+                    "load",
+                    f"{control_config_path}",
+                ]
+                process = run_subprocess(cmd)
+                process.wait()
+
+                for command, controllers in controller_manager["controllers"].items():
+                    cmd = [
+                        "rosrun",
+                        "controller_manager",
+                        "controller_manager",
+                        f"{command}",
+                    ] + controllers[0].split()
+                    process = run_subprocess(cmd)
+                    processes["ros_control"].append(process)
 
     try:
         processes["multiverse_server"][0].wait()
@@ -163,7 +218,7 @@ def main():
             print(f"Terminate ROS with PID {process.pid}")
             process.send_signal(signal.SIGINT)
             process.wait()
-            
+
         for simulator in simulators:
             if len(processes[simulator]) > 0:
                 for process in processes[simulator]:
@@ -175,6 +230,7 @@ def main():
             print(f"Terminate multiverse_server with PID {process.pid}")
             process.send_signal(signal.SIGINT)
             process.wait()
+
 
 if __name__ == "__main__":
     main()

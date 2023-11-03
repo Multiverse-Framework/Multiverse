@@ -31,9 +31,10 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
     meta_data["handedness"] = multiverse_params.at("handedness");
     
     urdf::Model urdf_model;
-    const std::string robot_urdf_path = multiverse_params.at("urdf");
-    if (!urdf_model.initFile(robot_urdf_path))
+    const std::string robot_description = multiverse_params.at("robot_description");
+    if (!urdf_model.initParamWithNodeHandle(robot_description, n))
     {
+        ROS_WARN("Failed to load robot from %s\n", robot_description.c_str());
         return;
     }
     
@@ -51,7 +52,6 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
                 receive_objects[robot_joint.first] = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
                 send_objects[robot_joint.first] = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
             }
-            ROS_INFO("%s\n", robot_joint.first.c_str());
             
             joint_names.push_back(robot_joint.first);
             joint_states[robot_joint.first] = (double *)calloc(3, sizeof(double));

@@ -135,8 +135,7 @@ multiverse_client:
 
   ros_control:
     world_2:
-      ur5e:
-        meta_data:
+      - meta_data:
           length_unit: m
           angle_unit: rad
           mass_unit: kg
@@ -145,9 +144,12 @@ multiverse_client:
         host: "tcp://127.0.0.1"
         port: 7800
         controller_manager:
-          urdf: multiverse_control/resources/universal_robot/ur5e/ur5e.urdf
+          robot: ur5e
+          robot_description: /robot_description
+          urdf: universal_robot/ur5e/urdf/ur5e.urdf
           config: universal_robot/ur5e/config/ros_control.yaml
           controllers:
-            - joint_state_controller
-              joint_trajectory_controller
-              gripper_controller
+            spawn:
+              - joint_state_controller
+                joint_trajectory_controller
+                gripper_controller
