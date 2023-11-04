@@ -40,6 +40,7 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 
 	const Json::Value multiverse_client_meta_data_params_json = multiverse_client_params_json["meta_data"];
 	multiverse_params["world"] = multiverse_client_meta_data_params_json["world"].toStyledString();
+	multiverse_params["name"] = multiverse_client_meta_data_params_json["name"].toStyledString();
 
 	for (std::pair<const std::string, std::string> &multiverse_param : multiverse_params)
 	{
@@ -49,7 +50,8 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 
 	send_objects_json = multiverse_params_json["multiverse_client"]["send"];
 	receive_objects_json = multiverse_params_json["multiverse_client"]["receive"];
-	world = multiverse_params["world"];
+	world_name = multiverse_params["world"];
+	simulation_name = multiverse_params["name"];
 
 	server_socket_addr = multiverse_params["server_host"] + ":" + multiverse_params["server_port"];
 
@@ -174,7 +176,8 @@ void MjMultiverseClient::bind_request_meta_data()
 	mtx.lock();
 	// Create JSON object and populate it
 	request_meta_data_json.clear();
-	request_meta_data_json["world"] = world;
+	request_meta_data_json["world"] = world_name;
+	request_meta_data_json["name"] = simulation_name;
 	request_meta_data_json["length_unit"] = "m";
 	request_meta_data_json["angle_unit"] = "rad";
 	request_meta_data_json["mass_unit"] = "kg";

@@ -24,6 +24,7 @@
 MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params)
 {
     meta_data["world"] = multiverse_params.at("world");
+    meta_data["name"] = multiverse_params.at("robot") + "_controller";
     meta_data["length_unit"] = multiverse_params.at("length_unit");
     meta_data["angle_unit"] = multiverse_params.at("angle_unit");
     meta_data["mass_unit"] = multiverse_params.at("mass_unit");
@@ -124,6 +125,7 @@ void MultiverseHWInterface::bind_request_meta_data()
     // Create JSON object and populate it
     request_meta_data_json.clear();
     request_meta_data_json["world"] = meta_data["world"];
+    request_meta_data_json["name"] = meta_data["name"];
     request_meta_data_json["length_unit"] = meta_data["length_unit"];
     request_meta_data_json["angle_unit"] = meta_data["angle_unit"];
     request_meta_data_json["mass_unit"] = meta_data["mass_unit"];

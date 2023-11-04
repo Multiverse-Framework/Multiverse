@@ -4,6 +4,7 @@ import rospy
 def init_request_meta_data_dict(meta_data: dict) -> dict:
     request_meta_data_dict = {}
     request_meta_data_dict["world"] = meta_data.get("world", "world")
+    request_meta_data_dict["name"] = "ros"
     request_meta_data_dict["length_unit"] = meta_data.get("length_unit", "m") 
     request_meta_data_dict["angle_unit"] = meta_data.get("angle_unit", "rad") 
     request_meta_data_dict["mass_unit"] = meta_data.get("mass_unit", "kg") 

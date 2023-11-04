@@ -97,20 +97,20 @@ def main():
             scene_xml_path = re.search(r"Scene:\s*([^\n]+)", result.stdout).group(1)
             cmd = [f"{scene_xml_path}"]
 
+            config_dict = simulator_data["config"]
+            cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
+
             if (
                 multiverse_server_dict is not None
                 and multiverse_client_dict is not None
             ):
-                if multiverse_client_dict.get(simulation_name, None) is not None:
+                if multiverse_client_dict.get(simulation_name) is not None:
+                    multiverse_client_dict[simulation_name]["meta_data"]["name"] = simulation_name
                     multiverse_dict = {
                         "multiverse_server": multiverse_server_dict,
-                        "multiverse_client": multiverse_client_dict.get(
-                            simulation_name, None
-                        ),
+                        "multiverse_client": multiverse_client_dict[simulation_name],
                     }
                     cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
-                config_dict = simulator_data["config"]
-                cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
 
             suffix = "_headless" if simulator_data.get("headless", False) else ""
             cmd = [f"{simulator}{suffix}"] + cmd

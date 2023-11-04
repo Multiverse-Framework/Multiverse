@@ -53,7 +53,9 @@ public:
     static std::mutex mutex;
 
 private:
-    std::string world;
+    std::string world_name;
+
+    std::string simulation_name;
 
     double world_time;
 

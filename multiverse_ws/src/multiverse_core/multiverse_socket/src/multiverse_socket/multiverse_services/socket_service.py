@@ -54,6 +54,7 @@ class socket_service(MultiverseRosServiceServer):
 
         self._request_meta_data_dict = {}
         self._request_meta_data_dict["world"] = world_name
+        self._request_meta_data_dict["name"] = "ros"
         self._request_meta_data_dict["length_unit"] = "m" if request.length_unit == "" else request.length_unit
         self._request_meta_data_dict["angle_unit"] = "rad" if request.angle_unit == "" else request.angle_unit
         self._request_meta_data_dict["mass_unit"] = "kg" if request.mass_unit == "" else request.mass_unit
@@ -65,7 +66,7 @@ class socket_service(MultiverseRosServiceServer):
 
         self.__send_data = [0]
         for object_data in request.send:
-            if world_name not in self.__worlds or object_data.object_name not in self.__worlds[world_name]:
+            if object_data.object_name == "" or world_name not in self.__worlds or object_data.object_name not in self.__worlds[world_name]:
                 continue
             self._request_meta_data_dict["send"][object_data.object_name] = [object_data.attribute_name]
             self.__send_data += object_data.data
@@ -89,6 +90,7 @@ class socket_service(MultiverseRosServiceServer):
         response.handedness = response_meta_data_dict["handedness"]
 
         if len(self.__send_data) > 1:
+            print(self.__send_data)
             self._set_send_data(self.__send_data)
             self._communicate()
             self._set_send_data(self.__send_data)

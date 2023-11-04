@@ -133,26 +133,15 @@ int main(int argc, char **argv)
     mj_visual.init();
 #endif
 
-    if (argc > 2)
-    {
-        const std::string multiverse_params_str = argv[2];
-        Json::Value multiverse_params_json;
-        Json::Reader reader;
-        if (reader.parse(multiverse_params_str, multiverse_params_json) && !multiverse_params_json.empty())
-        {
-            mj_multiverse_client.init(multiverse_params_json);
-        }
-    }
-
     std::map<std::string, double> config_params_map = {
         {"rtf_desired", 1.0},
         {"max_time_step", 0.01},
         {"min_time_step", 0.001}
     };
     
-    if (argc > 3)
+    if (argc > 2)
     {
-        const std::string config_params_str = argv[3];
+        const std::string config_params_str = argv[2];
         Json::Value config_params_json;
         Json::Reader reader;
         if (reader.parse(config_params_str, config_params_json) && !config_params_json.empty())
@@ -164,6 +153,17 @@ int main(int argc, char **argv)
                     config_param.second = config_params_json[config_param.first].asDouble();
                 }
             }
+        }
+    }
+
+    if (argc > 3)
+    {
+        const std::string multiverse_params_str = argv[3];
+        Json::Value multiverse_params_json;
+        Json::Reader reader;
+        if (reader.parse(multiverse_params_str, multiverse_params_json) && !multiverse_params_json.empty())
+        {
+            mj_multiverse_client.init(multiverse_params_json);
         }
     }
 

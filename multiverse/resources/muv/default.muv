@@ -110,7 +110,7 @@ multiverse_client:
           port: 7301
           topic: /tf
           rate: 60
-          root_frame_id: map
+          root_frame_id: map_1
           
         - meta_data:
             world: world_2

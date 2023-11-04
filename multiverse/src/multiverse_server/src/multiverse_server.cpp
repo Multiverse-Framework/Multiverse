@@ -178,6 +178,8 @@ std::mutex mtx;
 
 std::map<std::string, double> world_times;
 
+std::map<std::string, Json::Value> request_meta_data_map; 
+
 std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
 
 std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>>> efforts;
@@ -397,7 +399,30 @@ private:
 
     void init_response_meta_data()
     {
+        if (!request_meta_data_json.isMember("name"))
+        {
+            if (simulation_name.empty())
+            {
+                throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " doesn't have a name.");
+            }
+        }
+        else
+        {
+            std::string tmp_simulation_name = request_meta_data_json["name"].toStyledString().c_str();
+        
+            if (tmp_simulation_name != simulation_name && request_meta_data_map.count(tmp_simulation_name) > 0)
+            {
+                request_meta_data_map[tmp_simulation_name] = request_meta_data_json;
+                request_meta_data_json = request_meta_data_map[simulation_name];
+            }
+            else
+            {
+                simulation_name = tmp_simulation_name;
+            }
+        }
+
         world_name = request_meta_data_json.isMember("world") ? request_meta_data_json["world"].asString() : "world";
+        
         const std::string length_unit = request_meta_data_json.isMember("length_unit") ? request_meta_data_json["length_unit"].asString() : "m";
         const std::string angle_unit = request_meta_data_json.isMember("angle_unit") ? request_meta_data_json["angle_unit"].asString() : "rad";
         const std::string handedness = request_meta_data_json.isMember("handedness") ? request_meta_data_json["handedness"].asString() : "rhs";
@@ -866,6 +891,8 @@ private:
     std::map<EAttribute, std::vector<double>> conversion_map;
 
     std::string world_name;
+
+    std::string simulation_name;
 
     Json::Reader reader;
 
