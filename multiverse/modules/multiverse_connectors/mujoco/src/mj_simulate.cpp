@@ -41,10 +41,3 @@ void MjSimulate::init()
     // make data
     d = mj_makeData(m);
 }
-
-void MjSimulate::step()
-{
-    mtx.lock();
-    mj_step(m, d);
-    mtx.unlock();
-}

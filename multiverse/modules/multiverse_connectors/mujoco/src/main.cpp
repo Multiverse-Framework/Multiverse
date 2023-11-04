@@ -59,8 +59,13 @@ void simulate(const double rtf_desired, const double max_time_step, const double
     int i = 0;
     while (!stop)
     {
+        mtx.lock();
+        mj_step1(m, d);
+        mtx.unlock();
         mj_multiverse_client.communicate();
-        mj_simulate.step();
+        mtx.lock();
+        mj_step2(m, d);
+        mtx.unlock();
 
         // Calculate real time factor
         int num_step = mju_ceil(1 / m->opt.timestep);

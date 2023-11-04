@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     MultiverseHWInterface multiverse_hw_interface(multiverse_params);
     controller_manager::ControllerManager controller_manager(&multiverse_hw_interface, ros::NodeHandle(multiverse_params["robot"]));
 
-    ros::AsyncSpinner spinner(3);
+    ros::AsyncSpinner spinner(0);
     spinner.start();
     
     double ros_time_start = ros::Time::now().toSec();

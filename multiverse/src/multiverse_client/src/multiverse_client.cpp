@@ -338,25 +338,22 @@ void MultiverseClient::communicate(const bool resend_request_meta_data)
     {
         run();
     }
-    else
+    else if (resend_request_meta_data)
     {
-        if (resend_request_meta_data)
+        wait_for_meta_data_thread_finish();
+        if (flag == EMultiverseClientState::BindSendData)
         {
-            wait_for_meta_data_thread_finish();
-            if (flag == EMultiverseClientState::BindSendData)
-            {
-                init_objects();
-            }
-            clean_up();
-            
-            flag = EMultiverseClientState::BindRequestMetaData;
-            
-            run();
+            init_objects();
         }
-        else if (flag == EMultiverseClientState::BindSendData || flag == EMultiverseClientState::InitSendAndReceiveData)
-        {
-            run();
-        }
+        clean_up();
+        
+        flag = EMultiverseClientState::BindRequestMetaData;
+        
+        run();
+    }
+    else if (flag == EMultiverseClientState::BindSendData || flag == EMultiverseClientState::InitSendAndReceiveData)
+    {
+        run();
     }
 }
 

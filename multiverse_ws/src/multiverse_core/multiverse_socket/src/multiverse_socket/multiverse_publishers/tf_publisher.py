@@ -41,11 +41,9 @@ class tf_publisher(MultiverseRosPublisher):
             tf_msg.transform.translation.y = tf_data["position"][1]
             tf_msg.transform.translation.z = tf_data["position"][2]
             quat = numpy.array([tf_data["quaternion"][0], tf_data["quaternion"][1], tf_data["quaternion"][2], tf_data["quaternion"][3]])
-            try:
-                quat = quat / numpy.linalg.norm(quat)
-            except TypeError as e:
-                rospy.logwarn(e)
+            if any([q is None for q in quat]):
                 continue
+            quat = quat / numpy.linalg.norm(quat)
             tf_msg.transform.rotation.w = quat[0]
             tf_msg.transform.rotation.x = quat[1]
             tf_msg.transform.rotation.y = quat[2]

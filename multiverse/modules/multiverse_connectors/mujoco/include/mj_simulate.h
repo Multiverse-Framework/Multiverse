@@ -42,12 +42,6 @@ public:
      */
     void init();
 
-    /**
-     * @brief Advance the simulation
-     * 
-     */
-    void step();
-
 private:
     MjSimulate() = default; // Singleton
 

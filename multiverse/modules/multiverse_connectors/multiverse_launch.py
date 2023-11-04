@@ -131,21 +131,20 @@ def main():
         processes["ros"] = [process]
 
         if "ros" in data["multiverse_client"] and data["multiverse_client"]["ros"] is not None:
-            ros_services_dict = data["multiverse_client"]["ros"]["services"]
-            ros_publishers_dict = data["multiverse_client"]["ros"]["publishers"]
-            ros_subscribers_dict = data["multiverse_client"]["ros"]["subscribers"]
-
             cmd = [
                 "rosrun",
                 "multiverse_socket",
                 "multiverse_socket_node.py",
                 f'--multiverse_server="{multiverse_server_dict}"',
             ]
-            if ros_services_dict is not None:
+            if "services" in data["multiverse_client"]["ros"]:
+                ros_services_dict = data["multiverse_client"]["ros"]["services"]
                 cmd.append(f'--services="{ros_services_dict}"')
-            if ros_services_dict is not None:
+            if "publishers" in data["multiverse_client"]["ros"]:
+                ros_publishers_dict = data["multiverse_client"]["ros"]["publishers"]
                 cmd.append(f'--publishers="{ros_publishers_dict}"')
-            if ros_services_dict is not None:
+            if "subscribers" in data["multiverse_client"]["ros"]:
+                ros_subscribers_dict = data["multiverse_client"]["ros"]["subscribers"]
                 cmd.append(f'--subscribers="{ros_subscribers_dict}"')
 
             process = run_subprocess(cmd)
