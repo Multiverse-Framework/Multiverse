@@ -114,7 +114,7 @@ void MultiverseClient::start()
     {
         printf("[Client %s] Start.\n", port.c_str());
         run();
-    }    
+    }
 }
 
 void MultiverseClient::connect()
@@ -225,18 +225,24 @@ void MultiverseClient::run()
         case EMultiverseClientState::ReceiveData:
             zmq_recv(client_socket, receive_buffer, receive_buffer_size * sizeof(double), 0);
 
-            if (!should_shut_down && (std::isnan(*receive_buffer) || *receive_buffer == -1.0))
+            if (!should_shut_down)
             {
-                printf("[Client %s] The socket %s from the server has been terminated (%f), returning to resend the meta data.\n", port.c_str(), socket_addr.c_str(), *receive_buffer);
+                if (std::isnan(*receive_buffer) || *receive_buffer == -1.0)
+                {
+                    printf("[Client %s] The socket %s from the server has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
 
-                wait_for_connect_to_server_thread_finish();
-                start_connect_to_server_thread();
-                return;
+                    wait_for_connect_to_server_thread_finish();
+                    start_connect_to_server_thread();
+                    return;
+                }
+                else if (*receive_buffer == -2.0)
+                {
+                    printf("[Client %s] The socket %s from the server has been received new meta data.\n", port.c_str(), socket_addr.c_str());
+                    flag = EMultiverseClientState::SendRequestMetaData;
+                    break;
+                }
             }
-            else
-            {
-                flag = EMultiverseClientState::BindReceiveData;
-            }
+            flag = EMultiverseClientState::BindReceiveData;
             break;
 
         case EMultiverseClientState::BindReceiveData:

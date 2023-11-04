@@ -1,0 +1,6 @@
+string simulation_name
+multiverse_msgs/ObjectData[] send
+multiverse_msgs/ObjectAttribute[] receive
+---
+string[] send_objects
+string[] receive_objects

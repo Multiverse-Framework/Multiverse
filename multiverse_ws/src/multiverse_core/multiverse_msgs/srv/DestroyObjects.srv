@@ -1,0 +1,4 @@
+string simulation_name
+string[] objects
+---
+string[] objects

@@ -178,7 +178,7 @@ std::mutex mtx;
 
 std::map<std::string, double> world_times;
 
-std::map<std::string, Json::Value> request_meta_data_map; 
+std::map<std::string, std::pair<Json::Value, bool>> request_meta_data_map; 
 
 std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
 
@@ -237,7 +237,7 @@ public:
                 receive_request_meta_data();
                 message_str = message.to_string();
                 if (message_str[0] != '{' ||
-                    message_str[0] == '{' && message_str[1] == '}' ||
+                    message_str[0] == '{' && message_str[1] == '}' && message_str.size() == 2 ||
                     message_str.empty() ||
                     !reader.parse(message_str, request_meta_data_json))
                 {
@@ -342,10 +342,23 @@ public:
                     receive_buffer[i] = *receive_data_vec[i].first * receive_data_vec[i].second;                    
                 }
                 flag = EMultiverseServerState::SendReceiveData;
+                break;
 
             case EMultiverseServerState::SendReceiveData:
                 send_receive_data();
-                flag = EMultiverseServerState::ReceiveSendData;
+                if (request_meta_data_map[simulation_name].second)
+                {
+                    printf("[Server] Socket %s has sent simulation %s request meta data.\n", socket_addr.c_str(), simulation_name.c_str());
+                    receive_request_meta_data();
+                    request_meta_data_json = request_meta_data_map[simulation_name].first;
+                    send_data_vec.clear();
+                    receive_data_vec.clear();
+                    flag = EMultiverseServerState::BindObjects;
+                }
+                else
+                {
+                    flag = EMultiverseServerState::ReceiveSendData;
+                }
                 break;
 
             default:
@@ -410,16 +423,26 @@ private:
         {
             std::string tmp_simulation_name = request_meta_data_json["name"].toStyledString().c_str();
         
-            if (tmp_simulation_name != simulation_name && request_meta_data_map.count(tmp_simulation_name) > 0)
+            if (tmp_simulation_name != simulation_name && !simulation_name.empty() && request_meta_data_map.count(tmp_simulation_name) > 0)
             {
-                request_meta_data_map[tmp_simulation_name] = request_meta_data_json;
-                request_meta_data_json = request_meta_data_map[simulation_name];
+                for (const std::string &object_name : request_meta_data_json["send"].getMemberNames())
+                {
+                    request_meta_data_map[tmp_simulation_name].first["send"][object_name] = request_meta_data_json["send"][object_name];
+                }
+                for (const std::string &object_name : request_meta_data_json["receive"].getMemberNames())
+                {
+                    request_meta_data_map[tmp_simulation_name].first["receive"][object_name] = request_meta_data_json["receive"][object_name];
+                }
+                request_meta_data_map[tmp_simulation_name].second = true;
+                request_meta_data_json = request_meta_data_map[simulation_name].first;
             }
             else
             {
                 simulation_name = tmp_simulation_name;
+                request_meta_data_map[simulation_name].first = request_meta_data_json;
             }
         }
+        request_meta_data_map[simulation_name].second = false;
 
         world_name = request_meta_data_json.isMember("world") ? request_meta_data_json["world"].asString() : "world";
         
@@ -470,30 +493,6 @@ private:
                       [mass_unit, length_unit, time_unit](double &torque)
                       { torque = unit_scale[mass_unit] * unit_scale[length_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
 
-        std::for_each(conversion_map[EAttribute::CmdJointRvalue].begin(), conversion_map[EAttribute::CmdJointRvalue].end(),
-                      [angle_unit](double &joint_rvalue)
-                      { joint_rvalue = unit_scale[angle_unit]; });
-
-        std::for_each(conversion_map[EAttribute::CmdJointTvalue].begin(), conversion_map[EAttribute::CmdJointTvalue].end(),
-                      [length_unit](double &joint_tvalue)
-                      { joint_tvalue = unit_scale[length_unit]; });
-
-        std::for_each(conversion_map[EAttribute::CmdJointLinearVelocity].begin(), conversion_map[EAttribute::CmdJointLinearVelocity].end(),
-                      [length_unit, time_unit](double &joint_linear_velocity)
-                      { joint_linear_velocity = unit_scale[length_unit] / unit_scale[time_unit]; });
-
-        std::for_each(conversion_map[EAttribute::CmdJointAngularVelocity].begin(), conversion_map[EAttribute::CmdJointAngularVelocity].end(),
-                      [angle_unit, time_unit](double &joint_angular_velocity)
-                      { joint_angular_velocity = unit_scale[angle_unit] / unit_scale[time_unit]; });
-
-        std::for_each(conversion_map[EAttribute::CmdJointForce].begin(), conversion_map[EAttribute::CmdJointForce].end(),
-                      [mass_unit, length_unit, time_unit](double &force)
-                      { force = unit_scale[mass_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
-
-        std::for_each(conversion_map[EAttribute::CmdJointTorque].begin(), conversion_map[EAttribute::CmdJointTorque].end(),
-                      [mass_unit, length_unit, time_unit](double &torque)
-                      { torque = unit_scale[mass_unit] * unit_scale[length_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
-
         std::for_each(conversion_map[EAttribute::JointPosition].begin(), conversion_map[EAttribute::JointPosition].end(),
                       [length_unit](double &joint_position)
                       { joint_position = unit_scale[length_unit]; });
@@ -509,6 +508,18 @@ private:
         std::for_each(conversion_map[EAttribute::Torque].begin(), conversion_map[EAttribute::Torque].end(),
                       [mass_unit, length_unit, time_unit](double &torque)
                       { torque = unit_scale[mass_unit] * unit_scale[length_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
+
+        conversion_map[EAttribute::CmdJointRvalue] = conversion_map[EAttribute::JointRvalue];
+
+        conversion_map[EAttribute::CmdJointTvalue] = conversion_map[EAttribute::JointTvalue];
+        
+        conversion_map[EAttribute::CmdJointLinearVelocity] = conversion_map[EAttribute::JointLinearVelocity];
+
+        conversion_map[EAttribute::CmdJointAngularVelocity] = conversion_map[EAttribute::JointAngularVelocity];
+
+        conversion_map[EAttribute::CmdJointForce] = conversion_map[EAttribute::Force];
+
+        conversion_map[EAttribute::CmdJointTorque] = conversion_map[EAttribute::Torque];
 
         for (size_t i = 0; i < 3; i++)
         {
@@ -852,6 +863,11 @@ private:
         {
             receive_buffer[0] = -1.0;
         }
+        else if (request_meta_data_map[simulation_name].second)
+        {
+            receive_buffer[0] = -2.0;;
+        }
+        
         zmq::message_t reply_data(receive_buffer_size * sizeof(double));
         memcpy(reply_data.data(), receive_buffer, receive_buffer_size * sizeof(double));
         socket.send(reply_data, zmq::send_flags::none);
