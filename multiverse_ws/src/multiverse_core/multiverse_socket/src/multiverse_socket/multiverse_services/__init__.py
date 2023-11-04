@@ -1,2 +1,2 @@
 from .ros_service_server import MultiverseRosServiceServer
-from .query_data_service import query_data_service
+from .exchange_data_service import exchange_data_service

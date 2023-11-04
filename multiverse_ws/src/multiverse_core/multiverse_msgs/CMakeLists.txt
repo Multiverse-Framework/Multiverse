@@ -22,7 +22,7 @@ add_message_files(
 # # Generate services in the 'srv' folder
 add_service_files(
   FILES
-  Socket.srv
+  ExchangeData.srv
 )
 
 # # Generate added messages and services with any dependencies listed here

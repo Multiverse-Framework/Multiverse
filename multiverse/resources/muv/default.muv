@@ -87,7 +87,7 @@ multiverse_client:
 
   ros:
     services:
-      query_data:
+      exchange_data:
         meta_data:
           length_unit: m
           angle_unit: rad

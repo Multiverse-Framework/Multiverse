@@ -11,7 +11,7 @@ multiverse_client:
   root_frame_id: map
 
   services:
-    query_data:
+    exchange_data:
       port: 7400
 
   publishers:

@@ -3,14 +3,14 @@
 from typing import Dict
 from multiverse_socket.multiverse_services import MultiverseRosServiceServer
 from multiverse_msgs.msg import ObjectAttribute, ObjectData
-from multiverse_msgs.srv import Socket, SocketRequest, SocketResponse
+from multiverse_msgs.srv import ExchangeData, ExchangeDataRequest, ExchangeDataResponse
 
 
-class query_data_service(MultiverseRosServiceServer):
+class exchange_data_service(MultiverseRosServiceServer):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self._service_name = "/multiverse/query_data"
-        self._service_class = Socket
+        self._service_name = "/multiverse/exchange_data"
+        self._service_class = ExchangeData
         self.__worlds = {}
 
     def update_world(self, world_name) -> None:
@@ -31,7 +31,7 @@ class query_data_service(MultiverseRosServiceServer):
                     self.__worlds[world_name][""].add(attribute_name)
                     self.__worlds[world_name][object_name].add(attribute_name)
 
-    def _bind_request_meta_data(self, request: SocketRequest) -> None:
+    def _bind_request_meta_data(self, request: ExchangeDataRequest) -> None:
         world_name = request.world
         world_need_update = False
 
@@ -71,8 +71,8 @@ class query_data_service(MultiverseRosServiceServer):
                     continue
                 self._request_meta_data_dict["receive"][object_attribute.object_name].append(attribute_name)
 
-    def _bind_response(self, response_meta_data_dict: Dict) -> SocketResponse:
-        response = SocketResponse()
+    def _bind_response(self, response_meta_data_dict: Dict) -> ExchangeDataResponse:
+        response = ExchangeDataResponse()
         response.world = response_meta_data_dict["world"]
         response.length_unit = response_meta_data_dict["length_unit"]
         response.angle_unit = response_meta_data_dict["angle_unit"]
