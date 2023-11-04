@@ -75,13 +75,16 @@ int main(int argc, char **argv)
     
     ros::Time time_last = ros::Time::now();
     ros::Time time_now = ros::Time::now();
-
+    ros::Time time_now_rtf;
     while (ros::ok())
     {
         multiverse_hw_interface.communicate();
         time_now = ros::Time::now();
         ros::Duration duration = time_now - time_last;
-        controller_manager.update(time_now, duration);
+        ros::Duration duration_rtf;
+        duration_rtf.fromSec(duration.toSec() * 10);
+        time_now_rtf.fromSec(time_last.toSec() + duration_rtf.toSec() * 10);
+        controller_manager.update(time_now_rtf, duration_rtf);
         time_last = time_now;
     }
 

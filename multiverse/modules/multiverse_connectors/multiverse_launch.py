@@ -118,94 +118,102 @@ def main():
             process = run_subprocess(cmd)
             processes[cmd[0]].append(process)
 
-    if "multiverse_client" in data and "ros" in data["multiverse_client"]:
-        cmd_1 = ["roscore"]
-        process_1 = run_subprocess(cmd_1)
-
-        ros_params_dict = data["multiverse_client"]["ros"]
-        ros_services_dict = ros_params_dict["services"]
-        ros_publishers_dict = ros_params_dict["publishers"]
-        ros_subscribers_dict = ros_params_dict["subscribers"]
-        cmd_2 = [
-            "rosrun",
-            "multiverse_socket",
-            "multiverse_socket_node.py",
-            f'--multiverse_server="{multiverse_server_dict}"',
-            f'--services="{ros_services_dict}"',
-            f'--publishers="{ros_publishers_dict}"',
-            f'--subscribers="{ros_subscribers_dict}"',
-        ]
-        process_2 = run_subprocess(cmd_2)
-
-        processes["ros"] = [process_1, process_2]
-
     if (
         multiverse_server_dict is not None
         and "multiverse_client" in data
-        and "ros_control" in data["multiverse_client"]
+        and (
+            "ros" in data["multiverse_client"]
+            or "ros_control" in data["multiverse_client"]
+        )
     ):
-        rospy.init_node(name="multiverse_launch")
+        cmd = ["roscore"]
+        process = run_subprocess(cmd)
+        processes["ros"] = [process]
 
-        robots_path = os.path.join(resources_path, "robot")
-        for world, ros_control_params in data["multiverse_client"][
-            "ros_control"
-        ].items():
-            for ros_control_param in ros_control_params:
-                controller_manager = ros_control_param["controller_manager"]
-                robot = controller_manager["robot"]
-                robot_description = controller_manager["robot_description"]
-                robot_urdf_path = controller_manager["urdf"]
-                if not os.path.isabs(robot_urdf_path):
-                    robot_urdf_path = os.path.join(robots_path, robot_urdf_path)
+        if "ros" in data["multiverse_client"] and data["multiverse_client"]["ros"] is not None:
+            ros_services_dict = data["multiverse_client"]["ros"]["services"]
+            ros_publishers_dict = data["multiverse_client"]["ros"]["publishers"]
+            ros_subscribers_dict = data["multiverse_client"]["ros"]["subscribers"]
 
-                tree = ET.parse(robot_urdf_path)
-                root = tree.getroot()
-                robot_urdf_str = ET.tostring(root, encoding="unicode")
-                rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
-                multiverse_dict = {
-                    "multiverse_server": multiverse_server_dict,
-                    "multiverse_client": {
-                        "host": ros_control_param["host"],
-                        "port": ros_control_param["port"],
-                        "meta_data": ros_control_param["meta_data"] | {"world": world},
-                    },
-                    "controller_manager": {
-                        "robot": robot,
-                        "robot_description": robot_description,
-                    },
-                }
-                cmd = [
-                    "rosrun",
-                    "multiverse_control",
-                    "multiverse_control_node",
-                    f"{multiverse_dict}".replace(" ", "")
-                    .replace("'", '"')
-                    .replace('"', '"'),
-                ]
-                process = run_subprocess(cmd)
-                processes["ros_control"].append(process)
+            cmd = [
+                "rosrun",
+                "multiverse_socket",
+                "multiverse_socket_node.py",
+                f'--multiverse_server="{multiverse_server_dict}"',
+            ]
+            if ros_services_dict is not None:
+                cmd.append(f'--services="{ros_services_dict}"')
+            if ros_services_dict is not None:
+                cmd.append(f'--publishers="{ros_publishers_dict}"')
+            if ros_services_dict is not None:
+                cmd.append(f'--subscribers="{ros_subscribers_dict}"')
 
-                control_config_path = controller_manager["config"]
-                if not os.path.isabs(control_config_path):
-                    control_config_path = os.path.join(robots_path, control_config_path)
-                os.environ['ROS_NAMESPACE'] = f"{robot}"
-                cmd = [
-                    "rosparam",
-                    "load",
-                    f"{control_config_path}",
-                ]
-                process = run_subprocess(cmd)
-                process.wait()
+            process = run_subprocess(cmd)
+            processes["ros"].append(process)
 
-                for command, controllers in controller_manager["controllers"].items():
+        if "ros_control" in data["multiverse_client"]:
+            rospy.init_node(name="multiverse_launch")
+
+            robots_path = os.path.join(resources_path, "robot")
+            for world, ros_control_params in data["multiverse_client"][
+                "ros_control"
+            ].items():
+                for ros_control_param in ros_control_params:
+                    controller_manager = ros_control_param["controller_manager"]
+                    robot = controller_manager["robot"]
+                    robot_description = controller_manager["robot_description"]
+                    robot_urdf_path = controller_manager["urdf"]
+                    if not os.path.isabs(robot_urdf_path):
+                        robot_urdf_path = os.path.join(robots_path, robot_urdf_path)
+
+                    tree = ET.parse(robot_urdf_path)
+                    root = tree.getroot()
+                    robot_urdf_str = ET.tostring(root, encoding="unicode")
+                    rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
+                    multiverse_dict = {
+                        "multiverse_server": multiverse_server_dict,
+                        "multiverse_client": {
+                            "host": ros_control_param["host"],
+                            "port": ros_control_param["port"],
+                            "meta_data": ros_control_param["meta_data"] | {"world": world},
+                        },
+                        "controller_manager": {
+                            "robot": robot,
+                            "robot_description": robot_description,
+                        },
+                    }
                     cmd = [
                         "rosrun",
-                        "controller_manager",
-                        "controller_manager",
-                        f"{command}",
-                    ] + controllers[0].split()
+                        "multiverse_control",
+                        "multiverse_control_node",
+                        f"{multiverse_dict}".replace(" ", "")
+                        .replace("'", '"')
+                        .replace('"', '"'),
+                    ]
                     process = run_subprocess(cmd)
                     processes["ros_control"].append(process)
+
+                    control_config_path = controller_manager["config"]
+                    if not os.path.isabs(control_config_path):
+                        control_config_path = os.path.join(robots_path, control_config_path)
+                    os.environ["ROS_NAMESPACE"] = f"{robot}"
+                    cmd = [
+                        "rosparam",
+                        "load",
+                        f"{control_config_path}",
+                    ]
+                    process = run_subprocess(cmd)
+                    process.wait()
+
+                    for command, controllers in controller_manager["controllers"].items():
+                        cmd = [
+                            "rosrun",
+                            "controller_manager",
+                            "controller_manager",
+                            f"{command}",
+                        ] + controllers[0].split()
+                        process = run_subprocess(cmd)
+                        processes["ros_control"].append(process)
 
     try:
         processes["multiverse_server"][0].wait()

@@ -44,6 +44,10 @@ private:
 
     std::map<std::string, std::set<std::string>> receive_objects;
 
+    std::vector<double *> send_data_vec;
+
+    std::vector<double *> receive_data_vec;
+
 private:
     void start_connect_to_server_thread() override;
 

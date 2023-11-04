@@ -3,7 +3,7 @@ joint_state_controller:
   publish_rate: 60
 
 joint_trajectory_controller: 
-  type: position_controllers/JointTrajectoryController  
+  type: velocity_controllers/JointTrajectoryController  
   joints:
     - shoulder_pan_joint
     - shoulder_lift_joint
@@ -11,24 +11,24 @@ joint_trajectory_controller:
     - wrist_1_joint
     - wrist_2_joint
     - wrist_3_joint
-  # gains:
-  #   shoulder_pan_joint: {p: 2000, i: 100, d: 50}
-  #   shoulder_lift_joint: {p: 2000, i: 100, d: 50}
-  #   elbow_joint: {p: 2000, i: 100, d: 50}
-  #   wrist_1_joint: {p: 2000, i: 100, d: 50}
-  #   wrist_2_joint: {p: 2000, i: 100, d: 50}
-  #   wrist_3_joint: {p: 2000, i: 100, d: 50}
-  # constraints:
-  #   goal_time: 0.5
-  #   shoulder_pan_joint: { goal: 0.05 }
-  #   shoulder_lift_joint: { goal: 0.05 }
-  #   elbow_joint: { goal: 0.05 }
-  #   wrist_1_joint: { goal: 0.05 }
-  #   wrist_2_joint: { goal: 0.05 }
-  #   wrist_3_joint: { goal: 0.05 }
+  gains:
+    shoulder_pan_joint: {p: 5, i: 1, d: 0.01}
+    shoulder_lift_joint: {p: 5, i: 1, d: 0.01}
+    elbow_joint: {p: 5, i: 1, d: 0.01}
+    wrist_1_joint: {p: 5, i: 1, d: 0.01}
+    wrist_2_joint: {p: 5, i: 1, d: 0.01}
+    wrist_3_joint: {p: 5, i: 1, d: 0.01}
+  constraints:
+    goal_time: 0.5
+    shoulder_pan_joint: { goal: 0.05 }
+    shoulder_lift_joint: { goal: 0.05 }
+    elbow_joint: { goal: 0.05 }
+    wrist_1_joint: { goal: 0.05 }
+    wrist_2_joint: { goal: 0.05 }
+    wrist_3_joint: { goal: 0.05 }
 
-# gripper_controller:
-#   type: position_controllers/GripperActionController
-#   joint: gripper_hand_e_finger_1_joint
-#   gains:
-#     gripper_hand_e_finger_1_joint: { p: 2000, i: 100, d: 50 }
+gripper_controller:
+  type: effort_controllers/GripperActionController
+  joint: gripper_hand_e_finger_1_joint
+  gains:
+    gripper_hand_e_finger_1_joint: {p: 5, i: 0, d: 0.1}

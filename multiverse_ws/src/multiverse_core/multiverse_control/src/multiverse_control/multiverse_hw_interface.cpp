@@ -150,42 +150,72 @@ void MultiverseHWInterface::bind_response_meta_data()
 
 void MultiverseHWInterface::init_send_and_receive_data()
 {
-    
+    for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
+	{
+        for (const std::string &attribute_name : send_object.second)
+        {
+            if (strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 || strcmp(attribute_name.c_str(), "cmd_joint_rvalue") == 0)
+            {
+                send_data_vec.emplace_back(&joint_commands[send_object.first][0]);
+            }
+            else if (strcmp(attribute_name.c_str(), "cmd_joint_linear_velocity") == 0 || strcmp(attribute_name.c_str(), "cmd_joint_angular_velocity") == 0)
+            {
+                send_data_vec.emplace_back(&joint_commands[send_object.first][1]);
+            }
+            else if (strcmp(attribute_name.c_str(), "cmd_joint_force") == 0 || strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0)
+            {
+                send_data_vec.emplace_back(&joint_commands[send_object.first][2]);
+            }
+        }
+    }
+
+    for (const std::pair<std::string, std::set<std::string>> &receive_object : receive_objects)
+	{
+        for (const std::string &attribute_name : receive_object.second)
+        {
+            if (strcmp(attribute_name.c_str(), "joint_tvalue") == 0 || strcmp(attribute_name.c_str(), "joint_rvalue") == 0)
+            {
+                receive_data_vec.emplace_back(&joint_states[receive_object.first][0]);
+            }
+            else if (strcmp(attribute_name.c_str(), "joint_linear_velocity") == 0 || strcmp(attribute_name.c_str(), "joint_angular_velocity") == 0)
+            {
+                receive_data_vec.emplace_back(&joint_states[receive_object.first][1]);
+            }
+            else if (strcmp(attribute_name.c_str(), "joint_force") == 0 || strcmp(attribute_name.c_str(), "joint_torque") == 0)
+            {
+                receive_data_vec.emplace_back(&joint_states[receive_object.first][2]);
+            }
+        }
+    }
 }
 
 void MultiverseHWInterface::bind_send_data()
 {
-    double *send_buffer_addr = send_buffer + 1;
+    *send_buffer = get_time_now();
 
-    for (const std::string &joint_name : joint_names)
-    {
-        *send_buffer_addr++ = joint_commands[joint_name][0];
-        *send_buffer_addr++ = joint_commands[joint_name][1];
-        *send_buffer_addr++ = joint_commands[joint_name][2];
-    }
+	for (size_t i = 0; i < send_buffer_size - 1; i++)
+	{
+		send_buffer[i + 1] = *send_data_vec[i];
+	}
 }
 
 void MultiverseHWInterface::bind_receive_data()
 {
-    double *receive_buffer_addr = receive_buffer + 1;
-
-    for (const std::string &joint_name : joint_names)
-    {
-        joint_states[joint_name][0] = *receive_buffer_addr++;
-        joint_states[joint_name][1] = *receive_buffer_addr++;
-        joint_states[joint_name][2] = *receive_buffer_addr++;
-    }
+    for (size_t i = 0; i < receive_buffer_size - 1; i++)
+	{
+		*receive_data_vec[i] = receive_buffer[i + 1];
+	}
 }
 
 void MultiverseHWInterface::clean_up()
 {
-
+    send_data_vec.clear();
+    receive_data_vec.clear();
 }
 
 void MultiverseHWInterface::communicate(const bool resend_meta_data)
 {
     MultiverseClient::communicate(resend_meta_data);
-    ROS_WARN("%f - %f - %f\n", joint_commands["shoulder_pan_joint"][0], joint_commands["shoulder_pan_joint"][1], joint_commands["shoulder_pan_joint"][2]);
 }
 
 void MultiverseHWInterface::doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,

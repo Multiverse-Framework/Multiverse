@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <mujoco model="ur5e">
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
-	<option timestep="0.001" gravity="0 0 -9.81">
+	<option timestep="0.001" gravity="0 0 0">
 		<flag contact="enable" energy="enable"/>
 	</option>
 	<default>
@@ -73,4 +73,8 @@
 			</body>
 		</body>
 	</worldbody>
+
+	<equality>
+		<joint joint1="gripper_hand_e_finger_1_joint" joint2="gripper_hand_e_finger_2_joint" polycoef="0 1 0 0 0"/>
+	</equality>
 </mujoco>
