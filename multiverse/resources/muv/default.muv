@@ -43,7 +43,7 @@ sim_2:
         body:
           ur5e:
             pos: [0, 0, 1]
-          gravcomp: 10
+          gravcomp: 1
       disable_self_collision: auto
   config:
     rtf_desired: 10
