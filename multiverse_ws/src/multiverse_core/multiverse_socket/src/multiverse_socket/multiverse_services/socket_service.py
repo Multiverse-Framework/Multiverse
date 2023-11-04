@@ -12,10 +12,11 @@ class socket_service(MultiverseRosServiceServer):
         self._service_name = "/multiverse/socket"
         self._service_class = Socket
         self.__worlds = {}
+        self.__send_data = []
 
     def update_world(self, world_name) -> None:
         super()._init_request_meta_data()
-        self._request_meta_data_dict["world"] = ""
+        self._request_meta_data_dict["world"] = world_name
         self._request_meta_data_dict["receive"][""] = [""]
         self._set_request_meta_data()
         self._communicate(True)
@@ -62,6 +63,13 @@ class socket_service(MultiverseRosServiceServer):
         self._request_meta_data_dict["send"] = {}
         self._request_meta_data_dict["receive"] = {}
 
+        self.__send_data = [0]
+        for object_data in request.send:
+            if world_name not in self.__worlds or object_data.object_name not in self.__worlds[world_name]:
+                continue
+            self._request_meta_data_dict["send"][object_data.object_name] = [object_data.attribute_name]
+            self.__send_data += object_data.data
+
         for object_attribute in request.receive:
             if world_name not in self.__worlds or object_attribute.object_name not in self.__worlds[world_name]:
                 continue
@@ -79,6 +87,17 @@ class socket_service(MultiverseRosServiceServer):
         response.mass_unit = response_meta_data_dict["mass_unit"]
         response.time_unit = response_meta_data_dict["time_unit"]
         response.handedness = response_meta_data_dict["handedness"]
+
+        if len(self.__send_data) > 1:
+            self._set_send_data(self.__send_data)
+            self._communicate()
+            self._set_send_data(self.__send_data)
+            self._communicate()
+            self._communicate(True)
+
+            for object_name, object_data in self._get_response_meta_data()["send"].items():
+                for attribute_name, attribute_data in object_data.items():
+                    response.send.append(ObjectData(object_name, attribute_name, attribute_data))
 
         if response_meta_data_dict.get("receive") is None:
             return response
