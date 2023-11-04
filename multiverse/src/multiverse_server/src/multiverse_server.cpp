@@ -315,15 +315,10 @@ public:
 
             case EMultiverseServerState::BindSendData:
                 mtx.lock();
-                if (!std::isnan(send_buffer[0]) && send_buffer[0] > 0.0)
+                if (!std::isnan(send_buffer[0]) && send_buffer[0] >= 0.0)
                 {
                     *send_data_vec[0].first = send_buffer[0] * send_data_vec[0].second;
-                }
-                // if (strcmp(socket_addr.c_str(), "tcp://127.0.0.1:7800") == 0 && send_buffer[0] < 0.0)
-                // {
-                //     printf("%s - %f\n", socket_addr.c_str(), send_buffer[0]);
-                // }
-                
+                }                
                 
                 for (size_t i = 1; i < send_buffer_size; i++)
                 {
@@ -751,7 +746,7 @@ private:
             sockets_need_clean_up[socket_addr] = false;
             zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
             sockets_need_clean_up[socket_addr] = true;
-            if (message.to_string()[0] != '{' && message.to_string()[1] != '{')
+            if (message.to_string()[0] != '{' && message.to_string()[1] != '}')
             {
                 memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
             }

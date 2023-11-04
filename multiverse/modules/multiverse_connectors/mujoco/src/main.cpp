@@ -54,8 +54,7 @@ double get_time_now()
 
 void simulate(const double rtf_desired, const double max_time_step, const double min_time_step)
 {
-    double init_time_step = m->opt.timestep;
-    double start_time = get_time_now();
+    start_time = get_time_now();
     double last_real_time = get_time_now() - start_time;
     int i = 0;
     while (!stop)

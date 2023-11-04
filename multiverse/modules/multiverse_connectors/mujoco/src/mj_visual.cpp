@@ -139,11 +139,15 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
     // backspace: reset simulation
     if (act == GLFW_PRESS && key == GLFW_KEY_BACKSPACE)
     {
+        mtx.lock();
+        d->time = 0;
+        start_time += real_time;
         mj_resetData(m, d);
         mj_forward(m, d);
         cam.distance = cam_distance_0;
         cam.elevation = m->vis.global.elevation;
         cam.azimuth = m->vis.global.azimuth;
+        mtx.unlock();
     }
 
     // s: save simulation

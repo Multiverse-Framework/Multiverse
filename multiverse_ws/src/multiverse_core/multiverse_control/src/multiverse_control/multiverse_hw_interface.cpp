@@ -199,7 +199,7 @@ void MultiverseHWInterface::init_send_and_receive_data()
 
 void MultiverseHWInterface::bind_send_data()
 {
-    send_buffer[0] = 0.0;
+    send_buffer[0] = std::numeric_limits<double>::quiet_NaN();
 	for (size_t i = 1; i < send_buffer_size; i++)
 	{
 		send_buffer[i] = *send_data_vec[i];

@@ -31,4 +31,6 @@ bool stop = false;
 
 double rtf = 1.0;
 
+double start_time;
+
 double real_time;

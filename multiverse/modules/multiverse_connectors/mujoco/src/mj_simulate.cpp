@@ -44,5 +44,7 @@ void MjSimulate::init()
 
 void MjSimulate::step()
 {
+    mtx.lock();
     mj_step(m, d);
+    mtx.unlock();
 }

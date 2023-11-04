@@ -225,7 +225,7 @@ void MultiverseClient::run()
         case EMultiverseClientState::ReceiveData:
             zmq_recv(client_socket, receive_buffer, receive_buffer_size * sizeof(double), 0);
 
-            if (!should_shut_down && (std::isnan(*receive_buffer) || *receive_buffer < 0))
+            if (!should_shut_down && (std::isnan(*receive_buffer) || *receive_buffer == -1.0))
             {
                 printf("[Client %s] The socket %s from the server has been terminated (%f), returning to resend the meta data.\n", port.c_str(), socket_addr.c_str(), *receive_buffer);
 
