@@ -357,6 +357,7 @@ void MjMultiverseClient::bind_response_meta_data()
 void MjMultiverseClient::init_send_and_receive_data()
 {
 	mtx.lock();
+	send_data_vec.emplace_back(&d->time);
 	for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, send_object.first.c_str());
@@ -455,6 +456,7 @@ void MjMultiverseClient::init_send_and_receive_data()
 		}
 	}
 
+	receive_data_vec.emplace_back(nullptr);
 	for (const std::pair<std::string, std::set<std::string>> &receive_object : receive_objects)
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, receive_object.first.c_str());
@@ -562,9 +564,9 @@ void MjMultiverseClient::init_send_and_receive_data()
 
 void MjMultiverseClient::bind_send_data()
 {
-	if (send_buffer_size - 1 != send_data_vec.size())
+	if (send_buffer_size != send_data_vec.size())
 	{
-		printf("The size of send_data_vec (%ld) does not match with send_buffer_size - 1 (%ld)", send_data_vec.size(), send_buffer_size);
+		printf("The size of send_data_vec (%ld) does not match with send_buffer_size (%ld)", send_data_vec.size(), send_buffer_size);
 		return;
 	}
 
@@ -576,20 +578,18 @@ void MjMultiverseClient::bind_send_data()
 		mju_mulMatVec(contact_effort.second, jac, d->qfrc_constraint, 6, m->nv);
 	}
 
-	*send_buffer = get_time_now();
-
-	for (size_t i = 0; i < send_buffer_size - 1; i++)
+	for (size_t i = 0; i < send_buffer_size; i++)
 	{
-		send_buffer[i + 1] = *send_data_vec[i];
+		send_buffer[i] = *send_data_vec[i];
 	}
 	mtx.unlock();
 }
 
 void MjMultiverseClient::bind_receive_data()
 {
-	if (receive_buffer_size - 1 != receive_data_vec.size())
+	if (receive_buffer_size != receive_data_vec.size())
 	{
-		printf("The size of receive_data_vec (%ld) does not match with receive_buffer_size - 1 (%ld)", receive_data_vec.size(), receive_buffer_size - 1);
+		printf("The size of receive_data_vec (%ld) does not match with receive_buffer_size (%ld)", receive_data_vec.size(), receive_buffer_size);
 		return;
 	}
 
@@ -637,10 +637,9 @@ void MjMultiverseClient::bind_receive_data()
 		}
 	}
 
-	for (size_t i = 0; i < receive_buffer_size - 1; i++)
+	for (size_t i = 1; i < receive_buffer_size; i++)
 	{
-		*receive_data_vec[i] = receive_buffer[i + 1];
-		printf("%ld - %f\n", i, *receive_data_vec[i]);
+		*receive_data_vec[i] = receive_buffer[i];
 	}
 	mtx.unlock();
 }

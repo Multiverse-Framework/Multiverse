@@ -55,6 +55,8 @@ public:
 private:
     std::string world;
 
+    double world_time;
+
     Json::Value send_objects_json;
 
     Json::Value receive_objects_json;

@@ -73,19 +73,21 @@ int main(int argc, char **argv)
     ros::AsyncSpinner spinner(3);
     spinner.start();
     
-    ros::Time time_last = ros::Time::now();
-    ros::Time time_now = ros::Time::now();
-    ros::Time time_now_rtf;
+    double ros_time_start = ros::Time::now().toSec();
+    ros::Time world_time_now = multiverse_hw_interface.get_world_time(ros_time_start);
+    ros::Time world_time_last = world_time_now;
+    ros::Duration duration;
     while (ros::ok())
     {
-        multiverse_hw_interface.communicate();
-        time_now = ros::Time::now();
-        ros::Duration duration = time_now - time_last;
-        ros::Duration duration_rtf;
-        duration_rtf.fromSec(duration.toSec() * 10);
-        time_now_rtf.fromSec(time_last.toSec() + duration_rtf.toSec() * 10);
-        controller_manager.update(time_now_rtf, duration_rtf);
-        time_last = time_now;
+        do
+        {
+            multiverse_hw_interface.communicate();
+            world_time_now = multiverse_hw_interface.get_world_time(ros_time_start);
+            duration = world_time_now - world_time_last;
+            world_time_last = world_time_now;
+        } while (duration.toSec() <= 0.0 && ros::ok());
+        
+        controller_manager.update(ros::Time::now(), duration);
     }
 
     return 0;

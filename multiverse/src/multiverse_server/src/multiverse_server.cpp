@@ -42,6 +42,7 @@ using namespace std::chrono_literals;
 
 enum class EAttribute : unsigned char
 {
+    Time,
     Position,
     Quaternion,
     RelativeVelocity,
@@ -76,6 +77,7 @@ enum class EMultiverseServerState : unsigned char
 
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
     {
+        {"time", {EAttribute::Time, {0.0}}},
         {"position", {EAttribute::Position, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
         {"quaternion", {EAttribute::Quaternion, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
         {"relative_velocity", {EAttribute::RelativeVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
@@ -111,6 +113,9 @@ std::map<std::string, double> unit_scale =
 
 std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scale =
     {
+        {EAttribute::Time,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
         {EAttribute::Position,
          {{"rhs", {1.0, 1.0, 1.0}},
           {"lhs", {1.0, -1.0, 1.0}}}},
@@ -170,6 +175,8 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
           {"lhs", {1.0, -1.0, 1.0}}}}};
 
 std::mutex mtx;
+
+std::map<std::string, double> world_times;
 
 std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
 
@@ -277,9 +284,9 @@ public:
                 if (message.to_string()[0] == '{')
                 {
                     message_str = message.to_string();
-                    if (message_str[1] == '}')
+                    if (message_str[1] == '}' && message_str.size() == 2)
                     {
-                        printf("[Server] Received close signal from socket %s.\n", socket_addr.c_str());
+                        printf("[Server] Received close signal %s from socket %s.\n", message_str.c_str(), socket_addr.c_str());
                         send_data_vec.clear();
                         receive_data_vec.clear();
                         flag = EMultiverseServerState::SendResponseMetaData;
@@ -308,9 +315,19 @@ public:
 
             case EMultiverseServerState::BindSendData:
                 mtx.lock();
-                for (size_t i = 0; i < send_buffer_size - 1; i++)
+                if (!std::isnan(send_buffer[0]) && send_buffer[0] > 0.0)
                 {
-                    *send_data_vec[i].first = send_buffer[i + 1] * send_data_vec[i].second;
+                    *send_data_vec[0].first = send_buffer[0] * send_data_vec[0].second;
+                }
+                // if (strcmp(socket_addr.c_str(), "tcp://127.0.0.1:7800") == 0 && send_buffer[0] < 0.0)
+                // {
+                //     printf("%s - %f\n", socket_addr.c_str(), send_buffer[0]);
+                // }
+                
+                
+                for (size_t i = 1; i < send_buffer_size; i++)
+                {
+                    *send_data_vec[i].first = send_buffer[i] * send_data_vec[i].second;
                 }
                 mtx.unlock();
                 flag = EMultiverseServerState::BindReceiveData;
@@ -323,9 +340,9 @@ public:
                 compute_cumulative_data();
                 mtx.unlock();
 
-                for (size_t i = 0; i < receive_buffer_size - 1; i++)
+                for (size_t i = 0; i < receive_buffer_size; i++)
                 {
-                    receive_buffer[i + 1] = *receive_data_vec[i].first * receive_data_vec[i].second;                    
+                    receive_buffer[i] = *receive_data_vec[i].first * receive_data_vec[i].second;                    
                 }
                 flag = EMultiverseServerState::SendReceiveData;
 
@@ -396,6 +413,10 @@ private:
         {
             conversion_map.emplace(attribute.second);
         }
+
+        std::for_each(conversion_map[EAttribute::Time].begin(), conversion_map[EAttribute::Time].end(),
+                      [time_unit](double &time)
+                      { time = unit_scale[time_unit]; });
 
         std::for_each(conversion_map[EAttribute::Position].begin(), conversion_map[EAttribute::Position].end(),
                       [length_unit](double &position)
@@ -490,7 +511,7 @@ private:
 
         response_meta_data_json.clear();
         response_meta_data_json["world"] = world_name;
-        response_meta_data_json["time"] = get_time_now() * unit_scale[time_unit];
+        response_meta_data_json["time"] = world_times[world_name] * unit_scale[time_unit];
         response_meta_data_json["angle_unit"] = angle_unit;
         response_meta_data_json["length_unit"] = length_unit;
         response_meta_data_json["mass_unit"] = mass_unit;
@@ -502,6 +523,12 @@ private:
     {
         send_objects_json = request_meta_data_json["send"];
         std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &objects = worlds[world_name];
+        if (world_times.count(world_name) == 0)
+        {
+            world_times[world_name] = 0.0;
+        }
+        send_data_vec.emplace_back(&world_times[world_name], conversion_map[attribute_map["time"].first][0]);
+
         for (const std::string &object_name : send_objects_json.getMemberNames())
         {
             if (objects.count(object_name) == 0)
@@ -546,7 +573,7 @@ private:
                     printf("[Server] Continue state [%s - %s] on socket %s\n", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
                     objects[object_name][attribute_name].second = true;
-
+                    
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
                         double *data = &objects[object_name][attribute_name].first[i];
@@ -661,6 +688,7 @@ private:
 
     void bind_receive_objects()
     {
+        receive_data_vec.emplace_back(&world_times[world_name], conversion_map[attribute_map["time"].first][0]);
         for (const std::string &object_name : receive_objects_json.getMemberNames())
         {
             for (const Json::Value &attribute_json : receive_objects_json[object_name])
@@ -691,8 +719,8 @@ private:
 
     void send_response_meta_data()
     {
-        send_buffer_size = 1 + send_data_vec.size();
-        receive_buffer_size = 1 + receive_data_vec.size();
+        send_buffer_size = send_data_vec.size();
+        receive_buffer_size = receive_data_vec.size();
 
         if (should_shut_down)
         {
@@ -800,7 +828,10 @@ private:
     void send_receive_data()
     {
         // Send receive_data over ZMQ
-        receive_buffer[0] = should_shut_down ? -1.0 : get_time_now();
+        if (should_shut_down)
+        {
+            receive_buffer[0] = -1.0;
+        }
         zmq::message_t reply_data(receive_buffer_size * sizeof(double));
         memcpy(reply_data.data(), receive_buffer, receive_buffer_size * sizeof(double));
         socket.send(reply_data, zmq::send_flags::none);

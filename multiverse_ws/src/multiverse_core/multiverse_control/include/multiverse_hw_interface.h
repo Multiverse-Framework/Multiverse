@@ -35,9 +35,14 @@ public:
     ~MultiverseHWInterface();
 
 public:
+    ros::Time get_world_time(const double offset = 0.0) const;
+
+public:
     void communicate(const bool resend_meta_data = false) override;
 
 private:
+    double world_time = 0.0;
+    
     std::map<std::string, std::string> meta_data;
 
     std::map<std::string, std::set<std::string>> send_objects;

@@ -23,6 +23,7 @@
 
 std::map<std::string, size_t> attribute_map = {
     {"", 0},
+    {"time", 1},
     {"position", 3},
     {"quaternion", 4},
     {"relative_velocity", 6},
@@ -49,7 +50,7 @@ bool MultiverseClientJson::compute_response_meta_data()
     return !response_meta_data_str.empty() &&
            reader.parse(response_meta_data_str, response_meta_data_json) &&
            response_meta_data_json.isMember("time") &&
-           response_meta_data_json["time"].asDouble() > 0;
+           response_meta_data_json["time"].asDouble() >= 0;
 }
 
 void MultiverseClientJson::compute_request_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const

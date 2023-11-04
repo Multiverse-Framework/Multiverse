@@ -110,9 +110,8 @@ private:
         pybind11::object parsed_dict = json_loads(response_meta_data_str);
 
         response_meta_data_dict = parsed_dict.cast<pybind11::dict>();
-        const bool result = response_meta_data_dict.contains("time") && response_meta_data_dict["time"].cast<double>() > 0;
         
-        return result;
+        return response_meta_data_dict.contains("time");
     }
 
     void compute_request_buffer_sizes(size_t &req_send_buffer_size, size_t &req_receive_buffer_size) const override
@@ -233,8 +232,9 @@ private:
             printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).", port.c_str(), send_data.size(), send_buffer_size);
             return;
         }
-
-        for (size_t i = 0; i < send_buffer_size; i++)
+        
+        send_buffer[0] = 0.0;
+        for (size_t i = 1; i < send_buffer_size; i++)
         {
             send_buffer[i] = send_data[i].cast<double>();
         }
