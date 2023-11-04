@@ -1,2 +1,2 @@
 from .ros_service_server import MultiverseRosServiceServer
-from .exchange_data_service import exchange_data_service
+from .socket_service import socket_service
