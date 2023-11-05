@@ -1,3 +1,5 @@
+resources: ../
+
 worlds:
   world_0:
     rtf_desired: 1

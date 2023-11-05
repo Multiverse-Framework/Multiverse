@@ -9,12 +9,7 @@ import signal
 from typing import List
 import rospy
 import xml.etree.ElementTree as ET
-
-processes = {"multiverse_server": [], "ros": [], "ros_control": []}
-simulators = {"mujoco"}
-multiverse_path = os.path.dirname(os.path.dirname(os.path.dirname(sys.argv[0])))
-resources_path = os.path.join(multiverse_path, "resources")
-muv_file = sys.argv[1]
+import argparse
 
 
 def run_subprocess(cmd: List[str]):
@@ -55,12 +50,32 @@ def parse_simulator(simulator_data):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+                    prog='multiverse_launch',
+                    description='Launch the multiverse framework')
+    parser.add_argument(
+        "--muv_file",
+        type=str,
+        required=True,
+        help="Path to .muv file",
+    )
+    args = parser.parse_args()
+    muv_file = args.muv_file
+
     try:
         with open(muv_file, "r") as file:
             data = yaml.safe_load(file)
     except Exception as e:
         print(f"Error reading MUV file: {e}")
         sys.exit(1)
+
+    global resources_path
+    resources_path = data.get("resources", "../")
+    if not os.path.isabs(resources_path):
+        resources_path = os.path.join(os.path.dirname(muv_file), resources_path)
+
+    processes = {"multiverse_server": [], "ros": [], "ros_control": []}
+    simulators = {"mujoco"}
 
     world_dict = data.get("worlds", {})
     simulation_dict = data.get("simulations", {})
@@ -71,6 +86,7 @@ def main():
     server_port = multiverse_server_dict.get("port", "7000")
     process = run_subprocess(["multiverse_server", f"{server_host}:{server_port}"])
     processes["multiverse_server"] = [process]
+    
 
     for simulator in simulators:
         processes[simulator] = []

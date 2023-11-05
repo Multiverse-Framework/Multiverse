@@ -43,7 +43,7 @@ public:
     void connect();
 
     /**
-     * @brief start the client
+     * @brief Start the client
      * 
      */
     void start();

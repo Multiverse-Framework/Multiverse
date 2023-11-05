@@ -55,6 +55,27 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 	connect();
 }
 
+bool MjMultiverseClient::spawn_objects(const std::set<std::string> objects)
+{
+	if (objects.size() == 0)
+	{
+		return true;
+	}
+	
+	
+	return true;
+}
+
+bool MjMultiverseClient::destroy_objects(const std::set<std::string> objects)
+{
+	if (objects.size() == 0)
+	{
+		return true;
+	}
+
+	return true;
+}
+
 bool MjMultiverseClient::init_objects(bool from_server)
 {
 	if (from_server && reader.parse(request_meta_data_str, request_meta_data_json))
@@ -62,7 +83,29 @@ bool MjMultiverseClient::init_objects(bool from_server)
 		receive_objects_json = request_meta_data_json["receive"];
 		send_objects_json = request_meta_data_json["send"];
 	}
-	
+
+	std::set<std::string> objects_to_spawn;
+	for (const std::string &object_name : send_objects_json.getMemberNames())
+	{
+		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 ||
+			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1)
+		{
+			objects_to_spawn.insert(object_name);
+		}
+	}
+	for (const std::string &object_name : receive_objects_json.getMemberNames())
+	{
+		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 ||
+			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1)
+		{
+			objects_to_spawn.insert(object_name);
+		}
+	}
+	if (!spawn_objects(objects_to_spawn))
+	{
+		return false;
+	}
+
 	std::set<std::string> body_attributes = {"position", "quaternion", "relative_velocity", "force", "torque"};
 	std::set<std::string> receive_hinge_joint_attributes = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
 	std::set<std::string> receive_slide_joint_attributes = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};

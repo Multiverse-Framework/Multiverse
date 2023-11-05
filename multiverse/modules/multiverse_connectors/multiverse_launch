@@ -19,4 +19,4 @@ MULTIVERSE_PATH=$(dirname $(dirname $0))
 
 source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash
 
-python3.10 $MULTIVERSE_PATH/modules/multiverse_connectors/multiverse_launch.py "$MUV_FILE"
+python3.10 $MULTIVERSE_PATH/modules/multiverse_connectors/multiverse_launch.py --muv_file=$MUV_FILE

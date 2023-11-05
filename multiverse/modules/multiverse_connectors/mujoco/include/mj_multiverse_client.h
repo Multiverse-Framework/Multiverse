@@ -42,6 +42,11 @@ public:
 public:
     void init(const Json::Value &multiverse_params_json);
 
+private:
+    bool spawn_objects(const std::set<std::string> objects);
+
+    bool destroy_objects(const std::set<std::string> objects);
+
 public:
     void communicate(const bool resend_meta_data = false) override;
 
