@@ -196,7 +196,7 @@ private:
         
     }
 
-    bool init_objects() override
+    bool init_objects(bool from_server = false) override
     {
         return true;
     }
@@ -213,16 +213,22 @@ private:
 
     void clean_up() override
     {
-        send_data = pybind11::list();
+        // printf("HERE ALSO\n");
+        // send_data = pybind11::list();
 
-        receive_data = pybind11::list();
+        // receive_data = pybind11::list();
     }
 
     void init_send_and_receive_data() override
     {
-        send_data = pybind11::cast(std::vector<double>(send_buffer_size, 0.0));
-
-        receive_data = pybind11::cast(std::vector<double>(receive_buffer_size, 0.0));
+        if (send_buffer_size != send_data.size())
+        {
+            send_data = pybind11::cast(std::vector<double>(send_buffer_size, 0.0));
+        }
+        if (receive_buffer_size != receive_data.size())
+        {
+            receive_data = pybind11::cast(std::vector<double>(receive_buffer_size, 0.0));
+        }
     }
 
     void bind_send_data() override
@@ -233,7 +239,7 @@ private:
             return;
         }
         
-        send_buffer[0] = 0.0;
+        send_buffer[0] = std::numeric_limits<double>::quiet_NaN();
         for (size_t i = 1; i < send_buffer_size; i++)
         {
             send_buffer[i] = send_data[i].cast<double>();

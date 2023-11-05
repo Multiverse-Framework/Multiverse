@@ -31,16 +31,16 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 	std::map<std::string, std::string> multiverse_params;
 
 	const Json::Value multiverse_server_params_json = multiverse_params_json["multiverse_server"];
-	multiverse_params["server_host"] = multiverse_server_params_json.isMember("host") ? multiverse_server_params_json["host"].toStyledString() : "tcp://127.0.0.1";
-	multiverse_params["server_port"] = multiverse_server_params_json.isMember("port") ? multiverse_server_params_json["port"].toStyledString() : "7000";
+	multiverse_params["server_host"] = multiverse_server_params_json.isMember("host") ? multiverse_server_params_json["host"].asString() : "tcp://127.0.0.1";
+	multiverse_params["server_port"] = multiverse_server_params_json.isMember("port") ? multiverse_server_params_json["port"].asString() : "7000";
 
 	const Json::Value multiverse_client_params_json = multiverse_params_json["multiverse_client"];
-	multiverse_params["client_host"] = multiverse_client_params_json.isMember("host") ? multiverse_client_params_json["host"].toStyledString() : "tcp://127.0.0.1";
-	multiverse_params["client_port"] = multiverse_client_params_json["port"].toStyledString();
+	multiverse_params["client_host"] = multiverse_client_params_json.isMember("host") ? multiverse_client_params_json["host"].asString() : "tcp://127.0.0.1";
+	multiverse_params["client_port"] = multiverse_client_params_json["port"].asString();
 
 	const Json::Value multiverse_client_meta_data_params_json = multiverse_client_params_json["meta_data"];
-	multiverse_params["world"] = multiverse_client_meta_data_params_json["world"].toStyledString();
-	multiverse_params["name"] = multiverse_client_meta_data_params_json["name"].toStyledString();
+	multiverse_params["world"] = multiverse_client_meta_data_params_json["world"].asString();
+	multiverse_params["name"] = multiverse_client_meta_data_params_json["name"].asString();
 
 	for (std::pair<const std::string, std::string> &multiverse_param : multiverse_params)
 	{
@@ -61,8 +61,14 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 	connect();
 }
 
-bool MjMultiverseClient::init_objects()
+bool MjMultiverseClient::init_objects(bool from_server)
 {
+	if (from_server && reader.parse(request_meta_data_str, request_meta_data_json))
+	{
+		receive_objects_json = request_meta_data_json["receive"];
+		send_objects_json = request_meta_data_json["send"];
+	}
+	
 	std::set<std::string> body_attributes = {"position", "quaternion", "relative_velocity", "force", "torque"};
 	std::set<std::string> receive_hinge_joint_attributes = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
 	std::set<std::string> receive_slide_joint_attributes = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};

@@ -19,24 +19,25 @@
 // SOFTWARE.
 
 #define _USE_MATH_DEFINES
-#include <cmath>
 #include <chrono>
+#include <cmath>
 #include <csignal>
 #include <iostream>
+#include <unistd.h>
 
 #ifdef __linux__
-    #include <jsoncpp/json/json.h>
-    #include <jsoncpp/json/reader.h>
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/reader.h>
 #elif _WIN32
-    #include <json/json.h>
-    #include <json/reader.h>
+#include <json/json.h>
+#include <json/reader.h>
 #endif
 
 #include <mutex>
 #include <thread>
 #include <zmq.hpp>
 
-#define STRING_SIZE 200
+#define STRING_SIZE 2000
 
 using namespace std::chrono_literals;
 
@@ -73,6 +74,14 @@ enum class EMultiverseServerState : unsigned char
     BindSendData,
     BindReceiveData,
     SendReceiveData,
+};
+
+enum class EMetaDataRequest : unsigned char
+{
+    None,
+    WaitForOtherSimulation,
+    WaitForSendingData,
+    Done
 };
 
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
@@ -178,7 +187,7 @@ std::mutex mtx;
 
 std::map<std::string, double> world_times;
 
-std::map<std::string, std::pair<Json::Value, bool>> request_meta_data_map; 
+std::map<std::string, std::pair<Json::Value, EMetaDataRequest>> request_meta_data_map;
 
 std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
 
@@ -270,8 +279,11 @@ public:
             case EMultiverseServerState::SendResponseMetaData:
                 send_response_meta_data();
                 // printf("[Server] Send meta data to socket %s:\n%*.*s", socket_addr.c_str(), STRING_SIZE, STRING_SIZE, response_meta_data_json.toStyledString().c_str());
+
                 if (send_buffer_size == 1 && receive_buffer_size == 1)
                 {
+                    send_data_vec.clear();
+                    receive_data_vec.clear();
                     flag = EMultiverseServerState::ReceiveRequestMetaData;
                 }
                 else
@@ -313,6 +325,7 @@ public:
                 {
                     flag = EMultiverseServerState::BindSendData;
                 }
+
                 break;
 
             case EMultiverseServerState::BindSendData:
@@ -320,13 +333,24 @@ public:
                 if (!std::isnan(send_buffer[0]) && send_buffer[0] >= 0.0)
                 {
                     *send_data_vec[0].first = send_buffer[0] * send_data_vec[0].second;
-                }                
-                
+                }
                 for (size_t i = 1; i < send_buffer_size; i++)
                 {
                     *send_data_vec[i].first = send_buffer[i] * send_data_vec[i].second;
                 }
                 mtx.unlock();
+                if (strcmp(request_simulation_name.c_str(), simulation_name.c_str()) != 0 && request_meta_data_map.count(request_simulation_name) > 0)
+                {
+                    while (!should_shut_down)
+                    {
+                        if (request_meta_data_map[request_simulation_name].second == EMetaDataRequest::WaitForSendingData || request_meta_data_map[request_simulation_name].second == EMetaDataRequest::None)
+                        {
+                            break;
+                        }
+                    }
+                    request_meta_data_map[request_simulation_name].second = EMetaDataRequest::Done;
+                }
+
                 flag = EMultiverseServerState::BindReceiveData;
                 break;
 
@@ -339,21 +363,37 @@ public:
 
                 for (size_t i = 0; i < receive_buffer_size; i++)
                 {
-                    receive_buffer[i] = *receive_data_vec[i].first * receive_data_vec[i].second;                    
+                    receive_buffer[i] = *receive_data_vec[i].first * receive_data_vec[i].second;
                 }
                 flag = EMultiverseServerState::SendReceiveData;
                 break;
 
             case EMultiverseServerState::SendReceiveData:
                 send_receive_data();
-                if (request_meta_data_map[simulation_name].second)
+                if (request_meta_data_map[simulation_name].second == EMetaDataRequest::WaitForOtherSimulation)
                 {
-                    printf("[Server] Socket %s has sent simulation %s request meta data.\n", socket_addr.c_str(), simulation_name.c_str());
+                    // printf("[Server] Socket %s has received new request meta data.\n", socket_addr.c_str());
+                    request_meta_data_map[simulation_name].second = EMetaDataRequest::WaitForSendingData;
+                    while (!should_shut_down)
+                    {
+                        if (request_meta_data_map[simulation_name].second == EMetaDataRequest::Done)
+                        {
+                            break;
+                        }
+                    }
+
                     receive_request_meta_data();
                     request_meta_data_json = request_meta_data_map[simulation_name].first;
+                    const std::string message_str = request_meta_data_json.toStyledString();
+                    zmq::message_t request_message(message_str.size());
+                    memcpy(request_message.data(), message_str.data(), message_str.size());
+
+                    socket.send(request_message, zmq::send_flags::none);
+                    request_meta_data_map[simulation_name].second = EMetaDataRequest::None;
+
                     send_data_vec.clear();
                     receive_data_vec.clear();
-                    flag = EMultiverseServerState::BindObjects;
+                    flag = EMultiverseServerState::ReceiveRequestMetaData;
                 }
                 else
                 {
@@ -421,31 +461,38 @@ private:
         }
         else
         {
-            std::string tmp_simulation_name = request_meta_data_json["name"].toStyledString().c_str();
-        
-            if (tmp_simulation_name != simulation_name && !simulation_name.empty() && request_meta_data_map.count(tmp_simulation_name) > 0)
+            request_simulation_name = request_meta_data_json["name"].asString();
+
+            if (request_simulation_name != simulation_name && !simulation_name.empty() && request_meta_data_map.count(request_simulation_name) > 0)
             {
-                for (const std::string &object_name : request_meta_data_json["send"].getMemberNames())
+                for (const std::string &type_str : {"send", "receive"})
                 {
-                    request_meta_data_map[tmp_simulation_name].first["send"][object_name] = request_meta_data_json["send"][object_name];
+                    for (const std::string &object_name : request_meta_data_json[type_str].getMemberNames())
+                    {
+                        for (const Json::Value &attribute_json : request_meta_data_json[type_str][object_name])
+                        {
+                            Json::Value &attributes = request_meta_data_map[request_simulation_name].first[type_str][object_name];
+                            if (std::find(attributes.begin(), attributes.end(), attribute_json) == attributes.end())
+                            {
+                                request_meta_data_map[request_simulation_name].first[type_str][object_name].append(attribute_json);
+                            }
+                        }
+                    }
                 }
-                for (const std::string &object_name : request_meta_data_json["receive"].getMemberNames())
-                {
-                    request_meta_data_map[tmp_simulation_name].first["receive"][object_name] = request_meta_data_json["receive"][object_name];
-                }
-                request_meta_data_map[tmp_simulation_name].second = true;
-                request_meta_data_json = request_meta_data_map[simulation_name].first;
+                printf("request_meta_data_map[%s]: %s\n", request_simulation_name.c_str(), request_meta_data_map[request_simulation_name].first.toStyledString().c_str());
+                request_meta_data_map[request_simulation_name].second = EMetaDataRequest::WaitForOtherSimulation;
+                request_meta_data_json["world"] = request_meta_data_map[request_simulation_name].first["world"];
+                request_meta_data_json["receive"].clear();
             }
             else
             {
-                simulation_name = tmp_simulation_name;
-                request_meta_data_map[simulation_name].first = request_meta_data_json;
+                simulation_name = request_simulation_name;
             }
         }
-        request_meta_data_map[simulation_name].second = false;
+        request_meta_data_map[simulation_name] = {request_meta_data_json, EMetaDataRequest::None};
 
         world_name = request_meta_data_json.isMember("world") ? request_meta_data_json["world"].asString() : "world";
-        
+
         const std::string length_unit = request_meta_data_json.isMember("length_unit") ? request_meta_data_json["length_unit"].asString() : "m";
         const std::string angle_unit = request_meta_data_json.isMember("angle_unit") ? request_meta_data_json["angle_unit"].asString() : "rad";
         const std::string handedness = request_meta_data_json.isMember("handedness") ? request_meta_data_json["handedness"].asString() : "rhs";
@@ -512,7 +559,7 @@ private:
         conversion_map[EAttribute::CmdJointRvalue] = conversion_map[EAttribute::JointRvalue];
 
         conversion_map[EAttribute::CmdJointTvalue] = conversion_map[EAttribute::JointTvalue];
-        
+
         conversion_map[EAttribute::CmdJointLinearVelocity] = conversion_map[EAttribute::JointLinearVelocity];
 
         conversion_map[EAttribute::CmdJointAngularVelocity] = conversion_map[EAttribute::JointAngularVelocity];
@@ -542,12 +589,12 @@ private:
 
         response_meta_data_json.clear();
         response_meta_data_json["world"] = world_name;
-        response_meta_data_json["time"] = world_times[world_name] * unit_scale[time_unit];
         response_meta_data_json["angle_unit"] = angle_unit;
         response_meta_data_json["length_unit"] = length_unit;
         response_meta_data_json["mass_unit"] = mass_unit;
         response_meta_data_json["time_unit"] = time_unit;
         response_meta_data_json["handedness"] = handedness;
+        response_meta_data_json["time"] = world_times[world_name] * unit_scale[time_unit];
     }
 
     void bind_send_objects()
@@ -604,7 +651,7 @@ private:
                     printf("[Server] Continue state [%s - %s] on socket %s\n", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
                     objects[object_name][attribute_name].second = true;
-                    
+
                     for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
                     {
                         double *data = &objects[object_name][attribute_name].first[i];
@@ -863,11 +910,12 @@ private:
         {
             receive_buffer[0] = -1.0;
         }
-        else if (request_meta_data_map[simulation_name].second)
+        else if (request_meta_data_map[simulation_name].second == EMetaDataRequest::WaitForOtherSimulation)
         {
-            receive_buffer[0] = -2.0;;
+            printf("request_meta_data_map[simulation_name].second:%s\n", request_meta_data_map[simulation_name].first.toStyledString().c_str());
+            receive_buffer[0] = -2.0;
         }
-        
+
         zmq::message_t reply_data(receive_buffer_size * sizeof(double));
         memcpy(reply_data.data(), receive_buffer, receive_buffer_size * sizeof(double));
         socket.send(reply_data, zmq::send_flags::none);
@@ -900,15 +948,17 @@ private:
 
     double *receive_buffer;
 
-    std::vector<std::pair<double*, double>> send_data_vec;
+    std::vector<std::pair<double *, double>> send_data_vec;
 
-    std::vector<std::pair<double*, double>> receive_data_vec;
+    std::vector<std::pair<double *, double>> receive_data_vec;
 
     std::map<EAttribute, std::vector<double>> conversion_map;
 
     std::string world_name;
 
     std::string simulation_name;
+
+    std::string request_simulation_name;
 
     Json::Reader reader;
 
@@ -943,9 +993,9 @@ void start_multiverse_server(const std::string &server_socket_addr)
         if (workers.count(receive_addr) == 0)
         {
             workers[receive_addr] = std::thread([receive_addr]()
-                                               { MultiverseServer multiverse_server(receive_addr); multiverse_server.start(); });
+                                                { MultiverseServer multiverse_server(receive_addr); multiverse_server.start(); });
         }
-        
+
         zmq::message_t response(receive_addr.size());
         memcpy(response.data(), receive_addr.c_str(), receive_addr.size());
         server_socket.send(response, zmq::send_flags::none);

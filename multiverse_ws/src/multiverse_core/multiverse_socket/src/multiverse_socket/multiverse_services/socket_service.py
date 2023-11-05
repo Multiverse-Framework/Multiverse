@@ -90,10 +90,8 @@ class socket_service(MultiverseRosServiceServer):
         response.handedness = response_meta_data_dict["handedness"]
 
         if len(self.__send_data) > 1:
-            print(self.__send_data)
             self._set_send_data(self.__send_data)
             self._communicate()
-            self._set_send_data(self.__send_data)
             self._communicate()
             self._communicate(True)
 

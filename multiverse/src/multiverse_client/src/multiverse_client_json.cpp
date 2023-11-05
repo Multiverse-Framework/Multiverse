@@ -44,7 +44,6 @@ std::map<std::string, size_t> attribute_map = {
     {"force", 3},
     {"torque", 3}};
 
-
 bool MultiverseClientJson::compute_response_meta_data()
 {
     return !response_meta_data_str.empty() &&

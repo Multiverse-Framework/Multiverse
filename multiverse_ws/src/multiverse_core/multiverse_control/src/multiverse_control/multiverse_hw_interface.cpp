@@ -97,7 +97,7 @@ MultiverseHWInterface::~MultiverseHWInterface()
     disconnect();
 }
 
-bool MultiverseHWInterface::init_objects()
+bool MultiverseHWInterface::init_objects(bool from_server)
 {
     return send_objects.size() > 0 || receive_objects.size() > 0;
 }

@@ -1,2 +1,3 @@
 from .ros_service_server import MultiverseRosServiceServer
 from .socket_service import socket_service
+from .spawn_objects_service import spawn_objects_service
