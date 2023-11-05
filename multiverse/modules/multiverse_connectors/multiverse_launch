@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMMAND_PATTERNS=("multiverse_control_node" "multiverse_socket_node.py" "roscore" "rosmaster" "mujoco" "multiverse_server" "multiverse_launch.py")
+COMMAND_PATTERNS=("multiverse_control_node" "multiverse_socket_node.py" "mujoco" "multiverse_server" "multiverse_launch.py")
 
 for COMMAND_PATTERN in "${COMMAND_PATTERNS[@]}"; do
     # Get the PIDs of all matching processes

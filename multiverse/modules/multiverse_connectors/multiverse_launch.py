@@ -132,9 +132,11 @@ def main():
             processes[cmd[0]].append(process)
 
     if multiverse_client_dict is not None and ("ros" in multiverse_client_dict or "ros_control" in multiverse_client_dict):
-        cmd = ["roscore"]
-        process = run_subprocess(cmd)
-        processes["ros"] = [process]
+        import rosgraph
+        if not rosgraph.is_master_online():
+            cmd = ["roscore"]
+            process = run_subprocess(cmd)
+            processes["ros"] = [process]
 
         if "ros" in multiverse_client_dict:
             cmd = [
