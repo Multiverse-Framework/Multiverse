@@ -1,63 +1,69 @@
-sim_1:
-  simulator: mujoco
-  world:
-    path: floor/mjcf/floor.xml
-  robots:
-    tiago_dual_0:
-      path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
-      apply:
-        body:
-          tiago_dual_0:
-            pos: [1, 2, 0]
-          gravcomp: 1
-      disable_self_collision: auto
-      gravcomp: 1
-      suffix:
-        body: _0
-        geom: _0
-        joint: _0
-    tiago_dual_1:
-      path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
-      apply:
-        body:
-          tiago_dual_1:
-            pos: [-1, -2, 0]
-      disable_self_collision: auto
-      suffix:
-        body: _1
-        geom: _1
-        joint: _1
-  config:
+worlds:
+  world_0:
     rtf_desired: 1
-    max_time_step: 0.01
-    min_time_step: 0.001
 
-sim_2:
-  simulator: mujoco
-  world:
-    path: floor/mjcf/floor.xml
-  robots:
-    ur5e:
-      path: universal_robot/ur5e/mjcf/ur5e.xml
-      apply:
-        body:
-          ur5e:
-            pos: [0, 0, 1]
-          gravcomp: 1
-      disable_self_collision: auto
-  config:
+  world_1:
     rtf_desired: 10
-    max_time_step: 0.01
-    min_time_step: 0.001
+
+simulations:
+  sim_1:
+    simulator: mujoco
+    world:
+      name: world_0
+      path: floor/mjcf/floor.xml
+    robots:
+      tiago_dual_0:
+        path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
+        apply:
+          body:
+            tiago_dual_0:
+              pos: [1, 2, 0]
+            gravcomp: 1
+        disable_self_collision: auto
+        gravcomp: 1
+        suffix:
+          body: _0
+          geom: _0
+          joint: _0
+      tiago_dual_1:
+        path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
+        apply:
+          body:
+            tiago_dual_1:
+              pos: [-1, -2, 0]
+        disable_self_collision: auto
+        suffix:
+          body: _1
+          geom: _1
+          joint: _1
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
+
+  sim_2:
+    simulator: mujoco
+    world:
+      name: world_1
+      path: floor/mjcf/floor.xml
+    robots:
+      ur5e:
+        path: universal_robot/ur5e/mjcf/ur5e.xml
+        apply:
+          body:
+            ur5e:
+              pos: [0, 0, 1]
+            gravcomp: 1
+        disable_self_collision: auto
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
 
 multiverse_server:
   host: "tcp://127.0.0.1"
   port: 7000
 
-multiverse_client:
+multiverse_clients:
   sim_1:
-    meta_data:
-      world: world_1
     host: "tcp://127.0.0.1"
     port: 7501
     send:
@@ -68,8 +74,6 @@ multiverse_client:
       tiago_dual_1: ["relative_velocity"]
 
   sim_2:
-    meta_data:
-      world: world_2
     host: "tcp://127.0.0.1"
     port: 7502
     send:
@@ -83,7 +87,6 @@ multiverse_client:
       wrist_2_joint: ["cmd_joint_angular_velocity"]
       wrist_3_joint: ["cmd_joint_angular_velocity"]
       gripper_hand_e_finger_1_joint: ["cmd_joint_force"]
-
 
   ros:
     services:
@@ -109,7 +112,7 @@ multiverse_client:
     publishers:
       tf:
         - meta_data:
-            world: world_1
+            world: world_0
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -122,7 +125,7 @@ multiverse_client:
           root_frame_id: map_1
           
         - meta_data:
-            world: world_2
+            world: world_1
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -137,7 +140,7 @@ multiverse_client:
     subscribers:
       cmd_vel:
         - meta_data:
-            world: world_1
+            world: world_0
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -148,7 +151,7 @@ multiverse_client:
           topic: /cmd_vel
           body: tiago_dual_0
         - meta_data:
-            world: world_1
+            world: world_0
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -160,22 +163,22 @@ multiverse_client:
           body: tiago_dual_1
 
   ros_control:
-    world_2:
-      - meta_data:
-          length_unit: m
-          angle_unit: rad
-          mass_unit: kg
-          time_unit: s
-          handedness: rhs
-        host: "tcp://127.0.0.1"
-        port: 7800
-        controller_manager:
-          robot: ur5e
-          robot_description: /robot_description
-          urdf: universal_robot/ur5e/urdf/ur5e.urdf
-          config: universal_robot/ur5e/config/ros_control.yaml
-          controllers:
-            spawn:
-              - joint_state_controller
-                joint_trajectory_controller
-                gripper_controller
+    - meta_data:
+        world: world_1
+        length_unit: m
+        angle_unit: rad
+        mass_unit: kg
+        time_unit: s
+        handedness: rhs
+      host: "tcp://127.0.0.1"
+      port: 7800
+      controller_manager:
+        robot: ur5e
+        robot_description: /robot_description
+        urdf: universal_robot/ur5e/urdf/ur5e.urdf
+        config: universal_robot/ur5e/config/ros_control.yaml
+        controllers:
+          spawn:
+            - joint_state_controller
+              joint_trajectory_controller
+              gripper_controller

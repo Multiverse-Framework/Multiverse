@@ -42,30 +42,24 @@ int main(int argc, char **argv)
     std::map<std::string, std::string> multiverse_params;
 
     const Json::Value multiverse_server_params_json = multiverse_params_json["multiverse_server"];
-    multiverse_params["server_host"] = multiverse_server_params_json["host"].toStyledString();
-    multiverse_params["server_port"] = multiverse_server_params_json["port"].toStyledString();
+    multiverse_params["server_host"] = multiverse_server_params_json["host"].asString();
+    multiverse_params["server_port"] = multiverse_server_params_json["port"].asString();
 
     const Json::Value multiverse_client_params_json = multiverse_params_json["multiverse_client"];
-    multiverse_params["client_host"] = multiverse_client_params_json["host"].toStyledString();
-    multiverse_params["client_port"] = multiverse_client_params_json["port"].toStyledString();
+    multiverse_params["client_host"] = multiverse_client_params_json["host"].asString();
+    multiverse_params["client_port"] = multiverse_client_params_json["port"].asString();
 
     const Json::Value multiverse_client_meta_data_json = multiverse_client_params_json["meta_data"];
-    multiverse_params["world"] = multiverse_client_meta_data_json["world"].toStyledString();
-    multiverse_params["length_unit"] = multiverse_client_meta_data_json["length_unit"].toStyledString();
-    multiverse_params["angle_unit"] = multiverse_client_meta_data_json["angle_unit"].toStyledString();
-    multiverse_params["mass_unit"] = multiverse_client_meta_data_json["mass_unit"].toStyledString();
-    multiverse_params["time_unit"] = multiverse_client_meta_data_json["time_unit"].toStyledString();
-    multiverse_params["handedness"] = multiverse_client_meta_data_json["handedness"].toStyledString();
+    multiverse_params["world"] = multiverse_client_meta_data_json["world"].asString();
+    multiverse_params["length_unit"] = multiverse_client_meta_data_json["length_unit"].asString();
+    multiverse_params["angle_unit"] = multiverse_client_meta_data_json["angle_unit"].asString();
+    multiverse_params["mass_unit"] = multiverse_client_meta_data_json["mass_unit"].asString();
+    multiverse_params["time_unit"] = multiverse_client_meta_data_json["time_unit"].asString();
+    multiverse_params["handedness"] = multiverse_client_meta_data_json["handedness"].asString();
 
     const Json::Value controller_manager_params_json = multiverse_params_json["controller_manager"];
-    multiverse_params["robot"] = controller_manager_params_json["robot"].toStyledString();
-    multiverse_params["robot_description"] = controller_manager_params_json["robot_description"].toStyledString();
-
-    for (std::pair<const std::string, std::string> &multiverse_param : multiverse_params)
-    {
-        multiverse_param.second.erase(std::remove(multiverse_param.second.begin(), multiverse_param.second.end(), '"'), multiverse_param.second.end());
-        multiverse_param.second.erase(std::remove(multiverse_param.second.begin(), multiverse_param.second.end(), '\n'), multiverse_param.second.end());
-    }
+    multiverse_params["robot"] = controller_manager_params_json["robot"].asString();
+    multiverse_params["robot_description"] = controller_manager_params_json["robot_description"].asString();
 
     MultiverseHWInterface multiverse_hw_interface(multiverse_params);
     controller_manager::ControllerManager controller_manager(&multiverse_hw_interface, ros::NodeHandle(multiverse_params["robot"]));

@@ -42,12 +42,6 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 	multiverse_params["world"] = multiverse_client_meta_data_params_json["world"].asString();
 	multiverse_params["name"] = multiverse_client_meta_data_params_json["name"].asString();
 
-	for (std::pair<const std::string, std::string> &multiverse_param : multiverse_params)
-	{
-		multiverse_param.second.erase(std::remove(multiverse_param.second.begin(), multiverse_param.second.end(), '"'), multiverse_param.second.end());
-		multiverse_param.second.erase(std::remove(multiverse_param.second.begin(), multiverse_param.second.end(), '\n'), multiverse_param.second.end());
-	}
-
 	send_objects_json = multiverse_params_json["multiverse_client"]["send"];
 	receive_objects_json = multiverse_params_json["multiverse_client"]["receive"];
 	world_name = multiverse_params["world"];

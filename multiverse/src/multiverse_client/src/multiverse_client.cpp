@@ -159,8 +159,6 @@ void MultiverseClient::run()
         case EMultiverseClientState::BindRequestMetaData:
             bind_request_meta_data();
 
-            // printf("[Client %s] Sent meta data to the server:%s\n", port.c_str(), request_meta_data_str.c_str());
-
             wait_for_meta_data_thread_finish();
             start_meta_data_thread();
             flag = EMultiverseClientState::InitSendAndReceiveData;
@@ -174,8 +172,6 @@ void MultiverseClient::run()
 
         case EMultiverseClientState::ReceiveResponseMetaData:
             receive_response_meta_data();
-
-            // printf("[Client %s] Received meta data from the server:%s\n", port.c_str(), response_meta_data_str.c_str());
 
             if (should_shut_down)
             {

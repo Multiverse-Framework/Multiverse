@@ -23,7 +23,6 @@
 #include <cmath>
 #include <csignal>
 #include <iostream>
-#include <unistd.h>
 
 #ifdef __linux__
 #include <jsoncpp/json/json.h>
@@ -341,11 +340,19 @@ public:
                 mtx.unlock();
                 if (strcmp(request_simulation_name.c_str(), simulation_name.c_str()) != 0 && request_meta_data_map.count(request_simulation_name) > 0)
                 {
+                    double start = get_time_now();
+                    double now = get_time_now();
                     while (!should_shut_down)
                     {
                         if (request_meta_data_map[request_simulation_name].second == EMetaDataRequest::WaitForSendingData || request_meta_data_map[request_simulation_name].second == EMetaDataRequest::None)
                         {
                             break;
+                        }
+                        now = get_time_now();
+                        if (now - start > 1)
+                        {
+                            printf("[Server] Socket %s is waiting for %s to be ready.\n", socket_addr.c_str(), request_simulation_name.c_str());
+                            start = now;
                         }
                     }
                     request_meta_data_map[request_simulation_name].second = EMetaDataRequest::Done;
@@ -372,13 +379,22 @@ public:
                 send_receive_data();
                 if (request_meta_data_map[simulation_name].second == EMetaDataRequest::WaitForOtherSimulation)
                 {
-                    // printf("[Server] Socket %s has received new request meta data.\n", socket_addr.c_str());
+                    printf("[Server] Socket %s has received new request meta data.\n", socket_addr.c_str());
                     request_meta_data_map[simulation_name].second = EMetaDataRequest::WaitForSendingData;
+
+                    double start = get_time_now();
+                    double now = get_time_now();
                     while (!should_shut_down)
                     {
                         if (request_meta_data_map[simulation_name].second == EMetaDataRequest::Done)
                         {
                             break;
+                        }
+                        now = get_time_now();
+                        if (now - start > 1)
+                        {
+                            printf("[Server] Socket %s is waiting for data to be sent.\n", socket_addr.c_str());
+                            start = now;
                         }
                     }
 
@@ -479,7 +495,7 @@ private:
                         }
                     }
                 }
-                printf("request_meta_data_map[%s]: %s\n", request_simulation_name.c_str(), request_meta_data_map[request_simulation_name].first.toStyledString().c_str());
+
                 request_meta_data_map[request_simulation_name].second = EMetaDataRequest::WaitForOtherSimulation;
                 request_meta_data_json["world"] = request_meta_data_map[request_simulation_name].first["world"];
                 request_meta_data_json["receive"].clear();
