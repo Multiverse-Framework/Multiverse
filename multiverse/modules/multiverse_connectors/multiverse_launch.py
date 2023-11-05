@@ -24,25 +24,23 @@ def run_subprocess(cmd: List[str]):
 
 
 def parse_mujoco(mujoco_data):
-    world_xml_path = os.path.join(resources_path, "world")
+    worlds_path = os.path.join(resources_path, "worlds")
     if "world" in mujoco_data and "path" in mujoco_data["world"]:
         if os.path.isabs(mujoco_data["world"]["path"]):
-            world_xml_path = mujoco_data["world"]["path"]
+            worlds_path = mujoco_data["world"]["path"]
         else:
-            world_xml_path = os.path.join(world_xml_path, mujoco_data["world"]["path"])
+            worlds_path = os.path.join(worlds_path, mujoco_data["world"]["path"])
     else:
-        world_xml_path = os.path.join(world_xml_path, "floor/mjcf/floor.xml")
+        worlds_path = os.path.join(worlds_path, "floor/mjcf/floor.xml")
 
-    mujoco_args = [f"--world={world_xml_path}"]
+    mujoco_args = [f"--world={worlds_path}"]
 
-    robots_xml_path = os.path.join(resources_path, "robot")
+    robots_path = os.path.join(resources_path, "robots")
     if "robots" in mujoco_data:
         for robot_name in mujoco_data["robots"]:
             if "path" in mujoco_data["robots"][robot_name]:
                 if not os.path.isabs(mujoco_data["robots"][robot_name]["path"]):
-                    mujoco_data["robots"][robot_name]["path"] = os.path.join(
-                        robots_xml_path, mujoco_data["robots"][robot_name]["path"]
-                    )
+                    mujoco_data["robots"][robot_name]["path"] = os.path.join(robots_path, mujoco_data["robots"][robot_name]["path"])
         robots_dict = mujoco_data["robots"]
         mujoco_args.append(f"--robots={robots_dict}".replace(" ", ""))
 
@@ -66,9 +64,7 @@ def main():
 
     world_dict = data.get("worlds", {})
     simulation_dict = data.get("simulations", {})
-    multiverse_server_dict = data.get(
-        "multiverse_server", {"host": "tcp://127.0.0.1", "port": "7000"}
-    )
+    multiverse_server_dict = data.get("multiverse_server", {"host": "tcp://127.0.0.1", "port": "7000"})
     multiverse_client_dict = data.get("multiverse_clients")
 
     server_host = multiverse_server_dict.get("host", "tcp://127.0.0.1")
@@ -80,10 +76,7 @@ def main():
         processes[simulator] = []
 
     for simulation_name, simulator_data in simulation_dict.items():
-        if (
-            "simulator" not in simulator_data
-            or simulator_data["simulator"] not in simulators
-        ):
+        if "simulator" not in simulator_data or simulator_data["simulator"] not in simulators:
             continue
 
         cmd = [f"mujoco_compile", f"--name={simulation_name}"]
@@ -100,19 +93,12 @@ def main():
 
             world = simulator_data.get("world")
             world_name = "world" if world is None else world["name"]
-            rtf_desired = (
-                1
-                if world_name not in world_dict
-                else world_dict[world_name].get("rtf_desired", 1)
-            )
+            rtf_desired = 1 if world_name not in world_dict else world_dict[world_name].get("rtf_desired", 1)
 
             config_dict = simulator_data["config"] | {"rtf_desired": rtf_desired}
             cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
 
-            if (
-                multiverse_client_dict is not None
-                and multiverse_client_dict.get(simulation_name) is not None
-            ):
+            if multiverse_client_dict is not None and multiverse_client_dict.get(simulation_name) is not None:
                 multiverse_client_dict[simulation_name]["meta_data"] = {
                     "world": world_name,
                     "name": simulation_name,
@@ -129,9 +115,7 @@ def main():
             process = run_subprocess(cmd)
             processes[cmd[0]].append(process)
 
-    if multiverse_client_dict is not None and (
-        "ros" in multiverse_client_dict or "ros_control" in multiverse_client_dict
-    ):
+    if multiverse_client_dict is not None and ("ros" in multiverse_client_dict or "ros_control" in multiverse_client_dict):
         cmd = ["roscore"]
         process = run_subprocess(cmd)
         processes["ros"] = [process]
@@ -159,7 +143,7 @@ def main():
         if "ros_control" in multiverse_client_dict:
             rospy.init_node(name="multiverse_launch")
 
-            robots_path = os.path.join(resources_path, "robot")
+            robots_path = os.path.join(resources_path, "robots")
             for ros_control_param in multiverse_client_dict["ros_control"]:
                 controller_manager = ros_control_param["controller_manager"]
                 robot = controller_manager["robot"]
@@ -177,7 +161,7 @@ def main():
                     "multiverse_client": {
                         "host": ros_control_param["host"],
                         "port": ros_control_param["port"],
-                        "meta_data": ros_control_param["meta_data"]
+                        "meta_data": ros_control_param["meta_data"],
                     },
                     "controller_manager": {
                         "robot": robot,
@@ -188,18 +172,14 @@ def main():
                     "rosrun",
                     "multiverse_control",
                     "multiverse_control_node",
-                    f"{multiverse_dict}".replace(" ", "")
-                    .replace("'", '"')
-                    .replace('"', '"'),
+                    f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"', '"'),
                 ]
                 process = run_subprocess(cmd)
                 processes["ros_control"].append(process)
 
                 control_config_path = controller_manager["config"]
                 if not os.path.isabs(control_config_path):
-                    control_config_path = os.path.join(
-                        robots_path, control_config_path
-                    )
+                    control_config_path = os.path.join(robots_path, control_config_path)
                 os.environ["ROS_NAMESPACE"] = f"{robot}"
                 cmd = [
                     "rosparam",
@@ -209,9 +189,7 @@ def main():
                 process = run_subprocess(cmd)
                 process.wait()
 
-                for command, controllers in controller_manager[
-                    "controllers"
-                ].items():
+                for command, controllers in controller_manager["controllers"].items():
                     cmd = [
                         "rosrun",
                         "controller_manager",

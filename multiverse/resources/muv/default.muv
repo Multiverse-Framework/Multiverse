@@ -122,8 +122,7 @@ multiverse_clients:
           port: 7301
           topic: /tf
           rate: 60
-          root_frame_id: map_1
-          
+          root_frame_id: map_0
         - meta_data:
             world: world_1
             length_unit: m
@@ -132,10 +131,24 @@ multiverse_clients:
             time_unit: s
             handedness: rhs
           host: "tcp://127.0.0.1"
-          topic: /tf
           port: 7302
+          topic: /tf
           rate: 60
-          root_frame_id: map_2
+          root_frame_id: map_1
+      odom:
+        - meta_data:
+            world: world_0
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
+          port: 7303
+          topic: /odom
+          rate: 60
+          body: tiago_dual_0
+          frame_id: map_0
 
     subscribers:
       cmd_vel:
