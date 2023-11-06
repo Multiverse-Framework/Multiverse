@@ -3,6 +3,7 @@
 import sys
 import yaml
 import os
+import glob
 import subprocess
 import re
 import signal
@@ -12,6 +13,20 @@ import xml.etree.ElementTree as ET
 import argparse
 
 
+def find_files(filename_pattern):
+    matches = []
+    for resources_path in resources_paths:
+        search_pattern = os.path.join(resources_path, "**", filename_pattern)
+        matches += [path for path in glob.iglob(search_pattern, recursive=True)]
+    if len(matches) == 0:
+        raise FileNotFoundError(f"{filename_pattern} not found in {resources_paths}")
+    elif len(matches) >= 1:
+        if len(matches) > 1:
+            print(f"Multiple matches for '{filename_pattern}' detected: {matches}. Using the first one.")
+        match = matches[0]
+    return match
+
+
 def run_subprocess(cmd: List[str]):
     cmd_str = " ".join(cmd)
     print(f'Execute "{cmd_str}"')
@@ -19,25 +34,14 @@ def run_subprocess(cmd: List[str]):
 
 
 def parse_mujoco(mujoco_data):
-    worlds_path = os.path.join(resources_path, "worlds")
-    if "world" in mujoco_data and "path" in mujoco_data["world"]:
-        if os.path.isabs(mujoco_data["world"]["path"]):
-            worlds_path = mujoco_data["world"]["path"]
-        else:
-            worlds_path = os.path.join(worlds_path, mujoco_data["world"]["path"])
-    else:
-        worlds_path = os.path.join(worlds_path, "floor/mjcf/floor.xml")
-
+    worlds_path = find_files(mujoco_data["world"]["path"])
     mujoco_args = [f"--world={worlds_path}"]
 
-    robots_path = os.path.join(resources_path, "robots")
-    if "robots" in mujoco_data:
-        for robot_name in mujoco_data["robots"]:
-            if "path" in mujoco_data["robots"][robot_name]:
-                if not os.path.isabs(mujoco_data["robots"][robot_name]["path"]):
-                    mujoco_data["robots"][robot_name]["path"] = os.path.join(robots_path, mujoco_data["robots"][robot_name]["path"])
-        robots_dict = mujoco_data["robots"]
-        mujoco_args.append(f"--robots={robots_dict}".replace(" ", ""))
+    for robot_name in mujoco_data.get("robots", []):
+        if "path" in mujoco_data["robots"][robot_name]:
+            mujoco_data["robots"][robot_name]["path"] = find_files(mujoco_data["robots"][robot_name]["path"])
+    robots_dict = mujoco_data["robots"]
+    mujoco_args.append(f"--robots={robots_dict}".replace(" ", ""))
 
     return mujoco_args
 
@@ -50,9 +54,7 @@ def parse_simulator(simulator_data):
 
 
 def main():
-    parser = argparse.ArgumentParser(
-                    prog='multiverse_launch',
-                    description='Launch the multiverse framework')
+    parser = argparse.ArgumentParser(prog="multiverse_launch", description="Launch the multiverse framework")
     parser.add_argument(
         "--muv_file",
         type=str,
@@ -69,10 +71,13 @@ def main():
         print(f"Error reading MUV file: {e}")
         sys.exit(1)
 
-    global resources_path
-    resources_path = data.get("resources", "../")
-    if not os.path.isabs(resources_path):
-        resources_path = os.path.join(os.path.dirname(muv_file), resources_path)
+    global resources_paths
+    resources_paths = data.get("resources", ["../robots", "../worlds", "../objects"])
+    resources_paths = [
+        os.path.join(os.path.dirname(muv_file), resources_path) if not os.path.isabs(resources_path) else resources_path
+        for resources_path in resources_paths
+    ]
+    print(resources_paths)
 
     processes = {"multiverse_server": [], "ros": [], "ros_control": []}
     simulators = {"mujoco"}
@@ -86,7 +91,6 @@ def main():
     server_port = multiverse_server_dict.get("port", "7000")
     process = run_subprocess(["multiverse_server", f"{server_host}:{server_port}"])
     processes["multiverse_server"] = [process]
-    
 
     for simulator in simulators:
         processes[simulator] = []
@@ -111,7 +115,7 @@ def main():
             world_name = "world" if world is None else world["name"]
             rtf_desired = 1 if world_name not in world_dict else world_dict[world_name].get("rtf_desired", 1)
 
-            config_dict = simulator_data["config"] | {"rtf_desired": rtf_desired}
+            config_dict = simulator_data["config"] | {"rtf_desired": rtf_desired, "resources": resources_paths}
             cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
 
             if multiverse_client_dict is not None and multiverse_client_dict.get(simulation_name) is not None:
@@ -133,6 +137,7 @@ def main():
 
     if multiverse_client_dict is not None and ("ros" in multiverse_client_dict or "ros_control" in multiverse_client_dict):
         import rosgraph
+
         if not rosgraph.is_master_online():
             cmd = ["roscore"]
             process = run_subprocess(cmd)
@@ -161,14 +166,11 @@ def main():
         if "ros_control" in multiverse_client_dict:
             rospy.init_node(name="multiverse_launch")
 
-            robots_path = os.path.join(resources_path, "robots")
             for ros_control_param in multiverse_client_dict["ros_control"]:
                 controller_manager = ros_control_param["controller_manager"]
                 robot = controller_manager["robot"]
                 robot_description = controller_manager["robot_description"]
-                robot_urdf_path = controller_manager["urdf"]
-                if not os.path.isabs(robot_urdf_path):
-                    robot_urdf_path = os.path.join(robots_path, robot_urdf_path)
+                robot_urdf_path = find_files(controller_manager["urdf"])
 
                 tree = ET.parse(robot_urdf_path)
                 root = tree.getroot()
@@ -195,9 +197,7 @@ def main():
                 process = run_subprocess(cmd)
                 processes["ros_control"].append(process)
 
-                control_config_path = controller_manager["config"]
-                if not os.path.isabs(control_config_path):
-                    control_config_path = os.path.join(robots_path, control_config_path)
+                control_config_path = find_files(controller_manager["config"])
                 os.environ["ROS_NAMESPACE"] = f"{robot}"
                 cmd = [
                     "rosparam",

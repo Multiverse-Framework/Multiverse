@@ -1,4 +1,7 @@
-resources: ../
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
 
 worlds:
   world_0:
@@ -12,10 +15,10 @@ simulations:
     simulator: mujoco
     world:
       name: world_0
-      path: floor/mjcf/floor.xml
+      path: floor.xml
     robots:
       tiago_dual_0:
-        path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
+        path: tiago_dual.xml
         apply:
           body:
             tiago_dual_0:
@@ -28,7 +31,7 @@ simulations:
           geom: _0
           joint: _0
       tiago_dual_1:
-        path: pal_robotics/tiago_dual/mjcf/tiago_dual.xml
+        path: tiago_dual.xml
         apply:
           body:
             tiago_dual_1:
@@ -46,10 +49,10 @@ simulations:
     simulator: mujoco
     world:
       name: world_1
-      path: floor/mjcf/floor.xml
+      path: floor.xml
     robots:
       ur5e:
-        path: universal_robot/ur5e/mjcf/ur5e.xml
+        path: ur5e.xml
         apply:
           body:
             ur5e:
@@ -190,8 +193,8 @@ multiverse_clients:
       controller_manager:
         robot: ur5e
         robot_description: /robot_description
-        urdf: universal_robot/ur5e/urdf/ur5e.urdf
-        config: universal_robot/ur5e/config/ros_control.yaml
+        urdf: ur5e.urdf
+        config: ur5e/config/ros_control.yaml
         controllers:
           spawn:
             - joint_state_controller
