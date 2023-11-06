@@ -14,7 +14,7 @@ class MultiverseRosBase:
         self.server_port = str(kwargs.get("server_port", "7000"))
         self.client_host = str(kwargs.get("host", "tcp://127.0.0.1"))
         self.client_port = str(kwargs.get("port"))
-        meta_data = kwargs["meta_data"]
+        meta_data = kwargs.get("meta_data", {})
         self.meta_data = {
             "world": str(meta_data.get("world", "world")),
             "length_unit": str(meta_data.get("length_unit", "m")),

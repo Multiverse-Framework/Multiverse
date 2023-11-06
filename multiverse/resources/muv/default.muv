@@ -96,21 +96,9 @@ multiverse_clients:
   ros:
     services:
       socket:
-        meta_data:
-          length_unit: m
-          angle_unit: rad
-          mass_unit: kg
-          time_unit: s
-          handedness: rhs
         host: "tcp://127.0.0.1"
         port: 7401
       spawn_objects:
-        meta_data:
-          length_unit: m
-          angle_unit: rad
-          mass_unit: kg
-          time_unit: s
-          handedness: rhs
         host: "tcp://127.0.0.1"
         port: 7402
 
