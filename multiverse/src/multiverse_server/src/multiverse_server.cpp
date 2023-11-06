@@ -32,7 +32,6 @@
 #include <json/reader.h>
 #endif
 
-#include <set>
 #include <mutex>
 #include <thread>
 #include <zmq.hpp>
@@ -185,10 +184,11 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
 
 std::mutex mtx;
 
+std::map<std::string, std::pair<Json::Value, EMetaDataRequest>> request_meta_data_map;
+
 struct Attribute
 {
     std::vector<double> data;
-    std::map<std::string, std::vector<double>> simulation_data;
     bool is_sent = false;
 };
 
@@ -199,7 +199,7 @@ struct Object
 
 struct Simulation
 {
-    std::map<std::string, Object> objects;
+    std::map<Object, Attribute> efforts;
 };
 
 struct World
@@ -211,20 +211,7 @@ struct World
 
 std::map<std::string, World> worlds;
 
-struct MetaData
-{
-    std::string world_name;
-    std::string simulation_name;
-    std::string length_unit = "m";
-    std::string angle_unit = "rad";
-    std::string handedness = "rhs";
-    std::string mass_unit = "kg";
-    std::string time_unit = "s";
-    std::map<std::string, std::map<std::string, std::vector<double>>> send;
-    std::map<std::string, std::map<std::string, std::vector<double>>> receive;
-};
-
-std::map<std::string, std::pair<Json::Value, EMetaDataRequest>> meta_data_map;
+std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>>> efforts;
 
 bool should_shut_down = false;
 
@@ -277,7 +264,11 @@ public:
             {
             case EMultiverseServerState::ReceiveRequestMetaData:
                 receive_request_meta_data();
-                if (!parse_request_meta_data_from_string(message.to_string()))
+                message_str = message.to_string();
+                if (message_str[0] != '{' ||
+                    message_str[0] == '{' && message_str[1] == '}' && message_str.size() == 2 ||
+                    message_str.empty() ||
+                    !reader.parse(message_str, request_meta_data_json))
                 {
                     flag = EMultiverseServerState::BindReceiveData;
                 }
@@ -290,11 +281,11 @@ public:
 
             case EMultiverseServerState::BindObjects:
                 // printf("[Server] Receive meta data from socket %s:\n%*.*s", socket_addr.c_str(), STRING_SIZE, STRING_SIZE, request_meta_data_json.toStyledString().c_str());
-                validate_meta_data();
-                bind_conversion_map();
+                init_response_meta_data();
 
                 mtx.lock();
                 bind_send_objects();
+                validate_response_meta_data();
                 mtx.unlock();
 
                 wait_for_objects();
@@ -326,7 +317,7 @@ public:
                 receive_send_data();
                 if (message.to_string()[0] == '{')
                 {
-                    const std::string &message_str = message.to_string();
+                    message_str = message.to_string();
                     if (message_str[1] == '}' && message_str.size() == 2)
                     {
                         printf("[Server] Received close signal %s from socket %s.\n", message_str.c_str(), socket_addr.c_str());
@@ -334,7 +325,7 @@ public:
                         receive_data_vec.clear();
                         flag = EMultiverseServerState::SendResponseMetaData;
                     }
-                    else if (parse_request_meta_data_from_string(message_str))
+                    else if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
                     {
                         send_data_vec.clear();
                         receive_data_vec.clear();
@@ -368,13 +359,13 @@ public:
                     *send_data_vec[i].first = send_buffer[i] * send_data_vec[i].second;
                 }
                 mtx.unlock();
-                if (strcmp(request_simulation_name.c_str(), meta_data.simulation_name.c_str()) != 0 && meta_data_map.count(request_simulation_name) > 0)
+                if (strcmp(request_simulation_name.c_str(), simulation_name.c_str()) != 0 && request_meta_data_map.count(request_simulation_name) > 0)
                 {
                     double start = get_time_now();
                     double now = get_time_now();
                     while (!should_shut_down)
                     {
-                        if (meta_data_map[request_simulation_name].second == EMetaDataRequest::WaitForSendingData || meta_data_map[request_simulation_name].second == EMetaDataRequest::None)
+                        if (request_meta_data_map[request_simulation_name].second == EMetaDataRequest::WaitForSendingData || request_meta_data_map[request_simulation_name].second == EMetaDataRequest::None)
                         {
                             break;
                         }
@@ -385,7 +376,7 @@ public:
                             start = now;
                         }
                     }
-                    meta_data_map[request_simulation_name].second = EMetaDataRequest::Done;
+                    request_meta_data_map[request_simulation_name].second = EMetaDataRequest::Done;
                 }
 
                 flag = EMultiverseServerState::BindReceiveData;
@@ -407,16 +398,16 @@ public:
 
             case EMultiverseServerState::SendReceiveData:
                 send_receive_data();
-                if (meta_data_map[meta_data.simulation_name].second == EMetaDataRequest::WaitForOtherSimulation)
+                if (request_meta_data_map[simulation_name].second == EMetaDataRequest::WaitForOtherSimulation)
                 {
                     printf("[Server] Socket %s has received new request meta data.\n", socket_addr.c_str());
-                    meta_data_map[meta_data.simulation_name].second = EMetaDataRequest::WaitForSendingData;
+                    request_meta_data_map[simulation_name].second = EMetaDataRequest::WaitForSendingData;
 
                     double start = get_time_now();
                     double now = get_time_now();
                     while (!should_shut_down)
                     {
-                        if (meta_data_map[meta_data.simulation_name].second == EMetaDataRequest::Done)
+                        if (request_meta_data_map[simulation_name].second == EMetaDataRequest::Done)
                         {
                             break;
                         }
@@ -429,12 +420,13 @@ public:
                     }
 
                     receive_request_meta_data();
-                    const std::string &message_str = meta_data_map[meta_data.simulation_name].first.toStyledString();
+                    request_meta_data_json = request_meta_data_map[simulation_name].first;
+                    const std::string message_str = request_meta_data_json.toStyledString();
                     zmq::message_t request_message(message_str.size());
                     memcpy(request_message.data(), message_str.data(), message_str.size());
 
                     socket.send(request_message, zmq::send_flags::none);
-                    meta_data_map[meta_data.simulation_name].second = EMetaDataRequest::None;
+                    request_meta_data_map[simulation_name].second = EMetaDataRequest::None;
 
                     send_data_vec.clear();
                     receive_data_vec.clear();
@@ -471,21 +463,35 @@ public:
     }
 
 private:
-    bool parse_request_meta_data_from_string(const std::string request_meta_data_str)
+    void receive_request_meta_data()
     {
-        Json::Value request_meta_data_json;
+        send_buffer_size = 1;
+        receive_buffer_size = 1;
 
-        if (request_meta_data_str[0] != '{' ||
-            request_meta_data_str[0] == '{' && request_meta_data_str[1] == '}' && request_meta_data_str.size() == 2 ||
-            request_meta_data_str.empty() ||
-            !reader.parse(request_meta_data_str, request_meta_data_json))
+        send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
+        receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
+
+        is_receive_data_sent = false;
+
+        // Receive JSON string over ZMQ
+        try
         {
-            return false;
+            sockets_need_clean_up[socket_addr] = false;
+            zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
+            sockets_need_clean_up[socket_addr] = true;
         }
+        catch (const zmq::error_t &e)
+        {
+            should_shut_down = true;
+            printf("[Server] %s, socket %s prepares to close.\n", e.what(), socket_addr.c_str());
+        }
+    }
 
+    void init_response_meta_data()
+    {
         if (!request_meta_data_json.isMember("name"))
         {
-            if (meta_data.simulation_name.empty())
+            if (simulation_name.empty())
             {
                 throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " doesn't have a name.");
             }
@@ -494,7 +500,7 @@ private:
         {
             request_simulation_name = request_meta_data_json["name"].asString();
 
-            if (request_simulation_name != meta_data.simulation_name && !meta_data.simulation_name.empty() && meta_data_map.count(request_simulation_name) > 0)
+            if (request_simulation_name != simulation_name && !simulation_name.empty() && request_meta_data_map.count(request_simulation_name) > 0)
             {
                 for (const std::string &type_str : {"send", "receive"})
                 {
@@ -502,76 +508,33 @@ private:
                     {
                         for (const Json::Value &attribute_json : request_meta_data_json[type_str][object_name])
                         {
-                            Json::Value &attributes = meta_data_map[request_simulation_name].first[type_str][object_name];
+                            Json::Value &attributes = request_meta_data_map[request_simulation_name].first[type_str][object_name];
                             if (std::find(attributes.begin(), attributes.end(), attribute_json) == attributes.end())
                             {
-                                meta_data_map[request_simulation_name].first[type_str][object_name].append(attribute_json);
+                                request_meta_data_map[request_simulation_name].first[type_str][object_name].append(attribute_json);
                             }
                         }
                     }
                 }
 
-                meta_data_map[request_simulation_name].second = EMetaDataRequest::WaitForOtherSimulation;
-                meta_data.world_name = meta_data_map[request_simulation_name].first["world"].asString();
-                meta_data.receive.clear();
+                request_meta_data_map[request_simulation_name].second = EMetaDataRequest::WaitForOtherSimulation;
+                request_meta_data_json["world"] = request_meta_data_map[request_simulation_name].first["world"];
+                request_meta_data_json["receive"].clear();
             }
             else
             {
-                meta_data.simulation_name = request_simulation_name;
+                simulation_name = request_simulation_name;
             }
         }
-        meta_data_map[meta_data.simulation_name] = {request_meta_data_json, EMetaDataRequest::None};
+        request_meta_data_map[simulation_name] = {request_meta_data_json, EMetaDataRequest::None};
 
-        meta_data.world_name = request_meta_data_json.isMember("world") ? request_meta_data_json["world"].asString() : "world";
-        meta_data.length_unit = request_meta_data_json.isMember("length_unit") ? request_meta_data_json["length_unit"].asString() : "m";
-        meta_data.angle_unit = request_meta_data_json.isMember("angle_unit") ? request_meta_data_json["angle_unit"].asString() : "rad";
-        meta_data.handedness = request_meta_data_json.isMember("handedness") ? request_meta_data_json["handedness"].asString() : "rhs";
-        meta_data.mass_unit = request_meta_data_json.isMember("mass_unit") ? request_meta_data_json["mass_unit"].asString() : "kg";
-        meta_data.time_unit = request_meta_data_json.isMember("time_unit") ? request_meta_data_json["time_unit"].asString() : "s";
+        world_name = request_meta_data_json.isMember("world") ? request_meta_data_json["world"].asString() : "world";
 
-        for (const Json::Value &send_objects_json : request_meta_data_json["send"])
-        {
-            for (const std::string &object_name : send_objects_json.getMemberNames())
-            {
-                for (const Json::Value &attribute_json : send_objects_json[object_name])
-                {
-                    const std::string &attribute_name = attribute_json.asString();
-                    if (attribute_map.count(attribute_name) == 0)
-                    {
-                        printf("[Server] socket %s requests invalid sending attribute %s\n", socket_addr.c_str(), attribute_name.c_str());
-                        return false;
-                    }
-                    meta_data.send[object_name][attribute_name] = {};
-                }
-            }
-        }
-        for (const Json::Value &receive_objects_json : request_meta_data_json["receive"])
-        {
-            for (const std::string &object_name : receive_objects_json.getMemberNames())
-            {
-                for (const Json::Value &attribute_json : receive_objects_json[object_name])
-                {
-                    const std::string &attribute_name = attribute_json.asString();
-                    if (attribute_map.count(attribute_name) == 0)
-                    {
-                        printf("[Server] socket %s requests invalid receiving attribute %s\n", socket_addr.c_str(), attribute_name.c_str());
-                        return false;
-                    }
-                    meta_data.receive[object_name][attribute_name] = {};
-                }
-            }
-        }
-
-        return true;
-    }
-
-    void bind_conversion_map()
-    {
-        const std::string &length_unit = meta_data.length_unit;
-        const std::string &angle_unit = meta_data.angle_unit;
-        const std::string &handedness = meta_data.handedness;
-        const std::string &mass_unit = meta_data.mass_unit;
-        const std::string &time_unit = meta_data.time_unit;
+        const std::string length_unit = request_meta_data_json.isMember("length_unit") ? request_meta_data_json["length_unit"].asString() : "m";
+        const std::string angle_unit = request_meta_data_json.isMember("angle_unit") ? request_meta_data_json["angle_unit"].asString() : "rad";
+        const std::string handedness = request_meta_data_json.isMember("handedness") ? request_meta_data_json["handedness"].asString() : "rhs";
+        const std::string mass_unit = request_meta_data_json.isMember("mass_unit") ? request_meta_data_json["mass_unit"].asString() : "kg";
+        const std::string time_unit = request_meta_data_json.isMember("time_unit") ? request_meta_data_json["time_unit"].asString() : "s";
 
         for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
         {
@@ -660,60 +623,30 @@ private:
                 *(conversion_scale_it++) *= *(handedness_scale_it++);
             }
         }
+
+        response_meta_data_json.clear();
+        response_meta_data_json["world"] = world_name;
+        response_meta_data_json["angle_unit"] = angle_unit;
+        response_meta_data_json["length_unit"] = length_unit;
+        response_meta_data_json["mass_unit"] = mass_unit;
+        response_meta_data_json["time_unit"] = time_unit;
+        response_meta_data_json["handedness"] = handedness;
+        response_meta_data_json["time"] = worlds[world_name].time * unit_scale[time_unit];
     }
-
-    void receive_request_meta_data()
-    {
-        send_buffer_size = 1;
-        receive_buffer_size = 1;
-
-        send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
-        receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
-
-        is_receive_data_sent = false;
-
-        // Receive JSON string over ZMQ
-        try
-        {
-            sockets_need_clean_up[socket_addr] = false;
-            zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
-            sockets_need_clean_up[socket_addr] = true;
-        }
-        catch (const zmq::error_t &e)
-        {
-            should_shut_down = true;
-            printf("[Server] %s, socket %s prepares to close.\n", e.what(), socket_addr.c_str());
-        }
-    }
-
-    // void bind_response_meta_data()
-    // {
-    //     response_meta_data_json.clear();
-    //     response_meta_data_json["world"] = world_name;
-    //     response_meta_data_json["angle_unit"] = angle_unit;
-    //     response_meta_data_json["length_unit"] = length_unit;
-    //     response_meta_data_json["mass_unit"] = mass_unit;
-    //     response_meta_data_json["time_unit"] = time_unit;
-    //     response_meta_data_json["handedness"] = handedness;
-    //     response_meta_data_json["time"] = worlds[world_name].time * unit_scale[time_unit];
-    // }
 
     void bind_send_objects()
     {
-        World &world = worlds[meta_data.world_name];
-        std::map<std::string, Object> &objects = world.objects;
-        std::map<std::string, Simulation> &simulations = world.simulations;
-        simulations[meta_data.simulation_name].objects = objects;
+        send_objects_json = request_meta_data_json["send"];
+        std::map<std::string, Object> &objects = worlds[world_name].objects;
+        send_data_vec.emplace_back(&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]);
 
-        send_data_vec.emplace_back(&world.time, conversion_map[attribute_map["time"].first][0]);
-
-        for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &object_pair : meta_data.send)
+        for (const std::string &object_name : send_objects_json.getMemberNames())
         {
-            const std::string &object_name = object_pair.first;
-            for (std::pair<const std::string, std::vector<double>> &attribute_pair : object_pair.second)
+            for (const Json::Value &attribute_json : send_objects_json[object_name])
             {
-                const std::string &attribute_name = attribute_pair.first;
-                Attribute &attribute = objects[object_name].attributes[attribute_name];
+                const std::string &attribute_name = attribute_json.asString();
+                Object &object = objects[object_name];
+                Attribute &attribute = object.attributes[attribute_name];
                 if (attribute.data.size() == 0)
                 {
                     attribute.data = attribute_map[attribute_name].second;
@@ -722,17 +655,16 @@ private:
                         double *data = &attribute.data[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
-                        meta_data.send[object_name][attribute_name]
                         response_meta_data_json["send"][object_name][attribute_name].append(attribute_map[attribute_name].second[i]);
                     }
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
-                    std::vector<double> &simulation_data = attribute.simulation_data[meta_data.simulation_name];
-                    simulation_data = attribute_map[attribute_name].second;
-                    for (size_t i = 0; i < simulation_data.size(); i++)
+                    efforts[world_name][object_name][socket_addr][attribute_name] = attribute_map[attribute_name].second;
+
+                    for (size_t i = 0; i < attribute_map[attribute_name].second.size(); i++)
                     {
-                        double *data = &simulation_data[i];
+                        double *data = &efforts[world_name][object_name][socket_addr][attribute_name][i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
                         response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
@@ -756,54 +688,70 @@ private:
         }
     }
 
-    void validate_meta_data()
+    void validate_response_meta_data()
     {
-        if (request_meta_data.receive.count("") > 0 &&
-            request_meta_data.receive[""].count("") > 0)
+        receive_objects_json = request_meta_data_json["receive"];
+
+        if (receive_objects_json.isMember("") &&
+            std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
         {
-            for (const std::pair<const std::string, Object> &object_pair : worlds[meta_data.world_name].objects)
+            receive_objects_json = {};
+            for (const std::pair<std::string, Object> &object : worlds[world_name].objects)
             {
-                const std::string &object_name = object_pair.first;
-                for (const std::pair<const std::string, Attribute> &attribute_pair : object_pair.second.attributes)
+                for (const std::pair<std::string, Attribute> &attribute : object.second.attributes)
                 {
-                    const std::string &attribute_name = attribute_pair.first;
-                    request_meta_data.receive[object_name].insert(attribute_name);
+                    if ((strcmp(attribute.first.c_str(), "force") != 0 && strcmp(attribute.first.c_str(), "torque") != 0 ||
+                         attribute.second.data.size() > 3))
+                    {
+                        receive_objects_json[object.first].append(attribute.first);
+                    }
                 }
             }
             return;
         }
 
-        for (std::pair<const std::string, std::set<std::string>> &object_pair : request_meta_data.receive)
+        for (const std::string &object_name : request_meta_data_json["receive"].getMemberNames())
         {
-            const std::string &object_name = object_pair.first;
             if (!object_name.empty())
             {
-                for (const std::string &attribute_name : object_pair.second)
+                for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
                 {
+                    const std::string &attribute_name = attribute_json.asString();
                     if (!attribute_name.empty())
                     {
                         continue;
                     }
-                    
-                    object_pair.second.clear();
-                    for (const std::pair<const std::string, Attribute> &attribute_pair : worlds[meta_data.world_name].objects[object_name].attributes)
+
+                    receive_objects_json[object_name] = {};
+                    for (const std::pair<std::string, Attribute> &attribute : worlds[world_name].objects[object_name].attributes)
                     {
-                        object_pair.second.insert(attribute_pair.first);
+                        if ((strcmp(attribute.first.c_str(), "force") != 0 && strcmp(attribute.first.c_str(), "torque") != 0 ||
+                             attribute.second.data.size() > 3) &&
+                            std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), attribute.first) == receive_objects_json[object_name].end())
+                        {
+                            receive_objects_json[object_name].append(attribute.first);
+                        }
                     }
                     break;
                 }
             }
             else
             {
-                for (const std::pair<const std::string, Object> &object_map : worlds[meta_data.world_name].objects)
+                for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
                 {
-                    const std::string &object_name = object_map.first;
-                    for (const std::string &attribute_name : object_pair.second)
+                    const std::string &attribute_name = attribute_json.asString();
+                    for (const std::pair<std::string, Object> &object : worlds[world_name].objects)
                     {
-                        request_meta_data.receive[object_name].insert(attribute_name);
+                        if (object.second.attributes.count(attribute_name) != 0 &&
+                            (strcmp(attribute_name.c_str(), "force") != 0 && strcmp(attribute_name.c_str(), "torque") != 0 ||
+                             object.second.attributes.at(attribute_name).data.size() > 3) &&
+                            std::find(receive_objects_json[object.first].begin(), receive_objects_json[object.first].end(), attribute_name) == receive_objects_json[object.first].end())
+                        {
+                            receive_objects_json[object.first].append(attribute_name);
+                        }
                     }
                 }
-                request_meta_data.receive.erase(object_name);
+                receive_objects_json.removeMember(object_name);
                 break;
             }
         }
@@ -818,12 +766,12 @@ private:
         {
             found_all_objects = true;
             now = get_time_now();
-            for (std::pair<const std::string, std::set<std::string>> &object_pair : request_meta_data.receive)
+            for (const std::string &object_name : receive_objects_json.getMemberNames())
             {
-                const std::string &object_name = object_pair.first;
-                for (const std::string &attribute_name : object_pair.second)
+                for (const Json::Value &attribute_json : receive_objects_json[object_name])
                 {
-                    if ((worlds[meta_data.world_name].objects.count(object_name) == 0 || worlds[meta_data.world_name].objects[object_name].attributes.count(attribute_name) == 0))
+                    const std::string &attribute_name = attribute_json.asString();
+                    if ((worlds[world_name].objects.count(object_name) == 0 || worlds[world_name].objects[object_name].attributes.count(attribute_name) == 0))
                     {
                         found_all_objects = false;
                         if (now - start > 1)
@@ -842,29 +790,30 @@ private:
 
     void bind_receive_objects()
     {
-        receive_data_vec.emplace_back(&worlds[meta_data.world_name].time, conversion_map[attribute_map["time"].first][0]);
-        for (std::pair<const std::string, std::set<std::string>> &object_pair : request_meta_data.receive)
+        receive_data_vec.emplace_back(&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]);
+        for (const std::string &object_name : receive_objects_json.getMemberNames())
         {
-            const std::string &object_name = object_pair.first;
-            for (const std::string &attribute_name : object_pair.second)
+            for (const Json::Value &attribute_json : receive_objects_json[object_name])
             {
+                const std::string attribute_name = attribute_json.asString();
+
                 size_t data_size;
                 if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
                     data_size = 3;
-                    worlds[meta_data.world_name].objects[object_name].attributes[attribute_name].is_sent = true;
+                    worlds[world_name].objects[object_name].attributes[attribute_name].is_sent = true;
                 }
                 else
                 {
-                    data_size = worlds[meta_data.world_name].objects[object_name].attributes[attribute_name].data.size();
+                    data_size = worlds[world_name].objects[object_name].attributes[attribute_name].data.size();
                 }
 
                 for (size_t i = 0; i < data_size; i++)
                 {
-                    double *data = &worlds[meta_data.world_name].objects[object_name].attributes[attribute_name].data[i];
+                    double *data = &worlds[world_name].objects[object_name].attributes[attribute_name].data[i];
                     const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
                     receive_data_vec.emplace_back(data, conversion);
-                    response_meta_data.receive[object_name][attribute_name].push_back(*data * conversion);
+                    response_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
                 }
             }
         }
@@ -877,7 +826,7 @@ private:
 
         if (should_shut_down)
         {
-            response_meta_data.time = -1.0;
+            response_meta_data_json["time"] = -1.0;
         }
 
         if (continue_state)
@@ -918,12 +867,12 @@ private:
 
     void wait_for_receive_data()
     {
-        for (std::pair<const std::string, std::set<std::string>> &object_pair : request_meta_data.receive)
+        for (const std::string &object_name : send_objects_json.getMemberNames())
         {
-            const std::string &object_name = object_pair.first;
-            for (const std::string &attribute_name : object_pair.second)
+            for (const Json::Value &attribute_json : send_objects_json[object_name])
             {
-                worlds[meta_data.world_name].objects[object_name].attributes[attribute_name].is_sent = true;
+                const std::string attribute_name = attribute_json.asString();
+                worlds[world_name].objects[object_name].attributes[attribute_name].is_sent = true;
             }
         }
 
@@ -955,7 +904,6 @@ private:
     {
         for (const std::string &object_name : receive_objects_json.getMemberNames())
         {
-            Object &object = worlds[world_name].objects[object_name];
             for (const std::string &effort_str : {"force", "torque"})
             {
                 if (std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), effort_str) == receive_objects_json[object_name].end())
@@ -963,12 +911,16 @@ private:
                     continue;
                 }
 
-                std::vector<double> &effort = object.attributes[effort_str].data;
-                for (size_t i = 0; i < 3; i++)
+                for (std::pair<const std::string, std::map<std::string, std::vector<double>>> &effort : efforts[world_name][object_name])
                 {
-                    for (std::pair<std::string, Simulation> simulation : worlds[world_name].simulations)
+                    for (size_t i = 0; i < 3; i++)
                     {
-                        effort[i] += object.attributes[effort_str].simulation_data[simulation.first][i];
+                        for (size_t j = 3; j < effort.second[effort_str].size(); j += 3)
+                        {
+                            effort.second[effort_str][i] += effort.second[effort_str][j];
+                        }
+
+                        worlds[world_name].objects[object_name].attributes[effort_str].data[i] = effort.second[effort_str][i];
                     }
                 }
             }
@@ -982,9 +934,9 @@ private:
         {
             receive_buffer[0] = -1.0;
         }
-        else if (meta_data_map[simulation_name].second == EMetaDataRequest::WaitForOtherSimulation)
+        else if (request_meta_data_map[simulation_name].second == EMetaDataRequest::WaitForOtherSimulation)
         {
-            printf("meta_data_map[simulation_name].second:%s\n", meta_data_map[simulation_name].first.toStyledString().c_str());
+            printf("request_meta_data_map[simulation_name].second:%s\n", request_meta_data_map[simulation_name].first.toStyledString().c_str());
             receive_buffer[0] = -2.0;
         }
 
@@ -998,19 +950,19 @@ private:
 
     zmq::message_t message;
 
+    std::string message_str;
+
     std::string socket_addr;
 
     zmq::socket_t socket;
 
-    MetaData meta_data;
+    Json::Value request_meta_data_json;
 
-    // Json::Value request_meta_data_json;
+    Json::Value send_objects_json;
 
-    // Json::Value send_objects_json;
+    Json::Value response_meta_data_json;
 
-    // Json::Value response_meta_data_json;
-
-    // Json::Value receive_objects_json;
+    Json::Value receive_objects_json;
 
     size_t send_buffer_size = 1;
 
@@ -1025,6 +977,10 @@ private:
     std::vector<std::pair<double *, double>> receive_data_vec;
 
     std::map<EAttribute, std::vector<double>> conversion_map;
+
+    std::string world_name;
+
+    std::string simulation_name;
 
     std::string request_simulation_name;
 
