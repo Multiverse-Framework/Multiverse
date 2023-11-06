@@ -184,11 +184,30 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
 
 std::mutex mtx;
 
-std::map<std::string, double> world_times;
+// std::map<std::string, double> world_times;
 
 std::map<std::string, std::pair<Json::Value, EMetaDataRequest>> request_meta_data_map;
 
-std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
+struct Attribute
+{
+    std::vector<double> data;
+    bool is_sent = false;
+};
+
+struct Object
+{
+    std::map<std::string, Attribute> attributes;
+};
+
+struct World
+{
+    std::map<std::string, Object> objects;
+    double time = 0.0;
+};
+
+std::map<std::string, World> worlds;
+
+// std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
 
 std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>>> efforts;
 
@@ -610,36 +629,26 @@ private:
         response_meta_data_json["mass_unit"] = mass_unit;
         response_meta_data_json["time_unit"] = time_unit;
         response_meta_data_json["handedness"] = handedness;
-        response_meta_data_json["time"] = world_times[world_name] * unit_scale[time_unit];
+        response_meta_data_json["time"] = worlds[world_name].time * unit_scale[time_unit];
     }
 
     void bind_send_objects()
     {
         send_objects_json = request_meta_data_json["send"];
-        std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &objects = worlds[world_name];
-        if (world_times.count(world_name) == 0)
-        {
-            world_times[world_name] = 0.0;
-        }
-        send_data_vec.emplace_back(&world_times[world_name], conversion_map[attribute_map["time"].first][0]);
+        std::map<std::string, Object> &objects = worlds[world_name].objects;
+        send_data_vec.emplace_back(&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]);
 
         for (const std::string &object_name : send_objects_json.getMemberNames())
         {
-            if (objects.count(object_name) == 0)
-            {
-                objects[object_name] = {};
-            }
-
             for (const Json::Value &attribute_json : send_objects_json[object_name])
             {
-                const std::string attribute_name = attribute_json.asString();
-                if (objects[object_name].count(attribute_name) == 0)
+                const std::string &attribute_name = attribute_json.asString();
+                if (objects[object_name].attributes.count(attribute_name) == 0)
                 {
-                    objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
-
-                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                    objects[object_name].attributes[attribute_name].data = attribute_map[attribute_name].second;
+                    for (size_t i = 0; i < objects[object_name].attributes[attribute_name].data.size(); i++)
                     {
-                        double *data = &objects[object_name][attribute_name].first[i];
+                        double *data = &objects[object_name].attributes[attribute_name].data[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
                         response_meta_data_json["send"][object_name][attribute_name].append(attribute_map[attribute_name].second[i]);
@@ -647,11 +656,6 @@ private:
                 }
                 else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
-                    if (objects[object_name].count(attribute_name) == 0)
-                    {
-                        objects[object_name][attribute_name] = {attribute_map[attribute_name].second, false};
-                    }
-
                     efforts[world_name][object_name][socket_addr][attribute_name] = attribute_map[attribute_name].second;
 
                     for (size_t i = 0; i < attribute_map[attribute_name].second.size(); i++)
@@ -666,11 +670,11 @@ private:
                 {
                     printf("[Server] Continue state [%s - %s] on socket %s\n", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
-                    objects[object_name][attribute_name].second = true;
+                    objects[object_name].attributes[attribute_name].is_sent = true;
 
-                    for (size_t i = 0; i < objects[object_name][attribute_name].first.size(); i++)
+                    for (size_t i = 0; i < objects[object_name].attributes[attribute_name].data.size(); i++)
                     {
-                        double *data = &objects[object_name][attribute_name].first[i];
+                        double *data = &objects[object_name].attributes[attribute_name].data[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
                         response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
@@ -688,12 +692,12 @@ private:
             std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
         {
             receive_objects_json = {};
-            for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : worlds[world_name])
+            for (const std::pair<std::string, Object> &object : worlds[world_name].objects)
             {
-                for (const std::pair<std::string, std::pair<std::vector<double>, bool>> &attribute : object.second)
+                for (const std::pair<std::string, Attribute> &attribute : object.second.attributes)
                 {
                     if ((strcmp(attribute.first.c_str(), "force") != 0 && strcmp(attribute.first.c_str(), "torque") != 0 ||
-                         attribute.second.first.size() > 3))
+                         attribute.second.data.size() > 3))
                     {
                         receive_objects_json[object.first].append(attribute.first);
                     }
@@ -708,17 +712,17 @@ private:
             {
                 for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
                 {
-                    const std::string attribute_name = attribute_json.asString();
+                    const std::string &attribute_name = attribute_json.asString();
                     if (!attribute_name.empty())
                     {
                         continue;
                     }
 
                     receive_objects_json[object_name] = {};
-                    for (const std::pair<std::string, std::pair<std::vector<double>, bool>> &attribute : worlds[world_name][object_name])
+                    for (const std::pair<std::string, Attribute> &attribute : worlds[world_name].objects[object_name].attributes)
                     {
                         if ((strcmp(attribute.first.c_str(), "force") != 0 && strcmp(attribute.first.c_str(), "torque") != 0 ||
-                             attribute.second.first.size() > 3) &&
+                             attribute.second.data.size() > 3) &&
                             std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), attribute.first) == receive_objects_json[object_name].end())
                         {
                             receive_objects_json[object_name].append(attribute.first);
@@ -731,12 +735,12 @@ private:
             {
                 for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
                 {
-                    const std::string attribute_name = attribute_json.asString();
-                    for (const std::pair<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>> &object : worlds[world_name])
+                    const std::string &attribute_name = attribute_json.asString();
+                    for (const std::pair<std::string, Object> &object : worlds[world_name].objects)
                     {
-                        if (object.second.count(attribute_name) != 0 &&
+                        if (object.second.attributes.count(attribute_name) != 0 &&
                             (strcmp(attribute_name.c_str(), "force") != 0 && strcmp(attribute_name.c_str(), "torque") != 0 ||
-                             object.second.at(attribute_name).first.size() > 3) &&
+                             object.second.attributes.at(attribute_name).data.size() > 3) &&
                             std::find(receive_objects_json[object.first].begin(), receive_objects_json[object.first].end(), attribute_name) == receive_objects_json[object.first].end())
                         {
                             receive_objects_json[object.first].append(attribute_name);
@@ -762,8 +766,8 @@ private:
             {
                 for (const Json::Value &attribute_json : receive_objects_json[object_name])
                 {
-                    const std::string attribute_name = attribute_json.asString();
-                    if ((worlds[world_name].count(object_name) == 0 || worlds[world_name][object_name].count(attribute_name) == 0))
+                    const std::string &attribute_name = attribute_json.asString();
+                    if ((worlds[world_name].objects.count(object_name) == 0 || worlds[world_name].objects[object_name].attributes.count(attribute_name) == 0))
                     {
                         found_all_objects = false;
                         if (now - start > 1)
@@ -782,7 +786,7 @@ private:
 
     void bind_receive_objects()
     {
-        receive_data_vec.emplace_back(&world_times[world_name], conversion_map[attribute_map["time"].first][0]);
+        receive_data_vec.emplace_back(&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]);
         for (const std::string &object_name : receive_objects_json.getMemberNames())
         {
             for (const Json::Value &attribute_json : receive_objects_json[object_name])
@@ -793,16 +797,16 @@ private:
                 if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
                 {
                     data_size = 3;
-                    worlds[world_name][object_name][attribute_name].second = true;
+                    worlds[world_name].objects[object_name].attributes[attribute_name].is_sent = true;
                 }
                 else
                 {
-                    data_size = worlds[world_name][object_name][attribute_name].first.size();
+                    data_size = worlds[world_name].objects[object_name].attributes[attribute_name].data.size();
                 }
 
                 for (size_t i = 0; i < data_size; i++)
                 {
-                    double *data = &worlds[world_name][object_name][attribute_name].first[i];
+                    double *data = &worlds[world_name].objects[object_name].attributes[attribute_name].data[i];
                     const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
                     receive_data_vec.emplace_back(data, conversion);
                     response_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
@@ -864,7 +868,7 @@ private:
             for (const Json::Value &attribute_json : send_objects_json[object_name])
             {
                 const std::string attribute_name = attribute_json.asString();
-                worlds[world_name][object_name][attribute_name].second = true;
+                worlds[world_name].objects[object_name].attributes[attribute_name].is_sent = true;
             }
         }
 
@@ -876,7 +880,7 @@ private:
                 {
                     const std::string attribute_name = attribute_json.asString();
                     double start = get_time_now();
-                    while ((worlds[world_name].count(object_name) == 0 || worlds[world_name][object_name].count(attribute_name) == 0 || !worlds[world_name][object_name][attribute_name].second) && !should_shut_down)
+                    while ((worlds[world_name].objects.count(object_name) == 0 || worlds[world_name].objects[object_name].attributes.count(attribute_name) == 0 || !worlds[world_name].objects[object_name].attributes[attribute_name].is_sent) && !should_shut_down)
                     {
                         const double now = get_time_now();
                         if (now - start > 1)
@@ -912,7 +916,7 @@ private:
                             effort.second[effort_str][i] += effort.second[effort_str][j];
                         }
 
-                        worlds[world_name][object_name][effort_str].first[i] = effort.second[effort_str][i];
+                        worlds[world_name].objects[object_name].attributes[effort_str].data[i] = effort.second[effort_str][i];
                     }
                 }
             }
