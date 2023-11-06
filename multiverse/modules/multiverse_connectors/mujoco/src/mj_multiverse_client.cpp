@@ -61,8 +61,7 @@ bool MjMultiverseClient::spawn_objects(const std::set<std::string> objects)
 	{
 		return true;
 	}
-	
-	
+
 	return true;
 }
 
@@ -635,7 +634,7 @@ void MjMultiverseClient::bind_receive_data()
 {
 	if (receive_buffer_size != receive_data_vec.size())
 	{
-		printf("The size of receive_data_vec (%ld) does not match with receive_buffer_size (%ld)", receive_data_vec.size(), receive_buffer_size);
+		printf("[Client %s] The size of receive_data_vec (%ld) does not match with receive_buffer_size (%ld)\n", port.c_str(), receive_data_vec.size(), receive_buffer_size);
 		return;
 	}
 
@@ -700,6 +699,12 @@ void MjMultiverseClient::clean_up()
 	{
 		free(contact_effort.second);
 	}
+	contact_efforts.clear();
+	for (std::pair<const int, mjtNum *> &odom_velocity : odom_velocities)
+	{
+		free(odom_velocity.second);
+	}
+	odom_velocities.clear();
 }
 
 void MjMultiverseClient::communicate(const bool resend_meta_data)

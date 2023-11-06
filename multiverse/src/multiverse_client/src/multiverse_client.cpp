@@ -239,7 +239,6 @@ void MultiverseClient::run()
                     zmq_msg_init(&message);
                     zmq_msg_recv(&message, client_socket, 0);
                     request_meta_data_str = std::string(static_cast<char *>(zmq_msg_data(&message)), zmq_msg_size(&message));
-                    printf("request_meta_data_str: %s\n", request_meta_data_str.c_str());
                     zmq_msg_close(&message);
                     init_objects(true);
                     flag = EMultiverseClientState::BindRequestMetaData;
