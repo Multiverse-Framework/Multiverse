@@ -184,8 +184,6 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
 
 std::mutex mtx;
 
-// std::map<std::string, double> world_times;
-
 std::map<std::string, std::pair<Json::Value, EMetaDataRequest>> request_meta_data_map;
 
 struct Attribute
@@ -199,15 +197,19 @@ struct Object
     std::map<std::string, Attribute> attributes;
 };
 
+struct Simulation
+{
+    std::map<Object, Attribute> efforts;
+};
+
 struct World
 {
     std::map<std::string, Object> objects;
+    std::map<std::string, Simulation> simulations;
     double time = 0.0;
 };
 
 std::map<std::string, World> worlds;
-
-// std::map<std::string, std::map<std::string, std::map<std::string, std::pair<std::vector<double>, bool>>>> worlds;
 
 std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, std::vector<double>>>>> efforts;
 
@@ -643,12 +645,14 @@ private:
             for (const Json::Value &attribute_json : send_objects_json[object_name])
             {
                 const std::string &attribute_name = attribute_json.asString();
-                if (objects[object_name].attributes.count(attribute_name) == 0)
+                Object &object = objects[object_name];
+                Attribute &attribute = object.attributes[attribute_name];
+                if (attribute.data.size() == 0)
                 {
-                    objects[object_name].attributes[attribute_name].data = attribute_map[attribute_name].second;
-                    for (size_t i = 0; i < objects[object_name].attributes[attribute_name].data.size(); i++)
+                    attribute.data = attribute_map[attribute_name].second;
+                    for (size_t i = 0; i < attribute.data.size(); i++)
                     {
-                        double *data = &objects[object_name].attributes[attribute_name].data[i];
+                        double *data = &attribute.data[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
                         response_meta_data_json["send"][object_name][attribute_name].append(attribute_map[attribute_name].second[i]);
@@ -670,11 +674,11 @@ private:
                 {
                     printf("[Server] Continue state [%s - %s] on socket %s\n", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                     continue_state = true;
-                    objects[object_name].attributes[attribute_name].is_sent = true;
+                    attribute.is_sent = true;
 
-                    for (size_t i = 0; i < objects[object_name].attributes[attribute_name].data.size(); i++)
+                    for (size_t i = 0; i < attribute.data.size(); i++)
                     {
-                        double *data = &objects[object_name].attributes[attribute_name].data[i];
+                        double *data = &attribute.data[i];
                         const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                         send_data_vec.emplace_back(data, conversion);
                         response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
