@@ -30,17 +30,22 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 {
 	std::map<std::string, std::string> multiverse_params;
 
-	const Json::Value multiverse_server_params_json = multiverse_params_json["multiverse_server"];
+	const Json::Value &multiverse_server_params_json = multiverse_params_json["multiverse_server"];
 	multiverse_params["server_host"] = multiverse_server_params_json.isMember("host") ? multiverse_server_params_json["host"].asString() : "tcp://127.0.0.1";
 	multiverse_params["server_port"] = multiverse_server_params_json.isMember("port") ? multiverse_server_params_json["port"].asString() : "7000";
 
-	const Json::Value multiverse_client_params_json = multiverse_params_json["multiverse_client"];
+	const Json::Value &multiverse_client_params_json = multiverse_params_json["multiverse_client"];
 	multiverse_params["client_host"] = multiverse_client_params_json.isMember("host") ? multiverse_client_params_json["host"].asString() : "tcp://127.0.0.1";
 	multiverse_params["client_port"] = multiverse_client_params_json["port"].asString();
 
-	const Json::Value multiverse_client_meta_data_params_json = multiverse_client_params_json["meta_data"];
+	const Json::Value &multiverse_client_meta_data_params_json = multiverse_client_params_json["meta_data"];
 	multiverse_params["world_name"] = multiverse_client_meta_data_params_json["world_name"].asString();
 	multiverse_params["simulation_name"] = multiverse_client_meta_data_params_json["simulation_name"].asString();
+
+	for (const Json::Value &resource : multiverse_client_params_json["resources"])
+	{
+		resources.insert(resource.asString());
+	}
 
 	send_objects_json = multiverse_params_json["multiverse_client"]["send"];
 	receive_objects_json = multiverse_params_json["multiverse_client"]["receive"];
@@ -60,6 +65,18 @@ bool MjMultiverseClient::spawn_objects(const std::set<std::string> objects)
 	if (objects.size() == 0)
 	{
 		return true;
+	}
+	else
+	{
+		for (std::string object : objects)
+		{
+			printf("%s\n", object.c_str());
+		}
+		
+		for (const std::string resource : resources)
+		{
+			printf("%s\n", resource.c_str());
+		}		
 	}
 
 	return true;
@@ -86,7 +103,12 @@ bool MjMultiverseClient::init_objects(bool from_server)
 	std::set<std::string> objects_to_spawn;
 	for (const std::string &object_name : send_objects_json.getMemberNames())
 	{
-		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 ||
+		if (strcmp(object_name.c_str(), "body") == 0 || strcmp(object_name.c_str(), "joint") == 0)
+		{
+			continue;
+		}
+		
+		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
 			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1)
 		{
 			objects_to_spawn.insert(object_name);
@@ -94,7 +116,12 @@ bool MjMultiverseClient::init_objects(bool from_server)
 	}
 	for (const std::string &object_name : receive_objects_json.getMemberNames())
 	{
-		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 ||
+		if (strcmp(object_name.c_str(), "body") == 0 || strcmp(object_name.c_str(), "joint") == 0)
+		{
+			continue;
+		}
+		
+		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
 			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1)
 		{
 			objects_to_spawn.insert(object_name);

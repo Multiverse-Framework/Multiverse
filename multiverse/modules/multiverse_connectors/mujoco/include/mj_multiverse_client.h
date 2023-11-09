@@ -80,6 +80,8 @@ private:
 
     std::map<int, mjtNum *> contact_efforts;
 
+    std::set<std::string> resources;
+
 private:
     void start_connect_to_server_thread() override;
 

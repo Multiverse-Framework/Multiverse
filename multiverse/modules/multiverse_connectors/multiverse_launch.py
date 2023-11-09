@@ -78,7 +78,6 @@ def main():
         os.path.join(os.path.dirname(muv_file), resources_path) if not os.path.isabs(resources_path) else resources_path
         for resources_path in resources_paths
     ]
-    print(resources_paths)
 
     processes = {"multiverse_server": [], "ros": [], "ros_control": []}
     simulators = {"mujoco"}
@@ -108,7 +107,6 @@ def main():
 
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode == 0:
-            print(result.stdout)
             scene_xml_path = re.search(r"Scene:\s*([^\n]+)", result.stdout).group(1)
             cmd = [f"{scene_xml_path}"]
 
@@ -126,7 +124,7 @@ def main():
                 }
                 multiverse_dict = {
                     "multiverse_server": multiverse_server_dict,
-                    "multiverse_client": multiverse_client_dict[simulation_name],
+                    "multiverse_client": multiverse_client_dict[simulation_name] | {"resources": resources_paths}
                 }
                 cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
 
