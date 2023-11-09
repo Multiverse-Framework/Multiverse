@@ -45,23 +45,23 @@ simulations:
       max_time_step: 0.01
       min_time_step: 0.001
 
-  sim_2:
-    simulator: mujoco
-    world:
-      name: world_1
-      path: floor.xml
-    robots:
-      ur5e:
-        path: ur5e.xml
-        apply:
-          body:
-            ur5e:
-              pos: [0, 0, 1]
-            gravcomp: 1
-        disable_self_collision: auto
-    config:
-      max_time_step: 0.01
-      min_time_step: 0.001
+  # sim_2:
+  #   simulator: mujoco
+  #   world:
+  #     name: world_1
+  #     path: floor.xml
+  #   robots:
+  #     ur5e:
+  #       path: ur5e.xml
+  #       apply:
+  #         body:
+  #           ur5e:
+  #             pos: [0, 0, 1]
+  #           gravcomp: 1
+  #       disable_self_collision: auto
+  #   config:
+  #     max_time_step: 0.01
+  #     min_time_step: 0.001
 
 multiverse_server:
   host: "tcp://127.0.0.1"
@@ -74,35 +74,35 @@ multiverse_clients:
     send:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue"]
-    receive:
-      tiago_dual_0: ["relative_velocity"]
-      tiago_dual_1: ["relative_velocity"]
+    # receive:
+    #   tiago_dual_0: ["relative_velocity"]
+    #   tiago_dual_1: ["relative_velocity"]
 
-  sim_2:
-    host: "tcp://127.0.0.1"
-    port: 7502
-    send:
-      body: ["position", "quaternion"]
-      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
-    receive:
-      shoulder_pan_joint: ["cmd_joint_angular_velocity"]
-      shoulder_lift_joint: ["cmd_joint_angular_velocity"]
-      elbow_joint: ["cmd_joint_angular_velocity"]
-      wrist_1_joint: ["cmd_joint_angular_velocity"]
-      wrist_2_joint: ["cmd_joint_angular_velocity"]
-      wrist_3_joint: ["cmd_joint_angular_velocity"]
-      gripper_hand_e_finger_1_joint: ["cmd_joint_force"]
+  # sim_2:
+  #   host: "tcp://127.0.0.1"
+  #   port: 7502
+  #   send:
+  #     body: ["position", "quaternion"]
+  #     joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+  #   receive:
+  #     shoulder_pan_joint: ["cmd_joint_angular_velocity"]
+  #     shoulder_lift_joint: ["cmd_joint_angular_velocity"]
+  #     elbow_joint: ["cmd_joint_angular_velocity"]
+  #     wrist_1_joint: ["cmd_joint_angular_velocity"]
+  #     wrist_2_joint: ["cmd_joint_angular_velocity"]
+  #     wrist_3_joint: ["cmd_joint_angular_velocity"]
+  #     gripper_hand_e_finger_1_joint: ["cmd_joint_force"]
 
   ros:
     services:
       socket:
         host: "tcp://127.0.0.1"
         port: 7401
-      spawn_objects:
-        host: "tcp://127.0.0.1"
-        port: 7402
+    #   spawn_objects:
+    #     host: "tcp://127.0.0.1"
+    #     port: 7402
 
-    publishers:
+    # publishers:
       # tf:
       #   - meta_data:
       #       world_name: world_0
@@ -128,63 +128,63 @@ multiverse_clients:
       #     topic: /tf
       #     rate: 60
       #     root_frame_id: map_1
-      odom:
-        - meta_data:
-            world_name: world_0
-            length_unit: m
-            angle_unit: rad
-            mass_unit: kg
-            time_unit: s
-            handedness: rhs
-          host: "tcp://127.0.0.1"
-          port: 7303
-          topic: /odom
-          rate: 60
-          body: tiago_dual_0
-          frame_id: map_0
+  #     odom:
+  #       - meta_data:
+  #           world_name: world_0
+  #           length_unit: m
+  #           angle_unit: rad
+  #           mass_unit: kg
+  #           time_unit: s
+  #           handedness: rhs
+  #         host: "tcp://127.0.0.1"
+  #         port: 7303
+  #         topic: /odom
+  #         rate: 60
+  #         body: tiago_dual_0
+  #         frame_id: map_0
 
-    subscribers:
-      cmd_vel:
-        - meta_data:
-            world_name: world_0
-            length_unit: m
-            angle_unit: rad
-            mass_unit: kg
-            time_unit: s
-            handedness: rhs
-          host: "tcp://127.0.0.1"
-          port: 7201
-          topic: /cmd_vel
-          body: tiago_dual_0
-        - meta_data:
-            world_name: world_0
-            length_unit: m
-            angle_unit: rad
-            mass_unit: kg
-            time_unit: s
-            handedness: rhs
-          host: "tcp://127.0.0.1"
-          port: 7202
-          topic: /cmd_vel
-          body: tiago_dual_1
+  #   subscribers:
+  #     cmd_vel:
+  #       - meta_data:
+  #           world_name: world_0
+  #           length_unit: m
+  #           angle_unit: rad
+  #           mass_unit: kg
+  #           time_unit: s
+  #           handedness: rhs
+  #         host: "tcp://127.0.0.1"
+  #         port: 7201
+  #         topic: /cmd_vel
+  #         body: tiago_dual_0
+  #       - meta_data:
+  #           world_name: world_0
+  #           length_unit: m
+  #           angle_unit: rad
+  #           mass_unit: kg
+  #           time_unit: s
+  #           handedness: rhs
+  #         host: "tcp://127.0.0.1"
+  #         port: 7202
+  #         topic: /cmd_vel
+  #         body: tiago_dual_1
 
-  ros_control:
-    - meta_data:
-        world_name: world_1
-        length_unit: m
-        angle_unit: rad
-        mass_unit: kg
-        time_unit: s
-        handedness: rhs
-      host: "tcp://127.0.0.1"
-      port: 7800
-      controller_manager:
-        robot: ur5e
-        robot_description: /robot_description
-        urdf: ur5e.urdf
-        config: ur5e/config/ros_control.yaml
-        controllers:
-          spawn:
-            - joint_state_controller
-              joint_trajectory_controller
-              gripper_controller
+  # ros_control:
+  #   - meta_data:
+  #       world_name: world_1
+  #       length_unit: m
+  #       angle_unit: rad
+  #       mass_unit: kg
+  #       time_unit: s
+  #       handedness: rhs
+  #     host: "tcp://127.0.0.1"
+  #     port: 7800
+  #     controller_manager:
+  #       robot: ur5e
+  #       robot_description: /robot_description
+  #       urdf: ur5e.urdf
+  #       config: ur5e/config/ros_control.yaml
+  #       controllers:
+  #         spawn:
+  #           - joint_state_controller
+  #             joint_trajectory_controller
+  #             gripper_controller

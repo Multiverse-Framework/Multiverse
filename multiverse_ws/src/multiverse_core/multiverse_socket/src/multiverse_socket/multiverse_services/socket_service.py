@@ -13,6 +13,7 @@ class socket_service(MultiverseRosServiceServer):
         self._service_class = Socket
         self.__worlds = {}
         self.__send_data = []
+        self.__simulation_name = ""
 
     def update_world(self, world_name) -> None:
         super()._init_request_meta_data()
@@ -33,7 +34,6 @@ class socket_service(MultiverseRosServiceServer):
                     self.__worlds[world_name][object_name].add(attribute_name)
 
     def _bind_request_meta_data(self, request: SocketRequest) -> None:
-        print("request", request)
         meta_data = request.meta_data
         world_name = meta_data.world_name
         if world_name == "":
@@ -41,8 +41,8 @@ class socket_service(MultiverseRosServiceServer):
             rospy.logwarn(f"World is not set, set to default world")
             world_name = "world"
         
-        simulation_name = meta_data.simulation_name
-        if simulation_name == "":
+        self.__simulation_name = meta_data.simulation_name
+        if self.__simulation_name == "":
             world_need_update = False
 
             if self.__worlds.get(world_name) is None:
@@ -64,7 +64,7 @@ class socket_service(MultiverseRosServiceServer):
         self._request_meta_data_dict = {}
         self._request_meta_data_dict["meta_data"] = {}
         self._request_meta_data_dict["meta_data"]["world_name"] = world_name
-        self._request_meta_data_dict["meta_data"]["simulation_name"] = "ros" if simulation_name == "" else simulation_name
+        self._request_meta_data_dict["meta_data"]["simulation_name"] = "ros" if self.__simulation_name == "" else self.__simulation_name
         self._request_meta_data_dict["meta_data"]["length_unit"] = "m" if meta_data.length_unit == "" else meta_data.length_unit
         self._request_meta_data_dict["meta_data"]["angle_unit"] = "rad" if meta_data.angle_unit == "" else meta_data.angle_unit
         self._request_meta_data_dict["meta_data"]["mass_unit"] = "kg" if meta_data.mass_unit == "" else meta_data.mass_unit
@@ -76,11 +76,11 @@ class socket_service(MultiverseRosServiceServer):
 
         self.__send_data = [0]
 
-        empty_simulation_name = simulation_name == ""
+        empty_simulation_name = self.__simulation_name == ""
         
         for object_data in request.send:
             empty_object_name = object_data.object_name == ""
-            if not empty_simulation_name and empty_object_name:
+            if empty_object_name:
                 continue
             self._request_meta_data_dict["send"][object_data.object_name] = [object_data.attribute_name]
             self.__send_data += object_data.data
@@ -102,8 +102,19 @@ class socket_service(MultiverseRosServiceServer):
                     continue
                 self._request_meta_data_dict["receive"][object_attribute.object_name].append(attribute_name)
 
-    def _bind_response(self, response_meta_data_dict: Dict) -> SocketResponse:
+    def _bind_response(self) -> SocketResponse:
         response = SocketResponse()
+
+        if self.__simulation_name != "":
+            self._set_send_data(self.__send_data)
+            self._communicate()
+            self._communicate()
+            self._request_meta_data_dict["name"] = "ros"
+            self._set_request_meta_data()
+            self._communicate(True)
+
+        response_meta_data_dict = self._get_response_meta_data()
+        
         response.meta_data.world_name = response_meta_data_dict["meta_data"]["world_name"]
         response.meta_data.simulation_name = response_meta_data_dict["meta_data"]["simulation_name"]
         response.meta_data.length_unit = response_meta_data_dict["meta_data"]["length_unit"]
@@ -112,23 +123,14 @@ class socket_service(MultiverseRosServiceServer):
         response.meta_data.time_unit = response_meta_data_dict["meta_data"]["time_unit"]
         response.meta_data.handedness = response_meta_data_dict["meta_data"]["handedness"]
 
-        if len(self.__send_data) > 1:
-            self._set_send_data(self.__send_data)
-            self._communicate()
-            self._communicate()
-            self._request_meta_data_dict["name"] = "ros"
-            self._set_request_meta_data()
-            self._communicate(True)
-
-            for object_name, object_data in self._get_response_meta_data()["send"].items():
+        if response_meta_data_dict.get("send") is not None:
+            for object_name, object_data in response_meta_data_dict["send"].items():
                 for attribute_name, attribute_data in object_data.items():
                     response.send.append(ObjectData(object_name, attribute_name, attribute_data))
                     
-        if response_meta_data_dict.get("receive") is None:
-            return response
-
-        for object_name, object_data in response_meta_data_dict["receive"].items():
-            for attribute_name, attribute_data in object_data.items():
-                response.receive.append(ObjectData(object_name, attribute_name, attribute_data))
+        if response_meta_data_dict.get("receive") is not None:
+            for object_name, object_data in response_meta_data_dict["receive"].items():
+                for attribute_name, attribute_data in object_data.items():
+                    response.receive.append(ObjectData(object_name, attribute_name, attribute_data))
 
         return response

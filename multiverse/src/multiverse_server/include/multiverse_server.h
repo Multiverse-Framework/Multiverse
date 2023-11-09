@@ -133,6 +133,8 @@ private:
 
     std::string world_name;
 
+    std::string request_world_name;
+
     std::string simulation_name;
 
     std::string request_simulation_name;

@@ -233,7 +233,7 @@ void MultiverseClient::run()
                 }
                 else if (*receive_buffer == -2.0)
                 {
-                    printf("[Client %s] The socket %s from the server has been received new meta data.\n", port.c_str(), socket_addr.c_str());
+                    printf("[Client %s] The socket %s from the server has received new meta data.\n", port.c_str(), socket_addr.c_str());
                     send_request_meta_data();
                     zmq_msg_t message;
                     zmq_msg_init(&message);
