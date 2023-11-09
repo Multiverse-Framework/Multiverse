@@ -120,8 +120,8 @@ def main():
 
             if multiverse_client_dict is not None and multiverse_client_dict.get(simulation_name) is not None:
                 multiverse_client_dict[simulation_name]["meta_data"] = {
-                    "world": world_name,
-                    "name": simulation_name,
+                    "world_name": world_name,
+                    "simulation_name": simulation_name,
                 }
                 multiverse_dict = {
                     "multiverse_server": multiverse_server_dict,

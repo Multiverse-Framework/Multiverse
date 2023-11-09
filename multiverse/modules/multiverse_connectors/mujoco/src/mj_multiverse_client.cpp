@@ -39,13 +39,13 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 	multiverse_params["client_port"] = multiverse_client_params_json["port"].asString();
 
 	const Json::Value multiverse_client_meta_data_params_json = multiverse_client_params_json["meta_data"];
-	multiverse_params["world"] = multiverse_client_meta_data_params_json["world"].asString();
-	multiverse_params["name"] = multiverse_client_meta_data_params_json["name"].asString();
+	multiverse_params["world_name"] = multiverse_client_meta_data_params_json["world_name"].asString();
+	multiverse_params["simulation_name"] = multiverse_client_meta_data_params_json["simulation_name"].asString();
 
 	send_objects_json = multiverse_params_json["multiverse_client"]["send"];
 	receive_objects_json = multiverse_params_json["multiverse_client"]["receive"];
-	world_name = multiverse_params["world"];
-	simulation_name = multiverse_params["name"];
+	world_name = multiverse_params["world_name"];
+	simulation_name = multiverse_params["simulation_name"];
 
 	server_socket_addr = multiverse_params["server_host"] + ":" + multiverse_params["server_port"];
 
@@ -218,13 +218,13 @@ void MjMultiverseClient::bind_request_meta_data()
 	mtx.lock();
 	// Create JSON object and populate it
 	request_meta_data_json.clear();
-	request_meta_data_json["world"] = world_name;
-	request_meta_data_json["name"] = simulation_name;
-	request_meta_data_json["length_unit"] = "m";
-	request_meta_data_json["angle_unit"] = "rad";
-	request_meta_data_json["mass_unit"] = "kg";
-	request_meta_data_json["time_unit"] = "s";
-	request_meta_data_json["handedness"] = "rhs";
+	request_meta_data_json["meta_data"]["world_name"] = world_name;
+	request_meta_data_json["meta_data"]["simulation_name"] = simulation_name;
+	request_meta_data_json["meta_data"]["length_unit"] = "m";
+	request_meta_data_json["meta_data"]["angle_unit"] = "rad";
+	request_meta_data_json["meta_data"]["mass_unit"] = "kg";
+	request_meta_data_json["meta_data"]["time_unit"] = "s";
+	request_meta_data_json["meta_data"]["handedness"] = "rhs";
 
 	for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
 	{

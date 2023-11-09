@@ -103,34 +103,34 @@ multiverse_clients:
         port: 7402
 
     publishers:
-      tf:
-        - meta_data:
-            world: world_0
-            length_unit: m
-            angle_unit: rad
-            mass_unit: kg
-            time_unit: s
-            handedness: rhs
-          host: "tcp://127.0.0.1"
-          port: 7301
-          topic: /tf
-          rate: 60
-          root_frame_id: map_0
-        - meta_data:
-            world: world_1
-            length_unit: m
-            angle_unit: rad
-            mass_unit: kg
-            time_unit: s
-            handedness: rhs
-          host: "tcp://127.0.0.1"
-          port: 7302
-          topic: /tf
-          rate: 60
-          root_frame_id: map_1
+      # tf:
+      #   - meta_data:
+      #       world_name: world_0
+      #       length_unit: m
+      #       angle_unit: rad
+      #       mass_unit: kg
+      #       time_unit: s
+      #       handedness: rhs
+      #     host: "tcp://127.0.0.1"
+      #     port: 7301
+      #     topic: /tf
+      #     rate: 60
+      #     root_frame_id: map_0
+      #   - meta_data:
+      #       world_name: world_1
+      #       length_unit: m
+      #       angle_unit: rad
+      #       mass_unit: kg
+      #       time_unit: s
+      #       handedness: rhs
+      #     host: "tcp://127.0.0.1"
+      #     port: 7302
+      #     topic: /tf
+      #     rate: 60
+      #     root_frame_id: map_1
       odom:
         - meta_data:
-            world: world_0
+            world_name: world_0
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -146,7 +146,7 @@ multiverse_clients:
     subscribers:
       cmd_vel:
         - meta_data:
-            world: world_0
+            world_name: world_0
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -157,7 +157,7 @@ multiverse_clients:
           topic: /cmd_vel
           body: tiago_dual_0
         - meta_data:
-            world: world_0
+            world_name: world_0
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -170,7 +170,7 @@ multiverse_clients:
 
   ros_control:
     - meta_data:
-        world: world_1
+        world_name: world_1
         length_unit: m
         angle_unit: rad
         mass_unit: kg

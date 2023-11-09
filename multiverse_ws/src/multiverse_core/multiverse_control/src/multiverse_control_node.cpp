@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     multiverse_params["client_port"] = multiverse_client_params_json["port"].asString();
 
     const Json::Value multiverse_client_meta_data_json = multiverse_client_params_json["meta_data"];
-    multiverse_params["world"] = multiverse_client_meta_data_json["world"].asString();
+    multiverse_params["world_name"] = multiverse_client_meta_data_json["world_name"].asString();
     multiverse_params["length_unit"] = multiverse_client_meta_data_json["length_unit"].asString();
     multiverse_params["angle_unit"] = multiverse_client_meta_data_json["angle_unit"].asString();
     multiverse_params["mass_unit"] = multiverse_client_meta_data_json["mass_unit"].asString();

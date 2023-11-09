@@ -23,8 +23,8 @@
 
 MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params)
 {
-    meta_data["world"] = multiverse_params.at("world");
-    meta_data["name"] = multiverse_params.at("robot") + "_controller";
+    meta_data["world_name"] = multiverse_params.at("world_name");
+    meta_data["simulation_name"] = multiverse_params.at("robot") + "_controller";
     meta_data["length_unit"] = multiverse_params.at("length_unit");
     meta_data["angle_unit"] = multiverse_params.at("angle_unit");
     meta_data["mass_unit"] = multiverse_params.at("mass_unit");
@@ -124,13 +124,13 @@ void MultiverseHWInterface::bind_request_meta_data()
 {
     // Create JSON object and populate it
     request_meta_data_json.clear();
-    request_meta_data_json["world"] = meta_data["world"];
-    request_meta_data_json["name"] = meta_data["name"];
-    request_meta_data_json["length_unit"] = meta_data["length_unit"];
-    request_meta_data_json["angle_unit"] = meta_data["angle_unit"];
-    request_meta_data_json["mass_unit"] = meta_data["mass_unit"];
-    request_meta_data_json["time_unit"] = meta_data["time_unit"];
-    request_meta_data_json["handedness"] = meta_data["handedness"];
+    request_meta_data_json["meta_data"]["world_name"] = meta_data["world_name"];
+    request_meta_data_json["meta_data"]["simulation_name"] = meta_data["simulation_name"];
+    request_meta_data_json["meta_data"]["length_unit"] = meta_data["length_unit"];
+    request_meta_data_json["meta_data"]["angle_unit"] = meta_data["angle_unit"];
+    request_meta_data_json["meta_data"]["mass_unit"] = meta_data["mass_unit"];
+    request_meta_data_json["meta_data"]["time_unit"] = meta_data["time_unit"];
+    request_meta_data_json["meta_data"]["handedness"] = meta_data["handedness"];
 
     for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
     {

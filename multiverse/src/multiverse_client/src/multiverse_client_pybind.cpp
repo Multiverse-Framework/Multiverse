@@ -213,7 +213,6 @@ private:
 
     void clean_up() override
     {
-        // printf("HERE ALSO\n");
         // send_data = pybind11::list();
 
         // receive_data = pybind11::list();

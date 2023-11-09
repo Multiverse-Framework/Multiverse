@@ -233,7 +233,7 @@ void MultiverseServer::start()
 
         case EMultiverseServerState::BindObjects:
         {
-            // printf("[Server] Received meta data from socket %s %s:\n%s", simulation_name.c_str(), socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
+            printf("[Server] Received meta data from socket %s %s:\n%s", simulation_name.c_str(), socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
             bind_meta_data();
 
             mtx.lock();
@@ -253,7 +253,7 @@ void MultiverseServer::start()
         case EMultiverseServerState::SendResponseMetaData:
         {
             send_response_meta_data();
-            // printf("[Server] Sent meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
+            printf("[Server] Sent meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
 
             if (send_buffer_size == 1 && receive_buffer_size == 1)
             {
@@ -454,37 +454,18 @@ void MultiverseServer::receive_request_meta_data()
 
 void MultiverseServer::bind_meta_data()
 {
-    if (!request_meta_data_json.isMember("name"))
+    Json::Value &meta_data = request_meta_data_json["meta_data"];
+    if (!meta_data.isMember("world_name") || meta_data["world_name"].asString().empty())
     {
-        if (simulation_name.empty())
-        {
-            throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " doesn't have a name.");
-        }
+        throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " doesn't have a world name.");
     }
-    request_simulation_name = request_meta_data_json["name"].asString();
-
-    if (request_meta_data_json.isMember("world"))
+    world_name = meta_data["world_name"].asString();
+    
+    if (!meta_data.isMember("simulation_name") || meta_data["simulation_name"].asString().empty())
     {
-        world_name = request_meta_data_json["world"].asString();
+        throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " doesn't have a simulation name.");
     }
-    else
-    {
-        world_name = "";
-        for (const std::pair<std::string, World> &world : worlds)
-        {
-            for (const std::pair<std::string, Simulation> &simulation : world.second.simulations)
-            {
-                if (strcmp(simulation.first.c_str(), request_simulation_name.c_str()) == 0)
-                {
-                    world_name = world.first;
-                }
-            }
-        }
-        if (world_name.empty())
-        {
-            world_name = "world";
-        }
-    }
+    request_simulation_name = meta_data["simulation_name"].asString();
 
     if (request_simulation_name != simulation_name && !simulation_name.empty() && worlds[world_name].simulations.count(request_simulation_name) > 0)
     {
@@ -505,21 +486,30 @@ void MultiverseServer::bind_meta_data()
         }
 
         simulation.meta_data_state = EMetaDataState::WaitAfterOtherSendReceiveData;
-        request_meta_data_json["world"] = simulation.request_meta_data_json["world"];
+        meta_data["world_name"] = simulation.request_meta_data_json["meta_data"]["world_name"];
     }
     else
     {
         simulation_name = request_simulation_name;
     }
 
+    if (socket_addr.compare("tcp://127.0.0.1:7501") == 0)
+    {
+        printf("tcp://127.0.0.1:7501 %s\n", request_meta_data_json.toStyledString().c_str());
+    }
+    if (socket_addr.compare("tcp://127.0.0.1:7402") == 0)
+    {
+        printf("tcp://127.0.0.1:7402 %s\n", request_meta_data_json.toStyledString().c_str());
+    }
+
     worlds[world_name].simulations[simulation_name].request_meta_data_json = request_meta_data_json;
     worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::None;
 
-    const std::string length_unit = request_meta_data_json.isMember("length_unit") ? request_meta_data_json["length_unit"].asString() : "m";
-    const std::string angle_unit = request_meta_data_json.isMember("angle_unit") ? request_meta_data_json["angle_unit"].asString() : "rad";
-    const std::string handedness = request_meta_data_json.isMember("handedness") ? request_meta_data_json["handedness"].asString() : "rhs";
-    const std::string mass_unit = request_meta_data_json.isMember("mass_unit") ? request_meta_data_json["mass_unit"].asString() : "kg";
-    const std::string time_unit = request_meta_data_json.isMember("time_unit") ? request_meta_data_json["time_unit"].asString() : "s";
+    const std::string length_unit = meta_data.isMember("length_unit") ? meta_data["length_unit"].asString() : "m";
+    const std::string angle_unit = meta_data.isMember("angle_unit") ? meta_data["angle_unit"].asString() : "rad";
+    const std::string handedness = meta_data.isMember("handedness") ? meta_data["handedness"].asString() : "rhs";
+    const std::string mass_unit = meta_data.isMember("mass_unit") ? meta_data["mass_unit"].asString() : "kg";
+    const std::string time_unit = meta_data.isMember("time_unit") ? meta_data["time_unit"].asString() : "s";
 
     for (const std::pair<const std::string, std::pair<EAttribute, std::vector<double>>> &attribute : attribute_map)
     {
@@ -610,12 +600,7 @@ void MultiverseServer::bind_meta_data()
     }
 
     response_meta_data_json.clear();
-    response_meta_data_json["world"] = world_name;
-    response_meta_data_json["angle_unit"] = angle_unit;
-    response_meta_data_json["length_unit"] = length_unit;
-    response_meta_data_json["mass_unit"] = mass_unit;
-    response_meta_data_json["time_unit"] = time_unit;
-    response_meta_data_json["handedness"] = handedness;
+    response_meta_data_json["meta_data"] = meta_data;
     response_meta_data_json["time"] = worlds[world_name].time * unit_scale[time_unit];
 }
 

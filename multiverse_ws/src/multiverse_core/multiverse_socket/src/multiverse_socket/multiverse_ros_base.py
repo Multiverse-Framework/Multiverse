@@ -16,7 +16,8 @@ class MultiverseRosBase:
         self.client_port = str(kwargs.get("port"))
         meta_data = kwargs.get("meta_data", {})
         self.meta_data = {
-            "world": str(meta_data.get("world", "world")),
+            "world_name": str(meta_data.get("world_name", "world")),
+            "simulation_name": str(meta_data.get("simulation_name", "ros")),
             "length_unit": str(meta_data.get("length_unit", "m")),
             "angle_unit": str(meta_data.get("angle_unit", "rad")),
             "mass_unit": str(meta_data.get("mass_unit", "kg")),

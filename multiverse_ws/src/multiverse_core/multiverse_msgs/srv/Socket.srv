@@ -1,17 +1,7 @@
-string world
-string length_unit
-string angle_unit
-string mass_unit
-string time_unit
-string handedness
+multiverse_msgs/MetaData meta_data
 multiverse_msgs/ObjectData[] send
 multiverse_msgs/ObjectAttribute[] receive
 ---
-string world
-string length_unit
-string angle_unit
-string mass_unit
-string time_unit
-string handedness
+multiverse_msgs/MetaData meta_data
 multiverse_msgs/ObjectData[] send
 multiverse_msgs/ObjectData[] receive
