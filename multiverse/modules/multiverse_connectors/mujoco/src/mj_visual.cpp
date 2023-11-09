@@ -150,6 +150,36 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
         mtx.unlock();
     }
 
+    // plus: speed up simulation
+    if (act == GLFW_PRESS && key == GLFW_KEY_KP_ADD)
+    {
+        mtx.lock();
+        rtf_desired *= 2;
+        d->time = 0;
+        start_time += real_time;
+        mj_resetData(m, d);
+        mj_forward(m, d);
+        cam.distance = cam_distance_0;
+        cam.elevation = m->vis.global.elevation;
+        cam.azimuth = m->vis.global.azimuth;
+        mtx.unlock();
+    }
+
+    // minus: slow down simulation
+    if (act == GLFW_PRESS && key == GLFW_KEY_KP_SUBTRACT)
+    {
+        mtx.lock();
+        rtf_desired /= 2;
+        d->time = 0;
+        start_time += real_time;
+        mj_resetData(m, d);
+        mj_forward(m, d);
+        cam.distance = cam_distance_0;
+        cam.elevation = m->vis.global.elevation;
+        cam.azimuth = m->vis.global.azimuth;
+        mtx.unlock();
+    }
+
     // s: save simulation
     if (act == GLFW_PRESS && key == GLFW_KEY_S)
     {
@@ -253,17 +283,23 @@ void MjVisual::render()
     mjrRect rect3 = {0, viewport.height - 150, 300, 50};
     mjrRect rect4 = {0, viewport.height - 200, 300, 50};
     mjrRect rect5 = {0, viewport.height - 250, 300, 50};
+    mjrRect rect6 = {viewport.width - 100, 0, 100, 50};
+
     std::string real_time_text = "Real time: " + std::to_string(real_time);
     std::string sim_time_text = "Simulation time: " + std::to_string(d->time);
     std::string rtf_text = "Real-time factor: " + std::to_string(rtf);
     std::string time_step_text = "Time step: " + std::to_string(m->opt.timestep);
     std::string energy = "Total energy: " + std::to_string(d->energy[0] + d->energy[1]);
+    std::ostringstream rtf_ss;
+    rtf_ss << std::fixed << std::setprecision(2);
+    rtf_ss << rtf_desired << " X";
 
     mjr_label(rect1, 0, real_time_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
     mjr_label(rect2, 0, sim_time_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
     mjr_label(rect3, 0, rtf_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
     mjr_label(rect4, 0, time_step_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
     mjr_label(rect5, 0, energy.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
+    mjr_label(rect6, 0, rtf_ss.str().c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
 
     // swap OpenGL buffers (blocking call due to v-sync)
     glfwSwapBuffers(window);

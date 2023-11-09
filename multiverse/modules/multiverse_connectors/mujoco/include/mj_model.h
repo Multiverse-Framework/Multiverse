@@ -37,6 +37,8 @@ extern bool stop;
 
 extern double rtf;
 
+extern double rtf_desired;
+
 extern double start_time;
 
 extern double real_time;

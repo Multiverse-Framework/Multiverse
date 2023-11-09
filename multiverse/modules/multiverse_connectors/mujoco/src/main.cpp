@@ -52,7 +52,7 @@ double get_time_now()
     return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
 }
 
-void simulate(const double rtf_desired, const double max_time_step, const double min_time_step)
+void simulate(const double max_time_step, const double min_time_step)
 {
     start_time = get_time_now();
     double last_real_time = get_time_now() - start_time;
@@ -167,7 +167,9 @@ int main(int argc, char **argv)
         }
     }
 
-    std::thread sim_thread(&simulate, config_params_map["rtf_desired"], config_params_map["max_time_step"], config_params_map["min_time_step"]);
+    rtf_desired = config_params_map["rtf_desired"];
+
+    std::thread sim_thread(&simulate, config_params_map["max_time_step"], config_params_map["min_time_step"]);
 #ifdef VISUAL
     mj_visual.run();
 #endif
