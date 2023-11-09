@@ -468,6 +468,10 @@ void MultiverseServer::bind_meta_data()
     }
     request_simulation_name = meta_data["simulation_name"].asString();
 
+    if (!simulation_name.empty() && worlds[request_world_name].simulations.count(request_simulation_name) == 0)
+    {
+        printf("[Server] Socket %s requests a non-existing simulation %s.\n", socket_addr.c_str(), request_simulation_name.c_str());
+    }
     if (request_simulation_name != simulation_name && !simulation_name.empty() && worlds[request_world_name].simulations.count(request_simulation_name) > 0)
     {
         Simulation &simulation = worlds[request_world_name].simulations[request_simulation_name];
@@ -907,7 +911,7 @@ void MultiverseServer::send_receive_data()
     }
     else if (worlds[world_name].simulations[simulation_name].meta_data_state == EMetaDataState::Reset)
     {
-        receive_buffer[0] = 0.0;
+        receive_buffer[0] = -3.0;
         worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::None;
     }
 

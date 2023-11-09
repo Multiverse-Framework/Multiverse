@@ -20,8 +20,8 @@
 
 #include "mj_visual.h"
 
-#include <sstream>
 #include <iomanip>
+#include <sstream>
 
 mjvCamera MjVisual::cam;  // abstract camera
 mjvOption MjVisual::opt;  // visualization options
@@ -38,6 +38,8 @@ int MjVisual::cursor_body_id = -1;
 int MjVisual::cursor_id = -1;
 
 mjtNum MjVisual::cam_distance_0 = 10.0;
+
+double MjVisual::sim_start = 0.0;
 
 // allocate lists from https://github.com/deepmind/mujoco/blob/main/src/render/render_context.c
 static void listAllocate(GLuint *base, GLsizei *range, GLsizei newrange)
@@ -120,10 +122,10 @@ void MjVisual::mouse_move(GLFWwindow *window, double xpos, double ypos)
     }
     else if (button_middle)
     {
-        double offset =  2.0 * cam.distance * mju_tan(m->vis.global.fovy / 360.0 * M_PI);
+        double offset = 2.0 * cam.distance * mju_tan(m->vis.global.fovy / 360.0 * M_PI);
         double dxx = dx / height * offset;
         double dyy = -dy / height * offset * mju_sin(cam.elevation / 180.0 * M_PI);
-        double dzz = dy / height * offset * mju_cos(cam.elevation / 180.0 * M_PI) ;
+        double dzz = dy / height * offset * mju_cos(cam.elevation / 180.0 * M_PI);
         d->mocap_pos[0] += -dxx * mju_sin(cam.azimuth / 180.0 * M_PI) + dyy * mju_cos(cam.azimuth / 180.0 * M_PI);
         d->mocap_pos[1] += dxx * mju_cos(cam.azimuth / 180.0 * M_PI) + dyy * mju_sin(cam.azimuth / 180.0 * M_PI);
         d->mocap_pos[2] += dzz;
@@ -140,7 +142,8 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
     if (act == GLFW_PRESS && key == GLFW_KEY_BACKSPACE)
     {
         mtx.lock();
-        d->time = 0;
+        d->time = 0.0;
+        sim_start = 0.0;
         start_time += real_time;
         mj_resetData(m, d);
         mj_forward(m, d);
@@ -155,7 +158,7 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
     {
         mtx.lock();
         rtf_desired *= 2;
-        d->time = 0;
+        d->time = 0.0;
         start_time += real_time;
         mj_resetData(m, d);
         mj_forward(m, d);
@@ -170,7 +173,7 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
     {
         mtx.lock();
         rtf_desired /= 2;
-        d->time = 0;
+        d->time = 0.0;
         start_time += real_time;
         mj_resetData(m, d);
         mj_forward(m, d);
@@ -222,14 +225,24 @@ bool MjVisual::is_window_closed()
 
 void MjVisual::run()
 {
-    mjtNum sim_start = d->time;
+    sim_start = d->time;
     while (!stop)
     {
-        if (d->time == 0.0)
+        if (d->time <= m->opt.timestep)
         {
-            sim_start = d->time;
+            listAllocate(&con.baseMesh, &con.rangeMesh, 2 * m->nmesh);
+
+            // process meshes
+            for (int i = 0; i < m->nmesh; i++)
+            {
+                mjr_uploadMesh(m, &con, i);
+            }
+            for (int i = 0; i < m->ntex; i++)
+            {
+                mjr_uploadTexture(m, &con, i);
+            }
         }
-        
+
         if (is_window_closed())
         {
             stop = true;
@@ -246,28 +259,10 @@ void MjVisual::run()
 
 void MjVisual::render()
 {
-    // if (MjSim::reload_mesh)
-    // {
-    //     // allocate list
-    //     listAllocate(&con.baseMesh, &con.rangeMesh, 2 * m->nmesh);
+    cam.lookat[0] = d->mocap_pos[3 * cursor_id];
+    cam.lookat[1] = d->mocap_pos[3 * cursor_id + 1];
+    cam.lookat[2] = d->mocap_pos[3 * cursor_id + 2];
 
-    //     // process meshes
-    //     for (int i = 0; i < m->nmesh; i++)
-    //     {
-    //         mjr_uploadMesh(m, &con, i);
-    //     }
-    //     for (int i= 0; i < m->ntex; i++)
-    //     {
-    //         mjr_uploadTexture(m, &con, i);
-    //     }
-
-    //     MjSim::reload_mesh = false;
-    // }
-
-    cam.lookat[0] = d->mocap_pos[3*cursor_id];
-    cam.lookat[1] = d->mocap_pos[3*cursor_id+1];
-    cam.lookat[2] = d->mocap_pos[3*cursor_id+2];
-    
     // get framebuffer viewport
     mjrRect viewport = {0, 0, 0, 0};
     glfwGetFramebufferSize(window, &viewport.width, &viewport.height);
@@ -276,10 +271,10 @@ void MjVisual::render()
     mjv_updateScene(m, d, &opt, NULL, &cam, mjCAT_ALL, &scn);
 
     mjr_render(viewport, &scn, &con);
-    
+
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(4);
-    oss << "[" << d->mocap_pos[3*cursor_id] << ", " << d->mocap_pos[3*cursor_id+1] << ", " << d->mocap_pos[3*cursor_id+2] << "]";
+    oss << "[" << d->mocap_pos[3 * cursor_id] << ", " << d->mocap_pos[3 * cursor_id + 1] << ", " << d->mocap_pos[3 * cursor_id + 2] << "]";
     mjr_text(mjFONT_NORMAL, oss.str().c_str(), &con, 0.5, 0.5, 1, 1, 1);
 
     // print simulation time

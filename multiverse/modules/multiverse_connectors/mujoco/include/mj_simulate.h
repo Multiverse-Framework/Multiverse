@@ -42,6 +42,13 @@ public:
      */
     void init();
 
+public:
+    /**
+     * @brief Reset the simulation
+     * 
+     */
+    static void reset();
+
 private:
     MjSimulate() = default; // Singleton
 

@@ -43,7 +43,7 @@ public:
     void init(const Json::Value &multiverse_params_json);
 
 private:
-    bool spawn_objects(const std::set<std::string> objects);
+    bool spawn_objects(std::set<std::string> &objects);
 
     bool destroy_objects(const std::set<std::string> objects);
 

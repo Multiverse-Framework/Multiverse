@@ -133,4 +133,6 @@ private:
 
     // init cam distance
     static mjtNum cam_distance_0;
+
+    static double sim_start;
 };
