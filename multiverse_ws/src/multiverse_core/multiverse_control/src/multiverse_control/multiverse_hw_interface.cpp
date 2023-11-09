@@ -227,6 +227,16 @@ void MultiverseHWInterface::communicate(const bool resend_meta_data)
     MultiverseClient::communicate(resend_meta_data);
 }
 
+void MultiverseHWInterface::reset()
+{
+    for (const std::string &joint_name : joint_names)
+    {
+        joint_commands[joint_name][0] = 0.0;
+        joint_commands[joint_name][1] = 0.0;
+        joint_commands[joint_name][2] = 0.0;
+    }
+}
+
 void MultiverseHWInterface::doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
                                      const std::list<hardware_interface::ControllerInfo> &stop_list)
 {

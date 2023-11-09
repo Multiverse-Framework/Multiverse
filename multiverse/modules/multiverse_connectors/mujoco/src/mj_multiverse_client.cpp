@@ -707,6 +707,14 @@ void MjMultiverseClient::clean_up()
 	odom_velocities.clear();
 }
 
+void MjMultiverseClient::reset()
+{
+	d->time = 0;
+	start_time += real_time;
+	mj_resetData(m, d);
+	mj_forward(m, d);
+}
+
 void MjMultiverseClient::communicate(const bool resend_meta_data)
 {
 	MjMultiverseClient::mutex.lock();

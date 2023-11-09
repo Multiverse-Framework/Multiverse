@@ -218,6 +218,11 @@ private:
         // receive_data = pybind11::list();
     }
 
+    void reset() override
+    {
+        
+    }
+
     void init_send_and_receive_data() override
     {
         if (send_buffer_size != send_data.size())

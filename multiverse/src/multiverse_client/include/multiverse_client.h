@@ -175,7 +175,13 @@ protected:
      * @brief Clean up pointer
      *
      */
-    virtual void clean_up() = 0;    
+    virtual void clean_up() = 0;
+
+    /**
+     * @brief Reset the simulation
+     * 
+     */
+    virtual void reset() = 0;
 
 private:
     void run();

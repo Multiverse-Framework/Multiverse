@@ -76,6 +76,8 @@ private:
 
     void clean_up() override;
 
+    void reset() override;
+
 public:
     void doSwitch(const std::list<hardware_interface::ControllerInfo> &start_list,
                   const std::list<hardware_interface::ControllerInfo> &stop_list);

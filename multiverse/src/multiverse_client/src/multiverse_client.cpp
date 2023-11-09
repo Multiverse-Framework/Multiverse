@@ -244,6 +244,11 @@ void MultiverseClient::run()
                     flag = EMultiverseClientState::BindRequestMetaData;
                     break;
                 }
+                else if (*receive_buffer == -3.0)
+                {
+                    printf("[Client %s] The socket %s from the server has received reset command.\n", port.c_str(), socket_addr.c_str());
+                    reset();
+                }
             }
             flag = EMultiverseClientState::BindReceiveData;
             break;

@@ -15,7 +15,6 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   MetaData.msg
-  SimulationMetaData.msg
   ObjectAttribute.msg
   ObjectData.msg
 )
@@ -24,8 +23,6 @@ add_message_files(
 add_service_files(
   FILES
   Socket.srv
-  SpawnObjects.srv
-  DestroyObjects.srv
 )
 
 # # Generate added messages and services with any dependencies listed here

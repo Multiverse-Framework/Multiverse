@@ -103,6 +103,8 @@ private:
 
     void clean_up() override;
 
+    void reset() override;
+
 private:
     MjMultiverseClient()
     {
