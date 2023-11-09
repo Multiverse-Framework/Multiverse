@@ -138,6 +138,7 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
 enum class EMetaDataState : unsigned char
 {
     None,
+    Reset,
     WaitAfterOtherSendReceiveData,
     WaitAfterOtherSendSendData,
     WaitAfterOtherSendRequestMetaData
@@ -499,6 +500,10 @@ void MultiverseServer::bind_meta_data()
         {
             simulation.meta_data_state = EMetaDataState::WaitAfterOtherSendReceiveData;
             world_name = request_world_name;
+        }
+        else
+        {
+            simulation.meta_data_state = EMetaDataState::Reset;
         }
     }
     else
@@ -899,6 +904,11 @@ void MultiverseServer::send_receive_data()
     else if (worlds[world_name].simulations[simulation_name].meta_data_state == EMetaDataState::WaitAfterOtherSendReceiveData)
     {
         receive_buffer[0] = -2.0;
+    }
+    else if (worlds[world_name].simulations[simulation_name].meta_data_state == EMetaDataState::Reset)
+    {
+        receive_buffer[0] = 0.0;
+        worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::None;
     }
 
     zmq::message_t reply_data(receive_buffer_size * sizeof(double));

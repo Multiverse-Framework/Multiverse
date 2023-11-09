@@ -225,6 +225,11 @@ void MjVisual::run()
     mjtNum sim_start = d->time;
     while (!stop)
     {
+        if (d->time == 0.0)
+        {
+            sim_start = d->time;
+        }
+        
         if (is_window_closed())
         {
             stop = true;

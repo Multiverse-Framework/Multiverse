@@ -105,7 +105,7 @@ class socket_service(MultiverseRosServiceServer):
     def _bind_response(self) -> SocketResponse:
         response = SocketResponse()
 
-        if self.__simulation_name != "":
+        if self.__simulation_name != "" and (self._get_response_meta_data().get("send") is not None or self._get_response_meta_data().get("receive") is not None):
             self._set_send_data(self.__send_data)
             self._communicate()
             self._communicate()

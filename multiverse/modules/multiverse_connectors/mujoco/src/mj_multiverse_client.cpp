@@ -709,10 +709,12 @@ void MjMultiverseClient::clean_up()
 
 void MjMultiverseClient::reset()
 {
+	mtx.lock();
 	d->time = 0;
 	start_time += real_time;
 	mj_resetData(m, d);
 	mj_forward(m, d);
+	mtx.unlock();
 }
 
 void MjMultiverseClient::communicate(const bool resend_meta_data)
