@@ -23,9 +23,9 @@ class Robot:
         self.suffix = {}
 
 
-def get_body_collision_dict(robot: Robot) -> Dict[str, str]:
+def get_body_collision_dict(xml_path: str) -> Dict[str, str]:
     body_collision_dict = {}
-    m = mujoco.MjModel.from_xml_path(robot.path)
+    m = mujoco.MjModel.from_xml_path(xml_path)
     d = mujoco.MjData(m)
     mujoco.mj_step(m, d)
     for geom1_id, geom2_id in zip(d.contact.geom1, d.contact.geom2):
@@ -72,7 +72,7 @@ def modify_robot(save_dir_path: str, robot: Robot) -> str:
     print(f"  Path: {robot.path}")
     print(f"  Apply: {robot.apply}")
 
-    body_collision_dict = get_body_collision_dict(robot)
+    body_collision_dict = get_body_collision_dict(robot.path)
 
     robot_xml_file = robot.name + ".xml"
     robot_xml_path = os.path.join(save_dir_path, robot_xml_file)
@@ -196,35 +196,76 @@ def main():
 
     shutil.copy(world_xml_path, save_xml_path)
 
+    scene_tree = ET.parse(save_xml_path)
+    scene_root = scene_tree.getroot()
+
+    for default_element in scene_root.findall("default"):
+        for default_child_element in default_element.findall("default"):
+            default_dict[default_child_element.get("class")] = list(
+                default_child_element
+            )
+        scene_root.remove(default_element)
+
+    meshdir = os.path.dirname(world_xml_path)
+    for compiler_element in scene_root.findall("compiler"):
+        if "meshdir" in compiler_element.attrib:
+            meshdir = compiler_element.get("meshdir")
+            del compiler_element.attrib["meshdir"]
+            break
+    if not os.path.isabs(meshdir):
+        meshdir = os.path.join(os.path.dirname(world_xml_path), meshdir)
+    for asset_element in scene_root.findall("asset"):
+        for mesh_element in asset_element.findall("mesh"):
+            if "file" in mesh_element.attrib:
+                file = mesh_element.get("file")
+                if not os.path.isabs(file):
+                    file = os.path.join(meshdir, file)
+                    mesh_element.set("file", file)
+                asset_element.remove(mesh_element)
+            asset_dict["mesh"][mesh_element.get("name")] = mesh_element
+    
     if args.robots:
         robots_json_str = args.robots.replace("'", '"')
         robots = parse_robot(robots_json_str)
         print("Robots:")
         for robot in robots:
             robot_xml_file = modify_robot(save_dir_path, robot)
-
-            tree = ET.parse(save_xml_path)
-            root = tree.getroot()
             include_element = ET.Element(
                 "include", {"file": os.path.basename(robot_xml_file)}
             )
-            root.append(include_element)
-            tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
+            scene_root.append(include_element)
+            scene_tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
-    tree = ET.parse(save_xml_path)
-    root = tree.getroot()
     default_parent_element = ET.Element("default")
-    root.append(default_parent_element)
+    scene_root.append(default_parent_element)
     for class_name, default_elements in default_dict.items():
         default_child_element = ET.Element("default", {"class": class_name})
         default_parent_element.append(default_child_element)
         for default_element in default_elements:
             default_child_element.append(default_element)
+
     asset_element = ET.Element("asset")
-    root.append(asset_element)
+    scene_root.append(asset_element)
     for _, mesh_element in asset_dict["mesh"].items():
         asset_element.append(mesh_element)
-    tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
+
+    scene_tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
+
+    body_collision_dict = get_body_collision_dict(save_xml_path)
+    contact_element = ET.Element("contact")
+    scene_root.append(contact_element)
+    for body1_name, body2_name in body_collision_dict.items():
+        contact_element.append(
+            ET.Element(
+                "exclude",
+                {
+                    "name": f"{body1_name}_{body2_name}",
+                    "body1": body1_name,
+                    "body2": body2_name,
+                },
+            ),
+        )
+    scene_tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
     m = mujoco.MjModel.from_xml_path(save_xml_path)
     if mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, "cursor") == -1:
