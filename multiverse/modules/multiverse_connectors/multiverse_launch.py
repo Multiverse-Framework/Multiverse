@@ -37,11 +37,12 @@ def parse_mujoco(mujoco_data):
     worlds_path = find_files(mujoco_data["world"]["path"])
     mujoco_args = [f"--world={worlds_path}"]
 
-    for robot_name in mujoco_data.get("robots", []):
-        if "path" in mujoco_data["robots"][robot_name]:
-            mujoco_data["robots"][robot_name]["path"] = find_files(mujoco_data["robots"][robot_name]["path"])
-    robots_dict = mujoco_data["robots"]
-    mujoco_args.append(f"--robots={robots_dict}".replace(" ", ""))
+    if "robots" in mujoco_data:
+        for robot_name in mujoco_data["robots"]:
+            if "path" in mujoco_data["robots"][robot_name]:
+                mujoco_data["robots"][robot_name]["path"] = find_files(mujoco_data["robots"][robot_name]["path"])
+        robots_dict = mujoco_data["robots"]
+        mujoco_args.append(f"--robots={robots_dict}".replace(" ", ""))
 
     return mujoco_args
 
@@ -114,8 +115,8 @@ def main():
             world = simulator_data.get("world")
             world_name = "world" if world is None else world["name"]
             rtf_desired = 1 if world_name not in world_dict else world_dict[world_name].get("rtf_desired", 1)
-
-            config_dict = simulator_data["config"] | {"rtf_desired": rtf_desired, "resources": resources_paths}
+            
+            config_dict = simulator_data.get("config", {}) | {"rtf_desired": rtf_desired, "resources": resources_paths}
             cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
 
             if multiverse_client_dict is not None and multiverse_client_dict.get(simulation_name) is not None:

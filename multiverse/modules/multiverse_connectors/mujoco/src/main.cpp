@@ -59,6 +59,10 @@ void simulate(const double max_time_step, const double min_time_step)
     int i = 0;
     while (!stop)
     {
+        if (d->time == 0.0)
+        {
+            i = 0;
+        }
         mtx.lock();
         mj_step1(m, d);
         mtx.unlock();

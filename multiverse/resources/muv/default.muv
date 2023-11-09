@@ -25,7 +25,6 @@ simulations:
               pos: [1, 2, 0]
             gravcomp: 1
         disable_self_collision: auto
-        gravcomp: 1
         suffix:
           body: _0
           geom: _0
