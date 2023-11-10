@@ -3,10 +3,10 @@
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
 		<default class="visual">
-			<geom contype="0" conaffinity="0"/>
+			<geom contype="0" conaffinity="0" />
 		</default>
 		<default class="collision">
-			<geom rgba="1.0 0.0 0.0 0.0" />
+			<geom rgba="1.0 0.0 0.0 0.5" />
 		</default>
 	</default>
 	<asset>
@@ -282,6 +282,19 @@
 			</body>
 		</body>
 	</worldbody>
+
+	<actuator>
+		<general name="theta1_slewing_actuator" joint="theta1_slewing_joint" gaintype="fixed" biastype="affine" gainprm="200000000" biasprm="0 -200000000 -8000000" forcerange="-1500000 1500000" ctrlrange="-3.7099999134770023 3.7099999134770023"/>
+		<general name="theta2_boom_actuator" joint="theta2_boom_joint" gaintype="fixed" biastype="affine" gainprm="20000000" biasprm="0 -20000000 -8000000" forcerange="-150000 150000" ctrlrange="-1.2000000140073657 1.563000055861744"/>
+		<general name="theta3_arm_actuator" joint="theta3_arm_joint" gaintype="fixed" biastype="affine" gainprm="20000000" biasprm="0 -20000000 -8000000" forcerange="-150000 150000" ctrlrange="-0.9100000139512037 4.5999998539578195"/>
+		<general name="q4_big_telescope_actuator" joint="q4_big_telescope" gaintype="fixed" biastype="affine" gainprm="2000000" biasprm="0 -2000000 -400000" forcerange="-150000 150000" ctrlrange="0.0 2.2360000610351562"/>
+		<general name="theta8_rotator_actuator" joint="theta8_rotator_joint" gaintype="fixed" biastype="affine" gainprm="200000" biasprm="0 -200000 -40000" forcerange="-150000 150000" ctrlrange="-3.14 3.14"/>
+		<general name="theta10_outer_jaw_actuator" joint="theta10_outer_jaw_joint" gaintype="fixed" biastype="affine" gainprm="200000" biasprm="0 -200000 -40000" forcerange="-150000 150000" ctrlrange="0.0 3.000000101597441"/>
+	</actuator>
+
+	<contact>
+		<exclude body1="K10_outer_jaw" body2="K12_inner_jaw"/>
+	</contact>
 
 	<equality>
 		<joint joint1="q4_big_telescope" joint2="q5_small_telescope" polycoef="0 1 0 0 0" name="equality1"/>

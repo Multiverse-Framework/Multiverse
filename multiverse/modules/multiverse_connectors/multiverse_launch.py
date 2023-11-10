@@ -169,6 +169,7 @@ def main():
                 controller_manager = ros_control_param["controller_manager"]
                 robot = controller_manager["robot"]
                 robot_description = controller_manager["robot_description"]
+                actuators = controller_manager["actuators"]
                 robot_urdf_path = find_files(controller_manager["urdf"])
 
                 tree = ET.parse(robot_urdf_path)
@@ -185,6 +186,7 @@ def main():
                     "controller_manager": {
                         "robot": robot,
                         "robot_description": robot_description,
+                        "actuators": actuators
                     },
                 }
                 cmd = [

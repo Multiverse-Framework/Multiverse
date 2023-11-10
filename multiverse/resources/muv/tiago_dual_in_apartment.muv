@@ -1,0 +1,90 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+
+worlds:
+  tiago_dual_in_apartment:
+    rtf_desired: 1
+
+simulations:
+  tiago_dual_in_apartment:
+    simulator: mujoco
+    world:
+      name: world
+      path: apartment.xml
+    robots:
+      tiago_dual:
+        path: tiago_dual.xml
+        apply:
+          body:
+            tiago_dual:
+              pos: [1.5, 2.5, 0]
+            gravcomp: 1
+        disable_self_collision: auto
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  tiago_dual_in_apartment:
+    host: "tcp://127.0.0.1"
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue"]
+    receive:
+      tiago_dual: ["relative_velocity"]
+
+  ros:
+    services:
+      socket:
+        host: "tcp://127.0.0.1"
+        port: 7400
+
+    publishers:
+      tf:
+        - meta_data:
+            world_name: world
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
+          port: 7301
+          topic: /tf
+          rate: 60
+          root_frame_id: map
+      odom:
+        - meta_data:
+            world_name: world
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
+          port: 7302
+          topic: /odom
+          rate: 60
+          body: tiago_dual
+          frame_id: map
+
+    subscribers:
+      cmd_vel:
+        - meta_data:
+            world_name: world
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
+          port: 7200
+          topic: /cmd_vel
+          body: tiago_dual

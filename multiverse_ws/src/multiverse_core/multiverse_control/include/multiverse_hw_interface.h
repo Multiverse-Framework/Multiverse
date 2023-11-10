@@ -30,7 +30,7 @@
 class MultiverseHWInterface : public MultiverseClientJson, public hardware_interface::RobotHW
 {
 public:
-    MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params);
+    MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params, const std::map<std::string, std::string> &joint_actuators);
 
     ~MultiverseHWInterface();
 
@@ -52,6 +52,8 @@ private:
     std::vector<double *> send_data_vec;
 
     std::vector<double *> receive_data_vec;
+
+    std::map<std::string, std::string> actuators;
 
 private:
     void start_connect_to_server_thread() override;

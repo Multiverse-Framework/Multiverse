@@ -239,7 +239,8 @@ bool MjMultiverseClient::init_objects(bool from_server)
 		}
 
 		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
-			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1)
+			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
+			mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, object_name.c_str()) == -1)
 		{
 			objects_to_spawn.insert(object_name);
 		}
@@ -252,7 +253,8 @@ bool MjMultiverseClient::init_objects(bool from_server)
 		}
 
 		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
-			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1)
+			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
+			mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, object_name.c_str()) == -1)
 		{
 			objects_to_spawn.insert(object_name);
 		}
@@ -274,11 +276,16 @@ bool MjMultiverseClient::init_objects(bool from_server)
 			const std::string attribute_name = attribute_json.asString();
 			const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
 			const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str());
+			const int actuator_id = mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, object_name.c_str());
 			if (body_attributes.count(attribute_name) != 0 && body_id != -1)
 			{
 				receive_objects[object_name].insert(attribute_name);
 			}
 			else if (joint_id != -1 && ((receive_hinge_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (receive_slide_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)))
+			{
+				receive_objects[object_name].insert(attribute_name);
+			}
+			else if (actuator_id != -1)
 			{
 				receive_objects[object_name].insert(attribute_name);
 			}
@@ -387,6 +394,7 @@ void MjMultiverseClient::bind_request_meta_data()
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, send_object.first.c_str());
 		const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, send_object.first.c_str());
+		const int actuator_id = mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, send_object.first.c_str());
 		if (body_id != -1)
 		{
 			const std::string body_name = send_object.first;
@@ -403,12 +411,21 @@ void MjMultiverseClient::bind_request_meta_data()
 				request_meta_data_json["send"][joint_name].append(attribute_name);
 			}
 		}
+		else if (actuator_id != -1)
+		{
+			const std::string actuator_name = send_object.first;
+			for (const std::string &attribute_name : send_object.second)
+			{
+				request_meta_data_json["send"][actuator_name].append(attribute_name);
+			}
+		}
 	}
 
 	for (const std::pair<std::string, std::set<std::string>> &receive_object : receive_objects)
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, receive_object.first.c_str());
 		const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, receive_object.first.c_str());
+		const int actuator_id = mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, receive_object.first.c_str());
 		if (body_id != -1)
 		{
 			const std::string body_name = receive_object.first;
@@ -426,6 +443,14 @@ void MjMultiverseClient::bind_request_meta_data()
 				request_meta_data_json["receive"][joint_name].append(attribute_name);
 			}
 		}
+		else if (actuator_id != -1)
+		{
+			const std::string actuator_name = receive_object.first;
+			for (const std::string &attribute_name : receive_object.second)
+			{
+				request_meta_data_json["receive"][actuator_name].append(attribute_name);
+			}
+		}
 	}
 
 	mtx.unlock();
@@ -440,6 +465,7 @@ void MjMultiverseClient::bind_response_meta_data()
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, send_object.first.c_str());
 		const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, send_object.first.c_str());
+		const int actuator_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, send_object.first.c_str());
 		if (body_id != -1)
 		{
 			if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
@@ -549,6 +575,21 @@ void MjMultiverseClient::bind_response_meta_data()
 						d->qpos[qpos_id + 2] = y_json.asDouble();
 						d->qpos[qpos_id + 3] = z_json.asDouble();
 					}
+				}
+			}
+		}
+		else if (actuator_id != -1)
+		{
+			for (const std::string &attribute_name : send_object.second)
+			{
+				if (strcmp(attribute_name.c_str(), "cmd_joint_rvalue") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_angular_velocity") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_linear_velocity") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_force") == 0)
+				{
+					d->ctrl[actuator_id] = response_meta_data_json["send"][send_object.first][attribute_name][0].asDouble();
 				}
 			}
 		}
@@ -663,6 +704,7 @@ void MjMultiverseClient::init_send_and_receive_data()
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, receive_object.first.c_str());
 		const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, receive_object.first.c_str());
+		const int actuator_id = mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, receive_object.first.c_str());
 		if (body_id != -1)
 		{
 			const std::string body_name = receive_object.first;
@@ -732,31 +774,34 @@ void MjMultiverseClient::init_send_and_receive_data()
 			const int dof_id = m->jnt_dofadr[joint_id];
 			for (const std::string &attribute_name : receive_object.second)
 			{
-				if ((strcmp(attribute_name.c_str(), "cmd_joint_rvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
-					(strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
-				{
-					receive_data_vec.emplace_back(&d->qpos[qpos_id]);
-				}
-				else if ((strcmp(attribute_name.c_str(), "cmd_joint_angular_velocity") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
-						 (strcmp(attribute_name.c_str(), "cmd_joint_linear_velocity") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
-				{
-					receive_data_vec.emplace_back(&d->qvel[dof_id]);
-				}
-				else if ((strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
-						 (strcmp(attribute_name.c_str(), "cmd_joint_force") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
+				if ((strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
+					(strcmp(attribute_name.c_str(), "cmd_joint_force") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
 				{
 					receive_data_vec.emplace_back(&d->qfrc_applied[dof_id]);
-				}
-				else if (strcmp(attribute_name.c_str(), "joint_quaternion") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL)
-				{
-					receive_data_vec.emplace_back(&d->qpos[qpos_id]);
-					receive_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
-					receive_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
-					receive_data_vec.emplace_back(&d->qpos[qpos_id + 3]);
 				}
 				else
 				{
 					printf("Receive %s for %s not supported\n", attribute_name.c_str(), joint_name.c_str());
+				}
+			}
+		}
+		else if (actuator_id != -1)
+		{
+			const std::string actuator_name = receive_object.first;
+			for (const std::string &attribute_name : receive_object.second)
+			{
+				if (strcmp(attribute_name.c_str(), "cmd_joint_rvalue") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_angular_velocity") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_linear_velocity") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0 ||
+					strcmp(attribute_name.c_str(), "cmd_joint_force") == 0)
+				{
+					receive_data_vec.emplace_back(&d->ctrl[actuator_id]);
+				}
+				else
+				{
+					printf("Receive %s for %s not supported\n", attribute_name.c_str(), actuator_name.c_str());
 				}
 			}
 		}

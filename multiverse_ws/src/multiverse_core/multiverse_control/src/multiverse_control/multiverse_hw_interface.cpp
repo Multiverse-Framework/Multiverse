@@ -21,7 +21,7 @@
 #include "multiverse_hw_interface.h"
 #include <urdf/model.h>
 
-MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params)
+MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params, const std::map<std::string, std::string> &joint_actuators)
 {
     meta_data["world_name"] = multiverse_params.at("world_name");
     meta_data["simulation_name"] = multiverse_params.at("robot") + "_controller";
@@ -30,7 +30,7 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
     meta_data["mass_unit"] = multiverse_params.at("mass_unit");
     meta_data["time_unit"] = multiverse_params.at("time_unit");
     meta_data["handedness"] = multiverse_params.at("handedness");
-    
+
     urdf::Model urdf_model;
     const std::string robot_description = multiverse_params.at("robot_description");
     if (!urdf_model.initParamWithNodeHandle(robot_description, n))
@@ -40,23 +40,29 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
     }
 
     server_socket_addr = multiverse_params.at("server_host") + ":" + multiverse_params.at("server_port");
-    
+
     host = multiverse_params.at("client_host");
-	port = multiverse_params.at("client_port");
-    
+    port = multiverse_params.at("client_port");
+
     for (const std::pair<std::string, urdf::JointSharedPtr> &robot_joint : urdf_model.joints_)
     {
+        if (joint_actuators.count(robot_joint.first) == 0)
+        {
+            continue;
+        }
+        actuators[joint_actuators.at(robot_joint.first)] = robot_joint.first;
+
         if (robot_joint.second->type == urdf::Joint::PRISMATIC || robot_joint.second->type == urdf::Joint::REVOLUTE)
         {
             if (robot_joint.second->type == urdf::Joint::PRISMATIC)
             {
                 receive_objects[robot_joint.first] = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
-                send_objects[robot_joint.first] = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
+                send_objects[joint_actuators.at(robot_joint.first)] = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
             }
             else if (robot_joint.second->type == urdf::Joint::REVOLUTE)
             {
                 receive_objects[robot_joint.first] = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
-                send_objects[robot_joint.first] = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
+                send_objects[joint_actuators.at(robot_joint.first)] = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
             }
 
             joint_names.push_back(robot_joint.first);
@@ -64,7 +70,7 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
             joint_commands[robot_joint.first] = (double *)calloc(3, sizeof(double));
         }
     }
-    
+
     for (const std::string &joint_name : joint_names)
     {
         hardware_interface::JointStateHandle joint_state_handle(joint_name, &joint_states[joint_name][0], &joint_states[joint_name][1], &joint_states[joint_name][2]);
@@ -160,27 +166,27 @@ void MultiverseHWInterface::init_send_and_receive_data()
     send_data_vec.emplace_back(nullptr);
 
     for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
-	{
+    {
         for (const std::string &attribute_name : send_object.second)
         {
             if (strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 || strcmp(attribute_name.c_str(), "cmd_joint_rvalue") == 0)
             {
-                send_data_vec.emplace_back(&joint_commands[send_object.first][0]);
+                send_data_vec.emplace_back(&joint_commands.at(actuators.at(send_object.first))[0]);
             }
             else if (strcmp(attribute_name.c_str(), "cmd_joint_linear_velocity") == 0 || strcmp(attribute_name.c_str(), "cmd_joint_angular_velocity") == 0)
             {
-                send_data_vec.emplace_back(&joint_commands[send_object.first][1]);
+                send_data_vec.emplace_back(&joint_commands.at(actuators.at(send_object.first))[1]);
             }
             else if (strcmp(attribute_name.c_str(), "cmd_joint_force") == 0 || strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0)
             {
-                send_data_vec.emplace_back(&joint_commands[send_object.first][2]);
+                send_data_vec.emplace_back(&joint_commands.at(actuators.at(send_object.first))[2]);
             }
         }
     }
 
     receive_data_vec.emplace_back(&world_time);
     for (const std::pair<std::string, std::set<std::string>> &receive_object : receive_objects)
-	{
+    {
         for (const std::string &attribute_name : receive_object.second)
         {
             if (strcmp(attribute_name.c_str(), "joint_tvalue") == 0 || strcmp(attribute_name.c_str(), "joint_rvalue") == 0)
@@ -202,18 +208,18 @@ void MultiverseHWInterface::init_send_and_receive_data()
 void MultiverseHWInterface::bind_send_data()
 {
     send_buffer[0] = std::numeric_limits<double>::quiet_NaN();
-	for (size_t i = 1; i < send_buffer_size; i++)
-	{
-		send_buffer[i] = *send_data_vec[i];
-	}
+    for (size_t i = 1; i < send_buffer_size; i++)
+    {
+        send_buffer[i] = *send_data_vec[i];
+    }
 }
 
 void MultiverseHWInterface::bind_receive_data()
 {
     for (size_t i = 0; i < receive_buffer_size; i++)
-	{
-		*receive_data_vec[i] = receive_buffer[i];
-	}
+    {
+        *receive_data_vec[i] = receive_buffer[i];
+    }
 }
 
 void MultiverseHWInterface::clean_up()

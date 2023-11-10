@@ -5,7 +5,7 @@ import argparse
 import shutil
 import os
 import mujoco
-from typing import List, Dict
+from typing import List, Dict, Set
 import xml.etree.ElementTree as ET
 
 default_dict = {}
@@ -23,7 +23,7 @@ class Robot:
         self.suffix = {}
 
 
-def get_body_collision_dict(xml_path: str) -> Dict[str, str]:
+def get_body_collision_dict(xml_path: str) -> Dict[str, Set[str]]:
     body_collision_dict = {}
     m = mujoco.MjModel.from_xml_path(xml_path)
     d = mujoco.MjData(m)
@@ -33,8 +33,7 @@ def get_body_collision_dict(xml_path: str) -> Dict[str, str]:
         body1_name = m.body(body1_id).name
         body2_id = m.geom(geom2_id).bodyid[0]
         body2_name = m.body(body2_id).name
-        body_collision_dict[body1_name] = body2_name
-
+        body_collision_dict[body1_name] = body_collision_dict.get(body1_name, set()).union({body2_name})
     return body_collision_dict
 
 
@@ -61,9 +60,10 @@ def parse_robot(data: str) -> List[Robot]:
 
 def update_element_name(elements: list, element_type: str, suffix: str):
     for element_id, element in enumerate(elements):
-        element_name = element.get("name")
+        element_name = element.get("name", None)
         if element_name is None:
-            element.set("name", f"{element_type}_{element_id}")
+            element_name = f"{element_type}_{element_id}"
+            element.set("name", element_name)
         element.set("name", f"{element_name}{suffix}")
 
 
@@ -89,17 +89,18 @@ def modify_robot(save_dir_path: str, robot: Robot) -> str:
     if robot.disable_self_collision == "auto":
         contact_element = ET.Element("contact")
         root.append(contact_element)
-        for body1_name, body2_name in body_collision_dict.items():
-            contact_element.append(
-                ET.Element(
-                    "exclude",
-                    {
-                        "name": f"{body1_name}_{body2_name}",
-                        "body1": body1_name,
-                        "body2": body2_name,
-                    },
-                ),
-            )
+        for body1_name, body2_names in body_collision_dict.items():
+            for body2_name in body2_names:
+                contact_element.append(
+                    ET.Element(
+                        "exclude",
+                        {
+                            "name": f"{body1_name}_{body2_name}",
+                            "body1": body1_name,
+                            "body2": body2_name,
+                        },
+                    ),
+                )
 
     for default_element in root.findall("default"):
         for default_child_element in default_element.findall("default"):
@@ -118,8 +119,9 @@ def modify_robot(save_dir_path: str, robot: Robot) -> str:
                 if not os.path.isabs(file):
                     file = os.path.join(meshdir, file)
                     mesh_element.set("file", file)
-            asset_dict["mesh"][mesh_element.get("name")] = mesh_element
-    root.remove(asset_element)
+                file_name = mesh_element.get("name", os.path.splitext(os.path.basename(file))[0])
+                asset_dict["mesh"][file_name] = mesh_element
+                asset_element.remove(mesh_element)
 
     for element_type, element_suffix in robot.suffix.items():
         update_element_name(
@@ -254,17 +256,19 @@ def main():
     body_collision_dict = get_body_collision_dict(save_xml_path)
     contact_element = ET.Element("contact")
     scene_root.append(contact_element)
-    for body1_name, body2_name in body_collision_dict.items():
-        contact_element.append(
-            ET.Element(
-                "exclude",
-                {
-                    "name": f"{body1_name}_{body2_name}",
-                    "body1": body1_name,
-                    "body2": body2_name,
-                },
-            ),
-        )
+    for body1_name, body2_names in body_collision_dict.items():
+        for body2_name in body2_names:
+            contact_element.append(
+                ET.Element(
+                    "exclude",
+                    {
+                        "name": f"{body1_name}_{body2_name}",
+                        "body1": body1_name,
+                        "body2": body2_name,
+                    },
+                ),
+            )
+    body_collision_dict.clear()
     scene_tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
     m = mujoco.MjModel.from_xml_path(save_xml_path)

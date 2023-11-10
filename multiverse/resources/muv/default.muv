@@ -84,13 +84,12 @@ multiverse_clients:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
     receive:
-      shoulder_pan_joint: ["cmd_joint_angular_velocity"]
-      shoulder_lift_joint: ["cmd_joint_angular_velocity"]
-      elbow_joint: ["cmd_joint_angular_velocity"]
-      wrist_1_joint: ["cmd_joint_angular_velocity"]
-      wrist_2_joint: ["cmd_joint_angular_velocity"]
-      wrist_3_joint: ["cmd_joint_angular_velocity"]
-      gripper_hand_e_finger_1_joint: ["cmd_joint_force"]
+      shoulder_pan: ["cmd_joint_rvalue"]
+      shoulder_lift: ["cmd_joint_rvalue"]
+      elbow: ["cmd_joint_rvalue"]
+      wrist_1: ["cmd_joint_rvalue"]
+      wrist_2: ["cmd_joint_rvalue"]
+      wrist_3: ["cmd_joint_rvalue"]
 
   ros:
     services:
@@ -179,8 +178,14 @@ multiverse_clients:
         robot_description: /robot_description
         urdf: ur5e.urdf
         config: ur5e/config/ros_control.yaml
+        actuators:
+          shoulder_pan: shoulder_pan_joint
+          shoulder_lift: shoulder_lift_joint
+          elbow: elbow_joint
+          wrist_1: wrist_1_joint
+          wrist_2: wrist_2_joint
+          wrist_3: wrist_3_joint
         controllers:
           spawn:
             - joint_state_controller
               joint_trajectory_controller
-              gripper_controller
