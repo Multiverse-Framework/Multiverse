@@ -1,0 +1,24 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 60
+
+joint_trajectory_controller: 
+  type: velocity_controllers/JointTrajectoryController  
+  joints:
+    - theta1_slewing_joint
+    - theta2_boom_joint
+    - theta3_arm_joint
+    - q4_big_telescope
+    - theta6_tip_joint
+    - theta7_tilt_joint
+    - theta8_rotator_joint
+    - theta10_outer_jaw_joint
+  gains:
+    theta1_slewing_joint: {p: 5, i: 1, d: 0.01}
+    theta2_boom_joint: {p: 5, i: 1, d: 0.01}
+    theta3_arm_joint: {p: 5, i: 1, d: 0.01}
+    q4_big_telescope: {p: 5, i: 1, d: 0.01}
+    theta6_tip_joint: {p: 5, i: 1, d: 0.01}
+    theta7_tilt_joint: {p: 5, i: 1, d: 0.01}
+    theta8_rotator_joint: {p: 5, i: 1, d: 0.01}
+    theta10_outer_jaw_joint: {p: 5, i: 1, d: 0.01}

@@ -1,0 +1,89 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+
+worlds:
+  mujoco_sim:
+    rtf_desired: 1
+
+simulations:
+  mujoco_sim:
+    simulator: mujoco
+    world:
+      name: world
+      path: floor.xml
+    robots:
+      crane:
+        path: crane.xml
+        apply:
+          body:
+            crane:
+              pos: [0, 0, 2]
+            gravcomp: 0
+        disable_self_collision: auto
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  mujoco_sim:
+    host: "tcp://127.0.0.1"
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+    receive:
+      theta1_slewing_joint: ["cmd_joint_angular_velocity"]
+      theta2_boom_joint: ["cmd_joint_angular_velocity"]
+      theta3_arm_joint: ["cmd_joint_angular_velocity"]
+      q4_big_telescope: ["cmd_joint_linear_velocity"]
+      theta6_tip_joint: ["cmd_joint_angular_velocity"]
+      theta7_tilt_joint: ["cmd_joint_angular_velocity"]
+      theta8_rotator_joint: ["cmd_joint_angular_velocity"]
+      theta10_outer_jaw_joint: ["cmd_joint_angular_velocity"]
+
+  ros:
+    services:
+      socket:
+        host: "tcp://127.0.0.1"
+        port: 7400
+
+    publishers:
+      tf:
+        - meta_data:
+            world_name: world
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
+          port: 7301
+          topic: /tf
+          rate: 60
+          root_frame_id: map
+
+  ros_control:
+  - meta_data:
+      world_name: world
+      length_unit: m
+      angle_unit: rad
+      mass_unit: kg
+      time_unit: s
+      handedness: rhs
+    host: "tcp://127.0.0.1"
+    port: 7800
+    controller_manager:
+      robot: crane
+      robot_description: /robot_description
+      urdf: crane.urdf
+      config: crane/config/ros_control.yaml
+      controllers:
+        spawn:
+          - joint_state_controller
+            joint_trajectory_controller
