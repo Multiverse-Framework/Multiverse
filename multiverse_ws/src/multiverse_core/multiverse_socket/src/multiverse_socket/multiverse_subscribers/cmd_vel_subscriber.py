@@ -17,7 +17,7 @@ class cmd_vel_subscriber(MultiverseRosSubscriber):
     def _init_request_meta_data(self) -> None:
         super()._init_request_meta_data()
         self._request_meta_data_dict["send"] = {}
-        self._request_meta_data_dict["send"][self.__body] = ["relative_velocity"]
+        self._request_meta_data_dict["send"][self.__body] = ["odometric_velocity"]
         self._request_meta_data_dict["receive"] = {}
 
     def _init_send_data(self) -> None:

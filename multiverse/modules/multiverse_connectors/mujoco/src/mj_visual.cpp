@@ -122,13 +122,16 @@ void MjVisual::mouse_move(GLFWwindow *window, double xpos, double ypos)
     }
     else if (button_middle)
     {
-        double offset = 2.0 * cam.distance * mju_tan(m->vis.global.fovy / 360.0 * M_PI);
-        double dxx = dx / height * offset;
-        double dyy = -dy / height * offset * mju_sin(cam.elevation / 180.0 * M_PI);
-        double dzz = dy / height * offset * mju_cos(cam.elevation / 180.0 * M_PI);
-        d->mocap_pos[0] += -dxx * mju_sin(cam.azimuth / 180.0 * M_PI) + dyy * mju_cos(cam.azimuth / 180.0 * M_PI);
-        d->mocap_pos[1] += dxx * mju_cos(cam.azimuth / 180.0 * M_PI) + dyy * mju_sin(cam.azimuth / 180.0 * M_PI);
-        d->mocap_pos[2] += dzz;
+        if (cursor_id != -1 && mj_name2id(m, mjtObj::mjOBJ_SITE, "cursor_x") != -1 && mj_name2id(m, mjtObj::mjOBJ_SITE, "cursor_y") != -1 && mj_name2id(m, mjtObj::mjOBJ_SITE, "cursor_z") != -1)
+        {
+            double offset = 2.0 * cam.distance * mju_tan(m->vis.global.fovy / 360.0 * M_PI);
+            double dxx = dx / height * offset;
+            double dyy = -dy / height * offset * mju_sin(cam.elevation / 180.0 * M_PI);
+            double dzz = dy / height * offset * mju_cos(cam.elevation / 180.0 * M_PI);
+            d->mocap_pos[3 * cursor_id] += -dxx * mju_sin(cam.azimuth / 180.0 * M_PI) + dyy * mju_cos(cam.azimuth / 180.0 * M_PI);
+            d->mocap_pos[3 * cursor_id + 1] += dxx * mju_cos(cam.azimuth / 180.0 * M_PI) + dyy * mju_sin(cam.azimuth / 180.0 * M_PI);
+            d->mocap_pos[3 * cursor_id + 2] += dzz;
+        }
     }
     else if (button_right)
     {
@@ -259,9 +262,12 @@ void MjVisual::run()
 
 void MjVisual::render()
 {
-    cam.lookat[0] = d->mocap_pos[3 * cursor_id];
-    cam.lookat[1] = d->mocap_pos[3 * cursor_id + 1];
-    cam.lookat[2] = d->mocap_pos[3 * cursor_id + 2];
+    if (cursor_id != -1)
+    {
+        cam.lookat[0] = d->mocap_pos[3 * cursor_id];
+        cam.lookat[1] = d->mocap_pos[3 * cursor_id + 1];
+        cam.lookat[2] = d->mocap_pos[3 * cursor_id + 2];
+    }
 
     // get framebuffer viewport
     mjrRect viewport = {0, 0, 0, 0};
@@ -272,10 +278,13 @@ void MjVisual::render()
 
     mjr_render(viewport, &scn, &con);
 
-    std::ostringstream oss;
-    oss << std::fixed << std::setprecision(4);
-    oss << "[" << d->mocap_pos[3 * cursor_id] << ", " << d->mocap_pos[3 * cursor_id + 1] << ", " << d->mocap_pos[3 * cursor_id + 2] << "]";
-    mjr_text(mjFONT_NORMAL, oss.str().c_str(), &con, 0.5, 0.5, 1, 1, 1);
+    if (cursor_id != -1)
+    {
+        std::ostringstream oss;
+        oss << std::fixed << std::setprecision(4);
+        oss << "[" << d->mocap_pos[3 * cursor_id] << ", " << d->mocap_pos[3 * cursor_id + 1] << ", " << d->mocap_pos[3 * cursor_id + 2] << "]";
+        mjr_text(mjFONT_NORMAL, oss.str().c_str(), &con, 0.5, 0.5, 1, 1, 1);
+    }
 
     // print simulation time
     mjrRect rect1 = {0, viewport.height - 50, 300, 50};

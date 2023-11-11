@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 #define _USE_MATH_DEFINES
+#include <set>
 #include <chrono>
 #include <csignal>
 #include <iostream>
@@ -36,12 +37,15 @@ std::map<std::string, bool> sockets_need_clean_up;
 zmq::context_t server_context{1};
 zmq::context_t context{1};
 
+std::set<std::string> cumulative_attribute_names = {"force", "torque"};
+
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
     {
         {"time", {EAttribute::Time, {0.0}}},
         {"position", {EAttribute::Position, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
         {"quaternion", {EAttribute::Quaternion, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
         {"relative_velocity", {EAttribute::RelativeVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
+        {"odometric_velocity", {EAttribute::OdometricVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
         {"joint_rvalue", {EAttribute::JointRvalue, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_tvalue", {EAttribute::JointTvalue, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_linear_velocity", {EAttribute::JointLinearVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
@@ -84,6 +88,9 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
          {{"rhs", {1.0, 1.0, 1.0, 1.0}},
           {"lhs", {-1.0, 1.0, -1.0, 1.0}}}},
         {EAttribute::RelativeVelocity,
+         {{"rhs", {1.0, 1.0, 1.0, 1.0, 1.0, 1.0}},
+          {"lhs", {1.0, 1.0, 1.0, 1.0, 1.0, 1.0}}}},
+        {EAttribute::OdometricVelocity,
          {{"rhs", {1.0, 1.0, 1.0, 1.0, 1.0, 1.0}},
           {"lhs", {1.0, 1.0, 1.0, 1.0, 1.0, 1.0}}}},
         {EAttribute::JointRvalue,
@@ -160,7 +167,7 @@ struct Object
 
 struct Simulation
 {
-    std::map<std::string, Object> objects;
+    std::map<std::string, Object*> objects;
     Json::Value request_meta_data_json;
     EMetaDataState meta_data_state;
 };
@@ -582,6 +589,15 @@ void MultiverseServer::bind_meta_data()
                   [mass_unit, length_unit, time_unit](double &torque)
                   { torque = unit_scale[mass_unit] * unit_scale[length_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
 
+    for (size_t i = 0; i < 3; i++)
+    {
+        conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[length_unit] / unit_scale[time_unit];
+    }
+    for (size_t i = 3; i < 6; i++)
+    {
+        conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[angle_unit] / unit_scale[time_unit];
+    }
+
     conversion_map[EAttribute::CmdJointRvalue] = conversion_map[EAttribute::JointRvalue];
 
     conversion_map[EAttribute::CmdJointTvalue] = conversion_map[EAttribute::JointTvalue];
@@ -594,14 +610,7 @@ void MultiverseServer::bind_meta_data()
 
     conversion_map[EAttribute::CmdJointTorque] = conversion_map[EAttribute::Torque];
 
-    for (size_t i = 0; i < 3; i++)
-    {
-        conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[length_unit] / unit_scale[time_unit];
-    }
-    for (size_t i = 3; i < 6; i++)
-    {
-        conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[angle_unit] / unit_scale[time_unit];
-    }
+    conversion_map[EAttribute::OdometricVelocity] = conversion_map[EAttribute::RelativeVelocity];
 
     for (std::pair<const EAttribute, std::vector<double>> &conversion_scale : conversion_map)
     {
@@ -628,12 +637,12 @@ void MultiverseServer::bind_send_objects()
     for (const std::string &object_name : send_objects_json.getMemberNames())
     {
         Object &object = objects[object_name];
-        simulation.objects[object_name] = object;
+        simulation.objects[object_name] = &object;
         for (const Json::Value &attribute_json : send_objects_json[object_name])
         {
             const std::string &attribute_name = attribute_json.asString();
             Attribute &attribute = object.attributes[attribute_name];
-            if (attribute.data.size() == 0)
+            if (attribute.data.size() == 0 && cumulative_attribute_names.count(attribute_name) == 0)
             {
                 attribute.data = attribute_map[attribute_name].second;
                 for (size_t i = 0; i < attribute.data.size(); i++)
@@ -644,12 +653,17 @@ void MultiverseServer::bind_send_objects()
                     response_meta_data_json["send"][object_name][attribute_name].append(attribute_map[attribute_name].second[i]);
                 }
             }
-            else if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
+            else if (cumulative_attribute_names.count(attribute_name) > 0)
             {
-                attribute.simulation_data[simulation_name] = attribute_map[attribute_name].second;
-                for (size_t i = 0; i < attribute.simulation_data[simulation_name].size(); i++)
+                std::vector<double> &simulation_data = attribute.simulation_data[simulation_name];
+                if (simulation_data.size() == 0)
                 {
-                    double *data = &attribute.simulation_data[simulation_name][i];
+                    simulation_data = attribute_map[attribute_name].second;
+                }
+
+                for (size_t i = 0; i < simulation_data.size(); i++)
+                {
+                    double *data = &simulation_data[i];
                     const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                     send_data_vec.emplace_back(data, conversion);
                     response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
@@ -769,21 +783,19 @@ void MultiverseServer::bind_receive_objects()
         for (const Json::Value &attribute_json : receive_objects_json[object_name])
         {
             const std::string attribute_name = attribute_json.asString();
-
-            size_t data_size;
-            if (strcmp(attribute_name.c_str(), "force") == 0 || strcmp(attribute_name.c_str(), "torque") == 0)
+            Attribute &attribute = worlds[world_name].objects[object_name].attributes[attribute_name];
+            if (cumulative_attribute_names.count(attribute_name) > 0)
             {
-                data_size = 3;
-                worlds[world_name].objects[object_name].attributes[attribute_name].is_sent = true;
-            }
-            else
-            {
-                data_size = worlds[world_name].objects[object_name].attributes[attribute_name].data.size();
+                if (attribute.data.size() == 0)
+                {
+                    attribute.data = attribute_map[attribute_name].second;
+                    attribute.is_sent = true;
+                }
             }
 
-            for (size_t i = 0; i < data_size; i++)
+            for (size_t i = 0; i < attribute.data.size(); i++)
             {
-                double *data = &worlds[world_name].objects[object_name].attributes[attribute_name].data[i];
+                double *data = &attribute.data[i];
                 const double conversion = 1.0 / conversion_map[attribute_map[attribute_name].first][i];
                 receive_data_vec.emplace_back(data, conversion);
                 response_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
@@ -877,20 +889,31 @@ void MultiverseServer::compute_cumulative_data()
 {
     for (const std::string &object_name : receive_objects_json.getMemberNames())
     {
-        for (const std::string &effort_str : {"force", "torque"})
+        for (const std::string &attribute_name : cumulative_attribute_names)
         {
-            if (std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), effort_str) == receive_objects_json[object_name].end())
+            if (std::find(receive_objects_json[object_name].begin(), receive_objects_json[object_name].end(), attribute_name) == receive_objects_json[object_name].end())
             {
                 continue;
             }
 
-            std::vector<double> &data = worlds[world_name].objects[object_name].attributes[effort_str].data;
-            for (size_t i = 0; i < 3; i++)
+            std::vector<double> &data = worlds[world_name].objects[object_name].attributes[attribute_name].data;
+            data = attribute_map[attribute_name].second;
+            for (size_t i = 0; i < data.size(); i++)
             {
                 for (std::pair<const std::string, Simulation> &simulation_pair : worlds[world_name].simulations)
                 {
+                    if (simulation_pair.second.objects.count(object_name) == 0)
+                    {
+                        continue;
+                    }
+                    
                     const std::string &simulation_name = simulation_pair.first;
-                    const std::vector<double> simulation_data = simulation_pair.second.objects[object_name].attributes[effort_str].simulation_data[simulation_name];
+                    const std::vector<double> &simulation_data = (*simulation_pair.second.objects[object_name]).attributes[attribute_name].simulation_data[simulation_name];                  
+                    if (simulation_data.size() != data.size())
+                    {
+                        continue;
+                    }
+                    
                     data[i] += simulation_data[i];
                 }
             }

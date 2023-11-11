@@ -1,0 +1,27 @@
+<mujoco>
+    <option timestep="0.001" integrator="RK4" gravity="0 0 -9.81">
+        <flag sensornoise="disable" energy="enable" contact="disable" />
+    </option>
+    <compiler angle="radian" />
+    <asset>
+        <texture type="skybox" builtin="gradient" rgb1="1 1 1" rgb2=".6 .8 1" width="256" height="256"/>
+    </asset>
+
+    <worldbody>
+        <body name="table" pos="0 0 8">
+            <freejoint />
+            <geom type="box" size=".5 .5 .05" rgba="0 0 .9 1" mass="6" />
+            <geom type="box" pos=".45 .45 -.25" size=".05 .05 .25" rgba="0 0 .9 1" mass="1" />
+            <geom type="box" pos=".45 -.45 -.25" size=".05 .05 .25" rgba="0 0 .9 1" mass="1" />
+            <geom type="box" pos="-.45 .45 -.25" size=".05 .05 .25" rgba="0 0 .9 1" mass="1" />
+            <geom type="box" pos="-.45 -.45 -.25" size=".05 .05 .25" rgba="0 0 .9 1" mass="1" />
+        </body>
+    </worldbody>
+    
+    <visual>
+		<global fovy="45" azimuth="225" elevation="-30" />
+	</visual>
+    <worldbody>
+		<body name="cursor" mocap="true" pos="1.5 0 1" euler="0 0 0"/>
+	</worldbody>
+</mujoco>

@@ -38,6 +38,7 @@ enum class EAttribute : unsigned char
     Position,
     Quaternion,
     RelativeVelocity,
+    OdometricVelocity,
     JointRvalue,
     JointTvalue,
     JointLinearVelocity,

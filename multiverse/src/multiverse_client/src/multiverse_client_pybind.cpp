@@ -29,6 +29,7 @@ std::map<std::string, size_t> attribute_map = {
     {"position", 3},
     {"quaternion", 4},
     {"relative_velocity", 6},
+    {"odometric_velocity", 6},
     {"joint_rvalue", 1},
     {"joint_tvalue", 1},
     {"joint_linear_velocity", 1},

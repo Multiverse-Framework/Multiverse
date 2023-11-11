@@ -20,7 +20,7 @@ class odom_publisher(MultiverseRosPublisher):
 
     def _init_request_meta_data(self) -> None:
         super()._init_request_meta_data()
-        self._request_meta_data_dict["receive"][self.__body_name] = ["position", "quaternion", "relative_velocity"]
+        self._request_meta_data_dict["receive"][self.__body_name] = ["position", "quaternion", "odometric_velocity"]
 
     def _construct_rosmsg(self, response_meta_data_dict) -> None:
         if response_meta_data_dict.get("receive") is None:
