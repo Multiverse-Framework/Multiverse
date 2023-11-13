@@ -20,7 +20,6 @@ simulations:
           body:
             crane:
               pos: [0, 0, 2]
-            gravcomp: 0
         disable_self_collision: auto
     config:
       max_time_step: 0.01

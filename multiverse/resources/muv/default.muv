@@ -29,6 +29,7 @@ simulations:
           body: _0
           geom: _0
           joint: _0
+          position: _0
       tiago_dual_1:
         path: tiago_dual.xml
         apply:
@@ -40,6 +41,7 @@ simulations:
           body: _1
           geom: _1
           joint: _1
+          position: _1
     config:
       max_time_step: 0.01
       min_time_step: 0.001

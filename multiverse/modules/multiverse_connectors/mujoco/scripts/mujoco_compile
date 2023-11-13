@@ -139,13 +139,36 @@ def modify_robot(save_dir_path: str, robot: Robot) -> str:
             exclude_element.set("body2", f"{body2_name}")
             exclude_element.set("name", f"{body1_name}_{body2_name}")
 
+    joint_suffix = robot.suffix["joint"]
+    for actuator_element in root.findall("actuator"):
+        for actuator_type in {"general", "motor", "position", "velocity"}:
+            for element in actuator_element.findall(actuator_type):
+                joint_name = element.get("joint")
+                joint_name = f"{joint_name}{joint_suffix}"
+                element.set("joint", joint_name)
+                element_name = element.get("name")
+                element_name = f"{element_name}{joint_suffix}"
+                element.set("name", element_name)
+
+    for equality_element in root.findall("equality"):
+         for joint_element in equality_element.findall("joint"):
+            joint1_name = joint_element.get("joint1")
+            joint1_name = f"{joint1_name}{joint_suffix}"
+            joint_element.set("joint1", joint1_name)
+            joint2_name = joint_element.get("joint2")
+            joint2_name = f"{joint2_name}{joint_suffix}"
+            joint_element.set("joint2", f"{joint2_name}")
+
     for element_type, attributes in robot.apply.items():
         for attribute_name, attribute_props in attributes.items():
             if isinstance(attribute_props, dict):
                 for attribute_child_name, attribute_child_prop in attribute_props.items():
                     for element in list(root.iter(element_type)):
                         if element.get("name") == attribute_name:
-                            element.set(attribute_child_name, " ".join(map(str, attribute_child_prop)))
+                            if isinstance(attribute_child_prop, list):
+                                element.set(attribute_child_name, " ".join(map(str, attribute_child_prop)))
+                            elif isinstance(attribute_child_prop, int):
+                                element.set(attribute_child_name, str(attribute_child_prop))
             elif isinstance(attribute_props, list):
                 for element in list(root.iter(element_type)):
                     element.set(attribute_name, " ".join(map(str, attribute_props)))
