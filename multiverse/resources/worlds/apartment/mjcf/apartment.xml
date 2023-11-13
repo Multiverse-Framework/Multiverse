@@ -2,7 +2,7 @@
 <mujoco model="world">
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<compiler angle="radian"/>
-  	<option timestep="0.001"/>
+  	<option timestep="0.002"/>
 	
 	<default>
 		<default class="visual">

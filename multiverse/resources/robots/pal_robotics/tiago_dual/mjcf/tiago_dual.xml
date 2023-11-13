@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <mujoco model="tiago_dual">
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
-	<option timestep="0.001" gravity="0 0 -9.81">
+	<option timestep="0.002" gravity="0 0 -9.81">
 		<flag contact="enable" energy="enable"/>
 	</option>
 	<default>
@@ -75,45 +75,45 @@
 									</body>
 								</body>
 							</body>
-							<body name="arm_left_1_link" pos="0.02556 0.19 -0.17100000000000004" quat="4.329780281177467e-17 0.7071067811865476 0.7071067811865475 4.3297802811774664e-17">
+							<body gravcomp="1" name="arm_left_1_link" pos="0.02556 0.19 -0.17100000000000004" quat="4.329780281177467e-17 0.7071067811865476 0.7071067811865475 4.3297802811774664e-17">
 								<geom name="arm_left_1_link_collision_0" pos="0.0 0.0 0.0" quat="0.0 1.0 0.0 0.0" class="collision" type="mesh" mesh="arm_1_collision_collision1d0_1d0_1d0"/>
 								<joint name="arm_left_1_joint" pos="0.0 0.0 2.7755575615628914e-17" type="hinge" range="-1.1780972450961724 1.5707963267948966" axis="0.0 0.0 1.0"/>
-								<body name="arm_left_2_link" pos="0.125 -0.019500000000000003 0.031000000000000028" quat="0.7071067811865476 0.7071067811865475 -3.189250306701418e-17 3.1892503067014186e-17">
+								<body gravcomp="1" name="arm_left_2_link" pos="0.125 -0.019500000000000003 0.031000000000000028" quat="0.7071067811865476 0.7071067811865475 -3.189250306701418e-17 3.1892503067014186e-17">
 									<geom name="arm_left_2_link_collision_0" pos="0.0 0.0 0.0" quat="0.0 0.0 0.0 1.0" class="collision" type="mesh" mesh="arm_2_collision_collision1d01d0_1d0"/>
 									<joint name="arm_left_2_joint" pos="3.469446951953614e-18 -4.010654775073297e-33 2.7755575615628914e-17" type="hinge" range="-1.1780972450961724 1.5707963267948966" axis="0.0 0.0 1.0"/>
-									<body name="arm_left_3_link" pos="0.08949999999999997 0.0 -0.0015000000000000013" quat="0.5000000000000001 0.5 0.5 0.5">
+									<body gravcomp="1" name="arm_left_3_link" pos="0.08949999999999997 0.0 -0.0015000000000000013" quat="0.5000000000000001 0.5 0.5 0.5">
 										<geom name="arm_left_3_link_collision_0" pos="0.0 0.0 0.0" quat="0.0 0.0 0.0 1.0" class="collision" type="mesh" mesh="arm_3_collision_collision1d01d0_1d0"/>
 										<joint name="arm_left_3_joint" pos="3.274080905458301e-33 -1.301042606982596e-18 -2.7755575615628914e-17" type="hinge" range="-0.7853981633974483 3.9269908169872414" axis="0.0 0.0 1.0"/>
-										<body name="arm_left_4_link" pos="-0.020000000000000018 -0.026999999999999996 0.22200000000000003" quat="0.5 0.5000000000000001 -0.5000000000000001 0.5">
+										<body gravcomp="1" name="arm_left_4_link" pos="-0.020000000000000018 -0.026999999999999996 0.22200000000000003" quat="0.5 0.5000000000000001 -0.5000000000000001 0.5">
 											<geom name="arm_left_4_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_4_collision_collision_1d0_1d0_1d0"/>
 											<joint name="arm_left_4_joint" pos="2.775557561562892e-17 -1.7347234759768056e-17 -3.469446951953608e-18" type="hinge" range="-0.39269908169872414 2.356194490192345" axis="0.0 0.0 1.0"/>
-											<body name="arm_left_5_link" pos="0.16200000000000014 -0.020000000000000018 -0.027000000000000007" quat="0.7071067811865476 5.551115123125785e-17 -0.7071067811865475 -5.551115123125789e-17">
+											<body gravcomp="1" name="arm_left_5_link" pos="0.16200000000000014 -0.020000000000000018 -0.027000000000000007" quat="0.7071067811865476 5.551115123125785e-17 -0.7071067811865475 -5.551115123125789e-17">
 												<geom name="arm_left_5_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_5_collision_wrist_2017_collision_1d0_1d0_1d0"/>
 												<joint name="arm_left_5_joint" pos="1.7347234759768022e-17 6.938893903907336e-18 -1.3877787807814454e-16" type="hinge" range="-2.0943951023931953 2.0943951023931953" axis="0.0 0.0 1.0"/>
-												<body name="arm_left_6_link" pos="0.0 0.0 -0.15000000000000002" quat="0.5000000000000001 -0.4999999999999999 -0.5 -0.5">
+												<body gravcomp="1" name="arm_left_6_link" pos="0.0 0.0 -0.15000000000000002" quat="0.5000000000000001 -0.4999999999999999 -0.5 -0.5">
 													<geom name="arm_left_6_link_collision_0" pos="0.0 0.0 0.0" quat="0.0 1.0 0.0 0.0" class="collision" type="mesh" mesh="arm_6_collision_wrist_2017_collision_1d01d01d0"/>
 													<joint name="arm_left_6_joint" pos="1.4448635242662495e-32 2.775557561562892e-17 9.244463733058733e-33" type="hinge" range="-1.413716694115407 1.413716694115407" axis="0.0 0.0 1.0"/>
-													<body name="arm_left_7_link" pos="0.0 0.0 0.0" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
+													<body gravcomp="1" name="arm_left_7_link" pos="0.0 0.0 0.0" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
 														<joint name="arm_left_7_joint" pos="0.0 0.0 -0.0" type="hinge" range="-2.0943951023931953 2.0943951023931953" axis="0.0 0.0 1.0"/>
-														<body name="arm_left_tool_link" pos="-6.938893903907228e-18 0.0 -0.04600000000000004" quat="0.49999999999999994 -0.49999999999999994 0.5 0.5000000000000001">
+														<body gravcomp="1" name="arm_left_tool_link" pos="-6.938893903907228e-18 0.0 -0.04600000000000004" quat="0.49999999999999994 -0.49999999999999994 0.5 0.5000000000000001">
 															<geom name="arm_left_tool_link_collision_0" pos="0.001 0.0 0.0" quat="0.7071067811865476 0.0 0.7071067811865475 0.0" class="collision" type="cylinder" size="0.005 0.0025"/>
-															<body name="wrist_left_ft_link" pos="0.007850000000000024 0.0 1.1102230246251565e-16" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
+															<body gravcomp="1" name="wrist_left_ft_link" pos="0.007850000000000024 0.0 1.1102230246251565e-16" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
 																<geom name="wrist_left_ft_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.0225 0.00785"/>
-																<body name="wrist_left_ft_tool_link" pos="0.0 0.0 0.012724999999999875" quat="0.5000000000000001 -0.5 -0.5 -0.4999999999999999">
+																<body gravcomp="1" name="wrist_left_ft_tool_link" pos="0.0 0.0 0.012724999999999875" quat="0.5000000000000001 -0.5 -0.5 -0.4999999999999999">
 																	<geom name="wrist_left_ft_tool_link_collision_0" pos="0.0 0.0 0.0" quat="0.7071067811865476 0.0 0.7071067811865475 0.0" class="collision" type="cylinder" size="0.025 0.004875"/>
-																	<body name="gripper_left_link" pos="0.010000000000000231 0.0 0.0" quat="-1.5265566588595907e-16 -0.7071067811865475 -9.813077866773593e-17 0.7071067811865476">
+																	<body gravcomp="1" name="gripper_left_link" pos="0.010000000000000231 0.0 0.0" quat="-1.5265566588595907e-16 -0.7071067811865475 -9.813077866773593e-17 0.7071067811865476">
 																		<geom name="gripper_left_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="gripper_link_collision_collision1d01d01d0"/>
-																		<body name="gripper_left_grasping_frame" pos="0.0 0.0 -0.1200000000000001" quat="0.49999816339744846 -0.49999999999662703 0.49999999999662703 0.5000018366025516"/>
-																		<body name="gripper_left_right_finger_link" pos="0.0 6.938893903907228e-18 -2.220446049250313e-16" quat="1.0 1.5407439555097887e-32 0.0 -2.465190328815662e-32">
+																		<body gravcomp="1" name="gripper_left_grasping_frame" pos="0.0 0.0 -0.1200000000000001" quat="0.49999816339744846 -0.49999999999662703 0.49999999999662703 0.5000018366025516"/>
+																		<body gravcomp="1" name="gripper_left_right_finger_link" pos="0.0 6.938893903907228e-18 -2.220446049250313e-16" quat="1.0 1.5407439555097887e-32 0.0 -2.465190328815662e-32">
 																			<geom name="gripper_left_right_finger_link_collision_0" pos="0.005 0.0 -0.165" quat="4.632679487995776e-05 0.0 0.0 0.999999998926914" class="collision" type="box" size="0.005000000000000001 0.025 0.055"/>
 																			<joint name="gripper_left_right_finger_joint" pos="-2.220446049250313e-16 2.4651903288156597e-31 6.93889390390718e-18" type="slide" range="0.0 0.04500000178813934" axis="0.9999999999999998 0.0 2.220446049250313e-16"/>
 																		</body>
-																		<body name="gripper_left_left_finger_link" pos="0.0 6.938893903907228e-18 -2.220446049250313e-16" quat="1.0 1.5407439555097887e-32 0.0 -2.465190328815662e-32">
+																		<body gravcomp="1" name="gripper_left_left_finger_link" pos="0.0 6.938893903907228e-18 -2.220446049250313e-16" quat="1.0 1.5407439555097887e-32 0.0 -2.465190328815662e-32">
 																			<geom name="gripper_left_left_finger_link_collision_0" pos="-0.005 0.0 -0.165" quat="4.632679487995776e-05 0.0 0.0 0.999999998926914" class="collision" type="box" size="0.005000000000000001 0.025 0.055"/>
 																			<joint name="gripper_left_left_finger_joint" pos="-2.220446049250313e-16 2.4651903288156597e-31 6.93889390390718e-18" type="slide" range="0.0 0.04500000178813934" axis="-0.9999999999999998 0.0 2.220446049250313e-16"/>
 																		</body>
 																	</body>
-																	<body name="gripper_left_tool_link" pos="0.010000000000000231 0.0 0.0" quat="-1.5265566588595907e-16 -0.7071067811865475 -9.813077866773593e-17 0.7071067811865476"/>
+																	<body gravcomp="1" name="gripper_left_tool_link" pos="0.010000000000000231 0.0 0.0" quat="-1.5265566588595907e-16 -0.7071067811865475 -9.813077866773593e-17 0.7071067811865476"/>
 																</body>
 															</body>
 														</body>
@@ -124,45 +124,45 @@
 									</body>
 								</body>
 							</body>
-							<body name="arm_right_1_link" pos="0.02556 -0.19 -0.17100000000000004" quat="0.7071067811865476 0.0 0.0 -0.7071067811865475">
+							<body gravcomp="1" name="arm_right_1_link" pos="0.02556 -0.19 -0.17100000000000004" quat="0.7071067811865476 0.0 0.0 -0.7071067811865475">
 								<geom name="arm_right_1_link_collision_0" pos="0.0 0.0 0.0" quat="0.0 0.0 1.0 0.0" class="collision" type="mesh" mesh="arm_1_collision_collision1d0_1d01d0"/>
 								<joint name="arm_right_1_joint" pos="0.0 0.0 2.7755575615628914e-17" type="hinge" range="-1.1780972450961724 1.5707963267948966" axis="0.0 0.0 1.0"/>
-								<body name="arm_right_2_link" pos="0.125 -0.019500000000000003 -0.031000000000000028" quat="0.7071067811865476 -0.7071067811865475 0.0 0.0">
+								<body gravcomp="1" name="arm_right_2_link" pos="0.125 -0.019500000000000003 -0.031000000000000028" quat="0.7071067811865476 -0.7071067811865475 0.0 0.0">
 									<geom name="arm_right_2_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_2_collision_collision1d01d01d0"/>
 									<joint name="arm_right_2_joint" pos="-3.469446951953614e-18 7.703719777548943e-34 2.7755575615628914e-17" type="hinge" range="-1.1780972450961724 1.5707963267948966" axis="0.0 0.0 1.0"/>
-									<body name="arm_right_3_link" pos="0.08949999999999997 0.0 -0.0015000000000000013" quat="0.5000000000000001 -0.5 -0.4999999999999999 0.5">
+									<body gravcomp="1" name="arm_right_3_link" pos="0.08949999999999997 0.0 -0.0015000000000000013" quat="0.5000000000000001 -0.5 -0.4999999999999999 0.5">
 										<geom name="arm_right_3_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_3_collision_collision1d01d01d0"/>
 										<joint name="arm_right_3_joint" pos="6.259272319258517e-33 -1.3010426069825992e-18 2.7755575615628914e-17" type="hinge" range="-0.7853981633974483 3.9269908169872414" axis="0.0 0.0 1.0"/>
-										<body name="arm_right_4_link" pos="-0.020000000000000018 -0.027 -0.22199999999999992" quat="0.5000000000000001 -0.5 -0.5 -0.4999999999999999">
+										<body gravcomp="1" name="arm_right_4_link" pos="-0.020000000000000018 -0.027 -0.22199999999999992" quat="0.5000000000000001 -0.5 -0.5 -0.4999999999999999">
 											<geom name="arm_right_4_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_4_collision_collision1d01d01d0"/>
 											<joint name="arm_right_4_joint" pos="8.326672684688674e-17 -1.7347234759768046e-17 2.465190328815662e-32" type="hinge" range="-0.39269908169872414 2.356194490192345" axis="0.0 0.0 1.0"/>
-											<body name="arm_right_5_link" pos="-0.16200000000000003 0.019999999999999907 0.027000000000000003" quat="0.7071067811865476 5.551115123125783e-17 -0.7071067811865475 -5.551115123125784e-17">
+											<body gravcomp="1" name="arm_right_5_link" pos="-0.16200000000000003 0.019999999999999907 0.027000000000000003" quat="0.7071067811865476 5.551115123125783e-17 -0.7071067811865475 -5.551115123125784e-17">
 												<geom name="arm_right_5_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_5_collision_wrist_2017_collision1d01d01d0"/>
 												<joint name="arm_right_5_joint" pos="9.367506770274758e-17 3.469446951953571e-18 -2.7755575615628907e-17" type="hinge" range="-2.0943951023931953 2.0943951023931953" axis="0.0 0.0 1.0"/>
-												<body name="arm_right_6_link" pos="0.0 0.0 0.15000000000000002" quat="0.5000000000000001 -0.4999999999999999 -0.5 -0.5">
+												<body gravcomp="1" name="arm_right_6_link" pos="0.0 0.0 0.15000000000000002" quat="0.5000000000000001 -0.4999999999999999 -0.5 -0.5">
 													<geom name="arm_right_6_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_6_collision_wrist_2017_collision1d01d01d0"/>
 													<joint name="arm_right_6_joint" pos="-4.357881996052619e-33 2.775557561562892e-17 -1.8488927466117464e-32" type="hinge" range="-1.413716694115407 1.413716694115407" axis="0.0 0.0 1.0"/>
-													<body name="arm_right_7_link" pos="0.0 0.0 0.0" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
+													<body gravcomp="1" name="arm_right_7_link" pos="0.0 0.0 0.0" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
 														<joint name="arm_right_7_joint" pos="0.0 -0.0 0.0" type="hinge" range="-2.0943951023931953 2.0943951023931953" axis="0.0 0.0 1.0"/>
-														<body name="arm_right_tool_link" pos="0.0 0.0 0.04600000000000004" quat="-0.5 0.5 0.4999999999999999 0.5000000000000001">
+														<body gravcomp="1" name="arm_right_tool_link" pos="0.0 0.0 0.04600000000000004" quat="-0.5 0.5 0.4999999999999999 0.5000000000000001">
 															<geom name="arm_right_tool_link_collision_0" pos="0.001 0.0 0.0" quat="0.7071067811865476 0.0 0.7071067811865475 0.0" class="collision" type="cylinder" size="0.005 0.0025"/>
-															<body name="wrist_right_ft_link" pos="0.007849999999999913 0.0 0.0" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
+															<body gravcomp="1" name="wrist_right_ft_link" pos="0.007849999999999913 0.0 0.0" quat="0.5000000000000001 0.5 0.4999999999999999 0.5">
 																<geom name="wrist_right_ft_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.0225 0.00785"/>
-																<body name="wrist_right_ft_tool_link" pos="0.0 0.0 0.012724999999999875" quat="0.5000000000000001 -0.5 -0.5 -0.4999999999999999">
+																<body gravcomp="1" name="wrist_right_ft_tool_link" pos="0.0 0.0 0.012724999999999875" quat="0.5000000000000001 -0.5 -0.5 -0.4999999999999999">
 																	<geom name="wrist_right_ft_tool_link_collision_0" pos="0.0 0.0 0.0" quat="0.7071067811865476 0.0 0.7071067811865475 0.0" class="collision" type="cylinder" size="0.025 0.004875"/>
-																	<body name="gripper_right_link" pos="0.010000000000000009 0.0 0.0" quat="1.6653345369377356e-16 0.7071067811865476 5.551115123125793e-17 -0.7071067811865475">
+																	<body gravcomp="1" name="gripper_right_link" pos="0.010000000000000009 0.0 0.0" quat="1.6653345369377356e-16 0.7071067811865476 5.551115123125793e-17 -0.7071067811865475">
 																		<geom name="gripper_right_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="gripper_link_collision_collision1d01d01d0"/>
-																		<body name="gripper_right_grasping_frame" pos="-1.1102230246251565e-16 0.0 -0.11999999999999988" quat="0.4999981633974485 -0.49999999999662703 0.4999999999966269 0.5000018366025516"/>
-																		<body name="gripper_right_right_finger_link" pos="0.0 0.0 0.0" quat="1.0 -1.495388688159114e-33 -2.465190328815662e-32 -6.162975822039152e-33">
+																		<body gravcomp="1" name="gripper_right_grasping_frame" pos="-1.1102230246251565e-16 0.0 -0.11999999999999988" quat="0.4999981633974485 -0.49999999999662703 0.4999999999966269 0.5000018366025516"/>
+																		<body gravcomp="1" name="gripper_right_right_finger_link" pos="0.0 0.0 0.0" quat="1.0 -1.495388688159114e-33 -2.465190328815662e-32 -6.162975822039152e-33">
 																			<geom name="gripper_right_right_finger_link_collision_0" pos="0.005 0.0 -0.165" quat="4.632679487995776e-05 0.0 0.0 0.999999998926914" class="collision" type="box" size="0.005000000000000001 0.025 0.055"/>
 																			<joint name="gripper_right_right_finger_joint" pos="0.0 0.0 0.0" type="slide" range="0.0 0.04500000178813934" axis="0.9999999999999998 0.0 2.220446049250313e-16"/>
 																		</body>
-																		<body name="gripper_right_left_finger_link" pos="0.0 0.0 0.0" quat="1.0 -1.495388688159114e-33 -2.465190328815662e-32 -6.162975822039152e-33">
+																		<body gravcomp="1" name="gripper_right_left_finger_link" pos="0.0 0.0 0.0" quat="1.0 -1.495388688159114e-33 -2.465190328815662e-32 -6.162975822039152e-33">
 																			<geom name="gripper_right_left_finger_link_collision_0" pos="-0.005 0.0 -0.165" quat="4.632679487995776e-05 0.0 0.0 0.999999998926914" class="collision" type="box" size="0.005000000000000001 0.025 0.055"/>
 																			<joint name="gripper_right_left_finger_joint" pos="0.0 0.0 0.0" type="slide" range="0.0 0.04500000178813934" axis="-0.9999999999999998 0.0 2.220446049250313e-16"/>
 																		</body>
 																	</body>
-																	<body name="gripper_right_tool_link" pos="0.010000000000000009 0.0 0.0" quat="1.6653345369377356e-16 0.7071067811865476 5.551115123125793e-17 -0.7071067811865475"/>
+																	<body gravcomp="1" name="gripper_right_tool_link" pos="0.010000000000000009 0.0 0.0" quat="1.6653345369377356e-16 0.7071067811865476 5.551115123125793e-17 -0.7071067811865475"/>
 																</body>
 															</body>
 														</body>
@@ -246,19 +246,19 @@
 		<general name="torso_lift_actuator" joint="torso_lift_joint" gaintype="fixed" biastype="affine" gainprm="10000" biasprm="0 -10000 -4000" ctrlrange="0.0 0.8" />
 		<general name="head_1_actuator" joint="head_1_joint" gaintype="fixed" biastype="affine" gainprm="100" biasprm="0 -100 -20" ctrlrange="-1.3089969389957472 1.3089969389957472" />
 		<general name="head_2_actuator" joint="head_2_joint" gaintype="fixed" biastype="affine" gainprm="100" biasprm="0 -100 -20" ctrlrange="-1.0471975511965976 0.7853981633974483" />
-		<general name="arm_left_1_actuator" joint="arm_left_1_joint" gaintype="fixed" biastype="affine" gainprm="1000" biasprm="0 -1000 -100" ctrlrange="-1.1780972450961724 1.5707963267948966" />
-		<general name="arm_left_2_actuator" joint="arm_left_2_joint" gaintype="fixed" biastype="affine" gainprm="1000" biasprm="0 -1000 -100" ctrlrange="-1.1780972450961724 1.5707963267948966" />
-		<general name="arm_left_3_actuator" joint="arm_left_3_joint" gaintype="fixed" biastype="affine" gainprm="100" biasprm="0 -100 -10" ctrlrange="-0.7853981633974483 3.9269908169872414" />
+		<general name="arm_left_1_actuator" joint="arm_left_1_joint" gaintype="fixed" biastype="affine" gainprm="500" biasprm="0 -500 -100" ctrlrange="-1.1780972450961724 1.5707963267948966" />
+		<general name="arm_left_2_actuator" joint="arm_left_2_joint" gaintype="fixed" biastype="affine" gainprm="500" biasprm="0 -500 -100" ctrlrange="-1.1780972450961724 1.5707963267948966" />
+		<general name="arm_left_3_actuator" joint="arm_left_3_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -5" ctrlrange="-0.7853981633974483 3.9269908169872414" />
 		<general name="arm_left_4_actuator" joint="arm_left_4_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -5" ctrlrange="-0.39269908169872414 2.356194490192345" />
-		<general name="arm_left_5_actuator" joint="arm_left_5_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -1" ctrlrange="-2.0943951023931953 2.0943951023931953" />
-		<general name="arm_left_6_actuator" joint="arm_left_6_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -1" ctrlrange="-1.413716694115407 1.413716694115407" />
-		<general name="arm_left_7_actuator" joint="arm_left_7_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -1" ctrlrange="-2.0943951023931953 2.0943951023931953" />
-		<general name="arm_right_1_actuator" joint="arm_right_1_joint" gaintype="fixed" biastype="affine" gainprm="1000" biasprm="0 -1000 -100" ctrlrange="-1.1780972450961724 1.5707963267948966" />
-		<general name="arm_right_2_actuator" joint="arm_right_2_joint" gaintype="fixed" biastype="affine" gainprm="1000" biasprm="0 -1000 -100" ctrlrange="-1.1780972450961724 1.5707963267948966" />
-		<general name="arm_right_3_actuator" joint="arm_right_3_joint" gaintype="fixed" biastype="affine" gainprm="100" biasprm="0 -100 -10" ctrlrange="-0.7853981633974483 3.9269908169872414" />
+		<general name="arm_left_5_actuator" joint="arm_left_5_joint" gaintype="fixed" biastype="affine" gainprm="5" biasprm="0 -5 -1" ctrlrange="-2.0943951023931953 2.0943951023931953" />
+		<general name="arm_left_6_actuator" joint="arm_left_6_joint" gaintype="fixed" biastype="affine" gainprm="5" biasprm="0 -5 -1" ctrlrange="-1.413716694115407 1.413716694115407" />
+		<general name="arm_left_7_actuator" joint="arm_left_7_joint" gaintype="fixed" biastype="affine" gainprm="5" biasprm="0 -5 -0.1" ctrlrange="-2.0943951023931953 2.0943951023931953" />
+		<general name="arm_right_1_actuator" joint="arm_right_1_joint" gaintype="fixed" biastype="affine" gainprm="500" biasprm="0 -500 -100" ctrlrange="-1.1780972450961724 1.5707963267948966" />
+		<general name="arm_right_2_actuator" joint="arm_right_2_joint" gaintype="fixed" biastype="affine" gainprm="500" biasprm="0 -500 -100" ctrlrange="-1.1780972450961724 1.5707963267948966" />
+		<general name="arm_right_3_actuator" joint="arm_right_3_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -5" ctrlrange="-0.7853981633974483 3.9269908169872414" />
 		<general name="arm_right_4_actuator" joint="arm_right_4_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -5" ctrlrange="-0.39269908169872414 2.356194490192345" />
-		<general name="arm_right_5_actuator" joint="arm_right_5_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -1" ctrlrange="-2.0943951023931953 2.0943951023931953" />
-		<general name="arm_right_6_actuator" joint="arm_right_6_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -1" ctrlrange="-1.413716694115407 1.413716694115407" />
-		<general name="arm_right_7_actuator" joint="arm_right_7_joint" gaintype="fixed" biastype="affine" gainprm="50" biasprm="0 -50 -1" ctrlrange="-2.0943951023931953 2.0943951023931953" />
+		<general name="arm_right_5_actuator" joint="arm_right_5_joint" gaintype="fixed" biastype="affine" gainprm="5" biasprm="0 -5 -1" ctrlrange="-2.0943951023931953 2.0943951023931953" />
+		<general name="arm_right_6_actuator" joint="arm_right_6_joint" gaintype="fixed" biastype="affine" gainprm="5" biasprm="0 -5 -1" ctrlrange="-1.413716694115407 1.413716694115407" />
+		<general name="arm_right_7_actuator" joint="arm_right_7_joint" gaintype="fixed" biastype="affine" gainprm="5" biasprm="0 -5 -0.1" ctrlrange="-2.0943951023931953 2.0943951023931953" />
 	</actuator>
 </mujoco>

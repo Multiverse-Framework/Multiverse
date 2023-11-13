@@ -4,7 +4,7 @@ resources:
   - ../objects
 
 worlds:
-  tiago_dual_in_apartment:
+  world:
     rtf_desired: 1
 
 simulations:
@@ -22,7 +22,7 @@ simulations:
               pos: [1.5, 2.5, 0]
         disable_self_collision: auto
     config:
-      max_time_step: 0.001
+      max_time_step: 0.004
       min_time_step: 0.001
 
 multiverse_server:
