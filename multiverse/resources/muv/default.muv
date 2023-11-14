@@ -165,29 +165,29 @@ multiverse_clients:
           topic: /cmd_vel
           body: tiago_dual_1
 
-  ros_control:
-    - meta_data:
-        world_name: world_1
-        length_unit: m
-        angle_unit: rad
-        mass_unit: kg
-        time_unit: s
-        handedness: rhs
-      host: "tcp://127.0.0.1"
-      port: 7800
-      controller_manager:
-        robot: ur5e
-        robot_description: /robot_description
-        urdf: ur5e.urdf
-        config: ur5e/config/ros_control.yaml
-        actuators:
-          shoulder_pan: shoulder_pan_joint
-          shoulder_lift: shoulder_lift_joint
-          elbow: elbow_joint
-          wrist_1: wrist_1_joint
-          wrist_2: wrist_2_joint
-          wrist_3: wrist_3_joint
-        controllers:
-          spawn:
-            - joint_state_controller
-              joint_trajectory_controller
+    ros_control:
+      - meta_data:
+          world_name: world_1
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        host: "tcp://127.0.0.1"
+        port: 7800
+        controller_manager:
+          robot: ur5e
+          robot_description: /robot_description
+          urdf: ur5e.urdf
+          config: ur5e/config/ros_control.yaml
+          actuators:
+            shoulder_pan: shoulder_pan_joint
+            shoulder_lift: shoulder_lift_joint
+            elbow: elbow_joint
+            wrist_1: wrist_1_joint
+            wrist_2: wrist_2_joint
+            wrist_3: wrist_3_joint
+          controllers:
+            spawn:
+              - joint_state_controller
+                joint_trajectory_controller

@@ -103,55 +103,59 @@ multiverse_clients:
           port: 7200
           topic: /cmd_vel
           body: tiago_dual
+
+    ros_run:
+      rviz:
+        config: tiago_dual/config/rviz.rviz
+        robot_descriptions:
+          tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
+          apartment_description: apartment/urdf/apartment.urdf
+
+      map_server:
+        map: apartment/map/apartment.yaml
+
+      move_base:
+        base_global_planner: navfn/NavfnROS
+        base_local_planner: dwa_local_planner/DWAPlannerROS
+        config: tiago_dual/config/move_base.yaml
   
-  ros_control:
-    - meta_data:
-        world_name: world
-        length_unit: m
-        angle_unit: rad
-        mass_unit: kg
-        time_unit: s
-        handedness: rhs
-      host: "tcp://127.0.0.1"
-      port: 7800
-      controller_manager:
-        robot: tiago_dual
-        robot_description: /robot_description
-        urdf: tiago_dual/urdf/tiago_dual.urdf
-        config: tiago_dual/config/ros_control.yaml
-        actuators:
-          torso_lift_actuator: torso_lift_joint
-          head_1_actuator: head_1_joint
-          head_2_actuator: head_2_joint
-          arm_left_1_actuator: arm_left_1_joint
-          arm_left_2_actuator: arm_left_2_joint
-          arm_left_3_actuator: arm_left_3_joint
-          arm_left_4_actuator: arm_left_4_joint
-          arm_left_5_actuator: arm_left_5_joint
-          arm_left_6_actuator: arm_left_6_joint
-          arm_left_7_actuator: arm_left_7_joint
-          arm_right_1_actuator: arm_right_1_joint
-          arm_right_2_actuator: arm_right_2_joint
-          arm_right_3_actuator: arm_right_3_joint
-          arm_right_4_actuator: arm_right_4_joint
-          arm_right_5_actuator: arm_right_5_joint
-          arm_right_6_actuator: arm_right_6_joint
-          arm_right_7_actuator: arm_right_7_joint
-        controllers:
-          spawn:
-            - joint_state_controller
-              torso_controller
-              head_controller
-              arm_left_controller
-              arm_right_controller
-
-  rviz:
-    config: tiago_dual/config/rviz.rviz
-    robot_descriptions:
-      tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
-      apartment_description: apartment/urdf/apartment.urdf
-
-  move_base:
-    base_global_planner: navfn/NavfnROS
-    base_local_planner: dwa_local_planner/DWAPlannerROS
-    config: tiago_dual/config/move_base.yaml
+    ros_control:
+      - meta_data:
+          world_name: world
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        host: "tcp://127.0.0.1"
+        port: 7800
+        controller_manager:
+          robot: tiago_dual
+          robot_description: /robot_description
+          urdf: tiago_dual/urdf/tiago_dual.urdf
+          config: tiago_dual/config/ros_control.yaml
+          actuators:
+            torso_lift_actuator: torso_lift_joint
+            head_1_actuator: head_1_joint
+            head_2_actuator: head_2_joint
+            arm_left_1_actuator: arm_left_1_joint
+            arm_left_2_actuator: arm_left_2_joint
+            arm_left_3_actuator: arm_left_3_joint
+            arm_left_4_actuator: arm_left_4_joint
+            arm_left_5_actuator: arm_left_5_joint
+            arm_left_6_actuator: arm_left_6_joint
+            arm_left_7_actuator: arm_left_7_joint
+            arm_right_1_actuator: arm_right_1_joint
+            arm_right_2_actuator: arm_right_2_joint
+            arm_right_3_actuator: arm_right_3_joint
+            arm_right_4_actuator: arm_right_4_joint
+            arm_right_5_actuator: arm_right_5_joint
+            arm_right_6_actuator: arm_right_6_joint
+            arm_right_7_actuator: arm_right_7_joint
+          controllers:
+            spawn:
+              - joint_state_controller
+                torso_controller
+                head_controller
+                arm_left_controller
+                arm_right_controller

@@ -65,29 +65,29 @@ multiverse_clients:
           rate: 60
           root_frame_id: map
 
-  ros_control:
-  - meta_data:
-      world_name: world
-      length_unit: m
-      angle_unit: rad
-      mass_unit: kg
-      time_unit: s
-      handedness: rhs
-    host: "tcp://127.0.0.1"
-    port: 7800
-    controller_manager:
-      robot: crane
-      robot_description: /robot_description
-      urdf: crane.urdf
-      config: crane/config/ros_control.yaml
-      actuators:
-        theta1_slewing_actuator: theta1_slewing_joint
-        theta2_boom_actuator: theta2_boom_joint
-        theta3_arm_actuator: theta3_arm_joint
-        q4_big_telescope_actuator: q4_big_telescope
-        theta8_rotator_actuator: theta8_rotator_joint
-        theta10_outer_jaw_actuator: theta10_outer_jaw_joint
-      controllers:
-        spawn:
-          - joint_state_controller
-            joint_trajectory_controller
+    ros_control:
+    - meta_data:
+        world_name: world
+        length_unit: m
+        angle_unit: rad
+        mass_unit: kg
+        time_unit: s
+        handedness: rhs
+      host: "tcp://127.0.0.1"
+      port: 7800
+      controller_manager:
+        robot: crane
+        robot_description: /robot_description
+        urdf: crane.urdf
+        config: crane/config/ros_control.yaml
+        actuators:
+          theta1_slewing_actuator: theta1_slewing_joint
+          theta2_boom_actuator: theta2_boom_joint
+          theta3_arm_actuator: theta3_arm_joint
+          q4_big_telescope_actuator: q4_big_telescope
+          theta8_rotator_actuator: theta8_rotator_joint
+          theta10_outer_jaw_actuator: theta10_outer_jaw_joint
+        controllers:
+          spawn:
+            - joint_state_controller
+              joint_trajectory_controller

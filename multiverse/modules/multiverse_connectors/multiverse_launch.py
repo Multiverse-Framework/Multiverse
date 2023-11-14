@@ -78,7 +78,7 @@ def main():
         for resources_path in resources_paths
     ]
 
-    processes = {"multiverse_server": [], "ros": [], "ros_control": [], "rviz": []}
+    processes = {"multiverse_server": [], "ros": [], "ros_run": [], "ros_control": []}
     simulators = {"mujoco"}
 
     world_dict = data.get("worlds", {})
@@ -140,29 +140,30 @@ def main():
             cmd = ["roscore"]
             process = run_subprocess(cmd)
             processes["ros"] = [process]
-
-        if "ros" in multiverse_client_dict:
+        
+        ros_dict = multiverse_client_dict.get("ros", {})
+        if "ros" in multiverse_client_dict and any(key in ros_dict for key in ["services", "publishers", "subscribers"]):
             cmd = [
                 "rosrun",
                 "multiverse_socket",
                 "multiverse_socket_node.py",
                 f'--multiverse_server="{multiverse_server_dict}"',
             ]
-            if "services" in multiverse_client_dict["ros"]:
-                ros_services_dict = multiverse_client_dict["ros"]["services"]
+            if "services" in ros_dict:
+                ros_services_dict = ros_dict["services"]
                 cmd.append(f'--services="{ros_services_dict}"')
-            if "publishers" in multiverse_client_dict["ros"]:
-                ros_publishers_dict = multiverse_client_dict["ros"]["publishers"]
+            if "publishers" in ros_dict:
+                ros_publishers_dict = ros_dict["publishers"]
                 cmd.append(f'--publishers="{ros_publishers_dict}"')
-            if "subscribers" in multiverse_client_dict["ros"]:
-                ros_subscribers_dict = multiverse_client_dict["ros"]["subscribers"]
+            if "subscribers" in ros_dict:
+                ros_subscribers_dict = ros_dict["subscribers"]
                 cmd.append(f'--subscribers="{ros_subscribers_dict}"')
 
             process = run_subprocess(cmd)
             processes["ros"].append(process)
 
-        if "ros_control" in multiverse_client_dict or "rviz" in multiverse_client_dict:
-            import rospkg, rospy
+        if "ros_run" in ros_dict or "ros_control" in ros_dict:
+            import rospkg, rospy, rosparam
             rospy.init_node(name="multiverse_launch")
             rospack = rospkg.RosPack()
             multiverse_control_pkg_path = rospack.get_path("multiverse_control")
@@ -179,8 +180,61 @@ def main():
                 robot_urdf_str = robot_urdf_str.replace("file://", mesh_relpath_prefix)
                 return robot_urdf_str
 
-            if "ros_control" in multiverse_client_dict:
-                for ros_control_dict in multiverse_client_dict["ros_control"]:
+            if "ros_run" in ros_dict:
+                ros_run_dict = ros_dict["ros_run"]
+                if "rviz" in ros_run_dict:
+                    rviz_dict = ros_run_dict["rviz"]
+                    
+                    for robot_description, urdf_path in rviz_dict.get("robot_descriptions", {}).items():
+                        urdf_path = find_files(urdf_path)
+                        urdf_str = get_urdf_str(urdf_path)
+                        rospy.set_param(f"/{robot_description}", f"{urdf_str}")
+
+                    rviz_config_path = find_files(rviz_dict["config"])
+                    cmd = [
+                        "rosrun",
+                        "rviz",
+                        "rviz",
+                        "--display-config",
+                        f"{rviz_config_path}",
+                    ]
+                    process = run_subprocess(cmd)
+                    processes["ros_run"].append(process)
+
+                if "map_server" in ros_run_dict:
+                    map_server_dict = ros_run_dict["map_server"]
+                    map_path = find_files(map_server_dict["map"])
+                    cmd = [
+                        "rosrun",
+                        "map_server",
+                        "map_server",
+                        f"{map_path}",
+                    ]
+                    process = run_subprocess(cmd)
+                    processes["ros_run"].append(process)
+
+                if "move_base" in ros_run_dict:
+                    move_base_dict = ros_run_dict["move_base"]
+                    base_global_planner = move_base_dict.get("base_global_planner", "navfn/NavfnROS")
+                    base_local_planner = move_base_dict.get("base_local_planner", "dwa_local_planner/DWAPlannerROS")
+                    config_path = find_files(move_base_dict["config"])
+                    file = open(config_path, 'r')
+                    yamlfile = yaml.load(file)
+                    file.close()
+                    rosparam.upload_params('/move_base_node', yamlfile)
+                    cmd = [
+                        "rosrun",
+                        "move_base",
+                        "move_base",
+                        f"_base_global_planner:={base_global_planner}",
+                        f"base_local_planner:={base_local_planner}",
+                        f"{map_path}",
+                    ]
+                    process = run_subprocess(cmd)
+                    processes["ros_run"].append(process)                    
+
+            if "ros_control" in ros_dict:
+                for ros_control_dict in ros_dict["ros_control"]:
                     controller_manager = ros_control_dict["controller_manager"]
                     robot = controller_manager["robot"]
                     robot_description = controller_manager["robot_description"]
@@ -230,31 +284,12 @@ def main():
                         process = run_subprocess(cmd)
                         processes["ros_control"].append(process)
 
-            if "rviz" in multiverse_client_dict:
-                rviz_dict = multiverse_client_dict["rviz"]
-                
-                for robot_description, urdf_path in rviz_dict.get("robot_descriptions", {}).items():
-                    urdf_path = find_files(urdf_path)
-                    urdf_str = get_urdf_str(urdf_path)
-                    rospy.set_param(f"/{robot_description}", f"{urdf_str}")
-
-                rviz_config_path = find_files(rviz_dict["config"])
-                cmd = [
-                    "rosrun",
-                    "rviz",
-                    "rviz",
-                    "--display-config",
-                    f"{rviz_config_path}",
-                ]
-                process = run_subprocess(cmd)
-                processes["rviz"].append(process)
-
     try:
         processes["multiverse_server"][0].wait()
     except KeyboardInterrupt:
         print("CTRL+C detected in parent. Sending SIGINT to subprocess.")
-        for process in processes["rviz"]:
-            print(f"Terminate rviz with PID {process.pid}")
+        for process in processes["ros_run"]:
+            print(f"Terminate ros_run with PID {process.pid}")
             process.send_signal(signal.SIGINT)
             process.wait()
 
