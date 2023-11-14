@@ -1,0 +1,67 @@
+# Blender MTL File: 'None'
+# Material Count: 6
+
+newmtl _Game_Materials_Laborraum_M_Display_M_Display_001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/M_Display_M_Display_D.jpg
+
+newmtl _Game_Materials_Laborraum_M_Glass_Oven_Door_M_Glass_Oven_Do_001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl _Game_Materials_Laborraum_M_Icons_M_Icons_001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/M_Icons_M_Icons_D.jpg
+
+newmtl _Game_Materials_Laborraum_M_Metal_Fridge_M_Metal_Fridge_001
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/M_Metal_Fridge_M_Metal_Fridge_D.jpg
+
+newmtl _Game_Materials_Laborraum_M_Plastic_White_M_Plastic_White_012
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/M_Plastic_White_M_Plastic_White_D.jpg
+
+newmtl _Game_Materials_Laborraum_M_Rubber_Plastic_M_Rubber_Plastic_009
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures/M_Rubber_Plastic_M_Rubber_Plastic_D.jpg

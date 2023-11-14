@@ -8,7 +8,6 @@ import subprocess
 import re
 import signal
 from typing import List
-import rospy
 import xml.etree.ElementTree as ET
 import argparse
 
@@ -79,7 +78,7 @@ def main():
         for resources_path in resources_paths
     ]
 
-    processes = {"multiverse_server": [], "ros": [], "ros_control": []}
+    processes = {"multiverse_server": [], "ros": [], "ros_control": [], "rviz": []}
     simulators = {"mujoco"}
 
     world_dict = data.get("worlds", {})
@@ -162,68 +161,105 @@ def main():
             process = run_subprocess(cmd)
             processes["ros"].append(process)
 
-        if "ros_control" in multiverse_client_dict:
+        if "ros_control" in multiverse_client_dict or "rviz" in multiverse_client_dict:
+            import rospkg, rospy
             rospy.init_node(name="multiverse_launch")
+            rospack = rospkg.RosPack()
+            multiverse_control_pkg_path = rospack.get_path("multiverse_control")
+            mesh_abspath_prefix = os.path.relpath("/", multiverse_control_pkg_path)
+            mesh_abspath_prefix = os.path.join("package://multiverse_control", mesh_abspath_prefix)
 
-            for ros_control_param in multiverse_client_dict["ros_control"]:
-                controller_manager = ros_control_param["controller_manager"]
-                robot = controller_manager["robot"]
-                robot_description = controller_manager["robot_description"]
-                actuators = controller_manager["actuators"]
-                robot_urdf_path = find_files(controller_manager["urdf"])
-
-                tree = ET.parse(robot_urdf_path)
+            def get_urdf_str(urdf_path: str) -> str:
+                tree = ET.parse(urdf_path)
                 root = tree.getroot()
                 robot_urdf_str = ET.tostring(root, encoding="unicode")
-                rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
-                multiverse_dict = {
-                    "multiverse_server": multiverse_server_dict,
-                    "multiverse_client": {
-                        "host": ros_control_param["host"],
-                        "port": ros_control_param["port"],
-                        "meta_data": ros_control_param["meta_data"],
-                    },
-                    "controller_manager": {
-                        "robot": robot,
-                        "robot_description": robot_description,
-                        "actuators": actuators
-                    },
-                }
-                cmd = [
-                    "rosrun",
-                    "multiverse_control",
-                    "multiverse_control_node",
-                    f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"', '"'),
-                ]
-                process = run_subprocess(cmd)
-                processes["ros_control"].append(process)
+                mesh_relpath_prefix = os.path.relpath(os.path.dirname(urdf_path), multiverse_control_pkg_path)
+                mesh_relpath_prefix = os.path.join("package://multiverse_control", mesh_relpath_prefix) + "/"
+                robot_urdf_str = robot_urdf_str.replace("file:///", mesh_abspath_prefix)
+                robot_urdf_str = robot_urdf_str.replace("file://", mesh_relpath_prefix)
+                return robot_urdf_str
 
-                control_config_path = find_files(controller_manager["config"])
-                os.environ["ROS_NAMESPACE"] = f"{robot}"
-                cmd = [
-                    "rosparam",
-                    "load",
-                    f"{control_config_path}",
-                ]
-                process = run_subprocess(cmd)
-                process.wait()
-
-                for command, controllers in controller_manager["controllers"].items():
+            if "ros_control" in multiverse_client_dict:
+                for ros_control_dict in multiverse_client_dict["ros_control"]:
+                    controller_manager = ros_control_dict["controller_manager"]
+                    robot = controller_manager["robot"]
+                    robot_description = controller_manager["robot_description"]
+                    actuators = controller_manager["actuators"]
+                    robot_urdf_path = find_files(controller_manager["urdf"])
+                    robot_urdf_str = get_urdf_str(robot_urdf_path)
+                    rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
+                    multiverse_dict = {
+                        "multiverse_server": multiverse_server_dict,
+                        "multiverse_client": {
+                            "host": ros_control_dict["host"],
+                            "port": ros_control_dict["port"],
+                            "meta_data": ros_control_dict["meta_data"],
+                        },
+                        "controller_manager": {
+                            "robot": robot,
+                            "robot_description": robot_description,
+                            "actuators": actuators
+                        },
+                    }
                     cmd = [
                         "rosrun",
-                        "controller_manager",
-                        "controller_manager",
-                        f"{command}",
-                    ] + controllers[0].split()
+                        "multiverse_control",
+                        "multiverse_control_node",
+                        f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"', '"'),
+                    ]
                     process = run_subprocess(cmd)
                     processes["ros_control"].append(process)
+
+                    control_config_path = find_files(controller_manager["config"])
+                    os.environ["ROS_NAMESPACE"] = f"{robot}"
+                    cmd = [
+                        "rosparam",
+                        "load",
+                        f"{control_config_path}",
+                    ]
+                    process = run_subprocess(cmd)
+                    process.wait()
+
+                    for command, controllers in controller_manager["controllers"].items():
+                        cmd = [
+                            "rosrun",
+                            "controller_manager",
+                            "controller_manager",
+                            f"{command}",
+                        ] + controllers[0].split()
+                        process = run_subprocess(cmd)
+                        processes["ros_control"].append(process)
+
+            if "rviz" in multiverse_client_dict:
+                rviz_dict = multiverse_client_dict["rviz"]
+                
+                for robot_description, urdf_path in rviz_dict.get("robot_descriptions", {}).items():
+                    urdf_path = find_files(urdf_path)
+                    urdf_str = get_urdf_str(urdf_path)
+                    rospy.set_param(f"/{robot_description}", f"{urdf_str}")
+
+                rviz_config_path = find_files(rviz_dict["config"])
+                cmd = [
+                    "rosrun",
+                    "rviz",
+                    "rviz",
+                    "--display-config",
+                    f"{rviz_config_path}",
+                ]
+                process = run_subprocess(cmd)
+                processes["rviz"].append(process)
 
     try:
         processes["multiverse_server"][0].wait()
     except KeyboardInterrupt:
         print("CTRL+C detected in parent. Sending SIGINT to subprocess.")
+        for process in processes["rviz"]:
+            print(f"Terminate rviz with PID {process.pid}")
+            process.send_signal(signal.SIGINT)
+            process.wait()
+
         for process in processes["ros_control"]:
-            print(f"Terminate ROS with PID {process.pid}")
+            print(f"Terminate ros_control with PID {process.pid}")
             process.send_signal(signal.SIGINT)
             process.wait()
 

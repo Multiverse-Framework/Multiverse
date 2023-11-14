@@ -1,0 +1,89 @@
+DWAPlannerROS:
+  # Robot configuration parameters
+  acc_lim_x: 3.0
+  acc_lim_y: 3.0
+  acc_lim_th: 15.0
+
+  max_vel_x: 0.3
+  min_vel_x: 0.0
+  max_vel_y: 0.3
+  min_vel_y: -0.3
+
+  max_vel_trans: 0.3
+  min_vel_trans: 0.1
+  max_vel_theta: 1.5
+  min_vel_theta: 0.1
+
+  # Trajectory Scoring Parameters
+  path_distance_bias: 64.0 # 64.0   - weighting for how much it should stick to the global path plan
+  goal_distance_bias: 24.0 # 24.0   - wighting for how much it should attempt to reach its goal
+  occdist_scale: 0.01 # 0.01   - weighting for how much the controller should avoid obstacles
+  forward_point_distance: 0.325 # 0.325  - how far along to place an additional scoring point
+  stop_time_buffer: 0.2 # 0.2    - amount of time a robot must stop in before colliding for a valid traj.
+  scaling_speed: 0.25 # 0.25   - absolute velocity at which to start scaling the robot's footprint
+  max_scaling_factor: 0.2 # 0.2    - how much to scale the robot's footprint when at speed.
+
+  # Goal Tolerance Parameters
+  yaw_goal_tolerance: 0.1
+  xy_goal_tolerance: 0.1
+  latch_xy_goal_tolerance: false
+
+  sim_time: 0.5
+
+NavfnROS:
+  allow_unknown: true # Specifies whether or not to allow navfn to create plans that traverse unknown space.
+  default_tolerance: 0.1 # A tolerance on the goal point for the planner.
+
+global_costmap:
+  global_frame: map
+  robot_base_frame: base_footprint
+  update_frequency: 5.0
+  publish_frequency: 5.0
+  obstacle_range: 5
+  raytrace_range: 6
+  footprint: [[-0.6, -0.4], [-0.6, 0.4], [0.6, 0.4], [0.6, -0.4]]
+  inflation:
+    inflation_radius: 0.2
+  obstacles_laser:
+    observation_sources: base_scan
+    base_scan:
+      {
+        sensor_frame: base_laser_link,
+        data_type: LaserScan,
+        topic: tiago_dual/base_laser,
+        marking: true,
+        clearing: true,
+      }
+  plugins:
+  - {name: static,                  type: "costmap_2d::StaticLayer"}
+  - {name: obstacles_laser,         type: "costmap_2d::VoxelLayer"}
+  - {name: inflation,               type: "costmap_2d::InflationLayer"}
+
+local_costmap:
+  global_frame: map
+  robot_base_frame: base_footprint
+  update_frequency: 5.0
+  publish_frequency: 5.0
+  obstacle_range: 5
+  raytrace_range: 6
+  footprint: [[-0.6, -0.4], [-0.6, 0.4], [0.6, 0.4], [0.6, -0.4]]
+  inflation:
+    inflation_radius: 0.2
+  obstacles_laser:
+    observation_sources: base_scan
+    base_scan:
+      {
+        sensor_frame: base_laser_link,
+        data_type: LaserScan,
+        topic: tiago_dual/base_laser,
+        marking: true,
+        clearing: true,
+      }
+  rolling_window: true
+  width: 4.0
+  height: 4.0
+  resolution: 0.02
+
+  plugins:
+  - {name: obstacles_laser,           type: "costmap_2d::ObstacleLayer"}
+  - {name: inflation,                 type: "costmap_2d::InflationLayer"}

@@ -22,7 +22,7 @@ simulations:
               pos: [1.5, 2.5, 0]
         disable_self_collision: auto
     config:
-      max_time_step: 0.004
+      max_time_step: 0.002
       min_time_step: 0.001
 
 multiverse_server:
@@ -117,7 +117,7 @@ multiverse_clients:
       controller_manager:
         robot: tiago_dual
         robot_description: /robot_description
-        urdf: tiago_dual.urdf
+        urdf: tiago_dual/urdf/tiago_dual.urdf
         config: tiago_dual/config/ros_control.yaml
         actuators:
           torso_lift_actuator: torso_lift_joint
@@ -144,3 +144,14 @@ multiverse_clients:
               head_controller
               arm_left_controller
               arm_right_controller
+
+  rviz:
+    config: tiago_dual/config/rviz.rviz
+    robot_descriptions:
+      tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
+      apartment_description: apartment/urdf/apartment.urdf
+
+  move_base:
+    base_global_planner: navfn/NavfnROS
+    base_local_planner: dwa_local_planner/DWAPlannerROS
+    config: tiago_dual/config/move_base.yaml

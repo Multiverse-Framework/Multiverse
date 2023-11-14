@@ -187,6 +187,26 @@
 							<geom name="dishwasher_front_handle_collision_1" pos="0.0164985 0.0 -0.08" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.01 0.0065 0.0065"/>
 						</body>
 					</body>
+					<body name="dishwasher_tray1" pos="0.22401426000000013 0.007359259999999868 0.22713593000000004" quat="1.0 0.0 0.0 0.0">
+						<geom name="dishwasher_tray1_collision_4" pos="-0.280937 0.0 -0.035299" quat="0.5894866410700077 0.0 0.0 0.0" class="collision" type="box" size="0.004289 0.269203 0.116486"/>
+						<geom name="dishwasher_tray1_collision_0" pos="-0.03859 0.0 -0.144673" quat="0.6161270161257336 0.0 0.0 0.0" class="collision" type="box" size="0.242135 0.269203 0.007112"/>
+						<geom name="dishwasher_tray1_collision_2" pos="-0.03859 -0.255159 -0.035299" quat="0.5839668226877277 0.0 0.0 0.0" class="collision" type="box" size="0.242135 0.005448 0.116486"/>
+						<geom name="dishwasher_tray1_collision_1" pos="-0.03859 0.255159 -0.035299" quat="0.5839668226877277 0.0 0.0 0.0" class="collision" type="box" size="0.242135 0.005448 0.116486"/>
+						<geom name="dishwasher_tray1_collision_3" pos="0.193489 0.0 -0.035299" quat="0.5894866410700077 0.0 0.0 0.0" class="collision" type="box" size="0.004289 0.269203 0.116486"/>
+						<joint name="dishwasher_tray1_joint" pos="-1.3877787807814457e-16 1.3270634591222574e-16 -2.7755575615628914e-17" type="slide" range="0.0 0.5" axis="-0.9999999999999998 0.0 2.220446049250313e-16"/>
+					</body>
+					<body name="dishwasher_tray2" pos="0.20742001999999982 0.007357980000000097 0.40232784000000005" quat="1.0 0.0 0.0 0.0">
+						<geom name="dishwasher_tray2_collision_0" pos="0.0 0.0 -0.051928" quat="0.6087749994866741 0.0 0.0 0.0" class="collision" type="box" size="0.231314 0.23732 0.013794"/>
+						<geom name="dishwasher_tray2_collision_1" pos="0.0 -0.243352 0.023995" quat="0.5761293257594167 0.0 0.0 0.0" class="collision" type="box" size="0.231314 0.008574 0.087812"/>
+						<geom name="dishwasher_tray2_collision_3" pos="-0.225859 0.0 0.023995" quat="0.5764794011931389 0.0 0.0 0.0" class="collision" type="box" size="0.004182 0.23732 0.087812"/>
+						<geom name="dishwasher_tray2_collision_2" pos="0.0 0.243352 0.023995" quat="0.5761293257594167 0.0 0.0 0.0" class="collision" type="box" size="0.231314 0.008574 0.087812"/>
+						<geom name="dishwasher_tray2_collision_4" pos="0.225859 0.0 0.023995" quat="0.5764794011931389 0.0 0.0 0.0" class="collision" type="box" size="0.004182 0.23732 0.087812"/>
+						<joint name="dishwasher_tray2_joint" pos="1.942890293094024e-16 -9.71445146547012e-17 -5.551115123125783e-17" type="slide" range="0.0 0.30000001192092896" axis="-0.9999999999999998 0.0 2.220446049250313e-16"/>
+					</body>
+					<body name="dishwasher_tray3" pos="0.2278721199999998 0.013125249999999866 0.61131351" quat="1.0 0.0 0.0 0.0">
+						<geom name="dishwasher_tray3_collision_0" pos="0.0 0.0 0.0" quat="0.6176568626672904 0.0 0.0 0.0" class="collision" type="box" size="0.22 0.27 0.036"/>
+						<joint name="dishwasher_tray3_joint" pos="2.220446049250313e-16 1.3357370765021415e-16 0.0" type="slide" range="0.0 0.30000001192092896" axis="-0.9999999999999998 0.0 2.220446049250313e-16"/>
+					</body>
 				</body>
 				<body name="cabinet8" pos="2.49268082 3.37232117 0.49448143" quat="1.0 0.0 0.0 0.0">
 					<inertial pos="0.05229960381984711 1.4008454854774754e-05 -0.07545115798711777" mass="252.7664337158203" diaginertia="22.008981704711914 17.070188522338867 14.708601951599121"/>
