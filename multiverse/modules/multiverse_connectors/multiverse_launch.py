@@ -218,10 +218,9 @@ def main():
                     base_global_planner = move_base_dict.get("base_global_planner", "navfn/NavfnROS")
                     base_local_planner = move_base_dict.get("base_local_planner", "dwa_local_planner/DWAPlannerROS")
                     config_path = find_files(move_base_dict["config"])
-                    file = open(config_path, 'r')
-                    yamlfile = yaml.load(file)
-                    file.close()
-                    rosparam.upload_params('/move_base_node', yamlfile)
+                    with open(config_path, "r") as file:
+                        move_base_params = yaml.safe_load(file)
+                    rosparam.upload_params('/move_base_node', move_base_params)
                     cmd = [
                         "rosrun",
                         "move_base",
