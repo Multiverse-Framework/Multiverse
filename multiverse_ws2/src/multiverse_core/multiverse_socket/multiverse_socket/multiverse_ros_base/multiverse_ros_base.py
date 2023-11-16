@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import dataclasses
-from typing import List, Dict, Optional
 
+import dataclasses
+from typing import List, Dict
 from multiverse_client_pybind import MultiverseClientPybind  # noqa
 
 
@@ -10,7 +10,7 @@ class SocketMetaData:
     server_host: str = "tcp://127.0.0.1"
     server_port: str = "7000"
     client_host: str = "tcp://127.0.0.1"
-    client_port: Optional[str] = None
+    client_port: str = ""
 
 
 @dataclasses.dataclass
@@ -27,41 +27,30 @@ class SimulationMetaData:
 class MultiverseRosBase:
     _request_meta_data_dict = {}
 
-    _send_data: List[float]
-
-    def __init__(self, socket_metadata: SocketMetaData = SocketMetaData(),
-                 simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
-        if socket_metadata.client_port is None:
+    def __init__(self, socket_metadata: SocketMetaData = SocketMetaData(), simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
+        if socket_metadata.client_port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")
-        self.server_host = socket_metadata.server_host
-        self.server_port = socket_metadata.server_port
-        self.client_host = socket_metadata.client_host
-        self.client_port = socket_metadata.client_port
-        self.simulation_metadata = simulation_metadata
+        self._server_host = socket_metadata.server_host
+        self._server_port = socket_metadata.server_port
+        self._client_host = socket_metadata.client_host
+        self._client_port = socket_metadata.client_port
+        self._simulation_metadata = simulation_metadata
         self._init_request_meta_data()
 
     def start(self) -> None:
         pass
 
-    @property
-    def send_data(self) -> List[float]:
-        return self._send_data
-
-    @send_data.setter
-    def send_data(self, data):
-        self._send_data = data
-
     def _init_multiverse_socket(self) -> None:
-        server_socket_addr = f"{self.server_host}:{self.server_port}"
+        server_socket_addr = f"{self._server_host}:{self._server_port}"
         self.__multiverse_socket = MultiverseClientPybind(server_socket_addr)
 
     def _init_request_meta_data(self) -> None:
-        self._request_meta_data_dict = self.simulation_metadata.__dict__
+        self._request_meta_data_dict["meta_data"] = self._simulation_metadata.__dict__
         self._request_meta_data_dict["send"] = {}
         self._request_meta_data_dict["receive"] = {}
 
     def _connect(self) -> None:
-        self.__multiverse_socket.connect(self.client_host, self.client_port)
+        self.__multiverse_socket.connect(self._client_host, self._client_port)
         self.__multiverse_socket.start()
 
     def _disconnect(self) -> None:
