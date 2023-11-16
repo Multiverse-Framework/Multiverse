@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import rclpy
-from rclpy import Node
+from rclpy.node import Node
 from typing import List, Dict
 from ..multiverse_ros_base import MultiverseRosBase, SimulationMetaData, SocketMetaData
 

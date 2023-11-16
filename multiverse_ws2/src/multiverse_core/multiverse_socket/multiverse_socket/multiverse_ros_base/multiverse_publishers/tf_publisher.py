@@ -18,6 +18,7 @@ class TfPublisher(MultiverseRosPublisher):
                  simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
         super().__init__(topic_name=topic_name, node_name=node_name, socket_metadata=socket_metadata,
                          simulation_metadata=simulation_metadata)
+        print(self.simulation_metadata)
         self._use_meta_data = True
         self._tf_publisher = self.create_publisher(TFMessage, self._topic_name, 100)
         self._tf_msgs = []
