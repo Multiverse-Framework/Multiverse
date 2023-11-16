@@ -28,24 +28,14 @@
 #elif _WIN32
 #include <json/reader.h>
 #endif
-#include <thread>
 #include <csignal>
+#include <thread>
 
 static MjSimulate &mj_simulate = MjSimulate::get_instance();
 #ifdef VISUAL
 static MjVisual &mj_visual = MjVisual::get_instance();
 #endif
 static MjMultiverseClient &mj_multiverse_client = MjMultiverseClient::get_instance();
-
-// Signal handler function
-void signal_handler(int signum) {
-    printf("Interrupt signal (%d) received.\n", signum);
-    
-    stop = true;
-
-    // Exit program
-    exit(signum);
-}
 
 double get_time_now()
 {
@@ -86,7 +76,7 @@ void simulate(const double max_time_step, const double min_time_step)
             real_time = get_time_now() - start_time;
             error_time = real_time - d->time / rtf_desired;
         } while (error_time < -1E-6 && i != 0);
-        
+
         last_sim_times.push_front(d->time);
         last_real_times.push_front(real_time);
         if (i == num_step)
@@ -121,7 +111,9 @@ void simulate(const double max_time_step, const double min_time_step)
 int main(int argc, char **argv)
 {
     // Register signal handler for SIGINT
-    signal(SIGINT, signal_handler);
+    signal(SIGINT, [](int signum)
+           {printf("[MuJoCo] Interrupt signal (%d) received.\n", signum);
+            stop = true;});
 
     // print version, check compatibility
     printf("MuJoCo version %s\n", mj_versionString());
@@ -131,7 +123,7 @@ int main(int argc, char **argv)
         mju_error("USAGE:  mujoco mjcf.xml\n");
     }
     scene_xml_path = argv[1];
-    
+
     mj_simulate.init();
 #ifdef VISUAL
     mj_visual.init();
@@ -140,9 +132,8 @@ int main(int argc, char **argv)
     std::map<std::string, double> config_params_map = {
         {"rtf_desired", 1.0},
         {"max_time_step", 0.01},
-        {"min_time_step", 0.001}
-    };
-    
+        {"min_time_step", 0.001}};
+
     if (argc > 2)
     {
         const std::string config_params_str = argv[2];
@@ -177,7 +168,7 @@ int main(int argc, char **argv)
 #ifdef VISUAL
     mj_visual.run();
 #endif
-    
+
     sim_thread.join();
 
     mj_multiverse_client.disconnect();
