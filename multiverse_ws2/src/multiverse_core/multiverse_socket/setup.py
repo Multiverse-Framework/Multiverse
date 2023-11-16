@@ -1,18 +1,12 @@
 from setuptools import setup
 
 package_name = 'multiverse_socket'
-multiverse_ros_base = f"{package_name}.multiverse_ros_base"
-multiverse_utils = f"{multiverse_ros_base}.utils"
-multiverse_publishers = f"{multiverse_ros_base}.multiverse_publishers"
 
 setup(
     name=package_name,
     version='0.0.0',
-    packages=[package_name, multiverse_ros_base, multiverse_utils, multiverse_publishers],
-    package_dir={package_name: package_name, 
-                 multiverse_ros_base: f"{multiverse_ros_base}".replace(".", "/"),
-                 multiverse_utils: f"{multiverse_utils}".replace(".", "/"),
-                 multiverse_publishers: f"{multiverse_publishers}".replace(".", "/")},
+    packages=[package_name],
+    package_dir={package_name: package_name},
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),

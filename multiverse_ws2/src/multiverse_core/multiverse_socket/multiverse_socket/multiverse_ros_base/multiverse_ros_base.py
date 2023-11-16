@@ -1,31 +1,42 @@
 #!/usr/bin/env python3
+import dataclasses
+from typing import List, Dict, Optional
 
-from multiverse_socket.multiverse_ros_base.utils import init_request_meta_data_dict
-from rclpy.node import Node
-from typing import List, Dict
 from multiverse_client_pybind import MultiverseClientPybind  # noqa
 
 
-class MultiverseRosBase(Node):
+@dataclasses.dataclass
+class SocketMetaData:
+    server_host: str = "tcp://127.0.0.1"
+    server_port: str = "7000"
+    client_host: str = "tcp://127.0.0.1"
+    client_port: Optional[str] = None
+
+
+@dataclasses.dataclass
+class SimulationMetaData:
+    world_name: str = "world"
+    simulation_name: str = "ros"
+    length_unit: str = "m"
+    angle_unit: str = "rad"
+    mass_unit: str = "kg"
+    time_unit: str = "s"
+    handedness: str = "rhs"
+
+
+class MultiverseRosBase:
     _request_meta_data_dict = {}
 
-    def __init__(self, **kwargs) -> None:
-        super().__init__("tf_publisher")
-        self.server_host = str(kwargs.get("server_host", "tcp://127.0.0.1"))
-        self.server_port = str(kwargs.get("server_port", "7000"))
-        self.client_host = str(kwargs.get("host", "tcp://127.0.0.1"))
-        self.client_port = str(kwargs.get("port"))
-        meta_data = kwargs.get("meta_data", {})
-        self.meta_data = {
-            "world_name": str(meta_data.get("world_name", "world")),
-            "simulation_name": str(meta_data.get("simulation_name", "ros")),
-            "length_unit": str(meta_data.get("length_unit", "m")),
-            "angle_unit": str(meta_data.get("angle_unit", "rad")),
-            "mass_unit": str(meta_data.get("mass_unit", "kg")),
-            "time_unit": str(meta_data.get("time_unit", "s")),
-            "handedness": str(meta_data.get("handedness", "rhs"))
-        }
+    def __init__(self, socket_metadata: SocketMetaData = SocketMetaData(),
+                 simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
+        if socket_metadata.client_port is None:
+            raise ValueError(f"Must specify client port for {self.__class__.__name__}")
+        self.server_host = socket_metadata.server_host
+        self.server_port = socket_metadata.server_port
+        self.client_host = socket_metadata.client_host
+        self.client_port = socket_metadata.client_port
         self._init_request_meta_data()
+        self.simulation_metadata = simulation_metadata
 
     def start(self) -> None:
         pass
@@ -35,7 +46,7 @@ class MultiverseRosBase(Node):
         self.__multiverse_socket = MultiverseClientPybind(server_socket_addr)
 
     def _init_request_meta_data(self) -> None:
-        self._request_meta_data_dict = init_request_meta_data_dict(self.meta_data)
+        self._request_meta_data_dict = self.simulation_metadata.__dict__
 
     def _connect(self) -> None:
         self.__multiverse_socket.connect(self.client_host, self.client_port)

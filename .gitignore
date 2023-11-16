@@ -34,10 +34,15 @@
 # Built files
 __pycache__
 *.egg-info
+*.idea
+*.pytest_cache
 multiverse_ws/.catkin_tools
 multiverse_ws/build
 multiverse_ws/devel
 multiverse_ws/logs
+multiverse_ws2/build
+multiverse_ws2/install
+multiverse_ws2/log
 multiverse/bin
 multiverse/lib
 multiverse/build
