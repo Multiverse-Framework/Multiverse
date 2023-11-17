@@ -9,9 +9,49 @@ import json
 import rclpy
 import yaml
 
-from .multiverse_ros_base.multiverse_publishers.ros_publisher import MultiverseRosPublisher
-from .multiverse_ros_base.multiverse_publishers.tf_publisher import TfPublisher
-from .multiverse_ros_base.multiverse_ros_base import MultiverseRosBase, SimulationMetaData
+from multiverse_socket.multiverse_ros_node.multiverse_publishers.ros_publisher import MultiverseRosPublisher
+from multiverse_socket.multiverse_ros_node.multiverse_ros_node import MultiverseRosNode, SimulationMetaData
+
+
+class MultiverseRosBaseProperties:
+    def __init__(self, ros_base_name: str, ros_base_prop: Dict):
+        self.ros_base_name = ros_base_name
+        self.ros_base_prop = ros_base_prop
+
+    @property
+    def publisher_name(self):
+        publisher_name = self.ros_base_name.split("_")
+        publisher_name = ''.join(part.capitalize() for part in publisher_name)
+        return publisher_name + "Publisher"
+
+    def create_publisher(self):
+        ros_base_name = self.publisher_name
+        simulation_metadata_dict = self.ros_base_prop.pop("meta_data")
+        simulation_metadata = SimulationMetaData(
+            world_name=simulation_metadata_dict["world_name"],
+            length_unit=simulation_metadata_dict["length_unit"],
+            angle_unit=simulation_metadata_dict["angle_unit"],
+            mass_unit=simulation_metadata_dict["mass_unit"],
+            time_unit=simulation_metadata_dict["time_unit"],
+            handedness=simulation_metadata_dict["handedness"],
+        )
+        client_host = self.ros_base_prop.pop("host")
+        client_port = str(self.ros_base_prop.pop("port"))
+        node_name = f"{self.ros_base_name}_publisher_{client_port}"
+        topic_name = self.ros_base_prop.pop("topic")
+        rate = self.ros_base_prop.pop("rate")
+
+        for subclass in MultiverseRosPublisher.__subclasses__():
+            if subclass.__name__ == ros_base_name:
+                return subclass(node_name=node_name,
+                                topic_name=topic_name,
+                                rate=rate,
+                                client_host=client_host,
+                                client_port=client_port,
+                                simulation_metadata=simulation_metadata,
+                                **self.ros_base_prop)
+
+        raise TypeError(f"Class {ros_base_name} not found.")
 
 
 class MultiverseRosSocket:
@@ -27,8 +67,8 @@ class MultiverseRosSocket:
             subscribers: Optional[Dict] = None,
             services: Optional[Dict] = None,
     ) -> None:
-        MultiverseRosBase._server_host = server_host
-        MultiverseRosBase._server_port = str(server_port)
+        MultiverseRosNode._server_host = server_host
+        MultiverseRosNode._server_port = str(server_port)
         if isinstance(services, dict):
             self.services = services
         if isinstance(subscribers, dict):
@@ -43,31 +83,9 @@ class MultiverseRosSocket:
         for publisher_name, publisher_props in self.publishers.items():
             for publisher_prop in publisher_props:
                 print(f"Start publisher [{publisher_name}] with {publisher_prop}")
-                simulation_metadata = SimulationMetaData(
-                    world_name=publisher_prop["meta_data"]["world_name"],
-                    length_unit=publisher_prop["meta_data"]["length_unit"],
-                    angle_unit=publisher_prop["meta_data"]["angle_unit"],
-                    mass_unit=publisher_prop["meta_data"]["mass_unit"],
-                    time_unit=publisher_prop["meta_data"]["time_unit"],
-                    handedness=publisher_prop["meta_data"]["handedness"],
-                )
-                client_host = publisher_prop["host"]
-                client_port = str(publisher_prop["port"])
-                node_name = f"{publisher_name}_publisher_{client_port}"
-                topic_name = publisher_prop["topic"]
-                rate = publisher_prop["rate"]
-
-                if publisher_name == "tf":
-                    publisher = TfPublisher(
-                        root_frame_id=publisher_prop.get("root_frame_id", "map"),
-                        node_name=node_name,
-                        topic_name=topic_name,
-                        rate=rate,
-                        client_host=client_host,
-                        client_port=client_port,
-                        simulation_metadata=simulation_metadata,
-                    )
-                    publisher_list.append(publisher)
+                publisher = MultiverseRosBaseProperties(ros_base_name=publisher_name,
+                                                        ros_base_prop=publisher_prop).create_publisher()
+                publisher_list.append(publisher)
 
         for publisher in publisher_list:
             publisher_thread = threading.Thread(target=publisher.start)
@@ -76,6 +94,7 @@ class MultiverseRosSocket:
 
         try:
             while rclpy.ok():
+                # TODO: Add multiverse_server live checking
                 sleep(1)
         except KeyboardInterrupt:
             print(f"[{self.__class__.__name__}] Caught SIGINT (Ctrl+C), exiting...")

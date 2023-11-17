@@ -1,5 +1,5 @@
 import unittest
-from multiverse_socket.multiverse_ros_base.multiverse_ros_base import SimulationMetaData
+from multiverse_ros_base.multiverse_ros_base import SimulationMetaData
 
 
 class MetadataTestCase(unittest.TestCase):

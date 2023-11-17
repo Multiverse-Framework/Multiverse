@@ -15,6 +15,6 @@ setup(
     license="MIT",
     tests_require=["pytest"],
     entry_points={
-        "console_scripts": ["multiverse_socket_node = multiverse_socket.multiverse_socket_node:main"],
+        "console_scripts": ["multiverse_socket_node = scripts.multiverse_socket_node:main"],
     },
 )

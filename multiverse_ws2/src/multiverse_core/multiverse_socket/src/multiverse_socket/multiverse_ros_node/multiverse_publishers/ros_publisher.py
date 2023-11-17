@@ -4,10 +4,10 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.publisher import Publisher
 from rclpy.node import Node
 from typing import List, Dict
-from ..multiverse_ros_base import MultiverseRosBase, SimulationMetaData
+from ..multiverse_ros_node import MultiverseRosNode, SimulationMetaData
 
 
-class MultiverseRosPublisher(MultiverseRosBase, Node):
+class MultiverseRosPublisher(MultiverseRosNode, Node):
     _publisher: Publisher
     _use_meta_data: bool = False
     _topic_name: str = ""
@@ -21,8 +21,9 @@ class MultiverseRosPublisher(MultiverseRosBase, Node):
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
             simulation_metadata: SimulationMetaData = SimulationMetaData(),
+            **kwargs
     ):
-        MultiverseRosBase.__init__(self, client_host=client_host, client_port=client_port,
+        MultiverseRosNode.__init__(self, client_host=client_host, client_port=client_port,
                                    simulation_metadata=simulation_metadata)
         Node.__init__(self, node_name=node_name)
         self._topic_name = topic_name

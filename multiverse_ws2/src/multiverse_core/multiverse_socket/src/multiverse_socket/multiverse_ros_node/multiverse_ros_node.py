@@ -16,7 +16,7 @@ class SimulationMetaData:
     handedness: str = "rhs"
 
 
-class MultiverseRosBase:
+class MultiverseRosNode:
     _server_host: str = "tcp://127.0.0.1"
     _server_port: str = "7000"
 
