@@ -224,3 +224,8 @@ multiverse_clients:
           topic: /tf
           rate: 60
           root_frame_id: map_1
+
+    ros2_run:
+      rviz2:
+        config: tiago_dual/config/rviz.rviz
+        robot_descriptions:

@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 {
     // Register signal handler for SIGINT
     signal(SIGINT, [](int signum)
-           {printf("[MuJoCo] Interrupt signal (%d) received.\n", signum);
+           {printf("[MuJoCo] Caught SIGINT (Ctrl+C), exiting...\n");
             stop = true;});
 
     // print version, check compatibility

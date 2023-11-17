@@ -6,17 +6,9 @@ from multiverse_client_pybind import MultiverseClientPybind  # noqa
 
 
 @dataclasses.dataclass
-class SocketMetaData:
-    server_host: str = "tcp://127.0.0.1"
-    server_port: str = "7000"
-    client_host: str = "tcp://127.0.0.1"
-    client_port: str = ""
-
-
-@dataclasses.dataclass
 class SimulationMetaData:
     world_name: str = "world"
-    simulation_name: str = "ros"
+    simulation_name: str = "ros2"
     length_unit: str = "m"
     angle_unit: str = "rad"
     mass_unit: str = "kg"
@@ -25,15 +17,14 @@ class SimulationMetaData:
 
 
 class MultiverseRosBase:
-    _request_meta_data_dict = {}
+    _server_host: str = "tcp://127.0.0.1"
+    _server_port: str = "7000"
 
-    def __init__(self, socket_metadata: SocketMetaData = SocketMetaData(), simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
-        if socket_metadata.client_port == "":
+    def __init__(self, client_host: str = "tcp://127.0.0.1", client_port: str = "", simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
+        if client_port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")
-        self._server_host = socket_metadata.server_host
-        self._server_port = socket_metadata.server_port
-        self._client_host = socket_metadata.client_host
-        self._client_port = socket_metadata.client_port
+        self._client_host = client_host
+        self._client_port = client_port
         self._simulation_metadata = simulation_metadata
         self._init_request_meta_data()
 
@@ -45,6 +36,7 @@ class MultiverseRosBase:
         self.__multiverse_socket = MultiverseClientPybind(server_socket_addr)
 
     def _init_request_meta_data(self) -> None:
+        self._request_meta_data_dict = {}
         self._request_meta_data_dict["meta_data"] = self._simulation_metadata.__dict__
         self._request_meta_data_dict["send"] = {}
         self._request_meta_data_dict["receive"] = {}

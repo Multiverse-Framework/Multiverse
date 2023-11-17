@@ -2,17 +2,17 @@
 
 import argparse
 import threading
-from typing import Optional, Dict
+from typing import Optional, Dict, List
 import rclpy
 import yaml, json
+from time import sleep
 
-from .multiverse_ros_base.multiverse_publishers.ros_publisher import SocketMetaData, SimulationMetaData
+from .multiverse_ros_base.multiverse_ros_base import MultiverseRosBase, SimulationMetaData
+from .multiverse_ros_base.multiverse_publishers.ros_publisher import MultiverseRosPublisher
 from .multiverse_ros_base.multiverse_publishers.tf_publisher import TfPublisher
 
 
 class MultiverseRosSocket:
-    server_host: str
-    server_port: str
     publishers: Optional[Dict[str, Dict]] = None
     subscribers: Optional[Dict[str, Dict]] = None
     services: Optional[Dict[str, Dict]] = None
@@ -25,8 +25,8 @@ class MultiverseRosSocket:
         subscribers: Optional[Dict] = None,
         services: Optional[Dict] = None,
     ) -> None:
-        self.server_host = server_host
-        self.server_port = str(server_port)
+        MultiverseRosBase._server_host = server_host
+        MultiverseRosBase._server_port = str(server_port)
         if isinstance(services, dict):
             self.services = services
         if isinstance(subscribers, dict):
@@ -36,24 +36,22 @@ class MultiverseRosSocket:
 
     def start(self):
         threads = {}
-        publisher_list = []
+        publisher_list: List[MultiverseRosPublisher] = []
 
         for publisher_name, publisher_props in self.publishers.items():
             for publisher_prop in publisher_props:
                 print(f"Start publisher [{publisher_name}] with {publisher_prop}")
-                socket_metadata = SocketMetaData(
-                    server_host=self.server_host, server_port=self.server_port, client_host=publisher_prop["host"], client_port=str(publisher_prop["port"])
-                )
                 simulation_metadata = SimulationMetaData(
                     world_name=publisher_prop["meta_data"]["world_name"],
-                    simulation_name="ros",
                     length_unit=publisher_prop["meta_data"]["length_unit"],
                     angle_unit=publisher_prop["meta_data"]["angle_unit"],
                     mass_unit=publisher_prop["meta_data"]["mass_unit"],
                     time_unit=publisher_prop["meta_data"]["time_unit"],
                     handedness=publisher_prop["meta_data"]["handedness"],
                 )
-                node_name = f"{publisher_name}_publisher_{socket_metadata.client_port}"
+                client_host = publisher_prop["host"]
+                client_port = str(publisher_prop["port"])
+                node_name = f"{publisher_name}_publisher_{client_port}"
                 topic_name = publisher_prop["topic"]
                 rate = publisher_prop["rate"]
 
@@ -63,7 +61,8 @@ class MultiverseRosSocket:
                         node_name=node_name,
                         topic_name=topic_name,
                         rate=rate,
-                        socket_metadata=socket_metadata,
+                        client_host=client_host,
+                        client_port=client_port,
                         simulation_metadata=simulation_metadata,
                     )
                     publisher_list.append(publisher)
@@ -74,11 +73,12 @@ class MultiverseRosSocket:
             threads[publisher] = publisher_thread
 
         try:
-            for publisher in publisher_list:
-                threads[publisher].join()
+            while rclpy.ok():
+                sleep(1)
         except KeyboardInterrupt:
             print(f"[{self.__class__.__name__}] Caught SIGINT (Ctrl+C), exiting...")
             rclpy.shutdown()
+        finally:
             for publisher in publisher_list:
                 threads[publisher].join()
 

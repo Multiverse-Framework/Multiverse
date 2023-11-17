@@ -3,9 +3,8 @@
 import sys
 import yaml
 import os
-import xml.etree.ElementTree as ET
 import argparse
-from utils import find_files, run_subprocess
+from utils import find_files, run_subprocess, get_urdf_str
 
 
 def main():
@@ -71,16 +70,6 @@ def main():
             mesh_abspath_prefix = os.path.relpath("/", multiverse_control_pkg_path)
             mesh_abspath_prefix = os.path.join("package://multiverse_control", mesh_abspath_prefix)
 
-            def get_urdf_str(urdf_path: str) -> str:
-                tree = ET.parse(urdf_path)
-                root = tree.getroot()
-                robot_urdf_str = ET.tostring(root, encoding="unicode")
-                mesh_relpath_prefix = os.path.relpath(os.path.dirname(urdf_path), multiverse_control_pkg_path)
-                mesh_relpath_prefix = os.path.join("package://multiverse_control", mesh_relpath_prefix) + "/"
-                robot_urdf_str = robot_urdf_str.replace("file:///", mesh_abspath_prefix)
-                robot_urdf_str = robot_urdf_str.replace("file://", mesh_relpath_prefix)
-                return robot_urdf_str
-
             if "ros_run" in ros_dict:
                 ros_run_dict = ros_dict["ros_run"]
                 if "rviz" in ros_run_dict:
@@ -88,7 +77,7 @@ def main():
 
                     for robot_description, urdf_path in rviz_dict.get("robot_descriptions", {}).items():
                         urdf_path = find_files(resources_paths, urdf_path)
-                        urdf_str = get_urdf_str(urdf_path)
+                        urdf_str = get_urdf_str(mesh_abspath_prefix, multiverse_control_pkg_path, urdf_path)
                         rospy.set_param(f"/{robot_description}", f"{urdf_str}")
 
                     rviz_config_path = find_files(resources_paths, rviz_dict["config"])
@@ -137,7 +126,7 @@ def main():
                     robot_description = controller_manager["robot_description"]
                     actuators = controller_manager["actuators"]
                     robot_urdf_path = find_files(resources_paths, controller_manager["urdf"])
-                    robot_urdf_str = get_urdf_str(robot_urdf_path)
+                    robot_urdf_str = get_urdf_str(mesh_abspath_prefix, multiverse_control_pkg_path, robot_urdf_path)
                     rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
                     multiverse_dict = {
                         "multiverse_server": multiverse_server_dict,

@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     // register signal SIGINT and signal handler
     signal(SIGINT, [](int signum)
            {
-        printf("[Server] Interrupt signal (%d) received, wait for 1s then shutdown.\n", signum);
+        printf("[Server] Caught SIGINT (Ctrl+C), wait for 1s then shutdown.\n", signum);
         zmq_sleep(1);
         should_shut_down = true; 
         server_context.shutdown(); });

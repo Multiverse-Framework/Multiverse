@@ -7,7 +7,7 @@ from geometry_msgs.msg import TransformStamped
 from tf2_msgs.msg import TFMessage
 
 from .ros_publisher import MultiverseRosPublisher
-from ..multiverse_ros_base import SocketMetaData, SimulationMetaData
+from ..multiverse_ros_base import SimulationMetaData
 
 
 class TfPublisher(MultiverseRosPublisher):
@@ -21,10 +21,11 @@ class TfPublisher(MultiverseRosPublisher):
         topic_name: str,
         node_name: str,
         rate: float = 60.0,
-        socket_metadata: SocketMetaData = SocketMetaData(),
+        client_host: str = "tcp://127.0.0.1", 
+        client_port: str = "",
         simulation_metadata: SimulationMetaData = SimulationMetaData(),
     ) -> None:
-        super().__init__(topic_name=topic_name, node_name=node_name, rate=rate, socket_metadata=socket_metadata, simulation_metadata=simulation_metadata)
+        super().__init__(topic_name=topic_name, node_name=node_name, rate=rate,  client_host=client_host, client_port=client_port, simulation_metadata=simulation_metadata)
         self._use_meta_data = True
         self._publisher = self.create_publisher(TFMessage, self._topic_name, 100)
         self._root_frame_id = root_frame_id
@@ -51,7 +52,7 @@ class TfPublisher(MultiverseRosPublisher):
             tf_msg.transform.translation.x = float(tf_data["position"][0])
             tf_msg.transform.translation.y = float(tf_data["position"][1])
             tf_msg.transform.translation.z = float(tf_data["position"][2])
-            quaternion = numpy.array([float(tf_data["quaternion"][0]), float(tf_data["quaternion"][1]), float(tf_data["quaternion"][2]), float(tf_data["quaternion"][3])])
+            quaternion = numpy.array([float(tf_data["quaternion"][i]) for i in range(4)])
             if any([q is None for q in quaternion]):
                 continue
             quaternion = quaternion / numpy.linalg.norm(quaternion)
