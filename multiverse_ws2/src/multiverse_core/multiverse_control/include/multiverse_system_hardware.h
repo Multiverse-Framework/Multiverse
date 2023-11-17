@@ -24,21 +24,20 @@
 #include <set>
 
 // ROS Controls
-#include <hardware_interface/handle.hpp>
-#include <hardware_interface/hardware_info.hpp>
+#include <hardware_interface/base_interface.hpp>
 #include <hardware_interface/system_interface.hpp>
-#include <hardware_interface/types/hardware_interface_return_values.hpp>
-#include <rclcpp/macros.hpp>
-#include <rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp>
-#include <rclcpp_lifecycle/state.hpp>
 
-class MultiverseHWInterface : public MultiverseClientJson, public hardware_interface::SystemInterface
+class MultiverseSystemHardware : public MultiverseClientJson, public hardware_interface::BaseInterface<hardware_interface::SystemInterface>
 {
 public:
-    MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params, const std::map<std::string, std::string> &joint_actuators);
+    MultiverseSystemHardware();
+
+    ~MultiverseSystemHardware();
 
 public:
-    // ros::Time get_world_time(const double offset = 0.0) const;
+    void init(const std::map<std::string, std::string> &multiverse_params, const std::map<std::string, std::string> &in_joint_actuator_map);
+
+    double get_world_time(const double offset = 0.0) const;
 
 public:
     void communicate(const bool resend_meta_data = false) override;
@@ -56,7 +55,9 @@ private:
 
     std::vector<double *> receive_data_vec;
 
-    std::map<std::string, std::string> actuators;
+    std::map<std::string, std::string> joint_actuator_map;
+
+    std::map<std::string, std::string> actuator_joint_map;
 
 private:
     void start_connect_to_server_thread() override;
@@ -84,9 +85,15 @@ private:
     void reset() override;
 
 public:
+    hardware_interface::return_type configure(const hardware_interface::HardwareInfo &system_info) override;
+
     std::vector<hardware_interface::StateInterface> export_state_interfaces() override;
 
     std::vector<hardware_interface::CommandInterface> export_command_interfaces() override;
+
+    hardware_interface::return_type start() override;
+
+    hardware_interface::return_type stop() override;
 
     hardware_interface::return_type read() override;
 
