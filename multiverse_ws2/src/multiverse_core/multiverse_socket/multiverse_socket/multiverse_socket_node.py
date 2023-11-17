@@ -2,14 +2,16 @@
 
 import argparse
 import threading
-from typing import Optional, Dict, List
-import rclpy
-import yaml, json
 from time import sleep
+from typing import Optional, Dict, List
 
-from .multiverse_ros_base.multiverse_ros_base import MultiverseRosBase, SimulationMetaData
+import json
+import rclpy
+import yaml
+
 from .multiverse_ros_base.multiverse_publishers.ros_publisher import MultiverseRosPublisher
 from .multiverse_ros_base.multiverse_publishers.tf_publisher import TfPublisher
+from .multiverse_ros_base.multiverse_ros_base import MultiverseRosBase, SimulationMetaData
 
 
 class MultiverseRosSocket:
@@ -18,12 +20,12 @@ class MultiverseRosSocket:
     services: Optional[Dict[str, Dict]] = None
 
     def __init__(
-        self,
-        server_host: str = "tcp://127.0.0.1",
-        server_port: int = 7000,
-        publishers: Optional[Dict] = None,
-        subscribers: Optional[Dict] = None,
-        services: Optional[Dict] = None,
+            self,
+            server_host: str = "tcp://127.0.0.1",
+            server_port: int = 7000,
+            publishers: Optional[Dict] = None,
+            subscribers: Optional[Dict] = None,
+            services: Optional[Dict] = None,
     ) -> None:
         MultiverseRosBase._server_host = server_host
         MultiverseRosBase._server_port = str(server_port)
@@ -82,6 +84,7 @@ class MultiverseRosSocket:
             for publisher in publisher_list:
                 threads[publisher].join()
 
+
 def main():
     parser = argparse.ArgumentParser(description="Multiverse parser")
     parser.add_argument(
@@ -118,7 +121,8 @@ def main():
 
     rclpy.init()
     multiverse_ros_socket = MultiverseRosSocket(
-        server_host=multiverse_server["host"], server_port=multiverse_server["port"], publishers=publishers, subscribers=subscribers, services=services
+        server_host=multiverse_server["host"], server_port=multiverse_server["port"], publishers=publishers,
+        subscribers=subscribers, services=services
     )
     multiverse_ros_socket.start()
     if rclpy.ok():

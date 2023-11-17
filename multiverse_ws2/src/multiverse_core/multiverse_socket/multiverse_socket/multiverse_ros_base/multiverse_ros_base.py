@@ -20,7 +20,8 @@ class MultiverseRosBase:
     _server_host: str = "tcp://127.0.0.1"
     _server_port: str = "7000"
 
-    def __init__(self, client_host: str = "tcp://127.0.0.1", client_port: str = "", simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
+    def __init__(self, client_host: str = "tcp://127.0.0.1", client_port: str = "",
+                 simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
         if client_port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")
         self._client_host = client_host
@@ -36,10 +37,7 @@ class MultiverseRosBase:
         self.__multiverse_socket = MultiverseClientPybind(server_socket_addr)
 
     def _init_request_meta_data(self) -> None:
-        self._request_meta_data_dict = {}
-        self._request_meta_data_dict["meta_data"] = self._simulation_metadata.__dict__
-        self._request_meta_data_dict["send"] = {}
-        self._request_meta_data_dict["receive"] = {}
+        self._request_meta_data_dict = {"meta_data": self._simulation_metadata.__dict__, "send": {}, "receive": {}}
 
     def _connect(self) -> None:
         self.__multiverse_socket.connect(self._client_host, self._client_port)
@@ -54,7 +52,7 @@ class MultiverseRosBase:
     def _get_response_meta_data(self) -> Dict:
         response_meta_data = self.__multiverse_socket.get_response_meta_data()
         if not response_meta_data:
-            print(f"[Client {self.client_port}] Receive empty response meta data.")
+            print(f"[Client {self._client_port}] Receive empty response meta data.")
         return response_meta_data
 
     def _set_send_data(self, send_data: List[float]) -> None:
@@ -66,7 +64,7 @@ class MultiverseRosBase:
     def _get_receive_data(self) -> List[float]:
         receive_data = self.__multiverse_socket.get_receive_data()
         if not receive_data:
-            print(f"[Client {self.client_port}] Receive empty data.")
+            print(f"[Client {self._client_port}] Receive empty data.")
         return receive_data
 
     def _restart(self) -> None:

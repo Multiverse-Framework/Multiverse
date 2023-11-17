@@ -16,16 +16,17 @@ class TfPublisher(MultiverseRosPublisher):
     _root_frame_id: str = "map"
 
     def __init__(
-        self,
-        root_frame_id: str,
-        topic_name: str,
-        node_name: str,
-        rate: float = 60.0,
-        client_host: str = "tcp://127.0.0.1", 
-        client_port: str = "",
-        simulation_metadata: SimulationMetaData = SimulationMetaData(),
+            self,
+            root_frame_id: str,
+            topic_name: str,
+            node_name: str,
+            rate: float = 60.0,
+            client_host: str = "tcp://127.0.0.1",
+            client_port: str = "",
+            simulation_metadata: SimulationMetaData = SimulationMetaData(),
     ) -> None:
-        super().__init__(topic_name=topic_name, node_name=node_name, rate=rate,  client_host=client_host, client_port=client_port, simulation_metadata=simulation_metadata)
+        super().__init__(topic_name=topic_name, node_name=node_name, rate=rate, client_host=client_host,
+                         client_port=client_port, simulation_metadata=simulation_metadata)
         self._use_meta_data = True
         self._publisher = self.create_publisher(TFMessage, self._topic_name, 100)
         self._root_frame_id = root_frame_id

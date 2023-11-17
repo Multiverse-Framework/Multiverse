@@ -14,20 +14,21 @@ class MultiverseRosPublisher(MultiverseRosBase, Node):
     _executor: MultiThreadedExecutor
 
     def __init__(
-        self,
-        topic_name: str,
-        node_name: str,
-        rate: float = 60.0,
-        client_host: str = "tcp://127.0.0.1", 
-        client_port: str = "",
-        simulation_metadata: SimulationMetaData = SimulationMetaData(),
+            self,
+            topic_name: str,
+            node_name: str,
+            rate: float = 60.0,
+            client_host: str = "tcp://127.0.0.1",
+            client_port: str = "",
+            simulation_metadata: SimulationMetaData = SimulationMetaData(),
     ):
-        MultiverseRosBase.__init__(self, client_host=client_host, client_port=client_port, simulation_metadata=simulation_metadata)
+        MultiverseRosBase.__init__(self, client_host=client_host, client_port=client_port,
+                                   simulation_metadata=simulation_metadata)
         Node.__init__(self, node_name=node_name)
         self._topic_name = topic_name
         self._executor = MultiThreadedExecutor()
         self._executor.add_node(self)
-        self.create_timer(1.0/rate, self._publisher_callback)
+        self.create_timer(1.0 / rate, self._publisher_callback)
 
     def start(self) -> None:
         self._init_multiverse_socket()
