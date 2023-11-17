@@ -13,7 +13,7 @@ from multiverse_socket.multiverse_ros_node.multiverse_publishers.ros_publisher i
 from multiverse_socket.multiverse_ros_node.multiverse_ros_node import MultiverseRosNode, SimulationMetaData
 
 
-class MultiverseRosBaseProperties:
+class MultiverseRosNodeProperties:
     def __init__(self, ros_base_name: str, ros_base_prop: Dict):
         self.ros_base_name = ros_base_name
         self.ros_base_prop = ros_base_prop
@@ -25,7 +25,6 @@ class MultiverseRosBaseProperties:
         return publisher_name + "Publisher"
 
     def create_publisher(self):
-        ros_base_name = self.publisher_name
         simulation_metadata_dict = self.ros_base_prop.pop("meta_data")
         simulation_metadata = SimulationMetaData(
             world_name=simulation_metadata_dict["world_name"],
@@ -42,7 +41,7 @@ class MultiverseRosBaseProperties:
         rate = self.ros_base_prop.pop("rate")
 
         for subclass in MultiverseRosPublisher.__subclasses__():
-            if subclass.__name__ == ros_base_name:
+            if subclass.__name__ == self.publisher_name:
                 return subclass(node_name=node_name,
                                 topic_name=topic_name,
                                 rate=rate,
@@ -51,7 +50,7 @@ class MultiverseRosBaseProperties:
                                 simulation_metadata=simulation_metadata,
                                 **self.ros_base_prop)
 
-        raise TypeError(f"Class {ros_base_name} not found.")
+        raise TypeError(f"Class {self.publisher_name} not found.")
 
 
 class MultiverseRosSocket:
@@ -83,7 +82,7 @@ class MultiverseRosSocket:
         for publisher_name, publisher_props in self.publishers.items():
             for publisher_prop in publisher_props:
                 print(f"Start publisher [{publisher_name}] with {publisher_prop}")
-                publisher = MultiverseRosBaseProperties(ros_base_name=publisher_name,
+                publisher = MultiverseRosNodeProperties(ros_base_name=publisher_name,
                                                         ros_base_prop=publisher_prop).create_publisher()
                 publisher_list.append(publisher)
 
