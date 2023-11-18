@@ -79,32 +79,5 @@ def main():
                     ]
                     process = run_subprocess(cmd)
 
-        if "ros_control" in ros2_dict:
-            for ros_control_dict in ros2_dict["ros_control"]:
-                controller_manager = ros_control_dict["controller_manager"]
-                robot = controller_manager["robot"]
-                actuators = controller_manager["actuators"]
-                robot_urdf_path = find_files(resources_paths, controller_manager["urdf"])
-                robot_urdf_str = get_urdf_str_abs(robot_urdf_path)
-
-                multiverse_dict = {
-                    "multiverse_server": multiverse_server_dict,
-                    "multiverse_client": {
-                        "host": ros_control_dict["host"],
-                        "port": ros_control_dict["port"],
-                        "meta_data": ros_control_dict["meta_data"],
-                    },
-                    "controller_manager": {"robot": robot, "actuators": actuators},
-                }
-                cmd = [
-                    "ros2",
-                    "run",
-                    "multiverse_control",
-                    "multiverse_control_node",
-                    f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"', '"'),
-                    robot_urdf_str
-                ]
-                process = run_subprocess(cmd)
-
 if __name__ == "__main__":
     main()

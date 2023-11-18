@@ -188,9 +188,4 @@
       <inertia ixx="9.890410052167731e-05" ixy="0.0" ixz="0.0" iyy="9.890410052167731e-05" iyz="0.0" izz="0.0001321171875"/>
     </inertial>
   </link>
-  <ros2_control name="robot" type="system">
-    <hardware>
-      <plugin>multiverse_control/MultiverseSystemHardware</plugin>
-    </hardware>
-  </ros2_control>
 </robot>
