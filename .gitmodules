@@ -1,6 +1,3 @@
-[submodule "multiverse_mujoco_connector"]
-	path = multiverse_ws/src/multiverse_connectors/multiverse_mujoco_connector
-	url = https://github.com/Multiverse-Framework/Multiverse-MuJoCo-Connector.git
 [submodule "USD"]
 	path = multiverse/external/USD
 	url = https://github.com/PixarAnimationStudios/USD.git
@@ -10,3 +7,6 @@
 [submodule "mujoco"]
 	path = multiverse/external/mujoco
 	url = https://github.com/deepmind/mujoco.git
+[submodule "multiverse/external/sofa"]
+	path = multiverse/external/sofa
+	url = https://github.com/sofa-framework/sofa.git

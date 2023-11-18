@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Hoang Giang Nguyen - Institute for Artificial Intelligence, University Bremen
+// Copyright (c) 2023, Giang Hoang Nguyen - Institute for Artificial Intelligence, University Bremen
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,34 @@
 
 std::map<std::string, size_t> attribute_map = {
     {"", 0},
+    {"time", 1},
     {"position", 3},
     {"quaternion", 4},
     {"relative_velocity", 6},
+    {"odometric_velocity", 6},
     {"joint_rvalue", 1},
     {"joint_tvalue", 1},
+    {"joint_linear_velocity", 1},
+    {"joint_angular_velocity", 1},
+    {"joint_force", 1},
+    {"joint_torque", 1},
+    {"cmd_joint_rvalue", 1},
+    {"cmd_joint_tvalue", 1},
+    {"cmd_joint_linear_velocity", 1},
+    {"cmd_joint_angular_velocity", 1},
+    {"cmd_joint_force", 1},
+    {"cmd_joint_torque", 1},
     {"joint_position", 3},
     {"joint_quaternion", 4},
     {"force", 3},
     {"torque", 3}};
-
 
 bool MultiverseClientJson::compute_response_meta_data()
 {
     return !response_meta_data_str.empty() &&
            reader.parse(response_meta_data_str, response_meta_data_json) &&
            response_meta_data_json.isMember("time") &&
-           response_meta_data_json["time"].asDouble() > 0;
+           response_meta_data_json["time"].asDouble() >= 0;
 }
 
 void MultiverseClientJson::compute_request_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const

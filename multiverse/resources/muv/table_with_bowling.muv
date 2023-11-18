@@ -1,0 +1,92 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+
+worlds:
+  bowling_simulation:
+    rtf_desired: 1
+  table_simulation:
+    rtf_desired: 1
+  table_with_bowling_simulation:
+    rtf_desired: 1
+
+simulations:
+  bowling_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: demo/bowling.xml
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
+
+  table_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: demo/table.xml
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
+
+  cube_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: demo/cube.xml
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
+
+  table_with_bowling_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: demo/table_with_bowling.xml
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  table_with_bowling_simulation:
+    host: "tcp://127.0.0.1"
+    port: 7501
+    send:
+      cursor: ["position", "quaternion"]
+      bowling: ["force", "torque"]
+      table: ["force", "torque"]
+    receive:
+      bowling: ["relative_velocity", "position", "quaternion"]
+      table: ["relative_velocity", "position", "quaternion"]
+      cube: ["relative_velocity", "position", "quaternion"]
+
+  bowling_simulation:
+    host: "tcp://127.0.0.1"
+    port: 7502
+    send:
+      bowling: ["relative_velocity", "position", "quaternion"]
+    receive:
+      cursor: ["position", "quaternion"]
+      bowling: ["force", "torque"]
+
+  table_simulation:
+    host: "tcp://127.0.0.1"
+    port: 7503
+    send:
+      table: ["relative_velocity", "position", "quaternion"]
+    receive:
+      cursor: ["position", "quaternion"]
+      table: ["force", "torque"]
+
+  cube_simulation:
+    host: "tcp://127.0.0.1"
+    port: 7504
+    send:
+      cube: ["relative_velocity", "position", "quaternion"]
+    receive:
+      cursor: ["position", "quaternion"]

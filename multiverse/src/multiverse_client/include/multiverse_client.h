@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Hoang Giang Nguyen - Institute for Artificial Intelligence, University Bremen
+// Copyright (c) 2023, Giang Hoang Nguyen - Institute for Artificial Intelligence, University Bremen
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ public:
     void connect();
 
     /**
-     * @brief start the client
+     * @brief Start the client
      * 
      */
     void start();
@@ -115,7 +115,7 @@ protected:
      * @brief Initalize the objects from configuration
      *
      */
-    virtual bool init_objects() = 0;
+    virtual bool init_objects(bool from_server = false) = 0;
 
     /**
      * @brief Bind the meta data from the objects
@@ -175,7 +175,13 @@ protected:
      * @brief Clean up pointer
      *
      */
-    virtual void clean_up() = 0;    
+    virtual void clean_up() = 0;
+
+    /**
+     * @brief Reset the simulation
+     * 
+     */
+    virtual void reset() = 0;
 
 private:
     void run();

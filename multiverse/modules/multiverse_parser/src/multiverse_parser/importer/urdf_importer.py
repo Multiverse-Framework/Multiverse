@@ -317,8 +317,8 @@ class UrdfImporter:
                 elif mesh_path.find("file://") != -1:
                     mesh_path_abs = mesh_path.replace("file://", "")
                     if not os.path.isabs(mesh_path_abs):
-                        mesh_path_abs = os.path.join(self.source_file_dir, mesh_path_abs)
-                        if os.path.exists(mesh_path_abs):
+                        mesh_path_abs = os.path.join(os.path.dirname(self.urdf_file_path), mesh_path_abs)
+                        if not os.path.exists(mesh_path_abs):
                             print(f"Mesh file {mesh_path_abs} not found.")
                             return
 

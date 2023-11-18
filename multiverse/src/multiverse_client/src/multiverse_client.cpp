@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Hoang Giang Nguyen - Institute for Artificial Intelligence, University Bremen
+// Copyright (c) 2023, Giang Hoang Nguyen - Institute for Artificial Intelligence, University Bremen
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -59,18 +59,18 @@ void MultiverseClient::connect_to_server()
     zmq_connect(client_socket, server_socket_addr.c_str());
 
     zmq_msg_t request;
-    zmq_msg_init_size(&request, sizeof(int));
-    *reinterpret_cast<int*>(zmq_msg_data(&request)) = std::stoi(port);
+    zmq_msg_init_size(&request, socket_addr.size());
+    memcpy(zmq_msg_data(&request), socket_addr.c_str(), socket_addr.size());
     zmq_msg_send(&request, client_socket, 0);
     zmq_msg_close(&request);
 
-    std::string receive_port;
+    std::string receive_socket_addr;
     try
     {
         zmq_msg_t response;
         zmq_msg_init(&response);
         zmq_msg_recv(&response, client_socket, 0);
-        receive_port = std::to_string(*reinterpret_cast<int*>(zmq_msg_data(&response)));
+        receive_socket_addr = std::string((char *)zmq_msg_data(&response), zmq_msg_size(&response));
         zmq_msg_close(&response);
     }
     catch (const zmq::error_t &e)
@@ -81,7 +81,7 @@ void MultiverseClient::connect_to_server()
 
     zmq_disconnect(client_socket, server_socket_addr.c_str());
 
-    if (port.compare(receive_port) != 0)
+    if (socket_addr.compare(receive_socket_addr) != 0)
     {
         flag = EMultiverseClientState::None;
     }
@@ -114,7 +114,7 @@ void MultiverseClient::start()
     {
         printf("[Client %s] Start.\n", port.c_str());
         run();
-    }    
+    }
 }
 
 void MultiverseClient::connect()
@@ -129,7 +129,7 @@ void MultiverseClient::connect()
     {
         return;
     }
-    
+
     context = zmq_ctx_new();
     client_socket = zmq_socket(context, ZMQ_REQ);
 
@@ -159,8 +159,6 @@ void MultiverseClient::run()
         case EMultiverseClientState::BindRequestMetaData:
             bind_request_meta_data();
 
-            // printf("[Client %s] Sent meta data to the server:%*.*s\n", port.c_str(), STRING_SIZE, STRING_SIZE, request_meta_data_str.c_str());
-
             wait_for_meta_data_thread_finish();
             start_meta_data_thread();
             flag = EMultiverseClientState::InitSendAndReceiveData;
@@ -174,8 +172,6 @@ void MultiverseClient::run()
 
         case EMultiverseClientState::ReceiveResponseMetaData:
             receive_response_meta_data();
-
-            // printf("[Client %s] Received meta data from the server:%*.*s\n", port.c_str(), STRING_SIZE, STRING_SIZE, response_meta_data_str.c_str());
 
             if (should_shut_down)
             {
@@ -217,7 +213,6 @@ void MultiverseClient::run()
             break;
 
         case EMultiverseClientState::SendData:
-            send_buffer[0] = get_time_now();
             zmq_send(client_socket, send_buffer, send_buffer_size * sizeof(double), 0);
 
             flag = EMultiverseClientState::ReceiveData;
@@ -226,18 +221,36 @@ void MultiverseClient::run()
         case EMultiverseClientState::ReceiveData:
             zmq_recv(client_socket, receive_buffer, receive_buffer_size * sizeof(double), 0);
 
-            if (!should_shut_down && (std::isnan(*receive_buffer) || *receive_buffer < 0))
+            if (!should_shut_down)
             {
-                printf("[Client %s] The socket %s from the server has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
+                if (std::isnan(*receive_buffer) || *receive_buffer == -1.0)
+                {
+                    printf("[Client %s] The socket %s from the server has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
 
-                wait_for_connect_to_server_thread_finish();
-                start_connect_to_server_thread();
-                return;
+                    wait_for_connect_to_server_thread_finish();
+                    start_connect_to_server_thread();
+                    return;
+                }
+                else if (*receive_buffer == -2.0)
+                {
+                    printf("[Client %s] The socket %s from the server has received new meta data.\n", port.c_str(), socket_addr.c_str());
+                    send_request_meta_data();
+                    zmq_msg_t message;
+                    zmq_msg_init(&message);
+                    zmq_msg_recv(&message, client_socket, 0);
+                    request_meta_data_str = std::string(static_cast<char *>(zmq_msg_data(&message)), zmq_msg_size(&message));
+                    zmq_msg_close(&message);
+                    init_objects(true);
+                    flag = EMultiverseClientState::BindRequestMetaData;
+                    break;
+                }
+                else if (*receive_buffer == -3.0)
+                {
+                    printf("[Client %s] The socket %s from the server has received reset command.\n", port.c_str(), socket_addr.c_str());
+                    reset();
+                }
             }
-            else
-            {
-                flag = EMultiverseClientState::BindReceiveData;
-            }
+            flag = EMultiverseClientState::BindReceiveData;
             break;
 
         case EMultiverseClientState::BindReceiveData:
@@ -339,25 +352,22 @@ void MultiverseClient::communicate(const bool resend_request_meta_data)
     {
         run();
     }
-    else
+    else if (resend_request_meta_data)
     {
-        if (resend_request_meta_data)
+        wait_for_meta_data_thread_finish();
+        if (flag == EMultiverseClientState::BindSendData)
         {
-            wait_for_meta_data_thread_finish();
-            if (flag == EMultiverseClientState::BindSendData)
-            {
-                init_objects();
-            }
-            clean_up();
-            
-            flag = EMultiverseClientState::BindRequestMetaData;
-            
-            run();
+            init_objects();
         }
-        else if (flag == EMultiverseClientState::BindSendData || flag == EMultiverseClientState::InitSendAndReceiveData)
-        {
-            run();
-        }
+        clean_up();
+
+        flag = EMultiverseClientState::BindRequestMetaData;
+
+        run();
+    }
+    else if (flag == EMultiverseClientState::BindSendData || flag == EMultiverseClientState::InitSendAndReceiveData)
+    {
+        run();
     }
 }
 

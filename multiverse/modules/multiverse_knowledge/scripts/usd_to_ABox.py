@@ -346,13 +346,13 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
 
     ontology_stats(save_path)
 
-    with open(save_path, 'r') as file:
+    with open(save_path, "r") as file:
         content = file.read()
-    
+
     content = content.replace("<USD.", "<USD").replace("</USD.", "</USD").replace(":USD.", ":USD")
     content = content.replace("<DUL.", "<DUL").replace("</DUL.", "</DUL").replace(":DUL.", ":DUL")
-    
-    with open(save_path, 'w') as file:
+
+    with open(save_path, "w") as file:
         file.write(content)
 
     return None

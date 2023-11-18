@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Hoang Giang Nguyen - Institute for Artificial Intelligence, University Bremen
+// Copyright (c) 2023, Giang Hoang Nguyen - Institute for Artificial Intelligence, University Bremen
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,19 @@ std::map<std::string, size_t> attribute_map = {
     {"position", 3},
     {"quaternion", 4},
     {"relative_velocity", 6},
+    {"odometric_velocity", 6},
     {"joint_rvalue", 1},
     {"joint_tvalue", 1},
+    {"joint_linear_velocity", 1},
+    {"joint_angular_velocity", 1},
+    {"joint_force", 1},
+    {"joint_torque", 1},
+    {"cmd_joint_rvalue", 1},
+    {"cmd_joint_tvalue", 1},
+    {"cmd_joint_linear_velocity", 1},
+    {"cmd_joint_angular_velocity", 1},
+    {"cmd_joint_force", 1},
+    {"cmd_joint_torque", 1},
     {"joint_position", 3},
     {"joint_quaternion", 4},
     {"force", 3},
@@ -100,9 +111,8 @@ private:
         pybind11::object parsed_dict = json_loads(response_meta_data_str);
 
         response_meta_data_dict = parsed_dict.cast<pybind11::dict>();
-        const bool result = response_meta_data_dict.contains("time") && response_meta_data_dict["time"].cast<double>() > 0;
         
-        return result;
+        return response_meta_data_dict.contains("time");
     }
 
     void compute_request_buffer_sizes(size_t &req_send_buffer_size, size_t &req_receive_buffer_size) const override
@@ -187,7 +197,7 @@ private:
         
     }
 
-    bool init_objects() override
+    bool init_objects(bool from_server = false) override
     {
         return true;
     }
@@ -204,16 +214,26 @@ private:
 
     void clean_up() override
     {
-        send_data = pybind11::list();
+        // send_data = pybind11::list();
 
-        receive_data = pybind11::list();
+        // receive_data = pybind11::list();
+    }
+
+    void reset() override
+    {
+        
     }
 
     void init_send_and_receive_data() override
     {
-        send_data = pybind11::cast(std::vector<double>(send_buffer_size, 0.0));
-
-        receive_data = pybind11::cast(std::vector<double>(receive_buffer_size, 0.0));
+        if (send_buffer_size != send_data.size())
+        {
+            send_data = pybind11::cast(std::vector<double>(send_buffer_size, 0.0));
+        }
+        if (receive_buffer_size != receive_data.size())
+        {
+            receive_data = pybind11::cast(std::vector<double>(receive_buffer_size, 0.0));
+        }
     }
 
     void bind_send_data() override
@@ -223,8 +243,9 @@ private:
             printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).", port.c_str(), send_data.size(), send_buffer_size);
             return;
         }
-
-        for (size_t i = 0; i < send_buffer_size; i++)
+        
+        send_buffer[0] = std::numeric_limits<double>::quiet_NaN();
+        for (size_t i = 1; i < send_buffer_size; i++)
         {
             send_buffer[i] = send_data[i].cast<double>();
         }

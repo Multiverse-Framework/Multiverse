@@ -323,7 +323,7 @@ class MjcfExporter:
                         scale = tuple(abs(x) for x in scale)
                     if not any(x > 0 for x in geom_builder.scale):
                         scale = tuple(-abs(x) for x in scale)
-                        
+
                     transform(scale=scale)
 
                     export_stl(os.path.join(self.mjcf_file_dir, mesh_rel_path))

@@ -1,0 +1,98 @@
+# Blender 3.3.1 MTL File: 'None'
+# www.blender.org
+
+newmtl /Game/Materials_Laborraum/M_Basic_Black_M_Basic_Black
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Game/Materials_Laborraum/M_Basic_Black_M_Basic_Black_D.jpg
+map_Ks M_Basic_Black_M_Basic_Black_S.jpg
+map_Bump M_Basic_Black_M_Basic_Black_N.jpg
+
+newmtl /Game/Materials_Laborraum/M_Display_M_Display
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Game/Materials_Laborraum/M_Display_M_Display_D.jpg
+map_Ks M_Display_M_Display_S.jpg
+map_Bump M_Display_M_Display_N.jpg
+
+newmtl /Game/Materials_Laborraum/M_Glass_Oven_Door_M_Glass_Oven_Door
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl /Game/Materials_Laborraum/M_Glass_Oven_M_Glass_Oven
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl /Game/Materials_Laborraum/M_Icons_M_Icons
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Game/Materials_Laborraum/M_Icons_M_Icons_D.jpg
+map_Ks M_Icons_M_Icons_S.jpg
+map_Bump M_Icons_M_Icons_N.jpg
+
+newmtl /Game/Materials_Laborraum/M_Metal_Chrome_M_Metal_Chrome
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Game/Materials_Laborraum/M_Metal_Chrome_M_Metal_Chrome_D.jpg
+map_Ks M_Metal_Chrome_M_Metal_Chrome_S.jpg
+map_Bump M_Metal_Chrome_M_Metal_Chrome_N.jpg
+
+newmtl /Game/Materials_Laborraum/M_OvenBase_M_OvenBase
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Game/Materials_Laborraum/M_OvenBase_M_OvenBase_D.jpg
+map_Ks Game/Materials_Laborraum/M_OvenBase_M_OvenBase_S.jpg
+map_Bump M_OvenBase_M_OvenBase_N.jpg
+
+newmtl /Game/Materials_Laborraum/M_Rubber_Plastic_M_Rubber_Plastic
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Game/Materials_Laborraum/M_Rubber_Plastic_M_Rubber_Plastic_D.jpg
+map_Ks M_Rubber_Plastic_M_Rubber_Plastic_S.jpg
+map_Bump M_Rubber_Plastic_M_Rubber_Plastic_N.jpg
+
+newmtl /Game/StarterContent/Materials/M_Metal_Burnished_Steel_M_Metal_
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Game/StarterContent/Materials/M_Metal_Burnished_Steel_M_Metal_Burnished_Steel_D.jpg
+map_Ks Game/StarterContent/Materials/M_Metal_Burnished_Steel_M_Metal_Burnished_Steel_S.jpg

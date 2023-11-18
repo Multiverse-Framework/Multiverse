@@ -11,7 +11,6 @@ class MultiverseRosServiceServer(MultiverseRosBase):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.use_thread = False
 
     def start(self) -> None:
         self._init_multiverse_socket()
@@ -27,7 +26,7 @@ class MultiverseRosServiceServer(MultiverseRosBase):
         self._bind_request_meta_data(request)
         self._set_request_meta_data()
         self._communicate(True)
-        return self._bind_response(self._get_response_meta_data())
+        return self._bind_response()
 
     def _bind_request_meta_data(self, request):
         pass

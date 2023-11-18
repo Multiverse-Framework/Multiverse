@@ -6,14 +6,13 @@ from multiverse_socket import MultiverseRosBase
 
 
 class MultiverseRosSubscriber(MultiverseRosBase):
-    _topic_name = ""
     _data_class = None
     _send_data = []
     _receive_data = []
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
-        self.use_thread = True
+        self.topic = str(kwargs.get("topic"))
 
     def start(self) -> None:
         self._init_multiverse_socket()
@@ -27,8 +26,8 @@ class MultiverseRosSubscriber(MultiverseRosBase):
             self._receive_data = self._get_receive_data()
             if len(self._receive_data) > 0:
                 break
-        rospy.Subscriber(self._topic_name, self._data_class, self._subscriber_callback)
-        rospy.loginfo(f"Start subscriber {self._topic_name}")
+        rospy.Subscriber(self.topic, self._data_class, self._subscriber_callback)
+        rospy.loginfo(f"Start subscriber {self.topic}")
         rospy.spin()
         self._disconnect()
 

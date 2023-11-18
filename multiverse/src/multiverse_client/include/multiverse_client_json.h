@@ -1,4 +1,4 @@
-// Copyright (c) 2023, Hoang Giang Nguyen - Institute for Artificial Intelligence, University Bremen
+// Copyright (c) 2023, Giang Hoang Nguyen - Institute for Artificial Intelligence, University Bremen
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,11 @@
 #pragma once
 
 #include "multiverse_client.h"
+#ifdef __linux__
 #include <jsoncpp/json/json.h>
+#elif _WIN32
+#include <json/json.h>
+#endif
 
 class MultiverseClientJson : public MultiverseClient
 {

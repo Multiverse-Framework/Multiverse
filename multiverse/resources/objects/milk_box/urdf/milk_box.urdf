@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<robot name="milk_box">
+    <link name="milk_box">
+        <visual>
+            <geometry>
+                <mesh filename="package://static_objects/milk_box/meshes/obj/milk_box.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.06 0.095 0.2"/>
+            </geometry>
+        </collision>
+    </link>
+</robot>
