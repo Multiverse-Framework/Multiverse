@@ -26,12 +26,13 @@ int main(int argc, char **argv)
 {
 	rclcpp::init(argc, argv);
 
-	if (argc < 2)
+	if (argc < 3)
 	{
 		return 0;
 	}
 
 	const std::string &multiverse_params_str = argv[1];
+	const std::string &robot_urdf_str = argv[2];
 	Json::Value multiverse_params_json;
 	Json::Reader reader;
 	if (!reader.parse(multiverse_params_str, multiverse_params_json) || multiverse_params_json.empty())
@@ -61,7 +62,6 @@ int main(int argc, char **argv)
 
 	const Json::Value &controller_manager_params_json = multiverse_params_json["controller_manager"];
 	multiverse_params["robot"] = controller_manager_params_json["robot"].asString();
-	multiverse_params["robot_description"] = controller_manager_params_json["robot_description"].asString();
 
 	const Json::Value &actuators_json = controller_manager_params_json["actuators"];
 	for (const std::string &actuator_name : actuators_json.getMemberNames())
@@ -73,10 +73,10 @@ int main(int argc, char **argv)
 	MultiverseSystemHardware multiverse_system_hardware;
 	multiverse_system_hardware.init(multiverse_params, joint_actuator_map);
 	std::shared_ptr<rclcpp::Executor> executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
-	controller_manager::ControllerManager controller_manager(executor, "controller_manager", multiverse_params["robot"]);
+	controller_manager::ControllerManager controller_manager(std::make_unique<hardware_interface::ResourceManager>(robot_urdf_str), executor, "controller_manager", multiverse_params["robot"]);
 
 	double ros_time_start = controller_manager.now().seconds();
-	double world_time_now = multiverse_system_hardware.get_world_time(ros_time_start);
+	double world_time_now = multiverse_system_hardware.get_world_time(0);
 	double world_time_last = world_time_now;
 	double duration;
 	while (rclcpp::ok())

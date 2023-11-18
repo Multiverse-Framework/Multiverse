@@ -34,8 +34,8 @@ def main():
     multiverse_client_dict = data.get("multiverse_clients")
 
     if multiverse_client_dict is not None and "ros2" in multiverse_client_dict:
-        ros_dict = multiverse_client_dict.get("ros2", {})
-        if "ros2" in multiverse_client_dict and any(key in ros_dict for key in ["services", "publishers", "subscribers"]):
+        ros2_dict = multiverse_client_dict.get("ros2", {})
+        if "ros2" in multiverse_client_dict and any(key in ros2_dict for key in ["services", "publishers", "subscribers"]):
             cmd = [
                 "ros2",
                 "run",
@@ -46,8 +46,8 @@ def main():
             # if "services" in ros_dict:
             #     ros_services_dict = ros_dict["services"]
             #     cmd.append(f'--services="{ros_services_dict}"')
-            if "publishers" in ros_dict:
-                ros_publishers_dict = ros_dict["publishers"]
+            if "publishers" in ros2_dict:
+                ros_publishers_dict = ros2_dict["publishers"]
                 cmd.append(f'--publishers="{ros_publishers_dict}"')
             # if "subscribers" in ros_dict:
             #     ros_subscribers_dict = ros_dict["subscribers"]
@@ -55,9 +55,9 @@ def main():
 
             process = run_subprocess(cmd)
 
-        if "ros2_run" in ros_dict:
-            if "ros2_run" in ros_dict:
-                ros2_run_dict = ros_dict["ros2_run"]
+        if "ros2_run" in ros2_dict:
+            if "ros2_run" in ros2_dict:
+                ros2_run_dict = ros2_dict["ros2_run"]
                 if "rviz2" in ros2_run_dict:
                     rviz2_dict = ros2_run_dict["rviz2"]
 
@@ -78,6 +78,33 @@ def main():
                         f"{rviz2_config_path}",
                     ]
                     process = run_subprocess(cmd)
+
+        if "ros_control" in ros2_dict:
+            for ros_control_dict in ros2_dict["ros_control"]:
+                controller_manager = ros_control_dict["controller_manager"]
+                robot = controller_manager["robot"]
+                actuators = controller_manager["actuators"]
+                robot_urdf_path = find_files(resources_paths, controller_manager["urdf"])
+                robot_urdf_str = get_urdf_str_abs(robot_urdf_path)
+
+                multiverse_dict = {
+                    "multiverse_server": multiverse_server_dict,
+                    "multiverse_client": {
+                        "host": ros_control_dict["host"],
+                        "port": ros_control_dict["port"],
+                        "meta_data": ros_control_dict["meta_data"],
+                    },
+                    "controller_manager": {"robot": robot, "actuators": actuators},
+                }
+                cmd = [
+                    "ros2",
+                    "run",
+                    "multiverse_control",
+                    "multiverse_control_node",
+                    f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"', '"'),
+                    robot_urdf_str
+                ]
+                process = run_subprocess(cmd)
 
 if __name__ == "__main__":
     main()
