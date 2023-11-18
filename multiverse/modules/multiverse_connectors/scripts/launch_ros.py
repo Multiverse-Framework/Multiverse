@@ -4,7 +4,7 @@ import sys
 import yaml
 import os
 import argparse
-from utils import find_files, run_subprocess, get_urdf_str
+from utils import find_files, run_subprocess, get_urdf_str_from_ros_package
 
 
 def main():
@@ -77,7 +77,7 @@ def main():
 
                     for robot_description, urdf_path in rviz_dict.get("robot_descriptions", {}).items():
                         urdf_path = find_files(resources_paths, urdf_path)
-                        urdf_str = get_urdf_str(mesh_abspath_prefix, multiverse_control_pkg_path, urdf_path)
+                        urdf_str = get_urdf_str_from_ros_package(mesh_abspath_prefix, multiverse_control_pkg_path, urdf_path)
                         rospy.set_param(f"/{robot_description}", f"{urdf_str}")
 
                     rviz_config_path = find_files(resources_paths, rviz_dict["config"])
@@ -126,7 +126,7 @@ def main():
                     robot_description = controller_manager["robot_description"]
                     actuators = controller_manager["actuators"]
                     robot_urdf_path = find_files(resources_paths, controller_manager["urdf"])
-                    robot_urdf_str = get_urdf_str(mesh_abspath_prefix, multiverse_control_pkg_path, robot_urdf_path)
+                    robot_urdf_str = get_urdf_str_from_ros_package(mesh_abspath_prefix, multiverse_control_pkg_path, robot_urdf_path)
                     rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
                     multiverse_dict = {
                         "multiverse_server": multiverse_server_dict,

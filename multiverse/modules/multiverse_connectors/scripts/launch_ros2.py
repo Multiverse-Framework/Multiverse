@@ -4,7 +4,7 @@ import sys
 import yaml
 import os
 import argparse
-from utils import run_subprocess, find_files
+from utils import run_subprocess, find_files, get_urdf_str_abs
 
 def main():
     parser = argparse.ArgumentParser(prog="multiverse_launch", description="Launch the multiverse framework")
@@ -55,30 +55,29 @@ def main():
 
             process = run_subprocess(cmd)
 
-        # if "ros2_run" in ros_dict:
-        #     multiverse_control_pkg_path = get_package_share_directory("multiverse_control")
-        #     mesh_abspath_prefix = os.path.relpath("/", multiverse_control_pkg_path)
-        #     mesh_abspath_prefix = os.path.join("package://multiverse_control", mesh_abspath_prefix)
+        if "ros2_run" in ros_dict:
+            if "ros2_run" in ros_dict:
+                ros2_run_dict = ros_dict["ros2_run"]
+                if "rviz2" in ros2_run_dict:
+                    rviz2_dict = ros2_run_dict["rviz2"]
 
-        #     if "ros2_run" in ros_dict:
-        #         ros2_run_dict = ros_dict["ros2_run"]
-        #         if "rviz2" in ros2_run_dict:
-        #             rviz2_dict = ros2_run_dict["rviz2"]
+                    for _, urdf_path in rviz2_dict.get("robot_descriptions", {}).items():
+                        urdf_path = find_files(resources_paths, urdf_path)
+                        urdf_str = get_urdf_str_abs(urdf_path)
+                        tmp_urdf_path = os.path.join("/tmp", os.path.basename(urdf_path))
+                        with open(tmp_urdf_path, 'w') as file:
+                            file.write(urdf_str)
 
-        #             for robot_description, urdf_path in rviz2_dict.get("robot_descriptions", {}).items():
-        #                 urdf_path = find_files(resources_paths, urdf_path)
-        #                 urdf_str = get_urdf_str(mesh_abspath_prefix, multiverse_control_pkg_path, urdf_path)
-        #                 rospy.set_param(f"/{robot_description}", f"{urdf_str}")
-
-        #             rviz_config_path = find_files(resources_paths, rviz_dict["config"])
-        #             cmd = [
-        #                 "rosrun",
-        #                 "rviz",
-        #                 "rviz",
-        #                 "--display-config",
-        #                 f"{rviz_config_path}",
-        #             ]
-        #             process = run_subprocess(cmd)
+                    rviz2_config_path = find_files(resources_paths, rviz2_dict["config"])
+                    cmd = [
+                        "ros2",
+                        "run",
+                        "rviz2",
+                        "rviz2",
+                        "--display-config",
+                        f"{rviz2_config_path}",
+                    ]
+                    process = run_subprocess(cmd)
 
 if __name__ == "__main__":
     main()

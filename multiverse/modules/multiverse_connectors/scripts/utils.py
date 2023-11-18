@@ -25,12 +25,20 @@ def find_files(resources_paths: List[str], filename_pattern: str) -> str:
         match = matches[0]
     return match
 
-def get_urdf_str(mesh_abspath_prefix: str, multiverse_control_pkg_path: str, urdf_path: str) -> str:
+def get_urdf_str_from_ros_package(mesh_abspath_prefix: str, ros_pkg_path: str, urdf_path: str) -> str:
     tree = ET.parse(urdf_path)
     root = tree.getroot()
     robot_urdf_str = ET.tostring(root, encoding="unicode")
-    mesh_relpath_prefix = os.path.relpath(os.path.dirname(urdf_path), multiverse_control_pkg_path)
+    mesh_relpath_prefix = os.path.relpath(os.path.dirname(urdf_path), ros_pkg_path)
     mesh_relpath_prefix = os.path.join("package://multiverse_control", mesh_relpath_prefix) + "/"
     robot_urdf_str = robot_urdf_str.replace("file:///", mesh_abspath_prefix)
     robot_urdf_str = robot_urdf_str.replace("file://", mesh_relpath_prefix)
+    return robot_urdf_str
+
+def get_urdf_str_abs(urdf_path: str) -> str:
+    tree = ET.parse(urdf_path)
+    root = tree.getroot()
+    robot_urdf_str = ET.tostring(root, encoding="unicode")
+    mesh_abspath_prefix = "file://" + os.path.dirname(urdf_path) + "/"
+    robot_urdf_str = robot_urdf_str.replace("file://", mesh_abspath_prefix)
     return robot_urdf_str
