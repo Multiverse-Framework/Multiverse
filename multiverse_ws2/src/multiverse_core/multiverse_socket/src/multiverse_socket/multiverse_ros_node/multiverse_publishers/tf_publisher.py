@@ -33,14 +33,14 @@ class TfPublisher(MultiverseRosPublisher):
         
 
     def _construct_ros_message(self, response_meta_data: Dict) -> None:
-        self.object_names = []
+        object_names = []
         if response_meta_data.get("receive") is None:
             return
 
-        self.object_names = response_meta_data["receive"].keys()
+        object_names = response_meta_data["receive"].keys()
         self._tf_msgs = []
 
-        for object_name in self.object_names:
+        for object_name in object_names:
             tf_data = response_meta_data["receive"][object_name]
             if any([p is None for p in tf_data["position"]]) or any([q is None for q in tf_data["quaternion"]]):
                 continue

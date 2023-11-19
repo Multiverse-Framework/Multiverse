@@ -39,19 +39,17 @@ class MultiverseRosPublisher(MultiverseRosNode, Node):
         self.destroy_node()
 
     def _publisher_callback(self):
+        self._communicate(self._use_meta_data)
         if self._use_meta_data:
-            self._communicate(True)
             self._construct_ros_message(self.response_meta_data)
-            self._publish()
         else:
-            self._communicate()
-            self._bind_ros_message()
-            self._publish()
+            self._bind_ros_message(self.receive_data)
+        self._publish()
 
     def _construct_ros_message(self, response_meta_data) -> None:
         pass
 
-    def _bind_ros_message(self) -> None:
+    def _bind_ros_message(self, receive_data) -> None:
         pass
 
     def _publish(self) -> None:

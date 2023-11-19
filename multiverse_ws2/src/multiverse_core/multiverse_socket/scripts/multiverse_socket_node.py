@@ -97,8 +97,15 @@ class MultiverseRosSocket:
 
     def start(self):
         threads = {}
-        publisher_list: List[MultiverseRosPublisher] = []
         subscriber_list: List[MultiverseRosSubscriber] = []
+        publisher_list: List[MultiverseRosPublisher] = []
+        
+        for subscriber_name, subscriber_props in self.subscribers.items():
+            for subscriber_prop in subscriber_props:
+                print(f"Start subscriber [{subscriber_name}] with {subscriber_prop}")
+                subscriber = MultiverseRosNodeProperties(ros_base_name=subscriber_name,
+                                                        ros_base_prop=subscriber_prop).create_subscriber()
+                subscriber_list.append(subscriber)
 
         for publisher_name, publisher_props in self.publishers.items():
             for publisher_prop in publisher_props:
@@ -107,22 +114,15 @@ class MultiverseRosSocket:
                                                         ros_base_prop=publisher_prop).create_publisher()
                 publisher_list.append(publisher)
 
-        for subscriber_name, subscriber_props in self.subscribers.items():
-            for subscriber_prop in subscriber_props:
-                print(f"Start subscriber [{subscriber_name}] with {subscriber_prop}")
-                subscriber = MultiverseRosNodeProperties(ros_base_name=subscriber_name,
-                                                        ros_base_prop=subscriber_prop).create_subscriber()
-                subscriber_list.append(subscriber)
+        for subscriber in subscriber_list:
+            subscriber_thread = threading.Thread(target=subscriber.start)
+            subscriber_thread.start()
+            threads[subscriber] = subscriber_thread
 
         for publisher in publisher_list:
             publisher_thread = threading.Thread(target=publisher.start)
             publisher_thread.start()
             threads[publisher] = publisher_thread
-
-        for subscriber in subscriber_list:
-            subscriber_thread = threading.Thread(target=subscriber.start)
-            subscriber_thread.start()
-            threads[subscriber] = subscriber_thread
 
         try:
             while rclpy.ok():
@@ -132,10 +132,10 @@ class MultiverseRosSocket:
             print(f"[{self.__class__.__name__}] Caught SIGINT (Ctrl+C), exiting...")
             rclpy.shutdown()
         finally:
-            for publisher in publisher_list:
-                threads[publisher].join()
             for subscriber in subscriber_list:
                 threads[subscriber].join()
+            for publisher in publisher_list:
+                threads[publisher].join()
 
 
 def main():

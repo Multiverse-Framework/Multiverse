@@ -7,7 +7,7 @@ from ..multiverse_ros_node import SimulationMetaData
 
 
 class CmdVelSubscriber(MultiverseRosSubscriber):
-    _body: str
+    _body_name: str
     _msg_type = Twist
 
     def __init__(
@@ -19,10 +19,10 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
         simulation_metadata: SimulationMetaData = SimulationMetaData(),
         **kwargs
     ) -> None:
-        self._body = kwargs.get("body")
-        if self._body is None:
+        self._body_name = kwargs.get("body")
+        if self._body_name is None:
             raise Exception("Body not found.")
-        elif not isinstance(self._body, str):
+        elif not isinstance(self._body_name, str):
             raise TypeError("Body is not a string.")
         super().__init__(
             topic_name=topic_name,
@@ -31,7 +31,7 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
             client_port=client_port,
             simulation_metadata=simulation_metadata,
         )
-        self.request_meta_data["send"][self._body] = ["odometric_velocity"]
+        self.request_meta_data["send"][self._body_name] = ["odometric_velocity"]
 
     def _init_send_data(self) -> None:
         self.send_data = [0.0] * 7
