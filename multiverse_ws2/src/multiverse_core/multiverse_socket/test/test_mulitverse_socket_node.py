@@ -6,9 +6,8 @@ from time import sleep
 
 import rclpy
 
-from multiverse_socket.multiverse_ros_node.multiverse_publishers.tf_publisher import TfPublisher
-from scripts.multiverse_socket_node import MultiverseRosNodeProperties
-
+from ...multiverse_socket.src.multiverse_socket.multiverse_ros_node.multiverse_publishers.tf_publisher import TfPublisher
+from ..scripts.multiverse_socket_node import MultiverseRosNodeProperties
 
 def start_multiverse_server() -> subprocess.Popen:
     return subprocess.Popen(["multiverse_server"])

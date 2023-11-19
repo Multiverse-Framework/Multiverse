@@ -4,44 +4,44 @@ resources:
   - ../objects
 
 worlds:
-  world_0:
+  world_1:
     rtf_desired: 1
 
-  world_1:
+  world_2:
     rtf_desired: 10
 
 simulations:
   sim_1:
     simulator: mujoco
     world:
-      name: world_0
+      name: world_1
       path: floor.xml
     robots:
-      tiago_dual_0:
-        path: tiago_dual.xml
-        apply:
-          body:
-            tiago_dual_0:
-              pos: [1, 2, 0]
-            gravcomp: 1
-        disable_self_collision: auto
-        suffix:
-          body: _0
-          geom: _0
-          joint: _0
-          position: _0
       tiago_dual_1:
         path: tiago_dual.xml
         apply:
           body:
             tiago_dual_1:
-              pos: [-1, -2, 0]
+              pos: [1, 2, 0]
+            gravcomp: 1
         disable_self_collision: auto
         suffix:
           body: _1
           geom: _1
           joint: _1
           position: _1
+      tiago_dual_2:
+        path: tiago_dual.xml
+        apply:
+          body:
+            tiago_dual_2:
+              pos: [-1, -2, 0]
+        disable_self_collision: auto
+        suffix:
+          body: _2
+          geom: _2
+          joint: _2
+          position: _2
     config:
       max_time_step: 0.002
       min_time_step: 0.001
@@ -49,7 +49,7 @@ simulations:
   sim_2:
     simulator: mujoco
     world:
-      name: world_1
+      name: world_2
       path: floor.xml
     robots:
       ur5e:
@@ -76,8 +76,8 @@ multiverse_clients:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue"]
     receive:
-      tiago_dual_0: ["odometric_velocity"]
       tiago_dual_1: ["odometric_velocity"]
+      tiago_dual_2: ["odometric_velocity"]
 
   sim_2:
     host: "tcp://127.0.0.1"
@@ -102,7 +102,7 @@ multiverse_clients:
     publishers:
       tf:
         - meta_data:
-            world_name: world_0
+            world_name: world_1
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -114,7 +114,7 @@ multiverse_clients:
           rate: 60
           root_frame_id: map_0
         - meta_data:
-            world_name: world_1
+            world_name: world_2
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -127,7 +127,7 @@ multiverse_clients:
           root_frame_id: map_1
       odom:
         - meta_data:
-            world_name: world_0
+            world_name: world_1
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -137,24 +137,13 @@ multiverse_clients:
           port: 7303
           topic: /odom
           rate: 60
-          body: tiago_dual_0
+          body: tiago_dual_1
           frame_id: map_0
 
     subscribers:
       cmd_vel:
         - meta_data:
-            world_name: world_0
-            length_unit: m
-            angle_unit: rad
-            mass_unit: kg
-            time_unit: s
-            handedness: rhs
-          host: "tcp://127.0.0.1"
-          port: 7201
-          topic: /cmd_vel
-          body: tiago_dual_0
-        - meta_data:
-            world_name: world_0
+            world_name: world_1
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -163,11 +152,11 @@ multiverse_clients:
           host: "tcp://127.0.0.1"
           port: 7202
           topic: /cmd_vel
-          body: tiago_dual_1
+          body: tiago_dual_2
 
     ros_control:
       - meta_data:
-          world_name: world_1
+          world_name: world_2
           length_unit: m
           angle_unit: rad
           mass_unit: kg
@@ -201,7 +190,7 @@ multiverse_clients:
     publishers:
       tf:
         - meta_data:
-            world_name: world_0
+            world_name: world_1
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -213,7 +202,7 @@ multiverse_clients:
           rate: 60
           root_frame_id: map_0
         - meta_data:
-            world_name: world_1
+            world_name: world_2
             length_unit: m
             angle_unit: rad
             mass_unit: kg
@@ -224,6 +213,19 @@ multiverse_clients:
           topic: /tf
           rate: 60
           root_frame_id: map_1
+    subscribers:
+      cmd_vel:
+        - meta_data:
+            world_name: world_1
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
+          port: 7801
+          topic: /cmd_vel
+          body: tiago_dual_1
 
     ros2_run:
       rviz2:

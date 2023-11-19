@@ -12,22 +12,21 @@ from ..multiverse_ros_node import SimulationMetaData
 
 class TfPublisher(MultiverseRosPublisher):
     _tf_msgs: List[TransformStamped] = []
-    _topic_name: str = "/tf"
 
     def __init__(
             self,
-            topic_name: str,
-            node_name: str,
+            topic_name: str = "/tf",
+            node_name: str = "tf_publisher",
             rate: float = 60.0,
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
             simulation_metadata: SimulationMetaData = SimulationMetaData(),
             **kwargs
     ) -> None:
+        self._msg_type = TFMessage
         super().__init__(topic_name=topic_name, node_name=node_name, rate=rate, client_host=client_host,
                          client_port=client_port, simulation_metadata=simulation_metadata)
         self._use_meta_data = True
-        self._publisher = self.create_publisher(TFMessage, self._topic_name, 100)
         self._root_frame_id = kwargs.get("root_frame_id", "map")
 
     def _init_request_meta_data(self) -> None:
@@ -44,17 +43,16 @@ class TfPublisher(MultiverseRosPublisher):
 
         for object_name in self.object_names:
             tf_data = response_meta_data_dict["receive"][object_name]
+            if any([p is None for p in tf_data["position"]]) or any([q is None for q in tf_data["quaternion"]]):
+                continue
             tf_msg = TransformStamped()
             tf_msg.header.frame_id = self._root_frame_id
             tf_msg.header.stamp = self.get_clock().now().to_msg()
             tf_msg.child_frame_id = object_name
-
             tf_msg.transform.translation.x = float(tf_data["position"][0])
             tf_msg.transform.translation.y = float(tf_data["position"][1])
             tf_msg.transform.translation.z = float(tf_data["position"][2])
             quaternion = numpy.array([float(tf_data["quaternion"][i]) for i in range(4)])
-            if any([q is None for q in quaternion]):
-                continue
             quaternion = quaternion / numpy.linalg.norm(quaternion)
             tf_msg.transform.rotation.w = quaternion[0]
             tf_msg.transform.rotation.x = quaternion[1]

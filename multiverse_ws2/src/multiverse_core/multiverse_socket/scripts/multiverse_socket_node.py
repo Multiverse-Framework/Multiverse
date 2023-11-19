@@ -10,6 +10,7 @@ import rclpy
 import yaml
 
 from multiverse_socket.multiverse_ros_node.multiverse_publishers.ros_publisher import MultiverseRosPublisher
+from multiverse_socket.multiverse_ros_node.multiverse_subscribers.ros_subscriber import MultiverseRosSubscriber
 from multiverse_socket.multiverse_ros_node.multiverse_ros_node import MultiverseRosNode, SimulationMetaData
 
 
@@ -17,16 +18,8 @@ class MultiverseRosNodeProperties:
     def __init__(self, ros_base_name: str, ros_base_prop: Dict):
         self.ros_base_name = ros_base_name
         self.ros_base_prop = ros_base_prop
-
-    @property
-    def publisher_name(self):
-        publisher_name = self.ros_base_name.split("_")
-        publisher_name = ''.join(part.capitalize() for part in publisher_name)
-        return publisher_name + "Publisher"
-
-    def create_publisher(self):
         simulation_metadata_dict = self.ros_base_prop.pop("meta_data")
-        simulation_metadata = SimulationMetaData(
+        self.simulation_metadata = SimulationMetaData(
             world_name=simulation_metadata_dict["world_name"],
             length_unit=simulation_metadata_dict["length_unit"],
             angle_unit=simulation_metadata_dict["angle_unit"],
@@ -34,23 +27,50 @@ class MultiverseRosNodeProperties:
             time_unit=simulation_metadata_dict["time_unit"],
             handedness=simulation_metadata_dict["handedness"],
         )
-        client_host = self.ros_base_prop.pop("host")
-        client_port = str(self.ros_base_prop.pop("port"))
-        node_name = f"{self.ros_base_name}_publisher_{client_port}"
+        self.client_host = self.ros_base_prop.pop("host")
+        self.client_port = str(self.ros_base_prop.pop("port"))
+
+    @property
+    def publisher_name(self):
+        publisher_name = self.ros_base_name.split("_")
+        publisher_name = ''.join(part.capitalize() for part in publisher_name)
+        return publisher_name + "Publisher"
+    
+    @property
+    def subscriber_name(self):
+        subscriber_name = self.ros_base_name.split("_")
+        subscriber_name = ''.join(part.capitalize() for part in subscriber_name)
+        return subscriber_name + "Subscriber"
+
+    def create_publisher(self):
+        node_name = f"{self.ros_base_name}_publisher_{self.client_port}"
         topic_name = self.ros_base_prop.pop("topic")
         rate = self.ros_base_prop.pop("rate")
-
         for subclass in MultiverseRosPublisher.__subclasses__():
             if subclass.__name__ == self.publisher_name:
                 return subclass(node_name=node_name,
                                 topic_name=topic_name,
                                 rate=rate,
-                                client_host=client_host,
-                                client_port=client_port,
-                                simulation_metadata=simulation_metadata,
+                                client_host=self.client_host,
+                                client_port=self.client_port,
+                                simulation_metadata=self.simulation_metadata,
                                 **self.ros_base_prop)
 
         raise TypeError(f"Class {self.publisher_name} not found.")
+    
+    def create_subscriber(self):
+        node_name = f"{self.ros_base_name}_subscriber_{self.client_port}"
+        topic_name = self.ros_base_prop.pop("topic")
+        for subclass in MultiverseRosSubscriber.__subclasses__():
+            if subclass.__name__ == self.subscriber_name:
+                return subclass(node_name=node_name,
+                                topic_name=topic_name,
+                                client_host=self.client_host,
+                                client_port=self.client_port,
+                                simulation_metadata=self.simulation_metadata,
+                                **self.ros_base_prop)
+
+        raise TypeError(f"Class {self.subscriber_name} not found.")
 
 
 class MultiverseRosSocket:
@@ -78,6 +98,7 @@ class MultiverseRosSocket:
     def start(self):
         threads = {}
         publisher_list: List[MultiverseRosPublisher] = []
+        subscriber_list: List[MultiverseRosSubscriber] = []
 
         for publisher_name, publisher_props in self.publishers.items():
             for publisher_prop in publisher_props:
@@ -86,10 +107,22 @@ class MultiverseRosSocket:
                                                         ros_base_prop=publisher_prop).create_publisher()
                 publisher_list.append(publisher)
 
+        for subscriber_name, subscriber_props in self.subscribers.items():
+            for subscriber_prop in subscriber_props:
+                print(f"Start subscriber [{subscriber_name}] with {subscriber_prop}")
+                subscriber = MultiverseRosNodeProperties(ros_base_name=subscriber_name,
+                                                        ros_base_prop=subscriber_prop).create_subscriber()
+                subscriber_list.append(subscriber)
+
         for publisher in publisher_list:
             publisher_thread = threading.Thread(target=publisher.start)
             publisher_thread.start()
             threads[publisher] = publisher_thread
+
+        for subscriber in subscriber_list:
+            subscriber_thread = threading.Thread(target=subscriber.start)
+            subscriber_thread.start()
+            threads[subscriber] = subscriber_thread
 
         try:
             while rclpy.ok():
@@ -101,6 +134,8 @@ class MultiverseRosSocket:
         finally:
             for publisher in publisher_list:
                 threads[publisher].join()
+            for subscriber in subscriber_list:
+                threads[subscriber].join()
 
 
 def main():

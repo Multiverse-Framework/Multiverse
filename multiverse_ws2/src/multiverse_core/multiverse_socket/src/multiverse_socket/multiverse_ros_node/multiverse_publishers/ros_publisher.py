@@ -9,8 +9,8 @@ from ..multiverse_ros_node import MultiverseRosNode, SimulationMetaData
 
 class MultiverseRosPublisher(MultiverseRosNode, Node):
     _publisher: Publisher
+    _msg_type = None
     _use_meta_data: bool = False
-    _topic_name: str = ""
     _executor: MultiThreadedExecutor
 
     def __init__(
@@ -20,16 +20,15 @@ class MultiverseRosPublisher(MultiverseRosNode, Node):
             rate: float = 60.0,
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
-            simulation_metadata: SimulationMetaData = SimulationMetaData(),
-            **kwargs
-    ):
+            simulation_metadata: SimulationMetaData = SimulationMetaData()
+    ) -> None:
         MultiverseRosNode.__init__(self, client_host=client_host, client_port=client_port,
                                    simulation_metadata=simulation_metadata)
         Node.__init__(self, node_name=node_name)
-        self._topic_name = topic_name
         self._executor = MultiThreadedExecutor()
         self._executor.add_node(self)
-        self.create_timer(1.0 / rate, self._publisher_callback)
+        self._publisher = self.create_publisher(self._msg_type, topic_name, 100)
+        self.create_timer(timer_period_sec=1.0 / rate, callback=self._publisher_callback)
 
     def start(self) -> None:
         self._init_multiverse_socket()

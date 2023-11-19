@@ -49,9 +49,9 @@ def main():
             if "publishers" in ros2_dict:
                 ros_publishers_dict = ros2_dict["publishers"]
                 cmd.append(f'--publishers="{ros_publishers_dict}"')
-            # if "subscribers" in ros_dict:
-            #     ros_subscribers_dict = ros_dict["subscribers"]
-            #     cmd.append(f'--subscribers="{ros_subscribers_dict}"')
+            if "subscribers" in ros2_dict:
+                ros_subscribers_dict = ros2_dict["subscribers"]
+                cmd.append(f'--subscribers="{ros_subscribers_dict}"')
 
             process = run_subprocess(cmd)
 
