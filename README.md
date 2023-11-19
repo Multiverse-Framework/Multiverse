@@ -27,7 +27,5 @@ build_multiverse.bat            # Build the software
 # Test
 
 ```bash
-source multiverse_ws/devel/setup.bash                # Source the ROS workspace
-multiverse_server                                    # Start the multiverse server
-roslaunch mujoco_sim multi_mujoco_sim_ref.launch     # Start 4 instances of MuJoCo
+multiverse_launch 
 ```
