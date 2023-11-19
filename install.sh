@@ -12,8 +12,9 @@ add-apt-repository ppa:ubuntu-toolchain-r/test
 # Update package lists
 apt-get update
 
-# Install ROS
+# Install ROS1 and ROS2
 apt-get install -y ros-noetic-desktop-full
+apt-get install -y ros-foxy-desktop
 
 # Install python3-pip
 apt-get install -y python3-pip
