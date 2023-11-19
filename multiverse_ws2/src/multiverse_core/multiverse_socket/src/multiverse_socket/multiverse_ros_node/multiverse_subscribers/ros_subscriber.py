@@ -11,6 +11,7 @@ class MultiverseRosSubscriber(MultiverseRosNode, Node):
     _msg_type = None
     _send_data: List[float] = []
     _receive_data: List[float] = []
+    _executor: MultiThreadedExecutor
 
     def __init__(
             self,
@@ -28,16 +29,11 @@ class MultiverseRosSubscriber(MultiverseRosNode, Node):
         self.create_subscription(msg_type=self._msg_type, topic=topic_name, callback=self._subscriber_callback, qos_profile=1)
 
     def start(self) -> None:
-        self._init_multiverse_socket()
-        self._set_request_meta_data()
         self._connect()
-        self._get_response_meta_data()
         self._init_send_data()
-        self._set_send_data(self._send_data)
         self._communicate()
         while rclpy.ok():
-            self._receive_data = self._get_receive_data()
-            if len(self._receive_data) > 0:
+            if len(self.receive_data) > 0:
                 break
         self._executor.spin()
         self._disconnect()
@@ -45,9 +41,7 @@ class MultiverseRosSubscriber(MultiverseRosNode, Node):
 
     def _subscriber_callback(self, data: Any) -> None:
         self._bind_send_data(data)
-        self._set_send_data(self._send_data)
         self._communicate()
-        self._receive_data = self._get_receive_data()
 
     def _init_send_data(self) -> None:
         pass

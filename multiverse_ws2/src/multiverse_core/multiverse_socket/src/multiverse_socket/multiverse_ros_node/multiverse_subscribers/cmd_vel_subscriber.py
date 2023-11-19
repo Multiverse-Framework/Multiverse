@@ -7,6 +7,9 @@ from ..multiverse_ros_node import SimulationMetaData
 
 
 class CmdVelSubscriber(MultiverseRosSubscriber):
+    _body: str
+    _msg_type = Twist
+
     def __init__(
         self,
         topic_name: str = "/cmd_vel",
@@ -21,7 +24,6 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
             raise Exception("Body not found.")
         elif not isinstance(self._body, str):
             raise TypeError("Body is not a string.")
-        self._msg_type = Twist
         super().__init__(
             topic_name=topic_name,
             node_name=node_name,
@@ -29,20 +31,17 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
             client_port=client_port,
             simulation_metadata=simulation_metadata,
         )
-
-    def _init_request_meta_data(self) -> None:
-        super()._init_request_meta_data()
-        self._request_meta_data_dict["send"] = {}
-        self._request_meta_data_dict["send"][self._body] = ["odometric_velocity"]
-        self._request_meta_data_dict["receive"] = {}
+        self.request_meta_data["send"][self._body] = ["odometric_velocity"]
 
     def _init_send_data(self) -> None:
-        self._send_data = [0.0] * 7
+        self.send_data = [0.0] * 7
 
     def _bind_send_data(self, twist_msg: Twist) -> None:
-        self._send_data[1] = twist_msg.linear.x
-        self._send_data[2] = twist_msg.linear.y
-        self._send_data[3] = twist_msg.linear.z
-        self._send_data[4] = twist_msg.angular.x
-        self._send_data[5] = twist_msg.angular.y
-        self._send_data[6] = twist_msg.angular.z
+        self.send_data[1:] = [
+            twist_msg.linear.x,
+            twist_msg.linear.y,
+            twist_msg.linear.z,
+            twist_msg.angular.x,
+            twist_msg.angular.y,
+            twist_msg.angular.z
+        ]

@@ -11,7 +11,10 @@ from ..multiverse_ros_node import SimulationMetaData
 
 
 class TfPublisher(MultiverseRosPublisher):
+    _use_meta_data = True
+    _msg_type = TFMessage
     _tf_msgs: List[TransformStamped] = []
+    _root_frame_id: str
 
     def __init__(
             self,
@@ -23,26 +26,22 @@ class TfPublisher(MultiverseRosPublisher):
             simulation_metadata: SimulationMetaData = SimulationMetaData(),
             **kwargs
     ) -> None:
-        self._msg_type = TFMessage
         super().__init__(topic_name=topic_name, node_name=node_name, rate=rate, client_host=client_host,
                          client_port=client_port, simulation_metadata=simulation_metadata)
-        self._use_meta_data = True
         self._root_frame_id = kwargs.get("root_frame_id", "map")
+        self.request_meta_data["receive"][""] = ["position", "quaternion"]
+        
 
-    def _init_request_meta_data(self) -> None:
-        super()._init_request_meta_data()
-        self._request_meta_data_dict["receive"][""] = ["position", "quaternion"]
-
-    def _construct_ros_message(self, response_meta_data_dict: Dict) -> None:
+    def _construct_ros_message(self, response_meta_data: Dict) -> None:
         self.object_names = []
-        if response_meta_data_dict.get("receive") is None:
+        if response_meta_data.get("receive") is None:
             return
 
-        self.object_names = response_meta_data_dict["receive"].keys()
+        self.object_names = response_meta_data["receive"].keys()
         self._tf_msgs = []
 
         for object_name in self.object_names:
-            tf_data = response_meta_data_dict["receive"][object_name]
+            tf_data = response_meta_data["receive"][object_name]
             if any([p is None for p in tf_data["position"]]) or any([q is None for q in tf_data["quaternion"]]):
                 continue
             tf_msg = TransformStamped()

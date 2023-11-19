@@ -19,6 +19,10 @@ class SimulationMetaData:
 class MultiverseRosNode:
     _server_host: str = "tcp://127.0.0.1"
     _server_port: str = "7000"
+    _client_host: str
+    _client_port: str
+    _simulation_metadata: SimulationMetaData
+    _multiverse_socket: MultiverseClientPybind
 
     def __init__(self, client_host: str = "tcp://127.0.0.1", client_port: str = "",
                  simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
@@ -27,45 +31,53 @@ class MultiverseRosNode:
         self._client_host = client_host
         self._client_port = client_port
         self._simulation_metadata = simulation_metadata
-        self._init_request_meta_data()
+        self._multiverse_socket = MultiverseClientPybind(f"{self._server_host}:{self._server_port}")
+        self.request_meta_data = {"meta_data": self._simulation_metadata.__dict__, "send": {}, "receive": {}}
 
     def start(self) -> None:
         pass
 
-    def _init_multiverse_socket(self) -> None:
-        server_socket_addr = f"{self._server_host}:{self._server_port}"
-        self.__multiverse_socket = MultiverseClientPybind(server_socket_addr)
-
-    def _init_request_meta_data(self) -> None:
-        self._request_meta_data_dict = {"meta_data": self._simulation_metadata.__dict__, "send": {}, "receive": {}}
-
-    def _connect(self) -> None:
-        self.__multiverse_socket.connect(self._client_host, self._client_port)
-        self.__multiverse_socket.start()
-
-    def _disconnect(self) -> None:
-        self.__multiverse_socket.disconnect()
-
-    def _set_request_meta_data(self) -> None:
-        self.__multiverse_socket.set_request_meta_data(self._request_meta_data_dict)
-
-    def _get_response_meta_data(self) -> Dict:
-        response_meta_data = self.__multiverse_socket.get_response_meta_data()
+    @property
+    def request_meta_data(self) -> Dict:
+        return self._request_meta_data
+    
+    @request_meta_data.setter
+    def request_meta_data(self, request_meta_data: Dict) -> None:
+        self._request_meta_data = request_meta_data
+        self._multiverse_socket.set_request_meta_data(self._request_meta_data)
+        
+    @property
+    def response_meta_data(self) -> Dict:
+        response_meta_data = self._multiverse_socket.get_response_meta_data()
         if not response_meta_data:
             print(f"[Client {self._client_port}] Receive empty response meta data.")
         return response_meta_data
 
-    def _set_send_data(self, send_data: List[float]) -> None:
-        self.__multiverse_socket.set_send_data(send_data)
+    @property
+    def send_data(self) -> List[float]:
+        return self._send_data
+    
+    @send_data.setter
+    def send_data(self, send_data: List[float]) -> None:
+        self._send_data = send_data
+        self._multiverse_socket.set_send_data(self._send_data)
 
-    def _communicate(self, resend_request_meta_data: bool = False) -> None:
-        self.__multiverse_socket.communicate(resend_request_meta_data)
-
-    def _get_receive_data(self) -> List[float]:
-        receive_data = self.__multiverse_socket.get_receive_data()
+    @property
+    def receive_data(self) -> List[float]:
+        receive_data = self._multiverse_socket.get_receive_data()
         if not receive_data:
             print(f"[Client {self._client_port}] Receive empty data.")
         return receive_data
+
+    def _connect(self) -> None:
+        self._multiverse_socket.connect(self._client_host, self._client_port)
+        self._multiverse_socket.start()
+
+    def _disconnect(self) -> None:
+        self._multiverse_socket.disconnect()
+
+    def _communicate(self, resend_request_meta_data: bool = False) -> None:
+        self._multiverse_socket.communicate(resend_request_meta_data)
 
     def _restart(self) -> None:
         self._disconnect()

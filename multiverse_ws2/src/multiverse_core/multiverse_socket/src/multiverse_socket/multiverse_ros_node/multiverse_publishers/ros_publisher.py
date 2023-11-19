@@ -31,11 +31,9 @@ class MultiverseRosPublisher(MultiverseRosNode, Node):
         self.create_timer(timer_period_sec=1.0 / rate, callback=self._publisher_callback)
 
     def start(self) -> None:
-        self._init_multiverse_socket()
-        self._set_request_meta_data()
         self._connect()
         if not self._use_meta_data:
-            self._construct_ros_message(self._get_response_meta_data())
+            self._construct_ros_message(self.response_meta_data)
         self._executor.spin()
         self._disconnect()
         self.destroy_node()
@@ -43,17 +41,17 @@ class MultiverseRosPublisher(MultiverseRosNode, Node):
     def _publisher_callback(self):
         if self._use_meta_data:
             self._communicate(True)
-            self._construct_ros_message(self._get_response_meta_data())
+            self._construct_ros_message(self.response_meta_data)
             self._publish()
         else:
             self._communicate()
-            self._bind_ros_message(self._get_receive_data())
+            self._bind_ros_message()
             self._publish()
 
-    def _construct_ros_message(self, response_meta_data_dict: Dict) -> None:
+    def _construct_ros_message(self, response_meta_data) -> None:
         pass
 
-    def _bind_ros_message(self, receive_data: List[float]) -> None:
+    def _bind_ros_message(self) -> None:
         pass
 
     def _publish(self) -> None:
