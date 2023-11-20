@@ -40,7 +40,7 @@ if [ ! -d "$BLENDER_EXT_DIR/lib" ]; then
     (cd $BLENDER_EXT_DIR/lib/linux_x86_64_glibc_228; svn update -r63459)
 fi
 
-(cd $BLENDER_EXT_DIR/blender && make BUILD_DIR=../../../build/blender)
+(cd $BLENDER_BUILD_DIR && cmake ../../external/blender-git/blender && make -j$(nproc) && make install)
 (cd $BLENDER_BUILD_DIR/bin/3.6/python/bin;
 ./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
 ./python3.10 -m pip install scipy pillow --no-warn-script-location; # For multiverse_parser

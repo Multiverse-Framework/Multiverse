@@ -37,6 +37,11 @@ if(UNIX)
 
     set(BUILD_FLAGS "-stdlib=${STDLIB}")
 
+    include_directories(
+        "/usr/include/c++/${CMAKE_CXX_STANDARD}"
+        "/usr/include/x86_64-linux-gnu/c++/${CMAKE_CXX_STANDARD}"
+    )
+
     build_multiverse_client()
 
     if(MULTIVERSE_CLIENT_LIBRARY_TYPE STREQUAL "STATIC")
@@ -57,4 +62,3 @@ elseif(WIN32)
     target_link_directories(${MULTIVERSE_CLIENT} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
     target_link_libraries(${MULTIVERSE_CLIENT} PRIVATE cppzmq cppzmq-static)
 endif()
-

@@ -9,23 +9,28 @@ apt-get install -y curl # if you haven't already installed curl
 curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 add-apt-repository ppa:ubuntu-toolchain-r/test
 
+curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+add-apt-repository universe
+
 # Update package lists
 apt-get update
-
-# Install ROS1 and ROS2
-apt-get install -y ros-noetic-desktop-full
-apt-get install -y ros-foxy-desktop
-
-# Install python3-pip
-apt-get install -y python3-pip
 
 # Install python3.8
 apt-get install -y python3.8-dev
 update-alternatives --remove-all python3
 update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 100
 
-# Install catkin-tools
+# Install ROS1
+apt-get install -y ros-noetic-desktop-full
 apt-get install -y python3-catkin-tools
+
+# Install ROS2
+apt-get install -y ros-foxy-desktop
+apt-get install -y ros-dev-tools
+
+# Install python3-pip
+apt-get install -y python3-pip
 
 # Install rosdep
 apt-get install -y python3-rosdep
@@ -50,6 +55,7 @@ apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
 
 # Install and link clang-11 for creating shared library
 apt-get install -y clang-11 libc++-11-dev libstdc++-11-dev libc++abi-11-dev llvm-11-dev
+ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
 update-alternatives --remove-all clang++
 update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
 
