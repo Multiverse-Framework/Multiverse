@@ -23,6 +23,7 @@ update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 100
 
 # Install ROS1
 apt-get install -y ros-noetic-desktop-full
+apt-get install -y ros-noetic-xacro ros-noetic-rviz ros-noetic-joint-trajectory-controller ros-noetic-rqt-robot-steering ros-noetic-rqt-joint-trajectory-controller ros-noetic-joint-state-controller ros-noetic-joint-state-publisher-gui ros-noetic-effort-controllers ros-noetic-gripper-action-controller ros-noetic-dwa-local-planner ros-noetic-cob-gazebo-objects ros-noetic-map-server ros-noetic-move-base
 apt-get install -y python3-catkin-tools
 
 # Install ROS2
@@ -76,6 +77,9 @@ apt-get install -y jupyter-notebook
 
 # Upgrade pip
 pip3 install --upgrade pip
+
+# Install packages for ROS
+pip3 install rospkg tf
 
 # Install PySide6
 pip3 install pyside6
