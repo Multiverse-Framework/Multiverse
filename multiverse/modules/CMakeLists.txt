@@ -1,5 +1,5 @@
 add_subdirectory(multiverse_connectors)
 
-# add_subdirectory(multiverse_knowledge)
+add_subdirectory(multiverse_knowledge)
 
-# add_subdirectory(multiverse_parser)
+add_subdirectory(multiverse_parser)

@@ -43,7 +43,7 @@ fi
 (cd $BLENDER_BUILD_DIR && cmake ../../external/blender-git/blender && make -j$(nproc) && make install)
 (cd $BLENDER_BUILD_DIR/bin/3.6/python/bin;
 ./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
-./python3.10 -m pip install scipy pillow --no-warn-script-location; # For multiverse_parser
+./python3.10 -m pip install scipy pillow tf --no-warn-script-location; # For multiverse_parser
 ./python3.10 -m pip install mujoco numpy-stl --no-warn-script-location; # For MuJoCo
 ./python3.10 -m pip install bpy --no-warn-script-location; # For blender
 ./python3.10 -m pip install rospkg pyyaml urdf_parser_py --no-warn-script-location) # For URDF
