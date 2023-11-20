@@ -24,8 +24,6 @@ target_link_libraries(mujoco_headless
     boost_filesystem
     ${BUILD_DIR}/mujoco/lib/libmujoco.so
 )
-set_target_properties(mujoco_headless PROPERTIES
-    INSTALL_RPATH "${BUILD_DIR}/mujoco/lib")
 install(TARGETS mujoco_headless DESTINATION ${BIN_DIR})
 
 add_executable(mujoco ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco.cpp)
@@ -43,6 +41,4 @@ target_link_libraries(mujoco
     boost_filesystem
     ${BUILD_DIR}/mujoco/lib/libmujoco.so
 )
-set_target_properties(mujoco PROPERTIES
-    INSTALL_RPATH "${BUILD_DIR}/mujoco/lib")
 install(TARGETS mujoco DESTINATION ${BIN_DIR})
