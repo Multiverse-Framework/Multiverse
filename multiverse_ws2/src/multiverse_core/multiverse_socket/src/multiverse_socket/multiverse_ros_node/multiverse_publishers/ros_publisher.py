@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 
+from typing import List, Dict
+
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.publisher import Publisher
 from rclpy.node import Node
-from typing import List, Dict
+
 from ..multiverse_ros_node import MultiverseRosNode, SimulationMetaData
 
 
@@ -46,10 +48,10 @@ class MultiverseRosPublisher(MultiverseRosNode, Node):
             self._bind_ros_message(self.receive_data)
         self._publish()
 
-    def _construct_ros_message(self, response_meta_data) -> None:
+    def _construct_ros_message(self, response_meta_data: Dict) -> None:
         pass
 
-    def _bind_ros_message(self, receive_data) -> None:
+    def _bind_ros_message(self, receive_data: List[float]) -> None:
         pass
 
     def _publish(self) -> None:

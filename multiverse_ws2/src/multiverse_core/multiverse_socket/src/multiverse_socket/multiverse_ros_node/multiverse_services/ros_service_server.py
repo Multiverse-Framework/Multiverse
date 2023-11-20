@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
 
-from typing import List, Any
+from typing import Any
 
-import rclpy
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 
 from ..multiverse_ros_node import MultiverseRosNode, SimulationMetaData
 
 
-class MultiverseRosSubscriber(MultiverseRosNode, Node):
-    _msg_type = None
-    _send_data: List[float] = []
-    _receive_data: List[float] = []
-    _executor: MultiThreadedExecutor
+class MultiverseRosServiceServer(MultiverseRosNode, Node):
+    _srv_name = ""
+    _srv_type = None
 
     def __init__(
             self,
-            topic_name: str,
             node_name: str,
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
@@ -28,25 +24,22 @@ class MultiverseRosSubscriber(MultiverseRosNode, Node):
         Node.__init__(self, node_name=node_name)
         self._executor = MultiThreadedExecutor()
         self._executor.add_node(self)
-        self.create_subscription(msg_type=self._msg_type, topic=topic_name, callback=self._subscriber_callback, qos_profile=1)
+        self.create_service(srv_name=self._srv_type, srv_name=self._srv_name, callback=self._service_callback)
 
     def start(self) -> None:
         self._connect()
-        self._init_send_data()
-        self._communicate()
-        while rclpy.ok():
-            if len(self.receive_data) > 0:
-                break
+        self.get_logger().info(f"Start service {self._service_name}")
         self._executor.spin()
         self._disconnect()
         self.destroy_node()
 
-    def _subscriber_callback(self, data: Any) -> None:
-        self._bind_send_data(data)
-        self._communicate()
+    def _service_callback(self, request: Any) -> Any:
+        self._bind_request_meta_data(request)
+        self._communicate(True)
+        return self._bind_response()
 
-    def _init_send_data(self) -> None:
+    def _bind_request_meta_data(self, request: Any):
         pass
 
-    def _bind_send_data(self, data: Any):
+    def _bind_response(self) -> Any:
         pass
