@@ -37,3 +37,8 @@ jobs:
       run: |
           chmod +x build_multiverse_ws.sh
           ./build_multiverse_ws.sh
+
+    - name: Run build_multiverse_ws2.sh
+      run: |
+          chmod +x build_multiverse_ws2.sh
+          ./build_multiverse_ws2.sh
