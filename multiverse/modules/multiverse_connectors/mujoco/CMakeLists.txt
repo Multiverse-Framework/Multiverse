@@ -18,14 +18,14 @@ add_library(mujoco_headless_lib
 )
 target_link_libraries(mujoco_headless
     mujoco_headless_lib
+    multiverse_client_json
     Threads::Threads
     jsoncpp
     boost_filesystem
     ${BUILD_DIR}/mujoco/lib/libmujoco.so
-    ${LIB_DIR}/libstdc++/libmultiverse_client_json.so
 )
 set_target_properties(mujoco_headless PROPERTIES
-    INSTALL_RPATH "${BUILD_DIR}/mujoco/lib;${LIB_DIR}/libstdc++")
+    INSTALL_RPATH "${BUILD_DIR}/mujoco/lib")
 install(TARGETS mujoco_headless DESTINATION ${BIN_DIR})
 
 add_executable(mujoco ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco.cpp)
@@ -35,14 +35,14 @@ add_library(mujoco_lib
 target_link_libraries(mujoco
     mujoco_lib
     mujoco_headless_lib
+    multiverse_client_json
     glfw
     GL
     Threads::Threads
     jsoncpp
     boost_filesystem
     ${BUILD_DIR}/mujoco/lib/libmujoco.so
-    ${LIB_DIR}/libstdc++/libmultiverse_client_json.so
 )
 set_target_properties(mujoco PROPERTIES
-    INSTALL_RPATH "${BUILD_DIR}/mujoco/lib;${LIB_DIR}/libstdc++")
+    INSTALL_RPATH "${BUILD_DIR}/mujoco/lib")
 install(TARGETS mujoco DESTINATION ${BIN_DIR})

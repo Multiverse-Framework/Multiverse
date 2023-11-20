@@ -1,3 +1,5 @@
+project(multiverse_modules)
+
 add_subdirectory(multiverse_connectors)
 
 add_subdirectory(multiverse_knowledge)

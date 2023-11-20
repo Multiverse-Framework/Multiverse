@@ -1,3 +1,5 @@
+project(multiverse_source)
+
 if(WIN32)
     find_package(jsoncpp REQUIRED)
     find_package(Zeromq REQUIRED)
