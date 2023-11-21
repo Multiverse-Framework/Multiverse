@@ -103,4 +103,5 @@ cd $CURRENT_DIR
 
 if [ "$RELOAD" = true ]; then
     exec bash # Reload ~/.bashrc
+    rosdep update
 fi
