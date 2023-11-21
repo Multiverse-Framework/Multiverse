@@ -28,8 +28,8 @@ jobs:
           export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
           . virtualenvwrapper.sh
           mkvirtualenv multiverse
-          echo ". virtualenvwrapper.sh" >> ~/.bashrc
-          echo "workon multiverse" >> ~/.bashrc
+          echo ". virtualenvwrapper.sh" >> /home/$USER/.bashrc
+          echo "workon multiverse" >> /home/$USER/.bashrc
 
     - name: Run build_third_parties.sh
       run: |
