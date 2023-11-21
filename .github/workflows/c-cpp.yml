@@ -16,12 +16,24 @@ jobs:
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@v1.3.0
-            
 
     - name: Run install.sh
       run: |
           chmod +x install.sh
           sudo ./install.sh
+
+    - name: Setup virtual environment
+      run: |
+          pip install virtualenvwrapper
+          mkdir .virtualenvs
+          export WORKON_HOME=~/.virtualenvs
+          . ~/.local/bin/virtualenvwrapper.sh
+          mkvirtualenv multiverse
+          workon multiverse
+          echo "export PATH=$PATH:/home/$USER/.local/bin" >> ~/.bashrc
+          echo "export WORKON_HOME=~/.virtualenvs" >> ~/.bashrc
+          echo ". /home/$USER/.local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+          echo "workon multiverse" >> ~/.bashrc
 
     - name: Run build_third_parties.sh
       run: |
