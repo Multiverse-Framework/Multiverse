@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from typing import Dict
+
 from geometry_msgs.msg import Twist
 
 from .ros_subscriber import MultiverseRosSubscriber
@@ -17,7 +19,7 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
         client_host: str = "tcp://127.0.0.1",
         client_port: str = "",
         simulation_metadata: SimulationMetaData = SimulationMetaData(),
-        **kwargs
+        **kwargs: Dict
     ) -> None:
         self._body_name = kwargs.get("body")
         if self._body_name is None:
@@ -36,7 +38,7 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
     def _init_send_data(self) -> None:
         self.send_data = [0.0] * 7
 
-    def _bind_send_data(self, twist_msg: Twist) -> None:
+    def _bind_send_data(self, twist_msg: Twist) -> Twist:
         self.send_data[1:] = [
             twist_msg.linear.x,
             twist_msg.linear.y,

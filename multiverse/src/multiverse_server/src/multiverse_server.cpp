@@ -874,7 +874,7 @@ void MultiverseServer::wait_for_receive_data()
                     const double now = get_time_now();
                     if (now - start > 1)
                     {
-                        printf("[Server] Socket at %s is waiting for data of [%s][%s][%s] to be sent.\n", socket_addr.c_str(), world_name.c_str(), object_name.c_str(), attribute_name.c_str());
+                        printf("[Server] Socket %s is waiting for data of [%s][%s][%s] to be sent.\n", socket_addr.c_str(), world_name.c_str(), object_name.c_str(), attribute_name.c_str());
                         start = now;
                     }
                 }

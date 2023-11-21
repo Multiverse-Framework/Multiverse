@@ -22,13 +22,6 @@ jobs:
           chmod +x install.sh
           sudo ./install.sh
 
-    - name: Setup virtual environment
-      run: |
-          pip install virtualenvwrapper
-          export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-          . virtualenvwrapper.sh
-          mkvirtualenv multiverse
-
     - name: Run build_third_parties.sh
       run: |
           workon multiverse

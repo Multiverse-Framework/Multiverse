@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List
+from typing import List, Dict
 
 from nav_msgs.msg import Odometry
 
@@ -23,7 +23,7 @@ class OdomPublisher(MultiverseRosPublisher):
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
             simulation_metadata: SimulationMetaData = SimulationMetaData(),
-            **kwargs
+            **kwargs: Dict
     ) -> None:
         super().__init__(topic_name=topic_name, node_name=node_name, rate=rate, client_host=client_host,
                          client_port=client_port, simulation_metadata=simulation_metadata)

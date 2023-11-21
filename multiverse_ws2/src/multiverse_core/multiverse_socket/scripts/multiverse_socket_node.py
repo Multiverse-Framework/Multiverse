@@ -49,7 +49,7 @@ class MultiverseRosNodeProperties:
         self._ros_base_name = ros_base_name
 
     def create_publisher(self):
-        node_name = f"{self.ros_base_name}_publisher_{self.client_port}"
+        node_name = f"{self.ros_base_name}Publisher{self.client_port}"
         topic_name = self.ros_base_prop.pop("topic")
         rate = self.ros_base_prop.pop("rate")
         publisher_name = f"{self.ros_base_name}Publisher"
@@ -66,7 +66,7 @@ class MultiverseRosNodeProperties:
         raise TypeError(f"Class {publisher_name} not found.")
 
     def create_subscriber(self):
-        node_name = f"{self.ros_base_name}_subscriber_{self.client_port}"
+        node_name = f"{self.ros_base_name}Subscriber{self.client_port}"
         topic_name = self.ros_base_prop.pop("topic")
         subscriber_name = f"{self.ros_base_name}Subscriber"
         for subclass in MultiverseRosSubscriber.__subclasses__():
@@ -81,7 +81,7 @@ class MultiverseRosNodeProperties:
         raise TypeError(f"Class {subscriber_name} not found.")
 
     def create_service(self):
-        node_name = f"{self.ros_base_name}_service_{self.client_port}"
+        node_name = f"{self.ros_base_name}Service{self.client_port}"
         service_name = f"{self.ros_base_name}Service"
         for subclass in MultiverseRosService.__subclasses__():
             if subclass.__name__ == service_name:
@@ -109,12 +109,9 @@ class MultiverseRosSocket:
     ) -> None:
         MultiverseRosNode._server_host = server_host
         MultiverseRosNode._server_port = str(server_port)
-        if isinstance(publishers, dict):
-            self.publishers = publishers
-        if isinstance(subscribers, dict):
-            self.subscribers = subscribers
-        if isinstance(services, dict):
-            self.services = services
+        self.subscribers = subscribers if isinstance(subscribers, dict) else {}
+        self.publishers = publishers if isinstance(publishers, dict) else {}
+        self.services = services if isinstance(services, dict) else {}
 
     def start(self):
         threads = {}
@@ -151,7 +148,7 @@ class MultiverseRosSocket:
         for publisher in publisher_list:
             publisher_thread = threading.Thread(target=publisher.run)
             publisher_thread.start()
-            threads[publisher] = publisher_thread
+            threads[publisher] = publisher_thread        
 
         for service in service_list:
             service_thread = threading.Thread(target=service.run)
@@ -182,7 +179,6 @@ def main():
         required=False,
         help="Parameters for multiverse server",
     )
-    parser.set_defaults(multiverse_server={"host": "tcp://127.0.0.1", "port": "7000"})
     parser.add_argument(
         "--services",
         type=yaml.safe_load,
@@ -203,10 +199,10 @@ def main():
     )
     args = parser.parse_args()
 
-    multiverse_server = json.loads(args.multiverse_server.replace("'", '"'))
-    publishers = json.loads(args.publishers.replace("'", '"')) if args.publishers is not None else None
-    subscribers = json.loads(args.subscribers.replace("'", '"')) if args.subscribers is not None else None
-    services = json.loads(args.services.replace("'", '"')) if args.services is not None else None
+    multiverse_server = json.loads(args.multiverse_server.replace("'", '"')) if isinstance(args.multiverse_server, str) else {"host": "tcp://127.0.0.1", "port": "7000"}
+    publishers = json.loads(args.publishers.replace("'", '"')) if isinstance(args.publishers, str) else None
+    subscribers = json.loads(args.subscribers.replace("'", '"')) if isinstance(args.subscribers, str) else None
+    services = json.loads(args.services.replace("'", '"')) if isinstance(args.services, str) else None
 
     rclpy.init()
     multiverse_ros_socket = MultiverseRosSocket(

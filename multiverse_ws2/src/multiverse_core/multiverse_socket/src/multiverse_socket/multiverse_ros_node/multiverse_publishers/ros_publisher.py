@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from typing import Dict
+
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from rclpy.publisher import Publisher
@@ -21,7 +23,7 @@ class MultiverseRosPublisher(MultiverseRosNode, Node):
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
             simulation_metadata: SimulationMetaData = SimulationMetaData(),
-            **kwargs
+            **kwargs: Dict
     ) -> None:
         MultiverseRosNode.__init__(self, client_host=client_host, client_port=client_port,
                                    simulation_metadata=simulation_metadata)
@@ -32,6 +34,7 @@ class MultiverseRosPublisher(MultiverseRosNode, Node):
         self.create_timer(timer_period_sec=1.0 / rate, callback=self._publisher_callback)
 
     def run(self) -> None:
+        super().run()
         self._connect()
         if not self._use_meta_data:
             self._bind_response_meta_data(self.response_meta_data)

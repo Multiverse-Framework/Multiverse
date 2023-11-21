@@ -39,7 +39,7 @@ class MultiverseRosNode:
         self.request_meta_data = {"meta_data": self._simulation_metadata.__dict__, "send": {}, "receive": {}}
 
     def run(self) -> None:
-        pass
+        self.get_logger().info(f"Start {self.__class__.__name__}")
 
     @property
     def request_meta_data(self) -> Dict:

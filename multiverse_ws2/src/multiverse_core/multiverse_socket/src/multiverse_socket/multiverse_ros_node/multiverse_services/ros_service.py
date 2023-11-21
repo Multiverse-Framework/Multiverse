@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Any
+from typing import Dict
 
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node, MsgType, SrvTypeRequest, SrvTypeResponse
@@ -18,7 +18,7 @@ class MultiverseRosService(MultiverseRosNode, Node):
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
             simulation_metadata: SimulationMetaData = SimulationMetaData(),
-            **kwargs
+            **kwargs: Dict
     ) -> None:
         MultiverseRosNode.__init__(self, client_host=client_host, client_port=client_port,
                                    simulation_metadata=simulation_metadata)
@@ -28,8 +28,8 @@ class MultiverseRosService(MultiverseRosNode, Node):
         self.create_service(srv_type=self._srv_type, srv_name=self._srv_name, callback=self._service_callback)
 
     def run(self) -> None:
+        super().run()
         self._connect()
-        self.get_logger().info(f"Start service {self._srv_name}")
         self._executor.spin()
         self._disconnect()
         self.destroy_node()

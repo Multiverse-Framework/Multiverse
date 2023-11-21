@@ -82,7 +82,7 @@ class MultiverseRosSocket:
             for service_name, service_prop in services.items():
                 service_prop["server_host"] = server_host
                 service_prop["server_port"] = server_port
-                rospy.loginfo(f"Start service server [{service_name}] with {service_prop}")
+                rospy.loginfo(f"Start service [{service_name}] with {service_prop}")
 
                 exec(f"from multiverse_socket.multiverse_services import {service_name}_service")
                 service = eval(f"{service_name}_service")(**service_prop)
