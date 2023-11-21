@@ -25,14 +25,10 @@ jobs:
     - name: Setup virtual environment
       run: |
           pip install virtualenvwrapper
-          mkdir .virtualenvs
-          export WORKON_HOME=~/.virtualenvs
-          . home/$USER/.local/bin/virtualenvwrapper.sh
+          export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+          . virtualenvwrapper.sh
           mkvirtualenv multiverse
-          workon multiverse
-          echo "export PATH=$PATH:/home/$USER/.local/bin" >> ~/.bashrc
-          echo "export WORKON_HOME=~/.virtualenvs" >> ~/.bashrc
-          echo ". /home/$USER/.local/bin/virtualenvwrapper.sh" >> ~/.bashrc
+          echo ". virtualenvwrapper.sh" >> ~/.bashrc
           echo "workon multiverse" >> ~/.bashrc
 
     - name: Run build_third_parties.sh
