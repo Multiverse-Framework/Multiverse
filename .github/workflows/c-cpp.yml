@@ -27,7 +27,7 @@ jobs:
           pip install virtualenvwrapper
           mkdir .virtualenvs
           export WORKON_HOME=~/.virtualenvs
-          . ~/.local/bin/virtualenvwrapper.sh
+          . home/$USER/.local/bin/virtualenvwrapper.sh
           mkvirtualenv multiverse
           workon multiverse
           echo "export PATH=$PATH:/home/$USER/.local/bin" >> ~/.bashrc
