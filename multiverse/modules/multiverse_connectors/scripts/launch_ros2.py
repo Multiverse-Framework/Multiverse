@@ -43,9 +43,9 @@ def main():
                 "multiverse_socket_node",
                 f'--multiverse_server="{multiverse_server_dict}"',
             ]
-            # if "services" in ros_dict:
-            #     ros_services_dict = ros_dict["services"]
-            #     cmd.append(f'--services="{ros_services_dict}"')
+            if "services" in ros2_dict:
+                ros_services_dict = ros2_dict["services"]
+                cmd.append(f'--services="{ros_services_dict}"')
             if "publishers" in ros2_dict:
                 ros_publishers_dict = ros2_dict["publishers"]
                 cmd.append(f'--publishers="{ros_publishers_dict}"')

@@ -30,11 +30,11 @@ class TfPublisher(MultiverseRosPublisher):
                          client_port=client_port, simulation_metadata=simulation_metadata)
         self._root_frame_id = kwargs.get("root_frame_id", "map")
         self.request_meta_data["receive"][""] = ["position", "quaternion"]
-        
 
-    def _construct_ros_message(self, response_meta_data: Dict) -> None:
-        object_names = []
-        if response_meta_data.get("receive") is None:
+    def _bind_response_meta_data(self, response_meta_data: Dict) -> None:
+        objects = response_meta_data.get("receive")
+
+        if objects is None:
             return
 
         object_names = response_meta_data["receive"].keys()

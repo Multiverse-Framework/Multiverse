@@ -35,17 +35,16 @@ class OdomPublisher(MultiverseRosPublisher):
         self._frame_id = str(kwargs.get("frame_id", "map"))
         self.request_meta_data["receive"][self._body_name] = ["position", "quaternion", "odometric_velocity"]
 
-
-    def _construct_ros_message(self, response_meta_data) -> None:
+    def _bind_response_meta_data(self, response_meta_data) -> None:
         if response_meta_data.get("receive") is None:
             return
-        
+
         self._odom_msg.header.frame_id = self._frame_id
         self._odom_msg.child_frame_id = self._body_name
         self._odom_msg.pose.covariance = [0.0] * 36
         self._odom_msg.twist.covariance = [0.0] * 36
 
-    def _bind_ros_message(self, receive_data: List[float]) -> None:
+    def _bind_receive_data(self, receive_data: List[float]) -> None:
         self._odom_msg.header.stamp = self.get_clock().now().to_msg()
         self._odom_msg.pose.pose.position.x = receive_data[1]
         self._odom_msg.pose.pose.position.y = receive_data[2]

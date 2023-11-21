@@ -182,10 +182,10 @@ multiverse_clients:
                 joint_trajectory_controller
 
   ros2:
-    # services:
-    #   socket:
-    #     host: "tcp://127.0.0.1"
-    #     port: 7400
+    services:
+      socket:
+        - host: "tcp://127.0.0.1"
+          port: 7900
 
     publishers:
       tf:
@@ -197,7 +197,7 @@ multiverse_clients:
             time_unit: s
             handedness: rhs
           host: "tcp://127.0.0.1"
-          port: 7701
+          port: 7801
           topic: /tf
           rate: 60
           root_frame_id: map_1
@@ -209,7 +209,7 @@ multiverse_clients:
             time_unit: s
             handedness: rhs
           host: "tcp://127.0.0.1"
-          port: 7702
+          port: 7802
           topic: /tf
           rate: 60
           root_frame_id: map_2
@@ -222,7 +222,7 @@ multiverse_clients:
             time_unit: s
             handedness: rhs
           host: "tcp://127.0.0.1"
-          port: 7703
+          port: 7803
           topic: /odom
           rate: 60
           body: tiago_dual_2
@@ -238,12 +238,12 @@ multiverse_clients:
             time_unit: s
             handedness: rhs
           host: "tcp://127.0.0.1"
-          port: 7801
+          port: 7701
           topic: /cmd_vel
           body: tiago_dual_2
 
-    ros2_run:
-      rviz2:
-        config: ur5e/config/rviz2.rviz
-        robot_descriptions:
-          ur5e_description: ur5e/urdf/ur5e.urdf
+    # ros2_run:
+    #   rviz2:
+    #     config: ur5e/config/rviz2.rviz
+    #     robot_descriptions:
+    #       ur5e_description: ur5e/urdf/ur5e.urdf

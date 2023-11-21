@@ -21,7 +21,8 @@ class MultiverseRosSubscriber(MultiverseRosNode, Node):
             node_name: str,
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
-            simulation_metadata: SimulationMetaData = SimulationMetaData()
+            simulation_metadata: SimulationMetaData = SimulationMetaData(),
+            **kwargs: object
     ) -> None:
         MultiverseRosNode.__init__(self, client_host=client_host, client_port=client_port,
                                    simulation_metadata=simulation_metadata)
@@ -30,7 +31,7 @@ class MultiverseRosSubscriber(MultiverseRosNode, Node):
         self._executor.add_node(self)
         self.create_subscription(msg_type=self._msg_type, topic=topic_name, callback=self._subscriber_callback, qos_profile=1)
 
-    def start(self) -> None:
+    def run(self) -> None:
         self._connect()
         self._init_send_data()
         self._communicate()
@@ -46,7 +47,4 @@ class MultiverseRosSubscriber(MultiverseRosNode, Node):
         self._communicate()
 
     def _init_send_data(self) -> None:
-        pass
-
-    def _bind_send_data(self, data: Any):
         pass
