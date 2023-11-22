@@ -39,7 +39,11 @@ class MultiverseRosNode:
         self.request_meta_data = {"meta_data": self._simulation_metadata.__dict__, "send": {}, "receive": {}}
 
     def run(self) -> None:
-        self.get_logger().info(f"Start {self.__class__.__name__}")
+        print(f"[Client {self._client_port}] Start {self.__class__.__name__}")
+        self._run()
+
+    def _run(self) -> None:
+        raise NotImplementedError(f"Must implement _run() for {self.__class__.__name__}")
 
     @property
     def request_meta_data(self) -> Dict:

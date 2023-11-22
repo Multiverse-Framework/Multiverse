@@ -33,8 +33,7 @@ class MultiverseRosPublisher(MultiverseRosNode, Node):
         self._publisher = self.create_publisher(self._msg_type, topic_name, 100)
         self.create_timer(timer_period_sec=1.0 / rate, callback=self._publisher_callback)
 
-    def run(self) -> None:
-        super().run()
+    def _run(self) -> None:
         self._connect()
         if not self._use_meta_data:
             self._bind_response_meta_data(self.response_meta_data)

@@ -27,8 +27,7 @@ class MultiverseRosService(MultiverseRosNode, Node):
         self._executor.add_node(self)
         self.create_service(srv_type=self._srv_type, srv_name=self._srv_name, callback=self._service_callback)
 
-    def run(self) -> None:
-        super().run()
+    def _run(self) -> None:
         self._connect()
         self._executor.spin()
         self._disconnect()

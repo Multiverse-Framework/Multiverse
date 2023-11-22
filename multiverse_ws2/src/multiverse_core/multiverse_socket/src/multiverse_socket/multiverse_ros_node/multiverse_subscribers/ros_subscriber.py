@@ -31,8 +31,7 @@ class MultiverseRosSubscriber(MultiverseRosNode, Node):
         self._executor.add_node(self)
         self.create_subscription(msg_type=self._msg_type, topic=topic_name, callback=self._subscriber_callback, qos_profile=1)
 
-    def run(self) -> None:
-        super().run()
+    def _run(self) -> None:
         self._connect()
         self._init_send_data()
         self._communicate()
