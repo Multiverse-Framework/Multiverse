@@ -13,20 +13,18 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
     _msg_type = Twist
 
     def __init__(
-        self,
-        topic_name: str = "/cmd_vel",
-        node_name: str = "cmd_vel_subscriber",
-        client_host: str = "tcp://127.0.0.1",
-        client_port: str = "",
-        simulation_metadata: SimulationMetaData = SimulationMetaData(),
-        **kwargs: Dict
+            self,
+            topic_name: str = "/cmd_vel",
+            client_host: str = "tcp://127.0.0.1",
+            client_port: str = "",
+            simulation_metadata: SimulationMetaData = SimulationMetaData(),
+            **kwargs: Dict
     ) -> None:
         self._body_name = None if "body" not in kwargs else str(kwargs["body"])
         if self._body_name is None:
             raise Exception("Body not found.")
         super().__init__(
             topic_name=topic_name,
-            node_name=node_name,
             client_host=client_host,
             client_port=client_port,
             simulation_metadata=simulation_metadata,

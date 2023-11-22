@@ -2,6 +2,7 @@
 
 from typing import List, Dict
 
+import rospy
 from nav_msgs.msg import Odometry
 
 from .ros_publisher import MultiverseRosPublisher
@@ -18,14 +19,13 @@ class OdomPublisher(MultiverseRosPublisher):
     def __init__(
             self,
             topic_name: str = "/tf",
-            node_name: str = "tf_publisher",
             rate: float = 60.0,
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
             simulation_metadata: SimulationMetaData = SimulationMetaData(),
             **kwargs: Dict
     ) -> None:
-        super().__init__(topic_name=topic_name, node_name=node_name, rate=rate, client_host=client_host,
+        super().__init__(topic_name=topic_name, rate=rate, client_host=client_host,
                          client_port=client_port, simulation_metadata=simulation_metadata)
         self._body_name = None if "body" not in kwargs else str(kwargs["body"])
         if self._body_name is None:
@@ -43,7 +43,7 @@ class OdomPublisher(MultiverseRosPublisher):
         self._odom_msg.twist.covariance = [0.0] * 36
 
     def _bind_receive_data(self, receive_data: List[float]) -> None:
-        self._odom_msg.header.stamp = self.get_clock().now().to_msg()
+        self._odom_msg.header.stamp = rospy.Time.now()
         self._odom_msg.pose.pose.position.x = receive_data[1]
         self._odom_msg.pose.pose.position.y = receive_data[2]
         self._odom_msg.pose.pose.position.z = receive_data[3]

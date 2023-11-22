@@ -96,8 +96,8 @@ multiverse_clients:
   ros:
     services:
       socket:
-        host: "tcp://127.0.0.1"
-        port: 7400
+        - host: "tcp://127.0.0.1"
+          port: 7400
 
     publishers:
       tf:

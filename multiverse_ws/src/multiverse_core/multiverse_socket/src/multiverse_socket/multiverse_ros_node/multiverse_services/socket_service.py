@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+
 from typing import Dict
 
-from multiverse_interfaces.msg import ObjectData
-from multiverse_interfaces.srv import Socket
+import rospy
+from multiverse_msgs.msg import ObjectData
+from multiverse_msgs.srv import Socket, SocketRequest, SocketResponse
 
 from .ros_service import MultiverseRosService
 from ..multiverse_ros_node import SimulationMetaData
@@ -10,26 +12,27 @@ from ..multiverse_ros_node import SimulationMetaData
 
 class SocketService(MultiverseRosService):
     _srv_name = "/multiverse/socket"
-    _srv_type = Socket
+    _srv_class = Socket
+    _srv_request_class = SocketRequest
+    _srv_response_class = SocketResponse
     _worlds = {}
     _simulation_name = ""
 
     def __init__(
             self,
-            node_name: str,
             client_host: str = "tcp://127.0.0.1",
             client_port: str = "",
             simulation_metadata: SimulationMetaData = SimulationMetaData()
     ) -> None:
-        super().__init__(node_name=node_name, client_host=client_host, client_port=client_port,
+        super().__init__(client_host=client_host, client_port=client_port,
                          simulation_metadata=simulation_metadata)
 
     def update_world(self, world_name) -> None:
         self.request_meta_data["meta_data"]["world_name"] = world_name
         self.request_meta_data["receive"][""] = [""]
         self._communicate(True)
-        receive_objects = self.response_meta_data["receive"]
-        if self.response_meta_data.get("receive") is not None:
+        receive_objects = self.response_meta_data.get("receive")
+        if receive_objects is not None:
             self._worlds[world_name] = {}
             self._worlds[world_name][""] = {""}
             for object_name, object_attributes in receive_objects.items():
@@ -38,11 +41,11 @@ class SocketService(MultiverseRosService):
                     self._worlds[world_name][""].add(attribute_name)
                     self._worlds[world_name][object_name].add(attribute_name)
 
-    def _bind_request_meta_data(self, request: Socket.Request) -> Socket.Request:
+    def _bind_request_meta_data(self, request: SocketRequest) -> SocketRequest:
         meta_data = request.meta_data
         world_name = meta_data.world_name
         if world_name == "":
-            self.get_logger().warn(f"World is not set, set to default world")
+            rospy.logwarn(f"World is not set, set to default world")
             world_name = "world"
 
         self._simulation_name = meta_data.simulation_name
@@ -69,7 +72,7 @@ class SocketService(MultiverseRosService):
         request_meta_data: Dict = {"meta_data": {}, "send": {}, "receive": {}}
         request_meta_data["meta_data"]["world_name"] = world_name
         request_meta_data["meta_data"][
-            "simulation_name"] = "ros2" if is_simulation_name_empty else self._simulation_name
+            "simulation_name"] = "ros" if is_simulation_name_empty else self._simulation_name
         request_meta_data["meta_data"][
             "length_unit"] = "m" if meta_data.length_unit == "" else meta_data.length_unit
         request_meta_data["meta_data"][
@@ -113,7 +116,7 @@ class SocketService(MultiverseRosService):
         self.send_data = send_data
         return request
 
-    def _bind_response_meta_data(self, response: Socket.Response) -> Socket.Response:
+    def _bind_response_meta_data(self, response: SocketResponse) -> SocketResponse:
         response_meta_data = self.response_meta_data
 
         if self._simulation_name != "" and (

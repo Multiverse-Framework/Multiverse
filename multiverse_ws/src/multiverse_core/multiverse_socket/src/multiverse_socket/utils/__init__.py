@@ -1,1 +1,0 @@
-from multiverse_socket.utils.multiverse_utils import init_request_meta_data_dict

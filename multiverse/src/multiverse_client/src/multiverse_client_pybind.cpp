@@ -62,6 +62,7 @@ public:
     inline void set_request_meta_data(const pybind11::dict &in_request_meta_data_dict)
     {
         request_meta_data_dict = in_request_meta_data_dict;
+        compute_request_buffer_sizes(send_buffer_size, receive_buffer_size);
     }
 
     inline pybind11::dict get_response_meta_data()
