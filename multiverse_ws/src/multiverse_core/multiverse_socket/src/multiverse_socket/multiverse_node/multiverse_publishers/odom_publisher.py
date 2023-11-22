@@ -5,11 +5,11 @@ from typing import List, Dict
 import rospy
 from nav_msgs.msg import Odometry
 
-from .ros_publisher import MultiverseRosPublisher
-from ..multiverse_ros_node import SimulationMetaData
+from .multiverse_publisher import MultiversePublisher
+from ..multiverse_node import MultiverseMetaData, SocketAddress
 
 
-class OdomPublisher(MultiverseRosPublisher):
+class OdomPublisher(MultiversePublisher):
     _use_meta_data = False
     _msg_type = Odometry
     _odom_msg = Odometry()
@@ -17,26 +17,34 @@ class OdomPublisher(MultiverseRosPublisher):
     _frame_id: str
 
     def __init__(
-            self,
-            topic_name: str = "/tf",
-            rate: float = 60.0,
-            client_host: str = "tcp://127.0.0.1",
-            client_port: str = "",
-            simulation_metadata: SimulationMetaData = SimulationMetaData(),
-            **kwargs: Dict
+        self,
+        topic_name: str = "/tf",
+        rate: float = 60.0,
+        client_addr: SocketAddress = SocketAddress(),
+        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+        **kwargs: Dict
     ) -> None:
-        super().__init__(topic_name=topic_name, rate=rate, client_host=client_host,
-                         client_port=client_port, simulation_metadata=simulation_metadata)
-        self._body_name = None if "body" not in kwargs else str(kwargs["body"])
-        if self._body_name is None:
+        super().__init__(
+            topic_name=topic_name,
+            rate=rate,
+            client_addr=client_addr,
+            multiverse_meta_data=multiverse_meta_data,
+        )
+        if "body" not in kwargs:
             raise Exception("Body not found.")
+        self._body_name = str(kwargs["body"])
         self._frame_id = str(kwargs.get("frame_id", "map"))
-        self.request_meta_data["receive"][self._body_name] = ["position", "quaternion", "odometric_velocity"]
+        self.request_meta_data["receive"][self._body_name] = [
+            "position",
+            "quaternion",
+            "odometric_velocity",
+        ]
 
     def _bind_response_meta_data(self, response_meta_data) -> None:
         if response_meta_data.get("receive") is None:
             return
 
+        self._odom_msg.header.seq += 1
         self._odom_msg.header.frame_id = self._frame_id
         self._odom_msg.child_frame_id = self._body_name
         self._odom_msg.pose.covariance = [0.0] * 36

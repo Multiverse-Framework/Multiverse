@@ -9,9 +9,9 @@ T = TypeVar("T")
 
 
 @dataclasses.dataclass
-class SimulationMetaData:
+class MultiverseMetaData:
     world_name: str = "world"
-    simulation_name: str = "ros2"
+    simulation_name: str = "ros"
     length_unit: str = "m"
     angle_unit: str = "rad"
     mass_unit: str = "kg"
@@ -19,31 +19,45 @@ class SimulationMetaData:
     handedness: str = "rhs"
 
 
-class MultiverseRosNode:
-    _server_host: str = "tcp://127.0.0.1"
-    _server_port: str = "7000"
-    _client_host: str
-    _client_port: str
-    _simulation_metadata: SimulationMetaData
-    _multiverse_socket: MultiverseClientPybind
-    _send_data: List[float]
+@dataclasses.dataclass
+class SocketAddress:
+    host: str = "tcp://127.0.0.1"
+    port: str = ""
 
-    def __init__(self, client_host: str = "tcp://127.0.0.1", client_port: str = "",
-                 simulation_metadata: SimulationMetaData = SimulationMetaData()) -> None:
-        if client_port == "":
+
+class MultiverseNode:
+    _server_addr: SocketAddress = SocketAddress(host="tcp://127.0.0.1", port="7000")
+    _client_addr: SocketAddress
+    _meta_data: MultiverseMetaData
+    _multiverse_socket: MultiverseClientPybind
+
+    def __init__(
+        self,
+        client_addr: SocketAddress,
+        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+    ) -> None:
+        if not isinstance(client_addr.port, str) or client_addr.port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")
-        self._client_host = client_host
-        self._client_port = client_port
-        self._simulation_metadata = simulation_metadata
-        self._multiverse_socket = MultiverseClientPybind(f"{self._server_host}:{self._server_port}")
-        self.request_meta_data = {"meta_data": self._simulation_metadata.__dict__, "send": {}, "receive": {}}
+        self._send_data = None
+        self._client_addr = client_addr
+        self._meta_data = multiverse_meta_data
+        self._multiverse_socket = MultiverseClientPybind(
+            f"{self._server_addr.host}:{self._server_addr.port}"
+        )
+        self.request_meta_data = {
+            "meta_data": self._meta_data.__dict__,
+            "send": {},
+            "receive": {},
+        }
 
     def run(self) -> None:
-        print(f"[Client {self._client_port}] Start {self.__class__.__name__}")
+        print(f"[Client {self._client_addr.port}] Start {self.__class__.__name__}")
         self._run()
 
     def _run(self) -> None:
-        raise NotImplementedError(f"Must implement _run() for {self.__class__.__name__}")
+        raise NotImplementedError(
+            f"Must implement _run() for {self.__class__.__name__}"
+        )
 
     @property
     def request_meta_data(self) -> Dict:
@@ -58,7 +72,9 @@ class MultiverseRosNode:
     def response_meta_data(self) -> Dict:
         response_meta_data = self._multiverse_socket.get_response_meta_data()
         if not response_meta_data:
-            print(f"[Client {self._client_port}] Receive empty response meta data.")
+            print(
+                f"[Client {self._client_addr.port}] Receive empty response meta data."
+            )
         return response_meta_data
 
     @property
@@ -74,7 +90,7 @@ class MultiverseRosNode:
     def receive_data(self) -> List[float]:
         receive_data = self._multiverse_socket.get_receive_data()
         if not receive_data:
-            print(f"[Client {self._client_port}] Receive empty data.")
+            print(f"[Client {self._client_addr.port}] Receive empty data.")
         return receive_data
 
     def _bind_request_meta_data(self, request_meta_data: T) -> T:
@@ -90,7 +106,7 @@ class MultiverseRosNode:
         pass
 
     def _connect(self) -> None:
-        self._multiverse_socket.connect(self._client_host, self._client_port)
+        self._multiverse_socket.connect(self._client_addr.host, self._client_addr.port)
         self._multiverse_socket.start()
 
     def _disconnect(self) -> None:

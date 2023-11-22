@@ -4,25 +4,25 @@ from typing import Dict
 
 import rospy
 
-from ..multiverse_ros_node import MultiverseRosNode, SimulationMetaData
+from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
-class MultiverseRosPublisher(MultiverseRosNode):
+class MultiversePublisher(MultiverseNode):
     _publisher: rospy.Publisher
     _msg_type = None
     _use_meta_data: bool = False
 
     def __init__(
-            self,
-            topic_name: str,
-            rate: float = 60.0,
-            client_host: str = "tcp://127.0.0.1",
-            client_port: str = "",
-            simulation_metadata: SimulationMetaData = SimulationMetaData(),
-            **kwargs: Dict
+        self,
+        topic_name: str,
+        rate: float = 60.0,
+        client_addr: SocketAddress = SocketAddress(),
+        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+        **kwargs: Dict
     ) -> None:
-        MultiverseRosNode.__init__(self, client_host=client_host, client_port=client_port,
-                                   simulation_metadata=simulation_metadata)
+        MultiverseNode.__init__(
+            self, client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
+        )
         self.rate = rospy.Rate(rate)
         self._publisher = rospy.Publisher(topic_name, self._msg_type, queue_size=100)
 

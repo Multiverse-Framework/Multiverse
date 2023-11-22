@@ -2,7 +2,7 @@ import os
 import setuptools
 
 package_name = "multiverse_socket"
-submodule1 = os.path.join(package_name, "multiverse_ros_node")
+submodule1 = os.path.join(package_name, "multiverse_node")
 submodule2 = os.path.join(submodule1, "multiverse_publishers")
 submodule3 = os.path.join(submodule1, "multiverse_subscribers")
 submodule4 = os.path.join(submodule1, "multiverse_services")

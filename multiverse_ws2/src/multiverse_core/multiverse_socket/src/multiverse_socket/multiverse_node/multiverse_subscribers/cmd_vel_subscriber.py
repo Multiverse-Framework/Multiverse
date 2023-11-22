@@ -4,11 +4,11 @@ from typing import Dict
 
 from geometry_msgs.msg import Twist
 
-from .ros_subscriber import MultiverseRosSubscriber
-from ..multiverse_ros_node import SimulationMetaData
+from .multiverse_subscriber import MultiverseSubscriber
+from ..multiverse_node import MultiverseMetaData, SocketAddress
 
 
-class CmdVelSubscriber(MultiverseRosSubscriber):
+class CmdVelSubscriber(MultiverseSubscriber):
     _body_name: str
     _msg_type = Twist
 
@@ -16,20 +16,18 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
         self,
         topic_name: str = "/cmd_vel",
         node_name: str = "cmd_vel_subscriber",
-        client_host: str = "tcp://127.0.0.1",
-        client_port: str = "",
-        simulation_metadata: SimulationMetaData = SimulationMetaData(),
+        client_addr: SocketAddress = SocketAddress(),
+        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
         **kwargs: Dict
     ) -> None:
-        self._body_name = None if "body" not in kwargs else str(kwargs["body"])
-        if self._body_name is None:
+        if "body" not in kwargs:
             raise Exception("Body not found.")
+        self._body_name = str(kwargs["body"])
         super().__init__(
             topic_name=topic_name,
             node_name=node_name,
-            client_host=client_host,
-            client_port=client_port,
-            simulation_metadata=simulation_metadata,
+            client_addr=client_addr,
+            multiverse_meta_data=multiverse_meta_data,
         )
         self.request_meta_data["send"][self._body_name] = ["odometric_velocity"]
 
@@ -43,6 +41,6 @@ class CmdVelSubscriber(MultiverseRosSubscriber):
             twist_msg.linear.z,
             twist_msg.angular.x,
             twist_msg.angular.y,
-            twist_msg.angular.z
+            twist_msg.angular.z,
         ]
         return twist_msg

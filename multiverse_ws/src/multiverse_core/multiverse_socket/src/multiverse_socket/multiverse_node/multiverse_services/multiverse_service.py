@@ -5,25 +5,29 @@ from typing import Dict, Any
 
 import rospy
 
-from ..multiverse_ros_node import MultiverseRosNode, SimulationMetaData
+from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
-class MultiverseRosService(MultiverseRosNode):
+class MultiverseService(MultiverseNode):
     _srv_name = ""
     _srv_class: Any = None
     _srv_request_class: Any = None
     _srv_response_class: Any = None
 
     def __init__(
-            self,
-            client_host: str = "tcp://127.0.0.1",
-            client_port: str = "",
-            simulation_metadata: SimulationMetaData = SimulationMetaData(),
-            **kwargs: Dict
+        self,
+        client_addr: SocketAddress = SocketAddress(),
+        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+        **kwargs: Dict
     ) -> None:
-        MultiverseRosNode.__init__(self, client_host=client_host, client_port=client_port,
-                                   simulation_metadata=simulation_metadata)
-        rospy.Service(name=self._srv_name, service_class=self._srv_class, handler=self._service_handler)
+        MultiverseNode.__init__(
+            self, client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
+        )
+        rospy.Service(
+            name=self._srv_name,
+            service_class=self._srv_class,
+            handler=self._service_handler,
+        )
 
     @property
     def response(self) -> Any:

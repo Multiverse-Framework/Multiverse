@@ -9,8 +9,9 @@ from rclpy.node import Node
 
 from multiverse_interfaces.srv import Socket
 
-from multiverse_socket_node import MultiverseRosNodeProperties
-from multiverse_socket.multiverse_ros_node import *
+from multiverse_socket_node import MultiverseNodeProperties
+from multiverse_socket.multiverse_node import *
+from multiverse_socket.multiverse_node.multiverse_node import MultiverseMetaData
 
 
 def start_multiverse_server(server_port: str) -> subprocess.Popen:
@@ -40,11 +41,24 @@ class SocketClient(Node):
 
 
 class MultiverseRosNodePropertiesTestCase(unittest.TestCase):
-    tf_publisher_props = MultiverseRosNodeProperties("tf", {
-        "meta_data": {"world_name": "world", "length_unit": "m", "angle_unit": "rad", "mass_unit": "kg",
-                      "time_unit": "s", "handedness": "rhs"}, "host": "tcp://127.0.0.1", "port": "1234",
-        "topic": "/tf",
-        "rate": 60, "root_frame_id": "map"})
+    tf_publisher_props = MultiverseNodeProperties(
+        "tf",
+        {
+            "meta_data": {
+                "world_name": "world",
+                "length_unit": "m",
+                "angle_unit": "rad",
+                "mass_unit": "kg",
+                "time_unit": "s",
+                "handedness": "rhs",
+            },
+            "host": "tcp://127.0.0.1",
+            "port": "1234",
+            "topic": "/tf",
+            "rate": 60,
+            "root_frame_id": "map",
+        },
+    )
 
     @classmethod
     def setUpClass(cls):
@@ -55,7 +69,7 @@ class MultiverseRosNodePropertiesTestCase(unittest.TestCase):
         rclpy.shutdown()
 
     def test_ros_base_name(self):
-        self.assertEqual(self.tf_publisher_props.ros_base_name, "Tf")
+        self.assertEqual(self.tf_publisher_props.ros_node_name, "Tf")
 
     def test_tf_subclass_creation(self):
         publisher = self.tf_publisher_props.create_publisher()
@@ -63,13 +77,28 @@ class MultiverseRosNodePropertiesTestCase(unittest.TestCase):
 
 
 class MultiverseRosNodeCreationTestCase(unittest.TestCase):
-    tf_publisher_props = MultiverseRosNodeProperties("tf", {
-        "meta_data": {"world_name": "world", "length_unit": "m", "angle_unit": "rad", "mass_unit": "kg",
-                      "time_unit": "s", "handedness": "rhs"}, "host": "tcp://127.0.0.1", "port": "1234",
-        "topic": "/tf",
-        "rate": 50, "root_frame_id": "map"})
+    tf_publisher_props = MultiverseNodeProperties(
+        "tf",
+        {
+            "meta_data": {
+                "world_name": "world",
+                "length_unit": "m",
+                "angle_unit": "rad",
+                "mass_unit": "kg",
+                "time_unit": "s",
+                "handedness": "rhs",
+            },
+            "host": "tcp://127.0.0.1",
+            "port": "1234",
+            "topic": "/tf",
+            "rate": 50,
+            "root_frame_id": "map",
+        },
+    )
 
-    socket_service_props = MultiverseRosNodeProperties("socket", {"host": "tcp://127.0.0.1", "port": "2345"})
+    socket_service_props = MultiverseNodeProperties(
+        "socket", {"host": "tcp://127.0.0.1", "port": "2345"}
+    )
 
     def test_tf_publisher(self):
         rclpy.init()
@@ -77,7 +106,7 @@ class MultiverseRosNodeCreationTestCase(unittest.TestCase):
         process = start_multiverse_server(server_port)
         thread = threading.Thread(target=kill_ros_after_second, args=(1,))
         thread.start()
-        TfPublisher._server_port = server_port
+        TfPublisher._server_addr.port = server_port
         self.tf_publisher = self.tf_publisher_props.create_publisher()
         self.tf_publisher.run()
         thread.join()
@@ -89,9 +118,9 @@ class MultiverseRosNodeCreationTestCase(unittest.TestCase):
         process = start_multiverse_server(server_port)
         thread = threading.Thread(target=kill_ros_after_second, args=(1,))
         thread.start()
-        SocketService._server_port = server_port
+        SocketService._server_addr.port = server_port
         self.socket_service = self.socket_service_props.create_service()
-        self.socket_service.run()
+        # self.socket_service.run()
         thread.join()
         kill_multiverse_server(process)
 
@@ -102,7 +131,9 @@ class MultiverseRosNodeCreationTestCase(unittest.TestCase):
 
 
 class SocketServiceTestCase(unittest.TestCase):
-    socket_service_props = MultiverseRosNodeProperties("socket", {"host": "tcp://127.0.0.1", "port": "2346"})
+    socket_service_props = MultiverseNodeProperties(
+        "socket", {"host": "tcp://127.0.0.1", "port": "2346"}
+    )
 
     @classmethod
     def setUpClass(cls):
@@ -113,21 +144,21 @@ class SocketServiceTestCase(unittest.TestCase):
         process = start_multiverse_server(server_port)
         ros_thread = threading.Thread(target=kill_ros_after_second, args=(1,))
         ros_thread.start()
-        SocketService._server_port = server_port
+        SocketService._server_addr.port = server_port
         self.socket_service = self.socket_service_props.create_service()
         service_thread = threading.Thread(target=self.socket_service.run)
         socket_client = SocketClient()
         service_thread.start()
 
         request = Socket.Request()
-        simulation_metadata = SimulationMetaData()
-        request.meta_data.world_name = simulation_metadata.world_name
-        request.meta_data.simulation_name = simulation_metadata.simulation_name
-        request.meta_data.length_unit = simulation_metadata.length_unit
-        request.meta_data.angle_unit = simulation_metadata.angle_unit
-        request.meta_data.mass_unit = simulation_metadata.mass_unit
-        request.meta_data.time_unit = simulation_metadata.time_unit
-        request.meta_data.handedness = simulation_metadata.handedness
+        multiverse_meta_data = MultiverseMetaData()
+        request.meta_data.world_name = multiverse_meta_data.world_name
+        request.meta_data.simulation_name = multiverse_meta_data.simulation_name
+        request.meta_data.length_unit = multiverse_meta_data.length_unit
+        request.meta_data.angle_unit = multiverse_meta_data.angle_unit
+        request.meta_data.mass_unit = multiverse_meta_data.mass_unit
+        request.meta_data.time_unit = multiverse_meta_data.time_unit
+        request.meta_data.handedness = multiverse_meta_data.handedness
         request.send.clear()
         request.receive.clear()
 

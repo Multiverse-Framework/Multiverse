@@ -6,30 +6,35 @@ import rclpy
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 
-from ..multiverse_ros_node import MultiverseRosNode, SimulationMetaData
+from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
-class MultiverseRosSubscriber(MultiverseRosNode, Node):
+class MultiverseSubscriber(MultiverseNode, Node):
     _msg_type = None
     _send_data: List[float] = []
     _receive_data: List[float] = []
     _executor: MultiThreadedExecutor
 
     def __init__(
-            self,
-            topic_name: str,
-            node_name: str,
-            client_host: str = "tcp://127.0.0.1",
-            client_port: str = "",
-            simulation_metadata: SimulationMetaData = SimulationMetaData(),
-            **kwargs: Dict
+        self,
+        topic_name: str,
+        node_name: str,
+        client_addr: SocketAddress = SocketAddress(),
+        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+        **kwargs: Dict
     ) -> None:
-        MultiverseRosNode.__init__(self, client_host=client_host, client_port=client_port,
-                                   simulation_metadata=simulation_metadata)
+        MultiverseNode.__init__(
+            self, client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
+        )
         Node.__init__(self, node_name=node_name)
         self._executor = MultiThreadedExecutor()
         self._executor.add_node(self)
-        self.create_subscription(msg_type=self._msg_type, topic=topic_name, callback=self._subscriber_callback, qos_profile=1)
+        self.create_subscription(
+            msg_type=self._msg_type,
+            topic=topic_name,
+            callback=self._subscriber_callback,
+            qos_profile=1,
+        )
 
     def _run(self) -> None:
         self._connect()
