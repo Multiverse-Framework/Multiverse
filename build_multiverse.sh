@@ -52,7 +52,6 @@ cmake --install $BUILD_DIR
 cd $CURRENT_DIR
 
 if [ "$RELOAD" = true ]; then
+    rosdep update
     exec bash # Reload ~/.bashrc
 fi
-
-rosdep update
