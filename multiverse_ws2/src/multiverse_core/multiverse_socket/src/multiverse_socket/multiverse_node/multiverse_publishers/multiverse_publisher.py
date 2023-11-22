@@ -10,10 +10,11 @@ from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
 class MultiversePublisher(MultiverseNode, Node):
-    _publisher: Publisher
-    _msg_type = None
     _use_meta_data: bool = False
     _executor: MultiThreadedExecutor
+    _publisher: Publisher
+    _msg_type = None
+    _msg = None
 
     def __init__(
         self,
@@ -30,6 +31,7 @@ class MultiversePublisher(MultiverseNode, Node):
         Node.__init__(self, node_name=node_name)
         self._executor = MultiThreadedExecutor()
         self._executor.add_node(self)
+        self._msg = self._msg_type()
         self._publisher = self.create_publisher(self._msg_type, topic_name, 100)
         self.create_timer(
             timer_period_sec=1.0 / rate, callback=self._publisher_callback
@@ -52,4 +54,4 @@ class MultiversePublisher(MultiverseNode, Node):
         self._publish()
 
     def _publish(self) -> None:
-        pass
+        self._publisher.publish(self._msg)

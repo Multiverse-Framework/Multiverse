@@ -8,9 +8,10 @@ from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
 class MultiversePublisher(MultiverseNode):
+    _use_meta_data: bool = False
     _publisher: rospy.Publisher
     _msg_type = None
-    _use_meta_data: bool = False
+    _msg = None
 
     def __init__(
         self,
@@ -24,6 +25,7 @@ class MultiversePublisher(MultiverseNode):
             self, client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
         )
         self.rate = rospy.Rate(rate)
+        self._msg = self._msg_type()
         self._publisher = rospy.Publisher(topic_name, self._msg_type, queue_size=100)
 
     def _run(self) -> None:
@@ -46,4 +48,4 @@ class MultiversePublisher(MultiverseNode):
         self._disconnect()
 
     def _publish(self) -> None:
-        pass
+        self._publisher.publish(self._msg)

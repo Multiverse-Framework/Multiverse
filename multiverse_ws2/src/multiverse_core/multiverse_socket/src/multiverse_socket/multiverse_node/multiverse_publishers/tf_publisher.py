@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Dict, List
+from typing import Dict
 
 import numpy
 from geometry_msgs.msg import TransformStamped
@@ -13,7 +13,6 @@ from ..multiverse_node import MultiverseMetaData, SocketAddress
 class TfPublisher(MultiversePublisher):
     _use_meta_data = True
     _msg_type = TFMessage
-    _tf_msgs: List[TransformStamped] = []
     _root_frame_id: str
 
     def __init__(
@@ -41,7 +40,7 @@ class TfPublisher(MultiversePublisher):
         if objects is None:
             return
 
-        self._tf_msgs = []
+        self._msg.transforms.clear()
 
         for object_name, tf_data in objects.items():
             tf_data = response_meta_data["receive"][object_name]
@@ -64,7 +63,4 @@ class TfPublisher(MultiversePublisher):
             tf_msg.transform.rotation.x = quaternion[1]
             tf_msg.transform.rotation.y = quaternion[2]
             tf_msg.transform.rotation.z = quaternion[3]
-            self._tf_msgs.append(tf_msg)
-
-    def _publish(self) -> None:
-        self._publisher.publish(TFMessage(transforms=self._tf_msgs))
+            self._msg.transforms.append(tf_msg)
