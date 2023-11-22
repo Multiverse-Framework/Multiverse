@@ -4,7 +4,6 @@ import dataclasses
 from typing import List, Dict, TypeVar
 
 from rclpy.node import Node
-from rclpy.executors import MultiThreadedExecutor
 
 from multiverse_client_pybind import MultiverseClientPybind  # noqa
 
@@ -29,7 +28,6 @@ class SocketAddress:
 
 
 class MultiverseNode(Node):
-    _executor: MultiThreadedExecutor
     _server_addr: SocketAddress = SocketAddress(host="tcp://127.0.0.1", port="7000")
     _client_addr: SocketAddress
     _meta_data: MultiverseMetaData
@@ -44,8 +42,6 @@ class MultiverseNode(Node):
         if not isinstance(client_addr.port, str) or client_addr.port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")
         super().__init__(node_name=f"{node_name}{client_addr.port}")
-        self._executor = MultiThreadedExecutor()
-        self._executor.add_node(self)
         self._send_data = None
         self._client_addr = client_addr
         self._meta_data = multiverse_meta_data
@@ -59,13 +55,17 @@ class MultiverseNode(Node):
         }
 
     def run(self) -> None:
-        self.get_logger().info(f"[Client {self._client_addr.port}] Start {self.__class__.__name__}")
+        self.get_logger().info(f"Start {self.__class__.__name__}")
         self._run()
 
     def _run(self) -> None:
         raise NotImplementedError(
             f"Must implement _run() for {self.__class__.__name__}"
         )
+    
+    def stop(self) -> None:
+        self._disconnect()
+        self.destroy_node()
 
     @property
     def request_meta_data(self) -> Dict:

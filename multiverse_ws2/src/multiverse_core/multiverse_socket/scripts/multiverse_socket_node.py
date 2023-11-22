@@ -4,11 +4,12 @@ import dataclasses
 import argparse
 import json
 import threading
+import yaml
 from time import sleep
 from typing import Dict, List
 
 import rclpy
-import yaml
+from rclpy.executors import SingleThreadedExecutor
 
 from multiverse_socket.multiverse_node.multiverse_node import (
     MultiverseNode,
@@ -60,14 +61,14 @@ class MultiverseNodeProperties:
         ros_node_name = "".join(part.capitalize() for part in ros_node_name)
         self._ros_node_name = ros_node_name
 
-    def create_publisher(self):
+    def create_publisher(self) -> MultiversePublisher:
         topic_name = self.ros_node_prop.pop("topic")
         rate = self.ros_node_prop.pop("rate")
         publisher_name = f"{self.ros_node_name}Publisher"
         for subclass in MultiversePublisher.__subclasses__():
             if subclass.__name__ == publisher_name:
                 return subclass(
-                    node_name=self.ros_node_name,
+                    node_name=publisher_name,
                     topic_name=topic_name,
                     rate=rate,
                     client_addr=self.client_addr,
@@ -77,13 +78,13 @@ class MultiverseNodeProperties:
 
         raise TypeError(f"Class {publisher_name} not found.")
 
-    def create_subscriber(self):
+    def create_subscriber(self) -> MultiverseSubscriber:
         topic_name = self.ros_node_prop.pop("topic")
         subscriber_name = f"{self.ros_node_name}Subscriber"
         for subclass in MultiverseSubscriber.__subclasses__():
             if subclass.__name__ == subscriber_name:
                 return subclass(
-                    node_name=self.ros_node_name,
+                    node_name=subscriber_name,
                     topic_name=topic_name,
                     client_addr=self.client_addr,
                     multiverse_meta_data=self.multiverse_meta_data,
@@ -92,12 +93,12 @@ class MultiverseNodeProperties:
 
         raise TypeError(f"Class {subscriber_name} not found.")
 
-    def create_service(self):
+    def create_service(self) -> MultiverseService:
         service_name = f"{self.ros_node_name}Service"
         for subclass in MultiverseService.__subclasses__():
             if subclass.__name__ == service_name:
                 return subclass(
-                    node_name=self.ros_node_name,
+                    node_name=service_name,
                     client_addr=self.client_addr,
                     multiverse_meta_data=self.multiverse_meta_data,
                     **self.ros_node_prop,
@@ -127,10 +128,11 @@ class MultiverseRosSocket:
     def start(self):
         rclpy.init()
         
-        threads = {}
         subscriber_list: List[MultiverseSubscriber] = []
         publisher_list: List[MultiversePublisher] = []
         service_list: List[MultiverseService] = []
+
+        executor = SingleThreadedExecutor()
 
         for subscriber_name, subscriber_props in self.ros_node.subscribers.items():
             for subscriber_prop in subscriber_props:
@@ -138,6 +140,8 @@ class MultiverseRosSocket:
                 subscriber = MultiverseNodeProperties(
                     ros_node_name=subscriber_name, ros_name_prop=subscriber_prop
                 ).create_subscriber()
+                executor.add_node(subscriber)
+                subscriber.run()
                 subscriber_list.append(subscriber)
 
         for publisher_name, publisher_props in self.ros_node.publishers.items():
@@ -146,6 +150,8 @@ class MultiverseRosSocket:
                 publisher = MultiverseNodeProperties(
                     ros_node_name=publisher_name, ros_name_prop=publisher_prop
                 ).create_publisher()
+                executor.add_node(publisher)
+                publisher.run()
                 publisher_list.append(publisher)
 
         for service_name, service_props in self.ros_node.services.items():
@@ -154,37 +160,22 @@ class MultiverseRosSocket:
                 service = MultiverseNodeProperties(
                     ros_node_name=service_name, ros_name_prop=service_prop
                 ).create_service()
+                executor.add_node(service)
+                service.run()
                 service_list.append(service)
 
-        for subscriber in subscriber_list:
-            subscriber_thread = threading.Thread(target=subscriber.run)
-            subscriber_thread.start()
-            threads[subscriber] = subscriber_thread
-
-        for publisher in publisher_list:
-            publisher_thread = threading.Thread(target=publisher.run)
-            publisher_thread.start()
-            threads[publisher] = publisher_thread
-
-        for service in service_list:
-            service_thread = threading.Thread(target=service.run)
-            service_thread.start()
-            threads[service] = service_thread
-
         try:
-            while rclpy.ok():
-                # TODO: Add multiverse_server live checking
-                sleep(1)
+            executor.spin()
         except KeyboardInterrupt:
             print(f"[{self.__class__.__name__}] Caught SIGINT (Ctrl+C), exiting...")
             rclpy.shutdown()
         finally:
             for subscriber in subscriber_list:
-                threads[subscriber].join()
+                subscriber.stop()
             for publisher in publisher_list:
-                threads[publisher].join()
+                publisher.stop()
             for service in service_list:
-                threads[service].join()
+                service.stop()
 
 
 def parse_ros_node_from_str(ros_node_str: str) -> dict:

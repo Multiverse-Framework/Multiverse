@@ -2,6 +2,7 @@
 
 from typing import Dict
 
+import rclpy
 from rclpy.publisher import Publisher
 
 from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
@@ -37,9 +38,6 @@ class MultiversePublisher(MultiverseNode):
         self._connect_and_start()
         if not self._use_meta_data:
             self._bind_response_meta_data(self.response_meta_data)
-        self._executor.spin()
-        self._disconnect()
-        self.destroy_node()
 
     def _publisher_callback(self):
         self._communicate(self._use_meta_data)
@@ -50,4 +48,5 @@ class MultiversePublisher(MultiverseNode):
         self._publish()
 
     def _publish(self) -> None:
-        self._publisher.publish(self._msg)
+        if rclpy.ok():
+            self._publisher.publish(self._msg)

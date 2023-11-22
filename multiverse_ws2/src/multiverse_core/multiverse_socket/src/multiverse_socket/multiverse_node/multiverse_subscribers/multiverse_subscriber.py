@@ -39,9 +39,6 @@ class MultiverseSubscriber(MultiverseNode):
         while rclpy.ok():
             if len(self.receive_data) > 0:
                 break
-        self._executor.spin()
-        self._disconnect()
-        self.destroy_node()
 
     def _subscriber_callback(self, data: Any) -> None:
         self._bind_send_data(data)

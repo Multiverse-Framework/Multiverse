@@ -31,9 +31,6 @@ class MultiverseService(MultiverseNode):
 
     def _run(self) -> None:
         self._connect_and_start()
-        self._executor.spin()
-        self._disconnect()
-        self.destroy_node()
 
     def _service_callback(
         self, request: SrvTypeRequest, response: SrvTypeResponse

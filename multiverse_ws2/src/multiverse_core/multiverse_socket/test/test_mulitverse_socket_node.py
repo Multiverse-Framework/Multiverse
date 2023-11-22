@@ -6,6 +6,7 @@ from time import sleep
 
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import MultiThreadedExecutor
 
 from multiverse_interfaces.srv import Socket
 
@@ -110,6 +111,7 @@ class MultiverseRosNodeCreationTestCase(unittest.TestCase):
         TfPublisher._server_addr.port = server_port
         self.tf_publisher = self.tf_publisher_props.create_publisher()
         self.tf_publisher.run()
+        rclpy.spin(self.tf_publisher)
         thread.join()
         kill_multiverse_server(process)
 
@@ -122,6 +124,7 @@ class MultiverseRosNodeCreationTestCase(unittest.TestCase):
         SocketService._server_addr.port = server_port
         self.socket_service = self.socket_service_props.create_service()
         self.socket_service.run()
+        rclpy.spin(self.socket_service)
         thread.join()
         kill_multiverse_server(process)
 
@@ -147,10 +150,14 @@ class SocketServiceTestCase(unittest.TestCase):
         ros_thread.start()
         SocketService._server_addr.port = server_port
         self.socket_service = self.socket_service_props.create_service()
-        service_thread = threading.Thread(target=self.socket_service.run)
-        socket_client = SocketClient()
-        service_thread.start()
+        self.socket_service.run()
 
+        executor = MultiThreadedExecutor()
+        executor.add_node(self.socket_service)
+        executor_spin_thread = threading.Thread(target=executor.spin)
+        executor_spin_thread.start()
+
+        socket_client = SocketClient()
         request = Socket.Request()
         multiverse_meta_data = MultiverseMetaData()
         request.meta_data.world_name = multiverse_meta_data.world_name
@@ -169,7 +176,7 @@ class SocketServiceTestCase(unittest.TestCase):
         socket_client.destroy_node()
 
         ros_thread.join()
-        service_thread.join()
+        executor_spin_thread.join()
         kill_multiverse_server(process)
 
     @classmethod
