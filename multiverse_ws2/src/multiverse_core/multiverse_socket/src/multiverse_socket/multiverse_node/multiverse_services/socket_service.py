@@ -21,9 +21,9 @@ class SocketService(MultiverseService):
         multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
     ) -> None:
         super().__init__(
-            node_name=node_name,
-            client_addr=client_addr,
-            multiverse_meta_data=multiverse_meta_data,
+            node_name=node_name, 
+            client_addr=client_addr, 
+            multiverse_meta_data=multiverse_meta_data
         )
 
     def update_world(self, world_name) -> None:

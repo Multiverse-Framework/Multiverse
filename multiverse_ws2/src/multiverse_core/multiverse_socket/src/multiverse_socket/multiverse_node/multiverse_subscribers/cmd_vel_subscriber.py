@@ -25,9 +25,9 @@ class CmdVelSubscriber(MultiverseSubscriber):
         self._body_name = str(kwargs["body"])
         super().__init__(
             topic_name=topic_name,
-            node_name=node_name,
-            client_addr=client_addr,
-            multiverse_meta_data=multiverse_meta_data,
+            node_name=node_name, 
+            client_addr=client_addr, 
+            multiverse_meta_data=multiverse_meta_data
         )
         self.request_meta_data["send"][self._body_name] = ["odometric_velocity"]
 

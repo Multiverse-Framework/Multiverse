@@ -3,6 +3,9 @@
 import dataclasses
 from typing import List, Dict, TypeVar
 
+from rclpy.node import Node
+from rclpy.executors import MultiThreadedExecutor
+
 from multiverse_client_pybind import MultiverseClientPybind  # noqa
 
 T = TypeVar("T")
@@ -25,7 +28,8 @@ class SocketAddress:
     port: str = ""
 
 
-class MultiverseNode:
+class MultiverseNode(Node):
+    _executor: MultiThreadedExecutor
     _server_addr: SocketAddress = SocketAddress(host="tcp://127.0.0.1", port="7000")
     _client_addr: SocketAddress
     _meta_data: MultiverseMetaData
@@ -33,11 +37,15 @@ class MultiverseNode:
 
     def __init__(
         self,
+        node_name: str,
         client_addr: SocketAddress,
         multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
     ) -> None:
         if not isinstance(client_addr.port, str) or client_addr.port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")
+        super().__init__(node_name=f"{node_name}{client_addr.port}")
+        self._executor = MultiThreadedExecutor()
+        self._executor.add_node(self)
         self._send_data = None
         self._client_addr = client_addr
         self._meta_data = multiverse_meta_data
@@ -51,7 +59,7 @@ class MultiverseNode:
         }
 
     def run(self) -> None:
-        print(f"[Client {self._client_addr.port}] Start {self.__class__.__name__}")
+        self.get_logger().info(f"[Client {self._client_addr.port}] Start {self.__class__.__name__}")
         self._run()
 
     def _run(self) -> None:
@@ -90,7 +98,7 @@ class MultiverseNode:
     def receive_data(self) -> List[float]:
         receive_data = self._multiverse_socket.get_receive_data()
         if not receive_data:
-            print(f"[Client {self._client_addr.port}] Receive empty data.")
+            self.get_logger().warn(f"[Client {self._client_addr.port}] Receive empty data.")
         return receive_data
 
     def _bind_request_meta_data(self, request_meta_data: T) -> T:

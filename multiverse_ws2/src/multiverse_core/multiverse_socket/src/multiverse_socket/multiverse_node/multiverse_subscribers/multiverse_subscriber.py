@@ -3,17 +3,14 @@
 from typing import List, Dict, Any
 
 import rclpy
-from rclpy.executors import MultiThreadedExecutor
-from rclpy.node import Node
 
 from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
-class MultiverseSubscriber(MultiverseNode, Node):
+class MultiverseSubscriber(MultiverseNode):
     _msg_type = None
     _send_data: List[float] = []
     _receive_data: List[float] = []
-    _executor: MultiThreadedExecutor
 
     def __init__(
         self,
@@ -23,12 +20,11 @@ class MultiverseSubscriber(MultiverseNode, Node):
         multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
         **kwargs: Dict
     ) -> None:
-        MultiverseNode.__init__(
-            self, client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
+        super().__init__(
+            node_name=node_name,
+            client_addr=client_addr, 
+            multiverse_meta_data=multiverse_meta_data
         )
-        Node.__init__(self, node_name=node_name)
-        self._executor = MultiThreadedExecutor()
-        self._executor.add_node(self)
         self.create_subscription(
             msg_type=self._msg_type,
             topic=topic_name,

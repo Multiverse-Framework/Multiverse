@@ -2,16 +2,13 @@
 
 from typing import Dict
 
-from rclpy.executors import MultiThreadedExecutor
-from rclpy.node import Node
 from rclpy.publisher import Publisher
 
 from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
-class MultiversePublisher(MultiverseNode, Node):
+class MultiversePublisher(MultiverseNode):
     _use_meta_data: bool = False
-    _executor: MultiThreadedExecutor
     _publisher: Publisher
     _msg_type = None
     _msg = None
@@ -25,12 +22,11 @@ class MultiversePublisher(MultiverseNode, Node):
         multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
         **kwargs: Dict
     ) -> None:
-        MultiverseNode.__init__(
-            self, client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
+        super().__init__(
+            node_name=node_name, 
+            client_addr=client_addr, 
+            multiverse_meta_data=multiverse_meta_data
         )
-        Node.__init__(self, node_name=node_name)
-        self._executor = MultiThreadedExecutor()
-        self._executor.add_node(self)
         self._msg = self._msg_type()
         self._publisher = self.create_publisher(self._msg_type, topic_name, 100)
         self.create_timer(

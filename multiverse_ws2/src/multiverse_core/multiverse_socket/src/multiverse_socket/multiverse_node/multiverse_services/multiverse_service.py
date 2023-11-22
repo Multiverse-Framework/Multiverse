@@ -2,13 +2,12 @@
 
 from typing import Dict
 
-from rclpy.executors import MultiThreadedExecutor
-from rclpy.node import Node, MsgType, SrvTypeRequest, SrvTypeResponse
+from rclpy.node import MsgType, SrvTypeRequest, SrvTypeResponse
 
 from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
-class MultiverseService(MultiverseNode, Node):
+class MultiverseService(MultiverseNode):
     _srv_name = ""
     _srv_type: MsgType = None
 
@@ -19,12 +18,11 @@ class MultiverseService(MultiverseNode, Node):
         multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
         **kwargs: Dict
     ) -> None:
-        MultiverseNode.__init__(
-            self, client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
+        super().__init__(
+            node_name=node_name, 
+            client_addr=client_addr, 
+            multiverse_meta_data=multiverse_meta_data
         )
-        Node.__init__(self, node_name=node_name)
-        self._executor = MultiThreadedExecutor()
-        self._executor.add_node(self)
         self.create_service(
             srv_type=self._srv_type,
             srv_name=self._srv_name,
