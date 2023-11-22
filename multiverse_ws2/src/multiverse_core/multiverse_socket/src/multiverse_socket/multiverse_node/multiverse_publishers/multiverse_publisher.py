@@ -34,7 +34,7 @@ class MultiversePublisher(MultiverseNode):
         )
 
     def _run(self) -> None:
-        self._connect()
+        self._connect_and_start()
         if not self._use_meta_data:
             self._bind_response_meta_data(self.response_meta_data)
         self._executor.spin()

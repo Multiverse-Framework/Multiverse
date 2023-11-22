@@ -27,7 +27,7 @@ class MultiverseSubscriber(MultiverseNode):
         )
 
     def _run(self) -> None:
-        self._connect()
+        self._connect_and_start()
         self._init_send_data()
         self._communicate()
         while not rospy.is_shutdown():

@@ -29,7 +29,7 @@ class MultiversePublisher(MultiverseNode):
         self._publisher = rospy.Publisher(topic_name, self._msg_type, queue_size=100)
 
     def _run(self) -> None:
-        self._connect()
+        self._connect_and_start()
         if self._use_meta_data:
             while not rospy.is_shutdown():
                 self._communicate(True)

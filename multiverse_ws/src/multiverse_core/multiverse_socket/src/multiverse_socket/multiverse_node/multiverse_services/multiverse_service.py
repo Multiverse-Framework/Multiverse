@@ -34,7 +34,7 @@ class MultiverseService(MultiverseNode):
         return self._srv_response_class()
 
     def _run(self) -> None:
-        self._connect()
+        self._connect_and_start()
         rospy.spin()
         self._disconnect()
 

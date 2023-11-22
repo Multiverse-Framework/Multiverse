@@ -20,6 +20,7 @@ def start_multiverse_server(server_port: str) -> subprocess.Popen:
 
 def kill_multiverse_server(process: subprocess.Popen):
     process.send_signal(signal.SIGINT)
+    process.wait()
 
 
 def kill_ros_after_second(second: float):
@@ -120,7 +121,7 @@ class MultiverseRosNodeCreationTestCase(unittest.TestCase):
         thread.start()
         SocketService._server_addr.port = server_port
         self.socket_service = self.socket_service_props.create_service()
-        # self.socket_service.run()
+        self.socket_service.run()
         thread.join()
         kill_multiverse_server(process)
 

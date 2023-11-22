@@ -105,7 +105,7 @@ class MultiverseNode:
     def _bind_receive_data(self, receive_data: T) -> T:
         pass
 
-    def _connect(self) -> None:
+    def _connect_and_start(self) -> None:
         self._multiverse_socket.connect(self._client_addr.host, self._client_addr.port)
         self._multiverse_socket.start()
 
@@ -117,4 +117,4 @@ class MultiverseNode:
 
     def _restart(self) -> None:
         self._disconnect()
-        self._connect()
+        self._connect_and_start()
