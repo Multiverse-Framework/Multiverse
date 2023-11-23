@@ -1,0 +1,1102 @@
+<?xml version="1.0"?>
+<robot name="task_board">
+	<link name="task_board_main">
+		<visual>
+			<geometry>
+				<mesh filename="file://../meshes/dae/task_board_main.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_1.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_2.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_3.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_4.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_5.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_6.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_7.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_8.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_9.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_10.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_11.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_12.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_13.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_14.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_15.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_16.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_17.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_18.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_19.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_20.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_21.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_22.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_23.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_24.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_25.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_26.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_27.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_28.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_29.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_30.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_31.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_32.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_33.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_34.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_35.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_36.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_37.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_38.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_39.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_40.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_41.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_part_42.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_clock_joint" type="fixed">
+		<parent link="task_board_main" />
+		<child link="task_board_clock" />
+		<origin rpy="0 0 0" xyz="0.02361 0.09598 0.086058" />
+	</joint>
+	<link name="task_board_clock">
+		<visual>
+			<geometry>
+				<mesh filename="file://../meshes/dae/task_board_clock.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_clock.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_hole_1_joint" type="fixed">
+		<parent link="task_board_main" />
+		<child link="task_board_hole_1" />
+		<origin rpy="0 0 0" xyz="-0.0191 0.039 0.0734" />
+	</joint>
+	<link name="task_board_hole_1">
+		<visual>
+			<geometry>
+				<mesh filename="file://../meshes/dae/task_board_hole.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.19634954084936207" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.39269908169872414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.5890486225480862" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.7853981633974483" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.9817477042468103" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.1780972450961724" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.3744467859455345" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.5707963267948966" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.7671458676442586" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.9634954084936207" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.159844949342983" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.356194490192345" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.552544031041707" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.748893571891069" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.9452431127404313" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.141592653589793" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.3379421944391554" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.5342917352885173" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.7306412761378795" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.9269908169872414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.123340357836604" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.319689898685966" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.516039439535327" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.71238898038469" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.908738521234052" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.105088062083414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.301437602932776" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.497787143782138" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.6941366846315" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.8904862254808625" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 6.086835766330224" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_hole_2_joint" type="fixed">
+		<parent link="task_board_main" />
+		<child link="task_board_hole_2" />
+		<origin rpy="0 0 0" xyz="-0.044 0.039 0.0734" />
+	</joint>
+	<link name="task_board_hole_2">
+		<visual>
+			<geometry>
+				<mesh filename="file://../meshes/dae/task_board_hole.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.19634954084936207" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.39269908169872414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.5890486225480862" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.7853981633974483" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.9817477042468103" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.1780972450961724" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.3744467859455345" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.5707963267948966" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.7671458676442586" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.9634954084936207" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.159844949342983" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.356194490192345" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.552544031041707" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.748893571891069" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.9452431127404313" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.141592653589793" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.3379421944391554" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.5342917352885173" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.7306412761378795" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.9269908169872414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.123340357836604" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.319689898685966" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.516039439535327" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.71238898038469" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.908738521234052" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.105088062083414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.301437602932776" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.497787143782138" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.6941366846315" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.8904862254808625" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 6.086835766330224" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_hole_3_joint" type="fixed">
+		<parent link="task_board_main" />
+		<child link="task_board_hole_3" />
+		<origin rpy="0 -1.5707963267948966 0" xyz="0.037334 -0.102 0.0963" />
+	</joint>
+	<link name="task_board_hole_3">
+		<visual>
+			<geometry>
+				<mesh filename="file://../meshes/dae/task_board_hole.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.19634954084936207" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.39269908169872414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.5890486225480862" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.7853981633974483" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0.9817477042468103" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.1780972450961724" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.3744467859455345" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.5707963267948966" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.7671458676442586" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 1.9634954084936207" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.159844949342983" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.356194490192345" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.552544031041707" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.748893571891069" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 2.9452431127404313" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.141592653589793" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.3379421944391554" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.5342917352885173" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.7306412761378795" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 3.9269908169872414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.123340357836604" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.319689898685966" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.516039439535327" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.71238898038469" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 4.908738521234052" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.105088062083414" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.301437602932776" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.497787143782138" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.6941366846315" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 5.8904862254808625" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 6.086835766330224" xyz="0 0 0" />
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_hole_side.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_lid_joint" type="revolute">
+		<parent link="task_board_main" />
+		<child link="task_board_lid" />
+		<origin rpy="0 0 0" xyz="0.033026 -0.0472 0.079405" />
+		<axis xyz="0 1 0" />
+		<limit effort="1000" lower="0.0" upper="2.072927552593665" velocity="1000" />
+	</joint>
+	<link name="task_board_lid">
+		<visual>
+			<geometry>
+				<mesh filename="file://../meshes/dae/task_board_lid.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_lid.stl" />
+			</geometry>
+		</collision>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_lid_hinge.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_lid_knob_joint" type="fixed">
+		<parent link="task_board_lid" />
+		<child link="task_board_lid_knob" />
+		<origin rpy="0 0 0" xyz="-0.066776 0.0 0.010587" />
+	</joint>
+	<link name="task_board_lid_knob">
+		<visual>
+			<geometry>
+				<mesh
+					filename="file://../meshes/dae/task_board_lid_knob.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0.0 0.0 -0.00255" />
+			<geometry>
+				<cylinder length="0.006" radius="0.004" />
+			</geometry>
+		</collision>
+		<collision>
+			<origin rpy="0 0 0" xyz="0.0 0.0 0.00155" />
+			<geometry>
+				<cylinder length="0.0027" radius="0.007486" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_slider_joint" type="prismatic">
+		<parent link="task_board_main" />
+		<child link="task_board_slider" />
+		<origin rpy="0 0 0" xyz="0.04301 0.061594 0.082959" />
+		<axis xyz="1 0 0" />
+		<limit effort="1000" lower="-0.025" upper="0.01" velocity="1000" />
+	</joint>
+	<link name="task_board_slider">
+		<visual>
+			<geometry>
+				<mesh
+					filename="file://../meshes/dae/task_board_slider.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_slider.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_button_1_joint" type="prismatic">
+		<parent link="task_board_main" />
+		<child link="task_board_button_1" />
+		<origin rpy="0 0 0" xyz="-0.043957 0.09625 0.0835" />
+		<axis xyz="0 0 1" />
+		<limit effort="1000" lower="-0.003" upper="0" velocity="1000" />
+	</joint>
+	<link name="task_board_button_1">
+		<visual>
+			<geometry>
+				<mesh
+					filename="file://../meshes/dae/task_board_button.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_button.stl" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="task_board_button_2_joint" type="prismatic">
+		<parent link="task_board_main" />
+		<child link="task_board_button_2" />
+		<origin rpy="0 0 0" xyz="-0.02995 0.09625 0.0835" />
+		<axis xyz="0 0 1" />
+		<limit effort="1000" lower="-0.003" upper="0" velocity="1000" />
+	</joint>
+	<link name="task_board_button_2">
+		<visual>
+			<geometry>
+				<mesh
+					filename="file://../meshes/dae/task_board_button.dae" />
+			</geometry>
+		</visual>
+		<collision>
+			<geometry>
+				<mesh
+					filename="file://../meshes/stl/task_board_button.stl" />
+			</geometry>
+		</collision>
+	</link>
+</robot>

@@ -1,0 +1,255 @@
+<mujoco model="task_board">
+    <compiler angle="radian" meshdir="../meshes/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="false" boundmass="0.000001" boundinertia="0.000001"/>
+    <asset>
+        <mesh name="task_board_part_1" file="task_board_part_1.stl"/>
+        <mesh name="task_board_part_2" file="task_board_part_2.stl"/>
+        <mesh name="task_board_part_3" file="task_board_part_3.stl"/>
+        <mesh name="task_board_part_4" file="task_board_part_4.stl"/>
+        <mesh name="task_board_part_5" file="task_board_part_5.stl"/>
+        <mesh name="task_board_part_6" file="task_board_part_6.stl"/>
+        <mesh name="task_board_part_7" file="task_board_part_7.stl"/>
+        <mesh name="task_board_part_8" file="task_board_part_8.stl"/>
+        <mesh name="task_board_part_9" file="task_board_part_9.stl"/>
+        <mesh name="task_board_part_10" file="task_board_part_10.stl"/>
+        <mesh name="task_board_part_11" file="task_board_part_11.stl"/>
+        <mesh name="task_board_part_12" file="task_board_part_12.stl"/>
+        <mesh name="task_board_part_13" file="task_board_part_13.stl"/>
+        <mesh name="task_board_part_14" file="task_board_part_14.stl"/>
+        <mesh name="task_board_part_15" file="task_board_part_15.stl"/>
+        <mesh name="task_board_part_16" file="task_board_part_16.stl"/>
+        <mesh name="task_board_part_17" file="task_board_part_17.stl"/>
+        <mesh name="task_board_part_18" file="task_board_part_18.stl"/>
+        <mesh name="task_board_part_19" file="task_board_part_19.stl"/>
+        <mesh name="task_board_part_20" file="task_board_part_20.stl"/>
+        <mesh name="task_board_part_21" file="task_board_part_21.stl"/>
+        <mesh name="task_board_part_22" file="task_board_part_22.stl"/>
+        <mesh name="task_board_part_23" file="task_board_part_23.stl"/>
+        <mesh name="task_board_part_24" file="task_board_part_24.stl"/>
+        <mesh name="task_board_part_25" file="task_board_part_25.stl"/>
+        <mesh name="task_board_part_26" file="task_board_part_26.stl"/>
+        <mesh name="task_board_part_27" file="task_board_part_27.stl"/>
+        <mesh name="task_board_part_28" file="task_board_part_28.stl"/>
+        <mesh name="task_board_part_29" file="task_board_part_29.stl"/>
+        <mesh name="task_board_part_30" file="task_board_part_30.stl"/>
+        <mesh name="task_board_part_31" file="task_board_part_31.stl"/>
+        <mesh name="task_board_part_32" file="task_board_part_32.stl"/>
+        <mesh name="task_board_part_33" file="task_board_part_33.stl"/>
+        <mesh name="task_board_part_34" file="task_board_part_34.stl"/>
+        <mesh name="task_board_part_35" file="task_board_part_35.stl"/>
+        <mesh name="task_board_part_36" file="task_board_part_36.stl"/>
+        <mesh name="task_board_part_37" file="task_board_part_37.stl"/>
+        <mesh name="task_board_part_38" file="task_board_part_38.stl"/>
+        <mesh name="task_board_part_39" file="task_board_part_39.stl"/>
+        <mesh name="task_board_part_40" file="task_board_part_40.stl"/>
+        <mesh name="task_board_part_41" file="task_board_part_41.stl"/>
+        <mesh name="task_board_part_42" file="task_board_part_42.stl"/>
+        <mesh name="task_board_clock" file="task_board_clock.stl"/>
+        <mesh name="task_board_hole_side" file="task_board_hole_side.stl"/>
+        <mesh name="task_board_lid" file="task_board_lid.stl"/>
+        <mesh name="task_board_lid_hinge" file="task_board_lid_hinge.stl"/>
+        <mesh name="task_board_slider" file="task_board_slider.stl"/>
+        <mesh name="task_board_button" file="task_board_button.stl"/>
+    </asset>
+    <worldbody>
+        <body name="task_board">
+            <body name="task_board_main">
+                <geom type="mesh" mesh="task_board_part_1"/>
+                <geom type="mesh" mesh="task_board_part_2"/>
+                <geom type="mesh" mesh="task_board_part_3"/>
+                <geom type="mesh" mesh="task_board_part_4"/>
+                <geom type="mesh" mesh="task_board_part_5"/>
+                <geom type="mesh" mesh="task_board_part_6"/>
+                <geom type="mesh" mesh="task_board_part_7"/>
+                <geom type="mesh" mesh="task_board_part_8"/>
+                <geom type="mesh" mesh="task_board_part_9"/>
+                <geom type="mesh" mesh="task_board_part_10"/>
+                <geom type="mesh" mesh="task_board_part_11"/>
+                <geom type="mesh" mesh="task_board_part_12"/>
+                <geom type="mesh" mesh="task_board_part_13"/>
+                <geom type="mesh" mesh="task_board_part_14"/>
+                <geom type="mesh" mesh="task_board_part_15"/>
+                <geom type="mesh" mesh="task_board_part_16"/>
+                <geom type="mesh" mesh="task_board_part_17"/>
+                <geom type="mesh" mesh="task_board_part_18"/>
+                <geom type="mesh" mesh="task_board_part_19"/>
+                <geom type="mesh" mesh="task_board_part_20"/>
+                <geom type="mesh" mesh="task_board_part_21"/>
+                <geom type="mesh" mesh="task_board_part_22"/>
+                <geom type="mesh" mesh="task_board_part_23"/>
+                <geom type="mesh" mesh="task_board_part_24"/>
+                <geom type="mesh" mesh="task_board_part_25"/>
+                <geom type="mesh" mesh="task_board_part_26"/>
+                <geom type="mesh" mesh="task_board_part_27"/>
+                <geom type="mesh" mesh="task_board_part_28"/>
+                <geom type="mesh" mesh="task_board_part_29"/>
+                <geom type="mesh" mesh="task_board_part_30"/>
+                <geom type="mesh" mesh="task_board_part_31"/>
+                <geom type="mesh" mesh="task_board_part_32"/>
+                <geom type="mesh" mesh="task_board_part_33"/>
+                <geom type="mesh" mesh="task_board_part_34"/>
+                <geom type="mesh" mesh="task_board_part_35"/>
+                <geom type="mesh" mesh="task_board_part_36"/>
+                <geom type="mesh" mesh="task_board_part_37"/>
+                <geom type="mesh" mesh="task_board_part_38"/>
+                <geom type="mesh" mesh="task_board_part_39"/>
+                <geom type="mesh" mesh="task_board_part_40"/>
+                <geom type="mesh" mesh="task_board_part_41"/>
+                <geom type="mesh" mesh="task_board_part_42"/>
+                <body name="task_board_clock" pos="0.02361 0.09598 0.086058">
+                    <geom type="mesh" mesh="task_board_clock"/>
+                </body>
+                <body name="task_board_hole_1" pos="-0.0191 0.039 0.0734">
+                    <geom type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.95694 0 0 0.290285" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.92388 0 0 0.382683" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.881921 0 0 0.471397" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.83147 0 0 0.55557" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.77301 0 0 0.634393" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.707107 0 0 0.707107" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.634393 0 0 0.77301" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.55557 0 0 0.83147" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.471397 0 0 0.881921" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.382683 0 0 0.92388" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.290285 0 0 0.95694" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.19509 0 0 0.980785" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.0980171 0 0 0.995185" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0 0 0 1" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.0980171 0 0 0.995185" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.19509 0 0 0.980785" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.290285 0 0 0.95694" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.382683 0 0 0.92388" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.471397 0 0 0.881921" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.55557 0 0 0.83147" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.634393 0 0 0.77301" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.707107 0 0 0.707107" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.77301 0 0 0.634393" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.83147 0 0 0.55557" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.881921 0 0 0.471397" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.92388 0 0 0.382683" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.95694 0 0 0.290285" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
+                </body>
+                <body name="task_board_hole_2" pos="-0.044 0.039 0.0734">
+                    <geom type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.95694 0 0 0.290285" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.92388 0 0 0.382683" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.881921 0 0 0.471397" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.83147 0 0 0.55557" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.77301 0 0 0.634393" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.707107 0 0 0.707107" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.634393 0 0 0.77301" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.55557 0 0 0.83147" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.471397 0 0 0.881921" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.382683 0 0 0.92388" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.290285 0 0 0.95694" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.19509 0 0 0.980785" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.0980171 0 0 0.995185" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0 0 0 1" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.0980171 0 0 0.995185" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.19509 0 0 0.980785" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.290285 0 0 0.95694" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.382683 0 0 0.92388" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.471397 0 0 0.881921" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.55557 0 0 0.83147" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.634393 0 0 0.77301" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.707107 0 0 0.707107" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.77301 0 0 0.634393" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.83147 0 0 0.55557" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.881921 0 0 0.471397" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.92388 0 0 0.382683" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.95694 0 0 0.290285" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
+                </body>
+                <body name="task_board_hole_3" pos="0.037334 -0.102 0.0963" quat="0.707107 0 -0.707107 0">
+                    <geom type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.95694 0 0 0.290285" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.92388 0 0 0.382683" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.881921 0 0 0.471397" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.83147 0 0 0.55557" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.77301 0 0 0.634393" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.707107 0 0 0.707107" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.634393 0 0 0.77301" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.55557 0 0 0.83147" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.471397 0 0 0.881921" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.382683 0 0 0.92388" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.290285 0 0 0.95694" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.19509 0 0 0.980785" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0.0980171 0 0 0.995185" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="0 0 0 1" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.0980171 0 0 0.995185" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.19509 0 0 0.980785" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.290285 0 0 0.95694" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.382683 0 0 0.92388" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.471397 0 0 0.881921" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.55557 0 0 0.83147" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.634393 0 0 0.77301" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.707107 0 0 0.707107" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.77301 0 0 0.634393" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.83147 0 0 0.55557" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.881921 0 0 0.471397" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.92388 0 0 0.382683" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.95694 0 0 0.290285" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
+                    <geom quat="-0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
+                </body>
+                <body name="task_board_lid" pos="0.033026 -0.0472 0.079405">
+                    <joint name="task_board_lid_joint" pos="0 0 0" axis="0 1 0" range="0 2.07293"/>
+                    <geom type="mesh" mesh="task_board_lid"/>
+                    <geom type="mesh" mesh="task_board_lid_hinge"/>
+                    <body name="task_board_lid_knob" pos="-0.066776 0 0.010587">
+                        <geom size="0.004 0.003" pos="0 0 -0.00255" type="cylinder"/>
+                        <geom size="0.007486 0.00135" pos="0 0 0.00155" type="cylinder"/>
+                    </body>
+                </body>
+                <body name="task_board_slider" pos="0.04301 0.061594 0.082959">
+                    <joint name="task_board_slider_joint" pos="0 0 0" axis="1 0 0" type="slide" range="-0.025 0.01"/>
+                    <geom type="mesh" mesh="task_board_slider"/>
+                </body>
+                <body name="task_board_button_1" pos="-0.043957 0.09625 0.0835">
+                    <joint name="task_board_button_1_joint" pos="0 0 0" axis="0 0 1" type="slide" range="-0.003 0"/>
+                    <geom type="mesh" mesh="task_board_button"/>
+                </body>
+                <body name="task_board_button_2" pos="-0.02995 0.09625 0.0835">
+                    <joint name="task_board_button_2_joint" pos="0 0 0" axis="0 0 1" type="slide" range="-0.003 0"/>
+                    <geom type="mesh" mesh="task_board_button"/>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+    <equality/>
+    <contact>
+        <exclude body1="task_board_lid" body2="task_board_main"/>
+        <exclude body1="task_board_slider" body2="task_board_main"/>
+        <exclude body1="task_board_button_1" body2="task_board_main"/>
+        <exclude body1="task_board_button_2" body2="task_board_main"/>
+        <exclude body1="task_board_button_1" body2="task_board_clock"/>
+        <exclude body1="task_board_button_1" body2="task_board_hole_1"/>
+        <exclude body1="task_board_button_1" body2="task_board_hole_2"/>
+        <exclude body1="task_board_button_1" body2="task_board_hole_3"/>
+        <exclude body1="task_board_button_1" body2="task_board_lid_knob"/>
+        <exclude body1="task_board_button_2" body2="task_board_clock"/>
+        <exclude body1="task_board_button_2" body2="task_board_hole_1"/>
+        <exclude body1="task_board_button_2" body2="task_board_hole_2"/>
+        <exclude body1="task_board_button_2" body2="task_board_hole_3"/>
+        <exclude body1="task_board_button_2" body2="task_board_lid_knob"/>
+        <exclude body1="task_board_lid" body2="task_board_clock"/>
+        <exclude body1="task_board_lid" body2="task_board_hole_1"/>
+        <exclude body1="task_board_lid" body2="task_board_hole_2"/>
+        <exclude body1="task_board_lid" body2="task_board_hole_3"/>
+        <exclude body1="task_board_lid" body2="task_board_lid_knob"/>
+        <exclude body1="task_board_main" body2="task_board_lid_knob"/>
+        <exclude body1="task_board_slider" body2="task_board_clock"/>
+        <exclude body1="task_board_slider" body2="task_board_hole_1"/>
+        <exclude body1="task_board_slider" body2="task_board_hole_2"/>
+        <exclude body1="task_board_slider" body2="task_board_hole_3"/>
+        <exclude body1="task_board_slider" body2="task_board_lid_knob"/>
+    </contact>
+</mujoco>

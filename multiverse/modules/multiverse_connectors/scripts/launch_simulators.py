@@ -14,12 +14,13 @@ def parse_mujoco(resources_paths, mujoco_data):
     worlds_path = find_files(resources_paths, mujoco_data["world"]["path"])
     mujoco_args = [f"--world={worlds_path}"]
 
-    if "robots" in mujoco_data:
-        for robot_name in mujoco_data["robots"]:
-            if "path" in mujoco_data["robots"][robot_name]:
-                mujoco_data["robots"][robot_name]["path"] = find_files(resources_paths, mujoco_data["robots"][robot_name]["path"])
-        robots_dict = mujoco_data["robots"]
-        mujoco_args.append(f"--robots={robots_dict}".replace(" ", ""))
+    for entity_str in ["robots", "objects"]:
+        if entity_str in mujoco_data:
+            for entity_name in mujoco_data[entity_str]:
+                if "path" in mujoco_data[entity_str][entity_name]:
+                    mujoco_data[entity_str][entity_name]["path"] = find_files(resources_paths, mujoco_data[entity_str][entity_name]["path"])
+            entity_dict = mujoco_data[entity_str]
+            mujoco_args.append(f"--{entity_str}={entity_dict}".replace(" ", ""))
 
     return mujoco_args
 

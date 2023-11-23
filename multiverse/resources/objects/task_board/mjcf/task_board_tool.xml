@@ -1,0 +1,19 @@
+<mujoco model="task_board_tool">
+    <compiler angle="radian" meshdir="../meshes/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="true" boundmass="0.000001" boundinertia="0.000001"/>
+    <asset>
+        <mesh name="task_board_tool_1" file="task_board_tool_1.stl" />
+        <mesh name="task_board_tool_2" file="task_board_tool_2.stl" />
+        <mesh name="task_board_tool_3" file="task_board_tool_3.stl" />
+        <mesh name="task_board_tool_4" file="task_board_tool_4.stl" />
+    </asset>
+
+    <worldbody>
+        <body name="task_board_tool">
+            <geom type="mesh" mesh="task_board_tool_1" />
+            <geom type="mesh" mesh="task_board_tool_2" />
+            <geom type="mesh" mesh="task_board_tool_3" />
+            <geom type="mesh" mesh="task_board_tool_4" />
+            <geom type="sphere" pos="0 -0.056582 0" size="0.00099" />
+        </body>
+    </worldbody>
+</mujoco>

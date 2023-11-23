@@ -1,0 +1,110 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  ur5e_with_task_board:
+    simulator: mujoco
+    world:
+      name: world
+      path: work_table.xml
+    robots:
+      ur5e:
+        path: ur5e.xml
+        apply:
+          body:
+            ur5e:
+              pos: [0.0, 0.0, 1.05]
+        disable_self_collision: auto
+    objects:
+      task_board:
+        path: task_board.xml
+        apply:
+          body:
+            task_board:
+              pos: [0.7, 0.0, 1.05]
+        prefix:
+          geom: task_board_
+
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  ur5e_with_task_board:
+    host: "tcp://127.0.0.1"
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+    receive:
+      shoulder_pan: ["cmd_joint_rvalue"]
+      shoulder_lift: ["cmd_joint_rvalue"]
+      elbow: ["cmd_joint_rvalue"]
+      wrist_1: ["cmd_joint_rvalue"]
+      wrist_2: ["cmd_joint_rvalue"]
+      wrist_3: ["cmd_joint_rvalue"]
+  ros:
+    services:
+      socket:
+        - host: "tcp://127.0.0.1"
+          port: 7400
+
+    publishers:
+      tf:
+        - meta_data:
+            world_name: world
+            length_unit: m
+            angle_unit: rad
+            mass_unit: kg
+            time_unit: s
+            handedness: rhs
+          host: "tcp://127.0.0.1"
+          port: 7301
+          topic: /tf
+          rate: 60
+          root_frame_id: map
+
+    ros_run:
+      rviz:
+        config: ur5e_with_task_board/config/rviz.rviz
+        robot_descriptions:
+          ur5e_description: ur5e/urdf/ur5e.urdf
+          task_board_description: task_board/urdf/task_board.urdf
+  
+    ros_control:
+      - meta_data:
+          world_name: world
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        host: "tcp://127.0.0.1"
+        port: 7600
+        controller_manager:
+          robot: ur5e
+          robot_description: /robot_description
+          urdf: ur5e.urdf
+          config: ur5e/config/ros_control.yaml
+          actuators:
+            shoulder_pan: shoulder_pan_joint
+            shoulder_lift: shoulder_lift_joint
+            elbow: elbow_joint
+            wrist_1: wrist_1_joint
+            wrist_2: wrist_2_joint
+            wrist_3: wrist_3_joint
+          controllers:
+            spawn:
+              - joint_state_controller
+                joint_trajectory_controller

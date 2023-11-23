@@ -1,0 +1,26 @@
+<mujoco>
+    <option timestep="0.001" integrator="RK4" gravity="0 0 -9.81" noslip_iterations="5" noslip_tolerance="1e-6">
+        <flag sensornoise="disable" energy="enable" contact="enable" />
+    </option>
+
+    <asset>
+        <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4" />
+        <material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2" />
+    </asset>
+
+    <worldbody>
+        <geom name="floor" size="0 0 .05" type="plane" material="grid" condim="4" friction="2 0.05 0.01" />
+        <light diffuse=".5 .5 .5" pos="0 -1 5" dir="0 0 -1" />
+        <light diffuse=".5 .5 .5" pos="0 1 5" dir="0 0 -1" />
+    </worldbody>
+
+    <worldbody>
+        <body name="table" pos="0 0 1">
+            <geom type="box" size="1 .5 .05" rgba="0.9 0.9 .9 1" mass="6" condim="4" friction="2 0.05 0.01" />
+            <geom type="box" pos=".95 .45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
+            <geom type="box" pos="-.95 .45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
+            <geom type="box" pos=".95 -.45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
+            <geom type="box" pos="-.95 -.45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
+        </body>
+    </worldbody>
+</mujoco>
