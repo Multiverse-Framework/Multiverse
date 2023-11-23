@@ -8,7 +8,11 @@ from PIL import Image
 
 def clean_up_meshes(file_path: str) -> None:
     bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
-    if len([selected_object for selected_object in bpy.context.selected_objects if selected_object.type == "MESH"]) > 1:
+    for selected_object in bpy.context.selected_objects:
+        if selected_object.type != "MESH":
+            selected_object.select_set(False)
+    if len(bpy.context.selected_objects) > 1:
+        bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
         bpy.ops.object.join()
 
     selected_object = bpy.context.object
@@ -31,8 +35,8 @@ def export_usd(out_usd: str) -> None:
 def export_obj(out_obj: str) -> []:
     clean_up_meshes(out_obj)
     out_obj_dir = os.path.dirname(out_obj)
-    os.makedirs(name=os.path.join(out_obj_dir, "textures"), exist_ok=True)
-    bpy.ops.export_scene.obj(filepath=out_obj, use_selection=True, axis_forward="Y", axis_up="Z", path_mode="RELATIVE")
+    os.makedirs(name=os.path.join(out_obj_dir, "..", "textures"), exist_ok=True)
+    bpy.ops.wm.obj_export(filepath=out_obj, export_selected_objects=True, forward_axis="Y", up_axis="Z", path_mode="RELATIVE")
     out_mtl = out_obj.replace(".obj", ".mtl")
     with open(out_mtl, "r") as file:
         lines = file.readlines()
@@ -42,12 +46,12 @@ def export_obj(out_obj: str) -> []:
         if line.startswith("map_Kd"):
             texture_path = os.path.join(out_obj_dir, line.split("map_Kd")[1].strip())
             texture_file_name = os.path.basename(texture_path)
-            new_texture_path = os.path.join("textures", texture_file_name)
+            new_texture_path = os.path.join("..", "textures", texture_file_name)
             shutil.copy2(texture_path, os.path.join(out_obj_dir, new_texture_path))
             lines[i] = f"map_Kd {new_texture_path}\n"
             img = Image.open(texture_path)
-            png_file_name = texture_file_name.replace(".jpg", ".png")
-            img.save(os.path.join(out_obj_dir, new_texture_path).replace(".jpg", ".png"), "PNG")
+            png_file_name = texture_file_name.replace(".jpg", ".png").replace(".JPG", ".png")
+            img.save(os.path.join(out_obj_dir, new_texture_path).replace(".jpg", ".png").replace(".JPG", ".png"), "PNG")
             png_file_names.append(png_file_name)
 
     with open(out_mtl, "w") as file:

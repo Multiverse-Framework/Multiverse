@@ -125,7 +125,7 @@ class GeomBuilder:
     def add_mesh(self, mesh_name: str = None, material_name: str = None) -> MeshBuilder:
         mesh_name = modify_name(in_name=mesh_name)
 
-        if mesh_name is None:
+        if mesh_name is None or not mesh_name[0].isalpha():
             mesh_name = "SM_" + self.name
 
         mesh_path = os.path.join(TMP_DIR, "visual" if self.is_visual else "collision", mesh_name + ".usda")
@@ -169,9 +169,9 @@ class GeomBuilder:
             for prim_with_material in prims_with_material:
                 parent_prim = prim_with_material
                 prim_path = prim_with_material.GetName()
-                while not self.stage.GetPrimAtPath(self.path.AppendPath(prim_path)).IsValid() and parent_prim.IsValid():
+                while not self.stage.GetPrimAtPath(self.path.AppendPath(prim_path)).IsValid() and not parent_prim.GetParent().GetPath().IsRootPrimPath():
                     parent_prim = parent_prim.GetParent()
-                    prim_path = parent_prim.GetName() + "/" + prim_path
+                    prim_path = os.path.join(parent_prim.GetName(), prim_path)
 
                 prim = self.stage.OverridePrim(self.path.AppendPath(prim_path))
                 material_binding_API = UsdShade.MaterialBindingAPI.Apply(prim)

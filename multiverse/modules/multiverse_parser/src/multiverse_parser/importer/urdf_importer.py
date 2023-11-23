@@ -125,7 +125,7 @@ class UrdfImporter:
 
             body_builder.set_transform(pos=urdf_joint_pos, quat=urdf_joint_quat, relative_to=urdf_link_name)
 
-            urdf_link = self.robot.link_map[child_link_name]
+            urdf_link = self.robot.link_map[urdf_child_link_name]
             if self.with_visual:
                 for urdf_visual in urdf_link.visuals:
                     geom_name = child_link_name + "_visual_"

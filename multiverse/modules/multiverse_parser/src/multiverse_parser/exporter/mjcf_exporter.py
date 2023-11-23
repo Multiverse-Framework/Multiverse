@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.10
 
 import os
-from math import radians
+from math import radians, isclose
 from xml.etree import ElementTree as ET
 from xml.dom import minidom
 from pxr import UsdPhysics
@@ -39,7 +39,7 @@ class MjcfExporter:
 
         self.compiler = ET.SubElement(self.root, "compiler")
         self.compiler.set("meshdir", mjcf_file_name + "/")
-        texturedir = os.path.join(mjcf_file_name, "obj", "textures")
+        texturedir = os.path.join(mjcf_file_name, "textures")
         self.compiler.set("texturedir", texturedir)
         self.compiler.set("angle", "radian")
         self.compiler.set("autolimits", "true")
@@ -265,7 +265,7 @@ class MjcfExporter:
 
             mesh_file_name = os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0]
 
-            geom_suffix = "".join(map(str, geom_builder.scale)).replace(".", "d").replace("-", "_")
+            geom_suffix = "".join(map(str, geom_builder.scale)).replace(".", "d").replace("-", "_") if any([not isclose(x, 1.0) for x in geom_builder.scale]) else ""
 
             if self.with_visual and geom_builder.is_visual:
                 mesh_rel_path = os.path.join(

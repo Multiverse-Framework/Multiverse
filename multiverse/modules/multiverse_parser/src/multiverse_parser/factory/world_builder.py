@@ -48,7 +48,7 @@ class WorldBuilder:
             self.stage.SetDefaultPrim(body_builder.xform.GetPrim())
             return body_builder
         else:
-            return BodyBuilder(self.stage, body_name, parent_body_name)
+            return BodyBuilder(self.stage, body_name, modify_name(in_name=parent_body_name))
 
     def export(self, usd_file_path: str = None) -> None:
         self.stage.Save()
