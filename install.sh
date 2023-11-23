@@ -79,7 +79,7 @@ apt-get install -y jupyter-notebook
 pip3 install --upgrade pip
 
 # Install packages for ROS
-pip3 install rospkg tf
+pip3 install rospkg catkin_tools empy pyside2 PyQt5
 
 # Install PySide6
 pip3 install pyside6
