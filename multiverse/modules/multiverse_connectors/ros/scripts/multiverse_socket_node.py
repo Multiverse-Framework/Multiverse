@@ -1,28 +1,23 @@
 #!/usr/bin/env python3
 
-import dataclasses
 import argparse
+import dataclasses
 import json
 import yaml
 from typing import Dict, List
 
-import rclpy
-from rclpy.executors import SingleThreadedExecutor
+from multiverse_socket.multiverse_node.multiverse_nodes.config import USING_ROS1
 
-from multiverse_socket.multiverse_node.multiverse_node import (
-    MultiverseNode,
-    MultiverseMetaData,
-    SocketAddress,
-)
-from multiverse_socket.multiverse_node.multiverse_publishers.multiverse_publisher import (
-    MultiversePublisher,
-)
-from multiverse_socket.multiverse_node.multiverse_services.multiverse_service import (
-    MultiverseService,
-)
-from multiverse_socket.multiverse_node.multiverse_subscribers.multiverse_subscriber import (
-    MultiverseSubscriber,
-)
+if USING_ROS1:
+    import rospy
+else:
+    import rclpy
+    from rclpy.executors import SingleThreadedExecutor
+
+from multiverse_socket.multiverse_node.multiverse_meta_node import MultiverseMetaNode, MultiverseMetaData, SocketAddress
+from multiverse_socket.multiverse_node.multiverse_publishers.multiverse_publisher import MultiversePublisher
+from multiverse_socket.multiverse_node.multiverse_services.multiverse_service import MultiverseService
+from multiverse_socket.multiverse_node.multiverse_subscribers.multiverse_subscriber import MultiverseSubscriber
 
 
 class MultiverseNodeProperties:
@@ -120,11 +115,14 @@ class MultiverseRosSocket:
             server_addr: SocketAddress,
             ros_node: RosNode,
     ) -> None:
-        MultiverseNode._server_addr = server_addr
+        MultiverseMetaNode._server_addr = server_addr
         self.ros_node = ros_node
 
     def start(self):
-        rclpy.init()
+        if USING_ROS1:
+            rospy.init_node(name="multiverse_ros_socket", anonymous=False)
+        else:
+            rclpy.init()
 
         subscriber_list: List[MultiverseSubscriber] = []
         publisher_list: List[MultiversePublisher] = []
@@ -138,7 +136,8 @@ class MultiverseRosSocket:
                 subscriber = MultiverseNodeProperties(
                     ros_node_name=subscriber_name, ros_name_prop=subscriber_prop
                 ).create_subscriber()
-                executor.add_node(subscriber)
+                if not USING_ROS1:
+                    executor.add_node(subscriber)
                 subscriber.run()
                 subscriber_list.append(subscriber)
 
@@ -148,7 +147,8 @@ class MultiverseRosSocket:
                 publisher = MultiverseNodeProperties(
                     ros_node_name=publisher_name, ros_name_prop=publisher_prop
                 ).create_publisher()
-                executor.add_node(publisher)
+                if not USING_ROS1:
+                    executor.add_node(publisher)
                 publisher.run()
                 publisher_list.append(publisher)
 
@@ -158,15 +158,23 @@ class MultiverseRosSocket:
                 service = MultiverseNodeProperties(
                     ros_node_name=service_name, ros_name_prop=service_prop
                 ).create_service()
-                executor.add_node(service)
+                if not USING_ROS1:
+                    executor.add_node(service)
                 service.run()
                 service_list.append(service)
 
         try:
-            executor.spin()
+            if USING_ROS1:
+                rospy.spin()
+            else:
+                executor.spin()
         except KeyboardInterrupt:
-            print(f"[{self.__class__.__name__}] Caught SIGINT (Ctrl+C), exiting...")
-            rclpy.shutdown()
+            exit_str = f"[{self.__class__.__name__}] Caught SIGINT (Ctrl+C), exiting..."
+            if USING_ROS1:
+                rospy.signal_shutdown(exit_str)
+            else:
+                print(exit_str)
+                rclpy.shutdown()
         finally:
             for subscriber in subscriber_list:
                 subscriber.stop()
@@ -229,8 +237,12 @@ def main():
         ros_node=ros_node,
     )
     multiverse_ros_socket.start()
-    if rclpy.ok():
-        rclpy.shutdown()
+    if USING_ROS1:
+        if not rospy.is_shutdown():
+            rospy.signal_shutdown("Multiverse socket shutdown")
+    else:
+        if rclpy.ok():
+            rclpy.shutdown()
 
 
 if __name__ == "__main__":

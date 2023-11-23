@@ -4,8 +4,13 @@ from typing import List, Dict
 
 from nav_msgs.msg import Odometry
 
+from ..multiverse_nodes.config import USING_ROS1
+
+if USING_ROS1:
+    import rospy
+
 from .multiverse_publisher import MultiversePublisher
-from ..multiverse_node import MultiverseMetaData, SocketAddress
+from ..multiverse_meta_node import SocketAddress, MultiverseMetaData
 
 
 class OdomPublisher(MultiversePublisher):
@@ -16,16 +21,16 @@ class OdomPublisher(MultiversePublisher):
 
     def __init__(
             self,
+            node_name: str,
             topic_name: str = "/tf",
-            node_name: str = "tf_publisher",
             rate: float = 60.0,
             client_addr: SocketAddress = SocketAddress(),
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:
         super().__init__(
-            topic_name=topic_name,
             node_name=node_name,
+            topic_name=topic_name,
             rate=rate,
             client_addr=client_addr,
             multiverse_meta_data=multiverse_meta_data,
@@ -44,13 +49,15 @@ class OdomPublisher(MultiversePublisher):
         if response_meta_data.get("receive") is None:
             return
 
+        if USING_ROS1:
+            self._msg.header.seq += 1
         self._msg.header.frame_id = self._frame_id
         self._msg.child_frame_id = self._body_name
         self._msg.pose.covariance = [0.0] * 36
         self._msg.twist.covariance = [0.0] * 36
 
     def _bind_receive_data(self, receive_data: List[float]) -> None:
-        self._msg.header.stamp = self.get_clock().now().to_msg()
+        self._msg.header.stamp = rospy.Time.now() if USING_ROS1 else self.get_clock().now().to_msg()
         self._msg.pose.pose.position.x = receive_data[1]
         self._msg.pose.pose.position.y = receive_data[2]
         self._msg.pose.pose.position.z = receive_data[3]

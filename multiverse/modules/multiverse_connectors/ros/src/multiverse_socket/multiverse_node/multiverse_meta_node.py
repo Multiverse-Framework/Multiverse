@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 
 import dataclasses
+from enum import Enum
 from typing import List, Dict, TypeVar
-
-from rclpy.node import Node
 
 from multiverse_client_pybind import MultiverseClientPybind  # noqa
 
 T = TypeVar("T")
+
+
+class LoggingLevel(Enum):
+    INFO = "INFO"
+    WARN = "WARN"
+    ERROR = "ERROR"
 
 
 @dataclasses.dataclass
@@ -27,7 +32,7 @@ class SocketAddress:
     port: str = ""
 
 
-class MultiverseNode(Node):
+class MultiverseMetaNode:
     _server_addr: SocketAddress = SocketAddress(host="tcp://127.0.0.1", port="7000")
     _client_addr: SocketAddress
     _meta_data: MultiverseMetaData
@@ -35,13 +40,11 @@ class MultiverseNode(Node):
 
     def __init__(
             self,
-            node_name: str,
             client_addr: SocketAddress,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
     ) -> None:
         if not isinstance(client_addr.port, str) or client_addr.port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")
-        super().__init__(node_name=f"{node_name}{client_addr.port}")
         self._send_data = None
         self._client_addr = client_addr
         self._meta_data = multiverse_meta_data
@@ -55,17 +58,14 @@ class MultiverseNode(Node):
         }
 
     def run(self) -> None:
-        self.get_logger().info(f"Start {self.__class__.__name__}")
+        self._logging(f"[Client {self._client_addr.port}] Start {self.__class__.__name__}")
         self._run()
 
     def _run(self) -> None:
-        raise NotImplementedError(
-            f"Must implement _run() for {self.__class__.__name__}"
-        )
+        raise NotImplementedError(f"Must implement _run() for {self.__class__.__name__}")
 
     def stop(self) -> None:
         self._disconnect()
-        self.destroy_node()
 
     @property
     def request_meta_data(self) -> Dict:
@@ -80,9 +80,7 @@ class MultiverseNode(Node):
     def response_meta_data(self) -> Dict:
         response_meta_data = self._multiverse_socket.get_response_meta_data()
         if not response_meta_data:
-            print(
-                f"[Client {self._client_addr.port}] Receive empty response meta data."
-            )
+            self._logging(f"[Client {self._client_addr.port}] Receive empty response meta data.")
         return response_meta_data
 
     @property
@@ -98,7 +96,7 @@ class MultiverseNode(Node):
     def receive_data(self) -> List[float]:
         receive_data = self._multiverse_socket.get_receive_data()
         if not receive_data:
-            self.get_logger().warn(f"[Client {self._client_addr.port}] Receive empty data.")
+            self._logging(f"[Client {self._client_addr.port}] Receive empty data.")
         return receive_data
 
     def _bind_request_meta_data(self, request_meta_data: T) -> T:
@@ -126,3 +124,6 @@ class MultiverseNode(Node):
     def _restart(self) -> None:
         self._disconnect()
         self._connect_and_start()
+
+    def _logging(self, log_str: str, logging_level: LoggingLevel = LoggingLevel.INFO) -> None:
+        raise NotImplementedError(f"Must implement _logging() for {self.__class__.__name__}")

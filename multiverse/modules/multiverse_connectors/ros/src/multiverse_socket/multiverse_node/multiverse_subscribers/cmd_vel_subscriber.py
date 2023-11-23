@@ -5,7 +5,7 @@ from typing import Dict
 from geometry_msgs.msg import Twist
 
 from .multiverse_subscriber import MultiverseSubscriber
-from ..multiverse_node import MultiverseMetaData, SocketAddress
+from ..multiverse_meta_node import SocketAddress, MultiverseMetaData
 
 
 class CmdVelSubscriber(MultiverseSubscriber):
@@ -13,20 +13,20 @@ class CmdVelSubscriber(MultiverseSubscriber):
     _msg_type = Twist
 
     def __init__(
-        self,
-        topic_name: str = "/cmd_vel",
-        node_name: str = "cmd_vel_subscriber",
-        client_addr: SocketAddress = SocketAddress(),
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
-        **kwargs: Dict
+            self,
+            node_name: str,
+            topic_name: str = "/cmd_vel",
+            client_addr: SocketAddress = SocketAddress(),
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            **kwargs: Dict
     ) -> None:
         if "body" not in kwargs:
             raise Exception("Body not found.")
         self._body_name = str(kwargs["body"])
         super().__init__(
+            node_name=node_name,
             topic_name=topic_name,
-            node_name=node_name, 
-            client_addr=client_addr, 
+            client_addr=client_addr,
             multiverse_meta_data=multiverse_meta_data
         )
         self.request_meta_data["send"][self._body_name] = ["odometric_velocity"]
