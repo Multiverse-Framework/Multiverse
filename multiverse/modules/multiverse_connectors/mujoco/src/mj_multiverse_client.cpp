@@ -303,7 +303,7 @@ bool MjMultiverseClient::init_objects(bool from_server)
 			{
 				if (body_attributes.count(attribute_name) != 0)
 				{
-					for (int body_id = 1; body_id < m->nbody; body_id++)
+					for (int body_id = 0; body_id < m->nbody; body_id++)
 					{
 						send_objects[mj_id2name(m, mjtObj::mjOBJ_BODY, body_id)].insert(attribute_name);
 					}

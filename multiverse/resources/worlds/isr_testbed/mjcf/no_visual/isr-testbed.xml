@@ -1,0 +1,277 @@
+<?xml version="1.0" ?>
+<mujoco model="isr_testbed">
+	<compiler meshdir="../../meshes/" texturedir="../../meshes/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<default>
+		<default class="visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="collision">
+			<geom rgba=".9 .9 .9 1.0"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="construction_cone_collision10d010d010d0" file="stl/construction_cone10d010d010d0.stl"/>
+		<mesh name="fire_hydrant_collision" file="stl/fire_hydrant.stl"/>
+		<mesh name="pine_tree_collision" file="stl/pine_tree.stl"/>
+		<mesh name="standing_collision" file="stl/standing.stl"/>
+		<mesh name="plastic_cup_collision" file="stl/plastic_cup.stl"/>
+		<mesh name="shelf_collision0d150d20d2" file="stl/shelf0d150d20d2.stl"/>
+		<mesh name="plant_floor_small_collision" file="stl/plant_floor_small.stl"/>
+		<mesh name="bedroom_nightstand_collision" file="stl/bedroom_nightstand.stl"/>
+		<mesh name="cabinet_diamondback_collision1d81d01d0" file="stl/cabinet_diamondback1d81d01d0.stl"/>
+		<mesh name="aruco_marker_0_collision0d10d10d1" file="stl/aruco_marker_00d10d10d1.stl"/>
+	</asset>
+	<asset>
+		<texture type="2d" name="texplane" builtin="checker" mark="cross" rgb1="0.2 0.3 0.4" rgb2="0.1 0.15 0.2" markrgb="0.8 0.8 0.8" width="512" height="512"/>
+		<material name="matplane" texture="texplane" texuniform="true" reflectance="0.3"/>
+	</asset>
+	<worldbody>
+		<geom name="ground" size="0 0 1" type="plane" condim="1" material="matplane"/>
+		<light pos="0 0 4" dir="0 0 -1" directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2"/>
+	</worldbody>
+	<worldbody>
+		<body name="isr_testbed" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<body name="wall" pos="-1.19 1.86 0.0" quat="1.0 0.0 0.0 0.0">
+				<body name="wall__wall__Wall_2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="wall__wall__Wall_2_collision_0" pos="-1.26581 9.97568 1.25" quat="0.9999999699875002 0.0 0.0 -0.00024499999754897927" class="collision" type="box" size="8.7892 0.07500000000000001 1.25"/>
+				</body>
+				<body name="wall__wall__Wall_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="wall__wall__Wall_0_collision_0" pos="-9.98 1.805 1.25" quat="-0.7071054825112365 0.0 0.0 0.7071080798594734" class="collision" type="box" size="8.250000000000002 0.07500000000000001 1.25"/>
+				</body>
+			</body>
+			<body name="cone2__ConstructionCone__link" pos="-4.54 2.97 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="cone2__ConstructionCone__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="construction_cone_collision10d010d010d0"/>
+			</body>
+			<body name="cone4__ConstructionCone__link" pos="3.03 8.33 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="cone4__ConstructionCone__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="construction_cone_collision10d010d010d0"/>
+			</body>
+			<body name="hydrant1__fire_hydrant__link" pos="1.01 9.45 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="hydrant1__fire_hydrant__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="fire_hydrant_collision"/>
+			</body>
+			<body name="tree1__pine_tree__link" pos="-6.0 9.45 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="tree1__pine_tree__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="pine_tree_collision"/>
+			</body>
+			<body name="human__person_standing__link" pos="-2.04 2.41 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="human__person_standing__link_collision_0" pos="0.0 0.0 0.02" quat="0.9998000066665778 0.019998666693333084 0.0 0.0" class="collision" type="mesh" mesh="standing_collision"/>
+				<geom name="human__person_standing__link_collision_1" pos="0.0 -0.1 0.01" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.175 0.01"/>
+			</body>
+			<body name="pizza_box__pizza_box__base_link" pos="2.0 -0.15 0.8" quat="0.8775825618903728 0.0 0.0 0.47942553860420295">
+				<geom name="pizza_box__pizza_box__base_link_collision_0" pos="0.0 0.0 0.0175" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.205 0.3 0.0175"/>
+			</body>
+			<body name="tea_box__tea_box__base_link" pos="-2.85 0.9 0.85" quat="1.0 0.0 0.0 0.0">
+				<geom name="tea_box__tea_box__base_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.0315 0.079 0.0365"/>
+			</body>
+			<body name="cup1__plastic_cup__link" pos="-2.85 -2.4 0.45" quat="0.8775825618903728 0.0 0.0 0.47942553860420295">
+				<geom name="cup1__plastic_cup__link_collision_0" pos="0.0 0.0 0.065" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="plastic_cup_collision"/>
+			</body>
+			<body name="shelf__shelf__base_link" pos="-2.85 1.0 0.0" quat="0.7109135380122774 0.0 0.0 0.7032794192004103">
+				<geom name="shelf__shelf__base_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="shelf_collision0d150d20d2"/>
+			</body>
+			<body name="plant_floor_small__plant_floor_small__base_link" pos="-2.84 -3.05 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="plant_floor_small__plant_floor_small__base_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="plant_floor_small_collision"/>
+			</body>
+			<body name="table_bedside__table_bedside__base_link" pos="-2.82 -2.48 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="table_bedside__table_bedside__base_link_collision_0" pos="0.0 0.0 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.3 0.3 0.2"/>
+			</body>
+			<body name="nightstand1__bedroom_nightstand__link_0" pos="-0.69 5.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="nightstand1__bedroom_nightstand__link_0_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="bedroom_nightstand_collision"/>
+			</body>
+			<body name="dinning_room_table__dinning_room_table__base_link" pos="2.05802 -2.30976 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="dinning_room_table__dinning_room_table__base_link_collision_3" pos="-0.65 0.4 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.05 0.35"/>
+				<geom name="dinning_room_table__dinning_room_table__base_link_collision_4" pos="0.55 -0.4 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.05 0.35"/>
+				<geom name="dinning_room_table__dinning_room_table__base_link_collision_2" pos="-0.04 0.015 0.75" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.65 0.45 0.05"/>
+				<geom name="dinning_room_table__dinning_room_table__base_link_collision_1" pos="0.55 0.4 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.05 0.35"/>
+				<geom name="dinning_room_table__dinning_room_table__base_link_collision_0" pos="-0.65 -0.4 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.05 0.35"/>
+			</body>
+			<body name="cabinet_diamondback__cabinet_diamondback__base_link" pos="0.91 1.69 0.0" quat="0.7086488244966772 0.0 0.0 -0.7055613676637048">
+				<geom name="cabinet_diamondback__cabinet_diamondback__base_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="cabinet_diamondback_collision1d81d01d0"/>
+			</body>
+			<body name="tray_blue_white__tray_blue_white__base_link" pos="2.12 1.67 0.68" quat="0.7179106696109434 0.0 0.0 -0.6961352386273568">
+				<geom name="tray_blue_white__tray_blue_white__base_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.115 0.15 0.008"/>
+			</body>
+			<body name="chair_dinning_room_2__simple_chair__link_0" pos="2.96 -2.52 0.0" quat="0.7151343726872377 0.0 0.0 0.6989870020259541">
+				<geom name="chair_dinning_room_2__simple_chair__link_0_collision_5" pos="-0.05 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_dinning_room_2__simple_chair__link_0_collision_2" pos="0.15 -0.22 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.0375 0.19"/>
+				<geom name="chair_dinning_room_2__simple_chair__link_0_collision_0" pos="-0.05 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_dinning_room_2__simple_chair__link_0_collision_3" pos="0.33 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_dinning_room_2__simple_chair__link_0_collision_1" pos="0.15 -0.05 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.225 0.025"/>
+				<geom name="chair_dinning_room_2__simple_chair__link_0_collision_4" pos="0.33 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+			</body>
+			<body name="chair_kitchen_2__simple_chair__link_0" pos="2.26 -0.97 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="chair_kitchen_2__simple_chair__link_0_collision_2" pos="0.33 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_2__simple_chair__link_0_collision_5" pos="0.33 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_2__simple_chair__link_0_collision_3" pos="0.15 -0.22 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.0375 0.19"/>
+				<geom name="chair_kitchen_2__simple_chair__link_0_collision_0" pos="0.15 -0.05 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.225 0.025"/>
+				<geom name="chair_kitchen_2__simple_chair__link_0_collision_4" pos="-0.05 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_2__simple_chair__link_0_collision_1" pos="-0.05 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+			</body>
+			<body name="sofa__sofa__link_0" pos="-0.76 -0.9 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="sofa__sofa__link_0_collision_2" pos="0.0 -0.8 0.5" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.4 0.125 0.25"/>
+				<geom name="sofa__sofa__link_0_collision_1" pos="0.35 0.0 0.5" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.15 0.915 0.25"/>
+				<geom name="sofa__sofa__link_0_collision_0" pos="0.05 0.0 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.465 0.915 0.185"/>
+				<geom name="sofa__sofa__link_0_collision_3" pos="0.0 0.8 0.5" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.4 0.125 0.25"/>
+			</body>
+			<body name="chair2__tv_chair__link_0" pos="-0.73 0.57 0.0" quat="0.7073882691671997 0.0 0.0 -0.7068251811053661">
+				<geom name="chair2__tv_chair__link_0_collision_3" pos="-0.33 -0.33 0.3" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.05 0.05 0.225"/>
+				<geom name="chair2__tv_chair__link_0_collision_2" pos="0.33 -0.1 0.5" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.05 0.225 0.05"/>
+				<geom name="chair2__tv_chair__link_0_collision_4" pos="0.33 -0.33 0.3" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.05 0.05 0.225"/>
+				<geom name="chair2__tv_chair__link_0_collision_1" pos="-0.33 -0.1 0.5" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.05 0.225 0.05"/>
+				<geom name="chair2__tv_chair__link_0_collision_5" pos="0.0 -0.1 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.35 0.3 0.025"/>
+				<geom name="chair2__tv_chair__link_0_collision_0" pos="0.0 0.18 0.65" quat="0.9800665778412416 -0.19866933079506124 0.0 0.0" class="collision" type="box" size="0.3 0.10000000000000002 0.425"/>
+				<geom name="chair2__tv_chair__link_0_collision_6" pos="0.0 -0.2 0.35" quat="0.9902159962126372 -0.1395431146442365 0.0 0.0" class="collision" type="box" size="0.35 0.24999999999999994 0.05"/>
+			</body>
+			<body name="tv_table__tv_table__link_0" pos="-2.81 -0.98 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="tv_table__tv_table__link_0_collision_0" pos="-0.05 0.05 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.2 0.825 0.25"/>
+			</body>
+			<body name="walls" pos="0.49183 0.433522 0.0" quat="1.0 0.0 0.0 0.0">
+				<body name="walls__walls__Wall_19" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_19_collision_0" pos="-2.66199 1.59399 0.5" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.95 0.025 0.5"/>
+				</body>
+				<body name="walls__walls__Wall_22" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_22_collision_0" pos="1.028 -4.332 0.6" quat="0.7071054825112364 0.0 0.0 0.7071080798594735" class="collision" type="box" size="0.575 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_24" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_24_collision_0" pos="3.128 -3.232 0.6" quat="0.7071054825112364 0.0 0.0 0.7071080798594735" class="collision" type="box" size="0.575 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_26" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_26_collision_0" pos="3.728 -1.757 0.6" quat="0.7071054825112364 0.0 0.0 0.7071080798594735" class="collision" type="box" size="0.9499999999999997 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_36" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_36_collision_0" pos="1.117 1.66399 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.95 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_49" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_49_collision_0" pos="-1.28699 5.09399 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="2.325 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_51" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_51_collision_0" pos="0.588 2.74399 0.6" quat="1.3267948966775328e-06 0.0 0.0 0.9999999999991198" class="collision" type="box" size="0.45 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_58" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_58_collision_0" pos="2.042 3.33899 0.6" quat="0.7071054825112364 0.0 0.0 0.7071080798594735" class="collision" type="box" size="1.7 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_63" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_63_collision_0" pos="2.878 0.843 0.6" quat="0.7071054825112364 0.0 0.0 0.7071080798594735" class="collision" type="box" size="1.7 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Door_4" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Door_4_collision_0" pos="-0.44425 -3.76409 0.6" quat="0.9999998848000022 0.0 0.0 -0.0004799999815680004" class="collision" type="box" size="0.453 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_23" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_23_collision_0" pos="2.078 -3.782 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="1.075 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_27" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_27_collision_0" pos="3.303 -0.832 0.6" quat="1.3267948966775328e-06 0.0 0.0 0.9999999999991198" class="collision" type="box" size="0.45 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_50" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_50_collision_0" pos="1.01299 3.91899 0.6" quat="-0.7071054825112364 0.0 0.0 0.7071080798594735" class="collision" type="box" size="1.2 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_61" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_61_collision_0" pos="-2.27499 -3.756 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="1.325 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_21" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_21_collision_0" pos="-0.022 -4.882 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="1.075 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_48" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_48_collision_0" pos="-3.58099 0.669 0.6" quat="0.7066280235061142 0.0 0.0 0.7075852149358708" class="collision" type="box" size="4.450005 0.025000000000000005 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_25" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_25_collision_0" pos="3.428 -2.682 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.325 0.025 0.6"/>
+				</body>
+				<body name="walls__walls__Wall_53" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<geom name="walls__walls__Wall_53_collision_0" pos="-0.765 3.24799 0.6" quat="0.7071054825112364 0.0 0.0 0.7071080798594735" class="collision" type="box" size="1.7 0.025 0.6"/>
+				</body>
+			</body>
+			<body name="cone1__ConstructionCone__link" pos="-5.94 2.97 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="cone1__ConstructionCone__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="construction_cone_collision10d010d010d0"/>
+			</body>
+			<body name="table_outside__cafe_table__link" pos="-5.25 3.77 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="table_outside__cafe_table__link_collision_2" pos="0.0 0.0 0.37" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.021 0.021 0.075"/>
+				<geom name="table_outside__cafe_table__link_collision_0" pos="0.0 0.0 0.02" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.28 0.28 0.02"/>
+				<geom name="table_outside__cafe_table__link_collision_1" pos="0.0 0.0 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.4565 0.4565 0.0175"/>
+			</body>
+			<body name="tree2__pine_tree__link" pos="-9.11 6.25 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="tree2__pine_tree__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="pine_tree_collision"/>
+			</body>
+			<body name="basmati_rice__basmati_rice__base_link" pos="-2.85 0.5 0.8" quat="1.0 0.0 0.0 0.0">
+				<geom name="basmati_rice__basmati_rice__base_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.0205 0.061 0.085"/>
+			</body>
+			<body name="cup2__plastic_cup__link" pos="1.83 -0.48 0.8" quat="0.8775825618903728 0.0 0.0 0.47942553860420295">
+				<geom name="cup2__plastic_cup__link_collision_0" pos="0.0 0.0 0.065" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="plastic_cup_collision"/>
+			</body>
+			<body name="apple_juice_box__apple_juice__base_link" pos="-2.84 1.64 1.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="apple_juice_box__apple_juice__base_link_collision_0" pos="0.0 0.0 0.0055" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.0345 0.0345 0.1295"/>
+			</body>
+			<body name="nightstand2__bedroom_nightstand__link_0" pos="-2.89 5.03713 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="nightstand2__bedroom_nightstand__link_0_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="bedroom_nightstand_collision"/>
+			</body>
+			<body name="cabinet_ikea_galant__cabinet_ikea_galant__base_link" pos="1.8 1.68 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="cabinet_ikea_galant__cabinet_ikea_galant__base_link_collision_0" pos="0.0 0.0 0.33" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.65 0.27 0.33"/>
+			</body>
+			<body name="chair_kitchen_1__simple_chair__link_0" pos="1.57 -0.98 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="chair_kitchen_1__simple_chair__link_0_collision_3" pos="-0.05 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_1__simple_chair__link_0_collision_2" pos="0.15 -0.05 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.225 0.025"/>
+				<geom name="chair_kitchen_1__simple_chair__link_0_collision_5" pos="-0.05 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_1__simple_chair__link_0_collision_0" pos="0.15 -0.22 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.0375 0.19"/>
+				<geom name="chair_kitchen_1__simple_chair__link_0_collision_4" pos="0.33 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_1__simple_chair__link_0_collision_1" pos="0.33 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+			</body>
+			<body name="chair1__tv_chair__link_0" pos="-0.73 -2.05 0.0" quat="0.7073882691671997 0.0 0.0 -0.7068251811053661">
+				<geom name="chair1__tv_chair__link_0_collision_0" pos="0.33 -0.1 0.5" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.05 0.225 0.05"/>
+				<geom name="chair1__tv_chair__link_0_collision_1" pos="0.0 0.18 0.65" quat="0.9800665778412416 -0.19866933079506124 0.0 0.0" class="collision" type="box" size="0.3 0.10000000000000002 0.425"/>
+				<geom name="chair1__tv_chair__link_0_collision_2" pos="0.0 -0.1 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.35 0.3 0.025"/>
+				<geom name="chair1__tv_chair__link_0_collision_5" pos="-0.33 -0.1 0.5" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.05 0.225 0.05"/>
+				<geom name="chair1__tv_chair__link_0_collision_6" pos="0.0 -0.2 0.35" quat="0.9902159962126372 -0.1395431146442365 0.0 0.0" class="collision" type="box" size="0.35 0.24999999999999994 0.05"/>
+				<geom name="chair1__tv_chair__link_0_collision_4" pos="-0.33 -0.33 0.3" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.05 0.05 0.225"/>
+				<geom name="chair1__tv_chair__link_0_collision_3" pos="0.33 -0.33 0.3" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.05 0.05 0.225"/>
+			</body>
+			<body name="aruco_marker_0__aruco_marker_0__link_0" pos="1.5 1.96 0.8" quat="0.7071067811865476 0.0 0.0 -0.7071067811865475">
+				<geom name="aruco_marker_0__aruco_marker_0__link_0_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="aruco_marker_0_collision0d10d10d1"/>
+			</body>
+			<body name="cone3__ConstructionCone__link" pos="3.03 6.84 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="cone3__ConstructionCone__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="construction_cone_collision10d010d010d0"/>
+			</body>
+			<body name="wardrobe__wardrobe__base_link" pos="-2.65 2.44 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="wardrobe__wardrobe__base_link_collision_0" pos="0.0 0.2 1.0" quat="0.7073882691671997 0.0 0.0 0.7068251811053661" class="collision" type="box" size="0.5 0.3600000000000001 1.0"/>
+			</body>
+			<body name="lamp_ikea_arstid__lamp_ikea_arstid__base_link" pos="-2.85 -2.0 0.0" quat="0.7109135380122774 0.0 0.0 0.7032794192004103">
+				<geom name="lamp_ikea_arstid__lamp_ikea_arstid__base_link_collision_0" pos="0.0 0.0 0.9" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.13 0.25"/>
+				<geom name="lamp_ikea_arstid__lamp_ikea_arstid__base_link_collision_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.18 0.01"/>
+				<geom name="lamp_ikea_arstid__lamp_ikea_arstid__base_link_collision_2" pos="0.0 0.0 0.42" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.03 0.4"/>
+			</body>
+			<body name="table_living_room__table_living_room__base_link" pos="2.0 -0.156695 0.0" quat="0.7086488244966772 0.0 0.0 -0.7055613676637048">
+				<geom name="table_living_room__table_living_room__base_link_collision_3" pos="0.35 -0.59 0.39" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.06 0.06 0.375"/>
+				<geom name="table_living_room__table_living_room__base_link_collision_5" pos="0.35 0.63 0.39" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.06 0.06 0.375"/>
+				<geom name="table_living_room__table_living_room__base_link_collision_4" pos="-0.4 0.63 0.39" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.06 0.06 0.375"/>
+				<geom name="table_living_room__table_living_room__base_link_collision_2" pos="-0.4 -0.59 0.39" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.06 0.06 0.375"/>
+				<geom name="table_living_room__table_living_room__base_link_collision_1" pos="-0.03 0.025 0.75" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.525 0.75 0.04"/>
+				<geom name="table_living_room__table_living_room__base_link_collision_0" pos="-0.03 0.025 0.35" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.4 0.65 0.025"/>
+			</body>
+			<body name="chair_kitchen_3__simple_chair__link_0" pos="2.88 -0.26 0.0" quat="0.7002847660410397 0.0 0.0 0.7138636049350369">
+				<geom name="chair_kitchen_3__simple_chair__link_0_collision_2" pos="0.15 -0.05 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.225 0.025"/>
+				<geom name="chair_kitchen_3__simple_chair__link_0_collision_5" pos="0.33 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_3__simple_chair__link_0_collision_3" pos="-0.05 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_3__simple_chair__link_0_collision_4" pos="-0.05 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_kitchen_3__simple_chair__link_0_collision_0" pos="0.15 -0.22 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.0375 0.19"/>
+				<geom name="chair_kitchen_3__simple_chair__link_0_collision_1" pos="0.33 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+			</body>
+			<body name="beer__beer__link" pos="-2.73 -2.64 0.6" quat="0.8775825618903728 0.0 0.0 0.47942553860420295">
+				<geom name="beer__beer__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="cylinder" size="0.035 0.06"/>
+			</body>
+			<body name="chair_dinning_room_1__simple_chair__link_0" pos="1.91 -3.05 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="chair_dinning_room_1__simple_chair__link_0_collision_5" pos="0.33 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_dinning_room_1__simple_chair__link_0_collision_3" pos="0.15 -0.22 0.6" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.0375 0.19"/>
+				<geom name="chair_dinning_room_1__simple_chair__link_0_collision_1" pos="-0.05 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_dinning_room_1__simple_chair__link_0_collision_0" pos="0.33 -0.25 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_dinning_room_1__simple_chair__link_0_collision_4" pos="-0.05 0.15 0.2" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.04 0.04 0.25"/>
+				<geom name="chair_dinning_room_1__simple_chair__link_0_collision_2" pos="0.15 -0.05 0.45" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.25 0.225 0.025"/>
+			</body>
+			<body name="hydrant2__fire_hydrant__link" pos="-4.0 9.45 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="hydrant2__fire_hydrant__link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="fire_hydrant_collision"/>
+			</body>
+			<body name="tv__tv__link_0" pos="-2.85 -0.94 0.035264" quat="0.9999155011900349 0.0 0.0 -0.012999633836427429">
+				<geom name="tv__tv__link_0_collision_0" pos="0.05 -0.08 0.8" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.15 0.6 0.4"/>
+			</body>
+			<body name="bed__bed__link_0" pos="-1.94933 4.30992 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="bed__bed__link_0_collision_0" pos="0.2 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.8 1.1 0.3"/>
+			</body>
+		</body>
+	</worldbody>
+</mujoco>

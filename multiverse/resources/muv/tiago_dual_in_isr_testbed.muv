@@ -9,18 +9,18 @@ worlds:
     rtf_desired: 1
 
 simulations:
-  tiago_dual_in_apartment:
+  tiago_dual_in_isr_testbed:
     simulator: mujoco
     world:
       name: world
-      path: apartment.xml
+      path: no_visual/isr-testbed.xml
     robots:
       tiago_dual:
         path: tiago_dual.xml
         apply:
           body:
             tiago_dual:
-              pos: [1.5, 2.5, 0]
+              pos: [-3.0, -5.0, 0]
         disable_self_collision: auto
     config:
       max_time_step: 0.002
@@ -31,7 +31,7 @@ multiverse_server:
   port: 7000
 
 multiverse_clients:
-  tiago_dual_in_apartment:
+  tiago_dual_in_isr_testbed:
     host: "tcp://127.0.0.1"
     port: 7500
     send:
@@ -107,13 +107,13 @@ multiverse_clients:
 
     ros_run:
       rviz:
-        config: tiago_dual_in_apartment/config/rviz.rviz
+        config: tiago_dual_in_isr_testbed/config/rviz.rviz
         robot_descriptions:
           tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
-          apartment_description: apartment/urdf/apartment.urdf
+          isr_testbed_description: isr_testbed/urdf/isr-testbed.urdf
 
       map_server:
-        map: apartment/map/apartment.yaml
+        map: isr_testbed/map/isr-testbed.yaml
 
       move_base:
         base_global_planner: navfn/NavfnROS

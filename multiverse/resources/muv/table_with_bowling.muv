@@ -16,7 +16,7 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: demo/bowling.xml
+      path: table_with_bowling/bowling.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001
@@ -25,7 +25,7 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: demo/table.xml
+      path: table_with_bowling/table.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001
@@ -34,7 +34,7 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: demo/cube.xml
+      path: table_with_bowling/cube.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001
@@ -43,7 +43,7 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: demo/table_with_bowling.xml
+      path: table_with_bowling/table_with_bowling.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001

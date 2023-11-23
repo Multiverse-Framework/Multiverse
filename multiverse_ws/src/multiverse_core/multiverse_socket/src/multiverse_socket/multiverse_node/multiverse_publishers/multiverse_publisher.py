@@ -34,18 +34,19 @@ class MultiversePublisher(MultiverseNode):
             while not rospy.is_shutdown():
                 self._communicate(True)
                 self._bind_response_meta_data(self.response_meta_data)
-                if not rospy.is_shutdown():
-                    self._publish()
+                self._publish()
                 self.rate.sleep()
         else:
             self._bind_response_meta_data(self.response_meta_data)
             while not rospy.is_shutdown():
                 self._communicate()
                 self._bind_receive_data(self.receive_data)
-                if not rospy.is_shutdown():
-                    self._publish()
+                self._publish()
                 self.rate.sleep()
         self._disconnect()
 
     def _publish(self) -> None:
-        self._publisher.publish(self._msg)
+        try:
+            self._publisher.publish(self._msg)
+        except KeyboardInterrupt:
+            return

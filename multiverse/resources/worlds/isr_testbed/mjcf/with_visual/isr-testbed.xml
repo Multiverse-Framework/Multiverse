@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="isr_testbed">
-	<compiler meshdir="../meshes/" texturedir="../meshes/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<compiler meshdir="../../meshes/" texturedir="../../meshes/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
 		<default class="visual">
 			<geom contype="0" conaffinity="0"/>
@@ -89,9 +89,7 @@
 		<texture name="tv_visual" type="2d" file="tv_texture.png"/>
 		<material name="tv_visual" texture="tv_visual"/>
 		<mesh name="tv_visual" file="obj/tv.obj"/>
-		<texture name="bed_visual" type="2d" file="cherry_wood.png"/>
-		<material name="bed_visual" texture="bed_visual"/>
-		<mesh name="bed_visual" file="obj/bed.obj"/>
+		<mesh name="bed_visual" file="stl/bed.stl"/>
 	</asset>
 	<asset>
 		<texture type="2d" name="texplane" builtin="checker" mark="cross" rgb1="0.2 0.3 0.4" rgb2="0.1 0.15 0.2" markrgb="0.8 0.8 0.8" width="512" height="512"/>
@@ -405,7 +403,7 @@
 			</body>
 			<body name="bed__bed__link_0" pos="-1.94933 4.30992 0.0" quat="1.0 0.0 0.0 0.0">
 				<geom name="bed__bed__link_0_collision_0" pos="0.2 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.8 1.1 0.3"/>
-				<!-- <geom name="bed__bed__link_0_visual_0" pos="-1.35 -8.0 -0.3" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" material="bed_visual" mesh="bed_visual"/> -->
+				<geom name="bed__bed__link_0_visual_0" pos="-1.35 -8.0 -0.3" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="bed_visual"/>
 			</body>
 		</body>
 	</worldbody>
