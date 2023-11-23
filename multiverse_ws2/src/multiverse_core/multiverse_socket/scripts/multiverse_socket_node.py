@@ -3,9 +3,7 @@
 import dataclasses
 import argparse
 import json
-import threading
 import yaml
-from time import sleep
 from typing import Dict, List
 
 import rclpy
@@ -127,7 +125,7 @@ class MultiverseRosSocket:
 
     def start(self):
         rclpy.init()
-        
+
         subscriber_list: List[MultiverseSubscriber] = []
         publisher_list: List[MultiversePublisher] = []
         service_list: List[MultiverseService] = []
@@ -180,7 +178,6 @@ class MultiverseRosSocket:
 
 def parse_ros_node_from_str(ros_node_str: str) -> dict:
     return json.loads(ros_node_str.replace("'", '"')) if isinstance(ros_node_str, str) else {}
-
 
 
 def main():

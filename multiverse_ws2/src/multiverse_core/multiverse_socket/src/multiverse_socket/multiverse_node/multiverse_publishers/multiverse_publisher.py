@@ -31,7 +31,8 @@ class MultiversePublisher(MultiverseNode):
         self._msg = self._msg_type()
         self._publisher = self.create_publisher(self._msg_type, topic_name, 100)
         self.create_timer(
-            timer_period_sec=1.0 / rate, callback=self._publisher_callback
+            timer_period_sec=1.0 / rate, 
+            callback=self._publisher_callback
         )
 
     def _run(self) -> None:
@@ -39,7 +40,7 @@ class MultiversePublisher(MultiverseNode):
         if not self._use_meta_data:
             self._bind_response_meta_data(self.response_meta_data)
 
-    def _publisher_callback(self):
+    def _publisher_callback(self) -> None:
         self._communicate(self._use_meta_data)
         if self._use_meta_data:
             self._bind_response_meta_data(self.response_meta_data)
@@ -48,5 +49,7 @@ class MultiversePublisher(MultiverseNode):
         self._publish()
 
     def _publish(self) -> None:
-        if rclpy.ok():
+        try:
             self._publisher.publish(self._msg)
+        except KeyboardInterrupt:
+            return

@@ -59,6 +59,9 @@ class MultiverseNode:
             f"Must implement _run() for {self.__class__.__name__}"
         )
 
+    def stop(self) -> None:
+        self._disconnect()
+
     @property
     def request_meta_data(self) -> Dict:
         return self._request_meta_data

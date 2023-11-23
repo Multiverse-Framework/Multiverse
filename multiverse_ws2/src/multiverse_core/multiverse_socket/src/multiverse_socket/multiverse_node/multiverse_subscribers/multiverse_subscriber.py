@@ -2,8 +2,6 @@
 
 from typing import List, Dict, Any
 
-import rclpy
-
 from ..multiverse_node import MultiverseNode, MultiverseMetaData, SocketAddress
 
 
@@ -36,9 +34,6 @@ class MultiverseSubscriber(MultiverseNode):
         self._connect_and_start()
         self._init_send_data()
         self._communicate()
-        while rclpy.ok():
-            if len(self.receive_data) > 0:
-                break
 
     def _subscriber_callback(self, data: Any) -> None:
         self._bind_send_data(data)

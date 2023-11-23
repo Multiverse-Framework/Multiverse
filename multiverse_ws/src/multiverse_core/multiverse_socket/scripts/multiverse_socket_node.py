@@ -3,12 +3,10 @@
 import argparse
 import dataclasses
 import json
-import threading
-from time import sleep
+import yaml
 from typing import Dict, List
 
 import rospy
-import yaml
 
 from multiverse_socket.multiverse_node.multiverse_node import (
     MultiverseNode,
@@ -124,7 +122,6 @@ class MultiverseRosSocket:
     def start(self):
         rospy.init_node(name="multiverse_ros_socket", anonymous=False)
 
-        threads = {}
         subscriber_list: List[MultiverseSubscriber] = []
         publisher_list: List[MultiversePublisher] = []
         service_list: List[MultiverseService] = []
@@ -135,6 +132,7 @@ class MultiverseRosSocket:
                 subscriber = MultiverseNodeProperties(
                     ros_node_name=subscriber_name, ros_name_prop=subscriber_prop
                 ).create_subscriber()
+                subscriber.run()
                 subscriber_list.append(subscriber)
 
         for publisher_name, publisher_props in self.ros_node.publishers.items():
@@ -143,6 +141,7 @@ class MultiverseRosSocket:
                 publisher = MultiverseNodeProperties(
                     ros_node_name=publisher_name, ros_name_prop=publisher_prop
                 ).create_publisher()
+                publisher.run()
                 publisher_list.append(publisher)
 
         for service_name, service_props in self.ros_node.services.items():
@@ -151,38 +150,22 @@ class MultiverseRosSocket:
                 service = MultiverseNodeProperties(
                     ros_node_name=service_name, ros_name_prop=service_prop
                 ).create_service()
+                service.run()
                 service_list.append(service)
 
-        for subscriber in subscriber_list:
-            subscriber_thread = threading.Thread(target=subscriber.run)
-            subscriber_thread.start()
-            threads[subscriber] = subscriber_thread
-
-        for publisher in publisher_list:
-            publisher_thread = threading.Thread(target=publisher.run)
-            publisher_thread.start()
-            threads[publisher] = publisher_thread
-
-        for service in service_list:
-            service_thread = threading.Thread(target=service.run)
-            service_thread.start()
-            threads[service] = service_thread
-
         try:
-            while not rospy.is_shutdown():
-                # TODO: Add multiverse_server live checking
-                sleep(1)
+            rospy.spin()
         except KeyboardInterrupt:
             rospy.signal_shutdown(
                 f"[{self.__class__.__name__}] Caught SIGINT (Ctrl+C), exiting..."
             )
         finally:
             for subscriber in subscriber_list:
-                threads[subscriber].join()
+                subscriber.stop()
             for publisher in publisher_list:
-                threads[publisher].join()
+                publisher.stop()
             for service in service_list:
-                threads[service].join()
+                service.stop()
 
 
 def parse_ros_node_from_str(ros_node_str: str) -> dict:
