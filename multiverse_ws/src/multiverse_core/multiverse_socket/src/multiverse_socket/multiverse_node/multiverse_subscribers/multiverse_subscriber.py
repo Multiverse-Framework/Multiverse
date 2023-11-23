@@ -13,11 +13,11 @@ class MultiverseSubscriber(MultiverseNode):
     _receive_data: List[float] = []
 
     def __init__(
-        self,
-        topic_name: str,
-        client_addr: SocketAddress = SocketAddress(),
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
-        **kwargs: Dict
+            self,
+            topic_name: str,
+            client_addr: SocketAddress = SocketAddress(),
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            **kwargs: Dict
     ) -> None:
         super().__init__(
             client_addr=client_addr,

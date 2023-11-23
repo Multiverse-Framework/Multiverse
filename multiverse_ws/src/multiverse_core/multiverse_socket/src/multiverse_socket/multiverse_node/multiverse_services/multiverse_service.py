@@ -14,10 +14,10 @@ class MultiverseService(MultiverseNode):
     _srv_response_class: Any = None
 
     def __init__(
-        self,
-        client_addr: SocketAddress = SocketAddress(),
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
-        **kwargs: Dict
+            self,
+            client_addr: SocketAddress = SocketAddress(),
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            **kwargs: Dict
     ) -> None:
         super().__init__(
             client_addr=client_addr,

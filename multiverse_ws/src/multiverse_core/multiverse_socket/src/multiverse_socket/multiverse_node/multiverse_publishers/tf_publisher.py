@@ -18,12 +18,12 @@ class TfPublisher(MultiversePublisher):
     _seq: int = 0
 
     def __init__(
-        self,
-        topic_name: str = "/tf",
-        rate: float = 60.0,
-        client_addr: SocketAddress = SocketAddress(),
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
-        **kwargs: Dict
+            self,
+            topic_name: str = "/tf",
+            rate: float = 60.0,
+            client_addr: SocketAddress = SocketAddress(),
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            **kwargs: Dict
     ) -> None:
         super().__init__(
             topic_name=topic_name,
@@ -45,7 +45,7 @@ class TfPublisher(MultiversePublisher):
         for object_name, tf_data in objects.items():
             tf_data = response_meta_data["receive"][object_name]
             if any([p is None for p in tf_data["position"]]) or any(
-                [q is None for q in tf_data["quaternion"]]
+                    [q is None for q in tf_data["quaternion"]]
             ):
                 continue
             tf_msg = TransformStamped()

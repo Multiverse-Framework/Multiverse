@@ -16,12 +16,12 @@ class OdomPublisher(MultiversePublisher):
     _frame_id: str
 
     def __init__(
-        self,
-        topic_name: str = "/tf",
-        rate: float = 60.0,
-        client_addr: SocketAddress = SocketAddress(),
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
-        **kwargs: Dict
+            self,
+            topic_name: str = "/tf",
+            rate: float = 60.0,
+            client_addr: SocketAddress = SocketAddress(),
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            **kwargs: Dict
     ) -> None:
         super().__init__(
             topic_name=topic_name,

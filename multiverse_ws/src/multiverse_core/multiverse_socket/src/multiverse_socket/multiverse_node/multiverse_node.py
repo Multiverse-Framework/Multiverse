@@ -32,9 +32,9 @@ class MultiverseNode:
     _multiverse_socket: MultiverseClientPybind
 
     def __init__(
-        self,
-        client_addr: SocketAddress,
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            self,
+            client_addr: SocketAddress,
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
     ) -> None:
         if not isinstance(client_addr.port, str) or client_addr.port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")

@@ -15,14 +15,14 @@ class SocketService(MultiverseService):
     _simulation_name = ""
 
     def __init__(
-        self,
-        node_name: str,
-        client_addr: SocketAddress = SocketAddress(),
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            self,
+            node_name: str,
+            client_addr: SocketAddress = SocketAddress(),
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
     ) -> None:
         super().__init__(
-            node_name=node_name, 
-            client_addr=client_addr, 
+            node_name=node_name,
+            client_addr=client_addr,
             multiverse_meta_data=multiverse_meta_data
         )
 
@@ -56,17 +56,17 @@ class SocketService(MultiverseService):
             else:
                 for object_attribute in request.receive:
                     if (
-                        self._worlds[world_name].get(object_attribute.object_name)
-                        is None
+                            self._worlds[world_name].get(object_attribute.object_name)
+                            is None
                     ):
                         world_need_update = True
                         break
                     for attribute_name in object_attribute.attribute_names:
                         if (
-                            attribute_name
-                            not in self._worlds[world_name][
-                                object_attribute.object_name
-                            ]
+                                attribute_name
+                                not in self._worlds[world_name][
+                            object_attribute.object_name
+                        ]
                         ):
                             world_need_update = True
                             break
@@ -111,8 +111,8 @@ class SocketService(MultiverseService):
         for object_attribute in request.receive:
             is_object_name_empty = object_attribute.object_name == ""
             object_not_found = (
-                world_name not in self._worlds
-                or object_attribute.object_name not in self._worlds[world_name]
+                    world_name not in self._worlds
+                    or object_attribute.object_name not in self._worlds[world_name]
             )
             if is_simulation_name_empty and object_not_found:
                 continue
@@ -122,9 +122,9 @@ class SocketService(MultiverseService):
             for attribute_name in object_attribute.attribute_names:
                 empty_attribute_name = attribute_name == ""
                 attribute_not_found = (
-                    world_name not in self._worlds
-                    or attribute_name
-                    not in self._worlds[world_name][object_attribute.object_name]
+                        world_name not in self._worlds
+                        or attribute_name
+                        not in self._worlds[world_name][object_attribute.object_name]
                 )
                 if is_simulation_name_empty and attribute_not_found:
                     continue
@@ -142,8 +142,8 @@ class SocketService(MultiverseService):
         response_meta_data = self.response_meta_data
 
         if self._simulation_name != "" and (
-            response_meta_data.get("send") is not None
-            or response_meta_data.get("receive") is not None
+                response_meta_data.get("send") is not None
+                or response_meta_data.get("receive") is not None
         ):
             self._communicate()
             self._communicate()

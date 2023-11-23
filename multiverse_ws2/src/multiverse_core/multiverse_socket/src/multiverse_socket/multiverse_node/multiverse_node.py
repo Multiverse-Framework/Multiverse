@@ -34,10 +34,10 @@ class MultiverseNode(Node):
     _multiverse_socket: MultiverseClientPybind
 
     def __init__(
-        self,
-        node_name: str,
-        client_addr: SocketAddress,
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            self,
+            node_name: str,
+            client_addr: SocketAddress,
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
     ) -> None:
         if not isinstance(client_addr.port, str) or client_addr.port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}")
@@ -62,7 +62,7 @@ class MultiverseNode(Node):
         raise NotImplementedError(
             f"Must implement _run() for {self.__class__.__name__}"
         )
-    
+
     def stop(self) -> None:
         self._disconnect()
         self.destroy_node()

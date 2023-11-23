@@ -13,11 +13,11 @@ class CmdVelSubscriber(MultiverseSubscriber):
     _msg_type = Twist
 
     def __init__(
-        self,
-        topic_name: str = "/cmd_vel",
-        client_addr: SocketAddress = SocketAddress(),
-        multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
-        **kwargs: Dict
+            self,
+            topic_name: str = "/cmd_vel",
+            client_addr: SocketAddress = SocketAddress(),
+            multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            **kwargs: Dict
     ) -> None:
         if "body" not in kwargs:
             raise Exception("Body not found.")
