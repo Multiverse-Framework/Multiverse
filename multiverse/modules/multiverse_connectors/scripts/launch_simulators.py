@@ -4,7 +4,8 @@ import re
 import subprocess
 from typing import List, Dict, Any
 
-from multiverse_launch import MultiverseLaunch, find_files, run_subprocess
+from multiverse_launch import MultiverseLaunch
+from utils import find_files, run_subprocess
 
 
 def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
@@ -30,14 +31,15 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
     def __init__(self):
         super().__init__()
 
-    def run_simulations(self):
+    def run_simulations(self) -> List[subprocess.Popen]:
+        processes: List[subprocess.Popen] = []
         for simulation_name, simulation_data in self.simulations.items():
             if "simulator" not in simulation_data or simulation_data["simulator"] not in self.simulators:
                 continue
 
             result = self.run_simulator_compile(simulation_name, simulation_data)
-
-            self.run_simulator(result, simulation_name, simulation_data)
+            processes.append(self.run_simulator(result, simulation_name, simulation_data))
+        return processes
 
     def parse_simulator(self, simulation_data):
         if simulation_data["simulator"] == "mujoco":
@@ -54,35 +56,38 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
 
     def run_simulator(self, compiler_result: subprocess.CompletedProcess, simulation_name,
                       simulation_data) -> subprocess.Popen:
-        if compiler_result.returncode == 0:
-            scene_xml_path = re.search(r"Scene:\s*([^\n]+)", compiler_result.stdout).group(1)
-            cmd = [f"{scene_xml_path}"]
+        if compiler_result.returncode != 0:
+            print(compiler_result.stderr)
+            raise RuntimeError(f"Failed to compile {simulation_name}")
 
-            world = simulation_data.get("world")
-            world_name = "world" if world is None else world["name"]
-            rtf_desired = 1 if world_name not in self.worlds else self.worlds[world_name].get("rtf_desired", 1)
+        scene_xml_path = re.search(r"Scene:\s*([^\n]+)", compiler_result.stdout).group(1)
+        cmd = [f"{scene_xml_path}"]
 
-            config_dict = simulation_data.get("config", {})
-            config_dict["rtf_desired"] = rtf_desired
-            config_dict["resources"] = self.resources_paths
-            cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
+        world = simulation_data.get("world")
+        world_name = "world" if world is None else world["name"]
+        rtf_desired = 1 if world_name not in self.worlds else self.worlds[world_name].get("rtf_desired", 1)
 
-            if self.multiverse_clients.get(simulation_name) is not None:
-                self.multiverse_clients[simulation_name]["meta_data"] = {
-                    "world_name": world_name,
-                    "simulation_name": simulation_name,
-                }
+        config_dict = simulation_data.get("config", {})
+        config_dict["rtf_desired"] = rtf_desired
+        config_dict["resources"] = self.resources_paths
+        cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
 
-            multiverse_dict = {"multiverse_server": self.multiverse_server,
-                               "multiverse_client": self.multiverse_clients[simulation_name]}
-            multiverse_dict["multiverse_client"]["resources"] = self.resources_paths
+        if self.multiverse_clients.get(simulation_name) is not None:
+            self.multiverse_clients[simulation_name]["meta_data"] = {
+                "world_name": world_name,
+                "simulation_name": simulation_name,
+            }
 
-            cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
+        multiverse_dict = {"multiverse_server": self.multiverse_server,
+                           "multiverse_client": self.multiverse_clients[simulation_name]}
+        multiverse_dict["multiverse_client"]["resources"] = self.resources_paths
 
-            suffix = "_headless" if simulation_data.get("headless", False) else ""
-            cmd = [f"{simulation_data['simulator']}{suffix}"] + cmd
+        cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
 
-            return run_subprocess(cmd)
+        suffix = "_headless" if simulation_data.get("headless", False) else ""
+        cmd = [f"{simulation_data['simulator']}{suffix}"] + cmd
+
+        return run_subprocess(cmd)
 
 
 def main():

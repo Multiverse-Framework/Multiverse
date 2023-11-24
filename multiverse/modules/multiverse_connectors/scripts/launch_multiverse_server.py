@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.10
 
-from multiverse_launch import MultiverseLaunch, run_subprocess
+from multiverse_launch import MultiverseLaunch
+from utils import run_subprocess
 
 
 def main():

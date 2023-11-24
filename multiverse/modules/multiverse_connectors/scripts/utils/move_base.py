@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
 import subprocess
-import rosparam
 import yaml
-from ..multiverse_launch import find_files, run_subprocess
+
+from .utils import find_files, run_subprocess
 
 def run_move_base(move_base_dict, resources_paths, map_path) -> subprocess.Popen:
+    import rosparam
     base_global_planner = move_base_dict.get("base_global_planner", "navfn/NavfnROS")
     base_local_planner = move_base_dict.get("base_local_planner", "dwa_local_planner/DWAPlannerROS")
     config_path = find_files(resources_paths, move_base_dict["config"])

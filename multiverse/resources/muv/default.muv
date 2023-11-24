@@ -242,8 +242,8 @@ multiverse_clients:
           topic: /cmd_vel
           body: tiago_dual_2
 
-    ros2_run:
-      rviz2:
+    ros_run:
+      rviz:
         config: ur5e/config/rviz2.rviz
         robot_descriptions:
           ur5e_description: ur5e/urdf/ur5e.urdf
