@@ -37,10 +37,7 @@ def main():
         ros2_dict = multiverse_client_dict.get("ros2", {})
         if "ros2" in multiverse_client_dict and any(key in ros2_dict for key in ["services", "publishers", "subscribers"]):
             cmd = [
-                "ros2",
-                "run",
-                "multiverse_socket",
-                "multiverse_socket_node",
+                "multiverse_ros_run",
                 f'--multiverse_server="{multiverse_server_dict}"',
             ]
             if "services" in ros2_dict:
