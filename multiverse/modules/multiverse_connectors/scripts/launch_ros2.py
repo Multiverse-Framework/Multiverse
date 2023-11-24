@@ -4,7 +4,7 @@ import sys
 import yaml
 import os
 import argparse
-from utils import run_subprocess, find_files, get_urdf_str_abs
+from multiverse_launch import run_subprocess, find_files, get_urdf_str_abs
 
 def main():
     parser = argparse.ArgumentParser(prog="multiverse_launch", description="Launch the multiverse framework")

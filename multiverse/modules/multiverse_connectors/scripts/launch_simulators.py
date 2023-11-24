@@ -1,16 +1,13 @@
 #!/usr/bin/env python3.10
 
-import sys
-import yaml
-import os
-import subprocess
 import re
-import argparse
+import subprocess
+from typing import List, Dict, Any
 
-from utils import find_files, run_subprocess
+from multiverse_launch import MultiverseLaunch, find_files, run_subprocess
 
 
-def parse_mujoco(resources_paths, mujoco_data):
+def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
     worlds_path = find_files(resources_paths, mujoco_data["world"]["path"])
     mujoco_args = [f"--world={worlds_path}"]
 
@@ -18,90 +15,79 @@ def parse_mujoco(resources_paths, mujoco_data):
         if entity_str in mujoco_data:
             for entity_name in mujoco_data[entity_str]:
                 if "path" in mujoco_data[entity_str][entity_name]:
-                    mujoco_data[entity_str][entity_name]["path"] = find_files(resources_paths, mujoco_data[entity_str][entity_name]["path"])
+                    mujoco_data[entity_str][entity_name]["path"] = find_files(resources_paths,
+                                                                              mujoco_data[entity_str][entity_name][
+                                                                                  "path"])
             entity_dict = mujoco_data[entity_str]
             mujoco_args.append(f"--{entity_str}={entity_dict}".replace(" ", ""))
 
     return mujoco_args
 
 
-def parse_simulator(resources_paths, simulator_data):
-    if simulator_data["simulator"] == "mujoco":
-        return parse_mujoco(resources_paths, simulator_data)
-    else:
-        return None
-
-
-def main():
-    parser = argparse.ArgumentParser(prog="multiverse_launch", description="Launch the multiverse framework")
-    parser.add_argument(
-        "--muv_file",
-        type=str,
-        required=True,
-        help="Path to .muv file",
-    )
-    args = parser.parse_args()
-    muv_file = args.muv_file
-
-    try:
-        with open(muv_file, "r") as file:
-            data = yaml.safe_load(file)
-    except Exception as e:
-        print(f"Error reading MUV file: {e}")
-        sys.exit(1)
-
-    resources_paths = data.get("resources", ["../robots", "../worlds", "../objects"])
-    resources_paths = [
-        os.path.join(os.path.dirname(muv_file), resources_path) if not os.path.isabs(resources_path) else resources_path
-        for resources_path in resources_paths
-    ]
-
+class MultiverseSimulationLaunch(MultiverseLaunch):
     simulators = {"mujoco"}
 
-    world_dict = data.get("worlds", {})
-    simulation_dict = data.get("simulations", {})
-    multiverse_server_dict = data.get("multiverse_server", {"host": "tcp://127.0.0.1", "port": "7000"})
-    multiverse_client_dict = data.get("multiverse_clients")
+    def __init__(self):
+        super().__init__()
 
-    for simulation_name, simulator_data in simulation_dict.items():
-        if "simulator" not in simulator_data or simulator_data["simulator"] not in simulators:
-            continue
+    def run_simulations(self):
+        for simulation_name, simulation_data in self.simulations.items():
+            if "simulator" not in simulation_data or simulation_data["simulator"] not in self.simulators:
+                continue
 
-        simulator = simulator_data["simulator"]
+            result = self.run_simulator_compile(simulation_name, simulation_data)
 
-        cmd = [f"mujoco_compile", f"--name={simulation_name}"]
-        cmd += parse_simulator(resources_paths, simulator_data)
+            self.run_simulator(result, simulation_name, simulation_data)
 
+    def parse_simulator(self, simulation_data):
+        if simulation_data["simulator"] == "mujoco":
+            return parse_mujoco(self.resources_paths, simulation_data)
+        else:
+            raise NotImplementedError(f"Simulator {simulation_data['simulator']} not implemented")
+
+    def run_simulator_compile(self, simulation_name, simulation_data):
+        cmd = self.parse_simulator(simulation_data)
+        cmd = [f"{simulation_data['simulator']}_compile", f"--name={simulation_name}"] + cmd
         cmd_str = " ".join(cmd)
         print(f'Execute "{cmd_str}"')
+        return subprocess.run(cmd, capture_output=True, text=True)
 
-        result = subprocess.run(cmd, capture_output=True, text=True)
-        if result.returncode == 0:
-            scene_xml_path = re.search(r"Scene:\s*([^\n]+)", result.stdout).group(1)
+    def run_simulator(self, compiler_result: subprocess.CompletedProcess, simulation_name,
+                      simulation_data) -> subprocess.Popen:
+        if compiler_result.returncode == 0:
+            scene_xml_path = re.search(r"Scene:\s*([^\n]+)", compiler_result.stdout).group(1)
             cmd = [f"{scene_xml_path}"]
 
-            world = simulator_data.get("world")
+            world = simulation_data.get("world")
             world_name = "world" if world is None else world["name"]
-            rtf_desired = 1 if world_name not in world_dict else world_dict[world_name].get("rtf_desired", 1)
+            rtf_desired = 1 if world_name not in self.worlds else self.worlds[world_name].get("rtf_desired", 1)
 
-            config_dict = simulator_data.get("config", {}) | {"rtf_desired": rtf_desired, "resources": resources_paths}
+            config_dict = simulation_data.get("config", {})
+            config_dict["rtf_desired"] = rtf_desired
+            config_dict["resources"] = self.resources_paths
             cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
 
-            if multiverse_client_dict is not None and multiverse_client_dict.get(simulation_name) is not None:
-                multiverse_client_dict[simulation_name]["meta_data"] = {
+            if self.multiverse_clients.get(simulation_name) is not None:
+                self.multiverse_clients[simulation_name]["meta_data"] = {
                     "world_name": world_name,
                     "simulation_name": simulation_name,
                 }
-                multiverse_dict = {
-                    "multiverse_server": multiverse_server_dict,
-                    "multiverse_client": multiverse_client_dict[simulation_name] | {"resources": resources_paths},
-                }
-                cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
 
-            suffix = "_headless" if simulator_data.get("headless", False) else ""
-            cmd = [f"{simulator}{suffix}"] + cmd
+            multiverse_dict = {"multiverse_server": self.multiverse_server,
+                               "multiverse_client": self.multiverse_clients[simulation_name]}
+            multiverse_dict["multiverse_client"]["resources"] = self.resources_paths
 
-            process = run_subprocess(cmd)
+            cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
+
+            suffix = "_headless" if simulation_data.get("headless", False) else ""
+            cmd = [f"{simulation_data['simulator']}{suffix}"] + cmd
+
+            return run_subprocess(cmd)
+
+
+def main():
+    multiverse_launch = MultiverseSimulationLaunch()
+    multiverse_launch.run_simulations()
 
 
 if __name__ == "__main__":
