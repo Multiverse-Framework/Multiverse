@@ -48,9 +48,6 @@ apt-get install -y libjsoncpp-dev
 # Install zmqpp
 apt-get install -y libzmqpp-dev
 
-# Install doxygen
-apt-get install -y doxygen
-
 # Install additional packages for MuJoCo
 apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
 
