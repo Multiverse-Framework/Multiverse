@@ -1,5 +1,5 @@
 execute_process(
-    COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/mujoco_compile ${BIN_DIR}/mujoco_compile
+    COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/mujoco_compile.py ${BIN_DIR}/mujoco_compile
 )
 
 include_directories(
