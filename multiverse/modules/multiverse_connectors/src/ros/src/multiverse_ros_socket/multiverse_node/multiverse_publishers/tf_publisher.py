@@ -49,6 +49,8 @@ class TfPublisher(MultiversePublisher):
 
         for object_name, tf_data in objects.items():
             tf_data = response_meta_data["receive"][object_name]
+            if "position" not in tf_data or "quaternion" not in tf_data:
+                continue
             if any([p is None for p in tf_data["position"]]) or any(
                     [q is None for q in tf_data["quaternion"]]
             ):
@@ -76,5 +78,5 @@ class TfPublisher(MultiversePublisher):
             tf_msg.transform.rotation.z = quaternion[3]
             self._msg.transforms.append(tf_msg)
 
-        # if INTERFACE == Interface.ROS1:
-        #     self._seq += 1
+        if INTERFACE == Interface.ROS1:
+            self._seq += 1

@@ -128,41 +128,57 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 				printf("Found XML file of [%s] at: %s.\n", object_name.c_str(), object_xml_path.c_str());
 
 				boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
-				if (!boost::filesystem::exists(new_object_xml_path))
+
 				{
-					boost::filesystem::copy(object_xml_path, new_object_xml_path);
+					boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_option::overwrite_if_exists);
 					tinyxml2::XMLDocument doc;
 					if (doc.LoadFile(new_object_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
 					{
 						tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
-						for (tinyxml2::XMLElement *compiler_element = mujoco_element->FirstChildElement("compiler");
-							 compiler_element != nullptr; compiler_element = compiler_element->NextSiblingElement())
+						for (const std::string &asset_type : {"mesh", "texture"})
 						{
-							if (compiler_element->Attribute("meshdir") != nullptr)
+							boost::filesystem::path asset_dir_path = object_xml_path;
+							const char *asset_type_dir = (asset_type + "dir").c_str();
+							for (tinyxml2::XMLElement *compiler_element = mujoco_element->FirstChildElement("compiler");
+								compiler_element != nullptr; compiler_element = compiler_element->NextSiblingElement())
 							{
-								boost::filesystem::path meshdir_path = compiler_element->Attribute("meshdir");
-								if (meshdir_path.is_relative())
+								if (compiler_element->Attribute(asset_type_dir) == nullptr)
 								{
-									meshdir_path = object_xml_path.parent_path() / meshdir_path;
-									compiler_element->SetAttribute("meshdir", meshdir_path.c_str());
+									continue;
 								}
-							}
-							if (compiler_element->Attribute("texturedir") != nullptr)
-							{
-								boost::filesystem::path texturedir_path = compiler_element->Attribute("texturedir");
-								if (texturedir_path.is_relative())
+								asset_dir_path = compiler_element->Attribute(asset_type_dir);
+								if (asset_dir_path.is_relative())
 								{
-									texturedir_path = object_xml_path.parent_path() / texturedir_path;
-									compiler_element->SetAttribute("texturedir", texturedir_path.c_str());
+									asset_dir_path = object_xml_path.parent_path() / asset_dir_path;
+								}
+								compiler_element->DeleteAttribute(asset_type_dir);
+							}
+							for (tinyxml2::XMLElement *asset_element = mujoco_element->FirstChildElement("asset");
+									asset_element != nullptr; asset_element = asset_element->NextSiblingElement())
+							{
+								for (tinyxml2::XMLElement *asset_type_element = asset_element->FirstChildElement(asset_type.c_str());
+										asset_type_element != nullptr; asset_type_element = asset_type_element->NextSiblingElement())
+								{
+									if (asset_type_element->Attribute("file") == nullptr)
+									{
+										continue;
+									}
+									boost::filesystem::path asset_file_path = asset_type_element->Attribute("file");
+									if (!asset_file_path.empty() && asset_file_path.is_relative())
+									{
+										asset_file_path = asset_dir_path / asset_file_path;
+										asset_type_element->SetAttribute("file", asset_file_path.c_str());
+									}
 								}
 							}
 						}
+						
 						for (tinyxml2::XMLElement *default_element = mujoco_element->FirstChildElement("default");
-							 default_element != nullptr; default_element = default_element->NextSiblingElement())
+								default_element != nullptr; default_element = default_element->NextSiblingElement())
 						{
 							std::vector<tinyxml2::XMLElement *> children_to_remove;
 							for (tinyxml2::XMLElement *default_child_element = default_element->FirstChildElement("default");
-								 default_child_element != nullptr; default_child_element = default_child_element->NextSiblingElement())
+									default_child_element != nullptr; default_child_element = default_child_element->NextSiblingElement())
 							{
 								if (default_child_element->Attribute("class") != nullptr && (strcmp(default_child_element->Attribute("class"), "visual") == 0 || strcmp(default_child_element->Attribute("class"), "collision") == 0))
 								{
@@ -480,9 +496,9 @@ void MjMultiverseClient::bind_response_meta_data()
 						const Json::Value z_json = response_meta_data_json["send"][send_object.first][attribute_name][2];
 						if (!x_json.isNull() && !y_json.isNull() && !z_json.isNull())
 						{
-							d->mocap_pos[3*mocap_id] = x_json.asDouble();
-							d->mocap_pos[3*mocap_id + 1] = y_json.asDouble();
-							d->mocap_pos[3*mocap_id + 2] = z_json.asDouble();
+							d->mocap_pos[3 * mocap_id] = x_json.asDouble();
+							d->mocap_pos[3 * mocap_id + 1] = y_json.asDouble();
+							d->mocap_pos[3 * mocap_id + 2] = z_json.asDouble();
 						}
 					}
 					else if (strcmp(attribute_name.c_str(), "quaternion") == 0)
@@ -493,10 +509,10 @@ void MjMultiverseClient::bind_response_meta_data()
 						const Json::Value z_json = response_meta_data_json["send"][send_object.first][attribute_name][3];
 						if (!w_json.isNull() && !x_json.isNull() && !y_json.isNull() && !z_json.isNull())
 						{
-							d->mocap_quat[4*mocap_id] = w_json.asDouble();
-							d->mocap_quat[4*mocap_id + 1] = x_json.asDouble();
-							d->mocap_quat[4*mocap_id + 2] = y_json.asDouble();
-							d->mocap_quat[4*mocap_id + 3] = z_json.asDouble();
+							d->mocap_quat[4 * mocap_id] = w_json.asDouble();
+							d->mocap_quat[4 * mocap_id + 1] = x_json.asDouble();
+							d->mocap_quat[4 * mocap_id + 2] = y_json.asDouble();
+							d->mocap_quat[4 * mocap_id + 3] = z_json.asDouble();
 						}
 					}
 				}
@@ -648,16 +664,16 @@ void MjMultiverseClient::init_send_and_receive_data()
 				{
 					if (strcmp(attribute_name.c_str(), "position") == 0)
 					{
-						send_data_vec.emplace_back(&d->mocap_pos[3*mocap_id]);
-						send_data_vec.emplace_back(&d->mocap_pos[3*mocap_id + 1]);
-						send_data_vec.emplace_back(&d->mocap_pos[3*mocap_id + 2]);
+						send_data_vec.emplace_back(&d->mocap_pos[3 * mocap_id]);
+						send_data_vec.emplace_back(&d->mocap_pos[3 * mocap_id + 1]);
+						send_data_vec.emplace_back(&d->mocap_pos[3 * mocap_id + 2]);
 					}
 					else if (strcmp(attribute_name.c_str(), "quaternion") == 0)
 					{
-						send_data_vec.emplace_back(&d->mocap_quat[4*mocap_id]);
-						send_data_vec.emplace_back(&d->mocap_quat[4*mocap_id + 1]);
-						send_data_vec.emplace_back(&d->mocap_quat[4*mocap_id + 2]);
-						send_data_vec.emplace_back(&d->mocap_quat[4*mocap_id + 3]);
+						send_data_vec.emplace_back(&d->mocap_quat[4 * mocap_id]);
+						send_data_vec.emplace_back(&d->mocap_quat[4 * mocap_id + 1]);
+						send_data_vec.emplace_back(&d->mocap_quat[4 * mocap_id + 2]);
+						send_data_vec.emplace_back(&d->mocap_quat[4 * mocap_id + 3]);
 					}
 					else
 					{
@@ -785,16 +801,16 @@ void MjMultiverseClient::init_send_and_receive_data()
 				{
 					if (strcmp(attribute_name.c_str(), "position") == 0)
 					{
-						receive_data_vec.emplace_back(&d->mocap_pos[3*mocap_id]);
-						receive_data_vec.emplace_back(&d->mocap_pos[3*mocap_id + 1]);
-						receive_data_vec.emplace_back(&d->mocap_pos[3*mocap_id + 2]);
+						receive_data_vec.emplace_back(&d->mocap_pos[3 * mocap_id]);
+						receive_data_vec.emplace_back(&d->mocap_pos[3 * mocap_id + 1]);
+						receive_data_vec.emplace_back(&d->mocap_pos[3 * mocap_id + 2]);
 					}
 					else if (strcmp(attribute_name.c_str(), "quaternion") == 0)
 					{
-						receive_data_vec.emplace_back(&d->mocap_quat[4*mocap_id]);
-						receive_data_vec.emplace_back(&d->mocap_quat[4*mocap_id + 1]);
-						receive_data_vec.emplace_back(&d->mocap_quat[4*mocap_id + 2]);
-						receive_data_vec.emplace_back(&d->mocap_quat[4*mocap_id + 3]);
+						receive_data_vec.emplace_back(&d->mocap_quat[4 * mocap_id]);
+						receive_data_vec.emplace_back(&d->mocap_quat[4 * mocap_id + 1]);
+						receive_data_vec.emplace_back(&d->mocap_quat[4 * mocap_id + 2]);
+						receive_data_vec.emplace_back(&d->mocap_quat[4 * mocap_id + 3]);
 					}
 					else
 					{
@@ -817,8 +833,8 @@ void MjMultiverseClient::init_send_and_receive_data()
 						receive_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
 					}
 					else if (strcmp(attribute_name.c_str(), "quaternion") == 0 &&
-								(m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE) ||
-							(m->body_dofnum[body_id] == 3 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_BALL))
+								 (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE) ||
+							 (m->body_dofnum[body_id] == 3 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_BALL))
 					{
 						if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 						{
@@ -850,8 +866,8 @@ void MjMultiverseClient::init_send_and_receive_data()
 						receive_data_vec.emplace_back(&d->xfrc_applied[6 * body_id + 5]);
 					}
 					else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0 &&
-							m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE &&
-							odom_velocities.count(body_id) == 0)
+							 m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE &&
+							 odom_velocities.count(body_id) == 0)
 					{
 						receive_data_vec.emplace_back(&d->qvel[dof_id]);
 						receive_data_vec.emplace_back(&d->qvel[dof_id + 1]);
@@ -861,8 +877,8 @@ void MjMultiverseClient::init_send_and_receive_data()
 						receive_data_vec.emplace_back(&d->qvel[dof_id + 5]);
 					}
 					else if (strcmp(attribute_name.c_str(), "odometric_velocity") == 0 &&
-							m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE &&
-							odom_velocities.count(body_id) == 0)
+							 m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE &&
+							 odom_velocities.count(body_id) == 0)
 					{
 						odom_velocities[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
 						receive_data_vec.emplace_back(&odom_velocities[body_id][0]);
@@ -996,7 +1012,7 @@ void MjMultiverseClient::bind_receive_data()
 	{
 		*receive_data_vec[i] = receive_buffer[i];
 	}
-	
+
 	mtx.unlock();
 }
 
