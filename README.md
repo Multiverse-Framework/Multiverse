@@ -11,10 +11,11 @@ Multiverse is a simulation framework designed to integrate multiple advanced phy
 ## Linux
 
 ```bash
-sudo ./install.sh               # Install all prerequisites
+./install.sh                    # Install all prerequisites (sudo required)
 ./build_third_parties.sh        # Build the dependencies
 ./build_multiverse.sh           # Build the software
-./build_multiverse_ws.sh        # Build the ROS workspace
+./build_multiverse_ws.sh        # Build the ROS workspace (only for Ubuntu 20.04)
+./build_multiverse_ws2.sh       # Build the ROS2 workspace (for Ubuntu >= 20.04)
 ```
 
 ## Windows 11
