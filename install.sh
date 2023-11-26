@@ -74,13 +74,10 @@ sudo apt-get install -y pybind11-dev
 sudo apt-get install -y jupyter-notebook
 
 # Upgrade pip
-pip install --upgrade pip
+pip install --upgrade pip build
 
-# Install PySide6
-pip install pyside6
-
-# Install PyOpenGL
-pip install pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11
+# Install additional packages for USD and multiverse_knowledge
+pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11
 
 # Install additional packages for Jupyter Notebook
 pip install panel jupyter-server bash_kernel
