@@ -52,8 +52,9 @@
     </asset>
     <worldbody>
         <body name="task_board">
+            <freejoint/>
             <body name="task_board_main">
-                <geom type="mesh" mesh="task_board_part_1"/>
+                <geom type="box" pos="0 0 0.0062" size="0.077486 0.128209 0.0062" />
                 <geom type="mesh" mesh="task_board_part_2"/>
                 <geom type="mesh" mesh="task_board_part_3"/>
                 <geom type="mesh" mesh="task_board_part_4"/>
@@ -210,15 +211,15 @@
                     </body>
                 </body>
                 <body name="task_board_slider" pos="0.04301 0.061594 0.082959">
-                    <joint name="task_board_slider_joint" pos="0 0 0" axis="1 0 0" type="slide" range="-0.025 0.01"/>
+                    <joint name="task_board_slider_joint" pos="0 0 0" axis="1 0 0" type="slide" range="-0.025 0.01" damping="0.5"/>
                     <geom type="mesh" mesh="task_board_slider"/>
                 </body>
-                <body name="task_board_button_1" pos="-0.043957 0.09625 0.0835">
-                    <joint name="task_board_button_1_joint" pos="0 0 0" axis="0 0 1" type="slide" range="-0.003 0"/>
+                <body name="task_board_button_1" pos="-0.043957 0.09625 0.0835" gravcomp="1">
+                    <joint name="task_board_button_1_joint" pos="0 0 0" axis="0 0 1" type="slide" range="-0.003 0" stiffness="1" springref="0"/>
                     <geom type="mesh" mesh="task_board_button"/>
                 </body>
-                <body name="task_board_button_2" pos="-0.02995 0.09625 0.0835">
-                    <joint name="task_board_button_2_joint" pos="0 0 0" axis="0 0 1" type="slide" range="-0.003 0"/>
+                <body name="task_board_button_2" pos="-0.02995 0.09625 0.0835" gravcomp="1">
+                    <joint name="task_board_button_2_joint" pos="0 0 0" axis="0 0 1" type="slide" range="-0.003 0" stiffness="1" springref="0"/>
                     <geom type="mesh" mesh="task_board_button"/>
                 </body>
             </body>
