@@ -71,11 +71,11 @@ class MultiverseRosLaunch(MultiverseLaunch):
                 pass
             else:
                 raise ValueError(f"Invalid interface")
+            
+            processes += self.run_ros_nodes(ros_dict.get("ros_run", {}))
 
             for ros_control in self.ros.get("ros_control", {}):
                 processes += self.run_ros_control(ros_control)
-
-            processes += self.run_ros_nodes(ros_dict.get("ros_run", {}))
 
         return processes
 
