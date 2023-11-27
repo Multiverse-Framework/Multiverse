@@ -39,6 +39,9 @@ if [ $# -eq 0 ]; then
 else
     # File name of the MUV file
     MUV_FILE=$1
+    if [[ "$MUV_FILE" != /* ]]; then
+        MUV_FILE="$(pwd)/$MUV_FILE"
+    fi
 fi
 
 # Check if the file exists
