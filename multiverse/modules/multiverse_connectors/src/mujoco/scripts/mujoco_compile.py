@@ -259,6 +259,8 @@ class MujocoCompiler:
         self.world_xml_path = args.world
         print(f"World: {self.world_xml_path}")
         self.scene_name = args.name
+        self.save_dir_path = os.path.join(args.save_dir, self.scene_name)
+        self.save_xml_dir = args.save_dir
         self.robots = []
         self.objects = []
         self.default_dict = {}
@@ -301,13 +303,9 @@ class MujocoCompiler:
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
     def create_world_xml(self):
-        save_dir_path = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "saved"
-        )
-        save_dir_path = os.path.join(save_dir_path, self.scene_name)
-        if not os.path.exists(save_dir_path):
-            os.makedirs(save_dir_path)
-        self.save_xml_path = os.path.join(save_dir_path, self.scene_name + ".xml")
+        if not os.path.exists(self.save_dir_path):
+            os.makedirs(self.save_dir_path)
+        self.save_xml_path = os.path.join(self.save_dir_path, self.scene_name + ".xml")
         shutil.copy(self.world_xml_path, self.save_xml_path)
 
     def modify_robot_or_object(self, entity: Union[Robot, Object]) -> str:
@@ -401,6 +399,15 @@ def main():
     )
     parser.add_argument(
         "--objects", help="JSON string with objects' data", required=False
+    )
+    if os.path.basename(__file__) == "mujoco_compile":
+        save_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "saved")
+    elif os.path.basename(__file__) == "mujoco_compile.py":
+        save_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "..", "saved")
+    else:
+        raise RuntimeError(f"Unknown file name {os.path.basename(__file__)}")
+    parser.add_argument(
+        "--save_dir", help="Path to save directory", required=False, default=save_dir
     )
 
     # Parse arguments
