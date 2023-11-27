@@ -9,5 +9,5 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd ../textures/WoodenLog_Diffuse_8K.jpg
-map_Bump -bm 2.000000 ../textures/WoodenLog_normal_8K.jpg
+map_Kd ../textures/WoodenLog_Diffuse_8K.png
+map_Bump -bm 2.000000 ../textures/WoodenLog_normal_8K.png
