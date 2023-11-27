@@ -167,12 +167,16 @@ def add_cursor_element(root: ET.Element):
     )
 
 
-def exclude_collision(root: ET.Element, xml_path: str) -> Dict[str, Set[str]]:
+def exclude_collision(root: ET.Element, xml_path: str, include_collision: List[str]) -> Dict[str, Set[str]]:
     body_collision_dict = get_body_collision_dict(xml_path)
     contact_element = ET.Element("contact")
     root.append(contact_element)
     for body1_name, body2_names in body_collision_dict.items():
+        if body1_name in include_collision:
+            continue
         for body2_name in body2_names:
+            if body2_name in include_collision:
+                continue
             contact_element.append(
                 ET.Element(
                     "exclude",
@@ -264,7 +268,7 @@ class MujocoCompiler:
         self.robots = []
         self.objects = []
         self.default_dict = {}
-        self.asset_dict = {"mesh": {}, "texture": {}}
+        self.asset_dict = {"mesh": {}, "texture": {}, "material": {}}
 
     def build_world_xml(self, robots=Optional[Robot], objects=Optional[Object]):
         self.create_world_xml()
@@ -275,9 +279,14 @@ class MujocoCompiler:
         meshdir, texturedir = remove_dirs_and_get_abs_dirs(root, self.world_xml_path)
         self.append_asset_and_remove_from_root(root, meshdir, texturedir)
 
+        include_collision: List[str] = []
+
         if robots is not None:
             print("Robots:")
+            robot: Robot
             for robot in robots:
+                if robot.disable_self_collision == "off":
+                    include_collision.append(robot.name)
                 robot_xml_file = self.modify_robot_or_object(robot)
                 include_element = ET.Element("include", {"file": os.path.basename(robot_xml_file)})
                 root.append(include_element)
@@ -285,7 +294,10 @@ class MujocoCompiler:
 
         if objects is not None:
             print("Objects:")
+            obj: Object
             for obj in objects:
+                if obj.disable_self_collision == "off":
+                    include_collision.append(obj.name)
                 object_xml_file = self.modify_robot_or_object(obj)
                 include_element = ET.Element("include", {"file": os.path.basename(object_xml_file)})
                 root.append(include_element)
@@ -295,7 +307,7 @@ class MujocoCompiler:
         self.set_new_asset(root)
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
-        exclude_collision(root, self.save_xml_path)
+        exclude_collision(root, self.save_xml_path, include_collision)
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         self.add_visual_and_cursor_element(root)
@@ -322,16 +334,13 @@ class MujocoCompiler:
 
         meshdir, texturedir = remove_dirs_and_get_abs_dirs(root, entity.path)
 
-        if entity.disable_self_collision == "auto":
-            exclude_collision(root, entity.path)
-
         self.append_default_and_remove_from_root(root)
 
         self.append_asset_and_remove_from_root(root, meshdir, texturedir)
 
-        add_prefix_and_suffix(root, entity.prefix, entity.suffix)
-
         apply_properties(root, entity.apply)
+
+        add_prefix_and_suffix(root, entity.prefix, entity.suffix)
 
         ET.indent(tree, space="\t", level=0)
         tree.write(entity_xml_path, encoding="utf-8", xml_declaration=True)
@@ -356,6 +365,10 @@ class MujocoCompiler:
                     asset_element.remove(element)
                     file_name = element.get("name", os.path.splitext(os.path.basename(file))[0])
                     self.asset_dict[asset_type][file_name] = element
+            for material_element in asset_element.findall("material"):
+                material_name = material_element.get("name")
+                self.asset_dict["material"][material_name] = material_element
+                asset_element.remove(material_element)
 
     def set_new_default(self, root: ET.Element):
         default_parent_element = ET.Element("default")
@@ -373,6 +386,8 @@ class MujocoCompiler:
             asset_element.append(mesh_element)
         for _, texture_element in self.asset_dict["texture"].items():
             asset_element.append(texture_element)
+        for _, material_element in self.asset_dict["material"].items():
+            asset_element.append(material_element)
 
     def add_visual_and_cursor_element(self, root: ET.Element):
         m = mujoco.MjModel.from_xml_path(self.save_xml_path)

@@ -21,6 +21,40 @@ simulations:
             crane:
               pos: [0, 0, 2]
         disable_self_collision: auto
+    objects:
+      wooden_log_1:
+        path: wooden_log.xml
+        apply:
+          body:
+            wooden_log:
+              pos: [-4, 3.7, 0.26]
+              quat: [0, 0.707, 0, 0.707]
+        suffix:
+          body: _1
+          geom: _1
+        disable_self_collision: "off"
+      wooden_log_2:
+        path: wooden_log.xml
+        apply:
+          body:
+            wooden_log:
+              pos: [-4, 4.3, 0.26]
+              quat: [0, 0.707, 0, 0.707]
+        suffix:
+          body: _2
+          geom: _2
+        disable_self_collision: "off"
+      wooden_log_3:
+        path: wooden_log.xml
+        apply:
+          body:
+            wooden_log:
+              pos: [-4, 4, 0.7]
+              quat: [0, 0.707, 0, 0.707]
+        suffix:
+          body: _3
+          geom: _3
+        disable_self_collision: "off"
     config:
       max_time_step: 0.01
       min_time_step: 0.001
