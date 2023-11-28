@@ -148,7 +148,7 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
         d->time = 0.0;
         sim_start = 0.0;
         start_time += real_time;
-        mj_resetData(m, d);
+        mj_resetDataKeyframe(m, d, 0);
         mj_forward(m, d);
         cam.distance = cam_distance_0;
         cam.elevation = m->vis.global.elevation;
@@ -163,7 +163,7 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
         rtf_desired *= 2;
         d->time = 0.0;
         start_time += real_time;
-        mj_resetData(m, d);
+        mj_resetDataKeyframe(m, d, 0);
         mj_forward(m, d);
         cam.distance = cam_distance_0;
         cam.elevation = m->vis.global.elevation;
@@ -178,7 +178,7 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
         rtf_desired /= 2;
         d->time = 0.0;
         start_time += real_time;
-        mj_resetData(m, d);
+        mj_resetDataKeyframe(m, d, 0);
         mj_forward(m, d);
         cam.distance = cam_distance_0;
         cam.elevation = m->vis.global.elevation;

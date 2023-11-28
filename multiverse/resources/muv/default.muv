@@ -60,6 +60,13 @@ simulations:
               pos: [0, 0, 1]
             gravcomp: 1
         disable_self_collision: auto
+        joint_state:
+          shoulder_pan_joint: 0
+          shoulder_lift_joint: -1.57
+          elbow_joint: 0
+          wrist_1_joint: 0
+          wrist_2_joint: 0
+          wrist_3_joint: 0
     config:
       max_time_step: 0.01
       min_time_step: 0.001

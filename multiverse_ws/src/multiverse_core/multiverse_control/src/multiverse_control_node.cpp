@@ -41,6 +41,7 @@ int main(int argc, char **argv)
 
     std::map<std::string, std::string> multiverse_params;
     std::map<std::string, std::string> joint_actuators;
+    std::map<std::string, double> init_joint_states;
 
     const Json::Value &multiverse_server_params_json = multiverse_params_json["multiverse_server"];
     multiverse_params["server_host"] = multiverse_server_params_json["host"].asString();
@@ -62,6 +63,12 @@ int main(int argc, char **argv)
     multiverse_params["robot"] = controller_manager_params_json["robot"].asString();
     multiverse_params["robot_description"] = controller_manager_params_json["robot_description"].asString();
 
+    const Json::Value &init_joint_state = controller_manager_params_json["init_joint_state"];
+    for (const std::string &joint_name : init_joint_state.getMemberNames())
+    {
+        init_joint_states[joint_name] = init_joint_state[joint_name].asDouble();
+    }
+
     const Json::Value &actuators_json = controller_manager_params_json["actuators"];
     for (const std::string &actuator_name : actuators_json.getMemberNames())
     {
@@ -69,7 +76,7 @@ int main(int argc, char **argv)
         joint_actuators[joint_name] = actuator_name;
     }
 
-    MultiverseHWInterface multiverse_hw_interface(multiverse_params, joint_actuators);
+    MultiverseHWInterface multiverse_hw_interface(multiverse_params, joint_actuators, init_joint_states);
     controller_manager::ControllerManager controller_manager(&multiverse_hw_interface, ros::NodeHandle(multiverse_params["robot"]));
 
     ros::AsyncSpinner spinner(0);

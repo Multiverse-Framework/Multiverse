@@ -34,7 +34,7 @@ class Object:
 
 def get_body_collision_dict(xml_path: str) -> Dict[str, Set[str]]:
     body_collision_dict = {}
-    m = mujoco.MjModel.from_xml_path(xml_path)
+    m = mujoco.MjModel.from_xml_path(filename=xml_path)
     d = mujoco.MjData(m)
     mujoco.mj_step(m, d)
     for geom1_id, geom2_id in zip(d.contact.geom1, d.contact.geom2):
@@ -232,23 +232,11 @@ def add_prefix_and_suffix(root: ET.Element, prefix, suffix):
             joint_element.set("joint2", f"{joint2_name}")
 
 
-def apply_properties(root: ET.Element, apply: Dict[str, Dict[str, Any]]):
-    for element_type, attributes in apply.items():
-        for attribute_name, attribute_props in attributes.items():
-            if isinstance(attribute_props, dict):
-                for attribute_child_name, attribute_child_prop in attribute_props.items():
-                    for element in list(root.iter(element_type)):
-                        if element.get("name") == attribute_name:
-                            if isinstance(attribute_child_prop, list):
-                                element.set(attribute_child_name, " ".join(map(str, attribute_child_prop)))
-                            elif isinstance(attribute_child_prop, int):
-                                element.set(attribute_child_name, str(attribute_child_prop))
-            elif isinstance(attribute_props, list):
-                for element in list(root.iter(element_type)):
-                    element.set(attribute_name, " ".join(map(str, attribute_props)))
-            else:
-                for element in list(root.iter(element_type)):
-                    element.set(attribute_name, f"{attribute_props}")
+def add_key_frame_element(root: ET.Element, keyframe_dict: Dict[str, ET.Element]) -> None:
+    keyframe_element = ET.Element("keyframe")
+    root.append(keyframe_element)
+    for key_name, key_element in keyframe_dict.items():
+        keyframe_element.append(key_element)
 
 
 class MujocoCompiler:
@@ -268,6 +256,7 @@ class MujocoCompiler:
         self.robots = []
         self.objects = []
         self.default_dict = {}
+        self.keyframe_dict = {}
         self.asset_dict = {"mesh": {}, "texture": {}, "material": {}}
 
     def build_world_xml(self, robots=Optional[Robot], objects=Optional[Object]):
@@ -279,35 +268,28 @@ class MujocoCompiler:
         meshdir, texturedir = remove_dirs_and_get_abs_dirs(root, self.world_xml_path)
         self.append_asset_and_remove_from_root(root, meshdir, texturedir)
 
+        self.append_key_frame_and_remove_from_root(root, self.world_xml_path)
+
         include_collision: List[str] = []
 
-        if robots is not None:
-            print("Robots:")
-            robot: Robot
-            for robot in robots:
-                if robot.disable_self_collision == "off":
-                    include_collision.append(robot.name)
-                robot_xml_file = self.modify_robot_or_object(robot)
-                include_element = ET.Element("include", {"file": os.path.basename(robot_xml_file)})
-                root.append(include_element)
-                tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
-
-        if objects is not None:
-            print("Objects:")
-            obj: Object
-            for obj in objects:
-                if obj.disable_self_collision == "off":
-                    include_collision.append(obj.name)
-                object_xml_file = self.modify_robot_or_object(obj)
-                include_element = ET.Element("include", {"file": os.path.basename(object_xml_file)})
-                root.append(include_element)
-                tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
+        for entities, entity_str in [(robots, "robots"), (objects, "objects")]:
+            if entities is not None:
+                for entity in entities:
+                    if entity.disable_self_collision == "off":
+                        include_collision.append(entity.name)
+                    entity_xml_file = self.modify_robot_or_object(entity)
+                    include_element = ET.Element("include", {"file": os.path.basename(entity_xml_file)})
+                    root.append(include_element)
+                    tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         self.set_new_default(root)
         self.set_new_asset(root)
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         exclude_collision(root, self.save_xml_path, include_collision)
+        tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
+
+        add_key_frame_element(root, self.keyframe_dict)
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         self.add_visual_and_cursor_element(root)
@@ -323,6 +305,7 @@ class MujocoCompiler:
     def modify_robot_or_object(self, entity: Union[Robot, Object]) -> str:
         print(f"- Name: {entity.name}")
         print(f"  Path: {entity.path}")
+        print(f"  Joint state: {entity.joint_state}")
         print(f"  Apply: {entity.apply}")
 
         entity_xml_file = entity.name + ".xml"
@@ -338,7 +321,9 @@ class MujocoCompiler:
 
         self.append_asset_and_remove_from_root(root, meshdir, texturedir)
 
-        apply_properties(root, entity.apply)
+        self.append_key_frame_and_remove_from_root(root, entity.path, entity.joint_state)
+
+        self.apply_properties(root, entity.path, entity.apply)
 
         add_prefix_and_suffix(root, entity.prefix, entity.suffix)
 
@@ -400,6 +385,95 @@ class MujocoCompiler:
         )
         visual_element.append(global_element)
         add_cursor_element(root)
+
+    def append_key_frame_and_remove_from_root(self, root: ET.Element, entity_path: str,
+                                              joint_state: Dict[str, float] = None):
+        m = mujoco.MjModel.from_xml_path(entity_path)
+        qpos_list = []
+        for qpos_id in range(m.nq):
+            found_list = [qpos_id == m.jnt_qposadr[jnt_id] for jnt_id in range(m.njnt)]
+            if any(found_list):
+                jnt_id = found_list.index(True)
+                jnt_name = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, jnt_id)
+                if joint_state is not None and jnt_name in joint_state:
+                    qpos_list.append(joint_state[jnt_name])
+                else:
+                    qpos_list.append(m.qpos0[qpos_id])
+            else:
+                qpos_list.append(m.qpos0[qpos_id])
+
+        for keyframe_element in root.findall("keyframe"):
+            for key_element in keyframe_element.findall("key"):
+                if key_element.get("time") is None:
+                    key_element.set("time", "0")
+                key_name = key_element.get("name")
+                if key_name in self.keyframe_dict and self.keyframe_dict[key_name].get("qpos") is not None:
+                    existing_qpos_list = self.keyframe_dict[key_name].get("qpos").split(" ")
+                    qpos_list = existing_qpos_list + qpos_list
+                key_element.set("qpos", " ".join(map(str, qpos_list)))
+                self.keyframe_dict[key_element.get("name")] = key_element
+
+        if root.find("keyframe") is not None:
+            for keyframe_element in root.findall("keyframe"):
+                root.remove(keyframe_element)
+        else:
+            if "home" in self.keyframe_dict and self.keyframe_dict["home"].get("qpos") is not None:
+                existing_qpos_list = self.keyframe_dict.get("home").get("qpos").split(" ")
+                qpos_list = existing_qpos_list + qpos_list
+                self.keyframe_dict["home"].set("qpos", " ".join(map(str, qpos_list)))
+            else:
+                key_element = ET.Element("key", {"name": "home", "qpos": " ".join(map(str, qpos_list))})
+                self.keyframe_dict["home"] = key_element
+
+    def apply_properties(self, root: ET.Element, entity_xml_path: str, apply: Dict[str, Dict[str, Any]]) -> None:
+        for element_type, attributes in apply.items():
+            for attribute_name, attribute_props in attributes.items():
+                if isinstance(attribute_props, dict):
+                    for attribute_child_name, attribute_child_prop in attribute_props.items():
+                        for element in list(root.iter(element_type)):
+                            if element.get("name") == attribute_name:
+                                if isinstance(attribute_child_prop, list):
+                                    element.set(attribute_child_name, " ".join(map(str, attribute_child_prop)))
+                                elif isinstance(attribute_child_prop, int):
+                                    element.set(attribute_child_name, str(attribute_child_prop))
+                elif isinstance(attribute_props, list):
+                    for element in list(root.iter(element_type)):
+                        element.set(attribute_name, " ".join(map(str, attribute_props)))
+                else:
+                    for element in list(root.iter(element_type)):
+                        element.set(attribute_name, f"{attribute_props}")
+
+        self.apply_key_frame(entity_xml_path, apply)
+
+    def apply_key_frame(self, entity_xml_path: str, apply: Dict[str, Dict[str, Any]]) -> None:
+        m = mujoco.MjModel.from_xml_path(entity_xml_path)
+        for body_name, body_attributes in apply.get("body", {}).items():
+            if isinstance(body_attributes, dict) and body_attributes.get("pos") is not None:
+                pos = body_attributes.get("pos")
+                body_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, body_name)
+                qpos_id = m.body_dofadr[body_id]
+                if qpos_id == -1:
+                    continue
+                for key_element in self.keyframe_dict.values():
+                    qpos_list = key_element.get("qpos").split(" ")
+                    qpos_id = len(qpos_list) - m.nq + qpos_id
+                    qpos_list[qpos_id:qpos_id + 3] = pos
+                    key_element.set("qpos", " ".join(map(str, qpos_list)))
+            if isinstance(body_attributes, dict) and body_attributes.get("quat") is not None:
+                quat = body_attributes.get("quat")
+                body_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, body_name)
+                qpos_id = m.body_dofadr[body_id]
+                qpos_num = m.body_dofnum[body_id]
+                if qpos_id == -1:
+                    continue
+                for key_element in self.keyframe_dict.values():
+                    qpos_list = key_element.get("qpos").split(" ")
+                    qpos_id = len(qpos_list) - m.nq + qpos_id
+                    if qpos_num == 3:
+                        qpos_list[qpos_id:qpos_id + 4] = quat
+                    elif qpos_num == 6:
+                        qpos_list[qpos_id + 3:qpos_id + 7] = quat
+                    key_element.set("qpos", " ".join(map(str, qpos_list)))
 
 
 def main():

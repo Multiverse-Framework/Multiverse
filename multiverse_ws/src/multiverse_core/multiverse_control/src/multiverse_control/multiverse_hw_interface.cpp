@@ -21,7 +21,9 @@
 #include "multiverse_hw_interface.h"
 #include <urdf/model.h>
 
-MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params, const std::map<std::string, std::string> &joint_actuators)
+MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params,
+                                             const std::map<std::string, std::string> &joint_actuators,
+                                             const std::map<std::string, double> &in_init_joint_states)
 {
     meta_data["world_name"] = multiverse_params.at("world_name");
     meta_data["simulation_name"] = multiverse_params.at("robot") + "_controller";
@@ -69,6 +71,20 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
             joint_states[robot_joint.first] = (double *)calloc(3, sizeof(double));
             joint_commands[robot_joint.first] = (double *)calloc(3, sizeof(double));
         }
+    }
+
+    for (const std::string &joint_name : joint_names)
+    {
+        if (in_init_joint_states.count(joint_name) == 0)
+        {
+            init_joint_states[joint_name] = 0.0;
+        }
+        else
+        {
+            init_joint_states[joint_name] = in_init_joint_states.at(joint_name);
+        }
+        joint_states[joint_name][0] = init_joint_states[joint_name];
+        joint_commands[joint_name][0] = init_joint_states[joint_name];
     }
 
     for (const std::string &joint_name : joint_names)
@@ -237,7 +253,7 @@ void MultiverseHWInterface::reset()
 {
     for (const std::string &joint_name : joint_names)
     {
-        joint_commands[joint_name][0] = 0.0;
+        joint_commands[joint_name][0] = init_joint_states[joint_name];
         joint_commands[joint_name][1] = 0.0;
         joint_commands[joint_name][2] = 0.0;
     }
@@ -254,6 +270,7 @@ void MultiverseHWInterface::doSwitch(const std::list<hardware_interface::Control
             {
                 if (std::find(joint_names.begin(), joint_names.end(), joint_name) != joint_names.end())
                 {
+                    joint_commands[joint_name][0] = init_joint_states[joint_name];
                     joint_commands[joint_name][1] = 0.0;
                     joint_commands[joint_name][2] = 0.0;
                 }

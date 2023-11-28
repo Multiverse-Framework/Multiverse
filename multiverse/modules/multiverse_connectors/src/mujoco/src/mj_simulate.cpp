@@ -40,6 +40,8 @@ void MjSimulate::init()
 
     // make data
     d = mj_makeData(m);
+
+	mj_resetDataKeyframe(m, d, 0);
 }
 
 void MjSimulate::reset()
@@ -56,6 +58,8 @@ void MjSimulate::reset()
 
     // make data
     mjData *d_new = mj_makeData(m_new);
+
+	mj_resetDataKeyframe(m_new, d_new, 0);
 
     d_new->time = d->time;
 

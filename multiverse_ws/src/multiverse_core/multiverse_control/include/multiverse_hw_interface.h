@@ -30,7 +30,9 @@
 class MultiverseHWInterface : public MultiverseClientJson, public hardware_interface::RobotHW
 {
 public:
-    MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params, const std::map<std::string, std::string> &joint_actuators);
+    MultiverseHWInterface(const std::map<std::string, std::string> &multiverse_params,
+                          const std::map<std::string, std::string> &joint_actuators,
+                          const std::map<std::string, double> &init_joint_states);
 
     ~MultiverseHWInterface();
 
@@ -42,7 +44,7 @@ public:
 
 private:
     double world_time = 0.0;
-    
+
     std::map<std::string, std::string> meta_data;
 
     std::map<std::string, std::set<std::string>> send_objects;
@@ -95,6 +97,9 @@ private:
 
 private:
     std::vector<std::string> joint_names;
+
+    // Initial states
+    std::map<std::string, double> init_joint_states;
 
     // States
     std::map<std::string, double *> joint_states;

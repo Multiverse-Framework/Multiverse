@@ -124,6 +124,14 @@ class MultiverseRosLaunch(MultiverseLaunch):
         robot_urdf_str = get_urdf_str_from_ros_package(self.mesh_abspath_prefix, self.multiverse_control_pkg_path,
                                                        robot_urdf_path)
 
+        joint_state = {}
+        world_name = ros_control["meta_data"]["world_name"]
+        for simulation in self.simulations.values():
+            if simulation.get("world") is not None and simulation["world"]["name"] == world_name:
+                robot = simulation["robots"][controller_manager["robot"]]
+                joint_state = robot.get("joint_state", {})
+                break
+
         rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
         multiverse_dict = {
             "multiverse_server": self.multiverse_server,
@@ -133,7 +141,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
                 "meta_data": ros_control["meta_data"],
             },
             "controller_manager": {"robot": controller_manager["robot"], "robot_description": robot_description,
-                                   "actuators": controller_manager["actuators"]},
+                                   "actuators": controller_manager["actuators"], "init_joint_state": joint_state},
         }
         cmd = [
             "rosrun",

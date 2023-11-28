@@ -59,15 +59,22 @@ class MultiversePublisher(MultiverseNode):
             self._bind_response_meta_data(self.response_meta_data)
 
     def _publisher_callback(self, _=None) -> None:
-        self._communicate(self._use_meta_data)
-        if self._use_meta_data:
-            self._bind_response_meta_data(self.response_meta_data)
-        else:
-            self._bind_receive_data(self.receive_data)
-        self._publish()
-
-    def _publish(self) -> None:
         try:
-            self._publisher.publish(self._msg)
+            self._communicate(self._use_meta_data)
+            if self._use_meta_data:
+                self._bind_response_meta_data(self.response_meta_data)
+            else:
+                self._bind_receive_data(self.receive_data)
+            self._publish()
         except KeyboardInterrupt:
             return
+
+    def _publish(self) -> None:
+        if INTERFACE == Interface.ROS1:
+            if not rospy.is_shutdown():
+                self._publisher.publish(self._msg)
+        elif INTERFACE == Interface.ROS2:
+            if rclpy.ok():
+                self._publisher.publish(self._msg)
+        else:
+            raise ValueError(f"Invalid interface {INTERFACE}")
