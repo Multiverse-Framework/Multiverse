@@ -6,6 +6,7 @@ import subprocess
 import os
 import xml.etree.ElementTree as ET
 
+
 def run_subprocess(cmd: List[str]) -> subprocess.Popen:
     cmd_str = " ".join(cmd)
     print(f'Execute "{cmd_str}"')
@@ -23,7 +24,8 @@ def find_files(resources_paths: List[str], filename_pattern: str) -> str:
         if len(matches) > 1:
             print(f"Found multiple {filename_pattern} files, using the first one")
         return matches[0]
-    
+
+
 def get_urdf_str_from_ros_package(mesh_abspath_prefix: str, ros_pkg_path: str, urdf_path: str) -> str:
     tree = ET.parse(urdf_path)
     root = tree.getroot()

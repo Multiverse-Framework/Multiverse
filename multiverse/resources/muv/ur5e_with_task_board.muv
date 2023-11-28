@@ -15,12 +15,22 @@ simulations:
       name: world
       path: work_table.xml
     robots:
+      2f85:
+        path: 2f85.xml
+        prefix:
+          geom: robotiq_2f85_
+        disable_self_collision: "off"
       ur5e:
         path: ur5e.xml
         apply:
           body:
             ur5e:
               pos: [0.0, 0.0, 1.05]
+        attach:
+          wrist_3_link: 
+            2f85:
+              pos: [0.0, 0.1, 0.0]
+              quat: [-1.0, 1.0, 0.0, 0.0]
         disable_self_collision: auto
         joint_state:
           shoulder_pan_joint: -1.5708
@@ -29,100 +39,100 @@ simulations:
           wrist_1_joint: -1.5708
           wrist_2_joint: -1.5708
           wrist_3_joint: 0.0
-    objects:
-      task_board:
-        path: task_board.xml
-        apply:
-          body:
-            task_board:
-              pos: [0.7, 0.0, 1.05]
-        prefix:
-          geom: task_board_
-      task_board_tool:
-        path: task_board_tool.xml
-        apply:
-          body:
-            task_board_tool:
-              pos: [0.686, -0.102, 1.146]
-              quat: [0.7071, 0.0, 0.0, 0.7071]
-        prefix:
-          geom: task_board_tool_
+    # objects:
+    #   task_board:
+    #     path: task_board.xml
+    #     apply:
+    #       body:
+    #         task_board:
+    #           pos: [0.7, 0.0, 1.05]
+    #     prefix:
+    #       geom: task_board_
+    #   task_board_tool:
+    #     path: task_board_tool.xml
+    #     apply:
+    #       body:
+    #         task_board_tool:
+    #           pos: [0.686, -0.102, 1.146]
+    #           quat: [0.7071, 0.0, 0.0, 0.7071]
+    #     prefix:
+    #       geom: task_board_tool_
 
     config:
       max_time_step: 0.002
       min_time_step: 0.001
 
-multiverse_server:
-  host: "tcp://127.0.0.1"
-  port: 7000
+# multiverse_server:
+#   host: "tcp://127.0.0.1"
+#   port: 7000
 
-multiverse_clients:
-  ur5e_with_task_board:
-    host: "tcp://127.0.0.1"
-    port: 7500
-    send:
-      body: ["position", "quaternion"]
-      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
-    receive:
-      shoulder_pan: ["cmd_joint_rvalue"]
-      shoulder_lift: ["cmd_joint_rvalue"]
-      elbow: ["cmd_joint_rvalue"]
-      wrist_1: ["cmd_joint_rvalue"]
-      wrist_2: ["cmd_joint_rvalue"]
-      wrist_3: ["cmd_joint_rvalue"]
-  ros:
-    ros_control:
-      - meta_data:
-          world_name: world
-          length_unit: m
-          angle_unit: rad
-          mass_unit: kg
-          time_unit: s
-          handedness: rhs
-        host: "tcp://127.0.0.1"
-        port: 7600
-        controller_manager:
-          robot: ur5e
-          robot_description: /robot_description
-          urdf: ur5e.urdf
-          config: ur5e/config/ros_control.yaml
-          actuators:
-            shoulder_pan: shoulder_pan_joint
-            shoulder_lift: shoulder_lift_joint
-            elbow: elbow_joint
-            wrist_1: wrist_1_joint
-            wrist_2: wrist_2_joint
-            wrist_3: wrist_3_joint
-          controllers:
-            spawn:
-              - joint_state_controller
-                joint_trajectory_controller
+# multiverse_clients:
+#   ur5e_with_task_board:
+#     host: "tcp://127.0.0.1"
+#     port: 7500
+#     send:
+#       body: ["position", "quaternion"]
+#       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+#     receive:
+#       shoulder_pan: ["cmd_joint_rvalue"]
+#       shoulder_lift: ["cmd_joint_rvalue"]
+#       elbow: ["cmd_joint_rvalue"]
+#       wrist_1: ["cmd_joint_rvalue"]
+#       wrist_2: ["cmd_joint_rvalue"]
+#       wrist_3: ["cmd_joint_rvalue"]
+#   ros:
+#     ros_control:
+#       - meta_data:
+#           world_name: world
+#           length_unit: m
+#           angle_unit: rad
+#           mass_unit: kg
+#           time_unit: s
+#           handedness: rhs
+#         host: "tcp://127.0.0.1"
+#         port: 7600
+#         controller_manager:
+#           robot: ur5e
+#           robot_description: /robot_description
+#           urdf: ur5e.urdf
+#           config: ur5e/config/ros_control.yaml
+#           actuators:
+#             shoulder_pan: shoulder_pan_joint
+#             shoulder_lift: shoulder_lift_joint
+#             elbow: elbow_joint
+#             wrist_1: wrist_1_joint
+#             wrist_2: wrist_2_joint
+#             wrist_3: wrist_3_joint
+#           controllers:
+#             spawn:
+#               - joint_state_controller
+#                 joint_trajectory_controller
 
-    services:
-      socket:
-        - host: "tcp://127.0.0.1"
-          port: 7400
+#     services:
+#       socket:
+#         - host: "tcp://127.0.0.1"
+#           port: 7400
 
-  ros2:
-    publishers:
-      tf:
-        - meta_data:
-            world_name: world
-            length_unit: m
-            angle_unit: rad
-            mass_unit: kg
-            time_unit: s
-            handedness: rhs
-          host: "tcp://127.0.0.1"
-          port: 7301
-          topic: /tf
-          rate: 60
-          root_frame_id: map
+#   ros2:
+#     publishers:
+#       tf:
+#         - meta_data:
+#             world_name: world
+#             length_unit: m
+#             angle_unit: rad
+#             mass_unit: kg
+#             time_unit: s
+#             handedness: rhs
+#           host: "tcp://127.0.0.1"
+#           port: 7301
+#           topic: /tf
+#           rate: 60
+#           root_frame_id: map
 
-    ros_run:
-      rviz:
-        config: ur5e_with_task_board/config/rviz.rviz2
-        robot_descriptions:
-          ur5e_description: ur5e/urdf/ur5e.urdf
-          task_board_description: task_board/urdf/task_board.urdf
-          task_board_tool_description: task_board/urdf/task_board_tool.urdf
+#     ros_run:
+#       rviz:
+#         config: ur5e_with_task_board/config/rviz.rviz2
+#         robot_descriptions:
+#           ur5e_description: ur5e/urdf/ur5e.urdf
+#           task_board_description: task_board/urdf/task_board.urdf
+#           task_board_tool_description: task_board/urdf/task_board_tool.urdf
