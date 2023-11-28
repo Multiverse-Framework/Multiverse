@@ -70,11 +70,4 @@ class MultiversePublisher(MultiverseNode):
             return
 
     def _publish(self) -> None:
-        if INTERFACE == Interface.ROS1:
-            if not rospy.is_shutdown():
-                self._publisher.publish(self._msg)
-        elif INTERFACE == Interface.ROS2:
-            if rclpy.ok():
-                self._publisher.publish(self._msg)
-        else:
-            raise ValueError(f"Invalid interface {INTERFACE}")
+        self._publisher.publish(self._msg)
