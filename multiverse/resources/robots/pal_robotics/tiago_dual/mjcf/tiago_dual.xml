@@ -239,7 +239,7 @@
 	</worldbody>
 
 	<equality>
-		<joint joint1="torso_lift_joint" joint2="torso_fixed_column_link_extern_joint" polycoef="0 1 0 0 0" name="equality1"/>
+		<joint joint1="torso_lift_joint" joint2="torso_fixed_column_link_extern_joint" polycoef="0 1 0 0 0"/>
 	</equality>
 
 	<actuator>

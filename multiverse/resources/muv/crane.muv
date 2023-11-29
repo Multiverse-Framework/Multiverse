@@ -79,25 +79,26 @@ multiverse_clients:
       theta10_outer_jaw_actuator: ["cmd_joint_rvalue"]
 
   ros:
-    services:
-      socket:
-        - host: "tcp://127.0.0.1"
-          port: 7400
+    ros_nodes:
+      services:
+        socket:
+          - host: "tcp://127.0.0.1"
+            port: 7400
 
-    publishers:
-      tf:
-        - meta_data:
-            world_name: world
-            length_unit: m
-            angle_unit: rad
-            mass_unit: kg
-            time_unit: s
-            handedness: rhs
-          host: "tcp://127.0.0.1"
-          port: 7301
-          topic: /tf
-          rate: 60
-          root_frame_id: map
+      publishers:
+        tf:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            host: "tcp://127.0.0.1"
+            port: 7301
+            topic: /tf
+            rate: 60
+            root_frame_id: map
 
     ros_control:
     - meta_data:

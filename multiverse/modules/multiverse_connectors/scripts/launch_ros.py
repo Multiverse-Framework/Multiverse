@@ -9,6 +9,7 @@ from multiverse_ros_socket import Interface, INTERFACE
 from multiverse_launch import MultiverseLaunch
 from utils import find_files, run_subprocess, get_urdf_str_from_ros_package
 
+
 def is_roscore_running() -> bool:
     import rosgraph
     return rosgraph.is_master_online()
@@ -16,11 +17,13 @@ def is_roscore_running() -> bool:
 
 def run_controller_command(controller_manager: Dict[str, Any]) -> List[subprocess.Popen]:
     processes: List[subprocess.Popen] = []
+    robot_description = controller_manager["robot_description"]
     for command, controllers in controller_manager["controllers"].items():
         cmd = [
                   "rosrun",
                   "controller_manager",
                   "controller_manager",
+                  f"robot_description:={robot_description}",
                   f"{command}",
               ] + controllers[0].split()
         process = run_subprocess(cmd)
@@ -71,7 +74,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
                 pass
             else:
                 raise ValueError(f"Invalid interface")
-            
+
             processes += self.run_ros_nodes(ros_dict.get("ros_run", {}))
 
             for ros_control in self.ros.get("ros_control", {}):
@@ -80,7 +83,9 @@ class MultiverseRosLaunch(MultiverseLaunch):
         return processes
 
     def run_multiverse_ros(self) -> Optional[subprocess.Popen]:
-        if not any([key in self.ros for key in ["services", "publishers", "subscribers"]]):
+        ros_nodes = self.ros.get("ros_nodes")
+        if ros_nodes is None or not any(
+                [key in ros_nodes for key in ["services", "publishers", "subscribers"]]):
             return None
 
         cmd = [
@@ -88,8 +93,8 @@ class MultiverseRosLaunch(MultiverseLaunch):
             f'--multiverse_server="{self.multiverse_server}"',
         ]
         for ros_node_type in ["services", "publishers", "subscribers"]:
-            if ros_node_type in self.ros:
-                cmd.append(f'--{ros_node_type}="{self.ros[ros_node_type]}"')
+            if ros_node_type in ros_nodes:
+                cmd.append(f'--{ros_node_type}="{ros_nodes[ros_node_type]}"')
 
         return run_subprocess(cmd)
 
@@ -107,7 +112,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
         process = self._run_controller_node(ros_control)
         processes.append(process)
 
-        process = self._load_config(ros_control["controller_manager"])
+        process = self._load_config(ros_control["controller_manager"], ros_control["meta_data"]["world_name"])
         processes.append(process)
 
         processes += run_controller_command(ros_control["controller_manager"])
@@ -147,13 +152,14 @@ class MultiverseRosLaunch(MultiverseLaunch):
             "rosrun",
             "multiverse_control",
             "multiverse_control_node",
+            f"robot_description:={robot_description}",
             f"{multiverse_dict}".replace(" ", "").replace("'", '"').replace('"', '"'),
         ]
         return run_subprocess(cmd)
 
-    def _load_config(self, controller_manager: Dict[str, Any]) -> subprocess.Popen:
+    def _load_config(self, controller_manager: Dict[str, Any], world_name: str) -> subprocess.Popen:
         control_config_path = find_files(self.resources_paths, controller_manager["config"])
-        os.environ["ROS_NAMESPACE"] = controller_manager["robot"]
+        os.environ["ROS_NAMESPACE"] = os.path.join(world_name, controller_manager["robot"])
         cmd = [
             "rosparam",
             "load",

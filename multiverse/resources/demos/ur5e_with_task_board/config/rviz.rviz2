@@ -7,6 +7,7 @@ Panels:
         - /Global Options1
         - /Status1
         - /Ur5eModel1/Description Topic1
+        - /Gripper2F85Model1/Status1
       Splitter Ratio: 0.5
     Tree Height: 1682
   - Class: rviz_common/Selection
@@ -202,6 +203,91 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Alpha: 1
+      Class: rviz_default_plugins/RobotModel
+      Collision Enabled: false
+      Description File: /tmp/gripper-2F-85.urdf
+      Description Source: File
+      Description Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: ""
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+        base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_mount:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        gripper_2F_85:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_coupler:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_driver:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_follower:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_pad:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_silicone_pad:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_spring_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_coupler:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_driver:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_follower:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_pad:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_silicone_pad:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_spring_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+      Name: Gripper2F85Model
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -260,10 +346,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.6103975772857666
+      Pitch: 0.7203974723815918
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.9203901290893555
+      Yaw: 1.0403906106948853
     Saved: ~
 Window Geometry:
   Displays:

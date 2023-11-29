@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     }
 
     MultiverseHWInterface multiverse_hw_interface(multiverse_params, joint_actuators, init_joint_states);
-    controller_manager::ControllerManager controller_manager(&multiverse_hw_interface, ros::NodeHandle(multiverse_params["robot"]));
+    controller_manager::ControllerManager controller_manager(&multiverse_hw_interface, ros::NodeHandle("/" + multiverse_params["world_name"] + "/" + multiverse_params["robot"]));
 
     ros::AsyncSpinner spinner(0);
     spinner.start();
