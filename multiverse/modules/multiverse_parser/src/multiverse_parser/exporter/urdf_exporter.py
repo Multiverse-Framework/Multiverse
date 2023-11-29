@@ -9,7 +9,6 @@ from multiverse_parser import WorldBuilder, GeomType, JointType
 from multiverse_parser.factory.body_builder import body_dict
 from multiverse_parser.factory.joint_builder import joint_dict
 from multiverse_parser.factory.geom_builder import geom_dict
-from multiverse_parser.factory.mesh_builder import VisualMeshBuilder, CollisionMeshBuilder
 from multiverse_parser.utils import *
 
 

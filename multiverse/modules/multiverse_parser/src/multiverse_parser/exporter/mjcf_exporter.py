@@ -73,32 +73,6 @@ class MjcfExporter:
         )
 
         self.asset = ET.SubElement(self.root, "asset")
-        # floor_texture = ET.SubElement(self.asset, "texture")
-        # floor_texture.set("name", "grid")
-        # floor_texture.set("type", "2d")
-        # floor_texture.set("builtin", "checker")
-        # floor_texture.set("width", "512")
-        # floor_texture.set("height", "512")
-        # floor_texture.set("rgb1", ".1 .2 .3")
-        # floor_texture.set("rgb2", ".2 .3 .4")
-        # floor_material = ET.SubElement(self.asset, "material")
-        # floor_material.set("name", "grid")
-        # floor_material.set("texture", "grid")
-        # floor_material.set("texrepeat", "1 1")
-        # floor_material.set("texuniform", "true")
-
-        # worldbody = ET.SubElement(self.root, "worldbody")
-        # floor_geom = ET.SubElement(worldbody, "geom")
-        # floor_geom.set("name", "floor")
-        # floor_geom.set("size", "0 0 0.05")
-        # floor_geom.set("type", "plane")
-        # floor_geom.set("material", "grid")
-        # floor_geom.set("condim", "4")
-        # floor_geom.set("friction", "2 0.05 0.01")
-        # light = ET.SubElement(worldbody, "light")
-        # light.set("diffuse", ".5 .5 .5")
-        # light.set("pos", "0 0 5")
-        # light.set("dir", "0 0 -1")
 
         self.body_dict = {}
 
