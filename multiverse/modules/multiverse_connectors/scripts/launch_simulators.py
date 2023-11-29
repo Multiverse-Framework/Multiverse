@@ -78,11 +78,11 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
                 "simulation_name": simulation_name,
             }
 
-        multiverse_dict = {"multiverse_server": self.multiverse_server,
-                           "multiverse_client": self.multiverse_clients[simulation_name]}
-        multiverse_dict["multiverse_client"]["resources"] = self.resources_paths
+            multiverse_dict = {"multiverse_server": self.multiverse_server,
+                               "multiverse_client": self.multiverse_clients[simulation_name]}
+            multiverse_dict["multiverse_client"]["resources"] = self.resources_paths
 
-        cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
+            cmd += [f"{multiverse_dict}".replace(" ", "").replace("'", '"')]
 
         suffix = "_headless" if simulation_data.get("headless", False) else ""
         cmd = [f"{simulation_data['simulator']}{suffix}"] + cmd

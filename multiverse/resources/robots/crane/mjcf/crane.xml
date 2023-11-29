@@ -1,5 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="crane">
+	<option impratio="10"/>
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
 		<default class="visual">
