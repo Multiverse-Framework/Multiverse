@@ -277,7 +277,7 @@ class UsdImporter:
                 joint_quat = joint.GetLocalRot1Attr().Get()
                 joint_pos = body1_rot.GetInverse().Transform(Gf.Vec3d(joint.GetLocalPos0Attr().Get()) - body1_to_body2_pos)
 
-                joint_builder = body_builder.add_joint(
+                joint_builder = body_builder.import_joint(
                     joint_name=joint_name,
                     parent_name=parent_name,
                     joint_type=joint_type,

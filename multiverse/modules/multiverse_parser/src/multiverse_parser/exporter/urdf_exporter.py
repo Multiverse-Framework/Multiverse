@@ -27,7 +27,7 @@ class UrdfExporter:
         self.with_visual = with_visual
         self.with_collision = with_collision
 
-        self.robot = urdf.URDF(self.world_builder.stage.GetDefaultPrim().GetName())
+        self.robot = urdf.URDF(self.world_builder._stage.GetDefaultPrim().GetName())
 
         tmp_urdf_file_path = self.urdf_file_path
         mesh_path = os.path.splitext(os.path.basename(tmp_urdf_file_path))[0]
@@ -113,8 +113,8 @@ class UrdfExporter:
             elif joint_builder.axis == "-Z":
                 joint.axis = (0, 0, -1)
 
-            joint.parent = joint_builder.parent_xform.GetPrim().GetName()
-            joint.child = joint_builder.child_xform.GetPrim().GetName()
+            joint.parent = joint_builder.parent_prim.GetPrim().GetName()
+            joint.child = joint_builder.child_prim.GetPrim().GetName()
 
             xyz = joint_builder.joint.GetLocalPos0Attr().Get()
             quat = joint_builder.joint.GetLocalRot0Attr().Get() * joint_builder.joint.GetLocalRot1Attr().Get().GetInverse()

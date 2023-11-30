@@ -1,15 +1,15 @@
 #!/usr/bin/env python3.10
-
+import numpy
 # import numpy
-# from scipy.spatial.transform import Rotation
+from scipy.spatial.transform import Rotation
 # import bpy
 # import tf
 # import os, shutil
-# from pxr import UsdGeom, Gf, UsdShade
-#
-# xform_cache = UsdGeom.XformCache()
-#
-#
+from pxr import UsdGeom, Gf, UsdShade
+
+xform_cache = UsdGeom.XformCache()
+
+
 # def diagonalize_inertia(inertia_tensor):
 #     eigenvalues, eigenvectors = numpy.linalg.eigh(inertia_tensor)
 #     eigenvectors = eigenvectors / numpy.linalg.norm(eigenvectors, axis=0)
@@ -60,8 +60,22 @@ def modify_name(in_name: str, replacement: str = None) -> str:
             raise ValueError(f"Name {in_name} is empty and replacement is None.")
         out_name = replacement
     return out_name
-#
-#
+
+
+def rpy_to_quat(rpy_angles: tuple) -> tuple:
+    """
+    Convert RPY Euler angles to a quaternion
+    :param rpy_angles: Tuple of (roll, pitch, yaw) angles in radians
+    :return: Tuple of (w, x, y, z) quaternion
+    """
+    # Create a Rotation object from the RPY Euler angles
+    rotation = Rotation.from_euler('xyz', rpy_angles, degrees=False)  # 'xyz' order means RPY
+
+    # Get the quaternion representation from the Rotation object
+    quaternion = rotation.as_quat(canonical=False)
+
+    return tuple(quaternion)
+
 # def convert_quat(quat) -> tuple:
 #     if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):
 #         real = quat.GetReal()

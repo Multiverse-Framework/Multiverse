@@ -4,15 +4,17 @@ from typing import Dict, Optional
 
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
-# from multiverse_parser.utils import modify_name, xform_cache
+from ..utils import xform_cache, modify_name
+
 # from .geom_builder import GeomBuilder, GeomType, geom_dict
-# from .joint_builder import JointBuilder, JointType, joint_dict
+from .joint_builder import JointBuilder, JointType
 
 
 class BodyBuilder:
     stage: Usd.Stage
     path: Sdf.Path
     xform: UsdGeom.Xform
+    joint_builders: Dict[str, JointBuilder]
 
     def __init__(self, stage: Usd.Stage, name: str, parent_xform: Optional[UsdGeom.Xform] = None) -> None:
         if parent_xform is not None:
@@ -21,34 +23,44 @@ class BodyBuilder:
             self.path = Sdf.Path("/").AppendPath(name)
         self.stage = stage
         self.xform = UsdGeom.Xform.Define(self.stage, self.path)
+        self.joint_builders = {}
         # self.geom_names = set()
         # self.joint_names = set()
 
-    # def set_transform(
-    #     self,
-    #     pos: tuple = (0.0, 0.0, 0.0),
-    #     quat: tuple = (1.0, 0.0, 0.0, 0.0),
-    #     scale: tuple = (1.0, 1.0, 1.0),
-    #     relative_to: str = None,
-    # ) -> None:
-    #     mat = Gf.Matrix4d()
-    #     mat.SetTranslateOnly(pos)
-    #     mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
-    #     mat_scale = Gf.Matrix4d()
-    #     mat_scale.SetScale(Gf.Vec3d(scale))
-    #     mat = mat_scale * mat
-    #
-    #     if relative_to is not None:
-    #         relative_prim = body_dict[relative_to].xform.GetPrim()
-    #         if relative_prim:
-    #             parent_prim = self.xform.GetPrim().GetParent()
-    #             if parent_prim.IsValid() and parent_prim != relative_prim:
-    #                 parent_to_relative_mat, _ = xform_cache.ComputeRelativeTransform(relative_prim, parent_prim)
-    #                 mat = mat * parent_to_relative_mat
-    #         else:
-    #             print(f"Prim at path {relative_to} not found.")
-    #
-    #     self.xform.AddTransformOp().Set(mat)
+    def set_transform(
+            self,
+            pos: tuple = (0.0, 0.0, 0.0),
+            quat: tuple = (1.0, 0.0, 0.0, 0.0),
+            scale: tuple = (1.0, 1.0, 1.0),
+            relative_to_xform: Optional[UsdGeom.Xform] = None,
+    ) -> None:
+        """
+        Set transform of the body.
+        :param pos: Tuple of (x, y, z) position.
+        :param quat: Tuple of (w, x, y, z) quaternion.
+        :param scale: Tuple of (x, y, z) scale.
+        :param relative_to_xform: Xform to set the transform relative to.
+        :return: None
+        """
+        mat = Gf.Matrix4d()
+        mat.SetTranslateOnly(pos)
+        mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
+        mat_scale = Gf.Matrix4d()
+        mat_scale.SetScale(Gf.Vec3d(scale))
+        mat = mat_scale * mat
+
+        if relative_to_xform is not None:
+            relative_to_prim = relative_to_xform.GetPrim()
+            if relative_to_prim:
+                parent_prim = self.xform.GetPrim().GetParent()
+                if parent_prim.IsValid() and parent_prim != relative_to_prim:
+                    parent_to_relative_mat, _ = xform_cache.ComputeRelativeTransform(relative_to_prim, parent_prim)
+                    mat = mat * parent_to_relative_mat
+            else:
+                raise ValueError(f"Prim at path {relative_to_xform.GetPath()} not found.")
+
+        self.xform.AddTransformOp().Set(mat)
+
     #
     # def add_geom(self, geom_name: str, geom_type: GeomType, is_visual: bool) -> GeomBuilder:
     #     goem_name = modify_name(in_name=geom_name)
@@ -60,45 +72,40 @@ class BodyBuilder:
     #         self.geom_names.add(geom_name)
     #         geom_builder = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type, is_visual=is_visual)
     #     return geom_builder
-    #
-    # def add_joint(
-    #     self,
-    #     joint_name: str,
-    #     parent_name: str,
-    #     joint_type: JointType,
-    #     joint_pos: tuple = (0.0, 0.0, 0.0),
-    #     joint_quat: tuple = None,
-    #     joint_axis: str = "Z",
-    # ) -> JointBuilder:
-    #     joint_name = modify_name(in_name=joint_name)
-    #
-    #     if joint_name in joint_dict:
-    #         print(f"Joint {joint_name} already exists.")
-    #         joint_builer = joint_dict[joint_name]
-    #     else:
-    #         self.joint_names.add(joint_name)
-    #         parent_name = modify_name(parent_name)
-    #         if body_dict.get(parent_name) is None:
-    #             return None
-    #
-    #         joint_builer = JointBuilder(
-    #             stage=self.stage,
-    #             name=joint_name,
-    #             parent_xform=body_dict[parent_name].xform,
-    #             child_xform=self.xform,
-    #             joint_type=joint_type,
-    #             pos=joint_pos,
-    #             quat=joint_quat,
-    #             axis=joint_axis,
-    #         )
-    #
-    #     return joint_builer
-    #
-    # def enable_rigid_body(self) -> None:
-    #     physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
-    #     physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
-    #     physics_rigid_body_api.Apply(self.xform.GetPrim())
-    #
+
+    def add_joint(
+        self,
+        joint_name: str,
+        parent_prim: Usd.Prim,
+        joint_type: JointType,
+        joint_pos: tuple = (0.0, 0.0, 0.0),
+        joint_quat: tuple = None,
+        joint_axis: str = "Z",
+    ) -> JointBuilder:
+        joint_name = modify_name(in_name=joint_name)
+
+        if joint_name in self.joint_builders:
+            print(f"Joint {joint_name} already exists.")
+            joint_builder = self.joint_builders[joint_name]
+        else:
+            joint_builder = JointBuilder(
+                stage=self.stage,
+                name=joint_name,
+                parent_prim=parent_prim,
+                child_prim=self.xform.GetPrim(),
+                joint_type=joint_type,
+                joint_pos=joint_pos,
+                joint_quat=joint_quat,
+                joint_axis=joint_axis,
+            )
+
+        return joint_builder
+
+    def enable_rigid_body(self) -> None:
+        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
+        physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
+        physics_rigid_body_api.Apply(self.xform.GetPrim())
+
     # def set_inertial(
     #     self,
     #     mass: float = 1e-1,

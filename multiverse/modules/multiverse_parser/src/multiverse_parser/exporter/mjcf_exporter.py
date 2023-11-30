@@ -35,7 +35,7 @@ class MjcfExporter:
         self.mesh_rel_paths = set()
 
         self.root = ET.Element("mujoco")
-        self.root.set("model", self.world_builder.stage.GetDefaultPrim().GetName())
+        self.root.set("model", self.world_builder._stage.GetDefaultPrim().GetName())
 
         self.compiler = ET.SubElement(self.root, "compiler")
         self.compiler.set("meshdir", mjcf_file_name + "/")
@@ -100,8 +100,8 @@ class MjcfExporter:
                     self.build_link(body_name=body_name, parent_body_name=parent_body_name)
                     reduces_body_names.remove(body_name)
             for joint_name, joint_builder in joint_dict.items():
-                parent_body_name = joint_builder.parent_xform.GetPrim().GetName()
-                child_body_name = joint_builder.child_xform.GetPrim().GetName()
+                parent_body_name = joint_builder.parent_prim.GetPrim().GetName()
+                child_body_name = joint_builder.child_prim.GetPrim().GetName()
                 if parent_body_name in self.body_dict and child_body_name not in self.body_dict:
                     stop = False
                     self.build_link(body_name=child_body_name, parent_body_name=parent_body_name)

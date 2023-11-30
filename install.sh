@@ -4,7 +4,7 @@
 sudo apt-get update && sudo apt-get upgrade
 
 # Install presiqisite for ubuntu
-sudo apt-get install software-properties-common curl
+sudo apt-get install -y software-properties-common curl python-is-python3
 
 # Setup your sources.list
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
@@ -50,6 +50,9 @@ sudo apt-get install -y libjsoncpp-dev
 
 # Install zmqpp
 sudo apt-get install -y libzmqpp-dev
+
+# Install additional packages for USD
+sudo apt-get install -y libxcb-cursor0
 
 # Install additional packages for MuJoCo
 sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
