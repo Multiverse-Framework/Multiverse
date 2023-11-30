@@ -1,3 +1,6 @@
+import sys
+sys.path = [sys_path for sys_path in sys.path if "USD/lib/python" not in sys_path]
+
 import unittest
 
 import os

@@ -8,6 +8,7 @@ import string
 from typing import Optional
 
 from ..factory.config import Configuration
+from ..utils import import_obj, import_stl, import_dae, export_usd
 
 
 def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
@@ -32,12 +33,12 @@ class Importer:
     source_file_path: str
     _tmp_file_name: str = "tmp"
     _tmp_file_path: str
-    _tmp_meshdir_path: str
+    _tmp_mesh_dir: str
     config: Configuration
 
     def __init__(self, file_path: str, configuration: Configuration = Configuration()):
         self.source_file_path = file_path
-        self._tmp_file_path, self._tmp_meshdir_path = self.create_tmp_paths()
+        self._tmp_file_path, self._tmp_mesh_dir = self.create_tmp_paths()
         self.config = configuration
         atexit.register(self.clean_up)
 
@@ -46,15 +47,15 @@ class Importer:
         Create temporary paths for the USD file and the mesh directory.
         :return: Tuple of the temporary USD file path and the temporary mesh directory path.
         """
-        tmp_dir_path = os.path.join("/tmp",
+        tmp_dir = os.path.join("/tmp",
                                     "cache",
                                     "".join(random.choices(string.ascii_letters + string.digits, k=10)))
-        tmp_file_path = os.path.join(tmp_dir_path, f"{self._tmp_file_name}.usda")
-        tmp_meshdir_path = os.path.join(tmp_dir_path, self._tmp_file_name, "usd")
-        os.makedirs(name=tmp_dir_path, exist_ok=True)
-        os.makedirs(name=tmp_meshdir_path, exist_ok=True)
-        print(f"Create {tmp_dir_path} and {tmp_meshdir_path}.")
-        return tmp_file_path, tmp_meshdir_path
+        tmp_file_path = os.path.join(tmp_dir, f"{self._tmp_file_name}.usda")
+        tmp_mesh_dir = os.path.join(tmp_dir, self._tmp_file_name, "usd")
+        os.makedirs(name=tmp_dir, exist_ok=True)
+        os.makedirs(name=tmp_mesh_dir, exist_ok=True)
+        print(f"Create {tmp_dir} and {tmp_mesh_dir}.")
+        return tmp_file_path, tmp_mesh_dir
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         """
@@ -63,6 +64,30 @@ class Importer:
         :return: If save_file_path is None, return the temporary file path. Otherwise, return the save_file_path.
         """
         raise NotImplementedError
+
+    def import_mesh(self, mesh_file_path: str) -> str:
+        """
+        Import the mesh from the mesh file path to the temporary mesh directory path.
+        :param mesh_file_path: Path to the mesh file.
+        :return: Path to the imported mesh.
+        """
+
+        file_name = os.path.basename(mesh_file_path).split(".")[0]
+        tmp_file_path = os.path.join(self.tmp_meshdir_path, f"{file_name}.usda")
+        file_extension = os.path.splitext(mesh_file_path)[1]
+
+        if file_extension == ".obj":
+            import_obj(mesh_file_path)
+        elif file_extension == ".stl":
+            import_stl(mesh_file_path)
+        elif file_extension == ".dae":
+            import_dae(mesh_file_path)
+        else:
+            raise ValueError(f"Unsupported file extension {file_extension}.")
+
+        export_usd(tmp_file_path)
+
+        return tmp_file_path
 
     def save_tmp_model(self, file_path: str) -> None:
         file_name = os.path.basename(file_path).split(".")[0]
@@ -74,18 +99,19 @@ class Importer:
 
         os.rename(new_file_path, file_path)
 
-        new_meshdir = os.path.join(file_dir, file_name)
-        if os.path.exists(new_meshdir):
-            shutil.rmtree(new_meshdir)
+        new_mesh_dir = os.path.join(file_dir, file_name)
+        if os.path.exists(new_mesh_dir):
+            shutil.rmtree(new_mesh_dir)
 
         tmp_meshdir = os.path.join(file_dir, self._tmp_file_name)
+        print(new_mesh_dir)
         if os.path.exists(tmp_meshdir):
-            os.rename(tmp_meshdir, new_meshdir)
+            os.rename(tmp_meshdir, new_mesh_dir)
 
             with open(file_path, "r", encoding="utf-8") as file:
                 file_contents = file.read()
 
-            tmp_path = "@./" + self._tmp_file_name
+            tmp_path = "@./" + os.path.dirname(self._tmp_mesh_dir)
             new_path = "@./" + file_name
             file_contents = file_contents.replace(tmp_path, new_path)
 
@@ -108,7 +134,7 @@ class Importer:
 
     @property
     def tmp_meshdir_path(self) -> str:
-        return self._tmp_meshdir_path
+        return self._tmp_mesh_dir
 
     @property
     def source_file_path(self) -> str:

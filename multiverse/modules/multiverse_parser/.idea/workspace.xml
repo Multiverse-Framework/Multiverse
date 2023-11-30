@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c31052a0-b126-4bad-84e6-af8f743ce335" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/input/ur5e/mjcf/ur5e_2.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../external/USD" beforeDir="false" afterPath="$PROJECT_DIR$/../../external/USD" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/input/tiago_dual/meshes/obj/arm_5_wrist_2017.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/input/tiago_dual/meshes/obj/arm_6_wrist_2017.mtl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/input/tiago_dual/urdf/tiago_dual_1.urdf" beforeDir="false" afterPath="$PROJECT_DIR$/resources/input/tiago_dual/urdf/tiago_dual_1.urdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/input/tiago_dual/urdf/tiago_dual_2.urdf" beforeDir="false" afterPath="$PROJECT_DIR$/resources/input/tiago_dual/urdf/tiago_dual_2.urdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/input/ur5e/mjcf/ur5e.xml" beforeDir="false" afterPath="$PROJECT_DIR$/resources/input/ur5e/mjcf/ur5e_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/output/test_mjcf_importer/ur5e.usda" beforeDir="false" afterPath="$PROJECT_DIR$/resources/output/test_mjcf_importer/ur5e.usda" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/output/test_urdf_importer/tiago_dual.usda" beforeDir="false" afterPath="$PROJECT_DIR$/resources/output/test_urdf_importer/tiago_dual.usda" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/output/test_urdf_importer/world.usda" beforeDir="false" afterPath="$PROJECT_DIR$/resources/output/test_urdf_importer/world.usda" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/output/test_world_builder/test.usda" beforeDir="false" afterPath="$PROJECT_DIR$/resources/output/test_world_builder/test.usda" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/factory/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/factory/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/factory/body_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/factory/body_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/factory/geom_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/factory/geom_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/factory/joint_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/factory/joint_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/factory/mesh_builder.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/factory/mesh_builder.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/importer/importer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/importer/importer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/importer/mjcf_importer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/importer/mjcf_importer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/importer/urdf_importer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/importer/urdf_importer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/importer/usd_importer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/importer/usd_importer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/utils/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/multiverse_parser/utils/mesh_importer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/multiverse_parser/utils/mesh_importer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_factory.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_factory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_mjcf_to_usd.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_mjcf_to_usd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_urdf_to_usd.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_urdf_to_usd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../resources/robots/robotiq/gripper-2F-85/scene.xml" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Unit Test" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$USER_HOME$/.cache/JetBrains/PyCharm2023.2/python_stubs/1205942013/mujoco/_structs/MjModel.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/../../build/blender/bin/3.6/python/lib/python3.10/shutil.py" root0="SKIP_INSPECTION" />
+    <setting file="file://$PROJECT_DIR$/../../build/blender/bin/3.6/python/lib/python3.10/unittest/loader.py" root0="SKIP_INSPECTION" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="2YqmQqZILnjp8flsa6UXFstLjRM" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "CleanUpMultiverseParser",
+    "last_opened_file_path": "/media/giangnguyen/Storage/Multiverse/multiverse/modules/multiverse_parser/resources/input/ur5e/mjcf",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources/input/ur5e/mjcf" />
+      <recent name="$PROJECT_DIR$/resources/input/urdf" />
+      <recent name="$PROJECT_DIR$/tests" />
+      <recent name="$PROJECT_DIR$/tests/input" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python tests.Python tests for test_urdf_to_usd.UrdfToUsdTestCase.test_urdf_importer_root_link">
+    <configuration name="Python tests for test_mjcf_to_usd.UrdfToUsdTestCase" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="multiverse_parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_mjcf_to_usd.UrdfToUsdTestCase&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_mjcf_to_usd.UrdfToUsdTestCase.test_mjcf_importer" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="multiverse_parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_mjcf_to_usd.UrdfToUsdTestCase.test_mjcf_importer&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_urdf_to_usd.UrdfToUsdTestCase" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="multiverse_parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_urdf_to_usd.UrdfToUsdTestCase&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_urdf_to_usd.UrdfToUsdTestCase.test_urdf_importer" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="multiverse_parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_urdf_to_usd.UrdfToUsdTestCase.test_urdf_importer&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for test_urdf_to_usd.UrdfToUsdTestCase.test_urdf_importer_root_link" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="multiverse_parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_urdf_to_usd.UrdfToUsdTestCase.test_urdf_importer_root_link&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Python tests for test_urdf_to_usd.UrdfToUsdTestCase.test_urdf_importer_root_link" />
+        <item itemvalue="Python tests.Python tests for test_urdf_to_usd.UrdfToUsdTestCase" />
+        <item itemvalue="Python tests.Python tests for test_urdf_to_usd.UrdfToUsdTestCase.test_urdf_importer" />
+        <item itemvalue="Python tests.Python tests for test_mjcf_to_usd.UrdfToUsdTestCase" />
+        <item itemvalue="Python tests.Python tests for test_mjcf_to_usd.UrdfToUsdTestCase.test_mjcf_importer" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c31052a0-b126-4bad-84e6-af8f743ce335" name="Changes" comment="" />
+      <created>1701261470921</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1701261470921</updated>
+      <workItem from="1701261471927" duration="822000" />
+      <workItem from="1701265212401" duration="602000" />
+      <workItem from="1701265821931" duration="11288000" />
+      <workItem from="1701338540393" duration="23200000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/multiverse_parser$.coverage" NAME=" Coverage Results" MODIFIED="1701361493622" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests" />
+  </component>
+</project>

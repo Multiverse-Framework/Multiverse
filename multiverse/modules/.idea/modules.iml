@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/multiverse_connectors/scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/multiverse_connectors/src/mujoco/scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/multiverse_connectors/src/ros/scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/multiverse_connectors/src/ros/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/multiverse_connectors/src/ros/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/multiverse_connectors/tests" isTestSource="true" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.8 (multiverse)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

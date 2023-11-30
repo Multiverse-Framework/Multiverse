@@ -240,8 +240,6 @@ class UsdImporter:
                         geom_builder.set_attribute(prefix="primvars", displayColor=COLLISION_MESH_COLOR)
                         geom_builder.set_attribute(prefix="primvars", displayOpacity=COLLISION_MESH_OPACITY)
 
-                    geom_builder.compute_extent()
-
     def build_joint(self, parent_prim):
         for xform_prim in [xform_prim for xform_prim in parent_prim.GetChildren() if xform_prim.IsA(UsdGeom.Xform)]:
             joint_prims = [joint_prim for joint_prim in xform_prim.GetChildren() if joint_prim.IsA(UsdPhysics.Joint)]

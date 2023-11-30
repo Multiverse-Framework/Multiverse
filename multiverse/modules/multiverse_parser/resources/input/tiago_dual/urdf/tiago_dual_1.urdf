@@ -584,10 +584,10 @@
         <mesh filename="file://../meshes/stl/arm_5_collision_wrist_2017.stl" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </collision>
-    <visual name="arm_5_wrist_2017">
+    <visual name="arm_5-wrist-2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/arm_5_wrist_2017.obj" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../meshes/obj/arm_5-wrist-2017.obj" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </visual>
   </link>
@@ -605,10 +605,10 @@
         <mesh filename="file://../meshes/stl/arm_6_collision_wrist_2017.stl" scale="-1.0 -1.0000000000000004 -1.0000000000000004"/>
       </geometry>
     </collision>
-    <visual name="arm_6_wrist_2017">
+    <visual name="arm_6-wrist-2017">
       <origin xyz="0.0 0.0 0.0" rpy="3.141592653589793 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/arm_6_wrist_2017.obj" scale="-1.0 -1.0000000000000004 -1.0000000000000004"/>
+        <mesh filename="file://../meshes/obj/arm_6-wrist-2017.obj" scale="-1.0 -1.0000000000000004 -1.0000000000000004"/>
       </geometry>
     </visual>
   </link>
@@ -842,10 +842,10 @@
     <limit effort="1000" lower="-2.0943951023931953" upper="2.0943951023931953" velocity="1000"/>
   </joint>
   <link name="arm_right_5_link">
-    <visual name="arm_5_wrist_2017">
+    <visual name="arm_5-wrist-2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/arm_5_wrist_2017.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/obj/arm_5-wrist-2017.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="arm_5_collision_wrist_2017">
@@ -869,10 +869,10 @@
         <mesh filename="file://../meshes/stl/arm_6_collision_wrist_2017.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
-    <visual name="arm_6_wrist_2017">
+    <visual name="arm_6-wrist-2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/arm_6_wrist_2017.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/obj/arm_6-wrist-2017.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>

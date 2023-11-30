@@ -4,7 +4,7 @@ import unittest
 import os
 import tracemalloc
 from pxr import Usd
-from multiverse_parser import WorldBuilder, BodyBuilder, JointBuilder, JointType
+from multiverse_parser import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomType, GeomProperty
 
 
 class FactoryTestCase(unittest.TestCase):
@@ -50,6 +50,19 @@ class FactoryTestCase(unittest.TestCase):
                                      quat=(-math.sqrt(2) / 2, 0.0, 0.0, math.sqrt(2) / 2),
                                      scale=(1.0, 1.0, 1.0),
                                      relative_to_xform=body_1_xform)
+
+        geom_builder_1 = body_builder_1.add_geom(geom_name="geom_1", geom_type=GeomType.CUBE,
+                                                 geom_property=GeomProperty(is_visible=True, is_collidable=True))
+        geom_1_xform = geom_builder_1.xform
+        self.assertEqual(geom_1_xform.GetPath(), "/body_0/body_1/geom_1")
+
+        geom_builder_1.set_transform(pos=(0.1, 0.2, 3.0), quat=(1.0, 0.0, 0.0, 0.0), scale=(1.0, 1.0, 1.0))
+        geom_1_local_transform = geom_1_xform.GetLocalTransformation()
+        geom_1_local_pos = geom_1_local_transform.ExtractTranslation()
+        self.assertEqual(geom_1_local_pos, (0.1, 0.2, 3.0))
+
+        geom_builder_1.set_attribute(prefix="primvars", displayColor=[(0, 0, 0)])
+        geom_builder_1.set_attribute(prefix="primvars", displayOpacity=[1])
 
         joint_builder = JointBuilder(stage=world_builder._stage,
                                      name="joint_0",

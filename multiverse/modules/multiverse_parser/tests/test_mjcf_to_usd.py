@@ -16,7 +16,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
     def test_mjcf_importer(self):
-        input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e.xml")
+        input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
         importer = MjcfImporter(file_path=input_mjcf_path, with_physics=True, with_visual=True,
                                 with_collision=True)
         self.assertEqual(importer.source_file_path, input_mjcf_path)
@@ -29,28 +29,28 @@ class UrdfToUsdTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "ur5e")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_1.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    # def test_urdf_importer_root_link(self):
-    #     input_urdf_path = os.path.join(self.resource_path, "input", "urdf", "tiago_dual_2.urdf")
-    #     importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
-    #                             with_collision=True)
-    #     usd_file_path = importer.import_model()
-    #
-    #     stage = Usd.Stage.Open(usd_file_path)
-    #     default_prim = stage.GetDefaultPrim()
-    #     self.assertEqual(default_prim.GetName(), "world")
-    #
-    #     output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "world.usda")
-    #     importer.save_tmp_model(file_path=output_usd_path)
-    #     self.assertTrue(os.path.exists(output_usd_path))
-    #
-    # def test_urdf_importer_with_invalid_file_path(self):
-    #     with self.assertRaises(FileNotFoundError):
-    #         UrdfImporter(file_path="abcxyz", with_physics=True, with_visual=True,
-    #                      with_collision=True)
+    def test_urdf_importer_root_link(self):
+        input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_2.xml")
+        importer = MjcfImporter(file_path=input_mjcf_path, with_physics=True, with_visual=True,
+                                with_collision=True)
+        usd_file_path = importer.import_model()
+
+        stage = Usd.Stage.Open(usd_file_path)
+        default_prim = stage.GetDefaultPrim()
+        self.assertEqual(default_prim.GetName(), "ur5e_root")
+
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_2.usda")
+        importer.save_tmp_model(file_path=output_usd_path)
+        self.assertTrue(os.path.exists(output_usd_path))
+
+    def test_urdf_importer_with_invalid_file_path(self):
+        with self.assertRaises(FileNotFoundError):
+            MjcfImporter(file_path="abcxyz", with_physics=True, with_visual=True,
+                         with_collision=True)
 
     @classmethod
     def tearDownClass(cls):

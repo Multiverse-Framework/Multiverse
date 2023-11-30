@@ -6,7 +6,7 @@ from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
 from ..utils import xform_cache, modify_name
 
-# from .geom_builder import GeomBuilder, GeomType, geom_dict
+from .geom_builder import GeomBuilder, GeomType, GeomProperty
 from .joint_builder import JointBuilder, JointType
 
 
@@ -14,7 +14,8 @@ class BodyBuilder:
     stage: Usd.Stage
     path: Sdf.Path
     xform: UsdGeom.Xform
-    joint_builders: Dict[str, JointBuilder]
+    _joint_builders: Dict[str, JointBuilder]
+    _geom_builders: Dict[str, GeomBuilder]
 
     def __init__(self, stage: Usd.Stage, name: str, parent_xform: Optional[UsdGeom.Xform] = None) -> None:
         if parent_xform is not None:
@@ -23,7 +24,8 @@ class BodyBuilder:
             self.path = Sdf.Path("/").AppendPath(name)
         self.stage = stage
         self.xform = UsdGeom.Xform.Define(self.stage, self.path)
-        self.joint_builders = {}
+        self._joint_builders = {}
+        self._geom_builders = {}
         # self.geom_names = set()
         # self.joint_names = set()
 
@@ -84,9 +86,9 @@ class BodyBuilder:
     ) -> JointBuilder:
         joint_name = modify_name(in_name=joint_name)
 
-        if joint_name in self.joint_builders:
+        if joint_name in self._joint_builders:
             print(f"Joint {joint_name} already exists.")
-            joint_builder = self.joint_builders[joint_name]
+            joint_builder = self._joint_builders[joint_name]
         else:
             joint_builder = JointBuilder(
                 stage=self.stage,
@@ -98,6 +100,8 @@ class BodyBuilder:
                 joint_quat=joint_quat,
                 joint_axis=joint_axis,
             )
+            joint_builder.build()
+            self._joint_builders[joint_name] = joint_builder
 
         return joint_builder
 
@@ -105,6 +109,35 @@ class BodyBuilder:
         physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
         physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
         physics_rigid_body_api.Apply(self.xform.GetPrim())
+
+    def add_geom(self, geom_name: str, geom_type: GeomType, geom_property: GeomProperty) -> GeomBuilder:
+        geom_name = modify_name(in_name=geom_name)
+        if geom_name in self._geom_builders:
+            print(f"Geom {geom_name} already exists.")
+            geom_builder = self._geom_builders[geom_name]
+        else:
+            geom_builder = GeomBuilder(
+                stage=self.stage,
+                geom_name=geom_name,
+                body_path=self.path,
+                geom_type=geom_type,
+                geom_property=geom_property
+            )
+            self._geom_builders[geom_name] = geom_builder
+
+        return geom_builder
+
+    def get_joint_builder(self, joint_name: str) -> JointBuilder:
+        joint_name = modify_name(in_name=joint_name)
+        if joint_name not in self._joint_builders:
+            raise ValueError(f"Joint {joint_name} not found in {self.__class__.__name__}.")
+        return self._joint_builders[joint_name]
+
+    def get_geom_builder(self, geom_name: str) -> GeomBuilder:
+        geom_name = modify_name(in_name=geom_name)
+        if geom_name not in self._joint_builders:
+            raise ValueError(f"Geom {geom_name} not found in {self.__class__.__name__}.")
+        return self._geom_builders[geom_name]
 
     # def set_inertial(
     #     self,

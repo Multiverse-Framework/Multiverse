@@ -12,7 +12,7 @@ def import_dae(in_dae: str) -> None:
 
 
 def import_obj(in_obj: str) -> None:
-    bpy.ops.import_scene.obj(filepath=in_obj, axis_forward="Y", axis_up="Z")
+    bpy.ops.wm.obj_import(filepath=in_obj, forward_axis="Y", up_axis="Z")
 
 
 def import_stl(in_stl: str) -> None:
