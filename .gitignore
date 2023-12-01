@@ -46,6 +46,7 @@ multiverse_ws2/log
 multiverse/bin
 multiverse/lib
 multiverse/build
+multiverse/modules/multiverse_parser/resources/output
 multiverse/external
 multiverse/tests/**/output
 multiverse/saved

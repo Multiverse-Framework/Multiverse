@@ -72,6 +72,10 @@ class FactoryTestCase(unittest.TestCase):
         self.assertEqual(joint_builder.path, "/body_0/body_1/joint_0")
         self.assertEqual(joint_builder.type, JointType.FIXED)
 
+        mesh_builder = geom_builder_1.add_mesh(mesh_file_path=os.path.join(self.resource_path, "input", "milk_box",
+                                                                           "meshes", "usd", "obj", "milk_box.usda"))
+        # mesh_builder.build()
+
         world_builder.export()
         self.assertTrue(os.path.exists(file_path))
 

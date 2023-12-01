@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.10
+
 import numpy
-# import numpy
 from scipy.spatial.transform import Rotation
 # import bpy
 # import tf
@@ -8,7 +8,7 @@ from scipy.spatial.transform import Rotation
 from pxr import UsdGeom, Gf, UsdShade
 
 xform_cache = UsdGeom.XformCache()
-
+#
 
 # def diagonalize_inertia(inertia_tensor):
 #     eigenvalues, eigenvectors = numpy.linalg.eigh(inertia_tensor)
@@ -74,7 +74,7 @@ def rpy_to_quat(rpy_angles: tuple) -> tuple:
     # Get the quaternion representation from the Rotation object
     quaternion = rotation.as_quat(canonical=False)
 
-    return tuple(quaternion)
+    return quaternion[3], quaternion[0], quaternion[1], quaternion[2]
 
 # def convert_quat(quat) -> tuple:
 #     if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):
