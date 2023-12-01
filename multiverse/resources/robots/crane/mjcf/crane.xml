@@ -1,6 +1,9 @@
 <?xml version="1.0" ?>
 <mujoco model="crane_model">
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<option timestep="0.001" gravity="0 0 -9.81">
+		<flag contact="enable" energy="enable"/>
+	</option>
 	<default>
 		<default class="visual">
 			<geom contype="0" conaffinity="0"/>
@@ -375,11 +378,22 @@
 				</body>
 			</body>
 	</worldbody>
-
+	
+	<!--Choose either 1) or 2)-->
+	<!--1) piston joint controller-->
 	<actuator>
-		<general name="theta1_slewing_actuator" joint="theta1_slewing_joint" gaintype="fixed" biastype="affine" gainprm="200000000" biasprm="0 -200000000 -8000000" forcerange="-1500000 1500000" ctrlrange="-3.7099999134770023 3.7099999134770023"/>
+		<position name="boom_cylinder_piston_in_barrel_linear_actuator" joint="boom_cylinder_piston_in_barrel_linear_joint" kp="1000000000" forcerange="-1500000000 1500000000" ctrlrange="-0.3612070083618164 0.6147930026054382"/>
+		<position name="arm_cylinder_piston_in_barrel_linear_actuator_left" joint="arm_cylinder_piston_in_barrel_linear_joint_left" kp="1000000000" forcerange="-1500000000 1500000000" ctrlrange="-0.37357500195503235 0.5544250011444092"/>
+		<position name="arm_cylinder_piston_in_barrel_linear_actuator_right" joint="arm_cylinder_piston_in_barrel_linear_joint_right" kp="1000000000" forcerange="-1500000000 1500000000" ctrlrange="-0.37357500195503235 0.5544250011444092"/>
+	</actuator>
+
+	<!--2) revolute joint controller-->
+	<!-- <actuator>
 		<general name="theta2_boom_actuator" joint="theta2_boom_joint" gaintype="fixed" biastype="affine" gainprm="20000000" biasprm="0 -20000000 -8000000" forcerange="-150000 150000" ctrlrange="-1.2000000140073657 1.563000055861744"/>
 		<general name="theta3_arm_actuator" joint="theta3_arm_joint" gaintype="fixed" biastype="affine" gainprm="20000000" biasprm="0 -20000000 -8000000" forcerange="-150000 150000" ctrlrange="-0.9100000139512037 4.5999998539578195"/>
+	</actuator> -->
+
+	<actuator>
 		<general name="q4_big_telescope_actuator" joint="q4_big_telescope" gaintype="fixed" biastype="affine" gainprm="2000000" biasprm="0 -2000000 -400000" forcerange="-150000 150000" ctrlrange="0.0 2.2360000610351562"/>
 		<general name="theta8_rotator_actuator" joint="theta8_rotator_joint" gaintype="fixed" biastype="affine" gainprm="200000" biasprm="0 -200000 -40000" forcerange="-150000 150000" ctrlrange="-3.14 3.14"/>
 		<general name="theta10_outer_jaw_actuator" joint="theta10_outer_jaw_joint" gaintype="fixed" biastype="affine" gainprm="200000" biasprm="0 -200000 -40000" forcerange="-150000 150000" ctrlrange="0.0 3.000000101597441"/>
@@ -387,10 +401,25 @@
 
 	<contact>
 		<exclude body1="K10_outer_jaw" body2="K12_inner_jaw"/>
+		<exclude body1="boom_cylinder_linkage_big" body2="boom_cylinder_cover"/>
+		<exclude body1="K1_slewing_column" body2="boom_cylinder_piston" />
+		<exclude body1="K2_boom" body2="arm_cylinder_piston_right" />
+		<exclude body1="K2_boom" body2="arm_cylinder_piston_left" />
+		<exclude body1="boom_cylinder_linkage_small" body2="boom_cylinder_linkage_big" />
+		<exclude body1="boom_cylinder_piston" body2="boom_cylinder_linkage_big" />
 	</contact>
 
 	<equality>
-		<joint joint1="q4_big_telescope" joint2="q5_small_telescope" polycoef="0 1 0 0 0" name="equality1"/>
-		<joint joint1="theta10_outer_jaw_joint" joint2="theta12_inner_jaw_joint" polycoef="0 1 0 0 0" name="equality2"/>
+		<joint name="equality_1" joint1="q4_big_telescope" joint2="q5_small_telescope" polycoef="0 1 0 0 0" />
+		<joint name="equality_2" joint1="theta10_outer_jaw_joint" joint2="theta12_inner_jaw_joint" polycoef="0 1 0 0 0" />
+		<joint name="equality_3" joint1="arm_cylinder_mounting_on_boom_left" joint2="arm_cylinder_mounting_on_boom_right" polycoef="0 1 0 0 0" />
+		<joint name="equality_4" joint1="arm_cylinder_piston_in_barrel_linear_joint_left" joint2="arm_cylinder_piston_in_barrel_linear_joint_right" polycoef="0 1 0 0 0" />
+	</equality>
+
+	<equality>
+		<weld name="weld_1" body1="boom_cylinder_linkage_small" body2="boom_cylinder_piston" anchor="0 1.17448 0" torquescale="1000"/>
+		<weld name="weld_2" body1="boom_cylinder_linkage_small" body2="boom_cylinder_linkage_big" anchor="0.57 0 0" torquescale="1000"/> 
+		<weld name="weld_3" body1="K3_arm" body2="arm_cylinder_piston_right" anchor="0 0 0" torquescale="1000"/> 
+		<weld name="weld_4" body1="K3_arm" body2="arm_cylinder_piston_left" anchor="0 0 0" torquescale="1000"/> 
 	</equality>
 </mujoco>
