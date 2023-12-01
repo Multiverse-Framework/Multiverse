@@ -22,7 +22,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
     def test_urdf_importer(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
         importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
-                                with_collision=True, rgba=(1.0, 0.0, 0.0, 0.1))
+                                with_collision=True, geom_rgba=(1.0, 0.0, 0.0, 0.1))
         self.assertEqual(importer.source_file_path, input_urdf_path)
         self.assertEqual(importer.config.model_name, "tiago_dual")
 

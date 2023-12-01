@@ -49,7 +49,7 @@ class UrdfImporter(Importer):
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
-            rgba: Optional[tuple] = None,
+            geom_rgba: Optional[tuple] = None,
     ) -> None:
         # self.material_dict = {}
         # self.mesh_dict = {}
@@ -69,7 +69,7 @@ class UrdfImporter(Importer):
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            rgba=rgba
+            default_rgba=geom_rgba
         ))
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
@@ -161,41 +161,41 @@ class UrdfImporter(Importer):
             geom_rot = (0.0, 0.0, 0.0)
         geom_quat = rpy_to_quat(geom_rot)
 
-        is_visible = isinstance(geom, urdf.Visual)
-        is_collidable = isinstance(geom, urdf.Collision)
-        rgba = self.config.rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
-            else geom.material.color.rgba
+        geom_is_visible = isinstance(geom, urdf.Visual)
+        geom_is_collidable = isinstance(geom, urdf.Collision)
+        geom_rgba = self.config.default_rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
+            else geom.material.color.default_rgba
         if type(geom.geometry) is urdf.Box:
             geom_builder = body_builder.add_geom(geom_name=geom_name,
                                                  geom_type=GeomType.CUBE,
-                                                 geom_property=GeomProperty(is_visible=is_visible,
-                                                                            is_collidable=is_collidable,
-                                                                            rgba=rgba))
+                                                 geom_property=GeomProperty(is_visible=geom_is_visible,
+                                                                            is_collidable=geom_is_collidable,
+                                                                            rgba=geom_rgba))
             geom_builder.build()
             geom_scale = tuple(geom.geometry.size[i] / 2.0 for i in range(3))
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
         elif type(geom.geometry) is urdf.Sphere:
             geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE,
-                                                 geom_property=GeomProperty(is_visible=is_visible,
-                                                                            is_collidable=is_collidable,
-                                                                            rgba=rgba))
+                                                 geom_property=GeomProperty(is_visible=geom_is_visible,
+                                                                            is_collidable=geom_is_collidable,
+                                                                            rgba=geom_rgba))
             geom_builder.build()
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             geom_builder.set_attribute(radius=geom.geometry.radius)
         elif type(geom.geometry) is urdf.Cylinder:
             geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CYLINDER,
-                                                 geom_property=GeomProperty(is_visible=is_visible,
-                                                                            is_collidable=is_collidable,
-                                                                            rgba=rgba))
+                                                 geom_property=GeomProperty(is_visible=geom_is_visible,
+                                                                            is_collidable=geom_is_collidable,
+                                                                            rgba=geom_rgba))
             geom_builder.build()
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             geom_builder.set_attribute(radius=geom.geometry.radius, height=geom.geometry.length)
         elif type(geom.geometry) is urdf.Mesh:
             geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.MESH,
-                                                 geom_property=GeomProperty(is_visible=is_visible,
-                                                                            is_collidable=is_collidable,
-                                                                            rgba=rgba))
-            source_mesh_file_path = self.get_mesh_file_path(urdf_file_path=geom.geometry.filename)
+                                                 geom_property=GeomProperty(is_visible=geom_is_visible,
+                                                                            is_collidable=geom_is_collidable,
+                                                                            rgba=geom_rgba))
+            source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)
             if source_mesh_file_path is not None:
                 tmp_mesh_file_path = self.import_mesh(mesh_file_path=source_mesh_file_path)
                 mesh_builder = geom_builder.add_mesh(mesh_file_path=tmp_mesh_file_path)
@@ -208,35 +208,35 @@ class UrdfImporter(Importer):
 
         return geom_builder
 
-    def get_mesh_file_path(self, urdf_file_path: str) -> Optional[str]:
+    def get_mesh_file_path(self, urdf_mesh_file_path: str) -> Optional[str]:
         mesh_file_path = None
-        if urdf_file_path.find("package://") != -1:
-            urdf_file_path = urdf_file_path.replace("package://", "")
-            package_name = urdf_file_path.split("/", 2)[0]
+        if urdf_mesh_file_path.find("package://") != -1:
+            urdf_mesh_file_path = urdf_mesh_file_path.replace("package://", "")
+            package_name = urdf_mesh_file_path.split("/", 2)[0]
             try:
                 import rospkg
                 package_path = os.path.dirname(rospkg.RosPack().get_path(package_name))
-                mesh_file_path = os.path.join(package_path, urdf_file_path)
+                mesh_file_path = os.path.join(package_path, urdf_mesh_file_path)
             except (ImportError, rospkg.common.ResourceNotFound):
                 print(f"Package {package_name} not found or rospkg not installed, "
-                      f"searching for {urdf_file_path} in {os.getcwd()}...")
+                      f"searching for {urdf_mesh_file_path} in {os.getcwd()}...")
                 file_paths = []
                 for root, _, files in os.walk(os.getcwd()):
-                    if urdf_file_path in files:
-                        file_paths.append(os.path.join(root, urdf_file_path))
+                    if urdf_mesh_file_path in files:
+                        file_paths.append(os.path.join(root, urdf_mesh_file_path))
 
                 if len(file_paths) == 0:
-                    print(f"Mesh file {urdf_file_path} not found in {os.getcwd()}.")
+                    print(f"Mesh file {urdf_mesh_file_path} not found in {os.getcwd()}.")
                     return
                 elif len(file_paths) == 1:
                     print(f"Found {file_paths[0]}")
                 elif len(file_paths) > 1:
-                    print(f"Found {len(file_paths)} meshes {urdf_file_path} in {os.getcwd()}, "
+                    print(f"Found {len(file_paths)} meshes {urdf_mesh_file_path} in {os.getcwd()}, "
                           f"take the first one {file_paths[0]}.")
                     mesh_file_path = file_paths[0]
 
-        elif urdf_file_path.find("file://") != -1:
-            mesh_file_path = urdf_file_path.replace("file://", "")
+        elif urdf_mesh_file_path.find("file://") != -1:
+            mesh_file_path = urdf_mesh_file_path.replace("file://", "")
             if not os.path.isabs(mesh_file_path):
                 mesh_file_path = os.path.join(os.path.dirname(self.source_file_path), mesh_file_path)
                 if not os.path.exists(mesh_file_path):

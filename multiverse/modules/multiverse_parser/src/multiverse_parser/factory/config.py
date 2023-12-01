@@ -8,4 +8,4 @@ class Configuration:
     with_physics: bool = True
     with_visual: bool = True
     with_collision: bool = True
-    rgba: Optional[tuple] = None
+    default_rgba: Optional[tuple] = None

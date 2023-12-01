@@ -100,17 +100,17 @@ class UrdfExporter:
             elif joint_builder.type == JointType.CONTINUOUS:
                 joint.type = "continuous"
 
-            if joint_builder.axis == "X":
+            if joint_builder._axis == "X":
                 joint.axis = (1, 0, 0)
-            elif joint_builder.axis == "Y":
+            elif joint_builder._axis == "Y":
                 joint.axis = (0, 1, 0)
-            elif joint_builder.axis == "Z":
+            elif joint_builder._axis == "Z":
                 joint.axis = (0, 0, 1)
-            elif joint_builder.axis == "-X":
+            elif joint_builder._axis == "-X":
                 joint.axis = (-1, 0, 0)
-            elif joint_builder.axis == "-Y":
+            elif joint_builder._axis == "-Y":
                 joint.axis = (0, -1, 0)
-            elif joint_builder.axis == "-Z":
+            elif joint_builder._axis == "-Z":
                 joint.axis = (0, 0, -1)
 
             joint.parent = joint_builder.parent_prim.GetPrim().GetName()

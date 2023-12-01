@@ -317,7 +317,7 @@ class MjcfExporter:
         if joint_builder.type == JointType.NONE or joint_builder.type == JointType.FIXED:
             return
 
-        joint.set("pos", " ".join(map(str, joint_builder.pos)))
+        joint.set("pos", " ".join(map(str, joint_builder._pos)))
 
         if joint_builder.type == JointType.PRISMATIC or joint_builder.type == JointType.REVOLUTE:
             if joint_builder.type == JointType.PRISMATIC:
@@ -333,7 +333,7 @@ class MjcfExporter:
             joint.set("type", "ball")
 
         if joint_builder.type != JointType.SPHERICAL:
-            axis = rotate_vector_by_quat((0, 0, 1), joint_builder.quat)
+            axis = rotate_vector_by_quat((0, 0, 1), joint_builder._quat)
             joint.set("axis", " ".join(map(str, axis)))
 
     def export(self):

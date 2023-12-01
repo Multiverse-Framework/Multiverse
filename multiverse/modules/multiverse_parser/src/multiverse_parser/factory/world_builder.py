@@ -8,10 +8,6 @@ from .body_builder import BodyBuilder
 from ..utils import modify_name
 
 
-# from .body_builder import BodyBuilder, body_dict
-#
-#
-
 def setup_stage(file_path: str) -> Usd.Stage:
     stage = Usd.Stage.CreateNew(file_path)
     UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)

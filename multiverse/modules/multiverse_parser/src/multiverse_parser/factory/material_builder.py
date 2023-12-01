@@ -4,6 +4,7 @@ import os
 
 from pxr import Usd, Sdf
 
+
 class MaterialBuilder:
     _stage: Usd.Stage
 

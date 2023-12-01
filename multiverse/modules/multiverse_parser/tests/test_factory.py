@@ -21,16 +21,16 @@ class FactoryTestCase(unittest.TestCase):
         self.assertIsInstance(world_builder._stage, Usd.Stage)
 
         body_builder_0 = world_builder.add_body(body_name="body_0")
-        self.assertEqual(body_builder_0.path, "/body_0")
+        self.assertEqual(body_builder_0.xform.GetPath(), "/body_0")
 
         body_builder_1 = world_builder.add_body(body_name="body_1", parent_body_name="body_0")
-        self.assertEqual(body_builder_1.path, "/body_0/body_1")
+        self.assertEqual(body_builder_1.xform.GetPath(), "/body_0/body_1")
 
         body_builder_2 = world_builder.add_body(body_name="body_2", parent_body_name="body_0")
-        self.assertEqual(body_builder_2.path, "/body_0/body_2")
+        self.assertEqual(body_builder_2.xform.GetPath(), "/body_0/body_2")
 
         body_builder_3 = world_builder.add_body(body_name="body_3", parent_body_name="body_2")
-        self.assertEqual(body_builder_3.path, "/body_0/body_2/body_3")
+        self.assertEqual(body_builder_3.xform.GetPath(), "/body_0/body_2/body_3")
 
         body_builder_4 = world_builder.add_body(body_name="body_1", parent_body_name="body_2")
         self.assertEqual(body_builder_4, body_builder_1)
@@ -69,12 +69,12 @@ class FactoryTestCase(unittest.TestCase):
                                      parent_prim=body_builder_1.xform.GetPrim(),
                                      child_prim=body_builder_3.xform.GetPrim(),
                                      joint_type=JointType.FIXED)
-        self.assertEqual(joint_builder.path, "/body_0/body_1/joint_0")
+        self.assertEqual(joint_builder._path, "/body_0/body_1/joint_0")
         self.assertEqual(joint_builder.type, JointType.FIXED)
 
         mesh_builder = geom_builder_1.add_mesh(mesh_file_path=os.path.join(self.resource_path, "input", "milk_box",
                                                                            "meshes", "usd", "obj", "milk_box.usda"))
-        # mesh_builder.build()
+        mesh_builder.build()
 
         world_builder.export()
         self.assertTrue(os.path.exists(file_path))

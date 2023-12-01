@@ -11,23 +11,17 @@ from .joint_builder import JointBuilder, JointType
 
 
 class BodyBuilder:
-    stage: Usd.Stage
-    path: Sdf.Path
-    xform: UsdGeom.Xform
+    _stage: Usd.Stage
+    _xform: UsdGeom.Xform
     _joint_builders: Dict[str, JointBuilder]
     _geom_builders: Dict[str, GeomBuilder]
 
     def __init__(self, stage: Usd.Stage, name: str, parent_xform: Optional[UsdGeom.Xform] = None) -> None:
-        if parent_xform is not None:
-            self.path = parent_xform.GetPath().AppendPath(name)
-        else:
-            self.path = Sdf.Path("/").AppendPath(name)
-        self.stage = stage
-        self.xform = UsdGeom.Xform.Define(self.stage, self.path)
+        path = parent_xform.GetPath().AppendPath(name) if parent_xform is not None else Sdf.Path("/").AppendPath(name)
+        self._stage = stage
+        self._xform = UsdGeom.Xform.Define(self._stage, path)
         self._joint_builders = {}
         self._geom_builders = {}
-        # self.geom_names = set()
-        # self.joint_names = set()
 
     def set_transform(
             self,
@@ -54,35 +48,23 @@ class BodyBuilder:
         if relative_to_xform is not None:
             relative_to_prim = relative_to_xform.GetPrim()
             if relative_to_prim:
-                parent_prim = self.xform.GetPrim().GetParent()
+                parent_prim = self._xform.GetPrim().GetParent()
                 if parent_prim.IsValid() and parent_prim != relative_to_prim:
                     parent_to_relative_mat, _ = xform_cache.ComputeRelativeTransform(relative_to_prim, parent_prim)
                     mat = mat * parent_to_relative_mat
             else:
                 raise ValueError(f"Prim at path {relative_to_xform.GetPath()} not found.")
 
-        self.xform.AddTransformOp().Set(mat)
-
-    #
-    # def add_geom(self, geom_name: str, geom_type: GeomType, is_visual: bool) -> GeomBuilder:
-    #     goem_name = modify_name(in_name=geom_name)
-    #
-    #     if goem_name in geom_dict:
-    #         print(f"Geom {goem_name} already exists.")
-    #         geom_builder = geom_dict[goem_name]
-    #     else:
-    #         self.geom_names.add(geom_name)
-    #         geom_builder = GeomBuilder(stage=self.stage, geom_name=geom_name, body_path=self.path, geom_type=geom_type, is_visual=is_visual)
-    #     return geom_builder
+        self._xform.AddTransformOp().Set(mat)
 
     def add_joint(
-        self,
-        joint_name: str,
-        parent_prim: Usd.Prim,
-        joint_type: JointType,
-        joint_pos: tuple = (0.0, 0.0, 0.0),
-        joint_quat: tuple = None,
-        joint_axis: str = "Z",
+            self,
+            joint_name: str,
+            parent_prim: Usd.Prim,
+            joint_type: JointType,
+            joint_pos: tuple = (0.0, 0.0, 0.0),
+            joint_quat: tuple = None,
+            joint_axis: str = "Z",
     ) -> JointBuilder:
         joint_name = modify_name(in_name=joint_name)
 
@@ -91,10 +73,10 @@ class BodyBuilder:
             joint_builder = self._joint_builders[joint_name]
         else:
             joint_builder = JointBuilder(
-                stage=self.stage,
+                stage=self._stage,
                 name=joint_name,
                 parent_prim=parent_prim,
-                child_prim=self.xform.GetPrim(),
+                child_prim=self._xform.GetPrim(),
                 joint_type=joint_type,
                 joint_pos=joint_pos,
                 joint_quat=joint_quat,
@@ -106,9 +88,9 @@ class BodyBuilder:
         return joint_builder
 
     def enable_rigid_body(self) -> None:
-        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self.xform)
+        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self._xform)
         physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
-        physics_rigid_body_api.Apply(self.xform.GetPrim())
+        physics_rigid_body_api.Apply(self._xform.GetPrim())
 
     def add_geom(self, geom_name: str, geom_type: GeomType, geom_property: GeomProperty) -> GeomBuilder:
         geom_name = modify_name(in_name=geom_name)
@@ -117,9 +99,9 @@ class BodyBuilder:
             geom_builder = self._geom_builders[geom_name]
         else:
             geom_builder = GeomBuilder(
-                stage=self.stage,
+                stage=self._stage,
                 geom_name=geom_name,
-                body_path=self.path,
+                body_path=self._xform.GetPath(),
                 geom_type=geom_type,
                 geom_property=geom_property
             )
@@ -154,3 +136,7 @@ class BodyBuilder:
     #     physics_mass_api.CreateDensityAttr(density)
     #     physics_mass_api.CreatePrincipalAxesAttr(Gf.Quatf(principal_axes[0], Gf.Vec3f(principal_axes[1], principal_axes[2], principal_axes[3])))
     #     physics_mass_api.Apply(self.xform.GetPrim())
+
+    @property
+    def xform(self) -> Usd.Stage:
+        return self._xform

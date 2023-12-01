@@ -2,8 +2,9 @@
 
 import os
 from dataclasses import dataclass
-from typing import Optional, List
+from typing import Optional, List, Union, Any
 
+import numpy
 from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf, UsdShade
 # import bpy, bmesh
 from enum import Enum
@@ -22,11 +23,30 @@ class GeomType(Enum):
     MESH = 5
 
 
-@dataclass
 class GeomProperty:
-    is_visible: bool = True
-    is_collidable: bool = True
-    rgba: Optional[tuple] = None
+    is_visible: bool
+    is_collidable: bool
+    _rgba: Optional[tuple]
+
+    def __init__(self, is_visible: bool = True, is_collidable: bool = True, rgba: Optional[tuple] = None) -> None:
+        self.is_visible = is_visible
+        self.is_collidable = is_collidable
+        self.rgba = rgba
+
+    @property
+    def rgba(self) -> Optional[tuple]:
+        return self._rgba
+
+    @rgba.setter
+    def rgba(self, rgba: Any) -> None:
+        if rgba is not None:
+            rgba = (float(rgba[0]), float(rgba[1]), float(rgba[2]), float(rgba[3]))
+            if len(rgba) != 4:
+                raise ValueError(f"RGBA must be a tuple of length 4.")
+            for value in rgba:
+                if not (0.0 <= value <= 1.0):
+                    raise ValueError(f"RGBA values must be between 0.0 and 1.0.")
+        self._rgba = rgba
 
 
 def inertia_of_triangle(v1, v2, v3, density) -> Gf.Matrix3d:
@@ -83,83 +103,54 @@ def reference_materials(material_builder: MaterialBuilder, stage: Usd.Stage, mes
     material_root_prim.GetReferences().AddReference(mesh_file_path, material_root_path)
 
 
-def overwrite_local_prim_with_reference_prim(stage: Usd.Stage, reference_prim: Usd.Prim,
-                                             xform: UsdGeom.Xform) -> Usd.Prim:
-    parent_prim = reference_prim
-    prim_path_tail = reference_prim.GetName()
-    while (not stage.GetPrimAtPath(xform.GetPath().AppendPath(prim_path_tail)).IsValid()
-           and not parent_prim.GetParent().GetPath().IsRootPrimPath()):
-        parent_prim = parent_prim.GetParent()
-        prim_path_tail = os.path.join(parent_prim.GetName(), prim_path_tail)
-    return stage.OverridePrim(xform.GetPath().AppendPath(prim_path_tail))
-
-
 class GeomBuilder:
-    stage: Usd.Stage
-    name: str
-    type: GeomType
-    scale: tuple
-    xform: UsdGeom.Xform
-    geom_properties: GeomProperty
+    _stage: Usd.Stage
+    _type: GeomType
+    _xform: UsdGeom.Xform
+    _property: GeomProperty
 
     def __init__(self, stage: Usd.Stage, geom_name: str, body_path: Sdf.Path, geom_type: GeomType,
                  geom_property: GeomProperty) -> None:
-        self.stage = stage
-        self.name = geom_name
-        self.type = geom_type
-        self.scale = (1.0, 1.0, 1.0)
-        self.xform = UsdGeom.Xform.Define(self.stage, body_path.AppendPath(geom_name))
-        self.geom_properties = geom_property
+        self._stage = stage
+        self._type = geom_type
+        self._xform = UsdGeom.Xform.Define(self._stage, body_path.AppendPath(geom_name))
+        self._property = geom_property
 
     def add_mesh(self, mesh_file_path: str) -> MeshBuilder:
         mesh_builder = MeshBuilder(mesh_file_path)
         reference_meshes = mesh_builder.build()
         local_meshes = []
         for mesh in reference_meshes:
-            local_meshes.append(self.stage.OverridePrim(self.xform.GetPath().AppendPath(mesh.GetPrim().GetName())))
+            local_meshes.append(self._stage.OverridePrim(self.xform.GetPath().AppendPath(mesh.GetPrim().GetName())))
             self.xform.GetPrim().GetReferences().AddReference(mesh_file_path, mesh_builder.xform.GetPath())
 
         material_builder = MaterialBuilder(file_path=mesh_file_path)
 
         bind_materials(mesh_builder, local_meshes, reference_meshes)
 
-        # prims_with_material = [
-        #     prim
-        #     for prim in mesh_builder.stage.TraverseAll()
-        #     if (not any([prim == local_mesh.GetPrim() for local_mesh in local_meshes])
-        #         and len(prim.FindAllRelationshipTargetPaths()) > 0
-        #         and prim.HasAPI(UsdShade.MaterialBindingAPI))
-        # ]
-        # for prim_with_material in prims_with_material:
-        #     prim = overwrite_local_prim_with_reference_prim(self.stage, prim_with_material, self.xform)
-        #     material_binding_api = UsdShade.MaterialBindingAPI.Apply(prim)
-        #     for path in prim_with_material.FindAllRelationshipTargetPaths():
-        #         if UsdShade.Material(mesh_builder.stage.GetPrimAtPath(path)):
-        #             material_binding_api.Bind(UsdShade.Material(mesh_builder.stage.GetPrimAtPath(path)))
-
-        reference_materials(material_builder, self.stage, mesh_file_path)
+        reference_materials(material_builder, self._stage, mesh_file_path)
 
         return mesh_builder
 
     def _create_geoms(self) -> List[UsdGeom.Gprim]:
         if self.type == GeomType.PLANE:
-            geom = UsdGeom.Mesh.Define(self.stage, self.xform.GetPath().AppendPath("Plane"))
+            geom = UsdGeom.Mesh.Define(self._stage, self.xform.GetPath().AppendPath("Plane"))
             geom.CreatePointsAttr([(-0.5, -0.5, 0), (0.5, -0.5, 0), (-0.5, 0.5, 0), (0.5, 0.5, 0)])
             geom.CreateNormalsAttr([(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)])
             geom.CreateFaceVertexCountsAttr([4])
             geom.CreateFaceVertexIndicesAttr([0, 1, 3, 2])
             return [UsdGeom.Mesh(geom)]
         if self.type == GeomType.CUBE:
-            geom = UsdGeom.Cube.Define(self.stage, self.xform.GetPath().AppendPath("Cube"))
+            geom = UsdGeom.Cube.Define(self._stage, self.xform.GetPath().AppendPath("Cube"))
             return [UsdGeom.Cube(geom)]
         if self.type == GeomType.SPHERE:
-            geom = UsdGeom.Sphere.Define(self.stage, self.xform.GetPath().AppendPath("Sphere"))
+            geom = UsdGeom.Sphere.Define(self._stage, self.xform.GetPath().AppendPath("Sphere"))
             return [UsdGeom.Sphere(geom)]
         if self.type == GeomType.CYLINDER:
-            geom = UsdGeom.Cylinder.Define(self.stage, self.xform.GetPath().AppendPath("Cylinder"))
+            geom = UsdGeom.Cylinder.Define(self._stage, self.xform.GetPath().AppendPath("Cylinder"))
             return [UsdGeom.Cylinder(geom)]
         if self.type == GeomType.CAPSULE:
-            geom = UsdGeom.Cylinder.Define(self.stage, self.xform.GetPath().AppendPath("Capsule"))
+            geom = UsdGeom.Cylinder.Define(self._stage, self.xform.GetPath().AppendPath("Capsule"))
             return [UsdGeom.Cylinder(geom)]
         if self.type == GeomType.MESH:
             return self.geom_prims
@@ -168,9 +159,9 @@ class GeomBuilder:
     def build(self) -> List[UsdGeom.Gprim]:
         geoms = self._create_geoms()
         for geom in geoms:
-            if self.geom_properties.rgba is not None:
-                geom.CreateDisplayColorAttr([self.geom_properties.rgba[:3]])
-                geom.CreateDisplayOpacityAttr([self.geom_properties.rgba[3]])
+            if self.property.rgba is not None:
+                geom.CreateDisplayColorAttr([self.property.rgba[:3]])
+                geom.CreateDisplayOpacityAttr([self.property.rgba[3]])
         return geoms
 
     def set_transform(
@@ -179,15 +170,14 @@ class GeomBuilder:
             quat: tuple = (1.0, 0.0, 0.0, 0.0),
             scale: tuple = (1.0, 1.0, 1.0),
     ) -> None:
-        self.scale = scale
         mat = Gf.Matrix4d()
         mat.SetTranslateOnly(pos)
         mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
         mat_scale = Gf.Matrix4d()
         mat_scale.SetScale(scale)
         mat = mat_scale * mat
-        self.xform.ClearXformOpOrder()
-        self.xform.AddTransformOp().Set(mat)
+        self._xform.ClearXformOpOrder()
+        self._xform.AddTransformOp().Set(mat)
         self._update_extent()
 
     def set_attribute(self, prefix: str = None, **kwargs) -> None:
@@ -195,7 +185,7 @@ class GeomBuilder:
             for key, value in kwargs.items():
                 attr = prefix + ":" + key if prefix is not None else key
                 if not geom_prim.GetPrim().HasAttribute(attr):
-                    raise ValueError(f"Geom {self.name} does not have attribute {attr}.")
+                    raise ValueError(f"Geom {geom_prim.GetPrim().GetName()} does not have attribute {attr}.")
                 geom_prim.GetPrim().GetAttribute(attr).Set(value)
         self._update_extent()
 
@@ -225,3 +215,15 @@ class GeomBuilder:
     @property
     def geom_prims(self) -> List[UsdGeom.Gprim]:
         return [UsdGeom.Gprim(prim) for prim in self.xform.GetPrim().GetChildren()]
+
+    @property
+    def xform(self) -> UsdGeom.Xform:
+        return self._xform
+
+    @property
+    def type(self) -> GeomType:
+        return self._type
+
+    @property
+    def property(self) -> GeomProperty:
+        return self._property

@@ -5,16 +5,10 @@ from typing import List
 
 from pxr import Usd, UsdGeom, Sdf, UsdShade
 
-from .material_builder import MaterialBuilder
-#
-# mesh_dict = {}
-#
-#
-
 
 class MeshBuilder:
-    _xform: UsdGeom.Xform
     _stage: Usd.Stage
+    _xform: UsdGeom.Xform
 
     def __init__(self, mesh_file_path: str) -> None:
         self._stage = Usd.Stage.Open(mesh_file_path) if os.path.exists(mesh_file_path) \
