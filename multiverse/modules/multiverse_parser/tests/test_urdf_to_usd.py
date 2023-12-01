@@ -5,7 +5,6 @@ import unittest
 
 import os
 import tracemalloc
-from time import sleep
 
 from multiverse_parser import UrdfImporter
 from pxr import Usd

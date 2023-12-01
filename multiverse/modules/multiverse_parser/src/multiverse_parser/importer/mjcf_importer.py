@@ -170,6 +170,7 @@ class MjcfImporter(Importer):
                 geom_builder.build()
                 geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat, scale=mj_geom.size)
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_SPHERE, mujoco.mjtGeom.mjGEOM_ELLIPSOID]:
+                # TODO: Fix ellipsoid
                 geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE,
                                                      geom_property=GeomProperty(is_visible=geom_is_visible,
                                                                                 is_collidable=geom_is_collidable,
@@ -178,6 +179,7 @@ class MjcfImporter(Importer):
                 geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat)
                 geom_builder.set_attribute(radius=mj_geom.size[0])
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_CYLINDER, mujoco.mjtGeom.mjGEOM_CAPSULE]:
+                # TODO: Fix capsule
                 geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CYLINDER,
                                                      geom_property=GeomProperty(is_visible=geom_is_visible,
                                                                                 is_collidable=geom_is_collidable,
