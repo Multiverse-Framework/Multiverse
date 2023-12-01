@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.10
 
-from typing import Dict
+from typing import Dict, Optional
 
 from pxr import Usd, UsdGeom
 
@@ -23,8 +23,8 @@ class WorldBuilder:
         self._stage = setup_stage(file_path)
         self._body_builders = {}
 
-    def add_body(self, body_name: str, parent_body_name: str = None) -> BodyBuilder:
-        body_name = modify_name(in_name=body_name)
+    def add_body(self, body_name: str, parent_body_name: str = None, body_id: Optional[int] = None) -> BodyBuilder:
+        body_name = modify_name(in_name=body_name, replacement=f"Body_{body_id}" if body_id is not None else None)
 
         if body_name in self._body_builders:
             print(f"Body {body_name} already exists.")

@@ -2,6 +2,7 @@
 
 from typing import Dict, Optional
 
+import numpy
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
 from ..utils import xform_cache, modify_name
@@ -25,24 +26,24 @@ class BodyBuilder:
 
     def set_transform(
             self,
-            pos: tuple = (0.0, 0.0, 0.0),
-            quat: tuple = (1.0, 0.0, 0.0, 0.0),
-            scale: tuple = (1.0, 1.0, 1.0),
+            pos: numpy.ndarray = numpy.array([0.0, 0.0, 0.0]),
+            quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0]),
+            scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
             relative_to_xform: Optional[UsdGeom.Xform] = None,
     ) -> None:
         """
-        Set transform of the body.
-        :param pos: Tuple of (x, y, z) position.
-        :param quat: Tuple of (w, x, y, z) quaternion.
-        :param scale: Tuple of (x, y, z) scale.
-        :param relative_to_xform: Xform to set the transform relative to.
+        Set the transform of the body.
+        :param pos: Array of x, y, z position.
+        :param quat: Array of w, x, y, z quaternion.
+        :param scale: Array of x, y, z scale.
+        :param relative_to_xform: Relative transform prim to apply the transform to.
         :return: None
         """
         mat = Gf.Matrix4d()
-        mat.SetTranslateOnly(pos)
+        mat.SetTranslateOnly(Gf.Vec3d(*pos))
         mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
         mat_scale = Gf.Matrix4d()
-        mat_scale.SetScale(Gf.Vec3d(scale))
+        mat_scale.SetScale(Gf.Vec3d(*scale))
         mat = mat_scale * mat
 
         if relative_to_xform is not None:
@@ -62,8 +63,8 @@ class BodyBuilder:
             joint_name: str,
             parent_prim: Usd.Prim,
             joint_type: JointType,
-            joint_pos: tuple = (0.0, 0.0, 0.0),
-            joint_quat: tuple = None,
+            joint_pos: numpy.ndarray = numpy.array([0.0, 0.0, 0.0]),
+            joint_quat: Optional[numpy.ndarray] = None,
             joint_axis: str = "Z",
     ) -> JointBuilder:
         joint_name = modify_name(in_name=joint_name)
@@ -120,22 +121,6 @@ class BodyBuilder:
         if geom_name not in self._joint_builders:
             raise ValueError(f"Geom {geom_name} not found in {self.__class__.__name__}.")
         return self._geom_builders[geom_name]
-
-    # def set_inertial(
-    #     self,
-    #     mass: float = 1e-1,
-    #     com: tuple = (0.0, 0.0, 0.0),
-    #     diagonal_inertia: tuple = (1e-3, 1e-3, 1e-3),
-    #     density: float = 100,
-    #     principal_axes: tuple = (1, 0, 0, 0),
-    # ) -> None:
-    #     physics_mass_api = UsdPhysics.MassAPI(self.xform)
-    #     physics_mass_api.CreateMassAttr(mass)
-    #     physics_mass_api.CreateCenterOfMassAttr(Gf.Vec3f(com))
-    #     physics_mass_api.CreateDiagonalInertiaAttr(Gf.Vec3f(diagonal_inertia))
-    #     physics_mass_api.CreateDensityAttr(density)
-    #     physics_mass_api.CreatePrincipalAxesAttr(Gf.Quatf(principal_axes[0], Gf.Vec3f(principal_axes[1], principal_axes[2], principal_axes[3])))
-    #     physics_mass_api.Apply(self.xform.GetPrim())
 
     @property
     def xform(self) -> Usd.Stage:

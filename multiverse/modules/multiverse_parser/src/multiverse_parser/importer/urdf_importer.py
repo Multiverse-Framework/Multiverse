@@ -4,6 +4,7 @@ import os
 from math import degrees
 from typing import Optional, List, Union, Dict
 
+import numpy
 from pxr import Gf, Usd
 from urdf_parser_py import urdf
 
@@ -29,13 +30,13 @@ from ..utils import rpy_to_quat, xform_cache
 # from pxr import Gf
 
 
-def get_joint_pos_and_quat(urdf_joint) -> (tuple, tuple):
+def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
     if hasattr(urdf_joint, "origin") and urdf_joint.origin is not None:
-        joint_pos = tuple(urdf_joint.origin.xyz)
-        joint_rpy = tuple(urdf_joint.origin.rpy)
+        joint_pos = urdf_joint.origin.xyz
+        joint_rpy = urdf_joint.origin.rpy
     else:
-        joint_pos = (0.0, 0.0, 0.0)
-        joint_rpy = (0.0, 0.0, 0.0)
+        joint_pos = numpy.array([0.0, 0.0, 0.0])
+        joint_rpy = numpy.array([0.0, 0.0, 0.0])
     return joint_pos, rpy_to_quat(joint_rpy)
 
 
@@ -49,22 +50,14 @@ class UrdfImporter(Importer):
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
-            geom_rgba: Optional[tuple] = None,
+            geom_rgba: Optional[numpy.ndarray] = None,
     ) -> None:
-        # self.material_dict = {}
-        # self.mesh_dict = {}
-        # self.geom_dict = {}
-        #     self.rospack = rospkg.RosPack()
-        #
-        #     # for urdf_material in ET.parse(urdf_file_path).getroot().findall("material"):
-        #     #     self.material_dict[urdf_material.get("name")] = tuple(map(float, urdf_material.find("color").get("rgba").split()))
-
         with open(file_path, "r") as file:
             urdf_string = file.read()
         self._urdf_model = urdf.URDF.from_xml_string(urdf_string)
 
         model_name = self._urdf_model.name
-        super().__init__(file_path=file_path, configuration=Configuration(
+        super().__init__(file_path=file_path, config=Configuration(
             model_name=model_name,
             with_physics=with_physics,
             with_visual=with_visual,
@@ -75,12 +68,12 @@ class UrdfImporter(Importer):
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         self._world_builder = WorldBuilder(self.tmp_file_path)
 
-        body_builder = self._world_builder.add_body(body_name=self.config.model_name)
-        if self.config.model_name != self._urdf_model.get_root():
-            print(f"Root link {self._urdf_model.get_root()} is not the model name {self.config.model_name}, "
+        body_builder = self._world_builder.add_body(body_name=self._config.model_name)
+        if self._config.model_name != self._urdf_model.get_root():
+            print(f"Root link {self._urdf_model.get_root()} is not the model name {self._config.model_name}, "
                   f"add it as a root body.")
             body_builder = self._world_builder.add_body(body_name=self._urdf_model.get_root(),
-                                                        parent_body_name=self.config.model_name)
+                                                        parent_body_name=self._config.model_name)
 
         self._import_geoms(link=self._urdf_model.link_map[self._urdf_model.get_root()],
                            body_builder=body_builder)
@@ -102,7 +95,7 @@ class UrdfImporter(Importer):
                               child_body_name=child_urdf_link_name,
                               joint=child_urdf_joint)
 
-            if self.config.with_physics:
+            if self._config.with_physics:
                 self._import_joint(joint=child_urdf_joint,
                                    parent_body_name=urdf_link_name,
                                    child_body_name=child_urdf_link_name)
@@ -112,7 +105,7 @@ class UrdfImporter(Importer):
     def _import_body(self, body_name: str, child_body_name: str, joint: urdf.Joint) -> BodyBuilder:
         joint_pos, joint_quat = get_joint_pos_and_quat(joint)
 
-        if joint.type != "fixed" and self.config.with_physics:
+        if joint.type != "fixed" and self._config.with_physics:
             body_builder = self._world_builder.add_body(body_name=child_body_name,
                                                         parent_body_name=self._urdf_model.get_root())
             body_builder.enable_rigid_body()
@@ -131,7 +124,7 @@ class UrdfImporter(Importer):
     def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> Dict[str, GeomBuilder]:
         geom_builders = {}
         geom_name = f"{link.name}_geom"
-        if self.config.with_visual:
+        if self._config.with_visual:
             for i, visual in enumerate(link.visuals):
                 visual_geom_name = f"{geom_name}_visual_{i}"
                 if visual_geom_name not in geom_builders:
@@ -140,7 +133,7 @@ class UrdfImporter(Importer):
                                                                         body_builder=body_builder)
                 else:
                     raise ValueError(f"Geom {visual_geom_name} already exists.")
-        if self.config.with_collision:
+        if self._config.with_collision:
             for i, collision in enumerate(link.collisions):
                 collision_geom_name = f"{geom_name}_collision_{i}"
                 if collision_geom_name not in geom_builders:
@@ -154,16 +147,16 @@ class UrdfImporter(Importer):
     def _import_geom(self, geom_name: str, geom: Union[urdf.Visual, urdf.Collision],
                      body_builder: BodyBuilder) -> GeomBuilder:
         if geom.origin is not None:
-            geom_pos = tuple(geom.origin.xyz)
-            geom_rot = tuple(geom.origin.rpy)
+            geom_pos = geom.origin.xyz
+            geom_rot = geom.origin.rpy
         else:
-            geom_pos = (0.0, 0.0, 0.0)
-            geom_rot = (0.0, 0.0, 0.0)
+            geom_pos = numpy.array([0.0, 0.0, 0.0])
+            geom_rot = numpy.array([0.0, 0.0, 0.0])
         geom_quat = rpy_to_quat(geom_rot)
 
         geom_is_visible = isinstance(geom, urdf.Visual)
         geom_is_collidable = isinstance(geom, urdf.Collision)
-        geom_rgba = self.config.default_rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
+        geom_rgba = self._config.default_rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
             else geom.material.color.default_rgba
         if type(geom.geometry) is urdf.Box:
             geom_builder = body_builder.add_geom(geom_name=geom_name,
@@ -172,7 +165,7 @@ class UrdfImporter(Importer):
                                                                             is_collidable=geom_is_collidable,
                                                                             rgba=geom_rgba))
             geom_builder.build()
-            geom_scale = tuple(geom.geometry.size[i] / 2.0 for i in range(3))
+            geom_scale = numpy.array([geom.geometry.size[i] / 2.0 for i in range(3)])
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
         elif type(geom.geometry) is urdf.Sphere:
             geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE,
@@ -198,10 +191,9 @@ class UrdfImporter(Importer):
             source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)
             if source_mesh_file_path is not None:
                 tmp_mesh_file_path = self.import_mesh(mesh_file_path=source_mesh_file_path)
-                mesh_builder = geom_builder.add_mesh(mesh_file_path=tmp_mesh_file_path)
-                mesh_builder.build()
+                geom_builder.add_mesh(mesh_file_path=tmp_mesh_file_path)
                 geom_builder.build()
-                geom_scale = (1.0, 1.0, 1.0) if geom.geometry.scale is None else tuple(geom.geometry.scale)
+                geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
         else:
             raise ValueError(f"Geom type {type(geom.geometry)} not implemented.")

@@ -2,7 +2,7 @@
 
 import os
 from dataclasses import dataclass
-from typing import Optional, List, Union, Any
+from typing import Optional, List, Union, Any, Dict, Tuple
 
 import numpy
 from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf, UsdShade
@@ -26,15 +26,15 @@ class GeomType(Enum):
 class GeomProperty:
     is_visible: bool
     is_collidable: bool
-    _rgba: Optional[tuple]
+    _rgba: Optional[numpy.ndarray]
 
-    def __init__(self, is_visible: bool = True, is_collidable: bool = True, rgba: Optional[tuple] = None) -> None:
+    def __init__(self, is_visible: bool = True, is_collidable: bool = True, rgba: Optional[numpy.ndarray] = None) -> None:
         self.is_visible = is_visible
         self.is_collidable = is_collidable
         self.rgba = rgba
 
     @property
-    def rgba(self) -> Optional[tuple]:
+    def rgba(self) -> Optional[numpy.ndarray]:
         return self._rgba
 
     @rgba.setter
@@ -108,6 +108,8 @@ class GeomBuilder:
     _type: GeomType
     _xform: UsdGeom.Xform
     _property: GeomProperty
+    _mesh_builders: Dict[str, MeshBuilder]
+    _material_builders: Dict[str, MaterialBuilder]
 
     def __init__(self, stage: Usd.Stage, geom_name: str, body_path: Sdf.Path, geom_type: GeomType,
                  geom_property: GeomProperty) -> None:
@@ -115,24 +117,33 @@ class GeomBuilder:
         self._type = geom_type
         self._xform = UsdGeom.Xform.Define(self._stage, body_path.AppendPath(geom_name))
         self._property = geom_property
+        self._mesh_builders = {}
+        self._material_builders = {}
 
-    def add_mesh(self, mesh_file_path: str) -> MeshBuilder:
-        mesh_builder = MeshBuilder(mesh_file_path)
-        reference_meshes = mesh_builder.build()
+    def add_mesh(self, mesh_file_path: str) -> Tuple[MeshBuilder, MaterialBuilder]:
+        if mesh_file_path in self._mesh_builders:
+            mesh_builder = self._mesh_builders[mesh_file_path]
+        else:
+            mesh_builder = MeshBuilder(mesh_file_path)
+
+        if mesh_file_path in self._material_builders:
+            material_builder = self._material_builders[mesh_file_path]
+        else:
+            material_builder = MaterialBuilder(file_path=mesh_file_path)
+
+        reference_meshes = mesh_builder.meshes
         local_meshes = []
         for mesh in reference_meshes:
             local_meshes.append(self._stage.OverridePrim(self.xform.GetPath().AppendPath(mesh.GetPrim().GetName())))
             self.xform.GetPrim().GetReferences().AddReference(mesh_file_path, mesh_builder.xform.GetPath())
 
-        material_builder = MaterialBuilder(file_path=mesh_file_path)
-
         bind_materials(mesh_builder, local_meshes, reference_meshes)
 
         reference_materials(material_builder, self._stage, mesh_file_path)
 
-        return mesh_builder
+        return mesh_builder, material_builder
 
-    def _create_geoms(self) -> List[UsdGeom.Gprim]:
+    def _create_geoms(self) -> List[Usd.Prim]:
         if self.type == GeomType.PLANE:
             geom = UsdGeom.Mesh.Define(self._stage, self.xform.GetPath().AppendPath("Plane"))
             geom.CreatePointsAttr([(-0.5, -0.5, 0), (0.5, -0.5, 0), (-0.5, 0.5, 0), (0.5, 0.5, 0)])
@@ -141,40 +152,43 @@ class GeomBuilder:
             geom.CreateFaceVertexIndicesAttr([0, 1, 3, 2])
             return [UsdGeom.Mesh(geom)]
         if self.type == GeomType.CUBE:
-            geom = UsdGeom.Cube.Define(self._stage, self.xform.GetPath().AppendPath("Cube"))
-            return [UsdGeom.Cube(geom)]
+            return [UsdGeom.Cube.Define(self._stage, self.xform.GetPath().AppendPath("Cube"))]
         if self.type == GeomType.SPHERE:
-            geom = UsdGeom.Sphere.Define(self._stage, self.xform.GetPath().AppendPath("Sphere"))
-            return [UsdGeom.Sphere(geom)]
+            return [UsdGeom.Sphere.Define(self._stage, self.xform.GetPath().AppendPath("Sphere"))]
         if self.type == GeomType.CYLINDER:
-            geom = UsdGeom.Cylinder.Define(self._stage, self.xform.GetPath().AppendPath("Cylinder"))
-            return [UsdGeom.Cylinder(geom)]
+            return [UsdGeom.Cylinder.Define(self._stage, self.xform.GetPath().AppendPath("Cylinder"))]
         if self.type == GeomType.CAPSULE:
-            geom = UsdGeom.Cylinder.Define(self._stage, self.xform.GetPath().AppendPath("Capsule"))
-            return [UsdGeom.Cylinder(geom)]
+            return [UsdGeom.Cylinder.Define(self._stage, self.xform.GetPath().AppendPath("Capsule"))]
         if self.type == GeomType.MESH:
             return self.geom_prims
         raise ValueError(f"Geom type {self.type} not supported.")
 
     def build(self) -> List[UsdGeom.Gprim]:
-        geoms = self._create_geoms()
-        for geom in geoms:
+        self._create_geoms()
+        for geom in self.geom_prims:
             if self.property.rgba is not None:
                 geom.CreateDisplayColorAttr([self.property.rgba[:3]])
                 geom.CreateDisplayOpacityAttr([self.property.rgba[3]])
-        return geoms
+        return self.geom_prims
 
     def set_transform(
             self,
-            pos: tuple = (0.0, 0.0, 0.0),
-            quat: tuple = (1.0, 0.0, 0.0, 0.0),
-            scale: tuple = (1.0, 1.0, 1.0),
+            pos: numpy.ndarray = numpy.array([0.0, 0.0, 0.0]),
+            quat: numpy.ndarray = numpy.array([1.0, 0.0, 0.0, 0.0]),
+            scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
     ) -> None:
+        """
+        Set the transform of the body.
+        :param pos: Array of x, y, z position.
+        :param quat: Array of w, x, y, z quaternion.
+        :param scale: Array of x, y, z scale.
+        :return: None
+        """
         mat = Gf.Matrix4d()
-        mat.SetTranslateOnly(pos)
+        mat.SetTranslateOnly(Gf.Vec3d(*pos))
         mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(quat[1], quat[2], quat[3])))
         mat_scale = Gf.Matrix4d()
-        mat_scale.SetScale(scale)
+        mat_scale.SetScale(Gf.Vec3d(*scale))
         mat = mat_scale * mat
         self._xform.ClearXformOpOrder()
         self._xform.AddTransformOp().Set(mat)

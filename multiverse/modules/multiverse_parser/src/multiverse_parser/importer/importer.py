@@ -5,10 +5,13 @@ import os
 import random
 import shutil
 import string
-from typing import Optional, Dict
+from typing import Optional, Dict, Tuple
+
+import numpy
+from pxr import Usd, UsdGeom
 
 from ..factory.config import Configuration
-from ..utils import import_obj, import_stl, import_dae, export_usd
+from ..utils import modify_name, import_obj, import_stl, import_dae, export_usd
 
 
 def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
@@ -32,25 +35,25 @@ def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
 class Importer:
     source_file_path: str
     config: Configuration
-    _tmp_file_name: str = "tmp"
-    _tmp_file_path: str
     _tmp_mesh_dir: str
+    _tmp_file_path: str
+    _tmp_file_name: str = "tmp"
     _mesh_file_paths: Dict[str, str] = {}
 
-    def __init__(self, file_path: str, configuration: Configuration = Configuration()):
-        self.source_file_path = file_path
-        self._tmp_file_path, self._tmp_mesh_dir = self.create_tmp_paths()
-        self.config = configuration
+    def __init__(self, file_path: str, config: Configuration = Configuration()):
+        self._source_file_path = file_path
+        self._tmp_file_path, self._tmp_mesh_dir = self._create_tmp_paths()
+        self._config = config
         atexit.register(self.clean_up)
 
-    def create_tmp_paths(self) -> tuple[str, str]:
+    def _create_tmp_paths(self) -> Tuple[str, str]:
         """
         Create temporary paths for the USD file and the mesh directory.
         :return: Tuple of the temporary USD file path and the temporary mesh directory path.
         """
         tmp_dir = os.path.join("/tmp",
-                                    "cache",
-                                    "".join(random.choices(string.ascii_letters + string.digits, k=10)))
+                               "cache",
+                               "".join(random.choices(string.ascii_letters + string.digits, k=10)))
         tmp_file_path = os.path.join(tmp_dir, f"{self._tmp_file_name}.usda")
         tmp_mesh_dir = os.path.join(tmp_dir, self._tmp_file_name, "usd")
         os.makedirs(name=tmp_dir, exist_ok=True)

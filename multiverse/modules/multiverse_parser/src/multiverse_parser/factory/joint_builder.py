@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.10
 
-from typing import List, Union
+from typing import List, Union, Optional
 
 import numpy
 from pxr import Usd, UsdGeom, Gf, UsdPhysics
@@ -23,7 +23,7 @@ def get_joint_axis(axis: List[float]) -> str | None:
         return "-Y"
     if numpy.array_equal(axis, [0, 0, -1]):
         return "-Z"
-    return None
+    raise ValueError(f"Axis {axis} not supported.")
 
 
 class JointType(Enum):
@@ -80,8 +80,8 @@ class JointBuilder:
             parent_prim: UsdGeom.Xform,
             child_prim: UsdGeom.Xform,
             joint_type: JointType,
-            joint_pos: tuple = (0.0, 0.0, 0.0),
-            joint_quat: tuple = None,
+            joint_pos: numpy.ndarray = numpy.array([0.0, 0.0, 0.0]),
+            joint_quat: Optional[numpy.ndarray] = None,
             joint_axis: Union[str, List[float]] = "Z",
     ) -> None:
         self._stage = stage
@@ -89,7 +89,7 @@ class JointBuilder:
         self._parent_prim = parent_prim
         self._child_prim = child_prim
         self._type = joint_type
-        self._pos = Gf.Vec3d(joint_pos)
+        self._pos = Gf.Vec3d(*joint_pos)
         self._axis = joint_axis if isinstance(joint_axis, str) else get_joint_axis(joint_axis)
         if joint_quat is not None:
             # TODO: Convert quat to axis, then set axis to Z again

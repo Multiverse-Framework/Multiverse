@@ -51,7 +51,7 @@ xform_cache = UsdGeom.XformCache()
 #
 def modify_name(in_name: str, replacement: str = None) -> str:
     out_name = in_name
-    for special_char in [" ", "-", "~"]:
+    for special_char in [" ", "-", "~", ".", "/"]:
         if special_char in in_name:
             print(f"Name {in_name} contains {special_char}, replacing with _")
             out_name = out_name.replace(special_char, "_")
@@ -62,19 +62,19 @@ def modify_name(in_name: str, replacement: str = None) -> str:
     return out_name
 
 
-def rpy_to_quat(rpy_angles: tuple) -> tuple:
+def rpy_to_quat(rpy_angles: numpy.ndarray) -> numpy.ndarray:
     """
     Convert RPY Euler angles to a quaternion
     :param rpy_angles: Tuple of (roll, pitch, yaw) angles in radians
     :return: Tuple of (w, x, y, z) quaternion
     """
     # Create a Rotation object from the RPY Euler angles
-    rotation = Rotation.from_euler('xyz', rpy_angles, degrees=False)  # 'xyz' order means RPY
+    rotation = Rotation.from_euler('xyz', rpy_angles)  # 'xyz' order means RPY
 
     # Get the quaternion representation from the Rotation object
     quaternion = rotation.as_quat(canonical=False)
 
-    return quaternion[3], quaternion[0], quaternion[1], quaternion[2]
+    return numpy.array([quaternion[3], quaternion[0], quaternion[1], quaternion[2]])
 
 # def convert_quat(quat) -> tuple:
 #     if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):

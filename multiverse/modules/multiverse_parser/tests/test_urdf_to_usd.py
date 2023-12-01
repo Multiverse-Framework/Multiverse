@@ -24,7 +24,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
                                 with_collision=True, geom_rgba=(1.0, 0.0, 0.0, 0.1))
         self.assertEqual(importer.source_file_path, input_urdf_path)
-        self.assertEqual(importer.config.model_name, "tiago_dual")
+        self.assertEqual(importer._config.model_name, "tiago_dual")
 
         usd_file_path = importer.import_model()
         self.assertTrue(os.path.exists(usd_file_path))
