@@ -1,247 +1,277 @@
 <?xml version="1.0" ?>
-<mujoco model="crane">
-	<option impratio="10"/>
+<mujoco model="crane_model">
 	<compiler meshdir="../meshes/" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
 		<default class="visual">
-			<geom contype="0" conaffinity="0" />
+			<geom contype="0" conaffinity="0"/>
 		</default>
 		<default class="collision">
-			<geom rgba="1.0 0.0 0.0 0.5" />
+			<geom rgba="1.0 0.0 0.0 0.5"/>
 		</default>
 	</default>
 	<asset>
-		<mesh name="lkw_fahrerkabine_rote_teile_visual" file="visual/lkw_fahrerkabine_rote_teile.stl"/>
 		<mesh name="lkw_fahrerkabine_rote_teile_collision" file="collision/lkw_fahrerkabine_rote_teile.stl"/>
-		<mesh name="lkw_vorderraeder_graue_teile_visual" file="visual/lkw_vorderraeder_graue_teile.stl"/>
-		<mesh name="lkw_hinterraeder_schwarze_teile_collision" file="collision/lkw_hinterraeder_schwarze_teile.stl"/>
+		<mesh name="lkw_fahrerkabine_rote_teile_visual" file="visual/lkw_fahrerkabine_rote_teile.stl"/>
 		<mesh name="lkw_hinterraeder_schwarze_teile_visual" file="visual/lkw_hinterraeder_schwarze_teile.stl"/>
+		<mesh name="lkw_hinterraeder_schwarze_teile_collision" file="collision/lkw_hinterraeder_schwarze_teile.stl"/>
 		<mesh name="lkw_kotfluegel_vorne_rot_visual" file="visual/lkw_kotfluegel_vorne_rot.stl"/>
 		<mesh name="lkw_tank_visual" file="visual/lkw_tank.stl"/>
+		<mesh name="lkw_rungen_001_collision" file="collision/lkw_rungen_001.stl"/>
 		<mesh name="lkw_rungen_002_collision" file="collision/lkw_rungen_002.stl"/>
 		<mesh name="lkw_rungen_010_collision" file="collision/lkw_rungen_010.stl"/>
-		<mesh name="lkw_rungen_006_collision" file="collision/lkw_rungen_006.stl"/>
+		<mesh name="lkw_rungen_004_collision" file="collision/lkw_rungen_004.stl"/>
+		<mesh name="lkw_rungen_008_collision" file="collision/lkw_rungen_008.stl"/>
 		<mesh name="lkw_rungen_005_collision" file="collision/lkw_rungen_005.stl"/>
 		<mesh name="lkw_rungen_003_collision" file="collision/lkw_rungen_003.stl"/>
-		<mesh name="lkw_rungen_004_collision" file="collision/lkw_rungen_004.stl"/>
-		<mesh name="lkw_rungen_001_collision" file="collision/lkw_rungen_001.stl"/>
-		<mesh name="lkw_rungen_visual" file="visual/lkw_rungen.stl"/>
-		<mesh name="lkw_rungen_009_collision" file="collision/lkw_rungen_009.stl"/>
 		<mesh name="lkw_rungen_007_collision" file="collision/lkw_rungen_007.stl"/>
-		<mesh name="lkw_rungen_008_collision" file="collision/lkw_rungen_008.stl"/>
+		<mesh name="lkw_rungen_009_collision" file="collision/lkw_rungen_009.stl"/>
+		<mesh name="lkw_rungen_006_collision" file="collision/lkw_rungen_006.stl"/>
+		<mesh name="lkw_rungen_visual" file="visual/lkw_rungen.stl"/>
 		<mesh name="support_front_visual" file="visual/support_front.stl"/>
 		<mesh name="support_front_collision" file="collision/support_front.stl"/>
 		<mesh name="lkw_vorderachse_und_fahrerkabine_schwarze_teile_visual" file="visual/lkw_vorderachse_und_fahrerkabine_schwarze_teile.stl"/>
 		<mesh name="lkw_vorderachse_und_fahrerkabine_schwarze_teile_collision" file="collision/lkw_vorderachse_und_fahrerkabine_schwarze_teile.stl"/>
 		<mesh name="lkw_hinterraeder_graue_teile_visual" file="visual/lkw_hinterraeder_graue_teile.stl"/>
 		<mesh name="lkw_kotfluegel_hinten_schwarz_visual" file="visual/lkw_kotfluegel_hinten_schwarz.stl"/>
-		<mesh name="mounting_base_visual" file="visual/mounting_base.stl"/>
 		<mesh name="mounting_base_collision" file="collision/mounting_base.stl"/>
+		<mesh name="mounting_base_visual" file="visual/mounting_base.stl"/>
 		<mesh name="lkw_fahrerkabine_weisse_teile_visual" file="visual/lkw_fahrerkabine_weisse_teile.stl"/>
-		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_001_collision" file="collision/lkw_ladeflaeche_mit_rammschutz_seitlich_001.stl"/>
-		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_002_collision" file="collision/lkw_ladeflaeche_mit_rammschutz_seitlich_002.stl"/>
 		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_003_collision" file="collision/lkw_ladeflaeche_mit_rammschutz_seitlich_003.stl"/>
-		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_004_collision" file="collision/lkw_ladeflaeche_mit_rammschutz_seitlich_004.stl"/>
 		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_005_collision" file="collision/lkw_ladeflaeche_mit_rammschutz_seitlich_005.stl"/>
+		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_002_collision" file="collision/lkw_ladeflaeche_mit_rammschutz_seitlich_002.stl"/>
 		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_visual" file="visual/lkw_ladeflaeche_mit_rammschutz_seitlich.stl"/>
-		<mesh name="slewing_column_collision" file="collision/slewing_column.stl"/>
+		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_004_collision" file="collision/lkw_ladeflaeche_mit_rammschutz_seitlich_004.stl"/>
+		<mesh name="lkw_ladeflaeche_mit_rammschutz_seitlich_001_collision" file="collision/lkw_ladeflaeche_mit_rammschutz_seitlich_001.stl"/>
 		<mesh name="slewing_column_visual" file="visual/slewing_column.stl"/>
+		<mesh name="slewing_column_collision" file="collision/slewing_column.stl"/>
 		<mesh name="control_box_visual" file="visual/control_box.stl"/>
+		<mesh name="boom_cylinder_barrel_collision" file="collision/boom_cylinder_barrel.stl"/>
+		<mesh name="boom_cylinder_barrel_visual" file="visual/boom_cylinder_barrel.stl"/>
+		<mesh name="boom_cylinder_piston_collision" file="collision/boom_cylinder_piston.stl"/>
+		<mesh name="boom_cylinder_piston_visual" file="visual/boom_cylinder_piston.stl"/>
+		<mesh name="boom_cylinder_linkage_big_001_collision" file="collision/boom_cylinder_linkage_big_001.stl"/>
+		<mesh name="boom_cylinder_linkage_big_008_collision" file="collision/boom_cylinder_linkage_big_008.stl"/>
+		<mesh name="boom_cylinder_linkage_big_006_collision" file="collision/boom_cylinder_linkage_big_006.stl"/>
+		<mesh name="boom_cylinder_linkage_big_visual" file="visual/boom_cylinder_linkage_big.stl"/>
+		<mesh name="boom_cylinder_linkage_big_007_collision" file="collision/boom_cylinder_linkage_big_007.stl"/>
+		<mesh name="boom_cylinder_linkage_big_004_collision" file="collision/boom_cylinder_linkage_big_004.stl"/>
+		<mesh name="boom_cylinder_linkage_big_005_collision" file="collision/boom_cylinder_linkage_big_005.stl"/>
+		<mesh name="boom_cylinder_linkage_big_003_collision" file="collision/boom_cylinder_linkage_big_003.stl"/>
+		<mesh name="boom_cylinder_linkage_big_002_collision" file="collision/boom_cylinder_linkage_big_002.stl"/>
 		<mesh name="boom_visual" file="visual/boom.stl"/>
 		<mesh name="boom_collision" file="collision/boom.stl"/>
-		<mesh name="arm_001_collision" file="collision/arm_001.stl"/>
+		<mesh name="boom_cylinder_linkage_small_003_collision" file="collision/boom_cylinder_linkage_small_003.stl"/>
+		<mesh name="boom_cylinder_linkage_small_002_collision" file="collision/boom_cylinder_linkage_small_002.stl"/>
+		<mesh name="boom_cylinder_linkage_small_001_collision" file="collision/boom_cylinder_linkage_small_001.stl"/>
+		<mesh name="boom_cylinder_linkage_small_004_collision" file="collision/boom_cylinder_linkage_small_004.stl"/>
+		<mesh name="boom_cylinder_linkage_small_visual" file="visual/boom_cylinder_linkage_small.stl"/>
+		<mesh name="arm_cylinder_barrel_right_visual" file="visual/arm_cylinder_barrel_right.stl"/>
+		<mesh name="arm_cylinder_barrel_right_001_collision" file="collision/arm_cylinder_barrel_right_001.stl"/>
+		<mesh name="arm_cylinder_barrel_right_002_collision" file="collision/arm_cylinder_barrel_right_002.stl"/>
+		<mesh name="arm_cylinder_piston_right_002_collision" file="collision/arm_cylinder_piston_right_002.stl"/>
+		<mesh name="arm_cylinder_piston_right_001_collision" file="collision/arm_cylinder_piston_right_001.stl"/>
+		<mesh name="arm_cylinder_piston_right_visual" file="visual/arm_cylinder_piston_right.stl"/>
+		<mesh name="arm_cylinder_barrel_left_visual" file="visual/arm_cylinder_barrel_left.stl"/>
+		<mesh name="arm_cylinder_barrel_left_001_collision" file="collision/arm_cylinder_barrel_left_001.stl"/>
+		<mesh name="arm_cylinder_barrel_left_002_collision" file="collision/arm_cylinder_barrel_left_002.stl"/>
+		<mesh name="arm_cylinder_piston_left_001_collision" file="collision/arm_cylinder_piston_left_001.stl"/>
+		<mesh name="arm_cylinder_piston_left_visual" file="visual/arm_cylinder_piston_left.stl"/>
+		<mesh name="arm_cylinder_piston_left_002_collision" file="collision/arm_cylinder_piston_left_002.stl"/>
 		<mesh name="arm_visual" file="visual/arm.stl"/>
 		<mesh name="arm_004_collision" file="collision/arm_004.stl"/>
 		<mesh name="arm_003_collision" file="collision/arm_003.stl"/>
 		<mesh name="arm_002_collision" file="collision/arm_002.stl"/>
+		<mesh name="arm_001_collision" file="collision/arm_001.stl"/>
+		<mesh name="arm_cylinder_piston_cover_right_visual" file="visual/arm_cylinder_piston_cover_right.stl"/>
+		<mesh name="boom_cylinder_piston_cover_visual" file="visual/boom_cylinder_piston_cover.stl"/>
 		<mesh name="outer_telescope_002_collision" file="collision/outer_telescope_002.stl"/>
-		<mesh name="outer_telescope_001_collision" file="collision/outer_telescope_001.stl"/>
 		<mesh name="outer_telescope_003_collision" file="collision/outer_telescope_003.stl"/>
-		<mesh name="outer_telescope_visual" file="visual/outer_telescope.stl"/>
 		<mesh name="outer_telescope_004_collision" file="collision/outer_telescope_004.stl"/>
-		<mesh name="inner_telescope_collision" file="collision/inner_telescope.stl"/>
+		<mesh name="outer_telescope_visual" file="visual/outer_telescope.stl"/>
+		<mesh name="outer_telescope_001_collision" file="collision/outer_telescope_001.stl"/>
+		<mesh name="arm_cylinder_piston_cover_left_visual" file="visual/arm_cylinder_piston_cover_left.stl"/>
 		<mesh name="inner_telescope_visual" file="visual/inner_telescope.stl"/>
-		<mesh name="double_joint_link_visual" file="visual/double_joint_link.stl"/>
+		<mesh name="inner_telescope_collision" file="collision/inner_telescope.stl"/>
 		<mesh name="double_joint_link_collision" file="collision/double_joint_link.stl"/>
+		<mesh name="double_joint_link_visual" file="visual/double_joint_link.stl"/>
 		<mesh name="rotator_upper_part_visual" file="visual/rotator_upper_part.stl"/>
 		<mesh name="rotator_upper_part_collision" file="collision/rotator_upper_part.stl"/>
-		<mesh name="pincer_frame_visual" file="visual/pincer_frame.stl"/>
 		<mesh name="pincer_frame_collision" file="collision/pincer_frame.stl"/>
-		<mesh name="inner_jaw_013_collision" file="collision/inner_jaw_013.stl"/>
-		<mesh name="inner_jaw_003_collision" file="collision/inner_jaw_003.stl"/>
-		<mesh name="inner_jaw_002_collision" file="collision/inner_jaw_002.stl"/>
-		<mesh name="inner_jaw_015_collision" file="collision/inner_jaw_015.stl"/>
-		<mesh name="inner_jaw_011_collision" file="collision/inner_jaw_011.stl"/>
-		<mesh name="inner_jaw_005_collision" file="collision/inner_jaw_005.stl"/>
-		<mesh name="inner_jaw_012_collision" file="collision/inner_jaw_012.stl"/>
-		<mesh name="inner_jaw_007_collision" file="collision/inner_jaw_007.stl"/>
-		<mesh name="inner_jaw_008_collision" file="collision/inner_jaw_008.stl"/>
-		<mesh name="inner_jaw_visual" file="visual/inner_jaw.stl"/>
-		<mesh name="inner_jaw_004_collision" file="collision/inner_jaw_004.stl"/>
-		<mesh name="inner_jaw_009_collision" file="collision/inner_jaw_009.stl"/>
-		<mesh name="inner_jaw_010_collision" file="collision/inner_jaw_010.stl"/>
-		<mesh name="inner_jaw_014_collision" file="collision/inner_jaw_014.stl"/>
+		<mesh name="pincer_frame_visual" file="visual/pincer_frame.stl"/>
 		<mesh name="inner_jaw_006_collision" file="collision/inner_jaw_006.stl"/>
+		<mesh name="inner_jaw_007_collision" file="collision/inner_jaw_007.stl"/>
 		<mesh name="inner_jaw_001_collision" file="collision/inner_jaw_001.stl"/>
-		<mesh name="outer_jaw_014_collision" file="collision/outer_jaw_014.stl"/>
-		<mesh name="outer_jaw_visual" file="visual/outer_jaw.stl"/>
-		<mesh name="outer_jaw_002_collision" file="collision/outer_jaw_002.stl"/>
-		<mesh name="outer_jaw_005_collision" file="collision/outer_jaw_005.stl"/>
+		<mesh name="inner_jaw_009_collision" file="collision/inner_jaw_009.stl"/>
+		<mesh name="inner_jaw_013_collision" file="collision/inner_jaw_013.stl"/>
+		<mesh name="inner_jaw_008_collision" file="collision/inner_jaw_008.stl"/>
+		<mesh name="inner_jaw_004_collision" file="collision/inner_jaw_004.stl"/>
+		<mesh name="inner_jaw_014_collision" file="collision/inner_jaw_014.stl"/>
+		<mesh name="inner_jaw_015_collision" file="collision/inner_jaw_015.stl"/>
+		<mesh name="inner_jaw_010_collision" file="collision/inner_jaw_010.stl"/>
+		<mesh name="inner_jaw_visual" file="visual/inner_jaw.stl"/>
+		<mesh name="inner_jaw_002_collision" file="collision/inner_jaw_002.stl"/>
+		<mesh name="inner_jaw_011_collision" file="collision/inner_jaw_011.stl"/>
+		<mesh name="inner_jaw_012_collision" file="collision/inner_jaw_012.stl"/>
+		<mesh name="inner_jaw_003_collision" file="collision/inner_jaw_003.stl"/>
+		<mesh name="inner_jaw_005_collision" file="collision/inner_jaw_005.stl"/>
+		<mesh name="outer_jaw_006_collision" file="collision/outer_jaw_006.stl"/>
 		<mesh name="outer_jaw_011_collision" file="collision/outer_jaw_011.stl"/>
-		<mesh name="outer_jaw_007_collision" file="collision/outer_jaw_007.stl"/>
-		<mesh name="outer_jaw_013_collision" file="collision/outer_jaw_013.stl"/>
-		<mesh name="outer_jaw_001_collision" file="collision/outer_jaw_001.stl"/>
-		<mesh name="outer_jaw_003_collision" file="collision/outer_jaw_003.stl"/>
-		<mesh name="outer_jaw_008_collision" file="collision/outer_jaw_008.stl"/>
-		<mesh name="outer_jaw_009_collision" file="collision/outer_jaw_009.stl"/>
-		<mesh name="outer_jaw_010_collision" file="collision/outer_jaw_010.stl"/>
-		<mesh name="outer_jaw_012_collision" file="collision/outer_jaw_012.stl"/>
 		<mesh name="outer_jaw_015_collision" file="collision/outer_jaw_015.stl"/>
 		<mesh name="outer_jaw_004_collision" file="collision/outer_jaw_004.stl"/>
-		<mesh name="outer_jaw_006_collision" file="collision/outer_jaw_006.stl"/>
+		<mesh name="outer_jaw_007_collision" file="collision/outer_jaw_007.stl"/>
+		<mesh name="outer_jaw_001_collision" file="collision/outer_jaw_001.stl"/>
+		<mesh name="outer_jaw_010_collision" file="collision/outer_jaw_010.stl"/>
+		<mesh name="outer_jaw_013_collision" file="collision/outer_jaw_013.stl"/>
+		<mesh name="outer_jaw_003_collision" file="collision/outer_jaw_003.stl"/>
+		<mesh name="outer_jaw_visual" file="visual/outer_jaw.stl"/>
+		<mesh name="outer_jaw_012_collision" file="collision/outer_jaw_012.stl"/>
+		<mesh name="outer_jaw_002_collision" file="collision/outer_jaw_002.stl"/>
+		<mesh name="outer_jaw_014_collision" file="collision/outer_jaw_014.stl"/>
+		<mesh name="outer_jaw_008_collision" file="collision/outer_jaw_008.stl"/>
+		<mesh name="outer_jaw_005_collision" file="collision/outer_jaw_005.stl"/>
+		<mesh name="outer_jaw_009_collision" file="collision/outer_jaw_009.stl"/>
 	</asset>
 	<worldbody>
-		<body name="crane" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-			<freejoint/>
-			<body name="truck_cab" pos="0.0 0.0 0.52" quat="1.0 0.0 0.0 0.0">
-				<geom name="truck_cab_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_fahrerkabine_rote_teile_visual"/>
-				<geom name="truck_cab_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_fahrerkabine_rote_teile_collision"/>
-				<body name="tr_grey" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_grey_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_vorderraeder_graue_teile_visual"/>
-				</body>
-				<body name="tr_rr_wheels" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_rr_wheels_collision_0" pos="-3.7 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_hinterraeder_schwarze_teile_collision"/>
-					<geom name="tr_rr_wheels_visual_0" pos="-3.7 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_hinterraeder_schwarze_teile_visual"/>
-				</body>
-				<body name="cab_fender" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="cab_fender_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_kotfluegel_vorne_rot_visual"/>
-				</body>
-				<body name="tr_tank" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_tank_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_tank_visual"/>
-				</body>
-				<body name="tr_rungen" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_rungen_collision_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_002_collision"/>
-					<geom name="tr_rungen_collision_9" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_010_collision"/>
-					<geom name="tr_rungen_collision_5" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_006_collision"/>
-					<geom name="tr_rungen_collision_4" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_005_collision"/>
-					<geom name="tr_rungen_collision_2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_003_collision"/>
-					<geom name="tr_rungen_collision_3" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_004_collision"/>
-					<geom name="tr_rungen_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_001_collision"/>
-					<geom name="tr_rungen_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_rungen_visual"/>
-					<geom name="tr_rungen_collision_8" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_009_collision"/>
-					<geom name="tr_rungen_collision_6" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_007_collision"/>
-					<geom name="tr_rungen_collision_7" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_008_collision"/>
-				</body>
-				<body name="support_front" pos="-0.8 0.35 0.6207" quat="-2.0510342851533115e-10 0.0 0.0 1.0">
-					<geom name="support_front_visual_0" pos="-0.315 0.35 0.1485" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="support_front_visual"/>
-					<geom name="support_front_collision_0" pos="-0.315 0.35 0.1485" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="support_front_collision"/>
-				</body>
-				<body name="tr_black" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_black_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_vorderachse_und_fahrerkabine_schwarze_teile_visual"/>
-					<geom name="tr_black_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_vorderachse_und_fahrerkabine_schwarze_teile_collision"/>
-				</body>
-				<body name="tr_rr_rims" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_rr_rims_visual_0" pos="-3.7 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_hinterraeder_graue_teile_visual"/>
-				</body>
-				<body name="tr_rr_fender" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_rr_fender_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_kotfluegel_hinten_schwarz_visual"/>
-				</body>
-				<body name="K0_mounting_base" pos="-6.93852 0.35 0.6207" quat="-2.0510342851533115e-10 0.0 0.0 1.0">
-					<geom name="K0_mounting_base_visual_0" pos="-0.315 0.35 0.1485" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="mounting_base_visual"/>
-					<geom name="K0_mounting_base_collision_0" pos="-0.315 0.35 0.1485" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="mounting_base_collision"/>
-					<body name="moved_with_q1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-						<joint name="theta1_slewing_joint" pos="0.0 0.0 0.0" type="hinge" range="-3.7099999134770023 3.7099999134770023" axis="0.0 0.0 1.0"/>
-						<body name="K1_slewing_column" pos="-0.17999999999999972 0.0 2.425" quat="0.7071067811140325 0.7071067812590626 0.0 0.0">
-							<geom name="K1_slewing_column_collision_0" pos="0.18 -2.3652 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="slewing_column_collision"/>
-							<geom name="K1_slewing_column_visual_0" pos="0.18 -2.3652 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="slewing_column_visual"/>
-							<body name="control_box" pos="0.03000000000000025 -0.9100000000000001 -0.5000000000000001" quat="3.2759568508397764e-05 -3.275641303610518e-05 0.7071408362725098 0.7070727229427278">
-								<geom name="control_box_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="control_box_visual"/>
-								<geom name="control_box_collision_0" pos="0.0 -0.04 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.4 0.225 0.55"/>
-							</body>
-							<body name="moved_with_q2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-								<joint name="theta2_boom_joint" pos="0.0 0.0 -0.0" type="hinge" range="-1.2000000140073657 1.563000055861744" axis="0.0 0.0 1.0"/>
-								<body name="K2_boom" pos="3.4928833300000006 0.0 -5.551115123125783e-17" quat="1.0 0.0 0.0 0.0">
-									<geom name="K2_boom_visual_0" pos="-3.49288333 0.0 0.0" quat="0.9987192078450507 0.0 0.0 -0.050595887988594" class="visual" type="mesh" mesh="boom_visual"/>
-									<geom name="K2_boom_collision_0" pos="-3.49288333 0.0 0.0" quat="0.9987192078450507 0.0 0.0 -0.050595887988594" class="collision" type="mesh" mesh="boom_collision"/>
-									<body name="moved_with_q3" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-										<joint name="theta3_arm_joint" pos="0.0 0.0 -0.0" type="hinge" range="-0.9100000139512037 4.5999998539578195" axis="0.0 0.0 1.0"/>
-										<body name="K3_arm" pos="-0.39250000000000007 0.0 5.551115123125783e-17" quat="0.7071067811140325 0.7071067812590626 0.0 0.0">
-											<geom name="K3_arm_collision_0" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_001_collision"/>
-											<geom name="K3_arm_visual_0" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="arm_visual"/>
-											<geom name="K3_arm_collision_3" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_004_collision"/>
-											<geom name="K3_arm_collision_2" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_003_collision"/>
-											<geom name="K3_arm_collision_1" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_002_collision"/>
-											<body name="moved_with_q4" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-												<joint name="q4_big_telescope" pos="0.0 0.0 0.0" type="slide" range="0.0 2.2360000610351562" axis="0.0 0.0 1.0"/>
-												<body name="K4_outer_telescope" pos="0.0 0.0 3.157001602823" quat="1.0 0.0 0.0 0.0">
-													<geom name="K4_outer_telescope_collision_1" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="outer_telescope_002_collision"/>
-													<geom name="K4_outer_telescope_collision_0" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="outer_telescope_001_collision"/>
-													<geom name="K4_outer_telescope_collision_2" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="outer_telescope_003_collision"/>
-													<geom name="K4_outer_telescope_visual_0" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="outer_telescope_visual"/>
-													<geom name="K4_outer_telescope_collision_3" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="outer_telescope_004_collision"/>
-													<body name="moved_with_q5" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-														<joint name="q5_small_telescope" pos="0.0 0.0 0.0" type="slide" range="0.0 2.2360000610351562" axis="0.0 0.0 1.0"/>
-														<body name="K5_inner_telescope" pos="0.0 0.0 0.0" quat="-0.7071067811140325 0.7071067812590626 0.0 0.0">
-															<geom name="K5_inner_telescope_collision_0" pos="0.281 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="inner_telescope_collision"/>
-															<geom name="K5_inner_telescope_visual_0" pos="0.281 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="inner_telescope_visual"/>
-															<body name="moved_with_q6" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-																<joint name="theta6_tip_joint" pos="0.0 0.0 -0.0" type="hinge" range="-1.570000041628963 1.570000041628963" axis="0.0 0.0 1.0"/>
-																<body name="K6_double_joint_link" pos="-0.2129999999999992 0.0 0.0" quat="-0.7071067811140325 0.7071067812590626 0.0 0.0">
-																	<geom name="K6_double_joint_link_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="double_joint_link_visual"/>
-																	<geom name="K6_double_joint_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="double_joint_link_collision"/>
-																	<body name="moved_with_q7" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-																		<joint name="theta7_tilt_joint" pos="0.0 0.0 0.0" type="hinge" range="0.7853980302393938 2.3561899628184917" axis="0.0 0.0 1.0"/>
-																		<body name="K7_rotator_upper_part" pos="0.0 0.0 0.0" quat="-0.7071067811140325 0.7071067812590626 0.0 0.0">
-																			<geom name="K7_rotator_upper_part_visual_0" pos="0.0 0.0 0.113385" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="rotator_upper_part_visual"/>
-																			<geom name="K7_rotator_upper_part_collision_0" pos="0.0 0.0 0.113385" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="rotator_upper_part_collision"/>
-																			<body name="moved_with_q8" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-																				<joint name="theta8_rotator_joint" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
-																				<body name="K8_tool_center_point" pos="0.0 0.0 0.578" quat="1.0 0.0 0.0 0.0">
-																					<geom name="K8_tool_center_point_visual_0" pos="0.0 0.0 -0.454717" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="pincer_frame_visual"/>
-																					<geom name="K8_tool_center_point_collision_0" pos="0.0 0.0 -0.454717" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="pincer_frame_collision"/>
-																					<body name="K11" pos="0.0 0.3248 2.7755575615628914e-17" quat="0.49999999989744826 0.5 0.5000000001025517 0.5">
-																						<body name="moved_with_q12" pos="-1.3877787807814457e-17 0.0 0.0" quat="1.0 -2.1562786888997945e-30 0.0 0.0">
-																							<joint name="theta12_inner_jaw_joint" pos="2.8463827093604277e-27 2.8463802397415088e-27 -1.3877787807814457e-17" type="hinge" range="-3.000000101597441 3.000000101597441" axis="0.0 0.0 1.0"/>
-																							<body name="K12_inner_jaw" pos="0.8566 0.0 -1.7763568394002505e-15" quat="1.0 -2.1562786888997945e-30 0.0 0.0">
-																								<geom name="K12_inner_jaw_collision_12" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_013_collision"/>
-																								<geom name="K12_inner_jaw_collision_2" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_003_collision"/>
-																								<geom name="K12_inner_jaw_collision_1" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_002_collision"/>
-																								<geom name="K12_inner_jaw_collision_14" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_015_collision"/>
-																								<geom name="K12_inner_jaw_collision_10" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_011_collision"/>
-																								<geom name="K12_inner_jaw_collision_4" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_005_collision"/>
-																								<geom name="K12_inner_jaw_collision_11" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_012_collision"/>
-																								<geom name="K12_inner_jaw_collision_6" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_007_collision"/>
-																								<geom name="K12_inner_jaw_collision_7" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_008_collision"/>
-																								<geom name="K12_inner_jaw_visual_0" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="visual" type="mesh" mesh="inner_jaw_visual"/>
-																								<geom name="K12_inner_jaw_collision_3" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_004_collision"/>
-																								<geom name="K12_inner_jaw_collision_8" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_009_collision"/>
-																								<geom name="K12_inner_jaw_collision_9" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_010_collision"/>
-																								<geom name="K12_inner_jaw_collision_13" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_014_collision"/>
-																								<geom name="K12_inner_jaw_collision_5" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_006_collision"/>
-																								<geom name="K12_inner_jaw_collision_0" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_001_collision"/>
+		<body name="crane_model" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<body name="truck_cab" pos="0.0 0.0 0.52" quat="1.0 0.0 0.0 0.0">
+					<geom name="truck_cab_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_fahrerkabine_rote_teile_collision"/>
+					<geom name="truck_cab_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_fahrerkabine_rote_teile_visual"/>
+					<body name="tr_grey" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					</body>
+					<body name="tr_rr_wheels" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_rr_wheels_visual_0" pos="-3.7 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_hinterraeder_schwarze_teile_visual"/>
+						<geom name="tr_rr_wheels_collision_0" pos="-3.7 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_hinterraeder_schwarze_teile_collision"/>
+					</body>
+					<body name="cab_fender" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="cab_fender_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_kotfluegel_vorne_rot_visual"/>
+					</body>
+					<body name="tr_tank" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_tank_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_tank_visual"/>
+					</body>
+					<body name="tr_rungen" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_rungen_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_001_collision"/>
+						<geom name="tr_rungen_collision_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_002_collision"/>
+						<geom name="tr_rungen_collision_9" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_010_collision"/>
+						<geom name="tr_rungen_collision_3" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_004_collision"/>
+						<geom name="tr_rungen_collision_7" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_008_collision"/>
+						<geom name="tr_rungen_collision_4" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_005_collision"/>
+						<geom name="tr_rungen_collision_2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_003_collision"/>
+						<geom name="tr_rungen_collision_6" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_007_collision"/>
+						<geom name="tr_rungen_collision_8" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_009_collision"/>
+						<geom name="tr_rungen_collision_5" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_rungen_006_collision"/>
+						<geom name="tr_rungen_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_rungen_visual"/>
+					</body>
+					<body name="support_front" pos="-0.8 0.35 0.6207" quat="-2.0510342851533115e-10 0.0 0.0 1.0">
+						<geom name="support_front_visual_0" pos="-0.315 0.35 0.1485" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="support_front_visual"/>
+						<geom name="support_front_collision_0" pos="-0.315 0.35 0.1485" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="support_front_collision"/>
+					</body>
+					<body name="tr_black" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_black_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_vorderachse_und_fahrerkabine_schwarze_teile_visual"/>
+						<geom name="tr_black_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_vorderachse_und_fahrerkabine_schwarze_teile_collision"/>
+					</body>
+					<body name="tr_rr_rims" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_rr_rims_visual_0" pos="-3.7 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_hinterraeder_graue_teile_visual"/>
+					</body>
+					<body name="tr_rr_fender" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_rr_fender_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_kotfluegel_hinten_schwarz_visual"/>
+					</body>
+					<body name="K0_mounting_base" pos="-6.93852 0.35 0.6207" quat="-2.0510342851533115e-10 0.0 0.0 1.0">
+						<geom name="K0_mounting_base_collision_0" pos="-0.315 0.35 0.1485" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="mounting_base_collision"/>
+						<geom name="K0_mounting_base_visual_0" pos="-0.315 0.35 0.1485" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="mounting_base_visual"/>
+						<body name="moved_with_q1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+							<joint name="theta1_slewing_joint" pos="0.0 0.0 0.0" type="hinge" range="-3.7099999134770023 3.7099999134770023" axis="0.0 0.0 1.0"/>
+							<body name="K1_slewing_column" pos="-0.17999999999999972 0.0 2.425" quat="0.7071067811140325 0.7071067812590626 0.0 0.0">
+								<geom name="K1_slewing_column_visual_0" pos="0.18 -2.3652 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="slewing_column_visual"/>
+								<geom name="K1_slewing_column_collision_0" pos="0.18 -2.3652 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="slewing_column_collision"/>
+								<body name="control_box" pos="0.03000000000000025 -0.9100000000000001 -0.5000000000000001" quat="3.2759568508397764e-05 -3.275641303610518e-05 0.7071408362725098 0.7070727229427278">
+									<geom name="control_box_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="control_box_visual"/>
+									<geom name="control_box_collision_0" pos="0.0 -0.04 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.4 0.225 0.55"/>
+								</body>
+								<body name="moved_with_q2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+									<joint name="theta2_boom_joint" pos="0.0 0.0 -0.0" type="hinge" range="-1.2000000140073657 1.563000055861744" axis="0.0 0.0 1.0"/>
+									<body name="K2_boom" pos="3.4928833300000006 0.0 -5.551115123125783e-17" quat="1.0 0.0 0.0 0.0">
+										<geom name="K2_boom_visual_0" pos="-3.49288333 0.0 0.0" quat="0.9987192078450507 0.0 0.0 -0.050595887988594" class="visual" type="mesh" mesh="boom_visual"/>
+										<geom name="K2_boom_collision_0" pos="-3.49288333 0.0 0.0" quat="0.9987192078450507 0.0 0.0 -0.050595887988594" class="collision" type="mesh" mesh="boom_collision"/>
+										<body name="moved_with_q3" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+											<joint name="theta3_arm_joint" pos="0.0 0.0 -0.0" type="hinge" range="-0.9100000139512037 4.5999998539578195" axis="0.0 0.0 1.0"/>
+											<body name="K3_arm" pos="-0.39250000000000007 0.0 5.551115123125783e-17" quat="0.7071067811140325 0.7071067812590626 0.0 0.0">
+												<geom name="K3_arm_visual_0" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="arm_visual"/>
+												<geom name="K3_arm_collision_3" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_004_collision"/>
+												<geom name="K3_arm_collision_2" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_003_collision"/>
+												<geom name="K3_arm_collision_1" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_002_collision"/>
+												<geom name="K3_arm_collision_0" pos="0.3925 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="arm_001_collision"/>
+												<body name="moved_with_q4" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+													<joint name="q4_big_telescope" pos="0.0 0.0 0.0" type="slide" range="0.0 2.2360000610351562" axis="0.0 0.0 1.0"/>
+													<body name="K4_outer_telescope" pos="0.0 0.0 3.157001602823" quat="1.0 0.0 0.0 0.0">
+														<geom name="K4_outer_telescope_collision_1" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="outer_telescope_002_collision"/>
+														<geom name="K4_outer_telescope_collision_2" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="outer_telescope_003_collision"/>
+														<geom name="K4_outer_telescope_collision_3" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="outer_telescope_004_collision"/>
+														<geom name="K4_outer_telescope_visual_0" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="outer_telescope_visual"/>
+														<geom name="K4_outer_telescope_collision_0" pos="0.2905 0.0 -0.0712" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="outer_telescope_001_collision"/>
+														<body name="moved_with_q5" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+															<joint name="q5_small_telescope" pos="0.0 0.0 0.0" type="slide" range="0.0 2.2360000610351562" axis="0.0 0.0 1.0"/>
+															<body name="K5_inner_telescope" pos="0.0 0.0 0.0" quat="-0.7071067811140325 0.7071067812590626 0.0 0.0">
+																<geom name="K5_inner_telescope_visual_0" pos="0.281 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="inner_telescope_visual"/>
+																<geom name="K5_inner_telescope_collision_0" pos="0.281 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="inner_telescope_collision"/>
+																<body name="moved_with_q6" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+																	<joint name="theta6_tip_joint" pos="0.0 0.0 -0.0" type="hinge" range="-1.570000041628963 1.570000041628963" axis="0.0 0.0 1.0"/>
+																	<body name="K6_double_joint_link" pos="-0.2129999999999992 0.0 0.0" quat="-0.7071067811140325 0.7071067812590626 0.0 0.0">
+																		<geom name="K6_double_joint_link_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="double_joint_link_collision"/>
+																		<geom name="K6_double_joint_link_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="double_joint_link_visual"/>
+																		<body name="moved_with_q7" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+																			<joint name="theta7_tilt_joint" pos="0.0 0.0 0.0" type="hinge" range="0.7853980302393938 2.3561899628184917" axis="0.0 0.0 1.0"/>
+																			<body name="K7_rotator_upper_part" pos="0.0 0.0 0.0" quat="-0.7071067811140325 0.7071067812590626 0.0 0.0">
+																				<geom name="K7_rotator_upper_part_visual_0" pos="0.0 0.0 0.113385" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="rotator_upper_part_visual"/>
+																				<geom name="K7_rotator_upper_part_collision_0" pos="0.0 0.0 0.113385" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="rotator_upper_part_collision"/>
+																				<body name="moved_with_q8" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+																					<joint name="theta8_rotator_joint" pos="0.0 0.0 0.0" type="hinge" range="-3.140000083257926 3.140000083257926" axis="0.0 0.0 1.0"/>
+																					<body name="K8_tool_center_point" pos="0.0 0.0 0.578" quat="1.0 0.0 0.0 0.0">
+																						<geom name="K8_tool_center_point_collision_0" pos="0.0 0.0 -0.454717" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="pincer_frame_collision"/>
+																						<geom name="K8_tool_center_point_visual_0" pos="0.0 0.0 -0.454717" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="pincer_frame_visual"/>
+																						<body name="K11" pos="0.0 0.3248 2.7755575615628914e-17" quat="0.49999999989744826 0.5 0.5000000001025517 0.5">
+																							<body name="moved_with_q12" pos="-1.3877787807814457e-17 0.0 0.0" quat="1.0 -2.1562786888997945e-30 0.0 0.0">
+																								<joint name="theta12_inner_jaw_joint" pos="2.8463827093604277e-27 2.8463802397415088e-27 -1.3877787807814457e-17" type="hinge" range="-3.000000101597441 3.000000101597441" axis="0.0 0.0 1.0"/>
+																								<body name="K12_inner_jaw" pos="0.8566 0.0 -1.7763568394002505e-15" quat="1.0 -2.1562786888997945e-30 0.0 0.0">
+																									<geom name="K12_inner_jaw_collision_5" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_006_collision"/>
+																									<geom name="K12_inner_jaw_collision_6" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_007_collision"/>
+																									<geom name="K12_inner_jaw_collision_0" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_001_collision"/>
+																									<geom name="K12_inner_jaw_collision_8" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_009_collision"/>
+																									<geom name="K12_inner_jaw_collision_12" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_013_collision"/>
+																									<geom name="K12_inner_jaw_collision_7" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_008_collision"/>
+																									<geom name="K12_inner_jaw_collision_3" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_004_collision"/>
+																									<geom name="K12_inner_jaw_collision_13" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_014_collision"/>
+																									<geom name="K12_inner_jaw_collision_14" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_015_collision"/>
+																									<geom name="K12_inner_jaw_collision_9" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_010_collision"/>
+																									<geom name="K12_inner_jaw_visual_0" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="visual" type="mesh" mesh="inner_jaw_visual"/>
+																									<geom name="K12_inner_jaw_collision_1" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_002_collision"/>
+																									<geom name="K12_inner_jaw_collision_10" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_011_collision"/>
+																									<geom name="K12_inner_jaw_collision_11" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_012_collision"/>
+																									<geom name="K12_inner_jaw_collision_2" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_003_collision"/>
+																									<geom name="K12_inner_jaw_collision_4" pos="-0.5663 0.4813 0.0" quat="-0.7064682714200307 -0.03004299210485709 0.7064682715649296 -0.030042992098695164" class="collision" type="mesh" mesh="inner_jaw_005_collision"/>
+																								</body>
 																							</body>
 																						</body>
-																					</body>
-																					<body name="K9" pos="0.0 -0.3401799999999999 0.0" quat="-0.49999999989744826 -0.5 0.5000000001025517 0.5">
-																						<body name="moved_with_q10" pos="0.0 -2.7755575615628914e-17 0.0" quat="1.0 -2.1562756796342564e-30 0.0 0.0">
-																							<joint name="theta10_outer_jaw_joint" pos="-5.692763875057885e-27 -2.7755575615628914e-17 1.7078294398412643e-26" type="hinge" range="0.0 3.000000101597441" axis="0.0 0.0 1.0"/>
-																							<body name="K10_outer_jaw" pos="0.8566000000000001 0.0 1.7763568394002505e-15" quat="1.0 -2.1562756796342564e-30 0.0 0.0">
-																								<geom name="K10_outer_jaw_collision_13" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_014_collision"/>
-																								<geom name="K10_outer_jaw_visual_0" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224572 0.7068609240000736 0.01864495170740042" class="visual" type="mesh" mesh="outer_jaw_visual"/>
-																								<geom name="K10_outer_jaw_collision_1" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_002_collision"/>
-																								<geom name="K10_outer_jaw_collision_4" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_005_collision"/>
-																								<geom name="K10_outer_jaw_collision_10" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_011_collision"/>
-																								<geom name="K10_outer_jaw_collision_6" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_007_collision"/>
-																								<geom name="K10_outer_jaw_collision_12" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_013_collision"/>
-																								<geom name="K10_outer_jaw_collision_0" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_001_collision"/>
-																								<geom name="K10_outer_jaw_collision_2" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_003_collision"/>
-																								<geom name="K10_outer_jaw_collision_7" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_008_collision"/>
-																								<geom name="K10_outer_jaw_collision_8" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_009_collision"/>
-																								<geom name="K10_outer_jaw_collision_9" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_010_collision"/>
-																								<geom name="K10_outer_jaw_collision_11" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_012_collision"/>
-																								<geom name="K10_outer_jaw_collision_14" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_015_collision"/>
-																								<geom name="K10_outer_jaw_collision_3" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_004_collision"/>
-																								<geom name="K10_outer_jaw_collision_5" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_006_collision"/>
+																						<body name="K9" pos="0.0 -0.3401799999999999 0.0" quat="-0.49999999989744826 -0.5 0.5000000001025517 0.5">
+																							<body name="moved_with_q10" pos="0.0 -2.7755575615628914e-17 0.0" quat="1.0 -2.1562756796342564e-30 0.0 0.0">
+																								<joint name="theta10_outer_jaw_joint" pos="-5.692763875057885e-27 -2.7755575615628914e-17 1.7078294398412643e-26" type="hinge" range="0.0 3.000000101597441" axis="0.0 0.0 1.0"/>
+																								<body name="K10_outer_jaw" pos="0.8566000000000001 0.0 1.7763568394002505e-15" quat="1.0 -2.1562756796342564e-30 0.0 0.0">
+																									<geom name="K10_outer_jaw_collision_5" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_006_collision"/>
+																									<geom name="K10_outer_jaw_collision_10" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_011_collision"/>
+																									<geom name="K10_outer_jaw_collision_14" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_015_collision"/>
+																									<geom name="K10_outer_jaw_collision_3" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_004_collision"/>
+																									<geom name="K10_outer_jaw_collision_6" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_007_collision"/>
+																									<geom name="K10_outer_jaw_collision_0" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_001_collision"/>
+																									<geom name="K10_outer_jaw_collision_9" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_010_collision"/>
+																									<geom name="K10_outer_jaw_collision_12" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_013_collision"/>
+																									<geom name="K10_outer_jaw_collision_2" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_003_collision"/>
+																									<geom name="K10_outer_jaw_visual_0" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="visual" type="mesh" mesh="outer_jaw_visual"/>
+																									<geom name="K10_outer_jaw_collision_11" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_012_collision"/>
+																									<geom name="K10_outer_jaw_collision_1" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_002_collision"/>
+																									<geom name="K10_outer_jaw_collision_13" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_014_collision"/>
+																									<geom name="K10_outer_jaw_collision_7" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_008_collision"/>
+																									<geom name="K10_outer_jaw_collision_4" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_005_collision"/>
+																									<geom name="K10_outer_jaw_collision_8" pos="-0.5509339 0.47161 0.0" quat="0.706860923855094 -0.018644951711224565 0.7068609240000736 0.018644951707400423" class="collision" type="mesh" mesh="outer_jaw_009_collision"/>
+																								</body>
 																							</body>
 																						</body>
 																					</body>
@@ -256,32 +286,94 @@
 												</body>
 											</body>
 										</body>
+										<body name="boom_cylinder_linkage_small" pos="-3.0389999999999997 -0.0360339999999999 5.551115123125783e-17" quat="0.9990526321101211 0.0 -3.2342382812811674e-27 -0.04351825219191609">
+											<geom name="boom_cylinder_linkage_small_collision_2" pos="0.0 -0.124 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_small_003_collision"/>
+											<geom name="boom_cylinder_linkage_small_collision_1" pos="0.0 -0.124 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_small_002_collision"/>
+											<geom name="boom_cylinder_linkage_small_collision_0" pos="0.0 -0.124 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_small_001_collision"/>
+											<geom name="boom_cylinder_linkage_small_collision_3" pos="0.0 -0.124 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_small_004_collision"/>
+											<geom name="boom_cylinder_linkage_small_visual_0" pos="0.0 -0.124 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="boom_cylinder_linkage_small_visual"/>
+											<joint name="boom_cylinder_linkage_small_mounting_on_boom" pos="4.440892098899119e-16 -5.55111512511825e-17 -9.714451446114722e-17" type="hinge" range="-6.000000203194882 6.000000203194882" axis="0.0 0.0 1.0"/>
+										</body>
+										<body name="arm_cylinder_barrel_right" pos="-1.6801999999999992 -0.048499999999999766 0.2240000000000001" quat="-0.608545501146005 0.0 6.10793379665999e-27 0.7935189808914199">
+											<geom name="arm_cylinder_barrel_right_visual_0" pos="0.0 0.0 -0.2" quat="0.7071199780782919 0.0 0.0 0.7070935840485021" class="visual" type="mesh" mesh="arm_cylinder_barrel_right_visual"/>
+											<geom name="arm_cylinder_barrel_right_collision_0" pos="0.0 0.0 -0.2" quat="0.7071199780782919 0.0 0.0 0.7070935840485021" class="collision" type="mesh" mesh="arm_cylinder_barrel_right_001_collision"/>
+											<geom name="arm_cylinder_barrel_right_collision_1" pos="0.0 0.0 -0.2" quat="0.7071199780782919 0.0 0.0 0.7070935840485021" class="collision" type="mesh" mesh="arm_cylinder_barrel_right_002_collision"/>
+											<joint name="arm_cylinder_mounting_on_boom_right" pos="6.661338148718709e-16 -8.326672689527523e-17 -2.359223924425148e-16" type="hinge" range="-6.000000203194882 6.000000203194882" axis="0.0 0.0 1.0"/>
+											<body name="arm_cylinder_piston_right" pos="0.0 1.6175749999999995 1.1102230246251565e-16" quat="1.0 -9.693522803355794e-27 0.0 0.0">
+												<geom name="arm_cylinder_piston_right_collision_1" pos="0.0 -1.246 -0.2" quat="0.7071090180427969 0.0 0.0 0.707104544323222" class="collision" type="mesh" mesh="arm_cylinder_piston_right_002_collision"/>
+												<geom name="arm_cylinder_piston_right_collision_0" pos="0.0 -1.246 -0.2" quat="0.7071090180427969 0.0 0.0 0.707104544323222" class="collision" type="mesh" mesh="arm_cylinder_piston_right_001_collision"/>
+												<geom name="arm_cylinder_piston_right_visual_0" pos="0.0 -1.246 -0.2" quat="0.7071090180427969 0.0 0.0 0.707104544323222" class="visual" type="mesh" mesh="arm_cylinder_piston_right_visual"/>
+												<joint name="arm_cylinder_piston_in_barrel_linear_joint_right" pos="1.0722365344762671e-16 2.8793050640680793e-17 4.440892098728337e-16" type="slide" range="-0.37357500195503235 0.5544250011444092" axis="0.0 0.9999999999999998 2.220446049250313e-16"/>
+												<body name="arm_cylinder_cover_right" pos="8.881784197001252e-16 -1.7763568394002505e-15 0.0" quat="1.0 -9.693522803355794e-27 0.0 0.0">
+													<geom name="arm_cylinder_cover_right_visual_0" pos="0.0 -1.246 -0.2" quat="0.7071090180427969 0.0 0.0 0.707104544323222" class="visual" type="mesh" mesh="arm_cylinder_piston_cover_right_visual"/>
+												</body>
+											</body>
+										</body>
+										<body name="arm_cylinder_barrel_left" pos="-1.680200000000001 -0.04850000000000021 -0.224" quat="-0.608545501146005 0.0 6.10793379665999e-27 0.7935189808914199">
+											<geom name="arm_cylinder_barrel_left_visual_0" pos="0.0 0.0 0.238" quat="0.7071199780782919 0.0 0.0 0.7070935840485021" class="visual" type="mesh" mesh="arm_cylinder_barrel_left_visual"/>
+											<geom name="arm_cylinder_barrel_left_collision_0" pos="0.0 0.0 0.238" quat="0.7071199780782919 0.0 0.0 0.7070935840485021" class="collision" type="mesh" mesh="arm_cylinder_barrel_left_001_collision"/>
+											<geom name="arm_cylinder_barrel_left_collision_1" pos="0.0 0.0 0.238" quat="0.7071199780782919 0.0 0.0 0.7070935840485021" class="collision" type="mesh" mesh="arm_cylinder_barrel_left_002_collision"/>
+											<joint name="arm_cylinder_mounting_on_boom_left" pos="-1.110223024710548e-15 4.269574656785835e-26 2.0816681666179574e-16" type="hinge" range="-6.000000203194882 6.000000203194882" axis="0.0 0.0 1.0"/>
+											<body name="arm_cylinder_piston_left" pos="-8.881784197001252e-16 1.6175750000000013 0.0" quat="1.0 -9.693522803355794e-27 0.0 0.0">
+												<geom name="arm_cylinder_piston_left_collision_0" pos="0.0 -1.246 0.238" quat="0.7071090180427969 0.0 0.0 0.707104544323222" class="collision" type="mesh" mesh="arm_cylinder_piston_left_001_collision"/>
+												<geom name="arm_cylinder_piston_left_visual_0" pos="0.0 -1.246 0.238" quat="0.7071090180427969 0.0 0.0 0.707104544323222" class="visual" type="mesh" mesh="arm_cylinder_piston_left_visual"/>
+												<geom name="arm_cylinder_piston_left_collision_1" pos="0.0 -1.246 0.238" quat="0.7071090180427969 0.0 0.0 0.707104544323222" class="collision" type="mesh" mesh="arm_cylinder_piston_left_002_collision"/>
+												<joint name="arm_cylinder_piston_in_barrel_linear_joint_left" pos="2.3034440684407784e-16 -8.577892273081274e-16 -1.332267629914525e-15" type="slide" range="-0.37357500195503235 0.5544250011444092" axis="0.0 0.9999999999999998 2.220446049250313e-16"/>
+												<body name="arm_cylinder_cover_left" pos="0.0 0.0 0.0" quat="1.0 -9.693522803355794e-27 0.0 0.0">
+													<geom name="arm_cylinder_cover_left_visual_0" pos="0.0 -1.246 0.238" quat="0.7071090180427969 0.0 0.0 0.707104544323222" class="visual" type="mesh" mesh="arm_cylinder_piston_cover_left_visual"/>
+												</body>
+											</body>
+										</body>
 									</body>
 								</body>
-							</body>
-							<body name="hydraulic_block" pos="-0.2999999999999998 -0.7400000000000002 -5.551115123125783e-17" quat="0.9987502603949663 -1.5597328848292796e-19 -2.0938167711289532e-18 0.04997916927067833">
-								<geom name="hydraulic_block_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.2 0.34 0.31"/>
-								<geom name="hydraulic_block_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="box" size="0.2 0.34 0.31"/>
+								<body name="boom_cylinder_barrel" pos="0.43299999999999983 -1.7682 -5.551115123125783e-17" quat="0.9999953182036533 0.0 2.625341383889227e-27 -0.003059995224566235">
+									<geom name="boom_cylinder_barrel_collision_0" pos="0.0 0.069 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_barrel_collision"/>
+									<geom name="boom_cylinder_barrel_visual_0" pos="0.0 0.069 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="boom_cylinder_barrel_visual"/>
+									<joint name="boom_cylinder_mounting_on_slewing_column" pos="-1.6653345369377348e-16 5.551115123125782e-17 -7.96986995018831e-26" type="hinge" range="-6.000000203194882 6.000000203194882" axis="0.0 0.0 1.0"/>
+									<body name="boom_cylinder_piston" pos="0.0 0.43400700000000025 -1.1102230246251565e-16" quat="1.0 -6.462345454082618e-27 -1.297518493944718e-26 0.0">
+										<geom name="boom_cylinder_piston_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_piston_collision"/>
+										<geom name="boom_cylinder_piston_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="boom_cylinder_piston_visual"/>
+										<joint name="boom_cylinder_piston_in_barrel_linear_joint" pos="-6.794521582781092e-19 1.1102022328715852e-16 -2.2204460494780237e-16" type="slide" range="-0.3612070083618164 0.6147930026054382" axis="0.0 0.9999999999999998 2.220446049250313e-16"/>
+										<body name="boom_cylinder_cover" pos="-8.881784197001252e-16 0.0 0.0" quat="1.0 -6.462345454082618e-27 -1.297518493944718e-26 0.0">
+											<geom name="boom_cylinder_cover_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="boom_cylinder_piston_cover_visual"/>
+										</body>
+									</body>
+								</body>
+								<body name="boom_cylinder_linkage_big" pos="-0.1200000000000001 -0.06999999999999984 -5.551115123125783e-17" quat="0.9968714476658306 0.0 -4.8619723365801716e-27 -0.07903996981674044">
+									<geom name="boom_cylinder_linkage_big_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_big_001_collision"/>
+									<geom name="boom_cylinder_linkage_big_collision_7" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_big_008_collision"/>
+									<geom name="boom_cylinder_linkage_big_collision_5" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_big_006_collision"/>
+									<geom name="boom_cylinder_linkage_big_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="boom_cylinder_linkage_big_visual"/>
+									<geom name="boom_cylinder_linkage_big_collision_6" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_big_007_collision"/>
+									<geom name="boom_cylinder_linkage_big_collision_3" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_big_004_collision"/>
+									<geom name="boom_cylinder_linkage_big_collision_4" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_big_005_collision"/>
+									<geom name="boom_cylinder_linkage_big_collision_2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_big_003_collision"/>
+									<geom name="boom_cylinder_linkage_big_collision_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="boom_cylinder_linkage_big_002_collision"/>
+									<joint name="boom_cylinder_linkage_big_mounting_on_slewing_column" pos="-1.1102230239420249e-16 5.551115119710123e-17 -1.6653345375070114e-16" type="hinge" range="-6.000000203194882 6.000000203194882" axis="0.0 0.0 1.0"/>
+								</body>
+								<body name="hydraulic_block" pos="-0.2999999999999998 -0.7400000000000002 -5.551115123125783e-17" quat="0.9987502603949663 -1.5597328848292796e-19 -2.0938167711289532e-18 0.04997916927067833">
+									<geom name="hydraulic_block_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="box" size="0.2 0.34 0.31"/>
+									<geom name="hydraulic_block_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="box" size="0.2 0.34 0.31"/>
+								</body>
 							</body>
 						</body>
 					</body>
-				</body>
-				<body name="tr_white" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_white_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_fahrerkabine_weisse_teile_visual"/>
-				</body>
-				<body name="tr_crane_frameplate" pos="-6.85 0.0 0.55" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_crane_frameplate_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="box" size="0.475 0.355 0.09"/>
-				</body>
-				<body name="tr_bed" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-					<geom name="tr_bed_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_001_collision"/>
-					<geom name="tr_bed_collision_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_002_collision"/>
-					<geom name="tr_bed_collision_2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_003_collision"/>
-					<geom name="tr_bed_collision_3" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_004_collision"/>
-					<geom name="tr_bed_collision_4" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_005_collision"/>
-					<geom name="tr_bed_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_visual"/>
+					<body name="tr_white" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_white_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_fahrerkabine_weisse_teile_visual"/>
+					</body>
+					<body name="tr_crane_frameplate" pos="-6.85 0.0 0.55" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_crane_frameplate_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="box" size="0.475 0.355 0.09"/>
+					</body>
+					<body name="tr_bed" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+						<geom name="tr_bed_collision_2" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_003_collision"/>
+						<geom name="tr_bed_collision_4" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_005_collision"/>
+						<geom name="tr_bed_collision_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_002_collision"/>
+						<geom name="tr_bed_visual_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="visual" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_visual"/>
+						<geom name="tr_bed_collision_3" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_004_collision"/>
+						<geom name="tr_bed_collision_0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" class="collision" type="mesh" mesh="lkw_ladeflaeche_mit_rammschutz_seitlich_001_collision"/>
+					</body>
 				</body>
 			</body>
-		</body>
 	</worldbody>
 
 	<actuator>
