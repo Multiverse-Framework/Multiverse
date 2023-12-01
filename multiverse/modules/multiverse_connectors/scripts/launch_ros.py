@@ -192,6 +192,18 @@ class MultiverseRosLaunch(MultiverseLaunch):
                 process = run_move_base(ros_run["move_base"], self.resources_paths, map_path)
                 processes.append(process)
 
+        if "joint_state_publisher_gui" in ros_run:
+            if INTERFACE == Interface.ROS1:
+                from utils import run_joint_state_publisher_gui
+                process = run_joint_state_publisher_gui(ros_run["joint_state_publisher_gui"].get("robot_description", "robot_description"))
+                processes.append(process)
+
+        if "robot_state_publisher" in ros_run:
+            if INTERFACE == Interface.ROS1:
+                from utils import run_robot_state_publisher
+                process = run_robot_state_publisher(ros_run["robot_state_publisher"].get("robot_description", "robot_description"))
+                processes.append(process)
+
         return processes
 
     @property

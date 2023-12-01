@@ -13,14 +13,17 @@ def run_rviz(rviz_dict, resources_paths, mesh_abspath_prefix, multiverse_control
                                                  urdf_path)
         rospy.set_param(f"/{robot_description}", f"{urdf_str}")
 
-    rviz_config_path = find_files(resources_paths, rviz_dict["config"])
     cmd = [
         "rosrun",
         "rviz",
         "rviz",
-        "--display-config",
-        f"{rviz_config_path}",
     ]
+    if "config" in rviz_dict:
+        rviz_config_path = find_files(resources_paths, rviz_dict["config"])
+        cmd += [
+            "--display-config",
+            f"{rviz_config_path}",
+        ]
     return run_subprocess(cmd)
 
 

@@ -1,0 +1,22 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  ros:
+    ros_run:
+      rviz:
+        config: crane/config/rviz.rviz
+        robot_descriptions:
+          crane_description: crane/urdf/crane.urdf
+
+      joint_state_publisher_gui:
+        robot_description: /crane_description
+
+      robot_state_publisher:
+        robot_description: /crane_description
