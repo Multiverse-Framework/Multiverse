@@ -75,9 +75,15 @@ class JointProperty:
         self.quat = joint_quat
         self.axis = joint_axis
         self.type = joint_type
+        if joint_parent_prim.GetStage() != joint_child_prim.GetStage():
+            raise ValueError(f"Parent prim {self.parent_prim.GetPath()} and child prim {self.child_prim.GetPath()} "
+                             f"are not in the same stage.")
         self.parent_prim = joint_parent_prim
         self.child_prim = joint_child_prim
-        self.stage = self.parent_prim.GetStage()
+
+    @property
+    def stage(self) -> Usd.Stage:
+        return self.parent_prim.GetStage()
 
     @property
     def name(self) -> str:
@@ -165,35 +171,29 @@ class JointProperty:
         return self._type
 
     @type.setter
-    def type(self, joint_type: JointType) -> None:
-        self._type = joint_type
+    def type(self, value):
+        self._type = value
 
     @property
     def parent_prim(self) -> UsdGeom.Xform:
-        return self._parent_prim if hasattr(self, "_parent_prim") else None
+        return self._parent_prim
 
     @parent_prim.setter
-    def parent_prim(self, parent_prim: UsdGeom.Xform) -> None:
-        if self.child_prim is not None and parent_prim.GetStage() != self.child_prim.GetStage():
-            raise ValueError(f"Parent prim {parent_prim.GetPath()} and child prim {self.child_prim.GetPath()} "
-                             f"are not in the same stage.")
-        self._parent_prim = parent_prim
+    def parent_prim(self, value):
+        self._parent_prim = value
 
     @property
     def child_prim(self) -> UsdGeom.Xform:
-        return self._child_prim if hasattr(self, "_child_prim") else None
+        return self._child_prim
 
     @child_prim.setter
-    def child_prim(self, child_prim: UsdGeom.Xform) -> None:
-        if self.parent_prim is not None and child_prim.GetStage() != self.parent_prim.GetStage():
-            raise ValueError(f"Parent prim {self.parent_prim.GetPath()} and child prim {child_prim.GetPath()} "
-                             f"are not in the same stage.")
-        self._child_prim = child_prim
+    def child_prim(self, value):
+        self._child_prim = value
 
 
 class JointBuilder:
-    _joint: UsdPhysics.Joint
-    _joint_property: JointProperty
+    joint: UsdPhysics.Joint
+    joint_property: JointProperty
 
     def __init__(
             self,
@@ -265,7 +265,7 @@ class JointBuilder:
         return self._joint_property.stage
 
     @property
-    def path(self) -> str:
+    def path(self) -> Sdf.Path:
         return self._joint_property.path
 
     @property

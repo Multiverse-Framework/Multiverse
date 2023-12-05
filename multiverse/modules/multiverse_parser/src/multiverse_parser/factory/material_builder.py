@@ -1,14 +1,16 @@
 #!/usr/bin/env python3.10
 
 import os
-from typing import Optional
+from typing import Optional, List
 
 import numpy
 from pxr import Usd, Sdf, UsdShade, Gf
 
 
 class MaterialBuilder:
-    _stage: Usd.Stage
+    stage: Usd.Stage
+    root_prim: Usd.Prim
+    materials: List[UsdShade.Material]
 
     def __init__(self, file_path: str) -> None:
         self._stage = Usd.Stage.Open(file_path) \
@@ -20,7 +22,8 @@ class MaterialBuilder:
                        specular_color=Optional[numpy.ndarray]):
         for mesh_prim in self._stage.GetDefaultPrim().GetChildren():
             mesh_prim.ApplyAPI(UsdShade.MaterialBindingAPI)
-            material = UsdShade.Material.Define(self._stage, f"/Materials/M_{mesh_prim.GetName()}")
+            material = UsdShade.Material.Define(self._stage,
+                                                Sdf.Path("/Materials").AppendChild(f"M_{mesh_prim.GetName()}"))
             material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
             material_binding_api.Bind(material)
 
@@ -36,6 +39,10 @@ class MaterialBuilder:
                 shader.CreateInput("specularColor", Sdf.ValueTypeNames.Color3f).Set(Gf.Vec3f(*specular_color))
 
             material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "surface")
+
+    @property
+    def stage(self):
+        return self._stage
 
     @property
     def root_prim(self):

@@ -41,6 +41,8 @@ class UrdfToUsdTestCase(unittest.TestCase):
         importer = MjcfImporter(file_path=input_mjcf_path, with_physics=True, with_visual=True,
                                 with_collision=False)
 
+        importer.import_model()
+
         output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_3.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))

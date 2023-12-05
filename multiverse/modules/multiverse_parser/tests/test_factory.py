@@ -81,7 +81,7 @@ class FactoryTestCase(unittest.TestCase):
         mesh_builder, _ = geom_builder_1.add_mesh(mesh_file_path=os.path.join(self.resource_path, "input", "milk_box",
                                                                               "meshes", "usd", "obj", "milk_box.usda"))
         self.assertEqual(mesh_builder.xform.GetPath(), "/milk_box")
-        self.assertTrue(geom_builder_1._stage.GetPrimAtPath("/body_0/body_1/geom_1/SM_MilkBox").IsValid())
+        self.assertTrue(geom_builder_1.stage.GetPrimAtPath("/body_0/body_1/geom_1/SM_MilkBox").IsValid())
 
         world_builder.export()
         self.assertTrue(os.path.exists(file_path))

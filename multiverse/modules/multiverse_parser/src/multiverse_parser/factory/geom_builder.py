@@ -1,8 +1,7 @@
 #!/usr/bin/env python3.10
 
-import os
 from dataclasses import dataclass
-from typing import Optional, List, Union, Any, Dict, Tuple, Sequence
+from typing import Optional, List, Dict, Tuple, Sequence
 
 import numpy
 from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf, UsdShade
@@ -141,71 +140,67 @@ def reference_materials(material_builder: MaterialBuilder, stage: Usd.Stage, mes
 
 
 class GeomBuilder:
-    _stage: Usd.Stage
-    _type: GeomType
-    _xform: UsdGeom.Xform
-    _property: GeomProperty
-    _mesh_builders: Dict[str, MeshBuilder]
-    _material_builders: Dict[str, MaterialBuilder]
+    stage: Usd.Stage
+    xform: UsdGeom.Xform
+    geom_prims: List[UsdGeom.Gprim]
+    mesh_builders: Dict[str, MeshBuilder]
+    material_builders: Dict[str, MaterialBuilder]
 
-    def __init__(self, stage: Usd.Stage, geom_name: str, body_path: Sdf.Path, geom_type: GeomType,
-                 geom_property: GeomProperty) -> None:
-        self._stage = stage
-        self._type = geom_type
-        self._xform = UsdGeom.Xform.Define(self._stage, body_path.AppendPath(geom_name))
-        self._property = geom_property
+    def __init__(self, stage: Usd.Stage, geom_name: str, body_path: Sdf.Path, geom_property: GeomProperty) -> None:
+        self._geom_property = geom_property
+        self._xform = UsdGeom.Xform.Define(stage, body_path.AppendPath(geom_name))
         self._mesh_builders = {}
         self._material_builders = {}
+        self._geom_prims = self._create_geoms()
 
     def add_mesh(self, mesh_file_path: str) -> Tuple[MeshBuilder, MaterialBuilder]:
-        if mesh_file_path in self._mesh_builders:
-            mesh_builder = self._mesh_builders[mesh_file_path]
+        if mesh_file_path in self.mesh_builders:
+            mesh_builder = self.mesh_builders[mesh_file_path]
         else:
             mesh_builder = MeshBuilder(mesh_file_path)
 
-        if mesh_file_path in self._material_builders:
-            material_builder = self._material_builders[mesh_file_path]
+        if mesh_file_path in self.material_builders:
+            material_builder = self.material_builders[mesh_file_path]
         else:
             material_builder = MaterialBuilder(file_path=mesh_file_path)
 
         reference_meshes = mesh_builder.meshes
         local_meshes = []
         for mesh in reference_meshes:
-            local_meshes.append(self._stage.OverridePrim(self.xform.GetPath().AppendPath(mesh.GetPrim().GetName())))
+            local_meshes.append(self.stage.OverridePrim(self.xform.GetPath().AppendPath(mesh.GetPrim().GetName())))
             self.xform.GetPrim().GetReferences().AddReference(mesh_file_path, mesh_builder.xform.GetPath())
 
         bind_materials(mesh_builder, local_meshes, reference_meshes)
 
-        reference_materials(material_builder, self._stage, mesh_file_path)
+        reference_materials(material_builder, self.stage, mesh_file_path)
 
         return mesh_builder, material_builder
 
     def _create_geoms(self) -> List[Usd.Prim]:
         if self.type == GeomType.PLANE:
-            geom = UsdGeom.Mesh.Define(self._stage, self.xform.GetPath().AppendPath("Plane"))
+            geom = UsdGeom.Mesh.Define(self.stage, self.xform.GetPath().AppendPath("Plane"))
             geom.CreatePointsAttr([(-0.5, -0.5, 0), (0.5, -0.5, 0), (-0.5, 0.5, 0), (0.5, 0.5, 0)])
             geom.CreateNormalsAttr([(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)])
             geom.CreateFaceVertexCountsAttr([4])
             geom.CreateFaceVertexIndicesAttr([0, 1, 3, 2])
             return [UsdGeom.Mesh(geom)]
         if self.type == GeomType.CUBE:
-            return [UsdGeom.Cube.Define(self._stage, self.xform.GetPath().AppendPath("Cube"))]
+            return [UsdGeom.Cube.Define(self.stage, self.xform.GetPath().AppendPath("Cube"))]
         if self.type == GeomType.SPHERE:
-            return [UsdGeom.Sphere.Define(self._stage, self.xform.GetPath().AppendPath("Sphere"))]
+            return [UsdGeom.Sphere.Define(self.stage, self.xform.GetPath().AppendPath("Sphere"))]
         if self.type == GeomType.CYLINDER:
-            return [UsdGeom.Cylinder.Define(self._stage, self.xform.GetPath().AppendPath("Cylinder"))]
+            return [UsdGeom.Cylinder.Define(self.stage, self.xform.GetPath().AppendPath("Cylinder"))]
         if self.type == GeomType.CAPSULE:
-            return [UsdGeom.Cylinder.Define(self._stage, self.xform.GetPath().AppendPath("Capsule"))]
+            return [UsdGeom.Cylinder.Define(self.stage, self.xform.GetPath().AppendPath("Capsule"))]
         if self.type == GeomType.MESH:
-            return self.geom_prims
+            return []
         raise ValueError(f"Geom type {self.type} not supported.")
 
     def build(self) -> List[UsdGeom.Gprim]:
-        self._create_geoms()
         for geom in self.geom_prims:
-            if self.property.rgba is not None:
-                geom.CreateDisplayColorAttr(self.property.rgba[:3])
-                geom.CreateDisplayOpacityAttr(self.property.rgba[3])
+            if self.rgba is not None:
+                geom.CreateDisplayColorAttr(self.rgba[:3])
+                geom.CreateDisplayOpacityAttr(self.rgba[3])
         return self.geom_prims
 
     def set_transform(
@@ -227,8 +222,8 @@ class GeomBuilder:
         mat_scale = Gf.Matrix4d()
         mat_scale.SetScale(Gf.Vec3d(*scale))
         mat = mat_scale * mat
-        self._xform.ClearXformOpOrder()
-        self._xform.AddTransformOp().Set(mat)
+        self.xform.ClearXformOpOrder()
+        self.xform.AddTransformOp().Set(mat)
         self._update_extent()
 
     def set_attribute(self, prefix: str = None, **kwargs) -> None:
@@ -265,6 +260,10 @@ class GeomBuilder:
                 capsule.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
 
     @property
+    def stage(self) -> Usd.Stage:
+        return self.xform.GetPrim().GetStage()
+
+    @property
     def geom_prims(self) -> List[UsdGeom.Gprim]:
         return [UsdGeom.Gprim(prim) for prim in self.xform.GetPrim().GetChildren()]
 
@@ -274,8 +273,16 @@ class GeomBuilder:
 
     @property
     def type(self) -> GeomType:
-        return self._type
+        return self._geom_property.type
 
     @property
-    def property(self) -> GeomProperty:
-        return self._property
+    def rgba(self) -> Optional[numpy.ndarray]:
+        return self._geom_property.rgba
+
+    @property
+    def mesh_builders(self) -> Dict[str, MeshBuilder]:
+        return self._mesh_builders
+
+    @property
+    def material_builders(self) -> Dict[str, MaterialBuilder]:
+        return self._material_builders

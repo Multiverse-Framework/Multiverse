@@ -5,10 +5,9 @@ from typing import Dict, Optional
 import numpy
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
-from ..utils import xform_cache, modify_name
-
 from .geom_builder import GeomBuilder, GeomProperty
 from .joint_builder import JointBuilder, JointProperty
+from ..utils import xform_cache, modify_name
 
 
 class BodyBuilder:
@@ -77,7 +76,6 @@ class BodyBuilder:
 
     def add_geom(self, geom_property: GeomProperty) -> GeomBuilder:
         geom_name = geom_property.name
-        geom_type = geom_property.type
         if geom_name in self._geom_builders:
             print(f"Geom {geom_name} already exists.")
             geom_builder = self._geom_builders[geom_name]
@@ -86,7 +84,6 @@ class BodyBuilder:
                 stage=self._stage,
                 geom_name=geom_name,
                 body_path=self._xform.GetPath(),
-                geom_type=geom_type,
                 geom_property=geom_property
             )
             self._geom_builders[geom_name] = geom_builder
