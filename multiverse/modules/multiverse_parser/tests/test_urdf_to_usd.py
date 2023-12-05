@@ -1,4 +1,7 @@
 import sys
+
+import numpy
+
 sys.path = [sys_path for sys_path in sys.path if "USD/lib/python" not in sys_path]
 
 import unittest
@@ -21,7 +24,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
     def test_urdf_importer(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
         importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
-                                with_collision=True, geom_rgba=(1.0, 0.0, 0.0, 0.1))
+                                with_collision=True, geom_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
         self.assertEqual(importer.source_file_path, input_urdf_path)
         self.assertEqual(importer._config.model_name, "tiago_dual")
 

@@ -2,7 +2,7 @@
 
 import os
 from dataclasses import dataclass
-from typing import Optional, List, Union, Any, Dict, Tuple
+from typing import Optional, List, Union, Any, Dict, Tuple, Sequence
 
 import numpy
 from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf, UsdShade
@@ -23,29 +23,66 @@ class GeomType(Enum):
     MESH = 5
 
 
+@dataclass(init=False)
 class GeomProperty:
+    name: str
+    type: GeomType
     is_visible: bool
     is_collidable: bool
-    _rgba: Optional[numpy.ndarray]
+    rgba: Optional[numpy.ndarray]
 
-    def __init__(self, is_visible: bool = True, is_collidable: bool = True, rgba: Optional[numpy.ndarray] = None) -> None:
+    def __init__(self, geom_name: str, geom_type: GeomType, is_visible: bool = True, is_collidable: bool = True,
+                 rgba: Optional[numpy.ndarray] = None) -> None:
+        self.name = geom_name
+        self.type = geom_type
         self.is_visible = is_visible
         self.is_collidable = is_collidable
         self.rgba = rgba
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, name: str) -> None:
+        self._name = modify_name(name)
+
+    @property
+    def type(self) -> GeomType:
+        return self._type
+
+    @type.setter
+    def type(self, geom_type: GeomType) -> None:
+        self._type = geom_type
+
+    @property
+    def is_visible(self) -> bool:
+        return self._is_visible
+
+    @is_visible.setter
+    def is_visible(self, is_visible: bool) -> None:
+        self._is_visible = is_visible
+
+    @property
+    def is_collidable(self) -> bool:
+        return self._is_collidable
+
+    @is_collidable.setter
+    def is_collidable(self, is_collidable: bool) -> None:
+        self._is_collidable = is_collidable
 
     @property
     def rgba(self) -> Optional[numpy.ndarray]:
         return self._rgba
 
     @rgba.setter
-    def rgba(self, rgba: Any) -> None:
+    def rgba(self, rgba: Sequence) -> None:
         if rgba is not None:
-            rgba = (float(rgba[0]), float(rgba[1]), float(rgba[2]), float(rgba[3]))
             if len(rgba) != 4:
-                raise ValueError(f"RGBA must be a tuple of length 4.")
-            for value in rgba:
-                if not (0.0 <= value <= 1.0):
-                    raise ValueError(f"RGBA values must be between 0.0 and 1.0.")
+                raise ValueError(f"RGBA values must be a 4-element array.")
+            rgba = numpy.array(rgba, dtype=numpy.float32)
+            if not all(0.0 <= v <= 1.0 for v in rgba):
+                raise ValueError(f"RGBA values must be between 0.0 and 1.0.")
         self._rgba = rgba
 
 
@@ -167,8 +204,8 @@ class GeomBuilder:
         self._create_geoms()
         for geom in self.geom_prims:
             if self.property.rgba is not None:
-                geom.CreateDisplayColorAttr([self.property.rgba[:3]])
-                geom.CreateDisplayOpacityAttr([self.property.rgba[3]])
+                geom.CreateDisplayColorAttr(self.property.rgba[:3])
+                geom.CreateDisplayOpacityAttr(self.property.rgba[3])
         return self.geom_prims
 
     def set_transform(
@@ -221,6 +258,7 @@ class GeomBuilder:
                 height = cylinder.GetHeightAttr().Get()
                 cylinder.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
             elif self.type == GeomType.CAPSULE:
+                # TODO: Add more attributes
                 capsule = UsdGeom.Cylinder(geom_prim)
                 radius = capsule.GetRadiusAttr().Get()
                 height = capsule.GetHeightAttr().Get()

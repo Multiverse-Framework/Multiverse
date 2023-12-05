@@ -10,7 +10,8 @@ from urdf_parser_py import urdf
 
 from .importer import Configuration, Importer
 
-from ..factory import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomBuilder, GeomType, GeomProperty
+from ..factory import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomBuilder, GeomType, GeomProperty, \
+    JointProperty
 from ..utils import rpy_to_quat, xform_cache
 
 
@@ -159,35 +160,42 @@ class UrdfImporter(Importer):
         geom_rgba = self._config.default_rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
             else geom.material.color.default_rgba
         if type(geom.geometry) is urdf.Box:
-            geom_builder = body_builder.add_geom(geom_name=geom_name,
-                                                 geom_type=GeomType.CUBE,
-                                                 geom_property=GeomProperty(is_visible=geom_is_visible,
-                                                                            is_collidable=geom_is_collidable,
-                                                                            rgba=geom_rgba))
+            geom_property = GeomProperty(geom_name=geom_name,
+                                         geom_type=GeomType.CUBE,
+                                         is_visible=geom_is_visible,
+                                         is_collidable=geom_is_collidable,
+                                         rgba=geom_rgba)
+            geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
             geom_scale = numpy.array([geom.geometry.size[i] / 2.0 for i in range(3)])
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
         elif type(geom.geometry) is urdf.Sphere:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.SPHERE,
-                                                 geom_property=GeomProperty(is_visible=geom_is_visible,
-                                                                            is_collidable=geom_is_collidable,
-                                                                            rgba=geom_rgba))
+            geom_property = GeomProperty(geom_name=geom_name,
+                                         geom_type=GeomType.SPHERE,
+                                         is_visible=geom_is_visible,
+                                         is_collidable=geom_is_collidable,
+                                         rgba=geom_rgba)
+            geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             geom_builder.set_attribute(radius=geom.geometry.radius)
         elif type(geom.geometry) is urdf.Cylinder:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.CYLINDER,
-                                                 geom_property=GeomProperty(is_visible=geom_is_visible,
-                                                                            is_collidable=geom_is_collidable,
-                                                                            rgba=geom_rgba))
+            geom_property = GeomProperty(geom_name=geom_name,
+                                         geom_type=GeomType.CYLINDER,
+                                         is_visible=geom_is_visible,
+                                         is_collidable=geom_is_collidable,
+                                         rgba=geom_rgba)
+            geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             geom_builder.set_attribute(radius=geom.geometry.radius, height=geom.geometry.length)
         elif type(geom.geometry) is urdf.Mesh:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_type=GeomType.MESH,
-                                                 geom_property=GeomProperty(is_visible=geom_is_visible,
-                                                                            is_collidable=geom_is_collidable,
-                                                                            rgba=geom_rgba))
+            geom_property = GeomProperty(geom_name=geom_name,
+                                         geom_type=GeomType.MESH,
+                                         is_visible=geom_is_visible,
+                                         is_collidable=geom_is_collidable,
+                                         rgba=geom_rgba)
+            geom_builder = body_builder.add_geom(geom_property=geom_property)
             source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)
             if source_mesh_file_path is not None:
                 tmp_mesh_file_path = self.import_mesh(mesh_file_path=source_mesh_file_path)
@@ -258,13 +266,15 @@ class UrdfImporter(Importer):
 
             joint_pos = body1_rot.GetInverse().Transform(joint_pos - body1_to_body2_pos)
 
-            joint_builder = child_body_builder.add_joint(
+            joint_property = JointProperty(
                 joint_name=joint.name,
-                parent_prim=parent_prim,
-                joint_type=joint_type,
+                joint_parent_prim=parent_body_builder.xform.GetPrim(),
+                joint_child_prim=child_body_builder.xform.GetPrim(),
                 joint_pos=joint_pos,
                 joint_axis=joint.axis,
+                joint_type=joint_type,
             )
+            joint_builder = child_body_builder.add_joint(joint_property=joint_property)
 
             if joint_type == JointType.REVOLUTE:
                 joint_builder.set_limit(lower=degrees(joint.limit.lower),

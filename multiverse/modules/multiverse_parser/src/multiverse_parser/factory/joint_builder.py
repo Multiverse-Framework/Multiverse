@@ -1,29 +1,14 @@
 #!/usr/bin/env python3.10
 
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Sequence
+from dataclasses import dataclass
 
 import numpy
-from pxr import Usd, UsdGeom, Gf, UsdPhysics
+from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf
 from mujoco import mjtJoint
 from enum import Enum
 
-from ..utils import xform_cache
-
-
-def get_joint_axis(axis: List[float]) -> str | None:
-    if numpy.array_equal(axis, [1, 0, 0]):
-        return "X"
-    if numpy.array_equal(axis, [0, 1, 0]):
-        return "Y"
-    if numpy.array_equal(axis, [0, 0, 1]):
-        return "Z"
-    if numpy.array_equal(axis, [-1, 0, 0]):
-        return "-X"
-    if numpy.array_equal(axis, [0, -1, 0]):
-        return "-Y"
-    if numpy.array_equal(axis, [0, 0, -1]):
-        return "-Z"
-    raise ValueError(f"Axis {axis} not supported.")
+from ..utils import modify_name, xform_cache
 
 
 class JointType(Enum):
@@ -63,44 +48,166 @@ class JointType(Enum):
             return JointType.NONE
 
 
-class JointBuilder:
-    _stage: Usd.Stage
-    _path: str
-    _parent_prim: UsdGeom.Xform
-    _child_prim: UsdGeom.Xform
-    _type: JointType
-    _pos: Gf.Vec3d
-    _quat: Gf.Quatd
-    _axis: str
+@dataclass(init=False)
+class JointProperty:
+    stage: Usd.Stage
+    name: str
+    path: str
+    pos: Gf.Vec3d
+    quat: Gf.Quatd
+    axis: str
+    type: JointType
+    parent_prim: UsdGeom.Xform
+    child_prim: UsdGeom.Xform
 
     def __init__(
             self,
-            stage: Usd.Stage,
-            name: str,
-            parent_prim: UsdGeom.Xform,
-            child_prim: UsdGeom.Xform,
-            joint_type: JointType,
-            joint_pos: numpy.ndarray = numpy.array([0.0, 0.0, 0.0]),
-            joint_quat: Optional[numpy.ndarray] = None,
+            joint_name: str,
+            joint_parent_prim: UsdGeom.Xform,
+            joint_child_prim: UsdGeom.Xform,
+            joint_pos: Sequence = numpy.array([0.0, 0.0, 0.0]),
+            joint_quat: Optional[Sequence] = None,
             joint_axis: Union[str, List[float]] = "Z",
+            joint_type: JointType = JointType.REVOLUTE,
     ) -> None:
-        self._stage = stage
-        self._path = parent_prim.GetPath().AppendPath(name)
-        self._parent_prim = parent_prim
-        self._child_prim = child_prim
+        self.name = joint_name
+        self.pos = joint_pos
+        self.quat = joint_quat
+        self.axis = joint_axis
+        self.type = joint_type
+        self.parent_prim = joint_parent_prim
+        self.child_prim = joint_child_prim
+        self.stage = self.parent_prim.GetStage()
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, name: str) -> None:
+        self._name = modify_name(in_name=name)
+
+    @property
+    def path(self) -> str:
+        return self.parent_prim.GetPath().AppendChild(self.name)
+
+    @property
+    def pos(self) -> Gf.Vec3d:
+        return self._pos
+
+    @pos.setter
+    def pos(self, pos: Sequence) -> None:
+        self._pos = Gf.Vec3d(*pos)
+
+    @property
+    def quat(self) -> Gf.Quatd:
+        if self.type == JointType.FIXED:
+            return Gf.Quatd(1, 0, 0, 0)
+        if self.axis == "X":
+            return Gf.Quatd(0.7071068, 0, 0.7071068, 0)
+        elif self.axis == "Y":
+            return Gf.Quatd(0.7071068, -0.7071068, 0, 0)
+        elif self.axis == "Z":
+            return Gf.Quatd(1, 0, 0, 0)
+        elif self.axis == "-X":
+            return Gf.Quatd(0.7071068, 0, -0.7071068, 0)
+        elif self.axis == "-Y":
+            return Gf.Quatd(0.7071068, 0.7071068, 0, 0)
+        elif self.axis == "-Z":
+            return Gf.Quatd(0, 0, 1, 0)
+        else:
+            raise ValueError(f"Axis {self.axis} not supported.")
+
+    @quat.setter
+    def quat(self, quat: Sequence) -> None:
+        # TODO: Convert quat to axis, then set axis to Z again
+        if quat is not None:
+            raise NotImplementedError("Quat not supported yet.")
+        # quat = numpy.array(quat)
+        # magnitude = numpy.linalg.norm(quat)
+        # if not numpy.isclose(magnitude, 1.0):
+        #     raise ValueError(f"Quat {quat} is not normalized.")
+        # self._quat = Gf.Quatd(*quat)
+
+    @property
+    def axis(self) -> str:
+        return self._axis
+
+    @axis.setter
+    def axis(self, axis: Union[str, Sequence]) -> None:
+        if isinstance(axis, str):
+            if axis.upper() in ["X", "Y", "Z", "-X", "-Y", "-Z"]:
+                self._axis = axis.upper()
+            else:
+                raise ValueError(f"Axis {axis} not supported.")
+        else:
+            try:
+                axis = numpy.array(axis)
+            except ValueError:
+                raise NotImplementedError(f"Axis {axis} type {type(axis)} not supported.")
+            if numpy.allclose(axis, [1, 0, 0]):
+                self._axis = "X"
+            elif numpy.allclose(axis, [0, 1, 0]):
+                self._axis = "Y"
+            elif numpy.allclose(axis, [0, 0, 1]):
+                self._axis = "Z"
+            elif numpy.allclose(axis, [-1, 0, 0]):
+                self._axis = "-X"
+            elif numpy.allclose(axis, [0, -1, 0]):
+                self._axis = "-Y"
+            elif numpy.allclose(axis, [0, 0, -1]):
+                self._axis = "-Z"
+            else:
+                raise ValueError(f"Axis {axis} not supported.")
+
+    @property
+    def type(self) -> JointType:
+        return self._type
+
+    @type.setter
+    def type(self, joint_type: JointType) -> None:
         self._type = joint_type
-        self._pos = Gf.Vec3d(*joint_pos)
-        self._axis = joint_axis if isinstance(joint_axis, str) else get_joint_axis(joint_axis)
-        if joint_quat is not None:
-            # TODO: Convert quat to axis, then set axis to Z again
-            raise NotImplementedError(f"[Joint {name}] Joint quat {joint_quat} not supported yet.")
+
+    @property
+    def parent_prim(self) -> UsdGeom.Xform:
+        return self._parent_prim if hasattr(self, "_parent_prim") else None
+
+    @parent_prim.setter
+    def parent_prim(self, parent_prim: UsdGeom.Xform) -> None:
+        if self.child_prim is not None and parent_prim.GetStage() != self.child_prim.GetStage():
+            raise ValueError(f"Parent prim {parent_prim.GetPath()} and child prim {self.child_prim.GetPath()} "
+                             f"are not in the same stage.")
+        self._parent_prim = parent_prim
+
+    @property
+    def child_prim(self) -> UsdGeom.Xform:
+        return self._child_prim if hasattr(self, "_child_prim") else None
+
+    @child_prim.setter
+    def child_prim(self, child_prim: UsdGeom.Xform) -> None:
+        if self.parent_prim is not None and child_prim.GetStage() != self.parent_prim.GetStage():
+            raise ValueError(f"Parent prim {self.parent_prim.GetPath()} and child prim {child_prim.GetPath()} "
+                             f"are not in the same stage.")
+        self._child_prim = child_prim
+
+
+class JointBuilder:
+    _joint: UsdPhysics.Joint
+    _joint_property: JointProperty
+
+    def __init__(
+            self,
+            joint_property: JointProperty
+    ) -> None:
+        self._joint_property = joint_property
+        self._joint = self._create_joint()
 
     def build(self) -> UsdPhysics.Joint:
-        joint = self._create_joint()
-        joint.CreateCollisionEnabledAttr(False)
+        self._joint = self._create_joint()
+        self._joint.CreateCollisionEnabledAttr(False)
 
-        joint.GetBody0Rel().SetTargets([self.parent_prim.GetPath()])
-        joint.GetBody1Rel().SetTargets([self.child_prim.GetPath()])
+        self._joint.GetBody0Rel().SetTargets([self.parent_prim.GetPath()])
+        self._joint.GetBody1Rel().SetTargets([self.child_prim.GetPath()])
 
         body1_transform = xform_cache.GetLocalToWorldTransform(self.parent_prim)
         body1_rot = body1_transform.ExtractRotationQuat()
@@ -110,75 +217,77 @@ class JointBuilder:
         body1_to_body2_pos = body1_to_body2_transform.ExtractTranslation()
         body1_to_body2_rot = body1_to_body2_transform.ExtractRotationQuat()
 
-        joint.CreateLocalPos0Attr(body1_rot.Transform(self._pos) + body1_to_body2_pos)
-        joint.CreateLocalPos1Attr(Gf.Vec3d())
+        self._joint.CreateLocalPos0Attr(body1_rot.Transform(self.pos) + body1_to_body2_pos)
+        self._joint.CreateLocalPos1Attr(Gf.Vec3d())
 
-        joint.CreateLocalRot0Attr(Gf.Quatf(body1_to_body2_rot * self.quat))
-        joint.CreateLocalRot1Attr(Gf.Quatf(self.quat))
+        self._joint.CreateLocalRot0Attr(Gf.Quatf(body1_to_body2_rot * self.quat))
+        self._joint.CreateLocalRot1Attr(Gf.Quatf(self.quat))
 
-        return joint
+        return self._joint
 
     def _create_joint(self) -> UsdPhysics.Joint:
-        if self._type == JointType.FIXED:
-            return UsdPhysics.FixedJoint.Define(self._stage, self._path)
-        elif self._type == JointType.REVOLUTE or self._type == JointType.CONTINUOUS:
-            return UsdPhysics.RevoluteJoint.Define(self._stage, self._path)
-        elif self._type == JointType.PRISMATIC:
-            return UsdPhysics.PrismaticJoint.Define(self._stage, self._path)
-        elif self._type == JointType.SPHERICAL:
-            return UsdPhysics.SphericalJoint.Define(self._stage, self._path)
+        if self.type == JointType.FIXED:
+            return UsdPhysics.FixedJoint.Define(self.stage, self.path)
+        elif self.type == JointType.REVOLUTE or self.type == JointType.CONTINUOUS:
+            return UsdPhysics.RevoluteJoint.Define(self.stage, self.path)
+        elif self.type == JointType.PRISMATIC:
+            return UsdPhysics.PrismaticJoint.Define(self.stage, self.path)
+        elif self.type == JointType.SPHERICAL:
+            return UsdPhysics.SphericalJoint.Define(self.stage, self.path)
         else:
-            print(f"Joint type {str(self._type)} not supported, using default joint.")
-            return UsdPhysics.Joint.Define(self._stage, self._path)
+            print(f"Joint type {str(self.type)} not supported, using default joint.")
+            return UsdPhysics.Joint.Define(self.stage, self.path)
 
     def set_limit(self, lower: float = None, upper: float = None) -> None:
-        joint = self._stage.GetPrimAtPath(self._path)
-
         if lower is not None and upper is not None and lower > upper:
             raise ValueError(
-                f"[Joint {self.joint.GetName()}] Lower limit {lower} is greater than upper limit {upper}.")
+                f"[Joint {self._joint.GetName()}] Lower limit {lower} is greater than upper limit {upper}.")
 
-        if self._type == JointType.REVOLUTE or self._type == JointType.PRISMATIC:
+        if self.type == JointType.REVOLUTE or self.type == JointType.PRISMATIC:
             if lower is not None:
-                UsdPhysics.RevoluteJoint(joint).CreateLowerLimitAttr(lower)
+                UsdPhysics.RevoluteJoint(self.joint).CreateLowerLimitAttr(lower)
             if upper is not None:
-                UsdPhysics.RevoluteJoint(joint).CreateUpperLimitAttr(upper)
-        elif self._type == JointType.PRISMATIC:
+                UsdPhysics.RevoluteJoint(self.joint).CreateUpperLimitAttr(upper)
+        elif self.type == JointType.PRISMATIC:
             if lower is not None:
-                UsdPhysics.PrismaticJoint(joint).CreateLowerLimitAttr(lower)
+                UsdPhysics.PrismaticJoint(self.joint).CreateLowerLimitAttr(lower)
             if upper is not None:
-                UsdPhysics.PrismaticJoint(joint).CreateUpperLimitAttr(upper)
+                UsdPhysics.PrismaticJoint(self.joint).CreateUpperLimitAttr(upper)
         else:
-            print(f"[Joint {joint.GetName()}] Joint type {str(self._type)} does not have limits.")
+            print(f"[Joint {self.joint.GetName()}] Joint type {str(self.type)} does not have limits.")
 
     @property
-    def parent_prim(self) -> UsdGeom.Xform:
-        return self._parent_prim
+    def joint(self) -> UsdPhysics.Joint:
+        return self._joint
 
     @property
-    def child_prim(self) -> UsdGeom.Xform:
-        return self._child_prim
+    def stage(self) -> Usd.Stage:
+        return self._joint_property.stage
+
+    @property
+    def path(self) -> str:
+        return self._joint_property.path
+
+    @property
+    def pos(self) -> Gf.Vec3d:
+        return self._joint_property.pos
+
+    @property
+    def quat(self) -> Gf.Quatd:
+        return self._joint_property.quat
+
+    @property
+    def axis(self) -> str:
+        return self._joint_property.axis
 
     @property
     def type(self) -> JointType:
-        return self._type
+        return self._joint_property.type
 
     @property
-    def quat(self) -> Gf.Quatd | None:
-        if self._type == JointType.FIXED:
-            return Gf.Quatd(1, 0, 0, 0)
-        if self._axis == "X":
-            return Gf.Quatd(0.7071068, 0, 0.7071068, 0)
-        elif self._axis == "Y":
-            return Gf.Quatd(0.7071068, -0.7071068, 0, 0)
-        elif self._axis == "Z":
-            return Gf.Quatd(1, 0, 0, 0)
-        elif self._axis == "-X":
-            return Gf.Quatd(0.7071068, 0, -0.7071068, 0)
-        elif self._axis == "-Y":
-            return Gf.Quatd(0.7071068, 0.7071068, 0, 0)
-        elif self._axis == "-Z":
-            return Gf.Quatd(0, 0, 1, 0)
-        else:
-            joint = self._stage.GetPrimAtPath(self._path)
-            raise ValueError(f"[Joint {joint.GetName()}] Axis {self._axis} not supported.")
+    def parent_prim(self) -> UsdGeom.Xform:
+        return self._joint_property.parent_prim
+
+    @property
+    def child_prim(self) -> UsdGeom.Xform:
+        return self._joint_property.child_prim

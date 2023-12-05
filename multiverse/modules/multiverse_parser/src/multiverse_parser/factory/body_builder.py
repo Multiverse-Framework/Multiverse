@@ -7,8 +7,8 @@ from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
 from ..utils import xform_cache, modify_name
 
-from .geom_builder import GeomBuilder, GeomType, GeomProperty
-from .joint_builder import JointBuilder, JointType
+from .geom_builder import GeomBuilder, GeomProperty
+from .joint_builder import JointBuilder, JointProperty
 
 
 class BodyBuilder:
@@ -58,31 +58,13 @@ class BodyBuilder:
 
         self._xform.AddTransformOp().Set(mat)
 
-    def add_joint(
-            self,
-            joint_name: str,
-            parent_prim: Usd.Prim,
-            joint_type: JointType,
-            joint_pos: numpy.ndarray = numpy.array([0.0, 0.0, 0.0]),
-            joint_quat: Optional[numpy.ndarray] = None,
-            joint_axis: str = "Z",
-    ) -> JointBuilder:
-        joint_name = modify_name(in_name=joint_name)
-
+    def add_joint(self, joint_property: JointProperty) -> JointBuilder:
+        joint_name = joint_property.name
         if joint_name in self._joint_builders:
             print(f"Joint {joint_name} already exists.")
             joint_builder = self._joint_builders[joint_name]
         else:
-            joint_builder = JointBuilder(
-                stage=self._stage,
-                name=joint_name,
-                parent_prim=parent_prim,
-                child_prim=self._xform.GetPrim(),
-                joint_type=joint_type,
-                joint_pos=joint_pos,
-                joint_quat=joint_quat,
-                joint_axis=joint_axis,
-            )
+            joint_builder = JointBuilder(joint_property)
             joint_builder.build()
             self._joint_builders[joint_name] = joint_builder
 
@@ -93,8 +75,9 @@ class BodyBuilder:
         physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
         physics_rigid_body_api.Apply(self._xform.GetPrim())
 
-    def add_geom(self, geom_name: str, geom_type: GeomType, geom_property: GeomProperty) -> GeomBuilder:
-        geom_name = modify_name(in_name=geom_name)
+    def add_geom(self, geom_property: GeomProperty) -> GeomBuilder:
+        geom_name = geom_property.name
+        geom_type = geom_property.type
         if geom_name in self._geom_builders:
             print(f"Geom {geom_name} already exists.")
             geom_builder = self._geom_builders[geom_name]

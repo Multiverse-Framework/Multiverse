@@ -3,6 +3,8 @@ import unittest
 import os
 import tracemalloc
 
+import numpy
+
 from multiverse_parser import MjcfImporter
 from pxr import Usd
 
@@ -19,7 +21,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
         importer = MjcfImporter(file_path=input_mjcf_path, with_physics=True, with_visual=True,
                                 with_collision=True)
-        importer.config.default_rgba = (1.0, 0.0, 0.0, 0.5)
+        importer.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
         self.assertEqual(importer.source_file_path, input_mjcf_path)
         self.assertEqual(importer._config.model_name, "ur5e")
 

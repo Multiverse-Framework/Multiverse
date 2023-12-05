@@ -12,11 +12,11 @@ from multiverse_parser.utils import clear_meshes, copy_prim
 
 class UsdImporter:
     def __init__(
-        self,
-        usd_file_path: str,
-        with_physics: bool,
-        with_visual: bool,
-        with_collision: bool,
+            self,
+            usd_file_path: str,
+            with_physics: bool,
+            with_visual: bool,
+            with_collision: bool,
     ) -> None:
         self.usd_file_path = usd_file_path
         self.with_physics = with_physics
@@ -53,14 +53,16 @@ class UsdImporter:
             world_prim = UsdGeom.Xform.Define(self.stage, "/world").GetPrim()
             self.stage.SetDefaultPrim(world_prim)
             for xform_root_prim in xform_root_prims:
-                xform_prim = UsdGeom.Xform.Define(self.stage, world_prim.GetPath().AppendPath(xform_root_prim.GetName())).GetPrim()
+                xform_prim = UsdGeom.Xform.Define(self.stage,
+                                                  world_prim.GetPath().AppendPath(xform_root_prim.GetName())).GetPrim()
                 copy_prim(xform_root_prim, xform_prim, world_prim.GetPath())
                 self.stage.RemovePrim(xform_root_prim.GetPath())
 
         geom_prims_to_add_xform = {}
         for prim in [prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Xform)]:
             geom_prims = [geom_prim for geom_prim in prim.GetChildren() if geom_prim.IsA(UsdGeom.Gprim)]
-            xform_prims = [xform_prim for xform_prim in prim.GetChildren() if xform_prim.IsA(UsdGeom.Xform) and not xform_prim.IsA(UsdGeom.Gprim)]
+            xform_prims = [xform_prim for xform_prim in prim.GetChildren() if
+                           xform_prim.IsA(UsdGeom.Xform) and not xform_prim.IsA(UsdGeom.Gprim)]
 
             if len(geom_prims) > 0 and len(xform_prims) > 0:
                 geom_prims_to_add_xform[prim.GetName()] = geom_prims
@@ -71,7 +73,8 @@ class UsdImporter:
                 new_xform_prim = UsdGeom.Xform.Define(self.stage, new_xform_path)
 
                 for xform_op in UsdGeom.Xformable(geom_prim).GetOrderedXformOps():
-                    new_xform_prim.AddXformOp(op=xform_op.GetOpType(), precision=xform_op.GetPrecision()).Set(value=xform_op.Get())
+                    new_xform_prim.AddXformOp(op=xform_op.GetOpType(), precision=xform_op.GetPrecision()).Set(
+                        value=xform_op.Get())
 
                 new_geom_path = new_xform_path.AppendPath(geom_prim.GetName())
                 new_geom_prim = self.stage.DefinePrim(new_geom_path, geom_prim.GetTypeName())
@@ -96,7 +99,8 @@ class UsdImporter:
                         body_name=xform_prim.GetName(),
                         parent_body_name=parent_prim.GetName(),
                     )
-                    xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(xform_prim, self.parent_map[xform_prim])
+                    xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(xform_prim,
+                                                                                         self.parent_map[xform_prim])
                     body_builder.xform.AddTransformOp().Set(xform_local_transformation)
 
                 self.build_body(xform_prim)
@@ -155,7 +159,6 @@ class UsdImporter:
                         elif len(geom_prepended_items) > 0:
                             usd_mesh_path = geom_prepended_items[0].assetPath
                         else:
-                            usd_mesh_path = None
                             mesh_path = os.path.join(
                                 TMP_USD_MESH_PATH,
                                 "visual" if is_visual else "collision",
@@ -264,16 +267,21 @@ class UsdImporter:
                     joint_axis = joint.GetAxisAttr().Get()
                 elif joint_prim.IsA(UsdPhysics.SphericalJoint):
                     joint_type = JointType.SPHERICAL
+                else:
+                    raise NotImplementedError(f"Joint type {joint_prim} not supported.")
 
-                body1_transform = xform_cache.GetLocalToWorldTransform(self.stage.GetPrimAtPath(joint.GetBody0Rel().GetTargets()[0]).GetPrim())
+                body1_transform = xform_cache.GetLocalToWorldTransform(
+                    self.stage.GetPrimAtPath(joint.GetBody0Rel().GetTargets()[0]).GetPrim())
                 body1_rot = body1_transform.ExtractRotationQuat()
 
-                body2_transform = xform_cache.GetLocalToWorldTransform(self.stage.GetPrimAtPath(joint.GetBody1Rel().GetTargets()[0]).GetPrim())
+                body2_transform = xform_cache.GetLocalToWorldTransform(
+                    self.stage.GetPrimAtPath(joint.GetBody1Rel().GetTargets()[0]).GetPrim())
                 body1_to_body2_transform = body2_transform * body1_transform.GetInverse()
                 body1_to_body2_pos = body1_to_body2_transform.ExtractTranslation()
 
                 joint_quat = joint.GetLocalRot1Attr().Get()
-                joint_pos = body1_rot.GetInverse().Transform(Gf.Vec3d(joint.GetLocalPos0Attr().Get()) - body1_to_body2_pos)
+                joint_pos = body1_rot.GetInverse().Transform(
+                    Gf.Vec3d(joint.GetLocalPos0Attr().Get()) - body1_to_body2_pos)
 
                 joint_builder = body_builder._import_joint(
                     joint_name=joint_name,
