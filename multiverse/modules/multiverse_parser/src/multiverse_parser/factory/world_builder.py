@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.10
 
-from typing import Dict, Optional
+from typing import Optional
 
 from pxr import Usd, UsdGeom
 
@@ -16,8 +16,7 @@ def setup_stage(file_path: str) -> Usd.Stage:
 
 
 class WorldBuilder:
-    _stage: Usd.Stage
-    _body_builders: Dict[str, BodyBuilder]
+    stage: Usd.Stage
 
     def __init__(self, file_path: str) -> None:
         self._stage = setup_stage(file_path)
@@ -46,4 +45,8 @@ class WorldBuilder:
         return self._body_builders[body_name]
 
     def export(self) -> None:
-        self._stage.Save()
+        self.stage.Save()
+
+    @property
+    def stage(self):
+        return self._stage

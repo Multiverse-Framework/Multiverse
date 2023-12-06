@@ -85,40 +85,6 @@ class GeomProperty:
         self._rgba = rgba
 
 
-def inertia_of_triangle(v1, v2, v3, density) -> Gf.Matrix3d:
-    # Compute the area of the triangle
-    area = 0.5 * ((v2 - v1).cross(v3 - v1)).length
-    # Compute the inertia tensor of the triangle
-    inertia = Gf.Matrix3d()
-    for i in range(3):
-        for j in range(3):
-            inertia[i][j] = (
-                    density
-                    * area
-                    / 12
-                    * (
-                            (v1[i] ** 2 + v1[j] ** 2 + v2[i] ** 2 + v2[j] ** 2 + v3[i] ** 2 + v3[j] ** 2)
-                            + (v1[i] * v2[i] + v1[j] * v2[j] + v2[i] * v3[i] + v2[j] * v3[j] + v1[i] * v3[i] + v1[j] *
-                               v3[j])
-                    )
-            )
-            if i == j:
-                inertia[i][i] -= (
-                        density
-                        * area
-                        * (
-                                v1[(i + 1) % 3] ** 2
-                                + v1[(i + 2) % 3] ** 2
-                                + v2[(i + 1) % 3] ** 2
-                                + v2[(i + 2) % 3] ** 2
-                                + v3[(i + 1) % 3] ** 2
-                                + v3[(i + 2) % 3] ** 2
-                        )
-                        / 12
-                )
-    return inertia
-
-
 def bind_materials(mesh_builder: MeshBuilder, local_meshes: List[UsdGeom.Mesh], reference_meshes: List[UsdGeom.Mesh]):
     paths = mesh_builder.xform.GetPrim().FindAllRelationshipTargetPaths()
     if len(paths) > 0:

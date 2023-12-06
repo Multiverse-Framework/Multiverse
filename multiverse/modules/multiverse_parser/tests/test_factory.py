@@ -9,7 +9,7 @@ from pxr import Usd
 from multiverse_parser import (WorldBuilder,
                                JointBuilder, JointType, JointProperty,
                                GeomType, GeomProperty)
-
+from multiverse_parser.utils import calculate_triangle_inertia, calculate_mesh_inertia
 
 class FactoryTestCase(unittest.TestCase):
     resource_path: str
@@ -85,6 +85,45 @@ class FactoryTestCase(unittest.TestCase):
 
         world_builder.export()
         self.assertTrue(os.path.exists(file_path))
+
+    def test_inertia_of_triangle(self):
+        triangle = numpy.array([[1.0, 0.0, 0.0],
+                                [0.0, -1.0, 0.0],
+                                [0.0, 1.0, 0.0]])
+        inertia = calculate_triangle_inertia(v1=triangle[0], v2=triangle[1], v3=triangle[2], density=1.0)
+        print(inertia)
+
+    def test_inertia_of_mesh(self):
+        # Define the vertices of a cube
+        half_length = 0.5
+        vertices = numpy.array([
+            [-half_length, -half_length, -half_length],
+            [half_length, -half_length, -half_length],
+            [half_length, half_length, -half_length],
+            [-half_length, half_length, -half_length],
+            [-half_length, -half_length, half_length],
+            [half_length, -half_length, half_length],
+            [half_length, half_length, half_length],
+            [-half_length, half_length, half_length]
+        ])
+
+        # Define the faces of the cube (vertices' indices for each face)
+        faces = numpy.array([
+            [0, 1, 2],
+            [0, 2, 3],
+            [4, 5, 6],
+            [4, 6, 7],
+            [0, 1, 5],
+            [0, 5, 4],
+            [2, 3, 7],
+            [2, 7, 6],
+            [0, 3, 7],
+            [0, 7, 4],
+            [1, 2, 6],
+            [1, 6, 5],
+        ])
+        inertia = calculate_mesh_inertia(vertices=vertices, faces=faces, density=1.0)
+        print(inertia)
 
     @classmethod
     def tearDownClass(cls):

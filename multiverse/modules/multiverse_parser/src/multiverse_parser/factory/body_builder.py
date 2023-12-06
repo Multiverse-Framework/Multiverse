@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.10
 
-from typing import Dict, Optional
+from typing import Optional
 
 import numpy
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
@@ -11,15 +11,12 @@ from ..utils import xform_cache, modify_name
 
 
 class BodyBuilder:
-    _stage: Usd.Stage
-    _xform: UsdGeom.Xform
-    _joint_builders: Dict[str, JointBuilder]
-    _geom_builders: Dict[str, GeomBuilder]
+    stage: Usd.Stage
+    xform: UsdGeom.Xform
 
     def __init__(self, stage: Usd.Stage, name: str, parent_xform: Optional[UsdGeom.Xform] = None) -> None:
         path = parent_xform.GetPath().AppendPath(name) if parent_xform is not None else Sdf.Path("/").AppendPath(name)
-        self._stage = stage
-        self._xform = UsdGeom.Xform.Define(self._stage, path)
+        self._xform = UsdGeom.Xform.Define(stage, path)
         self._joint_builders = {}
         self._geom_builders = {}
 
@@ -81,7 +78,7 @@ class BodyBuilder:
             geom_builder = self._geom_builders[geom_name]
         else:
             geom_builder = GeomBuilder(
-                stage=self._stage,
+                stage=self.stage,
                 geom_name=geom_name,
                 body_path=self._xform.GetPath(),
                 geom_property=geom_property
@@ -101,6 +98,10 @@ class BodyBuilder:
         if geom_name not in self._joint_builders:
             raise ValueError(f"Geom {geom_name} not found in {self.__class__.__name__}.")
         return self._geom_builders[geom_name]
+
+    @property
+    def stage(self) -> Usd.Stage:
+        return self.xform.GetPrim().GetStage()
 
     @property
     def xform(self) -> Usd.Stage:

@@ -8,6 +8,8 @@ from scipy.spatial.transform import Rotation
 from pxr import UsdGeom, Gf, UsdShade
 
 xform_cache = UsdGeom.XformCache()
+
+
 #
 
 # def diagonalize_inertia(inertia_tensor):
@@ -75,6 +77,56 @@ def rpy_to_quat(rpy_angles: numpy.ndarray) -> numpy.ndarray:
     quaternion = rotation.as_quat(canonical=False)
 
     return numpy.array([quaternion[3], quaternion[0], quaternion[1], quaternion[2]])
+
+
+def calculate_triangle_inertia(v1: numpy.ndarray, v2: numpy.ndarray, v3: numpy.ndarray,
+                               density: float) -> numpy.ndarray:
+    # Ensure the input arrays have the same length
+    if len(v1) != 3 or len(v2) != 3 or len(v3) != 3:
+        raise ValueError("Input arrays must have 3 elements each.")
+
+    # Create NumPy arrays for the coordinates
+    v1 = numpy.array(v1)
+    v2 = numpy.array(v2)
+    v3 = numpy.array(v3)
+
+    # Calculate the centroid (center of mass)
+    centroid = numpy.array([numpy.mean(v1), numpy.mean(v2), numpy.mean(v3)])
+
+    # Calculate the coordinates relative to the centroid
+    x_rel = v1 - centroid[0]
+    y_rel = v2 - centroid[1]
+    z_rel = v3 - centroid[2]
+
+    # Calculate the inertia tensor
+    I_xx = density * numpy.sum((y_rel ** 2 + z_rel ** 2))
+    I_yy = density * numpy.sum((x_rel ** 2 + z_rel ** 2))
+    I_zz = density * numpy.sum((x_rel ** 2 + y_rel ** 2))
+    I_xy = - density * numpy.sum(x_rel * y_rel)
+    I_xz = - density * numpy.sum(x_rel * z_rel)
+    I_yz = - density * numpy.sum(y_rel * z_rel)
+
+    # Create the inertia tensor matrix
+    return numpy.array([[I_xx, I_xy, I_xz],
+                        [I_xy, I_yy, I_yz],
+                        [I_xz, I_yz, I_zz]])
+
+
+def calculate_mesh_inertia(vertices: numpy.ndarray, faces: numpy.ndarray, density: float):
+    # Initialize the inertia tensor to zeros
+    inertia_tensor = numpy.zeros((3, 3))
+
+    for face in faces:
+        # Extract the vertices of the triangle face
+        v1, v2, v3 = vertices[face]
+
+        # Calculate the inertia tensor for the triangle face
+        triangle_inertia = calculate_triangle_inertia(v1, v2, v3, density)
+
+        # Add the contribution of the triangle to the overall inertia tensor
+        inertia_tensor += triangle_inertia
+
+    return inertia_tensor
 
 # def convert_quat(quat) -> tuple:
 #     if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):
@@ -156,11 +208,11 @@ def rpy_to_quat(rpy_angles: numpy.ndarray) -> numpy.ndarray:
 #                         src_shader = UsdShade.Shader(src_rel_child_prim)
 #                         dest_shader = UsdShade.Shader.Define(dest_stage, src_rel_child_prim.GetPath())
 #
-#                         for src_shader_input in src_shader.GetInputs():
-#                             dest_shader_input = dest_shader.CreateInput(src_shader_input.GetBaseName(), src_shader_input.GetTypeName())
-#                             for connected_sources in src_shader_input.GetConnectedSources():
+#                         for src_shader_inumpyut in src_shader.GetInumpyuts():
+#                             dest_shader_inumpyut = dest_shader.CreateInumpyut(src_shader_inumpyut.GetBaseName(), src_shader_inumpyut.GetTypeName())
+#                             for connected_sources in src_shader_inumpyut.GetConnectedSources():
 #                                 for connected_source in connected_sources:
-#                                     dest_shader_input.ConnectToSource(connected_source)
+#                                     dest_shader_inumpyut.ConnectToSource(connected_source)
 #
 #                         for src_shader_output in src_shader.GetOutputs():
 #                             dest_shader_output = dest_shader.CreateOutput(src_shader_output.GetBaseName(), src_shader_output.GetTypeName())
@@ -170,7 +222,7 @@ def rpy_to_quat(rpy_angles: numpy.ndarray) -> numpy.ndarray:
 #
 #                         for src_shader_attr in src_shader.GetPrim().GetAttributes():
 #                             src_shader_attr_value = src_shader_attr.Get()
-#                             if src_shader_attr.GetName() == "inputs:file":
+#                             if src_shader_attr.GetName() == "inumpyuts:file":
 #                                 src_shader_file_path = src_shader_attr_value.resolvedPath
 #                                 dest_shader_file_path = os.path.join(os.path.dirname(dest_file_path), src_shader_attr_value.path)
 #

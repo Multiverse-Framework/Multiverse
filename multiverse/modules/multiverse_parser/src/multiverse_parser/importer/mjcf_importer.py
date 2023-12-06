@@ -13,7 +13,7 @@ from ..factory import (WorldBuilder, BodyBuilder,
                        JointBuilder, JointType, JointProperty,
                        GeomBuilder, GeomType, GeomProperty,
                        MeshBuilder, MeshProperty,
-                       MaterialBuilder)
+                       MaterialBuilder, MaterialProperty)
 
 
 def get_model_name(xml_file_path: str) -> str:
@@ -220,9 +220,10 @@ class MjcfImporter(Importer):
                 if mat_id != -1:
                     diffuse_color, emissive_color, specular_color = self.get_material_data(mat_id=mat_id)
                     material_builder = MaterialBuilder(file_path=tmp_mesh_file_path)
-                    material_builder.apply_material(diffuse_color=diffuse_color,
-                                                    emissive_color=emissive_color,
-                                                    specular_color=specular_color)
+                    material_property = MaterialProperty(diffuse_color=diffuse_color,
+                                                         emissive_color=emissive_color,
+                                                         specular_color=specular_color)
+                    material_builder.apply_material(material_property=material_property)
 
                 geom_builder.add_mesh(mesh_file_path=tmp_mesh_file_path)
                 geom_builder.build()

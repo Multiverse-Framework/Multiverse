@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 import os
-from typing import List, Dict
+from typing import List
 
 import numpy
 from pxr import Usd, UsdGeom
@@ -30,7 +30,7 @@ class MeshProperty:
 
     def check_validity(self):
         assert self.points.size != 0
-        assert self.normals.size == self.face_vertex_counts.size * 9 == self.face_vertex_indices.size * 3
+        assert self.face_vertex_counts.size * 3 == self.face_vertex_indices.size
 
     @property
     def points(self):
