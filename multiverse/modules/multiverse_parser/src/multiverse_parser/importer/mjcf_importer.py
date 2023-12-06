@@ -12,7 +12,7 @@ from .importer import Configuration, Importer
 from ..factory import (WorldBuilder, BodyBuilder,
                        JointBuilder, JointType, JointProperty,
                        GeomBuilder, GeomType, GeomProperty,
-                       MeshBuilder,
+                       MeshBuilder, MeshProperty,
                        MaterialBuilder)
 
 
@@ -210,11 +210,11 @@ class MjcfImporter(Importer):
                 points, normals, face_vertex_counts, face_vertex_indices = self.get_mesh_data(mesh_id=mesh_id)
                 tmp_mesh_file_path = os.path.join(self._tmp_mesh_dir, "usd", f"{mesh_name}.usda")
                 mesh_builder = MeshBuilder(mesh_file_path=tmp_mesh_file_path)
-                mesh_builder.create_mesh(mesh_name=mesh_name,
-                                         points=points,
-                                         normals=normals,
-                                         face_vertex_counts=face_vertex_counts,
-                                         face_vertex_indices=face_vertex_indices)
+                mesh_property = MeshProperty(points=points,
+                                             normals=normals,
+                                             face_vertex_counts=face_vertex_counts,
+                                             face_vertex_indices=face_vertex_indices)
+                mesh_builder.create_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
 
                 mat_id = mj_geom.matid
                 if mat_id != -1:

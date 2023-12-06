@@ -12,19 +12,16 @@ from ..utils import modify_name
 
 @dataclass(init=False)
 class MeshProperty:
-    name: str
     points: numpy.ndarray
     normals: numpy.ndarray
     face_vertex_counts: numpy.ndarray
     face_vertex_indices: numpy.ndarray
 
     def __init__(self,
-                 name: str,
                  points: numpy.ndarray,
                  normals: numpy.ndarray,
                  face_vertex_counts: numpy.ndarray,
                  face_vertex_indices: numpy.ndarray) -> None:
-        self.name = name
         self._points = points
         self._normals = normals
         self._face_vertex_counts = face_vertex_counts
@@ -32,17 +29,8 @@ class MeshProperty:
         self.check_validity()
 
     def check_validity(self):
-        assert self.name != ""
         assert self.points.size != 0
-        assert self.normals.size == self.face_vertex_counts.size * 3 == self.face_vertex_indices.size
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, name: str):
-        self._name = modify_name(name)
+        assert self.normals.size == self.face_vertex_counts.size * 9 == self.face_vertex_indices.size * 3
 
     @property
     def points(self):
@@ -66,69 +54,65 @@ class MeshBuilder:
     stage: Usd.Stage
     xform: UsdGeom.Xform
     meshes: List[UsdGeom.Mesh]
-    meshes_properties: Dict[str, MeshProperty]
 
     def __init__(self, mesh_file_path: str) -> None:
-        self.meshes_properties = {}
+        self._meshes_properties = {}
         if os.path.exists(mesh_file_path):
-            self._stage = Usd.Stage.Open(mesh_file_path)
-            self._xform = UsdGeom.Xform(self._stage.GetDefaultPrim())
-            for mesh in self.meshes:
+            stage = Usd.Stage.Open(mesh_file_path)
+            xform = UsdGeom.Xform(stage.GetDefaultPrim())
+            for mesh in [UsdGeom.Mesh(prim_child) for prim_child in xform.GetPrim().GetChildren() if
+                         UsdGeom.Mesh(prim_child)]:
                 mesh_name = mesh.GetPrim().GetName()
-                self.meshes_properties[mesh_name] = MeshProperty(
-                    name=mesh_name,
-                    points=mesh.GetPointsAttr().Get(),
-                    normals=mesh.GetNormalsAttr().Get(),
-                    face_vertex_counts=mesh.GetFaceVertexCountsAttr().Get(),
-                    face_vertex_indices=mesh.GetFaceVertexIndicesAttr().Get()
-                )
+                self.set_mesh_property(mesh_name=mesh_name,
+                                       mesh_property=MeshProperty(
+                                           points=numpy.array(mesh.GetPointsAttr().Get()),
+                                           normals=numpy.array(mesh.GetNormalsAttr().Get()),
+                                           face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
+                                           face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get())))
         else:
             mesh_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
             mesh_name = modify_name(mesh_name)
-            self._stage = Usd.Stage.CreateNew(mesh_file_path)
-            self._xform = UsdGeom.Xform.Define(self._stage, f"/{mesh_name}")
-            self._stage.SetDefaultPrim(self.xform.GetPrim())
+            stage = Usd.Stage.CreateNew(mesh_file_path)
+            xform = UsdGeom.Xform.Define(stage, f"/{mesh_name}")
+            stage.SetDefaultPrim(xform.GetPrim())
+        self._stage = stage
+        self._xform = xform
+
+    def get_mesh_property(self, mesh_name: str) -> MeshProperty:
+        mesh_name = modify_name(in_name=mesh_name)
+        return self._meshes_properties[mesh_name]
+
+    def set_mesh_property(self, mesh_name: str, mesh_property: MeshProperty) -> None:
+        mesh_name = modify_name(in_name=mesh_name)
+        self._meshes_properties[mesh_name] = mesh_property
 
     def create_mesh(self,
                     mesh_name: str,
-                    points: numpy.ndarray = numpy.array([]),
-                    normals: numpy.ndarray = numpy.array([]),
-                    face_vertex_counts: numpy.ndarray = numpy.array([]),
-                    face_vertex_indices: numpy.ndarray = numpy.array([])) -> UsdGeom.Mesh:
-        """
-        Create a mesh from the given data.
-        :param mesh_name: Name of the mesh.
-        :param points: List of points.
-        :param normals: List of normals.
-        :param face_vertex_counts: List of face vertex counts.
-        :param face_vertex_indices: List of face vertex indices.
-        :return: The created mesh.
-        """
-        mesh_name = modify_name(mesh_name)
+                    mesh_property: MeshProperty) -> UsdGeom.Mesh:
         xform_path = self.xform.GetPath()
         mesh = UsdGeom.Mesh.Define(self.stage, xform_path.AppendChild(f"SM_{mesh_name}"))
-        mesh.CreatePointsAttr(points)
-        mesh.CreateNormalsAttr(normals)
-        mesh.CreateFaceVertexCountsAttr(face_vertex_counts)
-        mesh.CreateFaceVertexIndicesAttr(face_vertex_indices)
+        mesh.CreatePointsAttr(mesh_property.points)
+        mesh.CreateNormalsAttr(mesh_property.normals)
+        mesh.CreateFaceVertexCountsAttr(mesh_property.face_vertex_counts)
+        mesh.CreateFaceVertexIndicesAttr(mesh_property.face_vertex_indices)
 
         self.stage.GetRootLayer().Save()
 
         return mesh
 
     @property
-    def meshes(self):
-        return [UsdGeom.Mesh(prim_child) for prim_child in self.xform.GetPrim().GetChildren() if
-                UsdGeom.Mesh(prim_child)]
-
-    @property
-    def xform(self):
-        return self._xform
+    def file_path(self):
+        return self.stage.GetRootLayer().realPath
 
     @property
     def stage(self):
         return self.xform.GetPrim().GetStage()
 
     @property
-    def file_path(self):
-        return self.stage.GetRootLayer().realPath
+    def xform(self):
+        return self._xform
+
+    @property
+    def meshes(self):
+        return [UsdGeom.Mesh(prim_child) for prim_child in self.xform.GetPrim().GetChildren() if
+                UsdGeom.Mesh(prim_child)]

@@ -55,7 +55,7 @@ class FactoryTestCase(unittest.TestCase):
                                      scale=numpy.array([1.0, 1.0, 1.0]),
                                      relative_to_xform=body_1_xform)
 
-        geom_property = GeomProperty(geom_name="geom_1", geom_type=GeomType.CUBE, is_visible=True, is_collidable=True)
+        geom_property = GeomProperty(geom_name="geom_1", geom_type=GeomType.CUBE)
         geom_builder_1 = body_builder_1.add_geom(geom_property=geom_property)
         geom_1_xform = geom_builder_1.xform
         self.assertEqual(geom_1_xform.GetPath(), "/body_0/body_1/geom_1")
