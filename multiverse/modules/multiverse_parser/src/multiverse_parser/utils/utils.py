@@ -79,54 +79,70 @@ def rpy_to_quat(rpy_angles: numpy.ndarray) -> numpy.ndarray:
     return numpy.array([quaternion[3], quaternion[0], quaternion[1], quaternion[2]])
 
 
-def calculate_triangle_inertia(v1: numpy.ndarray, v2: numpy.ndarray, v3: numpy.ndarray,
-                               density: float) -> numpy.ndarray:
-    # Ensure the input arrays have the same length
-    if len(v1) != 3 or len(v2) != 3 or len(v3) != 3:
-        raise ValueError("Input arrays must have 3 elements each.")
-
-    # Create NumPy arrays for the coordinates
-    v1 = numpy.array(v1)
-    v2 = numpy.array(v2)
-    v3 = numpy.array(v3)
-
-    # Calculate the centroid (center of mass)
-    centroid = numpy.array([numpy.mean(v1), numpy.mean(v2), numpy.mean(v3)])
-
-    # Calculate the coordinates relative to the centroid
-    x_rel = v1 - centroid[0]
-    y_rel = v2 - centroid[1]
-    z_rel = v3 - centroid[2]
-
-    # Calculate the inertia tensor
-    I_xx = density * numpy.sum((y_rel ** 2 + z_rel ** 2))
-    I_yy = density * numpy.sum((x_rel ** 2 + z_rel ** 2))
-    I_zz = density * numpy.sum((x_rel ** 2 + y_rel ** 2))
-    I_xy = - density * numpy.sum(x_rel * y_rel)
-    I_xz = - density * numpy.sum(x_rel * z_rel)
-    I_yz = - density * numpy.sum(y_rel * z_rel)
-
-    # Create the inertia tensor matrix
-    return numpy.array([[I_xx, I_xy, I_xz],
-                        [I_xy, I_yy, I_yz],
-                        [I_xz, I_yz, I_zz]])
+def scalar_triple_product(v1: numpy.ndarray, v2: numpy.ndarray, v3: numpy.ndarray) -> float:
+    return (v1[0] * (v2[1] * v3[2] - v3[1] * v2[2]) +
+            v1[1] * (v2[2] * v3[0] - v3[2] * v2[0]) +
+            v1[2] * (v2[0] * v3[1] - v3[0] * v2[1]))
 
 
-def calculate_mesh_inertia(vertices: numpy.ndarray, faces: numpy.ndarray, density: float):
+def calculate_tet3_inertia_moment(v1: numpy.ndarray, v2: numpy.ndarray, v3: numpy.ndarray, i: int) -> float:
+    return v1[i] ** 2 + v2[i] ** 2 + v3[i] ** 2 + v1[i] * v2[i] + v2[i] * v3[i] + v3[i] * v1[i]
+
+
+def calculate_tet3_inertia_product(v1: numpy.ndarray, v2: numpy.ndarray, v3: numpy.ndarray, i: int, j: int) -> float:
+    return (2 * v1[i] * v1[j] + 2 * v2[i] * v2[j] + 2 * v3[i] * v3[j] +
+            v1[i] * v2[j] + v2[i] * v1[j] + v1[i] * v3[j] + v3[i] * v1[j] + v2[i] * v3[j] + v3[i] * v2[j])
+
+
+def calculate_mesh_inertial(vertices: numpy.ndarray, faces: numpy.ndarray, density: float) -> \
+        (float, numpy.ndarray, numpy.ndarray):
+    # Initialize the mass to zero
+    mass = 0.0
+
     # Initialize the inertia tensor to zeros
-    inertia_tensor = numpy.zeros((3, 3))
+    Ixx = Iyy = Izz = Ixy = Ixz = Iyz = 0.0
 
+    # Initialize the center of mass to zeros
+    center_of_mass = numpy.zeros((1, 3))
+
+    i = 0
     for face in faces:
         # Extract the vertices of the triangle face
         v1, v2, v3 = vertices[face]
 
-        # Calculate the inertia tensor for the triangle face
-        triangle_inertia = calculate_triangle_inertia(v1, v2, v3, density)
+        det_j = numpy.abs(scalar_triple_product(v1, v2, v3))
 
-        # Add the contribution of the triangle to the overall inertia tensor
-        inertia_tensor += triangle_inertia
+        tet_volume = det_j / 6.0
+        tet_mass = density * tet_volume
+        tet_center_of_mass = tet_mass * (v1 + v2 + v3) / 4.0
+        center_of_mass += tet_center_of_mass
+        mass += tet_mass
 
-    return inertia_tensor
+        v100 = calculate_tet3_inertia_moment(v1, v2, v3, 0)
+        v010 = calculate_tet3_inertia_moment(v1, v2, v3, 1)
+        v001 = calculate_tet3_inertia_moment(v1, v2, v3, 2)
+
+        Ixx += det_j * (v010 + v001)
+        Iyy += det_j * (v100 + v001)
+        Izz += det_j * (v100 + v010)
+        Ixy += det_j * calculate_tet3_inertia_product(v1, v2, v3, 0, 1)
+        Ixz += det_j * calculate_tet3_inertia_product(v1, v2, v3, 0, 2)
+        Iyz += det_j * calculate_tet3_inertia_product(v1, v2, v3, 1, 2)
+
+    Ixx = density * Ixx / 60.0
+    Iyy = density * Iyy / 60.0
+    Izz = density * Izz / 60.0
+    Ixy = density * Ixy / 120.0
+    Ixz = density * Ixz / 120.0
+    Iyz = density * Iyz / 120.0
+
+    inertia_tensor = numpy.array([
+        [Ixx, -Ixy, -Ixz],
+        [-Ixy, Iyy, -Iyz],
+        [-Ixz, -Iyz, Izz]
+    ])
+
+    return mass, inertia_tensor, center_of_mass
 
 # def convert_quat(quat) -> tuple:
 #     if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):

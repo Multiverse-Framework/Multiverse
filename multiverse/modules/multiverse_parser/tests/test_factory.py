@@ -9,7 +9,8 @@ from pxr import Usd
 from multiverse_parser import (WorldBuilder,
                                JointBuilder, JointType, JointProperty,
                                GeomType, GeomProperty)
-from multiverse_parser.utils import calculate_triangle_inertia, calculate_mesh_inertia
+from multiverse_parser.utils import calculate_mesh_inertial
+
 
 class FactoryTestCase(unittest.TestCase):
     resource_path: str
@@ -86,16 +87,10 @@ class FactoryTestCase(unittest.TestCase):
         world_builder.export()
         self.assertTrue(os.path.exists(file_path))
 
-    def test_inertia_of_triangle(self):
-        triangle = numpy.array([[1.0, 0.0, 0.0],
-                                [0.0, -1.0, 0.0],
-                                [0.0, 1.0, 0.0]])
-        inertia = calculate_triangle_inertia(v1=triangle[0], v2=triangle[1], v3=triangle[2], density=1.0)
-        print(inertia)
-
-    def test_inertia_of_mesh(self):
+    def test_inertia_of_cube(self):
         # Define the vertices of a cube
-        half_length = 0.5
+        half_length = 2.0
+        density = 2.0
         vertices = numpy.array([
             [-half_length, -half_length, -half_length],
             [half_length, -half_length, -half_length],
@@ -111,19 +106,71 @@ class FactoryTestCase(unittest.TestCase):
         faces = numpy.array([
             [0, 1, 2],
             [0, 2, 3],
-            [4, 5, 6],
-            [4, 6, 7],
-            [0, 1, 5],
-            [0, 5, 4],
-            [2, 3, 7],
-            [2, 7, 6],
-            [0, 3, 7],
-            [0, 7, 4],
-            [1, 2, 6],
-            [1, 6, 5],
+            [1, 5, 6],
+            [6, 2, 1],
+            [5, 4, 7],
+            [7, 6, 5],
+            [4, 0, 3],
+            [3, 7, 4],
+            [3, 2, 6],
+            [6, 7, 3],
+            [4, 5, 1],
+            [1, 0, 4],
         ])
-        inertia = calculate_mesh_inertia(vertices=vertices, faces=faces, density=1.0)
-        print(inertia)
+        mass, inertia_tensor, center_of_mass = calculate_mesh_inertial(vertices=vertices, faces=faces, density=density)
+
+        mass_analytical = density * (2 * half_length) ** 3
+        center_of_mass_analytical = numpy.array([0.0, 0.0, 0.0])
+        inertia_tensor_analytical = numpy.array([[1.0 / 6, 0.0, 0.0],
+                                                 [0.0, 1.0 / 6, 0.0],
+                                                 [0.0, 0.0, 1.0 / 6]]) * mass_analytical * (2 * half_length) ** 2
+
+        self.assertTrue(numpy.allclose(mass, mass_analytical))
+        self.assertTrue(numpy.allclose(center_of_mass, center_of_mass_analytical))
+        self.assertTrue(numpy.allclose(inertia_tensor, inertia_tensor_analytical))
+
+    def test_inertia_of_sphere(self):
+        num_segments = 20
+        num_slices = 20
+        radius = 1.0
+
+        segment_angle = math.pi / num_segments
+        slice_angle = 2 * math.pi / num_slices
+
+        vertices = []
+        faces = []
+
+        # Define the vertices of a sphere
+        for i in range(num_segments + 1):
+            for j in range(num_slices):
+                x = radius * math.sin(segment_angle * i) * math.cos(slice_angle * j)
+                y = radius * math.sin(segment_angle * i) * math.sin(slice_angle * j)
+                z = radius * math.cos(segment_angle * i)
+                vertices.append([x, y, z])
+
+        # Define the faces of the sphere (vertices' indices for each face)
+        for i in range(num_segments):
+            for j in range(num_slices):
+                if i == 0:
+                    faces.append([0, j + 1, (j + 1) % num_slices + 1])
+                else:
+                    faces.append([i * num_slices + j + 1, (i + 1) * num_slices + j + 1,
+                                  (i + 1) * num_slices + (j + 1) % num_slices + 1])
+                    faces.append([i * num_slices + j + 1, (i + 1) * num_slices + (j + 1) % num_slices + 1,
+                                  i * num_slices + (j + 1) % num_slices + 1])
+
+        vertices = numpy.array(vertices)
+        faces = numpy.array(faces)
+
+        density = 2.0
+
+        mass, inertia_tensor, center_of_mass = calculate_mesh_inertial(vertices=vertices, faces=faces, density=density)
+
+        mass_analytical = density * 4 / 3 * math.pi * radius ** 3
+        center_of_mass_analytical = numpy.array([0.0, 0.0, 0.0])
+        inertia_tensor_analytical = numpy.array([[2.0 / 5, 0.0, 0.0],
+                                                 [0.0, 2.0 / 5, 0.0],
+                                                 [0.0, 0.0, 2.0 / 5]]) * mass_analytical * radius ** 2
 
     @classmethod
     def tearDownClass(cls):
