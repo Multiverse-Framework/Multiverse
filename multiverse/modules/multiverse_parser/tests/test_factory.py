@@ -130,18 +130,23 @@ class FactoryTestCase(unittest.TestCase):
         self.assertTrue(numpy.allclose(inertia_tensor, inertia_tensor_analytical))
 
     def test_inertia_of_sphere(self):
-        num_segments = 20
-        num_slices = 20
+        num_segments = 32
+        num_slices = 128
         radius = 1.0
+        density = 1.0
 
         segment_angle = math.pi / num_segments
         slice_angle = 2 * math.pi / num_slices
 
-        vertices = []
-        faces = []
-
         # Define the vertices of a sphere
+        vertices = []
         for i in range(num_segments + 1):
+            if i == 0:
+                vertices.append([0.0, 0.0, radius])
+                continue
+            elif i == num_segments:
+                vertices.append([0.0, 0.0, -radius])
+                continue
             for j in range(num_slices):
                 x = radius * math.sin(segment_angle * i) * math.cos(slice_angle * j)
                 y = radius * math.sin(segment_angle * i) * math.sin(slice_angle * j)
@@ -149,20 +154,45 @@ class FactoryTestCase(unittest.TestCase):
                 vertices.append([x, y, z])
 
         # Define the faces of the sphere (vertices' indices for each face)
+        faces = []
         for i in range(num_segments):
-            for j in range(num_slices):
-                if i == 0:
-                    faces.append([0, j + 1, (j + 1) % num_slices + 1])
-                else:
-                    faces.append([i * num_slices + j + 1, (i + 1) * num_slices + j + 1,
-                                  (i + 1) * num_slices + (j + 1) % num_slices + 1])
-                    faces.append([i * num_slices + j + 1, (i + 1) * num_slices + (j + 1) % num_slices + 1,
+            if i == 0:
+                for j in range(num_slices):
+                    faces.append([0,
+                                  j + 1,
+                                  (j + 1) % num_slices + 1])
+            elif i == num_segments - 1:
+                for j in range(num_slices):
+                    faces.append([(num_segments - 1) * num_slices + 1,
+                                  (i - 1) * num_slices + j + 1,
+                                  (i - 1) * num_slices + (j + 1) % num_slices + 1])
+            else:
+                for j in range(num_slices):
+                    faces.append([(i - 1) * num_slices + j + 1,
+                                  (i - 1) * num_slices + (j + 1) % num_slices + 1,
                                   i * num_slices + (j + 1) % num_slices + 1])
+                    faces.append([(i - 1) * num_slices + j + 1,
+                                  i * num_slices + (j + 1) % num_slices + 1,
+                                  i * num_slices + j + 1])
 
         vertices = numpy.array(vertices)
         faces = numpy.array(faces)
 
-        density = 2.0
+        # Plot the sphere and faces
+        import matplotlib.pyplot as plt
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection="3d")
+        ax.set_aspect("equal")
+        ax.set_xlim(-radius, radius)
+        ax.set_ylim(-radius, radius)
+        ax.set_zlim(-radius, radius)
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.set_zlabel("z")
+        # ax.plot(vertices[:, 0], vertices[:, 1], vertices[:, 2], "o")
+        for face in faces:
+            ax.plot(vertices[face, 0], vertices[face, 1], vertices[face, 2], "-")
+        plt.show()
 
         mass, inertia_tensor, center_of_mass = calculate_mesh_inertial(vertices=vertices, faces=faces, density=density)
 
@@ -171,6 +201,87 @@ class FactoryTestCase(unittest.TestCase):
         inertia_tensor_analytical = numpy.array([[2.0 / 5, 0.0, 0.0],
                                                  [0.0, 2.0 / 5, 0.0],
                                                  [0.0, 0.0, 2.0 / 5]]) * mass_analytical * radius ** 2
+
+        self.assertAlmostEqual(mass, mass_analytical, places=1)
+        self.assertTrue(numpy.allclose(center_of_mass, center_of_mass_analytical))
+        self.assertTrue(numpy.allclose(inertia_tensor, inertia_tensor_analytical, rtol=1e-1))
+
+    def test_inertia_of_cylinder(self):
+        num_segments = 10
+        num_slices = 128
+        radius = 1.0
+        height = 2.0
+        density = 1.0
+
+        segment_height = height / num_segments
+        slice_angle = 2 * math.pi / num_slices
+
+        # Define the vertices of a cylinder
+        vertices = []
+        for i in range(num_segments + 2):
+            if i == 0:
+                vertices.append([0.0, 0.0, -height / 2])
+            elif i == num_segments + 1:
+                vertices.append([0.0, 0.0, height / 2])
+                break
+            for j in range(num_slices):
+                x = radius * math.cos(slice_angle * j)
+                y = radius * math.sin(slice_angle * j)
+                z = -height / 2 + segment_height * i
+                vertices.append([x, y, z])
+
+        # Define the faces of the sphere (vertices' indices for each face)
+        faces = []
+        for i in range(num_segments + 2):
+            if i == 0:
+                for j in range(num_slices):
+                    faces.append([0,
+                                  j + 1,
+                                  (j + 1) % num_slices + 1])
+            elif i == num_segments + 1:
+                for j in range(num_slices):
+                    faces.append([(num_segments + 1) * num_slices + 1,
+                                  (i - 1) * num_slices + j + 1,
+                                  (i - 1) * num_slices + (j + 1) % num_slices + 1])
+            else:
+                for j in range(num_slices):
+                    faces.append([(i - 1) * num_slices + j + 1,
+                                  (i - 1) * num_slices + (j + 1) % num_slices + 1,
+                                  i * num_slices + (j + 1) % num_slices + 1])
+                    faces.append([(i - 1) * num_slices + j + 1,
+                                  i * num_slices + (j + 1) % num_slices + 1,
+                                  i * num_slices + j + 1])
+
+        vertices = numpy.array(vertices)
+        faces = numpy.array(faces)
+
+        # Plot the sphere and faces
+        import matplotlib.pyplot as plt
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection="3d")
+        ax.set_aspect("equal")
+        ax.set_xlim(-radius, radius)
+        ax.set_ylim(-radius, radius)
+        ax.set_zlim(-radius, radius)
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        ax.set_zlabel("z")
+        ax.plot(vertices[:, 0], vertices[:, 1], vertices[:, 2], "o")
+        for face in faces:
+            ax.plot(vertices[face, 0], vertices[face, 1], vertices[face, 2], "-")
+        plt.show()
+
+        mass, inertia_tensor, center_of_mass = calculate_mesh_inertial(vertices=vertices, faces=faces, density=density)
+
+        mass_analytical = density * math.pi * radius ** 2 * height
+        center_of_mass_analytical = numpy.array([0.0, 0.0, 0.0])
+        inertia_tensor_analytical = numpy.array([[1.0 / 12 * mass_analytical * (3 * radius ** 2 + height ** 2), 0.0, 0.0],
+                                                 [0.0, 1.0 / 12 * mass_analytical * (3 * radius ** 2 + height ** 2), 0.0],
+                                                 [0.0, 0.0, 1.0 / 2 * mass_analytical * radius ** 2]])
+
+        self.assertAlmostEqual(mass, mass_analytical, places=2)
+        self.assertTrue(numpy.allclose(center_of_mass, center_of_mass_analytical))
+        self.assertTrue(numpy.allclose(inertia_tensor, inertia_tensor_analytical, rtol=1e-3))
 
     @classmethod
     def tearDownClass(cls):

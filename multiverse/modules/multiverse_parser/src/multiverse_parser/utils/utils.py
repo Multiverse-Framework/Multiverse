@@ -105,7 +105,6 @@ def calculate_mesh_inertial(vertices: numpy.ndarray, faces: numpy.ndarray, densi
     # Initialize the center of mass to zeros
     center_of_mass = numpy.zeros((1, 3))
 
-    i = 0
     for face in faces:
         # Extract the vertices of the triangle face
         v1, v2, v3 = vertices[face]
