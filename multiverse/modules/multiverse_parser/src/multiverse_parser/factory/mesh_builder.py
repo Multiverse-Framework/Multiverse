@@ -30,6 +30,7 @@ class MeshProperty:
 
     def check_validity(self):
         assert self.points.size != 0
+        assert all(face_vertex_count == 3 for face_vertex_count in self.face_vertex_counts)
         assert self.face_vertex_counts.size * 3 == self.face_vertex_indices.size
 
     @property
@@ -113,6 +114,6 @@ class MeshBuilder:
         return self._xform
 
     @property
-    def meshes(self):
+    def meshes(self) -> List[UsdGeom.Mesh]:
         return [UsdGeom.Mesh(prim_child) for prim_child in self.xform.GetPrim().GetChildren() if
                 UsdGeom.Mesh(prim_child)]

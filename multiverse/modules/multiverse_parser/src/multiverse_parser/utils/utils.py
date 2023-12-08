@@ -109,24 +109,27 @@ def calculate_mesh_inertial(vertices: numpy.ndarray, faces: numpy.ndarray, densi
         # Extract the vertices of the triangle face
         v1, v2, v3 = vertices[face]
 
-        det_j = numpy.abs(scalar_triple_product(v1, v2, v3))
+        det = scalar_triple_product(v1, v2, v3)
 
-        tet_volume = det_j / 6.0
-        tet_mass = density * tet_volume
-        tet_center_of_mass = tet_mass * (v1 + v2 + v3) / 4.0
-        center_of_mass += tet_center_of_mass
-        mass += tet_mass
+        triangle_volume = det / 6.0
+        triangle_mass = density * triangle_volume
+        mass += triangle_mass
+
+        triangle_center_of_mass = (v1 + v2 + v3) / 4.0
+        center_of_mass += triangle_center_of_mass * triangle_mass
 
         v100 = calculate_tet3_inertia_moment(v1, v2, v3, 0)
         v010 = calculate_tet3_inertia_moment(v1, v2, v3, 1)
         v001 = calculate_tet3_inertia_moment(v1, v2, v3, 2)
 
-        Ixx += det_j * (v010 + v001)
-        Iyy += det_j * (v100 + v001)
-        Izz += det_j * (v100 + v010)
-        Ixy += det_j * calculate_tet3_inertia_product(v1, v2, v3, 0, 1)
-        Ixz += det_j * calculate_tet3_inertia_product(v1, v2, v3, 0, 2)
-        Iyz += det_j * calculate_tet3_inertia_product(v1, v2, v3, 1, 2)
+        Ixx += det * (v010 + v001)
+        Iyy += det * (v100 + v001)
+        Izz += det * (v100 + v010)
+        Ixy += det * calculate_tet3_inertia_product(v1, v2, v3, 0, 1)
+        Ixz += det * calculate_tet3_inertia_product(v1, v2, v3, 0, 2)
+        Iyz += det * calculate_tet3_inertia_product(v1, v2, v3, 1, 2)
+
+    center_of_mass /= mass
 
     Ixx = density * Ixx / 60.0
     Iyy = density * Iyy / 60.0
