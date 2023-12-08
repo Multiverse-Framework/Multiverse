@@ -16,6 +16,7 @@ from multiverse_parser import (WorldBuilder,
                                MeshBuilder)
 from multiverse_parser.utils import calculate_mesh_inertial, shift_inertia_tensor
 
+
 class Shape:
     _vertices: numpy.ndarray
     _faces: numpy.ndarray
@@ -157,7 +158,7 @@ class MultiShape:
         self._inertia_tensor = numpy.zeros((3, 3))
         self._center_of_mass = numpy.zeros((1, 3))
 
-    def add_shape(self, shape: Shape):
+    def add_shape(self, shape):
         self._shapes.append(shape)
 
     def build(self):
@@ -169,20 +170,23 @@ class MultiShape:
             self._inertia_tensor += shape.inertia_tensor
         self._center_of_mass /= self._mass
 
-    def plot(self):
+    def plot(self, display_wireframe: bool = True):
         fig = graph_objects.Figure()
 
-        limit = 0
-
-        for shape in self._shapes:
-            shape.add_plot_content(fig=fig)
-            limit = max(limit, shape.limit)
+        limit = self.add_plot_content(fig=fig, display_wireframe=display_wireframe)
 
         fig.update_layout(scene=dict(xaxis=dict(range=[-limit, limit]),
                                      yaxis=dict(range=[-limit, limit]),
                                      zaxis=dict(range=[-limit, limit])))
         fig.update_layout(scene_aspectmode='cube')
         fig.show()
+
+    def add_plot_content(self, fig: graph_objects.Figure, display_wireframe: bool = True):
+        self.limit = 0
+        for shape in self._shapes:
+            shape.add_plot_content(fig=fig, display_wireframe=display_wireframe)
+            self.limit = max(self.limit, shape.limit)
+        return self.limit
 
     @property
     def mass(self):
@@ -386,41 +390,71 @@ class Mesh(Shape):
     def calculate_inertial_analytical(self):
         pass
 
-# class MultiMesh(Shape):
-#     _mesh_builder: MeshBuilder
-#
-#     def __init__(self, mesh_file_path: str, density: float):
-#         self._mesh_builder = MeshBuilder(mesh_file_path=mesh_file_path)
-#         pos = self._mesh_builder.xform.GetLocalTransformation().ExtractTranslation()
-#         quat = self._mesh_builder.xform.GetLocalTransformation().ExtractRotation().GetQuaternion()
-#         super().__init__(density=density, pos=numpy.array([pos]), quat=numpy.array([quat]))
-#         self._density = density
-#
-#     def build(self):
-#
-#         for mesh in self._mesh_builder.meshes:
-#             mesh_name = mesh.GetPrim().GetName()
-#             vertices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).points
-#
-#             face_vertex_counts = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_counts
-#             face_vertex_indices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_indices
-#             faces = []
-#             face_idx = 0
-#             for face_vertex_count in face_vertex_counts:
-#                 faces.append(face_vertex_indices[face_idx:(face_idx + face_vertex_count)])
-#                 face_idx += face_vertex_count
-#             faces = numpy.array(faces)
-#
-#             mass, inertia_tensor, center_of_mass = calculate_mesh_inertial(vertices=vertices,
-#                                                                            faces=faces,
-#                                                                            density=self._density)
-#
-#             self._vertices = vertices
-#             self._faces = faces
-#
-#             self._center_of_mass = (self._center_of_mass * self._mass + center_of_mass * mass) / (self._mass + mass)
-#             self._mass += mass
-#             self._inertia_tensor += inertia_tensor
+
+class UsdMesh(MultiShape):
+    _mesh_builder: MeshBuilder
+
+    def __init__(self,
+                 mesh_file_path: str,
+                 density: float,
+                 pos: numpy.ndarray = numpy.zeros((1, 3)), quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])):
+        self._mesh_builder = MeshBuilder(mesh_file_path=mesh_file_path)
+
+        xform_pos = self._mesh_builder.xform.GetLocalTransformation().ExtractTranslation()
+        xform_quat = self._mesh_builder.xform.GetLocalTransformation().ExtractRotationQuat()
+        xform_quat = list(xform_quat.GetImaginary()) + [xform_quat.GetReal()]
+
+        xform_pos = numpy.array(xform_pos)
+        xform_quat = numpy.array(xform_quat)
+
+        pos = Rotation.from_quat(quat).apply(xform_pos) + pos
+        quat = Rotation.from_quat(xform_quat) * Rotation.from_quat(quat)
+
+        self._density = density
+        super().__init__(pos=pos, quat=quat.as_quat(canonical=False))
+
+    def apply_transform(self,
+                        pos: numpy.ndarray = numpy.zeros((1, 3)),
+                        quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])):
+        pass
+
+    def build(self):
+        for mesh in self._mesh_builder.meshes:
+            mesh_name = mesh.GetPrim().GetName()
+            vertices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).points
+
+            face_vertex_counts = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_counts
+            face_vertex_indices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_indices
+            normals = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).normals
+
+            faces = []
+            face_idx = 0
+            for face_vertex_count in face_vertex_counts:
+                face = face_vertex_indices[face_idx:(face_idx + face_vertex_count)]
+                face_normals = normals[face_idx:(face_idx + face_vertex_count)]
+                if not numpy.isclose(numpy.linalg.norm(face_normals), 0.0):
+                    edge_1 = vertices[face[1]] - vertices[face[0]]
+                    edge_2 = vertices[face[2]] - vertices[face[1]]
+                    edge_3 = vertices[face[0]] - vertices[face[2]]
+                    normal_1 = numpy.cross(edge_1, edge_2)
+                    normal_1 /= numpy.linalg.norm(normal_1)
+                    normal_2 = numpy.cross(edge_2, edge_3)
+                    normal_2 /= numpy.linalg.norm(normal_2)
+                    normal_3 = numpy.cross(edge_3, edge_1)
+                    normal_3 /= numpy.linalg.norm(normal_3)
+
+                    if (not numpy.allclose(face_normals, normal_1)
+                            or not numpy.allclose(face_normals, normal_2)
+                            or not numpy.allclose(face_normals, normal_3)):
+                        print(f"Flip face {face}.")
+                        face = face[::-1]
+
+                faces.append(face)
+                face_idx += face_vertex_count
+            faces = numpy.array(faces)
+
+            self.add_shape(shape=Mesh(vertices=vertices, faces=faces, density=self._density))
+        super().build()
 
 
 class FactoryTestCase(unittest.TestCase):
@@ -762,26 +796,71 @@ class FactoryTestCase(unittest.TestCase):
         numpy.testing.assert_array_almost_equal(multi_shape.center_of_mass, shape_combined.center_of_mass)
         numpy.testing.assert_array_almost_equal(multi_shape.inertia_tensor, shape_combined.inertia_tensor)
 
-    # def test_inertia_of_mesh_1(self):
-    #     mesh_file_path = os.path.join(self.resource_path, "input", "milk_box", "meshes", "usd", "obj", "milk_box.usda")
-    #     density = 1.0
-    #
-    #     mesh = Mesh(mesh_file_path=mesh_file_path, density=density)
-    #     mesh.build()
-    #     mesh.plot()
-    #
-    #     a = 0.06
-    #     b = 0.095
-    #     c = 0.2
-    #     mass_analytical = a * b * c * density
-    #     center_of_mass_analytical = numpy.zeros((1, 3))
-    #     inertia_tensor_analytical = numpy.array([[1.0 / 12 * mass_analytical * (b ** 2 + c ** 2), 0.0, 0.0],
-    #                                              [0.0, 1.0 / 12 * mass_analytical * (a ** 2 + c ** 2), 0.0],
-    #                                              [0.0, 0.0, 1.0 / 12 * mass_analytical * (a ** 2 + b ** 2)]])
-    #
-    #     self.assertAlmostEqual(mesh.mass, mass_analytical)
-    #     numpy.testing.assert_array_almost_equal(mesh.center_of_mass, center_of_mass_analytical)
-    #     numpy.testing.assert_array_almost_equal(mesh.inertia_tensor, inertia_tensor_analytical)
+    def test_inertia_of_mesh_1(self, pos=numpy.array([[0.0, 0.0, 0.0]]), quat=numpy.array([0.0, 0.0, 0.0, 1.0])):
+        mesh_file_path = os.path.join(self.resource_path, "input", "milk_box", "meshes", "usd", "obj", "milk_box.usda")
+        density = 1.0
+
+        usd_mesh = UsdMesh(mesh_file_path=mesh_file_path,
+                           density=density,
+                           pos=pos, quat=quat)
+        usd_mesh.build()
+        if self.plot:
+            usd_mesh.plot()
+
+        a = 0.06
+        b = 0.095
+        c = 0.2
+        box = Box(a=a, b=b, c=c,
+                  density=density,
+                  pos=pos, quat=quat)
+        box.build()
+        if self.plot:
+            box.plot()
+
+        self.assertAlmostEqual(usd_mesh.mass, box.mass)
+        numpy.testing.assert_array_almost_equal(usd_mesh.center_of_mass, box.center_of_mass)
+        numpy.testing.assert_array_almost_equal(usd_mesh.inertia_tensor, box.inertia_tensor)
+
+    def test_inertia_of_mesh_2(self):
+        pos = numpy.array([[random.uniform(-0.05, 0.05),
+                            random.uniform(-0.03, 0.03),
+                            random.uniform(-0.02, 0.02)]])
+        random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+
+        self.test_inertia_of_mesh_1(pos=pos, quat=quat)
+
+    def test_inertia_of_mesh_3(self, pos=numpy.array([[0.0, 0.0, 0.0]]), quat=numpy.array([0.0, 0.0, 0.0, 1.0])):
+        mesh_file_path = os.path.join(self.resource_path, "input", "ur5e", "meshes", "usd", "usd", "base_1.usda")
+        density = 7800.0
+
+        usd_mesh = UsdMesh(mesh_file_path=mesh_file_path,
+                           density=density,
+                           pos=pos, quat=quat)
+        usd_mesh.build()
+        if self.plot:
+            usd_mesh.plot(display_wireframe=False)
+
+    def test_inertia_of_mesh_4(self):
+        mesh_file_path_0 = os.path.join(self.resource_path, "input", "ur5e", "meshes", "usd", "usd", "base_0.usda")
+        mesh_file_path_1 = os.path.join(self.resource_path, "input", "ur5e", "meshes", "usd", "usd", "base_1.usda")
+        density = 900.0
+
+        usd_mesh_0 = UsdMesh(mesh_file_path=mesh_file_path_0,
+                             density=density,
+                             pos=numpy.array([[0.0, 0.0, 0.09357351479123255]]),
+                             quat=Rotation.from_euler(seq='y', angles=-90, degrees=True).as_quat(canonical=False))
+        usd_mesh_1 = UsdMesh(mesh_file_path=mesh_file_path_1,
+                             density=density,
+                             pos=numpy.array([[0.0, 0.0, 0.03113409208382618]]),
+                             quat=Rotation.from_euler(seq='y', angles=-90, degrees=True).as_quat(canonical=False))
+
+        usd_mesh = MultiShape()
+        usd_mesh.add_shape(usd_mesh_0)
+        usd_mesh.add_shape(usd_mesh_1)
+        usd_mesh.build()
+        if self.plot:
+            usd_mesh.plot(display_wireframe=False)
 
     @classmethod
     def tearDownClass(cls):
