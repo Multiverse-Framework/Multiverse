@@ -4,8 +4,9 @@ import math
 import os
 import tracemalloc
 import random
+from typing import List
 
-import matplotlib.pyplot as plt
+from plotly import graph_objects
 import numpy
 from scipy.spatial.transform import Rotation
 from pxr import Usd
@@ -13,18 +14,17 @@ from multiverse_parser import (WorldBuilder,
                                JointBuilder, JointType, JointProperty,
                                GeomType, GeomProperty,
                                MeshBuilder)
-from multiverse_parser.utils import calculate_mesh_inertial
-
+from multiverse_parser.utils import calculate_mesh_inertial, shift_inertia_tensor
 
 class Shape:
     _vertices: numpy.ndarray
     _faces: numpy.ndarray
-    _pos: numpy.ndarray = numpy.zeros((1, 3))
-    _quat: numpy.ndarray = numpy.array([1.0, 0.0, 0.0, 0.0])
+    _pos: numpy.ndarray
+    _quat: numpy.ndarray
     _density: float
-    _mass: float = 0.0
-    _inertia_tensor = numpy.zeros((3, 3))
-    _center_of_mass = numpy.zeros((1, 3))
+    _mass: float
+    _inertia_tensor: numpy.ndarray
+    _center_of_mass: numpy.ndarray
     _mass_analytical: float = 0.0
     _center_of_mass_analytical = numpy.zeros((1, 3))
     _inertia_tensor_analytical_center = numpy.zeros((3, 3))
@@ -36,46 +36,80 @@ class Shape:
         self._density = density
         self._pos = pos
         self._quat = quat
+        self._mass = 0
+        self._inertia_tensor = numpy.zeros((3, 3))
+        self._center_of_mass = numpy.zeros((1, 3))
+        self._create_vertices_and_faces()
+        self.apply_transform(self._pos, self._quat)
 
     def build(self):
-        self._create_vertices_and_faces()
-        self._apply_transform()
-        self._calculate_inertial()
-        self._calculate_inertial_analytical()
+        self.calculate_inertial()
+        self.calculate_inertial_analytical()
 
     def _create_vertices_and_faces(self):
         raise NotImplementedError
 
-    def _calculate_inertial(self):
+    def calculate_inertial(self):
         self._mass, self._inertia_tensor, self._center_of_mass = calculate_mesh_inertial(vertices=self._vertices,
                                                                                          faces=self._faces,
                                                                                          density=self._density)
 
-    def _calculate_inertial_analytical(self):
+    def calculate_inertial_analytical(self):
         raise NotImplementedError
 
-    def plot(self):
-        raise NotImplementedError
+    def apply_transform(self,
+                        pos: numpy.ndarray = numpy.zeros((1, 3)),
+                        quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])):
+        rotation = Rotation.from_quat(quat)
+        self._vertices = pos + rotation.apply(self._vertices)
 
-    def _apply_transform(self):
-        # rotation = Rotation.from_quat(self._quat)
-        pass
-        # self._vertices += self._pos
+    def plot(self, display_wireframe: bool = True):
+        fig = graph_objects.Figure()
 
-    def _plot(self, xlim: float = 1.0, ylim: float = 1.0, zlim: float = 1.0):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection="3d")
-        ax.set_aspect("equal")
-        ax.set_xlim(-xlim, xlim)
-        ax.set_ylim(-ylim, ylim)
-        ax.set_zlim(-zlim, zlim)
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("z")
-        # ax.plot(vertices[:, 0], vertices[:, 1], vertices[:, 2], "o")
-        for face in self._faces:
-            ax.plot(self._vertices[face, 0], self._vertices[face, 1], self._vertices[face, 2], "-")
-        plt.show()
+        self.add_plot_content(fig=fig, display_wireframe=display_wireframe)
+
+        limit = self.limit
+        fig.update_layout(scene=dict(xaxis=dict(range=[-limit, limit]),
+                                     yaxis=dict(range=[-limit, limit]),
+                                     zaxis=dict(range=[-limit, limit])))
+        fig.update_layout(scene_aspectmode='cube')
+        fig.show()
+
+    def add_plot_content(self, fig: graph_objects.Figure, display_wireframe: bool = True):
+        fig.add_trace(graph_objects.Mesh3d(x=self._vertices[:, 0],
+                                           y=self._vertices[:, 1],
+                                           z=self._vertices[:, 2],
+                                           i=self._faces[:, 0],
+                                           j=self._faces[:, 1],
+                                           k=self._faces[:, 2],
+                                           color='lightpink',
+                                           opacity=1.0))
+        if display_wireframe:
+            lines = []
+            for face in self._faces:
+                lines.append([self._vertices[face[0]], self._vertices[face[1]]])
+                lines.append([self._vertices[face[1]], self._vertices[face[2]]])
+                lines.append([self._vertices[face[2]], self._vertices[face[0]]])
+            lines = numpy.array(lines)
+            fig.add_trace(graph_objects.Scatter3d(x=lines[:, :, 0].flatten(),
+                                                  y=lines[:, :, 1].flatten(),
+                                                  z=lines[:, :, 2].flatten(),
+                                                  mode='lines',
+                                                  line=dict(color='black', width=1)))
+
+    @property
+    def vertices(self):
+        return self._vertices
+
+    @property
+    def faces(self):
+        return self._faces
+
+    @property
+    def limit(self):
+        return max(max(self._vertices[:, 0]) - min(self._vertices[:, 0]),
+                   max(self._vertices[:, 1]) - min(self._vertices[:, 1]),
+                   max(self._vertices[:, 2]) - min(self._vertices[:, 2]))
 
     @property
     def mass(self):
@@ -95,24 +129,72 @@ class Shape:
 
     @property
     def inertia_tensor_analytical(self):
-        # https://phys.libretexts.org/Bookshelves/Classical_Mechanics/Variational_Principles_in_Classical_Mechanics_(Cline)/13%3A_Rigid-body_Rotation/13.08%3A_Parallel-Axis_Theorem
-        inertia_tensor_analytical_parallel = self._mass_analytical * (
-            numpy.array(
-                [[self._center_of_mass_analytical[0][1] ** 2 + self._center_of_mass_analytical[0][2] ** 2,
-                  - self._center_of_mass_analytical[0][0] * self._center_of_mass_analytical[0][1],
-                  - self._center_of_mass_analytical[0][0] * self._center_of_mass_analytical[0][2]],
-                 [- self._center_of_mass_analytical[0][0] * self._center_of_mass_analytical[0][1],
-                  self._center_of_mass_analytical[0][2] ** 2 + self._center_of_mass_analytical[0][0] ** 2,
-                  - self._center_of_mass_analytical[0][1] * self._center_of_mass_analytical[0][2]],
-                 [- self._center_of_mass_analytical[0][0] * self._center_of_mass_analytical[0][2],
-                  - self._center_of_mass_analytical[0][1] * self._center_of_mass_analytical[0][2],
-                  self._center_of_mass_analytical[0][0] ** 2 + self._center_of_mass_analytical[0][1] ** 2]]
-            ))
-        return self._inertia_tensor_analytical_center + inertia_tensor_analytical_parallel
+        return shift_inertia_tensor(mass=self._mass_analytical,
+                                    inertia_tensor=self._inertia_tensor_analytical_center,
+                                    pos=self._center_of_mass_analytical,
+                                    quat=self._quat)
 
     @property
     def center_of_mass_analytical(self):
         return self._center_of_mass_analytical
+
+
+class MultiShape:
+    _shapes: List[Shape]
+    _pos: numpy.ndarray
+    _quat: numpy.ndarray
+    _mass: float
+    _inertia_tensor: numpy.ndarray
+    _center_of_mass: numpy.ndarray
+
+    def __init__(self,
+                 pos: numpy.ndarray = numpy.zeros((1, 3)),
+                 quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])):
+        self._shapes = []
+        self._pos = pos
+        self._quat = quat
+        self._mass = 0
+        self._inertia_tensor = numpy.zeros((3, 3))
+        self._center_of_mass = numpy.zeros((1, 3))
+
+    def add_shape(self, shape: Shape):
+        self._shapes.append(shape)
+
+    def build(self):
+        for shape in self._shapes[:]:
+            shape.apply_transform(self._pos, self._quat)
+            shape.build()
+            self._mass += shape.mass
+            self._center_of_mass += shape.mass * shape.center_of_mass
+            self._inertia_tensor += shape.inertia_tensor
+        self._center_of_mass /= self._mass
+
+    def plot(self):
+        fig = graph_objects.Figure()
+
+        limit = 0
+
+        for shape in self._shapes:
+            shape.add_plot_content(fig=fig)
+            limit = max(limit, shape.limit)
+
+        fig.update_layout(scene=dict(xaxis=dict(range=[-limit, limit]),
+                                     yaxis=dict(range=[-limit, limit]),
+                                     zaxis=dict(range=[-limit, limit])))
+        fig.update_layout(scene_aspectmode='cube')
+        fig.show()
+
+    @property
+    def mass(self):
+        return self._mass
+
+    @property
+    def inertia_tensor(self):
+        return self._inertia_tensor
+
+    @property
+    def center_of_mass(self):
+        return self._center_of_mass
 
 
 class Box(Shape):
@@ -120,10 +202,10 @@ class Box(Shape):
                  density: float,
                  pos: numpy.ndarray = numpy.zeros((1, 3)),
                  quat: numpy.ndarray = numpy.array([1.0, 0.0, 0.0, 0.0])):
-        super().__init__(density=density, pos=pos, quat=quat)
         self._a_half = a / 2
         self._b_half = b / 2
         self._c_half = c / 2
+        super().__init__(density=density, pos=pos, quat=quat)
 
     def _create_vertices_and_faces(self):
         self._vertices = numpy.array([
@@ -152,19 +234,13 @@ class Box(Shape):
             [4, 1, 0]
         ])
 
-    def _calculate_inertial_analytical(self):
+    def calculate_inertial_analytical(self):
         self._mass_analytical = self._density * (2 * self._a_half) * (2 * self._b_half) * (2 * self._c_half)
         self._center_of_mass_analytical = self._pos
         self._inertia_tensor_analytical_center = self._mass_analytical * numpy.array(
             [[1.0 / 3 * (self._b_half ** 2 + self._c_half ** 2), 0.0, 0.0],
              [0.0, 1.0 / 3 * (self._a_half ** 2 + self._c_half ** 2), 0.0],
              [0.0, 0.0, 1.0 / 3 * (self._a_half ** 2 + self._b_half ** 2)]])
-
-    def plot(self):
-        lim = max(self._a_half + numpy.abs(self._pos[0]),
-                  self._b_half + numpy.abs(self._pos[1]),
-                  self._c_half + numpy.abs(self._pos[2]))
-        self._plot(xlim=lim, ylim=lim, zlim=lim)
 
 
 class Sphere(Shape):
@@ -173,10 +249,10 @@ class Sphere(Shape):
                  pos: numpy.ndarray = numpy.zeros((1, 3)),
                  quat: numpy.ndarray = numpy.array([1.0, 0.0, 0.0, 0.0]),
                  num_segments: int = 32, num_slices: int = 128):
-        super().__init__(density=density, pos=pos, quat=quat)
         self._radius = radius
         self._num_segments = num_segments
         self._num_slices = num_slices
+        super().__init__(density=density, pos=pos, quat=quat)
 
     def _create_vertices_and_faces(self):
         segment_angle = math.pi / self._num_segments
@@ -222,16 +298,13 @@ class Sphere(Shape):
         self._vertices = numpy.array(vertices)
         self._faces = numpy.array(faces)
 
-    def _calculate_inertial_analytical(self):
+    def calculate_inertial_analytical(self):
         self._mass_analytical = self._density * 4 / 3 * math.pi * self._radius ** 3
         self._center_of_mass_analytical = self._pos
         self._inertia_tensor_analytical_center = (
                 numpy.array([[2.0 / 5, 0.0, 0.0],
                              [0.0, 2.0 / 5, 0.0],
                              [0.0, 0.0, 2.0 / 5]]) * self._mass_analytical * self._radius ** 2)
-
-    def plot(self):
-        self._plot(xlim=math.ceil(self._radius), ylim=math.ceil(self._radius), zlim=math.ceil(self._radius))
 
 
 class Cylinder(Shape):
@@ -240,11 +313,11 @@ class Cylinder(Shape):
                  pos: numpy.ndarray = numpy.zeros((1, 3)),
                  quat: numpy.ndarray = numpy.array([1.0, 0.0, 0.0, 0.0]),
                  num_segments: int = 32, num_slices: int = 128):
-        super().__init__(density=density, pos=pos, quat=quat)
         self._radius = radius
         self._height = height
         self._num_segments = num_segments
         self._num_slices = num_slices
+        super().__init__(density=density, pos=pos, quat=quat)
 
     def _create_vertices_and_faces(self):
         segment_height = self._height / self._num_segments
@@ -289,7 +362,7 @@ class Cylinder(Shape):
         self._vertices = numpy.array(vertices)
         self._faces = numpy.array(faces)
 
-    def _calculate_inertial_analytical(self):
+    def calculate_inertial_analytical(self):
         self._mass_analytical = self._density * math.pi * self._radius ** 2 * self._height
         self._center_of_mass_analytical = self._pos
         self._inertia_tensor_analytical_center = numpy.array(
@@ -297,56 +370,61 @@ class Cylinder(Shape):
              [0.0, 1.0 / 12 * self._mass_analytical * (3 * self._radius ** 2 + self._height ** 2), 0.0],
              [0.0, 0.0, 1.0 / 2 * self._mass_analytical * self._radius ** 2]])
 
-    def plot(self):
-        self._plot(xlim=math.ceil(self._radius), ylim=math.ceil(self._radius), zlim=math.ceil(self._height / 2))
-
 
 class Mesh(Shape):
-    _mesh_builder: MeshBuilder
+    def __init__(self, vertices: numpy.ndarray, faces: numpy.ndarray,
+                 density: float,
+                 pos: numpy.ndarray = numpy.zeros((1, 3)),
+                 quat: numpy.ndarray = numpy.array([1.0, 0.0, 0.0, 0.0])):
+        self._vertices = vertices
+        self._faces = faces
+        super().__init__(density=density, pos=pos, quat=quat)
 
-    def __init__(self, mesh_file_path: str, density: float):
-        self._mesh_builder = MeshBuilder(mesh_file_path=mesh_file_path)
-        pos = self._mesh_builder.xform.GetLocalTransformation().ExtractTranslation()
-        quat = self._mesh_builder.xform.GetLocalTransformation().ExtractRotation().GetQuaternion()
-        super().__init__(density=density, pos=numpy.array([pos]), quat=numpy.array([quat]))
-        self._density = density
-        self._extent = numpy.ones((1, 3))
+    def _create_vertices_and_faces(self):
+        pass
 
-    def build(self):
+    def calculate_inertial_analytical(self):
+        pass
 
-        for mesh in self._mesh_builder.meshes:
-            mesh_name = mesh.GetPrim().GetName()
-            vertices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).points
-            self._extent = numpy.array([[max(vertices[:, 0]) - min(vertices[:, 0]),
-                                         max(vertices[:, 1]) - min(vertices[:, 1]),
-                                         max(vertices[:, 2]) - min(vertices[:, 2])]])
-
-            face_vertex_counts = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_counts
-            face_vertex_indices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_indices
-            faces = []
-            face_idx = 0
-            for face_vertex_count in face_vertex_counts:
-                faces.append(face_vertex_indices[face_idx:(face_idx + face_vertex_count)])
-                face_idx += face_vertex_count
-            faces = numpy.array(faces)
-
-            mass, inertia_tensor, center_of_mass = calculate_mesh_inertial(vertices=vertices,
-                                                                           faces=faces,
-                                                                           density=self._density)
-
-            self._vertices = vertices
-            self._faces = faces
-
-            self._center_of_mass = (self._center_of_mass * self._mass + center_of_mass * mass) / (self._mass + mass)
-            self._mass += mass
-            self._inertia_tensor += inertia_tensor
-
-    def plot(self):
-        max_extent = max(self._extent[0, 0], self._extent[0, 1], self._extent[0, 2])
-        self._plot(xlim=max_extent, ylim=max_extent, zlim=max_extent)
+# class MultiMesh(Shape):
+#     _mesh_builder: MeshBuilder
+#
+#     def __init__(self, mesh_file_path: str, density: float):
+#         self._mesh_builder = MeshBuilder(mesh_file_path=mesh_file_path)
+#         pos = self._mesh_builder.xform.GetLocalTransformation().ExtractTranslation()
+#         quat = self._mesh_builder.xform.GetLocalTransformation().ExtractRotation().GetQuaternion()
+#         super().__init__(density=density, pos=numpy.array([pos]), quat=numpy.array([quat]))
+#         self._density = density
+#
+#     def build(self):
+#
+#         for mesh in self._mesh_builder.meshes:
+#             mesh_name = mesh.GetPrim().GetName()
+#             vertices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).points
+#
+#             face_vertex_counts = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_counts
+#             face_vertex_indices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_indices
+#             faces = []
+#             face_idx = 0
+#             for face_vertex_count in face_vertex_counts:
+#                 faces.append(face_vertex_indices[face_idx:(face_idx + face_vertex_count)])
+#                 face_idx += face_vertex_count
+#             faces = numpy.array(faces)
+#
+#             mass, inertia_tensor, center_of_mass = calculate_mesh_inertial(vertices=vertices,
+#                                                                            faces=faces,
+#                                                                            density=self._density)
+#
+#             self._vertices = vertices
+#             self._faces = faces
+#
+#             self._center_of_mass = (self._center_of_mass * self._mass + center_of_mass * mass) / (self._mass + mass)
+#             self._mass += mass
+#             self._inertia_tensor += inertia_tensor
 
 
 class FactoryTestCase(unittest.TestCase):
+    plot: bool = False
     resource_path: str
 
     @classmethod
@@ -429,7 +507,8 @@ class FactoryTestCase(unittest.TestCase):
 
         box = Box(a=a, b=b, c=c, density=density)
         box.build()
-        box.plot()
+        if self.plot:
+            box.plot()
 
         self.assertAlmostEqual(box.mass, box.mass_analytical)
         numpy.testing.assert_array_almost_equal(box.center_of_mass, box.center_of_mass_analytical)
@@ -444,7 +523,8 @@ class FactoryTestCase(unittest.TestCase):
 
         box = Box(a=a, b=b, c=c, density=density, pos=pos)
         box.build()
-        box.plot()
+        if self.plot:
+            box.plot()
 
         self.assertAlmostEqual(box.mass, box.mass_analytical)
         numpy.testing.assert_array_almost_equal(box.center_of_mass, box.center_of_mass_analytical)
@@ -452,31 +532,34 @@ class FactoryTestCase(unittest.TestCase):
 
     def test_inertia_of_box_with_fixed_pos_and_quat(self):
         a = 1.0
-        b = 1.0
-        c = 1.0
-        pos = numpy.array([0.0, 0.1, 0.0])
-        # quat = numpy.array([0.9659258, 0.258819, 0.0, 0.0])
-        quat = numpy.array([1.0, 0.0, 0.0, 0.0])
+        b = 2.0
+        c = 3.0
+        pos = numpy.array([[0.3, 0.2, 0.1]])
+        quat = Rotation.from_euler('xyz', [30, 45, 60], degrees=True).as_quat(canonical=False)
         density = 1.0
 
         box = Box(a=a, b=b, c=c, density=density, pos=pos, quat=quat)
         box.build()
-        box.plot()
+        if self.plot:
+            box.plot()
 
-        # self.assertAlmostEqual(box.mass, box.mass_analytical)
-        # numpy.testing.assert_array_almost_equal(box.center_of_mass, box.center_of_mass_analytical)
-        # numpy.testing.assert_array_almost_equal(box.inertia_tensor, box.inertia_tensor_analytical)
+        self.assertAlmostEqual(box.mass, box.mass_analytical)
+        numpy.testing.assert_array_almost_equal(box.center_of_mass, box.center_of_mass_analytical)
+        numpy.testing.assert_array_almost_equal(box.inertia_tensor, box.inertia_tensor_analytical)
 
     def test_inertia_of_box_with_random_pos(self):
         a = random.uniform(0.1, 0.3)
         b = random.uniform(0.1, 0.4)
         c = random.uniform(0.1, 0.5)
         pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
+        random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
         density = 2.0
 
-        box = Box(a=a, b=b, c=c, density=density, pos=pos)
+        box = Box(a=a, b=b, c=c, density=density, pos=pos, quat=quat)
         box.build()
-        box.plot()
+        if self.plot:
+            box.plot()
 
         self.assertAlmostEqual(box.mass, box.mass_analytical)
         numpy.testing.assert_array_almost_equal(box.center_of_mass, box.center_of_mass_analytical)
@@ -491,24 +574,29 @@ class FactoryTestCase(unittest.TestCase):
                         num_segments=random.randint(6, 32),
                         num_slices=16)
         sphere.build()
-        sphere.plot()
+        if self.plot:
+            sphere.plot()
 
         self.assertAlmostEqual(sphere.mass, sphere.mass_analytical, places=0)
         numpy.testing.assert_array_almost_equal(sphere.center_of_mass, sphere.center_of_mass_analytical)
         numpy.testing.assert_array_almost_equal(sphere.inertia_tensor, sphere.inertia_tensor_analytical, decimal=1)
 
-    def test_inertia_of_sphere_with_random_pos(self):
+    def test_inertia_of_sphere_with_random_pos_and_quat(self):
         radius = random.uniform(0.5, 1.0)
         density = 1.0
-        pos = numpy.array([[0.5, 0.5, 0.5]])
+        pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
+        random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
 
         sphere = Sphere(radius=radius,
                         density=density,
                         pos=pos,
+                        quat=quat,
                         num_segments=random.randint(6, 32),
-                        num_slices=16)
+                        num_slices=random.randint(16, 32))
         sphere.build()
-        sphere.plot()
+        if self.plot:
+            sphere.plot()
 
         self.assertAlmostEqual(sphere.mass, sphere.mass_analytical, places=0)
         numpy.testing.assert_array_almost_equal(sphere.center_of_mass, sphere.center_of_mass_analytical)
@@ -525,7 +613,8 @@ class FactoryTestCase(unittest.TestCase):
                             num_segments=random.randint(6, 32),
                             num_slices=random.randint(16, 32))
         cylinder.build()
-        cylinder.plot()
+        if self.plot:
+            cylinder.plot()
 
         self.assertAlmostEqual(cylinder.mass, cylinder.mass_analytical, places=0)
         numpy.testing.assert_array_almost_equal(cylinder.center_of_mass, cylinder.center_of_mass_analytical)
@@ -536,40 +625,163 @@ class FactoryTestCase(unittest.TestCase):
         height = random.uniform(1.0, 2.0)
         density = 1.0
         pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
+        random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
 
         cylinder = Cylinder(radius=radius,
                             height=height,
                             density=density,
                             pos=pos,
+                            quat=quat,
                             num_segments=random.randint(6, 32),
                             num_slices=random.randint(16, 32))
         cylinder.build()
-        cylinder.plot()
+        if self.plot:
+            cylinder.plot()
 
         self.assertAlmostEqual(cylinder.mass, cylinder.mass_analytical, places=0)
         numpy.testing.assert_array_almost_equal(cylinder.center_of_mass, cylinder.center_of_mass_analytical)
         numpy.testing.assert_array_almost_equal(cylinder.inertia_tensor, cylinder.inertia_tensor_analytical, decimal=1)
 
-    def test_inertia_of_mesh_1(self):
-        mesh_file_path = os.path.join(self.resource_path, "input", "milk_box", "meshes", "usd", "obj", "milk_box.usda")
+    def test_multiple_boxes_with_random_pos_and_quat(self):
+        pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
+        random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+        offset = Rotation.from_quat(quat).apply(numpy.array([[0.0, 0.125, 0.0]]))
+
+        pos_1 = pos + offset
+        pos_2 = pos - offset
+
         density = 1.0
+        box_1 = Box(a=0.5, b=0.25, c=0.5,
+                    density=density,
+                    pos=pos_1,
+                    quat=quat)
+        box_2 = Box(a=0.5, b=0.25, c=0.5,
+                    density=density,
+                    pos=pos_2,
+                    quat=quat)
 
-        mesh = Mesh(mesh_file_path=mesh_file_path, density=density)
-        mesh.build()
-        mesh.plot()
+        multi_shape = MultiShape()
+        multi_shape.add_shape(box_1)
+        multi_shape.add_shape(box_2)
+        multi_shape.build()
+        if self.plot:
+            multi_shape.plot()
 
-        a = 0.06
-        b = 0.095
-        c = 0.2
-        mass_analytical = a * b * c * density
-        center_of_mass_analytical = numpy.zeros((1, 3))
-        inertia_tensor_analytical = numpy.array([[1.0 / 12 * mass_analytical * (b ** 2 + c ** 2), 0.0, 0.0],
-                                                 [0.0, 1.0 / 12 * mass_analytical * (a ** 2 + c ** 2), 0.0],
-                                                 [0.0, 0.0, 1.0 / 12 * mass_analytical * (a ** 2 + b ** 2)]])
+        box_combined = Box(a=0.5, b=0.5, c=0.5,
+                           density=density,
+                           pos=pos,
+                           quat=quat)
+        box_combined.build()
+        if self.plot:
+            box_combined.plot()
 
-        self.assertAlmostEqual(mesh.mass, mass_analytical)
-        numpy.testing.assert_array_almost_equal(mesh.center_of_mass, center_of_mass_analytical)
-        numpy.testing.assert_array_almost_equal(mesh.inertia_tensor, inertia_tensor_analytical)
+        self.assertAlmostEqual(multi_shape.mass, box_combined.mass)
+        numpy.testing.assert_array_almost_equal(multi_shape.center_of_mass, box_combined.center_of_mass)
+        numpy.testing.assert_array_almost_equal(multi_shape.inertia_tensor, box_combined.inertia_tensor)
+
+    def test_multiple_shapes(self):
+        density = 1.0
+        box_1 = Box(a=0.5, b=0.1, c=0.5,
+                    density=density,
+                    pos=numpy.array([[0.0, -0.5, 0.0]]))
+        box_2 = Box(a=0.5, b=0.1, c=0.5,
+                    density=density,
+                    pos=numpy.array([[0.0, 0.5, 0.0]]))
+        cylinder = Cylinder(radius=0.05, height=1.0,
+                            density=density,
+                            quat=Rotation.from_euler(seq='x', angles=90, degrees=True).as_quat(canonical=False),
+                            num_segments=6,
+                            num_slices=16)
+
+        vertices = numpy.concatenate((box_1.vertices, box_2.vertices, cylinder.vertices), axis=0)
+        faces = numpy.concatenate((box_1.faces,
+                                   box_2.faces + len(box_1.vertices),
+                                   cylinder.faces + len(box_1.vertices) + len(box_2.vertices)), axis=0)
+
+        multi_shape = MultiShape()
+        multi_shape.add_shape(box_1)
+        multi_shape.add_shape(box_2)
+        multi_shape.add_shape(cylinder)
+        multi_shape.build()
+        if self.plot:
+            multi_shape.plot()
+
+        shape_combined = Mesh(vertices=vertices, faces=faces,
+                              density=density)
+        shape_combined.build()
+        if self.plot:
+            shape_combined.plot()
+
+        self.assertAlmostEqual(multi_shape.mass, shape_combined.mass)
+        numpy.testing.assert_array_almost_equal(multi_shape.center_of_mass, shape_combined.center_of_mass)
+        numpy.testing.assert_array_almost_equal(multi_shape.inertia_tensor, shape_combined.inertia_tensor)
+
+    def test_multiple_shapes_with_random_pos_and_quat(self):
+        pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
+        random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+
+        density = 1.0
+        box_1 = Box(a=0.5, b=0.1, c=0.5,
+                    density=density,
+                    pos=numpy.array([[0.0, -0.5, 0.0]]))
+        box_2 = Box(a=0.5, b=0.1, c=0.5,
+                    density=density,
+                    pos=numpy.array([[0.0, 0.5, 0.0]]))
+        cylinder = Cylinder(radius=0.05, height=1.0,
+                            density=density,
+                            quat=Rotation.from_euler(seq='x', angles=90, degrees=True).as_quat(canonical=False),
+                            num_segments=6,
+                            num_slices=16)
+
+        vertices = numpy.concatenate((box_1.vertices, box_2.vertices, cylinder.vertices), axis=0)
+        faces = numpy.concatenate((box_1.faces,
+                                   box_2.faces + len(box_1.vertices),
+                                   cylinder.faces + len(box_1.vertices) + len(box_2.vertices)), axis=0)
+
+        multi_shape = MultiShape(pos=pos, quat=quat)
+        multi_shape.add_shape(box_1)
+        multi_shape.add_shape(box_2)
+        multi_shape.add_shape(cylinder)
+        multi_shape.build()
+        if self.plot:
+            multi_shape.plot()
+
+        shape_combined = Mesh(density=density,
+                              vertices=vertices,
+                              faces=faces,
+                              pos=pos,
+                              quat=quat)
+        shape_combined.build()
+        if self.plot:
+            shape_combined.plot()
+
+        self.assertAlmostEqual(multi_shape.mass, shape_combined.mass)
+        numpy.testing.assert_array_almost_equal(multi_shape.center_of_mass, shape_combined.center_of_mass)
+        numpy.testing.assert_array_almost_equal(multi_shape.inertia_tensor, shape_combined.inertia_tensor)
+
+    # def test_inertia_of_mesh_1(self):
+    #     mesh_file_path = os.path.join(self.resource_path, "input", "milk_box", "meshes", "usd", "obj", "milk_box.usda")
+    #     density = 1.0
+    #
+    #     mesh = Mesh(mesh_file_path=mesh_file_path, density=density)
+    #     mesh.build()
+    #     mesh.plot()
+    #
+    #     a = 0.06
+    #     b = 0.095
+    #     c = 0.2
+    #     mass_analytical = a * b * c * density
+    #     center_of_mass_analytical = numpy.zeros((1, 3))
+    #     inertia_tensor_analytical = numpy.array([[1.0 / 12 * mass_analytical * (b ** 2 + c ** 2), 0.0, 0.0],
+    #                                              [0.0, 1.0 / 12 * mass_analytical * (a ** 2 + c ** 2), 0.0],
+    #                                              [0.0, 0.0, 1.0 / 12 * mass_analytical * (a ** 2 + b ** 2)]])
+    #
+    #     self.assertAlmostEqual(mesh.mass, mass_analytical)
+    #     numpy.testing.assert_array_almost_equal(mesh.center_of_mass, center_of_mass_analytical)
+    #     numpy.testing.assert_array_almost_equal(mesh.inertia_tensor, inertia_tensor_analytical)
 
     @classmethod
     def tearDownClass(cls):

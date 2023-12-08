@@ -146,6 +146,28 @@ def calculate_mesh_inertial(vertices: numpy.ndarray, faces: numpy.ndarray, densi
 
     return mass, inertia_tensor, center_of_mass
 
+
+def shift_inertia_tensor(mass: float,
+                         inertia_tensor: numpy.ndarray,
+                         pos: numpy.ndarray = numpy.zeros((1, 3)),
+                         quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])) -> numpy.ndarray:
+    # https://phys.libretexts.org/Bookshelves/Classical_Mechanics/Variational_Principles_in_Classical_Mechanics_(Cline)/13%3A_Rigid-body_Rotation/13.08%3A_Parallel-Axis_Theorem
+    inertia_tensor_parallel = mass * (
+        numpy.array(
+            [[pos[0][1] ** 2 + pos[0][2] ** 2,
+              - pos[0][0] * pos[0][1],
+              - pos[0][0] * pos[0][2]],
+             [- pos[0][0] * pos[0][1],
+              pos[0][2] ** 2 + pos[0][0] ** 2,
+              - pos[0][1] * pos[0][2]],
+             [- pos[0][0] * pos[0][2],
+              - pos[0][1] * pos[0][2],
+              pos[0][0] ** 2 + pos[0][1] ** 2]]
+        ))
+
+    rotation_matrix = Rotation.from_quat(quat).as_matrix()
+    return rotation_matrix @ inertia_tensor @ rotation_matrix.T + inertia_tensor_parallel
+
 # def convert_quat(quat) -> tuple:
 #     if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):
 #         real = quat.GetReal()
