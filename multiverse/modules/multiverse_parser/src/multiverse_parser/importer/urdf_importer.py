@@ -9,27 +9,11 @@ from pxr import Gf, Usd
 from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
 
-from .importer import Configuration, Importer
+from .importer import Configuration, InertiaSource, Importer
 
 from ..factory import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomBuilder, GeomType, GeomProperty, \
     JointProperty
-from ..utils import xform_cache
-
-
-# import rospkg
-# import xml.etree.ElementTree as ET
-# import numpy
-# import tf
-# from scipy.spatial.transform import Rotation
-# from math import degrees
-#
-# from multiverse_parser import WorldBuilder, GeomType, JointType
-# from multiverse_parser.factory.body_builder import body_dict
-# from multiverse_parser.utils import import_dae, import_obj, import_stl
-# from multiverse_parser.utils import export_usd
-# from multiverse_parser.utils import diagonalize_inertia, clear_meshes, modify_name
-# from multiverse_parser.utils import xform_cache
-# from pxr import Gf
+from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
 
 def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
@@ -39,7 +23,8 @@ def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
     else:
         joint_pos = numpy.array([0.0, 0.0, 0.0])
         joint_rpy = numpy.array([0.0, 0.0, 0.0])
-    return joint_pos, Rotation.from_euler('xyz', joint_rpy).as_quat(canonical=False)
+    joint_quat = Rotation.from_euler('xyz', joint_rpy).as_quat(canonical=False)
+    return joint_pos, joint_quat
 
 
 class UrdfImporter(Importer):
@@ -52,9 +37,10 @@ class UrdfImporter(Importer):
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
-            geom_rgba: Optional[numpy.ndarray] = None,
+            inertia_source: InertiaSource = InertiaSource.FROM_SRC,
+            default_rgba: Optional[numpy.ndarray] = None,
     ) -> None:
-        with open(file_path, "r") as file:
+        with open(file_path) as file:
             urdf_string = file.read()
         self._urdf_model = urdf.URDF.from_xml_string(urdf_string)
 
@@ -64,7 +50,8 @@ class UrdfImporter(Importer):
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            default_rgba=geom_rgba
+            default_rgba=default_rgba,
+            inertia_source=inertia_source
         ))
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
@@ -76,6 +63,10 @@ class UrdfImporter(Importer):
                   f"add it as a root body.")
             body_builder = self._world_builder.add_body(body_name=self._urdf_model.get_root(),
                                                         parent_body_name=self._config.model_name)
+            body_builder.enable_rigid_body()
+
+        self._import_inertial(body=self._urdf_model.link_map[self._urdf_model.get_root()],
+                              body_builder=body_builder)
 
         self._import_geoms(link=self._urdf_model.link_map[self._urdf_model.get_root()],
                            body_builder=body_builder)
@@ -93,9 +84,11 @@ class UrdfImporter(Importer):
         for child_joint_name, child_urdf_link_name in self._urdf_model.child_map[urdf_link_name]:
             child_urdf_joint: urdf.Joint = self._urdf_model.joint_map[child_joint_name]
 
-            self._import_body(body_name=urdf_link_name,
-                              child_body_name=child_urdf_link_name,
-                              joint=child_urdf_joint)
+            body_builder = self._import_body(body_name=urdf_link_name,
+                                             child_body_name=child_urdf_link_name,
+                                             joint=child_urdf_joint)
+
+            self._import_geoms(link=self._urdf_model.link_map[child_urdf_link_name], body_builder=body_builder)
 
             if self._config.with_physics:
                 self._import_joint(joint=child_urdf_joint,
@@ -107,9 +100,9 @@ class UrdfImporter(Importer):
     def _import_body(self, body_name: str, child_body_name: str, joint: urdf.Joint) -> BodyBuilder:
         joint_pos, joint_quat = get_joint_pos_and_quat(joint)
 
-        if joint.type != "fixed" and self._config.with_physics:
+        if self._config.with_physics and joint.type != "fixed":
             body_builder = self._world_builder.add_body(body_name=child_body_name,
-                                                        parent_body_name=self._urdf_model.get_root())
+                                                        parent_body_name=self._config.model_name)
             body_builder.enable_rigid_body()
         else:
             body_builder = self._world_builder.add_body(body_name=child_body_name,
@@ -119,9 +112,31 @@ class UrdfImporter(Importer):
         relative_to_xform = relative_to_body_builder.xform
         body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to_xform=relative_to_xform)
 
-        self._import_geoms(link=self._urdf_model.link_map[child_body_name], body_builder=body_builder)
+        self._import_inertial(body=self._urdf_model.link_map[child_body_name], body_builder=body_builder)
 
         return body_builder
+
+    def _import_inertial(self, body: urdf.Link, body_builder: BodyBuilder) -> None:
+        if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC:
+            if body.inertial is not None:
+                body_mass = body.inertial.mass
+                body_center_of_mass = body.inertial.origin.xyz
+                body_inertia = body.inertial.inertia
+                body_inertia_tensor = numpy.array([[body_inertia.ixx, body_inertia.ixy, body_inertia.ixz],
+                                                   [body_inertia.ixy, body_inertia.iyy, body_inertia.iyz],
+                                                   [body_inertia.ixz, body_inertia.iyz, body_inertia.izz]])
+                body_inertia_tensor = shift_inertia_tensor(mass=body_mass,
+                                                           inertia_tensor=body_inertia_tensor,
+                                                           quat=Rotation.from_euler('xyz',
+                                                                                    body.inertial.origin.rpy).inv()
+                                                           .as_quat(canonical=False))
+
+                body_diagonal_inertia, body_principal_axes = diagonalize_inertia(inertia_tensor=body_inertia_tensor)
+
+                body_builder.set_inertial(mass=body_mass,
+                                          center_of_mass=body_center_of_mass,
+                                          diagonal_inertia=body_diagonal_inertia,
+                                          principal_axes=body_principal_axes)
 
     def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> Dict[str, GeomBuilder]:
         geom_builders = {}
@@ -158,9 +173,8 @@ class UrdfImporter(Importer):
 
         geom_is_visible = isinstance(geom, urdf.Visual)
         geom_is_collidable = isinstance(geom, urdf.Collision)
-        geom_has_inertia = hasattr(geom, "inertia") and geom.inertia is not None
         geom_rgba = self._config.default_rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
-            else geom.material.color.default_rgba
+            else geom.material.color.rgba
         if type(geom.geometry) is urdf.Box:
             geom_property = GeomProperty(geom_name=geom_name,
                                          geom_type=GeomType.CUBE,

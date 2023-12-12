@@ -17,7 +17,7 @@ from ..factory import (WorldBuilder, BodyBuilder,
 
 
 def get_model_name(xml_file_path: str) -> str:
-    with open(xml_file_path, "r") as xml_file:
+    with open(xml_file_path) as xml_file:
         for line in xml_file:
             if "<mujoco model=" in line:
                 return line.split('"')[1]
@@ -47,7 +47,8 @@ class MjcfImporter(Importer):
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
-            inertia_source: InertiaSource = InertiaSource.FROM_SRC
+            inertia_source: InertiaSource = InertiaSource.FROM_SRC,
+            default_rgba: Optional[numpy.ndarray] = None
     ) -> None:
         try:
             self._mj_model = mujoco.MjModel.from_xml_path(filename=file_path)
@@ -63,6 +64,7 @@ class MjcfImporter(Importer):
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
+            default_rgba=default_rgba,
             inertia_source=inertia_source
         ))
 
@@ -100,7 +102,7 @@ class MjcfImporter(Importer):
         else:
             parent_mj_body = self.mj_model.body(mj_body.parentid)
             parent_body_name = get_body_name(parent_mj_body)
-            if mj_body.jntnum[0] > 0 and self._config.with_physics:
+            if self._config.with_physics and mj_body.jntnum[0] > 0:
                 body_builder = self._world_builder.add_body(body_name=body_name,
                                                             parent_body_name=self._config.model_name,
                                                             body_id=mj_body.id)

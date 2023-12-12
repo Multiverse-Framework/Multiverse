@@ -10,7 +10,7 @@ from pxr import UsdGeom, Gf, UsdShade
 xform_cache = UsdGeom.XformCache()
 
 
-def diagonalize_inertia(inertia_tensor):
+def diagonalize_inertia(inertia_tensor) -> (numpy.ndarray, numpy.ndarray):
     # Perform Singular Value Decomposition
     U, S, Vh = numpy.linalg.svd(inertia_tensor)
 
@@ -18,6 +18,11 @@ def diagonalize_inertia(inertia_tensor):
 
     R = numpy.dot(U, Vh)
     rotation_quat = Rotation.from_matrix(R).as_quat(canonical=False)
+
+    print(inertia_tensor)
+    print(diagonal_inertia)
+    print(R)
+    print(rotation_quat)
 
     return diagonal_inertia, rotation_quat
 

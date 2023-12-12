@@ -21,10 +21,13 @@ class UrdfToUsdTestCase(unittest.TestCase):
         tracemalloc.start()
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
-    def test_urdf_importer(self):
+    def test_urdf_importer_1(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
-        importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
-                                with_collision=True, geom_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
+        importer = UrdfImporter(file_path=input_urdf_path,
+                                with_physics=True,
+                                with_visual=True,
+                                with_collision=True,
+                                default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
         self.assertEqual(importer.source_file_path, input_urdf_path)
         self.assertEqual(importer._config.model_name, "tiago_dual")
 
@@ -36,6 +39,27 @@ class UrdfToUsdTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "tiago_dual")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "tiago_dual.usda")
+        importer.save_tmp_model(file_path=output_usd_path)
+        self.assertTrue(os.path.exists(output_usd_path))
+
+    def test_urdf_importer_2(self):
+        input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")
+        importer = UrdfImporter(file_path=input_urdf_path,
+                                with_physics=True,
+                                with_visual=True,
+                                with_collision=True,
+                                default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
+        self.assertEqual(importer.source_file_path, input_urdf_path)
+        self.assertEqual(importer._config.model_name, "ur5e")
+
+        usd_file_path = importer.import_model()
+        self.assertTrue(os.path.exists(usd_file_path))
+
+        stage = Usd.Stage.Open(usd_file_path)
+        default_prim = stage.GetDefaultPrim()
+        self.assertEqual(default_prim.GetName(), "ur5e")
+
+        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "ur5e.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 

@@ -188,19 +188,19 @@ class GeomBuilder:
     def set_transform(
             self,
             pos: numpy.ndarray = numpy.array([0.0, 0.0, 0.0]),
-            quat: numpy.ndarray = numpy.array([1.0, 0.0, 0.0, 0.0]),
+            quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0]),
             scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
     ) -> None:
         """
         Set the transform of the body.
         :param pos: Array of x, y, z position.
-        :param quat: Array of w, x, y, z quaternion.
+        :param quat: Array of x, y, z, w quaternion.
         :param scale: Array of x, y, z scale.
         :return: None
         """
         mat = Gf.Matrix4d()
         mat.SetTranslateOnly(Gf.Vec3d(*pos))
-        mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(*quat[1:])))
+        mat.SetRotateOnly(Gf.Quatd(quat[3], Gf.Vec3d(*quat[:3])))
         mat_scale = Gf.Matrix4d()
         mat_scale.SetScale(Gf.Vec3d(*scale))
         mat = mat_scale * mat
