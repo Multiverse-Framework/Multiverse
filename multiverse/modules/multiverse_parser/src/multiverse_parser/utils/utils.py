@@ -10,28 +10,17 @@ from pxr import UsdGeom, Gf, UsdShade
 xform_cache = UsdGeom.XformCache()
 
 
-#
+def diagonalize_inertia(inertia_tensor):
+    # Perform Singular Value Decomposition
+    U, S, Vh = numpy.linalg.svd(inertia_tensor)
 
-# def diagonalize_inertia(inertia_tensor):
-#     eigenvalues, eigenvectors = numpy.linalg.eigh(inertia_tensor)
-#     eigenvectors = eigenvectors / numpy.linalg.norm(eigenvectors, axis=0)
-#     rotation_quat = Rotation.from_matrix(eigenvectors).as_quat()
-#     rotation_quat = (
-#         rotation_quat[3],
-#         rotation_quat[0],
-#         rotation_quat[1],
-#         rotation_quat[2],
-#     )
-#     diagonal_inertia = numpy.diag(eigenvalues)
-#     diagonal_inertia = (
-#         diagonal_inertia[0][0],
-#         diagonal_inertia[1][1],
-#         diagonal_inertia[2][2],
-#     )
-#
-#     return diagonal_inertia, rotation_quat
-#
-#
+    diagonal_inertia = numpy.diag(numpy.diag(S))
+
+    R = numpy.dot(U, Vh)
+    rotation_quat = Rotation.from_matrix(R).as_quat(canonical=False)
+
+    return diagonal_inertia, rotation_quat
+
 # def clear_meshes() -> None:
 #     for armature in bpy.data.armatures:
 #         bpy.data.armatures.remove(armature)
@@ -49,8 +38,8 @@ xform_cache = UsdGeom.XformCache()
 #         bpy.data.images.remove(image)
 #
 #     return None
-#
-#
+
+
 def modify_name(in_name: str, replacement: str = None) -> str:
     out_name = in_name
     for special_char in [" ", "-", "~", ".", "/"]:
@@ -167,6 +156,12 @@ def shift_inertia_tensor(mass: float,
 
     rotation_matrix = Rotation.from_quat(quat).as_matrix()
     return rotation_matrix @ inertia_tensor @ rotation_matrix.T + inertia_tensor_parallel
+
+def shift_center_of_mass(center_of_mass: numpy.ndarray,
+                         pos: numpy.ndarray = numpy.zeros((1, 3)),
+                         quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])) -> numpy.ndarray:
+    rotation = Rotation.from_quat(quat)
+    return rotation.apply(center_of_mass) + pos
 
 # def convert_quat(quat) -> tuple:
 #     if isinstance(quat, Gf.Quatf) or isinstance(quat, Gf.Quatd):

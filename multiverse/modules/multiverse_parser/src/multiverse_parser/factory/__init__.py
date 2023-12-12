@@ -1,4 +1,4 @@
-from .config import Configuration
+from .config import Configuration, InertiaSource
 from .world_builder import WorldBuilder
 from .body_builder import BodyBuilder
 from .joint_builder import JointBuilder, JointType, JointProperty

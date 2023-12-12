@@ -7,11 +7,8 @@ import shutil
 import string
 from typing import Optional, Dict, Tuple
 
-import numpy
-from pxr import Usd, UsdGeom
-
-from ..factory.config import Configuration
-from ..utils import modify_name, import_obj, import_stl, import_dae, export_usd
+from ..factory.config import Configuration, InertiaSource
+from ..utils import import_obj, import_stl, import_dae, export_usd
 
 
 def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:

@@ -1,24 +1,26 @@
 #!/usr/bin/env python3.10
 
-from typing import Optional
+from typing import Optional, Dict
 
 import numpy
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
-from .geom_builder import GeomBuilder, GeomProperty
+from .geom_builder import GeomBuilder, GeomProperty, GeomInertial
 from .joint_builder import JointBuilder, JointProperty
-from ..utils import xform_cache, modify_name
+from ..utils import xform_cache, modify_name, diagonalize_inertia, shift_center_of_mass, shift_inertia_tensor
 
 
 class BodyBuilder:
     stage: Usd.Stage
     xform: UsdGeom.Xform
 
-    def __init__(self, stage: Usd.Stage, name: str, parent_xform: Optional[UsdGeom.Xform] = None) -> None:
+    def __init__(self,
+                 stage: Usd.Stage, name: str,
+                 parent_xform: Optional[UsdGeom.Xform] = None) -> None:
         path = parent_xform.GetPath().AppendPath(name) if parent_xform is not None else Sdf.Path("/").AppendPath(name)
         self._xform = UsdGeom.Xform.Define(stage, path)
-        self._joint_builders = {}
-        self._geom_builders = {}
+        self._joint_builders: Dict[str, JointBuilder] = {}
+        self._geom_builders: Dict[str, GeomBuilder] = {}
 
     def set_transform(
             self,
@@ -98,6 +100,54 @@ class BodyBuilder:
         if geom_name not in self._joint_builders:
             raise ValueError(f"Geom {geom_name} not found in {self.__class__.__name__}.")
         return self._geom_builders[geom_name]
+
+    def set_inertial(self,
+                     mass: float,
+                     center_of_mass: numpy.ndarray,
+                     diagonal_inertia: numpy.ndarray,
+                     principal_axes: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])) -> UsdPhysics.MassAPI:
+        physics_mass_api = UsdPhysics.MassAPI(self.xform)
+        physics_mass_api.CreateMassAttr(mass)
+        physics_mass_api.CreateCenterOfMassAttr(Gf.Vec3f(*center_of_mass))
+        physics_mass_api.CreateDiagonalInertiaAttr(Gf.Vec3f(*diagonal_inertia))
+        physics_mass_api.CreatePrincipalAxesAttr(Gf.Quatf(principal_axes[3], *principal_axes[:3]))
+        physics_mass_api.Apply(self.xform.GetPrim())
+
+        return physics_mass_api
+
+    def compute_and_set_inertial(self,
+                                 child_body_inertial: GeomInertial = GeomInertial(mass=0.0,
+                                                                                  center_of_mass=numpy.zeros((1, 3)),
+                                                                                  inertia_tensor=numpy.zeros((3, 3)))) \
+            -> UsdPhysics.MassAPI:
+        body_inertial = child_body_inertial
+        for geom_builder in self._geom_builders.values():
+            geom_inertial = geom_builder.calculate_inertial()
+            body_inertial.mass += geom_inertial.mass
+            body_inertial.center_of_mass += geom_inertial.center_of_mass * geom_inertial.mass
+            body_inertial.inertia_tensor += geom_inertial.inertia_tensor
+
+        if body_inertial.mass > 0.0:
+            body_inertial.center_of_mass /= body_inertial.mass
+
+        xform_transform = self.xform.GetLocalTransformation()
+        xform_pos = xform_transform.ExtractTranslation()
+        xform_pos = numpy.array(xform_pos)
+        xform_quat = xform_transform.ExtractRotationQuat()
+        xform_quat = numpy.array([*xform_quat.GetImaginary(), xform_quat.GetReal()])
+
+        body_center_of_mass = shift_center_of_mass(center_of_mass=body_inertial.center_of_mass,
+                                                   pos=xform_pos,
+                                                   quat=xform_quat)
+        body_inertia_tensor = shift_inertia_tensor(mass=body_inertial.mass,
+                                                   inertia_tensor=body_inertial.inertia_tensor)
+
+        diagonal_inertia, principal_axes = diagonalize_inertia(inertia_tensor=body_inertia_tensor)
+
+        return self.set_inertial(mass=body_inertial.mass,
+                                 center_of_mass=body_center_of_mass[0],
+                                 diagonal_inertia=diagonal_inertia,
+                                 principal_axes=principal_axes)
 
     @property
     def stage(self) -> Usd.Stage:

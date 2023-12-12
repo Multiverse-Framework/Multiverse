@@ -5,7 +5,7 @@ import tracemalloc
 
 import numpy
 
-from multiverse_parser import MjcfImporter
+from multiverse_parser import MjcfImporter, InertiaSource
 from pxr import Usd
 
 
@@ -19,8 +19,11 @@ class UrdfToUsdTestCase(unittest.TestCase):
 
     def test_mjcf_importer_1(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
-        importer = MjcfImporter(file_path=input_mjcf_path, with_physics=True, with_visual=True,
-                                with_collision=True)
+        importer = MjcfImporter(file_path=input_mjcf_path,
+                                with_physics=True,
+                                with_visual=True,
+                                with_collision=True,
+                                inertia_source=InertiaSource.FROM_SRC)
         importer.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
         self.assertEqual(importer.source_file_path, input_mjcf_path)
         self.assertEqual(importer._config.model_name, "ur5e")
@@ -38,8 +41,25 @@ class UrdfToUsdTestCase(unittest.TestCase):
 
     def test_mjcf_importer_2(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_2.xml")
-        importer = MjcfImporter(file_path=input_mjcf_path, with_physics=True, with_visual=True,
-                                with_collision=False)
+        importer = MjcfImporter(file_path=input_mjcf_path,
+                                with_physics=True,
+                                with_visual=True,
+                                with_collision=False,
+                                inertia_source=InertiaSource.FROM_MESH)
+
+        importer.import_model()
+
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_2.usda")
+        importer.save_tmp_model(file_path=output_usd_path)
+        self.assertTrue(os.path.exists(output_usd_path))
+
+    def test_mjcf_importer_3(self):
+        input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
+        importer = MjcfImporter(file_path=input_mjcf_path,
+                                with_physics=True,
+                                with_visual=True,
+                                with_collision=False,
+                                inertia_source=InertiaSource.FROM_MESH)
 
         importer.import_model()
 

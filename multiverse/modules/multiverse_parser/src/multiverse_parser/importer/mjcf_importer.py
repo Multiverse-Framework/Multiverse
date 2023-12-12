@@ -2,12 +2,12 @@
 
 import os.path
 from math import degrees
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Dict
 
 import mujoco
 import numpy
 
-from .importer import Configuration, Importer
+from .importer import Configuration, InertiaSource, Importer
 
 from ..factory import (WorldBuilder, BodyBuilder,
                        JointBuilder, JointType, JointProperty,
@@ -31,13 +31,23 @@ def get_body_name(mj_body) -> str:
 class MjcfImporter(Importer):
     _world_builder: WorldBuilder
     _mj_model: mujoco.MjModel
+    _geom_type_map: Dict = {
+        mujoco.mjtGeom.mjGEOM_PLANE: GeomType.PLANE,
+        mujoco.mjtGeom.mjGEOM_BOX: GeomType.CUBE,
+        mujoco.mjtGeom.mjGEOM_SPHERE: GeomType.SPHERE,
+        mujoco.mjtGeom.mjGEOM_ELLIPSOID: GeomType.SPHERE,
+        mujoco.mjtGeom.mjGEOM_CYLINDER: GeomType.CYLINDER,
+        mujoco.mjtGeom.mjGEOM_CAPSULE: GeomType.CYLINDER,
+        mujoco.mjtGeom.mjGEOM_MESH: GeomType.MESH,
+    }
 
     def __init__(
             self,
             file_path: str,
             with_physics: bool,
             with_visual: bool,
-            with_collision: bool
+            with_collision: bool,
+            inertia_source: InertiaSource = InertiaSource.FROM_SRC
     ) -> None:
         try:
             self._mj_model = mujoco.MjModel.from_xml_path(filename=file_path)
@@ -52,7 +62,8 @@ class MjcfImporter(Importer):
             model_name=model_name,
             with_physics=with_physics,
             with_visual=with_visual,
-            with_collision=with_collision
+            with_collision=with_collision,
+            inertia_source=inertia_source
         ))
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
@@ -60,14 +71,26 @@ class MjcfImporter(Importer):
 
         self._world_builder.add_body(body_name=self._config.model_name)
 
-        for body_id in range(1, self._mj_model.nbody):
-            mj_body = self._mj_model.body(body_id)
+        for body_id in range(1, self.mj_model.nbody):
+            mj_body = self.mj_model.body(body_id)
             body_builder = self.import_body(mj_body=mj_body)
 
             self.import_geoms(mj_body=mj_body, body_builder=body_builder)
 
             if self._config.with_physics:
+                if self._config.inertia_source == InertiaSource.FROM_SRC:
+                    body_builder.set_inertial(mass=mj_body.mass[0],
+                                              center_of_mass=mj_body.ipos,
+                                              diagonal_inertia=mj_body.inertia,
+                                              principal_axes=numpy.array([mj_body.iquat[1],
+                                                                          mj_body.iquat[2],
+                                                                          mj_body.iquat[3],
+                                                                          mj_body.iquat[0]]))
+
                 self.import_joints(mj_body=mj_body, body_builder=body_builder)
+
+        if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_MESH:
+            self._world_builder.compute_inertial()
 
         self._world_builder.export()
 
@@ -81,7 +104,7 @@ class MjcfImporter(Importer):
                                                         parent_body_name=self._config.model_name,
                                                         body_id=mj_body.id)
         else:
-            parent_mj_body = self._mj_model.body(mj_body.parentid)
+            parent_mj_body = self.mj_model.body(mj_body.parentid)
             parent_body_name = get_body_name(parent_mj_body)
             if mj_body.jntnum[0] > 0 and self._config.with_physics:
                 body_builder = self._world_builder.add_body(body_name=body_name,
@@ -112,7 +135,7 @@ class MjcfImporter(Importer):
         return joint_builders
 
     def _import_joint(self, mj_body, body_builder: BodyBuilder, joint_id: int) -> Optional[JointBuilder]:
-        mj_joint = self._mj_model.joint(joint_id)
+        mj_joint = self.mj_model.joint(joint_id)
         if mj_joint.type == mujoco.mjtJoint.mjJNT_FREE:
             return None
 
@@ -120,7 +143,7 @@ class MjcfImporter(Importer):
         joint_type = JointType.from_mujoco(jnt_type=mj_joint.type)
 
         parent_body_id = mj_body.parentid
-        parent_body_name = get_body_name(self._mj_model.body(parent_body_id))
+        parent_body_name = get_body_name(self.mj_model.body(parent_body_id))
         parent_body_builder = self._world_builder.get_body_builder(body_name=parent_body_name)
         joint_property = JointProperty(
             joint_name=joint_name,
@@ -150,63 +173,43 @@ class MjcfImporter(Importer):
         return geom_builders
 
     def _import_geom(self, body_builder: BodyBuilder, geom_id: int) -> Optional[GeomBuilder]:
-        mj_geom = self._mj_model.geom(geom_id)
+        mj_geom = self.mj_model.geom(geom_id)
         geom_is_visible = (mj_geom.contype == 0) and (mj_geom.conaffinity == 0)
         geom_is_collidable = (mj_geom.contype != 0) or (mj_geom.conaffinity != 0)
+        geom_has_inertia = True
         geom_builder = None
-        if geom_is_visible and self._config.with_visual or geom_is_collidable and self._config.with_collision:
+
+        if (geom_has_inertia and self._config.with_physics or
+                geom_is_visible and self._config.with_visual or
+                geom_is_collidable and self._config.with_collision):
             geom_name = mj_geom.name if mj_geom.name != "" else "Geom_" + str(geom_id)
             geom_rgba = mj_geom.rgba
+            geom_type = self._geom_type_map[mj_geom.type[0]]
+            geom_density = 1000.0
+            geom_property = GeomProperty(geom_name=geom_name,
+                                         geom_type=geom_type,
+                                         is_visible=geom_is_visible,
+                                         is_collidable=geom_is_collidable,
+                                         rgba=geom_rgba,
+                                         density=geom_density)
+            geom_builder = body_builder.add_geom(geom_property=geom_property)
+            geom_builder.build()
 
-            if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE:
-                geom_property = GeomProperty(geom_name=geom_name,
-                                             geom_type=GeomType.PLANE,
-                                             is_visible=geom_is_visible,
-                                             is_collidable=geom_is_collidable,
-                                             rgba=geom_rgba)
-                geom_builder = body_builder.add_geom(geom_property=geom_property)
-                geom_builder.build()
+            if mj_geom.type in [mujoco.mjtGeom.mjGEOM_PLANE]:
                 geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat, scale=numpy.array([50, 50, 1]))
-            elif mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX:
-                geom_property = GeomProperty(geom_name=geom_name,
-                                             geom_type=GeomType.CUBE,
-                                             is_visible=geom_is_visible,
-                                             is_collidable=geom_is_collidable,
-                                             rgba=geom_rgba)
-                geom_builder = body_builder.add_geom(geom_property=geom_property)
-                geom_builder.build()
+            elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_BOX]:
                 geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat, scale=mj_geom.size)
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_SPHERE, mujoco.mjtGeom.mjGEOM_ELLIPSOID]:
                 # TODO: Fix ellipsoid
-                geom_property = GeomProperty(geom_name=geom_name,
-                                             geom_type=GeomType.SPHERE,
-                                             is_visible=geom_is_visible,
-                                             is_collidable=geom_is_collidable,
-                                             rgba=geom_rgba)
-                geom_builder = body_builder.add_geom(geom_property=geom_property)
-                geom_builder.build()
                 geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat)
                 geom_builder.set_attribute(radius=mj_geom.size[0])
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_CYLINDER, mujoco.mjtGeom.mjGEOM_CAPSULE]:
                 # TODO: Fix capsule
-                geom_property = GeomProperty(geom_name=geom_name,
-                                             geom_type=GeomType.CYLINDER,
-                                             is_visible=geom_is_visible,
-                                             is_collidable=geom_is_collidable,
-                                             rgba=geom_rgba)
-                geom_builder = body_builder.add_geom(geom_property=geom_property)
-                geom_builder.build()
                 geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat)
                 geom_builder.set_attribute(radius=mj_geom.size[0], height=mj_geom.size[1] * 2)
-            elif mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH:
-                geom_property = GeomProperty(geom_name=geom_name,
-                                             geom_type=GeomType.MESH,
-                                             is_visible=geom_is_visible,
-                                             is_collidable=geom_is_collidable,
-                                             rgba=geom_rgba)
-                geom_builder = body_builder.add_geom(geom_property=geom_property)
+            elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_MESH]:
                 mesh_id = mj_geom.dataid[0]
-                mesh_name = self._mj_model.mesh(mesh_id).name
+                mesh_name = self.mj_model.mesh(mesh_id).name
                 points, normals, face_vertex_counts, face_vertex_indices = self.get_mesh_data(mesh_id=mesh_id)
                 tmp_mesh_file_path = os.path.join(self._tmp_mesh_dir, "usd", f"{mesh_name}.usda")
                 mesh_builder = MeshBuilder(mesh_file_path=tmp_mesh_file_path)
@@ -232,34 +235,35 @@ class MjcfImporter(Importer):
                 raise NotImplementedError(f"Geom type {mj_geom.type} not supported.")
 
         # if self.config.with_physics:
-        #     if geom_is_collidable:
-        #         geom_builder.enable_rigid_body()
+
+        # if geom_is_collidable:
+        #     geom_builder.enable_rigid_body()
 
         return geom_builder
 
     def get_mesh_data(self, mesh_id: int) -> Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray]:
-        vert_adr = self._mj_model.mesh_vertadr[mesh_id]
-        vert_num = self._mj_model.mesh_vertnum[mesh_id]
+        vert_adr = self.mj_model.mesh_vertadr[mesh_id]
+        vert_num = self.mj_model.mesh_vertnum[mesh_id]
 
-        face_adr = self._mj_model.mesh_faceadr[mesh_id]
-        face_num = self._mj_model.mesh_facenum[mesh_id]
+        face_adr = self.mj_model.mesh_faceadr[mesh_id]
+        face_num = self.mj_model.mesh_facenum[mesh_id]
         points = numpy.empty(shape=[vert_num, 3], dtype=float)
 
-        normals = numpy.empty(shape=[self._mj_model.mesh_facenum[mesh_id], 3], dtype=float)
+        normals = numpy.empty(shape=[self.mj_model.mesh_facenum[mesh_id], 3], dtype=float)
 
-        face_vertex_counts = numpy.empty(shape=self._mj_model.mesh_facenum[mesh_id], dtype=float)
+        face_vertex_counts = numpy.empty(shape=self.mj_model.mesh_facenum[mesh_id], dtype=float)
         face_vertex_counts.fill(3)
 
-        face_vertex_indices = numpy.empty(shape=self._mj_model.mesh_facenum[mesh_id] * 3, dtype=float)
+        face_vertex_indices = numpy.empty(shape=self.mj_model.mesh_facenum[mesh_id] * 3, dtype=float)
 
         for i in range(vert_num):
             vert_id = vert_adr + i
-            points[i] = self._mj_model.mesh_vert[vert_id]
+            points[i] = self.mj_model.mesh_vert[vert_id]
 
-        normal_adr = self._mj_model.mesh_normaladr[mesh_id]
+        normal_adr = self.mj_model.mesh_normaladr[mesh_id]
         for i in range(face_num):
             face_id = face_adr + i
-            face_normals = self._mj_model.mesh_normal[normal_adr + self._mj_model.mesh_facenormal[face_id]]
+            face_normals = self.mj_model.mesh_normal[normal_adr + self.mj_model.mesh_facenormal[face_id]]
 
             p1 = face_normals[0]
             p2 = face_normals[1]
@@ -273,9 +277,9 @@ class MjcfImporter(Importer):
                 normal = normal / norm
             normals[i] = normal
 
-            face_vertex_indices[3 * i] = self._mj_model.mesh_face[face_id][0]
-            face_vertex_indices[3 * i + 1] = self._mj_model.mesh_face[face_id][1]
-            face_vertex_indices[3 * i + 2] = self._mj_model.mesh_face[face_id][2]
+            face_vertex_indices[3 * i] = self.mj_model.mesh_face[face_id][0]
+            face_vertex_indices[3 * i + 1] = self.mj_model.mesh_face[face_id][1]
+            face_vertex_indices[3 * i + 2] = self.mj_model.mesh_face[face_id][2]
 
         return points, normals, face_vertex_counts, face_vertex_indices
 
@@ -287,14 +291,26 @@ class MjcfImporter(Importer):
         """
         if mat_id == -1:
             raise ValueError(f"Material {mat_id} not found.")
-        mat_rgba = self._mj_model.mat_rgba[mat_id]
+        mat_rgba = self.mj_model.mat_rgba[mat_id]
         mat_rgb = mat_rgba[0][:3]
         diffuse_color = numpy.array([float(x) for x in mat_rgb])
 
-        mat_emission = self._mj_model.mat_emission[mat_id]
+        mat_emission = self.mj_model.mat_emission[mat_id]
         emissive_color = numpy.array([float(x * mat_emission) for x in mat_rgb])
 
-        mat_specular = self._mj_model.mat_specular[mat_id]
+        mat_specular = self.mj_model.mat_specular[mat_id]
         specular_color = numpy.array([float(mat_specular) for _ in range(3)])
 
         return diffuse_color, emissive_color, specular_color
+
+    @property
+    def world_builder(self) -> WorldBuilder:
+        return self._world_builder
+
+    @property
+    def mj_model(self) -> mujoco.MjModel:
+        return self._mj_model
+
+    @property
+    def geom_type_map(self) -> Dict:
+        return self._geom_type_map

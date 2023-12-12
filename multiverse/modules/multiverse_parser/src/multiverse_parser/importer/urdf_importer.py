@@ -157,6 +157,7 @@ class UrdfImporter(Importer):
 
         geom_is_visible = isinstance(geom, urdf.Visual)
         geom_is_collidable = isinstance(geom, urdf.Collision)
+        geom_has_inertia = hasattr(geom, "inertia") and geom.inertia is not None
         geom_rgba = self._config.default_rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
             else geom.material.color.default_rgba
         if type(geom.geometry) is urdf.Box:
@@ -164,6 +165,7 @@ class UrdfImporter(Importer):
                                          geom_type=GeomType.CUBE,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
+                                         has_inertia=geom_has_inertia,
                                          rgba=geom_rgba)
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
@@ -174,6 +176,7 @@ class UrdfImporter(Importer):
                                          geom_type=GeomType.SPHERE,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
+                                         has_inertia=geom_has_inertia,
                                          rgba=geom_rgba)
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
@@ -184,6 +187,7 @@ class UrdfImporter(Importer):
                                          geom_type=GeomType.CYLINDER,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
+                                         has_inertia=geom_has_inertia,
                                          rgba=geom_rgba)
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
@@ -194,6 +198,7 @@ class UrdfImporter(Importer):
                                          geom_type=GeomType.MESH,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
+                                         has_inertia=geom_has_inertia,
                                          rgba=geom_rgba)
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)

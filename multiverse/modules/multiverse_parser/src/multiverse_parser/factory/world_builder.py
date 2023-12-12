@@ -44,6 +44,9 @@ class WorldBuilder:
             raise ValueError(f"Body {body_name} not found in {self.__class__.__name__}.")
         return self._body_builders[body_name]
 
+    def compute_inertial(self):
+        pass
+
     def export(self) -> None:
         self.stage.Save()
 

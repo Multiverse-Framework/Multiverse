@@ -502,6 +502,32 @@ class FactoryTestCase(unittest.TestCase):
                                      scale=numpy.array([1.0, 1.0, 1.0]),
                                      relative_to_xform=body_1_xform)
 
+        physics_mass_api_1 = body_builder_3.set_inertial(mass=1.0,
+                                                         density=1.0,
+                                                         center_of_mass=numpy.array([0.0, 0.0, 0.0]),
+                                                         diagonal_inertia=numpy.array([1.0, 1.0, 1.0]))
+        self.assertEqual(physics_mass_api_1.GetMassAttr().Get(), 1.0)
+        self.assertEqual(physics_mass_api_1.GetDensityAttr().Get(), 1.0)
+        self.assertEqual(physics_mass_api_1.GetCenterOfMassAttr().Get(), (0.0, 0.0, 0.0))
+        self.assertEqual(physics_mass_api_1.GetDiagonalInertiaAttr().Get(), (1.0, 1.0, 1.0))
+        self.assertEqual(physics_mass_api_1.GetPrincipalAxesAttr().Get().GetReal(), 1.0)
+        self.assertEqual(physics_mass_api_1.GetPrincipalAxesAttr().Get().GetImaginary(), (0.0, 0.0, 0.0))
+
+        # rotation = Rotation.from_euler('xyz', [30, 60, 45], degrees=True)
+        # physics_mass_api_2 = body_builder_3.set_inertia(mass=1.5,
+        #                                                 density=1.5,
+        #                                                 center_of_mass=numpy.array([0.1, 0.2, 0.3]),
+        #                                                 inertia_tensor=rotation.as_matrix())
+        #
+        # self.assertEqual(physics_mass_api_2.GetMassAttr().Get(), 1.5)
+        # self.assertEqual(physics_mass_api_2.GetDensityAttr().Get(), 1.5)
+        # self.assertEqual(physics_mass_api_2.GetCenterOfMassAttr().Get(), (0.1, 0.2, 0.3))
+        # self.assertEqual(physics_mass_api_2.GetDiagonalInertiaAttr().Get(), (1.0, 1.0, 1.0))
+        # inertia_quat = rotation.as_quat(canonical=False)
+        # self.assertAlmostEqual(physics_mass_api_2.GetPrincipalAxesAttr().Get().GetReal(), inertia_quat[3])
+        # numpy.testing.assert_array_almost_equal(physics_mass_api_2.GetPrincipalAxesAttr().Get().GetImaginary(),
+        #                                         inertia_quat[:3])
+
         geom_property = GeomProperty(geom_name="geom_1", geom_type=GeomType.CUBE)
         geom_builder_1 = body_builder_1.add_geom(geom_property=geom_property)
         geom_1_xform = geom_builder_1.xform
@@ -844,7 +870,7 @@ class FactoryTestCase(unittest.TestCase):
     def test_inertia_of_mesh_4(self):
         mesh_file_path_0 = os.path.join(self.resource_path, "input", "ur5e", "meshes", "usd", "usd", "base_0.usda")
         mesh_file_path_1 = os.path.join(self.resource_path, "input", "ur5e", "meshes", "usd", "usd", "base_1.usda")
-        density = 900.0
+        density = 1000.0
 
         usd_mesh_0 = UsdMesh(mesh_file_path=mesh_file_path_0,
                              density=density,
@@ -859,6 +885,40 @@ class FactoryTestCase(unittest.TestCase):
         usd_mesh.add_shape(usd_mesh_0)
         usd_mesh.add_shape(usd_mesh_1)
         usd_mesh.build()
+
+        print(usd_mesh.mass)
+        print(usd_mesh.center_of_mass)
+        print(usd_mesh.inertia_tensor)
+        if self.plot:
+            usd_mesh.plot(display_wireframe=False)
+
+    def test_inertia_of_mesh_5(self):
+        mesh_file_path_0 = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_2", "usd", "usd",
+                                        "base_0.usda")
+        mesh_file_path_1 = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_2", "usd", "usd",
+                                        "base_1.usda")
+        density = 1000.0
+
+        rot_0 = numpy.array([[-0.000010615485159348736, -0.0000019669532778099352, 0.9999999999417211],
+                             [-0.960465541694465, -0.27839889206341484, 0.0],
+                             [0.27839889206832197, -0.9604655417525367, 0.0]]).T
+        usd_mesh_0 = UsdMesh(mesh_file_path=mesh_file_path_0,
+                             density=density,
+                             pos=numpy.array([[6.729613291636444e-7, -3.658243672095132e-7, 0.09357351479123255]]),
+                             quat=Rotation.from_matrix(rot_0).as_quat(canonical=False))
+        rot_1 = numpy.array([[0.000009939201965791788, -0.000018943927687808948, 0.9999999997711702],
+                             [0.609143830480996, -0.7930597665640686, -0.000021078070432167806],
+                             [0.7930597667818939, 0.6091438305511049, 0.000003657195485007314]]).T
+        usd_mesh_1 = UsdMesh(mesh_file_path=mesh_file_path_1,
+                             density=density,
+                             pos=numpy.array([[1.5050970612118353e-7, 5.029437897684572e-7, 0.03113409208382618]]),
+                             quat=Rotation.from_matrix(rot_1).as_quat(canonical=False))
+
+        usd_mesh = MultiShape()
+        usd_mesh.add_shape(usd_mesh_0)
+        usd_mesh.add_shape(usd_mesh_1)
+        usd_mesh.build()
+
         if self.plot:
             usd_mesh.plot(display_wireframe=False)
 
