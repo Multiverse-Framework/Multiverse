@@ -78,19 +78,13 @@ class MjcfImporter(Importer):
             self.import_geoms(mj_body=mj_body, body_builder=body_builder)
 
             if self._config.with_physics:
-                if self._config.inertia_source == InertiaSource.FROM_SRC:
-                    body_builder.set_inertial(mass=mj_body.mass[0],
-                                              center_of_mass=mj_body.ipos,
-                                              diagonal_inertia=mj_body.inertia,
-                                              principal_axes=numpy.array([mj_body.iquat[1],
-                                                                          mj_body.iquat[2],
-                                                                          mj_body.iquat[3],
-                                                                          mj_body.iquat[0]]))
-
                 self.import_joints(mj_body=mj_body, body_builder=body_builder)
 
         if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_MESH:
-            self._world_builder.compute_inertial()
+            body_name = self.mj_model.body(1).name
+            body_builder = self._world_builder.get_body_builder(body_name=body_name)
+            for child_body_builder in body_builder.child_body_builders:
+                child_body_builder.compute_and_set_inertial()
 
         self._world_builder.export()
 
@@ -118,11 +112,29 @@ class MjcfImporter(Importer):
 
             relative_to_body_builder = self._world_builder.get_body_builder(body_name=parent_body_name)
             relative_to_xform = relative_to_body_builder.xform
+            body_pos = mj_body.pos
+            body_quat = numpy.array([mj_body.quat[1],
+                                     mj_body.quat[2],
+                                     mj_body.quat[3],
+                                     mj_body.quat[0]])
             body_builder.set_transform(
-                pos=mj_body.pos,
-                quat=mj_body.quat,
+                pos=body_pos,
+                quat=body_quat,
                 relative_to_xform=relative_to_xform,
             )
+
+            if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC:
+                body_mass = mj_body.mass[0]
+                body_center_of_mass = mj_body.ipos
+                body_diagonal_inertia = mj_body.inertia
+                body_principal_axes = numpy.array([mj_body.iquat[1],
+                                                   mj_body.iquat[2],
+                                                   mj_body.iquat[3],
+                                                   mj_body.iquat[0]])
+                body_builder.set_inertial(mass=body_mass,
+                                          center_of_mass=body_center_of_mass,
+                                          diagonal_inertia=body_diagonal_inertia,
+                                          principal_axes=body_principal_axes)
 
         return body_builder
 

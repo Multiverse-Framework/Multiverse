@@ -35,6 +35,7 @@ class WorldBuilder:
                 parent_body_builder = self.get_body_builder(body_name=parent_body_name)
                 parent_xform = parent_body_builder.xform
                 body_builder = BodyBuilder(stage=self._stage, name=body_name, parent_xform=parent_xform)
+                parent_body_builder.add_child_body_builder(child_body_builder=body_builder)
             self._body_builders[body_name] = body_builder
         return self._body_builders[body_name]
 
@@ -43,9 +44,6 @@ class WorldBuilder:
         if body_name not in self._body_builders:
             raise ValueError(f"Body {body_name} not found in {self.__class__.__name__}.")
         return self._body_builders[body_name]
-
-    def compute_inertial(self):
-        pass
 
     def export(self) -> None:
         self.stage.Save()

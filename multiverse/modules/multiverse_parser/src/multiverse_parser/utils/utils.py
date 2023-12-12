@@ -53,27 +53,6 @@ def modify_name(in_name: str, replacement: str = None) -> str:
     return out_name
 
 
-def rpy_to_quat(rpy_angles: numpy.ndarray) -> numpy.ndarray:
-    """
-    Convert RPY Euler angles to a quaternion
-    :param rpy_angles: Tuple of (roll, pitch, yaw) angles in radians
-    :return: Tuple of (w, x, y, z) quaternion
-    """
-    # Create a Rotation object from the RPY Euler angles
-    rotation = Rotation.from_euler('xyz', rpy_angles)  # 'xyz' order means RPY
-
-    # Get the quaternion representation from the Rotation object
-    quaternion = rotation.as_quat(canonical=False)
-
-    return numpy.array([quaternion[3], quaternion[0], quaternion[1], quaternion[2]])
-
-
-def scalar_triple_product(v1: numpy.ndarray, v2: numpy.ndarray, v3: numpy.ndarray) -> float:
-    return (v1[0] * (v2[1] * v3[2] - v3[1] * v2[2]) +
-            v1[1] * (v2[2] * v3[0] - v3[2] * v2[0]) +
-            v1[2] * (v2[0] * v3[1] - v3[0] * v2[1]))
-
-
 def calculate_tet3_inertia_moment(v1: numpy.ndarray, v2: numpy.ndarray, v3: numpy.ndarray, i: int) -> float:
     return v1[i] ** 2 + v2[i] ** 2 + v3[i] ** 2 + v1[i] * v2[i] + v2[i] * v3[i] + v3[i] * v1[i]
 
@@ -98,7 +77,7 @@ def calculate_mesh_inertial(vertices: numpy.ndarray, faces: numpy.ndarray, densi
         # Extract the vertices of the triangle face
         v1, v2, v3 = vertices[face]
 
-        det = scalar_triple_product(v1, v2, v3)
+        det = numpy.dot(v1, numpy.cross(v2, v3))
 
         triangle_volume = det / 6.0
         triangle_mass = density * triangle_volume
@@ -142,17 +121,9 @@ def shift_inertia_tensor(mass: float,
                          quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])) -> numpy.ndarray:
     # https://phys.libretexts.org/Bookshelves/Classical_Mechanics/Variational_Principles_in_Classical_Mechanics_(Cline)/13%3A_Rigid-body_Rotation/13.08%3A_Parallel-Axis_Theorem
     inertia_tensor_parallel = mass * (
-        numpy.array(
-            [[pos[0][1] ** 2 + pos[0][2] ** 2,
-              - pos[0][0] * pos[0][1],
-              - pos[0][0] * pos[0][2]],
-             [- pos[0][0] * pos[0][1],
-              pos[0][2] ** 2 + pos[0][0] ** 2,
-              - pos[0][1] * pos[0][2]],
-             [- pos[0][0] * pos[0][2],
-              - pos[0][1] * pos[0][2],
-              pos[0][0] ** 2 + pos[0][1] ** 2]]
-        ))
+        numpy.array([[pos[0][1] ** 2 + pos[0][2] ** 2, - pos[0][0] * pos[0][1], - pos[0][0] * pos[0][2]],
+                     [- pos[0][0] * pos[0][1], pos[0][2] ** 2 + pos[0][0] ** 2, - pos[0][1] * pos[0][2]],
+                     [- pos[0][0] * pos[0][2], - pos[0][1] * pos[0][2], pos[0][0] ** 2 + pos[0][1] ** 2]]))
 
     rotation_matrix = Rotation.from_quat(quat).as_matrix()
     return rotation_matrix @ inertia_tensor @ rotation_matrix.T + inertia_tensor_parallel

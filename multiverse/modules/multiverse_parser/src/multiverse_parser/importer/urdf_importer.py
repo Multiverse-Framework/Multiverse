@@ -6,13 +6,14 @@ from typing import Optional, List, Union, Dict
 
 import numpy
 from pxr import Gf, Usd
+from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
 
 from .importer import Configuration, Importer
 
 from ..factory import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomBuilder, GeomType, GeomProperty, \
     JointProperty
-from ..utils import rpy_to_quat, xform_cache
+from ..utils import xform_cache
 
 
 # import rospkg
@@ -38,7 +39,7 @@ def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
     else:
         joint_pos = numpy.array([0.0, 0.0, 0.0])
         joint_rpy = numpy.array([0.0, 0.0, 0.0])
-    return joint_pos, rpy_to_quat(joint_rpy)
+    return joint_pos, Rotation.from_euler('xyz', joint_rpy).as_quat(canonical=False)
 
 
 class UrdfImporter(Importer):
@@ -153,7 +154,7 @@ class UrdfImporter(Importer):
         else:
             geom_pos = numpy.array([0.0, 0.0, 0.0])
             geom_rot = numpy.array([0.0, 0.0, 0.0])
-        geom_quat = rpy_to_quat(geom_rot)
+        geom_quat = Rotation.from_euler('xyz', geom_rot).as_quat(canonical=False)
 
         geom_is_visible = isinstance(geom, urdf.Visual)
         geom_is_collidable = isinstance(geom, urdf.Collision)
@@ -165,7 +166,6 @@ class UrdfImporter(Importer):
                                          geom_type=GeomType.CUBE,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
-                                         has_inertia=geom_has_inertia,
                                          rgba=geom_rgba)
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
@@ -176,7 +176,6 @@ class UrdfImporter(Importer):
                                          geom_type=GeomType.SPHERE,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
-                                         has_inertia=geom_has_inertia,
                                          rgba=geom_rgba)
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
@@ -187,7 +186,6 @@ class UrdfImporter(Importer):
                                          geom_type=GeomType.CYLINDER,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
-                                         has_inertia=geom_has_inertia,
                                          rgba=geom_rgba)
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
@@ -198,7 +196,6 @@ class UrdfImporter(Importer):
                                          geom_type=GeomType.MESH,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
-                                         has_inertia=geom_has_inertia,
                                          rgba=geom_rgba)
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)

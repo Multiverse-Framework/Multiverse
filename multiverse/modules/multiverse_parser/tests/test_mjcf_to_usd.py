@@ -22,8 +22,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         importer = MjcfImporter(file_path=input_mjcf_path,
                                 with_physics=True,
                                 with_visual=True,
-                                with_collision=True,
-                                inertia_source=InertiaSource.FROM_SRC)
+                                with_collision=True)
         importer.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
         self.assertEqual(importer.source_file_path, input_mjcf_path)
         self.assertEqual(importer._config.model_name, "ur5e")
@@ -35,7 +34,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "ur5e")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_1.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 

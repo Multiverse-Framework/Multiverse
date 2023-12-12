@@ -503,11 +503,9 @@ class FactoryTestCase(unittest.TestCase):
                                      relative_to_xform=body_1_xform)
 
         physics_mass_api_1 = body_builder_3.set_inertial(mass=1.0,
-                                                         density=1.0,
                                                          center_of_mass=numpy.array([0.0, 0.0, 0.0]),
                                                          diagonal_inertia=numpy.array([1.0, 1.0, 1.0]))
         self.assertEqual(physics_mass_api_1.GetMassAttr().Get(), 1.0)
-        self.assertEqual(physics_mass_api_1.GetDensityAttr().Get(), 1.0)
         self.assertEqual(physics_mass_api_1.GetCenterOfMassAttr().Get(), (0.0, 0.0, 0.0))
         self.assertEqual(physics_mass_api_1.GetDiagonalInertiaAttr().Get(), (1.0, 1.0, 1.0))
         self.assertEqual(physics_mass_api_1.GetPrincipalAxesAttr().Get().GetReal(), 1.0)

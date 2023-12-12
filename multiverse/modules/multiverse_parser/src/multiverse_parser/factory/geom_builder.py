@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Optional, List, Dict, Tuple
 
 import numpy
-from pxr import Usd, UsdGeom, Gf, Sdf, UsdShade
+from pxr import Usd, UsdGeom, Gf, Sdf, UsdShade, UsdPhysics
 from enum import Enum
 
 from .material_builder import MaterialBuilder
@@ -25,7 +25,7 @@ class GeomType(Enum):
 class GeomInertial:
     mass: float = 0.0
     inertia_tensor: numpy.ndarray = numpy.zeros((3, 3))
-    center_of_mass: numpy.ndarray = numpy.zeros(3)
+    center_of_mass: numpy.ndarray = numpy.zeros((1, 3))
 
 
 @dataclass(init=False)
@@ -114,7 +114,7 @@ class GeomBuilder:
                  body_path: Sdf.Path,
                  geom_property: GeomProperty,
                  geom_inertia: GeomInertial = None) -> None:
-        self._geom_property = geom_property
+        self._property = geom_property
         self._xform = UsdGeom.Xform.Define(stage, body_path.AppendPath(geom_name))
         self._mesh_builders = {}
         self._material_builders = {}
@@ -170,6 +170,19 @@ class GeomBuilder:
             if self.rgba is not None:
                 geom.CreateDisplayColorAttr(self.rgba[:3])
                 geom.CreateDisplayOpacityAttr(self.rgba[3])
+            if not self.is_visible:
+                geom.CreateDisplayOpacityAttr([0.0])
+
+        if self.is_collidable:
+            for geom in self.geom_prims:
+                physics_collision_api = UsdPhysics.CollisionAPI(geom)
+                physics_collision_api.CreateCollisionEnabledAttr(True)
+                physics_collision_api.Apply(geom.GetPrim())
+                if self.type == GeomType.MESH:
+                    physics_mesh_collision_api = UsdPhysics.MeshCollisionAPI(geom)
+                    physics_mesh_collision_api.CreateApproximationAttr("convexHull")
+                    physics_mesh_collision_api.Apply(geom.GetPrim())
+
         return self.geom_prims
 
     def set_transform(
@@ -370,15 +383,23 @@ class GeomBuilder:
 
     @property
     def type(self) -> GeomType:
-        return self._geom_property.type
+        return self._property.type
+
+    @property
+    def is_visible(self) -> bool:
+        return self._property.is_visible
+
+    @property
+    def is_collidable(self) -> bool:
+        return self._property.is_collidable
 
     @property
     def rgba(self) -> Optional[numpy.ndarray]:
-        return self._geom_property.rgba
+        return self._property.rgba
 
     @property
     def density(self) -> float:
-        return self._geom_property.density
+        return self._property.density
 
     @property
     def mesh_builders(self) -> Dict[str, MeshBuilder]:
