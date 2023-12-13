@@ -11,18 +11,12 @@ xform_cache = UsdGeom.XformCache()
 
 
 def diagonalize_inertia(inertia_tensor) -> (numpy.ndarray, numpy.ndarray):
-    # Perform Singular Value Decomposition
-    U, S, Vh = numpy.linalg.svd(inertia_tensor)
+    diagonal_inertia, eigenvectors = numpy.linalg.eigh(inertia_tensor)
 
-    diagonal_inertia = numpy.diag(numpy.diag(S))
+    if numpy.linalg.det(eigenvectors) < 0:
+        eigenvectors[:, 0] = -eigenvectors[:, 0]
 
-    R = numpy.dot(U, Vh)
-    rotation_quat = Rotation.from_matrix(R).as_quat(canonical=False)
-
-    print(inertia_tensor)
-    print(diagonal_inertia)
-    print(R)
-    print(rotation_quat)
+    rotation_quat = Rotation.from_matrix(eigenvectors).as_quat(canonical=True)
 
     return diagonal_inertia, rotation_quat
 

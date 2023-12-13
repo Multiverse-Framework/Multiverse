@@ -9,12 +9,12 @@ from typing import List
 from plotly import graph_objects
 import numpy
 from scipy.spatial.transform import Rotation
-from pxr import Usd
+from pxr import Usd, UsdGeom, UsdPhysics, Gf
 from multiverse_parser import (WorldBuilder,
                                JointBuilder, JointType, JointProperty,
                                GeomType, GeomProperty,
                                MeshBuilder)
-from multiverse_parser.utils import calculate_mesh_inertial, shift_inertia_tensor
+from multiverse_parser.utils import calculate_mesh_inertial, shift_inertia_tensor, diagonalize_inertia
 
 
 class Shape:
@@ -466,6 +466,25 @@ class FactoryTestCase(unittest.TestCase):
         tracemalloc.start()
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
+    def test_diagonal_inertia(self):
+        inertia_tensor = numpy.diag([random.uniform(0.1, 1.0) for _ in range(3)])
+        pos = numpy.array([[random.uniform(-1.0, 1.0) for _ in range(3)]])
+        rotation = Rotation.from_euler('xyz', [random.uniform(0.0, 360.0) for _ in range(3)], degrees=True)
+        quat = rotation.as_quat(canonical=False)
+        inertia_tensor_rotate = shift_inertia_tensor(mass=1.0,
+                                                     inertia_tensor=inertia_tensor,
+                                                     pos=pos,
+                                                     quat=quat)
+        diag_inertia, rotation_quat = diagonalize_inertia(inertia_tensor_rotate)
+        inertia_tensor_recover = shift_inertia_tensor(mass=1.0,
+                                                      inertia_tensor=inertia_tensor_rotate,
+                                                      quat=Rotation.from_quat(rotation_quat).inv().as_quat(
+                                                          canonical=False))
+        inertia_tensor_rotate_recover = shift_inertia_tensor(mass=1.0,
+                                                             inertia_tensor=inertia_tensor_recover,
+                                                             quat=rotation_quat)
+        numpy.testing.assert_array_almost_equal(inertia_tensor_rotate, inertia_tensor_rotate_recover)
+
     def test_world_builder(self):
         file_path = os.path.join(self.resource_path, "output", "test_world_builder", "test.usda")
         world_builder = WorldBuilder(file_path=file_path)
@@ -592,7 +611,7 @@ class FactoryTestCase(unittest.TestCase):
         a = 1.0
         b = 2.0
         c = 3.0
-        pos = numpy.array([[0.3, 0.2, 0.1]])
+        pos = numpy.array([[3.0, 1.0, 2.0]])
         quat = Rotation.from_euler('xyz', [30, 45, 60], degrees=True).as_quat(canonical=False)
         density = 1.0
 
@@ -884,9 +903,6 @@ class FactoryTestCase(unittest.TestCase):
         usd_mesh.add_shape(usd_mesh_1)
         usd_mesh.build()
 
-        print(usd_mesh.mass)
-        print(usd_mesh.center_of_mass)
-        print(usd_mesh.inertia_tensor)
         if self.plot:
             usd_mesh.plot(display_wireframe=False)
 
