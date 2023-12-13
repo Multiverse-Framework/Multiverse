@@ -48,7 +48,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
                                 with_physics=True,
                                 with_visual=True,
                                 with_collision=True,
-                                default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
+                                default_rgba=numpy.array([0.0, 1.0, 0.0, 0.5]))
         self.assertEqual(importer.source_file_path, input_urdf_path)
         self.assertEqual(importer._config.model_name, "ur5e")
 

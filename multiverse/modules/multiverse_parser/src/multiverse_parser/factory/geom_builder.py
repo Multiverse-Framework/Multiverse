@@ -80,18 +80,6 @@ class GeomProperty:
         return self._density
 
 
-def bind_materials(mesh_builder: MeshBuilder, local_meshes: List[UsdGeom.Mesh], reference_meshes: List[UsdGeom.Mesh]):
-    paths = mesh_builder.xform.GetPrim().FindAllRelationshipTargetPaths()
-    if len(paths) > 0:
-        for local_mesh, reference_mesh in zip(local_meshes, reference_meshes):
-            if reference_mesh.GetPrim().HasAPI(UsdShade.MaterialBindingAPI):
-                material_binding_api = UsdShade.MaterialBindingAPI.Apply(local_mesh.GetPrim())
-                for path in paths:
-                    material = UsdShade.Material(mesh_builder.stage.GetPrimAtPath(path))
-                    if material:
-                        material_binding_api.Bind(material)
-
-
 def reference_materials(material_builder: MaterialBuilder, stage: Usd.Stage, mesh_file_path: str):
     material_root_path = material_builder.root_prim.GetPath()
     material_root_prim = stage.GetPrimAtPath(material_root_path)
@@ -99,6 +87,21 @@ def reference_materials(material_builder: MaterialBuilder, stage: Usd.Stage, mes
         material_root_prim = stage.DefinePrim(material_root_path)
     material_root_prim.GetReferences().AddReference(mesh_file_path, material_root_path)
 
+
+def bind_materials(reference_stage: Usd.Stage, local_stage: Usd.Stage, reference_prim: Usd.Prim, local_prim: Usd.Prim):
+    print(f"Binding material for {local_prim.GetPath()}")
+    reference_material_binding_api = UsdShade.MaterialBindingAPI(reference_prim)
+    material_binding_api = UsdShade.MaterialBindingAPI.Apply(local_prim)
+
+    for path in reference_material_binding_api.GetDirectBindingRel().GetTargets():
+        material = UsdShade.Material(reference_stage.GetPrimAtPath(path))
+        material_binding_api.Bind(material)
+
+    for reference_geom_subset in reference_material_binding_api.GetMaterialBindSubsets():
+        local_geom_subset = local_stage.OverridePrim(
+            local_prim.GetPath().AppendPath(reference_geom_subset.GetPrim().GetName()))
+
+        bind_materials(reference_stage, local_stage, reference_geom_subset.GetPrim(), local_geom_subset)
 
 class GeomBuilder:
     stage: Usd.Stage
@@ -121,30 +124,6 @@ class GeomBuilder:
         self._geom_prims = self._create_geoms()
         self._inertial = geom_inertia
 
-    def add_mesh(self, mesh_file_path: str) -> Tuple[MeshBuilder, MaterialBuilder]:
-        if mesh_file_path in self.mesh_builders:
-            mesh_builder = self.mesh_builders[mesh_file_path]
-        else:
-            mesh_builder = MeshBuilder(mesh_file_path)
-            self.mesh_builders[mesh_file_path] = mesh_builder
-
-        if mesh_file_path in self.material_builders:
-            material_builder = self.material_builders[mesh_file_path]
-        else:
-            material_builder = MaterialBuilder(file_path=mesh_file_path)
-
-        reference_meshes = mesh_builder.meshes
-        local_meshes = []
-        for mesh in reference_meshes:
-            local_meshes.append(self.stage.OverridePrim(self.xform.GetPath().AppendPath(mesh.GetPrim().GetName())))
-            self.xform.GetPrim().GetReferences().AddReference(mesh_file_path, mesh_builder.xform.GetPath())
-
-        bind_materials(mesh_builder, local_meshes, reference_meshes)
-
-        reference_materials(material_builder, self.stage, mesh_file_path)
-
-        return mesh_builder, material_builder
-
     def _create_geoms(self) -> List[Usd.Prim]:
         if self.type == GeomType.PLANE:
             geom = UsdGeom.Mesh.Define(self.stage, self.xform.GetPath().AppendPath("Plane"))
@@ -165,6 +144,29 @@ class GeomBuilder:
             return []
         raise ValueError(f"Geom type {self.type} not supported.")
 
+    def add_mesh(self, mesh_file_path: str) -> Tuple[MeshBuilder, MaterialBuilder]:
+        if mesh_file_path in self.mesh_builders:
+            mesh_builder = self.mesh_builders[mesh_file_path]
+        else:
+            mesh_builder = MeshBuilder(mesh_file_path)
+            self.mesh_builders[mesh_file_path] = mesh_builder
+
+        if mesh_file_path in self.material_builders:
+            material_builder = self.material_builders[mesh_file_path]
+        else:
+            material_builder = MaterialBuilder(file_path=mesh_file_path)
+
+        reference_prims = [mesh.GetPrim() for mesh in mesh_builder.xform.GetPrim().GetChildren()]
+        for reference_prim in reference_prims:
+            local_prim = self.stage.OverridePrim(self.xform.GetPath().AppendPath(reference_prim.GetName()))
+            self.xform.GetPrim().GetReferences().AddReference(mesh_file_path, mesh_builder.xform.GetPath())
+            if reference_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                bind_materials(mesh_builder.stage, self.stage, reference_prim, local_prim)
+
+        reference_materials(material_builder, self.stage, mesh_file_path)
+
+        return mesh_builder, material_builder
+
     def build(self) -> List[UsdGeom.Gprim]:
         for geom in self.geom_prims:
             if self.rgba is not None:
@@ -172,6 +174,7 @@ class GeomBuilder:
                 geom.CreateDisplayOpacityAttr(self.rgba[3])
             if not self.is_visible:
                 geom.CreateDisplayOpacityAttr([0.0])
+                geom.CreateVisibilityAttr("invisible")
 
         if self.is_collidable:
             for geom in self.geom_prims:

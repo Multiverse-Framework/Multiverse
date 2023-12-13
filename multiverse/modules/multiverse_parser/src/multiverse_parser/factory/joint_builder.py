@@ -223,6 +223,9 @@ class JointBuilder:
         self._joint.CreateLocalRot0Attr(Gf.Quatf(body1_to_body2_rot * self.quat))
         self._joint.CreateLocalRot1Attr(Gf.Quatf(self.quat))
 
+        if self.type == JointType.PRISMATIC or self.type == JointType.REVOLUTE or self.type == JointType.CONTINUOUS:
+            self._joint.CreateAxisAttr("Z")
+
         return self._joint
 
     def _create_joint(self) -> UsdPhysics.Joint:

@@ -77,7 +77,7 @@ class MaterialBuilder:
 
     @property
     def root_prim(self):
-        material_root_paths = [Sdf.Path("/").AppendPath("Materials"), Sdf.Path("/").AppendPath("_materials")]
+        material_root_paths = [Sdf.Path("/").AppendPath("_materials"), Sdf.Path("/").AppendPath("Materials")]
         for material_root_path in material_root_paths:
             if self.stage.GetPrimAtPath(material_root_path).IsValid():
                 return self.stage.GetPrimAtPath(material_root_path)

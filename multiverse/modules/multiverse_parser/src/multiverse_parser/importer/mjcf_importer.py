@@ -192,6 +192,11 @@ class MjcfImporter(Importer):
         geom_is_collidable = (mj_geom.contype != 0) or (mj_geom.conaffinity != 0)
         geom_has_inertia = True
         geom_builder = None
+        geom_pos = mj_geom.pos
+        geom_quat = numpy.array([mj_geom.quat[1],
+                                 mj_geom.quat[2],
+                                 mj_geom.quat[3],
+                                 mj_geom.quat[0]])
 
         if (geom_has_inertia and self._config.with_physics or
                 geom_is_visible and self._config.with_visual or
@@ -210,16 +215,16 @@ class MjcfImporter(Importer):
             geom_builder.build()
 
             if mj_geom.type in [mujoco.mjtGeom.mjGEOM_PLANE]:
-                geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat, scale=numpy.array([50, 50, 1]))
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=numpy.array([50, 50, 1]))
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_BOX]:
-                geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat, scale=mj_geom.size)
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=mj_geom.size)
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_SPHERE, mujoco.mjtGeom.mjGEOM_ELLIPSOID]:
                 # TODO: Fix ellipsoid
-                geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat)
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
                 geom_builder.set_attribute(radius=mj_geom.size[0])
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_CYLINDER, mujoco.mjtGeom.mjGEOM_CAPSULE]:
                 # TODO: Fix capsule
-                geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat)
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
                 geom_builder.set_attribute(radius=mj_geom.size[0], height=mj_geom.size[1] * 2)
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_MESH]:
                 mesh_id = mj_geom.dataid[0]
@@ -244,14 +249,9 @@ class MjcfImporter(Importer):
 
                 geom_builder.add_mesh(mesh_file_path=tmp_mesh_file_path)
                 geom_builder.build()
-                geom_builder.set_transform(pos=mj_geom.pos, quat=mj_geom.quat)
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             else:
                 raise NotImplementedError(f"Geom type {mj_geom.type} not supported.")
-
-        # if self.config.with_physics:
-
-        # if geom_is_collidable:
-        #     geom_builder.enable_rigid_body()
 
         return geom_builder
 
