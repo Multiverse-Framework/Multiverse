@@ -1,6 +1,6 @@
-from multiverse_parser.importer import (InertiaSource,
-                                        UrdfImporter,
+from multiverse_parser.importer import (UrdfImporter,
                                         MjcfImporter)
+from multiverse_parser.factory import InertiaSource
 from multiverse_parser.factory import (WorldBuilder,
                                        BodyBuilder,
                                        JointBuilder, JointType, JointProperty,

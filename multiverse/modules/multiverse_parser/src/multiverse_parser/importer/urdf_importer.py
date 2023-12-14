@@ -9,8 +9,9 @@ from pxr import Gf, Usd
 from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
 
-from .importer import Configuration, InertiaSource, Importer
+from .importer import Configuration, Importer
 
+from ..factory import InertiaSource
 from ..factory import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomBuilder, GeomType, GeomProperty, \
     JointProperty
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia

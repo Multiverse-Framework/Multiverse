@@ -7,8 +7,10 @@ from typing import Optional, List, Tuple, Dict
 import mujoco
 import numpy
 
-from .importer import Configuration, InertiaSource, Importer
+from pxr import UsdMujoco, Gf
 
+from .importer import Configuration, Importer
+from ..factory import InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
                        JointBuilder, JointType, JointProperty,
                        GeomBuilder, GeomType, GeomProperty,
@@ -71,6 +73,8 @@ class MjcfImporter(Importer):
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         self._world_builder = WorldBuilder(self.tmp_file_path)
 
+        self._import_config()
+
         self._world_builder.add_body(body_name=self._config.model_name)
 
         for body_id in range(1, self.mj_model.nbody):
@@ -91,6 +95,13 @@ class MjcfImporter(Importer):
         self._world_builder.export()
 
         return self.tmp_file_path if save_file_path is None else self.save_tmp_model(file_path=save_file_path)
+
+    def _import_config(self):
+        mujoco = UsdMujoco.Mujoco.Define(self._world_builder.stage, "/mujoco")
+        mujoco.CreateMjModelAttr(self._config.model_name)
+
+        mujoco_option_api = UsdMujoco.MujocoOptionAPI.Apply(mujoco.GetPrim())
+        mujoco_option_api.CreateMjTimeStepAttr(self.mj_model.opt.timestep)
 
     def import_body(self, mj_body) -> BodyBuilder:
         body_name = mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
@@ -124,6 +135,9 @@ class MjcfImporter(Importer):
                 quat=body_quat,
                 relative_to_xform=relative_to_xform,
             )
+            mujoco_body_api = UsdMujoco.MujocoBodyAPI.Apply(body_builder.xform.GetPrim())
+            mujoco_body_api.CreateMjBodyPosAttr(Gf.Vec3f(*body_pos))
+            mujoco_body_api.CreateMjBodyQuatAttr(Gf.Quatf(body_quat[3], *body_quat[:3]))
 
             if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC:
                 body_mass = mj_body.mass[0]

@@ -7,7 +7,7 @@ import shutil
 import string
 from typing import Optional, Dict, Tuple
 
-from ..factory.config import Configuration, InertiaSource
+from ..factory.config import Configuration
 from ..utils import import_obj, import_stl, import_dae, export_usd
 
 

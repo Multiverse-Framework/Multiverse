@@ -6,6 +6,7 @@ import tracemalloc
 import numpy
 
 from multiverse_parser import MjcfImporter, InertiaSource
+
 from pxr import Usd
 
 

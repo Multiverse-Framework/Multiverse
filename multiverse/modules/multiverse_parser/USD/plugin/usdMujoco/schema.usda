@@ -1,0 +1,72 @@
+#usda 1.0
+(
+    """ This file contains the API schema for MuJoCo.
+    """
+    subLayers = [
+        @usd/schema.usda@
+    ]
+)
+
+over "GLOBAL" 
+(
+    customData = {
+        string libraryName       = "UsdMujoco"
+        string libraryPath       = "."
+        string libraryPrefix     = "UsdMujoco"
+    }
+)
+{
+}
+
+class Mujoco "Mujoco" 
+(
+    customData = {
+        string className = "Mujoco"
+    }
+    doc = """Mujoco"""
+    inherits = </Typed>
+    prepend apiSchemas = ["MujocoOptionAPI"]
+)
+{
+    string mujoco:model = "" (
+        customData = {
+            string apiName = "mjModel"
+        }
+        displayName = "MuJoCo Model"
+        doc = """The name of the model."""
+    )
+}
+
+class "MujocoOptionAPI" (
+    inherits = </APISchemaBase>
+)
+{
+    float mujoco:option:timestep = 0.002 (
+        customData = {
+            string apiName = "mjTimeStep"
+        }
+        displayName = "Time Step"
+        doc = "Simulation time step in seconds."
+    )
+}
+
+class "MujocoBodyAPI" (
+    inherits = </APISchemaBase>
+)
+{
+    point3f mujoco:body:pos (
+        customData = {
+            string apiName = "mjBodyPos"
+        }
+        displayName = "Body Position"
+        doc = "The 3D position (x, y, z) of the body frame, in the parent coordinate frame."
+    )
+
+    quatf mujoco:body:quat = (1, 0, 0, 0) (
+        customData = {
+            string apiName = "mjBodyQuat"
+        }
+        displayName = "Body Quaternion"
+        doc = "The quaternion (w, x, y, z) of the body frame, in the parent coordinate frame."
+    )
+}

@@ -1,15 +1,10 @@
 #!/usr/bin/env python3.10
 
-from __future__ import print_function
-import sys
-
-sys.path = [sys_path for sys_path in sys.path if "USD/lib/python" not in sys_path]
-
 import argparse
 import os
-from multiverse_parser import UrdfImporter, MjcfImporter, UsdImporter
-from multiverse_parser import UrdfExporter, MjcfExporter
-from multiverse_parser import COLLISION_MESH_COLOR, COLLISION_MESH_OPACITY
+import numpy
+
+from multiverse_parser import UrdfImporter, MjcfImporter
 
 
 def main():
@@ -51,58 +46,38 @@ def main():
     )
     parser.set_defaults(keepusd=False)
     parser.add_argument(
-        "--collisionrgba",
+        "--defaultrgba",
         nargs="+",
         type=float,
-        help="The color of the collision meshes, if they exist",
+        help="The default color of the meshes",
     )
-    parser.set_defaults(
-        collisionrgba=[COLLISION_MESH_COLOR[0][0], COLLISION_MESH_COLOR[0][1], COLLISION_MESH_COLOR[0][2],
-                       COLLISION_MESH_OPACITY[0]])
+    parser.set_defaults(collisionrgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
 
     args = parser.parse_args()
 
-    if len(args.collisionrgba) != 4 or any(x < 0 or x > 1 for x in args.collisionrgba):
-        print(
-            f"Invalid collision rgba, set to default {[COLLISION_MESH_COLOR[0][0], COLLISION_MESH_COLOR[0][1], COLLISION_MESH_COLOR[0][2], COLLISION_MESH_OPACITY[0]]}")
-    else:
-        COLLISION_MESH_COLOR[0] = tuple(args.collisionrgba[:3])
-        COLLISION_MESH_OPACITY[0] = args.collisionrgba[3]
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
 
     if in_extension in [".usd", ".usda", ".usdc"]:
-        importer = UsdImporter(usd_file_path=args.input, with_physics=args.physics, with_visual=args.visual,
-                               with_collision=args.collision)
+        raise NotImplementedError("Importing from USD is not supported yet.")
     elif in_extension == ".urdf":
-        importer = UrdfImporter(urdf_file_path=args.input, with_physics=args.physics, with_visual=args.visual,
-                                with_collision=args.collision)
+        importer = UrdfImporter(file_path=args.input,
+                                with_physics=True,
+                                with_visual=True,
+                                with_collision=False)
     elif in_extension == ".xml":
-        importer = MjcfImporter(mjcf_file_path=args.input, with_physics=args.physics, with_visual=args.visual,
-                                with_collision=args.collision)
+        importer = MjcfImporter(file_path=args.input,
+                                with_physics=True,
+                                with_visual=True,
+                                with_collision=False)
     else:
-        print(f"Input extension [{in_extension}] not supported.")
-        return
+        raise NotImplementedError(f"Importing from {in_extension} is not supported yet.")
 
-    world_builder = importer.world_builder
+    importer.import_model()
 
     if args.keepusd:
-        usd_file_path = os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda")
-        world_builder.export(usd_file_path)
-    if not args.keepusd and out_extension == ".usda":
-        world_builder.export(args.output)
-    elif out_extension == ".urdf":
-        UrdfExporter(urdf_file_path=args.output, world_builder=world_builder, with_physics=args.physics,
-                     with_visual=args.visual, with_collision=args.collision)
-    elif out_extension == ".xml":
-        MjcfExporter(mjcf_file_path=args.output, world_builder=world_builder, with_physics=args.physics,
-                     with_visual=args.visual, with_collision=args.collision)
-    elif out_extension == ".usd" or out_extension == ".usdc" or out_extension == ".usdz":
-        print(f"Output extension [{out_extension}] not supported, try .usda instead.")
-    elif out_extension not in [".usd", ".usda", ".usdc"]:
-        print(f"Output extension [{out_extension}] not supported.")
-
-    world_builder.clean_up()
+        output_usd_path = os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda")
+        importer.save_tmp_model(file_path=str(output_usd_path))
 
 
 if __name__ == "__main__":

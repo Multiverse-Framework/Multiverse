@@ -1,3 +1,22 @@
+set(ENV{USD_SRC_DIR} ${EXT_DIR}/USD)
+set(ENV{USD_BUILD_DIR} ${BUILD_DIR}/USD)
+
+set(ENV{PYTHONPATH} $ENV{PYTHONPATH}:$ENV{USD_BUILD_DIR}/lib/python)
+
+# Execute the shell file during CMake configuration
+execute_process(
+  COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/install.sh
+  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  RESULT_VARIABLE INSTALL_RESULT
+)
+
+# Check the result of the script execution
+if(INSTALL_RESULT EQUAL 0)
+  message(VERBOSE "install.sh executed successfully.")
+else()
+  message(FATAL_ERROR "Failed to execute install.sh.")
+endif()
+
 add_custom_target(multiverse_parser_build ALL
     COMMAND ${BIN_DIR}/python3.10 -m build ${CMAKE_CURRENT_SOURCE_DIR} --outdir ${CMAKE_CURRENT_BINARY_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
