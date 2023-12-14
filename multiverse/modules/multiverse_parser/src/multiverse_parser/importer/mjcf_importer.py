@@ -4,10 +4,8 @@ import os.path
 from math import degrees
 from typing import Optional, List, Tuple, Dict
 
-import mujoco
 import numpy
-
-from pxr import UsdMujoco, Gf
+import mujoco
 
 from .importer import Configuration, Importer
 from ..factory import InertiaSource
@@ -16,6 +14,8 @@ from ..factory import (WorldBuilder, BodyBuilder,
                        GeomBuilder, GeomType, GeomProperty,
                        MeshBuilder, MeshProperty,
                        MaterialBuilder, MaterialProperty)
+
+from pxr import UsdMujoco, Gf
 
 
 def get_model_name(xml_file_path: str) -> str:
@@ -31,8 +31,8 @@ def get_body_name(mj_body) -> str:
 
 
 class MjcfImporter(Importer):
-    _world_builder: WorldBuilder
-    _mj_model: mujoco.MjModel
+    world_builder: WorldBuilder
+    mj_model: mujoco.MjModel
     _geom_type_map: Dict = {
         mujoco.mjtGeom.mjGEOM_PLANE: GeomType.PLANE,
         mujoco.mjtGeom.mjGEOM_BOX: GeomType.CUBE,
@@ -135,9 +135,6 @@ class MjcfImporter(Importer):
                 quat=body_quat,
                 relative_to_xform=relative_to_xform,
             )
-            mujoco_body_api = UsdMujoco.MujocoBodyAPI.Apply(body_builder.xform.GetPrim())
-            mujoco_body_api.CreateMjBodyPosAttr(Gf.Vec3f(*body_pos))
-            mujoco_body_api.CreateMjBodyQuatAttr(Gf.Quatf(body_quat[3], *body_quat[:3]))
 
             if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC:
                 body_mass = mj_body.mass[0]
@@ -151,6 +148,10 @@ class MjcfImporter(Importer):
                                           center_of_mass=body_center_of_mass,
                                           diagonal_inertia=body_diagonal_inertia,
                                           principal_axes=body_principal_axes)
+
+            mujoco_body_api = UsdMujoco.MujocoBodyAPI.Apply(body_builder.xform.GetPrim())
+            mujoco_body_api.CreateMjBodyPosAttr(Gf.Vec3f(*body_pos))
+            mujoco_body_api.CreateMjBodyQuatAttr(Gf.Quatf(body_quat[3], *body_quat[:3]))
 
         return body_builder
 
@@ -189,6 +190,18 @@ class MjcfImporter(Importer):
         elif mj_joint.type == mujoco.mjtJoint.mjJNT_SLIDE:
             joint_builder.set_limit(lower=mj_joint.range[0],
                                     upper=mj_joint.range[1])
+
+        mujoco_joint_api = UsdMujoco.MujocoJointAPI.Apply(joint_builder.joint.GetPrim())
+        mj_joint_type = "revolute" if mj_joint.type == mujoco.mjtJoint.mjJNT_HINGE \
+            else "prismatic" if mj_joint.type == mujoco.mjtJoint.mjJNT_SLIDE \
+            else "ball" if mj_joint.type == mujoco.mjtJoint.mjJNT_BALL \
+            else None
+        if mj_joint_type is None:
+            raise NotImplementedError(f"Joint type {mj_joint.type} not supported.")
+
+        mujoco_joint_api.CreateMjJointTypeAttr(mj_joint_type)
+        mujoco_joint_api.CreateMjJointPosAttr(Gf.Vec3f(*mj_joint.pos))
+        mujoco_joint_api.CreateMjJointAxisAttr(Gf.Vec3f(*mj_joint.axis))
 
         return joint_builder
 
@@ -266,6 +279,21 @@ class MjcfImporter(Importer):
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             else:
                 raise NotImplementedError(f"Geom type {mj_geom.type} not supported.")
+
+        mujoco_geom_api = UsdMujoco.MujocoGeomAPI.Apply(geom_builder.xform.GetPrim())
+        mj_geom_type = "plane" if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE \
+            else "box" if mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX \
+            else "sphere" if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE \
+            else "cylinder" if mj_geom.type == mujoco.mjtGeom.mjGEOM_CYLINDER \
+            else "capsule" if mj_geom.type == mujoco.mjtGeom.mjGEOM_CAPSULE \
+            else "mesh" if mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH \
+            else None
+        if mj_geom_type is None:
+            raise NotImplementedError(f"Geom type {mj_geom.type} not supported.")
+        mujoco_geom_api.CreateMjGeomTypeAttr(mj_geom_type)
+        mujoco_geom_api.CreateMjGeomSizeAttr(Gf.Vec3f(*mj_geom.size))
+        mujoco_geom_api.CreateMjGeomPosAttr(Gf.Vec3f(*geom_pos))
+        mujoco_geom_api.CreateMjGeomQuatAttr(Gf.Quatf(geom_quat[3], *geom_quat[:3]))
 
         return geom_builder
 

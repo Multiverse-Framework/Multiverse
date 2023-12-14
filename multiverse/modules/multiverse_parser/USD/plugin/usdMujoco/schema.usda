@@ -70,3 +70,71 @@ class "MujocoBodyAPI" (
         doc = "The quaternion (w, x, y, z) of the body frame, in the parent coordinate frame."
     )
 }
+
+class "MujocoJointAPI" (
+    inherits = </APISchemaBase>
+)
+{
+    uniform token mujoco:joint:type = "hinge" (
+        customData = {
+            string apiName = "mjJointType"
+        }
+        allowedTokens = ["ball", "slide", "hinge"]
+        displayName = "Joint Type"
+        doc = """Type of the joint."""
+    )
+
+    point3f mujoco:joint:pos (
+        customData = {
+            string apiName = "mjJointPos"
+        }
+        displayName = "Joint Position"
+        doc = "The 3D position (x, y, z) of the joint, specified in the frame of the body where the joint is defined."
+    )
+
+    vector3f mujoco:joint:axis = (0, 0, 1) (
+        customData = {
+            string apiName = "mjJointAxis"
+        }
+        displayName = "Joint Axis"
+        doc = "This attribute specifies the axis of rotation for hinge joints and the direction of translation for slide joints."
+    )
+}
+
+class "MujocoGeomAPI" (
+    inherits = </APISchemaBase>
+)
+{
+    uniform token mujoco:geom:type = "sphere" (
+        customData = {
+            string apiName = "mjGeomType"
+        }
+        allowedTokens = ["plane", "hfield", "sphere", "capsule", "ellipsoid", "cylinder", "box", "mesh", "sdf"]
+        displayName = "Geom Type"
+        doc = """Type of geometric shape."""
+    )
+
+    vector3f mujoco:geom:size (
+        customData = {
+            string apiName = "mjGeomSize"
+        }
+        displayName = "Geom Size"
+        doc = "Geom size parameters. The number of required parameters and their meaning depends on the geom type as documented under the type attribute."
+    )
+
+    point3f mujoco:geom:pos (
+        customData = {
+            string apiName = "mjGeomPos"
+        }
+        displayName = "Geom Position"
+        doc = "The 3D position (x, y, z) of the geom, specified in the frame of the body where the geom is defined."
+    )
+
+    quatf mujoco:geom:quat = (1, 0, 0, 0) (
+        customData = {
+            string apiName = "mjGeomQuat"
+        }
+        displayName = "Geom Quaternion"
+        doc = "The quaternion (w, x, y, z) of the geom frame, specified in the frame of the body where the geom is defined."
+    )
+}

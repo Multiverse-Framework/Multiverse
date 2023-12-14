@@ -2,14 +2,15 @@
 
 from dataclasses import dataclass
 from typing import Optional, List, Dict, Tuple
+from enum import Enum
 
 import numpy
-from pxr import Usd, UsdGeom, Gf, Sdf, UsdShade, UsdPhysics
-from enum import Enum
 
 from .material_builder import MaterialBuilder
 from .mesh_builder import MeshBuilder
 from ..utils import modify_name, calculate_mesh_inertial, shift_inertia_tensor, shift_center_of_mass
+
+from pxr import Usd, UsdGeom, Gf, Sdf, UsdShade, UsdPhysics
 
 
 class GeomType(Enum):

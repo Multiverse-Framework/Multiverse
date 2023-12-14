@@ -4,13 +4,15 @@ import os
 from math import radians, isclose
 from xml.etree import ElementTree as ET
 from xml.dom import minidom
-from pxr import UsdPhysics
+
 from multiverse_parser import WorldBuilder, GeomType, JointType
 from multiverse_parser.factory import COLLISION_MESH_COLOR, COLLISION_MESH_OPACITY
 from multiverse_parser.factory.body_builder import body_dict
 from multiverse_parser.factory.joint_builder import joint_dict
 from multiverse_parser.factory.geom_builder import geom_dict
 from multiverse_parser.utils import *
+
+from pxr import UsdPhysics
 
 
 class MjcfExporter:

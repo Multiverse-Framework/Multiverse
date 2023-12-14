@@ -16,6 +16,8 @@ pxr_plugin(${PXR_PACKAGE}
         mujoco
         mujocoOptionAPI
         mujocoBodyAPI
+        mujocoJointAPI
+        mujocoGeomAPI
         tokens
 
     PYTHON_CPPFILES
@@ -29,6 +31,8 @@ pxr_plugin(${PXR_PACKAGE}
         wrapMujoco.cpp 
         wrapMujocoOptionAPI.cpp   
         wrapMujocoBodyAPI.cpp
+        wrapMujocoJointAPI.cpp
+        wrapMujocoGeomAPI.cpp
 
     RESOURCE_FILES
         generatedSchema.usda

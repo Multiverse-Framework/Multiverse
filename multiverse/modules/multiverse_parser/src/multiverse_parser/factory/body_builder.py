@@ -1,14 +1,15 @@
 #!/usr/bin/env python3.10
 
 from __future__ import annotations
-
 from typing import Optional, Dict, List
+
 import numpy
-from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
 from .geom_builder import GeomBuilder, GeomProperty, GeomInertial
 from .joint_builder import JointBuilder, JointProperty
 from ..utils import xform_cache, modify_name, diagonalize_inertia, shift_center_of_mass, shift_inertia_tensor
+
+from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 
 
 class BodyBuilder:

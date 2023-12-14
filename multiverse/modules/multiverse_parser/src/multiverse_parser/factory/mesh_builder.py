@@ -5,9 +5,10 @@ import os
 from typing import List
 
 import numpy
-from pxr import Usd, UsdGeom
 
 from ..utils import modify_name
+
+from pxr import Usd, UsdGeom
 
 
 @dataclass(init=False)

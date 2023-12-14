@@ -2,13 +2,14 @@
 
 from typing import List, Union, Optional, Sequence
 from dataclasses import dataclass
-
-import numpy
-from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf
-from mujoco import mjtJoint
 from enum import Enum
 
+import numpy
+from mujoco import mjtJoint
+
 from ..utils import modify_name, xform_cache
+
+from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf
 
 
 class JointType(Enum):

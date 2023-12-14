@@ -2,10 +2,10 @@
 
 from typing import Optional
 
-from pxr import Usd, UsdGeom
-
 from .body_builder import BodyBuilder
 from ..utils import modify_name
+
+from pxr import Usd, UsdGeom
 
 
 def setup_stage(file_path: str) -> Usd.Stage:

@@ -5,6 +5,7 @@ import os
 from typing import Optional, List
 
 import numpy
+
 from pxr import Usd, Sdf, UsdShade, Gf
 
 

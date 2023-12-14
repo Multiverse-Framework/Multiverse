@@ -72,4 +72,8 @@ void wrapUsdMujocoTokens()
     _AddToken(cls, "MujocoBodyAPI", UsdMujocoTokens->MujocoBodyAPI);
     _AddToken(cls, "mjBodyPos", UsdMujocoTokens->mjBodyPos);
     _AddToken(cls, "mjBodyQuat", UsdMujocoTokens->mjBodyQuat);
+    _AddToken(cls, "MujocoJointAPI", UsdMujocoTokens->MujocoJointAPI);
+    _AddToken(cls, "mjJointType", UsdMujocoTokens->mjJointType);
+    _AddToken(cls, "mjJointPos", UsdMujocoTokens->mjJointPos);
+    _AddToken(cls, "mjJointAxis", UsdMujocoTokens->mjJointAxis);
 }
