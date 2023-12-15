@@ -123,6 +123,10 @@
     </body>
   </worldbody>
 
+  <equality>
+    <joint name="equality_1" joint1="shoulder_pan_joint" joint2="shoulder_lift_joint"/>
+  </equality>
+
   <actuator>
     <general class="size3" name="shoulder_pan" joint="shoulder_pan_joint"/>
     <general class="size3" name="shoulder_lift" joint="shoulder_lift_joint"/>

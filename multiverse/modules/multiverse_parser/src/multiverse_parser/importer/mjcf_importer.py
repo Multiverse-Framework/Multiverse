@@ -52,6 +52,7 @@ class MjcfImporter(Importer):
             inertia_source: InertiaSource = InertiaSource.FROM_SRC,
             default_rgba: Optional[numpy.ndarray] = None
     ) -> None:
+        self._joint_builders: Dict[str, JointBuilder] = {}
         try:
             self._mj_model = mujoco.MjModel.from_xml_path(filename=file_path)
         except ValueError as e:
@@ -92,15 +93,17 @@ class MjcfImporter(Importer):
             for child_body_builder in body_builder.child_body_builders:
                 child_body_builder.compute_and_set_inertial()
 
+        self._import_equality()
+
         self._world_builder.export()
 
         return self.tmp_file_path if save_file_path is None else self.save_tmp_model(file_path=save_file_path)
 
     def _import_config(self):
-        mujoco = UsdMujoco.Mujoco.Define(self._world_builder.stage, "/mujoco")
-        mujoco.CreateMjModelAttr(self._config.model_name)
+        usd_mujoco = UsdMujoco.Mujoco.Define(self._world_builder.stage, "/mujoco")
+        usd_mujoco.CreateMjModelAttr(self._config.model_name)
 
-        mujoco_option_api = UsdMujoco.MujocoOptionAPI.Apply(mujoco.GetPrim())
+        mujoco_option_api = UsdMujoco.MujocoOptionAPI.Apply(usd_mujoco.GetPrim())
         mujoco_option_api.CreateMjTimeStepAttr(self.mj_model.opt.timestep)
 
     def import_body(self, mj_body) -> BodyBuilder:
@@ -155,13 +158,11 @@ class MjcfImporter(Importer):
 
         return body_builder
 
-    def import_joints(self, mj_body, body_builder: BodyBuilder) -> List[JointBuilder]:
-        joint_builders = []
+    def import_joints(self, mj_body, body_builder: BodyBuilder):
         for joint_id in range(mj_body.jntadr[0], mj_body.jntadr[0] + mj_body.jntnum[0]):
             joint_builder = self._import_joint(mj_body, body_builder, joint_id)
             if joint_builder is not None:
-                joint_builders.append(joint_builder)
-        return joint_builders
+                self._joint_builders[joint_id] = joint_builder
 
     def _import_joint(self, mj_body, body_builder: BodyBuilder, joint_id: int) -> Optional[JointBuilder]:
         mj_joint = self.mj_model.joint(joint_id)
@@ -358,6 +359,22 @@ class MjcfImporter(Importer):
         specular_color = numpy.array([float(mat_specular) for _ in range(3)])
 
         return diffuse_color, emissive_color, specular_color
+
+    def _import_equality(self):
+        equality_prim = UsdMujoco.MujocoEquality.Define(self._world_builder.stage, "/mujoco/equality")
+        for equality_id in range(self.mj_model.neq):
+            equality = self.mj_model.equality(equality_id)
+            if equality.type == mujoco.mjtEq.mjEQ_JOINT:
+                equality_name = equality.name
+                joint1_id = equality.obj1id[0]
+                joint2_id = equality.obj2id[0]
+                joint1_path = self._joint_builders[joint1_id].joint.GetPath()
+                joint2_path = self._joint_builders[joint2_id].joint.GetPath()
+                mujoco_equality_joint_api = UsdMujoco.MujocoEqualityJointAPI.Apply(equality_prim.GetPrim(), equality_name)
+                mujoco_equality_joint_api.CreateMjEqualityJointJoint1Rel().SetTargets([joint1_path])
+                mujoco_equality_joint_api.CreateMjEqualityJointJoint2Rel().SetTargets([joint2_path])
+                mujoco_equality_joint_api.CreateMjEqualityJointPolycoefAttr(equality.data[:5])
+
 
     @property
     def world_builder(self) -> WorldBuilder:

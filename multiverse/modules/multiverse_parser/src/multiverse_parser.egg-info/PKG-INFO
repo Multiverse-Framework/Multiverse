@@ -8,7 +8,7 @@ Project-URL: Bug Tracker, https://github.com/Multiverse-Framework/Multiverse/iss
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
-Requires-Python: >=3.10
+Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 
 # Multiverse Parser

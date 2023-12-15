@@ -33,14 +33,19 @@ else
     # Specify the file path
     USD_MUJOCO_CMAKE_PATH="$USD_SRC_DIR/plugin/CMakeLists.txt"
 
-    # Specify the line to add
-    LINE_TO_ADD="add_subdirectory(usdMujoco)"
+    # Loop through each folder in the directory
+    for USD_PLUGIN in $USD_SRC_DIR/plugin/*; do
+        if [ -d "$USD_PLUGIN" ]; then
+            # Specify the line to add
+            LINE_TO_ADD="add_subdirectory($(basename $USD_PLUGIN))"
 
-    # Check if the line already exists in the file
-    if ! grep -Fxq "$LINE_TO_ADD" "$USD_MUJOCO_CMAKE_PATH"; then
-        # Add the line to the file
-        echo "\n$LINE_TO_ADD" >> $USD_MUJOCO_CMAKE_PATH
-    fi
+            # Check if the line already exists in the file
+            if ! grep -Fxq "$LINE_TO_ADD" "$USD_MUJOCO_CMAKE_PATH"; then
+                # Add the line to the file
+                echo "\n$LINE_TO_ADD" >> $USD_MUJOCO_CMAKE_PATH
+            fi
+        fi
+    done
     
     python3 $USD_SRC_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
 fi

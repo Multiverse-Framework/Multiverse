@@ -14,7 +14,7 @@ from ..factory import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomBu
     JointProperty
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
-from pxr import Gf
+from pxr import UsdUrdf, Gf
 
 
 def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
@@ -58,6 +58,8 @@ class UrdfImporter(Importer):
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         self._world_builder = WorldBuilder(self.tmp_file_path)
 
+        self._import_config()
+
         body_builder = self._world_builder.add_body(body_name=self._config.model_name)
         if self._config.model_name != self._urdf_model.get_root():
             print(f"Root link {self._urdf_model.get_root()} is not the model name {self._config.model_name}, "
@@ -77,6 +79,10 @@ class UrdfImporter(Importer):
         self._world_builder.export()
 
         return self.tmp_file_path if save_file_path is None else self.save_tmp_model(file_path=save_file_path)
+
+    def _import_config(self) -> None:
+        usd_urdf = UsdUrdf.Urdf.Define(self._world_builder.stage, "/urdf")
+        usd_urdf.CreateUrdfNameAttr(self._config.model_name)
 
     def _import_body_and_joint(self, urdf_link_name) -> None:
         if urdf_link_name not in self._urdf_model.child_map:
@@ -114,6 +120,8 @@ class UrdfImporter(Importer):
         body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to_xform=relative_to_xform)
 
         self._import_inertial(body=self._urdf_model.link_map[child_body_name], body_builder=body_builder)
+
+        urdf_link_api = UsdUrdf.UrdfLinkAPI.Apply(body_builder.xform.GetPrim())
 
         return body_builder
 
@@ -264,9 +272,8 @@ class UrdfImporter(Importer):
 
     def _import_joint(self, joint: urdf.Joint, parent_body_name: str, child_body_name: str) -> Optional[JointBuilder]:
         joint_type = JointType.from_string(joint.type)
-        joint_pos, _ = get_joint_pos_and_quat(joint)
-        joint_pos = Gf.Vec3d(joint_pos)
 
+        joint_builder = None
         if joint_type != JointType.FIXED and joint_type != JointType.NONE:
             parent_body_builder = self._world_builder.get_body_builder(parent_body_name)
             child_body_builder = self._world_builder.get_body_builder(child_body_name)
@@ -281,6 +288,8 @@ class UrdfImporter(Importer):
             body1_to_body2_transform = body2_transform * body1_transform.GetInverse()
             body1_to_body2_pos = body1_to_body2_transform.ExtractTranslation()
 
+            joint_pos, _ = get_joint_pos_and_quat(joint)
+            joint_pos = Gf.Vec3d(joint_pos)
             joint_pos = body1_rot.GetInverse().Transform(joint_pos - body1_to_body2_pos)
 
             joint_property = JointProperty(
@@ -300,4 +309,9 @@ class UrdfImporter(Importer):
                 joint_builder.set_limit(lower=joint.limit.lower,
                                         upper=joint.limit.upper)
 
-        return None
+            urdf_joint_api = UsdUrdf.UrdfJointAPI.Apply(joint_builder.joint.GetPrim())
+            urdf_joint_api.CreateUrdfJointTypeAttr(joint.type)
+            urdf_joint_api.CreateUrdfJointOriginXyzAttr(Gf.Vec3f(*joint.origin.xyz))
+            urdf_joint_api.CreateUrdfJointOriginRpyAttr(Gf.Vec3f(*joint.origin.rpy))
+
+        return joint_builder

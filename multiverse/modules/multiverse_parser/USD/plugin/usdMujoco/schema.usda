@@ -28,7 +28,7 @@ class Mujoco "Mujoco"
     prepend apiSchemas = ["MujocoOptionAPI"]
 )
 {
-    string mujoco:model = "" (
+    string mujoco:model (
         customData = {
             string apiName = "mjModel"
         }
@@ -38,6 +38,12 @@ class Mujoco "Mujoco"
 }
 
 class "MujocoOptionAPI" (
+    customData = {
+        string className = "MujocoOptionAPI"
+    }
+
+    doc = """This element is in one-to-one correspondence with the low level structure mjOption contained in the field mjModel.opt of mjModel."""
+
     inherits = </APISchemaBase>
 )
 {
@@ -50,7 +56,61 @@ class "MujocoOptionAPI" (
     )
 }
 
+class MujocoEquality "MujocoEquality" 
+(
+    customData = {
+        string className = "MujocoEquality"
+    }
+    doc = """This is a grouping element for equality constraints."""
+    inherits = </Typed>
+)
+{
+}
+
+class "MujocoEqualityJointAPI" (
+    customData = {
+        string className = "MujocoEqualityJointAPI"
+        token apiSchemaType = "multipleApply"
+        token propertyNamespacePrefix = "mujoco"
+    }
+
+    doc = """This element constrains the position or angle of one joint to be a quartic polynomial of another joint."""
+
+    inherits = </APISchemaBase>
+)
+{
+    rel joint1 (
+        customData = {
+            string apiName = "mjEqualityJointJoint1"
+        }
+        displayName = "Equality Joint1 Name"
+        doc = "Name of the first joint."
+    )
+
+    rel joint2 (
+        customData = {
+            string apiName = "mjEqualityJointJoint2"
+        }
+        displayName = "Equality Joint2 Name"
+        doc = "Name of the second joint."
+    )
+
+    float[] polycoef (
+        customData = {
+            string apiName = "mjEqualityJointPolycoef"
+        }
+        displayName = "Equality Joint Polycoef"
+        doc = "Coefficients a0 … a4 of the quartic polynomial."
+    )
+}
+
 class "MujocoBodyAPI" (
+    customData = {
+        string className = "MujocoBodyAPI"
+    }
+
+    doc = """This element creates a body."""
+
     inherits = </APISchemaBase>
 )
 {
@@ -72,6 +132,12 @@ class "MujocoBodyAPI" (
 }
 
 class "MujocoJointAPI" (
+    customData = {
+        string className = "MujocoJointAPI"
+    }
+
+    doc = """This element creates a joint."""
+
     inherits = </APISchemaBase>
 )
 {
@@ -102,6 +168,12 @@ class "MujocoJointAPI" (
 }
 
 class "MujocoGeomAPI" (
+    customData = {
+        string className = "MujocoGeomAPI"
+    }
+
+    doc = """This element creates a geom, and attaches it rigidly to the body within which the geom is defined."""
+
     inherits = </APISchemaBase>
 )
 {
