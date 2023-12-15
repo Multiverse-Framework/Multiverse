@@ -23,16 +23,97 @@ class Urdf "Urdf"
     customData = {
         string className = "Urdf"
     }
+
     doc = """Urdf"""
+
     inherits = </Typed>
 )
 {
     string urdf:name (
         customData = {
-            string apiName = "urdfName"
+            string apiName = "name"
         }
-        displayName = "Urdf Name"
+        displayName = "Name"
         doc = """The name of the model."""
+    )
+}
+
+class "UrdfOriginAPI" (
+    customData = {
+        string className = "UrdfOriginAPI"
+    }
+
+    doc = """The origin properties."""
+
+    inherits = </APISchemaBase>
+)
+{
+    point3f urdf:origin:xyz (
+        customData = {
+            string apiName = "xyz"
+        }
+        displayName = "Origin Position"
+        doc = "Represents the x, y, z offset."
+    )
+
+    float3 urdf:origin:rpy (
+        customData = {
+            string apiName = "rpy"
+        }
+        displayName = "Origin Roll Pitch Yaw"
+        doc = "Represents the fixed axis roll, pitch and yaw angles in radians."
+    )
+}
+
+class "UrdfGeometryAPI" (
+    customData = {
+        string className = "UrdfGeometryAPI"
+    }
+
+    doc = """The shape of the object. """
+
+    inherits = </APISchemaBase>
+)
+{
+    uniform token urdf:geometry:type (
+        customData = {
+            string apiName = "type"
+        }
+        allowedTokens = ["box", "cylinder", "sphere", "mesh"]
+        displayName = "Geometry Type"
+        doc = """The shape of the visual object."""
+    )
+
+    float3 urdf:geometry:size (
+        customData = {
+            string apiName = "size"
+        }
+        displayName = "Geometry Size"
+        doc = """The size of the box."""
+    )
+
+    float urdf:geometry:radius (
+        customData = {
+            string apiName = "radius"
+        }
+        displayName = "Geometry Radius"
+        doc = """The radius of the cylinder or sphere."""
+    )
+
+    float urdf:geometry:length (
+        customData = {
+            string apiName = "length"
+        }
+        displayName = "Geometry Length"
+        doc = """The length of the cylinder."""
+    )
+
+    string urdf:geometry:fileName (
+        customData = {
+            string apiName = "fileName"
+        }
+        displayName = "Geometry File Name"
+        doc = """The path to the mesh file."""
     )
 }
 
@@ -60,26 +141,10 @@ class "UrdfJointAPI" (
 {
     uniform token urdf:joint:type (
         customData = {
-            string apiName = "urdfJointType"
+            string apiName = "type"
         }
         allowedTokens = ["revolute", "continuous", "prismatic", "fixed", "floating", "planar"]
         displayName = "Joint Type"
         doc = """Type of the joint."""
-    )
-
-    point3f urdf:joint:origin:xyz (
-        customData = {
-            string apiName = "urdfJointOriginXyz"
-        }
-        displayName = "Joint Position"
-        doc = "Represents the x, y, z offset."
-    )
-
-    float3 urdf:joint:origin:rpy (
-        customData = {
-            string apiName = "urdfJointOriginRpy"
-        }
-        displayName = "Joint Roll Pitch Yaw"
-        doc = "Represents the rotation around fixed axis: first roll around x, then pitch around y and finally yaw around z."
     )
 }

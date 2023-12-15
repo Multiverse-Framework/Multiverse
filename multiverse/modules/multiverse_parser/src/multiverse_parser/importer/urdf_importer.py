@@ -29,8 +29,14 @@ def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
 
 
 class UrdfImporter(Importer):
-    _world_builder: WorldBuilder
-    _urdf_model: urdf.URDF
+    world_builder: WorldBuilder
+    urdf_model: urdf.URDF
+    _geom_type_map: Dict = {
+        urdf.Box: GeomType.CUBE,
+        urdf.Sphere: GeomType.SPHERE,
+        urdf.Cylinder: GeomType.CYLINDER,
+        urdf.Mesh: GeomType.MESH,
+    }
 
     def __init__(
             self,
@@ -41,11 +47,12 @@ class UrdfImporter(Importer):
             inertia_source: InertiaSource = InertiaSource.FROM_SRC,
             default_rgba: Optional[numpy.ndarray] = None,
     ) -> None:
+        self._world_builder = None
         with open(file_path) as file:
             urdf_string = file.read()
         self._urdf_model = urdf.URDF.from_xml_string(urdf_string)
 
-        model_name = self._urdf_model.name
+        model_name = self.urdf_model.name
         super().__init__(file_path=file_path, config=Configuration(
             model_name=model_name,
             with_physics=with_physics,
@@ -60,42 +67,42 @@ class UrdfImporter(Importer):
 
         self._import_config()
 
-        body_builder = self._world_builder.add_body(body_name=self._config.model_name)
-        if self._config.model_name != self._urdf_model.get_root():
-            print(f"Root link {self._urdf_model.get_root()} is not the model name {self._config.model_name}, "
+        body_builder = self.world_builder.add_body(body_name=self._config.model_name)
+        if self._config.model_name != self.urdf_model.get_root():
+            print(f"Root link {self.urdf_model.get_root()} is not the model name {self._config.model_name}, "
                   f"add it as a root body.")
-            body_builder = self._world_builder.add_body(body_name=self._urdf_model.get_root(),
-                                                        parent_body_name=self._config.model_name)
+            body_builder = self.world_builder.add_body(body_name=self.urdf_model.get_root(),
+                                                       parent_body_name=self._config.model_name)
             body_builder.enable_rigid_body()
 
-        self._import_inertial(body=self._urdf_model.link_map[self._urdf_model.get_root()],
+        self._import_inertial(body=self.urdf_model.link_map[self.urdf_model.get_root()],
                               body_builder=body_builder)
 
-        self._import_geoms(link=self._urdf_model.link_map[self._urdf_model.get_root()],
+        self._import_geoms(link=self.urdf_model.link_map[self.urdf_model.get_root()],
                            body_builder=body_builder)
 
-        self._import_body_and_joint(urdf_link_name=self._urdf_model.get_root())
+        self._import_body_and_joint(urdf_link_name=self.urdf_model.get_root())
 
-        self._world_builder.export()
+        self.world_builder.export()
 
         return self.tmp_file_path if save_file_path is None else self.save_tmp_model(file_path=save_file_path)
 
     def _import_config(self) -> None:
-        usd_urdf = UsdUrdf.Urdf.Define(self._world_builder.stage, "/urdf")
-        usd_urdf.CreateUrdfNameAttr(self._config.model_name)
+        usd_urdf = UsdUrdf.Urdf.Define(self.world_builder.stage, "/urdf")
+        usd_urdf.CreateNameAttr(self._config.model_name)
 
     def _import_body_and_joint(self, urdf_link_name) -> None:
-        if urdf_link_name not in self._urdf_model.child_map:
+        if urdf_link_name not in self.urdf_model.child_map:
             return
 
-        for child_joint_name, child_urdf_link_name in self._urdf_model.child_map[urdf_link_name]:
-            child_urdf_joint: urdf.Joint = self._urdf_model.joint_map[child_joint_name]
+        for child_joint_name, child_urdf_link_name in self.urdf_model.child_map[urdf_link_name]:
+            child_urdf_joint: urdf.Joint = self.urdf_model.joint_map[child_joint_name]
 
             body_builder = self._import_body(body_name=urdf_link_name,
                                              child_body_name=child_urdf_link_name,
                                              joint=child_urdf_joint)
 
-            self._import_geoms(link=self._urdf_model.link_map[child_urdf_link_name], body_builder=body_builder)
+            self._import_geoms(link=self.urdf_model.link_map[child_urdf_link_name], body_builder=body_builder)
 
             if self._config.with_physics:
                 self._import_joint(joint=child_urdf_joint,
@@ -108,18 +115,18 @@ class UrdfImporter(Importer):
         joint_pos, joint_quat = get_joint_pos_and_quat(joint)
 
         if self._config.with_physics and joint.type != "fixed":
-            body_builder = self._world_builder.add_body(body_name=child_body_name,
-                                                        parent_body_name=self._config.model_name)
+            body_builder = self.world_builder.add_body(body_name=child_body_name,
+                                                       parent_body_name=self._config.model_name)
             body_builder.enable_rigid_body()
         else:
-            body_builder = self._world_builder.add_body(body_name=child_body_name,
-                                                        parent_body_name=body_name)
+            body_builder = self.world_builder.add_body(body_name=child_body_name,
+                                                       parent_body_name=body_name)
 
-        relative_to_body_builder = self._world_builder.get_body_builder(body_name=body_name)
+        relative_to_body_builder = self.world_builder.get_body_builder(body_name=body_name)
         relative_to_xform = relative_to_body_builder.xform
         body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to_xform=relative_to_xform)
 
-        self._import_inertial(body=self._urdf_model.link_map[child_body_name], body_builder=body_builder)
+        self._import_inertial(body=self.urdf_model.link_map[child_body_name], body_builder=body_builder)
 
         urdf_link_api = UsdUrdf.UrdfLinkAPI.Apply(body_builder.xform.GetPrim())
 
@@ -184,50 +191,58 @@ class UrdfImporter(Importer):
         geom_is_collidable = isinstance(geom, urdf.Collision)
         geom_rgba = self._config.default_rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
             else geom.material.color.rgba
+        geom_type = self._geom_type_map[type(geom.geometry)]
+        geom_density = 1000.0
+        geom_property = GeomProperty(geom_name=geom_name,
+                                     geom_type=geom_type,
+                                     is_visible=geom_is_visible,
+                                     is_collidable=geom_is_collidable,
+                                     rgba=geom_rgba,
+                                     density=geom_density)
+        geom_builder = body_builder.add_geom(geom_property=geom_property)
+        geom_builder.build()
+
+        tmp_origin_mesh_file_path = ""
         if type(geom.geometry) is urdf.Box:
-            geom_property = GeomProperty(geom_name=geom_name,
-                                         geom_type=GeomType.CUBE,
-                                         is_visible=geom_is_visible,
-                                         is_collidable=geom_is_collidable,
-                                         rgba=geom_rgba)
-            geom_builder = body_builder.add_geom(geom_property=geom_property)
-            geom_builder.build()
             geom_scale = numpy.array([geom.geometry.size[i] / 2.0 for i in range(3)])
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
         elif type(geom.geometry) is urdf.Sphere:
-            geom_property = GeomProperty(geom_name=geom_name,
-                                         geom_type=GeomType.SPHERE,
-                                         is_visible=geom_is_visible,
-                                         is_collidable=geom_is_collidable,
-                                         rgba=geom_rgba)
-            geom_builder = body_builder.add_geom(geom_property=geom_property)
-            geom_builder.build()
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             geom_builder.set_attribute(radius=geom.geometry.radius)
         elif type(geom.geometry) is urdf.Cylinder:
-            geom_property = GeomProperty(geom_name=geom_name,
-                                         geom_type=GeomType.CYLINDER,
-                                         is_visible=geom_is_visible,
-                                         is_collidable=geom_is_collidable,
-                                         rgba=geom_rgba)
-            geom_builder = body_builder.add_geom(geom_property=geom_property)
-            geom_builder.build()
             geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             geom_builder.set_attribute(radius=geom.geometry.radius, height=geom.geometry.length)
         elif type(geom.geometry) is urdf.Mesh:
-            geom_property = GeomProperty(geom_name=geom_name,
-                                         geom_type=GeomType.MESH,
-                                         is_visible=geom_is_visible,
-                                         is_collidable=geom_is_collidable,
-                                         rgba=geom_rgba)
-            geom_builder = body_builder.add_geom(geom_property=geom_property)
             source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)
             if source_mesh_file_path is not None:
-                tmp_mesh_file_path = self.import_mesh(mesh_file_path=source_mesh_file_path)
-                geom_builder.add_mesh(mesh_file_path=tmp_mesh_file_path)
+                tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
+                    mesh_file_path=source_mesh_file_path)
+                tmp_origin_mesh_file_path = "file://" + tmp_origin_mesh_file_path
+                geom_builder.add_mesh(mesh_file_path=tmp_usd_mesh_file_path)
                 geom_builder.build()
                 geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
+        else:
+            raise ValueError(f"Geom type {type(geom.geometry)} not implemented.")
+
+        geom_xform_prim = geom_builder.xform.GetPrim()
+        urdf_geometry_api = UsdUrdf.UrdfGeometryAPI.Apply(geom_xform_prim)
+        urdf_geom_type_str = "box" if type(geom.geometry) is urdf.Box \
+            else "sphere" if type(geom.geometry) is urdf.Sphere \
+            else "cylinder" if type(geom.geometry) is urdf.Cylinder \
+            else "mesh" if type(geom.geometry) is urdf.Mesh \
+            else None
+        if urdf_geom_type_str is None:
+            raise NotImplementedError(f"Geom type {type(geom.geometry)} not implemented.")
+        urdf_geometry_api.CreateTypeAttr(urdf_geom_type_str)
+        if type(geom.geometry) is urdf.Box:
+            urdf_geometry_api.CreateSizeAttr(Gf.Vec3f(*geom.geometry.size))
+        elif type(geom.geometry) is urdf.Sphere:
+            urdf_geometry_api.CreateRadiusAttr(geom.geometry.radius)
+        elif type(geom.geometry) is urdf.Cylinder:
+            urdf_geometry_api.CreateLengthAttr(geom.geometry.length)
+        elif type(geom.geometry) is urdf.Mesh:
+            urdf_geometry_api.CreateFileNameAttr(tmp_origin_mesh_file_path)
         else:
             raise ValueError(f"Geom type {type(geom.geometry)} not implemented.")
 
@@ -275,8 +290,8 @@ class UrdfImporter(Importer):
 
         joint_builder = None
         if joint_type != JointType.FIXED and joint_type != JointType.NONE:
-            parent_body_builder = self._world_builder.get_body_builder(parent_body_name)
-            child_body_builder = self._world_builder.get_body_builder(child_body_name)
+            parent_body_builder = self.world_builder.get_body_builder(parent_body_name)
+            child_body_builder = self.world_builder.get_body_builder(child_body_name)
 
             parent_prim = parent_body_builder.xform.GetPrim()
             child_prim = child_body_builder.xform.GetPrim()
@@ -310,8 +325,22 @@ class UrdfImporter(Importer):
                                         upper=joint.limit.upper)
 
             urdf_joint_api = UsdUrdf.UrdfJointAPI.Apply(joint_builder.joint.GetPrim())
-            urdf_joint_api.CreateUrdfJointTypeAttr(joint.type)
-            urdf_joint_api.CreateUrdfJointOriginXyzAttr(Gf.Vec3f(*joint.origin.xyz))
-            urdf_joint_api.CreateUrdfJointOriginRpyAttr(Gf.Vec3f(*joint.origin.rpy))
+            urdf_joint_api.CreateTypeAttr(joint.type)
+
+            urdf_origin_api = UsdUrdf.UrdfOriginAPI.Apply(joint_builder.joint.GetPrim())
+            urdf_origin_api.CreateXyzAttr(Gf.Vec3f(*joint.origin.xyz))
+            urdf_origin_api.CreateRpyAttr(Gf.Vec3f(*joint.origin.rpy))
 
         return joint_builder
+
+    @property
+    def world_builder(self) -> WorldBuilder:
+        return self._world_builder
+
+    @property
+    def urdf_model(self) -> urdf.URDF:
+        return self._urdf_model
+
+    @property
+    def geom_type_map(self) -> Dict:
+        return self._geom_type_map

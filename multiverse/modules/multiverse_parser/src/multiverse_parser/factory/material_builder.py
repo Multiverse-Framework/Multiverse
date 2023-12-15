@@ -51,8 +51,13 @@ class MaterialBuilder:
                 self.apply_material(material_property, _mesh_prim)
         else:
             mesh_prim.ApplyAPI(UsdShade.MaterialBindingAPI)
+            material_name = mesh_prim.GetName()
+            if material_name[:3] == "SM_":
+                material_name = material_name[3:]
+            if material_name[:2] != "M_":
+                material_name = f"M_{material_name}"
             material = UsdShade.Material.Define(self._stage,
-                                                Sdf.Path("/Materials").AppendChild(f"M_{mesh_prim.GetName()}"))
+                                                Sdf.Path("/Materials").AppendChild(material_name))
             material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
             material_binding_api.Bind(material)
 

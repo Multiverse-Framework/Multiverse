@@ -15,11 +15,13 @@ pxr_plugin(${PXR_PACKAGE}
     PUBLIC_CLASSES
         mujoco
         mujocoOptionAPI
+        mujocoAsset
+        mujocoMesh
         mujocoBodyAPI
         mujocoJointAPI
         mujocoGeomAPI
         mujocoEquality
-        mujocoEqualityJointAPI
+        mujocoEqualityJoint
         tokens
 
     PYTHON_CPPFILES
@@ -31,12 +33,14 @@ pxr_plugin(${PXR_PACKAGE}
     PYMODULE_CPPFILES
         module.cpp
         wrapMujoco.cpp 
-        wrapMujocoOptionAPI.cpp   
+        wrapMujocoOptionAPI.cpp
+        wrapMujocoAsset.cpp
+        wrapMujocoMesh.cpp
         wrapMujocoBodyAPI.cpp
         wrapMujocoJointAPI.cpp
         wrapMujocoGeomAPI.cpp
         wrapMujocoEquality.cpp
-        wrapMujocoEqualityJointAPI.cpp
+        wrapMujocoEqualityJoint.cpp
 
     RESOURCE_FILES
         generatedSchema.usda

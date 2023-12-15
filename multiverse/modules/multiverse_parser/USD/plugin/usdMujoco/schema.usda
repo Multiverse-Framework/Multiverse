@@ -23,14 +23,17 @@ class Mujoco "Mujoco"
     customData = {
         string className = "Mujoco"
     }
+
     doc = """Mujoco"""
+
     inherits = </Typed>
+
     prepend apiSchemas = ["MujocoOptionAPI"]
 )
 {
     string mujoco:model (
         customData = {
-            string apiName = "mjModel"
+            string apiName = "model"
         }
         displayName = "MuJoCo Model"
         doc = """The name of the model."""
@@ -49,10 +52,58 @@ class "MujocoOptionAPI" (
 {
     float mujoco:option:timestep = 0.002 (
         customData = {
-            string apiName = "mjTimeStep"
+            string apiName = "timeStep"
         }
         displayName = "Time Step"
         doc = "Simulation time step in seconds."
+    )
+}
+
+class MujocoAsset "MujocoAsset"
+(
+    customData = {
+        string className = "MujocoAsset"
+    }
+
+    doc = """This is a grouping element for assets."""
+
+    inherits = </Typed>
+)
+{
+}
+
+class MujocoMesh "MujocoMesh" (
+    customData = {
+        string className = "MujocoMesh"
+    }
+
+    doc = """This element creates a mesh asset, which can then be referenced from geoms."""
+
+    inherits = </Typed>
+)
+{
+    float[] vertex (
+        customData = {
+            string apiName = "vertex"
+        }
+        displayName = "Mesh Vertex"
+        doc = "Vertex 3D position data."
+    )
+
+    int[] face (
+        customData = {
+            string apiName = "face"
+        }
+        displayName = "Mesh Face"
+        doc = "Faces of the mesh. Each face is a sequence of 3 vertex indices, in counter-clockwise order."
+    )
+
+    float[] normal (
+        customData = {
+            string apiName = "normal"
+        }
+        displayName = "Mesh Normal"
+        doc = "Vertex 3D normal data."
     )
 }
 
@@ -61,43 +112,43 @@ class MujocoEquality "MujocoEquality"
     customData = {
         string className = "MujocoEquality"
     }
+
     doc = """This is a grouping element for equality constraints."""
+
     inherits = </Typed>
 )
 {
 }
 
-class "MujocoEqualityJointAPI" (
+class MujocoEqualityJoint "MujocoEqualityJoint" (
     customData = {
-        string className = "MujocoEqualityJointAPI"
-        token apiSchemaType = "multipleApply"
-        token propertyNamespacePrefix = "mujoco"
+        string className = "MujocoEqualityJoint"
     }
 
     doc = """This element constrains the position or angle of one joint to be a quartic polynomial of another joint."""
 
-    inherits = </APISchemaBase>
+    inherits = </Typed>
 )
 {
-    rel joint1 (
+    rel mujoco:equality:joint:joint1 (
         customData = {
-            string apiName = "mjEqualityJointJoint1"
+            string apiName = "joint1"
         }
-        displayName = "Equality Joint1 Name"
-        doc = "Name of the first joint."
+        displayName = "Equality Joint1"
+        doc = "First joint."
     )
 
-    rel joint2 (
+    rel mujoco:equality:joint:joint2 (
         customData = {
-            string apiName = "mjEqualityJointJoint2"
+            string apiName = "joint2"
         }
-        displayName = "Equality Joint2 Name"
-        doc = "Name of the second joint."
+        displayName = "Equality Joint2"
+        doc = "Second joint."
     )
 
-    float[] polycoef (
+    float[] mujoco:equality:joint:polycoef (
         customData = {
-            string apiName = "mjEqualityJointPolycoef"
+            string apiName = "polycoef"
         }
         displayName = "Equality Joint Polycoef"
         doc = "Coefficients a0 … a4 of the quartic polynomial."
@@ -116,7 +167,7 @@ class "MujocoBodyAPI" (
 {
     point3f mujoco:body:pos (
         customData = {
-            string apiName = "mjBodyPos"
+            string apiName = "pos"
         }
         displayName = "Body Position"
         doc = "The 3D position (x, y, z) of the body frame, in the parent coordinate frame."
@@ -124,7 +175,7 @@ class "MujocoBodyAPI" (
 
     quatf mujoco:body:quat = (1, 0, 0, 0) (
         customData = {
-            string apiName = "mjBodyQuat"
+            string apiName = "quat"
         }
         displayName = "Body Quaternion"
         doc = "The quaternion (w, x, y, z) of the body frame, in the parent coordinate frame."
@@ -143,7 +194,7 @@ class "MujocoJointAPI" (
 {
     uniform token mujoco:joint:type = "hinge" (
         customData = {
-            string apiName = "mjJointType"
+            string apiName = "type"
         }
         allowedTokens = ["ball", "slide", "hinge"]
         displayName = "Joint Type"
@@ -152,7 +203,7 @@ class "MujocoJointAPI" (
 
     point3f mujoco:joint:pos (
         customData = {
-            string apiName = "mjJointPos"
+            string apiName = "pos"
         }
         displayName = "Joint Position"
         doc = "The 3D position (x, y, z) of the joint, specified in the frame of the body where the joint is defined."
@@ -160,7 +211,7 @@ class "MujocoJointAPI" (
 
     vector3f mujoco:joint:axis = (0, 0, 1) (
         customData = {
-            string apiName = "mjJointAxis"
+            string apiName = "axis"
         }
         displayName = "Joint Axis"
         doc = "This attribute specifies the axis of rotation for hinge joints and the direction of translation for slide joints."
@@ -179,16 +230,24 @@ class "MujocoGeomAPI" (
 {
     uniform token mujoco:geom:type = "sphere" (
         customData = {
-            string apiName = "mjGeomType"
+            string apiName = "type"
         }
         allowedTokens = ["plane", "hfield", "sphere", "capsule", "ellipsoid", "cylinder", "box", "mesh", "sdf"]
         displayName = "Geom Type"
         doc = """Type of geometric shape."""
     )
 
+    rel mujoco:geom:mesh (
+        customData = {
+            string apiName = "mesh"
+        }
+        displayName = "Geom Mesh"
+        doc = "The mesh asset."
+    )
+
     vector3f mujoco:geom:size (
         customData = {
-            string apiName = "mjGeomSize"
+            string apiName = "size"
         }
         displayName = "Geom Size"
         doc = "Geom size parameters. The number of required parameters and their meaning depends on the geom type as documented under the type attribute."
@@ -196,7 +255,7 @@ class "MujocoGeomAPI" (
 
     point3f mujoco:geom:pos (
         customData = {
-            string apiName = "mjGeomPos"
+            string apiName = "pos"
         }
         displayName = "Geom Position"
         doc = "The 3D position (x, y, z) of the geom, specified in the frame of the body where the geom is defined."
@@ -204,7 +263,7 @@ class "MujocoGeomAPI" (
 
     quatf mujoco:geom:quat = (1, 0, 0, 0) (
         customData = {
-            string apiName = "mjGeomQuat"
+            string apiName = "quat"
         }
         displayName = "Geom Quaternion"
         doc = "The quaternion (w, x, y, z) of the geom frame, specified in the frame of the body where the geom is defined."

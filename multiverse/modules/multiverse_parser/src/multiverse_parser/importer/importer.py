@@ -9,7 +9,8 @@ import subprocess
 from typing import Optional, Dict, Tuple
 
 from ..factory.config import Configuration
-from ..utils import import_obj, import_stl, import_dae, export_usd
+from ..utils import (import_obj, import_stl, import_dae,
+                     export_obj, export_stl, export_dae, export_usd)
 
 
 def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
@@ -36,13 +37,12 @@ class Importer:
     tmp_meshdir_path: str
     tmp_file_path: str
     _tmp_file_name: str = "tmp"
-    _mesh_file_paths: Dict[str, str] = {}
+    _mesh_file_paths: Dict[str, Tuple[str, str]] = {}
 
     def __init__(self, file_path: str, config: Configuration = Configuration()):
         self._source_file_path = file_path
         self._tmp_file_path, self._tmp_meshdir_path = self._create_tmp_paths()
         self._config = config
-        self._processes = []
         atexit.register(self.clean_up)
 
     def _create_tmp_paths(self) -> Tuple[str, str]:
@@ -68,25 +68,30 @@ class Importer:
         """
         raise NotImplementedError
 
-    def import_mesh(self, mesh_file_path: str) -> str:
+    def import_mesh(self, mesh_file_path: str) -> Tuple[str, str]:
         """
         Import the mesh from the mesh file path to the temporary mesh directory path.
         :param mesh_file_path: Path to the mesh file.
-        :return: Path to the imported mesh.
+        :return: Paths to the imported mesh.
         """
-        if mesh_file_path in self._mesh_file_paths:
-            return self._mesh_file_paths[mesh_file_path]
+        if mesh_file_path in self.mesh_file_paths:
+            return self.mesh_file_paths[mesh_file_path]
 
         file_name = os.path.basename(mesh_file_path).split(".")[0]
         file_extension = os.path.splitext(mesh_file_path)[1]
-        tmp_file_path = os.path.join(self.tmp_meshdir_path, f"{file_extension[1:]}", f"{file_name}.usda")
+        tmp_origin_file_path = os.path.join(os.path.dirname(self.tmp_meshdir_path),
+                                            file_extension[1:],
+                                            f"{file_name}{file_extension}")
+        tmp_usd_file_path = os.path.join(self.tmp_meshdir_path,
+                                         f"from_{file_extension[1:]}",
+                                         f"{file_name}.usda")
 
         if file_extension == ".obj":
-            cmd = import_obj(mesh_file_path) + export_usd(tmp_file_path)
+            cmd = import_obj(mesh_file_path) + export_obj(tmp_origin_file_path) + export_usd(tmp_usd_file_path)
         elif file_extension == ".stl":
-            cmd = import_stl(mesh_file_path) + export_usd(tmp_file_path)
+            cmd = import_stl(mesh_file_path) + export_stl(tmp_origin_file_path) + export_usd(tmp_usd_file_path)
         elif file_extension == ".dae":
-            cmd = import_dae(mesh_file_path) + export_usd(tmp_file_path)
+            cmd = import_dae(mesh_file_path) + export_dae(tmp_origin_file_path) + export_usd(tmp_usd_file_path)
         else:
             raise ValueError(f"Unsupported file extension {file_extension}.")
 
@@ -96,16 +101,14 @@ class Importer:
                f"import bpy"
                f"{cmd}"]
 
-        self._processes.append(subprocess.Popen(cmd))
+        process = subprocess.Popen(cmd)
+        process.wait()
 
-        self._mesh_file_paths[mesh_file_path] = tmp_file_path
+        self.mesh_file_paths[mesh_file_path] = tmp_usd_file_path, tmp_origin_file_path
 
-        return tmp_file_path
+        return tmp_usd_file_path, tmp_origin_file_path
 
     def save_tmp_model(self, file_path: str) -> None:
-        for process in self._processes:
-            process.wait()
-
         file_name = os.path.basename(file_path).split(".")[0]
         file_dir = os.path.dirname(file_path)
         tmp_file_dir = os.path.dirname(self.tmp_file_path)
@@ -123,11 +126,11 @@ class Importer:
         if os.path.exists(tmp_meshdir):
             os.rename(tmp_meshdir, new_mesh_dir)
 
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open(file_path, encoding="utf-8") as file:
                 file_contents = file.read()
 
-            tmp_path = "@" + os.path.dirname(self._tmp_meshdir_path)
-            new_path = "@./" + file_name
+            tmp_path = os.path.dirname(self._tmp_meshdir_path)
+            new_path = file_name
             file_contents = file_contents.replace(tmp_path, new_path)
 
             with open(file_path, "w", encoding="utf-8") as file:
@@ -150,6 +153,10 @@ class Importer:
     @property
     def tmp_meshdir_path(self) -> str:
         return self._tmp_meshdir_path
+
+    @property
+    def mesh_file_paths(self) -> Dict[str, Tuple[str, str]]:
+        return self._mesh_file_paths
 
     @property
     def source_file_path(self) -> str:

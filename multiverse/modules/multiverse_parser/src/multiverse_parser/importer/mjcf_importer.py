@@ -52,6 +52,7 @@ class MjcfImporter(Importer):
             inertia_source: InertiaSource = InertiaSource.FROM_SRC,
             default_rgba: Optional[numpy.ndarray] = None
     ) -> None:
+        self._world_builder = None
         self._joint_builders: Dict[str, JointBuilder] = {}
         try:
             self._mj_model = mujoco.MjModel.from_xml_path(filename=file_path)
@@ -76,7 +77,7 @@ class MjcfImporter(Importer):
 
         self._import_config()
 
-        self._world_builder.add_body(body_name=self._config.model_name)
+        self.world_builder.add_body(body_name=self._config.model_name)
 
         for body_id in range(1, self.mj_model.nbody):
             mj_body = self.mj_model.body(body_id)
@@ -89,44 +90,46 @@ class MjcfImporter(Importer):
 
         if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_MESH:
             body_name = self.mj_model.body(1).name
-            body_builder = self._world_builder.get_body_builder(body_name=body_name)
+            body_builder = self.world_builder.get_body_builder(body_name=body_name)
             for child_body_builder in body_builder.child_body_builders:
                 child_body_builder.compute_and_set_inertial()
 
         self._import_equality()
 
-        self._world_builder.export()
+        self.world_builder.export()
 
         return self.tmp_file_path if save_file_path is None else self.save_tmp_model(file_path=save_file_path)
 
     def _import_config(self):
-        usd_mujoco = UsdMujoco.Mujoco.Define(self._world_builder.stage, "/mujoco")
-        usd_mujoco.CreateMjModelAttr(self._config.model_name)
+        usd_mujoco = UsdMujoco.Mujoco.Define(self.world_builder.stage, "/mujoco")
+        usd_mujoco.CreateModelAttr(self._config.model_name)
 
         mujoco_option_api = UsdMujoco.MujocoOptionAPI.Apply(usd_mujoco.GetPrim())
-        mujoco_option_api.CreateMjTimeStepAttr(self.mj_model.opt.timestep)
+        mujoco_option_api.CreateTimeStepAttr(self.mj_model.opt.timestep)
+
+        UsdMujoco.MujocoAsset.Define(self.world_builder.stage, "/mujoco/asset")
 
     def import_body(self, mj_body) -> BodyBuilder:
         body_name = mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
 
         if mj_body.id == 1:
-            body_builder = self._world_builder.add_body(body_name=body_name,
-                                                        parent_body_name=self._config.model_name,
-                                                        body_id=mj_body.id)
+            body_builder = self.world_builder.add_body(body_name=body_name,
+                                                       parent_body_name=self._config.model_name,
+                                                       body_id=mj_body.id)
         else:
             parent_mj_body = self.mj_model.body(mj_body.parentid)
             parent_body_name = get_body_name(parent_mj_body)
             if self._config.with_physics and mj_body.jntnum[0] > 0:
-                body_builder = self._world_builder.add_body(body_name=body_name,
-                                                            parent_body_name=self._config.model_name,
-                                                            body_id=mj_body.id)
+                body_builder = self.world_builder.add_body(body_name=body_name,
+                                                           parent_body_name=self._config.model_name,
+                                                           body_id=mj_body.id)
                 body_builder.enable_rigid_body()
             else:
-                body_builder = self._world_builder.add_body(body_name=body_name,
-                                                            parent_body_name=parent_body_name,
-                                                            body_id=mj_body.id)
+                body_builder = self.world_builder.add_body(body_name=body_name,
+                                                           parent_body_name=parent_body_name,
+                                                           body_id=mj_body.id)
 
-            relative_to_body_builder = self._world_builder.get_body_builder(body_name=parent_body_name)
+            relative_to_body_builder = self.world_builder.get_body_builder(body_name=parent_body_name)
             relative_to_xform = relative_to_body_builder.xform
             body_pos = mj_body.pos
             body_quat = numpy.array([mj_body.quat[1],
@@ -153,8 +156,8 @@ class MjcfImporter(Importer):
                                           principal_axes=body_principal_axes)
 
             mujoco_body_api = UsdMujoco.MujocoBodyAPI.Apply(body_builder.xform.GetPrim())
-            mujoco_body_api.CreateMjBodyPosAttr(Gf.Vec3f(*body_pos))
-            mujoco_body_api.CreateMjBodyQuatAttr(Gf.Quatf(body_quat[3], *body_quat[:3]))
+            mujoco_body_api.CreatePosAttr(Gf.Vec3f(*body_pos))
+            mujoco_body_api.CreateQuatAttr(Gf.Quatf(body_quat[3], *body_quat[:3]))
 
         return body_builder
 
@@ -174,7 +177,7 @@ class MjcfImporter(Importer):
 
         parent_body_id = mj_body.parentid
         parent_body_name = get_body_name(self.mj_model.body(parent_body_id))
-        parent_body_builder = self._world_builder.get_body_builder(body_name=parent_body_name)
+        parent_body_builder = self.world_builder.get_body_builder(body_name=parent_body_name)
         joint_property = JointProperty(
             joint_name=joint_name,
             joint_parent_prim=parent_body_builder.xform.GetPrim(),
@@ -200,9 +203,9 @@ class MjcfImporter(Importer):
         if mj_joint_type is None:
             raise NotImplementedError(f"Joint type {mj_joint.type} not supported.")
 
-        mujoco_joint_api.CreateMjJointTypeAttr(mj_joint_type)
-        mujoco_joint_api.CreateMjJointPosAttr(Gf.Vec3f(*mj_joint.pos))
-        mujoco_joint_api.CreateMjJointAxisAttr(Gf.Vec3f(*mj_joint.axis))
+        mujoco_joint_api.CreateTypeAttr(mj_joint_type)
+        mujoco_joint_api.CreatePosAttr(Gf.Vec3f(*mj_joint.pos))
+        mujoco_joint_api.CreateAxisAttr(Gf.Vec3f(*mj_joint.axis))
 
         return joint_builder
 
@@ -242,6 +245,23 @@ class MjcfImporter(Importer):
             geom_builder = body_builder.add_geom(geom_property=geom_property)
             geom_builder.build()
 
+            geom_xform_prim = geom_builder.xform.GetPrim()
+            mujoco_geom_api = UsdMujoco.MujocoGeomAPI.Apply(geom_xform_prim)
+            mj_geom_type_str = "plane" if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE \
+                else "box" if mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX \
+                else "sphere" if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE \
+                else "cylinder" if mj_geom.type == mujoco.mjtGeom.mjGEOM_CYLINDER \
+                else "capsule" if mj_geom.type == mujoco.mjtGeom.mjGEOM_CAPSULE \
+                else "mesh" if mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH \
+                else None
+            if mj_geom_type_str is None:
+                raise NotImplementedError(f"Geom type {mj_geom.type} not supported.")
+            mujoco_geom_api.CreateTypeAttr(mj_geom_type_str)
+            mujoco_geom_api.CreateSizeAttr(Gf.Vec3f(*mj_geom.size))
+            mujoco_geom_api.CreatePosAttr(Gf.Vec3f(*geom_pos))
+            mujoco_geom_api.CreateQuatAttr(Gf.Quatf(geom_quat[3], *geom_quat[:3]))
+
+            mujoco_asset_prim = self.world_builder.stage.GetPrimAtPath("/mujoco/asset")
             if mj_geom.type in [mujoco.mjtGeom.mjGEOM_PLANE]:
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=numpy.array([50, 50, 1]))
             elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_BOX]:
@@ -266,6 +286,17 @@ class MjcfImporter(Importer):
                                              face_vertex_indices=face_vertex_indices)
                 mesh_builder.create_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
 
+                mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild(mesh_name)
+                mujoco_mesh = UsdMujoco.MujocoMesh.Define(self.world_builder.stage, mujoco_mesh_path)
+                vertex = points.reshape(-1, 3)
+                mujoco_mesh.CreateVertexAttr(vertex)
+                normal = normals.reshape(-1, 3)
+                mujoco_mesh.CreateNormalAttr(normal)
+                face = face_vertex_indices.reshape(-1, 3)
+                mujoco_mesh.CreateFaceAttr(face)
+
+                mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
+
                 mat_id = mj_geom.matid
                 if mat_id != -1:
                     diffuse_color, emissive_color, specular_color = self.get_material_data(mat_id=mat_id)
@@ -280,21 +311,6 @@ class MjcfImporter(Importer):
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             else:
                 raise NotImplementedError(f"Geom type {mj_geom.type} not supported.")
-
-        mujoco_geom_api = UsdMujoco.MujocoGeomAPI.Apply(geom_builder.xform.GetPrim())
-        mj_geom_type = "plane" if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE \
-            else "box" if mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX \
-            else "sphere" if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE \
-            else "cylinder" if mj_geom.type == mujoco.mjtGeom.mjGEOM_CYLINDER \
-            else "capsule" if mj_geom.type == mujoco.mjtGeom.mjGEOM_CAPSULE \
-            else "mesh" if mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH \
-            else None
-        if mj_geom_type is None:
-            raise NotImplementedError(f"Geom type {mj_geom.type} not supported.")
-        mujoco_geom_api.CreateMjGeomTypeAttr(mj_geom_type)
-        mujoco_geom_api.CreateMjGeomSizeAttr(Gf.Vec3f(*mj_geom.size))
-        mujoco_geom_api.CreateMjGeomPosAttr(Gf.Vec3f(*geom_pos))
-        mujoco_geom_api.CreateMjGeomQuatAttr(Gf.Quatf(geom_quat[3], *geom_quat[:3]))
 
         return geom_builder
 
@@ -361,7 +377,7 @@ class MjcfImporter(Importer):
         return diffuse_color, emissive_color, specular_color
 
     def _import_equality(self):
-        equality_prim = UsdMujoco.MujocoEquality.Define(self._world_builder.stage, "/mujoco/equality")
+        equality_prim = UsdMujoco.MujocoEquality.Define(self.world_builder.stage, "/mujoco/equality")
         for equality_id in range(self.mj_model.neq):
             equality = self.mj_model.equality(equality_id)
             if equality.type == mujoco.mjtEq.mjEQ_JOINT:
@@ -370,11 +386,12 @@ class MjcfImporter(Importer):
                 joint2_id = equality.obj2id[0]
                 joint1_path = self._joint_builders[joint1_id].joint.GetPath()
                 joint2_path = self._joint_builders[joint2_id].joint.GetPath()
-                mujoco_equality_joint_api = UsdMujoco.MujocoEqualityJointAPI.Apply(equality_prim.GetPrim(), equality_name)
-                mujoco_equality_joint_api.CreateMjEqualityJointJoint1Rel().SetTargets([joint1_path])
-                mujoco_equality_joint_api.CreateMjEqualityJointJoint2Rel().SetTargets([joint2_path])
-                mujoco_equality_joint_api.CreateMjEqualityJointPolycoefAttr(equality.data[:5])
-
+                mujoco_equality_joint = UsdMujoco.MujocoEqualityJoint.Define(self.world_builder.stage,
+                                                                             equality_prim.GetPath().AppendChild(
+                                                                                 equality_name))
+                mujoco_equality_joint.CreateJoint1Rel().SetTargets([joint1_path])
+                mujoco_equality_joint.CreateJoint2Rel().SetTargets([joint2_path])
+                mujoco_equality_joint.CreatePolycoefAttr(equality.data[:5])
 
     @property
     def world_builder(self) -> WorldBuilder:
