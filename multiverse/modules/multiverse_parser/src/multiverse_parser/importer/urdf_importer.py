@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.10
+#!/usr/bin/env python3
 
 import os
 from math import degrees
@@ -24,7 +24,7 @@ def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
     else:
         joint_pos = numpy.array([0.0, 0.0, 0.0])
         joint_rpy = numpy.array([0.0, 0.0, 0.0])
-    joint_quat = Rotation.from_euler('xyz', joint_rpy).as_quat(canonical=False)
+    joint_quat = Rotation.from_euler('xyz', joint_rpy).as_quat()
     return joint_pos, joint_quat
 
 
@@ -130,7 +130,7 @@ class UrdfImporter(Importer):
                                                            inertia_tensor=body_inertia_tensor,
                                                            quat=Rotation.from_euler('xyz',
                                                                                     body.inertial.origin.rpy).inv()
-                                                           .as_quat(canonical=False))
+                                                           .as_quat())
 
                 body_diagonal_inertia, body_principal_axes = diagonalize_inertia(inertia_tensor=body_inertia_tensor)
 
@@ -170,7 +170,7 @@ class UrdfImporter(Importer):
         else:
             geom_pos = numpy.array([0.0, 0.0, 0.0])
             geom_rot = numpy.array([0.0, 0.0, 0.0])
-        geom_quat = Rotation.from_euler('xyz', geom_rot).as_quat(canonical=False)
+        geom_quat = Rotation.from_euler('xyz', geom_rot).as_quat()
 
         geom_is_visible = isinstance(geom, urdf.Visual)
         geom_is_collidable = isinstance(geom, urdf.Collision)
@@ -262,7 +262,7 @@ class UrdfImporter(Importer):
 
         return mesh_file_path
 
-    def _import_joint(self, joint: urdf.Joint, parent_body_name: str, child_body_name: str) -> JointBuilder | None:
+    def _import_joint(self, joint: urdf.Joint, parent_body_name: str, child_body_name: str) -> Optional[JointBuilder]:
         joint_type = JointType.from_string(joint.type)
         joint_pos, _ = get_joint_pos_and_quat(joint)
         joint_pos = Gf.Vec3d(joint_pos)

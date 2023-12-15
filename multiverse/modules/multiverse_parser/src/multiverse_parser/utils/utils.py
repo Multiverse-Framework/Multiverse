@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.10
+#!/usr/bin/env python3
 
 import numpy
 from scipy.spatial.transform import Rotation
@@ -14,7 +14,7 @@ def diagonalize_inertia(inertia_tensor) -> (numpy.ndarray, numpy.ndarray):
     if numpy.linalg.det(eigenvectors) < 0:
         eigenvectors[:, 0] = -eigenvectors[:, 0]
 
-    rotation_quat = Rotation.from_matrix(eigenvectors).as_quat(canonical=True)
+    rotation_quat = Rotation.from_matrix(eigenvectors).as_quat()
 
     return diagonal_inertia, rotation_quat
 

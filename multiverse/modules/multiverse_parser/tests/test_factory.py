@@ -168,7 +168,8 @@ class MultiShape:
             self._mass += shape.mass
             self._center_of_mass += shape.mass * shape.center_of_mass
             self._inertia_tensor += shape.inertia_tensor
-        self._center_of_mass /= self._mass
+        if self._mass > 0.0:
+            self._center_of_mass /= self._mass
 
     def plot(self, display_wireframe: bool = True):
         fig = graph_objects.Figure()
@@ -411,7 +412,7 @@ class UsdMesh(MultiShape):
         quat = Rotation.from_quat(xform_quat) * Rotation.from_quat(quat)
 
         self._density = density
-        super().__init__(pos=pos, quat=quat.as_quat(canonical=False))
+        super().__init__(pos=pos, quat=quat.as_quat())
 
     def apply_transform(self,
                         pos: numpy.ndarray = numpy.zeros((1, 3)),
@@ -470,7 +471,7 @@ class FactoryTestCase(unittest.TestCase):
         inertia_tensor = numpy.diag([random.uniform(0.1, 1.0) for _ in range(3)])
         pos = numpy.array([[random.uniform(-1.0, 1.0) for _ in range(3)]])
         rotation = Rotation.from_euler('xyz', [random.uniform(0.0, 360.0) for _ in range(3)], degrees=True)
-        quat = rotation.as_quat(canonical=False)
+        quat = rotation.as_quat()
         inertia_tensor_rotate = shift_inertia_tensor(mass=1.0,
                                                      inertia_tensor=inertia_tensor,
                                                      pos=pos,
@@ -479,7 +480,7 @@ class FactoryTestCase(unittest.TestCase):
         inertia_tensor_recover = shift_inertia_tensor(mass=1.0,
                                                       inertia_tensor=inertia_tensor_rotate,
                                                       quat=Rotation.from_quat(rotation_quat).inv().as_quat(
-                                                          canonical=False))
+                                                          ))
         inertia_tensor_rotate_recover = shift_inertia_tensor(mass=1.0,
                                                              inertia_tensor=inertia_tensor_recover,
                                                              quat=rotation_quat)
@@ -540,7 +541,7 @@ class FactoryTestCase(unittest.TestCase):
         # self.assertEqual(physics_mass_api_2.GetDensityAttr().Get(), 1.5)
         # self.assertEqual(physics_mass_api_2.GetCenterOfMassAttr().Get(), (0.1, 0.2, 0.3))
         # self.assertEqual(physics_mass_api_2.GetDiagonalInertiaAttr().Get(), (1.0, 1.0, 1.0))
-        # inertia_quat = rotation.as_quat(canonical=False)
+        # inertia_quat = rotation.as_quat()
         # self.assertAlmostEqual(physics_mass_api_2.GetPrincipalAxesAttr().Get().GetReal(), inertia_quat[3])
         # numpy.testing.assert_array_almost_equal(physics_mass_api_2.GetPrincipalAxesAttr().Get().GetImaginary(),
         #                                         inertia_quat[:3])
@@ -612,7 +613,7 @@ class FactoryTestCase(unittest.TestCase):
         b = 2.0
         c = 3.0
         pos = numpy.array([[3.0, 1.0, 2.0]])
-        quat = Rotation.from_euler('xyz', [30, 45, 60], degrees=True).as_quat(canonical=False)
+        quat = Rotation.from_euler('xyz', [30, 45, 60], degrees=True).as_quat()
         density = 1.0
 
         box = Box(a=a, b=b, c=c, density=density, pos=pos, quat=quat)
@@ -630,7 +631,7 @@ class FactoryTestCase(unittest.TestCase):
         c = random.uniform(0.1, 0.5)
         pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
         random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
-        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat()
         density = 2.0
 
         box = Box(a=a, b=b, c=c, density=density, pos=pos, quat=quat)
@@ -663,7 +664,7 @@ class FactoryTestCase(unittest.TestCase):
         density = 1.0
         pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
         random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
-        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat()
 
         sphere = Sphere(radius=radius,
                         density=density,
@@ -703,7 +704,7 @@ class FactoryTestCase(unittest.TestCase):
         density = 1.0
         pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
         random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
-        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat()
 
         cylinder = Cylinder(radius=radius,
                             height=height,
@@ -723,7 +724,7 @@ class FactoryTestCase(unittest.TestCase):
     def test_multiple_boxes_with_random_pos_and_quat(self):
         pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
         random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
-        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat()
         offset = Rotation.from_quat(quat).apply(numpy.array([[0.0, 0.125, 0.0]]))
 
         pos_1 = pos + offset
@@ -768,7 +769,7 @@ class FactoryTestCase(unittest.TestCase):
                     pos=numpy.array([[0.0, 0.5, 0.0]]))
         cylinder = Cylinder(radius=0.05, height=1.0,
                             density=density,
-                            quat=Rotation.from_euler(seq='x', angles=90, degrees=True).as_quat(canonical=False),
+                            quat=Rotation.from_euler(seq='x', angles=90, degrees=True).as_quat(),
                             num_segments=6,
                             num_slices=16)
 
@@ -798,7 +799,7 @@ class FactoryTestCase(unittest.TestCase):
     def test_multiple_shapes_with_random_pos_and_quat(self):
         pos = numpy.array([[random.uniform(-0.5, 0.5), random.uniform(-0.3, 0.3), random.uniform(-0.2, 0.2)]])
         random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
-        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat()
 
         density = 1.0
         box_1 = Box(a=0.5, b=0.1, c=0.5,
@@ -809,7 +810,7 @@ class FactoryTestCase(unittest.TestCase):
                     pos=numpy.array([[0.0, 0.5, 0.0]]))
         cylinder = Cylinder(radius=0.05, height=1.0,
                             density=density,
-                            quat=Rotation.from_euler(seq='x', angles=90, degrees=True).as_quat(canonical=False),
+                            quat=Rotation.from_euler(seq='x', angles=90, degrees=True).as_quat(),
                             num_segments=6,
                             num_slices=16)
 
@@ -869,7 +870,7 @@ class FactoryTestCase(unittest.TestCase):
                             random.uniform(-0.03, 0.03),
                             random.uniform(-0.02, 0.02)]])
         random_angles = [random.uniform(0, 360), random.uniform(0, 360), random.uniform(0, 360)]
-        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat(canonical=False)
+        quat = Rotation.from_euler('xyz', random_angles, degrees=True).as_quat()
 
         self.test_inertia_of_mesh_1(pos=pos, quat=quat)
 
@@ -892,11 +893,11 @@ class FactoryTestCase(unittest.TestCase):
         usd_mesh_0 = UsdMesh(mesh_file_path=mesh_file_path_0,
                              density=density,
                              pos=numpy.array([[0.0, 0.0, 0.09357351479123255]]),
-                             quat=Rotation.from_euler(seq='y', angles=-90, degrees=True).as_quat(canonical=False))
+                             quat=Rotation.from_euler(seq='y', angles=-90, degrees=True).as_quat())
         usd_mesh_1 = UsdMesh(mesh_file_path=mesh_file_path_1,
                              density=density,
                              pos=numpy.array([[0.0, 0.0, 0.03113409208382618]]),
-                             quat=Rotation.from_euler(seq='y', angles=-90, degrees=True).as_quat(canonical=False))
+                             quat=Rotation.from_euler(seq='y', angles=-90, degrees=True).as_quat())
 
         usd_mesh = MultiShape()
         usd_mesh.add_shape(usd_mesh_0)
@@ -919,14 +920,14 @@ class FactoryTestCase(unittest.TestCase):
         usd_mesh_0 = UsdMesh(mesh_file_path=mesh_file_path_0,
                              density=density,
                              pos=numpy.array([[6.729613291636444e-7, -3.658243672095132e-7, 0.09357351479123255]]),
-                             quat=Rotation.from_matrix(rot_0).as_quat(canonical=False))
+                             quat=Rotation.from_matrix(rot_0).as_quat())
         rot_1 = numpy.array([[0.000009939201965791788, -0.000018943927687808948, 0.9999999997711702],
                              [0.609143830480996, -0.7930597665640686, -0.000021078070432167806],
                              [0.7930597667818939, 0.6091438305511049, 0.000003657195485007314]]).T
         usd_mesh_1 = UsdMesh(mesh_file_path=mesh_file_path_1,
                              density=density,
                              pos=numpy.array([[1.5050970612118353e-7, 5.029437897684572e-7, 0.03113409208382618]]),
-                             quat=Rotation.from_matrix(rot_1).as_quat(canonical=False))
+                             quat=Rotation.from_matrix(rot_1).as_quat())
 
         usd_mesh = MultiShape()
         usd_mesh.add_shape(usd_mesh_0)

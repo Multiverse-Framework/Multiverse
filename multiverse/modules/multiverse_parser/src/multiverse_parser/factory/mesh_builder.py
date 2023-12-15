@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.10
+#!/usr/bin/env python3
 
 from dataclasses import dataclass
 import os
@@ -8,7 +8,7 @@ import numpy
 
 from ..utils import modify_name
 
-from pxr import Usd, UsdGeom
+from pxr import Usd, UsdGeom, Sdf
 
 
 @dataclass(init=False)
@@ -61,7 +61,12 @@ class MeshBuilder:
         self._meshes_properties = {}
         if os.path.exists(mesh_file_path):
             stage = Usd.Stage.Open(mesh_file_path)
-            xform = UsdGeom.Xform(stage.GetDefaultPrim())
+
+            if not stage.GetDefaultPrim().IsValid():
+                xform_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
+                xform = UsdGeom.Xform.Define(stage, Sdf.Path("/").AppendChild(xform_name))
+            else:
+                xform = UsdGeom.Xform(stage.GetDefaultPrim())
             for mesh in [UsdGeom.Mesh(prim_child) for prim_child in xform.GetPrim().GetChildren() if
                          UsdGeom.Mesh(prim_child)]:
                 mesh_name = mesh.GetPrim().GetName()

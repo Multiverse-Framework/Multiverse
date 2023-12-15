@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.10
+#!/usr/bin/env python3
 
 import os.path
 from math import degrees
@@ -257,7 +257,7 @@ class MjcfImporter(Importer):
                 mesh_id = mj_geom.dataid[0]
                 mesh_name = self.mj_model.mesh(mesh_id).name
                 points, normals, face_vertex_counts, face_vertex_indices = self.get_mesh_data(mesh_id=mesh_id)
-                tmp_mesh_file_path = os.path.join(self._tmp_mesh_dir, "usd", f"{mesh_name}.usda")
+                tmp_mesh_file_path = os.path.join(self._tmp_meshdir_path, "usd", f"{mesh_name}.usda")
                 mesh_builder = MeshBuilder(mesh_file_path=tmp_mesh_file_path)
                 mesh_property = MeshProperty(points=points,
                                              normals=normals,

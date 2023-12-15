@@ -1,10 +1,11 @@
-#!/usr/bin/env python3.10
+#!/usr/bin/env python3
 
 import atexit
 import os
 import random
 import shutil
 import string
+import subprocess
 from typing import Optional, Dict, Tuple
 
 from ..factory.config import Configuration
@@ -32,15 +33,16 @@ def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
 class Importer:
     source_file_path: str
     config: Configuration
-    _tmp_mesh_dir: str
-    _tmp_file_path: str
+    tmp_meshdir_path: str
+    tmp_file_path: str
     _tmp_file_name: str = "tmp"
     _mesh_file_paths: Dict[str, str] = {}
 
     def __init__(self, file_path: str, config: Configuration = Configuration()):
         self._source_file_path = file_path
-        self._tmp_file_path, self._tmp_mesh_dir = self._create_tmp_paths()
+        self._tmp_file_path, self._tmp_meshdir_path = self._create_tmp_paths()
         self._config = config
+        self._processes = []
         atexit.register(self.clean_up)
 
     def _create_tmp_paths(self) -> Tuple[str, str]:
@@ -80,20 +82,30 @@ class Importer:
         tmp_file_path = os.path.join(self.tmp_meshdir_path, f"{file_extension[1:]}", f"{file_name}.usda")
 
         if file_extension == ".obj":
-            import_obj(mesh_file_path)
+            cmd = import_obj(mesh_file_path) + export_usd(tmp_file_path)
         elif file_extension == ".stl":
-            import_stl(mesh_file_path)
+            cmd = import_stl(mesh_file_path) + export_usd(tmp_file_path)
         elif file_extension == ".dae":
-            import_dae(mesh_file_path)
+            cmd = import_dae(mesh_file_path) + export_usd(tmp_file_path)
         else:
             raise ValueError(f"Unsupported file extension {file_extension}.")
 
-        export_usd(tmp_file_path)
+        cmd = ["blender",
+               "--background",
+               "--python-expr",
+               f"import bpy"
+               f"{cmd}"]
+
+        self._processes.append(subprocess.Popen(cmd))
+
         self._mesh_file_paths[mesh_file_path] = tmp_file_path
 
         return tmp_file_path
 
     def save_tmp_model(self, file_path: str) -> None:
+        for process in self._processes:
+            process.wait()
+
         file_name = os.path.basename(file_path).split(".")[0]
         file_dir = os.path.dirname(file_path)
         tmp_file_dir = os.path.dirname(self.tmp_file_path)
@@ -114,7 +126,7 @@ class Importer:
             with open(file_path, "r", encoding="utf-8") as file:
                 file_contents = file.read()
 
-            tmp_path = "@" + os.path.dirname(self._tmp_mesh_dir)
+            tmp_path = "@" + os.path.dirname(self._tmp_meshdir_path)
             new_path = "@./" + file_name
             file_contents = file_contents.replace(tmp_path, new_path)
 
@@ -137,7 +149,7 @@ class Importer:
 
     @property
     def tmp_meshdir_path(self) -> str:
-        return self._tmp_mesh_dir
+        return self._tmp_meshdir_path
 
     @property
     def source_file_path(self) -> str:

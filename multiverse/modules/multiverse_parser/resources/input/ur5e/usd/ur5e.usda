@@ -1,0 +1,589 @@
+#usda 1.0
+(
+    defaultPrim = "ur5e"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "ur5e"
+{
+    def Xform "base_link" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.0044333315, 0.0044333315, 0.0072)
+        float physics:mass = 4
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        bool physics:rigidBodyEnabled = 1
+
+        def Xform "base_link_geom_visual_0" (
+            prepend references = @./../meshes/usd/dae/base.usda@</base>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "eSeries_UR5e_013" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </_materials/JointGrey>
+                color3f[] primvars:displayColor = [(0.7, 0.7, 0.7)]
+                float[] primvars:displayOpacity = [1]
+
+                over "JointGrey" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/JointGrey>
+                }
+
+                over "Black" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/Black>
+                }
+            }
+        }
+
+        def Xform "base_link_geom_collision_0" (
+            prepend references = @./../meshes/usd/stl/base.usda@</base>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "base" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+                bool physics:collisionEnabled = 1
+                color3f[] primvars:displayColor = [(1, 0, 0)]
+                float[] primvars:displayOpacity = [0]
+                token visibility = "invisible"
+            }
+        }
+
+        def PhysicsRevoluteJoint "shoulder_pan_joint"
+        {
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </ur5e/base_link>
+            rel physics:body1 = </ur5e/shoulder_link>
+            bool physics:collisionEnabled = 0
+            point3f physics:localPos0 = (0, 0, 0.163)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -360
+            float physics:upperLimit = 360
+        }
+    }
+
+    def Xform "shoulder_link" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.00666, 0.010267496, 0.010267496)
+        float physics:mass = 3.7
+        quatf physics:principalAxes = (0.70710677, 0, 0.70710677, 0)
+        bool physics:rigidBodyEnabled = 1
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0.163, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Xform "shoulder_link_geom_visual_0" (
+            prepend references = @./../meshes/usd/dae/shoulder.usda@</shoulder>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "eSeries_UR5e_001" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </_materials/JointGrey>
+                color3f[] primvars:displayColor = [(0.7, 0.7, 0.7)]
+                float[] primvars:displayOpacity = [1]
+
+                over "JointGrey" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/JointGrey>
+                }
+
+                over "Black" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/Black>
+                }
+
+                over "URBlue" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/URBlue>
+                }
+            }
+        }
+
+        def Xform "shoulder_link_geom_collision_0" (
+            prepend references = @./../meshes/usd/stl/shoulder.usda@</shoulder>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "shoulder" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+                bool physics:collisionEnabled = 1
+                color3f[] primvars:displayColor = [(1, 0, 0)]
+                float[] primvars:displayOpacity = [0]
+                token visibility = "invisible"
+            }
+        }
+
+        def PhysicsRevoluteJoint "shoulder_lift_joint"
+        {
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </ur5e/shoulder_link>
+            rel physics:body1 = </ur5e/upper_arm_link>
+            bool physics:collisionEnabled = 0
+            point3f physics:localPos0 = (0, 0.138, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.5, -0.5, 0.5, 0.5)
+            quatf physics:localRot1 = (0.7071068, -0.7071068, 0, 0)
+            float physics:lowerLimit = -360
+            float physics:upperLimit = 360
+        }
+    }
+
+    def Xform "upper_arm_link" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0.2125)
+        float3 physics:diagonalInertia = (0.0151074, 0.13388579, 0.13388579)
+        float physics:mass = 8.393
+        quatf physics:principalAxes = (0.70710677, 0, 0.70710677, 0)
+        bool physics:rigidBodyEnabled = 1
+        matrix4d xformOp:transform = ( (2.220446049250313e-16, 0, -1, 0), (0, 1, 0, 0), (1, 0, 2.220446049250313e-16, 0), (0, 0.138, 0.163, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Xform "upper_arm_link_geom_visual_0" (
+            prepend references = @./../meshes/usd/dae/upperarm.usda@</upperarm>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "eSeries_UR5e_069" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </_materials/URBlue>
+                color3f[] primvars:displayColor = [(0.7, 0.7, 0.7)]
+                float[] primvars:displayOpacity = [1]
+
+                over "URBlue" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/URBlue>
+                }
+
+                over "JointGrey" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/JointGrey>
+                }
+
+                over "Black" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/Black>
+                }
+
+                over "LinkGrey" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/LinkGrey>
+                }
+            }
+        }
+
+        def Xform "upper_arm_link_geom_collision_0" (
+            prepend references = @./../meshes/usd/stl/upperarm.usda@</upperarm>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "upperarm" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+                bool physics:collisionEnabled = 1
+                color3f[] primvars:displayColor = [(1, 0, 0)]
+                float[] primvars:displayOpacity = [0]
+                token visibility = "invisible"
+            }
+        }
+
+        def PhysicsRevoluteJoint "elbow_joint"
+        {
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </ur5e/upper_arm_link>
+            rel physics:body1 = </ur5e/forearm_link>
+            bool physics:collisionEnabled = 0
+            point3f physics:localPos0 = (0, -0.131, 0.425)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.7071068, -0.7071068, 0, 0)
+            quatf physics:localRot1 = (0.7071068, -0.7071068, 0, 0)
+            float physics:lowerLimit = -180
+            float physics:upperLimit = 180
+        }
+    }
+
+    def Xform "forearm_link" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0.196)
+        float3 physics:diagonalInertia = (0.004095, 0.03117962, 0.03117962)
+        float physics:mass = 2.275
+        quatf physics:principalAxes = (0.70710677, 0, 0.70710677, 0)
+        bool physics:rigidBodyEnabled = 1
+        matrix4d xformOp:transform = ( (2.220446049250313e-16, 0, -1, 0), (0, 1, 0, 0), (1, 0, 2.220446049250313e-16, 0), (0.425, 0.007000000000000006, 0.1630000000000001, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Xform "forearm_link_geom_visual_0" (
+            prepend references = @./../meshes/usd/dae/forearm.usda@</forearm>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "eSeries_UR5e_028" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </_materials/JointGrey>
+                color3f[] primvars:displayColor = [(0.7, 0.7, 0.7)]
+                float[] primvars:displayOpacity = [1]
+
+                over "JointGrey" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/JointGrey>
+                }
+
+                over "Black" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/Black>
+                }
+
+                over "LinkGrey" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/LinkGrey>
+                }
+
+                over "URBlue" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/URBlue>
+                }
+            }
+        }
+
+        def Xform "forearm_link_geom_collision_0" (
+            prepend references = @./../meshes/usd/stl/forearm.usda@</forearm>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "forearm" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+                bool physics:collisionEnabled = 1
+                color3f[] primvars:displayColor = [(1, 0, 0)]
+                float[] primvars:displayOpacity = [0]
+                token visibility = "invisible"
+            }
+        }
+
+        def PhysicsRevoluteJoint "wrist_1_joint"
+        {
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </ur5e/forearm_link>
+            rel physics:body1 = </ur5e/wrist_1_link>
+            bool physics:collisionEnabled = 0
+            point3f physics:localPos0 = (3.081488e-33, 0, 0.392)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.5, -0.5, 0.5, 0.5)
+            quatf physics:localRot1 = (0.7071068, -0.7071068, 0, 0)
+            float physics:lowerLimit = -360
+            float physics:upperLimit = 360
+        }
+    }
+
+    def Xform "wrist_1_link" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0.127, 0)
+        float3 physics:diagonalInertia = (0.0021942, 0.002559899, 0.002559899)
+        float physics:mass = 1.219
+        quatf physics:principalAxes = (0.70710677, 0, 0.70710677, 0)
+        bool physics:rigidBodyEnabled = 1
+        matrix4d xformOp:transform = ( (-1, 0, -4.440892098500626e-16, 0), (0, 1, 0, 0), (4.440892098500626e-16, 0, -1, 0), (0.817, 0.007000000000000006, 0.16300000000000017, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Xform "wrist_1_link_geom_visual_0" (
+            prepend references = @./../meshes/usd/dae/wrist1.usda@</wrist1>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "eSeries_UR5e_043" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </_materials/JointGrey>
+                color3f[] primvars:displayColor = [(0.7, 0.7, 0.7)]
+                float[] primvars:displayOpacity = [1]
+
+                over "JointGrey" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/JointGrey>
+                }
+
+                over "URBlue" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/URBlue>
+                }
+
+                over "Black" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/Black>
+                }
+            }
+        }
+
+        def Xform "wrist_1_link_geom_collision_0" (
+            prepend references = @./../meshes/usd/stl/wrist1.usda@</wrist1>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "wrist1" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+                bool physics:collisionEnabled = 1
+                color3f[] primvars:displayColor = [(1, 0, 0)]
+                float[] primvars:displayOpacity = [0]
+                token visibility = "invisible"
+            }
+        }
+
+        def PhysicsRevoluteJoint "wrist_2_joint"
+        {
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </ur5e/wrist_1_link>
+            rel physics:body1 = </ur5e/wrist_2_link>
+            bool physics:collisionEnabled = 0
+            point3f physics:localPos0 = (0, 0.127, 0)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (1, 0, 0, 0)
+            quatf physics:localRot1 = (1, 0, 0, 0)
+            float physics:lowerLimit = -360
+            float physics:upperLimit = 360
+        }
+    }
+
+    def Xform "wrist_2_link" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0.1)
+        float3 physics:diagonalInertia = (0.0021942, 0.002559899, 0.002559899)
+        float physics:mass = 1.219
+        quatf physics:principalAxes = (0.70710677, 0, 0.70710677, 0)
+        bool physics:rigidBodyEnabled = 1
+        matrix4d xformOp:transform = ( (-1, 0, -4.440892098500626e-16, 0), (0, 1, 0, 0), (4.440892098500626e-16, 0, -1, 0), (0.817, 0.134, 0.16300000000000017, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Xform "wrist_2_link_geom_visual_0" (
+            prepend references = @./../meshes/usd/dae/wrist2.usda@</wrist2>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "eSeries_UR5e_049" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </_materials/JointGrey>
+                color3f[] primvars:displayColor = [(0.7, 0.7, 0.7)]
+                float[] primvars:displayOpacity = [1]
+
+                over "JointGrey" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/JointGrey>
+                }
+
+                over "URBlue" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/URBlue>
+                }
+
+                over "Black" (
+                    prepend apiSchemas = ["MaterialBindingAPI"]
+                )
+                {
+                    rel material:binding = </_materials/Black>
+                }
+            }
+        }
+
+        def Xform "wrist_2_link_geom_collision_0" (
+            prepend references = @./../meshes/usd/stl/wrist2.usda@</wrist2>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "wrist2" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+                bool physics:collisionEnabled = 1
+                color3f[] primvars:displayColor = [(1, 0, 0)]
+                float[] primvars:displayOpacity = [0]
+                token visibility = "invisible"
+            }
+        }
+
+        def PhysicsRevoluteJoint "wrist_3_joint"
+        {
+            uniform token physics:axis = "Z"
+            rel physics:body0 = </ur5e/wrist_2_link>
+            rel physics:body1 = </ur5e/wrist_3_link>
+            bool physics:collisionEnabled = 0
+            point3f physics:localPos0 = (0, 0, 0.1)
+            point3f physics:localPos1 = (0, 0, 0)
+            quatf physics:localRot0 = (0.7071068, -0.7071068, 0, 0)
+            quatf physics:localRot1 = (0.7071068, -0.7071068, 0, 0)
+            float physics:lowerLimit = -360
+            float physics:upperLimit = 360
+        }
+    }
+
+    def Xform "wrist_3_link" (
+        prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0.0771, 0)
+        float3 physics:diagonalInertia = (0.0000989041, 0.0000989041, 0.00013211719)
+        float physics:mass = 0.1879
+        quatf physics:principalAxes = (0, 0, 0.70710677, 0.70710677)
+        bool physics:rigidBodyEnabled = 1
+        matrix4d xformOp:transform = ( (-1, 0, -4.440892098500626e-16, 0), (0, 1, 0, 0), (4.440892098500626e-16, 0, -1, 0), (0.817, 0.134, 0.06300000000000017, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Xform "wrist_3_link_geom_visual_0" (
+            prepend references = @./../meshes/usd/dae/wrist3.usda@</wrist3>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "eSeries_UR5e_058" (
+                prepend apiSchemas = ["MaterialBindingAPI"]
+            )
+            {
+                rel material:binding = </_materials/LinkGrey>
+                color3f[] primvars:displayColor = [(0.7, 0.7, 0.7)]
+                float[] primvars:displayOpacity = [1]
+            }
+        }
+
+        def Xform "wrist_3_link_geom_collision_0" (
+            prepend references = @./../meshes/usd/stl/wrist3.usda@</wrist3>
+        )
+        {
+            matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+            uniform token[] xformOpOrder = ["xformOp:transform"]
+
+            over "wrist3" (
+                prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI"]
+            )
+            {
+                uniform token physics:approximation = "convexHull"
+                bool physics:collisionEnabled = 1
+                color3f[] primvars:displayColor = [(1, 0, 0)]
+                float[] primvars:displayOpacity = [0]
+                token visibility = "invisible"
+            }
+        }
+    }
+}
+
+def "_materials" (
+    prepend references = [
+        @./../meshes/usd/dae/base.usda@</_materials>,
+        @./../meshes/usd/stl/base.usda@</_materials>,
+        @./../meshes/usd/dae/shoulder.usda@</_materials>,
+        @./../meshes/usd/stl/shoulder.usda@</_materials>,
+        @./../meshes/usd/dae/upperarm.usda@</_materials>,
+        @./../meshes/usd/stl/upperarm.usda@</_materials>,
+        @./../meshes/usd/dae/forearm.usda@</_materials>,
+        @./../meshes/usd/stl/forearm.usda@</_materials>,
+        @./../meshes/usd/dae/wrist1.usda@</_materials>,
+        @./../meshes/usd/stl/wrist1.usda@</_materials>,
+        @./../meshes/usd/dae/wrist2.usda@</_materials>,
+        @./../meshes/usd/stl/wrist2.usda@</_materials>,
+        @./../meshes/usd/dae/wrist3.usda@</_materials>,
+        @./../meshes/usd/stl/wrist3.usda@</_materials>
+    ]
+)
+{
+}
+

@@ -18,7 +18,7 @@ else()
 endif()
 
 add_custom_target(multiverse_parser_build ALL
-    COMMAND ${BIN_DIR}/python3.10 -m build ${CMAKE_CURRENT_SOURCE_DIR} --outdir ${CMAKE_CURRENT_BINARY_DIR}
+    COMMAND python3 -m build ${CMAKE_CURRENT_SOURCE_DIR} --outdir ${CMAKE_CURRENT_BINARY_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Building multiverse_parser package"
     VERBATIM
@@ -26,7 +26,7 @@ add_custom_target(multiverse_parser_build ALL
 
 add_custom_target(multiverse_parser_install ALL
     DEPENDS multiverse_parser_build
-    COMMAND ${BIN_DIR}/python3.10 -m pip install ${CMAKE_CURRENT_BINARY_DIR}/multiverse_parser-0.0.1.tar.gz
+    COMMAND python3 -m pip install ${CMAKE_CURRENT_BINARY_DIR}/multiverse_parser-0.0.1.tar.gz
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Installing multiverse_parser package"
     VERBATIM
