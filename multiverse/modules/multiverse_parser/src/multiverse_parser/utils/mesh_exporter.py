@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 
-from typing import List
-
 clean_up_meshes_script = """
 def clean_up_meshes(bpy, file_path: str) -> None:
-    import os.path
-    
     bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
     for selected_object in bpy.context.selected_objects:
         if selected_object.type != "MESH":
@@ -35,9 +31,13 @@ def clean_up_meshes(bpy, file_path: str) -> None:
 
 
 def export_usd(out_usd: str) -> str:
-    return f"{clean_up_meshes_script}" \
-           f"clean_up_meshes(bpy, '{out_usd}')\n" \
-           f"bpy.ops.wm.usd_export(filepath='{out_usd}', selected_objects_only=True, overwrite_textures=True)"
+    return f"""
+import os.path
+
+{clean_up_meshes_script}
+clean_up_meshes(bpy, '{out_usd}')
+bpy.ops.wm.usd_export(filepath='{out_usd}', selected_objects_only=True, overwrite_textures=True)
+"""
 
 
 def export_dae(out_dae: str) -> str:
@@ -85,6 +85,7 @@ with open(out_mtl, "w") as file:
 
 def export_stl(out_stl: str) -> str:
     return f"""
+import os.path
 
 {clean_up_meshes_script}
 os.makedirs(name=os.path.dirname('{out_stl}'), exist_ok=True)

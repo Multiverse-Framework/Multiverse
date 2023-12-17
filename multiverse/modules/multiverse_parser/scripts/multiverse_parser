@@ -23,25 +23,25 @@ def main():
     )
     parser.add_argument(
         "--physics",
-        action=argparse.BooleanOptionalAction,
+        action='store_true',
         help="Whether to include physics properties or not",
     )
     parser.set_defaults(physics=True)
     parser.add_argument(
         "--visual",
-        action=argparse.BooleanOptionalAction,
+        action='store_true',
         help="Whether to include visual meshes or not",
     )
     parser.set_defaults(visual=True)
     parser.add_argument(
         "--collision",
-        action=argparse.BooleanOptionalAction,
+        action='store_true',
         help="Whether to include collision meshes or not",
     )
     parser.set_defaults(collision=True)
     parser.add_argument(
         "--keepusd",
-        action=argparse.BooleanOptionalAction,
+        action='store_true',
         help="Whether to keep the USD file or not",
     )
     parser.set_defaults(keepusd=False)
