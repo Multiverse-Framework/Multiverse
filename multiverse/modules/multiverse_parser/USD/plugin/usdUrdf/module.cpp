@@ -8,8 +8,8 @@ TF_WRAP_MODULE
 {
     TF_WRAP(UsdUrdfUrdf);
 
-    TF_WRAP(UsdUrdfUrdfOriginAPI);
+    TF_WRAP(UsdUrdfUrdfGeometryAPI);
+    TF_WRAP(UsdUrdfUrdfLinkInertialAPI);
     TF_WRAP(UsdUrdfUrdfLinkAPI);
     TF_WRAP(UsdUrdfUrdfJointAPI);
-    TF_WRAP(UsdUrdfUrdfGeometryAPI);
 }

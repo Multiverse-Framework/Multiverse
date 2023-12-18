@@ -38,33 +38,6 @@ class Urdf "Urdf"
     )
 }
 
-class "UrdfOriginAPI" (
-    customData = {
-        string className = "UrdfOriginAPI"
-    }
-
-    doc = """The origin properties."""
-
-    inherits = </APISchemaBase>
-)
-{
-    point3f urdf:origin:xyz (
-        customData = {
-            string apiName = "xyz"
-        }
-        displayName = "Origin Position"
-        doc = "Represents the x, y, z offset."
-    )
-
-    float3 urdf:origin:rpy (
-        customData = {
-            string apiName = "rpy"
-        }
-        displayName = "Origin Roll Pitch Yaw"
-        doc = "Represents the fixed axis roll, pitch and yaw angles in radians."
-    )
-}
-
 class "UrdfGeometryAPI" (
     customData = {
         string className = "UrdfGeometryAPI"
@@ -75,6 +48,22 @@ class "UrdfGeometryAPI" (
     inherits = </APISchemaBase>
 )
 {
+    point3f urdf:geometry:origin:xyz (
+        customData = {
+            string apiName = "xyz"
+        }
+        displayName = "Geometry Origin Position"
+        doc = "Describes the position of the geometry frame relative to the link frame."
+    )
+
+    float3 urdf:geometry:origin:rpy (
+        customData = {
+            string apiName = "rpy"
+        }
+        displayName = "Geometry Origin Roll Pitch Yaw"
+        doc = "Describes the orientation of the geometry frame relative to the link frame."
+    )
+
     uniform token urdf:geometry:type (
         customData = {
             string apiName = "type"
@@ -117,6 +106,89 @@ class "UrdfGeometryAPI" (
     )
 }
 
+class "UrdfLinkInertialAPI" (
+    customData = {
+        string className = "UrdfLinkInertialAPI"
+    }
+
+    doc = """The inertial properties of the link."""
+
+    inherits = </APISchemaBase>
+)
+{
+    float urdf:link:inertial:mass (
+        customData = {
+            string apiName = "mass"
+        }
+        displayName = "Inertial Mass"
+        doc = """The mass of the link."""
+    )
+
+    point3f urdf:link:inertial:origin:xyz (
+        customData = {
+            string apiName = "xyz"
+        }
+        displayName = "Inertial Origin Position"
+        doc = "Describes the position of the link’s center of mass relative to the link frame."
+    )
+
+    float3 urdf:link:inertial:origin:rpy (
+        customData = {
+            string apiName = "rpy"
+        }
+        displayName = "Inertial Origin Roll Pitch Yaw"
+        doc = "Describes the orientation of the link’s center of mass relative to the link frame."
+    )
+
+    float urdf:link:inertial:inertia:ixx (
+        customData = {
+            string apiName = "ixx"
+        }
+        displayName = "Inertial Ixx"
+        doc = """The moment of inertia around the x-axis."""
+    )
+
+    float urdf:link:inertial:inertia:iyy (
+        customData = {
+            string apiName = "iyy"
+        }
+        displayName = "Inertial Iyy"
+        doc = """The moment of inertia around the y-axis."""
+    )
+
+    float urdf:link:inertial:inertia:izz (
+        customData = {
+            string apiName = "izz"
+        }
+        displayName = "Inertial Izz"
+        doc = """The moment of inertia around the z-axis."""
+    )
+
+    float urdf:link:inertial:inertia:ixy (
+        customData = {
+            string apiName = "ixy"
+        }
+        displayName = "Inertial Ixy"
+        doc = """The moment of inertia around the x axis as the object rotates around the y axis."""
+    )
+
+    float urdf:link:inertial:inertia:ixz (
+        customData = {
+            string apiName = "ixz"
+        }
+        displayName = "Inertial Ixz"
+        doc = """The moment of inertia around the x axis as the object rotates around the z axis."""
+    )
+
+    float urdf:link:inertial:inertia:iyz (
+        customData = {
+            string apiName = "iyz"
+        }
+        displayName = "Inertial Iyz"
+        doc = """The moment of inertia around the y axis as the object rotates around the z axis."""
+    )
+}
+
 class "UrdfLinkAPI" (
     customData = {
         string className = "UrdfLinkAPI"
@@ -146,5 +218,77 @@ class "UrdfJointAPI" (
         allowedTokens = ["revolute", "continuous", "prismatic", "fixed", "floating", "planar"]
         displayName = "Joint Type"
         doc = """Type of the joint."""
+    )
+
+    point3f urdf:joint:origin:xyz (
+        customData = {
+            string apiName = "xyz"
+        }
+        displayName = "Joint Origin Position"
+        doc = "Describes the position of the joint frame relative to the parent link frame."
+    )
+
+    float3 urdf:joint:origin:rpy (
+        customData = {
+            string apiName = "rpy"
+        }
+        displayName = "Joint Origin Roll Pitch Yaw"
+        doc = "Describes the orientation of the joint frame relative to the parent link frame."
+    )
+
+    rel urdf:joint:parent (
+        customData = {
+            string apiName = "parent"
+        }
+        displayName = "Joint Parent"
+        doc = """The name of the parent link."""
+    )
+
+    rel urdf:joint:child (
+        customData = {
+            string apiName = "child"
+        }
+        displayName = "Joint Child"
+        doc = """The name of the child link."""
+    )
+
+    vector3f urdf:joint:axis (
+        customData = {
+            string apiName = "axis"
+        }
+        displayName = "Joint Axis"
+        doc = """The axis of rotation."""
+    )
+
+    float urdf:joint:limit:lower (
+        customData = {
+            string apiName = "lower"
+        }
+        displayName = "Joint Limit Lower"
+        doc = """The lower limit of the joint."""
+    )
+
+    float urdf:joint:limit:upper (
+        customData = {
+            string apiName = "upper"
+        }
+        displayName = "Joint Limit Upper"
+        doc = """The upper limit of the joint."""
+    )
+
+    float urdf:joint:limit:effort (
+        customData = {
+            string apiName = "effort"
+        }
+        displayName = "Joint Limit Effort"
+        doc = """The maximum effort the joint can apply."""
+    )
+
+    float urdf:joint:limit:velocity (
+        customData = {
+            string apiName = "velocity"
+        }
+        displayName = "Joint Limit Velocity"
+        doc = """The maximum velocity the joint can apply."""
     )
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Optional
+from typing import Optional, List
 
 from .body_builder import BodyBuilder
 from ..utils import modify_name
@@ -17,6 +17,7 @@ def setup_stage(file_path: str) -> Usd.Stage:
 
 class WorldBuilder:
     stage: Usd.Stage
+    body_builders: List[BodyBuilder]
 
     def __init__(self, file_path: str) -> None:
         self._stage = setup_stage(file_path)
@@ -51,3 +52,7 @@ class WorldBuilder:
     @property
     def stage(self):
         return self._stage
+
+    @property
+    def body_builders(self):
+        return list(self._body_builders.values())

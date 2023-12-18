@@ -13,31 +13,51 @@ from pxr import Usd, UsdGeom, Gf, UsdPhysics, Sdf
 
 
 class JointType(Enum):
-    NONE = 0
+    FREE = 0
     FIXED = 1
     REVOLUTE = 2
     CONTINUOUS = 3
     PRISMATIC = 4
     SPHERICAL = 5
+    PLANAR = 6
 
     @classmethod
-    def from_string(cls, type_str: str) -> "JointType":
+    def from_urdf(cls, type_str: str) -> "JointType":
+        if type_str == "floating":
+            return JointType.FREE
         if type_str == "fixed":
             return JointType.FIXED
-        elif type_str in ["revolute", "mjJNT_HINGE"]:
+        elif type_str == "revolute":
             return JointType.REVOLUTE
         elif type_str == "continuous":
             return JointType.CONTINUOUS
-        elif type_str in ["prismatic", "mjJNT_SLIDE"]:
+        elif type_str == "prismatic":
             return JointType.PRISMATIC
+        elif type_str == "planar":
+            return JointType.PLANAR
         else:
-            print(f"Joint type {type_str} not supported.")
-            return JointType.NONE
+            raise ValueError(f"Joint type {type_str} not supported.")
+
+    def to_urdf(self) -> str:
+        if self == JointType.FREE:
+            return "floating"
+        elif self == JointType.FIXED:
+            return "fixed"
+        elif self == JointType.REVOLUTE:
+            return "revolute"
+        elif self == JointType.CONTINUOUS:
+            return "continuous"
+        elif self == JointType.PRISMATIC:
+            return "prismatic"
+        elif self == JointType.PLANAR:
+            return "planar"
+        else:
+            raise ValueError(f"Joint type {self} not supported.")
 
     @classmethod
     def from_mujoco(cls, jnt_type: mjtJoint) -> "JointType":
         if jnt_type == mjtJoint.mjJNT_FREE:
-            return JointType.NONE
+            return JointType.FREE
         elif jnt_type == mjtJoint.mjJNT_HINGE:
             return JointType.REVOLUTE
         elif jnt_type == mjtJoint.mjJNT_SLIDE:
@@ -45,8 +65,128 @@ class JointType(Enum):
         elif jnt_type == mjtJoint.mjJNT_BALL:
             return JointType.SPHERICAL
         else:
-            print(f"Joint type {jnt_type} not supported.")
-            return JointType.NONE
+            raise ValueError(f"Joint type {jnt_type} not supported.")
+
+    def to_mujoco(self) -> mjtJoint:
+        if self == JointType.FREE:
+            return mjtJoint.mjJNT_FREE
+        elif self == JointType.REVOLUTE or self == JointType.CONTINUOUS:
+            return mjtJoint.mjJNT_HINGE
+        elif self == JointType.PRISMATIC:
+            return mjtJoint.mjJNT_SLIDE
+        elif self == JointType.SPHERICAL:
+            return mjtJoint.mjJNT_BALL
+        else:
+            raise ValueError(f"Joint type {self} not supported.")
+
+
+class JointAxis(Enum):
+    X = 0
+    Y = 1
+    Z = 2
+    NEG_X = 3
+    NEG_Y = 4
+    NEG_Z = 5
+
+    @classmethod
+    def from_string(cls, axis_str: str) -> "JointAxis":
+        if axis_str == "X":
+            return JointAxis.X
+        elif axis_str == "Y":
+            return JointAxis.Y
+        elif axis_str == "Z":
+            return JointAxis.Z
+        elif axis_str == "-X":
+            return JointAxis.NEG_X
+        elif axis_str == "-Y":
+            return JointAxis.NEG_Y
+        elif axis_str == "-Z":
+            return JointAxis.NEG_Z
+        else:
+            raise ValueError(f"Joint axis {axis_str} not supported.")
+
+    @classmethod
+    def to_string(cls) -> str:
+        if cls == JointAxis.X:
+            return "X"
+        elif cls == JointAxis.Y:
+            return "Y"
+        elif cls == JointAxis.Z:
+            return "Z"
+        elif cls == JointAxis.NEG_X:
+            return "-X"
+        elif cls == JointAxis.NEG_Y:
+            return "-Y"
+        elif cls == JointAxis.NEG_Z:
+            return "-Z"
+        else:
+            raise ValueError(f"Joint axis {cls} not supported.")
+
+    @classmethod
+    def from_array(cls, joint_axis: numpy.ndarray) -> "JointAxis":
+        if numpy.allclose(joint_axis, [1, 0, 0]):
+            return JointAxis.X
+        elif numpy.allclose(joint_axis, [0, 1, 0]):
+            return JointAxis.Y
+        elif numpy.allclose(joint_axis, [0, 0, 1]):
+            return JointAxis.Z
+        elif numpy.allclose(joint_axis, [-1, 0, 0]):
+            return JointAxis.NEG_X
+        elif numpy.allclose(joint_axis, [0, -1, 0]):
+            return JointAxis.NEG_Y
+        elif numpy.allclose(joint_axis, [0, 0, -1]):
+            return JointAxis.NEG_Z
+        else:
+            raise ValueError(f"Joint axis {joint_axis} not supported.")
+
+    def to_array(self) -> numpy.ndarray:
+        if self == JointAxis.X:
+            return numpy.array([1.0, 0.0, 0.0])
+        elif self == JointAxis.Y:
+            return numpy.array([0.0, 1.0, 0.0])
+        elif self == JointAxis.Z:
+            return numpy.array([0.0, 0.0, 1.0])
+        elif self == JointAxis.NEG_X:
+            return numpy.array([-1.0, 0.0, 0.0])
+        elif self == JointAxis.NEG_Y:
+            return numpy.array([0.0, -1.0, 0.0])
+        elif self == JointAxis.NEG_Z:
+            return numpy.array([0.0, 0.0, -1.0])
+        else:
+            raise ValueError(f"Joint axis {self} not supported.")
+
+    @classmethod
+    def from_quat(cls, quat: numpy.ndarray) -> "JointAxis":
+        if numpy.allclose(quat, [0.0, 0.7071068, 0.0, 0.7071068]):
+            return JointAxis.X
+        elif numpy.allclose(quat, [-0.7071068, 0.0, 0.0, 0.7071068]):
+            return JointAxis.Y
+        elif numpy.allclose(quat, [0.0, 0.0, 0.0, 1.0]):
+            return JointAxis.Z
+        elif numpy.allclose(quat, [0.0, -0.7071068, 0.0, 0.7071068]):
+            return JointAxis.NEG_X
+        elif numpy.allclose(quat, [0.7071068, 0.0, 0.0, 0.7071068]):
+            return JointAxis.NEG_Y
+        elif numpy.allclose(quat, [0.0, 1.0, 0.0, 0.0]):
+            return JointAxis.NEG_Z
+        else:
+            raise ValueError(f"Joint axis {quat} not supported.")
+
+    def to_quat(self) -> numpy.ndarray:
+        if self == JointAxis.X:
+            return numpy.array([0.0, 0.7071068, 0.0, 0.7071068])
+        elif self == JointAxis.Y:
+            return numpy.array([-0.7071068, 0.0, 0.0, 0.7071068])
+        elif self == JointAxis.Z:
+            return numpy.array([0.0, 0.0, 0.0, 1.0])
+        elif self == JointAxis.NEG_X:
+            return numpy.array([0.0, -0.7071068, 0.0, 0.7071068])
+        elif self == JointAxis.NEG_Y:
+            return numpy.array([0.7071068, 0.0, 0.0, 0.7071068])
+        elif self == JointAxis.NEG_Z:
+            return numpy.array([0.0, 1.0, 0.0, 0.0])
+        else:
+            raise ValueError(f"Joint axis {self} not supported.")
 
 
 @dataclass(init=False)
@@ -56,7 +196,7 @@ class JointProperty:
     path: str
     pos: Gf.Vec3d
     quat: Gf.Quatd
-    axis: str
+    axis: JointAxis
     type: JointType
     parent_prim: UsdGeom.Xform
     child_prim: UsdGeom.Xform
@@ -68,7 +208,7 @@ class JointProperty:
             joint_child_prim: UsdGeom.Xform,
             joint_pos: Sequence = numpy.array([0.0, 0.0, 0.0]),
             joint_quat: Optional[Sequence] = None,
-            joint_axis: Union[str, List[float]] = "Z",
+            joint_axis: JointAxis = JointAxis.Z,
             joint_type: JointType = JointType.REVOLUTE,
     ) -> None:
         self.name = joint_name
@@ -108,64 +248,22 @@ class JointProperty:
 
     @property
     def quat(self) -> Gf.Quatd:
-        if self.type == JointType.FIXED:
-            return Gf.Quatd(1, 0, 0, 0)
-        if self.axis == "X":
-            return Gf.Quatd(0.7071068, 0, 0.7071068, 0)
-        elif self.axis == "Y":
-            return Gf.Quatd(0.7071068, -0.7071068, 0, 0)
-        elif self.axis == "Z":
-            return Gf.Quatd(1, 0, 0, 0)
-        elif self.axis == "-X":
-            return Gf.Quatd(0.7071068, 0, -0.7071068, 0)
-        elif self.axis == "-Y":
-            return Gf.Quatd(0.7071068, 0.7071068, 0, 0)
-        elif self.axis == "-Z":
-            return Gf.Quatd(0, 0, 1, 0)
-        else:
-            raise ValueError(f"Axis {self.axis} not supported.")
+        quat = self.axis.to_quat()
+        return Gf.Quatd(quat[3], Gf.Vec3d(*quat[:3]))
 
     @quat.setter
     def quat(self, quat: Sequence) -> None:
         # TODO: Convert quat to axis, then set axis to Z again
         if quat is not None:
             raise NotImplementedError("Quat not supported yet.")
-        # quat = numpy.array(quat)
-        # magnitude = numpy.linalg.norm(quat)
-        # if not numpy.isclose(magnitude, 1.0):
-        #     raise ValueError(f"Quat {quat} is not normalized.")
-        # self._quat = Gf.Quatd(*quat)
 
     @property
-    def axis(self) -> str:
+    def axis(self) -> JointAxis:
         return self._axis
 
     @axis.setter
-    def axis(self, axis: Union[str, Sequence]) -> None:
-        if isinstance(axis, str):
-            if axis.upper() in ["X", "Y", "Z", "-X", "-Y", "-Z"]:
-                self._axis = axis.upper()
-            else:
-                raise ValueError(f"Axis {axis} not supported.")
-        else:
-            try:
-                axis = numpy.array(axis)
-            except ValueError:
-                raise NotImplementedError(f"Axis {axis} type {type(axis)} not supported.")
-            if numpy.allclose(axis, [1, 0, 0]):
-                self._axis = "X"
-            elif numpy.allclose(axis, [0, 1, 0]):
-                self._axis = "Y"
-            elif numpy.allclose(axis, [0, 0, 1]):
-                self._axis = "Z"
-            elif numpy.allclose(axis, [-1, 0, 0]):
-                self._axis = "-X"
-            elif numpy.allclose(axis, [0, -1, 0]):
-                self._axis = "-Y"
-            elif numpy.allclose(axis, [0, 0, -1]):
-                self._axis = "-Z"
-            else:
-                raise ValueError(f"Axis {axis} not supported.")
+    def axis(self, axis: JointAxis) -> None:
+        self._axis = axis
 
     @property
     def type(self) -> JointType:
@@ -281,7 +379,7 @@ class JointBuilder:
         return self._joint_property.quat
 
     @property
-    def axis(self) -> str:
+    def axis(self) -> JointAxis:
         return self._joint_property.axis
 
     @property

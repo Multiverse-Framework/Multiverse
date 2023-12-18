@@ -15,6 +15,7 @@ from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 class BodyBuilder:
     stage: Usd.Stage
     xform: UsdGeom.Xform
+    joint_builders: List[JointBuilder]
     child_body_builders: List[BodyBuilder]
 
     def __init__(self,
@@ -174,6 +175,10 @@ class BodyBuilder:
     @property
     def xform(self) -> Usd.Stage:
         return self._xform
+
+    @property
+    def joint_builders(self) -> List[JointBuilder]:
+        return list(self._joint_builders.values())
 
     @property
     def child_body_builders(self) -> List[BodyBuilder]:

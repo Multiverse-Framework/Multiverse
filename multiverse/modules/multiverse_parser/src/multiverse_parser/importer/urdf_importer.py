@@ -9,11 +9,33 @@ from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
 
 from ..factory import Factory, Configuration, InertiaSource
-from ..factory import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomBuilder, GeomType, GeomProperty, \
-    JointProperty
+from ..factory import (WorldBuilder,
+                       BodyBuilder,
+                       JointBuilder, JointAxis, JointType, JointProperty,
+                       GeomBuilder, GeomType, GeomProperty)
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
-from pxr import UsdUrdf, Gf
+from pxr import UsdUrdf, Gf, UsdPhysics
+
+
+def build_urdf_inertial_api(physics_mass_api: UsdPhysics.MassAPI) -> UsdUrdf.UrdfLinkInertialAPI:
+    mass = physics_mass_api.GetMassAttr().Get()
+    xyz = physics_mass_api.GetCenterOfMassAttr().Get()
+    quat = physics_mass_api.GetPrincipalAxesAttr().Get()
+    quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
+    rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
+    diagonal_inertia = physics_mass_api.GetDiagonalInertiaAttr().Get()
+
+    prim = physics_mass_api.GetPrim()
+    urdf_link_inertial_api = UsdUrdf.UrdfLinkInertialAPI.Apply(prim)
+    urdf_link_inertial_api.CreateMassAttr(mass)
+    urdf_link_inertial_api.CreateXyzAttr(Gf.Vec3f(*xyz))
+    urdf_link_inertial_api.CreateRpyAttr(Gf.Vec3f(*rpy))
+    urdf_link_inertial_api.CreateIxxAttr(diagonal_inertia[0])
+    urdf_link_inertial_api.CreateIyyAttr(diagonal_inertia[1])
+    urdf_link_inertial_api.CreateIzzAttr(diagonal_inertia[2])
+
+    return urdf_link_inertial_api
 
 
 def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
@@ -28,7 +50,6 @@ def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
 
 
 class UrdfImporter(Factory):
-    world_builder: WorldBuilder
     urdf_model: urdf.URDF
     _geom_type_map: Dict = {
         urdf.Box: GeomType.CUBE,
@@ -46,7 +67,6 @@ class UrdfImporter(Factory):
             inertia_source: InertiaSource = InertiaSource.FROM_SRC,
             default_rgba: Optional[numpy.ndarray] = None,
     ) -> None:
-        self._world_builder = None
         with open(file_path) as file:
             urdf_string = file.read()
         self._urdf_model = urdf.URDF.from_xml_string(urdf_string)
@@ -74,11 +94,11 @@ class UrdfImporter(Factory):
                                                        parent_body_name=self._config.model_name)
             body_builder.enable_rigid_body()
 
-        self._import_inertial(body=self.urdf_model.link_map[self.urdf_model.get_root()],
-                              body_builder=body_builder)
-
         self._import_geoms(link=self.urdf_model.link_map[self.urdf_model.get_root()],
                            body_builder=body_builder)
+
+        self._import_inertial(body=self.urdf_model.link_map[self.urdf_model.get_root()],
+                              body_builder=body_builder)
 
         self._import_body_and_joint(urdf_link_name=self.urdf_model.get_root())
 
@@ -103,6 +123,8 @@ class UrdfImporter(Factory):
 
             self._import_geoms(link=self.urdf_model.link_map[child_urdf_link_name], body_builder=body_builder)
 
+            self._import_inertial(body=self.urdf_model.link_map[child_urdf_link_name], body_builder=body_builder)
+
             if self._config.with_physics:
                 self._import_joint(joint=child_urdf_joint,
                                    parent_body_name=urdf_link_name,
@@ -125,33 +147,40 @@ class UrdfImporter(Factory):
         relative_to_xform = relative_to_body_builder.xform
         body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to_xform=relative_to_xform)
 
-        self._import_inertial(body=self.urdf_model.link_map[child_body_name], body_builder=body_builder)
-
         urdf_link_api = UsdUrdf.UrdfLinkAPI.Apply(body_builder.xform.GetPrim())
 
         return body_builder
 
     def _import_inertial(self, body: urdf.Link, body_builder: BodyBuilder) -> None:
-        if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC:
-            if body.inertial is not None:
-                body_mass = body.inertial.mass
-                body_center_of_mass = body.inertial.origin.xyz
-                body_inertia = body.inertial.inertia
-                body_inertia_tensor = numpy.array([[body_inertia.ixx, body_inertia.ixy, body_inertia.ixz],
-                                                   [body_inertia.ixy, body_inertia.iyy, body_inertia.iyz],
-                                                   [body_inertia.ixz, body_inertia.iyz, body_inertia.izz]])
-                body_inertia_tensor = shift_inertia_tensor(mass=body_mass,
-                                                           inertia_tensor=body_inertia_tensor,
-                                                           quat=Rotation.from_euler('xyz',
-                                                                                    body.inertial.origin.rpy).inv()
-                                                           .as_quat())
+        if self._config.with_physics:
+            if self._config.inertia_source == InertiaSource.FROM_SRC:
+                if body.inertial is not None:
+                    body_mass = body.inertial.mass
+                    body_center_of_mass = body.inertial.origin.xyz
+                    body_inertia = body.inertial.inertia
+                    body_inertia_tensor = numpy.array([[body_inertia.ixx, body_inertia.ixy, body_inertia.ixz],
+                                                       [body_inertia.ixy, body_inertia.iyy, body_inertia.iyz],
+                                                       [body_inertia.ixz, body_inertia.iyz, body_inertia.izz]])
+                    body_inertia_tensor = shift_inertia_tensor(mass=body_mass,
+                                                               inertia_tensor=body_inertia_tensor,
+                                                               quat=Rotation.from_euler('xyz',
+                                                                                        body.inertial.origin.rpy).inv()
+                                                               .as_quat())
 
-                body_diagonal_inertia, body_principal_axes = diagonalize_inertia(inertia_tensor=body_inertia_tensor)
+                    body_diagonal_inertia, body_principal_axes = diagonalize_inertia(inertia_tensor=body_inertia_tensor)
+                    physics_mass_api = body_builder.set_inertial(mass=body_mass,
+                                                                 center_of_mass=body_center_of_mass,
+                                                                 diagonal_inertia=body_diagonal_inertia,
+                                                                 principal_axes=body_principal_axes)
+                else:
+                    _, physics_mass_api = body_builder.compute_and_set_inertial()
 
-                body_builder.set_inertial(mass=body_mass,
-                                          center_of_mass=body_center_of_mass,
-                                          diagonal_inertia=body_diagonal_inertia,
-                                          principal_axes=body_principal_axes)
+            elif self._config.inertia_source == InertiaSource.FROM_MESH:
+                _, physics_mass_api = body_builder.compute_and_set_inertial()
+            else:
+                raise ValueError(f"Inertia source {self._config.inertia_source} not implemented.")
+
+            build_urdf_inertial_api(physics_mass_api=physics_mass_api)
 
     def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> Dict[str, GeomBuilder]:
         geom_builders = {}
@@ -285,10 +314,10 @@ class UrdfImporter(Factory):
         return mesh_file_path
 
     def _import_joint(self, joint: urdf.Joint, parent_body_name: str, child_body_name: str) -> Optional[JointBuilder]:
-        joint_type = JointType.from_string(joint.type)
+        joint_type = JointType.from_urdf(joint.type)
 
         joint_builder = None
-        if joint_type != JointType.FIXED and joint_type != JointType.NONE:
+        if joint_type != JointType.FIXED:
             parent_body_builder = self.world_builder.get_body_builder(parent_body_name)
             child_body_builder = self.world_builder.get_body_builder(child_body_name)
 
@@ -311,7 +340,7 @@ class UrdfImporter(Factory):
                 joint_parent_prim=parent_body_builder.xform.GetPrim(),
                 joint_child_prim=child_body_builder.xform.GetPrim(),
                 joint_pos=joint_pos,
-                joint_axis=joint.axis,
+                joint_axis=JointAxis.from_array(joint.axis),
                 joint_type=joint_type,
             )
             joint_builder = child_body_builder.add_joint(joint_property=joint_property)
@@ -325,16 +354,20 @@ class UrdfImporter(Factory):
 
             urdf_joint_api = UsdUrdf.UrdfJointAPI.Apply(joint_builder.joint.GetPrim())
             urdf_joint_api.CreateTypeAttr(joint.type)
+            urdf_joint_api.CreateXyzAttr(Gf.Vec3f(*joint.origin.xyz))
+            urdf_joint_api.CreateRpyAttr(Gf.Vec3f(*joint.origin.rpy))
+            urdf_joint_api.CreateParentRel().AddTarget(parent_prim.GetPath())
+            urdf_joint_api.CreateChildRel().AddTarget(child_prim.GetPath())
+            if joint_type in [JointType.REVOLUTE, JointType.PRISMATIC]:
+                urdf_joint_api.CreateAxisAttr(Gf.Vec3f(*joint.axis))
 
-            urdf_origin_api = UsdUrdf.UrdfOriginAPI.Apply(joint_builder.joint.GetPrim())
-            urdf_origin_api.CreateXyzAttr(Gf.Vec3f(*joint.origin.xyz))
-            urdf_origin_api.CreateRpyAttr(Gf.Vec3f(*joint.origin.rpy))
+            if joint_type in [JointType.REVOLUTE, JointType.PRISMATIC]:
+                urdf_joint_api.CreateLowerAttr(joint.limit.lower)
+                urdf_joint_api.CreateUpperAttr(joint.limit.upper)
+                urdf_joint_api.CreateEffortAttr(joint.limit.effort)
+                urdf_joint_api.CreateVelocityAttr(joint.limit.velocity)
 
         return joint_builder
-
-    @property
-    def world_builder(self) -> WorldBuilder:
-        return self._world_builder
 
     @property
     def urdf_model(self) -> urdf.URDF:

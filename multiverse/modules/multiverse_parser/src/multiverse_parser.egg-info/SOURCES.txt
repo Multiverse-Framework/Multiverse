@@ -10,14 +10,13 @@ src/multiverse_parser/exporter/mjcf_exporter.py
 src/multiverse_parser/exporter/urdf_exporter.py
 src/multiverse_parser/factory/__init__.py
 src/multiverse_parser/factory/body_builder.py
-src/multiverse_parser/factory/config.py
+src/multiverse_parser/factory/factory.py
 src/multiverse_parser/factory/geom_builder.py
 src/multiverse_parser/factory/joint_builder.py
 src/multiverse_parser/factory/material_builder.py
 src/multiverse_parser/factory/mesh_builder.py
 src/multiverse_parser/factory/world_builder.py
 src/multiverse_parser/importer/__init__.py
-src/multiverse_parser/importer/importer.py
 src/multiverse_parser/importer/mjcf_importer.py
 src/multiverse_parser/importer/urdf_importer.py
 src/multiverse_parser/importer/usd_importer.py
@@ -27,4 +26,5 @@ src/multiverse_parser/utils/mesh_importer.py
 src/multiverse_parser/utils/utils.py
 tests/test_factory.py
 tests/test_mjcf_to_usd.py
+tests/test_urdf_to_urdf.py
 tests/test_urdf_to_usd.py

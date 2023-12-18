@@ -12,6 +12,7 @@ from typing import Optional, Dict, Tuple
 
 import numpy
 
+from .world_builder import WorldBuilder
 from ..utils import (import_obj, import_stl, import_dae,
                      export_obj, export_stl, export_dae, export_usd)
 
@@ -53,6 +54,7 @@ def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
 
 
 class Factory:
+    world_builder: WorldBuilder
     source_file_path: str
     config: Configuration
     tmp_meshdir_path: str
@@ -61,6 +63,7 @@ class Factory:
     _mesh_file_paths: Dict[str, Tuple[str, str]] = {}
 
     def __init__(self, file_path: str, config: Configuration = Configuration()):
+        self._world_builder = None
         self._source_file_path = file_path
         self._tmp_file_path, self._tmp_meshdir_path = self._create_tmp_paths()
         self._config = config
@@ -166,6 +169,10 @@ class Factory:
         if os.path.exists(tmp_dir_path):
             print(f"Remove {tmp_dir_path}.")
             shutil.rmtree(tmp_dir_path)
+
+    @property
+    def world_builder(self) -> WorldBuilder:
+        return self._world_builder
 
     @property
     def tmp_file_path(self) -> str:

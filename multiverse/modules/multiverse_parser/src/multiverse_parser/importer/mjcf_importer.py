@@ -9,7 +9,7 @@ import mujoco
 
 from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
-                       JointBuilder, JointType, JointProperty,
+                       JointBuilder, JointAxis, JointType, JointProperty,
                        GeomBuilder, GeomType, GeomProperty,
                        MeshBuilder, MeshProperty,
                        MaterialBuilder, MaterialProperty)
@@ -30,7 +30,6 @@ def get_body_name(mj_body) -> str:
 
 
 class MjcfImporter(Factory):
-    world_builder: WorldBuilder
     mj_model: mujoco.MjModel
     _geom_type_map: Dict = {
         mujoco.mjtGeom.mjGEOM_PLANE: GeomType.PLANE,
@@ -51,7 +50,6 @@ class MjcfImporter(Factory):
             inertia_source: InertiaSource = InertiaSource.FROM_SRC,
             default_rgba: Optional[numpy.ndarray] = None
     ) -> None:
-        self._world_builder = None
         self._joint_builders: Dict[str, JointBuilder] = {}
         try:
             self._mj_model = mujoco.MjModel.from_xml_path(filename=file_path)
@@ -182,7 +180,7 @@ class MjcfImporter(Factory):
             joint_parent_prim=parent_body_builder.xform.GetPrim(),
             joint_child_prim=body_builder.xform.GetPrim(),
             joint_pos=mj_joint.pos,
-            joint_axis=mj_joint.axis,
+            joint_axis=JointAxis.from_array(mj_joint.axis),
             joint_type=joint_type,
         )
         joint_builder = body_builder.add_joint(joint_property=joint_property)
@@ -391,10 +389,6 @@ class MjcfImporter(Factory):
                 mujoco_equality_joint.CreateJoint1Rel().SetTargets([joint1_path])
                 mujoco_equality_joint.CreateJoint2Rel().SetTargets([joint2_path])
                 mujoco_equality_joint.CreatePolycoefAttr(equality.data[:5])
-
-    @property
-    def world_builder(self) -> WorldBuilder:
-        return self._world_builder
 
     @property
     def mj_model(self) -> mujoco.MjModel:
