@@ -9,7 +9,7 @@ from typing import List
 from plotly import graph_objects
 import numpy
 from scipy.spatial.transform import Rotation
-from pxr import Usd, UsdGeom, UsdPhysics, Gf
+from pxr import Usd
 from multiverse_parser import (WorldBuilder,
                                JointBuilder, JointType, JointProperty,
                                GeomType, GeomProperty,

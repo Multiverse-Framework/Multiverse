@@ -7,8 +7,7 @@ from typing import Optional, List, Tuple, Dict
 import numpy
 import mujoco
 
-from .importer import Configuration, Importer
-from ..factory import InertiaSource
+from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
                        JointBuilder, JointType, JointProperty,
                        GeomBuilder, GeomType, GeomProperty,
@@ -30,7 +29,7 @@ def get_body_name(mj_body) -> str:
     return mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
 
 
-class MjcfImporter(Importer):
+class MjcfImporter(Factory):
     world_builder: WorldBuilder
     mj_model: mujoco.MjModel
     _geom_type_map: Dict = {

@@ -2,15 +2,36 @@
 
 import atexit
 import os
+from dataclasses import dataclass
 import random
 import shutil
 import string
 import subprocess
+from enum import Enum
 from typing import Optional, Dict, Tuple
 
-from ..factory.config import Configuration
+import numpy
+
 from ..utils import (import_obj, import_stl, import_dae,
                      export_obj, export_stl, export_dae, export_usd)
+
+
+class InertiaSource(Enum):
+    FROM_SRC = 0
+    FROM_MESH = 1
+
+
+@dataclass
+class Configuration:
+    """
+    Configuration class for the Multiverse Parser.
+    """
+    model_name: str = ""
+    with_physics: bool = True
+    with_visual: bool = True
+    with_collision: bool = True
+    inertia_source: InertiaSource = InertiaSource.FROM_SRC
+    default_rgba: numpy.ndarray = numpy.array([0.5, 0.5, 0.5, 1.0])
 
 
 def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
@@ -31,7 +52,7 @@ def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
             shutil.copy2(source_item, destination_item)
 
 
-class Importer:
+class Factory:
     source_file_path: str
     config: Configuration
     tmp_meshdir_path: str

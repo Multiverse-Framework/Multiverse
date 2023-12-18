@@ -8,8 +8,7 @@ import numpy
 from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
 
-from .importer import Configuration, Importer
-from ..factory import InertiaSource
+from ..factory import Factory, Configuration, InertiaSource
 from ..factory import WorldBuilder, BodyBuilder, JointBuilder, JointType, GeomBuilder, GeomType, GeomProperty, \
     JointProperty
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
@@ -28,7 +27,7 @@ def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
     return joint_pos, joint_quat
 
 
-class UrdfImporter(Importer):
+class UrdfImporter(Factory):
     world_builder: WorldBuilder
     urdf_model: urdf.URDF
     _geom_type_map: Dict = {
