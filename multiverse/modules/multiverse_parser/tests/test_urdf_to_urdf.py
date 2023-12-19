@@ -20,7 +20,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
     def test_urdf_importer_1(self):
-        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
+        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_3.urdf")
         factory = UrdfImporter(file_path=input_urdf_path,
                                with_physics=True,
                                with_visual=True,

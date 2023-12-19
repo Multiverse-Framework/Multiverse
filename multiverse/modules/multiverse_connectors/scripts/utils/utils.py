@@ -15,6 +15,8 @@ def run_subprocess(cmd: List[str]) -> subprocess.Popen:
 
 
 def find_files(resources_paths: List[str], filename_pattern: str) -> str:
+    if os.path.isabs(filename_pattern):
+        return filename_pattern
     matches = []
     for resources_path in resources_paths:
         search_pattern = os.path.join(resources_path, "**", filename_pattern)

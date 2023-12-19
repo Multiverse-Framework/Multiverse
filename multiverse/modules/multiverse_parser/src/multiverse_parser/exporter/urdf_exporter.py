@@ -210,7 +210,7 @@ class UrdfExporter:
                     geometries = []
                     if geom_builder.type == GeomType.CUBE:
                         size = numpy.array(
-                            [geom_prim.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2
+                            [geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2
                         geometry = urdf.Box(size=size)
                         geometries.append(geometry)
                     elif geom_builder.type == GeomType.SPHERE:
@@ -244,10 +244,10 @@ class UrdfExporter:
                             quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
                             scale = numpy.array([transformation.GetRow(i).GetLength() for i in range(3)])
                             rotated_scale = Rotation.from_quat(quat).apply(scale)
-                            if not any(x < 0 for x in scale):
-                                rotated_scale = abs(rotated_scale)
-                            if not any(x > 0 for x in scale):
-                                rotated_scale = -abs(rotated_scale)
+                            # if not any(x < 0 for x in scale):
+                            #     rotated_scale = abs(rotated_scale)
+                            # if not any(x > 0 for x in scale):
+                            #     rotated_scale = -abs(rotated_scale)
 
                             geometry = urdf.Mesh(filename=mesh_ros_path, scale=rotated_scale)
                             geometries.append(geometry)

@@ -67,9 +67,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
         if "ros_control" in ros_dict or "ros_run" in ros_dict:
             if INTERFACE == Interface.ROS1:
                 import rospy
-
                 rospy.init_node(name="multiverse_launch")
-
             elif INTERFACE == Interface.ROS2:
                 pass
             else:

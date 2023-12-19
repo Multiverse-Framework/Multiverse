@@ -18,7 +18,8 @@ def clean_up_meshes(bpy, file_path: str) -> None:
         bpy.ops.mesh.select_all(action="SELECT")
         bpy.ops.mesh.flip_normals()
         bpy.ops.object.mode_set(mode="OBJECT")
-
+    
+    selected_object = bpy.context.object
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
     
     # Apply triangulate modifier
@@ -27,6 +28,7 @@ def clean_up_meshes(bpy, file_path: str) -> None:
     triangulate_modifier = selected_object.modifiers["Triangulate"]
     triangulate_modifier.quad_method = "BEAUTY"
     triangulate_modifier.ngon_method = "BEAUTY"
+    bpy.ops.object.modifier_apply(modifier="Triangulate")
 """
 
 

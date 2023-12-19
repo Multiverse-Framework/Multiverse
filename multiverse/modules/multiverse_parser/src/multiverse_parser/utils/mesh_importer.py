@@ -30,9 +30,9 @@ def import_dae(in_dae: str) -> str:
 
 def import_obj(in_obj: str) -> str:
     return f"{clean_up_meshes_script}" \
-           f"bpy.ops.import_scene.obj(filepath='{in_obj}')"
+           f"bpy.ops.wm.obj_import(filepath='{in_obj}', up_axis='Z', forward_axis='Y')"
 
 
 def import_stl(in_stl: str) -> str:
     return f"{clean_up_meshes_script}"\
-           f"bpy.ops.import_mesh.stl(filepath='{in_stl}')"
+           f"bpy.ops.wm.stl_import(filepath='{in_stl}', up_axis='Z', forward_axis='Y')"
