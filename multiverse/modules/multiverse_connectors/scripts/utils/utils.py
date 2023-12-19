@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.10
 
+import re
 from typing import List
 import glob
 import subprocess
@@ -32,7 +33,7 @@ def get_urdf_str_from_ros_package(mesh_abspath_prefix: str, ros_pkg_path: str, u
     robot_urdf_str = ET.tostring(root, encoding="unicode")
     mesh_relpath_prefix = os.path.relpath(os.path.dirname(urdf_path), ros_pkg_path)
     mesh_relpath_prefix = os.path.join("package://multiverse_control", mesh_relpath_prefix) + "/"
-    robot_urdf_str = robot_urdf_str.replace("file:///", mesh_abspath_prefix)
+    robot_urdf_str = robot_urdf_str.replace("file:///", mesh_abspath_prefix + "/")
     robot_urdf_str = robot_urdf_str.replace("file://", mesh_relpath_prefix)
     return robot_urdf_str
 
@@ -41,6 +42,11 @@ def get_urdf_str_abs(urdf_path: str) -> str:
     tree = ET.parse(urdf_path)
     root = tree.getroot()
     robot_urdf_str = ET.tostring(root, encoding="unicode")
-    mesh_abspath_prefix = "file://" + os.path.dirname(urdf_path) + "/"
-    robot_urdf_str = robot_urdf_str.replace("file://", mesh_abspath_prefix)
+    mesh_abspath_prefix = os.path.dirname(urdf_path) + "/"
+    pattern = r'filename="file://([^"]*)"'
+    matches = re.findall(pattern, robot_urdf_str)
+    for match in matches:
+        if match.startswith('/'):
+            continue  # Skip if it's not an absolute path
+        robot_urdf_str = robot_urdf_str.replace(f'filename="file://{match}"', f'filename="file://{mesh_abspath_prefix}{match}"')
     return robot_urdf_str

@@ -21,24 +21,32 @@ class UrdfToUsdTestCase(unittest.TestCase):
 
     def test_urdf_importer_1(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
-        importer = UrdfImporter(file_path=input_urdf_path,
-                                with_physics=True,
-                                with_visual=True,
-                                with_collision=True,
-                                default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
-        self.assertEqual(importer.source_file_path, input_urdf_path)
-        self.assertEqual(importer._config.model_name, "tiago_dual")
+        factory = UrdfImporter(file_path=input_urdf_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=True,
+                               default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
+        self.assertEqual(factory.source_file_path, input_urdf_path)
+        self.assertEqual(factory._config.model_name, "tiago_dual")
 
-        usd_file_path = importer.import_model()
+        usd_file_path = factory.import_model()
         self.assertTrue(os.path.exists(usd_file_path))
 
         stage = Usd.Stage.Open(usd_file_path)
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "tiago_dual")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "tiago_dual.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
-        self.assertTrue(os.path.exists(output_usd_path))
+        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "to_urdf", "tiago_dual.usda")
+        factory.save_tmp_model(file_path=output_usd_path)
+
+        output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "to_urdf", "tiago_dual.urdf")
+        exporter = UrdfExporter(file_path=output_urdf_path,
+                                factory=factory,
+                                relative_to_ros_package=False)
+        self.assertEqual(exporter.robot.name, "tiago_dual")
+
+        exporter.build()
+        exporter.export()
 
     def test_urdf_importer_2(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")

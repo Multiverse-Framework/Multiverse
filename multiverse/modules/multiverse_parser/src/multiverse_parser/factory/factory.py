@@ -13,7 +13,7 @@ from typing import Optional, Dict, Tuple
 import numpy
 
 from .world_builder import WorldBuilder
-from ..utils import (import_obj, import_stl, import_dae,
+from ..utils import (import_obj, import_stl, import_dae, import_usd,
                      export_obj, export_stl, export_dae, export_usd)
 
 
@@ -110,7 +110,9 @@ class Factory:
                                          f"from_{file_extension[1:]}",
                                          f"{file_name}.usda")
 
-        if file_extension == ".obj":
+        if file_extension in [".usd", ".usda", ".usdz"]:
+            cmd = import_usd(mesh_file_path) + export_usd(tmp_usd_file_path)
+        elif file_extension == ".obj":
             cmd = import_obj(mesh_file_path) + export_obj(tmp_origin_file_path) + export_usd(tmp_usd_file_path)
         elif file_extension == ".stl":
             cmd = import_stl(mesh_file_path) + export_stl(tmp_origin_file_path) + export_usd(tmp_usd_file_path)
@@ -131,6 +133,46 @@ class Factory:
         self.mesh_file_paths[mesh_file_path] = tmp_usd_file_path, tmp_origin_file_path
 
         return tmp_usd_file_path, tmp_origin_file_path
+
+    def export_mesh(self, in_mesh_file_path: str, out_mesh_file_path: str) -> None:
+        in_file_extension = os.path.splitext(in_mesh_file_path)[1]
+        out_file_extension = os.path.splitext(out_mesh_file_path)[1]
+        if in_mesh_file_path in self.mesh_file_paths:
+            tmp_usd_file_path, tmp_origin_file_path = self.mesh_file_paths[in_mesh_file_path]
+            if out_file_extension == os.path.splitext(tmp_origin_file_path)[1]:
+                shutil.copyfile(tmp_origin_file_path, out_mesh_file_path)
+                return
+
+        if in_file_extension in [".usd", ".usda", ".usdz"]:
+            cmd = import_usd(in_mesh_file_path)
+        elif in_file_extension == ".obj":
+            cmd = import_obj(in_mesh_file_path)
+        elif in_file_extension == ".stl":
+            cmd = import_stl(in_mesh_file_path)
+        elif in_file_extension == ".dae":
+            cmd = import_dae(in_mesh_file_path)
+        else:
+            raise ValueError(f"Unsupported file extension {in_file_extension}.")
+
+        if out_file_extension in [".usd", ".usda", ".usdz"]:
+            cmd += export_usd(out_mesh_file_path)
+        elif out_file_extension == ".obj":
+            cmd += export_obj(out_mesh_file_path)
+        elif out_file_extension == ".stl":
+            cmd += export_stl(out_mesh_file_path)
+        elif out_file_extension == ".dae":
+            cmd += export_dae(out_mesh_file_path)
+        else:
+            raise ValueError(f"Unsupported file extension {out_file_extension}.")
+
+        cmd = ["blender",
+               "--background",
+               "--python-expr",
+               f"import bpy"
+               f"{cmd}"]
+
+        process = subprocess.Popen(cmd)
+        process.wait()
 
     def save_tmp_model(self, file_path: str) -> None:
         file_name = os.path.basename(file_path).split(".")[0]

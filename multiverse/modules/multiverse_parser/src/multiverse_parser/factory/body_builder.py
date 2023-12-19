@@ -16,6 +16,7 @@ class BodyBuilder:
     stage: Usd.Stage
     xform: UsdGeom.Xform
     joint_builders: List[JointBuilder]
+    geom_builders: List[GeomBuilder]
     child_body_builders: List[BodyBuilder]
 
     def __init__(self,
@@ -179,6 +180,10 @@ class BodyBuilder:
     @property
     def joint_builders(self) -> List[JointBuilder]:
         return list(self._joint_builders.values())
+
+    @property
+    def geom_builders(self) -> List[GeomBuilder]:
+        return list(self._geom_builders.values())
 
     @property
     def child_body_builders(self) -> List[BodyBuilder]:

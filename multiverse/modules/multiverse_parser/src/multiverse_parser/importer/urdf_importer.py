@@ -152,7 +152,8 @@ class UrdfImporter(Factory):
         return body_builder
 
     def _import_inertial(self, body: urdf.Link, body_builder: BodyBuilder) -> None:
-        if self._config.with_physics:
+        if (self._config.with_physics and
+                (len(body_builder.child_body_builders) > 0 or len(body_builder.geom_builders) > 0)):
             if self._config.inertia_source == InertiaSource.FROM_SRC:
                 if body.inertial is not None:
                     body_mass = body.inertial.mass

@@ -5,15 +5,14 @@ from typing import Tuple, Optional
 
 import numpy
 from scipy.spatial.transform import Rotation
-# from math import radians
 from urdf_parser_py import urdf
-from pxr import UsdUrdf, Gf, UsdPhysics
-from urdf_parser_py.urdf import Joint
+from pxr import UsdUrdf, Gf, UsdPhysics, UsdGeom
 
 from ..factory import Factory
 from ..factory import (WorldBuilder,
                        BodyBuilder,
-                       JointBuilder, JointType)
+                       JointBuilder, JointType,
+                       GeomBuilder, GeomType)
 from ..importer.urdf_importer import build_urdf_inertial_api
 
 
@@ -35,7 +34,7 @@ def get_meshdir_path(file_path: str, relative_to_ros_package: bool) -> Tuple[str
         meshdir_ros = "package://" + mesh_path
     else:
         meshdir_abs = str(os.path.join(os.path.dirname(file_path), meshdir_name))
-        meshdir_ros = meshdir_abs
+        meshdir_ros = "file://" + meshdir_abs
 
     return meshdir_abs, meshdir_ros
 
@@ -83,6 +82,15 @@ def build_urdf_joint_api(joint_builder: JointBuilder) -> UsdUrdf.UrdfJointAPI:
     return urdf_joint_api
 
 
+def get_urdf_origin(xform: UsdGeom.Xform) -> urdf.Pose:
+    transformation = xform.GetLocalTransformation().RemoveScaleShear()
+    xyz = transformation.ExtractTranslation()
+    quat = transformation.ExtractRotationQuat()
+    quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
+    rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
+    return urdf.Pose(xyz=xyz, rpy=rpy)
+
+
 class UrdfExporter:
     def __init__(
             self,
@@ -124,19 +132,15 @@ class UrdfExporter:
                 self.robot.add_joint(urdf_joint)
 
     def _build_fixed_joint(self, body_builder: BodyBuilder) -> Optional[urdf.Joint]:
-        child_prim = body_builder.xform.GetPrim()
+        child_xform = body_builder.xform
+        child_prim = child_xform.GetPrim()
         child_link_name = child_prim.GetName()
         if child_link_name == self.robot.name:
             return None
         parent_link_name = child_prim.GetParent().GetName()
-        transformation = body_builder.xform.GetLocalTransformation().RemoveScaleShear()
-        xyz = transformation.ExtractTranslation()
-        quat = transformation.ExtractRotationQuat()
-        quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
-        rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
 
         urdf_joint = urdf.Joint(name=child_link_name + "_joint")
-        urdf_joint.origin = urdf.Pose(xyz=xyz, rpy=rpy)
+        urdf_joint.origin = get_urdf_origin(child_xform)
         urdf_joint.type = "fixed"
         urdf_joint.parent = parent_link_name
         urdf_joint.child = child_link_name
@@ -200,97 +204,75 @@ class UrdfExporter:
                                    iyz=iyz if iyz is not None else 0.0)
             link.inertial = urdf.Inertial(origin=origin, mass=mass, inertia=inertia)
 
-        #         for geom_name in body_builder.geom_names:
-        #             geom_builder = geom_dict[geom_name]
-        #
-        #             geometry = None
-        #
-        #             if geom_builder.type == GeomType.CUBE:
-        #                 geometry = urdf.Box(size=numpy.array([geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2)
-        #             elif geom_builder.type == GeomType.SPHERE:
-        #                 geometry = urdf.Sphere(radius=geom_builder.geom.GetRadiusAttr().Get())
-        #             elif geom_builder.type == GeomType.CYLINDER:
-        #                 geometry = urdf.Cylinder(
-        #                     radius=geom_builder.geom.GetRadiusAttr().Get(),
-        #                     length=geom_builder.geom.GetHeightAttr().Get(),
-        #                 )
-        #
-        #             is_visual = not geom_builder.geom.GetPrim().HasAPI(UsdPhysics.CollisionAPI)
-        #
-        #             transformation = geom_builder.xform.GetLocalTransformation().RemoveScaleShear()
-        #             xyz = transformation.ExtractTranslation()
-        #             quat = transformation.ExtractRotationQuat()
-        #             rpy = quat_to_rpy(quat)
-        #             origin = urdf.Pose(xyz, rpy)
-        #
-        #             if geometry is not None:
-        #                 if self.with_visual and is_visual:
-        #                     visual = urdf.Visual(
-        #                         geometry=geometry,
-        #                         material=None,
-        #                         origin=origin,
-        #                         name=geom_builder.name,
-        #                     )
-        #                     link.visual = visual
-        #
-        #                 if self.with_collision and not is_visual:
-        #                     collision = urdf.Collision(geometry=geometry, origin=origin, name=geom_builder.name)
-        #                     link.collision = collision
-        #
-        #             if geom_builder.mesh_builder is not None:
-        #                 mesh_builder = geom_builder.mesh_builder
-        #                 clear_meshes()
-        #
-        #                 import_usd(mesh_builder.usd_file_path)
-        #
-        #                 # transform(xyz=xyz, rpy=rpy)
-        #
-        #                 if self.with_visual and is_visual:
-        #                     mesh_rel_path = os.path.join(
-        #                         "obj",
-        #                         os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0] + ".obj",
-        #                     )
-        #                     export_obj(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
-        #                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
-        #                     scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
-        #                     if not any(x < 0 for x in geom_builder.scale):
-        #                         scale = tuple(abs(x) for x in scale)
-        #                     if not any(x > 0 for x in geom_builder.scale):
-        #                         scale = tuple(-abs(x) for x in scale)
-        #
-        #                     geometry = urdf.Mesh(filename=filename, scale=scale)
-        #
-        #                     visual = urdf.Visual(
-        #                         geometry=geometry,
-        #                         material=None,
-        #                         origin=origin,
-        #                         name=mesh_builder.name,
-        #                     )
-        #                     link.visual = visual
-        #
-        #                 if self.with_collision and not is_visual:
-        #                     mesh_rel_path = os.path.join(
-        #                         "stl",
-        #                         os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0] + ".stl",
-        #                     )
-        #
-        #                     export_stl(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
-        #                     filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
-        #                     scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
-        #                     if not any(x < 0 for x in geom_builder.scale):
-        #                         scale = tuple(abs(x) for x in scale)
-        #                     if not any(x > 0 for x in geom_builder.scale):
-        #                         scale = tuple(-abs(x) for x in scale)
-        #
-        #                     geometry = urdf.Mesh(filename=filename, scale=scale)
-        #
-        #                     collision = urdf.Collision(
-        #                         geometry=geometry,
-        #                         origin=origin,
-        #                         name=mesh_builder.name,
-        #                     )
-        #                     link.collision = collision
-        #
+            geom_builder: GeomBuilder
+            for geom_builder in body_builder.geom_builders:
+                for geom_prim in geom_builder.geom_prims:
+                    geometries = []
+                    if geom_builder.type == GeomType.CUBE:
+                        size = numpy.array(
+                            [geom_prim.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2
+                        geometry = urdf.Box(size=size)
+                        geometries.append(geometry)
+                    elif geom_builder.type == GeomType.SPHERE:
+                        sphere = UsdGeom.Sphere(geom_prim)
+                        radius = sphere.GetRadiusAttr().Get()
+                        geometry = urdf.Sphere(radius=radius)
+                        geometries.append(geometry)
+                    elif geom_builder.type == GeomType.CYLINDER:
+                        cylinder = UsdGeom.Cylinder(geom_prim)
+                        radius = cylinder.GetRadiusAttr().Get()
+                        length = cylinder.GetHeightAttr().Get()
+                        geometry = urdf.Cylinder(radius=radius, length=length)
+                        geometries.append(geometry)
+                    elif geom_builder.type == GeomType.MESH:
+                        for usd_file_path, mesh_builder in geom_builder.mesh_builders.items():
+                            if not geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
+                                file_extension = "obj"
+                            else:
+                                file_extension = "stl"
+                            mesh_rel_path = os.path.join(
+                                file_extension,
+                                os.path.splitext(os.path.basename(usd_file_path))[0] + f".{file_extension}",
+                            )
+                            mesh_abs_path = os.path.join(self._meshdir_abs, mesh_rel_path)
+                            mesh_ros_path = os.path.join(self._meshdir_ros, mesh_rel_path)
+                            self.factory.export_mesh(in_mesh_file_path=usd_file_path,
+                                                     out_mesh_file_path=mesh_abs_path)
+
+                            transformation = geom_builder.xform.GetLocalTransformation()
+                            quat = transformation.RemoveScaleShear().ExtractRotationQuat()
+                            quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
+                            scale = numpy.array([transformation.GetRow(i).GetLength() for i in range(3)])
+                            rotated_scale = Rotation.from_quat(quat).apply(scale)
+                            if not any(x < 0 for x in scale):
+                                rotated_scale = abs(rotated_scale)
+                            if not any(x > 0 for x in scale):
+                                rotated_scale = -abs(rotated_scale)
+
+                            geometry = urdf.Mesh(filename=mesh_ros_path, scale=rotated_scale)
+                            geometries.append(geometry)
+                    else:
+                        raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
+
+                    origin = get_urdf_origin(geom_builder.xform)
+
+                    for geometry in geometries:
+                        geom_name = geom_builder.xform.GetPrim().GetName()
+                        if not geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
+                            visual = urdf.Visual(
+                                geometry=geometry,
+                                material=None,  # TODO: Add material
+                                origin=origin,
+                                name=geom_name,
+                            )
+                            link.visual = visual
+                        else:
+                            collision = urdf.Collision(
+                                geometry=geometry,
+                                origin=origin,
+                                name=geom_name)
+                            link.collision = collision
+
         self.robot.add_link(link)
 
     def export(self):
