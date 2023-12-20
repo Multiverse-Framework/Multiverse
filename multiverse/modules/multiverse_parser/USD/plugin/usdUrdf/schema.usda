@@ -38,17 +38,17 @@ class Urdf "Urdf"
     )
 }
 
-class "UrdfGeometryAPI" (
+class "UrdfLinkVisualAPI" (
     customData = {
-        string className = "UrdfGeometryAPI"
+        string className = "UrdfLinkVisualAPI"
     }
 
-    doc = """The shape of the object. """
+    doc = """The visual properties of the link."""
 
     inherits = </APISchemaBase>
 )
 {
-    point3f urdf:geometry:origin:xyz (
+    point3f urdf:visual:origin:xyz (
         customData = {
             string apiName = "xyz"
         }
@@ -56,53 +56,131 @@ class "UrdfGeometryAPI" (
         doc = "Describes the position of the geometry frame relative to the link frame."
     )
 
-    float3 urdf:geometry:origin:rpy (
+    float3 urdf:visual:origin:rpy (
         customData = {
             string apiName = "rpy"
         }
         displayName = "Geometry Origin Roll Pitch Yaw"
         doc = "Describes the orientation of the geometry frame relative to the link frame."
     )
+}
 
-    uniform token urdf:geometry:type (
+class "UrdfLinkCollisionAPI" (
+    customData = {
+        string className = "UrdfLinkCollisionAPI"
+    }
+
+    doc = """The collision properties of the link."""
+
+    inherits = </APISchemaBase>
+)
+{
+    point3f urdf:collision:origin:xyz (
         customData = {
-            string apiName = "type"
+            string apiName = "xyz"
         }
-        allowedTokens = ["box", "cylinder", "sphere", "mesh"]
-        displayName = "Geometry Type"
-        doc = """The shape of the visual object."""
+        displayName = "Geometry Origin Position"
+        doc = "Describes the position of the geometry frame relative to the link frame."
     )
 
-    float3 urdf:geometry:size (
+    float3 urdf:collision:origin:rpy (
+        customData = {
+            string apiName = "rpy"
+        }
+        displayName = "Geometry Origin Roll Pitch Yaw"
+        doc = "Describes the orientation of the geometry frame relative to the link frame."
+    )
+}
+
+class "UrdfGeometryBoxAPI" (
+    customData = {
+        string className = "UrdfGeometryBoxAPI"
+    }
+
+    doc = """The box shape of the object."""
+
+    inherits = </APISchemaBase>
+)
+{
+    float3 urdf:geometry:box:size (
         customData = {
             string apiName = "size"
         }
-        displayName = "Geometry Size"
-        doc = """The size of the box."""
+        displayName = "Geometry Box Size"
+        doc = """Size attribute contains the three side lengths of the box."""
     )
+}
 
-    float urdf:geometry:radius (
+class "UrdfGeometryCylinderAPI" (
+    customData = {
+        string className = "UrdfGeometryCylinderAPI"
+    }
+
+    doc = """The cylinder shape of the object."""
+
+    inherits = </APISchemaBase>
+)
+{
+    float urdf:geometry:cylinder:radius (
         customData = {
             string apiName = "radius"
         }
-        displayName = "Geometry Radius"
-        doc = """The radius of the cylinder or sphere."""
+        displayName = "Geometry Cylinder Radius"
+        doc = """Radius attribute contains the radius of the cylinder."""
     )
 
-    float urdf:geometry:length (
+    float urdf:geometry:cylinder:length (
         customData = {
             string apiName = "length"
         }
-        displayName = "Geometry Length"
-        doc = """The length of the cylinder."""
+        displayName = "Geometry Cylinder Length"
+        doc = """Length attribute contains the length of the cylinder."""
+    )
+}
+
+class "UrdfGeometrySphereAPI" (
+    customData = {
+        string className = "UrdfGeometrySphereAPI"
+    }
+
+    doc = """The sphere shape of the object."""
+
+    inherits = </APISchemaBase>
+)
+{
+    float urdf:geometry:sphere:radius (
+        customData = {
+            string apiName = "radius"
+        }
+        displayName = "Geometry Sphere Radius"
+        doc = """Radius attribute contains the radius of the sphere."""
+    )
+}
+
+class "UrdfGeometryMeshAPI" (
+    customData = {
+        string className = "UrdfGeometryMeshAPI"
+    }
+
+    doc = """The mesh shape of the object."""
+
+    inherits = </APISchemaBase>
+)
+{
+    asset urdf:geometry:mesh:filename (
+        customData = {
+            string apiName = "filename"
+        }
+        displayName = "Geometry Mesh Filename"
+        doc = """Filename attribute contains the path to the mesh file."""
     )
 
-    string urdf:geometry:fileName (
+    float3 urdf:geometry:mesh:scale (
         customData = {
-            string apiName = "fileName"
+            string apiName = "scale"
         }
-        displayName = "Geometry File Name"
-        doc = """The path to the mesh file."""
+        displayName = "Geometry Mesh Scale"
+        doc = """Scale attribute contains the scaling of the mesh."""
     )
 }
 

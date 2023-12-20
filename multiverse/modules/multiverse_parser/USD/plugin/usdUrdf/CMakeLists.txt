@@ -14,9 +14,14 @@ pxr_plugin(${PXR_PACKAGE}
 
     PUBLIC_CLASSES
         urdf
-        urdfGeometryAPI
-        urdfLinkInertialAPI
         urdfLinkAPI
+        urdfLinkInertialAPI
+        urdfLinkVisualAPI
+        urdfLinkCollisionAPI
+        urdfGeometryBoxAPI
+        urdfGeometryCylinderAPI
+        urdfGeometrySphereAPI
+        urdfGeometryMeshAPI
         urdfJointAPI
         tokens
 
@@ -29,9 +34,14 @@ pxr_plugin(${PXR_PACKAGE}
     PYMODULE_CPPFILES
         module.cpp
         wrapUrdf.cpp
-        wrapUrdfGeometryAPI.cpp
+        wrapUrdfLinkAPI.cpp
         wrapUrdfLinkInertialAPI.cpp
-        wrapUrdfLinkAPI.cpp   
+        wrapUrdfLinkVisualAPI.cpp
+        wrapUrdfLinkCollisionAPI.cpp
+        wrapUrdfGeometryBoxAPI.cpp
+        wrapUrdfGeometryCylinderAPI.cpp
+        wrapUrdfGeometrySphereAPI.cpp
+        wrapUrdfGeometryMeshAPI.cpp
         wrapUrdfJointAPI.cpp
 
     RESOURCE_FILES

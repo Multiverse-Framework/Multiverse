@@ -210,11 +210,11 @@ class UrdfImporter(Factory):
                      body_builder: BodyBuilder) -> GeomBuilder:
         if geom.origin is not None:
             geom_pos = geom.origin.xyz
-            geom_rot = geom.origin.rpy
+            geom_rpy = geom.origin.rpy
         else:
             geom_pos = numpy.array([0.0, 0.0, 0.0])
-            geom_rot = numpy.array([0.0, 0.0, 0.0])
-        geom_quat = Rotation.from_euler('xyz', geom_rot).as_quat()
+            geom_rpy = numpy.array([0.0, 0.0, 0.0])
+        geom_quat = Rotation.from_euler('xyz', geom_rpy).as_quat()
 
         geom_is_visible = isinstance(geom, urdf.Visual)
         geom_is_collidable = isinstance(geom, urdf.Collision)
@@ -246,7 +246,6 @@ class UrdfImporter(Factory):
             if source_mesh_file_path is not None:
                 tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
                     mesh_file_path=source_mesh_file_path)
-                tmp_origin_mesh_file_path = "file://" + tmp_origin_mesh_file_path
                 geom_builder.add_mesh(mesh_file_path=tmp_usd_mesh_file_path)
                 geom_builder.build()
                 geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
@@ -255,23 +254,30 @@ class UrdfImporter(Factory):
             raise ValueError(f"Geom type {type(geom.geometry)} not implemented.")
 
         geom_xform_prim = geom_builder.xform.GetPrim()
-        urdf_geometry_api = UsdUrdf.UrdfGeometryAPI.Apply(geom_xform_prim)
-        urdf_geom_type_str = "box" if type(geom.geometry) is urdf.Box \
-            else "sphere" if type(geom.geometry) is urdf.Sphere \
-            else "cylinder" if type(geom.geometry) is urdf.Cylinder \
-            else "mesh" if type(geom.geometry) is urdf.Mesh \
-            else None
-        if urdf_geom_type_str is None:
-            raise NotImplementedError(f"Geom type {type(geom.geometry)} not implemented.")
-        urdf_geometry_api.CreateTypeAttr(urdf_geom_type_str)
+        if type(geom) is urdf.Visual:
+            urdf_geom_api = UsdUrdf.UrdfLinkVisualAPI.Apply(geom_xform_prim)
+        elif type(geom) is urdf.Collision:
+            urdf_geom_api = UsdUrdf.UrdfLinkCollisionAPI.Apply(geom_xform_prim)
+        else:
+            raise ValueError(f"Geom type {type(geom)} not supported.")
+
+        urdf_geom_api.CreateXyzAttr(Gf.Vec3f(*geom_pos))
+        urdf_geom_api.CreateRpyAttr(Gf.Vec3f(*geom_rpy))
+
         if type(geom.geometry) is urdf.Box:
-            urdf_geometry_api.CreateSizeAttr(Gf.Vec3f(*geom.geometry.size))
+            urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(geom_xform_prim)
+            urdf_geometry_box_api.CreateSizeAttr(Gf.Vec3f(*geom.geometry.size))
         elif type(geom.geometry) is urdf.Sphere:
-            urdf_geometry_api.CreateRadiusAttr(geom.geometry.radius)
+            urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI.Apply(geom_xform_prim)
+            urdf_geometry_sphere_api.CreateRadiusAttr(geom.geometry.radius)
         elif type(geom.geometry) is urdf.Cylinder:
-            urdf_geometry_api.CreateLengthAttr(geom.geometry.length)
+            urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI.Apply(geom_xform_prim)
+            urdf_geometry_cylinder_api.CreateLengthAttr(geom.geometry.length)
         elif type(geom.geometry) is urdf.Mesh:
-            urdf_geometry_api.CreateFileNameAttr(tmp_origin_mesh_file_path)
+            urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(geom_xform_prim)
+            urdf_geometry_mesh_api.CreateFilenameAttr(tmp_origin_mesh_file_path)
+            if geom.geometry.scale is not None:
+                urdf_geometry_mesh_api.CreateScaleAttr(Gf.Vec3f(*geom.geometry.scale))
         else:
             raise ValueError(f"Geom type {type(geom.geometry)} not implemented.")
 

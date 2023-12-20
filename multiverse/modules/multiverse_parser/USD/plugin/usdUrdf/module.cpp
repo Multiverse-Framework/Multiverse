@@ -8,8 +8,14 @@ TF_WRAP_MODULE
 {
     TF_WRAP(UsdUrdfUrdf);
 
-    TF_WRAP(UsdUrdfUrdfGeometryAPI);
-    TF_WRAP(UsdUrdfUrdfLinkInertialAPI);
     TF_WRAP(UsdUrdfUrdfLinkAPI);
+    TF_WRAP(UsdUrdfUrdfLinkInertialAPI);
+    TF_WRAP(UsdUrdfUrdfLinkVisualAPI);
+    TF_WRAP(UsdUrdfUrdfLinkCollisionAPI);
+    TF_WRAP(UsdUrdfUrdfGeometryBoxAPI);
+    TF_WRAP(UsdUrdfUrdfGeometryCylinderAPI);
+    TF_WRAP(UsdUrdfUrdfGeometrySphereAPI);
+    TF_WRAP(UsdUrdfUrdfGeometryMeshAPI);
+
     TF_WRAP(UsdUrdfUrdfJointAPI);
 }

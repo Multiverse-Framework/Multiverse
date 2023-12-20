@@ -243,13 +243,14 @@ class UrdfExporter:
                             quat = transformation.RemoveScaleShear().ExtractRotationQuat()
                             quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
                             scale = numpy.array([transformation.GetRow(i).GetLength() for i in range(3)])
-                            rotated_scale = Rotation.from_quat(quat).apply(scale)
+                            # rotated_scale = Rotation.from_quat(quat).apply(scale)
+                            # print(geom_builder.xform.GetPrim().GetName(), scale, rotated_scale, quat)
                             # if not any(x < 0 for x in scale):
                             #     rotated_scale = abs(rotated_scale)
                             # if not any(x > 0 for x in scale):
                             #     rotated_scale = -abs(rotated_scale)
 
-                            geometry = urdf.Mesh(filename=mesh_ros_path, scale=rotated_scale)
+                            geometry = urdf.Mesh(filename=mesh_ros_path, scale=scale)
                             geometries.append(geometry)
                     else:
                         raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
