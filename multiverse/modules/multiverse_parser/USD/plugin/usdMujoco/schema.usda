@@ -155,6 +155,42 @@ class MujocoEqualityJoint "MujocoEqualityJoint" (
     )
 }
 
+class "MujocoBodyInertialAPI"(
+    customData = {
+        string className = "MujocoBodyInertialAPI"
+    }
+
+    doc = """This element creates an inertial element for a body."""
+
+    inherits = </APISchemaBase>
+)
+{
+    float mujoco:body:inertial:mass (
+        customData = {
+            string apiName = "mass"
+        }
+        displayName = "Body Mass"
+        doc = "The mass of the body."
+    )
+
+    float mujoco:body:inertial:diaginertia = (1, 1, 1) (
+        customData = {
+            string apiName = "diaginertia"
+        }
+        displayName = "Body Diaginertia"
+        doc = "The diagonal elements of the inertia matrix."
+    )
+
+    float mujoco:body:inertial:posinertia = (0, 0, 0) (
+        customData = {
+            string apiName = "posinertia"
+        }
+        displayName = "Body Posinertia"
+        doc = "The off-diagonal elements of the inertia matrix."
+    )
+}
+
+
 class "MujocoBodyAPI" (
     customData = {
         string className = "MujocoBodyAPI"

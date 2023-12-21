@@ -123,6 +123,7 @@ def add_geom(geometry, xform_prim, geom_prim, link, suffix=""):
             name=geom_name)
         link.collision = collision
 
+
 class UrdfExporter:
     def __init__(
             self,
@@ -137,7 +138,7 @@ class UrdfExporter:
                                                                 relative_to_ros_package=relative_to_ros_package)
         self._file_path = file_path
 
-    def build(self):
+    def build(self) -> None:
         for body_builder in self.factory.world_builder.body_builders:
             self._build_joints(body_builder=body_builder)
             self._build_link(body_builder=body_builder)
@@ -248,7 +249,8 @@ class UrdfExporter:
             if geom_builder.type == GeomType.CUBE:
                 if not xform_prim.HasAPI(UsdUrdf.UrdfGeometryBoxAPI):
                     urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(xform_prim)
-                    urdf_geometry_box_api.CreateSizeAttr(numpy.array([geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2)
+                    urdf_geometry_box_api.CreateSizeAttr(numpy.array(
+                        [geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2)
                 urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI(xform_prim)
                 size = urdf_geometry_box_api.GetSizeAttr().Get()
                 geometry = urdf.Box(size=size)
@@ -301,7 +303,9 @@ class UrdfExporter:
                         urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(xform_prim)
                         urdf_geometry_mesh_api.CreateFilenameAttr(mesh_ros_path)
                         transformation = geom_builder.xform.GetLocalTransformation()
-                        urdf_geometry_mesh_api.CreateScaleAttr(numpy.array([transformation.GetRow(i).GetLength() for i in range(3)])) # TODO: Doesn't work for negative scale
+                        urdf_geometry_mesh_api.CreateScaleAttr(numpy.array(
+                            [transformation.GetRow(i).GetLength() for i in
+                             range(3)]))  # TODO: Doesn't work for negative scale
                     urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI(xform_prim)
                     scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
 

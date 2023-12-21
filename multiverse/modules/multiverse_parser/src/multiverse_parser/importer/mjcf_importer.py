@@ -6,6 +6,7 @@ from typing import Optional, List, Tuple, Dict
 
 import numpy
 import mujoco
+from scipy.spatial.transform import Rotation
 
 from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
@@ -14,8 +15,26 @@ from ..factory import (WorldBuilder, BodyBuilder,
                        MeshBuilder, MeshProperty,
                        MaterialBuilder, MaterialProperty)
 
-from pxr import UsdMujoco, Gf
+from pxr import UsdMujoco, Gf, UsdPhysics
 
+
+def build_mujoco_inertial_api(physics_mass_api: UsdPhysics.MassAPI) -> UsdMujoco.MujocoBodyInertialAPI:
+    mass = physics_mass_api.GetMassAttr().Get()
+    pos = physics_mass_api.GetCenterOfMassAttr().Get()
+    quat = physics_mass_api.GetPrincipalAxesAttr().Get()
+    quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
+    diagonal_inertia = physics_mass_api.GetDiagonalInertiaAttr().Get()
+
+    prim = physics_mass_api.GetPrim()
+    urdf_link_inertial_api = UsdMujoco.MujocoBodyInertialAPI.Apply(prim)
+    urdf_link_inertial_api.CreateMassAttr(mass)
+    urdf_link_inertial_api.CreateXyzAttr(Gf.Vec3f(*xyz))
+    urdf_link_inertial_api.CreateRpyAttr(Gf.Vec3f(*rpy))
+    urdf_link_inertial_api.CreateIxxAttr(diagonal_inertia[0])
+    urdf_link_inertial_api.CreateIyyAttr(diagonal_inertia[1])
+    urdf_link_inertial_api.CreateIzzAttr(diagonal_inertia[2])
+
+    return urdf_link_inertial_api
 
 def get_model_name(xml_file_path: str) -> str:
     with open(xml_file_path) as xml_file:

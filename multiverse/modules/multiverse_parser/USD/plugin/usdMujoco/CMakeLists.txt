@@ -18,6 +18,7 @@ pxr_plugin(${PXR_PACKAGE}
         mujocoAsset
         mujocoMesh
         mujocoBodyAPI
+        mujocoBodyInertialAPI
         mujocoJointAPI
         mujocoGeomAPI
         mujocoEquality
@@ -37,6 +38,7 @@ pxr_plugin(${PXR_PACKAGE}
         wrapMujocoAsset.cpp
         wrapMujocoMesh.cpp
         wrapMujocoBodyAPI.cpp
+        wrapMujocoBodyInertialAPI.cpp
         wrapMujocoJointAPI.cpp
         wrapMujocoGeomAPI.cpp
         wrapMujocoEquality.cpp
