@@ -20,7 +20,7 @@ def clean_up_meshes(bpy, file_path: str) -> None:
         bpy.ops.object.mode_set(mode="OBJECT")
     
     selected_object = bpy.context.object
-    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
     
     # Apply triangulate modifier
     selected_object = bpy.context.object
@@ -48,6 +48,7 @@ import shutil
 import os.path
 
 {clean_up_meshes_script}
+clean_up_meshes(bpy, '{out_dae}')
 out_dae_dir = os.path.dirname('{out_dae}')
 os.makedirs(name=os.path.join(out_dae_dir, "..", "textures"), exist_ok=True)
 bpy.ops.wm.collada_export(filepath='{out_dae}', use_texture_copies=True)
@@ -61,6 +62,7 @@ import os.path
 from PIL import Image
 
 {clean_up_meshes_script}
+clean_up_meshes(bpy, '{out_obj}')
 out_obj_dir = os.path.dirname('{out_obj}')
 os.makedirs(name=os.path.join(out_obj_dir, "..", "textures"), exist_ok=True)
 bpy.ops.wm.obj_export(filepath='{out_obj}', export_selected_objects=True, forward_axis="Y", up_axis="Z",
@@ -90,6 +92,7 @@ def export_stl(out_stl: str) -> str:
 import os.path
 
 {clean_up_meshes_script}
+clean_up_meshes(bpy, '{out_stl}')
 os.makedirs(name=os.path.dirname('{out_stl}'), exist_ok=True)
 selected_object = bpy.context.object
 selected_object.modifiers.new("Weld", "WELD")

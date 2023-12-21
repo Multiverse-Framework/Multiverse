@@ -272,6 +272,7 @@ class UrdfImporter(Factory):
             urdf_geometry_sphere_api.CreateRadiusAttr(geom.geometry.radius)
         elif type(geom.geometry) is urdf.Cylinder:
             urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI.Apply(geom_xform_prim)
+            urdf_geometry_cylinder_api.CreateRadiusAttr(geom.geometry.radius)
             urdf_geometry_cylinder_api.CreateLengthAttr(geom.geometry.length)
         elif type(geom.geometry) is urdf.Mesh:
             urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(geom_xform_prim)

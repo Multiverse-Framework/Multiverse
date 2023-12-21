@@ -24,7 +24,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         factory = UrdfImporter(file_path=input_urdf_path,
                                with_physics=True,
                                with_visual=True,
-                               with_collision=False,
+                               with_collision=True,
                                default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
         self.assertEqual(factory.source_file_path, input_urdf_path)
         self.assertEqual(factory._config.model_name, "tiago_dual")
