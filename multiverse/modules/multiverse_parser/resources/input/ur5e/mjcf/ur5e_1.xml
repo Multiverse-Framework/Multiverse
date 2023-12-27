@@ -27,7 +27,7 @@
           <geom type="cylinder"/>
         </default>
       </default>
-      <site size="0.001" rgba="0.5 0.5 0.5 0.3" group="4"/>
+      <site size="0.001" rgba="0.5 0.5 0.5 1.0" group="4"/>
     </default>
   </default>
 

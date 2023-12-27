@@ -6,7 +6,6 @@ from typing import Optional, List, Tuple, Dict
 
 import numpy
 import mujoco
-from scipy.spatial.transform import Rotation
 
 from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
@@ -15,26 +14,8 @@ from ..factory import (WorldBuilder, BodyBuilder,
                        MeshBuilder, MeshProperty,
                        MaterialBuilder, MaterialProperty)
 
-from pxr import UsdMujoco, Gf, UsdPhysics
+from pxr import UsdMujoco, Gf
 
-
-def build_mujoco_inertial_api(physics_mass_api: UsdPhysics.MassAPI) -> UsdMujoco.MujocoBodyInertialAPI:
-    mass = physics_mass_api.GetMassAttr().Get()
-    pos = physics_mass_api.GetCenterOfMassAttr().Get()
-    quat = physics_mass_api.GetPrincipalAxesAttr().Get()
-    quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
-    diagonal_inertia = physics_mass_api.GetDiagonalInertiaAttr().Get()
-
-    prim = physics_mass_api.GetPrim()
-    urdf_link_inertial_api = UsdMujoco.MujocoBodyInertialAPI.Apply(prim)
-    urdf_link_inertial_api.CreateMassAttr(mass)
-    urdf_link_inertial_api.CreateXyzAttr(Gf.Vec3f(*xyz))
-    urdf_link_inertial_api.CreateRpyAttr(Gf.Vec3f(*rpy))
-    urdf_link_inertial_api.CreateIxxAttr(diagonal_inertia[0])
-    urdf_link_inertial_api.CreateIyyAttr(diagonal_inertia[1])
-    urdf_link_inertial_api.CreateIzzAttr(diagonal_inertia[2])
-
-    return urdf_link_inertial_api
 
 def get_model_name(xml_file_path: str) -> str:
     with open(xml_file_path) as xml_file:
@@ -56,7 +37,7 @@ class MjcfImporter(Factory):
         mujoco.mjtGeom.mjGEOM_SPHERE: GeomType.SPHERE,
         mujoco.mjtGeom.mjGEOM_ELLIPSOID: GeomType.SPHERE,
         mujoco.mjtGeom.mjGEOM_CYLINDER: GeomType.CYLINDER,
-        mujoco.mjtGeom.mjGEOM_CAPSULE: GeomType.CYLINDER,
+        mujoco.mjtGeom.mjGEOM_CAPSULE: GeomType.CAPSULE,
         mujoco.mjtGeom.mjGEOM_MESH: GeomType.MESH,
     }
 
@@ -212,8 +193,8 @@ class MjcfImporter(Factory):
                                     upper=mj_joint.range[1])
 
         mujoco_joint_api = UsdMujoco.MujocoJointAPI.Apply(joint_builder.joint.GetPrim())
-        mj_joint_type = "revolute" if mj_joint.type == mujoco.mjtJoint.mjJNT_HINGE \
-            else "prismatic" if mj_joint.type == mujoco.mjtJoint.mjJNT_SLIDE \
+        mj_joint_type = "hinge" if mj_joint.type == mujoco.mjtJoint.mjJNT_HINGE \
+            else "slide" if mj_joint.type == mujoco.mjtJoint.mjJNT_SLIDE \
             else "ball" if mj_joint.type == mujoco.mjtJoint.mjJNT_BALL \
             else None
         if mj_joint_type is None:
@@ -222,6 +203,8 @@ class MjcfImporter(Factory):
         mujoco_joint_api.CreateTypeAttr(mj_joint_type)
         mujoco_joint_api.CreatePosAttr(Gf.Vec3f(*mj_joint.pos))
         mujoco_joint_api.CreateAxisAttr(Gf.Vec3f(*mj_joint.axis))
+        if mj_joint.type in [mujoco.mjtJoint.mjJNT_HINGE, mujoco.mjtJoint.mjJNT_SLIDE]:
+            mujoco_joint_api.CreateRangeAttr(Gf.Vec2f(*mj_joint.range))
 
         return joint_builder
 
@@ -286,7 +269,10 @@ class MjcfImporter(Factory):
                 # TODO: Fix ellipsoid
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
                 geom_builder.set_attribute(radius=mj_geom.size[0])
-            elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_CYLINDER, mujoco.mjtGeom.mjGEOM_CAPSULE]:
+            elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_CYLINDER]:
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
+                geom_builder.set_attribute(radius=mj_geom.size[0], height=mj_geom.size[1] * 2)
+            elif mj_geom.type in [mujoco.mjtGeom.mjGEOM_CAPSULE]:
                 # TODO: Fix capsule
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
                 geom_builder.set_attribute(radius=mj_geom.size[0], height=mj_geom.size[1] * 2)
@@ -310,17 +296,31 @@ class MjcfImporter(Factory):
                 mujoco_mesh.CreateNormalAttr(normal)
                 face = face_vertex_indices.reshape(-1, 3)
                 mujoco_mesh.CreateFaceAttr(face)
-
                 mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
                 mat_id = mj_geom.matid
                 if mat_id != -1:
-                    diffuse_color, emissive_color, specular_color = self.get_material_data(mat_id=mat_id)
+                    mat_rgba = self.mj_model.mat_rgba[mat_id][0]
+                    mat_emission = self.mj_model.mat_emission[mat_id].tolist()[0]
+                    mat_specular = self.mj_model.mat_specular[mat_id].tolist()[0]
+                    diffuse_color, emissive_color, specular_color = self.get_material_data(mat_rgb=mat_rgba[:3],
+                                                                                           mat_emission=mat_emission,
+                                                                                           mat_specular=mat_specular)
                     material_builder = MaterialBuilder(file_path=tmp_mesh_file_path)
                     material_property = MaterialProperty(diffuse_color=diffuse_color,
                                                          emissive_color=emissive_color,
                                                          specular_color=specular_color)
                     material_builder.apply_material(material_property=material_property)
+
+                    material_name = self.mj_model.mat(mat_id).name
+                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild(material_name)
+                    mujoco_material_prim = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
+                                                                           mujoco_material_path)
+                    mujoco_material_prim.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
+                    mujoco_material_prim.CreateEmissionAttr(mat_emission)
+                    mujoco_material_prim.CreateSpecularAttr(mat_specular)
+
+                    mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 
                 geom_builder.add_mesh(mesh_file_path=tmp_mesh_file_path)
                 geom_builder.build()
@@ -372,22 +372,13 @@ class MjcfImporter(Factory):
 
         return points, normals, face_vertex_counts, face_vertex_indices
 
-    def get_material_data(self, mat_id: int) -> Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]:
-        """
-        Get material data from the given material id.
-        :param mat_id: Material id.
-        :return: diffuse_color (RGB), emissive_color (RGB), specular_color (RGB)
-        """
-        if mat_id == -1:
-            raise ValueError(f"Material {mat_id} not found.")
-        mat_rgba = self.mj_model.mat_rgba[mat_id]
-        mat_rgb = mat_rgba[0][:3]
-        diffuse_color = numpy.array([float(x) for x in mat_rgb])
+    def get_material_data(self, mat_rgb, mat_emission, mat_specular) -> Tuple[
+        numpy.ndarray, numpy.ndarray, numpy.ndarray]:
 
-        mat_emission = self.mj_model.mat_emission[mat_id]
+        diffuse_color = numpy.array([float(x) for x in mat_rgb[:3]])
+
         emissive_color = numpy.array([float(x * mat_emission) for x in mat_rgb])
 
-        mat_specular = self.mj_model.mat_specular[mat_id]
         specular_color = numpy.array([float(mat_specular) for _ in range(3)])
 
         return diffuse_color, emissive_color, specular_color

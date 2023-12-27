@@ -136,7 +136,7 @@ class UsdImporter:
 
                         body_builder.set_inertial(mass=mass, com=com, diagonal_inertia=diagonal_inertia)
 
-                    geom_builder = body_builder.add_geom(
+                    geom_builder = body_builder.build_geom(
                         geom_name=xform_prim.GetName(),
                         geom_type=geom_type,
                         is_visual=is_visual,

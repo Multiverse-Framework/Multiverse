@@ -21,9 +21,9 @@ class MjcfToMjcfTestCase(unittest.TestCase):
     def test_mjcf_importer_1(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
         factory = MjcfImporter(file_path=input_mjcf_path,
-                                with_physics=True,
-                                with_visual=True,
-                                with_collision=True)
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=False)
         factory.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
         self.assertEqual(factory.source_file_path, input_mjcf_path)
         self.assertEqual(factory._config.model_name, "ur5e")

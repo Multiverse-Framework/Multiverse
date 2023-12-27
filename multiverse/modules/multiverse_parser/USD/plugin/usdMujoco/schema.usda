@@ -105,6 +105,50 @@ class MujocoMesh "MujocoMesh" (
         displayName = "Mesh Normal"
         doc = "Vertex 3D normal data."
     )
+
+    float3 mujoco:mesh:scale = (1, 1, 1) (
+        customData = {
+            string apiName = "scale"
+        }
+        displayName = "Mesh Scale"
+        doc = "This attribute specifies the scaling that will be applied to the vertex data along each coordinate axis. Negative values are allowed, resulting in flipping the mesh along the corresponding axis."
+    )
+}
+
+class MujocoMaterial "MujocoMaterial"
+(
+    customData = {
+        string className = "MujocoMaterial"
+    }
+
+    doc = """This element creates a material asset, which can then be referenced from geoms."""
+
+    inherits = </Typed>
+)
+{
+    color4f mujoco:material:rgba (
+        customData = {
+            string apiName = "rgba"
+        }
+        displayName = "Material RGBA"
+        doc = "Color and transparency of the material. All components should be in the range [0 1]."
+    )
+
+    float mujoco:material:emission (
+        customData = {
+            string apiName = "emission"
+        }
+        displayName = "Material Emission"
+        doc = "Emission in OpenGL has the RGBA format, however we only provide a scalar setting."
+    )
+
+    float mujoco:material:specular (
+        customData = {
+            string apiName = "specular"
+        }
+        displayName = "Material Specular"
+        doc = "Specularity in OpenGL has the RGBA format, however we only provide a scalar setting."
+    )
 }
 
 class MujocoEquality "MujocoEquality" 
@@ -155,7 +199,7 @@ class MujocoEqualityJoint "MujocoEqualityJoint" (
     )
 }
 
-class "MujocoBodyInertialAPI"(
+class "MujocoBodyInertialAPI" (
     customData = {
         string className = "MujocoBodyInertialAPI"
     }
@@ -165,28 +209,36 @@ class "MujocoBodyInertialAPI"(
     inherits = </APISchemaBase>
 )
 {
+    point3f mujoco:body:inertial:pos (
+        customData = {
+            string apiName = "pos"
+        }
+        displayName = "Inertial Position"
+        doc = "Position of the inertial frame."
+    )
+
+    quatf mujoco:body:inertial:quat = (1, 0, 0, 0) (
+        customData = {
+            string apiName = "quat"
+        }
+        displayName = "Inertial Quaternion"
+        doc = "Quaternion of the inertial frame."
+    )
+
     float mujoco:body:inertial:mass (
         customData = {
             string apiName = "mass"
         }
-        displayName = "Body Mass"
+        displayName = "Mass"
         doc = "The mass of the body."
     )
 
-    float mujoco:body:inertial:diaginertia = (1, 1, 1) (
+    float3 mujoco:body:inertial:diaginertia (
         customData = {
             string apiName = "diaginertia"
         }
-        displayName = "Body Diaginertia"
+        displayName = "Diagonal Inertia"
         doc = "The diagonal elements of the inertia matrix."
-    )
-
-    float mujoco:body:inertial:posinertia = (0, 0, 0) (
-        customData = {
-            string apiName = "posinertia"
-        }
-        displayName = "Body Posinertia"
-        doc = "The off-diagonal elements of the inertia matrix."
     )
 }
 
@@ -252,6 +304,14 @@ class "MujocoJointAPI" (
         displayName = "Joint Axis"
         doc = "This attribute specifies the axis of rotation for hinge joints and the direction of translation for slide joints."
     )
+
+    float2 mujoco:joint:range (
+        customData = {
+            string apiName = "range"
+        }
+        displayName = "Joint Range"
+        doc = "The range of motion of the joint. For hinge joints, this is the range of rotation in radians. For slide joints, this is the range of translation in meters."
+    )
 }
 
 class "MujocoGeomAPI" (
@@ -279,6 +339,14 @@ class "MujocoGeomAPI" (
         }
         displayName = "Geom Mesh"
         doc = "The mesh asset."
+    )
+
+    rel mujoco:geom:material (
+        customData = {
+            string apiName = "material"
+        }
+        displayName = "Geom Material"
+        doc = "The material asset."
     )
 
     vector3f mujoco:geom:size (
