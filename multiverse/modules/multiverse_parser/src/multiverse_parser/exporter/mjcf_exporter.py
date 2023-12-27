@@ -6,8 +6,9 @@ from xml.etree import ElementTree as ET
 from xml.dom import minidom
 
 import numpy
+from multiverse_parser.factory import MaterialBuilder
 from numpy import radians
-from pxr import UsdMujoco, UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd
+from pxr import UsdMujoco, UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd, UsdShade
 
 from ..factory import Factory
 from ..factory import (JointBuilder, JointType,
@@ -127,6 +128,7 @@ def get_mujoco_asset_prim(stage) -> Usd.Prim:
         mujoco_asset_prim = UsdMujoco.MujocoAsset.Define(stage, "/mujoco/asset")
     return mujoco_asset_prim.GetPrim()
 
+
 def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
     xform = geom_builder.xform
     xform_prim = xform.GetPrim()
@@ -162,7 +164,7 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
             if xform_prim.HasAPI(UsdUrdf.UrdfGeometryMeshAPI):
                 urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI(xform_prim)
                 geom_size = urdf_geometry_mesh_api.GetScaleAttr().Get()
-                geom_size = numpy.array([*geom_size])
+                geom_size = numpy.array([*geom_size]) if geom_size is not None else numpy.array([1.0, 1.0, 1.0])
             else:
                 raise NotImplementedError(f"Geom type {geom_builder.type} not implemented.")
             geom_type = "mesh"
@@ -188,11 +190,24 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
             mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild(mesh_name)
             mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
+            if len(geom_builder.material_builders) > 1:
+                raise NotImplementedError(f"Geom {geom_builder.xform.GetPrim().GetName()} has "
+                                          f"{len(geom_builder.material_builders)} materials.")
+            for _, material_builder in geom_builder.material_builders.items():
+                if len(material_builder.materials) > 1:
+                    raise NotImplementedError(f"Material in {material_builder.stage.GetRootLayer().realPath} has "
+                                              f"{len(material_builder.materials)} materials.")
+                for material in material_builder.materials:
+                    material_name = material.GetPrim().GetName()
+                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild(material_name)
+                    mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
+
     return mujoco_geom_api
 
 
 def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage, mujoco_asset_prim: Usd.Prim):
     mesh_file_paths = {}
+    materials = {}
     mesh_dir_name = os.path.dirname(stage.GetRootLayer().realPath)
 
     for prim in stage.TraverseAll():
@@ -205,7 +220,7 @@ def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage, mujoco_asset_pr
                 if prim.HasAPI(UsdUrdf.UrdfGeometryMeshAPI):
                     urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI(prim)
                     mesh_scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
-                    mesh_scale = tuple(mesh_scale)
+                    mesh_scale = tuple(mesh_scale) if mesh_scale is not None else (1.0, 1.0, 1.0)
                 else:
                     mesh_scale = (1.0, 1.0, 1.0)
                 if mesh_file_path not in mesh_file_paths:
@@ -214,9 +229,53 @@ def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage, mujoco_asset_pr
                     mesh_file_paths[mesh_file_path].add(mesh_scale)
 
     for mesh_file_path, mesh_scales in mesh_file_paths.items():
+        mesh_stage = Usd.Stage.Open(mesh_file_path)
+        for prim in mesh_stage.TraverseAll():
+            if prim.IsA(UsdShade.Material):
+                material = UsdShade.Material(prim)
+                material_name = material.GetPrim().GetName()
+                if material_name in materials:
+                    continue
+                materials[material_name] = {}
+                for surface_output in material.GetSurfaceOutputs():
+                    connected_source = surface_output.GetConnectedSource()[0]
+                    shader_prim = connected_source.GetPrim()
+                    if shader_prim.IsA(UsdShade.Shader):
+                        shader = UsdShade.Shader(shader_prim)
+                        for shader_input in shader.GetInputs():
+                            if shader_input.GetBaseName() == "diffuseColor":
+                                diffuse_color = shader_input.GetAttr().Get()
+                                materials[material_name]["diffuse_color"] = diffuse_color
+                            elif shader_input.GetBaseName() == "opacity":
+                                opacity = shader_input.GetAttr().Get()
+                                materials[material_name]["opacity"] = opacity
+                            elif shader_input.GetBaseName() == "emissiveColor":
+                                emissive_color = shader_input.GetAttr().Get()
+                                materials[material_name]["emissive_color"] = emissive_color
+                            elif shader_input.GetBaseName() == "specular":
+                                specular = shader_input.GetAttr().Get()
+                                materials[material_name]["specular_color"] = specular
+
+        for material_name, material_props in materials.items():
+            mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild(material_name)
+            mujoco_material = UsdMujoco.MujocoMaterial.Define(stage, mujoco_material_path)
+            rgba = Gf.Vec4f(1.0, 1.0, 1.0, 0.0)
+            emission = 0.0
+            specular = 0.0
+            if "diffuse_color" in material_props and "opacity" in material_props:
+                rgba = Gf.Vec4f(*material_props["diffuse_color"], material_props["opacity"])
+                if "emissive_color" in material_props and all([c != 0.0 for c in material_props["diffuse_color"]]):
+                    emissions = [material_props["emissive_color"][i] / material_props["diffuse_color"][i]
+                                 for i in range(3)]
+                    if emissions[0] == emissions[1] == emissions[2]:
+                        emission = emissions[0]
+            if "specular_color" in material_props:
+                specular = material_props["specular_color"]
+            mujoco_material.CreateRgbaAttr(rgba)
+            mujoco_material.CreateEmissionAttr(emission)
+            mujoco_material.CreateSpecularAttr(specular)
+
         for mesh_scale in mesh_scales:
-            if len(mesh_scales) == 2:
-                print(mesh_file_paths)
             scaled_mesh_file_path = scale_mesh(usd_file_path=mesh_file_path, scale=mesh_scale)
 
             mesh_stage = Usd.Stage.Open(scaled_mesh_file_path)
@@ -435,6 +494,15 @@ class MjcfExporter:
             material_prim = xform_prim.GetStage().GetPrimAtPath(material_rel_path)
             material_name = material_prim.GetName()
             geom.set("material", material_name)
+
+        if len(geom_builder.geom_prims) > 1:
+            raise NotImplementedError(f"Geom {geom_builder.xform.GetPrim().GetName()} has "
+                                      f"{len(geom_builder.geom_prims)} geom prims.")
+        geom_prim = geom_builder.geom_prims[0]
+        if geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
+            geom.set("class", "collision")
+        else:
+            geom.set("class", "visual")
 
     def _build_joint(self, joint_builder: JointBuilder, body_name: str) -> None:
         mujoco_joint_api = get_mujoco_joint_api(joint_builder=joint_builder)

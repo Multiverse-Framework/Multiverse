@@ -156,6 +156,7 @@ class GeomBuilder:
             material_builder = self.material_builders[mesh_file_path]
         else:
             material_builder = MaterialBuilder(file_path=mesh_file_path)
+            self.material_builders[mesh_file_path] = material_builder
 
         reference_prims = [mesh.GetPrim() for mesh in mesh_builder.xform.GetPrim().GetChildren()]
         for reference_prim in reference_prims:
