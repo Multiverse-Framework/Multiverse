@@ -1,5 +1,5 @@
 Metadata-Version: 2.1
-Name: multiverse-parser
+Name: multiverse_parser
 Version: 0.0.1
 Summary: A parser that converts between different scene descriptions
 Author-email: Giang Nguyen <hoanggia@uni-bremen.de>

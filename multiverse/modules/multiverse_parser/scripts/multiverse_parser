@@ -5,7 +5,7 @@ import os
 import numpy
 
 from multiverse_parser import UrdfImporter, MjcfImporter
-
+from multiverse_parser import UrdfExporter, MjcfExporter
 
 def main():
     parser = argparse.ArgumentParser(description="Multiverse parser")
@@ -61,23 +61,40 @@ def main():
     if in_extension in [".usd", ".usda", ".usdc"]:
         raise NotImplementedError("Importing from USD is not supported yet.")
     elif in_extension == ".urdf":
-        importer = UrdfImporter(file_path=args.input,
+        factory = UrdfImporter(file_path=args.input,
                                 with_physics=True,
                                 with_visual=True,
-                                with_collision=False)
+                                with_collision=True,
+                                default_rgba=args.collisionrgba)
     elif in_extension == ".xml":
-        importer = MjcfImporter(file_path=args.input,
+        factory = MjcfImporter(file_path=args.input,
                                 with_physics=True,
                                 with_visual=True,
-                                with_collision=False)
+                                with_collision=True,
+                                default_rgba=args.collisionrgba)
     else:
         raise NotImplementedError(f"Importing from {in_extension} is not supported yet.")
 
-    importer.import_model()
+    factory.import_model()
 
     if args.keepusd:
         output_usd_path = os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda")
-        importer.save_tmp_model(file_path=str(output_usd_path))
+        factory.save_tmp_model(file_path=str(output_usd_path))
+
+    if out_extension in [".usd", ".usda", ".usdc"]:
+        raise NotImplementedError("Exporting to USD is not supported yet.")
+    elif out_extension == ".xml":
+        exporter = MjcfExporter(file_path=args.output,
+                                factory=factory)
+        exporter.build()
+        exporter.export()
+    elif out_extension == ".urdf":
+        exporter = UrdfExporter(file_path=args.output,
+                                factory=factory)
+        exporter.build()
+        exporter.export()
+    else:
+        raise NotImplementedError(f"Exporting to {out_extension} is not supported yet.")
 
 
 if __name__ == "__main__":

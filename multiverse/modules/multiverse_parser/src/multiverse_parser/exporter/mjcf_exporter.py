@@ -262,14 +262,14 @@ def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage, mujoco_asset_pr
             rgba = Gf.Vec4f(1.0, 1.0, 1.0, 0.0)
             emission = 0.0
             specular = 0.0
-            if "diffuse_color" in material_props and "opacity" in material_props:
+            if material_props.get("diffuse_color") is not None and material_props.get("opacity") is not None:
                 rgba = Gf.Vec4f(*material_props["diffuse_color"], material_props["opacity"])
                 if "emissive_color" in material_props and all([c != 0.0 for c in material_props["diffuse_color"]]):
                     emissions = [material_props["emissive_color"][i] / material_props["diffuse_color"][i]
                                  for i in range(3)]
                     if emissions[0] == emissions[1] == emissions[2]:
                         emission = emissions[0]
-            if "specular_color" in material_props:
+            if material_props.get("specular_color") is not None:
                 specular = material_props["specular_color"]
             mujoco_material.CreateRgbaAttr(rgba)
             mujoco_material.CreateEmissionAttr(emission)
