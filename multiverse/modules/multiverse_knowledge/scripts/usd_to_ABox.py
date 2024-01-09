@@ -235,13 +235,13 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
                         xformOpTransform_inst.xformOp_transform = [prim.GetAttribute(xformOp).Get()]
 
             if prim.IsA(UsdGeom.Gprim):
-                displayColor_inst = dul_onto.Quality(prim.GetName() + "_dislayColor", namespace=dul_onto)
-                prim_inst.hasQuality.append(displayColor_inst)
-                displayOpacity_inst = dul_onto.Quality(prim.GetName() + "_dislayOpacity", namespace=dul_onto)
-                prim_inst.hasQuality.append(displayOpacity_inst)
-
                 gprim = UsdGeom.Gprim(prim)
                 if gprim.GetDisplayColorPrimvar().Get() is not None and gprim.GetDisplayOpacityPrimvar().Get() is not None:
+                    displayColor_inst = dul_onto.Quality(prim.GetName() + "_dislayColor", namespace=dul_onto)
+                    prim_inst.hasQuality.append(displayColor_inst)
+                    displayOpacity_inst = dul_onto.Quality(prim.GetName() + "_dislayOpacity", namespace=dul_onto)
+                    prim_inst.hasQuality.append(displayOpacity_inst)
+
                     displayColor_inst.primvars_displayColor = [gprim.GetDisplayColorPrimvar().Get()]
                     displayOpacity_inst.primvars_displayOpacity = [gprim.GetDisplayOpacityPrimvar().Get()]
 
