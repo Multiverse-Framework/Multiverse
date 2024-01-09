@@ -241,8 +241,9 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
                 prim_inst.hasQuality.append(displayOpacity_inst)
 
                 gprim = UsdGeom.Gprim(prim)
-                displayColor_inst.primvars_displayColor = [gprim.GetDisplayColorPrimvar().Get()]
-                displayOpacity_inst.primvars_displayOpacity = [gprim.GetDisplayOpacityPrimvar().Get()]
+                if gprim.GetDisplayColorPrimvar().Get() is not None and gprim.GetDisplayOpacityPrimvar().Get() is not None:
+                    displayColor_inst.primvars_displayColor = [gprim.GetDisplayColorPrimvar().Get()]
+                    displayOpacity_inst.primvars_displayOpacity = [gprim.GetDisplayOpacityPrimvar().Get()]
 
             if prim.IsA(UsdGeom.Xform):
                 hasXformSchema_prop = usd_onto.hasTypedSchema
