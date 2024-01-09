@@ -76,13 +76,14 @@ def get_urdf_joint_api(joint_builder: JointBuilder) -> UsdUrdf.UrdfJointAPI:
             urdf_joint_api.CreateEffortAttr(effort)
             urdf_joint_api.CreateVelocityAttr(velocity)
 
-        urdf_origin_api = UsdUrdf.UrdfOriginAPI.Apply(joint_prim)
         xyz = joint.GetLocalPos0Attr().Get()
+        xyz = Gf.Vec3f(*xyz)
         quat = joint.GetLocalRot0Attr().Get() * joint.GetLocalRot1Attr().Get().GetInverse()
         quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
         rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
-        urdf_origin_api.CreateXyzAttr(Gf.Vec3f(*xyz))
-        urdf_origin_api.CreateRpyAttr(Gf.Vec3f(*rpy))
+        rpy = Gf.Vec3f(*rpy)
+        urdf_joint_api.CreateXyzAttr(xyz)
+        urdf_joint_api.CreateRpyAttr(rpy)
 
     return urdf_joint_api
 
@@ -93,6 +94,9 @@ def get_urdf_origin(xform: UsdGeom.Xform) -> Tuple[Gf.Vec3f, Gf.Vec3f]:
     quat = transformation.ExtractRotationQuat()
     quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
     rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
+    rpy = Gf.Vec3f(*rpy)
+    rotation_matrix = Rotation.from_euler("xyz", rpy, degrees=False).as_matrix()
+    print(xform.GetPrim().GetName(), rotation_matrix)
     return xyz, rpy
 
 
@@ -203,7 +207,9 @@ def get_urdf_geometry_mesh_api(geom_builder, mesh_abs_path) -> UsdUrdf.UrdfGeome
         transformation = geom_builder.xform.GetLocalTransformation()
 
         # TODO: Doesn't work for negative scale
-        urdf_geometry_mesh_api.CreateScaleAttr(numpy.array([transformation.GetRow(i).GetLength() for i in range(3)]))
+        scale = [transformation.GetRow(i).GetLength() for i in range(3)]
+        scale = Gf.Vec3f(*scale)
+        urdf_geometry_mesh_api.CreateScaleAttr(scale)
     else:
         urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI(xform_prim)
     return urdf_geometry_mesh_api
@@ -353,7 +359,7 @@ class UrdfExporter:
                            link=link,
                            geometry=geometry,
                            urdf_geometry_api=urdf_geometry_api)
-            elif geom_builder.type == GeomType.CYLINDER:
+            elif geom_builder.type in [GeomType.CYLINDER, GeomType.CAPSULE]:
                 urdf_geometry_cylinder_api = get_urdf_geometry_cylinder_api(geom_builder=geom_builder)
                 radius = urdf_geometry_cylinder_api.GetRadiusAttr().Get()
                 length = urdf_geometry_cylinder_api.GetLengthAttr().Get()
@@ -375,7 +381,7 @@ class UrdfExporter:
                     scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
 
                     geometry = urdf.Mesh(filename=mesh_ros_path, scale=scale)
-                    build_geom(geom_name=f"{geom_name}_{geom_prim.GetPrim().GetName()}",
+                    build_geom(geom_name=geom_name,
                                link=link,
                                geometry=geometry,
                                urdf_geometry_api=urdf_geometry_api)

@@ -20,56 +20,59 @@ class UrdfToUsdTestCase(unittest.TestCase):
 
     def test_mjcf_to_usd_1(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
-        importer = MjcfImporter(file_path=input_mjcf_path,
-                                with_physics=True,
-                                with_visual=True,
-                                with_collision=True)
-        importer.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
-        self.assertEqual(importer.source_file_path, input_mjcf_path)
-        self.assertEqual(importer._config.model_name, "ur5e")
+        factory = MjcfImporter(file_path=input_mjcf_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=True,
+                               inertia_source=InertiaSource.FROM_SRC)
+        factory.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
+        self.assertEqual(factory.source_file_path, input_mjcf_path)
+        self.assertEqual(factory._config.model_name, "ur5e")
 
-        usd_file_path = importer.import_model()
+        usd_file_path = factory.import_model()
         self.assertTrue(os.path.exists(usd_file_path))
 
         stage = Usd.Stage.Open(usd_file_path)
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "ur5e")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e_1.usda")
+        factory.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_mjcf_to_usd_2(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_2.xml")
-        importer = MjcfImporter(file_path=input_mjcf_path,
-                                with_physics=True,
-                                with_visual=True,
-                                with_collision=False,
-                                inertia_source=InertiaSource.FROM_MESH)
+        factory = MjcfImporter(file_path=input_mjcf_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=False,
+                               inertia_source=InertiaSource.FROM_MESH)
 
-        importer.import_model()
+        factory.import_model()
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e_2.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_mjcf_to_usd_3(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
-        importer = MjcfImporter(file_path=input_mjcf_path,
-                                with_physics=True,
-                                with_visual=True,
-                                with_collision=False,
-                                inertia_source=InertiaSource.FROM_MESH)
+        factory = MjcfImporter(file_path=input_mjcf_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=False,
+                               inertia_source=InertiaSource.FROM_MESH)
 
-        importer.import_model()
+        factory.import_model()
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e_3.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_mjcf_to_usd_with_invalid_file_path(self):
         with self.assertRaises(FileNotFoundError):
-            MjcfImporter(file_path="abcxyz", with_physics=True, with_visual=True,
+            MjcfImporter(file_path="abcxyz",
+                         with_physics=True,
+                         with_visual=True,
                          with_collision=True)
 
     @classmethod

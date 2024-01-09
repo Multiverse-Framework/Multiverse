@@ -55,9 +55,6 @@ class UrdfToMjcfTestCase(unittest.TestCase):
         usd_file_path = factory.import_model()
         self.assertTrue(os.path.exists(usd_file_path))
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_mjcf",  "ur5e.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
-
         output_mjcf_path = os.path.join(self.resource_path, "output", "test_urdf_to_mjcf",  "ur5e.xml")
         exporter = MjcfExporter(file_path=output_mjcf_path,
                                 factory=factory)

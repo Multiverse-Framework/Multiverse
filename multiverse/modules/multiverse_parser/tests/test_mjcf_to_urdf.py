@@ -5,12 +5,12 @@ import tracemalloc
 
 import numpy
 
-from multiverse_parser import MjcfImporter, InertiaSource, MjcfExporter
+from multiverse_parser import MjcfImporter, InertiaSource, UrdfExporter
 
 from pxr import Usd
 
 
-class MjcfToMjcfTestCase(unittest.TestCase):
+class MjcfToUrdfTestCase(unittest.TestCase):
     resource_path: str
 
     @classmethod
@@ -18,7 +18,7 @@ class MjcfToMjcfTestCase(unittest.TestCase):
         tracemalloc.start()
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
-    def test_mjcf_to_mjcf(self):
+    def test_mjcf_to_urdf(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
         factory = MjcfImporter(file_path=input_mjcf_path,
                                with_physics=True,
@@ -35,9 +35,13 @@ class MjcfToMjcfTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "ur5e")
 
-        output_mjcf_path = os.path.join(self.resource_path, "output", "test_mjcf_to_mjcf", "ur5e.xml")
-        exporter = MjcfExporter(file_path=output_mjcf_path,
-                                factory=factory)
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_urdf", "ur5e.usda")
+        factory.save_tmp_model(file_path=output_usd_path)
+
+        output_urdf_path = os.path.join(self.resource_path, "output", "test_mjcf_to_urdf", "ur5e.urdf")
+        exporter = UrdfExporter(file_path=output_urdf_path,
+                                factory=factory,
+                                relative_to_ros_package=False)
         exporter.build()
         exporter.export()
 

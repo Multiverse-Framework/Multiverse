@@ -256,7 +256,8 @@ class MjcfImporter(Factory):
             if mj_geom_type_str is None:
                 raise NotImplementedError(f"Geom type {mj_geom.type} not supported.")
             mujoco_geom_api.CreateTypeAttr(mj_geom_type_str)
-            mujoco_geom_api.CreateSizeAttr(Gf.Vec3f(*mj_geom.size))
+            geom_size = mj_geom.size if mj_geom.type != mujoco.mjtGeom.mjGEOM_MESH else numpy.array([1.0, 1.0, 1.0])
+            mujoco_geom_api.CreateSizeAttr(Gf.Vec3f(*geom_size))
             mujoco_geom_api.CreatePosAttr(Gf.Vec3f(*geom_pos))
             mujoco_geom_api.CreateQuatAttr(Gf.Quatf(geom_quat[3], *geom_quat[:3]))
 
