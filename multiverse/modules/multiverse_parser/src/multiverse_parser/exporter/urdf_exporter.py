@@ -195,11 +195,11 @@ def get_mesh_rel_path(geom_prim: UsdGeom.Gprim, usd_file_path: str) -> str:
     return os.path.join(file_extension, os.path.splitext(os.path.basename(usd_file_path))[0] + f".{file_extension}")
 
 
-def get_urdf_geometry_mesh_api(geom_builder, mesh_ros_path) -> UsdUrdf.UrdfGeometryMeshAPI:
+def get_urdf_geometry_mesh_api(geom_builder, mesh_abs_path) -> UsdUrdf.UrdfGeometryMeshAPI:
     xform_prim = geom_builder.xform.GetPrim()
     if not xform_prim.HasAPI(UsdUrdf.UrdfGeometryMeshAPI):
         urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(xform_prim)
-        urdf_geometry_mesh_api.CreateFilenameAttr(mesh_ros_path)
+        urdf_geometry_mesh_api.CreateFilenameAttr(mesh_abs_path)
         transformation = geom_builder.xform.GetLocalTransformation()
 
         # TODO: Doesn't work for negative scale
@@ -366,14 +366,13 @@ class UrdfExporter:
                 for usd_file_path, mesh_builder in geom_builder.mesh_builders.items():
                     mesh_rel_path = get_mesh_rel_path(geom_prim=geom_prim, usd_file_path=usd_file_path)
                     mesh_abs_path = os.path.join(self._meshdir_abs, mesh_rel_path)
+                    mesh_ros_path = os.path.join(self._meshdir_ros, mesh_rel_path)
                     self.factory.export_mesh(in_mesh_file_path=usd_file_path,
                                              out_mesh_file_path=mesh_abs_path)
 
                     urdf_geometry_mesh_api = get_urdf_geometry_mesh_api(geom_builder=geom_builder,
-                                                                        mesh_ros_path=os.path.join(self._meshdir_ros,
-                                                                                                   mesh_rel_path))
+                                                                        mesh_abs_path=mesh_abs_path)
                     scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
-                    mesh_ros_path = urdf_geometry_mesh_api.GetFilenameAttr().Get()
 
                     geometry = urdf.Mesh(filename=mesh_ros_path, scale=scale)
                     build_geom(geom_name=f"{geom_name}_{geom_prim.GetPrim().GetName()}",

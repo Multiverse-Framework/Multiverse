@@ -18,7 +18,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         tracemalloc.start()
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
-    def test_mjcf_importer_1(self):
+    def test_mjcf_to_usd_1(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
         importer = MjcfImporter(file_path=input_mjcf_path,
                                 with_physics=True,
@@ -35,11 +35,11 @@ class UrdfToUsdTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "ur5e")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    def test_mjcf_importer_2(self):
+    def test_mjcf_to_usd_2(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_2.xml")
         importer = MjcfImporter(file_path=input_mjcf_path,
                                 with_physics=True,
@@ -49,11 +49,11 @@ class UrdfToUsdTestCase(unittest.TestCase):
 
         importer.import_model()
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_2.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e_2.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    def test_mjcf_importer_3(self):
+    def test_mjcf_to_usd_3(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e_1.xml")
         importer = MjcfImporter(file_path=input_mjcf_path,
                                 with_physics=True,
@@ -63,11 +63,11 @@ class UrdfToUsdTestCase(unittest.TestCase):
 
         importer.import_model()
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_3.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e_3.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    def test_mjcf_importer_with_invalid_file_path(self):
+    def test_mjcf_to_usd_with_invalid_file_path(self):
         with self.assertRaises(FileNotFoundError):
             MjcfImporter(file_path="abcxyz", with_physics=True, with_visual=True,
                          with_collision=True)

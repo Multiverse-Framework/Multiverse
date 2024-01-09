@@ -144,7 +144,7 @@ class Factory:
                 return
 
         if in_file_extension in [".usd", ".usda", ".usdz"]:
-            cmd = import_usd(in_mesh_file_path)
+            cmd = import_usd([in_mesh_file_path])
         elif in_file_extension == ".obj":
             cmd = import_obj(in_mesh_file_path)
         elif in_file_extension == ".stl":

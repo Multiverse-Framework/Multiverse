@@ -18,7 +18,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         tracemalloc.start()
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
-    def test_urdf_importer_1(self):
+    def test_urdf_to_usd_1(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
         importer = UrdfImporter(file_path=input_urdf_path,
                                 with_physics=True,
@@ -35,11 +35,11 @@ class UrdfToUsdTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "tiago_dual")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "tiago_dual.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "tiago_dual.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    def test_urdf_importer_2(self):
+    def test_urdf_to_usd_2(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")
         importer = UrdfImporter(file_path=input_urdf_path,
                                 with_physics=True,
@@ -56,11 +56,11 @@ class UrdfToUsdTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "ur5e")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "ur5e.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "ur5e.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    def test_urdf_importer_root_link(self):
+    def test_urdf_to_usd_root_link(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_2.urdf")
         importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
                                 with_collision=True)
@@ -70,11 +70,11 @@ class UrdfToUsdTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "world")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "world.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "world.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    def test_urdf_importer_meshes(self):
+    def test_urdf_to_usd_meshes(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "milk_box", "urdf", "milk_box.urdf")
         importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
                                 with_collision=True)
@@ -84,11 +84,11 @@ class UrdfToUsdTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "milk_box")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_importer", "milk_box.usda")
+        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "milk_box.usda")
         importer.save_tmp_model(file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    def test_urdf_importer_with_invalid_file_path(self):
+    def test_urdf_to_usd_with_invalid_file_path(self):
         with self.assertRaises(FileNotFoundError):
             UrdfImporter(file_path="abcxyz", with_physics=True, with_visual=True,
                          with_collision=True)
