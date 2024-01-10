@@ -89,7 +89,7 @@ class JointAxis(Enum):
     NEG_Z = 5
 
     @classmethod
-    def from_string(cls, axis_str: str) -> "JointAxis":
+    def from_string(cls, axis_str: str) -> Optional["JointAxis"]:
         if axis_str == "X":
             return JointAxis.X
         elif axis_str == "Y":
@@ -103,7 +103,7 @@ class JointAxis(Enum):
         elif axis_str == "-Z":
             return JointAxis.NEG_Z
         else:
-            raise ValueError(f"Joint axis {axis_str} not supported.")
+            return None
 
     @classmethod
     def to_string(cls) -> str:
@@ -137,7 +137,7 @@ class JointAxis(Enum):
         elif numpy.allclose(joint_axis, [0, 0, -1]):
             return JointAxis.NEG_Z
         else:
-            raise ValueError(f"Joint axis {joint_axis} not supported.")
+            return None
 
     def to_array(self) -> numpy.ndarray:
         if self == JointAxis.X:
@@ -192,15 +192,6 @@ class JointAxis(Enum):
 @dataclass(init=False)
 class JointProperty:
     stage: Usd.Stage
-    name: str
-    path: str
-    pos: Gf.Vec3d
-    quat: Gf.Quatd
-    axis: JointAxis
-    type: JointType
-    parent_prim: UsdGeom.Xform
-    child_prim: UsdGeom.Xform
-
     def __init__(
             self,
             joint_name: str,
@@ -213,14 +204,23 @@ class JointProperty:
     ) -> None:
         self.name = joint_name
         self.pos = joint_pos
-        self.quat = joint_quat
         self.axis = joint_axis
+        self.quat = joint_quat
         self.type = joint_type
         if joint_parent_prim.GetStage() != joint_child_prim.GetStage():
             raise ValueError(f"Parent prim {self.parent_prim.GetPath()} and child prim {self.child_prim.GetPath()} "
                              f"are not in the same stage.")
         self.parent_prim = joint_parent_prim
         self.child_prim = joint_child_prim
+    name: str
+    path: str
+    pos: Gf.Vec3d
+    quat: Gf.Quatd
+    axis: JointAxis
+    type: JointType
+    parent_prim: UsdGeom.Xform
+
+    child_prim: UsdGeom.Xform
 
     @property
     def stage(self) -> Usd.Stage:
@@ -248,14 +248,18 @@ class JointProperty:
 
     @property
     def quat(self) -> Gf.Quatd:
-        quat = self.axis.to_quat()
-        return Gf.Quatd(quat[3], Gf.Vec3d(*quat[:3]))
+        return Gf.Quatd(self._quat[3], Gf.Vec3d(*self._quat[:3]))
 
     @quat.setter
     def quat(self, quat: Sequence) -> None:
-        # TODO: Convert quat to axis, then set axis to Z again
         if quat is not None:
-            raise NotImplementedError("Quat not supported yet.")
+            if self.axis == JointAxis.Z:
+                self._quat = numpy.array([*quat])
+            else:
+                # TODO: Convert quat to axis, then set axis to Z again
+                raise ValueError(f"Joint axis {self.axis} not supported.")
+        else:
+            self._quat = self.axis.to_quat()
 
     @property
     def axis(self) -> JointAxis:

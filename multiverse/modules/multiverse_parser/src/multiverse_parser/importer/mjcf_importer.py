@@ -6,6 +6,7 @@ from typing import Optional, List, Tuple, Dict
 
 import numpy
 import mujoco
+from scipy.spatial.transform import Rotation
 
 from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
@@ -27,6 +28,18 @@ def get_model_name(xml_file_path: str) -> str:
 
 def get_body_name(mj_body) -> str:
     return mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
+
+
+def get_joint_axis_and_quat(mj_joint) -> [JointAxis, Optional[numpy.ndarray]]:
+    joint_axis = JointAxis.from_array(mj_joint.axis)
+    if joint_axis is not None:
+        return joint_axis, None
+    else:
+        v1 = mj_joint.axis
+        v2 = numpy.array([0, 0, 1])
+        rotation_matrix = numpy.dot(v2[:, numpy.newaxis], v1[numpy.newaxis, :])
+        joint_quat = Rotation.from_matrix(rotation_matrix).as_quat()
+        return JointAxis.Z, joint_quat
 
 
 class MjcfImporter(Factory):
@@ -175,12 +188,14 @@ class MjcfImporter(Factory):
         parent_body_id = mj_body.parentid
         parent_body_name = get_body_name(self.mj_model.body(parent_body_id))
         parent_body_builder = self.world_builder.get_body_builder(body_name=parent_body_name)
+        joint_axis, joint_quat = get_joint_axis_and_quat(mj_joint=mj_joint)
         joint_property = JointProperty(
             joint_name=joint_name,
             joint_parent_prim=parent_body_builder.xform.GetPrim(),
             joint_child_prim=body_builder.xform.GetPrim(),
             joint_pos=mj_joint.pos,
-            joint_axis=JointAxis.from_array(mj_joint.axis),
+            joint_quat=joint_quat,
+            joint_axis=joint_axis,
             joint_type=joint_type,
         )
         joint_builder = body_builder.add_joint(joint_property=joint_property)
@@ -373,8 +388,8 @@ class MjcfImporter(Factory):
 
         return points, normals, face_vertex_counts, face_vertex_indices
 
-    def get_material_data(self, mat_rgb, mat_emission, mat_specular) -> Tuple[
-        numpy.ndarray, numpy.ndarray, numpy.ndarray]:
+    def get_material_data(self, mat_rgb, mat_emission, mat_specular) \
+            -> Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]:
 
         diffuse_color = numpy.array([float(x) for x in mat_rgb[:3]])
 
@@ -390,6 +405,8 @@ class MjcfImporter(Factory):
             equality = self.mj_model.equality(equality_id)
             if equality.type == mujoco.mjtEq.mjEQ_JOINT:
                 equality_name = equality.name
+                if equality_name == "":
+                    equality_name = "Equality_" + str(equality_id)
                 joint1_id = equality.obj1id[0]
                 joint2_id = equality.obj2id[0]
                 joint1_path = self._joint_builders[joint1_id].joint.GetPath()

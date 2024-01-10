@@ -14,6 +14,7 @@ from ..factory import (WorldBuilder,
                        JointBuilder, JointType,
                        GeomBuilder, GeomType)
 from ..importer.urdf_importer import build_urdf_inertial_api
+from ..utils import xform_cache
 
 
 def get_meshdir_paths(file_path: str, relative_to_ros_package: bool) -> Tuple[str, str]:
@@ -58,7 +59,8 @@ def get_urdf_joint_api(joint_builder: JointBuilder) -> UsdUrdf.UrdfJointAPI:
         urdf_joint_api.CreateParentRel().AddTarget(joint_builder.parent_prim.GetPath())
         urdf_joint_api.CreateChildRel().AddTarget(joint_builder.child_prim.GetPath())
         if joint_builder.type in [JointType.REVOLUTE, JointType.PRISMATIC]:
-            urdf_joint_api.CreateAxisAttr(Gf.Vec3f(*joint_builder.axis.to_array()))
+            joint_axis = joint_builder.quat.Transform(Gf.Vec3d([0.0, 0.0, 1.0]))
+            urdf_joint_api.CreateAxisAttr(Gf.Vec3f(*joint_axis))
             effort = 1000  # TODO: Find a way to get this value
             velocity = 1000  # TODO: Find a way to get this value
             if joint_builder.type == JointType.REVOLUTE:
@@ -76,8 +78,11 @@ def get_urdf_joint_api(joint_builder: JointBuilder) -> UsdUrdf.UrdfJointAPI:
             urdf_joint_api.CreateEffortAttr(effort)
             urdf_joint_api.CreateVelocityAttr(velocity)
 
-        xyz = joint.GetLocalPos0Attr().Get()
-        xyz = Gf.Vec3f(*xyz)
+        parent_transform = xform_cache.GetLocalToWorldTransform(joint_builder.parent_prim)
+        child_transform = xform_cache.GetLocalToWorldTransform(joint_builder.child_prim)
+        parent_to_child_transform = child_transform * parent_transform.GetInverse()
+        xyz = parent_to_child_transform.ExtractTranslation()
+
         quat = joint.GetLocalRot0Attr().Get() * joint.GetLocalRot1Attr().Get().GetInverse()
         quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
         rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
@@ -95,12 +100,11 @@ def get_urdf_origin(xform: UsdGeom.Xform) -> Tuple[Gf.Vec3f, Gf.Vec3f]:
     quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
     rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
     rpy = Gf.Vec3f(*rpy)
-    rotation_matrix = Rotation.from_euler("xyz", rpy, degrees=False).as_matrix()
-    print(xform.GetPrim().GetName(), rotation_matrix)
     return xyz, rpy
 
 
-def get_urdf_geometry_api(xform_prim: Usd.Prim) -> Union[UsdUrdf.UrdfLinkVisualAPI, UsdUrdf.UrdfLinkCollisionAPI]:
+def get_urdf_geometry_api(geom_prim: Usd.Prim) -> Union[UsdUrdf.UrdfLinkVisualAPI, UsdUrdf.UrdfLinkCollisionAPI]:
+    xform_prim = geom_prim.GetPrim().GetParent()
     if xform_prim.HasAPI(UsdUrdf.UrdfLinkVisualAPI):
         urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI(xform_prim)
     elif xform_prim.HasAPI(UsdUrdf.UrdfLinkCollisionAPI):
@@ -108,8 +112,9 @@ def get_urdf_geometry_api(xform_prim: Usd.Prim) -> Union[UsdUrdf.UrdfLinkVisualA
     else:
         xform = UsdGeom.Xform(xform_prim)
         xyz, rpy = get_urdf_origin(xform)
+        rpy = Gf.Vec3f(rpy[0] - numpy.pi / 2, rpy[1], rpy[2])
 
-        if not xform_prim.HasAPI(UsdPhysics.CollisionAPI):
+        if not geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
             urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI.Apply(xform_prim)
         else:
             urdf_geometry_api = UsdUrdf.UrdfLinkCollisionAPI.Apply(xform_prim)
@@ -160,8 +165,9 @@ def get_urdf_geometry_box_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeometry
         urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI(xform_prim)
     else:
         urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(xform_prim)
-        urdf_geometry_box_api.CreateSizeAttr(numpy.array(
-            [geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2)
+        size = numpy.array([geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2
+        size = Gf.Vec3f(*size)
+        urdf_geometry_box_api.CreateSizeAttr(size)
     return urdf_geometry_box_api
 
 
@@ -339,10 +345,12 @@ class UrdfExporter:
         self.robot.add_link(link)
 
     def _build_geom(self, geom_builder: GeomBuilder, link: urdf.Link):
-        xform_prim = geom_builder.xform.GetPrim()
-        urdf_geometry_api = get_urdf_geometry_api(xform_prim=xform_prim)
-        geom_name = xform_prim.GetName()
+        if len(geom_builder.geom_prims) > 1:
+            raise NotImplementedError("Multiple geometry prims not supported yet.")
         for geom_prim in geom_builder.geom_prims:
+            urdf_geometry_api = get_urdf_geometry_api(geom_prim=geom_prim)
+            xform_prim = geom_builder.xform.GetPrim()
+            geom_name = xform_prim.GetName()
             if geom_builder.type == GeomType.CUBE:
                 urdf_geometry_box_api = get_urdf_geometry_box_api(geom_builder=geom_builder)
                 size = urdf_geometry_box_api.GetSizeAttr().Get()
