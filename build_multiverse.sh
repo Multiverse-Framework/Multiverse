@@ -4,7 +4,7 @@ CURRENT_DIR=$PWD
 
 cd $(dirname $0)
 
-BUILD_DIR=$PWD/multiverse/build/multiverse
+BUILD_DIR=$PWD/multiverse/build
 
 USD_BUILD_DIR=$BUILD_DIR/USD
 
