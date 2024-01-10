@@ -12,6 +12,7 @@ TF_WRAP_MODULE
     TF_WRAP(UsdMujocoMujocoAsset);
     TF_WRAP(UsdMujocoMujocoMesh);
     TF_WRAP(UsdMujocoMujocoMaterial);
+    TF_WRAP(UsdMujocoMujocoTexture);
 
     TF_WRAP(UsdMujocoMujocoBodyAPI);
     TF_WRAP(UsdMujocoMujocoBodyInertialAPI);

@@ -149,6 +149,43 @@ class MujocoMaterial "MujocoMaterial"
         displayName = "Material Specular"
         doc = "Specularity in OpenGL has the RGBA format, however we only provide a scalar setting."
     )
+
+    rel mujoco:material:texture (
+        customData = {
+            string apiName = "texture"
+        }
+        displayName = "Material Texture"
+        doc = "If this attribute is specified, the material has a texture associated with it."
+    )
+}
+
+class MujocoTexture "MujocoTexture"
+(
+    customData = {
+        string className = "MujocoTexture"
+    }
+
+    doc = """This element creates a texture asset, which can then be referenced from materials."""
+
+    inherits = </Typed>
+)
+{
+    string mujoco:texture:type = "2d" (
+        customData = {
+            string apiName = "type"
+        }
+        allowedTokens = ["2d", "cube", "skybox"]
+        displayName = "Texture Type"
+        doc = """This attribute determines how the texture is represented and mapped to objects. It also determines which of the remaining attributes are relevant."""
+    )
+
+    asset mujoco:texture:file (
+        customData = {
+            string apiName = "file"
+        }
+        displayName = "Texture File"
+        doc = "The texture file."
+    )
 }
 
 class MujocoEquality "MujocoEquality" 

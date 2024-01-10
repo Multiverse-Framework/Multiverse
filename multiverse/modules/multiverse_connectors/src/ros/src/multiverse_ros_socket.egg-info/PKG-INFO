@@ -1,5 +1,5 @@
 Metadata-Version: 2.1
-Name: multiverse-ros-socket
+Name: multiverse_ros_socket
 Version: 0.0.1
 Summary: The Multiverse ROS Socket for any ROS version
 Author-email: Giang Nguyen <hoanggia@uni-bremen.de>

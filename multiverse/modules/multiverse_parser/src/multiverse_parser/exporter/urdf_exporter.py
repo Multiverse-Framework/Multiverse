@@ -225,7 +225,7 @@ class UrdfExporter:
             self,
             factory: Factory,
             file_path: str,
-            relative_to_ros_package: bool = True,
+            relative_to_ros_package: bool = False,
     ) -> None:
         self._factory = factory
         robot_name = get_robot_name(world_builder=factory.world_builder)
