@@ -235,7 +235,6 @@ class MjcfImporter(Factory):
         mj_geom = self.mj_model.geom(geom_id)
         geom_is_visible = (mj_geom.contype == 0) and (mj_geom.conaffinity == 0)
         geom_is_collidable = (mj_geom.contype != 0) or (mj_geom.conaffinity != 0)
-        geom_has_inertia = True
         geom_builder = None
         geom_pos = mj_geom.pos
         geom_quat = numpy.array([mj_geom.quat[1],
@@ -243,9 +242,7 @@ class MjcfImporter(Factory):
                                  mj_geom.quat[3],
                                  mj_geom.quat[0]])
 
-        if (geom_has_inertia and self._config.with_physics or
-                geom_is_visible and self._config.with_visual or
-                geom_is_collidable and self._config.with_collision):
+        if geom_is_visible and self._config.with_visual or geom_is_collidable and self._config.with_collision:
             geom_name = mj_geom.name if mj_geom.name != "" else "Geom_" + str(geom_id)
             geom_rgba = mj_geom.rgba
             geom_type = self._geom_type_map[mj_geom.type[0]]

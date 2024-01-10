@@ -112,7 +112,6 @@ def get_urdf_geometry_api(geom_prim: Usd.Prim) -> Union[UsdUrdf.UrdfLinkVisualAP
     else:
         xform = UsdGeom.Xform(xform_prim)
         xyz, rpy = get_urdf_origin(xform)
-        rpy = Gf.Vec3f(rpy[0] - numpy.pi / 2, rpy[1], rpy[2])
 
         if not geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
             urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI.Apply(xform_prim)
@@ -389,6 +388,9 @@ class UrdfExporter:
                     scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
 
                     geometry = urdf.Mesh(filename=mesh_ros_path, scale=scale)
+                    rpy = urdf_geometry_api.GetRpyAttr().Get()
+                    rpy = Gf.Vec3f(rpy[0] - numpy.pi / 2, rpy[1], rpy[2])
+                    urdf_geometry_api.CreateRpyAttr(rpy)
                     build_geom(geom_name=geom_name,
                                link=link,
                                geometry=geometry,
