@@ -66,7 +66,7 @@ class Factory:
     def __init__(self, file_path: str, config: Configuration = Configuration()):
         self._world_builder = None
         self._source_file_path = file_path
-        self._tmp_file_path, self._tmp_meshdir_path, self._tmp_texturedir_path = self._create_tmp_paths()
+        self._tmp_file_path, self._tmp_usddir_path, self._tmp_texturedir_path = self._create_tmp_paths()
         self._config = config
         atexit.register(self.clean_up)
 
@@ -79,13 +79,13 @@ class Factory:
                                "cache",
                                "".join(random.choices(string.ascii_letters + string.digits, k=10)))
         tmp_file_path = os.path.join(tmp_dir, f"{self._tmp_file_name}.usda")
-        tmp_mesh_dir = os.path.join(tmp_dir, self._tmp_file_name, "usd")
+        tmp_usd_dir = os.path.join(tmp_dir, self._tmp_file_name, "usd")
         tmp_texture_dir = os.path.join(tmp_dir, self._tmp_file_name, "textures")
         os.makedirs(name=tmp_dir, exist_ok=True)
-        os.makedirs(name=tmp_mesh_dir, exist_ok=True)
+        os.makedirs(name=tmp_usd_dir, exist_ok=True)
         os.makedirs(name=tmp_texture_dir, exist_ok=True)
-        print(f"Create {tmp_dir}, {tmp_mesh_dir} and {tmp_texture_dir}.")
-        return tmp_file_path, tmp_mesh_dir, tmp_texture_dir
+        print(f"Create {tmp_dir}, {tmp_usd_dir} and {tmp_texture_dir}.")
+        return tmp_file_path, tmp_usd_dir, tmp_texture_dir
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         """
@@ -106,10 +106,10 @@ class Factory:
 
         file_name = os.path.basename(mesh_file_path).split(".")[0]
         file_extension = os.path.splitext(mesh_file_path)[1]
-        tmp_origin_file_path = os.path.join(os.path.dirname(self.tmp_meshdir_path),
+        tmp_origin_file_path = os.path.join(os.path.dirname(self.tmp_usddir_path),
                                             file_extension[1:],
                                             f"{file_name}{file_extension}")
-        tmp_usd_file_path = os.path.join(self.tmp_meshdir_path,
+        tmp_usd_file_path = os.path.join(self.tmp_usddir_path,
                                          f"from_{file_extension[1:]}",
                                          f"{file_name}.usda")
 
@@ -198,7 +198,7 @@ class Factory:
             with open(file_path, encoding="utf-8") as file:
                 file_contents = file.read()
 
-            tmp_path = os.path.dirname(self._tmp_meshdir_path)
+            tmp_path = os.path.dirname(self._tmp_usddir_path)
             new_path = file_name
             file_contents = file_contents.replace(tmp_path, new_path)
 
@@ -224,8 +224,8 @@ class Factory:
         return self._tmp_file_path
 
     @property
-    def tmp_meshdir_path(self) -> str:
-        return self._tmp_meshdir_path
+    def tmp_usddir_path(self) -> str:
+        return self._tmp_usddir_path
 
     @property
     def tmp_texturedir_path(self) -> str:

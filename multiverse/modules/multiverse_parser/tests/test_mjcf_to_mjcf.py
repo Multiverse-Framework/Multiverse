@@ -67,6 +67,32 @@ class MjcfToMjcfTestCase(unittest.TestCase):
         exporter.build()
         exporter.export()
 
+    def test_mjcf_to_mjcf_3(self):
+        input_mjcf_path = "/media/giangnguyen/Storage/Multiverse/multiverse/modules/multiverse_parser/resources/input/milk_box/mjcf/milk_box.xml"
+        factory = MjcfImporter(file_path=input_mjcf_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=True)
+        factory.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
+        self.assertEqual(factory.source_file_path, input_mjcf_path)
+        self.assertEqual(factory._config.model_name, "milk_box")
+
+        usd_file_path = factory.import_model()
+        self.assertTrue(os.path.exists(usd_file_path))
+
+        stage = Usd.Stage.Open(usd_file_path)
+        default_prim = stage.GetDefaultPrim()
+        self.assertEqual(default_prim.GetName(), "milk_box")
+
+        output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_mjcf", "milk_box.usda")
+        factory.save_tmp_model(file_path=output_usd_path)
+
+        output_mjcf_path = os.path.join(self.resource_path, "output", "test_mjcf_to_mjcf", "milk_box.xml")
+        exporter = MjcfExporter(file_path=output_mjcf_path,
+                                factory=factory)
+        exporter.build()
+        exporter.export()
+
     @classmethod
     def tearDownClass(cls):
         tracemalloc.stop()

@@ -13,14 +13,14 @@
   <library_effects>
     <effect id="M_MilkBox-effect">
       <profile_COMMON>
-        <newparam sid="milk_box_jpg-surface">
+        <newparam sid="milk_box_png-surface">
           <surface type="2D">
-            <init_from>milk_box_jpg</init_from>
+            <init_from>milk_box_png</init_from>
           </surface>
         </newparam>
-        <newparam sid="milk_box_jpg-sampler">
+        <newparam sid="milk_box_png-sampler">
           <sampler2D>
-            <source>milk_box_jpg-surface</source>
+            <source>milk_box_png-surface</source>
           </sampler2D>
         </newparam>
         <technique sid="common">
@@ -29,7 +29,7 @@
               <color sid="emission">0 0 0 1</color>
             </emission>
             <diffuse>
-              <texture texture="milk_box_jpg-sampler" texcoord="SM_MilkBox-mesh-map-0"/>
+              <texture texture="milk_box_png-sampler" texcoord="SM_MilkBox-mesh-map-0"/>
             </diffuse>
             <index_of_refraction>
               <float sid="ior">1.45</float>
@@ -40,8 +40,8 @@
     </effect>
   </library_effects>
   <library_images>
-    <image id="milk_box_jpg" name="milk_box_jpg">
-      <init_from>milk_box.jpg</init_from>
+    <image id="milk_box_png" name="milk_box_png">
+      <init_from>../textures/milk_box.png</init_from>
     </image>
   </library_images>
   <library_materials>

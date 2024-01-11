@@ -20,7 +20,13 @@ def clean_up_meshes(bpy, file_path: str) -> None:
         bpy.ops.object.mode_set(mode="OBJECT")
     
     selected_object = bpy.context.object
-    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+    selected_object.location.x = 0.0
+    selected_object.location.y = 0.0
+    selected_object.location.z = 0.0
+    selected_object.rotation_euler.x = 0.0
+    selected_object.rotation_euler.y = 0.0
+    selected_object.rotation_euler.z = 0.0
+    bpy.ops.object.transform_apply(scale=True, isolate_users=True)
     
     # Apply triangulate modifier
     selected_object = bpy.context.object

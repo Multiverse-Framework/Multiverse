@@ -82,36 +82,12 @@ class MujocoMesh "MujocoMesh" (
     inherits = </Typed>
 )
 {
-    float[] vertex (
+    asset mujoco:mesh:file (
         customData = {
-            string apiName = "vertex"
+            string apiName = "file"
         }
-        displayName = "Mesh Vertex"
-        doc = "Vertex 3D position data."
-    )
-
-    int[] face (
-        customData = {
-            string apiName = "face"
-        }
-        displayName = "Mesh Face"
-        doc = "Faces of the mesh. Each face is a sequence of 3 vertex indices, in counter-clockwise order."
-    )
-
-    float[] normal (
-        customData = {
-            string apiName = "normal"
-        }
-        displayName = "Mesh Normal"
-        doc = "Vertex 3D normal data."
-    )
-
-    float[] texcoord (
-        customData = {
-            string apiName = "texcoord"
-        }
-        displayName = "Mesh Texture Coordinate"
-        doc = "Vertex 2D texture coordinates, which are numbers between 0 and 1."
+        displayName = "Mesh File"
+        doc = "The mesh file."
     )
 
     float3 mujoco:mesh:scale = (1, 1, 1) (

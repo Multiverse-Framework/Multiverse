@@ -291,22 +291,21 @@ class MjcfImporter(Factory):
                 mesh_id = mj_geom.dataid[0]
                 mesh_name = self.mj_model.mesh(mesh_id).name
                 points, normals, face_vertex_counts, face_vertex_indices = self.get_mesh_data(mesh_id=mesh_id)
-                tmp_mesh_file_path = os.path.join(self._tmp_meshdir_path, "usd", f"{mesh_name}.usda")
-                mesh_builder = MeshBuilder(mesh_file_path=tmp_mesh_file_path)
+                tmp_usd_file_path = os.path.join(self._tmp_usddir_path, "usd", f"{mesh_name}.usda")
+                mesh_builder = MeshBuilder(mesh_file_path=tmp_usd_file_path)
                 mesh_property = MeshProperty(points=points,
                                              normals=normals,
                                              face_vertex_counts=face_vertex_counts,
                                              face_vertex_indices=face_vertex_indices)
                 mesh_builder.create_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
 
+                tmp_obj_file_path = os.path.join(os.path.dirname(self._tmp_usddir_path), "obj", f"{mesh_name}.obj")
+                self.export_mesh(tmp_usd_file_path, tmp_obj_file_path)
+
                 mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(self.world_builder.stage, mujoco_mesh_path)
-                vertex = points.reshape(-1, 3)
-                mujoco_mesh.CreateVertexAttr(vertex)
-                normal = normals.reshape(-1, 3)
-                mujoco_mesh.CreateNormalAttr(normal)
-                face = face_vertex_indices.reshape(-1, 3)
-                mujoco_mesh.CreateFaceAttr(face)
+                mujoco_mesh.CreateFileAttr(tmp_obj_file_path)
+
                 mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
                 mat_id = mj_geom.matid
@@ -317,27 +316,22 @@ class MjcfImporter(Factory):
                     diffuse_color, emissive_color, specular_color = self.get_material_data(mat_rgb=mat_rgba[:3],
                                                                                            mat_emission=mat_emission,
                                                                                            mat_specular=mat_specular)
-                    material_builder = MaterialBuilder(file_path=tmp_mesh_file_path)
+                    material_builder = MaterialBuilder(file_path=tmp_usd_file_path)
                     material_property = MaterialProperty(diffuse_color=diffuse_color,
                                                          emissive_color=emissive_color,
                                                          specular_color=specular_color)
                     material_builder.apply_material(material_property=material_property)
 
                     material_name = self.mj_model.mat(mat_id).name
-                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(material_name)
+                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
+                        material_name)
                     mujoco_material = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
-                                                                           mujoco_material_path)
-                    mujoco_material.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
-                    mujoco_material.CreateEmissionAttr(mat_emission)
-                    mujoco_material.CreateSpecularAttr(mat_specular)
-
+                                                                      mujoco_material_path)
                     texture_id = self.mj_model.mat_texid[mat_id][0]
                     if texture_id != -1:
                         texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
                         texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
-                        texcoord = self.mj_model.mesh_texcoord[texcoordadr:texcoordadr+texcoordnum]
-                        texcoord = texcoord.reshape(-1)
-                        mujoco_mesh.CreateTexcoordAttr(texcoord)
+                        texcoord = self.mj_model.mesh_texcoord[texcoordadr:texcoordadr + texcoordnum]
 
                         texture_name = self.mj_model.tex(texture_id).name
                         if texture_name == "":
@@ -347,14 +341,15 @@ class MjcfImporter(Factory):
                         height = self.mj_model.tex_height[texture_id]
                         texture_adr = self.mj_model.tex_adr[texture_id]
                         texture_num = width * height * 3
-                        rgb = self.mj_model.tex_rgb[texture_adr:texture_adr+texture_num]
+                        rgb = self.mj_model.tex_rgb[texture_adr:texture_adr + texture_num]
                         rgb = rgb.reshape((height, width, 3))
                         texture_file_path = os.path.join(self._tmp_texturedir_path, f"{texture_name}.png")
                         material_builder.add_texture(file_path=texture_file_path, rgb=rgb)
 
-                        mujoco_texture_path = mujoco_asset_prim.GetPath().AppendChild("textures").AppendChild(texture_name)
+                        mujoco_texture_path = mujoco_asset_prim.GetPath().AppendChild("textures").AppendChild(
+                            texture_name)
                         mujoco_texture = UsdMujoco.MujocoTexture.Define(self.world_builder.stage,
-                                                                             mujoco_texture_path)
+                                                                        mujoco_texture_path)
                         if texture_type == mujoco.mjtTexture.mjTEXTURE_2D:
                             mujoco_texture.CreateTypeAttr("2d")
                         elif texture_type == mujoco.mjtTexture.mjTEXTURE_CUBE:
@@ -366,10 +361,14 @@ class MjcfImporter(Factory):
 
                         mujoco_texture.CreateFileAttr(texture_file_path)
                         mujoco_material.CreateTextureRel().SetTargets([mujoco_texture_path])
+                    else:
+                        mujoco_material.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
+                        mujoco_material.CreateEmissionAttr(mat_emission)
+                        mujoco_material.CreateSpecularAttr(mat_specular)
 
                     mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 
-                geom_builder.add_mesh(mesh_file_path=tmp_mesh_file_path)
+                geom_builder.add_mesh(mesh_file_path=tmp_usd_file_path)
                 geom_builder.build()
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             else:
@@ -421,11 +420,8 @@ class MjcfImporter(Factory):
 
     def get_material_data(self, mat_rgb, mat_emission, mat_specular) \
             -> Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]:
-
         diffuse_color = numpy.array([float(x) for x in mat_rgb[:3]])
-
         emissive_color = numpy.array([float(x * mat_emission) for x in mat_rgb])
-
         specular_color = numpy.array([float(mat_specular) for _ in range(3)])
 
         return diffuse_color, emissive_color, specular_color

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 from typing import Optional
 from xml.etree import ElementTree as ET
 from xml.dom import minidom
@@ -428,29 +429,18 @@ class MjcfExporter:
         for mujoco_mesh in mujoco_meshes:
             mesh = ET.SubElement(asset, "mesh")
             mesh.set("name", mujoco_mesh.GetPrim().GetName())
-            vertex = mujoco_mesh.GetVertexAttr().Get()
-            mesh.set("vertex", " ".join(map(str, vertex)))
-            face = mujoco_mesh.GetFaceAttr().Get()
-            mesh.set("face", " ".join(map(str, face)))
-            normal = mujoco_mesh.GetNormalAttr().Get()
-            mesh.set("normal", " ".join(map(str, normal)))
+            tmp_mesh_path = mujoco_mesh.GetFileAttr().Get().path
+            mesh_file_name = os.path.basename(tmp_mesh_path)
+
+            mesh.set("file", f"obj/{mesh_file_name}")
             scale = mujoco_mesh.GetScaleAttr().Get()
             mesh.set("scale", " ".join(map(str, scale)))
-            texcoord = mujoco_mesh.GetTexcoordAttr().Get()
-            if texcoord is not None:
-                mesh.set("texcoord", " ".join(map(str, texcoord)))
 
         mujoco_materials = [UsdMujoco.MujocoMaterial(prim) for prim in mujoco_materials_prim.GetChildren()
                             if prim.IsA(UsdMujoco.MujocoMaterial)]
         for mujoco_material in mujoco_materials:
             material = ET.SubElement(asset, "material")
             material.set("name", mujoco_material.GetPrim().GetName())
-            rgba = mujoco_material.GetRgbaAttr().Get()
-            material.set("rgba", " ".join(map(str, rgba)))
-            emission = mujoco_material.GetEmissionAttr().Get()
-            material.set("emission", str(emission))
-            specular = mujoco_material.GetSpecularAttr().Get()
-            material.set("specular", str(specular))
             if len(mujoco_material.GetTextureRel().GetTargets()) > 1:
                 raise NotImplementedError(f"Material {mujoco_material.GetPrim().GetName()} has "
                                           f"{len(mujoco_material.GetTextureRel().GetTargets())} textures.")
@@ -458,6 +448,14 @@ class MjcfExporter:
                 texture_prim = stage.GetPrimAtPath(texture_path)
                 texture_name = texture_prim.GetName()
                 material.set("texture", texture_name)
+
+            if len(mujoco_material.GetTextureRel().GetTargets()) == 0:
+                rgba = mujoco_material.GetRgbaAttr().Get()
+                material.set("rgba", " ".join(map(str, rgba)))
+                emission = mujoco_material.GetEmissionAttr().Get()
+                material.set("emission", str(emission))
+                specular = mujoco_material.GetSpecularAttr().Get()
+                material.set("specular", str(specular))
 
         mujoco_textures = [UsdMujoco.MujocoTexture(prim) for prim in mujoco_textures_prim.GetChildren()
                            if prim.IsA(UsdMujoco.MujocoTexture)]
