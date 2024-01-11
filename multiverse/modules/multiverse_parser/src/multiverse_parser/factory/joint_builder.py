@@ -191,10 +191,15 @@ class JointAxis(Enum):
 
 @dataclass(init=False)
 class JointProperty:
-    stage: Usd.Stage
+    pos: Gf.Vec3d
+    quat: Gf.Quatd
+    axis: JointAxis
+    type: JointType
+    parent_prim: UsdGeom.Xform
+    child_prim: UsdGeom.Xform
+
     def __init__(
             self,
-            joint_name: str,
             joint_parent_prim: UsdGeom.Xform,
             joint_child_prim: UsdGeom.Xform,
             joint_pos: Sequence = numpy.array([0.0, 0.0, 0.0]),
@@ -202,7 +207,6 @@ class JointProperty:
             joint_axis: JointAxis = JointAxis.Z,
             joint_type: JointType = JointType.REVOLUTE,
     ) -> None:
-        self.name = joint_name
         self.pos = joint_pos
         self.axis = joint_axis
         self.quat = joint_quat
@@ -212,31 +216,6 @@ class JointProperty:
                              f"are not in the same stage.")
         self.parent_prim = joint_parent_prim
         self.child_prim = joint_child_prim
-    name: str
-    path: str
-    pos: Gf.Vec3d
-    quat: Gf.Quatd
-    axis: JointAxis
-    type: JointType
-    parent_prim: UsdGeom.Xform
-
-    child_prim: UsdGeom.Xform
-
-    @property
-    def stage(self) -> Usd.Stage:
-        return self.parent_prim.GetStage()
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @name.setter
-    def name(self, name: str) -> None:
-        self._name = modify_name(in_name=name)
-
-    @property
-    def path(self) -> str:
-        return self.parent_prim.GetPath().AppendChild(self.name)
 
     @property
     def pos(self) -> Gf.Vec3d:
@@ -295,13 +274,16 @@ class JointProperty:
 
 
 class JointBuilder:
+    stage: Usd.Stage
     joint: UsdPhysics.Joint
-    joint_property: JointProperty
 
     def __init__(
             self,
+            joint_name: str,
             joint_property: JointProperty
     ) -> None:
+        joint_name = modify_name(in_name=joint_name)
+        self._path = joint_property.parent_prim.GetPath().AppendChild(joint_name)
         self._joint_property = joint_property
         self._joint = self._create_joint()
 
@@ -368,11 +350,11 @@ class JointBuilder:
 
     @property
     def stage(self) -> Usd.Stage:
-        return self._joint_property.stage
+        return self._joint_property.parent_prim.GetStage()
 
     @property
     def path(self) -> Sdf.Path:
-        return self._joint_property.path
+        return self._path
 
     @property
     def pos(self) -> Gf.Vec3d:

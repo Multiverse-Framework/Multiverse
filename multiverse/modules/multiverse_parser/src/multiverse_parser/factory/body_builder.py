@@ -62,13 +62,12 @@ class BodyBuilder:
 
         self._xform.AddTransformOp().Set(mat)
 
-    def add_joint(self, joint_property: JointProperty) -> JointBuilder:
-        joint_name = joint_property.name
+    def add_joint(self, joint_name: str, joint_property: JointProperty) -> JointBuilder:
         if joint_name in self._joint_builders:
             print(f"Joint {joint_name} already exists.")
             joint_builder = self._joint_builders[joint_name]
         else:
-            joint_builder = JointBuilder(joint_property)
+            joint_builder = JointBuilder(joint_name=joint_name, joint_property=joint_property)
             joint_builder.build()
             self._joint_builders[joint_name] = joint_builder
 
@@ -79,8 +78,7 @@ class BodyBuilder:
         physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
         physics_rigid_body_api.Apply(self._xform.GetPrim())
 
-    def add_geom(self, geom_property: GeomProperty) -> GeomBuilder:
-        geom_name = geom_property.name
+    def add_geom(self, geom_name: str, geom_property: GeomProperty) -> GeomBuilder:
         if geom_name in self._geom_builders:
             print(f"Geom {geom_name} already exists.")
             geom_builder = self._geom_builders[geom_name]

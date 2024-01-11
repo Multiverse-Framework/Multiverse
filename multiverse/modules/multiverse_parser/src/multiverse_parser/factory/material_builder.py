@@ -6,6 +6,8 @@ from typing import Optional, List
 
 import numpy
 
+from .texture_builder import TextureBuilder
+
 from pxr import Usd, Sdf, UsdShade, Gf
 
 
@@ -76,6 +78,11 @@ class MaterialBuilder:
                     Gf.Vec3f(*material_property.specular_color))
 
             material.CreateSurfaceOutput().ConnectToSource(shader.ConnectableAPI(), "surface")
+
+    def add_texture(self, file_path: str, rgb: numpy.ndarray) -> TextureBuilder:
+        texture_builder = TextureBuilder(file_path=file_path)
+        texture_builder.rgb = rgb
+        return texture_builder
 
     @property
     def stage(self):

@@ -58,6 +58,7 @@ class Factory:
     source_file_path: str
     config: Configuration
     tmp_meshdir_path: str
+    tmp_texturedir_path: str
     tmp_file_path: str
     _tmp_file_name: str = "tmp"
     _mesh_file_paths: Dict[str, Tuple[str, str]] = {}
@@ -65,11 +66,11 @@ class Factory:
     def __init__(self, file_path: str, config: Configuration = Configuration()):
         self._world_builder = None
         self._source_file_path = file_path
-        self._tmp_file_path, self._tmp_meshdir_path = self._create_tmp_paths()
+        self._tmp_file_path, self._tmp_meshdir_path, self._tmp_texturedir_path = self._create_tmp_paths()
         self._config = config
         atexit.register(self.clean_up)
 
-    def _create_tmp_paths(self) -> Tuple[str, str]:
+    def _create_tmp_paths(self) -> Tuple[str, str, str]:
         """
         Create temporary paths for the USD file and the mesh directory.
         :return: Tuple of the temporary USD file path and the temporary mesh directory path.
@@ -79,10 +80,12 @@ class Factory:
                                "".join(random.choices(string.ascii_letters + string.digits, k=10)))
         tmp_file_path = os.path.join(tmp_dir, f"{self._tmp_file_name}.usda")
         tmp_mesh_dir = os.path.join(tmp_dir, self._tmp_file_name, "usd")
+        tmp_texture_dir = os.path.join(tmp_dir, self._tmp_file_name, "textures")
         os.makedirs(name=tmp_dir, exist_ok=True)
         os.makedirs(name=tmp_mesh_dir, exist_ok=True)
-        print(f"Create {tmp_dir} and {tmp_mesh_dir}.")
-        return tmp_file_path, tmp_mesh_dir
+        os.makedirs(name=tmp_texture_dir, exist_ok=True)
+        print(f"Create {tmp_dir}, {tmp_mesh_dir} and {tmp_texture_dir}.")
+        return tmp_file_path, tmp_mesh_dir, tmp_texture_dir
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         """
@@ -111,7 +114,7 @@ class Factory:
                                          f"{file_name}.usda")
 
         if file_extension in [".usd", ".usda", ".usdz"]:
-            cmd = import_usd(mesh_file_path) + export_usd(tmp_usd_file_path)
+            cmd = import_usd([mesh_file_path]) + export_usd(tmp_usd_file_path)
         elif file_extension == ".obj":
             cmd = import_obj(mesh_file_path) + export_obj(tmp_origin_file_path) + export_usd(tmp_usd_file_path)
         elif file_extension == ".stl":
@@ -223,6 +226,10 @@ class Factory:
     @property
     def tmp_meshdir_path(self) -> str:
         return self._tmp_meshdir_path
+
+    @property
+    def tmp_texturedir_path(self) -> str:
+        return self._tmp_texturedir_path
 
     @property
     def mesh_file_paths(self) -> Dict[str, Tuple[str, str]]:

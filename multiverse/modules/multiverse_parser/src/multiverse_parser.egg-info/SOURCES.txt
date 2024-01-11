@@ -15,6 +15,7 @@ src/multiverse_parser/factory/geom_builder.py
 src/multiverse_parser/factory/joint_builder.py
 src/multiverse_parser/factory/material_builder.py
 src/multiverse_parser/factory/mesh_builder.py
+src/multiverse_parser/factory/texture_builder.py
 src/multiverse_parser/factory/world_builder.py
 src/multiverse_parser/importer/__init__.py
 src/multiverse_parser/importer/mjcf_importer.py

@@ -190,7 +190,6 @@ class MjcfImporter(Factory):
         parent_body_builder = self.world_builder.get_body_builder(body_name=parent_body_name)
         joint_axis, joint_quat = get_joint_axis_and_quat(mj_joint=mj_joint)
         joint_property = JointProperty(
-            joint_name=joint_name,
             joint_parent_prim=parent_body_builder.xform.GetPrim(),
             joint_child_prim=body_builder.xform.GetPrim(),
             joint_pos=mj_joint.pos,
@@ -198,7 +197,7 @@ class MjcfImporter(Factory):
             joint_axis=joint_axis,
             joint_type=joint_type,
         )
-        joint_builder = body_builder.add_joint(joint_property=joint_property)
+        joint_builder = body_builder.add_joint(joint_name=joint_name, joint_property=joint_property)
 
         if mj_joint.type == mujoco.mjtJoint.mjJNT_HINGE:
             joint_builder.set_limit(lower=degrees(mj_joint.range[0]),
@@ -247,13 +246,12 @@ class MjcfImporter(Factory):
             geom_rgba = mj_geom.rgba
             geom_type = self._geom_type_map[mj_geom.type[0]]
             geom_density = 1000.0
-            geom_property = GeomProperty(geom_name=geom_name,
-                                         geom_type=geom_type,
+            geom_property = GeomProperty(geom_type=geom_type,
                                          is_visible=geom_is_visible,
                                          is_collidable=geom_is_collidable,
                                          rgba=geom_rgba,
                                          density=geom_density)
-            geom_builder = body_builder.add_geom(geom_property=geom_property)
+            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
             geom_builder.build()
 
             geom_xform_prim = geom_builder.xform.GetPrim()
@@ -301,7 +299,7 @@ class MjcfImporter(Factory):
                                              face_vertex_indices=face_vertex_indices)
                 mesh_builder.create_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
 
-                mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild(mesh_name)
+                mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(self.world_builder.stage, mujoco_mesh_path)
                 vertex = points.reshape(-1, 3)
                 mujoco_mesh.CreateVertexAttr(vertex)
@@ -326,12 +324,42 @@ class MjcfImporter(Factory):
                     material_builder.apply_material(material_property=material_property)
 
                     material_name = self.mj_model.mat(mat_id).name
-                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild(material_name)
+                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(material_name)
                     mujoco_material_prim = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
                                                                            mujoco_material_path)
                     mujoco_material_prim.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
                     mujoco_material_prim.CreateEmissionAttr(mat_emission)
                     mujoco_material_prim.CreateSpecularAttr(mat_specular)
+
+                    texture_id = self.mj_model.mat_texid[mat_id][0]
+                    if texture_id != -1:
+                        texture_name = self.mj_model.tex(texture_id).name
+                        if texture_name == "":
+                            texture_name = "Texture_" + str(texture_id)
+                        texture_type = self.mj_model.tex_type[texture_id]
+                        width = self.mj_model.tex_width[texture_id]
+                        height = self.mj_model.tex_height[texture_id]
+                        texture_adr = self.mj_model.tex_adr[texture_id]
+                        texture_num = width * height * 3
+                        rgb = self.mj_model.tex_rgb[texture_adr:texture_adr+texture_num]
+                        rgb = rgb.reshape((height, width, 3))
+                        texture_file_path = os.path.join(self._tmp_texturedir_path, f"{texture_name}.png")
+                        material_builder.add_texture(file_path=texture_file_path, rgb=rgb)
+
+                        mujoco_texture_path = mujoco_asset_prim.GetPath().AppendChild("textures").AppendChild(texture_name)
+                        mujoco_texture_prim = UsdMujoco.MujocoTexture.Define(self.world_builder.stage,
+                                                                             mujoco_texture_path)
+                        if texture_type == mujoco.mjtTexture.mjTEXTURE_2D:
+                            mujoco_texture_prim.CreateTypeAttr("2d")
+                        elif texture_type == mujoco.mjtTexture.mjTEXTURE_CUBE:
+                            mujoco_texture_prim.CreateTypeAttr("cube")
+                        elif texture_type == mujoco.mjtTexture.mjTEXTURE_SKYBOX:
+                            mujoco_texture_prim.CreateTypeAttr("skybox")
+                        else:
+                            raise NotImplementedError(f"Texture type {texture_type} not supported.")
+
+                        mujoco_texture_prim.CreateFileAttr(texture_file_path)
+                        mujoco_material_prim.CreateTextureRel().SetTargets([mujoco_texture_path])
 
                     mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 

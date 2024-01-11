@@ -187,25 +187,28 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
                 raise NotImplementedError(f"Geom type {geom_builder.type} not implemented.")
 
             mesh_name = add_scale_to_mesh_name(mesh_name=mesh_name, mesh_scale=geom_size)
-            mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild(mesh_name)
+            mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
             mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
             if len(geom_builder.material_builders) > 1:
                 raise NotImplementedError(f"Geom {geom_builder.xform.GetPrim().GetName()} has "
                                           f"{len(geom_builder.material_builders)} materials.")
-            for _, material_builder in geom_builder.material_builders.items():
+            for material_builder in geom_builder.material_builders:
                 if len(material_builder.materials) > 1:
                     raise NotImplementedError(f"Material in {material_builder.stage.GetRootLayer().realPath} has "
                                               f"{len(material_builder.materials)} materials.")
                 for material in material_builder.materials:
                     material_name = material.GetPrim().GetName()
-                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild(material_name)
+                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
+                        material_name)
                     mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 
     return mujoco_geom_api
 
 
-def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage, mujoco_asset_prim: Usd.Prim):
+def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage,
+                                               mujoco_meshes_prim: Usd.Prim,
+                                               mujoco_materials_prim: Usd.Prim):
     mesh_file_paths = {}
     materials = {}
     mesh_dir_name = os.path.dirname(stage.GetRootLayer().realPath)
@@ -257,7 +260,10 @@ def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage, mujoco_asset_pr
                                 materials[material_name]["specular_color"] = specular
 
         for material_name, material_props in materials.items():
-            mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild(material_name)
+            mujoco_material_path = mujoco_materials_prim.GetPath().AppendChild(material_name)
+            if stage.GetPrimAtPath(mujoco_material_path).IsValid():
+                continue
+
             mujoco_material = UsdMujoco.MujocoMaterial.Define(stage, mujoco_material_path)
             rgba = Gf.Vec4f(1.0, 1.0, 1.0, 0.0)
             emission = 0.0
@@ -280,6 +286,12 @@ def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage, mujoco_asset_pr
 
             mesh_stage = Usd.Stage.Open(scaled_mesh_file_path)
             xform_prim = mesh_stage.GetDefaultPrim()
+            xform_name = xform_prim.GetName()
+
+            mujoco_mesh_path = mujoco_meshes_prim.GetPath().AppendChild(xform_name)
+            if stage.GetPrimAtPath(mujoco_mesh_path).IsValid():
+                continue
+
             mesh_prims = [prim for prim in xform_prim.GetChildren() if prim.IsA(UsdGeom.Mesh)]
             if len(mesh_prims) != 1:
                 raise NotImplementedError(f"Mesh {xform_prim.GetName()} has {len(mesh_prims)} mesh prims.")
@@ -290,9 +302,6 @@ def build_mujoco_asset_mesh_and_material_prims(stage: Usd.Stage, mujoco_asset_pr
             normals = [n for normal in mesh.GetNormalsAttr().Get() for n in normal]
             face = mesh.GetFaceVertexIndicesAttr().Get()
 
-            xform_name = xform_prim.GetName()
-
-            mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild(xform_name)
             mujoco_mesh = UsdMujoco.MujocoMesh.Define(stage, mujoco_mesh_path)
             mujoco_mesh.CreateVertexAttr(vertex)
             mujoco_mesh.CreateNormalAttr(normals)
@@ -369,9 +378,16 @@ class MjcfExporter:
         mujoco_option_api = get_mujoco_option_api(mujoco_prim=mujoco_prim)
 
         mujoco_asset_prim = get_mujoco_asset_prim(stage=stage)
+        mujoco_meshes_path = mujoco_asset_prim.GetPath().AppendChild("meshes")
+        mujoco_meshes_prim = stage.GetPrimAtPath(mujoco_meshes_path)
+        mujoco_materials_path = mujoco_asset_prim.GetPath().AppendChild("materials")
+        mujoco_materials_prim = stage.GetPrimAtPath(mujoco_materials_path)
+        mujoco_textures_path = mujoco_asset_prim.GetPath().AppendChild("textures")
+        mujoco_textures_prim = stage.GetPrimAtPath(mujoco_textures_path)
 
         build_mujoco_asset_mesh_and_material_prims(stage=self.factory.world_builder.stage,
-                                                   mujoco_asset_prim=mujoco_asset_prim)
+                                                   mujoco_meshes_prim=mujoco_meshes_prim,
+                                                   mujoco_materials_prim=mujoco_materials_prim)
 
         model_name = UsdMujoco.Mujoco(mujoco_prim).GetModelAttr().Get()
         self.root.set("model", model_name)
@@ -407,7 +423,7 @@ class MjcfExporter:
         )
 
         asset = ET.SubElement(self.root, "asset")
-        mujoco_meshes = [UsdMujoco.MujocoMesh(prim) for prim in mujoco_asset_prim.GetChildren()
+        mujoco_meshes = [UsdMujoco.MujocoMesh(prim) for prim in mujoco_meshes_prim.GetChildren()
                          if prim.IsA(UsdMujoco.MujocoMesh)]
         for mujoco_mesh in mujoco_meshes:
             mesh = ET.SubElement(asset, "mesh")
@@ -421,7 +437,7 @@ class MjcfExporter:
             scale = mujoco_mesh.GetScaleAttr().Get()
             mesh.set("scale", " ".join(map(str, scale)))
 
-        mujoco_materials = [UsdMujoco.MujocoMaterial(prim) for prim in mujoco_asset_prim.GetChildren()
+        mujoco_materials = [UsdMujoco.MujocoMaterial(prim) for prim in mujoco_materials_prim.GetChildren()
                             if prim.IsA(UsdMujoco.MujocoMaterial)]
         for mujoco_material in mujoco_materials:
             material = ET.SubElement(asset, "material")
@@ -432,6 +448,24 @@ class MjcfExporter:
             material.set("emission", str(emission))
             specular = mujoco_material.GetSpecularAttr().Get()
             material.set("specular", str(specular))
+            if len(mujoco_material.GetTextureRel().GetTargets()) > 1:
+                raise NotImplementedError(f"Material {mujoco_material.GetPrim().GetName()} has "
+                                          f"{len(mujoco_material.GetTextureRel().GetTargets())} textures.")
+            for texture_path in mujoco_material.GetTextureRel().GetTargets():
+                texture_prim = stage.GetPrimAtPath(texture_path)
+                texture_name = texture_prim.GetName()
+                material.set("texture", texture_name)
+
+        mujoco_textures = [UsdMujoco.MujocoTexture(prim) for prim in mujoco_textures_prim.GetChildren()
+                           if prim.IsA(UsdMujoco.MujocoTexture)]
+        for mujoco_texture in mujoco_textures:
+            texture = ET.SubElement(asset, "texture")
+            texture.set("name", mujoco_texture.GetPrim().GetName())
+            texture_type = mujoco_texture.GetTypeAttr().Get()
+            texture.set("type", texture_type)
+            texture_abspath = mujoco_texture.GetFileAttr().Get().path
+            texture_relpath = os.path.relpath(texture_abspath, self.factory.tmp_texturedir_path)
+            texture.set("file", texture_relpath)
 
     def _build_body(self, body_name: str, parent_body_name: str) -> None:
         parent_body = self.body_dict[parent_body_name]

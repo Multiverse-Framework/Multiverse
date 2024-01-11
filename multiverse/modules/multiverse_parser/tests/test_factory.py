@@ -546,8 +546,8 @@ class FactoryTestCase(unittest.TestCase):
         # numpy.testing.assert_array_almost_equal(physics_mass_api_2.GetPrincipalAxesAttr().Get().GetImaginary(),
         #                                         inertia_quat[:3])
 
-        geom_property = GeomProperty(geom_name="geom_1", geom_type=GeomType.CUBE)
-        geom_builder_1 = body_builder_1.add_geom(geom_property=geom_property)
+        geom_property = GeomProperty(geom_type=GeomType.CUBE)
+        geom_builder_1 = body_builder_1.add_geom(geom_name="geom_1", geom_property=geom_property)
         geom_1_xform = geom_builder_1.xform
         self.assertEqual(geom_1_xform.GetPath(), "/body_0/body_1/geom_1")
 
@@ -561,11 +561,10 @@ class FactoryTestCase(unittest.TestCase):
         geom_builder_1.set_attribute(prefix="primvars", displayColor=[(0, 0, 0)])
         geom_builder_1.set_attribute(prefix="primvars", displayOpacity=[1])
 
-        joint_property = JointProperty(joint_name="joint_0",
-                                       joint_parent_prim=body_builder_1.xform.GetPrim(),
+        joint_property = JointProperty(joint_parent_prim=body_builder_1.xform.GetPrim(),
                                        joint_child_prim=body_builder_3.xform.GetPrim(),
                                        joint_type=JointType.FIXED)
-        joint_builder = JointBuilder(joint_property=joint_property)
+        joint_builder = JointBuilder(joint_name="joint_0", joint_property=joint_property)
         self.assertEqual(joint_builder.path, "/body_0/body_1/joint_0")
         self.assertEqual(joint_builder.type, JointType.FIXED)
 

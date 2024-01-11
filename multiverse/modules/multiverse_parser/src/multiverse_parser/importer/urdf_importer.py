@@ -222,13 +222,12 @@ class UrdfImporter(Factory):
             else geom.material.color.rgba
         geom_type = self._geom_type_map[type(geom.geometry)]
         geom_density = 1000.0
-        geom_property = GeomProperty(geom_name=geom_name,
-                                     geom_type=geom_type,
+        geom_property = GeomProperty(geom_type=geom_type,
                                      is_visible=geom_is_visible,
                                      is_collidable=geom_is_collidable,
                                      rgba=geom_rgba,
                                      density=geom_density)
-        geom_builder = body_builder.add_geom(geom_property=geom_property)
+        geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
         geom_builder.build()
 
         tmp_origin_mesh_file_path = ""
@@ -344,14 +343,13 @@ class UrdfImporter(Factory):
             joint_pos = body1_rot.GetInverse().Transform(joint_pos - body1_to_body2_pos)
 
             joint_property = JointProperty(
-                joint_name=joint.name,
                 joint_parent_prim=parent_body_builder.xform.GetPrim(),
                 joint_child_prim=child_body_builder.xform.GetPrim(),
                 joint_pos=joint_pos,
                 joint_axis=JointAxis.from_array(joint.axis),
                 joint_type=joint_type,
             )
-            joint_builder = child_body_builder.add_joint(joint_property=joint_property)
+            joint_builder = child_body_builder.add_joint(joint_name=joint.name, joint_property=joint_property)
 
             if joint_type == JointType.REVOLUTE:
                 joint_builder.set_limit(lower=degrees(joint.limit.lower),

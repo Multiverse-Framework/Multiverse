@@ -31,19 +31,18 @@ class GeomInertial:
 
 @dataclass(init=False)
 class GeomProperty:
-    name: str
     type: GeomType
     is_visible: bool
     is_collidable: bool
     rgba: Optional[numpy.ndarray]
     density: float
 
-    def __init__(self, geom_name: str, geom_type: GeomType,
+    def __init__(self,
+                 geom_type: GeomType,
                  is_visible: bool = True,
                  is_collidable: bool = True,
                  rgba: Optional[numpy.ndarray] = None,
                  density: float = 1000.0) -> None:
-        self._name = modify_name(geom_name)
         self._type = geom_type
         self._is_visible = is_visible
         self._is_collidable = is_collidable
@@ -55,10 +54,6 @@ class GeomProperty:
                 raise ValueError(f"RGBA values must be between 0.0 and 1.0.")
         self._rgba = rgba
         self._density = density
-
-    @property
-    def name(self) -> str:
-        return self._name
 
     @property
     def type(self) -> GeomType:
@@ -104,13 +99,13 @@ def bind_materials(reference_stage: Usd.Stage, local_stage: Usd.Stage, reference
 
         bind_materials(reference_stage, local_stage, reference_geom_subset.GetPrim(), local_geom_subset)
 
+
 class GeomBuilder:
     stage: Usd.Stage
     xform: UsdGeom.Xform
-    inertial: GeomInertial
     geom_prims: List[UsdGeom.Gprim]
     mesh_builders: Dict[str, MeshBuilder]
-    material_builders: Dict[str, MaterialBuilder]
+    material_builders: List[MaterialBuilder]
 
     def __init__(self,
                  stage: Usd.Stage,
@@ -152,11 +147,11 @@ class GeomBuilder:
             mesh_builder = MeshBuilder(mesh_file_path)
             self.mesh_builders[mesh_file_path] = mesh_builder
 
-        if mesh_file_path in self.material_builders:
-            material_builder = self.material_builders[mesh_file_path]
+        if mesh_file_path in self._material_builders:
+            material_builder = self._material_builders[mesh_file_path]
         else:
             material_builder = MaterialBuilder(file_path=mesh_file_path)
-            self.material_builders[mesh_file_path] = material_builder
+            self._material_builders[mesh_file_path] = material_builder
 
         reference_prims = [mesh.GetPrim() for mesh in mesh_builder.xform.GetPrim().GetChildren()]
         for reference_prim in reference_prims:
@@ -411,5 +406,5 @@ class GeomBuilder:
         return self._mesh_builders
 
     @property
-    def material_builders(self) -> Dict[str, MaterialBuilder]:
-        return self._material_builders
+    def material_builders(self) -> List[MaterialBuilder]:
+        return list(self._material_builders.values())
