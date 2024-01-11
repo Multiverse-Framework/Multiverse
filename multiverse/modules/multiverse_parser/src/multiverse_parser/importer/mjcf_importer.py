@@ -325,14 +325,20 @@ class MjcfImporter(Factory):
 
                     material_name = self.mj_model.mat(mat_id).name
                     mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(material_name)
-                    mujoco_material_prim = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
+                    mujoco_material = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
                                                                            mujoco_material_path)
-                    mujoco_material_prim.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
-                    mujoco_material_prim.CreateEmissionAttr(mat_emission)
-                    mujoco_material_prim.CreateSpecularAttr(mat_specular)
+                    mujoco_material.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
+                    mujoco_material.CreateEmissionAttr(mat_emission)
+                    mujoco_material.CreateSpecularAttr(mat_specular)
 
                     texture_id = self.mj_model.mat_texid[mat_id][0]
                     if texture_id != -1:
+                        texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
+                        texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
+                        texcoord = self.mj_model.mesh_texcoord[texcoordadr:texcoordadr+texcoordnum]
+                        texcoord = texcoord.reshape(-1)
+                        mujoco_mesh.CreateTexcoordAttr(texcoord)
+
                         texture_name = self.mj_model.tex(texture_id).name
                         if texture_name == "":
                             texture_name = "Texture_" + str(texture_id)
@@ -347,19 +353,19 @@ class MjcfImporter(Factory):
                         material_builder.add_texture(file_path=texture_file_path, rgb=rgb)
 
                         mujoco_texture_path = mujoco_asset_prim.GetPath().AppendChild("textures").AppendChild(texture_name)
-                        mujoco_texture_prim = UsdMujoco.MujocoTexture.Define(self.world_builder.stage,
+                        mujoco_texture = UsdMujoco.MujocoTexture.Define(self.world_builder.stage,
                                                                              mujoco_texture_path)
                         if texture_type == mujoco.mjtTexture.mjTEXTURE_2D:
-                            mujoco_texture_prim.CreateTypeAttr("2d")
+                            mujoco_texture.CreateTypeAttr("2d")
                         elif texture_type == mujoco.mjtTexture.mjTEXTURE_CUBE:
-                            mujoco_texture_prim.CreateTypeAttr("cube")
+                            mujoco_texture.CreateTypeAttr("cube")
                         elif texture_type == mujoco.mjtTexture.mjTEXTURE_SKYBOX:
-                            mujoco_texture_prim.CreateTypeAttr("skybox")
+                            mujoco_texture.CreateTypeAttr("skybox")
                         else:
                             raise NotImplementedError(f"Texture type {texture_type} not supported.")
 
-                        mujoco_texture_prim.CreateFileAttr(texture_file_path)
-                        mujoco_material_prim.CreateTextureRel().SetTargets([mujoco_texture_path])
+                        mujoco_texture.CreateFileAttr(texture_file_path)
+                        mujoco_material.CreateTextureRel().SetTargets([mujoco_texture_path])
 
                     mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 

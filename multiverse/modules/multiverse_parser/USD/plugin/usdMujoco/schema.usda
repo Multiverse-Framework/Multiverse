@@ -106,6 +106,14 @@ class MujocoMesh "MujocoMesh" (
         doc = "Vertex 3D normal data."
     )
 
+    float[] texcoord (
+        customData = {
+            string apiName = "texcoord"
+        }
+        displayName = "Mesh Texture Coordinate"
+        doc = "Vertex 2D texture coordinates, which are numbers between 0 and 1."
+    )
+
     float3 mujoco:mesh:scale = (1, 1, 1) (
         customData = {
             string apiName = "scale"

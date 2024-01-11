@@ -436,6 +436,9 @@ class MjcfExporter:
             mesh.set("normal", " ".join(map(str, normal)))
             scale = mujoco_mesh.GetScaleAttr().Get()
             mesh.set("scale", " ".join(map(str, scale)))
+            texcoord = mujoco_mesh.GetTexcoordAttr().Get()
+            if texcoord is not None:
+                mesh.set("texcoord", " ".join(map(str, texcoord)))
 
         mujoco_materials = [UsdMujoco.MujocoMaterial(prim) for prim in mujoco_materials_prim.GetChildren()
                             if prim.IsA(UsdMujoco.MujocoMaterial)]
