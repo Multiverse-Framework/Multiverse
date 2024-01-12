@@ -1,5 +1,6 @@
 from multiverse_parser.importer import UrdfImporter, MjcfImporter
 from multiverse_parser.exporter import UrdfExporter, MjcfExporter
+from multiverse_parser.factory import copy_and_overwrite
 from multiverse_parser.factory import InertiaSource
 from multiverse_parser.factory import (WorldBuilder,
                                        BodyBuilder,

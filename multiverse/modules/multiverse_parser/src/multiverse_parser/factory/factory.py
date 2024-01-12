@@ -8,7 +8,7 @@ import shutil
 import string
 import subprocess
 from enum import Enum
-from typing import Optional, Dict, Tuple
+from typing import Optional, Dict, Tuple, List
 
 import numpy
 
@@ -35,11 +35,13 @@ class Configuration:
     default_rgba: numpy.ndarray = numpy.array([0.5, 0.5, 0.5, 1.0])
 
 
-def copy_and_overwrite(source_folder: str, destination_folder: str) -> None:
+def copy_and_overwrite(source_folder: str, destination_folder: str, excludes: Optional[List[str]] = None) -> None:
     os.makedirs(name=destination_folder, exist_ok=True)
 
     # Iterate through all files and folders in the source folder
     for item in os.listdir(source_folder):
+        if excludes is not None and item in excludes:
+            continue
         source_item = os.path.join(source_folder, item)
         destination_item = os.path.join(destination_folder, item)
 
@@ -57,7 +59,7 @@ class Factory:
     world_builder: WorldBuilder
     source_file_path: str
     config: Configuration
-    tmp_meshdir_path: str
+    tmp_usddir_path: str
     tmp_texturedir_path: str
     tmp_file_path: str
     _tmp_file_name: str = "tmp"

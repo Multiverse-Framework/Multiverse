@@ -1,4 +1,4 @@
-from .factory import Factory, Configuration, InertiaSource
+from .factory import Factory, Configuration, InertiaSource, copy_and_overwrite
 from .world_builder import WorldBuilder
 from .body_builder import BodyBuilder
 from .joint_builder import JointBuilder, JointAxis, JointType, JointProperty

@@ -15,7 +15,7 @@ from ..factory import (WorldBuilder, BodyBuilder,
                        MeshBuilder, MeshProperty,
                        MaterialBuilder, MaterialProperty)
 
-from pxr import UsdMujoco, Gf
+from pxr import UsdMujoco, Gf, UsdGeom, Sdf
 
 
 def get_model_name(xml_file_path: str) -> str:
@@ -297,41 +297,51 @@ class MjcfImporter(Factory):
                                              normals=normals,
                                              face_vertex_counts=face_vertex_counts,
                                              face_vertex_indices=face_vertex_indices)
-                mesh_builder.create_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
+                mesh = mesh_builder.create_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
 
-                tmp_obj_file_path = os.path.join(os.path.dirname(self._tmp_usddir_path), "obj", f"{mesh_name}.obj")
-                self.export_mesh(tmp_usd_file_path, tmp_obj_file_path)
-
-                mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
-                mujoco_mesh = UsdMujoco.MujocoMesh.Define(self.world_builder.stage, mujoco_mesh_path)
-                mujoco_mesh.CreateFileAttr(tmp_obj_file_path)
-
-                mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
-
+                file_ext = "stl"
                 mat_id = mj_geom.matid
                 if mat_id != -1:
-                    mat_rgba = self.mj_model.mat_rgba[mat_id][0]
-                    mat_emission = self.mj_model.mat_emission[mat_id].tolist()[0]
-                    mat_specular = self.mj_model.mat_specular[mat_id].tolist()[0]
-                    diffuse_color, emissive_color, specular_color = self.get_material_data(mat_rgb=mat_rgba[:3],
-                                                                                           mat_emission=mat_emission,
-                                                                                           mat_specular=mat_specular)
                     material_builder = MaterialBuilder(file_path=tmp_usd_file_path)
-                    material_property = MaterialProperty(diffuse_color=diffuse_color,
-                                                         emissive_color=emissive_color,
-                                                         specular_color=specular_color)
-                    material_builder.apply_material(material_property=material_property)
-
                     material_name = self.mj_model.mat(mat_id).name
                     mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
                         material_name)
                     mujoco_material = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
                                                                       mujoco_material_path)
                     texture_id = self.mj_model.mat_texid[mat_id][0]
+                    if texture_id == -1:
+                        mat_rgba = self.mj_model.mat_rgba[mat_id][0]
+                        mat_emission = self.mj_model.mat_emission[mat_id].tolist()[0]
+                        mat_specular = self.mj_model.mat_specular[mat_id].tolist()[0]
+                        diffuse_color, emissive_color, specular_color = self.get_material_data(mat_rgb=mat_rgba[:3],
+                                                                                               mat_emission=mat_emission,
+                                                                                               mat_specular=mat_specular)
+                        mujoco_material.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
+                        mujoco_material.CreateEmissionAttr(mat_emission)
+                        mujoco_material.CreateSpecularAttr(mat_specular)
+                    else:
+                        diffuse_color = None
+                        emissive_color = None
+                        specular_color = None
+                    material_property = MaterialProperty(diffuse_color=diffuse_color,
+                                                         emissive_color=emissive_color,
+                                                         specular_color=specular_color)
+                    material = material_builder.apply_material(material_property=material_property)[0]
                     if texture_id != -1:
-                        texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
-                        texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
-                        texcoord = self.mj_model.mesh_texcoord[texcoordadr:texcoordadr + texcoordnum]
+                        file_ext = "obj"
+                        mesh_texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
+                        mesh_texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
+                        mesh_texcoord = self.mj_model.mesh_texcoord[
+                                        mesh_texcoordadr:mesh_texcoordadr + mesh_texcoordnum]
+                        mesh_texcoord = numpy.array([[x, 1 - y] for x, y in mesh_texcoord])
+                        mesh_faceadr = self.mj_model.mesh_faceadr[mesh_id]
+                        mesh_facenum = self.mj_model.mesh_facenum[mesh_id]
+                        mesh_facetexcoord = self.mj_model.mesh_facetexcoord[mesh_faceadr:mesh_faceadr + mesh_facenum]
+
+                        texcoord = UsdGeom.PrimvarsAPI(mesh).CreatePrimvar("uv",
+                                                                           Sdf.ValueTypeNames.TexCoord2fArray,
+                                                                           UsdGeom.Tokens.faceVarying)
+                        texcoord.Set(mesh_texcoord[mesh_facetexcoord].reshape(-1, 2))
 
                         texture_name = self.mj_model.tex(texture_id).name
                         if texture_name == "":
@@ -344,7 +354,10 @@ class MjcfImporter(Factory):
                         rgb = self.mj_model.tex_rgb[texture_adr:texture_adr + texture_num]
                         rgb = rgb.reshape((height, width, 3))
                         texture_file_path = os.path.join(self._tmp_texturedir_path, f"{texture_name}.png")
-                        material_builder.add_texture(file_path=texture_file_path, rgb=rgb)
+                        material_builder.add_texture(
+                            file_path=os.path.relpath(texture_file_path, os.path.dirname(tmp_usd_file_path)),
+                            rgb=rgb,
+                            material=material)
 
                         mujoco_texture_path = mujoco_asset_prim.GetPath().AppendChild("textures").AppendChild(
                             texture_name)
@@ -359,14 +372,19 @@ class MjcfImporter(Factory):
                         else:
                             raise NotImplementedError(f"Texture type {texture_type} not supported.")
 
-                        mujoco_texture.CreateFileAttr(texture_file_path)
+                        mujoco_texture.CreateFileAttr(f"{texture_name}.png")
                         mujoco_material.CreateTextureRel().SetTargets([mujoco_texture_path])
-                    else:
-                        mujoco_material.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
-                        mujoco_material.CreateEmissionAttr(mat_emission)
-                        mujoco_material.CreateSpecularAttr(mat_specular)
 
                     mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
+
+                tmp_mesh_file_path = os.path.join(os.path.dirname(self.tmp_usddir_path), file_ext, f"{mesh_name}.{file_ext}")
+                self.export_mesh(tmp_usd_file_path, tmp_mesh_file_path)
+
+                mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
+                mujoco_mesh = UsdMujoco.MujocoMesh.Define(self.world_builder.stage, mujoco_mesh_path)
+                mujoco_mesh.CreateFileAttr(tmp_mesh_file_path)
+
+                mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
                 geom_builder.add_mesh(mesh_file_path=tmp_usd_file_path)
                 geom_builder.build()
@@ -379,42 +397,22 @@ class MjcfImporter(Factory):
     def get_mesh_data(self, mesh_id: int) -> Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray]:
         vert_adr = self.mj_model.mesh_vertadr[mesh_id]
         vert_num = self.mj_model.mesh_vertnum[mesh_id]
+        points = self.mj_model.mesh_vert[vert_adr:vert_adr + vert_num]
+
+        normal_adr = self.mj_model.mesh_normaladr[mesh_id]
+        normal_num = self.mj_model.mesh_normalnum[mesh_id]
+        mesh_normal = self.mj_model.mesh_normal[normal_adr:normal_adr + normal_num]
 
         face_adr = self.mj_model.mesh_faceadr[mesh_id]
         face_num = self.mj_model.mesh_facenum[mesh_id]
-        points = numpy.empty(shape=[vert_num, 3], dtype=float)
+        mesh_facenormal = self.mj_model.mesh_facenormal[face_adr:face_adr + face_num]
 
-        normals = numpy.empty(shape=[self.mj_model.mesh_facenum[mesh_id], 3], dtype=float)
+        normals = mesh_normal[mesh_facenormal].reshape(-1, 3)
 
         face_vertex_counts = numpy.empty(shape=self.mj_model.mesh_facenum[mesh_id], dtype=float)
         face_vertex_counts.fill(3)
 
-        face_vertex_indices = numpy.empty(shape=self.mj_model.mesh_facenum[mesh_id] * 3, dtype=float)
-
-        for i in range(vert_num):
-            vert_id = vert_adr + i
-            points[i] = self.mj_model.mesh_vert[vert_id]
-
-        normal_adr = self.mj_model.mesh_normaladr[mesh_id]
-        for i in range(face_num):
-            face_id = face_adr + i
-            face_normals = self.mj_model.mesh_normal[normal_adr + self.mj_model.mesh_facenormal[face_id]]
-
-            p1 = face_normals[0]
-            p2 = face_normals[1]
-            p3 = face_normals[2]
-
-            v1 = p2 - p1
-            v2 = p3 - p1
-            normal = numpy.cross(v1, v2)
-            norm = numpy.linalg.norm(normal)
-            if norm != 0:
-                normal = normal / norm
-            normals[i] = normal
-
-            face_vertex_indices[3 * i] = self.mj_model.mesh_face[face_id][0]
-            face_vertex_indices[3 * i + 1] = self.mj_model.mesh_face[face_id][1]
-            face_vertex_indices[3 * i + 2] = self.mj_model.mesh_face[face_id][2]
+        face_vertex_indices = self.mj_model.mesh_face[face_adr:face_adr + face_num]
 
         return points, normals, face_vertex_counts, face_vertex_indices
 

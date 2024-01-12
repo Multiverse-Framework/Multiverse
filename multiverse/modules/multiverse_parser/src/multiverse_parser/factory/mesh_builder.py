@@ -82,6 +82,7 @@ class MeshBuilder:
             stage = Usd.Stage.CreateNew(mesh_file_path)
             xform = UsdGeom.Xform.Define(stage, f"/{mesh_name}")
             stage.SetDefaultPrim(xform.GetPrim())
+            UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
         self._stage = stage
         self._xform = xform
 
@@ -100,6 +101,7 @@ class MeshBuilder:
         mesh = UsdGeom.Mesh.Define(self.stage, xform_path.AppendChild(f"SM_{mesh_name}"))
         mesh.CreatePointsAttr(mesh_property.points)
         mesh.CreateNormalsAttr(mesh_property.normals)
+        mesh.SetNormalsInterpolation(UsdGeom.Tokens.faceVarying)
         mesh.CreateFaceVertexCountsAttr(mesh_property.face_vertex_counts)
         mesh.CreateFaceVertexIndicesAttr(mesh_property.face_vertex_indices)
 

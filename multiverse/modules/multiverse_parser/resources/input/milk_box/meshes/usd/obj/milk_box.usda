@@ -71,20 +71,3 @@ def "_materials"
         }
     }
 }
-
-over "body_0"
-{
-    over "body_1"
-    {
-        over "geom_1"
-        {
-            over "SM_MilkBox" (
-                prepend apiSchemas = ["MaterialBindingAPI"]
-            )
-            {
-                rel material:binding = </_materials/M_MilkBox>
-            }
-        }
-    }
-}
-

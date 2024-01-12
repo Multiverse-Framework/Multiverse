@@ -20,13 +20,7 @@ def clean_up_meshes(bpy, file_path: str) -> None:
         bpy.ops.object.mode_set(mode="OBJECT")
     
     selected_object = bpy.context.object
-    selected_object.location.x = 0.0
-    selected_object.location.y = 0.0
-    selected_object.location.z = 0.0
-    selected_object.rotation_euler.x = 0.0
-    selected_object.rotation_euler.y = 0.0
-    selected_object.rotation_euler.z = 0.0
-    bpy.ops.object.transform_apply(scale=True, isolate_users=True)
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
     
     # Apply triangulate modifier
     selected_object = bpy.context.object
@@ -82,7 +76,9 @@ for i, line in enumerate(lines):
         texture_path = os.path.join(out_obj_dir, line.split("map_Kd")[1].strip())
         texture_file_name = os.path.basename(texture_path)
         new_texture_path = os.path.join("..", "textures", texture_file_name)
-        shutil.copy2(texture_path, os.path.join(out_obj_dir, new_texture_path))
+        new_texture_abspath = os.path.join(out_obj_dir, new_texture_path)
+        if not os.path.exists(new_texture_abspath):
+            shutil.copy2(texture_path, new_texture_abspath)
         lines[i] = "map_Kd " + new_texture_path + "\\n"
         img = Image.open(texture_path)
         png_file_name = texture_file_name.replace(".jpg", ".png").replace(".JPG", ".png")
