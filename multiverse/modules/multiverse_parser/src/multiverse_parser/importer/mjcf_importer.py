@@ -83,7 +83,7 @@ class MjcfImporter(Factory):
         ))
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
-        self._world_builder = WorldBuilder(self.tmp_file_path)
+        self._world_builder = WorldBuilder(self.tmp_usd_file_path)
 
         self._import_config()
 
@@ -108,7 +108,7 @@ class MjcfImporter(Factory):
 
         self.world_builder.export()
 
-        return self.tmp_file_path if save_file_path is None else self.save_tmp_model(file_path=save_file_path)
+        return self.tmp_usd_file_path if save_file_path is None else self.save_tmp_model(usd_file_path=save_file_path)
 
     def _import_config(self):
         usd_mujoco = UsdMujoco.Mujoco.Define(self.world_builder.stage, "/mujoco")
@@ -118,6 +118,9 @@ class MjcfImporter(Factory):
         mujoco_option_api.CreateTimeStepAttr(self.mj_model.opt.timestep)
 
         UsdMujoco.MujocoAsset.Define(self.world_builder.stage, "/mujoco/asset")
+        UsdMujoco.MujocoMesh.Define(self.world_builder.stage, "/mujoco/asset/meshes")
+        UsdMujoco.MujocoMaterial.Define(self.world_builder.stage, "/mujoco/asset/materials")
+        UsdMujoco.MujocoTexture.Define(self.world_builder.stage, "/mujoco/asset/textures")
 
     def import_body(self, mj_body) -> BodyBuilder:
         body_name = mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
@@ -291,8 +294,8 @@ class MjcfImporter(Factory):
                 mesh_id = mj_geom.dataid[0]
                 mesh_name = self.mj_model.mesh(mesh_id).name
                 points, normals, face_vertex_counts, face_vertex_indices = self.get_mesh_data(mesh_id=mesh_id)
-                tmp_usd_file_path = os.path.join(self._tmp_usddir_path, "usd", f"{mesh_name}.usda")
-                mesh_builder = MeshBuilder(mesh_file_path=tmp_usd_file_path)
+                tmp_usd_mesh_file_path = os.path.join(self._tmp_usd_mesh_dir_path, "usd", f"{mesh_name}.usda")
+                mesh_builder = MeshBuilder(usd_mesh_file_path=tmp_usd_mesh_file_path)
                 mesh_property = MeshProperty(points=points,
                                              normals=normals,
                                              face_vertex_counts=face_vertex_counts,
@@ -302,7 +305,7 @@ class MjcfImporter(Factory):
                 file_ext = "stl"
                 mat_id = mj_geom.matid
                 if mat_id != -1:
-                    material_builder = MaterialBuilder(file_path=tmp_usd_file_path)
+                    material_builder = MaterialBuilder(file_path=tmp_usd_mesh_file_path)
                     material_name = self.mj_model.mat(mat_id).name
                     mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
                         material_name)
@@ -353,9 +356,9 @@ class MjcfImporter(Factory):
                         texture_num = width * height * 3
                         rgb = self.mj_model.tex_rgb[texture_adr:texture_adr + texture_num]
                         rgb = rgb.reshape((height, width, 3))
-                        texture_file_path = os.path.join(self._tmp_texturedir_path, f"{texture_name}.png")
+                        texture_file_path = os.path.join(self._tmp_texture_dir_path, f"{texture_name}.png")
                         material_builder.add_texture(
-                            file_path=os.path.relpath(texture_file_path, os.path.dirname(tmp_usd_file_path)),
+                            file_path=os.path.relpath(texture_file_path, os.path.dirname(tmp_usd_mesh_file_path)),
                             rgb=rgb,
                             material=material)
 
@@ -377,8 +380,9 @@ class MjcfImporter(Factory):
 
                     mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 
-                tmp_mesh_file_path = os.path.join(os.path.dirname(self.tmp_usddir_path), file_ext, f"{mesh_name}.{file_ext}")
-                self.export_mesh(tmp_usd_file_path, tmp_mesh_file_path)
+                tmp_mesh_file_path = os.path.join(os.path.dirname(self.tmp_usd_mesh_dir_path), file_ext, f"{mesh_name}.{file_ext}")
+                self.export_mesh(in_mesh_file_path=tmp_usd_mesh_file_path,
+                                 out_mesh_file_path=tmp_mesh_file_path)
 
                 mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(self.world_builder.stage, mujoco_mesh_path)
@@ -386,7 +390,7 @@ class MjcfImporter(Factory):
 
                 mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
-                geom_builder.add_mesh(mesh_file_path=tmp_usd_file_path)
+                geom_builder.add_mesh(mesh_file_path=tmp_usd_mesh_file_path)
                 geom_builder.build()
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             else:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from typing import Optional
+from typing import Optional, Tuple
 from xml.etree import ElementTree as ET
 from xml.dom import minidom
 
@@ -121,15 +121,21 @@ def get_mujoco_option_api(mujoco_prim) -> UsdMujoco.MujocoOptionAPI:
     return mujoco_option_api
 
 
-def get_mujoco_asset_prim(stage) -> Usd.Prim:
+def get_mujoco_asset_prim(stage) -> Tuple[Usd.Prim, Usd.Prim, Usd.Prim, Usd.Prim]:
     if stage.GetPrimAtPath("/mujoco/asset").IsValid():
         mujoco_asset_prim = stage.GetPrimAtPath("/mujoco/asset")
+        mujoco_meshes_prim = stage.GetPrimAtPath("/mujoco/asset/meshes")
+        mujoco_materials_prim = stage.GetPrimAtPath("/mujoco/asset/materials")
+        mujoco_textures_prim = stage.GetPrimAtPath("/mujoco/asset/textures")
     else:
         mujoco_asset_prim = UsdMujoco.MujocoAsset.Define(stage, "/mujoco/asset")
-        UsdMujoco.MujocoMesh.Define(stage, "/mujoco/asset/meshes")
-        UsdMujoco.MujocoMaterial.Define(stage, "/mujoco/asset/materials")
-        UsdMujoco.MujocoTexture.Define(stage, "/mujoco/asset/textures")
-    return mujoco_asset_prim.GetPrim()
+        mujoco_meshes_prim = UsdMujoco.MujocoMesh.Define(stage, "/mujoco/asset/meshes")
+        mujoco_materials_prim = UsdMujoco.MujocoMaterial.Define(stage, "/mujoco/asset/materials")
+        mujoco_textures_prim = UsdMujoco.MujocoTexture.Define(stage, "/mujoco/asset/textures")
+    return (mujoco_asset_prim.GetPrim(),
+            mujoco_meshes_prim.GetPrim(),
+            mujoco_materials_prim.GetPrim(),
+            mujoco_textures_prim.GetPrim())
 
 
 def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
@@ -150,16 +156,16 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
                 raise NotImplementedError(f"Geom type {geom_builder.type} not implemented.")
             geom_type = "box"
         elif geom_builder.type == GeomType.SPHERE:
-            geom_sphere_prim = UsdGeom.Sphere(geom_builder.geom_prims[0])
+            geom_sphere_prim = UsdGeom.Sphere(geom_builder.gprims[0])
             geom_size = numpy.array([geom_sphere_prim.GetRadiusAttr().Get(), 0.0, 0.0])
             geom_type = "sphere"
         elif geom_builder.type == GeomType.CYLINDER:
-            geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.geom_prims[0])
+            geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.gprims[0])
             geom_size = numpy.array([geom_cylinder_prim.GetRadiusAttr().Get(),
                                      geom_cylinder_prim.GetHeightAttr().Get() / 2, 0.0])
             geom_type = "cylinder"
         elif geom_builder.type == GeomType.CAPSULE:
-            geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.geom_prims[0])
+            geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.gprims[0])
             geom_size = numpy.array([geom_cylinder_prim.GetRadiusAttr().Get(),
                                      geom_cylinder_prim.GetHeightAttr().Get() / 2, 0.0])
             geom_type = "capsule"
@@ -224,7 +230,7 @@ class MjcfExporter:
     ) -> None:
         self._factory = factory
         self._file_path = file_path
-        self._meshdir_abs = os.path.join(os.path.dirname(self.file_path), self.file_name)
+        self._mesh_dir_abs_path = os.path.join(os.path.dirname(self.file_path), self.file_name)
         self._root = ET.Element("mujoco")
         self._body_dict = {}
 
@@ -278,13 +284,10 @@ class MjcfExporter:
 
         mujoco_option_api = get_mujoco_option_api(mujoco_prim=mujoco_prim)
 
-        mujoco_asset_prim = get_mujoco_asset_prim(stage=stage)
-        mujoco_meshes_path = mujoco_asset_prim.GetPath().AppendChild("meshes")
-        mujoco_meshes_prim = stage.GetPrimAtPath(mujoco_meshes_path)
-        mujoco_materials_path = mujoco_asset_prim.GetPath().AppendChild("materials")
-        mujoco_materials_prim = stage.GetPrimAtPath(mujoco_materials_path)
-        mujoco_textures_path = mujoco_asset_prim.GetPath().AppendChild("textures")
-        mujoco_textures_prim = stage.GetPrimAtPath(mujoco_textures_path)
+        (mujoco_asset_prim,
+         mujoco_meshes_prim,
+         mujoco_materials_prim,
+         mujoco_textures_prim) = get_mujoco_asset_prim(stage=stage)
 
         self._build_mujoco_asset_mesh_and_material_prims(stage=self.factory.world_builder.stage,
                                                          mujoco_meshes_prim=mujoco_meshes_prim,
@@ -330,10 +333,10 @@ class MjcfExporter:
             mesh = ET.SubElement(asset, "mesh")
             mesh.set("name", mujoco_mesh.GetPrim().GetName())
             tmp_mesh_path = mujoco_mesh.GetFileAttr().Get().path
-            tmp_mesh_dir = os.path.join(os.path.dirname(self.factory.tmp_file_path), "tmp")
-            tmp_mesh_path = os.path.relpath(tmp_mesh_path, tmp_mesh_dir)
+            tmp_mesh_dir_path = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path), "tmp")
+            tmp_mesh_relpath = os.path.relpath(tmp_mesh_path, tmp_mesh_dir_path)
 
-            mesh.set("file", tmp_mesh_path)
+            mesh.set("file", tmp_mesh_relpath)
             scale = mujoco_mesh.GetScaleAttr().Get()
             mesh.set("scale", " ".join(map(str, scale)))
 
@@ -401,11 +404,12 @@ class MjcfExporter:
         for mesh_file_path, mesh_scales in mesh_file_paths.items():
             mesh_stage = Usd.Stage.Open(mesh_file_path)
             mesh_file_name = os.path.basename(mesh_file_path).split(".")[0]
-            file_ext = "obj" if len([material for material in mesh_stage.TraverseAll() if
+            mesh_file_ext = "obj" if len([material for material in mesh_stage.TraverseAll() if
                                      material.IsA(UsdShade.Material)]) > 0 else "stl"
-            tmp_mesh_file_path = os.path.join(os.path.dirname(self.factory.tmp_usddir_path), file_ext,
-                                              f"{mesh_file_name}.{file_ext}")
-            self.factory.export_mesh(mesh_file_path, tmp_mesh_file_path)
+            tmp_mesh_file_path = os.path.join(os.path.dirname(self.factory.tmp_usd_mesh_dir_path), mesh_file_ext,
+                                              f"{mesh_file_name}.{mesh_file_ext}")
+            self.factory.export_mesh(in_mesh_file_path=mesh_file_path,
+                                     out_mesh_file_path=tmp_mesh_file_path)
 
             for mesh_scale in mesh_scales:
                 mesh_name = add_scale_to_mesh_name(mesh_name=mesh_file_name, mesh_scale=numpy.array(mesh_scale))
@@ -526,10 +530,10 @@ class MjcfExporter:
             material_name = material_prim.GetName()
             geom.set("material", material_name)
 
-        if len(geom_builder.geom_prims) > 1:
+        if len(geom_builder.gprims) > 1:
             raise NotImplementedError(f"Geom {geom_builder.xform.GetPrim().GetName()} has "
-                                      f"{len(geom_builder.geom_prims)} geom prims.")
-        geom_prim = geom_builder.geom_prims[0]
+                                      f"{len(geom_builder.gprims)} geom prims.")
+        geom_prim = geom_builder.gprims[0]
         if geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
             geom.set("class", "collision")
         else:
@@ -571,7 +575,7 @@ class MjcfExporter:
             file.write(pretty_string)
 
         new_mesh_dir = os.path.join(os.path.dirname(self.file_path), self.file_name)
-        tmp_mesh_dir = os.path.join(os.path.dirname(self.factory.tmp_file_path), "tmp")
+        tmp_mesh_dir = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path), "tmp")
 
         copy_and_overwrite(source_folder=tmp_mesh_dir, destination_folder=new_mesh_dir, excludes=["usd"])
 
@@ -588,8 +592,8 @@ class MjcfExporter:
         return os.path.splitext(os.path.basename(self.file_path))[0]
 
     @property
-    def meshdir_abs(self) -> str:
-        return self._meshdir_abs
+    def mesh_dir_abspath(self) -> str:
+        return self._mesh_dir_abs_path
 
     @property
     def root(self) -> ET.Element:

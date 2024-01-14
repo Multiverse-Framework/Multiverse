@@ -56,7 +56,7 @@ class BodyBuilder:
                 parent_prim = self._xform.GetPrim().GetParent()
                 if parent_prim.IsValid() and parent_prim != relative_to_prim:
                     parent_to_relative_mat, _ = xform_cache.ComputeRelativeTransform(relative_to_prim, parent_prim)
-                    mat = mat * parent_to_relative_mat
+                    mat *= parent_to_relative_mat
             else:
                 raise ValueError(f"Prim at path {relative_to_xform.GetPath()} not found.")
 

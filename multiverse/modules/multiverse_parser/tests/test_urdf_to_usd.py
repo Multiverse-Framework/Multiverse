@@ -36,7 +36,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "tiago_dual")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "tiago_dual.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
+        importer.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_urdf_to_usd_2(self):
@@ -57,7 +57,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "ur5e")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "ur5e.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
+        importer.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_urdf_to_usd_root_link(self):
@@ -71,7 +71,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "world")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "world.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
+        importer.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_urdf_to_usd_meshes(self):
@@ -85,7 +85,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "milk_box")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "milk_box.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
+        importer.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_urdf_to_usd_with_invalid_file_path(self):

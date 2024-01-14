@@ -36,7 +36,7 @@ class MjcfToUrdfTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "ur5e")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_urdf", "ur5e.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(usd_file_path=output_usd_path)
 
         output_urdf_path = os.path.join(self.resource_path, "output", "test_mjcf_to_urdf", "ur5e.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,

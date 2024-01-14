@@ -37,7 +37,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "ur5e")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e_1.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_mjcf_to_usd_2(self):
@@ -51,7 +51,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         factory.import_model()
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e_2.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_mjcf_to_usd_3(self):
@@ -65,7 +65,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         factory.import_model()
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_usd", "ur5e_3.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_mjcf_to_usd_with_invalid_file_path(self):

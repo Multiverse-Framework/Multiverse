@@ -45,7 +45,7 @@ Visualization Manager:
   - Alpha: 1
     Class: rviz_default_plugins/RobotModel
     Collision Enabled: false
-    Description File: /tmp/tiago_dual.urdf
+    Description File: /tmp/ur5e.urdf
     Description Source: File
     Description Topic:
       Depth: 5
@@ -68,7 +68,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: tiago_dual
+    Fixed Frame: ur5e
     Frame Rate: 30
   Name: root
   Tools:

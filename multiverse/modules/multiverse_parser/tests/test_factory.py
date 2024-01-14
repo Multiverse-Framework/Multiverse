@@ -399,7 +399,7 @@ class UsdMesh(MultiShape):
                  mesh_file_path: str,
                  density: float,
                  pos: numpy.ndarray = numpy.zeros((1, 3)), quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])):
-        self._mesh_builder = MeshBuilder(mesh_file_path=mesh_file_path)
+        self._mesh_builder = MeshBuilder(usd_mesh_file_path=mesh_file_path)
 
         xform_pos = self._mesh_builder.xform.GetLocalTransformation().ExtractTranslation()
         xform_quat = self._mesh_builder.xform.GetLocalTransformation().ExtractRotationQuat()
@@ -488,7 +488,7 @@ class FactoryTestCase(unittest.TestCase):
 
     def test_world_builder(self):
         file_path = os.path.join(self.resource_path, "output", "test_world_builder", "test.usda")
-        world_builder = WorldBuilder(file_path=file_path)
+        world_builder = WorldBuilder(usd_file_path=file_path)
         self.assertIsInstance(world_builder._stage, Usd.Stage)
 
         body_builder_0 = world_builder.add_body(body_name="body_0")

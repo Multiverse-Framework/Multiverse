@@ -176,7 +176,7 @@ def get_urdf_geometry_sphere_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeome
         urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI(xform_prim)
     else:
         urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI.Apply(xform_prim)
-        geom_sphere_prim = UsdGeom.Sphere(geom_builder.geom_prims[0])
+        geom_sphere_prim = UsdGeom.Sphere(geom_builder.gprims[0])
         radius = geom_sphere_prim.GetRadiusAttr().Get()
         urdf_geometry_sphere_api.CreateRadiusAttr(radius)
     return urdf_geometry_sphere_api
@@ -188,7 +188,7 @@ def get_urdf_geometry_cylinder_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeo
         urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI(xform_prim)
     else:
         urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI.Apply(xform_prim)
-        geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.geom_prims[0])
+        geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.gprims[0])
         radius = geom_cylinder_prim.GetRadiusAttr().Get()
         length = geom_cylinder_prim.GetHeightAttr().Get()
         urdf_geometry_cylinder_api.CreateRadiusAttr(radius)
@@ -344,9 +344,9 @@ class UrdfExporter:
         self.robot.add_link(link)
 
     def _build_geom(self, geom_builder: GeomBuilder, link: urdf.Link):
-        if len(geom_builder.geom_prims) > 1:
+        if len(geom_builder.gprims) > 1:
             raise NotImplementedError("Multiple geometry prims not supported yet.")
-        for geom_prim in geom_builder.geom_prims:
+        for geom_prim in geom_builder.gprims:
             urdf_geometry_api = get_urdf_geometry_api(geom_prim=geom_prim)
             xform_prim = geom_builder.xform.GetPrim()
             geom_name = xform_prim.GetName()

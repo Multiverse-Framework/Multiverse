@@ -80,7 +80,7 @@ def main():
 
     if args.keepusd or out_extension in [".usd", ".usda", ".usdc"]:
         output_usd_path = os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda")
-        factory.save_tmp_model(file_path=str(output_usd_path))
+        factory.save_tmp_model(usd_file_path=str(output_usd_path))
     if out_extension == ".xml":
         exporter = MjcfExporter(file_path=args.output,
                                 factory=factory)

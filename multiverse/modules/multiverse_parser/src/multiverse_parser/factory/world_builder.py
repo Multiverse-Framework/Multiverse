@@ -8,8 +8,8 @@ from ..utils import modify_name
 from pxr import Usd, UsdGeom
 
 
-def setup_stage(file_path: str) -> Usd.Stage:
-    stage = Usd.Stage.CreateNew(file_path)
+def setup_stage(usd_file_path: str) -> Usd.Stage:
+    stage = Usd.Stage.CreateNew(usd_file_path)
     UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
     UsdGeom.SetStageMetersPerUnit(stage, UsdGeom.LinearUnits.meters)
     return stage
@@ -19,8 +19,8 @@ class WorldBuilder:
     stage: Usd.Stage
     body_builders: List[BodyBuilder]
 
-    def __init__(self, file_path: str) -> None:
-        self._stage = setup_stage(file_path)
+    def __init__(self, usd_file_path: str) -> None:
+        self._stage = setup_stage(usd_file_path=usd_file_path)
         self._body_builders = {}
 
     def add_body(self, body_name: str, parent_body_name: str = None, body_id: Optional[int] = None) -> BodyBuilder:

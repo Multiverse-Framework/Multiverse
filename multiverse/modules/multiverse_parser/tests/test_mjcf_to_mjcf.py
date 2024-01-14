@@ -82,7 +82,7 @@ class MjcfToMjcfTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "anymal_b")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_mjcf_to_mjcf", "anymal_b.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(usd_file_path=output_usd_path)
 
         output_mjcf_path = os.path.join(self.resource_path, "output", "test_mjcf_to_mjcf", "anymal_b.xml")
         exporter = MjcfExporter(file_path=output_mjcf_path,

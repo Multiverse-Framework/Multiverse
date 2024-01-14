@@ -37,7 +37,7 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "tiago_dual")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "tiago_dual.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(usd_file_path=output_usd_path)
 
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "tiago_dual.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
@@ -62,7 +62,7 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(usd_file_path))
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(usd_file_path=output_usd_path)
 
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
@@ -88,7 +88,7 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(usd_file_path))
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.usda")
-        factory.save_tmp_model(file_path=output_usd_path)
+        factory.save_tmp_model(usd_file_path=output_usd_path)
 
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
@@ -110,7 +110,7 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         self.assertEqual(default_prim.GetName(), "milk_box")
 
         output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "milk_box.usda")
-        importer.save_tmp_model(file_path=output_usd_path)
+        importer.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
     def test_urdf_to_urdf_with_invalid_file_path(self):

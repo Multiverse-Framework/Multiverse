@@ -82,7 +82,7 @@ class UrdfImporter(Factory):
         ))
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
-        self._world_builder = WorldBuilder(self.tmp_file_path)
+        self._world_builder = WorldBuilder(self.tmp_usd_file_path)
 
         self._import_config()
 
@@ -104,7 +104,7 @@ class UrdfImporter(Factory):
 
         self.world_builder.export()
 
-        return self.tmp_file_path if save_file_path is None else self.save_tmp_model(file_path=save_file_path)
+        return self.tmp_usd_file_path if save_file_path is None else self.save_tmp_model(usd_file_path=save_file_path)
 
     def _import_config(self) -> None:
         usd_urdf = UsdUrdf.Urdf.Define(self.world_builder.stage, "/urdf")

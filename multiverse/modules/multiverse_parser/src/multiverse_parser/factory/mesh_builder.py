@@ -57,13 +57,13 @@ class MeshBuilder:
     xform: UsdGeom.Xform
     meshes: List[UsdGeom.Mesh]
 
-    def __init__(self, mesh_file_path: str) -> None:
+    def __init__(self, usd_mesh_file_path: str) -> None:
         self._meshes_properties = {}
-        if os.path.exists(mesh_file_path):
-            stage = Usd.Stage.Open(mesh_file_path)
+        if os.path.exists(usd_mesh_file_path):
+            stage = Usd.Stage.Open(usd_mesh_file_path)
 
             if not stage.GetDefaultPrim().IsValid():
-                xform_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
+                xform_name = os.path.splitext(os.path.basename(usd_mesh_file_path))[0]
                 xform = UsdGeom.Xform.Define(stage, Sdf.Path("/").AppendChild(xform_name))
             else:
                 xform = UsdGeom.Xform(stage.GetDefaultPrim())
@@ -77,9 +77,9 @@ class MeshBuilder:
                                            face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
                                            face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get())))
         else:
-            mesh_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
+            mesh_name = os.path.splitext(os.path.basename(usd_mesh_file_path))[0]
             mesh_name = modify_name(mesh_name)
-            stage = Usd.Stage.CreateNew(mesh_file_path)
+            stage = Usd.Stage.CreateNew(usd_mesh_file_path)
             xform = UsdGeom.Xform.Define(stage, f"/{mesh_name}")
             stage.SetDefaultPrim(xform.GetPrim())
             UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)

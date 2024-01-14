@@ -165,7 +165,7 @@ class GeomBuilder:
         return mesh_builder, material_builder
 
     def build(self) -> List[UsdGeom.Gprim]:
-        for geom in self.geom_prims:
+        for geom in self.gprims:
             if self.rgba is not None:
                 geom.CreateDisplayColorAttr(self.rgba[:3])
                 geom.CreateDisplayOpacityAttr(self.rgba[3])
@@ -174,7 +174,7 @@ class GeomBuilder:
                 geom.CreateVisibilityAttr("invisible")
 
         if self.is_collidable:
-            for geom in self.geom_prims:
+            for geom in self.gprims:
                 physics_collision_api = UsdPhysics.CollisionAPI(geom)
                 physics_collision_api.CreateCollisionEnabledAttr(True)
                 physics_collision_api.Apply(geom.GetPrim())
@@ -183,7 +183,7 @@ class GeomBuilder:
                     physics_mesh_collision_api.CreateApproximationAttr("convexHull")
                     physics_mesh_collision_api.Apply(geom.GetPrim())
 
-        return self.geom_prims
+        return self.gprims
 
     def set_transform(
             self,
@@ -209,7 +209,7 @@ class GeomBuilder:
         self._update_extent()
 
     def set_attribute(self, prefix: str = None, **kwargs) -> None:
-        for geom_prim in self.geom_prims:
+        for geom_prim in self.gprims:
             for key, value in kwargs.items():
                 attr = prefix + ":" + key if prefix is not None else key
                 if not geom_prim.GetPrim().HasAttribute(attr):
@@ -218,7 +218,7 @@ class GeomBuilder:
         self._update_extent()
 
     def _update_extent(self) -> None:
-        for geom_prim in self.geom_prims:
+        for geom_prim in self.gprims:
             if self.type == GeomType.PLANE:
                 mesh = UsdGeom.Mesh(geom_prim)
                 mesh.CreateExtentAttr([(-0.5, -0.5, 0), (0.5, 0.5, 0)])
@@ -249,11 +249,11 @@ class GeomBuilder:
         xform_pos = numpy.array([[*xform_pos]])
         xform_quat = xform_transform.ExtractRotationQuat()
         xform_quat = numpy.array([*xform_quat.GetImaginary(), xform_quat.GetReal()])
-        self._inertial.inertia_tensor = shift_inertia_tensor(mass=self._inertial.mass,
-                                                             inertia_tensor=self._inertial.inertia_tensor,
+        self._inertial.inertia_tensor = shift_inertia_tensor(mass=self.inertial.mass,
+                                                             inertia_tensor=self.inertial.inertia_tensor,
                                                              pos=xform_pos,
                                                              quat=xform_quat)
-        self._inertial.center_of_mass = shift_center_of_mass(center_of_mass=self._inertial.center_of_mass,
+        self._inertial.center_of_mass = shift_center_of_mass(center_of_mass=self.inertial.center_of_mass,
                                                              pos=xform_pos,
                                                              quat=xform_quat)
         return self._inertial
@@ -273,7 +273,7 @@ class GeomBuilder:
                                                           [0.0, 0.0, 0.0],
                                                           [0.0, 0.0, Izz]])
         elif geom_type == GeomType.CUBE:
-            cube = UsdGeom.Cube(self.geom_prims[0])
+            cube = UsdGeom.Cube(self.gprims[0])
             size = cube.GetSizeAttr().Get()
             scale_x = 1.0
             scale_y = 1.0
@@ -289,7 +289,7 @@ class GeomBuilder:
                                                           [0.0, Iyy, 0.0],
                                                           [0.0, 0.0, Izz]])
         elif geom_type == GeomType.SPHERE:
-            sphere = UsdGeom.Sphere(self.geom_prims[0])
+            sphere = UsdGeom.Sphere(self.gprims[0])
             radius = sphere.GetRadiusAttr().Get()
             scale_x = 1.0
             scale_y = 1.0
@@ -306,7 +306,7 @@ class GeomBuilder:
                                                           [0.0, 0.0, Izz]])
 
         elif geom_type == GeomType.CYLINDER:
-            cylinder = UsdGeom.Cylinder(self.geom_prims[0])
+            cylinder = UsdGeom.Cylinder(self.gprims[0])
             radius = cylinder.GetRadiusAttr().Get()
             height = cylinder.GetHeightAttr().Get()
             scale_x = 1.0
@@ -326,7 +326,7 @@ class GeomBuilder:
 
         elif geom_type == GeomType.CAPSULE:
             # TODO: Calculate inertia tensor for capsule
-            capsule = UsdGeom.Cylinder(self.geom_prims[0])
+            capsule = UsdGeom.Cylinder(self.gprims[0])
             radius = capsule.GetRadiusAttr().Get()
             height = capsule.GetHeightAttr().Get()
             scale_x = 1.0
@@ -374,7 +374,7 @@ class GeomBuilder:
         return self.xform.GetPrim().GetStage()
 
     @property
-    def geom_prims(self) -> List[UsdGeom.Gprim]:
+    def gprims(self) -> List[UsdGeom.Gprim]:
         return [UsdGeom.Gprim(prim) for prim in self.xform.GetPrim().GetChildren()]
 
     @property
