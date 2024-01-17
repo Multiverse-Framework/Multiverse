@@ -198,10 +198,12 @@ def get_urdf_geometry_cylinder_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeo
 
 def get_mesh_rel_path(geom_prim: UsdGeom.Gprim, usd_file_path: str) -> str:
     if not geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
-        file_extension = "from_obj"
+        file_extension = "obj"
     else:
-        file_extension = "from_stl"
-    return os.path.join(file_extension, os.path.splitext(os.path.basename(usd_file_path))[0] + f".{file_extension}")
+        file_extension = "stl"
+    return os.path.join("usd",
+                        f"from_{file_extension}",
+                        os.path.splitext(os.path.basename(usd_file_path))[0] + f".{file_extension}")
 
 
 def get_urdf_geometry_mesh_api(geom_builder, mesh_abs_path) -> UsdUrdf.UrdfGeometryMeshAPI:

@@ -6,29 +6,23 @@ def clean_up_meshes(bpy, file_path: str) -> None:
     for selected_object in bpy.context.selected_objects:
         if selected_object.type != "MESH":
             selected_object.select_set(False)
-    if len(bpy.context.selected_objects) > 1:
-        bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
-        bpy.ops.object.join()
+            continue
 
-    selected_object = bpy.context.object
-    selected_object.name = os.path.splitext(os.path.basename(file_path))[0]
-
-    if selected_object.scale[0] * selected_object.scale[1] * selected_object.scale[2] < 0:
-        bpy.ops.object.mode_set(mode="EDIT")
-        bpy.ops.mesh.select_all(action="SELECT")
-        bpy.ops.mesh.flip_normals()
-        bpy.ops.object.mode_set(mode="OBJECT")
+        if selected_object.scale[0] * selected_object.scale[1] * selected_object.scale[2] < 0:
+            bpy.ops.object.mode_set(mode="EDIT")
+            bpy.ops.mesh.select_all(action="SELECT")
+            bpy.ops.mesh.flip_normals()
+            bpy.ops.object.mode_set(mode="OBJECT")
     
-    selected_object = bpy.context.object
-    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+        bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
     
-    # Apply triangulate modifier
-    selected_object = bpy.context.object
-    bpy.ops.object.modifier_add(type="TRIANGULATE")
-    triangulate_modifier = selected_object.modifiers["Triangulate"]
-    triangulate_modifier.quad_method = "BEAUTY"
-    triangulate_modifier.ngon_method = "BEAUTY"
-    bpy.ops.object.modifier_apply(modifier="Triangulate")
+        # Apply triangulate modifier
+        selected_object = bpy.context.object
+        bpy.ops.object.modifier_add(type="TRIANGULATE")
+        triangulate_modifier = selected_object.modifiers["Triangulate"]
+        triangulate_modifier.quad_method = "BEAUTY"
+        triangulate_modifier.ngon_method = "BEAUTY"
+        bpy.ops.object.modifier_apply(modifier="Triangulate")
 """
 
 

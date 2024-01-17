@@ -13,9 +13,10 @@ from ..factory import (WorldBuilder, BodyBuilder,
                        JointBuilder, JointAxis, JointType, JointProperty,
                        GeomBuilder, GeomType, GeomProperty,
                        MeshBuilder, MeshProperty,
-                       MaterialBuilder, MaterialProperty)
+                       MaterialBuilder, MaterialProperty,
+                       TextureBuilder)
 
-from pxr import UsdMujoco, Gf, UsdGeom, Sdf, UsdShade
+from pxr import Usd, UsdMujoco, Gf, UsdGeom, Sdf, UsdShade
 
 
 def get_model_name(xml_file_path: str) -> str:
@@ -257,8 +258,8 @@ class MjcfImporter(Factory):
             geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
             geom_builder.build()
 
-            geom_xform_prim = geom_builder.xform.GetPrim()
-            mujoco_geom_api = UsdMujoco.MujocoGeomAPI.Apply(geom_xform_prim)
+            gprim_prim = geom_builder.gprim.GetPrim()
+            mujoco_geom_api = UsdMujoco.MujocoGeomAPI.Apply(gprim_prim)
             mj_geom_type_str = "plane" if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE \
                 else "box" if mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX \
                 else "sphere" if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE \
@@ -294,91 +295,107 @@ class MjcfImporter(Factory):
                 mesh_id = mj_geom.dataid[0]
                 mesh_name = self.mj_model.mesh(mesh_id).name
                 points, normals, face_vertex_counts, face_vertex_indices = self.get_mesh_data(mesh_id=mesh_id)
-                tmp_usd_mesh_file_path = os.path.join(self.tmp_usd_mesh_dir_path,
+                tmp_usd_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
                                                       "usd",
                                                       f"{mesh_name}.usda")
-                mesh_builder = MeshBuilder(usd_mesh_file_path=tmp_usd_mesh_file_path,
-                                           mesh_name=mesh_name)
-                mesh_property = MeshProperty(points=points,
-                                             normals=normals,
-                                             face_vertex_counts=face_vertex_counts,
-                                             face_vertex_indices=face_vertex_indices)
-                mesh = mesh_builder.create_mesh(mesh_property=mesh_property)
 
-                file_ext = "from_stl"
                 mat_id = mj_geom.matid
+                texture_id = self.mj_model.mat_texid[mat_id][0]
+                if texture_id == -1:
+                    file_ext = "stl"
+                    texture_coordinates = None
+                    texture_file_path = None
+                else:
+                    file_ext = "obj"
+                    mesh_texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
+                    mesh_texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
+                    mesh_texcoord = self.mj_model.mesh_texcoord[mesh_texcoordadr:mesh_texcoordadr + mesh_texcoordnum]
+                    mesh_texcoord = numpy.array([[x, 1 - y] for x, y in mesh_texcoord])
+                    mesh_faceadr = self.mj_model.mesh_faceadr[mesh_id]
+                    mesh_facenum = self.mj_model.mesh_facenum[mesh_id]
+                    mesh_facetexcoord = self.mj_model.mesh_facetexcoord[mesh_faceadr:mesh_faceadr + mesh_facenum]
+
+                    texture_coordinates = mesh_texcoord[mesh_facetexcoord].reshape(-1, 2)
+
+                    texture_name = self.mj_model.tex(texture_id).name
+                    if texture_name == "":
+                        texture_name = "Texture_" + str(texture_id)
+                    width = self.mj_model.tex_width[texture_id]
+                    height = self.mj_model.tex_height[texture_id]
+                    texture_adr = self.mj_model.tex_adr[texture_id]
+                    texture_num = width * height * 3
+                    rgb = self.mj_model.tex_rgb[texture_adr:texture_adr + texture_num]
+                    rgb = rgb.reshape((height, width, 3))
+                    texture_file_path = os.path.join(self._tmp_texture_dir_path, f"{texture_name}.png")
+                    texture_builder = TextureBuilder(file_path=texture_file_path)
+                    texture_builder.rgb = rgb
+
+                if not os.path.exists(tmp_usd_mesh_file_path):
+                    mesh_stage = Usd.Stage.CreateNew(tmp_usd_mesh_file_path)
+                    mesh = UsdGeom.Mesh.Define(mesh_stage, f"/{mesh_name}")
+                    mesh_stage.SetDefaultPrim(mesh.GetPrim())
+                    UsdGeom.SetStageUpAxis(mesh_stage, UsdGeom.Tokens.z)
+
+                    mesh_property = MeshProperty(points=points,
+                                                 normals=normals,
+                                                 face_vertex_counts=face_vertex_counts,
+                                                 face_vertex_indices=face_vertex_indices,
+                                                 texture_coordinates=texture_coordinates)
+                    MeshBuilder(stage=mesh_stage, mesh_property=mesh_property).build()
+
+                geom_builder.add_mesh(mesh_name=mesh_name,
+                                      mesh_path=f"/{mesh_name}",
+                                      usd_mesh_file_path=tmp_usd_mesh_file_path)
+
                 if mat_id != -1:
                     material_name = self.mj_model.mat(mat_id).name
-                    tmp_usd_material_file_path = os.path.join(self.tmp_usd_material_dir_path,
+
+                    tmp_usd_material_file_path = os.path.join(self.tmp_material_dir_path,
                                                               "usd",
                                                               f"{material_name}.usda")
-                    material_builder = MaterialBuilder(usd_material_file_path=tmp_usd_material_file_path,
-                                                       material_name=material_name)
+                    if not os.path.exists(tmp_usd_material_file_path):
+                        material_stage = Usd.Stage.CreateNew(tmp_usd_material_file_path)
+                        material = UsdShade.Material.Define(material_stage, f"/{material_name}")
+                        material_stage.SetDefaultPrim(material.GetPrim())
+                        UsdGeom.SetStageUpAxis(material_stage, UsdGeom.Tokens.z)
+                    else:
+                        material_stage = Usd.Stage.Open(tmp_usd_material_file_path)
 
-                    mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
-                        material_name)
+                    mujoco_material_path = (mujoco_asset_prim.GetPath().AppendChild("materials").
+                                            AppendChild(material_name))
                     mujoco_material = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
                                                                       mujoco_material_path)
+                    mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
+
                     texture_id = self.mj_model.mat_texid[mat_id][0]
                     if texture_id == -1:
                         mat_rgba = self.mj_model.mat_rgba[mat_id][0]
                         mat_emission = self.mj_model.mat_emission[mat_id].tolist()[0]
                         mat_specular = self.mj_model.mat_specular[mat_id].tolist()[0]
-                        diffuse_color, emissive_color, specular_color = self.get_material_data(mat_rgb=mat_rgba[:3],
-                                                                                               mat_emission=mat_emission,
-                                                                                               mat_specular=mat_specular)
+                        (diffuse_color,
+                         opacity,
+                         emissive_color,
+                         specular_color) = self.get_material_data(mat_rgba=mat_rgba,
+                                                                  mat_emission=mat_emission,
+                                                                  mat_specular=mat_specular)
+
                         mujoco_material.CreateRgbaAttr(Gf.Vec4f(*mat_rgba.tolist()))
                         mujoco_material.CreateEmissionAttr(mat_emission)
                         mujoco_material.CreateSpecularAttr(mat_specular)
                     else:
-                        diffuse_color = None
+                        diffuse_color = texture_file_path
+                        opacity = None
                         emissive_color = None
                         specular_color = None
-                    material_property = MaterialProperty(diffuse_color=diffuse_color,
-                                                         emissive_color=emissive_color,
-                                                         specular_color=specular_color)
-                    material = material_builder.create_material(material_property=material_property)
-                    mesh_prim = mesh.GetPrim()
-                    mesh_prim.ApplyAPI(UsdShade.MaterialBindingAPI)
-                    material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
-                    material_binding_api.Bind(material)
 
-                    if texture_id != -1:
-                        file_ext = "from_obj"
-                        mesh_texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
-                        mesh_texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
-                        mesh_texcoord = self.mj_model.mesh_texcoord[
-                                        mesh_texcoordadr:mesh_texcoordadr + mesh_texcoordnum]
-                        mesh_texcoord = numpy.array([[x, 1 - y] for x, y in mesh_texcoord])
-                        mesh_faceadr = self.mj_model.mesh_faceadr[mesh_id]
-                        mesh_facenum = self.mj_model.mesh_facenum[mesh_id]
-                        mesh_facetexcoord = self.mj_model.mesh_facetexcoord[mesh_faceadr:mesh_faceadr + mesh_facenum]
-
-                        texcoord = UsdGeom.PrimvarsAPI(mesh).CreatePrimvar("uv",
-                                                                           Sdf.ValueTypeNames.TexCoord2fArray,
-                                                                           UsdGeom.Tokens.faceVarying)
-                        texcoord.Set(mesh_texcoord[mesh_facetexcoord].reshape(-1, 2))
-
-                        texture_name = self.mj_model.tex(texture_id).name
-                        if texture_name == "":
-                            texture_name = "Texture_" + str(texture_id)
-                        texture_type = self.mj_model.tex_type[texture_id]
-                        width = self.mj_model.tex_width[texture_id]
-                        height = self.mj_model.tex_height[texture_id]
-                        texture_adr = self.mj_model.tex_adr[texture_id]
-                        texture_num = width * height * 3
-                        rgb = self.mj_model.tex_rgb[texture_adr:texture_adr + texture_num]
-                        rgb = rgb.reshape((height, width, 3))
-                        texture_file_path = os.path.join(self._tmp_texture_dir_path, f"{texture_name}.png")
-                        material_builder.add_texture(
-                            file_path=os.path.relpath(texture_file_path, os.path.dirname(tmp_usd_mesh_file_path)),
-                            rgb=rgb,
-                            material=material)
-
+                        texture_name = os.path.splitext(os.path.basename(texture_file_path))[0]
                         mujoco_texture_path = mujoco_asset_prim.GetPath().AppendChild("textures").AppendChild(
                             texture_name)
+                        mujoco_material.CreateTextureRel().SetTargets([mujoco_texture_path])
+
                         mujoco_texture = UsdMujoco.MujocoTexture.Define(self.world_builder.stage,
                                                                         mujoco_texture_path)
+                        texture_type = self.mj_model.tex_type[texture_id]
                         if texture_type == mujoco.mjtTexture.mjTEXTURE_2D:
                             mujoco_texture.CreateTypeAttr("2d")
                         elif texture_type == mujoco.mjtTexture.mjTEXTURE_CUBE:
@@ -389,11 +406,21 @@ class MjcfImporter(Factory):
                             raise NotImplementedError(f"Texture type {texture_type} not supported.")
 
                         mujoco_texture.CreateFileAttr(f"{texture_name}.png")
-                        mujoco_material.CreateTextureRel().SetTargets([mujoco_texture_path])
 
-                    mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
+                    material_property = MaterialProperty(diffuse_color=diffuse_color,
+                                                         opacity=opacity,
+                                                         emissive_color=emissive_color,
+                                                         specular_color=specular_color)
+                    material_builder = MaterialBuilder(stage=material_stage, material_property=material_property)
+                    material_builder.build()
 
-                tmp_mesh_file_path = os.path.join(os.path.dirname(self.tmp_usd_mesh_dir_path), file_ext, f"{mesh_name}.{file_ext}")
+                    geom_builder.add_material(material_name=material_name,
+                                              material_path=f"/{material_name}",
+                                              usd_material_file_path=tmp_usd_material_file_path)
+
+                tmp_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
+                                                  file_ext,
+                                                  f"{mesh_name}.{file_ext}")
                 self.export_mesh(in_mesh_file_path=tmp_usd_mesh_file_path,
                                  out_mesh_file_path=tmp_mesh_file_path)
 
@@ -403,7 +430,6 @@ class MjcfImporter(Factory):
 
                 mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
-                geom_builder.add_mesh(usd_mesh_file_path=tmp_usd_mesh_file_path)
                 geom_builder.build()
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             else:
@@ -433,13 +459,14 @@ class MjcfImporter(Factory):
 
         return points, normals, face_vertex_counts, face_vertex_indices
 
-    def get_material_data(self, mat_rgb, mat_emission, mat_specular) \
-            -> Tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray]:
-        diffuse_color = numpy.array([float(x) for x in mat_rgb[:3]])
-        emissive_color = numpy.array([float(x * mat_emission) for x in mat_rgb])
+    def get_material_data(self, mat_rgba, mat_emission, mat_specular) \
+            -> Tuple[numpy.ndarray, float, numpy.ndarray, numpy.ndarray]:
+        diffuse_color = numpy.array([float(x) for x in mat_rgba[:3]])
+        opacity = float(mat_rgba[3])
+        emissive_color = numpy.array([float(x * mat_emission) for x in mat_rgba[:3]])
         specular_color = numpy.array([float(mat_specular) for _ in range(3)])
 
-        return diffuse_color, emissive_color, specular_color
+        return diffuse_color, opacity, emissive_color, specular_color
 
     def _import_equality(self):
         equality_prim = UsdMujoco.MujocoEquality.Define(self.world_builder.stage, "/mujoco/equality")

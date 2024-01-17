@@ -61,9 +61,6 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         usd_file_path = factory.import_model()
         self.assertTrue(os.path.exists(usd_file_path))
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.usda")
-        factory.save_tmp_model(usd_file_path=output_usd_path)
-
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
                                 factory=factory,

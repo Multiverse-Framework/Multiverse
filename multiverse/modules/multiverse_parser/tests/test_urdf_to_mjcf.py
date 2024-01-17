@@ -46,7 +46,7 @@ class UrdfToMjcfTestCase(unittest.TestCase):
         input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")
         factory = UrdfImporter(file_path=input_urdf_path,
                                with_physics=True,
-                               with_visual=False,
+                               with_visual=True,
                                with_collision=True,
                                default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
         self.assertEqual(factory.source_file_path, input_urdf_path)

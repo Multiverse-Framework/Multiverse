@@ -40,8 +40,6 @@ def copy_and_overwrite(source_folder: str, destination_folder: str, excludes: Op
 
     # Iterate through all files and folders in the source folder
     for item in os.listdir(source_folder):
-        if excludes is not None and item in excludes:
-            continue
         source_item = os.path.join(source_folder, item)
         destination_item = os.path.join(destination_folder, item)
 
@@ -49,7 +47,10 @@ def copy_and_overwrite(source_folder: str, destination_folder: str, excludes: Op
         if os.path.isdir(source_item):
             if os.path.exists(destination_item):
                 shutil.rmtree(destination_item)
-            shutil.copytree(source_item, destination_item)
+            if excludes is None:
+                shutil.copytree(source_item, destination_item)
+            else:
+                shutil.copytree(source_item, destination_item, ignore=shutil.ignore_patterns(*excludes))
         # If item is a file, simply copy it
         else:
             shutil.copy2(source_item, destination_item)
@@ -113,20 +114,21 @@ class Factory:
 
         mesh_file_name = os.path.basename(mesh_file_path).split(".")[0]
         mesh_file_extension = os.path.splitext(mesh_file_path)[1]
-        tmp_mesh_file_path = os.path.join(os.path.dirname(self.tmp_mesh_dir_path),
+        tmp_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
                                           mesh_file_extension[1:],
                                           f"{mesh_file_name}{mesh_file_extension}")
         tmp_usd_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
+                                              "usd",
                                               f"from_{mesh_file_extension[1:]}",
                                               f"{mesh_file_name}.usda")
 
         if mesh_file_extension in [".usd", ".usda", ".usdz"]:
             cmd = import_usd([mesh_file_path]) + export_usd(tmp_usd_mesh_file_path)
-        elif mesh_file_extension == ".from_obj":
+        elif mesh_file_extension == ".obj":
             cmd = import_obj(mesh_file_path) + export_obj(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
-        elif mesh_file_extension == ".from_stl":
+        elif mesh_file_extension == ".stl":
             cmd = import_stl(mesh_file_path) + export_stl(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
-        elif mesh_file_extension == ".from_dae":
+        elif mesh_file_extension == ".dae":
             cmd = import_dae(mesh_file_path) + export_dae(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
         else:
             raise ValueError(f"Unsupported file extension {mesh_file_extension}.")
@@ -155,22 +157,22 @@ class Factory:
 
         if in_mesh_file_extension in [".usd", ".usda", ".usdz"]:
             cmd = import_usd([in_mesh_file_path])
-        elif in_mesh_file_extension == ".from_obj":
+        elif in_mesh_file_extension == ".obj":
             cmd = import_obj(in_mesh_file_path)
-        elif in_mesh_file_extension == ".from_stl":
+        elif in_mesh_file_extension == ".stl":
             cmd = import_stl(in_mesh_file_path)
-        elif in_mesh_file_extension == ".from_dae":
+        elif in_mesh_file_extension == ".dae":
             cmd = import_dae(in_mesh_file_path)
         else:
             raise ValueError(f"Unsupported file extension {in_mesh_file_extension}.")
 
         if out_mesh_file_extension in [".usd", ".usda", ".usdz"]:
             cmd += export_usd(out_mesh_file_path)
-        elif out_mesh_file_extension == ".from_obj":
+        elif out_mesh_file_extension == ".obj":
             cmd += export_obj(out_mesh_file_path)
-        elif out_mesh_file_extension == ".from_stl":
+        elif out_mesh_file_extension == ".stl":
             cmd += export_stl(out_mesh_file_path)
-        elif out_mesh_file_extension == ".from_dae":
+        elif out_mesh_file_extension == ".dae":
             cmd += export_dae(out_mesh_file_path)
         else:
             raise ValueError(f"Unsupported file extension {out_mesh_file_extension}.")
@@ -206,7 +208,11 @@ class Factory:
                 file_contents = file.read()
 
             new_usd_mesh_dir_path = usd_file_name
-            file_contents = file_contents.replace(self.tmp_mesh_dir_path, new_usd_mesh_dir_path)
+            file_contents = file_contents.replace(os.path.dirname(self.tmp_mesh_dir_path), new_usd_mesh_dir_path)
+
+            tmp_mesh_dir_relpath = os.path.relpath(os.path.dirname(self.tmp_mesh_dir_path),
+                                                   os.path.dirname(self.tmp_usd_file_path))
+            file_contents = file_contents.replace(tmp_mesh_dir_relpath, new_usd_mesh_dir_path)
 
             with open(usd_file_path, "w", encoding="utf-8") as file:
                 file.write(file_contents)

@@ -15,7 +15,7 @@ from ..factory import (WorldBuilder,
                        GeomBuilder, GeomType, GeomProperty)
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
-from pxr import UsdUrdf, Gf, UsdPhysics
+from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade
 
 
 def build_urdf_inertial_api(physics_mass_api: UsdPhysics.MassAPI) -> UsdUrdf.UrdfLinkInertialAPI:
@@ -183,31 +183,21 @@ class UrdfImporter(Factory):
 
             build_urdf_inertial_api(physics_mass_api=physics_mass_api)
 
-    def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> Dict[str, GeomBuilder]:
-        geom_builders = {}
+    def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> None:
         geom_name = f"{link.name}_geom"
         if self._config.with_visual:
             for i, visual in enumerate(link.visuals):
                 visual_geom_name = f"{geom_name}_visual_{i}"
-                if visual_geom_name not in geom_builders:
-                    geom_builders[visual_geom_name] = self._import_geom(geom_name=visual_geom_name,
-                                                                        geom=visual,
-                                                                        body_builder=body_builder)
-                else:
-                    raise ValueError(f"Geom {visual_geom_name} already exists.")
+                self._import_geom(geom_name=visual_geom_name, geom=visual, body_builder=body_builder)
         if self._config.with_collision:
             for i, collision in enumerate(link.collisions):
                 collision_geom_name = f"{geom_name}_collision_{i}"
-                if collision_geom_name not in geom_builders:
-                    geom_builders[collision_geom_name] = self._import_geom(geom_name=collision_geom_name,
-                                                                           geom=collision,
-                                                                           body_builder=body_builder)
-                else:
-                    raise ValueError(f"Geom {collision_geom_name} already exists.")
-        return geom_builders
+                self._import_geom(geom_name=collision_geom_name, geom=collision, body_builder=body_builder)
 
-    def _import_geom(self, geom_name: str, geom: Union[urdf.Visual, urdf.Collision],
-                     body_builder: BodyBuilder) -> GeomBuilder:
+    def _import_geom(self,
+                     geom_name: str,
+                     geom: Union[urdf.Visual, urdf.Collision],
+                     body_builder: BodyBuilder) -> None:
         if geom.origin is not None:
             geom_pos = geom.origin.xyz
             geom_rpy = geom.origin.rpy
@@ -227,61 +217,74 @@ class UrdfImporter(Factory):
                                      is_collidable=geom_is_collidable,
                                      rgba=geom_rgba,
                                      density=geom_density)
-        geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
-        geom_builder.build()
 
         tmp_origin_mesh_file_path = ""
-        if type(geom.geometry) is urdf.Box:
-            geom_scale = numpy.array([geom.geometry.size[i] / 2.0 for i in range(3)])
-            geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
-        elif type(geom.geometry) is urdf.Sphere:
-            geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
-            geom_builder.set_attribute(radius=geom.geometry.radius)
-        elif type(geom.geometry) is urdf.Cylinder:
-            geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
-            geom_builder.set_attribute(radius=geom.geometry.radius, height=geom.geometry.length)
-        elif type(geom.geometry) is urdf.Mesh:
+        if not type(geom.geometry) is urdf.Mesh:
+            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
+            geom_builder.build()
+
+            gprim_prim = geom_builder.gprim.GetPrim()
+            if type(geom) is urdf.Visual:
+                UsdUrdf.UrdfLinkVisualAPI.Apply(gprim_prim)
+            elif type(geom) is urdf.Collision:
+                UsdUrdf.UrdfLinkCollisionAPI.Apply(gprim_prim)
+            else:
+                raise ValueError(f"Geom type {type(geom)} not supported.")
+
+            if type(geom.geometry) is urdf.Box:
+                geom_scale = numpy.array([geom.geometry.size[i] / 2.0 for i in range(3)])
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
+
+                urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(gprim_prim)
+                urdf_geometry_box_api.CreateSizeAttr(Gf.Vec3f(*geom.geometry.size))
+            elif type(geom.geometry) is urdf.Sphere:
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
+                geom_builder.set_attribute(radius=geom.geometry.radius)
+
+                urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI.Apply(gprim_prim)
+                urdf_geometry_sphere_api.CreateRadiusAttr(geom.geometry.radius)
+            elif type(geom.geometry) is urdf.Cylinder:
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
+                geom_builder.set_attribute(radius=geom.geometry.radius, height=geom.geometry.length)
+
+                urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI.Apply(gprim_prim)
+                urdf_geometry_cylinder_api.CreateRadiusAttr(geom.geometry.radius)
+                urdf_geometry_cylinder_api.CreateLengthAttr(geom.geometry.length)
+            else:
+                raise ValueError(f"Geom type {type(geom.geometry)} not implemented.")
+        else:
             source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)
             if source_mesh_file_path is not None:
                 tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
                     mesh_file_path=source_mesh_file_path)
-                geom_builder.add_mesh(usd_mesh_file_path=tmp_usd_mesh_file_path)
-                geom_builder.build()
-                geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
-                geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
-        else:
-            raise ValueError(f"Geom type {type(geom.geometry)} not implemented.")
+                mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_path)
+                for mesh_prim in [prim for prim in mesh_stage.Traverse() if prim.IsA(UsdGeom.Mesh)]:
+                    mesh_name = mesh_prim.GetName()
+                    mesh_path = mesh_prim.GetPath()
+                    geom_builder = body_builder.add_geom(geom_name=f"{geom_name}_{mesh_name}",
+                                                         geom_property=geom_property)
+                    geom_builder.add_mesh(mesh_name=mesh_name,
+                                          mesh_path=mesh_path,
+                                          usd_mesh_file_path=tmp_usd_mesh_file_path)
+                    geom_builder.build()
+                    geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
+                    geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
 
-        geom_xform_prim = geom_builder.xform.GetPrim()
-        if type(geom) is urdf.Visual:
-            urdf_geom_api = UsdUrdf.UrdfLinkVisualAPI.Apply(geom_xform_prim)
-        elif type(geom) is urdf.Collision:
-            urdf_geom_api = UsdUrdf.UrdfLinkCollisionAPI.Apply(geom_xform_prim)
-        else:
-            raise ValueError(f"Geom type {type(geom)} not supported.")
+                    gprim_prim = geom_builder.gprim.GetPrim()
+                    urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(gprim_prim)
+                    urdf_geometry_mesh_api.CreateFilenameAttr(tmp_origin_mesh_file_path)
+                    if geom.geometry.scale is not None:
+                        urdf_geometry_mesh_api.CreateScaleAttr(Gf.Vec3f(*geom.geometry.scale))
 
-        urdf_geom_api.CreateXyzAttr(Gf.Vec3f(*geom_pos))
-        urdf_geom_api.CreateRpyAttr(Gf.Vec3f(*geom_rpy))
-
-        if type(geom.geometry) is urdf.Box:
-            urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(geom_xform_prim)
-            urdf_geometry_box_api.CreateSizeAttr(Gf.Vec3f(*geom.geometry.size))
-        elif type(geom.geometry) is urdf.Sphere:
-            urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI.Apply(geom_xform_prim)
-            urdf_geometry_sphere_api.CreateRadiusAttr(geom.geometry.radius)
-        elif type(geom.geometry) is urdf.Cylinder:
-            urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI.Apply(geom_xform_prim)
-            urdf_geometry_cylinder_api.CreateRadiusAttr(geom.geometry.radius)
-            urdf_geometry_cylinder_api.CreateLengthAttr(geom.geometry.length)
-        elif type(geom.geometry) is urdf.Mesh:
-            urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(geom_xform_prim)
-            urdf_geometry_mesh_api.CreateFilenameAttr(tmp_origin_mesh_file_path)
-            if geom.geometry.scale is not None:
-                urdf_geometry_mesh_api.CreateScaleAttr(Gf.Vec3f(*geom.geometry.scale))
-        else:
-            raise ValueError(f"Geom type {type(geom.geometry)} not implemented.")
-
-        return geom_builder
+                    if mesh_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                        material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
+                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                        if len(material_paths) > 1:
+                            raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
+                        material_prim = mesh_stage.GetPrimAtPath(material_paths[0])
+                        geom_builder.add_material(material_name=material_prim.GetName(),
+                                                  material_path=material_prim.GetPath(),
+                                                  usd_material_file_path=tmp_usd_mesh_file_path)
 
     def get_mesh_file_path(self, urdf_mesh_file_path: str) -> Optional[str]:
         mesh_file_path = None

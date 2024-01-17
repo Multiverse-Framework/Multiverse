@@ -564,7 +564,9 @@ class FactoryTestCase(unittest.TestCase):
                                           "usd",
                                           "from_obj",
                                           "milk_box.usda")
-        mesh_builder_2 = geom_builder_2.add_mesh(usd_mesh_file_path=usd_mesh_file_path)
+        mesh_builder_2 = geom_builder_2.add_mesh(mesh_path="/SM_MilkBox",
+                                                 usd_mesh_file_path=usd_mesh_file_path,
+                                                 texture_coordinate_name="UVMap")
         self.assertEqual(mesh_builder_2.mesh.GetPrim().GetPath(), "/milk_box")
         geom_2 = geom_builder_1.stage.GetPrimAtPath("/body_0/body_1/geom_2")
         self.assertTrue(geom_2.IsValid())
@@ -587,7 +589,8 @@ class FactoryTestCase(unittest.TestCase):
                                           "usd",
                                           "from_dae",
                                           "base.usda")
-        mesh_builder_3 = geom_builder_3.add_mesh(usd_mesh_file_path=usd_mesh_file_path)
+        mesh_builder_3 = geom_builder_3.add_mesh(mesh_path="/eSeries_UR5e_013/eSeries_UR5e_013",
+                                                 usd_mesh_file_path=usd_mesh_file_path)
         self.assertEqual(mesh_builder_3.mesh.GetPrim().GetPath(), "/base")
 
         usd_material_file_path = usd_mesh_file_path
@@ -595,28 +598,94 @@ class FactoryTestCase(unittest.TestCase):
                                     material_path="/_materials/JointGrey",
                                     usd_material_file_path=usd_material_file_path)
 
-        # geom_property_4 = GeomProperty(geom_type=GeomType.MESH)
-        # geom_builder_4 = body_builder_1.add_geom(geom_name="geom_4", geom_property=geom_property_4)
-        # usd_mesh_file_path = os.path.join(self.resource_path,
-        #                                   "input",
-        #                                   "sample_1",
-        #                                   "Assets",
-        #                                   "Game",
-        #                                   "Meshes"
-        #                                   "SM_Esstisch.usda")
-        # mesh_builder_4 = geom_builder_4.add_mesh(usd_mesh_file_path=usd_mesh_file_path)
-        # self.assertEqual(mesh_builder_4.mesh.GetPrim().GetPath(), "/SM_Esstisch")
-        #
-        # usd_material_file_path = os.path.join(self.resource_path,
-        #                                       "input",
-        #                                       "sample_1",
-        #                                       "Assets",
-        #                                       "Game",
-        #                                       "Materials_Laborraum"
-        #                                       "M_Esstisch.usda")
-        # geom_builder_4.add_material(material_name="joint_grey",
-        #                             material_path="/_materials/JointGrey",
-        #                             usd_material_file_path=usd_material_file_path)
+        geom_property_4 = GeomProperty(geom_type=GeomType.MESH)
+        geom_builder_4 = body_builder_0.add_geom(geom_name="geom_4", geom_property=geom_property_4)
+        usd_mesh_file_path = os.path.join(self.resource_path,
+                                          "input",
+                                          "sample_1",
+                                          "Assets",
+                                          "Game",
+                                          "Meshes",
+                                          "SM_Esstisch.usda")
+        mesh_builder_4 = geom_builder_4.add_mesh(mesh_path="/SM_Esstisch", usd_mesh_file_path=usd_mesh_file_path)
+        self.assertEqual(mesh_builder_4.mesh.GetPrim().GetPath(), "/SM_Esstisch")
+
+        usd_material_file_path = os.path.join(self.resource_path,
+                                              "input",
+                                              "sample_1",
+                                              "Assets",
+                                              "Game",
+                                              "Materials_Laborraum",
+                                              "M_Esstisch.usda")
+        geom_builder_4.add_material(material_name="EsstischMat",
+                                    material_path="/M_Esstisch",
+                                    usd_material_file_path=usd_material_file_path)
+
+        geom_property_5 = GeomProperty(geom_type=GeomType.MESH)
+        geom_builder_5 = body_builder_0.add_geom(geom_name="geom_5", geom_property=geom_property_5)
+        usd_mesh_file_path = os.path.join(self.resource_path,
+                                          "input",
+                                          "sample_1",
+                                          "Assets",
+                                          "Game",
+                                          "Meshes",
+                                          "SM_Esstischstuhl.usda")
+        mesh_builder_5 = geom_builder_5.add_mesh(mesh_path="/SM_Esstischstuhl", usd_mesh_file_path=usd_mesh_file_path)
+        self.assertEqual(mesh_builder_5.mesh.GetPrim().GetPath(), "/SM_Esstischstuhl")
+
+        mesh_stage = Usd.Stage.Open(usd_mesh_file_path)
+        subsets = []
+        for prim in mesh_stage.Traverse():
+            if prim.IsA(UsdGeom.Subset):
+                subsets.append(UsdGeom.Subset(prim))
+
+        usd_material_file_path = os.path.join(self.resource_path,
+                                              "input",
+                                              "sample_1",
+                                              "Assets",
+                                              "Game",
+                                              "Materials_Laborraum",
+                                              "M_Esstisch.usda")
+        geom_builder_5.add_material(material_name="EsstischMat",
+                                    material_path="/M_Esstisch",
+                                    usd_material_file_path=usd_material_file_path,
+                                    subset=subsets[0])
+
+        usd_material_file_path = os.path.join(self.resource_path,
+                                              "input",
+                                              "sample_1",
+                                              "Assets",
+                                              "Game",
+                                              "Materials_Laborraum",
+                                              "M_Basic_Black.usda")
+        geom_builder_5.add_material(material_name="BlackMat",
+                                    material_path="/M_Basic_Black",
+                                    usd_material_file_path=usd_material_file_path,
+                                    subset=subsets[1])
+
+        usd_material_file_path = os.path.join(self.resource_path,
+                                              "input",
+                                              "sample_1",
+                                              "Assets",
+                                              "Game",
+                                              "Materials_Laborraum",
+                                              "M_Fabric_Esstischstuhl.usda")
+        geom_builder_5.add_material(material_name="Fabric_Esstischstuhl_Mat",
+                                    material_path="/M_Fabric_Esstischstuhl",
+                                    usd_material_file_path=usd_material_file_path,
+                                    subset=subsets[2])
+
+        usd_material_file_path = os.path.join(self.resource_path,
+                                              "input",
+                                              "sample_1",
+                                              "Assets",
+                                              "Game",
+                                              "Materials_Laborraum",
+                                              "M_Plastic_Green.usda")
+        geom_builder_5.add_material(material_name="Plastic_Green_Mat",
+                                    material_path="/M_Plastic_Green",
+                                    usd_material_file_path=usd_material_file_path,
+                                    subset=subsets[3])
 
         world_builder.export()
         self.assertTrue(os.path.exists(file_path))

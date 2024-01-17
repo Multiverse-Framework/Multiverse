@@ -2,7 +2,7 @@
 
 import os
 from dataclasses import dataclass
-from typing import Optional, List, Dict, Tuple, Any
+from typing import Optional, List, Any
 from enum import Enum
 
 import numpy
@@ -77,30 +77,6 @@ class GeomProperty:
         return self._density
 
 
-# def reference_materials(material_builder: MaterialBuilder, stage: Usd.Stage, mesh_file_path: str):
-#     material_root_path = material_builder.root_prim.GetPath()
-#     material_root_prim = stage.GetPrimAtPath(material_root_path)
-#     if not material_root_prim.IsValid():
-#         material_root_prim = stage.DefinePrim(material_root_path)
-#     material_root_prim.GetReferences().AddReference(mesh_file_path, material_root_path)
-#
-#
-# def bind_materials(reference_stage: Usd.Stage, local_stage: Usd.Stage, reference_prim: Usd.Prim, local_prim: Usd.Prim):
-#     print(f"Binding material for {local_prim.GetPath()}")
-#     reference_material_binding_api = UsdShade.MaterialBindingAPI(reference_prim)
-#     material_binding_api = UsdShade.MaterialBindingAPI.Apply(local_prim)
-#
-#     for path in reference_material_binding_api.GetDirectBindingRel().GetTargets():
-#         material = UsdShade.Material(reference_stage.GetPrimAtPath(path))
-#         material_binding_api.Bind(material)
-#
-#     for reference_geom_subset in reference_material_binding_api.GetMaterialBindSubsets():
-#         local_geom_subset = local_stage.OverridePrim(
-#             local_prim.GetPath().AppendPath(reference_geom_subset.GetPrim().GetName()))
-#
-#         bind_materials(reference_stage, local_stage, reference_geom_subset.GetPrim(), local_geom_subset)
-
-
 def get_input(shader: UsdShade.Shader, input: str) -> Any:
     inputs = [shader_input.GetBaseName() for shader_input in shader.GetInputs()]
     if input not in inputs:
@@ -130,7 +106,6 @@ def get_input(shader: UsdShade.Shader, input: str) -> Any:
 class GeomBuilder:
     stage: Usd.Stage
     gprim: UsdGeom.Gprim
-    material_builders: List[MaterialBuilder]
 
     def __init__(self,
                  stage: Usd.Stage,
@@ -142,7 +117,6 @@ class GeomBuilder:
         geom_name = modify_name(geom_name)
         gprim_path = body_path.AppendPath(geom_name)
         self._gprim = self._create_gprim(stage=stage, gprim_path=gprim_path)
-        self._material_builders = {}
         self._inertial = geom_inertia
 
     def _create_gprim(self, stage: Usd.Stage, gprim_path: Sdf.Path) -> Usd.Prim:
@@ -165,28 +139,42 @@ class GeomBuilder:
             return UsdGeom.Mesh.Define(stage, gprim_path)
         raise ValueError(f"Geom type {self.type} not supported.")
 
-    def add_mesh(self, usd_mesh_file_path: str) -> MeshBuilder:
-        mesh_stage = Usd.Stage.Open(usd_mesh_file_path)
-        default_prim = mesh_stage.GetDefaultPrim()
-        if not default_prim.IsA(UsdGeom.Mesh):
-            raise ValueError(f"Default prim of {usd_mesh_file_path} is not a mesh.")
-        mesh = UsdGeom.Mesh(default_prim)
-        mesh_property = MeshProperty(
-            points=numpy.array(mesh.GetPointsAttr().Get()),
-            normals=numpy.array(mesh.GetNormalsAttr().Get()),
-            face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
-            face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get()))
-
-        mesh_name = os.path.splitext(os.path.basename(usd_mesh_file_path))[0]
+    def add_mesh(self,
+                 mesh_name: str,
+                 mesh_path: Sdf.Path,
+                 usd_mesh_file_path: str,
+                 texture_coordinate_name: str = "st") -> MeshBuilder:
         new_usd_mesh_file_path = os.path.join(self.stage.GetRootLayer().realPath.replace(".usda", ""),
                                               "meshes",
                                               "usd",
                                               f"{mesh_name}.usda")
+        mesh_stage = Usd.Stage.Open(usd_mesh_file_path)
+        mesh_prim = mesh_stage.GetPrimAtPath(mesh_path)
+        if not mesh_prim.IsA(UsdGeom.Mesh):
+            raise ValueError(f"Default prim of {usd_mesh_file_path} is not a mesh.")
+        mesh = UsdGeom.Mesh(mesh_prim)
+        prim_vars_api = UsdGeom.PrimvarsAPI(mesh)
+        if prim_vars_api.HasPrimvar(texture_coordinate_name):
+            texture_coordinates = prim_vars_api.GetPrimvar(texture_coordinate_name).Get()
+            texture_coordinates = numpy.array(texture_coordinates, dtype=numpy.float32)
+        else:
+            texture_coordinates = None
+
+        mesh_property = MeshProperty(
+            points=numpy.array(mesh.GetPointsAttr().Get()),
+            normals=numpy.array(mesh.GetNormalsAttr().Get()),
+            face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
+            face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get()),
+            texture_coordinates=texture_coordinates)
+
         if not os.path.exists(new_usd_mesh_file_path):
             new_mesh_stage = Usd.Stage.CreateNew(new_usd_mesh_file_path)
             new_mesh = UsdGeom.Mesh.Define(new_mesh_stage, f"/{mesh_name}")
             new_mesh_stage.SetDefaultPrim(new_mesh.GetPrim())
             UsdGeom.SetStageUpAxis(new_mesh_stage, UsdGeom.Tokens.z)
+
+            mesh_builder = MeshBuilder(stage=new_mesh_stage, mesh_property=mesh_property)
+            local_mesh = mesh_builder.build()
         else:
             new_mesh_stage = Usd.Stage.Open(new_usd_mesh_file_path)
             new_default_prim = new_mesh_stage.GetDefaultPrim()
@@ -195,10 +183,10 @@ class GeomBuilder:
             if not new_default_prim.IsA(UsdGeom.Mesh):
                 raise ValueError(f"Default prim of {new_usd_mesh_file_path} is not a mesh.")
 
-        mesh_builder = MeshBuilder(stage=new_mesh_stage, mesh_property=mesh_property)
-        mesh = mesh_builder.build()
+            mesh_builder = MeshBuilder(stage=new_mesh_stage, mesh_property=mesh_property)
+            local_mesh = new_default_prim
 
-        reference_prim = mesh.GetPrim()
+        reference_prim = local_mesh.GetPrim()
         new_usd_mesh_file_relpath = os.path.relpath(new_usd_mesh_file_path,
                                                     os.path.dirname(self.stage.GetRootLayer().realPath))
         self.gprim.GetPrim().GetReferences().AddReference(f"./{new_usd_mesh_file_relpath}", reference_prim.GetPath())
@@ -209,7 +197,7 @@ class GeomBuilder:
                      material_name: str,
                      material_path: Sdf.Path,
                      usd_material_file_path: str,
-                     subset_path: Optional[Sdf.Path] = None) -> MaterialBuilder:
+                     subset: Optional[UsdGeom.Subset] = None) -> MaterialBuilder:
         material_stage = Usd.Stage.Open(usd_material_file_path)
         material_prim = material_stage.GetPrimAtPath(material_path)
         if not material_prim.IsA(UsdShade.Material):
@@ -222,9 +210,11 @@ class GeomBuilder:
             raise ValueError(f"Material {usd_material_file_path} does not have a PBR shader.")
 
         diffuse_color = get_input(shader=pbr_shader, input="diffuseColor")
+        opacity = get_input(shader=pbr_shader, input="opacity")
         emissive_color = get_input(shader=pbr_shader, input="emissiveColor")
         specular_color = get_input(shader=pbr_shader, input="specularColor")
         material_property = MaterialProperty(diffuse_color=diffuse_color,
+                                             opacity=opacity,
                                              emissive_color=emissive_color,
                                              specular_color=specular_color)
 
@@ -248,28 +238,35 @@ class GeomBuilder:
                                            material_property=material_property)
         material = material_builder.build()
 
-        if subset_path is None:
-            local_materials_path = self.gprim.GetPrim().GetPath().AppendPath("Materials")
-            if not self.stage.GetPrimAtPath(local_materials_path).IsValid():
-                UsdGeom.Scope.Define(self.stage, local_materials_path)
+        local_materials_path = self.gprim.GetPrim().GetPath().AppendPath("Materials")
+        if not self.stage.GetPrimAtPath(local_materials_path).IsValid():
+            UsdGeom.Scope.Define(self.stage, local_materials_path)
 
-            local_material_path = local_materials_path.AppendChild(material_name)
-            if not self.stage.GetPrimAtPath(local_material_path).IsValid():
-                UsdShade.Material.Define(self.stage, local_material_path)
+        local_material_path = local_materials_path.AppendChild(material_name)
+        if not self.stage.GetPrimAtPath(local_material_path).IsValid():
+            UsdShade.Material.Define(self.stage, local_material_path)
 
-            local_material_prim = self.stage.GetPrimAtPath(local_material_path)
+        local_material_prim = self.stage.GetPrimAtPath(local_material_path)
 
-            reference_material_prim = material.GetPrim()
-            new_usd_material_file_relpath = os.path.relpath(new_usd_material_file_path,
-                                                            os.path.dirname(self.stage.GetRootLayer().realPath))
-            local_material_prim.GetReferences().AddReference(f"./{new_usd_material_file_relpath}",
-                                                             reference_material_prim.GetPath())
+        reference_material_prim = material.GetPrim()
+        new_usd_material_file_relpath = os.path.relpath(new_usd_material_file_path,
+                                                        os.path.dirname(self.stage.GetRootLayer().realPath))
+        local_material_prim.GetReferences().AddReference(f"./{new_usd_material_file_relpath}",
+                                                         reference_material_prim.GetPath())
+        local_material = UsdShade.Material(local_material_prim)
 
+        if subset is None:
             material_binding_api = UsdShade.MaterialBindingAPI.Apply(self.gprim.GetPrim())
-            material_binding_api.Bind(UsdShade.Material(local_material_prim))
-
         else:
-            raise NotImplementedError("Subset is not implemented yet.")
+            subset_name = subset.GetPrim().GetName()
+            local_subset_path = self.gprim.GetPrim().GetPath().AppendPath(subset_name)
+            local_subset = UsdGeom.Subset.Define(self.stage, local_subset_path)
+            local_subset.CreateElementTypeAttr(UsdGeom.Tokens.face)
+            local_subset.CreateIndicesAttr(subset.GetIndicesAttr().Get())
+            local_subset.CreateFamilyNameAttr(subset.GetFamilyNameAttr().Get())
+            material_binding_api = UsdShade.MaterialBindingAPI.Apply(local_subset.GetPrim())
+
+        material_binding_api.Bind(local_material)
 
         return material_builder
 
@@ -502,7 +499,3 @@ class GeomBuilder:
     @property
     def density(self) -> float:
         return self._property.density
-
-    @property
-    def material_builders(self) -> List[MaterialBuilder]:
-        return list(self._material_builders.values())

@@ -15,22 +15,29 @@ from pxr import Usd, UsdGeom, Sdf, UsdShade, Gf
 @dataclass(init=False)
 class MaterialProperty:
     diffuse_color: Optional[Union[numpy.ndarray, str]]
+    opacity: Optional[float]
     emissive_color: Optional[numpy.ndarray]
     specular_color: Optional[numpy.ndarray]
 
     def __init__(self,
                  diffuse_color: Any = None,
+                 opacity: Any = None,
                  emissive_color: Any = None,
                  specular_color: Any = None) -> None:
         self._diffuse_color = diffuse_color if isinstance(diffuse_color, str) \
             else numpy.array(diffuse_color) if diffuse_color is not None \
             else None
+        self._opacity = opacity if isinstance(opacity, float) else None
         self._emissive_color = numpy.array(emissive_color) if emissive_color is not None else None
         self._specular_color = numpy.array(specular_color) if specular_color is not None else None
 
     @property
     def diffuse_color(self):
         return self._diffuse_color
+
+    @property
+    def opacity(self):
+        return self._opacity
 
     @property
     def emissive_color(self):
@@ -74,6 +81,10 @@ class MaterialBuilder:
                                                      "textures",
                                                      f"{texture_name}.png")
                 self.add_texture(file_path=new_texture_file_path, rgb=rgb)
+
+        opacity = self.opacity
+        if isinstance(opacity, float):
+            pbr_shader.CreateInput("opacity", Sdf.ValueTypeNames.Float).Set(opacity)
 
         emissive_color = self.emissive_color
         if isinstance(emissive_color, numpy.ndarray):
@@ -142,6 +153,10 @@ class MaterialBuilder:
     @property
     def diffuse_color(self):
         return self._material_property.diffuse_color
+
+    @property
+    def opacity(self):
+        return self._material_property.opacity
 
     @property
     def emissive_color(self):
