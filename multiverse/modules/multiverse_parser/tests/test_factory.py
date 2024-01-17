@@ -9,12 +9,14 @@ from typing import List
 from plotly import graph_objects
 import numpy
 from scipy.spatial.transform import Rotation
-from pxr import Usd
+
 from multiverse_parser import (WorldBuilder,
                                JointBuilder, JointType, JointProperty,
                                GeomType, GeomProperty,
-                               MeshBuilder)
+                               MeshBuilder, MeshProperty)
 from multiverse_parser.utils import calculate_mesh_inertial, shift_inertia_tensor, diagonalize_inertia
+
+from pxr import Usd, UsdGeom
 
 
 class Shape:
@@ -480,7 +482,7 @@ class FactoryTestCase(unittest.TestCase):
         inertia_tensor_recover = shift_inertia_tensor(mass=1.0,
                                                       inertia_tensor=inertia_tensor_rotate,
                                                       quat=Rotation.from_quat(rotation_quat).inv().as_quat(
-                                                          ))
+                                                      ))
         inertia_tensor_rotate_recover = shift_inertia_tensor(mass=1.0,
                                                              inertia_tensor=inertia_tensor_recover,
                                                              quat=rotation_quat)
@@ -531,30 +533,15 @@ class FactoryTestCase(unittest.TestCase):
         self.assertEqual(physics_mass_api_1.GetPrincipalAxesAttr().Get().GetReal(), 1.0)
         self.assertEqual(physics_mass_api_1.GetPrincipalAxesAttr().Get().GetImaginary(), (0.0, 0.0, 0.0))
 
-        # rotation = Rotation.from_euler('xyz', [30, 60, 45], degrees=True)
-        # physics_mass_api_2 = body_builder_3.set_inertia(mass=1.5,
-        #                                                 density=1.5,
-        #                                                 center_of_mass=numpy.array([0.1, 0.2, 0.3]),
-        #                                                 inertia_tensor=rotation.as_matrix())
-        #
-        # self.assertEqual(physics_mass_api_2.GetMassAttr().Get(), 1.5)
-        # self.assertEqual(physics_mass_api_2.GetDensityAttr().Get(), 1.5)
-        # self.assertEqual(physics_mass_api_2.GetCenterOfMassAttr().Get(), (0.1, 0.2, 0.3))
-        # self.assertEqual(physics_mass_api_2.GetDiagonalInertiaAttr().Get(), (1.0, 1.0, 1.0))
-        # inertia_quat = rotation.as_quat()
-        # self.assertAlmostEqual(physics_mass_api_2.GetPrincipalAxesAttr().Get().GetReal(), inertia_quat[3])
-        # numpy.testing.assert_array_almost_equal(physics_mass_api_2.GetPrincipalAxesAttr().Get().GetImaginary(),
-        #                                         inertia_quat[:3])
-
-        geom_property = GeomProperty(geom_type=GeomType.CUBE)
-        geom_builder_1 = body_builder_1.add_geom(geom_name="geom_1", geom_property=geom_property)
-        geom_1_xform = geom_builder_1.xform
-        self.assertEqual(geom_1_xform.GetPath(), "/body_0/body_1/geom_1")
+        geom_property_1 = GeomProperty(geom_type=GeomType.CUBE)
+        geom_builder_1 = body_builder_1.add_geom(geom_name="geom_1", geom_property=geom_property_1)
+        geom_1 = geom_builder_1.gprim
+        self.assertEqual(geom_1.GetPath(), "/body_0/body_1/geom_1")
 
         geom_builder_1.set_transform(pos=numpy.array([0.1, 0.2, 3.0]),
                                      quat=numpy.array([math.sqrt(2) / 2, 0.0, 0.0, math.sqrt(2) / 2]),
                                      scale=numpy.array([1.0, 1.0, 1.0]))
-        geom_1_local_transform = geom_1_xform.GetLocalTransformation()
+        geom_1_local_transform = geom_1.GetLocalTransformation()
         geom_1_local_pos = geom_1_local_transform.ExtractTranslation()
         self.assertEqual(geom_1_local_pos, (0.1, 0.2, 3.0))
 
@@ -564,14 +551,72 @@ class FactoryTestCase(unittest.TestCase):
         joint_property = JointProperty(joint_parent_prim=body_builder_1.xform.GetPrim(),
                                        joint_child_prim=body_builder_3.xform.GetPrim(),
                                        joint_type=JointType.FIXED)
-        joint_builder = JointBuilder(joint_name="joint_0", joint_property=joint_property)
+        joint_builder = body_builder_1.add_joint(joint_name="joint_0", joint_property=joint_property)
         self.assertEqual(joint_builder.path, "/body_0/body_1/joint_0")
         self.assertEqual(joint_builder.type, JointType.FIXED)
 
-        mesh_builder, _ = geom_builder_1.add_mesh(mesh_file_path=os.path.join(self.resource_path, "input", "milk_box",
-                                                                              "meshes", "usd", "obj", "milk_box.usda"))
-        self.assertEqual(mesh_builder.xform.GetPath(), "/milk_box")
-        self.assertTrue(geom_builder_1.stage.GetPrimAtPath("/body_0/body_1/geom_1/SM_MilkBox").IsValid())
+        geom_property_2 = GeomProperty(geom_type=GeomType.MESH)
+        geom_builder_2 = body_builder_1.add_geom(geom_name="geom_2", geom_property=geom_property_2)
+        usd_mesh_file_path = os.path.join(self.resource_path,
+                                          "input",
+                                          "milk_box",
+                                          "meshes",
+                                          "usd",
+                                          "from_obj",
+                                          "milk_box.usda")
+        mesh_builder_2 = geom_builder_2.add_mesh(usd_mesh_file_path=usd_mesh_file_path)
+        self.assertEqual(mesh_builder_2.mesh.GetPrim().GetPath(), "/milk_box")
+        geom_2 = geom_builder_1.stage.GetPrimAtPath("/body_0/body_1/geom_2")
+        self.assertTrue(geom_2.IsValid())
+        self.assertTrue(geom_2.IsA(UsdGeom.Mesh))
+
+        geom_inertial = geom_builder_2.calculate_inertial()
+        self.assertEqual(geom_inertial.mass, 1.1399999493733048)
+
+        usd_material_file_path = usd_mesh_file_path
+        geom_builder_2.add_material(material_name="milk_box_mat",
+                                    material_path="/_materials/M_MilkBox",
+                                    usd_material_file_path=usd_material_file_path)
+
+        geom_property_3 = GeomProperty(geom_type=GeomType.MESH)
+        geom_builder_3 = body_builder_1.add_geom(geom_name="geom_3", geom_property=geom_property_3)
+        usd_mesh_file_path = os.path.join(self.resource_path,
+                                          "input",
+                                          "ur5e",
+                                          "meshes",
+                                          "usd",
+                                          "from_dae",
+                                          "base.usda")
+        mesh_builder_3 = geom_builder_3.add_mesh(usd_mesh_file_path=usd_mesh_file_path)
+        self.assertEqual(mesh_builder_3.mesh.GetPrim().GetPath(), "/base")
+
+        usd_material_file_path = usd_mesh_file_path
+        geom_builder_3.add_material(material_name="joint_grey",
+                                    material_path="/_materials/JointGrey",
+                                    usd_material_file_path=usd_material_file_path)
+
+        # geom_property_4 = GeomProperty(geom_type=GeomType.MESH)
+        # geom_builder_4 = body_builder_1.add_geom(geom_name="geom_4", geom_property=geom_property_4)
+        # usd_mesh_file_path = os.path.join(self.resource_path,
+        #                                   "input",
+        #                                   "sample_1",
+        #                                   "Assets",
+        #                                   "Game",
+        #                                   "Meshes"
+        #                                   "SM_Esstisch.usda")
+        # mesh_builder_4 = geom_builder_4.add_mesh(usd_mesh_file_path=usd_mesh_file_path)
+        # self.assertEqual(mesh_builder_4.mesh.GetPrim().GetPath(), "/SM_Esstisch")
+        #
+        # usd_material_file_path = os.path.join(self.resource_path,
+        #                                       "input",
+        #                                       "sample_1",
+        #                                       "Assets",
+        #                                       "Game",
+        #                                       "Materials_Laborraum"
+        #                                       "M_Esstisch.usda")
+        # geom_builder_4.add_material(material_name="joint_grey",
+        #                             material_path="/_materials/JointGrey",
+        #                             usd_material_file_path=usd_material_file_path)
 
         world_builder.export()
         self.assertTrue(os.path.exists(file_path))
@@ -840,7 +885,8 @@ class FactoryTestCase(unittest.TestCase):
         numpy.testing.assert_array_almost_equal(multi_shape.inertia_tensor, shape_combined.inertia_tensor)
 
     def test_inertia_of_mesh_1(self, pos=numpy.array([[0.0, 0.0, 0.0]]), quat=numpy.array([0.0, 0.0, 0.0, 1.0])):
-        mesh_file_path = os.path.join(self.resource_path, "input", "milk_box", "meshes", "usd", "obj", "milk_box.usda")
+        mesh_file_path = os.path.join(self.resource_path, "input", "milk_box", "meshes", "usd", "from_obj",
+                                      "milk_box.usda")
         density = 1.0
 
         usd_mesh = UsdMesh(mesh_file_path=mesh_file_path,

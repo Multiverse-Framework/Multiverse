@@ -1,0 +1,28 @@
+#usda 1.0
+(
+    defaultPrim = "M_Basic_Black"
+    upAxis = "Z"
+)
+
+def Material "M_Basic_Black" (
+    assetInfo = {
+        asset identifier = @/media/giangnguyen/Storage/tmp/Assets/Game/Materials_Laborraum/M_Basic_Black.usda@
+        string name = "M_Basic_Black"
+    }
+)
+{
+    token outputs:surface.connect = </M_Basic_Black/SurfaceShader.outputs:surface>
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:ambientOcclusion = 1
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0, 0, 0)
+        float inputs:metallic = 0
+        float inputs:roughness = 0.4
+        float inputs:specular = 0.09803922
+        token outputs:surface
+    }
+}
+

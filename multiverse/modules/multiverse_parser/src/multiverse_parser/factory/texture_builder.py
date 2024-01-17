@@ -28,4 +28,6 @@ class TextureBuilder:
     @rgb.setter
     def rgb(self, rgb: numpy.ndarray):
         img = Image.fromarray(rgb, 'RGB')
+        if not os.path.exists(os.path.dirname(self.file_path)):
+            os.makedirs(os.path.dirname(self.file_path))
         img.save(self.file_path)

@@ -245,7 +245,7 @@ class UrdfImporter(Factory):
             if source_mesh_file_path is not None:
                 tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
                     mesh_file_path=source_mesh_file_path)
-                geom_builder.add_mesh(mesh_file_path=tmp_usd_mesh_file_path)
+                geom_builder.add_mesh(usd_mesh_file_path=tmp_usd_mesh_file_path)
                 geom_builder.build()
                 geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)

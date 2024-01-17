@@ -1,0 +1,46 @@
+#usda 1.0
+(
+    defaultPrim = "M_Fabric_Esstischstuhl"
+    upAxis = "Z"
+)
+
+def Material "M_Fabric_Esstischstuhl" (
+    assetInfo = {
+        asset identifier = @/media/giangnguyen/Storage/tmp/Assets/Game/Materials_Laborraum/M_Fabric_Esstischstuhl.usda@
+        string name = "M_Fabric_Esstischstuhl"
+    }
+)
+{
+    token inputs:stPrimvarName = "st"
+    token outputs:surface.connect = </M_Fabric_Esstischstuhl/SurfaceShader.outputs:surface>
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:ambientOcclusion = 1
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor.connect = </M_Fabric_Esstischstuhl/diffuseTexture.outputs:rgb>
+        float inputs:metallic = 0
+        normal3f inputs:normal = (0.49803922, -0.49803922, 1)
+        float inputs:roughness = 0.84705883
+        float inputs:specular = 0.49803922
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </M_Fabric_Esstischstuhl.inputs:stPrimvarName>
+        token outputs:result
+    }
+
+    def Shader "diffuseTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 0, 1)
+        asset inputs:file = @Textures/T_M_Fabric_Esstischstuhl_BaseColor.png@
+        float2 inputs:st.connect = </M_Fabric_Esstischstuhl/PrimvarReader.outputs:result>
+        color3f outputs:rgb
+    }
+}
+

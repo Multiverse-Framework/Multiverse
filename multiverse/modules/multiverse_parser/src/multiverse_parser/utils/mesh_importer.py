@@ -7,8 +7,8 @@ for armature in bpy.data.armatures:
     bpy.data.armatures.remove(armature)
 for mesh in bpy.data.meshes:
     bpy.data.meshes.remove(mesh)
-for obj in bpy.data.objects:
-    bpy.data.objects.remove(obj)
+for from_obj in bpy.data.objects:
+    bpy.data.objects.remove(from_obj)
 for material in bpy.data.materials:
     bpy.data.materials.remove(material)
 for camera in bpy.data.cameras:

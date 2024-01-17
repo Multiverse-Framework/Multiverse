@@ -64,8 +64,7 @@ class BodyBuilder:
 
     def add_joint(self, joint_name: str, joint_property: JointProperty) -> JointBuilder:
         if joint_name in self._joint_builders:
-            print(f"Joint {joint_name} already exists.")
-            joint_builder = self._joint_builders[joint_name]
+            raise ValueError(f"Joint {joint_name} already exists.")
         else:
             joint_builder = JointBuilder(joint_name=joint_name, joint_property=joint_property)
             joint_builder.build()

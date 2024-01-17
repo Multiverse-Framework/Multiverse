@@ -288,7 +288,6 @@ class JointBuilder:
         self._joint = self._create_joint()
 
     def build(self) -> UsdPhysics.Joint:
-        self._joint = self._create_joint()
         self._joint.CreateCollisionEnabledAttr(False)
 
         self._joint.GetBody0Rel().SetTargets([self.parent_prim.GetPath()])

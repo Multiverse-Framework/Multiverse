@@ -8,7 +8,7 @@ import numpy
 
 from ..utils import modify_name
 
-from pxr import Usd, UsdGeom, Sdf
+from pxr import Usd, UsdGeom
 
 
 @dataclass(init=False)
@@ -54,74 +54,49 @@ class MeshProperty:
 class MeshBuilder:
     file_path: str
     stage: Usd.Stage
-    xform: UsdGeom.Xform
-    meshes: List[UsdGeom.Mesh]
+    mesh: UsdGeom.Mesh
+    subsets: List[UsdGeom.Subset]
 
-    def __init__(self, usd_mesh_file_path: str) -> None:
-        self._meshes_properties = {}
-        if os.path.exists(usd_mesh_file_path):
-            stage = Usd.Stage.Open(usd_mesh_file_path)
+    def __init__(self, stage, mesh_property: MeshProperty) -> None:
+        self._mesh_property = mesh_property
+        self._mesh = UsdGeom.Mesh(stage.GetDefaultPrim())
 
-            if not stage.GetDefaultPrim().IsValid():
-                xform_name = os.path.splitext(os.path.basename(usd_mesh_file_path))[0]
-                xform = UsdGeom.Xform.Define(stage, Sdf.Path("/").AppendChild(xform_name))
-            else:
-                xform = UsdGeom.Xform(stage.GetDefaultPrim())
-            for mesh in [UsdGeom.Mesh(prim_child) for prim_child in xform.GetPrim().GetChildren() if
-                         UsdGeom.Mesh(prim_child)]:
-                mesh_name = mesh.GetPrim().GetName()
-                self.set_mesh_property(mesh_name=mesh_name,
-                                       mesh_property=MeshProperty(
-                                           points=numpy.array(mesh.GetPointsAttr().Get()),
-                                           normals=numpy.array(mesh.GetNormalsAttr().Get()),
-                                           face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
-                                           face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get())))
-        else:
-            mesh_name = os.path.splitext(os.path.basename(usd_mesh_file_path))[0]
-            mesh_name = modify_name(mesh_name)
-            stage = Usd.Stage.CreateNew(usd_mesh_file_path)
-            xform = UsdGeom.Xform.Define(stage, f"/{mesh_name}")
-            stage.SetDefaultPrim(xform.GetPrim())
-            UsdGeom.SetStageUpAxis(stage, UsdGeom.Tokens.z)
-        self._stage = stage
-        self._xform = xform
-
-    def get_mesh_property(self, mesh_name: str) -> MeshProperty:
-        mesh_name = modify_name(in_name=mesh_name)
-        return self._meshes_properties[mesh_name]
-
-    def set_mesh_property(self, mesh_name: str, mesh_property: MeshProperty) -> None:
-        mesh_name = modify_name(in_name=mesh_name)
-        self._meshes_properties[mesh_name] = mesh_property
-
-    def create_mesh(self,
-                    mesh_name: str,
-                    mesh_property: MeshProperty) -> UsdGeom.Mesh:
-        xform_path = self.xform.GetPath()
-        mesh = UsdGeom.Mesh.Define(self.stage, xform_path.AppendChild(f"SM_{mesh_name}"))
-        mesh.CreatePointsAttr(mesh_property.points)
-        mesh.CreateNormalsAttr(mesh_property.normals)
+    def build(self) -> UsdGeom.Mesh:
+        mesh = self.mesh
+        mesh.CreatePointsAttr(self.points)
+        mesh.CreateNormalsAttr(self.normals)
         mesh.SetNormalsInterpolation(UsdGeom.Tokens.faceVarying)
-        mesh.CreateFaceVertexCountsAttr(mesh_property.face_vertex_counts)
-        mesh.CreateFaceVertexIndicesAttr(mesh_property.face_vertex_indices)
+        mesh.CreateFaceVertexCountsAttr(self.face_vertex_counts)
+        mesh.CreateFaceVertexIndicesAttr(self.face_vertex_indices)
 
         self.stage.GetRootLayer().Save()
 
-        return mesh
+        return self.mesh
+
+    @property
+    def mesh(self):
+        return self._mesh
+
+    @property
+    def stage(self):
+        return self.mesh.GetPrim().GetStage()
 
     @property
     def file_path(self):
         return self.stage.GetRootLayer().realPath
 
     @property
-    def stage(self):
-        return self.xform.GetPrim().GetStage()
+    def points(self):
+        return self._mesh_property.points
 
     @property
-    def xform(self):
-        return self._xform
+    def normals(self):
+        return self._mesh_property.normals
 
     @property
-    def meshes(self) -> List[UsdGeom.Mesh]:
-        return [UsdGeom.Mesh(prim_child) for prim_child in self.xform.GetPrim().GetChildren() if
-                UsdGeom.Mesh(prim_child)]
+    def face_vertex_counts(self):
+        return self._mesh_property.face_vertex_counts
+
+    @property
+    def face_vertex_indices(self):
+        return self._mesh_property.face_vertex_indices

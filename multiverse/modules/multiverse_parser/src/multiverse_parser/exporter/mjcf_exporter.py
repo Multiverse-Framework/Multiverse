@@ -404,8 +404,8 @@ class MjcfExporter:
         for mesh_file_path, mesh_scales in mesh_file_paths.items():
             mesh_stage = Usd.Stage.Open(mesh_file_path)
             mesh_file_name = os.path.basename(mesh_file_path).split(".")[0]
-            mesh_file_ext = "obj" if len([material for material in mesh_stage.TraverseAll() if
-                                     material.IsA(UsdShade.Material)]) > 0 else "stl"
+            mesh_file_ext = "from_obj" if len([material for material in mesh_stage.TraverseAll() if
+                                     material.IsA(UsdShade.Material)]) > 0 else "from_stl"
             tmp_mesh_file_path = os.path.join(os.path.dirname(self.factory.tmp_usd_mesh_dir_path), mesh_file_ext,
                                               f"{mesh_file_name}.{mesh_file_ext}")
             self.factory.export_mesh(in_mesh_file_path=mesh_file_path,

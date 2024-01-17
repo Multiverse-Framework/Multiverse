@@ -59,34 +59,40 @@ class Factory:
     world_builder: WorldBuilder
     source_file_path: str
     config: Configuration
-    tmp_usd_mesh_dir_path: str
-    tmp_texture_dir_path: str
     tmp_usd_file_path: str
+    tmp_mesh_dir_path: str
+    tmp_texture_dir_path: str
+    tmp_material_dir_path: str
     _mesh_file_path_dict: Dict[str, Tuple[str, str]] = {}
 
     def __init__(self, file_path: str, config: Configuration = Configuration()):
         self._world_builder = None
         self._source_file_path = file_path
-        self._tmp_usd_file_path, self._tmp_usd_mesh_dir_path, self._tmp_texture_dir_path = self._create_tmp_paths()
+        (self._tmp_usd_file_path,
+         self._tmp_mesh_dir_path,
+         self._tmp_material_dir_path,
+         self._tmp_texture_dir_path) = self._create_tmp_paths()
         self._config = config
         atexit.register(self.clean_up)
 
-    def _create_tmp_paths(self) -> Tuple[str, str, str]:
+    def _create_tmp_paths(self) -> Tuple[str, str, str, str]:
         """
         Create temporary paths for the USD file and the mesh directory.
-        :return: Tuple of the temporary USD file path and the temporary mesh directory path.
+        :return: Tuple of the temporary USD file path and the mesh dir, material dir and texture dir paths.
         """
         tmp_dir_path = os.path.join(f"/{self.tmp_file_name}",
                                     "cache",
                                     "".join(random.choices(string.ascii_letters + string.digits, k=10)))
         tmp_usd_file_path = os.path.join(tmp_dir_path, f"{self.tmp_file_name}.usda")
-        tmp_usd_mesh_dir_path = os.path.join(tmp_dir_path, self.tmp_file_name, "usd")
+        tmp_mesh_dir_path = os.path.join(tmp_dir_path, self.tmp_file_name, "meshes")
+        tmp_material_dir_path = os.path.join(tmp_dir_path, self.tmp_file_name, "materials")
         tmp_texture_dir_path = os.path.join(tmp_dir_path, self.tmp_file_name, "textures")
         os.makedirs(name=tmp_dir_path, exist_ok=True)
-        os.makedirs(name=tmp_usd_mesh_dir_path, exist_ok=True)
+        os.makedirs(name=tmp_mesh_dir_path, exist_ok=True)
+        os.makedirs(name=tmp_material_dir_path, exist_ok=True)
         os.makedirs(name=tmp_texture_dir_path, exist_ok=True)
-        print(f"Create {tmp_dir_path}, {tmp_usd_mesh_dir_path} and {tmp_texture_dir_path}.")
-        return tmp_usd_file_path, tmp_usd_mesh_dir_path, tmp_texture_dir_path
+        print(f"Created {tmp_dir_path}, {tmp_mesh_dir_path}, {tmp_material_dir_path} and {tmp_texture_dir_path}.")
+        return tmp_usd_file_path, tmp_mesh_dir_path, tmp_material_dir_path, tmp_texture_dir_path
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         """
@@ -107,20 +113,20 @@ class Factory:
 
         mesh_file_name = os.path.basename(mesh_file_path).split(".")[0]
         mesh_file_extension = os.path.splitext(mesh_file_path)[1]
-        tmp_mesh_file_path = os.path.join(os.path.dirname(self.tmp_usd_mesh_dir_path),
+        tmp_mesh_file_path = os.path.join(os.path.dirname(self.tmp_mesh_dir_path),
                                           mesh_file_extension[1:],
                                           f"{mesh_file_name}{mesh_file_extension}")
-        tmp_usd_mesh_file_path = os.path.join(self.tmp_usd_mesh_dir_path,
+        tmp_usd_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
                                               f"from_{mesh_file_extension[1:]}",
                                               f"{mesh_file_name}.usda")
 
         if mesh_file_extension in [".usd", ".usda", ".usdz"]:
             cmd = import_usd([mesh_file_path]) + export_usd(tmp_usd_mesh_file_path)
-        elif mesh_file_extension == ".obj":
+        elif mesh_file_extension == ".from_obj":
             cmd = import_obj(mesh_file_path) + export_obj(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
-        elif mesh_file_extension == ".stl":
+        elif mesh_file_extension == ".from_stl":
             cmd = import_stl(mesh_file_path) + export_stl(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
-        elif mesh_file_extension == ".dae":
+        elif mesh_file_extension == ".from_dae":
             cmd = import_dae(mesh_file_path) + export_dae(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
         else:
             raise ValueError(f"Unsupported file extension {mesh_file_extension}.")
@@ -149,22 +155,22 @@ class Factory:
 
         if in_mesh_file_extension in [".usd", ".usda", ".usdz"]:
             cmd = import_usd([in_mesh_file_path])
-        elif in_mesh_file_extension == ".obj":
+        elif in_mesh_file_extension == ".from_obj":
             cmd = import_obj(in_mesh_file_path)
-        elif in_mesh_file_extension == ".stl":
+        elif in_mesh_file_extension == ".from_stl":
             cmd = import_stl(in_mesh_file_path)
-        elif in_mesh_file_extension == ".dae":
+        elif in_mesh_file_extension == ".from_dae":
             cmd = import_dae(in_mesh_file_path)
         else:
             raise ValueError(f"Unsupported file extension {in_mesh_file_extension}.")
 
         if out_mesh_file_extension in [".usd", ".usda", ".usdz"]:
             cmd += export_usd(out_mesh_file_path)
-        elif out_mesh_file_extension == ".obj":
+        elif out_mesh_file_extension == ".from_obj":
             cmd += export_obj(out_mesh_file_path)
-        elif out_mesh_file_extension == ".stl":
+        elif out_mesh_file_extension == ".from_stl":
             cmd += export_stl(out_mesh_file_path)
-        elif out_mesh_file_extension == ".dae":
+        elif out_mesh_file_extension == ".from_dae":
             cmd += export_dae(out_mesh_file_path)
         else:
             raise ValueError(f"Unsupported file extension {out_mesh_file_extension}.")
@@ -199,9 +205,8 @@ class Factory:
             with open(usd_file_path, encoding="utf-8") as file:
                 file_contents = file.read()
 
-            tmp_usd_mesh_dir_path = os.path.dirname(self._tmp_usd_mesh_dir_path)
             new_usd_mesh_dir_path = usd_file_name
-            file_contents = file_contents.replace(tmp_usd_mesh_dir_path, new_usd_mesh_dir_path)
+            file_contents = file_contents.replace(self.tmp_mesh_dir_path, new_usd_mesh_dir_path)
 
             with open(usd_file_path, "w", encoding="utf-8") as file:
                 file.write(file_contents)
@@ -229,8 +234,12 @@ class Factory:
         return self._tmp_usd_file_path
 
     @property
-    def tmp_usd_mesh_dir_path(self) -> str:
-        return self._tmp_usd_mesh_dir_path
+    def tmp_mesh_dir_path(self) -> str:
+        return self._tmp_mesh_dir_path
+
+    @property
+    def tmp_material_dir_path(self) -> str:
+        return self._tmp_material_dir_path
 
     @property
     def tmp_texture_dir_path(self) -> str:

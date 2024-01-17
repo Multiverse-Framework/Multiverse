@@ -15,7 +15,7 @@ from ..factory import (WorldBuilder, BodyBuilder,
                        MeshBuilder, MeshProperty,
                        MaterialBuilder, MaterialProperty)
 
-from pxr import UsdMujoco, Gf, UsdGeom, Sdf
+from pxr import UsdMujoco, Gf, UsdGeom, Sdf, UsdShade
 
 
 def get_model_name(xml_file_path: str) -> str:
@@ -294,19 +294,27 @@ class MjcfImporter(Factory):
                 mesh_id = mj_geom.dataid[0]
                 mesh_name = self.mj_model.mesh(mesh_id).name
                 points, normals, face_vertex_counts, face_vertex_indices = self.get_mesh_data(mesh_id=mesh_id)
-                tmp_usd_mesh_file_path = os.path.join(self._tmp_usd_mesh_dir_path, "usd", f"{mesh_name}.usda")
-                mesh_builder = MeshBuilder(usd_mesh_file_path=tmp_usd_mesh_file_path)
+                tmp_usd_mesh_file_path = os.path.join(self.tmp_usd_mesh_dir_path,
+                                                      "usd",
+                                                      f"{mesh_name}.usda")
+                mesh_builder = MeshBuilder(usd_mesh_file_path=tmp_usd_mesh_file_path,
+                                           mesh_name=mesh_name)
                 mesh_property = MeshProperty(points=points,
                                              normals=normals,
                                              face_vertex_counts=face_vertex_counts,
                                              face_vertex_indices=face_vertex_indices)
-                mesh = mesh_builder.create_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
+                mesh = mesh_builder.create_mesh(mesh_property=mesh_property)
 
-                file_ext = "stl"
+                file_ext = "from_stl"
                 mat_id = mj_geom.matid
                 if mat_id != -1:
-                    material_builder = MaterialBuilder(file_path=tmp_usd_mesh_file_path)
                     material_name = self.mj_model.mat(mat_id).name
+                    tmp_usd_material_file_path = os.path.join(self.tmp_usd_material_dir_path,
+                                                              "usd",
+                                                              f"{material_name}.usda")
+                    material_builder = MaterialBuilder(usd_material_file_path=tmp_usd_material_file_path,
+                                                       material_name=material_name)
+
                     mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
                         material_name)
                     mujoco_material = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
@@ -329,9 +337,14 @@ class MjcfImporter(Factory):
                     material_property = MaterialProperty(diffuse_color=diffuse_color,
                                                          emissive_color=emissive_color,
                                                          specular_color=specular_color)
-                    material = material_builder.apply_material(material_property=material_property)[0]
+                    material = material_builder.create_material(material_property=material_property)
+                    mesh_prim = mesh.GetPrim()
+                    mesh_prim.ApplyAPI(UsdShade.MaterialBindingAPI)
+                    material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
+                    material_binding_api.Bind(material)
+
                     if texture_id != -1:
-                        file_ext = "obj"
+                        file_ext = "from_obj"
                         mesh_texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
                         mesh_texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
                         mesh_texcoord = self.mj_model.mesh_texcoord[
@@ -390,7 +403,7 @@ class MjcfImporter(Factory):
 
                 mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
-                geom_builder.add_mesh(mesh_file_path=tmp_usd_mesh_file_path)
+                geom_builder.add_mesh(usd_mesh_file_path=tmp_usd_mesh_file_path)
                 geom_builder.build()
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
             else:
