@@ -12,7 +12,7 @@ from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder,
                        BodyBuilder,
                        JointBuilder, JointAxis, JointType, JointProperty,
-                       GeomBuilder, GeomType, GeomProperty)
+                       GeomType, GeomProperty)
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
 from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade, Sdf
@@ -47,6 +47,24 @@ def get_joint_pos_and_quat(urdf_joint) -> (numpy.ndarray, numpy.ndarray):
         joint_rpy = numpy.array([0.0, 0.0, 0.0])
     joint_quat = Rotation.from_euler('xyz', joint_rpy).as_quat()
     return joint_pos, joint_quat
+
+
+def get_urdf_link_api(geom: Union[urdf.Visual, urdf.Collision], gprim_prim: Usd.Prim):
+    if type(geom) is urdf.Visual:
+        urdf_link_api = UsdUrdf.UrdfLinkVisualAPI.Apply(gprim_prim)
+    elif type(geom) is urdf.Collision:
+        urdf_link_api = UsdUrdf.UrdfLinkCollisionAPI.Apply(gprim_prim)
+    else:
+        raise ValueError(f"Geom type {type(geom)} not supported.")
+
+    if geom.origin is not None:
+        urdf_link_api.CreateXyzAttr(Gf.Vec3f(*geom.origin.xyz))
+        urdf_link_api.CreateRpyAttr(Gf.Vec3f(*geom.origin.rpy))
+    else:
+        urdf_link_api.CreateXyzAttr(Gf.Vec3f(0.0, 0.0, 0.0))
+        urdf_link_api.CreateRpyAttr(Gf.Vec3f(0.0, 0.0, 0.0))
+
+    return urdf_link_api
 
 
 class UrdfImporter(Factory):
@@ -149,7 +167,7 @@ class UrdfImporter(Factory):
         relative_to_xform = relative_to_body_builder.xform
         body_builder.set_transform(pos=joint_pos, quat=joint_quat, relative_to_xform=relative_to_xform)
 
-        urdf_link_api = UsdUrdf.UrdfLinkAPI.Apply(body_builder.xform.GetPrim())
+        UsdUrdf.UrdfLinkAPI.Apply(body_builder.xform.GetPrim())
 
         return body_builder
 
@@ -220,18 +238,12 @@ class UrdfImporter(Factory):
                                      rgba=geom_rgba,
                                      density=geom_density)
 
-        tmp_origin_mesh_file_path = ""
         if not type(geom.geometry) is urdf.Mesh:
             geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
             geom_builder.build()
 
             gprim_prim = geom_builder.gprim.GetPrim()
-            if type(geom) is urdf.Visual:
-                UsdUrdf.UrdfLinkVisualAPI.Apply(gprim_prim)
-            elif type(geom) is urdf.Collision:
-                UsdUrdf.UrdfLinkCollisionAPI.Apply(gprim_prim)
-            else:
-                raise ValueError(f"Geom type {type(geom)} not supported.")
+            get_urdf_link_api(geom=geom, gprim_prim=gprim_prim)
 
             if type(geom.geometry) is urdf.Box:
                 geom_scale = numpy.array([geom.geometry.size[i] / 2.0 for i in range(3)])
@@ -273,12 +285,7 @@ class UrdfImporter(Factory):
                     geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
 
                     gprim_prim = geom_builder.gprim.GetPrim()
-                    if type(geom) is urdf.Visual:
-                        UsdUrdf.UrdfLinkVisualAPI.Apply(gprim_prim)
-                    elif type(geom) is urdf.Collision:
-                        UsdUrdf.UrdfLinkCollisionAPI.Apply(gprim_prim)
-                    else:
-                        raise ValueError(f"Geom type {type(geom)} not supported.")
+                    get_urdf_link_api(geom=geom, gprim_prim=gprim_prim)
 
                     urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(gprim_prim)
                     urdf_geometry_mesh_api.CreateFilenameAttr(f"./{tmp_origin_mesh_file_path}")
@@ -314,10 +321,10 @@ class UrdfImporter(Factory):
     def get_mesh_file_path(self, urdf_mesh_file_path: str) -> Optional[str]:
         mesh_file_path = None
         if urdf_mesh_file_path.find("package://") != -1:
+            import rospkg
             urdf_mesh_file_path = urdf_mesh_file_path.replace("package://", "")
             package_name = urdf_mesh_file_path.split("/", 2)[0]
             try:
-                import rospkg
                 package_path = os.path.dirname(rospkg.RosPack().get_path(package_name))
                 mesh_file_path = os.path.join(package_path, urdf_mesh_file_path)
             except (ImportError, rospkg.common.ResourceNotFound):
@@ -392,7 +399,7 @@ class UrdfImporter(Factory):
             urdf_joint_api.CreateRpyAttr(Gf.Vec3f(*joint.origin.rpy))
             urdf_joint_api.CreateParentRel().AddTarget(parent_prim.GetPath())
             urdf_joint_api.CreateChildRel().AddTarget(child_prim.GetPath())
-            if joint_type in [JointType.REVOLUTE, JointType.PRISMATIC]:
+            if joint_type in [JointType.REVOLUTE, JointType.CONTINUOUS, JointType.PRISMATIC]:
                 urdf_joint_api.CreateAxisAttr(Gf.Vec3f(*joint.axis))
 
             if joint_type in [JointType.REVOLUTE, JointType.PRISMATIC]:

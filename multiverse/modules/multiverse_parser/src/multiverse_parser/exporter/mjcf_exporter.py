@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple
 from xml.etree import ElementTree as ET
 from xml.dom import minidom
 
@@ -13,7 +13,7 @@ from ..factory import Factory
 from ..factory import (JointBuilder, JointType,
                        GeomBuilder, GeomType,
                        MaterialProperty)
-from ..utils import xform_cache, modify_name, scale_mesh
+from ..utils import xform_cache, modify_name
 
 from pxr import UsdMujoco, UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd, UsdShade, Sdf
 
@@ -281,7 +281,7 @@ class MjcfExporter:
 
         mujoco_prim = get_mujoco_prim(stage=stage)
 
-        mujoco_option_api = get_mujoco_option_api(mujoco_prim=mujoco_prim)
+        get_mujoco_option_api(mujoco_prim=mujoco_prim)
 
         (mujoco_asset_prim,
          mujoco_meshes_prim,
@@ -467,7 +467,8 @@ class MjcfExporter:
                     raise NotImplementedError(f"Material {material_name} does not have a proper diffuse color.")
 
             specular_color = material_property.specular_color
-            if isinstance(specular_color, numpy.ndarray) and specular_color[0] == specular_color[1] == specular_color[2]:
+            if (isinstance(specular_color, numpy.ndarray) and
+                    specular_color[0] == specular_color[1] == specular_color[2]):
                 specular = float(specular_color[0])
                 mujoco_material.CreateSpecularAttr(specular)
 

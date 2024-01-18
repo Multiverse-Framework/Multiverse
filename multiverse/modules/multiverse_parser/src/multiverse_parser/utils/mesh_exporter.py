@@ -48,6 +48,7 @@ bpy.ops.wm.collada_export(filepath='{out_dae}', use_texture_copies=True)
 def export_obj(out_obj: str) -> str:
     return f"""
 import os.path
+import shutil
 from PIL import Image
 
 {clean_up_meshes_script}
@@ -67,8 +68,7 @@ for i, line in enumerate(lines):
         new_texture_path = os.path.join("..", "..", "textures", texture_file_name)
         new_texture_abspath = os.path.join(out_obj_dir, new_texture_path)
         if not os.path.exists(new_texture_abspath):
-            os.rename(texture_path, new_texture_abspath)
-        os.rmdir(os.path.dirname(texture_path))
+            shutil.copy(texture_path, new_texture_abspath)
         lines[i] = "map_Kd " + new_texture_path + "\\n"
         img = Image.open(texture_path)
         png_file_name = texture_file_name.replace(".jpg", ".png").replace(".JPG", ".png")

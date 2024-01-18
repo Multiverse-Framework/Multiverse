@@ -11,7 +11,7 @@ from enum import Enum
 from typing import Optional, Dict, Tuple, List
 
 import numpy
-from pxr import Usd, UsdShade, UsdGeom, Sdf
+from pxr import Usd, UsdShade, Sdf
 
 from .world_builder import WorldBuilder
 from ..utils import (import_obj, import_stl, import_dae, import_usd,
@@ -71,39 +71,40 @@ def fix_texture_path(usd_mesh_file_path: str):
             material_prim = stage.GetPrimAtPath(material_path)
             material_prims.append(material_prim)
 
-    for material_prim in material_prims:
-        for shader in [UsdShade.Shader(child_prim) for child_prim in material_prim.GetChildren()]:
-            if shader.GetIdAttr().Get() == "UsdPreviewSurface":
-                diffuse_color_input = shader.GetInput("diffuseColor")
-                if diffuse_color_input.HasConnectedSource():
-
-                    source = diffuse_color_input.GetConnectedSource()[0]
-                    if len(source.GetOutputs()) != 1:
-                        raise NotImplementedError("Multiple outputs are not supported yet.")
-                    output = source.GetOutputs()[0]
-                    output_prim = output.GetPrim()
-                    if not output_prim.IsA(UsdShade.Shader):
-                        raise NotImplementedError("Only shader output is supported.")
-                    output_shader = UsdShade.Shader(output_prim)
-                    if output_shader.GetIdAttr().Get() != "UsdUVTexture":
-                        raise NotImplementedError("Only texture shader is supported.")
-                    file_input = output_shader.GetInput("file").Get()
-                    if file_input is None:
-                        raise NotImplementedError("Only texture file input is supported.")
-                    texture_file_path = file_input.path
-                    if os.path.relpath(texture_file_path):
-                        texture_file_path = os.path.join(os.path.dirname(usd_mesh_file_path), texture_file_path)
-                    new_texture_file_path = os.path.join(os.path.dirname(usd_mesh_file_path), "..", "..", "textures",
-                                                         os.path.basename(usd_mesh_file_path))
-                    os.makedirs(name=os.path.dirname(new_texture_file_path), exist_ok=True)
-                    if not os.path.exists(new_texture_file_path):
-                        os.rename(texture_file_path, new_texture_file_path)
+    for shader in [UsdShade.Shader(child_prim)
+                   for material_prim in material_prims
+                   for child_prim in material_prim.GetChildren()]:
+        if shader.GetIdAttr().Get() == "UsdPreviewSurface":
+            diffuse_color_input = shader.GetInput("diffuseColor")
+            if diffuse_color_input.HasConnectedSource():
+                source = diffuse_color_input.GetConnectedSource()[0]
+                if len(source.GetOutputs()) != 1:
+                    raise NotImplementedError("Multiple outputs are not supported yet.")
+                output = source.GetOutputs()[0]
+                output_prim = output.GetPrim()
+                if not output_prim.IsA(UsdShade.Shader):
+                    raise NotImplementedError("Only shader output is supported.")
+                output_shader = UsdShade.Shader(output_prim)
+                if output_shader.GetIdAttr().Get() != "UsdUVTexture":
+                    raise NotImplementedError("Only texture shader is supported.")
+                file_input = output_shader.GetInput("file").Get()
+                if file_input is None:
+                    raise NotImplementedError("Only texture file input is supported.")
+                texture_file_path = file_input.path
+                if os.path.relpath(texture_file_path):
+                    texture_file_path = os.path.join(os.path.dirname(usd_mesh_file_path), texture_file_path)
+                new_texture_file_path = os.path.join(os.path.dirname(usd_mesh_file_path), "..", "..", "..", "textures",
+                                                     os.path.basename(texture_file_path))
+                os.makedirs(name=os.path.dirname(new_texture_file_path), exist_ok=True)
+                if not os.path.exists(new_texture_file_path):
+                    shutil.move(texture_file_path, new_texture_file_path)
+                if len(os.listdir(os.path.dirname(texture_file_path))) == 0:
                     os.rmdir(os.path.dirname(texture_file_path))
 
-                    new_texture_file_relpath = os.path.relpath(new_texture_file_path, os.path.dirname(usd_mesh_file_path))
-                    output_shader.CreateInput("file", Sdf.ValueTypeNames.Asset).Set(new_texture_file_relpath)
-                    stage.GetRootLayer().Save()
-                    return
+                new_texture_file_relpath = os.path.relpath(new_texture_file_path,
+                                                           os.path.dirname(usd_mesh_file_path))
+                output_shader.CreateInput("file", Sdf.ValueTypeNames.Asset).Set(new_texture_file_relpath)
+                stage.GetRootLayer().Save()
 
 
 class Factory:
@@ -255,7 +256,7 @@ class Factory:
                       excludes=excludes)
 
         new_usd_file_path = os.path.join(usd_dir_path, os.path.basename(self.tmp_usd_file_path))
-        os.rename(new_usd_file_path, usd_file_path)
+        shutil.move(new_usd_file_path, usd_file_path)
 
         new_mesh_dir_path = os.path.join(usd_dir_path, usd_file_name)
         tmp_mesh_dir_path = os.path.join(usd_dir_path, self.tmp_file_name)

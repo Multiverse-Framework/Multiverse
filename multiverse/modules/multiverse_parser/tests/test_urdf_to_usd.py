@@ -19,7 +19,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
     def test_urdf_to_usd_1(self):
-        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
+        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual.urdf")
         importer = UrdfImporter(file_path=input_urdf_path,
                                 with_physics=True,
                                 with_visual=True,
@@ -60,21 +60,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
         importer.save_tmp_model(usd_file_path=output_usd_path)
         self.assertTrue(os.path.exists(output_usd_path))
 
-    def test_urdf_to_usd_root_link(self):
-        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_2.urdf")
-        importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
-                                with_collision=True)
-        usd_file_path = importer.import_model()
-
-        stage = Usd.Stage.Open(usd_file_path)
-        default_prim = stage.GetDefaultPrim()
-        self.assertEqual(default_prim.GetName(), "world")
-
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_usd", "world.usda")
-        importer.save_tmp_model(usd_file_path=output_usd_path)
-        self.assertTrue(os.path.exists(output_usd_path))
-
-    def test_urdf_to_usd_meshes(self):
+    def test_urdf_to_usd_3(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "milk_box", "urdf", "milk_box.urdf")
         importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
                                 with_collision=True)

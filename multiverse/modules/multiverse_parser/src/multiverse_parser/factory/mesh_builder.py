@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 
 from dataclasses import dataclass
-import os
-from typing import List, Optional
+from typing import Optional
 
 import numpy
-
-from ..utils import modify_name
 
 from pxr import Usd, UsdGeom, Sdf
 

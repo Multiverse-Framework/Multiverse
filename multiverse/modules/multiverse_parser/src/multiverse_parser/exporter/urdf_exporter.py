@@ -7,7 +7,6 @@ import numpy
 from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
 
-from ..factory import merge_folders
 from ..factory import Factory
 from ..factory import (WorldBuilder,
                        BodyBuilder,
@@ -235,8 +234,9 @@ class UrdfExporter:
         self._factory = factory
         robot_name = get_robot_name(world_builder=factory.world_builder)
         self._robot = urdf.URDF(name=robot_name)
-        self._mesh_dir_abspath, self._mesh_dir_rospath = get_mesh_dir_paths(file_path=file_path,
-                                                                            relative_to_ros_package=relative_to_ros_package)
+        (self._mesh_dir_abspath,
+         self._mesh_dir_rospath) = get_mesh_dir_paths(file_path=file_path,
+                                                      relative_to_ros_package=relative_to_ros_package)
         self._file_path = file_path
 
     def build(self) -> None:
@@ -378,31 +378,14 @@ class UrdfExporter:
                        geometry=geometry,
                        urdf_geometry_api=urdf_geometry_api)
         elif geom_builder.type == GeomType.MESH:
-            prepended_items = gprim_prim.GetPrimStack()[0].referenceList.prependedItems
-            if len(prepended_items) != 1:
-                raise NotImplementedError(f"Geom {gprim_prim.GetName()} has {len(prepended_items)} prepended items.")
-
-            prepended_item = prepended_items[0]
-            usd_mesh_file_abspath = prepended_item.assetPath
-            if not os.path.isabs(usd_mesh_file_abspath):
-                usd_mesh_file_abspath = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path),
-                                                     usd_mesh_file_abspath)
+            usd_mesh_file_abspath = self._get_file_abspath_from_reference(prim=gprim_prim)
 
             if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
                 material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
                 material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
                 material_prim = geom_builder.stage.GetPrimAtPath(material_path)
                 material_name = material_prim.GetName()
-                prepended_items = material_prim.GetPrimStack()[0].referenceList.prependedItems
-                if len(prepended_items) != 1:
-                    raise NotImplementedError(
-                        f"Material {material_prim.GetName()} has {len(prepended_items)} prepended items.")
-
-                prepended_item = prepended_items[0]
-                usd_material_file_abspath = prepended_item.assetPath
-                if not os.path.isabs(usd_material_file_abspath):
-                    usd_material_file_abspath = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path),
-                                                             usd_material_file_abspath)
+                usd_material_file_abspath = self._get_file_abspath_from_reference(prim=material_prim)
                 usd_material_file_relpath = os.path.relpath(usd_material_file_abspath,
                                                             os.path.dirname(usd_mesh_file_abspath))
 
@@ -415,14 +398,15 @@ class UrdfExporter:
                 mesh_material = UsdShade.Material.Define(mesh_stage, mesh_material_path)
                 mesh_material_prim = mesh_material.GetPrim()
                 material_stage = Usd.Stage.Open(usd_material_file_abspath)
-                material_prim = material_stage.GetDefaultPrim()
-                material_path = material_prim.GetPath()
-                mesh_material_prim.GetReferences().AddReference(f"./{usd_material_file_relpath}", material_path)
+                ref_material_prim = material_stage.GetDefaultPrim()
+                ref_material_path = ref_material_prim.GetPath()
+                mesh_material_prim.GetReferences().AddReference(f"./{usd_material_file_relpath}", ref_material_path)
                 mesh_material_binding_api = UsdShade.MaterialBindingAPI.Apply(mesh_prim)
                 mesh_material_binding_api.Bind(mesh_material)
                 mesh_stage.GetRootLayer().Save()
 
-            tmp_mesh_file_relpath = get_mesh_file_relpath(geom_prim=gprim_prim, usd_mesh_file_path=usd_mesh_file_abspath)
+            tmp_mesh_file_relpath = get_mesh_file_relpath(geom_prim=gprim_prim,
+                                                          usd_mesh_file_path=usd_mesh_file_abspath)
             tmp_mesh_file_abspath = os.path.join(self.factory.tmp_mesh_dir_path, tmp_mesh_file_relpath)
             self.factory.export_mesh(in_mesh_file_path=usd_mesh_file_abspath,
                                      out_mesh_file_path=tmp_mesh_file_abspath)
@@ -442,6 +426,17 @@ class UrdfExporter:
                        urdf_geometry_api=urdf_geometry_api)
         else:
             raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
+
+    def _get_file_abspath_from_reference(self, prim: Usd.Prim) -> str:
+        prepended_items = prim.GetPrimStack()[0].referenceList.prependedItems
+        if len(prepended_items) != 1:
+            raise NotImplementedError(f"Prim {prim.GetName()} has {len(prepended_items)} prepended items.")
+
+        prepended_item = prepended_items[0]
+        file_abspath = prepended_item.assetPath
+        if not os.path.isabs(file_abspath):
+            file_abspath = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path), file_abspath)
+        return file_abspath
 
     def export(self, keep_usd: bool = True):
         os.makedirs(name=os.path.dirname(self.file_path), exist_ok=True)

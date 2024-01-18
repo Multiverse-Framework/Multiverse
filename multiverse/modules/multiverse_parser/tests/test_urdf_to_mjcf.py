@@ -20,7 +20,7 @@ class UrdfToMjcfTestCase(unittest.TestCase):
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
     def test_urdf_to_mjcf_1(self):
-        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
+        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual.urdf")
         factory = UrdfImporter(file_path=input_urdf_path,
                                with_physics=True,
                                with_visual=True,
@@ -62,7 +62,7 @@ class UrdfToMjcfTestCase(unittest.TestCase):
         exporter.export()
 
     def test_urdf_to_mjcf_3(self):
-        input_urdf_path = "/media/giangnguyen/Storage/Multiverse/multiverse/modules/multiverse_parser/resources/output/test_mjcf_to_urdf/anymal_b.urdf"
+        input_urdf_path = os.path.join(self.resource_path, "input", "anymal_b", "anymal_b.urdf")
         factory = UrdfImporter(file_path=input_urdf_path,
                                with_physics=True,
                                with_visual=True,

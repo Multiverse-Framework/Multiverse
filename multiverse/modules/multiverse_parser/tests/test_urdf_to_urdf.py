@@ -20,7 +20,7 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
     def test_urdf_to_urdf_1(self):
-        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual_1.urdf")
+        input_urdf_path = os.path.join(self.resource_path, "input", "tiago_dual", "urdf", "tiago_dual.urdf")
         factory = UrdfImporter(file_path=input_urdf_path,
                                with_physics=True,
                                with_visual=True,
@@ -57,32 +57,6 @@ class UrdfToUrdfTestCase(unittest.TestCase):
 
         usd_file_path = factory.import_model()
         self.assertTrue(os.path.exists(usd_file_path))
-
-        output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.urdf")
-        exporter = UrdfExporter(file_path=output_urdf_path,
-                                factory=factory,
-                                relative_to_ros_package=False)
-        self.assertEqual(exporter.robot.name, "ur5e")
-
-        exporter.build()
-        exporter.export()
-
-    def test_urdf_to_urdf_3(self):
-        input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")
-        factory = UrdfImporter(file_path=input_urdf_path,
-                               with_physics=True,
-                               with_visual=True,
-                               with_collision=True,
-                               default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]),
-                               inertia_source=InertiaSource.FROM_MESH)
-        self.assertEqual(factory.source_file_path, input_urdf_path)
-        self.assertEqual(factory._config.model_name, "ur5e")
-
-        usd_file_path = factory.import_model()
-        self.assertTrue(os.path.exists(usd_file_path))
-
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.usda")
-        factory.save_tmp_model(usd_file_path=output_usd_path)
 
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,

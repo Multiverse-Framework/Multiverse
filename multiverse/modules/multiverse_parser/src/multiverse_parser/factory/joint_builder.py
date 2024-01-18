@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List, Union, Optional, Sequence
+from typing import Optional, Sequence
 from dataclasses import dataclass
 from enum import Enum
 
@@ -123,7 +123,7 @@ class JointAxis(Enum):
             raise ValueError(f"Joint axis {cls} not supported.")
 
     @classmethod
-    def from_array(cls, joint_axis: numpy.ndarray) -> "JointAxis":
+    def from_array(cls, joint_axis: numpy.ndarray) -> Optional["JointAxis"]:
         if numpy.allclose(joint_axis, [1, 0, 0]):
             return JointAxis.X
         elif numpy.allclose(joint_axis, [0, 1, 0]):

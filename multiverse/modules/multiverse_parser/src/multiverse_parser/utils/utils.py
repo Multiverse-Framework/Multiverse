@@ -6,13 +6,21 @@ import subprocess
 import numpy
 from scipy.spatial.transform import Rotation
 
-from pxr import UsdGeom
+from pxr import UsdGeom, Gf
 
 from .mesh_exporter import export_usd
 from .mesh_importer import import_usd
 
 xform_cache = UsdGeom.XformCache()
 
+
+def get_transform(pos: numpy.ndarray, quat: numpy.ndarray, scale: numpy.ndarray):
+    mat = Gf.Matrix4d()
+    mat.SetTranslateOnly(Gf.Vec3d(*pos))
+    mat.SetRotateOnly(Gf.Quatd(quat[3], Gf.Vec3d(*quat[:3])))
+    mat_scale = Gf.Matrix4d()
+    mat_scale.SetScale(Gf.Vec3d(*scale))
+    return mat_scale * mat
 
 def diagonalize_inertia(inertia_tensor) -> (numpy.ndarray, numpy.ndarray):
     diagonal_inertia, eigenvectors = numpy.linalg.eigh(inertia_tensor)

@@ -16,7 +16,7 @@ from ..factory import (WorldBuilder, BodyBuilder,
                        MaterialBuilder, MaterialProperty,
                        TextureBuilder)
 
-from pxr import Usd, UsdMujoco, Gf, UsdGeom, Sdf, UsdShade
+from pxr import Usd, UsdMujoco, Gf, UsdGeom, UsdShade
 
 
 def get_model_name(xml_file_path: str) -> str:

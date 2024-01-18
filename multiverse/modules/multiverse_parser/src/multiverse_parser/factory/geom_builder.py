@@ -2,16 +2,16 @@
 
 import os
 from dataclasses import dataclass
-from typing import Optional, List, Any
+from typing import Optional
 from enum import Enum
 
 import numpy
 
 from .mesh_builder import MeshBuilder, MeshProperty
 from .material_builder import MaterialBuilder, MaterialProperty
-from ..utils import modify_name, calculate_mesh_inertial, shift_inertia_tensor, shift_center_of_mass
+from ..utils import modify_name, calculate_mesh_inertial, shift_inertia_tensor, shift_center_of_mass, get_transform
 
-from pxr import Usd, UsdGeom, Gf, Sdf, UsdShade, UsdPhysics
+from pxr import Usd, UsdGeom, Sdf, UsdShade, UsdPhysics
 
 
 class GeomType(Enum):
@@ -269,12 +269,7 @@ class GeomBuilder:
         :param scale: Array of x, y, z scale.
         :return: None
         """
-        mat = Gf.Matrix4d()
-        mat.SetTranslateOnly(Gf.Vec3d(*pos))
-        mat.SetRotateOnly(Gf.Quatd(quat[3], Gf.Vec3d(*quat[:3])))
-        mat_scale = Gf.Matrix4d()
-        mat_scale.SetScale(Gf.Vec3d(*scale))
-        mat = mat_scale * mat
+        mat = get_transform(pos=pos, quat=quat, scale=scale)
         self.gprim.ClearXformOpOrder()
         self.gprim.AddTransformOp().Set(mat)
         self._update_extent()

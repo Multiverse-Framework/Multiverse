@@ -7,10 +7,9 @@ import numpy
 
 from .geom_builder import GeomBuilder, GeomProperty, GeomInertial
 from .joint_builder import JointBuilder, JointProperty
-from ..utils import xform_cache, modify_name, diagonalize_inertia, shift_center_of_mass, shift_inertia_tensor
+from ..utils import get_transform, xform_cache, modify_name, diagonalize_inertia, shift_center_of_mass, shift_inertia_tensor
 
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
-
 
 class BodyBuilder:
     stage: Usd.Stage
@@ -43,12 +42,7 @@ class BodyBuilder:
         :param relative_to_xform: Relative transform prim to apply the transform to.
         :return: None
         """
-        mat = Gf.Matrix4d()
-        mat.SetTranslateOnly(Gf.Vec3d(*pos))
-        mat.SetRotateOnly(Gf.Quatd(quat[3], Gf.Vec3d(*quat[:3])))
-        mat_scale = Gf.Matrix4d()
-        mat_scale.SetScale(Gf.Vec3d(*scale))
-        mat = mat_scale * mat
+        mat = get_transform(pos=pos, quat=quat, scale=scale)
 
         if relative_to_xform is not None:
             relative_to_prim = relative_to_xform.GetPrim()

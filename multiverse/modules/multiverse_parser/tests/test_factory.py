@@ -401,10 +401,11 @@ class UsdMesh(MultiShape):
                  mesh_file_path: str,
                  density: float,
                  pos: numpy.ndarray = numpy.zeros((1, 3)), quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])):
-        self._mesh_builder = MeshBuilder(usd_mesh_file_path=mesh_file_path)
+        stage = Usd.Stage.Open(mesh_file_path)
+        self._mesh_builder = MeshBuilder(stage=stage)
 
-        xform_pos = self._mesh_builder.xform.GetLocalTransformation().ExtractTranslation()
-        xform_quat = self._mesh_builder.xform.GetLocalTransformation().ExtractRotationQuat()
+        xform_pos = self._mesh_builder.mesh.GetLocalTransformation().ExtractTranslation()
+        xform_quat = self._mesh_builder.mesh.GetLocalTransformation().ExtractRotationQuat()
         xform_quat = list(xform_quat.GetImaginary()) + [xform_quat.GetReal()]
 
         xform_pos = numpy.array(xform_pos)
@@ -562,9 +563,9 @@ class FactoryTestCase(unittest.TestCase):
                                           "milk_box",
                                           "meshes",
                                           "usd",
-                                          "from_obj",
                                           "milk_box.usda")
-        mesh_builder_2 = geom_builder_2.add_mesh(mesh_path="/SM_MilkBox",
+        mesh_builder_2 = geom_builder_2.add_mesh(mesh_name="milk_box",
+                                                 mesh_path="/SM_MilkBox",
                                                  usd_mesh_file_path=usd_mesh_file_path,
                                                  texture_coordinate_name="UVMap")
         self.assertEqual(mesh_builder_2.mesh.GetPrim().GetPath(), "/milk_box")
