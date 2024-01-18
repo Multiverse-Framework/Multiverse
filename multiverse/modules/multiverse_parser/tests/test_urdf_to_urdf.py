@@ -36,9 +36,6 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "tiago_dual")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "tiago_dual.usda")
-        factory.save_tmp_model(usd_file_path=output_usd_path)
-
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "tiago_dual.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
                                 factory=factory,

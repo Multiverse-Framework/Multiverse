@@ -14,6 +14,8 @@ pxr_plugin(${PXR_PACKAGE}
 
     PUBLIC_CLASSES
         urdf
+        urdfRobot
+        urdfMaterial
         urdfLinkAPI
         urdfLinkInertialAPI
         urdfLinkVisualAPI
@@ -34,6 +36,8 @@ pxr_plugin(${PXR_PACKAGE}
     PYMODULE_CPPFILES
         module.cpp
         wrapUrdf.cpp
+        wrapUrdfRobot.cpp
+        wrapUrdfMaterial.cpp
         wrapUrdfLinkAPI.cpp
         wrapUrdfLinkInertialAPI.cpp
         wrapUrdfLinkVisualAPI.cpp

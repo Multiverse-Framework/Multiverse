@@ -15,7 +15,7 @@ from ..factory import (WorldBuilder,
                        GeomBuilder, GeomType, GeomProperty)
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
-from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade
+from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade, Sdf
 
 
 def build_urdf_inertial_api(physics_mass_api: UsdPhysics.MassAPI) -> UsdUrdf.UrdfLinkInertialAPI:
@@ -109,6 +109,8 @@ class UrdfImporter(Factory):
     def _import_config(self) -> None:
         usd_urdf = UsdUrdf.Urdf.Define(self.world_builder.stage, "/urdf")
         usd_urdf.CreateNameAttr(self._config.model_name)
+        UsdUrdf.UrdfRobot.Define(self.world_builder.stage, "/urdf/robot")
+        UsdUrdf.UrdfMaterial.Define(self.world_builder.stage, "/urdf/robot/materials")
 
     def _import_body_and_joint(self, urdf_link_name) -> None:
         if urdf_link_name not in self.urdf_model.child_map:
@@ -271,8 +273,15 @@ class UrdfImporter(Factory):
                     geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
 
                     gprim_prim = geom_builder.gprim.GetPrim()
+                    if type(geom) is urdf.Visual:
+                        UsdUrdf.UrdfLinkVisualAPI.Apply(gprim_prim)
+                    elif type(geom) is urdf.Collision:
+                        UsdUrdf.UrdfLinkCollisionAPI.Apply(gprim_prim)
+                    else:
+                        raise ValueError(f"Geom type {type(geom)} not supported.")
+
                     urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(gprim_prim)
-                    urdf_geometry_mesh_api.CreateFilenameAttr(tmp_origin_mesh_file_path)
+                    urdf_geometry_mesh_api.CreateFilenameAttr(f"./{tmp_origin_mesh_file_path}")
                     if geom.geometry.scale is not None:
                         urdf_geometry_mesh_api.CreateScaleAttr(Gf.Vec3f(*geom.geometry.scale))
 
@@ -281,10 +290,24 @@ class UrdfImporter(Factory):
                         material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
                         if len(material_paths) > 1:
                             raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
-                        material_prim = mesh_stage.GetPrimAtPath(material_paths[0])
-                        geom_builder.add_material(material_name=material_prim.GetName(),
-                                                  material_path=material_prim.GetPath(),
-                                                  usd_material_file_path=tmp_usd_mesh_file_path)
+                        material_path = material_paths[0]
+                        material_builder = geom_builder.add_material(material_name=material_path.name,
+                                                                     material_path=material_path,
+                                                                     usd_material_file_path=tmp_usd_mesh_file_path)
+
+                        stage = self.world_builder.stage
+                        urdf_material_path = Sdf.Path(f"/urdf/robot/materials/{material_path.name}")
+                        if not stage.GetPrimAtPath(urdf_material_path).IsValid():
+                            urdf_material = UsdUrdf.UrdfMaterial.Define(stage, urdf_material_path)
+
+                            if isinstance(material_builder.diffuse_color, str):
+                                urdf_material.CreateTextureAttr(material_builder.diffuse_color)
+                            else:
+                                rgba = Gf.Vec4f(*material_builder.diffuse_color.tolist(), material_builder.opacity)
+                                urdf_material.CreateRgbaAttr(rgba)
+
+                        urdf_link_visual_api = UsdUrdf.UrdfLinkVisualAPI(gprim_prim)
+                        urdf_link_visual_api.CreateMaterialRel().SetTargets([urdf_material_path])
 
     def get_mesh_file_path(self, urdf_mesh_file_path: str) -> Optional[str]:
         mesh_file_path = None

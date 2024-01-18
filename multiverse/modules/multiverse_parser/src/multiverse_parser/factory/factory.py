@@ -35,7 +35,9 @@ class Configuration:
     default_rgba: numpy.ndarray = numpy.array([0.5, 0.5, 0.5, 1.0])
 
 
-def copy_and_overwrite(source_folder: str, destination_folder: str, excludes: Optional[List[str]] = None) -> None:
+def merge_folders(source_folder: str,
+                  destination_folder: str,
+                  excludes: Optional[List[str]] = None) -> None:
     os.makedirs(name=destination_folder, exist_ok=True)
 
     # Iterate through all files and folders in the source folder
@@ -45,12 +47,13 @@ def copy_and_overwrite(source_folder: str, destination_folder: str, excludes: Op
 
         # If item is a folder, call the function recursively
         if os.path.isdir(source_item):
-            if os.path.exists(destination_item):
-                shutil.rmtree(destination_item)
             if excludes is None:
-                shutil.copytree(source_item, destination_item)
+                shutil.copytree(source_item, destination_item,
+                                dirs_exist_ok=True)
             else:
-                shutil.copytree(source_item, destination_item, ignore=shutil.ignore_patterns(*excludes))
+                shutil.copytree(source_item, destination_item,
+                                dirs_exist_ok=True,
+                                ignore=shutil.ignore_patterns(*excludes))
         # If item is a file, simply copy it
         else:
             shutil.copy2(source_item, destination_item)
@@ -186,23 +189,26 @@ class Factory:
         process = subprocess.Popen(cmd)
         process.wait()
 
-    def save_tmp_model(self, usd_file_path: str) -> None:
+    def save_tmp_model(self,
+                       usd_file_path: str,
+                       excludes: Optional[List[str]] = None) -> None:
         usd_file_name = os.path.basename(usd_file_path).split(".")[0]
         usd_dir_path = os.path.dirname(usd_file_path)
         tmp_usd_dir_path = os.path.dirname(self.tmp_usd_file_path)
+
+        merge_folders(source_folder=tmp_usd_dir_path,
+                      destination_folder=usd_dir_path,
+                      excludes=excludes)
+
         new_usd_file_path = os.path.join(usd_dir_path, os.path.basename(self.tmp_usd_file_path))
-
-        copy_and_overwrite(source_folder=tmp_usd_dir_path, destination_folder=usd_dir_path)
-
         os.rename(new_usd_file_path, usd_file_path)
 
         new_mesh_dir_path = os.path.join(usd_dir_path, usd_file_name)
-        if os.path.exists(new_mesh_dir_path):
-            shutil.rmtree(new_mesh_dir_path)
-
         tmp_mesh_dir_path = os.path.join(usd_dir_path, self.tmp_file_name)
         if os.path.exists(tmp_mesh_dir_path):
-            os.rename(tmp_mesh_dir_path, new_mesh_dir_path)
+            merge_folders(source_folder=tmp_mesh_dir_path,
+                          destination_folder=new_mesh_dir_path)
+            shutil.rmtree(tmp_mesh_dir_path)
 
             with open(usd_file_path, encoding="utf-8") as file:
                 file_contents = file.read()

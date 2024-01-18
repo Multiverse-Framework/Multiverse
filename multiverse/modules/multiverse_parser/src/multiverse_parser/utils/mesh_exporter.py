@@ -44,7 +44,7 @@ import os.path
 {clean_up_meshes_script}
 clean_up_meshes(bpy, '{out_dae}')
 out_dae_dir = os.path.dirname('{out_dae}')
-os.makedirs(name=os.path.join(out_dae_dir, "..", "textures"), exist_ok=True)
+os.makedirs(name=os.path.join(out_dae_dir, "..", "..", "textures"), exist_ok=True)
 bpy.ops.wm.collada_export(filepath='{out_dae}', use_texture_copies=True)
 """
 

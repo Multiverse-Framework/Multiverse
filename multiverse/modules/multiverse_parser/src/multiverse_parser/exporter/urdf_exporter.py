@@ -6,8 +6,8 @@ from typing import Tuple, Optional, Union
 import numpy
 from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
-from pxr import UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd
 
+from ..factory import merge_folders
 from ..factory import Factory
 from ..factory import (WorldBuilder,
                        BodyBuilder,
@@ -16,8 +16,10 @@ from ..factory import (WorldBuilder,
 from ..importer.urdf_importer import build_urdf_inertial_api
 from ..utils import xform_cache
 
+from pxr import UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd
 
-def get_meshdir_paths(file_path: str, relative_to_ros_package: bool) -> Tuple[str, str]:
+
+def get_mesh_dir_paths(file_path: str, relative_to_ros_package: bool) -> Tuple[str, str]:
     meshdir_name = os.path.splitext(os.path.basename(file_path))[0]
     if relative_to_ros_package:
         tmp_urdf_file_path = file_path
@@ -31,10 +33,10 @@ def get_meshdir_paths(file_path: str, relative_to_ros_package: bool) -> Tuple[st
         else:
             raise ValueError(f"Could not find package.xml in any parent directory of {file_path}.")
 
-        meshdir_abs = str(os.path.join(os.path.dirname(tmp_urdf_file_path), mesh_path))
+        meshdir_abs = str(os.path.join(os.path.dirname(tmp_urdf_file_path), mesh_path, "meshes"))
         meshdir_ros = "package://" + mesh_path
     else:
-        meshdir_abs = str(os.path.join(os.path.dirname(file_path), meshdir_name))
+        meshdir_abs = str(os.path.join(os.path.dirname(file_path), meshdir_name, "meshes"))
         meshdir_ros = "file://" + meshdir_abs
 
     return meshdir_abs, meshdir_ros
@@ -103,20 +105,19 @@ def get_urdf_origin(xform: UsdGeom.Xform) -> Tuple[Gf.Vec3f, Gf.Vec3f]:
     return xyz, rpy
 
 
-def get_urdf_geometry_api(geom_prim: Usd.Prim) -> Union[UsdUrdf.UrdfLinkVisualAPI, UsdUrdf.UrdfLinkCollisionAPI]:
-    xform_prim = geom_prim.GetPrim().GetParent()
-    if xform_prim.HasAPI(UsdUrdf.UrdfLinkVisualAPI):
-        urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI(xform_prim)
-    elif xform_prim.HasAPI(UsdUrdf.UrdfLinkCollisionAPI):
-        urdf_geometry_api = UsdUrdf.UrdfLinkCollisionAPI(xform_prim)
+def get_urdf_geometry_api(gprim_prim: Usd.Prim) -> Union[UsdUrdf.UrdfLinkVisualAPI, UsdUrdf.UrdfLinkCollisionAPI]:
+    if gprim_prim.HasAPI(UsdUrdf.UrdfLinkVisualAPI):
+        urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI(gprim_prim)
+    elif gprim_prim.HasAPI(UsdUrdf.UrdfLinkCollisionAPI):
+        urdf_geometry_api = UsdUrdf.UrdfLinkCollisionAPI(gprim_prim)
     else:
-        xform = UsdGeom.Xform(xform_prim)
+        xform = UsdGeom.Xform(gprim_prim)
         xyz, rpy = get_urdf_origin(xform)
 
-        if not geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
-            urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI.Apply(xform_prim)
+        if not gprim_prim.HasAPI(UsdPhysics.CollisionAPI):
+            urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI.Apply(gprim_prim)
         else:
-            urdf_geometry_api = UsdUrdf.UrdfLinkCollisionAPI.Apply(xform_prim)
+            urdf_geometry_api = UsdUrdf.UrdfLinkCollisionAPI.Apply(gprim_prim)
 
         urdf_geometry_api.CreateXyzAttr(xyz)
         urdf_geometry_api.CreateRpyAttr(rpy)
@@ -131,13 +132,28 @@ def build_geom(geom_name: str,
     xyz = urdf_geometry_api.GetXyzAttr().Get()
     rpy = urdf_geometry_api.GetRpyAttr().Get()
     origin = urdf.Pose(xyz=xyz, rpy=rpy)
+    material = None
     if isinstance(urdf_geometry_api, UsdUrdf.UrdfLinkVisualAPI):
+        if len(urdf_geometry_api.GetMaterialRel().GetTargets()) > 0:
+            material_path = urdf_geometry_api.GetMaterialRel().GetTargets()[0]
+            material_prim = urdf_geometry_api.GetPrim().GetStage().GetPrimAtPath(material_path)
+            material_name = material_prim.GetName()
+            material = urdf.Material(name=material_name)
+            urdf_material = UsdUrdf.UrdfMaterial(material_prim)
+            rgba = urdf_material.GetRgbaAttr().Get()
+            texture_filename = urdf_material.GetTextureAttr().Get()
+            if rgba is not None:
+                color = urdf.Color(*rgba)
+                material.color = color
+            else:
+                texture = urdf.Texture(filename=texture_filename)
+                material.texture = texture
+
         visual = urdf.Visual(
             geometry=geometry,
-            material=None,  # TODO: Add material
+            material=material,
             origin=origin,
-            name=geom_name,
-        )
+            name=geom_name)
         link.visual = visual
     elif isinstance(urdf_geometry_api, UsdUrdf.UrdfLinkCollisionAPI):
         collision = urdf.Collision(
@@ -159,11 +175,11 @@ def get_urdf_inertial_api(xform_prim: Usd.Prim):
 
 
 def get_urdf_geometry_box_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeometryBoxAPI:
-    xform_prim = geom_builder.xform.GetPrim()
-    if xform_prim.HasAPI(UsdUrdf.UrdfGeometryBoxAPI):
-        urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI(xform_prim)
+    gprim_prim = geom_builder.gprim.GetPrim()
+    if gprim_prim.HasAPI(UsdUrdf.UrdfGeometryBoxAPI):
+        urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI(gprim_prim)
     else:
-        urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(xform_prim)
+        urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(gprim_prim)
         size = numpy.array([geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2
         size = Gf.Vec3f(*size)
         urdf_geometry_box_api.CreateSizeAttr(size)
@@ -171,11 +187,11 @@ def get_urdf_geometry_box_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeometry
 
 
 def get_urdf_geometry_sphere_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeometrySphereAPI:
-    xform_prim = geom_builder.xform.GetPrim()
-    if xform_prim.HasAPI(UsdUrdf.UrdfGeometrySphereAPI):
-        urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI(xform_prim)
+    gprim_prim = geom_builder.gprim.GetPrim()
+    if gprim_prim.HasAPI(UsdUrdf.UrdfGeometrySphereAPI):
+        urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI(gprim_prim)
     else:
-        urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI.Apply(xform_prim)
+        urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI.Apply(gprim_prim)
         geom_sphere_prim = UsdGeom.Sphere(geom_builder.gprims[0])
         radius = geom_sphere_prim.GetRadiusAttr().Get()
         urdf_geometry_sphere_api.CreateRadiusAttr(radius)
@@ -183,11 +199,11 @@ def get_urdf_geometry_sphere_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeome
 
 
 def get_urdf_geometry_cylinder_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeometryCylinderAPI:
-    xform_prim = geom_builder.xform.GetPrim()
-    if xform_prim.HasAPI(UsdUrdf.UrdfGeometryCylinderAPI):
-        urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI(xform_prim)
+    gprim_prim = geom_builder.gprim.GetPrim()
+    if gprim_prim.HasAPI(UsdUrdf.UrdfGeometryCylinderAPI):
+        urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI(gprim_prim)
     else:
-        urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI.Apply(xform_prim)
+        urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI.Apply(gprim_prim)
         geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.gprims[0])
         radius = geom_cylinder_prim.GetRadiusAttr().Get()
         length = geom_cylinder_prim.GetHeightAttr().Get()
@@ -196,29 +212,29 @@ def get_urdf_geometry_cylinder_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeo
     return urdf_geometry_cylinder_api
 
 
-def get_mesh_rel_path(geom_prim: UsdGeom.Gprim, usd_file_path: str) -> str:
-    if not geom_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
+def get_mesh_file_relpath(geom_prim: UsdGeom.Gprim, usd_mesh_file_path: str) -> str:
+    if len([child_prim for child_prim in geom_prim.GetPrim().GetChildren() if child_prim.IsA(UsdGeom.Subset)]) > 0:
         file_extension = "obj"
     else:
         file_extension = "stl"
-    return os.path.join("usd",
-                        f"from_{file_extension}",
-                        os.path.splitext(os.path.basename(usd_file_path))[0] + f".{file_extension}")
+    return os.path.join(f"{file_extension}",
+                        os.path.splitext(os.path.basename(usd_mesh_file_path))[0] + f".{file_extension}")
 
 
-def get_urdf_geometry_mesh_api(geom_builder, mesh_abs_path) -> UsdUrdf.UrdfGeometryMeshAPI:
-    xform_prim = geom_builder.xform.GetPrim()
-    if not xform_prim.HasAPI(UsdUrdf.UrdfGeometryMeshAPI):
-        urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(xform_prim)
-        urdf_geometry_mesh_api.CreateFilenameAttr(mesh_abs_path)
-        transformation = geom_builder.xform.GetLocalTransformation()
+def get_urdf_geometry_mesh_api(geom_builder: GeomBuilder, mesh_file_relpath: str) -> UsdUrdf.UrdfGeometryMeshAPI:
+    gprim = geom_builder.gprim
+    gprim_prim = gprim.GetPrim()
+    if not gprim_prim.HasAPI(UsdUrdf.UrdfGeometryMeshAPI):
+        urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(gprim_prim)
+        urdf_geometry_mesh_api.CreateFilenameAttr(f"./{mesh_file_relpath}")
+        transformation = gprim.GetLocalTransformation()
 
         # TODO: Doesn't work for negative scale
         scale = [transformation.GetRow(i).GetLength() for i in range(3)]
         scale = Gf.Vec3f(*scale)
         urdf_geometry_mesh_api.CreateScaleAttr(scale)
     else:
-        urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI(xform_prim)
+        urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI(gprim_prim)
     return urdf_geometry_mesh_api
 
 
@@ -232,14 +248,15 @@ class UrdfExporter:
         self._factory = factory
         robot_name = get_robot_name(world_builder=factory.world_builder)
         self._robot = urdf.URDF(name=robot_name)
-        self._meshdir_abs, self._meshdir_ros = get_meshdir_paths(file_path=file_path,
-                                                                 relative_to_ros_package=relative_to_ros_package)
+        self._mesh_dir_abspath, self._mesh_dir_rospath = get_mesh_dir_paths(file_path=file_path,
+                                                                            relative_to_ros_package=relative_to_ros_package)
         self._file_path = file_path
 
     def build(self) -> None:
         for body_builder in self.factory.world_builder.body_builders:
             self._build_joints(body_builder=body_builder)
             self._build_link(body_builder=body_builder)
+        self.factory.world_builder.stage.GetRootLayer().Save()
 
     def _build_joints(self, body_builder: BodyBuilder) -> None:
         for joint_builder in body_builder.joint_builders:
@@ -346,64 +363,74 @@ class UrdfExporter:
         self.robot.add_link(link)
 
     def _build_geom(self, geom_builder: GeomBuilder, link: urdf.Link):
-        if len(geom_builder.gprims) > 1:
-            raise NotImplementedError("Multiple geometry prims not supported yet.")
-        for geom_prim in geom_builder.gprims:
-            urdf_geometry_api = get_urdf_geometry_api(geom_prim=geom_prim)
-            xform_prim = geom_builder.xform.GetPrim()
-            geom_name = xform_prim.GetName()
-            if geom_builder.type == GeomType.CUBE:
-                urdf_geometry_box_api = get_urdf_geometry_box_api(geom_builder=geom_builder)
-                size = urdf_geometry_box_api.GetSizeAttr().Get()
-                geometry = urdf.Box(size=size)
-                build_geom(geom_name=geom_name,
-                           link=link,
-                           geometry=geometry,
-                           urdf_geometry_api=urdf_geometry_api)
-            elif geom_builder.type == GeomType.SPHERE:
-                urdf_geometry_sphere_api = get_urdf_geometry_sphere_api(geom_builder=geom_builder)
-                radius = urdf_geometry_sphere_api.GetRadiusAttr().Get()
-                geometry = urdf.Sphere(radius=radius)
-                build_geom(geom_name=geom_name,
-                           link=link,
-                           geometry=geometry,
-                           urdf_geometry_api=urdf_geometry_api)
-            elif geom_builder.type in [GeomType.CYLINDER, GeomType.CAPSULE]:
-                urdf_geometry_cylinder_api = get_urdf_geometry_cylinder_api(geom_builder=geom_builder)
-                radius = urdf_geometry_cylinder_api.GetRadiusAttr().Get()
-                length = urdf_geometry_cylinder_api.GetLengthAttr().Get()
-                geometry = urdf.Cylinder(radius=radius, length=length)
-                build_geom(geom_name=geom_name,
-                           link=link,
-                           geometry=geometry,
-                           urdf_geometry_api=urdf_geometry_api)
-            elif geom_builder.type == GeomType.MESH:
-                for usd_file_path, mesh_builder in geom_builder.mesh_builders.items():
-                    mesh_rel_path = get_mesh_rel_path(geom_prim=geom_prim, usd_file_path=usd_file_path)
-                    mesh_abs_path = os.path.join(self._meshdir_abs, mesh_rel_path)
-                    mesh_ros_path = os.path.join(self._meshdir_ros, mesh_rel_path)
-                    self.factory.export_mesh(in_mesh_file_path=usd_file_path,
-                                             out_mesh_file_path=mesh_abs_path)
+        gprim_prim = geom_builder.gprim.GetPrim()
+        urdf_geometry_api = get_urdf_geometry_api(gprim_prim=gprim_prim)
+        geom_name = gprim_prim.GetName()
+        if geom_builder.type == GeomType.CUBE:
+            urdf_geometry_box_api = get_urdf_geometry_box_api(geom_builder=geom_builder)
+            size = urdf_geometry_box_api.GetSizeAttr().Get()
+            geometry = urdf.Box(size=size)
+            build_geom(geom_name=geom_name,
+                       link=link,
+                       geometry=geometry,
+                       urdf_geometry_api=urdf_geometry_api)
+        elif geom_builder.type == GeomType.SPHERE:
+            urdf_geometry_sphere_api = get_urdf_geometry_sphere_api(geom_builder=geom_builder)
+            radius = urdf_geometry_sphere_api.GetRadiusAttr().Get()
+            geometry = urdf.Sphere(radius=radius)
+            build_geom(geom_name=geom_name,
+                       link=link,
+                       geometry=geometry,
+                       urdf_geometry_api=urdf_geometry_api)
+        elif geom_builder.type in [GeomType.CYLINDER, GeomType.CAPSULE]:
+            urdf_geometry_cylinder_api = get_urdf_geometry_cylinder_api(geom_builder=geom_builder)
+            radius = urdf_geometry_cylinder_api.GetRadiusAttr().Get()
+            length = urdf_geometry_cylinder_api.GetLengthAttr().Get()
+            geometry = urdf.Cylinder(radius=radius, length=length)
+            build_geom(geom_name=geom_name,
+                       link=link,
+                       geometry=geometry,
+                       urdf_geometry_api=urdf_geometry_api)
+        elif geom_builder.type == GeomType.MESH:
+            prepended_items = gprim_prim.GetPrimStack()[0].referenceList.prependedItems
+            if len(prepended_items) != 1:
+                raise NotImplementedError(f"Geom {gprim_prim.GetName()} has {len(prepended_items)} prepended items.")
 
-                    urdf_geometry_mesh_api = get_urdf_geometry_mesh_api(geom_builder=geom_builder,
-                                                                        mesh_abs_path=mesh_abs_path)
-                    scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
+            prepended_item = prepended_items[0]
+            usd_mesh_file_abspath = prepended_item.assetPath
+            if not os.path.isabs(usd_mesh_file_abspath):
+                usd_mesh_file_abspath = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path),
+                                                     usd_mesh_file_abspath)
 
-                    geometry = urdf.Mesh(filename=mesh_ros_path, scale=scale)
-                    build_geom(geom_name=geom_name,
-                               link=link,
-                               geometry=geometry,
-                               urdf_geometry_api=urdf_geometry_api)
-            else:
-                raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
+            mesh_file_relpath = get_mesh_file_relpath(geom_prim=gprim_prim, usd_mesh_file_path=usd_mesh_file_abspath)
+            mesh_file_abspath = os.path.join(self._mesh_dir_abspath, mesh_file_relpath)
+            mesh_file_rospath = os.path.join(self._mesh_dir_rospath, mesh_file_relpath)
+            self.factory.export_mesh(in_mesh_file_path=usd_mesh_file_abspath,
+                                     out_mesh_file_path=mesh_file_abspath)
 
-    def export(self):
+            mesh_file_relpath = os.path.relpath(mesh_file_abspath, start=os.path.dirname(self.file_path))
+            urdf_geometry_mesh_api = get_urdf_geometry_mesh_api(geom_builder=geom_builder,
+                                                                mesh_file_relpath=mesh_file_relpath)
+            scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
+
+            geometry = urdf.Mesh(filename=mesh_file_rospath, scale=scale)
+            build_geom(geom_name=geom_name,
+                       link=link,
+                       geometry=geometry,
+                       urdf_geometry_api=urdf_geometry_api)
+        else:
+            raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
+
+    def export(self, keep_usd: bool = True):
         os.makedirs(name=os.path.dirname(self.file_path), exist_ok=True)
 
         xml_string = self.robot.to_xml_string()
 
         with open(self.file_path, "w") as file:
             file.write(xml_string)
+
+        if keep_usd:
+            self.factory.save_tmp_model(usd_file_path=self.file_path.replace(".urdf", ".usda"))
 
     @property
     def file_path(self) -> str:

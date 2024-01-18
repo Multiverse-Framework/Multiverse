@@ -7,6 +7,8 @@ PXR_NAMESPACE_USING_DIRECTIVE
 TF_WRAP_MODULE
 {
     TF_WRAP(UsdUrdfUrdf);
+    TF_WRAP(UsdUrdfUrdfRobot);
+    TF_WRAP(UsdUrdfUrdfMaterial);
 
     TF_WRAP(UsdUrdfUrdfLinkAPI);
     TF_WRAP(UsdUrdfUrdfLinkInertialAPI);

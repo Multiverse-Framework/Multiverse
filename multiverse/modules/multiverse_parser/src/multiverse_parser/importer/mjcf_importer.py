@@ -350,17 +350,6 @@ class MjcfImporter(Factory):
                 if mat_id != -1:
                     material_name = self.mj_model.mat(mat_id).name
 
-                    tmp_usd_material_file_path = os.path.join(self.tmp_material_dir_path,
-                                                              "usd",
-                                                              f"{material_name}.usda")
-                    if not os.path.exists(tmp_usd_material_file_path):
-                        material_stage = Usd.Stage.CreateNew(tmp_usd_material_file_path)
-                        material = UsdShade.Material.Define(material_stage, f"/{material_name}")
-                        material_stage.SetDefaultPrim(material.GetPrim())
-                        UsdGeom.SetStageUpAxis(material_stage, UsdGeom.Tokens.z)
-                    else:
-                        material_stage = Usd.Stage.Open(tmp_usd_material_file_path)
-
                     mujoco_material_path = (mujoco_asset_prim.GetPath().AppendChild("materials").
                                             AppendChild(material_name))
                     mujoco_material = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
@@ -407,12 +396,22 @@ class MjcfImporter(Factory):
 
                         mujoco_texture.CreateFileAttr(f"{texture_name}.png")
 
+                    tmp_usd_material_file_path = os.path.join(self.tmp_material_dir_path,
+                                                              "usd",
+                                                              f"{material_name}.usda")
+                    if not os.path.exists(tmp_usd_material_file_path):
+                        material_stage = Usd.Stage.CreateNew(tmp_usd_material_file_path)
+                        material = UsdShade.Material.Define(material_stage, f"/{material_name}")
+                        material_stage.SetDefaultPrim(material.GetPrim())
+                        UsdGeom.SetStageUpAxis(material_stage, UsdGeom.Tokens.z)
+                    else:
+                        material_stage = Usd.Stage.Open(tmp_usd_material_file_path)
+
                     material_property = MaterialProperty(diffuse_color=diffuse_color,
                                                          opacity=opacity,
                                                          emissive_color=emissive_color,
                                                          specular_color=specular_color)
-                    material_builder = MaterialBuilder(stage=material_stage, material_property=material_property)
-                    material_builder.build()
+                    MaterialBuilder(stage=material_stage, material_property=material_property).build()
 
                     geom_builder.add_material(material_name=material_name,
                                               material_path=f"/{material_name}",

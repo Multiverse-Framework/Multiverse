@@ -8,13 +8,15 @@ from xml.dom import minidom
 import numpy
 from numpy import radians
 
-from ..factory import copy_and_overwrite
+from ..factory import merge_folders
 from ..factory import Factory
 from ..factory import (JointBuilder, JointType,
-                       GeomBuilder, GeomType)
+                       GeomBuilder, GeomType,
+                       MaterialProperty)
 from ..utils import xform_cache, modify_name, scale_mesh
 
 from pxr import UsdMujoco, UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd, UsdShade
+
 
 def build_inertial(xform_prim: Usd.Prim, body: ET.Element) -> None:
     mujoco_body_inertial_api = get_mujoco_inertial_api(xform_prim=xform_prim)
@@ -187,26 +189,28 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
         mujoco_geom_api.CreateTypeAttr(geom_type)
         if geom_builder.type == GeomType.MESH:
             prepended_items = gprim_prim.GetPrimStack()[0].referenceList.prependedItems
-            if len(prepended_items) > 0:
-                stage = gprim_prim.GetStage()
-                for prepended_item in prepended_items:
-                    mesh_name = prepended_item.primPath.name
-                    mesh_name = add_scale_to_mesh_name(mesh_name=mesh_name, mesh_scale=geom_size)
+            if len(prepended_items) != 1:
+                raise NotImplementedError(f"Geom {gprim_prim.GetName()} has {len(prepended_items)} prepended items.")
 
-                    mujoco_asset_prim = stage.GetPrimAtPath("/mujoco/asset")
-                    mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
-                    if not stage.GetPrimAtPath(mujoco_mesh_path).IsA(UsdMujoco.MujocoMesh):
-                        raise ValueError(f"Mesh {mesh_name} does not exist.")
-                    mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
+            stage = gprim_prim.GetStage()
+            mesh_name = prepended_items[0].primPath.name
+            mesh_name = add_scale_to_mesh_name(mesh_name=mesh_name, mesh_scale=geom_size)
 
-                    if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
-                        material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
-                        material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
-                        material_name = stage.GetPrimAtPath(material_path).GetName()
-                        mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(material_name)
-                        if not stage.GetPrimAtPath(mujoco_material_path).IsA(UsdMujoco.MujocoMaterial):
-                            raise ValueError(f"Material {material_name} does not exist.")
-                        mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
+            mujoco_asset_prim = stage.GetPrimAtPath("/mujoco/asset")
+            mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
+            if not stage.GetPrimAtPath(mujoco_mesh_path).IsA(UsdMujoco.MujocoMesh):
+                raise ValueError(f"Mesh {mesh_name} does not exist.")
+            mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
+
+            if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
+                material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
+                material_name = stage.GetPrimAtPath(material_path).GetName()
+                mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
+                    material_name)
+                if not stage.GetPrimAtPath(mujoco_material_path).IsA(UsdMujoco.MujocoMaterial):
+                    raise ValueError(f"Material {material_name} does not exist.")
+                mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 
     return mujoco_geom_api
 
@@ -272,6 +276,8 @@ class MjcfExporter:
                         child_body_builder = world_builder.get_body_builder(child_body_name)
                         reduces_body_builders.remove(child_body_builder)
             body_builders = reduces_body_builders
+
+        self._export_equality()
 
     def _build_config(self):
         stage = self.factory.world_builder.stage
@@ -411,7 +417,7 @@ class MjcfExporter:
                 mesh_name = add_scale_to_mesh_name(mesh_name=mesh_file_name, mesh_scale=numpy.array(mesh_scale))
                 mujoco_mesh_path = mujoco_meshes_prim.GetPath().AppendChild(mesh_name)
                 if stage.GetPrimAtPath(mujoco_mesh_path).IsValid():
-                    raise ValueError(f"Mesh {mesh_name} already exists.")
+                    continue
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(stage, mujoco_mesh_path)
                 mujoco_mesh.CreateFileAttr(tmp_mesh_file_path)
                 mujoco_mesh.CreateScaleAttr(mesh_scale)
@@ -423,27 +429,24 @@ class MjcfExporter:
                 material_name = material.GetPrim().GetName()
                 if material_name in materials:
                     continue
-                materials[material_name] = {}
                 for surface_output in material.GetSurfaceOutputs():
                     connected_source = surface_output.GetConnectedSource()[0]
                     shader_prim = connected_source.GetPrim()
                     if shader_prim.IsA(UsdShade.Shader):
                         shader = UsdShade.Shader(shader_prim)
-                        for shader_input in shader.GetInputs():
-                            if shader_input.GetBaseName() == "diffuseColor":
-                                diffuse_color = shader_input.GetAttr().Get()
-                                materials[material_name]["diffuse_color"] = diffuse_color
-                            elif shader_input.GetBaseName() == "opacity":
-                                opacity = shader_input.GetAttr().Get()
-                                materials[material_name]["opacity"] = opacity
-                            elif shader_input.GetBaseName() == "emissiveColor":
-                                emissive_color = shader_input.GetAttr().Get()
-                                materials[material_name]["emissive_color"] = emissive_color
-                            elif shader_input.GetBaseName() == "specular":
-                                specular = shader_input.GetAttr().Get()
-                                materials[material_name]["specular_color"] = specular
+                        if shader.GetIdAttr().Get() == "UsdPreviewSurface":
+                            materials[material_name] = MaterialProperty(
+                                diffuse_color=shader.GetInput("diffuseColor").GetAttr().Get(),
+                                opacity=shader.GetInput("opacity").GetAttr().Get(),
+                                emissive_color=shader.GetInput("emissiveColor").GetAttr().Get(),
+                                specular_color=shader.GetInput("specularColor").GetAttr().Get()
+                            )
+                            break
+                else:
+                    raise NotImplementedError(
+                        f"Material {material_name} does not have a shader with UsdPreviewSurface id.")
 
-        for material_name, material_props in materials.items():
+        for material_name, material_property in materials.items():
             mujoco_material_path = mujoco_materials_prim.GetPath().AppendChild(material_name)
             if stage.GetPrimAtPath(mujoco_material_path).IsValid():
                 continue
@@ -451,16 +454,19 @@ class MjcfExporter:
             mujoco_material = UsdMujoco.MujocoMaterial.Define(stage, mujoco_material_path)
             rgba = Gf.Vec4f(1.0, 1.0, 1.0, 0.0)
             emission = 0.0
-            specular = 0.0
-            if material_props.get("diffuse_color") is not None and material_props.get("opacity") is not None:
-                rgba = Gf.Vec4f(*material_props["diffuse_color"], material_props["opacity"])
-                if "emissive_color" in material_props and all([c != 0.0 for c in material_props["diffuse_color"]]):
-                    emissions = [material_props["emissive_color"][i] / material_props["diffuse_color"][i]
+            specular = 0.5
+            if material_property.diffuse_color is not None and material_property.opacity is not None:
+                rgba = Gf.Vec4f(*material_property.diffuse_color, material_property.opacity)
+                if material_property.emissive_color is not None and all(
+                        [c != 0.0 for c in material_property.diffuse_color]):
+                    emissions = [material_property.emissive_color[i] / material_property.diffuse_color[i]
                                  for i in range(3)]
                     if emissions[0] == emissions[1] == emissions[2]:
                         emission = emissions[0]
-            if material_props.get("specular_color") is not None:
-                specular = material_props["specular_color"]
+            specular_color = material_property.specular_color
+            if specular_color is not None and specular_color[0] == specular_color[1] == specular_color[2]:
+                specular = specular_color[0]
+
             mujoco_material.CreateRgbaAttr(rgba)
             mujoco_material.CreateEmissionAttr(emission)
             mujoco_material.CreateSpecularAttr(specular)
@@ -556,7 +562,29 @@ class MjcfExporter:
             joint_axis = mujoco_joint_api.GetAxisAttr().Get()
             joint.set("axis", " ".join(map(str, joint_axis)))
 
-    def export(self, excludes: List[str] = None) -> None:
+    def _export_equality(self):
+        stage = self.factory.world_builder.stage
+        equality_prim = stage.GetPrimAtPath("/mujoco/equality")
+        equality = ET.SubElement(self.root, "equality")
+        for child_prim in equality_prim.GetChildren():
+            if child_prim.IsA(UsdMujoco.MujocoEqualityJoint):
+                equality_joint_prim = UsdMujoco.MujocoEqualityJoint(child_prim)
+                joint1_path = equality_joint_prim.GetJoint1Rel().GetTargets()[0]
+                joint2_path = equality_joint_prim.GetJoint2Rel().GetTargets()[0]
+                if (not stage.GetPrimAtPath(joint1_path).IsA(UsdPhysics.Joint)
+                        or not stage.GetPrimAtPath(joint2_path).IsA(UsdPhysics.Joint)):
+                    raise ValueError(f"Equality joint {child_prim.GetName()} does not exist.")
+                joint1_name = joint1_path.name
+                joint2_name = joint2_path.name
+                poly_coef = equality_joint_prim.GetPolycoefAttr().Get()
+
+                equality_joint = ET.SubElement(equality, "joint")
+                equality_joint.set("name", child_prim.GetName())
+                equality_joint.set("joint1", joint1_name)
+                equality_joint.set("joint2", joint2_name)
+                equality_joint.set("polycoef", " ".join(map(str, poly_coef)))
+
+    def export(self, keep_usd: bool = True) -> None:
         os.makedirs(name=os.path.dirname(self.file_path), exist_ok=True)
 
         rough_string = ET.tostring(self.root, "utf-8")
@@ -566,14 +594,12 @@ class MjcfExporter:
         with open(self.file_path, "w", encoding="utf-8") as file:
             file.write(pretty_string)
 
-        new_mesh_dir = os.path.join(os.path.dirname(self.file_path), self.file_name)
-        tmp_mesh_dir = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path), "tmp")
-
-        if not isinstance(excludes, List) or "usd" not in excludes:
+        if keep_usd:
             self.factory.save_tmp_model(usd_file_path=self.file_path.replace(".xml", ".usda"))
         else:
-            copy_and_overwrite(source_folder=tmp_mesh_dir, destination_folder=new_mesh_dir, excludes=excludes)
-
+            new_mesh_dir = os.path.join(os.path.dirname(self.file_path), self.file_name)
+            tmp_mesh_dir = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path), "tmp")
+            merge_folders(source_folder=tmp_mesh_dir, destination_folder=new_mesh_dir, excludes=["usd"])
 
     @property
     def file_path(self) -> str:

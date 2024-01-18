@@ -38,6 +38,47 @@ class Urdf "Urdf"
     )
 }
 
+class UrdfRobot "UrdfRobot"
+(
+    customData = {
+        string className = "UrdfRobot"
+    }
+
+    doc = """Describes all properties of a robot."""
+
+    inherits = </Typed>
+)
+{
+}
+
+class UrdfMaterial "UrdfMaterial"
+(
+    customData = {
+        string className = "UrdfMaterial"
+    }
+
+    doc = """Describes all properties of a robot."""
+
+    inherits = </Typed>
+)
+{
+    color4f urdf:material:rgba (
+        customData = {
+            string apiName = "rgba"
+        }
+        displayName = "Material RGBA"
+        doc = "The color of a material specified by set of four numbers representing red/green/blue/alpha, each in the range of [0,1]."
+    )
+
+    asset urdf:material:texture (
+        customData = {
+            string apiName = "texture"
+        }
+        displayName = "Material Texture"
+        doc = "The texture of a material is specified by a filename."
+    )
+}
+
 class "UrdfLinkVisualAPI" (
     customData = {
         string className = "UrdfLinkVisualAPI"
@@ -52,7 +93,7 @@ class "UrdfLinkVisualAPI" (
         customData = {
             string apiName = "xyz"
         }
-        displayName = "Geometry Origin Position"
+        displayName = "Visual Origin X Y Z"
         doc = "Describes the position of the geometry frame relative to the link frame."
     )
 
@@ -60,8 +101,16 @@ class "UrdfLinkVisualAPI" (
         customData = {
             string apiName = "rpy"
         }
-        displayName = "Geometry Origin Roll Pitch Yaw"
+        displayName = "Visual Origin Roll Pitch Yaw"
         doc = "Describes the orientation of the geometry frame relative to the link frame."
+    )
+
+    rel urdf:visual:material (
+        customData = {
+            string apiName = "material"
+        }
+        displayName = "Visual Material"
+        doc = """The material of the visual element."""
     )
 }
 
@@ -79,7 +128,7 @@ class "UrdfLinkCollisionAPI" (
         customData = {
             string apiName = "xyz"
         }
-        displayName = "Geometry Origin Position"
+        displayName = "Collision Origin X Y Z"
         doc = "Describes the position of the geometry frame relative to the link frame."
     )
 
@@ -87,7 +136,7 @@ class "UrdfLinkCollisionAPI" (
         customData = {
             string apiName = "rpy"
         }
-        displayName = "Geometry Origin Roll Pitch Yaw"
+        displayName = "Collision Origin Roll Pitch Yaw"
         doc = "Describes the orientation of the geometry frame relative to the link frame."
     )
 }
@@ -206,7 +255,7 @@ class "UrdfLinkInertialAPI" (
         customData = {
             string apiName = "xyz"
         }
-        displayName = "Inertial Origin Position"
+        displayName = "Inertial Origin X Y Z"
         doc = "Describes the position of the link’s center of mass relative to the link frame."
     )
 
