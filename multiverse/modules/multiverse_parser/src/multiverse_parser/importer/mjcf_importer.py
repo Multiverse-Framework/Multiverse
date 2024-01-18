@@ -297,6 +297,7 @@ class MjcfImporter(Factory):
                 points, normals, face_vertex_counts, face_vertex_indices = self.get_mesh_data(mesh_id=mesh_id)
                 tmp_usd_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
                                                       "usd",
+                                                      "usd",
                                                       f"{mesh_name}.usda")
 
                 mat_id = mj_geom.matid

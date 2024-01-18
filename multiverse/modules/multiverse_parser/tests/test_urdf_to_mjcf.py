@@ -61,6 +61,25 @@ class UrdfToMjcfTestCase(unittest.TestCase):
         exporter.build()
         exporter.export()
 
+    def test_urdf_to_mjcf_3(self):
+        input_urdf_path = "/media/giangnguyen/Storage/Multiverse/multiverse/modules/multiverse_parser/resources/output/test_mjcf_to_urdf/anymal_b.urdf"
+        factory = UrdfImporter(file_path=input_urdf_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=True,
+                               default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
+        self.assertEqual(factory.source_file_path, input_urdf_path)
+        self.assertEqual(factory._config.model_name, "anymal_b")
+
+        usd_file_path = factory.import_model()
+        self.assertTrue(os.path.exists(usd_file_path))
+
+        output_mjcf_path = os.path.join(self.resource_path, "output", "test_urdf_to_mjcf",  "anymal_b.xml")
+        exporter = MjcfExporter(file_path=output_mjcf_path,
+                                factory=factory)
+        exporter.build()
+        exporter.export()
+
     @classmethod
     def tearDownClass(cls):
         tracemalloc.stop()

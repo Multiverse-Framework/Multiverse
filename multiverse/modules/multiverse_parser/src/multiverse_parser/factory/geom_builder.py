@@ -77,32 +77,6 @@ class GeomProperty:
         return self._density
 
 
-def get_input(shader: UsdShade.Shader, input: str) -> Any:
-    inputs = [shader_input.GetBaseName() for shader_input in shader.GetInputs()]
-    if input not in inputs:
-        return None
-    shader_input = shader.GetInput(input)
-    if shader_input.HasConnectedSource():
-        source = shader_input.GetConnectedSource()[0]
-        if len(source.GetOutputs()) != 1:
-            raise NotImplementedError("Multiple outputs are not supported yet.")
-        output = source.GetOutputs()[0]
-        output_prim = output.GetPrim()
-        if not output_prim.IsA(UsdShade.Shader):
-            raise NotImplementedError("Only shader output is supported.")
-        output_shader = UsdShade.Shader(output_prim)
-        file_input = output_shader.GetInput("file").Get()
-        if file_input is None:
-            raise NotImplementedError("Only texture file input is supported.")
-        file_path = file_input.path
-        if os.path.relpath(file_path):
-            file_path = os.path.join(os.path.dirname(shader.GetPrim().GetStage().GetRootLayer().realPath),
-                                     file_path)
-        return file_path
-    else:
-        return shader_input.Get()
-
-
 class GeomBuilder:
     stage: Usd.Stage
     gprim: UsdGeom.Gprim
@@ -146,6 +120,7 @@ class GeomBuilder:
                  texture_coordinate_name: str = "st") -> MeshBuilder:
         new_usd_mesh_file_path = os.path.join(self.stage.GetRootLayer().realPath.replace(".usda", ""),
                                               "meshes",
+                                              "usd",
                                               "usd",
                                               f"{mesh_name}.usda")
         mesh_stage = Usd.Stage.Open(usd_mesh_file_path)
@@ -209,15 +184,7 @@ class GeomBuilder:
         else:
             raise ValueError(f"Material {usd_material_file_path} does not have a PBR shader.")
 
-        diffuse_color = get_input(shader=pbr_shader, input="diffuseColor")
-        opacity = get_input(shader=pbr_shader, input="opacity")
-        emissive_color = get_input(shader=pbr_shader, input="emissiveColor")
-        specular_color = get_input(shader=pbr_shader, input="specularColor")
-        material_property = MaterialProperty(diffuse_color=diffuse_color,
-                                             opacity=opacity,
-                                             emissive_color=emissive_color,
-                                             specular_color=specular_color)
-
+        material_property = MaterialProperty.from_pbr_shader(pbr_shader=pbr_shader)
         new_usd_material_file_path = os.path.join(self.stage.GetRootLayer().realPath.replace(".usda", ""),
                                                   "materials",
                                                   "usd",

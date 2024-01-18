@@ -2,14 +2,41 @@
 
 from dataclasses import dataclass
 import os
-from typing import Optional, Union, Iterable, Any
+from typing import Optional, Union, Any
 
 import numpy
 
-from ..utils import modify_name
 from .texture_builder import TextureBuilder
 
-from pxr import Usd, UsdGeom, Sdf, UsdShade, Gf
+from pxr import Usd, Sdf, UsdShade, Gf
+
+
+def get_input(shader: UsdShade.Shader, input: str) -> Any:
+    inputs = [shader_input.GetBaseName() for shader_input in shader.GetInputs()]
+    if input not in inputs:
+        return None
+    shader_input = shader.GetInput(input)
+    if shader_input.HasConnectedSource():
+        source = shader_input.GetConnectedSource()[0]
+        if len(source.GetOutputs()) != 1:
+            raise NotImplementedError("Multiple outputs are not supported yet.")
+        output = source.GetOutputs()[0]
+        output_prim = output.GetPrim()
+        if not output_prim.IsA(UsdShade.Shader):
+            raise NotImplementedError("Only shader output is supported.")
+        output_shader = UsdShade.Shader(output_prim)
+        if output_shader.GetIdAttr().Get() != "UsdUVTexture":
+            raise NotImplementedError("Only texture shader is supported.")
+        file_input = output_shader.GetInput("file").Get()
+        if file_input is None:
+            raise NotImplementedError("Only texture file input is supported.")
+        file_path = file_input.path
+        if os.path.relpath(file_path):
+            file_path = os.path.join(os.path.dirname(shader.GetPrim().GetStage().GetRootLayer().realPath),
+                                     file_path)
+        return file_path
+    else:
+        return shader_input.Get()
 
 
 @dataclass(init=False)
@@ -30,6 +57,29 @@ class MaterialProperty:
         self._opacity = opacity if isinstance(opacity, float) else None
         self._emissive_color = numpy.array(emissive_color) if emissive_color is not None else None
         self._specular_color = numpy.array(specular_color) if specular_color is not None else None
+
+    @classmethod
+    def from_pbr_shader(cls, pbr_shader: UsdShade.Shader) -> "MaterialProperty":
+        diffuse_color = get_input(shader=pbr_shader, input="diffuseColor")
+        if isinstance(diffuse_color, Gf.Vec3f):
+            diffuse_color = numpy.array(diffuse_color)
+
+        opacity = get_input(shader=pbr_shader, input="opacity")
+        if opacity is not None:
+            opacity = float(opacity)
+
+        emissive_color = get_input(shader=pbr_shader, input="emissiveColor")
+        if isinstance(emissive_color, Gf.Vec3f):
+            emissive_color = numpy.array(emissive_color)
+
+        specular_color = get_input(shader=pbr_shader, input="specularColor")
+        if isinstance(specular_color, Gf.Vec3f):
+            specular_color = numpy.array(specular_color)
+
+        return MaterialProperty(diffuse_color=diffuse_color,
+                                opacity=opacity,
+                                emissive_color=emissive_color,
+                                specular_color=specular_color)
 
     @property
     def diffuse_color(self):
@@ -81,6 +131,8 @@ class MaterialBuilder:
                                                      "textures",
                                                      f"{texture_name}.png")
                 self.add_texture(file_path=new_texture_file_path, rgb=rgb)
+            else:
+                raise ValueError(f"Unsupported diffuse color type: {type(diffuse_color)}")
 
         opacity = self.opacity
         if isinstance(opacity, float):

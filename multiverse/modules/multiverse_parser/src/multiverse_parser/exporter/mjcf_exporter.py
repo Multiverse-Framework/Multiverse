@@ -15,7 +15,7 @@ from ..factory import (JointBuilder, JointType,
                        MaterialProperty)
 from ..utils import xform_cache, modify_name, scale_mesh
 
-from pxr import UsdMujoco, UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd, UsdShade
+from pxr import UsdMujoco, UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd, UsdShade, Sdf
 
 
 def build_inertial(xform_prim: Usd.Prim, body: ET.Element) -> None:
@@ -158,18 +158,15 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
                 raise NotImplementedError(f"Geom type {geom_builder.type} not implemented.")
             geom_type = "box"
         elif geom_builder.type == GeomType.SPHERE:
-            geom_sphere_prim = UsdGeom.Sphere(geom_builder.gprims[0])
-            geom_size = numpy.array([geom_sphere_prim.GetRadiusAttr().Get(), 0.0, 0.0])
+            geom_size = numpy.array([gprim.GetRadiusAttr().Get(), 0.0, 0.0])
             geom_type = "sphere"
         elif geom_builder.type == GeomType.CYLINDER:
-            geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.gprims[0])
-            geom_size = numpy.array([geom_cylinder_prim.GetRadiusAttr().Get(),
-                                     geom_cylinder_prim.GetHeightAttr().Get() / 2, 0.0])
+            geom_size = numpy.array([gprim.GetRadiusAttr().Get(),
+                                     gprim.GetHeightAttr().Get() / 2, 0.0])
             geom_type = "cylinder"
         elif geom_builder.type == GeomType.CAPSULE:
-            geom_cylinder_prim = UsdGeom.Cylinder(geom_builder.gprims[0])
-            geom_size = numpy.array([geom_cylinder_prim.GetRadiusAttr().Get(),
-                                     geom_cylinder_prim.GetHeightAttr().Get() / 2, 0.0])
+            geom_size = numpy.array([gprim.GetRadiusAttr().Get(),
+                                     gprim.GetHeightAttr().Get() / 2, 0.0])
             geom_type = "capsule"
         elif geom_builder.type == GeomType.MESH:
             if gprim_prim.HasAPI(UsdUrdf.UrdfGeometryMeshAPI):
@@ -291,9 +288,9 @@ class MjcfExporter:
          mujoco_materials_prim,
          mujoco_textures_prim) = get_mujoco_asset_prim(stage=stage)
 
-        self._build_mujoco_asset_mesh_and_material_prims(stage=self.factory.world_builder.stage,
-                                                         mujoco_meshes_prim=mujoco_meshes_prim,
-                                                         mujoco_materials_prim=mujoco_materials_prim)
+        self._build_mujoco_asset_mesh_and_material_prims(mujoco_meshes_prim=mujoco_meshes_prim,
+                                                         mujoco_materials_prim=mujoco_materials_prim,
+                                                         mujoco_textures_prim=mujoco_textures_prim)
 
         model_name = UsdMujoco.Mujoco(mujoco_prim).GetModelAttr().Get()
         self.root.set("model", model_name)
@@ -357,11 +354,14 @@ class MjcfExporter:
 
             if len(mujoco_material.GetTextureRel().GetTargets()) == 0:
                 rgba = mujoco_material.GetRgbaAttr().Get()
-                material.set("rgba", " ".join(map(str, rgba)))
+                if rgba is not None:
+                    material.set("rgba", " ".join(map(str, rgba)))
                 emission = mujoco_material.GetEmissionAttr().Get()
-                material.set("emission", str(emission))
+                if emission is not None:
+                    material.set("emission", str(emission))
                 specular = mujoco_material.GetSpecularAttr().Get()
-                material.set("specular", str(specular))
+                if specular is not None:
+                    material.set("specular", str(specular))
 
         mujoco_textures = [UsdMujoco.MujocoTexture(prim) for prim in mujoco_textures_prim.GetChildren()
                            if prim.IsA(UsdMujoco.MujocoTexture)]
@@ -373,9 +373,10 @@ class MjcfExporter:
             texture.set("file", mujoco_texture.GetFileAttr().Get().path)
 
     def _build_mujoco_asset_mesh_and_material_prims(self,
-                                                    stage: Usd.Stage,
                                                     mujoco_meshes_prim: Usd.Prim,
-                                                    mujoco_materials_prim: Usd.Prim):
+                                                    mujoco_materials_prim: Usd.Prim,
+                                                    mujoco_textures_prim: Usd.Prim):
+        stage = self.factory.world_builder.stage
         mesh_file_paths = {}
         mesh_dir_name = os.path.dirname(stage.GetRootLayer().realPath)
         for prim in stage.TraverseAll():
@@ -425,23 +426,13 @@ class MjcfExporter:
         materials = {}
         for prim in stage.TraverseAll():
             if prim.IsA(UsdShade.Material):
-                material = UsdShade.Material(prim)
-                material_name = material.GetPrim().GetName()
+                material_name = prim.GetName()
                 if material_name in materials:
                     continue
-                for surface_output in material.GetSurfaceOutputs():
-                    connected_source = surface_output.GetConnectedSource()[0]
-                    shader_prim = connected_source.GetPrim()
-                    if shader_prim.IsA(UsdShade.Shader):
-                        shader = UsdShade.Shader(shader_prim)
-                        if shader.GetIdAttr().Get() == "UsdPreviewSurface":
-                            materials[material_name] = MaterialProperty(
-                                diffuse_color=shader.GetInput("diffuseColor").GetAttr().Get(),
-                                opacity=shader.GetInput("opacity").GetAttr().Get(),
-                                emissive_color=shader.GetInput("emissiveColor").GetAttr().Get(),
-                                specular_color=shader.GetInput("specularColor").GetAttr().Get()
-                            )
-                            break
+                for shader in [UsdShade.Shader(child_prim) for child_prim in prim.GetChildren()]:
+                    if shader.GetIdAttr().Get() == "UsdPreviewSurface":
+                        materials[material_name] = MaterialProperty.from_pbr_shader(pbr_shader=shader)
+                        break
                 else:
                     raise NotImplementedError(
                         f"Material {material_name} does not have a shader with UsdPreviewSurface id.")
@@ -452,24 +443,33 @@ class MjcfExporter:
                 continue
 
             mujoco_material = UsdMujoco.MujocoMaterial.Define(stage, mujoco_material_path)
-            rgba = Gf.Vec4f(1.0, 1.0, 1.0, 0.0)
-            emission = 0.0
-            specular = 0.5
             if material_property.diffuse_color is not None and material_property.opacity is not None:
-                rgba = Gf.Vec4f(*material_property.diffuse_color, material_property.opacity)
-                if material_property.emissive_color is not None and all(
-                        [c != 0.0 for c in material_property.diffuse_color]):
-                    emissions = [material_property.emissive_color[i] / material_property.diffuse_color[i]
-                                 for i in range(3)]
-                    if emissions[0] == emissions[1] == emissions[2]:
-                        emission = emissions[0]
-            specular_color = material_property.specular_color
-            if specular_color is not None and specular_color[0] == specular_color[1] == specular_color[2]:
-                specular = specular_color[0]
+                if isinstance(material_property.diffuse_color, numpy.ndarray):
+                    rgba = Gf.Vec4f(*material_property.diffuse_color.tolist(), material_property.opacity)
+                    mujoco_material.CreateRgbaAttr(rgba)
 
-            mujoco_material.CreateRgbaAttr(rgba)
-            mujoco_material.CreateEmissionAttr(emission)
-            mujoco_material.CreateSpecularAttr(specular)
+                    if material_property.emissive_color is not None and all(
+                            [c != 0.0 for c in material_property.diffuse_color]):
+                        emissions = [material_property.emissive_color[i] / material_property.diffuse_color[i]
+                                     for i in range(3)]
+                        if emissions[0] == emissions[1] == emissions[2]:
+                            mujoco_material.CreateEmissionAttr(float(emissions[0]))
+
+                elif isinstance(material_property.diffuse_color, str):
+                    texture_name = os.path.splitext(os.path.basename(material_property.diffuse_color))[0]
+                    mujoco_texture_path = mujoco_textures_prim.GetPath().AppendChild(texture_name)
+                    mujoco_material.CreateTextureRel().SetTargets([mujoco_texture_path])
+
+                    mujoco_texture = UsdMujoco.MujocoTexture.Define(stage, mujoco_texture_path)
+                    mujoco_texture.CreateTypeAttr("2d")
+                    mujoco_texture.CreateFileAttr(f"{texture_name}.png")
+                else:
+                    raise NotImplementedError(f"Material {material_name} does not have a proper diffuse color.")
+
+            specular_color = material_property.specular_color
+            if isinstance(specular_color, numpy.ndarray) and specular_color[0] == specular_color[1] == specular_color[2]:
+                specular = float(specular_color[0])
+                mujoco_material.CreateSpecularAttr(specular)
 
     def _build_body(self, body_name: str, parent_body_name: str) -> None:
         parent_body = self.body_dict[parent_body_name]
@@ -564,7 +564,12 @@ class MjcfExporter:
 
     def _export_equality(self):
         stage = self.factory.world_builder.stage
-        equality_prim = stage.GetPrimAtPath("/mujoco/equality")
+
+        equality_path = Sdf.Path("/mujoco/equality")
+        equality_prim = stage.GetPrimAtPath(equality_path)
+        if not equality_prim.IsValid():
+            equality_prim = UsdMujoco.MujocoEquality.Define(stage, equality_path).GetPrim()
+
         equality = ET.SubElement(self.root, "equality")
         for child_prim in equality_prim.GetChildren():
             if child_prim.IsA(UsdMujoco.MujocoEqualityJoint):

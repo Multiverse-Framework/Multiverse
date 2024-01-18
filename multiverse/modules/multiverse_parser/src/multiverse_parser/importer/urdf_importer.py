@@ -302,9 +302,11 @@ class UrdfImporter(Factory):
 
                             if isinstance(material_builder.diffuse_color, str):
                                 urdf_material.CreateTextureAttr(material_builder.diffuse_color)
-                            else:
+                            elif isinstance(material_builder.diffuse_color, numpy.ndarray):
                                 rgba = Gf.Vec4f(*material_builder.diffuse_color.tolist(), material_builder.opacity)
                                 urdf_material.CreateRgbaAttr(rgba)
+                            else:
+                                raise ValueError(f"Diffuse color {material_builder.diffuse_color} not supported.")
 
                         urdf_link_visual_api = UsdUrdf.UrdfLinkVisualAPI(gprim_prim)
                         urdf_link_visual_api.CreateMaterialRel().SetTargets([urdf_material_path])
