@@ -59,6 +59,23 @@ class MaterialProperty:
         self._specular_color = numpy.array(specular_color) if specular_color is not None else None
 
     @classmethod
+    def from_material_file_path(cls, material_file_path: str, material_path: Sdf.Path) -> "MaterialProperty":
+        material_stage = Usd.Stage.Open(material_file_path)
+        material_prim = material_stage.GetPrimAtPath(material_path)
+        if not material_prim.IsA(UsdShade.Material):
+            raise TypeError(f"{material_path} is not a material")
+        return cls.from_prim(material_prim=material_prim)
+
+    @classmethod
+    def from_prim(cls, material_prim: Usd.Prim) -> "MaterialProperty":
+        for shader in [UsdShade.Shader(child_prim) for child_prim in material_prim.GetChildren()]:
+            if shader.GetIdAttr().Get() == "UsdPreviewSurface":
+                return cls.from_pbr_shader(pbr_shader=shader)
+
+        raise NotImplementedError(
+            f"Material {material_prim.GetName()} does not have a shader with UsdPreviewSurface id.")
+
+    @classmethod
     def from_pbr_shader(cls, pbr_shader: UsdShade.Shader) -> "MaterialProperty":
         diffuse_color = get_input(shader=pbr_shader, input="diffuseColor")
         if isinstance(diffuse_color, Gf.Vec3f):
@@ -76,19 +93,10 @@ class MaterialProperty:
         if isinstance(specular_color, Gf.Vec3f):
             specular_color = numpy.array(specular_color)
 
-        return MaterialProperty(diffuse_color=diffuse_color,
-                                opacity=opacity,
-                                emissive_color=emissive_color,
-                                specular_color=specular_color)
-
-    @classmethod
-    def from_prim(cls, material_prim: Usd.Prim) -> "MaterialProperty":
-        for shader in [UsdShade.Shader(child_prim) for child_prim in material_prim.GetChildren()]:
-            if shader.GetIdAttr().Get() == "UsdPreviewSurface":
-                return MaterialProperty.from_pbr_shader(pbr_shader=shader)
-
-        raise NotImplementedError(
-            f"Material {material_prim.GetName()} does not have a shader with UsdPreviewSurface id.")
+        return cls(diffuse_color=diffuse_color,
+                   opacity=opacity,
+                   emissive_color=emissive_color,
+                   specular_color=specular_color)
 
     @property
     def diffuse_color(self):

@@ -36,6 +36,34 @@ class MeshProperty:
         if self.texture_coordinates is not None:
             assert self.texture_coordinates.size == self.face_vertex_indices.size * 2
 
+    @classmethod
+    def from_mesh_file_path(cls,
+                            mesh_file_path: str,
+                            mesh_path: Sdf.Path,
+                            texture_coordinate_name: str = "st") -> "MeshProperty":
+        mesh_stage = Usd.Stage.Open(mesh_file_path)
+        mesh_prim = mesh_stage.GetPrimAtPath(mesh_path)
+        if not mesh_prim.IsA(UsdGeom.Mesh):
+            raise TypeError(f"{mesh_path} is not a mesh")
+
+        return cls.from_prim(mesh_prim, texture_coordinate_name)
+
+    @classmethod
+    def from_prim(cls, mesh_prim: Usd.Prim, texture_coordinate_name: str = "st") -> "MeshProperty":
+        mesh = UsdGeom.Mesh(mesh_prim)
+        prim_vars_api = UsdGeom.PrimvarsAPI(mesh_prim)
+        if prim_vars_api.HasPrimvar(texture_coordinate_name):
+            texture_coordinates = prim_vars_api.GetPrimvar(texture_coordinate_name).Get()
+            texture_coordinates = numpy.array(texture_coordinates, dtype=numpy.float32)
+        else:
+            texture_coordinates = None
+
+        return cls(points=numpy.array(mesh.GetPointsAttr().Get()),
+                   normals=numpy.array(mesh.GetNormalsAttr().Get()),
+                   face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
+                   face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get()),
+                   texture_coordinates=texture_coordinates)
+
     @property
     def points(self):
         return self._points

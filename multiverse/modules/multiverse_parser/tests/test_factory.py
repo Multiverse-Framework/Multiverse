@@ -13,7 +13,7 @@ from scipy.spatial.transform import Rotation
 from multiverse_parser import (WorldBuilder,
                                JointBuilder, JointType, JointProperty,
                                GeomType, GeomProperty,
-                               MeshBuilder, MeshProperty)
+                               MeshBuilder, MeshProperty, MaterialProperty)
 from multiverse_parser.utils import calculate_mesh_inertial, shift_inertia_tensor, diagonalize_inertia
 
 from pxr import Usd, UsdGeom
@@ -395,17 +395,18 @@ class Mesh(Shape):
 
 
 class UsdMesh(MultiShape):
-    _mesh_builder: MeshBuilder
+    mesh_property: MeshProperty
 
     def __init__(self,
                  mesh_file_path: str,
                  density: float,
                  pos: numpy.ndarray = numpy.zeros((1, 3)), quat: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])):
         stage = Usd.Stage.Open(mesh_file_path)
-        self._mesh_builder = MeshBuilder(stage=stage)
+        mesh_property = MeshProperty.from_prim(mesh_prim=stage.GetDefaultPrim())
+        mesh = MeshBuilder(stage=stage, mesh_property=mesh_property).build()
 
-        xform_pos = self._mesh_builder.mesh.GetLocalTransformation().ExtractTranslation()
-        xform_quat = self._mesh_builder.mesh.GetLocalTransformation().ExtractRotationQuat()
+        xform_pos = mesh.GetLocalTransformation().ExtractTranslation()
+        xform_quat = mesh.GetLocalTransformation().ExtractRotationQuat()
         xform_quat = list(xform_quat.GetImaginary()) + [xform_quat.GetReal()]
 
         xform_pos = numpy.array(xform_pos)
@@ -416,6 +417,7 @@ class UsdMesh(MultiShape):
 
         self._density = density
         super().__init__(pos=pos, quat=quat.as_quat())
+        self.mesh_property = MeshProperty.from_prim(mesh_prim=mesh.GetPrim())
 
     def apply_transform(self,
                         pos: numpy.ndarray = numpy.zeros((1, 3)),
@@ -423,41 +425,39 @@ class UsdMesh(MultiShape):
         pass
 
     def build(self):
-        for mesh in self._mesh_builder.meshes:
-            mesh_name = mesh.GetPrim().GetName()
-            vertices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).points
+        mesh_property = self.mesh_property
+        vertices = mesh_property.points
+        face_vertex_counts = mesh_property.face_vertex_counts
+        face_vertex_indices = mesh_property.face_vertex_indices
+        normals = mesh_property.normals
 
-            face_vertex_counts = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_counts
-            face_vertex_indices = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).face_vertex_indices
-            normals = self._mesh_builder.get_mesh_property(mesh_name=mesh_name).normals
+        faces = []
+        face_idx = 0
+        for face_vertex_count in face_vertex_counts:
+            face = face_vertex_indices[face_idx:(face_idx + face_vertex_count)]
+            face_normals = normals[face_idx:(face_idx + face_vertex_count)]
+            if not numpy.isclose(numpy.linalg.norm(face_normals), 0.0):
+                edge_1 = vertices[face[1]] - vertices[face[0]]
+                edge_2 = vertices[face[2]] - vertices[face[1]]
+                edge_3 = vertices[face[0]] - vertices[face[2]]
+                normal_1 = numpy.cross(edge_1, edge_2)
+                normal_1 /= numpy.linalg.norm(normal_1)
+                normal_2 = numpy.cross(edge_2, edge_3)
+                normal_2 /= numpy.linalg.norm(normal_2)
+                normal_3 = numpy.cross(edge_3, edge_1)
+                normal_3 /= numpy.linalg.norm(normal_3)
 
-            faces = []
-            face_idx = 0
-            for face_vertex_count in face_vertex_counts:
-                face = face_vertex_indices[face_idx:(face_idx + face_vertex_count)]
-                face_normals = normals[face_idx:(face_idx + face_vertex_count)]
-                if not numpy.isclose(numpy.linalg.norm(face_normals), 0.0):
-                    edge_1 = vertices[face[1]] - vertices[face[0]]
-                    edge_2 = vertices[face[2]] - vertices[face[1]]
-                    edge_3 = vertices[face[0]] - vertices[face[2]]
-                    normal_1 = numpy.cross(edge_1, edge_2)
-                    normal_1 /= numpy.linalg.norm(normal_1)
-                    normal_2 = numpy.cross(edge_2, edge_3)
-                    normal_2 /= numpy.linalg.norm(normal_2)
-                    normal_3 = numpy.cross(edge_3, edge_1)
-                    normal_3 /= numpy.linalg.norm(normal_3)
+                if (not numpy.allclose(face_normals, normal_1)
+                        or not numpy.allclose(face_normals, normal_2)
+                        or not numpy.allclose(face_normals, normal_3)):
+                    print(f"Flip face {face}.")
+                    face = face[::-1]
 
-                    if (not numpy.allclose(face_normals, normal_1)
-                            or not numpy.allclose(face_normals, normal_2)
-                            or not numpy.allclose(face_normals, normal_3)):
-                        print(f"Flip face {face}.")
-                        face = face[::-1]
+            faces.append(face)
+            face_idx += face_vertex_count
+        faces = numpy.array(faces)
 
-                faces.append(face)
-                face_idx += face_vertex_count
-            faces = numpy.array(faces)
-
-            self.add_shape(shape=Mesh(vertices=vertices, faces=faces, density=self._density))
+        self.add_shape(shape=Mesh(vertices=vertices, faces=faces, density=self._density))
         super().build()
 
 
@@ -564,10 +564,11 @@ class FactoryTestCase(unittest.TestCase):
                                           "meshes",
                                           "usd",
                                           "milk_box.usda")
+        mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=usd_mesh_file_path,
+                                                         mesh_path="/SM_MilkBox",
+                                                         texture_coordinate_name="st")
         mesh_builder_2 = geom_builder_2.add_mesh(mesh_name="milk_box",
-                                                 mesh_path="/SM_MilkBox",
-                                                 usd_mesh_file_path=usd_mesh_file_path,
-                                                 texture_coordinate_name="UVMap")
+                                                 mesh_property=mesh_property)
         self.assertEqual(mesh_builder_2.mesh.GetPrim().GetPath(), "/milk_box")
         geom_2 = geom_builder_1.stage.GetPrimAtPath("/body_0/body_1/geom_2")
         self.assertTrue(geom_2.IsValid())
@@ -577,9 +578,10 @@ class FactoryTestCase(unittest.TestCase):
         self.assertEqual(geom_inertial.mass, 1.1399999493733048)
 
         usd_material_file_path = usd_mesh_file_path
+        material_property = MaterialProperty.from_material_file_path(material_file_path=usd_material_file_path,
+                                                                     material_path="/_materials/M_MilkBox")
         geom_builder_2.add_material(material_name="milk_box_mat",
-                                    material_path="/_materials/M_MilkBox",
-                                    usd_material_file_path=usd_material_file_path)
+                                    material_property=material_property)
 
         geom_property_3 = GeomProperty(geom_type=GeomType.MESH)
         geom_builder_3 = body_builder_1.add_geom(geom_name="geom_3", geom_property=geom_property_3)
@@ -590,14 +592,16 @@ class FactoryTestCase(unittest.TestCase):
                                           "usd",
                                           "from_dae",
                                           "base.usda")
-        mesh_builder_3 = geom_builder_3.add_mesh(mesh_path="/eSeries_UR5e_013/eSeries_UR5e_013",
-                                                 usd_mesh_file_path=usd_mesh_file_path)
+        mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=usd_mesh_file_path,
+                                                         mesh_path="/eSeries_UR5e_013/eSeries_UR5e_013")
+        mesh_builder_3 = geom_builder_3.add_mesh(mesh_name="base", mesh_property=mesh_property)
         self.assertEqual(mesh_builder_3.mesh.GetPrim().GetPath(), "/base")
 
         usd_material_file_path = usd_mesh_file_path
+        material_property = MaterialProperty.from_material_file_path(material_file_path=usd_material_file_path,
+                                                                     material_path="/_materials/JointGrey")
         geom_builder_3.add_material(material_name="joint_grey",
-                                    material_path="/_materials/JointGrey",
-                                    usd_material_file_path=usd_material_file_path)
+                                    material_property=material_property)
 
         geom_property_4 = GeomProperty(geom_type=GeomType.MESH)
         geom_builder_4 = body_builder_0.add_geom(geom_name="geom_4", geom_property=geom_property_4)
@@ -608,7 +612,9 @@ class FactoryTestCase(unittest.TestCase):
                                           "Game",
                                           "Meshes",
                                           "SM_Esstisch.usda")
-        mesh_builder_4 = geom_builder_4.add_mesh(mesh_path="/SM_Esstisch", usd_mesh_file_path=usd_mesh_file_path)
+        mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=usd_mesh_file_path,
+                                                         mesh_path="/SM_Esstisch")
+        mesh_builder_4 = geom_builder_4.add_mesh(mesh_name="SM_Esstisch", mesh_property=mesh_property)
         self.assertEqual(mesh_builder_4.mesh.GetPrim().GetPath(), "/SM_Esstisch")
 
         usd_material_file_path = os.path.join(self.resource_path,
@@ -618,9 +624,10 @@ class FactoryTestCase(unittest.TestCase):
                                               "Game",
                                               "Materials_Laborraum",
                                               "M_Esstisch.usda")
+        material_property = MaterialProperty.from_material_file_path(material_file_path=usd_material_file_path,
+                                                                     material_path="/M_Esstischy")
         geom_builder_4.add_material(material_name="EsstischMat",
-                                    material_path="/M_Esstisch",
-                                    usd_material_file_path=usd_material_file_path)
+                                    material_property=material_property)
 
         geom_property_5 = GeomProperty(geom_type=GeomType.MESH)
         geom_builder_5 = body_builder_0.add_geom(geom_name="geom_5", geom_property=geom_property_5)
@@ -631,7 +638,9 @@ class FactoryTestCase(unittest.TestCase):
                                           "Game",
                                           "Meshes",
                                           "SM_Esstischstuhl.usda")
-        mesh_builder_5 = geom_builder_5.add_mesh(mesh_path="/SM_Esstischstuhl", usd_mesh_file_path=usd_mesh_file_path)
+        mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=usd_mesh_file_path,
+                                                         mesh_path="/SM_Esstischstuhl")
+        mesh_builder_5 = geom_builder_5.add_mesh(mesh_name="SM_Esstischstuhl", mesh_property=mesh_property)
         self.assertEqual(mesh_builder_5.mesh.GetPrim().GetPath(), "/SM_Esstischstuhl")
 
         mesh_stage = Usd.Stage.Open(usd_mesh_file_path)
@@ -647,9 +656,10 @@ class FactoryTestCase(unittest.TestCase):
                                               "Game",
                                               "Materials_Laborraum",
                                               "M_Esstisch.usda")
+        material_property = MaterialProperty.from_material_file_path(material_file_path=usd_material_file_path,
+                                                                     material_path="/M_Esstisch")
         geom_builder_5.add_material(material_name="EsstischMat",
-                                    material_path="/M_Esstisch",
-                                    usd_material_file_path=usd_material_file_path,
+                                    material_property=material_property,
                                     subset=subsets[0])
 
         usd_material_file_path = os.path.join(self.resource_path,
@@ -659,9 +669,10 @@ class FactoryTestCase(unittest.TestCase):
                                               "Game",
                                               "Materials_Laborraum",
                                               "M_Basic_Black.usda")
+        material_property = MaterialProperty.from_material_file_path(material_file_path=usd_material_file_path,
+                                                                     material_path="/M_Basic_Black")
         geom_builder_5.add_material(material_name="BlackMat",
-                                    material_path="/M_Basic_Black",
-                                    usd_material_file_path=usd_material_file_path,
+                                    material_property=material_property,
                                     subset=subsets[1])
 
         usd_material_file_path = os.path.join(self.resource_path,
@@ -671,9 +682,10 @@ class FactoryTestCase(unittest.TestCase):
                                               "Game",
                                               "Materials_Laborraum",
                                               "M_Fabric_Esstischstuhl.usda")
+        material_property = MaterialProperty.from_material_file_path(material_file_path=usd_material_file_path,
+                                                                     material_path="/M_Fabric_Esstischstuhl")
         geom_builder_5.add_material(material_name="Fabric_Esstischstuhl_Mat",
-                                    material_path="/M_Fabric_Esstischstuhl",
-                                    usd_material_file_path=usd_material_file_path,
+                                    material_property=material_property,
                                     subset=subsets[2])
 
         usd_material_file_path = os.path.join(self.resource_path,
@@ -683,9 +695,10 @@ class FactoryTestCase(unittest.TestCase):
                                               "Game",
                                               "Materials_Laborraum",
                                               "M_Plastic_Green.usda")
+        material_property = MaterialProperty.from_material_file_path(material_file_path=usd_material_file_path,
+                                                                     material_path="/M_Plastic_Green")
         geom_builder_5.add_material(material_name="Plastic_Green_Mat",
-                                    material_path="/M_Plastic_Green",
-                                    usd_material_file_path=usd_material_file_path,
+                                    material_property=material_property,
                                     subset=subsets[3])
 
         world_builder.export()
@@ -955,8 +968,7 @@ class FactoryTestCase(unittest.TestCase):
         numpy.testing.assert_array_almost_equal(multi_shape.inertia_tensor, shape_combined.inertia_tensor)
 
     def test_inertia_of_mesh_1(self, pos=numpy.array([[0.0, 0.0, 0.0]]), quat=numpy.array([0.0, 0.0, 0.0, 1.0])):
-        mesh_file_path = os.path.join(self.resource_path, "input", "milk_box", "meshes", "usd", "from_obj",
-                                      "milk_box.usda")
+        mesh_file_path = os.path.join(self.resource_path, "input", "milk_box", "meshes", "usd", "milk_box.usda")
         density = 1.0
 
         usd_mesh = UsdMesh(mesh_file_path=mesh_file_path,
@@ -1023,10 +1035,8 @@ class FactoryTestCase(unittest.TestCase):
             usd_mesh.plot(display_wireframe=False)
 
     def test_inertia_of_mesh_5(self):
-        mesh_file_path_0 = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_2", "usd", "usd",
-                                        "base_0.usda")
-        mesh_file_path_1 = os.path.join(self.resource_path, "output", "test_mjcf_importer", "ur5e_2", "usd", "usd",
-                                        "base_1.usda")
+        mesh_file_path_0 = os.path.join(self.resource_path, "input", "ur5e", "meshes", "usd", "usd", "base_0.usda")
+        mesh_file_path_1 = os.path.join(self.resource_path, "input", "ur5e", "meshes", "usd", "usd", "base_1.usda")
         density = 1000.0
 
         rot_0 = numpy.array([[-0.000010615485159348736, -0.0000019669532778099352, 0.9999999999417211],

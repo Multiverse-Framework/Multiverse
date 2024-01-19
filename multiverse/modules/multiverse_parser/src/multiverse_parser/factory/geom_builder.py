@@ -115,33 +115,12 @@ class GeomBuilder:
 
     def add_mesh(self,
                  mesh_name: str,
-                 mesh_path: Sdf.Path,
-                 usd_mesh_file_path: str,
-                 texture_coordinate_name: str = "st") -> MeshBuilder:
+                 mesh_property: MeshProperty) -> MeshBuilder:
         new_usd_mesh_file_path = os.path.join(self.stage.GetRootLayer().realPath.replace(".usda", ""),
                                               "meshes",
                                               "usd",
                                               "usd",
                                               f"{mesh_name}.usda")
-        mesh_stage = Usd.Stage.Open(usd_mesh_file_path)
-        mesh_prim = mesh_stage.GetPrimAtPath(mesh_path)
-        if not mesh_prim.IsA(UsdGeom.Mesh):
-            raise ValueError(f"Default prim of {usd_mesh_file_path} is not a mesh.")
-        mesh = UsdGeom.Mesh(mesh_prim)
-        prim_vars_api = UsdGeom.PrimvarsAPI(mesh)
-        if prim_vars_api.HasPrimvar(texture_coordinate_name):
-            texture_coordinates = prim_vars_api.GetPrimvar(texture_coordinate_name).Get()
-            texture_coordinates = numpy.array(texture_coordinates, dtype=numpy.float32)
-        else:
-            texture_coordinates = None
-
-        mesh_property = MeshProperty(
-            points=numpy.array(mesh.GetPointsAttr().Get()),
-            normals=numpy.array(mesh.GetNormalsAttr().Get()),
-            face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
-            face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get()),
-            texture_coordinates=texture_coordinates)
-
         if not os.path.exists(new_usd_mesh_file_path):
             new_mesh_stage = Usd.Stage.CreateNew(new_usd_mesh_file_path)
             new_mesh = UsdGeom.Mesh.Define(new_mesh_stage, f"/{mesh_name}")
@@ -170,21 +149,8 @@ class GeomBuilder:
 
     def add_material(self,
                      material_name: str,
-                     material_path: Sdf.Path,
-                     usd_material_file_path: str,
+                     material_property: MaterialProperty,
                      subset: Optional[UsdGeom.Subset] = None) -> MaterialBuilder:
-        material_stage = Usd.Stage.Open(usd_material_file_path)
-        material_prim = material_stage.GetPrimAtPath(material_path)
-        if not material_prim.IsA(UsdShade.Material):
-            raise ValueError(f"Default prim of {usd_material_file_path} is not a material.")
-        for shader in [UsdShade.Shader(child_prim) for child_prim in material_prim.GetChildren()]:
-            if shader.GetIdAttr().Get() == "UsdPreviewSurface":
-                pbr_shader = shader
-                break
-        else:
-            raise ValueError(f"Material {usd_material_file_path} does not have a PBR shader.")
-
-        material_property = MaterialProperty.from_pbr_shader(pbr_shader=pbr_shader)
         new_usd_material_file_path = os.path.join(self.stage.GetRootLayer().realPath.replace(".usda", ""),
                                                   "materials",
                                                   "usd",

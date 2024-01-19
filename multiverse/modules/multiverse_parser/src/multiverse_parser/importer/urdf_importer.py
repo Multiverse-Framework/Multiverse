@@ -12,7 +12,9 @@ from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder,
                        BodyBuilder,
                        JointBuilder, JointAxis, JointType, JointProperty,
-                       GeomType, GeomProperty)
+                       GeomType, GeomProperty,
+                       MeshProperty,
+                       MaterialProperty)
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
 from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade, Sdf
@@ -277,10 +279,11 @@ class UrdfImporter(Factory):
                     mesh_path = mesh_prim.GetPath()
                     geom_builder = body_builder.add_geom(geom_name=f"{geom_name}_{mesh_name}",
                                                          geom_property=geom_property)
+                    mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_usd_mesh_file_path,
+                                                                     mesh_path=mesh_path,
+                                                                     texture_coordinate_name="UVMap")
                     geom_builder.add_mesh(mesh_name=mesh_name,
-                                          mesh_path=mesh_path,
-                                          usd_mesh_file_path=tmp_usd_mesh_file_path,
-                                          texture_coordinate_name="UVMap")
+                                          mesh_property=mesh_property)
                     geom_builder.build()
                     geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
                     geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
@@ -299,12 +302,14 @@ class UrdfImporter(Factory):
                         if len(material_paths) > 1:
                             raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
                         material_path = material_paths[0]
+                        material_property = MaterialProperty.from_material_file_path(
+                            material_file_path=tmp_usd_mesh_file_path,
+                            material_path=material_path)
                         material_builder = geom_builder.add_material(material_name=material_path.name,
-                                                                     material_path=material_path,
-                                                                     usd_material_file_path=tmp_usd_mesh_file_path)
+                                                                     material_property=material_property)
 
                         stage = self.world_builder.stage
-                        urdf_material_path = Sdf.Path(f"/urdf/robot/materials/{material_path.name}")
+                        urdf_material_path = self.urdf_materials_prim.GetPath().AppendChild(material_path.name)
                         if not stage.GetPrimAtPath(urdf_material_path).IsValid():
                             urdf_material = UsdUrdf.UrdfMaterial.Define(stage, urdf_material_path)
 
@@ -418,3 +423,15 @@ class UrdfImporter(Factory):
     @property
     def geom_type_map(self) -> Dict:
         return self._geom_type_map
+
+    @property
+    def urdf_prim(self) -> Usd.Prim:
+        return self.world_builder.stage.GetPrimAtPath("/urdf")
+
+    @property
+    def urdf_robot_prim(self) -> Usd.Prim:
+        return self.urdf_prim.GetChild("robot")
+
+    @property
+    def urdf_materials_prim(self) -> Usd.Prim:
+        return self.urdf_robot_prim.GetChild("materials")
