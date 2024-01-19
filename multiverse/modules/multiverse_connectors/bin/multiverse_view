@@ -43,8 +43,8 @@ if [ ! -f "$SCENE_FILE" ]; then
     exit 1
 fi
 
-# (source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash && python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/launch_ros.py --muv_file=$MUV_FILE)
-(source /opt/ros/foxy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/local_setup.bash && python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/view_multiverse.py --scene_file=$SCENE_FILE)
+(source /opt/ros/noetic/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash && python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/view_multiverse.py --scene_file=$SCENE_FILE)
+# (source /opt/ros/foxy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/local_setup.bash && python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/view_multiverse.py --scene_file=$SCENE_FILE)
 
 # Your script's main logic here
 echo "[multiverse_view] Running... Press Ctrl+C to exit"

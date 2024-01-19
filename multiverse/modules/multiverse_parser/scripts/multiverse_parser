@@ -4,6 +4,7 @@ import argparse
 import os
 import numpy
 
+from multiverse_parser import InertiaSource
 from multiverse_parser import UrdfImporter, MjcfImporter
 from multiverse_parser import UrdfExporter, MjcfExporter
 
@@ -47,17 +48,31 @@ def main():
     )
     parser.set_defaults(keepusd=False)
     parser.add_argument(
-        "--collisionrgba",
+        "--inertiasource",
+        type=str,
+        required=False,
+        help="Where to get the inertia from (from_src or from_mesh)",
+    )
+    parser.set_defaults(collisionsource="from_src")
+    parser.add_argument(
+        "--defaultrgba",
         nargs="+",
         type=float,
-        help="The default color of the collision meshes",
+        help="The default color of the meshes",
     )
-    parser.set_defaults(collisionrgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
+    parser.set_defaults(defaultrgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
 
     args = parser.parse_args()
 
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
+
+    if args.inertiasource == "from_mesh":
+        inertia_source = InertiaSource.FROM_MESH
+    elif args.inertiasource == "from_src":
+        inertia_source = InertiaSource.FROM_SRC
+    else:
+        raise NotImplementedError(f"Inertia source {args.inertiasource} is not supported yet.")
 
     if in_extension in [".usd", ".usda", ".usdc"]:
         raise NotImplementedError("Importing from USD is not supported yet.")
@@ -66,33 +81,33 @@ def main():
                                with_physics=args.physics,
                                with_visual=args.visual,
                                with_collision=args.collision,
-                               default_rgba=args.collisionrgba)
+                               inertia_source=inertia_source,
+                               default_rgba=args.defaultrgba)
     elif in_extension == ".xml":
         factory = MjcfImporter(file_path=args.input,
                                with_physics=args.physics,
                                with_visual=args.visual,
                                with_collision=args.collision,
-                               default_rgba=args.collisionrgba)
+                               inertia_source=inertia_source,
+                               default_rgba=args.defaultrgba)
     else:
         raise NotImplementedError(f"Importing from {in_extension} is not supported yet.")
 
     factory.import_model()
 
-    if args.keepusd or out_extension in [".usd", ".usda", ".usdc"]:
+    if out_extension in [".usd", ".usda", ".usdc"]:
         output_usd_path = os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda")
         factory.save_tmp_model(usd_file_path=str(output_usd_path))
-    if out_extension == ".xml":
+    elif out_extension == ".xml":
         exporter = MjcfExporter(file_path=args.output,
                                 factory=factory)
         exporter.build()
-        exporter.export()
+        exporter.export(keep_usd=args.keepusd)
     elif out_extension == ".urdf":
         exporter = UrdfExporter(file_path=args.output,
                                 factory=factory)
         exporter.build()
-        exporter.export()
-    elif out_extension in [".usd", ".usdc"]:
-        pass
+        exporter.export(keep_usd=args.keepusd)
     else:
         raise NotImplementedError(f"Exporting to {out_extension} is not supported yet.")
 
