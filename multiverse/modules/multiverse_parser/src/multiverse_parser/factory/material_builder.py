@@ -34,7 +34,7 @@ def get_input(shader: UsdShade.Shader, input: str) -> Any:
         if os.path.relpath(file_path):
             file_path = os.path.join(os.path.dirname(shader.GetPrim().GetStage().GetRootLayer().realPath),
                                      file_path)
-        return file_path
+        return os.path.normpath(file_path)
     else:
         return shader_input.Get()
 
@@ -80,6 +80,15 @@ class MaterialProperty:
                                 opacity=opacity,
                                 emissive_color=emissive_color,
                                 specular_color=specular_color)
+
+    @classmethod
+    def from_prim(cls, material_prim: Usd.Prim) -> "MaterialProperty":
+        for shader in [UsdShade.Shader(child_prim) for child_prim in material_prim.GetChildren()]:
+            if shader.GetIdAttr().Get() == "UsdPreviewSurface":
+                return MaterialProperty.from_pbr_shader(pbr_shader=shader)
+
+        raise NotImplementedError(
+            f"Material {material_prim.GetName()} does not have a shader with UsdPreviewSurface id.")
 
     @property
     def diffuse_color(self):

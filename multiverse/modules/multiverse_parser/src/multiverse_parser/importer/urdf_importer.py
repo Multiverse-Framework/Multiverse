@@ -279,7 +279,8 @@ class UrdfImporter(Factory):
                                                          geom_property=geom_property)
                     geom_builder.add_mesh(mesh_name=mesh_name,
                                           mesh_path=mesh_path,
-                                          usd_mesh_file_path=tmp_usd_mesh_file_path)
+                                          usd_mesh_file_path=tmp_usd_mesh_file_path,
+                                          texture_coordinate_name="UVMap")
                     geom_builder.build()
                     geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
                     geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
@@ -308,7 +309,7 @@ class UrdfImporter(Factory):
                             urdf_material = UsdUrdf.UrdfMaterial.Define(stage, urdf_material_path)
 
                             if isinstance(material_builder.diffuse_color, str):
-                                urdf_material.CreateTextureAttr(material_builder.diffuse_color)
+                                urdf_material.CreateTextureAttr(f"./{material_builder.diffuse_color}")
                             elif isinstance(material_builder.diffuse_color, numpy.ndarray):
                                 rgba = Gf.Vec4f(*material_builder.diffuse_color.tolist(), material_builder.opacity)
                                 urdf_material.CreateRgbaAttr(rgba)

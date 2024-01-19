@@ -98,6 +98,7 @@ def fix_texture_path(usd_mesh_file_path: str):
                 os.makedirs(name=os.path.dirname(new_texture_file_path), exist_ok=True)
                 if not os.path.exists(new_texture_file_path):
                     shutil.move(texture_file_path, new_texture_file_path)
+                os.remove(texture_file_path)
                 if len(os.listdir(os.path.dirname(texture_file_path))) == 0:
                     os.rmdir(os.path.dirname(texture_file_path))
 

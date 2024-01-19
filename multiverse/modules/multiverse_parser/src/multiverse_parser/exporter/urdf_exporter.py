@@ -198,15 +198,6 @@ def get_urdf_geometry_cylinder_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeo
     return urdf_geometry_cylinder_api
 
 
-def get_mesh_file_relpath(geom_prim: UsdGeom.Gprim, usd_mesh_file_path: str) -> str:
-    if geom_prim.HasAPI(UsdShade.MaterialBindingAPI):
-        file_extension = "obj"
-    else:
-        file_extension = "stl"
-    return os.path.join(f"{file_extension}",
-                        os.path.splitext(os.path.basename(usd_mesh_file_path))[0] + f".{file_extension}")
-
-
 def get_urdf_geometry_mesh_api(geom_builder: GeomBuilder, mesh_file_relpath: str) -> UsdUrdf.UrdfGeometryMeshAPI:
     gprim = geom_builder.gprim
     gprim_prim = gprim.GetPrim()
@@ -230,6 +221,7 @@ class UrdfExporter:
             factory: Factory,
             file_path: str,
             relative_to_ros_package: bool = False,
+            visual_mesh_file_extension: str = "dae",
     ) -> None:
         self._factory = factory
         robot_name = get_robot_name(world_builder=factory.world_builder)
@@ -238,6 +230,7 @@ class UrdfExporter:
          self._mesh_dir_rospath) = get_mesh_dir_paths(file_path=file_path,
                                                       relative_to_ros_package=relative_to_ros_package)
         self._file_path = file_path
+        self._visual_mesh_file_extension = visual_mesh_file_extension
 
     def build(self) -> None:
         for body_builder in self.factory.world_builder.body_builders:
@@ -405,8 +398,8 @@ class UrdfExporter:
                 mesh_material_binding_api.Bind(mesh_material)
                 mesh_stage.GetRootLayer().Save()
 
-            tmp_mesh_file_relpath = get_mesh_file_relpath(geom_prim=gprim_prim,
-                                                          usd_mesh_file_path=usd_mesh_file_abspath)
+            tmp_mesh_file_relpath = self._get_mesh_file_relpath(geom_prim=gprim_prim,
+                                                                usd_mesh_file_path=usd_mesh_file_abspath)
             tmp_mesh_file_abspath = os.path.join(self.factory.tmp_mesh_dir_path, tmp_mesh_file_relpath)
             self.factory.export_mesh(in_mesh_file_path=usd_mesh_file_abspath,
                                      out_mesh_file_path=tmp_mesh_file_abspath)
@@ -426,6 +419,14 @@ class UrdfExporter:
                        urdf_geometry_api=urdf_geometry_api)
         else:
             raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
+
+    def _get_mesh_file_relpath(self, geom_prim: UsdGeom.Gprim, usd_mesh_file_path: str) -> str:
+        if geom_prim.HasAPI(UsdShade.MaterialBindingAPI):
+            file_extension = self.visual_mesh_file_extension
+        else:
+            file_extension = "stl"
+        return os.path.join(f"{file_extension}",
+                            os.path.splitext(os.path.basename(usd_mesh_file_path))[0] + f".{file_extension}")
 
     def _get_file_abspath_from_reference(self, prim: Usd.Prim) -> str:
         prepended_items = prim.GetPrimStack()[0].referenceList.prependedItems
@@ -460,3 +461,7 @@ class UrdfExporter:
     @property
     def robot(self) -> urdf.URDF:
         return self._robot
+
+    @property
+    def visual_mesh_file_extension(self) -> str:
+        return self._visual_mesh_file_extension

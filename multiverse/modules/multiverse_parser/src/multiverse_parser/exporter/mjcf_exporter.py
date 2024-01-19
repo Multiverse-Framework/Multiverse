@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from dataclasses import dataclass
 import os
 from typing import Optional, Tuple
 from xml.etree import ElementTree as ET
@@ -219,6 +220,12 @@ def add_scale_to_mesh_name(mesh_name: str, mesh_scale: numpy.ndarray) -> str:
     return mesh_name
 
 
+@dataclass(frozen=True, eq=True)
+class MeshFileProperty:
+    scale: Tuple[float, float, float]
+    has_texture: bool
+
+
 class MjcfExporter:
     def __init__(
             self,
@@ -377,7 +384,7 @@ class MjcfExporter:
                                                     mujoco_materials_prim: Usd.Prim,
                                                     mujoco_textures_prim: Usd.Prim):
         stage = self.factory.world_builder.stage
-        mesh_file_paths = {}
+        mesh_files = {}
         mesh_dir_name = os.path.dirname(stage.GetRootLayer().realPath)
         for prim in stage.TraverseAll():
             if not prim.IsA(UsdGeom.Mesh):
@@ -397,45 +404,50 @@ class MjcfExporter:
                         mesh_scale = tuple(mesh_scale) if mesh_scale is not None else (1.0, 1.0, 1.0)
                     else:
                         mesh_scale = (1.0, 1.0, 1.0)
-                    if mesh_file_path not in mesh_file_paths:
-                        mesh_file_paths[mesh_file_path] = {mesh_scale}
-                    elif mesh_scale not in mesh_file_paths[mesh_file_path]:
-                        mesh_file_paths[mesh_file_path].add(mesh_scale)
 
-        for mesh_file_path, mesh_scales in mesh_file_paths.items():
-            mesh_stage = Usd.Stage.Open(mesh_file_path)
+                    mesh_has_texture = False
+                    if prim.HasAPI(UsdShade.MaterialBindingAPI):
+                        material_binding_api = UsdShade.MaterialBindingAPI(prim)
+                        material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
+                        material_prim = stage.GetPrimAtPath(material_path)
+                        material_property = MaterialProperty.from_prim(material_prim=material_prim)
+                        if isinstance(material_property.diffuse_color, str):
+                            mesh_has_texture = True
+
+                    mesh_file_property = MeshFileProperty(scale=mesh_scale,
+                                                          has_texture=mesh_has_texture)
+
+                    if mesh_file_path not in mesh_files:
+                        mesh_files[mesh_file_path] = {mesh_file_property}
+                    elif mesh_scale not in mesh_files[mesh_file_path]:
+                        mesh_files[mesh_file_path].add(mesh_file_property)
+
+        for mesh_file_path, mesh_file_properties in mesh_files.items():
             mesh_file_name = os.path.basename(mesh_file_path).split(".")[0]
-            mesh_file_ext = "obj" \
-                if len([material for material in mesh_stage.TraverseAll() if material.IsA(UsdShade.Material)]) > 0 \
-                else "stl"
-            tmp_mesh_file_path = os.path.join(self.factory.tmp_mesh_dir_path,
-                                              mesh_file_ext,
-                                              f"{mesh_file_name}.{mesh_file_ext}")
-            self.factory.export_mesh(in_mesh_file_path=mesh_file_path,
-                                     out_mesh_file_path=tmp_mesh_file_path)
+            for mesh_file_property in mesh_file_properties:
+                mesh_file_ext = "obj" if mesh_file_property.has_texture else "stl"
+                tmp_mesh_file_path = os.path.join(self.factory.tmp_mesh_dir_path,
+                                                  mesh_file_ext,
+                                                  f"{mesh_file_name}.{mesh_file_ext}")
+                if not os.path.exists(tmp_mesh_file_path):
+                    self.factory.export_mesh(in_mesh_file_path=mesh_file_path,
+                                             out_mesh_file_path=tmp_mesh_file_path)
 
-            for mesh_scale in mesh_scales:
-                mesh_name = add_scale_to_mesh_name(mesh_name=mesh_file_name, mesh_scale=numpy.array(mesh_scale))
+                mesh_name = add_scale_to_mesh_name(mesh_name=mesh_file_name,
+                                                   mesh_scale=numpy.array(mesh_file_property.scale))
                 mujoco_mesh_path = mujoco_meshes_prim.GetPath().AppendChild(mesh_name)
                 if stage.GetPrimAtPath(mujoco_mesh_path).IsValid():
                     continue
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(stage, mujoco_mesh_path)
                 mujoco_mesh.CreateFileAttr(tmp_mesh_file_path)
-                mujoco_mesh.CreateScaleAttr(mesh_scale)
+                mujoco_mesh.CreateScaleAttr(Gf.Vec3f(*mesh_file_property.scale))
 
         materials = {}
-        for prim in stage.TraverseAll():
-            if prim.IsA(UsdShade.Material):
-                material_name = prim.GetName()
-                if material_name in materials:
-                    continue
-                for shader in [UsdShade.Shader(child_prim) for child_prim in prim.GetChildren()]:
-                    if shader.GetIdAttr().Get() == "UsdPreviewSurface":
-                        materials[material_name] = MaterialProperty.from_pbr_shader(pbr_shader=shader)
-                        break
-                else:
-                    raise NotImplementedError(
-                        f"Material {material_name} does not have a shader with UsdPreviewSurface id.")
+        for material_prim in [child_prim for child_prim in stage.TraverseAll() if child_prim.IsA(UsdShade.Material)]:
+            material_name = material_prim.GetName()
+            if material_name in materials:
+                continue
+            materials[material_name] = MaterialProperty.from_prim(material_prim=material_prim)
 
         for material_name, material_property in materials.items():
             mujoco_material_path = mujoco_materials_prim.GetPath().AppendChild(material_name)

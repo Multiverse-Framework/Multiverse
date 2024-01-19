@@ -69,17 +69,22 @@ class UrdfToUrdfTestCase(unittest.TestCase):
 
     def test_urdf_to_urdf_meshes(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "milk_box", "urdf", "milk_box.urdf")
-        importer = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
+        factory = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
                                 with_collision=True)
-        usd_file_path = importer.import_model()
+        usd_file_path = factory.import_model()
 
         stage = Usd.Stage.Open(usd_file_path)
         default_prim = stage.GetDefaultPrim()
         self.assertEqual(default_prim.GetName(), "milk_box")
 
-        output_usd_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "milk_box.usda")
-        importer.save_tmp_model(usd_file_path=output_usd_path)
-        self.assertTrue(os.path.exists(output_usd_path))
+        output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "milk_box.urdf")
+        exporter = UrdfExporter(file_path=output_urdf_path,
+                                factory=factory,
+                                relative_to_ros_package=False)
+        self.assertEqual(exporter.robot.name, "milk_box")
+
+        exporter.build()
+        exporter.export()
 
     def test_urdf_to_urdf_with_invalid_file_path(self):
         with self.assertRaises(FileNotFoundError):

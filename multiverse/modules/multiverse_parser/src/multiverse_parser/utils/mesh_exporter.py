@@ -36,12 +36,38 @@ bpy.ops.wm.usd_export(filepath='{out_usd}', selected_objects_only=True, overwrit
 def export_dae(out_dae: str) -> str:
     return f"""
 import os.path
+import re
+import shutil
 
 {clean_up_meshes_script}
 clean_up_meshes(bpy, '{out_dae}')
+bpy.ops.wm.collada_export(filepath='{out_dae}', 
+                          use_texture_copies=True, 
+                          export_global_forward_selection="Y", 
+                          export_global_up_selection="Z")
 out_dae_dir = os.path.dirname('{out_dae}')
 os.makedirs(name=os.path.join(out_dae_dir, "..", "..", "textures"), exist_ok=True)
-bpy.ops.wm.collada_export(filepath='{out_dae}', use_texture_copies=True)
+
+with open('{out_dae}', encoding="utf-8") as file:
+    file_contents = file.read()
+
+pattern = r'<init_from>([^<]*\.png)</init_from>'
+matches = re.findall(pattern, file_contents)
+for match in matches:
+    new_value = "../../textures/" + match
+    file_contents = file_contents.replace("<init_from>" + match + "</init_from>", f"<init_from>" + new_value + "</init_from>")
+    
+    texture_abspath = match
+    if not os.path.isabs(texture_abspath):
+        texture_abspath = os.path.join(out_dae_dir, texture_abspath)
+    new_texture_path = new_value
+    new_texture_abspath = os.path.join(out_dae_dir, new_texture_path)
+    if not os.path.exists(new_texture_abspath):
+        shutil.copy(texture_path, new_texture_abspath)
+    os.remove(texture_abspath)
+    
+with open('{out_dae}', "w", encoding="utf-8") as output:
+    output.write(file_contents)
 """
 
 
@@ -55,7 +81,10 @@ from PIL import Image
 clean_up_meshes(bpy, '{out_obj}')
 out_obj_dir = os.path.dirname('{out_obj}')
 os.makedirs(name=os.path.join(out_obj_dir, "..", "..", "textures"), exist_ok=True)
-bpy.ops.wm.obj_export(filepath='{out_obj}', export_selected_objects=True, forward_axis="Y", up_axis="Z",
+bpy.ops.wm.obj_export(filepath='{out_obj}', 
+                      export_selected_objects=True, 
+                      forward_axis="Y", 
+                      up_axis="Z", 
                       path_mode="RELATIVE")
 out_mtl = '{out_obj}'.replace(".obj", ".mtl")
 with open(out_mtl, "r") as file:
@@ -89,5 +118,8 @@ os.makedirs(name=os.path.dirname('{out_stl}'), exist_ok=True)
 selected_object = bpy.context.object
 selected_object.modifiers.new("Weld", "WELD")
 bpy.ops.object.modifier_apply(modifier="Weld")
-bpy.ops.export_mesh.stl(filepath='{out_stl}', use_selection=True, axis_forward="Y", axis_up="Z")
+bpy.ops.export_mesh.stl(filepath='{out_stl}', 
+                        use_selection=True, 
+                        axis_forward="Y", 
+                        axis_up="Z")
 """
