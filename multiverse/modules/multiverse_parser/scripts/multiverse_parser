@@ -24,6 +24,13 @@ def main():
         help="Export scene description as (URDF, MJCF, WORLD or USD)",
     )
     parser.add_argument(
+        "--relative_to_ros_package",
+        type=str,
+        required=False,
+        help="The path to the ROS package that contains the URDF file (only for output URDF)",
+    )
+    parser.set_defaults(relative_to_ros_package=None)
+    parser.add_argument(
         "--physics",
         action='store_true',
         help="Whether to include physics properties or not",
@@ -53,7 +60,7 @@ def main():
         required=False,
         help="Where to get the inertia from (from_src or from_mesh)",
     )
-    parser.set_defaults(collisionsource="from_src")
+    parser.set_defaults(inertiasource="from_src")
     parser.add_argument(
         "--defaultrgba",
         nargs="+",
@@ -105,7 +112,8 @@ def main():
         exporter.export(keep_usd=args.keepusd)
     elif out_extension == ".urdf":
         exporter = UrdfExporter(file_path=args.output,
-                                factory=factory)
+                                factory=factory,
+                                relative_to_ros_package=args.relative_to_ros_package)
         exporter.build()
         exporter.export(keep_usd=args.keepusd)
     else:

@@ -49,6 +49,8 @@ class MultiverseView:
             raise NotImplementedError(f"Cannot view {file_extension} files yet")
 
     def view_urdf(self):
+        from urdf_parser_py import urdf
+        fix_frame = urdf.URDF.from_xml_string(self.data).get_root()
         if INTERFACE == Interface.ROS1:
             import rospy
             import rospkg
@@ -64,7 +66,7 @@ class MultiverseView:
 
             ros_package = rospkg.RosPack()
             multiverse_control_pkg_path = ros_package.get_path("multiverse_control")
-            rviz_dict = {"robot_descriptions": {"robot_description": self.scene_file}}
+            rviz_dict = {"robot_descriptions": {"robot_description": self.scene_file}, "fix_frame": fix_frame}
             mesh_abspath_prefix = os.path.relpath("/", multiverse_control_pkg_path)
             mesh_abspath_prefix = os.path.join("package://multiverse_control", mesh_abspath_prefix)
             process = run_rviz(rviz_dict=rviz_dict,
@@ -82,7 +84,7 @@ class MultiverseView:
             process = run_robot_state_publisher2(robot_file_string=self.data)
             self.processes.append(process)
 
-            rviz2_dict = {"robot_descriptions": {"robot_description": self.scene_file}}
+            rviz2_dict = {"robot_descriptions": {"robot_description": self.scene_file}, "fix_frame": fix_frame}
             process = run_rviz2(rviz2_dict=rviz2_dict,
                                 resources_paths= [self.resource_path])
             self.processes.append(process)

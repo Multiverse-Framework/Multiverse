@@ -18,6 +18,13 @@ def run_rviz(rviz_dict, resources_paths, mesh_abspath_prefix, multiverse_control
     else:
         rviz_config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "rviz.rviz")
 
+    if "fix_frame" in rviz_dict:
+        with open(rviz_config_path) as file:
+            rviz_config = yaml.safe_load(file)
+        rviz_config["Visualization Manager"]["Global Options"]["Fixed Frame"] = rviz_dict["fix_frame"]
+        with open(rviz_config_path, 'w') as file:
+            yaml.dump(rviz_config, file)
+
     cmd = [
         "rosrun",
         "rviz",

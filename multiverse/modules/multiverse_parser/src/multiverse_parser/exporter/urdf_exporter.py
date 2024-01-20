@@ -18,29 +18,6 @@ from ..utils import xform_cache
 from pxr import UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd, UsdShade
 
 
-def get_mesh_dir_paths(file_path: str, relative_to_ros_package: bool) -> Tuple[str, str]:
-    meshdir_name = os.path.splitext(os.path.basename(file_path))[0]
-    if relative_to_ros_package:
-        tmp_urdf_file_path = file_path
-        mesh_path = meshdir_name
-        while tmp_urdf_file_path != "/":
-            tmp_urdf_file_path = os.path.dirname(tmp_urdf_file_path)
-            mesh_path = os.path.join(os.path.basename(tmp_urdf_file_path), mesh_path)
-
-            if os.path.exists(os.path.join(tmp_urdf_file_path, "package.xml")):
-                break
-        else:
-            raise ValueError(f"Could not find package.xml in any parent directory of {file_path}.")
-
-        meshdir_abs = str(os.path.join(os.path.dirname(tmp_urdf_file_path), mesh_path, "meshes"))
-        meshdir_ros = "package://" + mesh_path
-    else:
-        meshdir_abs = str(os.path.join(os.path.dirname(file_path), meshdir_name, "meshes"))
-        meshdir_ros = "file://" + meshdir_abs
-
-    return meshdir_abs, meshdir_ros
-
-
 def get_robot_name(world_builder: WorldBuilder) -> str:
     usd_urdf = UsdUrdf.Urdf.Get(world_builder.stage, "/urdf")
     if not usd_urdf.GetPrim().IsValid():
@@ -220,22 +197,58 @@ class UrdfExporter:
             self,
             factory: Factory,
             file_path: str,
-            relative_to_ros_package: bool = False,
-            visual_mesh_file_extension: str = "dae",
+            relative_to_ros_package: Optional[str] = None,
+            visual_mesh_file_extension: str = "obj",
     ) -> None:
         self._factory = factory
         robot_name = get_robot_name(world_builder=factory.world_builder)
         self._robot = urdf.URDF(name=robot_name)
-        (self._mesh_dir_abspath,
-         self._mesh_dir_rospath) = get_mesh_dir_paths(file_path=file_path,
-                                                      relative_to_ros_package=relative_to_ros_package)
+        self._ros_package_path = None
         self._file_path = file_path
+        (self._mesh_dir_abspath,
+         self._mesh_dir_rospath) = self._get_mesh_dir_paths(relative_to_ros_package=relative_to_ros_package)
         self._visual_mesh_file_extension = visual_mesh_file_extension
 
     def build(self) -> None:
         for body_builder in self.factory.world_builder.body_builders:
             self._build_joints(body_builder=body_builder)
             self._build_link(body_builder=body_builder)
+
+    def _get_mesh_dir_paths(self, relative_to_ros_package: Optional[str] = None) -> Tuple[str, str]:
+        file_path = self.file_path
+        meshdir_name = os.path.splitext(os.path.basename(file_path))[0]
+        mesh_dir_abspath = str(os.path.join(os.path.dirname(file_path), meshdir_name, "meshes"))
+        if relative_to_ros_package is not None:
+            if self._ros_package_path is not None:
+                ros_package_path = self._ros_package_path
+            else:
+                import rospkg
+                rospack = rospkg.RosPack()
+                try:
+                    self._ros_package_path = rospack.get_path(relative_to_ros_package)
+                except rospkg.ResourceNotFound:
+                    print(f"Could not find ROS package {relative_to_ros_package}, "
+                          f"searching for package.xml in parent directories of {file_path}.")
+                    self._ros_package_path = file_path
+                    mesh_dir_relpath = meshdir_name
+                    while self._ros_package_path != "/":
+                        self._ros_package_path = os.path.dirname(self._ros_package_path)
+                        mesh_dir_relpath = os.path.join(os.path.basename(self._ros_package_path), str(mesh_dir_relpath))
+
+                        if os.path.exists(os.path.join(self._ros_package_path, "package.xml")):
+                            print(f"Found package.xml in {self._ros_package_path}.")
+                            break
+                    else:
+                        raise FileNotFoundError(
+                            f"Could not find package.xml in any parent directory of {file_path}.")
+                ros_package_path = self._ros_package_path
+
+            mesh_dir_relpath = os.path.relpath(mesh_dir_abspath, ros_package_path)
+            mesh_dir_rospath = "package://" + relative_to_ros_package + "/" + mesh_dir_relpath
+        else:
+            mesh_dir_rospath = "file://" + mesh_dir_abspath
+
+        return mesh_dir_abspath, mesh_dir_rospath
 
     def _build_joints(self, body_builder: BodyBuilder) -> None:
         for joint_builder in body_builder.joint_builders:
@@ -449,6 +462,9 @@ class UrdfExporter:
 
         if keep_usd:
             self.factory.save_tmp_model(usd_file_path=self.file_path.replace(".urdf", ".usda"))
+        else:
+            self.factory.save_tmp_model(usd_file_path=self.file_path.replace(".urdf", ".usda"),
+                                        excludes=["usd", ".usda"])
 
     @property
     def file_path(self) -> str:

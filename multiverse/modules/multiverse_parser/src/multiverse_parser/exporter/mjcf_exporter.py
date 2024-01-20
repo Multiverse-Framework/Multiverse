@@ -615,9 +615,8 @@ class MjcfExporter:
         if keep_usd:
             self.factory.save_tmp_model(usd_file_path=self.file_path.replace(".xml", ".usda"))
         else:
-            new_mesh_dir = os.path.join(os.path.dirname(self.file_path), self.file_name)
-            tmp_mesh_dir = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path), "tmp")
-            merge_folders(source_folder=tmp_mesh_dir, destination_folder=new_mesh_dir, excludes=["usd"])
+            self.factory.save_tmp_model(usd_file_path=self.file_path.replace(".xml", ".usda"),
+                                        excludes=["usd", ".usda"])
 
     @property
     def file_path(self) -> str:

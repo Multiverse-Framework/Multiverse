@@ -38,7 +38,7 @@ class MjcfToUrdfTestCase(unittest.TestCase):
         output_urdf_path = os.path.join(self.resource_path, "output", "test_mjcf_to_urdf", "ur5e.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
                                 factory=factory,
-                                relative_to_ros_package=False)
+                                relative_to_ros_package=None)
         exporter.build()
         exporter.export()
 
@@ -62,7 +62,7 @@ class MjcfToUrdfTestCase(unittest.TestCase):
         output_urdf_path = os.path.join(self.resource_path, "output", "test_mjcf_to_urdf", "milk_box.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
                                 factory=factory,
-                                relative_to_ros_package=False)
+                                relative_to_ros_package=None)
         exporter.build()
         exporter.export()
 
@@ -86,7 +86,7 @@ class MjcfToUrdfTestCase(unittest.TestCase):
         output_urdf_path = os.path.join(self.resource_path, "output", "test_mjcf_to_urdf", "anymal_b.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
                                 factory=factory,
-                                relative_to_ros_package=False)
+                                relative_to_ros_package=None)
         exporter.build()
         exporter.export()
 

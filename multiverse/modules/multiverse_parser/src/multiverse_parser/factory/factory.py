@@ -57,7 +57,9 @@ def merge_folders(source_folder: str,
                                 ignore=shutil.ignore_patterns(*excludes))
         # If item is a file, simply copy it
         else:
-            shutil.copy2(source_item, destination_item)
+            _, extension = os.path.splitext(source_item)
+            if excludes is None or extension not in excludes:
+                shutil.copy2(source_item, destination_item)
 
 
 def fix_texture_path(usd_mesh_file_path: str):
@@ -240,7 +242,7 @@ class Factory:
         process = subprocess.Popen(cmd)
         process.wait()
 
-        if out_mesh_file_extension in [".usd", ".usda", ".usdz"]:
+        if ".usd" in out_mesh_file_extension:
             fix_texture_path(usd_mesh_file_path=out_mesh_file_path)
 
     def save_tmp_model(self,
@@ -257,7 +259,8 @@ class Factory:
                       excludes=excludes)
 
         new_usd_file_path = os.path.join(usd_dir_path, os.path.basename(self.tmp_usd_file_path))
-        shutil.move(new_usd_file_path, usd_file_path)
+        if os.path.exists(new_usd_file_path):
+            shutil.move(new_usd_file_path, usd_file_path)
 
         new_mesh_dir_path = os.path.join(usd_dir_path, usd_file_name)
         tmp_mesh_dir_path = os.path.join(usd_dir_path, self.tmp_file_name)
@@ -266,18 +269,19 @@ class Factory:
                           destination_folder=new_mesh_dir_path)
             shutil.rmtree(tmp_mesh_dir_path)
 
-            with open(usd_file_path, encoding="utf-8") as file:
-                file_contents = file.read()
+            if os.path.exists(usd_file_path):
+                with open(usd_file_path, encoding="utf-8") as file:
+                    file_contents = file.read()
 
-            new_usd_mesh_dir_path = usd_file_name
-            file_contents = file_contents.replace(os.path.dirname(self.tmp_mesh_dir_path), new_usd_mesh_dir_path)
+                new_usd_mesh_dir_path = usd_file_name
+                file_contents = file_contents.replace(os.path.dirname(self.tmp_mesh_dir_path), new_usd_mesh_dir_path)
 
-            tmp_mesh_dir_relpath = os.path.relpath(os.path.dirname(self.tmp_mesh_dir_path),
-                                                   os.path.dirname(self.tmp_usd_file_path))
-            file_contents = file_contents.replace(tmp_mesh_dir_relpath, new_usd_mesh_dir_path)
+                tmp_mesh_dir_relpath = os.path.relpath(os.path.dirname(self.tmp_mesh_dir_path),
+                                                       os.path.dirname(self.tmp_usd_file_path))
+                file_contents = file_contents.replace(tmp_mesh_dir_relpath, new_usd_mesh_dir_path)
 
-            with open(usd_file_path, "w", encoding="utf-8") as file:
-                file.write(file_contents)
+                with open(usd_file_path, "w", encoding="utf-8") as file:
+                    file.write(file_contents)
 
     def clean_up(self) -> None:
         """

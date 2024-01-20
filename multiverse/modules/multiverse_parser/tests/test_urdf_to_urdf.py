@@ -39,7 +39,7 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "tiago_dual.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
                                 factory=factory,
-                                relative_to_ros_package=False)
+                                relative_to_ros_package=None)
         self.assertEqual(exporter.robot.name, "tiago_dual")
 
         exporter.build()
@@ -61,7 +61,7 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "ur5e.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
                                 factory=factory,
-                                relative_to_ros_package=False)
+                                relative_to_ros_package=None)
         self.assertEqual(exporter.robot.name, "ur5e")
 
         exporter.build()
@@ -69,8 +69,10 @@ class UrdfToUrdfTestCase(unittest.TestCase):
 
     def test_urdf_to_urdf_meshes(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "milk_box", "urdf", "milk_box.urdf")
-        factory = UrdfImporter(file_path=input_urdf_path, with_physics=True, with_visual=True,
-                                with_collision=True)
+        factory = UrdfImporter(file_path=input_urdf_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=True)
         usd_file_path = factory.import_model()
 
         stage = Usd.Stage.Open(usd_file_path)
@@ -80,7 +82,7 @@ class UrdfToUrdfTestCase(unittest.TestCase):
         output_urdf_path = os.path.join(self.resource_path, "output", "test_urdf_to_urdf", "milk_box.urdf")
         exporter = UrdfExporter(file_path=output_urdf_path,
                                 factory=factory,
-                                relative_to_ros_package=False)
+                                relative_to_ros_package=None)
         self.assertEqual(exporter.robot.name, "milk_box")
 
         exporter.build()

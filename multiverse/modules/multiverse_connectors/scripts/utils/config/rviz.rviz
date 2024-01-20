@@ -1,746 +1,101 @@
 Panels:
-  - Class: rviz/Displays
-    Help Height: 138
-    Name: Displays
-    Property Tree Widget:
-      Expanded:
-        - /Global Options1
-        - /Status1
-        - /RobotModel1
-      Splitter Ratio: 0.5
-    Tree Height: 1522
-  - Class: rviz/Selection
-    Name: Selection
-  - Class: rviz/Tool Properties
+- Class: rviz/Displays
+  Help Height: 138
+  Name: Displays
+  Property Tree Widget:
     Expanded:
-      - /2D Pose Estimate1
-      - /2D Nav Goal1
-      - /Publish Point1
-    Name: Tool Properties
-    Splitter Ratio: 0.5886790156364441
-  - Class: rviz/Views
-    Expanded:
-      - /Current View1
-    Name: Views
+    - /Global Options1
+    - /Status1
     Splitter Ratio: 0.5
-  - Class: rviz/Time
-    Name: Time
-    SyncMode: 0
-    SyncSource: ""
+  Tree Height: 1522
+- Class: rviz/Selection
+  Name: Selection
+- Class: rviz/Tool Properties
+  Expanded:
+  - /2D Pose Estimate1
+  - /2D Nav Goal1
+  - /Publish Point1
+  Name: Tool Properties
+  Splitter Ratio: 0.5886790156364441
+- Class: rviz/Views
+  Expanded:
+  - /Current View1
+  Name: Views
+  Splitter Ratio: 0.5
+- Class: rviz/Time
+  Name: Time
+  SyncMode: 0
+  SyncSource: ''
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
   toolButtonStyle: 2
 Visualization Manager:
-  Class: ""
+  Class: ''
   Displays:
-    - Alpha: 0.5
-      Cell Size: 1
-      Class: rviz/Grid
-      Color: 160; 160; 164
-      Enabled: true
-      Line Style:
-        Line Width: 0.029999999329447746
-        Value: Lines
-      Name: Grid
-      Normal Cell Count: 0
-      Offset:
-        X: 0
-        Y: 0
-        Z: 0
-      Plane: XY
-      Plane Cell Count: 10
-      Reference Frame: <Fixed Frame>
-      Value: true
-    - Alpha: 1
-      Class: rviz/RobotModel
-      Collision Enabled: true
-      Enabled: true
-      Links:
-        All Links Enabled: true
-        Expand Joint Details: false
-        Expand Link Details: false
-        Expand Tree: false
-        Link Tree Style: Links in Alphabetic Order
-        apartment:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        apartment_root:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        bedside_table:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        bowl:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet10:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet10_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet10_drawer1_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet10_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet10_drawer2_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet10_drawer3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet10_drawer3_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet11:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet11_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet11_drawer1_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet11_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet11_drawer2_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet11_drawer3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet11_drawer3_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1_door:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1_door_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1_drawer1_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1_drawer2_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1_shelf1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet1_shelf2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_door:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_door_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_drawer3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_drawer4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_drawer5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_drawer6:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet2_shelf:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet4_door1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet4_door2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet4_door2_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet4_shelf1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet4_shelf2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet5_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet5_drawer1_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet5_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet5_drawer2_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet5_drawer3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet5_drawer3_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet6:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet6_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet6_drawer1_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet6_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet6_drawer2_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet6_drawer3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet6_drawer3_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet8:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet9:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet9_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet9_drawer1_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet9_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet9_drawer2_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet9_drawer3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cabinet9_drawer3_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        coffee_table:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        coffee_table_drawer:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        counter_sink:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        counter_sink_stove:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        counter_sink_tap:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        counter_sink_tap_switch:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        counter_wall:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        counter_watertab:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        cup:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        dishwasher:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        dishwasher_front:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        dishwasher_front_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        dishwasher_tray1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        dishwasher_tray2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        dishwasher_tray3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        envelope_root:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        fridge_base:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_door1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_door1_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_door2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_door2_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_door_tray1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_door_tray2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_drawer3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_drawer4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_drawer5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_egg_tray:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        fridge_shelf1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        fridge_shelf2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        furnitures_root:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        island_cover1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        island_cover3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        island_cover4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        island_cover5:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        kitchen1_base_board:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        kitchen1_root:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        kitchen2_base_board:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        kitchen2_root:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        kitchen_root:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        milk_box:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        oven:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        oven_door:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        sink_drawer1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        sink_drawer1_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        sink_drawer2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        stove:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wall1:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wall2:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wall3:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wall4:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wardrobe:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wardrobe_door_left:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wardrobe_door_left_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wardrobe_door_right:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wardrobe_door_right_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        window4_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        window4_left:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        window4_left_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        window4_left_handle_rotation:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        window4_right:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        window4_right_handle:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        window4_right_handle_rotation:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        windows:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-      Name: RobotModel
-      Robot Description: robot_description
-      TF Prefix: ""
-      Update Interval: 0
-      Value: true
-      Visual Enabled: true
+  - Alpha: 0.5
+    Cell Size: 1
+    Class: rviz/Grid
+    Color: 160; 160; 164
+    Enabled: true
+    Line Style:
+      Line Width: 0.029999999329447746
+      Value: Lines
+    Name: Grid
+    Normal Cell Count: 0
+    Offset:
+      X: 0
+      Y: 0
+      Z: 0
+    Plane: XY
+    Plane Cell Count: 10
+    Reference Frame: <Fixed Frame>
+    Value: true
+  - Alpha: 1
+    Class: rviz/RobotModel
+    Collision Enabled: false
+    Enabled: true
+    Links:
+      All Links Enabled: true
+      Expand Joint Details: false
+      Expand Link Details: false
+      Expand Tree: false
+      Link Tree Style: ''
+    Name: RobotModel
+    Robot Description: robot_description
+    TF Prefix: ''
+    Update Interval: 0
+    Value: true
+    Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: apartment
+    Fixed Frame: anymal_b
     Frame Rate: 30
   Name: root
   Tools:
-    - Class: rviz/Interact
-      Hide Inactive Objects: true
-    - Class: rviz/MoveCamera
-    - Class: rviz/Select
-    - Class: rviz/FocusCamera
-    - Class: rviz/Measure
-    - Class: rviz/SetInitialPose
-      Theta std deviation: 0.2617993950843811
-      Topic: /initialpose
-      X std deviation: 0.5
-      Y std deviation: 0.5
-    - Class: rviz/SetGoal
-      Topic: /move_base_simple/goal
-    - Class: rviz/PublishPoint
-      Single click: true
-      Topic: /clicked_point
+  - Class: rviz/Interact
+    Hide Inactive Objects: true
+  - Class: rviz/MoveCamera
+  - Class: rviz/Select
+  - Class: rviz/FocusCamera
+  - Class: rviz/Measure
+  - Class: rviz/SetInitialPose
+    Theta std deviation: 0.2617993950843811
+    Topic: /initialpose
+    X std deviation: 0.5
+    Y std deviation: 0.5
+  - Class: rviz/SetGoal
+    Topic: /move_base_simple/goal
+  - Class: rviz/PublishPoint
+    Single click: true
+    Topic: /clicked_point
   Value: true
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.3800272941589355
+      Distance: 10
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -748,18 +103,18 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 2.610136032104492
-        Y: 2.701209783554077
-        Z: 0.9439622163772583
+        X: 0
+        Y: 0
+        Z: 0
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.5647976994514465
+      Pitch: 0.785398006439209
       Target Frame: <Fixed Frame>
-      Yaw: 3.9335591793060303
-    Saved: ~
+      Yaw: 0.785398006439209
+    Saved: null
 Window Geometry:
   Displays:
     collapsed: false
