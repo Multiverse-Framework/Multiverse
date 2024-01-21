@@ -4,7 +4,7 @@ clean_up_meshes_script = """
 if len(bpy.data.objects) == 0:
     raise ValueError("No object in the scene.")
     
-for selected_object in bpy.context.selected_objects:
+for selected_object in bpy.data.objects:    
     # Check if the active object is a mesh
     if selected_object.type != 'MESH':
         continue

@@ -24,7 +24,7 @@ for image in bpy.data.images:
 def import_usd(in_usds: List[str],
                mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
                clean_up: bool = True) -> str:
-    return (f"{clean_up_meshes_script}" if {clean_up} else "") + f"""
+    return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
 for in_usd in {in_usds}:
     bpy.ops.wm.usd_import(filepath=in_usd, scale=1.0)
     bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
@@ -35,7 +35,7 @@ for in_usd in {in_usds}:
 def import_dae(in_daes: List[str],
                mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
                clean_up: bool = True) -> str:
-    return (f"{clean_up_meshes_script}" if {clean_up} else "") + f"""
+    return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
 for in_dae in {in_daes}:
     bpy.ops.wm.collada_import(filepath=in_dae)
     bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
@@ -46,7 +46,7 @@ for in_dae in {in_daes}:
 def import_obj(in_objs: List[str],
                mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
                clean_up: bool = True) -> str:
-    return (f"{clean_up_meshes_script}" if {clean_up} else "") + f"""
+    return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
 for in_obj in {in_objs}:
     bpy.ops.wm.obj_import(filepath=in_obj, up_axis='Z', forward_axis='Y')
     bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
@@ -57,7 +57,7 @@ for in_obj in {in_objs}:
 def import_stl(in_stls: List[str],
                mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
                clean_up: bool = True) -> str:
-    return (f"{clean_up_meshes_script}" if {clean_up} else "") + f"""
+    return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
 for in_stl in {in_stls}:
     bpy.ops.wm.stl_import(filepath=in_stl, up_axis='Z', forward_axis='Y')
     bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}

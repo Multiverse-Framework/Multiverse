@@ -25,6 +25,8 @@ def camel_case_to_snake_case(name: str) -> str:
 
 density_dict = {
     "glass": 2500.0,
+    "meat": 1000.0,
+    "bread": 250.0
 }
 
 
@@ -38,7 +40,8 @@ class CreateSceneTestCase(unittest.TestCase):
         cls.resource_path = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "multiverse_assets")
 
     def test_create_object(self):
-        folder_path = "/home/giangnguyen/Downloads/CoohomModels/deliver_6_1221/beer_bottle"
+        folder_path = "/home/giangnguyen/Downloads/CoohomModels/clean_models/bread_1"
+        material = "bread"
 
         obj_name = os.path.basename(folder_path).split(".")[0]
         obj_mesh_dir_path = os.path.join(folder_path, "obj")
@@ -116,7 +119,7 @@ class CreateSceneTestCase(unittest.TestCase):
                 geom_property = GeomProperty(geom_type=GeomType.MESH,
                                              is_visible=is_visible,
                                              is_collidable=is_collidable,
-                                             density=density_dict["glass"])
+                                             density=density_dict[material])
                 geom_builder = body_builder.add_geom(geom_name=geom_name,
                                                      geom_property=geom_property)
                 geom_builder.build()
