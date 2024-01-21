@@ -157,11 +157,14 @@ class Factory:
         """
         raise NotImplementedError
 
-    def import_mesh(self, mesh_file_path: str) -> Tuple[str, str]:
+    def import_mesh(self,
+                    mesh_file_path: str,
+                    mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0])) -> Tuple[str, str]:
         """
         Import the mesh from the mesh file path to the temporary mesh directory path.
         :param mesh_file_path: Path to the mesh file.
-        :return: Tuple of the temporary USD mesh file path and the temporary origin mesh file path.
+        :param mesh_scale: Scale of the mesh.
+        :return: Tuple of the temporary USD mesh file path and the temporary mesh file path.
         """
         if mesh_file_path in self.mesh_file_path_dict:
             return self.mesh_file_path_dict[mesh_file_path]
@@ -176,14 +179,18 @@ class Factory:
                                               f"from_{mesh_file_extension[1:]}",
                                               f"{mesh_file_name}.usda")
 
+        print("Importing mesh from", mesh_file_path, "to", tmp_usd_mesh_file_path, "and", tmp_mesh_file_path, ".")
         if mesh_file_extension in [".usd", ".usda", ".usdz"]:
-            cmd = import_usd([mesh_file_path]) + export_usd(tmp_usd_mesh_file_path)
+            cmd = import_usd([mesh_file_path], mesh_scale) + export_usd(tmp_usd_mesh_file_path)
         elif mesh_file_extension == ".obj":
-            cmd = import_obj(mesh_file_path) + export_obj(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
+            cmd = import_obj([mesh_file_path], mesh_scale) + export_obj(tmp_mesh_file_path) + export_usd(
+                tmp_usd_mesh_file_path)
         elif mesh_file_extension == ".stl":
-            cmd = import_stl(mesh_file_path) + export_stl(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
+            cmd = import_stl([mesh_file_path], mesh_scale) + export_stl(tmp_mesh_file_path) + export_usd(
+                tmp_usd_mesh_file_path)
         elif mesh_file_extension == ".dae":
-            cmd = import_dae(mesh_file_path) + export_dae(tmp_mesh_file_path) + export_usd(tmp_usd_mesh_file_path)
+            cmd = import_dae([mesh_file_path], mesh_scale) + export_dae(tmp_mesh_file_path) + export_usd(
+                tmp_usd_mesh_file_path)
         else:
             raise ValueError(f"Unsupported file extension {mesh_file_extension}.")
 
@@ -202,7 +209,10 @@ class Factory:
 
         return tmp_usd_mesh_file_path, tmp_mesh_file_path
 
-    def export_mesh(self, in_mesh_file_path: str, out_mesh_file_path: str) -> None:
+    def export_mesh(self,
+                    in_mesh_file_path: str,
+                    out_mesh_file_path: str,
+                    mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0])) -> None:
         in_mesh_file_extension = os.path.splitext(in_mesh_file_path)[1]
         out_mesh_file_extension = os.path.splitext(out_mesh_file_path)[1]
         if in_mesh_file_path in self.mesh_file_path_dict:
@@ -212,13 +222,13 @@ class Factory:
                 return
 
         if in_mesh_file_extension in [".usd", ".usda", ".usdz"]:
-            cmd = import_usd([in_mesh_file_path])
+            cmd = import_usd([in_mesh_file_path], mesh_scale)
         elif in_mesh_file_extension == ".obj":
-            cmd = import_obj(in_mesh_file_path)
+            cmd = import_obj([in_mesh_file_path], mesh_scale)
         elif in_mesh_file_extension == ".stl":
-            cmd = import_stl(in_mesh_file_path)
+            cmd = import_stl([in_mesh_file_path], mesh_scale)
         elif in_mesh_file_extension == ".dae":
-            cmd = import_dae(in_mesh_file_path)
+            cmd = import_dae([in_mesh_file_path], mesh_scale)
         else:
             raise ValueError(f"Unsupported file extension {in_mesh_file_extension}.")
 

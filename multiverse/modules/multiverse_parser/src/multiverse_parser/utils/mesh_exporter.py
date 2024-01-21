@@ -1,25 +1,25 @@
 #!/usr/bin/env python3
 
 clean_up_meshes_script = """
-def clean_up_meshes(bpy, file_path: str) -> None:
-    for selected_object in bpy.context.selected_objects:
-        # Check if the active object is a mesh
-        if selected_object.type != 'MESH':
-            continue
-        
-        bpy.context.view_layer.objects.active = selected_object
+if len(bpy.data.objects) == 0:
+    raise ValueError("No object in the scene.")
     
-        # Switch to Edit mode
-        bpy.ops.object.mode_set(mode='EDIT')
+for selected_object in bpy.context.selected_objects:
+    # Check if the active object is a mesh
+    if selected_object.type != 'MESH':
+        continue
     
-        bpy.ops.mesh.quads_convert_to_tris(quad_method="BEAUTY", ngon_method="BEAUTY")
-        if selected_object.scale[0] * selected_object.scale[1] * selected_object.scale[2] < 0:
-            bpy.ops.mesh.flip_normals()
-    
-        # Switch back to Object mode
-        bpy.ops.object.mode_set(mode='OBJECT')
-    
-        bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+    bpy.context.view_layer.objects.active = selected_object
+
+    # Switch to Edit mode
+    bpy.ops.object.mode_set(mode='EDIT')
+
+    bpy.ops.mesh.quads_convert_to_tris(quad_method="BEAUTY", ngon_method="BEAUTY")
+    if selected_object.scale[0] * selected_object.scale[1] * selected_object.scale[2] < 0:
+        bpy.ops.mesh.flip_normals()
+
+    # Switch back to Object mode
+    bpy.ops.object.mode_set(mode='OBJECT')
 """
 
 
@@ -28,7 +28,6 @@ def export_usd(out_usd: str) -> str:
 import os.path
 
 {clean_up_meshes_script}
-clean_up_meshes(bpy, '{out_usd}')
 bpy.ops.wm.usd_export(filepath='{out_usd}', selected_objects_only=True, overwrite_textures=True)
 """
 
@@ -40,7 +39,6 @@ import re
 import shutil
 
 {clean_up_meshes_script}
-clean_up_meshes(bpy, '{out_dae}')
 bpy.ops.wm.collada_export(filepath='{out_dae}', 
                           use_texture_copies=True, 
                           export_global_forward_selection="Y", 
@@ -78,11 +76,11 @@ import shutil
 from PIL import Image
 
 {clean_up_meshes_script}
-clean_up_meshes(bpy, '{out_obj}')
 out_obj_dir = os.path.dirname('{out_obj}')
 os.makedirs(name=os.path.join(out_obj_dir, "..", "..", "textures"), exist_ok=True)
+    
 bpy.ops.wm.obj_export(filepath='{out_obj}', 
-                      export_selected_objects=True, 
+                      export_selected_objects=False, 
                       forward_axis="Y", 
                       up_axis="Z", 
                       path_mode="RELATIVE")
@@ -113,13 +111,25 @@ def export_stl(out_stl: str) -> str:
 import os.path
 
 {clean_up_meshes_script}
-clean_up_meshes(bpy, '{out_stl}')
 os.makedirs(name=os.path.dirname('{out_stl}'), exist_ok=True)
 selected_object = bpy.context.object
 selected_object.modifiers.new("Weld", "WELD")
 bpy.ops.object.modifier_apply(modifier="Weld")
 bpy.ops.export_mesh.stl(filepath='{out_stl}', 
-                        use_selection=True, 
+                        use_selection=False, 
                         axis_forward="Y", 
                         axis_up="Z")
+"""
+
+
+def export_fbx(out_fbx: str) -> str:
+    return f"""
+{clean_up_meshes_script}
+bpy.ops.export_scene.fbx(filepath='{out_fbx}', 
+                         use_selection=False, 
+                         axis_forward="Y", 
+                         axis_up="Z",
+                         mesh_smooth_type="FACE",
+                         use_triangles=True,
+                         object_types={{"MESH"}})
 """

@@ -9,7 +9,6 @@ from xml.dom import minidom
 import numpy
 from numpy import radians
 
-from ..factory import merge_folders
 from ..factory import Factory
 from ..factory import (JointBuilder, JointType,
                        GeomBuilder, GeomType,
@@ -104,41 +103,6 @@ def get_mujoco_joint_api(joint_builder: JointBuilder) -> UsdMujoco.MujocoJointAP
             mujoco_joint_api.CreateRangeAttr(Gf.Vec2f(lower, upper))
 
     return mujoco_joint_api
-
-
-def get_mujoco_prim(stage: Usd.Stage) -> Usd.Prim:
-    if stage.GetPrimAtPath("/mujoco").IsValid():
-        usd_mujoco = UsdMujoco.Mujoco(stage.GetPrimAtPath("/mujoco"))
-    else:
-        usd_mujoco = UsdMujoco.Mujoco.Define(stage, "/mujoco")
-        model_name = stage.GetDefaultPrim().GetName()
-        usd_mujoco.CreateModelAttr(model_name)
-    return usd_mujoco.GetPrim()
-
-
-def get_mujoco_option_api(mujoco_prim) -> UsdMujoco.MujocoOptionAPI:
-    if mujoco_prim.HasAPI(UsdMujoco.MujocoOptionAPI):
-        mujoco_option_api = UsdMujoco.MujocoOptionAPI(mujoco_prim)
-    else:
-        mujoco_option_api = UsdMujoco.MujocoOptionAPI.Apply(mujoco_prim)
-    return mujoco_option_api
-
-
-def get_mujoco_asset_prim(stage) -> Tuple[Usd.Prim, Usd.Prim, Usd.Prim, Usd.Prim]:
-    if stage.GetPrimAtPath("/mujoco/asset").IsValid():
-        mujoco_asset_prim = stage.GetPrimAtPath("/mujoco/asset")
-        mujoco_meshes_prim = stage.GetPrimAtPath("/mujoco/asset/meshes")
-        mujoco_materials_prim = stage.GetPrimAtPath("/mujoco/asset/materials")
-        mujoco_textures_prim = stage.GetPrimAtPath("/mujoco/asset/textures")
-    else:
-        mujoco_asset_prim = UsdMujoco.MujocoAsset.Define(stage, "/mujoco/asset")
-        mujoco_meshes_prim = UsdMujoco.MujocoMesh.Define(stage, "/mujoco/asset/meshes")
-        mujoco_materials_prim = UsdMujoco.MujocoMaterial.Define(stage, "/mujoco/asset/materials")
-        mujoco_textures_prim = UsdMujoco.MujocoTexture.Define(stage, "/mujoco/asset/textures")
-    return (mujoco_asset_prim.GetPrim(),
-            mujoco_meshes_prim.GetPrim(),
-            mujoco_materials_prim.GetPrim(),
-            mujoco_textures_prim.GetPrim())
 
 
 def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
@@ -286,20 +250,11 @@ class MjcfExporter:
     def _build_config(self):
         stage = self.factory.world_builder.stage
 
-        mujoco_prim = get_mujoco_prim(stage=stage)
+        self._import_mujoco()
 
-        get_mujoco_option_api(mujoco_prim=mujoco_prim)
+        self._build_mujoco_asset_mesh_and_material_prims()
 
-        (mujoco_asset_prim,
-         mujoco_meshes_prim,
-         mujoco_materials_prim,
-         mujoco_textures_prim) = get_mujoco_asset_prim(stage=stage)
-
-        self._build_mujoco_asset_mesh_and_material_prims(mujoco_meshes_prim=mujoco_meshes_prim,
-                                                         mujoco_materials_prim=mujoco_materials_prim,
-                                                         mujoco_textures_prim=mujoco_textures_prim)
-
-        model_name = UsdMujoco.Mujoco(mujoco_prim).GetModelAttr().Get()
+        model_name = UsdMujoco.Mujoco(self.mujoco_prim).GetModelAttr().Get()
         self.root.set("model", model_name)
 
         compiler = ET.SubElement(self.root, "compiler")
@@ -333,7 +288,7 @@ class MjcfExporter:
         )
 
         asset = ET.SubElement(self.root, "asset")
-        mujoco_meshes = [UsdMujoco.MujocoMesh(prim) for prim in mujoco_meshes_prim.GetChildren()
+        mujoco_meshes = [UsdMujoco.MujocoMesh(prim) for prim in self.mujoco_meshes_prim.GetChildren()
                          if prim.IsA(UsdMujoco.MujocoMesh)]
         for mujoco_mesh in mujoco_meshes:
             mesh = ET.SubElement(asset, "mesh")
@@ -346,7 +301,7 @@ class MjcfExporter:
             scale = mujoco_mesh.GetScaleAttr().Get()
             mesh.set("scale", " ".join(map(str, scale)))
 
-        mujoco_materials = [UsdMujoco.MujocoMaterial(prim) for prim in mujoco_materials_prim.GetChildren()
+        mujoco_materials = [UsdMujoco.MujocoMaterial(prim) for prim in self.mujoco_materials_prim.GetChildren()
                             if prim.IsA(UsdMujoco.MujocoMaterial)]
         for mujoco_material in mujoco_materials:
             material = ET.SubElement(asset, "material")
@@ -370,7 +325,7 @@ class MjcfExporter:
                 if specular is not None:
                     material.set("specular", str(specular))
 
-        mujoco_textures = [UsdMujoco.MujocoTexture(prim) for prim in mujoco_textures_prim.GetChildren()
+        mujoco_textures = [UsdMujoco.MujocoTexture(prim) for prim in self.mujoco_textures_prim.GetChildren()
                            if prim.IsA(UsdMujoco.MujocoTexture)]
         for mujoco_texture in mujoco_textures:
             texture = ET.SubElement(asset, "texture")
@@ -379,10 +334,28 @@ class MjcfExporter:
             texture.set("type", texture_type)
             texture.set("file", mujoco_texture.GetFileAttr().Get().path)
 
-    def _build_mujoco_asset_mesh_and_material_prims(self,
-                                                    mujoco_meshes_prim: Usd.Prim,
-                                                    mujoco_materials_prim: Usd.Prim,
-                                                    mujoco_textures_prim: Usd.Prim):
+    def _import_mujoco(self):
+        stage = self.factory.world_builder.stage
+        if not stage.GetPrimAtPath("/mujoco").IsValid():
+            usd_mujoco = UsdMujoco.Mujoco.Define(stage, "/mujoco")
+            model_name = stage.GetDefaultPrim().GetName()
+            usd_mujoco.CreateModelAttr(model_name)
+            self._import_option()
+            self._import_asset()
+
+    def _import_option(self):
+        if not self.mujoco_prim.HasAPI(UsdMujoco.MujocoOptionAPI):
+            UsdMujoco.MujocoOptionAPI.Apply(self.mujoco_prim)
+
+    def _import_asset(self):
+        stage = self.factory.world_builder.stage
+        if not stage.GetPrimAtPath("/mujoco/asset").IsValid():
+            UsdMujoco.MujocoAsset.Define(stage, "/mujoco/asset")
+            UsdMujoco.MujocoMesh.Define(stage, "/mujoco/asset/meshes")
+            UsdMujoco.MujocoMaterial.Define(stage, "/mujoco/asset/materials")
+            UsdMujoco.MujocoTexture.Define(stage, "/mujoco/asset/textures")
+
+    def _build_mujoco_asset_mesh_and_material_prims(self):
         stage = self.factory.world_builder.stage
         mesh_files = {}
         mesh_dir_name = os.path.dirname(stage.GetRootLayer().realPath)
@@ -435,7 +408,7 @@ class MjcfExporter:
 
                 mesh_name = add_scale_to_mesh_name(mesh_name=mesh_file_name,
                                                    mesh_scale=numpy.array(mesh_file_property.scale))
-                mujoco_mesh_path = mujoco_meshes_prim.GetPath().AppendChild(mesh_name)
+                mujoco_mesh_path = self.mujoco_meshes_prim.GetPath().AppendChild(mesh_name)
                 if stage.GetPrimAtPath(mujoco_mesh_path).IsValid():
                     continue
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(stage, mujoco_mesh_path)
@@ -450,7 +423,7 @@ class MjcfExporter:
             materials[material_name] = MaterialProperty.from_prim(material_prim=material_prim)
 
         for material_name, material_property in materials.items():
-            mujoco_material_path = mujoco_materials_prim.GetPath().AppendChild(material_name)
+            mujoco_material_path = self.mujoco_materials_prim.GetPath().AppendChild(material_name)
             if stage.GetPrimAtPath(mujoco_material_path).IsValid():
                 continue
 
@@ -469,7 +442,7 @@ class MjcfExporter:
 
                 elif isinstance(material_property.diffuse_color, str):
                     texture_name = os.path.splitext(os.path.basename(material_property.diffuse_color))[0]
-                    mujoco_texture_path = mujoco_textures_prim.GetPath().AppendChild(texture_name)
+                    mujoco_texture_path = self.mujoco_textures_prim.GetPath().AppendChild(texture_name)
                     mujoco_material.CreateTextureRel().SetTargets([mujoco_texture_path])
 
                     mujoco_texture = UsdMujoco.MujocoTexture.Define(stage, mujoco_texture_path)
@@ -641,3 +614,23 @@ class MjcfExporter:
     @property
     def body_dict(self) -> dict:
         return self._body_dict
+
+    @property
+    def mujoco_prim(self) -> Usd.Prim:
+        return self.factory.world_builder.stage.GetPrimAtPath("/mujoco")
+
+    @property
+    def mujoco_asset_prim(self) -> Usd.Prim:
+        return self.mujoco_prim.GetChild("asset")
+
+    @property
+    def mujoco_meshes_prim(self) -> Usd.Prim:
+        return self.mujoco_asset_prim.GetChild("meshes")
+
+    @property
+    def mujoco_materials_prim(self) -> Usd.Prim:
+        return self.mujoco_asset_prim.GetChild("materials")
+
+    @property
+    def mujoco_textures_prim(self) -> Usd.Prim:
+        return self.mujoco_asset_prim.GetChild("textures")

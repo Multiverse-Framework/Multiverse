@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import shutil
 from typing import Tuple, Optional, Union
 
 import numpy
@@ -385,6 +386,7 @@ class UrdfExporter:
                        urdf_geometry_api=urdf_geometry_api)
         elif geom_builder.type == GeomType.MESH:
             usd_mesh_file_abspath = self._get_file_abspath_from_reference(prim=gprim_prim)
+            tmp_usd_mesh_file_abspath = usd_mesh_file_abspath
 
             if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
                 material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
@@ -395,7 +397,9 @@ class UrdfExporter:
                 usd_material_file_relpath = os.path.relpath(usd_material_file_abspath,
                                                             os.path.dirname(usd_mesh_file_abspath))
 
-                mesh_stage = Usd.Stage.Open(usd_mesh_file_abspath)
+                tmp_usd_mesh_file_abspath = tmp_usd_mesh_file_abspath.replace(".usda", "_tmp.usda")
+                shutil.copy2(usd_mesh_file_abspath, tmp_usd_mesh_file_abspath)
+                mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_abspath)
                 mesh_prim = mesh_stage.GetDefaultPrim()
                 mesh_path = mesh_prim.GetPath()
                 mesh_material_scope_path = mesh_path.AppendChild("Materials")
@@ -414,8 +418,10 @@ class UrdfExporter:
             tmp_mesh_file_relpath = self._get_mesh_file_relpath(geom_prim=gprim_prim,
                                                                 usd_mesh_file_path=usd_mesh_file_abspath)
             tmp_mesh_file_abspath = os.path.join(self.factory.tmp_mesh_dir_path, tmp_mesh_file_relpath)
-            self.factory.export_mesh(in_mesh_file_path=usd_mesh_file_abspath,
+            self.factory.export_mesh(in_mesh_file_path=tmp_usd_mesh_file_abspath,
                                      out_mesh_file_path=tmp_mesh_file_abspath)
+            if "_tmp.usda" in tmp_usd_mesh_file_abspath:
+                os.remove(tmp_usd_mesh_file_abspath)
 
             mesh_file_abspath = os.path.join(self._mesh_dir_abspath, tmp_mesh_file_relpath)
             mesh_file_relpath = os.path.relpath(path=mesh_file_abspath,

@@ -8,7 +8,24 @@ from multiverse_parser import InertiaSource
 from multiverse_parser import UrdfImporter, MjcfImporter
 from multiverse_parser import UrdfExporter, MjcfExporter
 
-
+source = shader_input.GetConnectedSource()[0]
+        if len(source.GetOutputs()) != 1:
+            raise NotImplementedError("Multiple outputs are not supported yet.")
+        output = source.GetOutputs()[0]
+        output_prim = output.GetPrim()
+        if not output_prim.IsA(UsdShade.Shader):
+            raise NotImplementedError("Only shader output is supported.")
+        output_shader = UsdShade.Shader(output_prim)
+        if output_shader.GetIdAttr().Get() != "UsdUVTexture":
+            raise NotImplementedError("Only texture shader is supported.")
+        file_input = output_shader.GetInput("file").Get()
+        if file_input is None:
+            raise NotImplementedError("Only texture file input is supported.")
+        file_path = file_input.path
+        if os.path.relpath(file_path):
+            file_path = os.path.join(os.path.dirname(shader.GetPrim().GetStage().GetRootLayer().realPath),
+                                     file_path)
+        return os.path.normpath(file_path)
 def main():
     parser = argparse.ArgumentParser(description="Multiverse parser")
     parser.add_argument(

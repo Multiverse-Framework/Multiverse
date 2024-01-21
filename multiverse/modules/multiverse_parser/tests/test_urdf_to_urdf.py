@@ -5,7 +5,7 @@ import tracemalloc
 
 import numpy
 
-from multiverse_parser import UrdfImporter, InertiaSource
+from multiverse_parser import UrdfImporter
 from multiverse_parser import UrdfExporter
 
 from pxr import Usd

@@ -17,7 +17,7 @@ from ..factory import (WorldBuilder,
                        MaterialProperty)
 from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
-from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade, Sdf
+from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade
 
 
 def build_urdf_inertial_api(physics_mass_api: UsdPhysics.MassAPI) -> UsdUrdf.UrdfLinkInertialAPI:

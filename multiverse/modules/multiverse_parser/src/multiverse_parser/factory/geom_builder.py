@@ -119,7 +119,6 @@ class GeomBuilder:
         new_usd_mesh_file_path = os.path.join(self.stage.GetRootLayer().realPath.replace(".usda", ""),
                                               "meshes",
                                               "usd",
-                                              "usd",
                                               f"{mesh_name}.usda")
         if not os.path.exists(new_usd_mesh_file_path):
             new_mesh_stage = Usd.Stage.CreateNew(new_usd_mesh_file_path)

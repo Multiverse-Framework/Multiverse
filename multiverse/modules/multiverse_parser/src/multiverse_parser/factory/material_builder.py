@@ -11,11 +11,11 @@ from .texture_builder import TextureBuilder
 from pxr import Usd, Sdf, UsdShade, Gf
 
 
-def get_input(shader: UsdShade.Shader, input: str) -> Any:
-    inputs = [shader_input.GetBaseName() for shader_input in shader.GetInputs()]
-    if input not in inputs:
+def get_input(shader: UsdShade.Shader, shader_input: str) -> Any:
+    shader_inputs = [shader_input.GetBaseName() for shader_input in shader.GetInputs()]
+    if shader_input not in shader_inputs:
         return None
-    shader_input = shader.GetInput(input)
+    shader_input = shader.GetInput(shader_input)
     if shader_input.HasConnectedSource():
         source = shader_input.GetConnectedSource()[0]
         if len(source.GetOutputs()) != 1:
@@ -77,19 +77,19 @@ class MaterialProperty:
 
     @classmethod
     def from_pbr_shader(cls, pbr_shader: UsdShade.Shader) -> "MaterialProperty":
-        diffuse_color = get_input(shader=pbr_shader, input="diffuseColor")
+        diffuse_color = get_input(shader=pbr_shader, shader_input="diffuseColor")
         if isinstance(diffuse_color, Gf.Vec3f):
             diffuse_color = numpy.array(diffuse_color)
 
-        opacity = get_input(shader=pbr_shader, input="opacity")
+        opacity = get_input(shader=pbr_shader, shader_input="opacity")
         if opacity is not None:
             opacity = float(opacity)
 
-        emissive_color = get_input(shader=pbr_shader, input="emissiveColor")
+        emissive_color = get_input(shader=pbr_shader, shader_input="emissiveColor")
         if isinstance(emissive_color, Gf.Vec3f):
             emissive_color = numpy.array(emissive_color)
 
-        specular_color = get_input(shader=pbr_shader, input="specularColor")
+        specular_color = get_input(shader=pbr_shader, shader_input="specularColor")
         if isinstance(specular_color, Gf.Vec3f):
             specular_color = numpy.array(specular_color)
 
