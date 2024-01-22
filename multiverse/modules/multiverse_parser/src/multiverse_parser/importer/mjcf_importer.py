@@ -296,16 +296,15 @@ class MjcfImporter(Factory):
                 points, normals, face_vertex_counts, face_vertex_indices = self._get_mesh_data(mesh_id=mesh_id)
                 tmp_usd_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
                                                       "usd",
-                                                      "usd",
                                                       f"{mesh_name}.usda")
 
                 mat_id = mj_geom.matid
-                texture_id = self.mj_model.mat_texid[mat_id][0]
-                if texture_id == -1:
+                if mat_id == -1 or self.mj_model.mat_texid[mat_id][0] == -1:
                     file_ext = "stl"
                     texture_coordinates = None
                     texture_file_path = None
                 else:
+                    texture_id = self.mj_model.mat_texid[mat_id][0]
                     file_ext = "obj"
                     mesh_texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
                     mesh_texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
@@ -335,7 +334,8 @@ class MjcfImporter(Factory):
                                              face_vertex_counts=face_vertex_counts,
                                              face_vertex_indices=face_vertex_indices,
                                              texture_coordinates=texture_coordinates)
-                geom_builder.add_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
+                mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
+                mesh_name = mesh_builder.mesh.GetPrim().GetPath().name
 
                 if mat_id != -1:
                     material_name = self.mj_model.mat(mat_id).name

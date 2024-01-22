@@ -39,6 +39,12 @@ def modify_name(in_name: str, replacement: str = None) -> str:
         if special_char in in_name:
             print(f"Name {in_name} contains {special_char}, replacing with _")
             out_name = out_name.replace(special_char, "_")
+
+    if out_name and out_name[0].isdigit():
+        if replacement is None:
+            raise ValueError(f"Name {in_name} starts with digit and replacement is None.")
+        out_name = replacement + out_name
+
     if out_name == "":
         if replacement is None:
             raise ValueError(f"Name {in_name} is empty and replacement is None.")

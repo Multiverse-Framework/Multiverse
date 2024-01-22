@@ -180,7 +180,7 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
 def add_scale_to_mesh_name(mesh_name: str, mesh_scale: numpy.ndarray) -> str:
     if not numpy.isclose(mesh_scale, numpy.array([1.0, 1.0, 1.0])).all():
         mesh_name += "_" + "_".join(map(str, mesh_scale))
-    mesh_name = modify_name(mesh_name)
+    mesh_name = modify_name(mesh_name, "Mesh_")
     return mesh_name
 
 

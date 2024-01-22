@@ -120,6 +120,7 @@ class GeomBuilder:
                                               "meshes",
                                               "usd",
                                               f"{mesh_name}.usda")
+        mesh_name = modify_name(mesh_name, "Mesh_")
         if not os.path.exists(new_usd_mesh_file_path):
             new_mesh_stage = Usd.Stage.CreateNew(new_usd_mesh_file_path)
             new_mesh = UsdGeom.Mesh.Define(new_mesh_stage, f"/{mesh_name}")
