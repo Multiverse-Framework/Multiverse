@@ -247,7 +247,9 @@ class UrdfExporter:
             mesh_dir_relpath = os.path.relpath(mesh_dir_abspath, ros_package_path)
             mesh_dir_rospath = "package://" + relative_to_ros_package + "/" + mesh_dir_relpath
         else:
-            mesh_dir_rospath = "file://" + mesh_dir_abspath
+            # mesh_dir_rospath = "file://" + mesh_dir_abspath
+            mesh_dir_relpath = os.path.relpath(mesh_dir_abspath, os.path.dirname(file_path))
+            mesh_dir_rospath = "file://" + mesh_dir_relpath
 
         return mesh_dir_abspath, mesh_dir_rospath
 

@@ -139,7 +139,7 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
                 geom_size = urdf_geometry_mesh_api.GetScaleAttr().Get()
                 geom_size = numpy.array([*geom_size]) if geom_size is not None else numpy.array([1.0, 1.0, 1.0])
             else:
-                raise NotImplementedError(f"Geom type {geom_builder.type} not implemented.")
+                geom_size = numpy.array([1.0, 1.0, 1.0])
             geom_type = "mesh"
         else:
             raise NotImplementedError(f"Geom type {geom_builder.type} not implemented.")
@@ -258,8 +258,8 @@ class MjcfExporter:
         self.root.set("model", model_name)
 
         compiler = ET.SubElement(self.root, "compiler")
-        compiler.set("meshdir", self.file_name + "/")
-
+        meshdir = os.path.join(self.file_name, "meshes")
+        compiler.set("meshdir", meshdir)
         texturedir = os.path.join(self.file_name, "textures")
         compiler.set("texturedir", texturedir)
         compiler.set("angle", "radian")
@@ -294,8 +294,7 @@ class MjcfExporter:
             mesh = ET.SubElement(asset, "mesh")
             mesh.set("name", mujoco_mesh.GetPrim().GetName())
             tmp_mesh_path = mujoco_mesh.GetFileAttr().Get().path
-            tmp_mesh_dir_path = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path), "tmp")
-            tmp_mesh_relpath = os.path.relpath(tmp_mesh_path, tmp_mesh_dir_path)
+            tmp_mesh_relpath = os.path.relpath(tmp_mesh_path, self.factory.tmp_mesh_dir_path)
 
             mesh.set("file", tmp_mesh_relpath)
             scale = mujoco_mesh.GetScaleAttr().Get()

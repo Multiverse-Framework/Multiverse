@@ -113,8 +113,9 @@ import os.path
 {clean_up_meshes_script}
 os.makedirs(name=os.path.dirname('{out_stl}'), exist_ok=True)
 selected_object = bpy.context.object
-selected_object.modifiers.new("Weld", "WELD")
-bpy.ops.object.modifier_apply(modifier="Weld")
+if len([vertex for obj in bpy.data.objects for vertex in obj.data.vertices]) > 1000:
+    selected_object.modifiers.new("Weld", "WELD")
+    bpy.ops.object.modifier_apply(modifier="Weld")
 bpy.ops.export_mesh.stl(filepath='{out_stl}', 
                         use_selection=False, 
                         axis_forward="Y", 
