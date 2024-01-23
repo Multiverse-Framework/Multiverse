@@ -51,6 +51,9 @@ class JointType(Enum):
             return "prismatic"
         elif self == JointType.PLANAR:
             return "planar"
+        elif self == JointType.SPHERICAL:
+            print(f"Joint type {self} not supported, using fixed joint.")
+            return "fixed"
         else:
             raise ValueError(f"Joint type {self} not supported.")
 

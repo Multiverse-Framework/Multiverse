@@ -155,6 +155,7 @@ class GeomBuilder:
                                                   "materials",
                                                   "usd",
                                                   f"{material_name}.usda")
+        material_name = modify_name(material_name)
         if not os.path.exists(new_usd_material_file_path):
             new_material_stage = Usd.Stage.CreateNew(new_usd_material_file_path)
             new_material = UsdShade.Material.Define(new_material_stage, f"/{material_name}")

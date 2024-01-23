@@ -8,6 +8,7 @@ import numpy
 import mujoco
 from scipy.spatial.transform import Rotation
 
+from ..utils import modify_name
 from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
                        JointBuilder, JointAxis, JointType, JointProperty,
@@ -79,7 +80,7 @@ class MjcfImporter(Factory):
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            default_rgba=default_rgba,
+            default_rgba=default_rgba if default_rgba is not None else numpy.array([1.0, 0.0, 0.0, 0.0]),
             inertia_source=inertia_source
         ))
 
@@ -263,6 +264,7 @@ class MjcfImporter(Factory):
             mj_geom_type_str = "plane" if mj_geom.type == mujoco.mjtGeom.mjGEOM_PLANE \
                 else "box" if mj_geom.type == mujoco.mjtGeom.mjGEOM_BOX \
                 else "sphere" if mj_geom.type == mujoco.mjtGeom.mjGEOM_SPHERE \
+                else "ellipsoid" if mj_geom.type == mujoco.mjtGeom.mjGEOM_ELLIPSOID \
                 else "cylinder" if mj_geom.type == mujoco.mjtGeom.mjGEOM_CYLINDER \
                 else "capsule" if mj_geom.type == mujoco.mjtGeom.mjGEOM_CAPSULE \
                 else "mesh" if mj_geom.type == mujoco.mjtGeom.mjGEOM_MESH \
@@ -299,7 +301,9 @@ class MjcfImporter(Factory):
                                                       f"{mesh_name}.usda")
 
                 mat_id = mj_geom.matid
-                if mat_id == -1 or self.mj_model.mat_texid[mat_id][0] == -1:
+                if (mat_id == -1 or
+                        self.mj_model.mat_texid[mat_id][0] == -1 or
+                        self.mj_model.mesh_texcoordadr[mesh_id] == -1):
                     file_ext = "stl"
                     texture_coordinates = None
                     texture_file_path = None
@@ -339,6 +343,7 @@ class MjcfImporter(Factory):
 
                 if mat_id != -1:
                     material_name = self.mj_model.mat(mat_id).name
+                    material_name = modify_name(material_name)
 
                     mujoco_material_path = self.mujoco_materials_prim.GetPath().AppendChild(material_name)
                     mujoco_material = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
@@ -346,7 +351,7 @@ class MjcfImporter(Factory):
                     mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 
                     texture_id = self.mj_model.mat_texid[mat_id][0]
-                    if texture_id == -1:
+                    if texture_id == -1 or texture_file_path is None:
                         mat_rgba = self.mj_model.mat_rgba[mat_id][0]
                         mat_emission = self.mj_model.mat_emission[mat_id].tolist()[0]
                         mat_specular = self.mj_model.mat_specular[mat_id].tolist()[0]
