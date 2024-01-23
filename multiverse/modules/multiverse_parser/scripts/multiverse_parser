@@ -30,23 +30,23 @@ def main():
     )
     parser.set_defaults(relative_to_ros_package=None)
     parser.add_argument(
-        "--physics",
+        "--no-physics",
         action='store_true',
         help="Whether to include physics properties or not",
     )
-    parser.set_defaults(physics=True)
+    parser.set_defaults(nophysics=False)
     parser.add_argument(
-        "--visual",
+        "--no-visual",
         action='store_true',
         help="Whether to include visual meshes or not",
     )
-    parser.set_defaults(visual=True)
+    parser.set_defaults(novisual=False)
     parser.add_argument(
-        "--collision",
+        "--no-collision",
         action='store_true',
         help="Whether to include collision meshes or not",
     )
-    parser.set_defaults(collision=True)
+    parser.set_defaults(nocollision=False)
     parser.add_argument(
         "--keepusd",
         action='store_true',
@@ -70,6 +70,11 @@ def main():
 
     args = parser.parse_args()
 
+    with_physics = not args.nophysics
+    with_visual = not args.novisual
+    with_collision = not args.nocollision
+    keep_usd = args.keepusd
+
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
 
@@ -84,16 +89,16 @@ def main():
         raise NotImplementedError("Importing from USD is not supported yet.")
     elif in_extension == ".urdf":
         factory = UrdfImporter(file_path=args.input,
-                               with_physics=args.physics,
-                               with_visual=args.visual,
-                               with_collision=args.collision,
+                               with_physics=with_physics,
+                               with_visual=with_visual,
+                               with_collision=with_collision,
                                inertia_source=inertia_source,
                                default_rgba=args.defaultrgba)
     elif in_extension == ".xml":
         factory = MjcfImporter(file_path=args.input,
-                               with_physics=args.physics,
-                               with_visual=args.visual,
-                               with_collision=args.collision,
+                               with_physics=with_physics,
+                               with_visual=with_visual,
+                               with_collision=with_collision,
                                inertia_source=inertia_source,
                                default_rgba=args.defaultrgba)
     else:
@@ -108,13 +113,13 @@ def main():
         exporter = MjcfExporter(file_path=args.output,
                                 factory=factory)
         exporter.build()
-        exporter.export(keep_usd=args.keepusd)
+        exporter.export(keep_usd=keep_usd)
     elif out_extension == ".urdf":
         exporter = UrdfExporter(file_path=args.output,
                                 factory=factory,
                                 relative_to_ros_package=args.relative_to_ros_package)
         exporter.build()
-        exporter.export(keep_usd=args.keepusd)
+        exporter.export(keep_usd=keep_usd)
     else:
         raise NotImplementedError(f"Exporting to {out_extension} is not supported yet.")
 
