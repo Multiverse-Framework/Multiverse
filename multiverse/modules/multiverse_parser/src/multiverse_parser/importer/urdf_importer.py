@@ -97,7 +97,7 @@ class UrdfImporter(Factory):
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            default_rgba=default_rgba,
+            default_rgba=default_rgba if default_rgba is not None else numpy.array([1.0, 0.0, 0.0, 0.0]),
             inertia_source=inertia_source
         ))
 

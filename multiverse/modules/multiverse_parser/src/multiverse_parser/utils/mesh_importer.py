@@ -58,8 +58,11 @@ def import_stl(in_stls: List[str],
                mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
                clean_up: bool = True) -> str:
     return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
+import re
 for in_stl in {in_stls}:
     bpy.ops.wm.stl_import(filepath=in_stl, up_axis='Z', forward_axis='Y')
     bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+    mesh = bpy.context.view_layer.objects.active.data
+    mesh.name = re.sub(r'\.\d+$', '', mesh.name)
 """
