@@ -343,7 +343,7 @@ class MjcfImporter(Factory):
 
                 if mat_id != -1:
                     material_name = self.mj_model.mat(mat_id).name
-                    material_name = modify_name(material_name)
+                    material_name = modify_name(material_name, "Material_")
 
                     mujoco_material_path = self.mujoco_materials_prim.GetPath().AppendChild(material_name)
                     mujoco_material = UsdMujoco.MujocoMaterial.Define(self.world_builder.stage,
