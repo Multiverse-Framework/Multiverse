@@ -1,0 +1,37 @@
+#usda 1.0
+(
+    defaultPrim = "pizza_box_white"
+    upAxis = "Z"
+)
+
+def Material "pizza_box_white"
+{
+    token inputs:frame:stPrimvarName = "st"
+    token outputs:surface.connect = </pizza_box_white/PBRShader.outputs:surface>
+
+    def Shader "PBRShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </pizza_box_white/DiffuseTexture.outputs:rgb>
+        color3f inputs:emissiveColor = (0, 0, 0)
+        float inputs:opacity = 1
+        int inputs:useSpecularWorkflow = 1
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        token inputs:varname.connect = </pizza_box_white.inputs:frame:stPrimvarName>
+        float2 outputs:result
+    }
+
+    def Shader "DiffuseTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        asset inputs:file = @../../textures/pizza_box_white.png@
+        float2 inputs:st.connect = </pizza_box_white/PrimvarReader.outputs:result>
+        float3 outputs:rgb
+    }
+}
+

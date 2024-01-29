@@ -140,7 +140,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 							boost::filesystem::path asset_dir_path = object_xml_path;
 							const char *asset_type_dir = (asset_type + "dir").c_str();
 							for (tinyxml2::XMLElement *compiler_element = mujoco_element->FirstChildElement("compiler");
-								compiler_element != nullptr; compiler_element = compiler_element->NextSiblingElement())
+								 compiler_element != nullptr; compiler_element = compiler_element->NextSiblingElement())
 							{
 								if (compiler_element->Attribute(asset_type_dir) == nullptr)
 								{
@@ -154,10 +154,10 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 								compiler_element->DeleteAttribute(asset_type_dir);
 							}
 							for (tinyxml2::XMLElement *asset_element = mujoco_element->FirstChildElement("asset");
-									asset_element != nullptr; asset_element = asset_element->NextSiblingElement())
+								 asset_element != nullptr; asset_element = asset_element->NextSiblingElement())
 							{
 								for (tinyxml2::XMLElement *asset_type_element = asset_element->FirstChildElement(asset_type.c_str());
-										asset_type_element != nullptr; asset_type_element = asset_type_element->NextSiblingElement())
+									 asset_type_element != nullptr; asset_type_element = asset_type_element->NextSiblingElement())
 								{
 									if (asset_type_element->Attribute("file") == nullptr)
 									{
@@ -172,13 +172,13 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 								}
 							}
 						}
-						
+
 						for (tinyxml2::XMLElement *default_element = mujoco_element->FirstChildElement("default");
-								default_element != nullptr; default_element = default_element->NextSiblingElement())
+							 default_element != nullptr; default_element = default_element->NextSiblingElement())
 						{
 							std::vector<tinyxml2::XMLElement *> children_to_remove;
 							for (tinyxml2::XMLElement *default_child_element = default_element->FirstChildElement("default");
-									default_child_element != nullptr; default_child_element = default_child_element->NextSiblingElement())
+								 default_child_element != nullptr; default_child_element = default_child_element->NextSiblingElement())
 							{
 								if (default_child_element->Attribute("class") != nullptr && (strcmp(default_child_element->Attribute("class"), "visual") == 0 || strcmp(default_child_element->Attribute("class"), "collision") == 0))
 								{
@@ -730,7 +730,9 @@ void MjMultiverseClient::init_send_and_receive_data()
 						send_data_vec.emplace_back(&d->qvel[dof_id + 4]);
 						send_data_vec.emplace_back(&d->qvel[dof_id + 5]);
 					}
-					else if (strcmp(attribute_name.c_str(), "odometric_velocity") == 0 && m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
+					else if (strcmp(attribute_name.c_str(), "odometric_velocity") == 0 &&
+							 m->body_dofnum[body_id] <= 6 &&
+							 m->body_jntadr[body_id] != -1)
 					{
 						odom_velocities[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
 						send_data_vec.emplace_back(&odom_velocities[body_id][0]);
@@ -824,7 +826,8 @@ void MjMultiverseClient::init_send_and_receive_data()
 				for (const std::string &attribute_name : receive_object.second)
 				{
 					if (strcmp(attribute_name.c_str(), "position") == 0 &&
-						m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 &&
+						m->body_dofnum[body_id] == 6 &&
+						m->body_jntadr[body_id] != -1 &&
 						m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 					{
 						int qpos_id = m->jnt_qposadr[m->body_jntadr[body_id]];
@@ -832,11 +835,11 @@ void MjMultiverseClient::init_send_and_receive_data()
 						receive_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
 						receive_data_vec.emplace_back(&d->qpos[qpos_id + 2]);
 					}
-					else if (strcmp(attribute_name.c_str(), "quaternion") == 0 &&
-								 (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE) ||
-							 (m->body_dofnum[body_id] == 3 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_BALL))
+					else if (strcmp(attribute_name.c_str(), "quaternion") == 0)
 					{
-						if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
+						if (m->body_dofnum[body_id] == 6 &&
+							m->body_jntadr[body_id] != -1 &&
+							m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 						{
 							int qpos_id = m->jnt_qposadr[m->body_jntadr[body_id]];
 							receive_data_vec.emplace_back(&d->qpos[qpos_id + 3]);
@@ -844,7 +847,9 @@ void MjMultiverseClient::init_send_and_receive_data()
 							receive_data_vec.emplace_back(&d->qpos[qpos_id + 5]);
 							receive_data_vec.emplace_back(&d->qpos[qpos_id + 6]);
 						}
-						else if (m->body_dofnum[body_id] == 3 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_BALL)
+						else if (m->body_dofnum[body_id] == 3 &&
+								 m->body_jntadr[body_id] != -1 &&
+								 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_BALL)
 						{
 							int qpos_id = m->jnt_qposadr[m->body_jntadr[body_id]];
 							receive_data_vec.emplace_back(&d->qpos[qpos_id]);
@@ -866,7 +871,9 @@ void MjMultiverseClient::init_send_and_receive_data()
 						receive_data_vec.emplace_back(&d->xfrc_applied[6 * body_id + 5]);
 					}
 					else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0 &&
-							 m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE &&
+							 m->body_dofnum[body_id] == 6 &&
+							 m->body_jntadr[body_id] != -1 &&
+							 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE &&
 							 odom_velocities.count(body_id) == 0)
 					{
 						receive_data_vec.emplace_back(&d->qvel[dof_id]);
@@ -876,17 +883,20 @@ void MjMultiverseClient::init_send_and_receive_data()
 						receive_data_vec.emplace_back(&d->qvel[dof_id + 4]);
 						receive_data_vec.emplace_back(&d->qvel[dof_id + 5]);
 					}
-					else if (strcmp(attribute_name.c_str(), "odometric_velocity") == 0 &&
-							 m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE &&
-							 odom_velocities.count(body_id) == 0)
+					else if (strcmp(attribute_name.c_str(), "odometric_velocity") == 0)
 					{
-						odom_velocities[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
-						receive_data_vec.emplace_back(&odom_velocities[body_id][0]);
-						receive_data_vec.emplace_back(&odom_velocities[body_id][1]);
-						receive_data_vec.emplace_back(&odom_velocities[body_id][2]);
-						receive_data_vec.emplace_back(&odom_velocities[body_id][3]);
-						receive_data_vec.emplace_back(&odom_velocities[body_id][4]);
-						receive_data_vec.emplace_back(&odom_velocities[body_id][5]);
+						if (m->body_dofnum[body_id] <= 6 &&
+							m->body_jntadr[body_id] != -1 &&
+							odom_velocities.count(body_id) == 0)
+						{
+							odom_velocities[body_id] = (mjtNum *)calloc(6, sizeof(mjtNum));
+							receive_data_vec.emplace_back(&odom_velocities[body_id][0]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][1]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][2]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][3]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][4]);
+							receive_data_vec.emplace_back(&odom_velocities[body_id][5]);
+						}
 					}
 				}
 			}
@@ -969,42 +979,110 @@ void MjMultiverseClient::bind_receive_data()
 	{
 		const int body_id = odom_velocity.first;
 		const int dof_adr = m->body_dofadr[body_id];
-		if (m->body_dofnum[body_id] == 6)
+		if (m->body_dofnum[body_id] == 6 &&
+			m->body_jntadr[body_id] != -1 &&
+			m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 		{
-			const int joint_id = m->body_jntadr[body_id];
-			const int qpos_id = m->jnt_qposadr[joint_id];
+			const int joint_adr = m->body_jntadr[body_id];
+			const int qpos_adr = m->jnt_qposadr[joint_adr];
 
-			const mjtNum w = (d->qpos + qpos_id)[3];
-			const mjtNum x = (d->qpos + qpos_id)[4];
-			const mjtNum y = (d->qpos + qpos_id)[5];
-			const mjtNum z = (d->qpos + qpos_id)[6];
+			const mjtNum w = (d->qpos + qpos_adr)[3];
+			const mjtNum x = (d->qpos + qpos_adr)[4];
+			const mjtNum y = (d->qpos + qpos_adr)[5];
+			const mjtNum z = (d->qpos + qpos_adr)[6];
 
 			const mjtNum sinr_cosp = 2 * (w * x + y * z);
 			const mjtNum cosr_cosp = 1 - 2 * (x * x + y * y);
-			mjtNum odom_x_joint_pos = std::atan2(sinr_cosp, cosr_cosp);
+			mjtNum odom_ang_x_joint_pos = std::atan2(sinr_cosp, cosr_cosp);
 
 			const mjtNum sinp = 2 * (w * y - z * x);
-			mjtNum odom_y_joint_pos;
+			mjtNum odom_ang_y_joint_pos;
 			if (std::abs(sinp) >= 1)
 			{
-				odom_y_joint_pos = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
+				odom_ang_y_joint_pos = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
 			}
 			else
 			{
-				odom_y_joint_pos = std::asin(sinp);
+				odom_ang_y_joint_pos = std::asin(sinp);
 			}
 
 			const mjtNum siny_cosp = 2 * (w * z + x * y);
 			const mjtNum cosy_cosp = 1 - 2 * (y * y + z * z);
-			mjtNum odom_z_joint_pos = std::atan2(siny_cosp, cosy_cosp);
+			mjtNum odom_ang_z_joint_pos = std::atan2(siny_cosp, cosy_cosp);
 
 			mjtNum *qvel = d->qvel + dof_adr;
-			qvel[0] = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) - mju_cos(odom_x_joint_pos) * mju_sin(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_cos(odom_z_joint_pos) + mju_sin(odom_x_joint_pos) * mju_sin(odom_z_joint_pos));
-			qvel[1] = odom_velocity.second[0] * mju_cos(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) + mju_cos(odom_x_joint_pos) * mju_cos(odom_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_x_joint_pos) * mju_sin(odom_y_joint_pos) * mju_sin(odom_z_joint_pos) - mju_sin(odom_x_joint_pos) * mju_cos(odom_z_joint_pos));
-			qvel[2] = odom_velocity.second[0] * mju_sin(odom_y_joint_pos) + odom_velocity.second[1] * mju_sin(odom_x_joint_pos) * mju_cos(odom_y_joint_pos) + odom_velocity.second[2] * mju_cos(odom_x_joint_pos) * mju_cos(odom_y_joint_pos);
+			qvel[0] = odom_velocity.second[0] * mju_cos(odom_ang_y_joint_pos) * mju_cos(odom_ang_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_ang_x_joint_pos) * mju_sin(odom_ang_y_joint_pos) * mju_cos(odom_ang_z_joint_pos) - mju_cos(odom_ang_x_joint_pos) * mju_sin(odom_ang_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_ang_x_joint_pos) * mju_sin(odom_ang_y_joint_pos) * mju_cos(odom_ang_z_joint_pos) + mju_sin(odom_ang_x_joint_pos) * mju_sin(odom_ang_z_joint_pos));
+			qvel[1] = odom_velocity.second[0] * mju_cos(odom_ang_y_joint_pos) * mju_sin(odom_ang_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_ang_x_joint_pos) * mju_sin(odom_ang_y_joint_pos) * mju_sin(odom_ang_z_joint_pos) + mju_cos(odom_ang_x_joint_pos) * mju_cos(odom_ang_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_ang_x_joint_pos) * mju_sin(odom_ang_y_joint_pos) * mju_sin(odom_ang_z_joint_pos) - mju_sin(odom_ang_x_joint_pos) * mju_cos(odom_ang_z_joint_pos));
+			qvel[2] = odom_velocity.second[0] * mju_sin(odom_ang_y_joint_pos) + odom_velocity.second[1] * mju_sin(odom_ang_x_joint_pos) * mju_cos(odom_ang_y_joint_pos) + odom_velocity.second[2] * mju_cos(odom_ang_x_joint_pos) * mju_cos(odom_ang_y_joint_pos);
 			qvel[3] = odom_velocity.second[3];
 			qvel[4] = odom_velocity.second[4];
 			qvel[5] = odom_velocity.second[5];
+		}
+		else if (m->body_dofnum[body_id] <= 6)
+		{
+			mjtNum odom_ang_x_joint_pos = 0.0;
+			mjtNum odom_ang_y_joint_pos = 0.0;
+			mjtNum odom_ang_z_joint_pos = 0.0;
+
+			const int joint_adr = m->body_jntadr[body_id];
+			for (int joint_id = joint_adr; joint_id < joint_adr + m->body_jntnum[body_id]; joint_id++)
+			{
+				const int qpos_adr = m->jnt_qposadr[joint_id];
+				if (m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE)
+				{
+					if (mju_abs(m->jnt_axis[3 * joint_id] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 1]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 2]) < mjMINVAL)
+					{
+						odom_ang_x_joint_pos = d->qpos[qpos_adr];
+					}
+					else if (mju_abs(m->jnt_axis[3 * joint_id + 1] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 2]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id]) < mjMINVAL)
+					{
+						odom_ang_y_joint_pos = d->qpos[qpos_adr];
+					}
+					else if (mju_abs(m->jnt_axis[3 * joint_id + 2] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 1]) < mjMINVAL)
+					{
+						odom_ang_z_joint_pos = d->qpos[qpos_adr];
+					}
+				}
+			}
+			for (int joint_num = 0; joint_num < m->body_jntnum[body_id]; joint_num++)
+			{
+				const int joint_id = joint_adr + joint_num;
+				if (m->jnt_type[joint_id] != mjtJoint::mjJNT_SLIDE && m->jnt_type[joint_id] != mjtJoint::mjJNT_HINGE)
+				{
+					continue;
+				}
+				const int dof_id = m->jnt_dofadr[joint_id];
+				if (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)
+				{
+					if (mju_abs(m->jnt_axis[3 * joint_id] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 1]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 2]) < mjMINVAL)
+					{
+						d->qvel[dof_id] = odom_velocity.second[0] * mju_cos(odom_ang_y_joint_pos) * mju_cos(odom_ang_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_ang_x_joint_pos) * mju_sin(odom_ang_y_joint_pos) * mju_cos(odom_ang_z_joint_pos) - mju_cos(odom_ang_x_joint_pos) * mju_sin(odom_ang_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_ang_x_joint_pos) * mju_sin(odom_ang_y_joint_pos) * mju_cos(odom_ang_z_joint_pos) + mju_sin(odom_ang_x_joint_pos) * mju_sin(odom_ang_z_joint_pos));
+					}
+					else if (mju_abs(m->jnt_axis[3 * joint_id + 1] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 2]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id]) < mjMINVAL)
+					{
+						d->qvel[dof_id] = odom_velocity.second[0] * mju_cos(odom_ang_y_joint_pos) * mju_sin(odom_ang_z_joint_pos) + odom_velocity.second[1] * (mju_sin(odom_ang_x_joint_pos) * mju_sin(odom_ang_y_joint_pos) * mju_sin(odom_ang_z_joint_pos) + mju_cos(odom_ang_x_joint_pos) * mju_cos(odom_ang_z_joint_pos)) + odom_velocity.second[2] * (mju_cos(odom_ang_x_joint_pos) * mju_sin(odom_ang_y_joint_pos) * mju_sin(odom_ang_z_joint_pos) - mju_sin(odom_ang_x_joint_pos) * mju_cos(odom_ang_z_joint_pos));
+					}
+					else if (mju_abs(m->jnt_axis[3 * joint_id + 2] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 1]) < mjMINVAL)
+					{
+						d->qvel[dof_id] = odom_velocity.second[0] * mju_sin(odom_ang_y_joint_pos) + odom_velocity.second[1] * mju_sin(odom_ang_x_joint_pos) * mju_cos(odom_ang_y_joint_pos) + odom_velocity.second[2] * mju_cos(odom_ang_x_joint_pos) * mju_cos(odom_ang_y_joint_pos);
+					}
+				}
+				else if (m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE)
+				{
+					if (mju_abs(m->jnt_axis[3 * joint_id] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 1]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 2]) < mjMINVAL)
+					{
+						d->qvel[dof_id] = odom_velocity.second[3];
+					}
+					else if (mju_abs(m->jnt_axis[3 * joint_id + 1] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 2]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id]) < mjMINVAL)
+					{
+						d->qvel[dof_id] = odom_velocity.second[4];
+					}
+					else if (mju_abs(m->jnt_axis[3 * joint_id + 2] - 1.0) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id]) < mjMINVAL && mju_abs(m->jnt_axis[3 * joint_id + 1]) < mjMINVAL)
+					{
+						d->qvel[dof_id] = odom_velocity.second[5];
+					}
+				}
+			}
 		}
 	}
 

@@ -100,11 +100,12 @@ class MjcfImporter(Factory):
             if self._config.with_physics:
                 self.import_joints(mj_body=mj_body, body_builder=body_builder)
 
-        if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_MESH:
+        if self._config.with_physics and self._config.inertia_source in [InertiaSource.FROM_VISUAL_MESH,
+                                                                         InertiaSource.FROM_COLLISION_MESH]:
             body_name = self.mj_model.body(1).name
             body_builder = self.world_builder.get_body_builder(body_name=body_name)
             for child_body_builder in body_builder.child_body_builders:
-                child_body_builder.compute_and_set_inertial()
+                child_body_builder.compute_and_set_inertial(self._config.inertia_source)
 
         self._import_equality()
 

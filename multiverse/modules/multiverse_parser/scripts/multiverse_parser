@@ -57,7 +57,7 @@ def main():
         "--inertiasource",
         type=str,
         required=False,
-        help="Where to get the inertia from (from_src or from_mesh)",
+        help="Where to get the inertia from (from_src, from_visual_mesh or from_collision_mesh)",
     )
     parser.set_defaults(inertiasource="from_src")
     parser.add_argument(
@@ -78,8 +78,10 @@ def main():
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
 
-    if args.inertiasource == "from_mesh":
-        inertia_source = InertiaSource.FROM_MESH
+    if args.inertiasource == "from_visual_mesh":
+        inertia_source = InertiaSource.FROM_VISUAL_MESH
+    elif args.inertiasource == "from_collision_mesh":
+        inertia_source = InertiaSource.FROM_COLLISION_MESH
     elif args.inertiasource == "from_src":
         inertia_source = InertiaSource.FROM_SRC
     else:

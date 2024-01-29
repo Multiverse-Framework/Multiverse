@@ -308,9 +308,11 @@ class GeomBuilder:
         elif geom_type == GeomType.CUBE:
             cube = UsdGeom.Cube(self.gprim.GetPrim())
             size = cube.GetSizeAttr().Get()
-            scale_x = 1.0
-            scale_y = 1.0
-            scale_z = 1.0
+            transformation = cube.GetLocalTransformation()
+            scale = [transformation.GetRow(i).GetLength() for i in range(3)]
+            scale_x = scale[0]
+            scale_y = scale[1]
+            scale_z = scale[2]
             length_x = size * scale_x
             length_y = size * scale_y
             length_z = size * scale_z

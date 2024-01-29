@@ -196,10 +196,10 @@ class UrdfImporter(Factory):
                                                                  diagonal_inertia=body_diagonal_inertia,
                                                                  principal_axes=body_principal_axes)
                 else:
-                    _, physics_mass_api = body_builder.compute_and_set_inertial()
+                    _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
 
-            elif self._config.inertia_source == InertiaSource.FROM_MESH:
-                _, physics_mass_api = body_builder.compute_and_set_inertial()
+            elif self._config.inertia_source in [InertiaSource.FROM_VISUAL_MESH, InertiaSource.FROM_COLLISION_MESH]:
+                _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
             else:
                 raise ValueError(f"Inertia source {self._config.inertia_source} not implemented.")
 

@@ -1,0 +1,37 @@
+#usda 1.0
+(
+    defaultPrim = "_1___Default"
+    upAxis = "Z"
+)
+
+def Material "_1___Default"
+{
+    token inputs:frame:stPrimvarName = "st"
+    token outputs:surface.connect = </_1___Default/PBRShader.outputs:surface>
+
+    def Shader "PBRShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor.connect = </_1___Default/DiffuseTexture.outputs:rgb>
+        color3f inputs:emissiveColor = (0, 0, 0)
+        float inputs:opacity = 1
+        int inputs:useSpecularWorkflow = 1
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        token inputs:varname.connect = </_1___Default.inputs:frame:stPrimvarName>
+        float2 outputs:result
+    }
+
+    def Shader "DiffuseTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        asset inputs:file = @../../textures/Construction_Cone_Diffuse.png@
+        float2 inputs:st.connect = </_1___Default/PrimvarReader.outputs:result>
+        float3 outputs:rgb
+    }
+}
+

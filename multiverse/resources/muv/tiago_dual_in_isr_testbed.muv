@@ -13,7 +13,7 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: no_visual/isr-testbed.xml
+      path: isr_testbed/isr_testbed.xml
     robots:
       tiago_dual:
         path: tiago_dual.xml
@@ -22,8 +22,10 @@ simulations:
             tiago_dual:
               pos: [-3.0, -5.0, 0]
         disable_self_collision: auto
+        joint_state:
+          torso_lift_joint: 0.8
     config:
-      max_time_step: 0.002
+      max_time_step: 0.001
       min_time_step: 0.001
 
 multiverse_server:
@@ -56,6 +58,10 @@ multiverse_clients:
       arm_right_5_actuator: ["cmd_joint_rvalue"]
       arm_right_6_actuator: ["cmd_joint_rvalue"]
       arm_right_7_actuator: ["cmd_joint_rvalue"]
+      gripper_left_left_finger_actuator: ["cmd_joint_force"]
+      gripper_left_right_finger_actuator: ["cmd_joint_force"]
+      gripper_right_left_finger_actuator: ["cmd_joint_force"]
+      gripper_right_right_finger_actuator: ["cmd_joint_force"]
 
   ros:
     ros_nodes:
@@ -111,8 +117,8 @@ multiverse_clients:
       rviz:
         config: tiago_dual_in_isr_testbed/config/rviz.rviz
         robot_descriptions:
-          tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
-          isr_testbed_description: isr_testbed/urdf/isr-testbed.urdf
+          tiago_dual_description: tiago_dual/tiago_dual.urdf
+          isr_testbed_description: isr_testbed/isr_testbed.urdf
 
       map_server:
         map: isr_testbed/map/isr-testbed.yaml
@@ -135,7 +141,7 @@ multiverse_clients:
         controller_manager:
           robot: tiago_dual
           robot_description: /robot_description
-          urdf: tiago_dual/urdf/tiago_dual.urdf
+          urdf: tiago_dual/tiago_dual.urdf
           config: tiago_dual/config/ros_control.yaml
           actuators:
             torso_lift_actuator: torso_lift_joint
@@ -155,6 +161,10 @@ multiverse_clients:
             arm_right_5_actuator: arm_right_5_joint
             arm_right_6_actuator: arm_right_6_joint
             arm_right_7_actuator: arm_right_7_joint
+            gripper_left_left_finger_actuator: gripper_left_left_finger_joint
+            gripper_left_right_finger_actuator: gripper_left_right_finger_joint
+            gripper_right_left_finger_actuator: gripper_right_left_finger_joint
+            gripper_right_right_finger_actuator: gripper_right_right_finger_joint
           controllers:
             spawn:
               - joint_state_controller
@@ -162,3 +172,7 @@ multiverse_clients:
                 head_controller
                 arm_left_controller
                 arm_right_controller
+                gripper_left_left_finger_effort_controller
+                gripper_left_right_finger_effort_controller
+                gripper_right_left_finger_effort_controller
+                gripper_right_right_finger_effort_controller

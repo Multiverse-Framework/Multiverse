@@ -31,7 +31,8 @@ class MeshProperty:
 
     def check_validity(self):
         assert self.points.size != 0
-        assert all(face_vertex_count == 3 for face_vertex_count in self.face_vertex_counts)
+        if not all(face_vertex_count == 3 for face_vertex_count in self.face_vertex_counts):
+            raise ValueError("Only triangular meshes are supported.")
         assert self.face_vertex_counts.size * 3 == self.face_vertex_indices.size
         if self.texture_coordinates is not None:
             assert self.texture_coordinates.size == self.face_vertex_indices.size * 2

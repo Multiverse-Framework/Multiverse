@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 from __future__ import annotations
+
+from enum import Enum
 from typing import Optional, Dict, List
 
 import numpy
@@ -11,6 +13,12 @@ from ..utils import get_transform, xform_cache, modify_name, diagonalize_inertia
     shift_inertia_tensor
 
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
+
+
+class InertiaSource(Enum):
+    FROM_SRC = 0
+    FROM_VISUAL_MESH = 1
+    FROM_COLLISION_MESH = 2
 
 
 class BodyBuilder:
@@ -114,12 +122,12 @@ class BodyBuilder:
 
         return physics_mass_api
 
-    def compute_and_set_inertial(self) -> (GeomInertial, UsdPhysics.MassAPI):
+    def compute_and_set_inertial(self, inertia_source: InertiaSource) -> (GeomInertial, UsdPhysics.MassAPI):
         body_inertial = GeomInertial(mass=0.0,
                                      center_of_mass=numpy.zeros((1, 3)),
                                      inertia_tensor=numpy.zeros((3, 3)))
         for child_body_builder in self.child_body_builders:
-            child_body_inertial, _ = child_body_builder.compute_and_set_inertial()
+            child_body_inertial, _ = child_body_builder.compute_and_set_inertial(inertia_source)
             body_inertial.mass += child_body_inertial.mass
             body_inertial.center_of_mass += child_body_inertial.center_of_mass * child_body_inertial.mass
             body_inertial.inertia_tensor += child_body_inertial.inertia_tensor
@@ -128,10 +136,12 @@ class BodyBuilder:
             body_inertial.center_of_mass /= body_inertial.mass
 
         for geom_builder in self._geom_builders.values():
-            geom_inertial = geom_builder.calculate_inertial()
-            body_inertial.mass += geom_inertial.mass
-            body_inertial.center_of_mass += geom_inertial.center_of_mass * geom_inertial.mass
-            body_inertial.inertia_tensor += geom_inertial.inertia_tensor
+            if (geom_builder.is_visible and inertia_source == InertiaSource.FROM_VISUAL_MESH or
+                    geom_builder.is_collidable and inertia_source == InertiaSource.FROM_COLLISION_MESH):
+                geom_inertial = geom_builder.calculate_inertial()
+                body_inertial.mass += geom_inertial.mass
+                body_inertial.center_of_mass += geom_inertial.center_of_mass * geom_inertial.mass
+                body_inertial.inertia_tensor += geom_inertial.inertia_tensor
 
         if body_inertial.mass > 0.0:
             body_inertial.center_of_mass /= body_inertial.mass

@@ -7,20 +7,15 @@ import random
 import shutil
 import string
 import subprocess
-from enum import Enum
 from typing import Optional, Dict, Tuple, List
 
 import numpy
 from pxr import Usd, UsdShade, Sdf
 
 from .world_builder import WorldBuilder
+from .body_builder import InertiaSource
 from ..utils import (import_obj, import_stl, import_dae, import_usd,
                      export_obj, export_stl, export_dae, export_usd)
-
-
-class InertiaSource(Enum):
-    FROM_SRC = 0
-    FROM_MESH = 1
 
 
 @dataclass
@@ -100,9 +95,10 @@ def fix_texture_path(usd_mesh_file_path: str):
                 os.makedirs(name=os.path.dirname(new_texture_file_path), exist_ok=True)
                 if not os.path.exists(new_texture_file_path):
                     shutil.move(texture_file_path, new_texture_file_path)
-                os.remove(texture_file_path)
-                if len(os.listdir(os.path.dirname(texture_file_path))) == 0:
-                    os.rmdir(os.path.dirname(texture_file_path))
+                if texture_file_path != new_texture_file_path and os.path.exists(texture_file_path):
+                    os.remove(texture_file_path)
+                    if len(os.listdir(os.path.dirname(texture_file_path))) == 0:
+                        os.rmdir(os.path.dirname(texture_file_path))
 
                 new_texture_file_relpath = os.path.relpath(new_texture_file_path,
                                                            os.path.dirname(usd_mesh_file_path))

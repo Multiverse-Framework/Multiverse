@@ -1,0 +1,297 @@
+#usda 1.0
+(
+    defaultPrim = "basmati_rice"
+    doc = "Blender v3.6.1"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "basmati_rice"
+{
+    matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+    uniform token[] xformOpOrder = ["xformOp:transform"]
+
+    def Mesh "basmati_rice" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        float3[] extent = [(-0.014252, -0.060768, -0.084776), (0.015, 0.060768, 0.084776)]
+        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+        int[] faceVertexIndices = [0, 1, 2, 1, 0, 3, 8, 9, 10, 9, 8, 11, 4, 5, 6, 7, 6, 5, 12, 13, 14, 15, 14, 13, 20, 21, 22, 23, 22, 21, 28, 29, 30, 31, 30, 29, 36, 37, 38, 39, 38, 37, 44, 45, 46, 47, 46, 45, 16, 17, 18, 17, 16, 19, 24, 25, 26, 25, 24, 27, 32, 33, 34, 33, 32, 35, 40, 41, 42, 41, 40, 43]
+        rel material:binding = </_materials/basmati_rice_top>
+        normal3f[] normals = [(0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, 0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 0, -0.99999994), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0)] (
+            interpolation = "faceVarying"
+        )
+        point3f[] points = [(0.015, 0.060768, -0.084776), (-0.014252, -0.060768, -0.084776), (-0.014252, 0.060768, -0.084776), (0.015, -0.060768, -0.084776), (0.015, -0.060768, -0.084776), (0.015, 0.060768, -0.084776), (-0.014252, -0.060768, -0.084776), (-0.014252, 0.060768, -0.084776), (0.015, -0.060768, 0.084776), (-0.014252, 0.060768, 0.084776), (-0.014252, -0.060768, 0.084776), (0.015, 0.060768, 0.084776), (0.015, 0.060768, 0.084776), (0.015, -0.060768, 0.084776), (-0.014252, 0.060768, 0.084776), (-0.014252, -0.060768, 0.084776), (0.015, -0.060768, 0.084776), (-0.014252, -0.060768, -0.084776), (0.015, -0.060768, -0.084776), (-0.014252, -0.060768, 0.084776), (-0.014252, -0.060768, 0.084776), (0.015, -0.060768, 0.084776), (-0.014252, -0.060768, -0.084776), (0.015, -0.060768, -0.084776), (-0.014252, 0.060768, 0.084776), (-0.014252, -0.060768, -0.084776), (-0.014252, -0.060768, 0.084776), (-0.014252, 0.060768, -0.084776), (-0.014252, 0.060768, -0.084776), (-0.014252, 0.060768, 0.084776), (-0.014252, -0.060768, -0.084776), (-0.014252, -0.060768, 0.084776), (-0.014252, 0.060768, 0.084776), (0.015, 0.060768, -0.084776), (-0.014252, 0.060768, -0.084776), (0.015, 0.060768, 0.084776), (0.015, 0.060768, 0.084776), (-0.014252, 0.060768, 0.084776), (0.015, 0.060768, -0.084776), (-0.014252, 0.060768, -0.084776), (0.015, 0.060768, -0.084776), (0.015, -0.060768, 0.084776), (0.015, -0.060768, -0.084776), (0.015, 0.060768, 0.084776), (0.015, 0.060768, 0.084776), (0.015, 0.060768, -0.084776), (0.015, -0.060768, 0.084776), (0.015, -0.060768, -0.084776)]
+        texCoord2f[] primvars:UVMap = [(0, 1), (1, 0), (1, 1), (1, 0), (0, 1), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)] (
+            interpolation = "faceVarying"
+        )
+        uniform token subdivisionScheme = "none"
+        uniform token subsetFamily:materialBind:familyType = "nonOverlapping"
+
+        def GeomSubset "basmati_rice_top" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token elementType = "face"
+            uniform token familyName = "materialBind"
+            int[] indices = [0, 1, 2, 3]
+            rel material:binding = </_materials/basmati_rice_top>
+        }
+
+        def GeomSubset "material" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token elementType = "face"
+            uniform token familyName = "materialBind"
+            int[] indices = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+            rel material:binding = </_materials/material>
+        }
+
+        def GeomSubset "basmati_rice_left" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token elementType = "face"
+            uniform token familyName = "materialBind"
+            int[] indices = [16, 17]
+            rel material:binding = </_materials/basmati_rice_left>
+        }
+
+        def GeomSubset "basmati_rice_back" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token elementType = "face"
+            uniform token familyName = "materialBind"
+            int[] indices = [18, 19]
+            rel material:binding = </_materials/basmati_rice_back>
+        }
+
+        def GeomSubset "basmati_rice" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token elementType = "face"
+            uniform token familyName = "materialBind"
+            int[] indices = [20, 21]
+            rel material:binding = </_materials/basmati_rice>
+        }
+
+        def GeomSubset "basmati_rice_front" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            uniform token elementType = "face"
+            uniform token familyName = "materialBind"
+            int[] indices = [22, 23]
+            rel material:binding = </_materials/basmati_rice_front>
+        }
+    }
+}
+
+def "_materials"
+{
+    def Material "basmati_rice_top"
+    {
+        token outputs:surface.connect = </_materials/basmati_rice_top/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            float3 inputs:diffuseColor.connect = </_materials/basmati_rice_top/Image_Texture.outputs:rgb>
+            float3 inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float inputs:opacity = 1
+            float inputs:roughness = 0.5
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+
+        def Shader "Image_Texture"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @../../../textures/basmati_rice_top.jpg@
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </_materials/basmati_rice_top/uvmap.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "uvmap"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "UVMap"
+            float2 outputs:result
+        }
+    }
+
+    def Material "material"
+    {
+        token outputs:surface.connect = </_materials/material/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            float3 inputs:diffuseColor = (1, 1, 1)
+            float3 inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float inputs:opacity = 1
+            float inputs:roughness = 0.5
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+    }
+
+    def Material "basmati_rice_left"
+    {
+        token outputs:surface.connect = </_materials/basmati_rice_left/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            float3 inputs:diffuseColor.connect = </_materials/basmati_rice_left/Image_Texture.outputs:rgb>
+            float3 inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float inputs:opacity = 1
+            float inputs:roughness = 0.5
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+
+        def Shader "Image_Texture"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @../../../textures/basmati_rice_left.jpg@
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </_materials/basmati_rice_left/uvmap.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "uvmap"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "UVMap"
+            float2 outputs:result
+        }
+    }
+
+    def Material "basmati_rice_back"
+    {
+        token outputs:surface.connect = </_materials/basmati_rice_back/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            float3 inputs:diffuseColor.connect = </_materials/basmati_rice_back/Image_Texture.outputs:rgb>
+            float3 inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float inputs:opacity = 1
+            float inputs:roughness = 0.5
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+
+        def Shader "Image_Texture"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @../../../textures/basmati_rice_back.jpg@
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </_materials/basmati_rice_back/uvmap.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "uvmap"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "UVMap"
+            float2 outputs:result
+        }
+    }
+
+    def Material "basmati_rice"
+    {
+        token outputs:surface.connect = </_materials/basmati_rice/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            float3 inputs:diffuseColor.connect = </_materials/basmati_rice/Image_Texture.outputs:rgb>
+            float3 inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float inputs:opacity = 1
+            float inputs:roughness = 0.5
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+
+        def Shader "Image_Texture"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @../../../textures/basmati_rice.jpg@
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </_materials/basmati_rice/uvmap.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "uvmap"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "UVMap"
+            float2 outputs:result
+        }
+    }
+
+    def Material "basmati_rice_front"
+    {
+        token outputs:surface.connect = </_materials/basmati_rice_front/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            float3 inputs:diffuseColor.connect = </_materials/basmati_rice_front/Image_Texture.outputs:rgb>
+            float3 inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float inputs:opacity = 1
+            float inputs:roughness = 0.5
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+
+        def Shader "Image_Texture"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @../../../textures/basmati_rice_front.jpg@
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </_materials/basmati_rice_front/uvmap.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "uvmap"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "UVMap"
+            float2 outputs:result
+        }
+    }
+}
+

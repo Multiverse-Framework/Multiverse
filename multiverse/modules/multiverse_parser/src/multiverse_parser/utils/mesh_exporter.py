@@ -3,23 +3,29 @@
 clean_up_meshes_script = """
 if len(bpy.data.objects) == 0:
     raise ValueError("No object in the scene.")
-    
+
 for selected_object in bpy.data.objects:    
     # Check if the active object is a mesh
     if selected_object.type != 'MESH':
         continue
     
+    # Select the object
     bpy.context.view_layer.objects.active = selected_object
 
     # Switch to Edit mode
     bpy.ops.object.mode_set(mode='EDIT')
 
-    bpy.ops.mesh.quads_convert_to_tris(quad_method="BEAUTY", ngon_method="BEAUTY")
     if selected_object.scale[0] * selected_object.scale[1] * selected_object.scale[2] < 0:
         bpy.ops.mesh.flip_normals()
 
     # Switch back to Object mode
     bpy.ops.object.mode_set(mode='OBJECT')
+
+    if 'TRIANGULATE' not in [modifier.type for modifier in selected_object.modifiers]:
+        bpy.ops.object.modifier_add(type='TRIANGULATE')
+
+    for modifier_name in [modifier.name for modifier in selected_object.modifiers]:
+        bpy.ops.object.modifier_apply(modifier=modifier_name)
 """
 
 
@@ -94,7 +100,9 @@ for i, line in enumerate(lines):
         texture_file_name = os.path.basename(texture_path)
         new_texture_path = os.path.join("..", "..", "textures", texture_file_name)
         new_texture_abspath = os.path.join(out_obj_dir, new_texture_path)
+        
         if not os.path.exists(new_texture_abspath):
+            print(new_texture_abspath)
             shutil.copy(texture_path, new_texture_abspath)
         lines[i] = "map_Kd " + new_texture_path + "\\n"
         img = Image.open(texture_path)

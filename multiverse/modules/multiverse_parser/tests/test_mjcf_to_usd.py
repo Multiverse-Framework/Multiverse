@@ -46,7 +46,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
                                with_physics=True,
                                with_visual=True,
                                with_collision=False,
-                               inertia_source=InertiaSource.FROM_MESH)
+                               inertia_source=InertiaSource.FROM_VISUAL_MESH)
 
         factory.import_model()
 
@@ -60,7 +60,7 @@ class UrdfToUsdTestCase(unittest.TestCase):
                                with_physics=True,
                                with_visual=True,
                                with_collision=False,
-                               inertia_source=InertiaSource.FROM_MESH)
+                               inertia_source=InertiaSource.FROM_VISUAL_MESH)
 
         factory.import_model()
 

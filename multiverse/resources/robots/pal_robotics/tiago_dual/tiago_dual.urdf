@@ -1,0 +1,1290 @@
+<?xml version="1.0" ?>
+<robot name="tiago_dual" version="1.0">
+  <link name="tiago_dual"/>
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="tiago_dual"/>
+    <child link="base_footprint"/>
+  </joint>
+  <link name="base_footprint"/>
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0985" rpy="0.0 0.0 0.0"/>
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+  </joint>
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.008795303292572498 4.891760181635618e-05 0.18509966135025024" rpy="-0.001902920426800847 0.00443292036652565 -0.0011016804492101073"/>
+      <mass value="4.583009719848633"/>
+      <inertia ixx="0.19431790709495544" ixy="0.0" ixz="0.0" iyy="0.21078379452228546" iyz="0.0" izz="0.24757026135921478"/>
+    </inertial>
+    <visual name="base_link_geom_visual_0_base">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/base.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="base_link_geom_collision_0_base_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/base_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_laser_link_joint" type="fixed">
+    <origin xyz="0.202 0.0 -0.004" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_laser_link"/>
+  </joint>
+  <link name="base_laser_link">
+    <inertial>
+      <origin xyz="0.1979040801525116 -5.744554437114857e-05 -0.03656253591179848" rpy="-1.567447304725647 1.4104689359664917 -3.1255857944488525"/>
+      <mass value="0.22902466356754303"/>
+      <inertia ixx="0.00013584904081653804" ixy="0.0" ixz="0.0" iyy="0.0004223589785397053" iyz="0.0" izz="0.0004473045119084418"/>
+    </inertial>
+    <visual name="base_laser_link_geom_visual_0_sick_tim551">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/sick_tim551.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="base_sonar_03_link_joint" type="fixed">
+    <origin xyz="-0.183 0.183 0.173" rpy="0.0 0.0 2.356194496154785"/>
+    <parent link="base_link"/>
+    <child link="base_sonar_03_link"/>
+  </joint>
+  <link name="base_sonar_03_link">
+    <inertial>
+      <origin xyz="-0.17975224554538727 0.1797652393579483 0.1729976385831833" rpy="0.00593895697966218 -0.0019195210188627243 1.570238471031189"/>
+      <mass value="0.0032655922695994377"/>
+      <inertia ixx="1.5969527566994657e-07" ixy="0.0" ixz="0.0" iyy="6.359992426041572e-07" iyz="0.0" izz="6.706197837047512e-07"/>
+    </inertial>
+    <visual name="base_sonar_03_link_geom_visual_0_srf05">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="base_sonar_02_link_joint" type="fixed">
+    <origin xyz="-0.259 0.0 0.173" rpy="0.0 0.0 3.1415927410125732"/>
+    <parent link="base_link"/>
+    <child link="base_sonar_02_link"/>
+  </joint>
+  <link name="base_sonar_02_link">
+    <inertial>
+      <origin xyz="-0.25441616773605347 9.185491762764286e-06 0.1729976385831833" rpy="0.00593895697966218 -0.0019195210188627243 1.570238471031189"/>
+      <mass value="0.0032655922695994377"/>
+      <inertia ixx="1.5969527566994657e-07" ixy="0.0" ixz="0.0" iyy="6.359992426041572e-07" iyz="0.0" izz="6.706197837047512e-07"/>
+    </inertial>
+    <visual name="base_sonar_02_link_geom_visual_0_srf05">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="base_sonar_01_link_joint" type="fixed">
+    <origin xyz="-0.183 -0.183 0.173" rpy="0.0 0.0 -2.356194496154785"/>
+    <parent link="base_link"/>
+    <child link="base_sonar_01_link"/>
+  </joint>
+  <link name="base_sonar_01_link">
+    <inertial>
+      <origin xyz="-0.1797652393579483 -0.17975224554538727 0.1729976385831833" rpy="0.00593895697966218 -0.0019195210188627243 1.570238471031189"/>
+      <mass value="0.0032655922695994377"/>
+      <inertia ixx="1.5969527566994657e-07" ixy="0.0" ixz="0.0" iyy="6.359992426041572e-07" iyz="0.0" izz="6.706197837047512e-07"/>
+    </inertial>
+    <visual name="base_sonar_01_link_geom_visual_0_srf05">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="base_mic_front_left_link_joint" type="fixed">
+    <origin xyz="0.23182 0.03902 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_mic_front_left_link"/>
+  </joint>
+  <link name="base_mic_front_left_link"/>
+  <joint name="base_mic_front_right_link_joint" type="fixed">
+    <origin xyz="0.23182 -0.03902 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_mic_front_right_link"/>
+  </joint>
+  <link name="base_mic_front_right_link"/>
+  <joint name="base_mic_back_left_link_joint" type="fixed">
+    <origin xyz="-0.1082 -0.0599 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_mic_back_left_link"/>
+  </joint>
+  <link name="base_mic_back_left_link"/>
+  <joint name="base_mic_back_right_link_joint" type="fixed">
+    <origin xyz="-0.1082 -0.13789 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_mic_back_right_link"/>
+  </joint>
+  <link name="base_mic_back_right_link"/>
+  <joint name="base_antenna_left_link_joint" type="fixed">
+    <origin xyz="-0.201 0.1062 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_antenna_left_link"/>
+  </joint>
+  <link name="base_antenna_left_link">
+    <inertial>
+      <origin xyz="-0.20105348527431488 0.10620015114545822 0.2664972245693207" rpy="0.015666212886571884 -1.5706382989883423 3.1300418376922607"/>
+      <mass value="0.028692401945590973"/>
+      <inertia ixx="4.4050278802387766e-07" ixy="0.0" ixz="0.0" iyy="0.0002167977945646271" iyz="0.0" izz="0.00021680167992599308"/>
+    </inertial>
+    <visual name="base_antenna_left_link_geom_visual_0_antenna">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/antenna.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="base_antenna_left_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.08500000089406967" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.17000000178813934"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_antenna_right_link_joint" type="fixed">
+    <origin xyz="-0.201 -0.1062 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_antenna_right_link"/>
+  </joint>
+  <link name="base_antenna_right_link">
+    <inertial>
+      <origin xyz="-0.20105348527431488 -0.10619985312223434 0.2664972245693207" rpy="0.015666212886571884 -1.5706382989883423 3.1300418376922607"/>
+      <mass value="0.028692401945590973"/>
+      <inertia ixx="4.4050278802387766e-07" ixy="0.0" ixz="0.0" iyy="0.0002167977945646271" iyz="0.0" izz="0.00021680167992599308"/>
+    </inertial>
+    <visual name="base_antenna_right_link_geom_visual_0_antenna">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/antenna.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="base_antenna_right_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.08500000089406967" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.17000000178813934"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_imu_link_joint" type="fixed">
+    <origin xyz="0.10171 0.0 0.11282" rpy="0.0 0.0 -1.5707963705062866"/>
+    <parent link="base_link"/>
+    <child link="base_imu_link"/>
+  </joint>
+  <link name="base_imu_link"/>
+  <joint name="suspension_right_joint" type="prismatic">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="suspension_right_link"/>
+    <limit effort="1000.0" lower="-0.004999999888241291" upper="0.004999999888241291" velocity="1000.0"/>
+  </joint>
+  <link name="suspension_right_link"/>
+  <joint name="wheel_right_joint" type="continuous">
+    <origin xyz="0.0 -0.2021999955177307 0.0" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="suspension_right_link"/>
+    <child link="wheel_right_link"/>
+  </joint>
+  <link name="wheel_right_link">
+    <inertial>
+      <origin xyz="-2.407864485576283e-06 -0.20232069492340088 0.0984966903924942" rpy="3.396417378098704e-05 -0.0003521875769365579 -1.5813586711883545"/>
+      <mass value="4.9378132820129395"/>
+      <inertia ixx="0.01838645152747631" ixy="0.0" ixz="0.0" iyy="0.018392162397503853" iyz="0.0" izz="0.02075279876589775"/>
+    </inertial>
+    <visual name="wheel_right_link_geom_visual_0_wheel">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/wheel.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="wheel_right_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.09849999845027924"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="suspension_left_joint" type="prismatic">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="suspension_left_link"/>
+    <limit effort="1000.0" lower="-0.004999999888241291" upper="0.004999999888241291" velocity="1000.0"/>
+  </joint>
+  <link name="suspension_left_link"/>
+  <joint name="wheel_left_joint" type="continuous">
+    <origin xyz="0.0 0.2021999955177307 0.0" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="suspension_left_link"/>
+    <child link="wheel_left_link"/>
+  </joint>
+  <link name="wheel_left_link">
+    <inertial>
+      <origin xyz="-2.407864485576283e-06 0.20232069492340088 0.09850330650806427" rpy="-3.396417378098704e-05 -0.0003521875769365579 -1.5602339506149292"/>
+      <mass value="4.9378132820129395"/>
+      <inertia ixx="0.01838645152747631" ixy="0.0" ixz="0.0" iyy="0.018392162397503853" iyz="0.0" izz="0.02075279876589775"/>
+    </inertial>
+    <visual name="wheel_left_link_geom_visual_0_wheel">
+      <origin xyz="0.0 0.0 0.0" rpy="-3.1415927410125732 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/wheel.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="wheel_left_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.09849999845027924"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="caster_front_right_1_joint" type="continuous">
+    <origin xyz="0.16949999332427979 -0.10199999809265137 -0.03350000083446503" rpy="0.0 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="caster_front_right_1_link"/>
+  </joint>
+  <link name="caster_front_right_1_link">
+    <inertial>
+      <origin xyz="0.1584390103816986 -0.10197509080171585 0.03501972556114197" rpy="3.1375229358673096 1.1986708641052246 3.138951539993286"/>
+      <mass value="0.012721667066216469"/>
+      <inertia ixx="1.7161858067993307e-06" ixy="0.0" ixz="0.0" iyy="1.6465297449030913e-05" iyz="0.0" izz="1.6936963220359758e-05"/>
+    </inertial>
+    <visual name="caster_front_right_1_link_geom_visual_0_caster_1">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="caster_front_right_2_joint" type="continuous">
+    <origin xyz="-0.01600000075995922 0.0 -0.03999999910593033" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="caster_front_right_1_link"/>
+    <child link="caster_front_right_2_link"/>
+  </joint>
+  <link name="caster_front_right_2_link">
+    <inertial>
+      <origin xyz="0.15349917113780975 -0.10200051963329315 0.024999601766467094" rpy="-1.4488305168924853e-05 -3.26891677104868e-05 -2.011641263961792"/>
+      <mass value="0.0963592454791069"/>
+      <inertia ixx="2.267268610012252e-05" ixy="0.0" ixz="0.0" iyy="2.2677813831251115e-05" iyz="0.0" izz="2.7069650968769565e-05"/>
+    </inertial>
+    <visual name="caster_front_right_2_link_geom_visual_0_caster_2">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="caster_front_right_2_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.02500000037252903"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="caster_front_left_1_joint" type="continuous">
+    <origin xyz="0.16949999332427979 0.10199999809265137 -0.03350000083446503" rpy="0.0 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="caster_front_left_1_link"/>
+  </joint>
+  <link name="caster_front_left_1_link">
+    <inertial>
+      <origin xyz="0.1584390103816986 0.10202490538358688 0.03501972556114197" rpy="3.1375229358673096 1.1986708641052246 3.138951539993286"/>
+      <mass value="0.012721667066216469"/>
+      <inertia ixx="1.7161858067993307e-06" ixy="0.0" ixz="0.0" iyy="1.6465297449030913e-05" iyz="0.0" izz="1.6936963220359758e-05"/>
+    </inertial>
+    <visual name="caster_front_left_1_link_geom_visual_0_caster_1">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="caster_front_left_2_joint" type="continuous">
+    <origin xyz="-0.01600000075995922 0.0 -0.03999999910593033" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="caster_front_left_1_link"/>
+    <child link="caster_front_left_2_link"/>
+  </joint>
+  <link name="caster_front_left_2_link">
+    <inertial>
+      <origin xyz="0.15349917113780975 0.10199947655200958 0.024999601766467094" rpy="-1.4488305168924853e-05 -3.26891677104868e-05 -2.011641263961792"/>
+      <mass value="0.0963592454791069"/>
+      <inertia ixx="2.267268610012252e-05" ixy="0.0" ixz="0.0" iyy="2.2677813831251115e-05" iyz="0.0" izz="2.7069650968769565e-05"/>
+    </inertial>
+    <visual name="caster_front_left_2_link_geom_visual_0_caster_2">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="caster_front_left_2_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.02500000037252903"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="caster_back_right_1_joint" type="continuous">
+    <origin xyz="-0.17350000143051147 -0.10199999809265137 -0.03350000083446503" rpy="0.0 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="caster_back_right_1_link"/>
+  </joint>
+  <link name="caster_back_right_1_link">
+    <inertial>
+      <origin xyz="-0.18456098437309265 -0.10197509080171585 0.03501972556114197" rpy="3.1375229358673096 1.1986708641052246 3.138951539993286"/>
+      <mass value="0.012721667066216469"/>
+      <inertia ixx="1.7161858067993307e-06" ixy="0.0" ixz="0.0" iyy="1.6465297449030913e-05" iyz="0.0" izz="1.6936963220359758e-05"/>
+    </inertial>
+    <visual name="caster_back_right_1_link_geom_visual_0_caster_1">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="caster_back_right_2_joint" type="continuous">
+    <origin xyz="-0.01600000075995922 0.0 -0.03999999910593033" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="caster_back_right_1_link"/>
+    <child link="caster_back_right_2_link"/>
+  </joint>
+  <link name="caster_back_right_2_link">
+    <inertial>
+      <origin xyz="-0.1895008236169815 -0.10200051963329315 0.024999601766467094" rpy="-1.4488305168924853e-05 -3.26891677104868e-05 -2.011641263961792"/>
+      <mass value="0.0963592454791069"/>
+      <inertia ixx="2.267268610012252e-05" ixy="0.0" ixz="0.0" iyy="2.2677813831251115e-05" iyz="0.0" izz="2.7069650968769565e-05"/>
+    </inertial>
+    <visual name="caster_back_right_2_link_geom_visual_0_caster_2">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="caster_back_right_2_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.02500000037252903"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="caster_back_left_1_joint" type="continuous">
+    <origin xyz="-0.17350000143051147 0.10199999809265137 -0.03350000083446503" rpy="0.0 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="caster_back_left_1_link"/>
+  </joint>
+  <link name="caster_back_left_1_link">
+    <inertial>
+      <origin xyz="-0.18456098437309265 0.10202490538358688 0.03501972556114197" rpy="3.1375229358673096 1.1986708641052246 3.138951539993286"/>
+      <mass value="0.012721667066216469"/>
+      <inertia ixx="1.7161858067993307e-06" ixy="0.0" ixz="0.0" iyy="1.6465297449030913e-05" iyz="0.0" izz="1.6936963220359758e-05"/>
+    </inertial>
+    <visual name="caster_back_left_1_link_geom_visual_0_caster_1">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="caster_back_left_2_joint" type="continuous">
+    <origin xyz="-0.01600000075995922 0.0 -0.03999999910593033" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="caster_back_left_1_link"/>
+    <child link="caster_back_left_2_link"/>
+  </joint>
+  <link name="caster_back_left_2_link">
+    <inertial>
+      <origin xyz="-0.1895008236169815 0.10199947655200958 0.024999601766467094" rpy="-1.4488305168924853e-05 -3.26891677104868e-05 -2.011641263961792"/>
+      <mass value="0.0963592454791069"/>
+      <inertia ixx="2.267268610012252e-05" ixy="0.0" ixz="0.0" iyy="2.2677813831251115e-05" iyz="0.0" izz="2.7069650968769565e-05"/>
+    </inertial>
+    <visual name="caster_back_left_2_link_geom_visual_0_caster_2">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="caster_back_left_2_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.02500000037252903"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="torso_fixed_link_joint" type="fixed">
+    <origin xyz="-0.062 0.0 0.193" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="torso_fixed_link"/>
+  </joint>
+  <link name="torso_fixed_link">
+    <inertial>
+      <origin xyz="-0.01745390146970749 1.3471870285997056e-09 0.23027999699115753" rpy="-1.1828066526220482e-08 -0.09348547458648682 5.840227501607842e-08"/>
+      <mass value="16.431100845336914"/>
+      <inertia ixx="0.11975406110286713" ixy="0.0" ixz="0.0" iyy="0.24629473686218262" iyz="0.0" izz="0.30280017852783203"/>
+    </inertial>
+    <visual name="torso_fixed_link_geom_visual_0_torso_fix">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/torso_fix.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="torso_fixed_link_geom_collision_0">
+      <origin xyz="0.08500000089406967 0.0 0.019999999552965164" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.4000000059604645 0.25 0.03999999910593033"/>
+      </geometry>
+    </collision>
+    <collision name="torso_fixed_link_geom_collision_1">
+      <origin xyz="0.0 0.0 0.05000000074505806" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.25 0.25 0.10000000149011612"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="torso_lift_joint" type="prismatic">
+    <origin xyz="0.0 0.0 0.597000002861023" rpy="0.0 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="torso_fixed_link"/>
+    <child link="torso_lift_link"/>
+    <limit effort="1000.0" lower="0.0" upper="0.800000011920929" velocity="1000.0"/>
+  </joint>
+  <link name="torso_lift_link">
+    <inertial>
+      <origin xyz="-0.06386889517307281 3.838672273559496e-05 0.6812766790390015" rpy="2.5257246494293213 -1.5671151876449585 -2.872738838195801"/>
+      <mass value="80.00180053710938"/>
+      <inertia ixx="1.1445907354354858" ixy="0.0" ixz="0.0" iyy="5.456185817718506" iyz="0.0" izz="5.476551532745361"/>
+    </inertial>
+    <visual name="torso_lift_link_geom_visual_0_torso_lift_dual_arm">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/torso_lift_dual_arm.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="torso_lift_link_geom_collision_0_torso_lift_collision_shoulder">
+      <origin xyz="-0.13099999725818634 0.17000000178813934 -0.02556000091135502" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/torso_lift_collision_shoulder.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="torso_lift_link_geom_collision_1_torso_lift_collision_shoulder">
+      <origin xyz="-0.13099999725818634 -0.1899999976158142 -0.02556000091135502" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/torso_lift_collision_shoulder.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="torso_lift_link_geom_collision_2_torso_lift_collision_core">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/torso_lift_collision_core.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="torso_lift_link_geom_collision_3_torso_lift_collision_neck">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/torso_lift_collision_neck.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="head_1_joint" type="revolute">
+    <origin xyz="0.18199999630451202 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="torso_lift_link"/>
+    <child link="head_1_link"/>
+    <limit effort="1000.0" lower="-1.3089969158172607" upper="1.3089969158172607" velocity="1000.0"/>
+  </joint>
+  <link name="head_1_link">
+    <inertial>
+      <origin xyz="0.1284070461988449 -3.3614639960433124e-08 0.9747036695480347" rpy="-1.5707980394363403 1.455827236175537 -3.141592502593994"/>
+      <mass value="3.18123197555542"/>
+      <inertia ixx="0.0075652096420526505" ixy="0.0" ixz="0.0" iyy="0.032833803445100784" iyz="0.0" izz="0.03655494377017021"/>
+    </inertial>
+    <visual name="head_1_link_geom_visual_0_head_1">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/head_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="head_1_link_geom_collision_0_head_1_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/head_1_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="head_2_joint" type="revolute">
+    <origin xyz="0.004999999888241291 0.0 0.09799999743700027" rpy="1.5707963705062866 -0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="head_1_link"/>
+    <child link="head_2_link"/>
+    <limit effort="1000.0" lower="-1.0471975803375244" upper="0.7853981852531433" velocity="1000.0"/>
+  </joint>
+  <link name="head_2_link">
+    <inertial>
+      <origin xyz="0.14982211589813232 2.6318464733776636e-05 1.0350416898727417" rpy="1.5706449747085571 -0.0028213898185640574 -2.189697742462158"/>
+      <mass value="10.35694408416748"/>
+      <inertia ixx="0.06285744905471802" ixy="0.0" ixz="0.0" iyy="0.06905682384967804" iyz="0.0" izz="0.0981026217341423"/>
+    </inertial>
+    <visual name="head_2_link_geom_visual_0_head_2">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/head_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="head_2_link_geom_collision_0_head_2_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/head_2_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="xtion_link_joint" type="fixed">
+    <origin xyz="0.0908 0.08 0.0" rpy="-1.5707963705062866 0.0 0.0"/>
+    <parent link="head_2_link"/>
+    <child link="xtion_link"/>
+  </joint>
+  <link name="xtion_link"/>
+  <joint name="xtion_optical_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5707963705062866 0.0 -1.5707963705062866"/>
+    <parent link="xtion_link"/>
+    <child link="xtion_optical_frame"/>
+  </joint>
+  <link name="xtion_optical_frame"/>
+  <joint name="xtion_orbbec_aux_joint_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="xtion_link"/>
+    <child link="xtion_orbbec_aux_joint_frame"/>
+  </joint>
+  <link name="xtion_orbbec_aux_joint_frame"/>
+  <joint name="xtion_rgb_frame_joint" type="fixed">
+    <origin xyz="0.0 0.022 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="xtion_orbbec_aux_joint_frame"/>
+    <child link="xtion_rgb_frame"/>
+  </joint>
+  <link name="xtion_rgb_frame"/>
+  <joint name="xtion_depth_frame_joint" type="fixed">
+    <origin xyz="0.0 0.025 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="xtion_rgb_frame"/>
+    <child link="xtion_depth_frame"/>
+  </joint>
+  <link name="xtion_depth_frame"/>
+  <joint name="xtion_depth_optical_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5707963705062866 0.0 -1.5707963705062866"/>
+    <parent link="xtion_depth_frame"/>
+    <child link="xtion_depth_optical_frame"/>
+  </joint>
+  <link name="xtion_depth_optical_frame"/>
+  <joint name="xtion_rgb_optical_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5707963705062866 0.0 -1.5707963705062866"/>
+    <parent link="xtion_rgb_frame"/>
+    <child link="xtion_rgb_optical_frame"/>
+  </joint>
+  <link name="xtion_rgb_optical_frame"/>
+  <joint name="arm_left_1_joint" type="revolute">
+    <origin xyz="0.02556000091135502 0.1899999976158142 -0.17100000381469727" rpy="3.1415927410125732 -0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="torso_lift_link"/>
+    <child link="arm_left_1_link"/>
+    <limit effort="1000.0" lower="-1.1780972480773926" upper="1.5707963705062866" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_1_link">
+    <inertial>
+      <origin xyz="-0.062415264546871185 0.26109611988067627 0.7068326473236084" rpy="-0.5198307633399963 -0.20634675025939941 -0.37266531586647034"/>
+      <mass value="2.326556444168091"/>
+      <inertia ixx="0.002655229065567255" ixy="0.0" ixz="0.0" iyy="0.02464391104876995" iyz="0.0" izz="0.024779949337244034"/>
+    </inertial>
+    <visual name="arm_left_1_link_geom_visual_0_arm_1">
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_left_1_link_geom_collision_0_arm_1_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_1_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_2_joint" type="revolute">
+    <origin xyz="0.125 -0.019500000402331352 0.03099999949336052" rpy="1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_1_link"/>
+    <child link="arm_left_2_link"/>
+    <limit effort="1000.0" lower="-1.1780972480773926" upper="1.5707963705062866" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_2_link">
+    <inertial>
+      <origin xyz="-0.06404110789299011 0.3396865129470825 0.6863976120948792" rpy="3.1327412128448486 0.08298283070325851 0.00155476329382509"/>
+      <mass value="1.2833430767059326"/>
+      <inertia ixx="0.0018821029225364327" ixy="0.0" ixz="0.0" iyy="0.003341596806421876" iyz="0.0" izz="0.0034246365539729595"/>
+    </inertial>
+    <visual name="arm_left_2_link_geom_visual_0_arm_2">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1415927410125732"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_2.obj" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_left_2_link_geom_collision_0_arm_2_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1415927410125732"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_2_collision.stl" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_3_joint" type="revolute">
+    <origin xyz="0.08950000256299973 3.0814879110195774e-33 -0.001500000013038516" rpy="1.5707963705062866 -0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_2_link"/>
+    <child link="arm_left_3_link"/>
+    <limit effort="1000.0" lower="-0.7853981852531433" upper="3.9269907474517822" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_3_link">
+    <inertial>
+      <origin xyz="-0.06056949496269226 0.2831023633480072 0.6934170722961426" rpy="-1.9211397171020508 1.479962944984436 2.3634467124938965"/>
+      <mass value="4.2203826904296875"/>
+      <inertia ixx="0.005868874955922365" ixy="0.0" ixz="0.0" iyy="0.08974360674619675" iyz="0.0" izz="0.09042287617921829"/>
+    </inertial>
+    <visual name="arm_left_3_link_geom_visual_0_arm_3">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1415927410125732"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_3.obj" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_left_3_link_geom_collision_0_arm_3_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1415927410125732"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_3_collision.stl" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_4_joint" type="revolute">
+    <origin xyz="-0.019999999552965164 -0.027000000700354576 0.22200000286102295" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_3_link"/>
+    <child link="arm_left_4_link"/>
+    <limit effort="1000.0" lower="-0.39269909262657166" upper="2.356194496154785" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_4_link">
+    <inertial>
+      <origin xyz="-0.007270804140716791 0.7061768174171448 0.6934573650360107" rpy="-0.4356919825077057 -0.20695683360099792 -0.14518021047115326"/>
+      <mass value="3.67008900642395"/>
+      <inertia ixx="0.005166410934180021" ixy="0.0" ixz="0.0" iyy="0.04315481707453728" iyz="0.0" izz="0.04374336823821068"/>
+    </inertial>
+    <visual name="arm_left_4_link_geom_visual_0_arm_4">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_4.obj" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_left_4_link_geom_collision_0_arm_4_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_4_collision.stl" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_5_joint" type="revolute">
+    <origin xyz="0.16200000047683716 -0.019999999552965164 -0.027000000700354576" rpy="-0.0 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_4_link"/>
+    <child link="arm_left_5_link"/>
+    <limit effort="1000.0" lower="-2.094395160675049" upper="2.094395160675049" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_5_link">
+    <inertial>
+      <origin xyz="-0.04984248802065849 0.7072207927703857 0.6863790154457092" rpy="3.0761890411376953 1.521157145500183 3.0828750133514404"/>
+      <mass value="3.093937397003174"/>
+      <inertia ixx="0.006034791935235262" ixy="0.0" ixz="0.0" iyy="0.028495630249381065" iyz="0.0" izz="0.029476221650838852"/>
+    </inertial>
+    <visual name="arm_left_5_link_geom_visual_0_arm_5_wrist_2017">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_5_wrist_2017.obj" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_left_5_link_geom_collision_0_arm_5_collision_wrist_2017">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_5_collision_wrist_2017.stl" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_6_joint" type="revolute">
+    <origin xyz="0.0 0.0 -0.15000000596046448" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_5_link"/>
+    <child link="arm_left_6_link"/>
+    <limit effort="1000.0" lower="-1.4137166738510132" upper="1.4137166738510132" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_6_link">
+    <inertial>
+      <origin xyz="-0.054436106234788895 0.9269351959228516 0.6865178942680359" rpy="0.0019794742111116648 6.122294871602207e-05 0.002933796960860491"/>
+      <mass value="0.3939484655857086"/>
+      <inertia ixx="0.00016052329738158733" ixy="0.0" ixz="0.0" iyy="0.00039506948087364435" iyz="0.0" izz="0.00048799763317219913"/>
+    </inertial>
+    <visual name="arm_left_6_link_geom_visual_0_arm_6_wrist_2017">
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_6_wrist_2017.obj" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_left_6_link_geom_collision_0_arm_6_collision_wrist_2017">
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_6_collision_wrist_2017.stl" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_7_joint" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="1.5707963705062866 -0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_6_link"/>
+    <child link="arm_left_7_link"/>
+    <limit effort="1000.0" lower="-2.094395160675049" upper="2.094395160675049" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_7_link"/>
+  <joint name="arm_left_tool_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 -0.046" rpy="-1.5707963705062866 1.5707963705062866 0.0"/>
+    <parent link="arm_left_7_link"/>
+    <child link="arm_left_tool_link"/>
+  </joint>
+  <link name="arm_left_tool_link">
+    <inertial>
+      <origin xyz="2.220446154715841e-19 0.0 -0.04699999839067459" rpy="3.1415927410125732 -1.570796251296997 0.0"/>
+      <mass value="0.0007853981805965304"/>
+      <inertia ixx="7.3303829672966e-09" ixy="0.0" ixz="0.0" iyy="7.3303829672966e-09" iyz="0.0" izz="9.817476609441655e-09"/>
+    </inertial>
+    <visual name="arm_left_tool_link_geom_visual_0">
+      <origin xyz="0.0010000000474974513 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.004999999888241291"/>
+      </geometry>
+    </visual>
+    <collision name="arm_left_tool_link_geom_collision_0">
+      <origin xyz="0.0010000000474974513 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.004999999888241291"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="wrist_left_ft_link_joint" type="fixed">
+    <origin xyz="0.00785 0.0 0.0" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+    <parent link="arm_left_tool_link"/>
+    <child link="wrist_left_ft_link"/>
+  </joint>
+  <link name="wrist_left_ft_link">
+    <inertial>
+      <origin xyz="0.007849999703466892 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.04993954300880432"/>
+      <inertia ixx="7.346272923314245e-06" ixy="0.0" ixz="0.0" iyy="7.346272923314245e-06" iyz="0.0" izz="1.2640946806641296e-05"/>
+    </inertial>
+    <visual name="wrist_left_ft_link_geom_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.02250000089406967" length="0.015699999406933784"/>
+      </geometry>
+    </visual>
+    <collision name="wrist_left_ft_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.02250000089406967" length="0.015699999406933784"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="wrist_left_ft_tool_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.012725" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <parent link="wrist_left_ft_link"/>
+    <child link="wrist_left_ft_tool_link"/>
+  </joint>
+  <link name="wrist_left_ft_tool_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.012725000269711018" rpy="-1.5707963705062866 0.7853981852531433 -1.5707963705062866"/>
+      <mass value="0.03828816115856171"/>
+      <inertia ixx="6.285838935582433e-06" ixy="0.0" ixz="0.0" iyy="6.285838935582433e-06" iyz="0.0" izz="1.1965050362050533e-05"/>
+    </inertial>
+    <visual name="wrist_left_ft_tool_link_geom_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.02500000037252903" length="0.009750000201165676"/>
+      </geometry>
+    </visual>
+    <collision name="wrist_left_ft_tool_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.02500000037252903" length="0.009750000201165676"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_left_tool_link_joint" type="fixed">
+    <origin xyz="0.01 0.0 0.0" rpy="3.1415927410125732 1.5707963705062866 0.0"/>
+    <parent link="wrist_left_ft_tool_link"/>
+    <child link="gripper_left_tool_link"/>
+  </joint>
+  <link name="gripper_left_tool_link"/>
+  <joint name="gripper_left_link_joint" type="fixed">
+    <origin xyz="0.01 0.0 0.0" rpy="3.1415927410125732 1.5707963705062866 0.0"/>
+    <parent link="wrist_left_ft_tool_link"/>
+    <child link="gripper_left_link"/>
+  </joint>
+  <link name="gripper_left_link">
+    <inertial>
+      <origin xyz="0.055877234786748886 -6.149214186734753e-06 -6.216389465407701e-06" rpy="-2.208202838897705 -1.5707594156265259 -2.2676138877868652"/>
+      <mass value="1.1609281301498413"/>
+      <inertia ixx="0.0014065168797969818" ixy="0.0" ixz="0.0" iyy="0.004091456066817045" iyz="0.0" izz="0.004576720762997866"/>
+    </inertial>
+    <visual name="gripper_left_link_geom_visual_0_gripper_link">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/gripper_link.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="gripper_left_link_geom_collision_0_gripper_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/gripper_link_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_left_right_finger_joint" type="prismatic">
+    <origin xyz="0.0 -6.162975822039155e-33 0.0" rpy="1.3454695115200456e-32 0.0 -4.930380657631324e-32"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_left_link"/>
+    <child link="gripper_left_right_finger_link"/>
+    <limit effort="1000.0" lower="0.0" upper="0.04500000178813934" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_left_right_finger_link">
+    <inertial>
+      <origin xyz="-0.058255475014448166 1.1640191078186035 0.6821131110191345" rpy="0.7602115869522095 -1.5441923141479492 2.5528311729431152"/>
+      <mass value="0.10103759169578552"/>
+      <inertia ixx="2.747980943240691e-05" ixy="0.0" ixz="0.0" iyy="0.0024304126854985952" iyz="0.0" izz="0.0024481690488755703"/>
+    </inertial>
+    <visual name="gripper_left_right_finger_link_geom_visual_0_gripper_finger_link">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -9.265358676202595e-05"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/gripper_finger_link.obj" scale="-1.000092625617981 -0.9999073147773743 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="gripper_left_right_finger_link_geom_collision_0">
+      <origin xyz="0.004999999888241291 0.0 -0.16500000655651093" rpy="0.0 -0.0 3.1414999961853027"/>
+      <geometry>
+        <box size="0.009999999776482582 0.05000000074505806 0.10999999940395355"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_left_left_finger_joint" type="prismatic">
+    <origin xyz="0.0 -6.162975822039155e-33 0.0" rpy="1.3454695115200456e-32 0.0 -4.930380657631324e-32"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="gripper_left_link"/>
+    <child link="gripper_left_left_finger_link"/>
+    <limit effort="1000.0" lower="0.0" upper="0.04500000178813934" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_left_left_finger_link">
+    <inertial>
+      <origin xyz="-0.058255475014448166 1.1640191078186035 0.6875566244125366" rpy="-2.6243865489959717 1.5495017766952515 -2.378355026245117"/>
+      <mass value="0.10103759169578552"/>
+      <inertia ixx="2.8091548301745206e-05" ixy="0.0" ixz="0.0" iyy="0.0024298429489135742" iyz="0.0" izz="0.0024481271393597126"/>
+    </inertial>
+    <visual name="gripper_left_left_finger_link_geom_visual_0_gripper_finger_link">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1414999961853027"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/gripper_finger_link.obj" scale="1.000092625617981 0.9999073147773743 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="gripper_left_left_finger_link_geom_collision_0">
+      <origin xyz="-0.004999999888241291 0.0 -0.16500000655651093" rpy="0.0 -0.0 3.1414999961853027"/>
+      <geometry>
+        <box size="0.009999999776482582 0.05000000074505806 0.10999999940395355"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_left_grasping_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 -0.12" rpy="1.5707926750183105 1.5707926750183105 3.1415927410125732"/>
+    <parent link="gripper_left_link"/>
+    <child link="gripper_left_grasping_frame"/>
+  </joint>
+  <link name="gripper_left_grasping_frame"/>
+  <joint name="arm_right_1_joint" type="revolute">
+    <origin xyz="0.02556000091135502 -0.1899999976158142 -0.17100000381469727" rpy="0.0 0.0 -1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="torso_lift_link"/>
+    <child link="arm_right_1_link"/>
+    <limit effort="1000.0" lower="-1.1780972480773926" upper="1.5707963705062866" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_1_link">
+    <inertial>
+      <origin xyz="-0.010464733466506004 -0.26109611988067627 0.7068326473236084" rpy="-0.5198307633399963 0.20634675025939941 0.37266531586647034"/>
+      <mass value="2.326556444168091"/>
+      <inertia ixx="0.002655229065567255" ixy="0.0" ixz="0.0" iyy="0.02464391104876995" iyz="0.0" izz="0.024779949337244034"/>
+    </inertial>
+    <visual name="arm_right_1_link_geom_visual_0_arm_1">
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 3.1415927410125732"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_1.obj" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_right_1_link_geom_collision_0_arm_1_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 3.1415927410125732"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_1_collision.stl" scale="-1.0 -1.0 -1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_2_joint" type="revolute">
+    <origin xyz="0.125 -0.019500000402331352 -0.03099999949336052" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_1_link"/>
+    <child link="arm_right_2_link"/>
+    <limit effort="1000.0" lower="-1.1780972480773926" upper="1.5707963705062866" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_2_link">
+    <inertial>
+      <origin xyz="-0.04783888906240463 -0.3396865129470825 0.6863976120948792" rpy="3.1327412128448486 0.08298283070325851 0.00155476329382509"/>
+      <mass value="1.2833430767059326"/>
+      <inertia ixx="0.0018821029225364327" ixy="0.0" ixz="0.0" iyy="0.003341596806421876" iyz="0.0" izz="0.0034246365539729595"/>
+    </inertial>
+    <visual name="arm_right_2_link_geom_visual_0_arm_2">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_right_2_link_geom_collision_0_arm_2_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_2_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_3_joint" type="revolute">
+    <origin xyz="0.08950000256299973 0.0 -0.001500000013038516" rpy="-1.5707963705062866 -0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_2_link"/>
+    <child link="arm_right_3_link"/>
+    <limit effort="1000.0" lower="-0.7853981852531433" upper="3.9269907474517822" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_3_link">
+    <inertial>
+      <origin xyz="-0.06356949359178543 -0.5258976221084595 0.6934170722961426" rpy="-1.9211397171020508 1.479962944984436 2.3634467124938965"/>
+      <mass value="4.2203826904296875"/>
+      <inertia ixx="0.005868874955922365" ixy="0.0" ixz="0.0" iyy="0.08974360674619675" iyz="0.0" izz="0.09042287617921829"/>
+    </inertial>
+    <visual name="arm_right_3_link_geom_visual_0_arm_3">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_3.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_right_3_link_geom_collision_0_arm_3_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_3_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_4_joint" type="revolute">
+    <origin xyz="-0.019999999552965164 -0.027000000700354576 -0.22200000286102295" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_3_link"/>
+    <child link="arm_right_4_link"/>
+    <limit effort="1000.0" lower="-0.39269909262657166" upper="2.356194496154785" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_4_link">
+    <inertial>
+      <origin xyz="-0.05060919374227524 -0.7061768174171448 0.6934573650360107" rpy="0.4356919825077057 0.20695683360099792 -0.14518021047115326"/>
+      <mass value="3.67008900642395"/>
+      <inertia ixx="0.005166410934180021" ixy="0.0" ixz="0.0" iyy="0.04315481707453728" iyz="0.0" izz="0.04374336823821068"/>
+    </inertial>
+    <visual name="arm_right_4_link_geom_visual_0_arm_4">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_4.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_right_4_link_geom_collision_0_arm_4_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_4_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_5_joint" type="revolute">
+    <origin xyz="-0.16200000047683716 0.019999999552965164 0.027000000700354576" rpy="-0.0 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_4_link"/>
+    <child link="arm_right_5_link"/>
+    <limit effort="1000.0" lower="-2.094395160675049" upper="2.094395160675049" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_5_link">
+    <inertial>
+      <origin xyz="-0.05284248664975166 -0.8697792291641235 0.6863790154457092" rpy="0.06540369242429733 -1.521157145500183 3.0828750133514404"/>
+      <mass value="3.093937397003174"/>
+      <inertia ixx="0.006034791935235262" ixy="0.0" ixz="0.0" iyy="0.028495630249381065" iyz="0.0" izz="0.029476221650838852"/>
+    </inertial>
+    <visual name="arm_right_5_link_geom_visual_0_arm_5_wrist_2017">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_5_wrist_2017.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_right_5_link_geom_collision_0_arm_5_collision_wrist_2017">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_5_collision_wrist_2017.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_6_joint" type="revolute">
+    <origin xyz="-0.0 -0.0 0.15000000596046448" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_5_link"/>
+    <child link="arm_right_6_link"/>
+    <limit effort="1000.0" lower="-1.4137166738510132" upper="1.4137166738510132" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_6_link">
+    <inertial>
+      <origin xyz="-0.05744389444589615 -0.9500648379325867 0.6864820718765259" rpy="0.0019794742111116648 6.122294871602207e-05 0.002933796960860491"/>
+      <mass value="0.3939484655857086"/>
+      <inertia ixx="0.00016052329738158733" ixy="0.0" ixz="0.0" iyy="0.00039506948087364435" iyz="0.0" izz="0.00048799763317219913"/>
+    </inertial>
+    <visual name="arm_right_6_link_geom_visual_0_arm_6_wrist_2017">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/arm_6_wrist_2017.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="arm_right_6_link_geom_collision_0_arm_6_collision_wrist_2017">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/arm_6_collision_wrist_2017.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_7_joint" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="1.5707963705062866 -0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_6_link"/>
+    <child link="arm_right_7_link"/>
+    <limit effort="1000.0" lower="-2.094395160675049" upper="2.094395160675049" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_7_link"/>
+  <joint name="arm_right_tool_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.046" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <parent link="arm_right_7_link"/>
+    <child link="arm_right_tool_link"/>
+  </joint>
+  <link name="arm_right_tool_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.04699999839067459" rpy="3.1415927410125732 -1.570796251296997 0.0"/>
+      <mass value="0.0007853981805965304"/>
+      <inertia ixx="7.3303829672966e-09" ixy="0.0" ixz="0.0" iyy="7.3303829672966e-09" iyz="0.0" izz="9.817476609441655e-09"/>
+    </inertial>
+    <visual name="arm_right_tool_link_geom_visual_0">
+      <origin xyz="0.0010000000474974513 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.004999999888241291"/>
+      </geometry>
+    </visual>
+    <collision name="arm_right_tool_link_geom_collision_0">
+      <origin xyz="0.0010000000474974513 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.004999999888241291"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="wrist_right_ft_link_joint" type="fixed">
+    <origin xyz="0.00785 0.0 0.0" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+    <parent link="arm_right_tool_link"/>
+    <child link="wrist_right_ft_link"/>
+  </joint>
+  <link name="wrist_right_ft_link">
+    <inertial>
+      <origin xyz="0.007849999703466892 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.04993954300880432"/>
+      <inertia ixx="7.346272923314245e-06" ixy="0.0" ixz="0.0" iyy="7.346272923314245e-06" iyz="0.0" izz="1.2640946806641296e-05"/>
+    </inertial>
+    <visual name="wrist_right_ft_link_geom_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.02250000089406967" length="0.015699999406933784"/>
+      </geometry>
+    </visual>
+    <collision name="wrist_right_ft_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.02250000089406967" length="0.015699999406933784"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="wrist_right_ft_tool_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.012725" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <parent link="wrist_right_ft_link"/>
+    <child link="wrist_right_ft_tool_link"/>
+  </joint>
+  <link name="wrist_right_ft_tool_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.012725000269711018" rpy="-1.5707963705062866 0.7853981852531433 -1.5707963705062866"/>
+      <mass value="0.03828816115856171"/>
+      <inertia ixx="6.285838935582433e-06" ixy="0.0" ixz="0.0" iyy="6.285838935582433e-06" iyz="0.0" izz="1.1965050362050533e-05"/>
+    </inertial>
+    <visual name="wrist_right_ft_tool_link_geom_visual_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.02500000037252903" length="0.009750000201165676"/>
+      </geometry>
+    </visual>
+    <collision name="wrist_right_ft_tool_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.02500000037252903" length="0.009750000201165676"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_right_tool_link_joint" type="fixed">
+    <origin xyz="0.01 0.0 0.0" rpy="3.1415927410125732 1.5707963705062866 0.0"/>
+    <parent link="wrist_right_ft_tool_link"/>
+    <child link="gripper_right_tool_link"/>
+  </joint>
+  <link name="gripper_right_tool_link"/>
+  <joint name="gripper_right_link_joint" type="fixed">
+    <origin xyz="0.01 0.0 0.0" rpy="3.1415927410125732 1.5707963705062866 0.0"/>
+    <parent link="wrist_right_ft_tool_link"/>
+    <child link="gripper_right_link"/>
+  </joint>
+  <link name="gripper_right_link">
+    <inertial>
+      <origin xyz="0.055877234786748886 -6.149214186734753e-06 -6.216389465407701e-06" rpy="-2.208202838897705 -1.5707594156265259 -2.2676138877868652"/>
+      <mass value="1.1609281301498413"/>
+      <inertia ixx="0.0014065168797969818" ixy="0.0" ixz="0.0" iyy="0.004091456066817045" iyz="0.0" izz="0.004576720762997866"/>
+    </inertial>
+    <visual name="gripper_right_link_geom_visual_0_gripper_link">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/gripper_link.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="gripper_right_link_geom_collision_0_gripper_link_collision">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/stl/gripper_link_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_right_right_finger_joint" type="prismatic">
+    <origin xyz="0.0 0.0 0.0" rpy="-2.990777583360514e-33 0.0 1.232595164407831e-32"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_right_link"/>
+    <child link="gripper_right_right_finger_link"/>
+    <limit effort="1000.0" lower="0.0" upper="0.04500000178813934" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_right_right_finger_link">
+    <inertial>
+      <origin xyz="-0.061255477368831635 -1.1640191078186035 0.6908868551254272" rpy="0.7602115869522095 -1.5441923141479492 2.5528311729431152"/>
+      <mass value="0.10103759169578552"/>
+      <inertia ixx="2.747980943240691e-05" ixy="0.0" ixz="0.0" iyy="0.0024304126854985952" iyz="0.0" izz="0.0024481690488755703"/>
+    </inertial>
+    <visual name="gripper_right_right_finger_link_geom_visual_0_gripper_finger_link">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -9.265358676202595e-05"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/gripper_finger_link.obj" scale="-1.000092625617981 -0.9999073147773743 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="gripper_right_right_finger_link_geom_collision_0">
+      <origin xyz="0.004999999888241291 0.0 -0.16500000655651093" rpy="0.0 -0.0 3.1414999961853027"/>
+      <geometry>
+        <box size="0.009999999776482582 0.05000000074505806 0.10999999940395355"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_right_left_finger_joint" type="prismatic">
+    <origin xyz="0.0 0.0 0.0" rpy="-2.990777583360514e-33 0.0 1.232595164407831e-32"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="gripper_right_link"/>
+    <child link="gripper_right_left_finger_link"/>
+    <limit effort="1000.0" lower="0.0" upper="0.04500000178813934" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_right_left_finger_link">
+    <inertial>
+      <origin xyz="-0.061255477368831635 -1.1640191078186035 0.6854433417320251" rpy="-2.6243865489959717 1.5495017766952515 -2.378355026245117"/>
+      <mass value="0.10103759169578552"/>
+      <inertia ixx="2.8091548301745206e-05" ixy="0.0" ixz="0.0" iyy="0.0024298429489135742" iyz="0.0" izz="0.0024481271393597126"/>
+    </inertial>
+    <visual name="gripper_right_left_finger_link_geom_visual_0_gripper_finger_link">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1414999961853027"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/gripper_finger_link.obj" scale="1.000092625617981 0.9999073147773743 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="gripper_right_left_finger_link_geom_collision_0">
+      <origin xyz="-0.004999999888241291 0.0 -0.16500000655651093" rpy="0.0 -0.0 3.1414999961853027"/>
+      <geometry>
+        <box size="0.009999999776482582 0.05000000074505806 0.10999999940395355"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_right_grasping_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 -0.12" rpy="1.5707926750183105 1.5707926750183105 3.1415927410125732"/>
+    <parent link="gripper_right_link"/>
+    <child link="gripper_right_grasping_frame"/>
+  </joint>
+  <link name="gripper_right_grasping_frame"/>
+  <joint name="torso_fixed_column_link_joint" type="fixed">
+    <origin xyz="-0.062 0.0 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="torso_fixed_column_link"/>
+  </joint>
+  <link name="torso_fixed_column_link">
+    <inertial>
+      <origin xyz="-0.06199999898672104 0.0 0.4699999988079071" rpy="-0.0 1.570796251296997 0.0"/>
+      <mass value="48.89500045776367"/>
+      <inertia ixx="0.3759809136390686" ixy="0.0" ixz="0.0" iyy="5.111966133117676" iyz="0.0" izz="5.12450647354126"/>
+    </inertial>
+    <visual name="torso_fixed_column_link_geom_visual_0">
+      <origin xyz="0.0 0.0 0.2750000059604645" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.18000000715255737 0.20000000298023224 0.550000011920929"/>
+      </geometry>
+    </visual>
+    <collision name="torso_fixed_column_link_geom_collision_0">
+      <origin xyz="0.0 0.0 0.2750000059604645" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <box size="0.23000000417232513 0.23000000417232513 0.550000011920929"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_cover_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.13" rpy="0.0 0.0 0.0"/>
+    <parent link="base_footprint"/>
+    <child link="base_cover_link"/>
+  </joint>
+  <link name="base_cover_link">
+    <inertial>
+      <origin xyz="-0.01842234469950199 -1.1418089584935842e-08 0.17250001430511475" rpy="0.02539295144379139 1.7227872604053118e-06 1.570791482925415"/>
+      <mass value="0.533096194267273"/>
+      <inertia ixx="0.018984170630574226" ixy="0.0" ixz="0.0" iyy="0.021554354578256607" iyz="0.0" izz="0.03799857571721077"/>
+    </inertial>
+    <visual name="base_cover_link_geom_visual_0_base_ring">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://tiago_dual/meshes/obj/base_ring.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+  </link>
+  <joint name="rgbd_laser_link_joint" type="fixed">
+    <origin xyz="-0.9 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="base_footprint"/>
+    <child link="rgbd_laser_link"/>
+  </joint>
+  <link name="rgbd_laser_link"/>
+</robot>
