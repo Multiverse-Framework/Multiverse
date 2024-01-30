@@ -340,33 +340,34 @@ class CreateSceneTestCase(unittest.TestCase):
                     os.remove(os.path.join(obj_target_dir_path, obj_name, "meshes", "stl", mesh_file_name))
 
     def test_create_robots(self):
-        robots_dir = "/media/giangnguyen/Storage/mujoco_menagerie"
-        for robot_name in os.listdir(robots_dir):
-            robot_dir_path = os.path.join(robots_dir, robot_name)
-            if not os.path.isdir(robot_dir_path):
-                continue
-            for robot_file_name in os.listdir(robot_dir_path):
-                if robot_file_name.endswith(".xml") and "scene" not in robot_file_name:
-                    robot_file_path = os.path.join(robot_dir_path, robot_file_name)
+        # robots_dir = "/media/giangnguyen/Storage/mujoco_menagerie"
+        # for robot_name in os.listdir(robots_dir):
+        #     robot_dir_path = os.path.join(robots_dir, robot_name)
+        #     if not os.path.isdir(robot_dir_path):
+        #         continue
+        #     for robot_file_name in os.listdir(robot_dir_path):
+        #         if robot_file_name.endswith(".xml") and "scene" not in robot_file_name:
+        #             robot_file_path = os.path.join(robot_dir_path, robot_file_name)
 
-                    factory = UrdfImporter(file_path=robot_file_path,
-                                        with_physics=True,
-                                        with_visual=True,
-                                        with_collision=True,
-                                        default_rgba=numpy.array([0.9, 0.9, 0.9, 1.0]),
-                                        inertia_source=InertiaSource.FROM_VISUAL_MESH)
-                    factory.import_model()
+        robot_file_path = "/media/giangnguyen/Storage/Multiverse/multiverse_ws/src/isr_testbed/urdf/isr-testbed.urdf"
+        factory = UrdfImporter(file_path=robot_file_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=True,
+                               default_rgba=numpy.array([0.9, 0.9, 0.9, 1.0]),
+                               inertia_source=InertiaSource.FROM_VISUAL_MESH)
+        factory.import_model()
 
-                    output_mjcf_path = os.path.join(self.resource_path, "robots", factory.config.model_name,
-                                                    f"{factory.config.model_name}.xml")
-                    mjcf_exporter = MjcfExporter(file_path=output_mjcf_path,
-                                                factory=factory)
-                    mjcf_exporter.build()
-                    mjcf_exporter.export()
+        output_mjcf_path = os.path.join(self.resource_path, "robots", factory.config.model_name,
+                                        f"{factory.config.model_name}.xml")
+        mjcf_exporter = MjcfExporter(file_path=output_mjcf_path,
+                                     factory=factory)
+        mjcf_exporter.build()
+        mjcf_exporter.export()
 
-                    output_urdf_path = os.path.join(self.resource_path, "robots", factory.config.model_name,
-                                                    f"{factory.config.model_name}.urdf")
-                    urdf_exporter = UrdfExporter(file_path=output_urdf_path,
-                                                factory=factory)
-                    urdf_exporter.build()
-                    urdf_exporter.export()
+        output_urdf_path = os.path.join(self.resource_path, "robots", factory.config.model_name,
+                                        f"{factory.config.model_name}.urdf")
+        urdf_exporter = UrdfExporter(file_path=output_urdf_path,
+                                     factory=factory)
+        urdf_exporter.build()
+        urdf_exporter.export()

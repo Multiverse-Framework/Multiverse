@@ -29,11 +29,19 @@ for selected_object in bpy.data.objects:
 """
 
 
-def export_usd(out_usd: str) -> str:
+def export_usd(out_usd: str, merge_mesh: bool = False) -> str:
     return f"""
 import os.path
 
 {clean_up_meshes_script}
+if {merge_mesh}:
+    bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
+    for selected_object in bpy.context.selected_objects:
+        if selected_object.type != "MESH":
+            selected_object.select_set(False)
+    if len(bpy.context.selected_objects) > 1:
+        bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
+        bpy.ops.object.join()
 bpy.ops.wm.usd_export(filepath='{out_usd}', selected_objects_only=True, overwrite_textures=True)
 """
 
@@ -67,7 +75,7 @@ for match in matches:
     new_texture_path = new_value
     new_texture_abspath = os.path.join(out_dae_dir, new_texture_path)
     if not os.path.exists(new_texture_abspath):
-        shutil.copy(texture_path, new_texture_abspath)
+        shutil.copy(texture_abspath, new_texture_abspath)
     os.remove(texture_abspath)
     
 with open('{out_dae}', "w", encoding="utf-8") as output:

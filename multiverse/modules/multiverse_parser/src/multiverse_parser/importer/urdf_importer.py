@@ -272,16 +272,21 @@ class UrdfImporter(Factory):
             source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)
             if source_mesh_file_path is not None:
                 tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
-                    mesh_file_path=source_mesh_file_path)
+                    mesh_file_path=source_mesh_file_path, merge_mesh=True)
                 mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_path)
                 for mesh_prim in [prim for prim in mesh_stage.Traverse() if prim.IsA(UsdGeom.Mesh)]:
                     mesh_name = mesh_prim.GetName()
                     mesh_path = mesh_prim.GetPath()
-                    geom_builder = body_builder.add_geom(geom_name=f"{geom_name}_{mesh_name}",
-                                                         geom_property=geom_property)
                     mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_usd_mesh_file_path,
                                                                      mesh_path=mesh_path,
                                                                      texture_coordinate_name="UVMap")
+                    if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
+                        # TODO: Fix empty mesh
+                        continue
+
+                    geom_builder = body_builder.add_geom(geom_name=f"{geom_name}_{mesh_name}",
+                                                         geom_property=geom_property)
+
                     geom_builder.add_mesh(mesh_name=mesh_name,
                                           mesh_property=mesh_property)
                     geom_builder.build()

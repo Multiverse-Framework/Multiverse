@@ -155,7 +155,8 @@ class Factory:
 
     def import_mesh(self,
                     mesh_file_path: str,
-                    mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0])) -> Tuple[str, str]:
+                    mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
+                    merge_mesh: bool = False) -> Tuple[str, str]:
         """
         Import the mesh from the mesh file path to the temporary mesh directory path.
         :param mesh_file_path: Path to the mesh file.
@@ -177,16 +178,16 @@ class Factory:
 
         print("Importing mesh from", mesh_file_path, "to", tmp_usd_mesh_file_path, "and", tmp_mesh_file_path, ".")
         if mesh_file_extension in [".usd", ".usda", ".usdz"]:
-            cmd = import_usd([mesh_file_path], mesh_scale) + export_usd(tmp_usd_mesh_file_path)
+            cmd = import_usd([mesh_file_path], mesh_scale) + export_usd(tmp_usd_mesh_file_path, merge_mesh)
         elif mesh_file_extension == ".obj":
             cmd = import_obj([mesh_file_path], mesh_scale) + export_obj(tmp_mesh_file_path) + export_usd(
-                tmp_usd_mesh_file_path)
+                tmp_usd_mesh_file_path, merge_mesh)
         elif mesh_file_extension == ".stl":
             cmd = import_stl([mesh_file_path], mesh_scale) + export_stl(tmp_mesh_file_path) + export_usd(
-                tmp_usd_mesh_file_path)
+                tmp_usd_mesh_file_path, merge_mesh)
         elif mesh_file_extension == ".dae":
             cmd = import_dae([mesh_file_path], mesh_scale) + export_dae(tmp_mesh_file_path) + export_usd(
-                tmp_usd_mesh_file_path)
+                tmp_usd_mesh_file_path, merge_mesh)
         else:
             raise ValueError(f"Unsupported file extension {mesh_file_extension}.")
 
