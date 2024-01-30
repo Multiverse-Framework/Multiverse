@@ -12,4 +12,4 @@
 	url = https://github.com/sofa-framework/sofa.git
 [submodule "multiverse_assets"]
 	path = multiverse_assets
-	url = git@github.com:Multiverse-Framework/Multiverse-Assets.git
+	url = https://github.com/Multiverse-Framework/Multiverse-Assets.git
