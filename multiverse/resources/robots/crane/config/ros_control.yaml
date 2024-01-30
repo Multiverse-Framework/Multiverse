@@ -5,9 +5,12 @@ joint_state_controller:
 joint_trajectory_controller: 
   type: position_controllers/JointTrajectoryController  
   joints:
-    - theta1_slewing_joint
-    - theta2_boom_joint
-    - theta3_arm_joint
+    - boom_cylinder_piston_in_barrel_linear_joint
+    - arm_cylinder_piston_in_barrel_linear_joint_left
+    - arm_cylinder_piston_in_barrel_linear_joint_right
+    # - theta1_slewing_joint
+    # - theta2_boom_joint
+    # - theta3_arm_joint
     - q4_big_telescope
     - theta8_rotator_joint
     - theta10_outer_jaw_joint

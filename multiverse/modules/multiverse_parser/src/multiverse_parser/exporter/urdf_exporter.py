@@ -1,247 +1,491 @@
-#!/usr/bin/env python3.10
+#!/usr/bin/env python3
 
 import os
+import shutil
+from typing import Tuple, Optional, Union
+
 import numpy
-from math import radians
+from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
-from pxr import UsdPhysics
-from multiverse_parser import WorldBuilder, GeomType, JointType
-from multiverse_parser.factory.body_builder import body_dict
-from multiverse_parser.factory.joint_builder import joint_dict
-from multiverse_parser.factory.geom_builder import geom_dict
-from multiverse_parser.factory.mesh_builder import VisualMeshBuilder, CollisionMeshBuilder
-from multiverse_parser.utils import *
+
+from ..factory import Factory
+from ..factory import (WorldBuilder,
+                       BodyBuilder,
+                       JointBuilder, JointType,
+                       GeomBuilder, GeomType)
+from ..importer.urdf_importer import build_urdf_inertial_api
+from ..utils import xform_cache
+
+from pxr import UsdUrdf, Gf, UsdPhysics, UsdGeom, Usd, UsdShade
+
+
+def get_robot_name(world_builder: WorldBuilder) -> str:
+    usd_urdf = UsdUrdf.Urdf.Get(world_builder.stage, "/urdf")
+    if not usd_urdf.GetPrim().IsValid():
+        usd_urdf = UsdUrdf.Urdf.Define(world_builder.stage, "/urdf")
+        usd_urdf.CreateNameAttr(world_builder.stage.GetDefaultPrim().GetName())
+    return usd_urdf.GetNameAttr().Get()
+
+
+def get_urdf_joint_api(joint_builder: JointBuilder) -> UsdUrdf.UrdfJointAPI:
+    joint = joint_builder.joint
+    joint_prim = joint.GetPrim()
+    if joint_prim.HasAPI(UsdUrdf.UrdfJointAPI):
+        urdf_joint_api = UsdUrdf.UrdfJointAPI(joint_prim)
+    else:
+        urdf_joint_api = UsdUrdf.UrdfJointAPI.Apply(joint_prim)
+        urdf_joint_api.CreateTypeAttr(joint_builder.type.to_urdf())
+        urdf_joint_api.CreateParentRel().AddTarget(joint_builder.parent_prim.GetPath())
+        urdf_joint_api.CreateChildRel().AddTarget(joint_builder.child_prim.GetPath())
+        if joint_builder.type in [JointType.REVOLUTE, JointType.PRISMATIC]:
+            joint_axis = joint_builder.quat.Transform(Gf.Vec3d([0.0, 0.0, 1.0]))
+            urdf_joint_api.CreateAxisAttr(Gf.Vec3f(*joint_axis))
+            effort = 1000  # TODO: Find a way to get this value
+            velocity = 1000  # TODO: Find a way to get this value
+            if joint_builder.type == JointType.REVOLUTE:
+                usd_joint = UsdPhysics.RevoluteJoint(joint_prim)
+                upper_limit = numpy.deg2rad(usd_joint.GetUpperLimitAttr().Get())
+                lower_limit = numpy.deg2rad(usd_joint.GetLowerLimitAttr().Get())
+            elif joint_builder.type == JointType.PRISMATIC:
+                usd_joint = UsdPhysics.PrismaticJoint(joint_prim)
+                upper_limit = usd_joint.GetUpperLimitAttr().Get()
+                lower_limit = usd_joint.GetLowerLimitAttr().Get()
+            else:
+                raise ValueError(f"Joint type {joint_builder.type} not supported.")
+            urdf_joint_api.CreateUpperAttr(upper_limit)
+            urdf_joint_api.CreateLowerAttr(lower_limit)
+            urdf_joint_api.CreateEffortAttr(effort)
+            urdf_joint_api.CreateVelocityAttr(velocity)
+
+        parent_transform = xform_cache.GetLocalToWorldTransform(joint_builder.parent_prim)
+        child_transform = xform_cache.GetLocalToWorldTransform(joint_builder.child_prim)
+        parent_to_child_transform = child_transform * parent_transform.GetInverse()
+        xyz = parent_to_child_transform.ExtractTranslation()
+
+        quat = joint.GetLocalRot0Attr().Get() * joint.GetLocalRot1Attr().Get().GetInverse()
+        quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
+        rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
+        rpy = Gf.Vec3f(*rpy)
+        urdf_joint_api.CreateXyzAttr(xyz)
+        urdf_joint_api.CreateRpyAttr(rpy)
+
+    return urdf_joint_api
+
+
+def get_urdf_origin(xform: UsdGeom.Xform) -> Tuple[Gf.Vec3f, Gf.Vec3f]:
+    transformation = xform.GetLocalTransformation().RemoveScaleShear()
+    xyz = transformation.ExtractTranslation()
+    quat = transformation.ExtractRotationQuat()
+    quat = numpy.array([*quat.GetImaginary(), quat.GetReal()])
+    rpy = Rotation.from_quat(quat).as_euler("xyz", degrees=False)
+    rpy = Gf.Vec3f(*rpy)
+    return xyz, rpy
+
+
+def get_urdf_geometry_api(gprim_prim: Usd.Prim) -> Union[UsdUrdf.UrdfLinkVisualAPI, UsdUrdf.UrdfLinkCollisionAPI]:
+    if gprim_prim.HasAPI(UsdUrdf.UrdfLinkVisualAPI):
+        urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI(gprim_prim)
+    elif gprim_prim.HasAPI(UsdUrdf.UrdfLinkCollisionAPI):
+        urdf_geometry_api = UsdUrdf.UrdfLinkCollisionAPI(gprim_prim)
+    else:
+        xform = UsdGeom.Xform(gprim_prim)
+        xyz, rpy = get_urdf_origin(xform)
+
+        if not gprim_prim.HasAPI(UsdPhysics.CollisionAPI):
+            urdf_geometry_api = UsdUrdf.UrdfLinkVisualAPI.Apply(gprim_prim)
+        else:
+            urdf_geometry_api = UsdUrdf.UrdfLinkCollisionAPI.Apply(gprim_prim)
+
+        urdf_geometry_api.CreateXyzAttr(xyz)
+        urdf_geometry_api.CreateRpyAttr(rpy)
+
+    return urdf_geometry_api
+
+
+def build_geom(geom_name: str,
+               link: urdf.Link,
+               geometry: Union[urdf.Box, urdf.Sphere, urdf.Cylinder, urdf.Mesh],
+               urdf_geometry_api: Union[UsdUrdf.UrdfLinkVisualAPI, UsdUrdf.UrdfLinkCollisionAPI]):
+    xyz = urdf_geometry_api.GetXyzAttr().Get()
+    rpy = urdf_geometry_api.GetRpyAttr().Get()
+    origin = urdf.Pose(xyz=xyz, rpy=rpy)
+
+    if isinstance(urdf_geometry_api, UsdUrdf.UrdfLinkVisualAPI):
+        visual = urdf.Visual(
+            geometry=geometry,
+            origin=origin,
+            name=geom_name)
+        link.visual = visual
+    elif isinstance(urdf_geometry_api, UsdUrdf.UrdfLinkCollisionAPI):
+        collision = urdf.Collision(
+            geometry=geometry,
+            origin=origin,
+            name=geom_name)
+        link.collision = collision
+    else:
+        raise ValueError(f"API {urdf_geometry_api} not supported.")
+
+
+def get_urdf_inertial_api(xform_prim: Usd.Prim):
+    if xform_prim.HasAPI(UsdUrdf.UrdfLinkInertialAPI):
+        urdf_link_inertial_api = UsdUrdf.UrdfLinkInertialAPI(xform_prim)
+    else:
+        physics_mass_api = UsdPhysics.MassAPI(xform_prim)
+        urdf_link_inertial_api = build_urdf_inertial_api(physics_mass_api=physics_mass_api)
+    return urdf_link_inertial_api
+
+
+def get_urdf_geometry_box_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeometryBoxAPI:
+    gprim = geom_builder.gprim
+    gprim_prim = gprim.GetPrim()
+    if gprim_prim.HasAPI(UsdUrdf.UrdfGeometryBoxAPI):
+        urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI(gprim_prim)
+    else:
+        urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(gprim_prim)
+        size = numpy.array([gprim.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2
+        size = Gf.Vec3f(*size)
+        urdf_geometry_box_api.CreateSizeAttr(size)
+    return urdf_geometry_box_api
+
+
+def get_urdf_geometry_sphere_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeometrySphereAPI:
+    gprim = geom_builder.gprim
+    gprim_prim = gprim.GetPrim()
+    sphere = UsdGeom.Sphere(gprim_prim)
+    if gprim_prim.HasAPI(UsdUrdf.UrdfGeometrySphereAPI):
+        urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI(gprim_prim)
+    else:
+        urdf_geometry_sphere_api = UsdUrdf.UrdfGeometrySphereAPI.Apply(gprim_prim)
+        radius = sphere.GetRadiusAttr().Get()
+        urdf_geometry_sphere_api.CreateRadiusAttr(radius)
+    return urdf_geometry_sphere_api
+
+
+def get_urdf_geometry_cylinder_api(geom_builder: GeomBuilder) -> UsdUrdf.UrdfGeometryCylinderAPI:
+    gprim = geom_builder.gprim
+    gprim_prim = gprim.GetPrim()
+    cylinder = UsdGeom.Cylinder(gprim_prim)
+    if gprim_prim.HasAPI(UsdUrdf.UrdfGeometryCylinderAPI):
+        urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI(gprim_prim)
+    else:
+        urdf_geometry_cylinder_api = UsdUrdf.UrdfGeometryCylinderAPI.Apply(gprim_prim)
+        radius = cylinder.GetRadiusAttr().Get()
+        length = cylinder.GetHeightAttr().Get()
+        urdf_geometry_cylinder_api.CreateRadiusAttr(radius)
+        urdf_geometry_cylinder_api.CreateLengthAttr(length)
+    return urdf_geometry_cylinder_api
+
+
+def get_urdf_geometry_mesh_api(geom_builder: GeomBuilder, mesh_file_relpath: str) -> UsdUrdf.UrdfGeometryMeshAPI:
+    gprim = geom_builder.gprim
+    gprim_prim = gprim.GetPrim()
+    if not gprim_prim.HasAPI(UsdUrdf.UrdfGeometryMeshAPI):
+        urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(gprim_prim)
+        urdf_geometry_mesh_api.CreateFilenameAttr(f"./{mesh_file_relpath}")
+        transformation = gprim.GetLocalTransformation()
+
+        # TODO: Doesn't work for negative scale
+        scale = [transformation.GetRow(i).GetLength() for i in range(3)]
+        scale = Gf.Vec3f(*scale)
+        urdf_geometry_mesh_api.CreateScaleAttr(scale)
+    else:
+        urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI(gprim_prim)
+    return urdf_geometry_mesh_api
 
 
 class UrdfExporter:
     def __init__(
-        self,
-        urdf_file_path: str,
-        world_builder: WorldBuilder,
-        with_physics: bool,
-        with_visual: bool,
-        with_collision: bool,
+            self,
+            factory: Factory,
+            file_path: str,
+            relative_to_ros_package: Optional[str] = None,
+            visual_mesh_file_extension: str = "obj",
     ) -> None:
-        self.urdf_file_path = urdf_file_path
-        self.world_builder = world_builder
-        self.with_physics = with_physics
-        self.with_visual = with_visual
-        self.with_collision = with_collision
+        self._factory = factory
+        robot_name = get_robot_name(world_builder=factory.world_builder)
+        self._robot = urdf.URDF(name=robot_name)
+        self._ros_package_path = None
+        self._file_path = file_path
+        (self._mesh_dir_abspath,
+         self._mesh_dir_rospath) = self._get_mesh_dir_paths(relative_to_ros_package=relative_to_ros_package)
+        self._visual_mesh_file_extension = visual_mesh_file_extension
 
-        self.robot = urdf.URDF(self.world_builder.stage.GetDefaultPrim().GetName())
+    def build(self) -> None:
+        for body_builder in self.factory.world_builder.body_builders:
+            self._build_joints(body_builder=body_builder)
+            self._build_link(body_builder=body_builder)
 
-        tmp_urdf_file_path = self.urdf_file_path
-        mesh_path = os.path.splitext(os.path.basename(tmp_urdf_file_path))[0]
-        while tmp_urdf_file_path != "/":
-            tmp_urdf_file_path = os.path.dirname(tmp_urdf_file_path)
-            mesh_path = os.path.join(os.path.basename(tmp_urdf_file_path), mesh_path)
+    def _get_mesh_dir_paths(self, relative_to_ros_package: Optional[str] = None) -> Tuple[str, str]:
+        file_path = self.file_path
+        meshdir_name = os.path.splitext(os.path.basename(file_path))[0]
+        mesh_dir_abspath = str(os.path.join(os.path.dirname(file_path), meshdir_name, "meshes"))
+        if relative_to_ros_package is not None:
+            if self._ros_package_path is not None:
+                ros_package_path = self._ros_package_path
+            else:
+                import rospkg
+                rospack = rospkg.RosPack()
+                try:
+                    self._ros_package_path = rospack.get_path(relative_to_ros_package)
+                except rospkg.ResourceNotFound:
+                    print(f"Could not find ROS package {relative_to_ros_package}, "
+                          f"searching for package.xml in parent directories of {file_path}.")
+                    self._ros_package_path = file_path
+                    mesh_dir_relpath = meshdir_name
+                    while self._ros_package_path != "/":
+                        self._ros_package_path = os.path.dirname(self._ros_package_path)
+                        mesh_dir_relpath = os.path.join(os.path.basename(self._ros_package_path), str(mesh_dir_relpath))
 
-            if os.path.exists(os.path.join(tmp_urdf_file_path, "package.xml")):
-                break
+                        if os.path.exists(os.path.join(self._ros_package_path, "package.xml")):
+                            print(f"Found package.xml in {self._ros_package_path}.")
+                            break
+                    else:
+                        raise FileNotFoundError(
+                            f"Could not find package.xml in any parent directory of {file_path}.")
+                ros_package_path = self._ros_package_path
+
+            mesh_dir_relpath = os.path.relpath(mesh_dir_abspath, ros_package_path)
+            mesh_dir_rospath = "package://" + relative_to_ros_package + "/" + mesh_dir_relpath
         else:
-            print(f"No ROS package found in {self.urdf_file_path}.")
-            return
+            # mesh_dir_rospath = "file://" + mesh_dir_abspath
+            mesh_dir_relpath = os.path.relpath(mesh_dir_abspath, os.path.dirname(file_path))
+            mesh_dir_rospath = "file://" + mesh_dir_relpath
 
-        self.urdf_mesh_dir_abs = os.path.join(os.path.dirname(tmp_urdf_file_path), mesh_path)
-        self.urdf_mesh_dir_ros = "package://" + mesh_path
+        return mesh_dir_abspath, mesh_dir_rospath
 
-        for body_name in self.world_builder.body_names:
-            if not with_physics or not self.build_joints(body_name=body_name):
-                self.build_fixed_joint(child_link_name=body_name)
-            self.build_link(body_name=body_name)
+    def _build_joints(self, body_builder: BodyBuilder) -> None:
+        for joint_builder in body_builder.joint_builders:
+            urdf_joint_api = get_urdf_joint_api(joint_builder=joint_builder)
 
-        self.export()
+            joint_type = urdf_joint_api.GetTypeAttr().Get()
+            if joint_type == "fixed" or not self.factory.config.with_physics:
+                urdf_joint = self._build_fixed_joint(body_builder=body_builder, urdf_joint_api=urdf_joint_api)
+            else:
+                urdf_joint = self._build_movable_joint(urdf_joint_api=urdf_joint_api)
+            if urdf_joint is not None:
+                self.robot.add_joint(urdf_joint)
 
-    def build_fixed_joint(self, child_link_name: str) -> None:
-        body_builder = body_dict[child_link_name]
-        parent_link_name = body_builder.xform.GetPrim().GetParent().GetName()
-        if parent_link_name in body_dict:
-            transformation = body_builder.xform.GetLocalTransformation().RemoveScaleShear()
-            xyz = transformation.ExtractTranslation()
-            quat = transformation.ExtractRotationQuat()
-            rpy = quat_to_rpy(quat)
+        if len(body_builder.joint_builders) == 0:
+            urdf_joint = self._build_fixed_joint(body_builder=body_builder)
+            if urdf_joint is not None:
+                self.robot.add_joint(urdf_joint)
 
-            joint = urdf.Joint(name=child_link_name + "_joint")
-            joint.origin = urdf.Pose(xyz=xyz, rpy=rpy)
-            joint.type = "fixed"
-            joint.parent = parent_link_name
-            joint.child = child_link_name
-            self.robot.add_joint(joint)
+    def _build_fixed_joint(self,
+                           body_builder: BodyBuilder,
+                           urdf_joint_api: Optional[UsdUrdf.UrdfJointAPI] = None) -> Optional[urdf.Joint]:
+        child_xform = body_builder.xform
+        child_prim = child_xform.GetPrim()
+        child_link_name = child_prim.GetName()
+        if child_link_name == self.robot.name:
+            return None
 
-    def build_joints(self, body_name: str) -> bool:
-        body_builder = body_dict[body_name]
+        parent_link_name = child_prim.GetParent().GetName()
 
-        for joint_name in body_builder.joint_names:
-            joint_builder = joint_dict[joint_name]
-            if joint_builder.type == JointType.NONE or joint_builder.type == JointType.FIXED or joint_builder.type == JointType.SPHERICAL:
-                continue
+        urdf_joint = urdf.Joint(name=child_link_name + "_joint")
+        if urdf_joint_api is not None:
+            xyz = urdf_joint_api.GetXyzAttr().Get()
+            rpy = urdf_joint_api.GetRpyAttr().Get()
+        else:
+            xyz, rpy = get_urdf_origin(xform=child_xform)
+        urdf_joint.origin = urdf.Pose(xyz=xyz, rpy=rpy)
+        urdf_joint.type = "fixed"
+        urdf_joint.parent = parent_link_name
+        urdf_joint.child = child_link_name
 
-            joint = urdf.Joint(name=joint_name)
+        return urdf_joint
 
-            if joint_builder.type == JointType.PRISMATIC or joint_builder.type == JointType.REVOLUTE:
-                limit = urdf.JointLimit()
-                limit.effort = 1000
-                limit.velocity = 1000
+    def _build_movable_joint(self, urdf_joint_api: UsdUrdf.UrdfJointAPI) -> urdf.Joint:
+        joint_type = urdf_joint_api.GetTypeAttr().Get()
+        joint_prim = urdf_joint_api.GetPrim()
+        joint_name = joint_prim.GetName()
 
-                if joint_builder.type == JointType.REVOLUTE:
-                    limit.lower = radians(joint_builder.joint.GetLowerLimitAttr().Get())
-                    limit.upper = radians(joint_builder.joint.GetUpperLimitAttr().Get())
-                else:
-                    limit.lower = joint_builder.joint.GetLowerLimitAttr().Get()
-                    limit.upper = joint_builder.joint.GetUpperLimitAttr().Get()
+        urdf_joint = urdf.Joint(name=joint_name)
+        xyz = urdf_joint_api.GetXyzAttr().Get()
+        rpy = urdf_joint_api.GetRpyAttr().Get()
+        urdf_joint.origin = urdf.Pose(xyz=xyz, rpy=rpy)
+        urdf_joint.type = joint_type
+        stage = self.factory.world_builder.stage
+        parent_prim_path = urdf_joint_api.GetParentRel().GetTargets()[0]
+        parent_prim = stage.GetPrimAtPath(parent_prim_path)
+        parent_name = parent_prim.GetName()
+        urdf_joint.parent = parent_name
+        child_prim_path = urdf_joint_api.GetChildRel().GetTargets()[0]
+        child_prim = stage.GetPrimAtPath(child_prim_path)
+        child_name = child_prim.GetName()
+        urdf_joint.child = child_name
+        if joint_type in ["revolute", "prismatic", "continuous"]:
+            urdf_joint.axis = urdf_joint_api.GetAxisAttr().Get()
+        if joint_type in ["revolute", "prismatic"]:
+            urdf_joint.limit = urdf.JointLimit()
+            urdf_joint.limit.lower = urdf_joint_api.GetLowerAttr().Get()
+            urdf_joint.limit.upper = urdf_joint_api.GetUpperAttr().Get()
+            urdf_joint.limit.effort = urdf_joint_api.GetEffortAttr().Get()
+            urdf_joint.limit.velocity = urdf_joint_api.GetVelocityAttr().Get()
 
-                if joint_builder.type == JointType.PRISMATIC:
-                    joint.type = "prismatic"
+        return urdf_joint
 
-                elif joint_builder.type == JointType.REVOLUTE:
-                    joint.type = "revolute"
+    def _build_link(self, body_builder: BodyBuilder) -> None:
+        xform_prim = body_builder.xform.GetPrim()
+        link_name = xform_prim.GetName()
+        link = urdf.Link(name=link_name)
 
-                joint.limit = limit
+        if self.factory.config.with_physics and xform_prim.HasAPI(UsdPhysics.MassAPI):
+            urdf_link_inertial_api = get_urdf_inertial_api(xform_prim)
 
-            elif joint_builder.type == JointType.CONTINUOUS:
-                joint.type = "continuous"
-
-            if joint_builder.axis == "X":
-                joint.axis = (1, 0, 0)
-            elif joint_builder.axis == "Y":
-                joint.axis = (0, 1, 0)
-            elif joint_builder.axis == "Z":
-                joint.axis = (0, 0, 1)
-            elif joint_builder.axis == "-X":
-                joint.axis = (-1, 0, 0)
-            elif joint_builder.axis == "-Y":
-                joint.axis = (0, -1, 0)
-            elif joint_builder.axis == "-Z":
-                joint.axis = (0, 0, -1)
-
-            joint.parent = joint_builder.parent_xform.GetPrim().GetName()
-            joint.child = joint_builder.child_xform.GetPrim().GetName()
-
-            xyz = joint_builder.joint.GetLocalPos0Attr().Get()
-            quat = joint_builder.joint.GetLocalRot0Attr().Get() * joint_builder.joint.GetLocalRot1Attr().Get().GetInverse()
-            rpy = quat_to_rpy(quat)
-            joint.origin = urdf.Pose(xyz=xyz, rpy=rpy)
-
-            self.robot.add_joint(joint)
-
-        return len(body_builder.joint_names) > 0
-
-    def build_link(self, body_name: str) -> None:
-        body_builder = body_dict[body_name]
-
-        link = urdf.Link(name=body_name)
-
-        if self.with_physics and body_builder.xform.GetPrim().HasAPI(UsdPhysics.MassAPI):
-            physics_mass_api = UsdPhysics.MassAPI(body_builder.xform)
-            mass = physics_mass_api.GetMassAttr().Get()
-            xyz = physics_mass_api.GetCenterOfMassAttr().Get()
-            rpy = quat_to_rpy(physics_mass_api.GetPrincipalAxesAttr().Get())
+            xyz = urdf_link_inertial_api.GetXyzAttr().Get()
+            rpy = urdf_link_inertial_api.GetRpyAttr().Get()
             origin = urdf.Pose(xyz=xyz, rpy=rpy)
-            diagonal_inertia = physics_mass_api.GetDiagonalInertiaAttr().Get()
-            inertia = urdf.Inertia(
-                ixx=diagonal_inertia[0],
-                iyy=diagonal_inertia[1],
-                izz=diagonal_inertia[2],
-            )
-            link.inertial = urdf.Inertial(mass=mass, inertia=inertia, origin=origin)
+            mass = urdf_link_inertial_api.GetMassAttr().Get()
+            ixx = urdf_link_inertial_api.GetIxxAttr().Get()
+            iyy = urdf_link_inertial_api.GetIyyAttr().Get()
+            izz = urdf_link_inertial_api.GetIzzAttr().Get()
+            ixy = urdf_link_inertial_api.GetIxyAttr().Get()
+            ixz = urdf_link_inertial_api.GetIxzAttr().Get()
+            iyz = urdf_link_inertial_api.GetIyzAttr().Get()
+            inertia = urdf.Inertia(ixx=ixx if ixx is not None else 1e-6,
+                                   iyy=iyy if iyy is not None else 1e-6,
+                                   izz=izz if izz is not None else 1e-6,
+                                   ixy=ixy if ixy is not None else 0.0,
+                                   ixz=ixz if ixz is not None else 0.0,
+                                   iyz=iyz if iyz is not None else 0.0)
+            link.inertial = urdf.Inertial(origin=origin, mass=mass, inertia=inertia)
 
-        for geom_name in body_builder.geom_names:
-            geom_builder = geom_dict[geom_name]
+            geom_builder: GeomBuilder
 
-            geometry = None
-
-            if geom_builder.type == GeomType.CUBE:
-                geometry = urdf.Box(size=numpy.array([geom_builder.xform.GetLocalTransformation().GetRow(i).GetLength() for i in range(3)]) * 2)
-            elif geom_builder.type == GeomType.SPHERE:
-                geometry = urdf.Sphere(radius=geom_builder.geom.GetRadiusAttr().Get())
-            elif geom_builder.type == GeomType.CYLINDER:
-                geometry = urdf.Cylinder(
-                    radius=geom_builder.geom.GetRadiusAttr().Get(),
-                    length=geom_builder.geom.GetHeightAttr().Get(),
-                )
-
-            is_visual = not geom_builder.geom.GetPrim().HasAPI(UsdPhysics.CollisionAPI)
-
-            transformation = geom_builder.xform.GetLocalTransformation().RemoveScaleShear()
-            xyz = transformation.ExtractTranslation()
-            quat = transformation.ExtractRotationQuat()
-            rpy = quat_to_rpy(quat)
-            origin = urdf.Pose(xyz, rpy)
-
-            if geometry is not None:
-                if self.with_visual and is_visual:
-                    visual = urdf.Visual(
-                        geometry=geometry,
-                        material=None,
-                        origin=origin,
-                        name=geom_builder.name,
-                    )
-                    link.visual = visual
-
-                if self.with_collision and not is_visual:
-                    collision = urdf.Collision(geometry=geometry, origin=origin, name=geom_builder.name)
-                    link.collision = collision
-
-            if geom_builder.mesh_builder is not None:
-                mesh_builder = geom_builder.mesh_builder
-                clear_meshes()
-
-                import_usd(mesh_builder.usd_file_path)
-
-                # transform(xyz=xyz, rpy=rpy)
-
-                if self.with_visual and is_visual:
-                    mesh_rel_path = os.path.join(
-                        "obj",
-                        os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0] + ".obj",
-                    )
-                    export_obj(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
-                    filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
-                    scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
-                    if not any(x < 0 for x in geom_builder.scale):
-                        scale = tuple(abs(x) for x in scale)
-                    if not any(x > 0 for x in geom_builder.scale):
-                        scale = tuple(-abs(x) for x in scale)
-
-                    geometry = urdf.Mesh(filename=filename, scale=scale)
-
-                    visual = urdf.Visual(
-                        geometry=geometry,
-                        material=None,
-                        origin=origin,
-                        name=mesh_builder.name,
-                    )
-                    link.visual = visual
-
-                if self.with_collision and not is_visual:
-                    mesh_rel_path = os.path.join(
-                        "stl",
-                        os.path.splitext(os.path.basename(mesh_builder.usd_file_path))[0] + ".stl",
-                    )
-
-                    export_stl(os.path.join(self.urdf_mesh_dir_abs, mesh_rel_path))
-                    filename = os.path.join(self.urdf_mesh_dir_ros, mesh_rel_path)
-                    scale = rotate_vector_by_quat(vector=geom_builder.scale, quat=quat)
-                    if not any(x < 0 for x in geom_builder.scale):
-                        scale = tuple(abs(x) for x in scale)
-                    if not any(x > 0 for x in geom_builder.scale):
-                        scale = tuple(-abs(x) for x in scale)
-
-                    geometry = urdf.Mesh(filename=filename, scale=scale)
-
-                    collision = urdf.Collision(
-                        geometry=geometry,
-                        origin=origin,
-                        name=mesh_builder.name,
-                    )
-                    link.collision = collision
+        for geom_builder in body_builder.geom_builders:
+            self._build_geom(geom_builder=geom_builder, link=link)
 
         self.robot.add_link(link)
 
-    def export(self):
-        os.makedirs(name=os.path.dirname(self.urdf_file_path), exist_ok=True)
+    def _build_geom(self, geom_builder: GeomBuilder, link: urdf.Link):
+        gprim_prim = geom_builder.gprim.GetPrim()
+        urdf_geometry_api = get_urdf_geometry_api(gprim_prim=gprim_prim)
+        geom_name = gprim_prim.GetName()
+        if geom_builder.type == GeomType.CUBE:
+            urdf_geometry_box_api = get_urdf_geometry_box_api(geom_builder=geom_builder)
+            size = urdf_geometry_box_api.GetSizeAttr().Get()
+            geometry = urdf.Box(size=size)
+            build_geom(geom_name=geom_name,
+                       link=link,
+                       geometry=geometry,
+                       urdf_geometry_api=urdf_geometry_api)
+        elif geom_builder.type == GeomType.SPHERE:
+            urdf_geometry_sphere_api = get_urdf_geometry_sphere_api(geom_builder=geom_builder)
+            radius = urdf_geometry_sphere_api.GetRadiusAttr().Get()
+            geometry = urdf.Sphere(radius=radius)
+            build_geom(geom_name=geom_name,
+                       link=link,
+                       geometry=geometry,
+                       urdf_geometry_api=urdf_geometry_api)
+        elif geom_builder.type in [GeomType.CYLINDER, GeomType.CAPSULE]:
+            urdf_geometry_cylinder_api = get_urdf_geometry_cylinder_api(geom_builder=geom_builder)
+            radius = urdf_geometry_cylinder_api.GetRadiusAttr().Get()
+            length = urdf_geometry_cylinder_api.GetLengthAttr().Get()
+            geometry = urdf.Cylinder(radius=radius, length=length)
+            build_geom(geom_name=geom_name,
+                       link=link,
+                       geometry=geometry,
+                       urdf_geometry_api=urdf_geometry_api)
+        elif geom_builder.type == GeomType.MESH:
+            usd_mesh_file_abspath = self._get_file_abspath_from_reference(prim=gprim_prim)
+            tmp_usd_mesh_file_abspath = usd_mesh_file_abspath
+
+            if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
+                material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
+                material_prim = geom_builder.stage.GetPrimAtPath(material_path)
+                material_name = material_prim.GetName()
+                usd_material_file_abspath = self._get_file_abspath_from_reference(prim=material_prim)
+                usd_material_file_relpath = os.path.relpath(usd_material_file_abspath,
+                                                            os.path.dirname(usd_mesh_file_abspath))
+
+                tmp_usd_mesh_file_abspath = tmp_usd_mesh_file_abspath.replace(".usda", "_tmp.usda")
+                shutil.copy2(usd_mesh_file_abspath, tmp_usd_mesh_file_abspath)
+                mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_abspath)
+                mesh_prim = mesh_stage.GetDefaultPrim()
+                mesh_path = mesh_prim.GetPath()
+                mesh_material_scope_path = mesh_path.AppendChild("Materials")
+                UsdGeom.Scope.Define(mesh_stage, mesh_material_scope_path)
+                mesh_material_path = mesh_material_scope_path.AppendChild(material_name)
+                mesh_material = UsdShade.Material.Define(mesh_stage, mesh_material_path)
+                mesh_material_prim = mesh_material.GetPrim()
+                material_stage = Usd.Stage.Open(usd_material_file_abspath)
+                ref_material_prim = material_stage.GetDefaultPrim()
+                ref_material_path = ref_material_prim.GetPath()
+                mesh_material_prim.GetReferences().AddReference(f"./{usd_material_file_relpath}", ref_material_path)
+                mesh_material_binding_api = UsdShade.MaterialBindingAPI.Apply(mesh_prim)
+                mesh_material_binding_api.Bind(mesh_material)
+                mesh_stage.GetRootLayer().Save()
+
+            tmp_mesh_file_relpath = self._get_mesh_file_relpath(geom_prim=gprim_prim,
+                                                                usd_mesh_file_path=usd_mesh_file_abspath)
+            tmp_mesh_file_abspath = os.path.join(self.factory.tmp_mesh_dir_path, tmp_mesh_file_relpath)
+            self.factory.export_mesh(in_mesh_file_path=tmp_usd_mesh_file_abspath,
+                                     out_mesh_file_path=tmp_mesh_file_abspath)
+            if "_tmp.usda" in tmp_usd_mesh_file_abspath:
+                os.remove(tmp_usd_mesh_file_abspath)
+
+            mesh_file_abspath = os.path.join(self._mesh_dir_abspath, tmp_mesh_file_relpath)
+            mesh_file_relpath = os.path.relpath(path=mesh_file_abspath,
+                                                start=os.path.dirname(self.file_path))
+            urdf_geometry_mesh_api = get_urdf_geometry_mesh_api(geom_builder=geom_builder,
+                                                                mesh_file_relpath=mesh_file_relpath)
+            scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
+
+            mesh_file_rospath = os.path.join(self._mesh_dir_rospath, tmp_mesh_file_relpath)
+            geometry = urdf.Mesh(filename=mesh_file_rospath, scale=scale)
+            build_geom(geom_name=geom_name,
+                       link=link,
+                       geometry=geometry,
+                       urdf_geometry_api=urdf_geometry_api)
+        else:
+            raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
+
+    def _get_mesh_file_relpath(self, geom_prim: UsdGeom.Gprim, usd_mesh_file_path: str) -> str:
+        if geom_prim.HasAPI(UsdShade.MaterialBindingAPI):
+            file_extension = self.visual_mesh_file_extension
+        else:
+            file_extension = "stl"
+        return os.path.join(f"{file_extension}",
+                            os.path.splitext(os.path.basename(usd_mesh_file_path))[0] + f".{file_extension}")
+
+    def _get_file_abspath_from_reference(self, prim: Usd.Prim) -> str:
+        prepended_items = prim.GetPrimStack()[0].referenceList.prependedItems
+        if len(prepended_items) != 1:
+            raise NotImplementedError(f"Prim {prim.GetName()} has {len(prepended_items)} prepended items.")
+
+        prepended_item = prepended_items[0]
+        file_abspath = prepended_item.assetPath
+        if not os.path.isabs(file_abspath):
+            file_abspath = os.path.join(os.path.dirname(self.factory.tmp_usd_file_path), file_abspath)
+        return file_abspath
+
+    def export(self, keep_usd: bool = True):
+        os.makedirs(name=os.path.dirname(self.file_path), exist_ok=True)
 
         xml_string = self.robot.to_xml_string()
 
-        with open(self.urdf_file_path, "w") as file:
+        with open(self.file_path, "w") as file:
             file.write(xml_string)
+
+        if keep_usd:
+            self.factory.save_tmp_model(usd_file_path=self.file_path.replace(".urdf", ".usda"))
+        else:
+            self.factory.save_tmp_model(usd_file_path=self.file_path.replace(".urdf", ".usda"),
+                                        excludes=["usd", ".usda"])
+
+    @property
+    def file_path(self) -> str:
+        return self._file_path
+
+    @property
+    def factory(self) -> Factory:
+        return self._factory
+
+    @property
+    def robot(self) -> urdf.URDF:
+        return self._robot
+
+    @property
+    def visual_mesh_file_extension(self) -> str:
+        return self._visual_mesh_file_extension

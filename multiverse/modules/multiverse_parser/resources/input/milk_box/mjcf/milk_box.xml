@@ -1,0 +1,29 @@
+<mujoco model="milk_box">
+    <compiler angle="radian" meshdir="../meshes/obj/" texturedir="../meshes/textures/"
+        autolimits="true" />
+    <asset>
+        <texture name="milk_box_visual" type="2d" file="milk_box.png" />
+        <material name="milk_box_visual" texture="milk_box_visual" />
+        <mesh name="milk_box_visual" file="milk_box.obj" />
+    </asset>
+    <default>
+        <default class="visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="collision">
+            <geom rgba="1.0 0.0 0.0 0.5" />
+        </default>
+    </default>
+    <worldbody>
+        <body name="milk_box">
+            <freejoint />
+            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <geom name="milk_box_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh"
+                material="milk_box_visual" mesh="milk_box_visual" class="visual" />
+            <geom name="milk_box_collision" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="box"
+                size="0.03 0.0475 0.1" class="collision" />
+        </body>
+    </worldbody>
+    <equality />
+    <contact />
+</mujoco>

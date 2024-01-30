@@ -30,7 +30,7 @@ for COMMAND_PATTERN in "${COMMAND_PATTERNS[@]}"; do
     fi
 done
 
-MULTIVERSE_PATH=$(dirname $(dirname $0))
+MULTIVERSE_PATH=$(dirname $(dirname "$0"))
 
 # Check if an argument is provided
 if [ $# -eq 0 ]; then

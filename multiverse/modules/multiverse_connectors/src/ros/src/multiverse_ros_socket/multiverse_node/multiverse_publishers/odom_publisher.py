@@ -54,6 +54,8 @@ class OdomPublisher(MultiversePublisher):
         self._msg.twist.covariance = [0.0] * 36
 
     def _bind_receive_data(self, receive_data: List[float]) -> None:
+        if len (receive_data) != 14:
+            return
         if INTERFACE == Interface.ROS1:
             self._msg.header.stamp = rospy.Time.now()
         elif INTERFACE == Interface.ROS2:

@@ -71,9 +71,12 @@ multiverse_clients:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
     receive:
-      theta1_slewing_actuator: ["cmd_joint_rvalue"]
-      theta2_boom_actuator: ["cmd_joint_rvalue"]
-      theta3_arm_actuator: ["cmd_joint_rvalue"]
+      boom_cylinder_piston_in_barrel_linear_actuator: ["cmd_joint_tvalue"]
+      arm_cylinder_piston_in_barrel_linear_actuator_left: ["cmd_joint_tvalue"]
+      arm_cylinder_piston_in_barrel_linear_actuator_right: ["cmd_joint_tvalue"]
+      # theta1_slewing_actuator: ["cmd_joint_rvalue"]
+      # theta2_boom_actuator: ["cmd_joint_rvalue"]
+      # theta3_arm_actuator: ["cmd_joint_rvalue"]
       q4_big_telescope_actuator: ["cmd_joint_tvalue"]
       theta8_rotator_actuator: ["cmd_joint_rvalue"]
       theta10_outer_jaw_actuator: ["cmd_joint_rvalue"]
@@ -116,9 +119,12 @@ multiverse_clients:
         urdf: crane.urdf
         config: crane/config/ros_control.yaml
         actuators:
-          theta1_slewing_actuator: theta1_slewing_joint
-          theta2_boom_actuator: theta2_boom_joint
-          theta3_arm_actuator: theta3_arm_joint
+          boom_cylinder_piston_in_barrel_linear_actuator: boom_cylinder_piston_in_barrel_linear_joint
+          arm_cylinder_piston_in_barrel_linear_actuator_left: arm_cylinder_piston_in_barrel_linear_joint_left
+          arm_cylinder_piston_in_barrel_linear_actuator_right: arm_cylinder_piston_in_barrel_linear_joint_right
+          # theta1_slewing_actuator: theta1_slewing_joint
+          # theta2_boom_actuator: theta2_boom_joint
+          # theta3_arm_actuator: theta3_arm_joint
           q4_big_telescope_actuator: q4_big_telescope
           theta8_rotator_actuator: theta8_rotator_joint
           theta10_outer_jaw_actuator: theta10_outer_jaw_joint

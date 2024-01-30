@@ -1,15 +1,12 @@
-#!/usr/bin/env python3.10
-
-from __future__ import print_function
-import sys
-
-sys.path = [sys_path for sys_path in sys.path if "USD/lib/python" not in sys_path]
+#!/usr/bin/env python3
 
 import argparse
 import os
-from multiverse_parser import UrdfImporter, MjcfImporter, UsdImporter
+import numpy
+
+from multiverse_parser import InertiaSource
+from multiverse_parser import UrdfImporter, MjcfImporter
 from multiverse_parser import UrdfExporter, MjcfExporter
-from multiverse_parser import COLLISION_MESH_COLOR, COLLISION_MESH_OPACITY
 
 def main():
     parser = argparse.ArgumentParser(description="Multiverse parser")
@@ -26,74 +23,107 @@ def main():
         help="Export scene description as (URDF, MJCF, WORLD or USD)",
     )
     parser.add_argument(
-        "--physics",
-        action=argparse.BooleanOptionalAction,
+        "--relative_to_ros_package",
+        type=str,
+        required=False,
+        help="The path to the ROS package that contains the URDF file (only for output URDF)",
+    )
+    parser.set_defaults(relative_to_ros_package=None)
+    parser.add_argument(
+        "--no-physics",
+        action='store_true',
         help="Whether to include physics properties or not",
     )
-    parser.set_defaults(physics=True)
+    parser.set_defaults(nophysics=False)
     parser.add_argument(
-        "--visual",
-        action=argparse.BooleanOptionalAction,
+        "--no-visual",
+        action='store_true',
         help="Whether to include visual meshes or not",
     )
-    parser.set_defaults(visual=True)
+    parser.set_defaults(novisual=False)
     parser.add_argument(
-        "--collision",
-        action=argparse.BooleanOptionalAction,
+        "--no-collision",
+        action='store_true',
         help="Whether to include collision meshes or not",
     )
-    parser.set_defaults(collision=True)
+    parser.set_defaults(nocollision=False)
     parser.add_argument(
         "--keepusd",
-        action=argparse.BooleanOptionalAction,
+        action='store_true',
         help="Whether to keep the USD file or not",
     )
     parser.set_defaults(keepusd=False)
     parser.add_argument(
-        "--collisionrgba",
+        "--inertiasource",
+        type=str,
+        required=False,
+        help="Where to get the inertia from (from_src, from_visual_mesh or from_collision_mesh)",
+    )
+    parser.set_defaults(inertiasource="from_src")
+    parser.add_argument(
+        "--defaultrgba",
         nargs="+",
         type=float,
-        help="The color of the collision meshes, if they exist",
+        help="The default color of the meshes",
     )
-    parser.set_defaults(collisionrgba=[COLLISION_MESH_COLOR[0][0], COLLISION_MESH_COLOR[0][1], COLLISION_MESH_COLOR[0][2], COLLISION_MESH_OPACITY[0]])
+    parser.set_defaults(defaultrgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
 
     args = parser.parse_args()
-    
-    if len(args.collisionrgba) != 4 or any(x < 0 or x > 1 for x in args.collisionrgba):
-        print(f"Invalid collision rgba, set to default {str([COLLISION_MESH_COLOR[0][0], COLLISION_MESH_COLOR[0][1], COLLISION_MESH_COLOR[0][2], COLLISION_MESH_OPACITY[0]])}")
-    else:
-        COLLISION_MESH_COLOR[0] = tuple(args.collisionrgba[:3])
-        COLLISION_MESH_OPACITY[0] = args.collisionrgba[3]
+
+    with_physics = not args.nophysics
+    with_visual = not args.novisual
+    with_collision = not args.nocollision
+    keep_usd = args.keepusd
+
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
 
-    if in_extension in [".usd", ".usda", ".usdc"]:
-        importer = UsdImporter(usd_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision) 
-    elif in_extension == ".urdf":
-        importer = UrdfImporter(urdf_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision) 
-    elif in_extension == ".xml":
-        importer = MjcfImporter(mjcf_file_path=args.input, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
+    if args.inertiasource == "from_visual_mesh":
+        inertia_source = InertiaSource.FROM_VISUAL_MESH
+    elif args.inertiasource == "from_collision_mesh":
+        inertia_source = InertiaSource.FROM_COLLISION_MESH
+    elif args.inertiasource == "from_src":
+        inertia_source = InertiaSource.FROM_SRC
     else:
-        print(f"Input extension [{in_extension}] not supported.")
-        return
-    
-    world_builder = importer.world_builder
+        raise NotImplementedError(f"Inertia source {args.inertiasource} is not supported yet.")
 
-    if args.keepusd:
-        usd_file_path = os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda")
-        world_builder.export(usd_file_path)
-    if not args.keepusd and out_extension == ".usda":
-        world_builder.export(args.output)
-    elif out_extension == ".urdf":
-        UrdfExporter(urdf_file_path=args.output, world_builder=world_builder, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
+    if in_extension in [".usd", ".usda", ".usdc"]:
+        raise NotImplementedError("Importing from USD is not supported yet.")
+    elif in_extension == ".urdf":
+        factory = UrdfImporter(file_path=args.input,
+                               with_physics=with_physics,
+                               with_visual=with_visual,
+                               with_collision=with_collision,
+                               inertia_source=inertia_source,
+                               default_rgba=args.defaultrgba)
+    elif in_extension == ".xml":
+        factory = MjcfImporter(file_path=args.input,
+                               with_physics=with_physics,
+                               with_visual=with_visual,
+                               with_collision=with_collision,
+                               inertia_source=inertia_source,
+                               default_rgba=args.defaultrgba)
+    else:
+        raise NotImplementedError(f"Importing from {in_extension} is not supported yet.")
+
+    factory.import_model()
+
+    if out_extension in [".usd", ".usda", ".usdc"]:
+        output_usd_path = os.path.join(os.path.dirname(args.output), os.path.splitext(args.output)[0] + ".usda")
+        factory.save_tmp_model(usd_file_path=str(output_usd_path))
     elif out_extension == ".xml":
-        MjcfExporter(mjcf_file_path=args.output, world_builder=world_builder, with_physics=args.physics, with_visual=args.visual, with_collision=args.collision)
-    elif out_extension == ".usd" or out_extension == ".usdc" or out_extension == ".usdz":
-        print(f"Output extension [{out_extension}] not supported, try .usda instead.")
-    elif out_extension not in [".usd", ".usda", ".usdc"]:
-        print(f"Output extension [{out_extension}] not supported.")
-
-    world_builder.clean_up()
+        exporter = MjcfExporter(file_path=args.output,
+                                factory=factory)
+        exporter.build()
+        exporter.export(keep_usd=keep_usd)
+    elif out_extension == ".urdf":
+        exporter = UrdfExporter(file_path=args.output,
+                                factory=factory,
+                                relative_to_ros_package=args.relative_to_ros_package)
+        exporter.build()
+        exporter.export(keep_usd=keep_usd)
+    else:
+        raise NotImplementedError(f"Exporting to {out_extension} is not supported yet.")
 
 
 if __name__ == "__main__":

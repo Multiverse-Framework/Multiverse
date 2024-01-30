@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.10
+#!/usr/bin/env python3
 
 from multiverse_launch import MultiverseLaunch
 from utils import run_subprocess

@@ -1,71 +1,146 @@
-#!/usr/bin/env python3.10
+#!/usr/bin/env python3
 
-import os
+from dataclasses import dataclass
+from typing import Optional
+
+import numpy
+
 from pxr import Usd, UsdGeom, Sdf
 
-from .material_builder import MaterialBuilder, material_dict
 
-mesh_dict = {}
+@dataclass(init=False)
+class MeshProperty:
+    points: numpy.ndarray
+    normals: numpy.ndarray
+    face_vertex_counts: numpy.ndarray
+    face_vertex_indices: numpy.ndarray
+    texture_coordinates: Optional[numpy.ndarray]
+
+    def __init__(self,
+                 points: numpy.ndarray,
+                 normals: numpy.ndarray,
+                 face_vertex_counts: numpy.ndarray,
+                 face_vertex_indices: numpy.ndarray,
+                 texture_coordinates: Optional[numpy.ndarray] = None) -> None:
+        self._points = points
+        self._normals = normals
+        self._face_vertex_counts = face_vertex_counts
+        self._face_vertex_indices = face_vertex_indices
+        self._texture_coordinates = texture_coordinates
+        self.check_validity()
+
+    def check_validity(self):
+        assert self.points.size != 0
+        if not all(face_vertex_count == 3 for face_vertex_count in self.face_vertex_counts):
+            raise ValueError("Only triangular meshes are supported.")
+        assert self.face_vertex_counts.size * 3 == self.face_vertex_indices.size
+        if self.texture_coordinates is not None:
+            assert self.texture_coordinates.size == self.face_vertex_indices.size * 2
+
+    @classmethod
+    def from_mesh_file_path(cls,
+                            mesh_file_path: str,
+                            mesh_path: Sdf.Path,
+                            texture_coordinate_name: str = "st") -> "MeshProperty":
+        mesh_stage = Usd.Stage.Open(mesh_file_path)
+        mesh_prim = mesh_stage.GetPrimAtPath(mesh_path)
+        if not mesh_prim.IsA(UsdGeom.Mesh):
+            raise TypeError(f"{mesh_path} is not a mesh")
+
+        return cls.from_prim(mesh_prim, texture_coordinate_name)
+
+    @classmethod
+    def from_prim(cls, mesh_prim: Usd.Prim, texture_coordinate_name: str = "st") -> "MeshProperty":
+        mesh = UsdGeom.Mesh(mesh_prim)
+        prim_vars_api = UsdGeom.PrimvarsAPI(mesh_prim)
+        if prim_vars_api.HasPrimvar(texture_coordinate_name):
+            texture_coordinates = prim_vars_api.GetPrimvar(texture_coordinate_name).Get()
+            texture_coordinates = numpy.array(texture_coordinates, dtype=numpy.float32)
+        else:
+            texture_coordinates = None
+
+        return cls(points=numpy.array(mesh.GetPointsAttr().Get()),
+                   normals=numpy.array(mesh.GetNormalsAttr().Get()),
+                   face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
+                   face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get()),
+                   texture_coordinates=texture_coordinates)
+
+    @property
+    def points(self):
+        return self._points
+
+    @property
+    def normals(self):
+        return self._normals
+
+    @property
+    def face_vertex_counts(self):
+        return self._face_vertex_counts
+
+    @property
+    def face_vertex_indices(self):
+        return self._face_vertex_indices
+
+    @property
+    def texture_coordinates(self):
+        return self._texture_coordinates
 
 
 class MeshBuilder:
-    def __init__(self, name: str, usd_file_path: str) -> None:
-        mesh_dict[usd_file_path] = self
+    file_path: str
+    stage: Usd.Stage
+    mesh: UsdGeom.Mesh
 
-        self.usd_file_path = usd_file_path
-        self.name = name
-        root_path = Sdf.Path("/").AppendPath(self.name)
-        self.mesh = None
-        if os.path.exists(self.usd_file_path):
-            self.stage = Usd.Stage.Open(self.usd_file_path)
-        else:
-            self.stage = Usd.Stage.CreateNew(self.usd_file_path)
+    def __init__(self, stage, mesh_property: MeshProperty) -> None:
+        self._mesh_property = mesh_property
+        self._mesh = UsdGeom.Mesh(stage.GetDefaultPrim())
 
-        if (
-            self.stage.GetDefaultPrim()
-            and self.stage.GetDefaultPrim().GetPath() == root_path
-            and UsdGeom.Xform(self.stage.GetDefaultPrim())
-            and len(self.stage.GetPseudoRoot().GetChildren()) == 1
-        ):
-            self.xform = UsdGeom.Xform(self.stage.GetDefaultPrim())
-        else:
-            self.xform = UsdGeom.Xform.Define(self.stage, root_path)
-            self.stage.SetDefaultPrim(self.xform.GetPrim())
+    def build(self) -> UsdGeom.Mesh:
+        mesh = self.mesh
+        mesh.CreatePointsAttr(self.points)
+        mesh.CreateNormalsAttr(self.normals)
+        mesh.SetNormalsInterpolation(UsdGeom.Tokens.faceVarying)
+        mesh.CreateFaceVertexCountsAttr(self.face_vertex_counts)
+        mesh.CreateFaceVertexIndicesAttr(self.face_vertex_indices)
+        if self.texture_coordinates is not None:
+            prim_vars_api = UsdGeom.PrimvarsAPI(mesh)
+            texture_coordinates = prim_vars_api.CreatePrimvar("st",
+                                                              Sdf.ValueTypeNames.TexCoord2fArray,
+                                                              UsdGeom.Tokens.faceVarying)
+            texture_coordinates.Set(self.texture_coordinates)
 
-        for prim_child in self.xform.GetPrim().GetChildren():
-            if UsdGeom.Mesh(prim_child):
-                self.mesh = UsdGeom.Mesh(prim_child)
-                break
+        self.stage.GetRootLayer().Save()
 
-        if self.mesh is None:
-            if os.path.exists(self.usd_file_path):
-                print(f"Mesh prim not found in {self.usd_file_path}, create one.")
-            self.mesh = UsdGeom.Mesh.Define(self.stage, root_path.AppendPath(name))
+        return self.mesh
 
-        UsdGeom.SetStageUpAxis(self.stage, UsdGeom.Tokens.z)
-        UsdGeom.SetStageMetersPerUnit(self.stage, UsdGeom.LinearUnits.meters)
+    @property
+    def mesh(self):
+        return self._mesh
 
-    def save(self):
-        self.stage.Save()
+    @property
+    def stage(self):
+        return self.mesh.GetPrim().GetStage()
 
+    @property
+    def file_path(self):
+        return self.stage.GetRootLayer().realPath
 
-class VisualMeshBuilder(MeshBuilder):
-    def __init__(self, name: str, usd_file_path: str) -> None:
-        super().__init__(name, usd_file_path)
+    @property
+    def points(self):
+        return self._mesh_property.points
 
-    def add_material(self, material_name) -> MaterialBuilder:
-        return material_dict[material_name] if material_name in material_dict else MaterialBuilder(material_name, self.usd_file_path)
+    @property
+    def normals(self):
+        return self._mesh_property.normals
 
+    @property
+    def face_vertex_counts(self):
+        return self._mesh_property.face_vertex_counts
 
-class CollisionMeshBuilder(MeshBuilder):
-    def __init__(self, name: str, usd_file_path: str) -> None:
-        super().__init__(name, usd_file_path)
+    @property
+    def face_vertex_indices(self):
+        return self._mesh_property.face_vertex_indices
 
-    def build(self, points, normals, face_vertex_counts, face_vertex_indices) -> None:
-        if self.mesh is not None:
-            self.mesh.CreatePointsAttr(points)
-            self.mesh.CreateNormalsAttr(normals)
-            self.mesh.CreateFaceVertexCountsAttr(face_vertex_counts)
-            self.mesh.CreateFaceVertexIndicesAttr(face_vertex_indices)
-        else:
-            print(f"Mesh prim is None.")
+    @property
+    def texture_coordinates(self):
+        return self._mesh_property.texture_coordinates

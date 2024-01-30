@@ -67,9 +67,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
         if "ros_control" in ros_dict or "ros_run" in ros_dict:
             if INTERFACE == Interface.ROS1:
                 import rospy
-
                 rospy.init_node(name="multiverse_launch")
-
             elif INTERFACE == Interface.ROS2:
                 pass
             else:
@@ -190,6 +188,18 @@ class MultiverseRosLaunch(MultiverseLaunch):
             if "move_base" in ros_run:
                 from utils import run_move_base
                 process = run_move_base(ros_run["move_base"], self.resources_paths, map_path)
+                processes.append(process)
+
+        if "joint_state_publisher_gui" in ros_run:
+            if INTERFACE == Interface.ROS1:
+                from utils import run_joint_state_publisher_gui
+                process = run_joint_state_publisher_gui(ros_run["joint_state_publisher_gui"].get("robot_description", "robot_description"))
+                processes.append(process)
+
+        if "robot_state_publisher" in ros_run:
+            if INTERFACE == Interface.ROS1:
+                from utils import run_robot_state_publisher
+                process = run_robot_state_publisher(ros_run["robot_state_publisher"].get("robot_description", "robot_description"))
                 processes.append(process)
 
         return processes
