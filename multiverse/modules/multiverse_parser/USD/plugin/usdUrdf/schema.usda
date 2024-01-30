@@ -89,7 +89,7 @@ class "UrdfLinkVisualAPI" (
     inherits = </APISchemaBase>
 )
 {
-    point3f urdf:visual:origin:xyz (
+    point3f urdf:visual:origin:xyz = (0, 0, 0) (
         customData = {
             string apiName = "xyz"
         }
@@ -97,7 +97,7 @@ class "UrdfLinkVisualAPI" (
         doc = "Describes the position of the geometry frame relative to the link frame."
     )
 
-    float3 urdf:visual:origin:rpy (
+    float3 urdf:visual:origin:rpy = (0, 0, 0) (
         customData = {
             string apiName = "rpy"
         }
@@ -124,7 +124,7 @@ class "UrdfLinkCollisionAPI" (
     inherits = </APISchemaBase>
 )
 {
-    point3f urdf:collision:origin:xyz (
+    point3f urdf:collision:origin:xyz = (0, 0, 0) (
         customData = {
             string apiName = "xyz"
         }
@@ -132,7 +132,7 @@ class "UrdfLinkCollisionAPI" (
         doc = "Describes the position of the geometry frame relative to the link frame."
     )
 
-    float3 urdf:collision:origin:rpy (
+    float3 urdf:collision:origin:rpy = (0, 0, 0) (
         customData = {
             string apiName = "rpy"
         }
