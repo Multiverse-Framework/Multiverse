@@ -25,7 +25,7 @@ simulations:
         joint_state:
           torso_lift_joint: 0.8
     config:
-      max_time_step: 0.001
+      max_time_step: 0.002
       min_time_step: 0.001
 
 multiverse_server:

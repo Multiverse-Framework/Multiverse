@@ -22,6 +22,8 @@ simulations:
             tiago_dual:
               pos: [1.5, 2.5, 0]
         disable_self_collision: auto
+        joint_state:
+          torso_lift_joint: 0.8
     config:
       max_time_step: 0.002
       min_time_step: 0.001
@@ -56,6 +58,10 @@ multiverse_clients:
       arm_right_5_actuator: ["cmd_joint_rvalue"]
       arm_right_6_actuator: ["cmd_joint_rvalue"]
       arm_right_7_actuator: ["cmd_joint_rvalue"]
+      gripper_left_left_finger_actuator: ["cmd_joint_force"]
+      gripper_left_right_finger_actuator: ["cmd_joint_force"]
+      gripper_right_left_finger_actuator: ["cmd_joint_force"]
+      gripper_right_right_finger_actuator: ["cmd_joint_force"]
 
   ros:
     ros_nodes:
@@ -111,7 +117,7 @@ multiverse_clients:
       rviz:
         config: tiago_dual_in_apartment/config/rviz.rviz
         robot_descriptions:
-          tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
+          tiago_dual_description: tiago_dual/tiago_dual.urdf
           apartment_description: apartment/urdf/apartment.urdf
 
       map_server:
@@ -135,7 +141,7 @@ multiverse_clients:
         controller_manager:
           robot: tiago_dual
           robot_description: /robot_description
-          urdf: tiago_dual/urdf/tiago_dual.urdf
+          urdf: tiago_dual/tiago_dual.urdf
           config: tiago_dual/config/ros_control.yaml
           actuators:
             torso_lift_actuator: torso_lift_joint
@@ -155,6 +161,10 @@ multiverse_clients:
             arm_right_5_actuator: arm_right_5_joint
             arm_right_6_actuator: arm_right_6_joint
             arm_right_7_actuator: arm_right_7_joint
+            gripper_left_left_finger_actuator: gripper_left_left_finger_joint
+            gripper_left_right_finger_actuator: gripper_left_right_finger_joint
+            gripper_right_left_finger_actuator: gripper_right_left_finger_joint
+            gripper_right_right_finger_actuator: gripper_right_right_finger_joint
           controllers:
             spawn:
               - joint_state_controller
@@ -162,3 +172,7 @@ multiverse_clients:
                 head_controller
                 arm_left_controller
                 arm_right_controller
+                gripper_left_left_finger_effort_controller
+                gripper_left_right_finger_effort_controller
+                gripper_right_left_finger_effort_controller
+                gripper_right_right_finger_effort_controller

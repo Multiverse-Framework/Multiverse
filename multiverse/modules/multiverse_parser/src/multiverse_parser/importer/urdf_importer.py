@@ -230,7 +230,9 @@ class UrdfImporter(Factory):
 
         geom_is_visible = isinstance(geom, urdf.Visual)
         geom_is_collidable = isinstance(geom, urdf.Collision)
-        geom_rgba = self._config.default_rgba if not hasattr(geom, "material") or not hasattr(geom.material, "color") \
+        geom_rgba = self._config.default_rgba if (not hasattr(geom, "material") or
+                                                  not hasattr(geom.material, "color") or
+                                                  geom.material.color is None) \
             else geom.material.color.rgba
         geom_type = self._geom_type_map[type(geom.geometry)]
         geom_density = 1000.0
@@ -385,7 +387,7 @@ class UrdfImporter(Factory):
             body1_to_body2_pos = body1_to_body2_transform.ExtractTranslation()
 
             joint_pos, _ = get_joint_pos_and_quat(joint)
-            joint_pos = Gf.Vec3d(joint_pos)
+            joint_pos = Gf.Vec3d(*joint_pos)
             joint_pos = body1_rot.GetInverse().Transform(joint_pos - body1_to_body2_pos)
 
             joint_property = JointProperty(
@@ -406,8 +408,9 @@ class UrdfImporter(Factory):
 
             urdf_joint_api = UsdUrdf.UrdfJointAPI.Apply(joint_builder.joint.GetPrim())
             urdf_joint_api.CreateTypeAttr(joint.type)
-            urdf_joint_api.CreateXyzAttr(Gf.Vec3f(*joint.origin.xyz))
-            urdf_joint_api.CreateRpyAttr(Gf.Vec3f(*joint.origin.rpy))
+            if joint.origin is not None:
+                urdf_joint_api.CreateXyzAttr(Gf.Vec3f(*joint.origin.xyz))
+                urdf_joint_api.CreateRpyAttr(Gf.Vec3f(*joint.origin.rpy))
             urdf_joint_api.CreateParentRel().AddTarget(parent_prim.GetPath())
             urdf_joint_api.CreateChildRel().AddTarget(child_prim.GetPath())
             if joint_type in [JointType.REVOLUTE, JointType.CONTINUOUS, JointType.PRISMATIC]:
