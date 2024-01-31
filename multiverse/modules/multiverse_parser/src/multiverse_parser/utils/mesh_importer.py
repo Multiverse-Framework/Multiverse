@@ -27,8 +27,8 @@ def import_usd(in_usds: List[str],
     return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
 for in_usd in {in_usds}:
     bpy.ops.wm.usd_import(filepath=in_usd, scale=1.0)
-    bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+    bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
 """
 
 
@@ -38,8 +38,8 @@ def import_dae(in_daes: List[str],
     return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
 for in_dae in {in_daes}:
     bpy.ops.wm.collada_import(filepath=in_dae)
-    bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+    bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
 """
 
 
@@ -49,8 +49,8 @@ def import_obj(in_objs: List[str],
     return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
 for in_obj in {in_objs}:
     bpy.ops.wm.obj_import(filepath=in_obj, up_axis='Z', forward_axis='Y')
-    bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+    bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
 """
 
 
@@ -61,8 +61,8 @@ def import_stl(in_stls: List[str],
 import re
 for in_stl in {in_stls}:
     bpy.ops.wm.stl_import(filepath=in_stl, up_axis='Z', forward_axis='Y')
-    bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+    bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
     mesh = bpy.context.view_layer.objects.active.data
     mesh.name = re.sub(r'\.\d+$', '', mesh.name)
 """
