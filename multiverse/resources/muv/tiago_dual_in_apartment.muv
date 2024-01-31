@@ -23,7 +23,21 @@ simulations:
               pos: [1.5, 2.5, 0]
         disable_self_collision: auto
         joint_state:
-          torso_lift_joint: 0.8
+          arm_left_1_joint: -1.0
+          arm_left_2_joint: 0.0
+          arm_left_3_joint: 1.5
+          arm_left_4_joint: 2.2
+          arm_left_5_joint: -1.5
+          arm_left_6_joint: 0.5
+          arm_left_7_joint: 0.0
+          arm_right_1_joint: -1.0
+          arm_right_2_joint: 0.0
+          arm_right_3_joint: 1.5
+          arm_right_4_joint: 2.2
+          arm_right_5_joint: -1.5
+          arm_right_6_joint: 0.5
+          arm_right_7_joint: 0.0
+          torso_lift_joint: 0.7
     config:
       max_time_step: 0.002
       min_time_step: 0.001
