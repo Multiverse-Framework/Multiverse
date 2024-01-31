@@ -322,6 +322,22 @@ def sort_entities(
     return entities
 
 
+def indent(elem, space="    ", level=0):
+    i = "\n" + level * space
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + space
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+        for elem in elem:
+            indent(elem, space, level + 1)
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+
+
 class MujocoCompiler:
     world_xml_path: str
     scene_name: str
@@ -382,7 +398,7 @@ class MujocoCompiler:
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         self.add_visual_and_cursor_element(root)
-        ET.indent(tree, space="\t", level=0)
+        indent(tree.getroot(), space="\t", level=0)
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
     def create_world_xml(self):
@@ -420,7 +436,7 @@ class MujocoCompiler:
 
         add_prefix_and_suffix(root, entity.prefix, entity.suffix)
 
-        ET.indent(tree, space="\t", level=0)
+        indent(tree.getroot(), space="\t", level=0)
         tree.write(entity_xml_path, encoding="utf-8", xml_declaration=True)
         entity.saved_path = entity_xml_path
 
@@ -695,13 +711,13 @@ class MujocoCompiler:
                         parent.remove(attach_body_element)
                         break
 
-            ET.indent(attach_entity_tree, space="\t", level=0)
+            indent(attach_entity_tree.getroot(), space="\t", level=0)
             attach_entity_tree.write(
                 attach_body_path, encoding="utf-8", xml_declaration=True
             )
 
             entity_body_element.append(attach_body_element)
-            ET.indent(entity_tree, space="\t", level=0)
+            indent(entity_tree.getroot(), space="\t", level=0)
             entity_tree.write(entity_path, encoding="utf-8", xml_declaration=True)
 
 
