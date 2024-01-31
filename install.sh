@@ -84,6 +84,12 @@ pip install --upgrade pip build
 # Install additional packages for USD and multiverse_knowledge
 pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11
 
+# Install additional packages for multiverse_parser
+pip install urdf_parser_py
+
+# Install additional packages for MuJoCo
+pip install mujoco
+
 # Install additional packages for Jupyter Notebook
 pip install panel jupyter-server bash_kernel
 python3 -m bash_kernel.install
