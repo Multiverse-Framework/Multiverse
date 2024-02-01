@@ -1,0 +1,129 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  arm_with_table:
+    simulator: mujoco
+    world:
+      name: world
+      path: work_table.xml
+    robots:
+      gripper:
+        path: gripper-2F-85.xml
+        prefix:
+          geom: gripper-2F-85_
+        disable_self_collision: "off"
+      arm:
+        path: arm.xml
+        apply:
+          body:
+            arm:
+              pos: [0.0, 0.0, 1.05]
+        attach:
+          LINK5: 
+            gripper:
+              pos: [0, 0.15, 0.108]
+              quat: [-1.0, 1.0, 0.0, 0.0]
+        disable_self_collision: auto
+
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  arm_with_table:
+    host: "tcp://127.0.0.1"
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+    receive:
+      fingers_actuator: ["cmd_joint_tvalue"]
+      JOINT1_actuator: ["cmd_joint_rvalue"]
+      JOINT2_actuator: ["cmd_joint_rvalue"]
+      JOINT3_actuator: ["cmd_joint_rvalue"]
+      JOINT4_actuator: ["cmd_joint_rvalue"]
+      JOINT5_actuator: ["cmd_joint_rvalue"]
+
+
+  ros:
+    ros_nodes:
+      subscribers:
+        data:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            host: "tcp://127.0.0.1"
+            port: 7700
+            msg_type: std_msgs/Float64
+            send:
+              fingers_actuator: ["cmd_joint_tvalue"]
+            topic: /gripper_command
+
+      publishers:
+        tf:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            host: "tcp://127.0.0.1"
+            port: 7301
+            topic: /tf
+            rate: 60
+            root_frame_id: map
+
+    services:
+      socket:
+        - host: "tcp://127.0.0.1"
+          port: 7400
+
+    ros_control:
+      - meta_data:
+          world_name: world
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        host: "tcp://127.0.0.1"
+        port: 7601
+        controller_manager:
+          robot: arm
+          robot_description: /robot_description
+          urdf: arm/arm.urdf
+          config: arm/config/ros_control.yaml
+          actuators:
+            JOINT1_actuator: JOINT1
+            JOINT2_actuator: JOINT2
+            JOINT3_actuator: JOINT3
+            JOINT4_actuator: JOINT4
+            JOINT5_actuator: JOINT5
+          controllers:
+            spawn:
+              - joint_state_controller
+                joint_trajectory_controller
+
+    ros_run:
+      rviz:
+        config: arm/config/rviz.rviz
+        robot_descriptions:
+          arm_description: arm/arm.urdf
+          gripper_description: gripper-2F-85/urdf/gripper-2F-85.urdf

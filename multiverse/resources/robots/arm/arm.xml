@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<mujoco model="arm">
+	<compiler meshdir="arm/meshes" texturedir="arm/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<default>
+		<default class="visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="collision">
+			<geom rgba="0.9 0.9 0.9 0.0"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="BASE" file="stl/BASE.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="LINK1" file="stl/LINK1.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="LINK2" file="stl/LINK2.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="LINK3" file="stl/LINK3.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="LINK4" file="stl/LINK4.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="LINK5" file="stl/LINK5.stl" scale="1.0 1.0 1.0"/>
+	</asset>
+	<worldbody>
+		<body name="arm" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<body name="BASE" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="0.601385235786438" pos="-0.001077802386134863 -9.549959258947638e-07 0.03241827338933945" quat="0.9999922513961792 4.6365872549358755e-05 0.003912098240107298 0.0003734573838301003" diaginertia="0.0032467455603182316 0.0033174839336425066 0.005002879537642002"/>
+				<geom name="BASE_geom_visual_0_BASE" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="BASE" class="visual"/>
+				<geom name="BASE_geom_collision_0_BASE" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="BASE" class="collision"/>
+				<body name="LINK1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="1.232831358909607" pos="-0.018095454201102257 3.040496039830032e-06 0.1923454999923706" quat="0.00046393138472922146 0.6620056629180908 -0.0004143920086789876 0.7494985461235046" diaginertia="0.005427561234682798 0.06088290736079216 0.06134486198425293"/>
+					<geom name="LINK1_geom_visual_0_LINK1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK1" class="visual"/>
+					<geom name="LINK1_geom_collision_0_LINK1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK1" class="collision"/>
+					<joint name="JOINT1" type="hinge" pos="0.0 0.0 0.0" range="0.0 6.283200263977051" axis="0.0 0.0 -1.0"/>
+					<body name="LINK2" pos="0.0 0.0 0.3050000071525574" quat="0.5 0.5 0.5 0.5">
+						<inertial mass="0.5608378052711487" pos="0.06757110357284546 1.971619713003747e-05 0.5094634294509888" quat="0.4566197991371155 0.5398513078689575 -0.45731043815612793 -0.5393756628036499" diaginertia="0.0026068033184856176 0.050808969885110855 0.0516180582344532"/>
+						<geom name="LINK2_geom_visual_0_LINK2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK2" class="visual"/>
+						<geom name="LINK2_geom_collision_0_LINK2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK2" class="collision"/>
+						<joint name="JOINT2" type="hinge" pos="0.0 0.0 0.0" range="-2.3561999797821045 2.3561999797821045" axis="0.0 0.0 -1.0"/>
+						<body name="LINK3" pos="2.311115933264683e-32 0.46000000834465027 0.10499999672174454" quat="2.4794422104041274e-30 1.6155445638695877e-15 1.0 1.6155445638695877e-15">
+							<inertial mass="0.9454330205917358" pos="-0.02846992388367653 2.993930502270814e-05 0.8624111413955688" quat="0.2346872091293335 0.6671229004859924 -0.23437222838401794 -0.6670371890068054" diaginertia="0.0025643666740506887 0.02872420847415924 0.030405791476368904"/>
+							<geom name="LINK3_geom_visual_0_LINK3" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK3" class="visual"/>
+							<geom name="LINK3_geom_collision_0_LINK3" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK3" class="collision"/>
+							<joint name="JOINT3" type="hinge" pos="0.0 -0.0 -2.311115933264683e-32" range="-2.836199998855591 2.836199998855591" axis="0.0 0.0 -1.0"/>
+							<body name="LINK4" pos="0.0 1.1102230246251565e-16 0.15800000727176666" quat="0.5 -0.5 0.5 0.5">
+								<inertial mass="0.4494718015193939" pos="-0.04205482453107834 -0.00010599445522530004 1.0925683975219727" quat="0.5381067991256714 0.4396097660064697 0.5571280121803284 -0.4547446370124817" diaginertia="0.0006459252326749265 0.0513189435005188 0.051338352262973785"/>
+								<geom name="LINK4_geom_visual_0_LINK4" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK4" class="visual"/>
+								<geom name="LINK4_geom_collision_0_LINK4" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK4" class="collision"/>
+								<joint name="JOINT4" type="hinge" pos="1.1102230246251565e-16 -3.3280069439011436e-31 3.821045009664276e-31" range="0.0 6.283200263977051" axis="0.0 0.0 -1.0"/>
+								<body name="LINK5" pos="0.0 7.888609052210118e-31 0.38999998569488525" quat="0.49999815225601196 0.5 0.500001847743988 0.5">
+									<inertial mass="0.4230022430419922" pos="0.04312693327665329 0.0002181106829084456 1.2157164812088013" quat="-0.22182345390319824 -0.6705713868141174 0.2243187576532364 0.6714234948158264" diaginertia="0.0010055281454697251 0.006334423087537289 0.006904659327119589"/>
+									<geom name="LINK5_geom_visual_0_LINK5" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK5" class="visual"/>
+									<geom name="LINK5_geom_collision_0_LINK5" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LINK5" class="collision"/>
+									<joint name="JOINT5" type="hinge" pos="-1.5186328127312734e-30 -2.295167766308207e-30 2.220446049250313e-16" range="0.0 6.283200263977051" axis="0.0 0.0 -1.0"/>
+								</body>
+							</body>
+						</body>
+					</body>
+				</body>
+			</body>
+		</body>
+	</worldbody>
+	<equality/>
+	<actuator>
+		<position name="JOINT1_actuator" joint="JOINT1" kp="1000" kv="200" ctrlrange="-2.3561999797821045 2.3561999797821045"/>
+		<position name="JOINT2_actuator" joint="JOINT2" kp="800" kv="120" ctrlrange="-2.3561999797821045 2.3561999797821045"/>
+		<position name="JOINT3_actuator" joint="JOINT3" kp="500" kv="20" ctrlrange="-2.836199998855591 2.836199998855591"/>
+		<position name="JOINT4_actuator" joint="JOINT4" kp="50" kv="10" ctrlrange="0.0 6.283200263977051"/>
+		<position name="JOINT5_actuator" joint="JOINT5" kp="20" kv="2" ctrlrange="0.0 6.283200263977051"/>
+	</actuator>
+</mujoco>
