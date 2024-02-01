@@ -26,7 +26,7 @@ def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
 
 
 class MultiverseSimulationLaunch(MultiverseLaunch):
-    simulators = {"mujoco"}
+    simulators = {"mujoco", "mujoco_headless"}
 
     def __init__(self):
         super().__init__()
@@ -42,14 +42,14 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         return processes
 
     def parse_simulator(self, simulation_data):
-        if simulation_data["simulator"] == "mujoco":
+        if simulation_data["simulator"] == "mujoco" or simulation_data["simulator"] == "mujoco_headless":
             return parse_mujoco(self.resources_paths, simulation_data)
         else:
             raise NotImplementedError(f"Simulator {simulation_data['simulator']} not implemented")
 
     def run_simulator_compile(self, simulation_name, simulation_data):
         cmd = self.parse_simulator(simulation_data)
-        cmd = [f"{simulation_data['simulator']}_compile", f"--name={simulation_name}"] + cmd
+        cmd = [f"{simulation_data['simulator']}_compile".replace("_headless", ""), f"--name={simulation_name}"] + cmd
         cmd_str = " ".join(cmd)
         print(f'Execute "{cmd_str}"')
         return subprocess.run(cmd, capture_output=True, text=True)
