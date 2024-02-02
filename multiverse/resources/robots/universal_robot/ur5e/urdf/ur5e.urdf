@@ -171,7 +171,7 @@
   <link name="wrist_3_link">
     <visual>
       <geometry>
-        <mesh filename="file://../meshes/dae/wrist3.dae"/>
+        <mesh filename="file:///media/giangnguyen/Storage/Multiverse/multiverse/resources/robots/universal_robot/ur5e/meshes/dae/wrist3.dae"/>
       </geometry>
       <material name="LightGrey">
         <color rgba="0.7 0.7 0.7 1.0"/>
@@ -179,7 +179,7 @@
     </visual>
     <collision>
       <geometry>
-        <mesh filename="file://../meshes/stl/wrist3.stl"/>
+        <mesh filename="file:///media/giangnguyen/Storage/Multiverse/multiverse/resources/robots/universal_robot/ur5e/meshes/stl/wrist3.stl"/>
       </geometry>
     </collision>
     <inertial>
