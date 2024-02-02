@@ -54,7 +54,11 @@ class MultiverseView:
         if INTERFACE == Interface.ROS1:
             import rospy
             import rospkg
-            from utils import run_rviz, run_joint_state_publisher_gui, run_robot_state_publisher
+            from utils import run_rviz, run_joint_state_publisher_gui, run_robot_state_publisher, is_roscore_running, run_subprocess
+
+            if not is_roscore_running():
+                process = run_subprocess(["roscore"])
+                self.processes.append(process)
 
             rospy.init_node(name="multiverse_view")
 

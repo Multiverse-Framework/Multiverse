@@ -71,7 +71,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: isr_testbed
+    Fixed Frame: butter
     Frame Rate: 30
   Name: root
   Tools:

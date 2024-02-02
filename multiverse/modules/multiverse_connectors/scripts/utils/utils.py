@@ -52,3 +52,8 @@ def get_urdf_str_abs(urdf_path: str) -> str:
             continue  # Skip if it's not an absolute path
         robot_urdf_str = robot_urdf_str.replace(f'filename="file://{match}"', f'filename="file://{mesh_abspath_prefix}{match}"')
     return robot_urdf_str
+
+
+def is_roscore_running() -> bool:
+    import rosgraph
+    return rosgraph.is_master_online()

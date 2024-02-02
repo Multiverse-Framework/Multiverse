@@ -7,12 +7,7 @@ from typing import Dict, Any, Optional, List
 from multiverse_ros_socket import Interface, INTERFACE
 
 from multiverse_launch import MultiverseLaunch
-from utils import find_files, run_subprocess, get_urdf_str_from_ros_package
-
-
-def is_roscore_running() -> bool:
-    import rosgraph
-    return rosgraph.is_master_online()
+from utils import find_files, run_subprocess, get_urdf_str_from_ros_package, is_roscore_running
 
 
 def run_controller_command(controller_manager: Dict[str, Any]) -> List[subprocess.Popen]:
