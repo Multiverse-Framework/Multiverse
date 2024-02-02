@@ -462,6 +462,11 @@ void MultiverseServer::receive_request_meta_data()
 
 void MultiverseServer::bind_meta_data()
 {
+    if (!request_meta_data_json.isMember("meta_data") || request_meta_data_json["meta_data"].empty())
+    {
+        throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " doesn't have meta data.");
+    }
+
     Json::Value &meta_data = request_meta_data_json["meta_data"];
     if (!meta_data.isMember("world_name") || meta_data["world_name"].asString().empty())
     {
