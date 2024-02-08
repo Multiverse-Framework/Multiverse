@@ -53,7 +53,7 @@ void MultiverseClient::connect_to_server()
 
     if (flag == EMultiverseClientState::ReceiveData || flag == EMultiverseClientState::ReceiveResponseMetaData)
     {
-        zmq_sleep(1);
+        zmq_sleep(1); // sleep for 1 second to finish the previous communication
     }
 
     zmq_connect(client_socket, server_socket_addr.c_str());
@@ -146,7 +146,7 @@ void MultiverseClient::run()
 {
     while (!should_shut_down)
     {
-        EMultiverseClientState current_flag = flag.load();
+        const EMultiverseClientState current_flag = flag.load();
         switch (current_flag)
         {
         case EMultiverseClientState::StartConnection:

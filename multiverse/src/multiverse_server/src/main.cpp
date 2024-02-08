@@ -70,7 +70,7 @@ int main(int argc, char **argv)
 
     zmq_sleep(1);
 
-    context.shutdown();
+    server_context.shutdown();
 
     if (multiverse_server_thread.joinable())
     {

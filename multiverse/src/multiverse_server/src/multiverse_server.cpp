@@ -35,7 +35,6 @@ using namespace std::chrono_literals;
 bool should_shut_down = false;
 std::map<std::string, bool> sockets_need_clean_up;
 zmq::context_t server_context{1};
-zmq::context_t context{1};
 
 std::set<std::string> cumulative_attribute_names = {"force", "torque"};
 
@@ -188,6 +187,7 @@ static double get_time_now()
 
 MultiverseServer::MultiverseServer(const std::string &in_socket_addr)
 {
+    context = zmq::context_t(1);
     socket = zmq::socket_t(context, zmq::socket_type::rep);
     socket_addr = in_socket_addr;
     socket.bind(socket_addr);

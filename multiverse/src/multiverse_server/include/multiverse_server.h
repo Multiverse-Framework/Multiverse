@@ -110,6 +110,8 @@ private:
 
     zmq::socket_t socket;
 
+    zmq::context_t context;
+
     Json::Value request_meta_data_json;
 
     Json::Value send_objects_json;
@@ -154,5 +156,3 @@ extern bool should_shut_down;
 extern std::map<std::string, bool> sockets_need_clean_up;
 
 extern zmq::context_t server_context;
-
-extern zmq::context_t context;
