@@ -37,16 +37,15 @@ fi
 if [ ! -d "$BLENDER_EXT_DIR/lib" ]; then
     (cd $BLENDER_EXT_DIR; mkdir lib; cd lib; svn checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/linux_x86_64_glibc_228)
     (cd $BLENDER_EXT_DIR/blender; make update)
-    (cd $BLENDER_EXT_DIR/lib/linux_x86_64_glibc_228; svn update -r63459)
 fi
 
 (cd $BLENDER_BUILD_DIR && cmake ../../external/blender-git/blender && make -j$(nproc) && make install)
-(cd $BLENDER_BUILD_DIR/bin/3.6/python/bin;
+(cd $BLENDER_BUILD_DIR/bin/4.0/python/bin;
 ./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
 ./python3.10 -m pip install scipy pillow tf --no-warn-script-location; # For multiverse_parser
 ./python3.10 -m pip install bpy --no-warn-script-location) # For blender
 ln -sf $BLENDER_BUILD_DIR/bin/blender $BIN_DIR
-ln -sf $BLENDER_BUILD_DIR/bin/3.6/python/bin/python3.10 $BIN_DIR
+ln -sf $BLENDER_BUILD_DIR/bin/4.0/python/bin/python3.10 $BIN_DIR
 
 # Build USD
 
