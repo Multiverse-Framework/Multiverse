@@ -31,7 +31,7 @@ void MjSimulate::init()
     // load and compile model
     char error[1000] = "Could not load binary model";
 
-    m = mj_loadXML(scene_xml_path.c_str(), 0, error, 1000);
+    m = mj_loadXML(scene_xml_path.string().c_str(), 0, error, 1000);
 
     if (!m)
     {
@@ -49,7 +49,7 @@ void MjSimulate::reset()
     // load and compile model
     char error[1000] = "Could not load binary model";
 
-    mjModel *m_new = mj_loadXML(scene_xml_path.c_str(), 0, error, 1000);
+    mjModel *m_new = mj_loadXML(scene_xml_path.string().c_str(), 0, error, 1000);
 
     if (!m_new)
     {

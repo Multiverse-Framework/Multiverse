@@ -30,6 +30,7 @@
 #elif _WIN32
 #include <json/json.h>
 #include <json/reader.h>
+#include <boost/filesystem.hpp>
 #endif
 
 enum class EAttribute : unsigned char

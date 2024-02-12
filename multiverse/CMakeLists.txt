@@ -20,6 +20,4 @@ endif()
 
 add_subdirectory(src)
 
-if(UNIX)
-    add_subdirectory(modules)
-endif()
+add_subdirectory(modules)

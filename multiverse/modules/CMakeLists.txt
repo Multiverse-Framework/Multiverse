@@ -2,6 +2,8 @@ project(multiverse_modules)
 
 add_subdirectory(multiverse_connectors)
 
-add_subdirectory(multiverse_knowledge)
+if (UNIX)
+    add_subdirectory(multiverse_knowledge)
 
-add_subdirectory(multiverse_parser)
+    add_subdirectory(multiverse_parser)
+endif()

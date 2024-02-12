@@ -62,7 +62,7 @@ void simulate(const double max_time_step, const double min_time_step)
         mtx.unlock();
 
         // Calculate real time factor
-        int num_step = mju_ceil(1 / m->opt.timestep);
+        int num_step = (int)mju_ceil(1 / m->opt.timestep);
         static std::deque<double> last_sim_times;
         static std::deque<double> last_real_times;
         double error_time;

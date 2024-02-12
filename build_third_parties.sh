@@ -42,7 +42,6 @@ fi
 (cd $BLENDER_BUILD_DIR && cmake ../../external/blender-git/blender && make -j$(nproc) && make install)
 (cd $BLENDER_BUILD_DIR/bin/4.0/python/bin;
 ./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
-./python3.10 -m pip install scipy pillow tf --no-warn-script-location; # For multiverse_parser
 ./python3.10 -m pip install bpy --no-warn-script-location) # For blender
 ln -sf $BLENDER_BUILD_DIR/bin/blender $BIN_DIR
 ln -sf $BLENDER_BUILD_DIR/bin/4.0/python/bin/python3.10 $BIN_DIR

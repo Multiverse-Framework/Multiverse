@@ -14,3 +14,9 @@ if not exist "%MULTIVERSE_DIR%\external\vcpkg" (
     bootstrap-vcpkg.bat
     vcpkg integrate install
 )
+
+@REM Upgrade pip
+python -m pip install --upgrade pip build
+
+@REM Install additional packages for USD and multiverse_knowledge
+python -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11

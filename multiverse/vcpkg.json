@@ -1,6 +1,10 @@
 {
     "dependencies": [
       "jsoncpp",
-      "cppzmq"
+      "cppzmq",
+      "boost-filesystem",
+      "tinyxml2",
+      "glfw3",
+      "opengl"
     ]
   }

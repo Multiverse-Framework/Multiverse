@@ -18,6 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "mj_visual.h"
 
 #include <iomanip>
@@ -70,7 +73,7 @@ void MjVisual::init()
     }
 
     // create window, make OpenGL context current, request v-sync
-    window = glfwCreateWindow(960, 540, scene_xml_path.stem().c_str(), NULL, NULL);
+    window = glfwCreateWindow(960, 540, scene_xml_path.stem().string().c_str(), NULL, NULL);
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1);
 
@@ -117,8 +120,8 @@ void MjVisual::mouse_move(GLFWwindow *window, double xpos, double ypos)
 
     if (button_left)
     {
-        cam.elevation += (-dy / height) / M_PI * 180.f;
-        cam.azimuth += (-dx / width) / M_PI * 180.f;
+        cam.elevation += (-dy / height) / std::acos(-1.0) * 180.f;
+        cam.azimuth += (-dx / width) / std::acos(-1.0) * 180.f;
     }
     else if (button_middle)
     {
@@ -189,9 +192,9 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
     // s: save simulation
     if (act == GLFW_PRESS && key == GLFW_KEY_S)
     {
-        printf("Save as %s\n", scene_xml_path.c_str());
+        printf("Save as %s\n", scene_xml_path.string().c_str());
         char error[1000] = "Could not save XML model";
-        mj_saveLastXML(scene_xml_path.c_str(), m, error, 1000);
+        mj_saveLastXML(scene_xml_path.string().c_str(), m, error, 1000);
     }
 }
 
@@ -303,12 +306,12 @@ void MjVisual::render()
     rtf_ss << std::fixed << std::setprecision(2);
     rtf_ss << rtf_desired << " X";
 
-    mjr_label(rect1, 0, real_time_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
-    mjr_label(rect2, 0, sim_time_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
-    mjr_label(rect3, 0, rtf_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
-    mjr_label(rect4, 0, time_step_text.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
-    mjr_label(rect5, 0, energy.c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
-    mjr_label(rect6, 0, rtf_ss.str().c_str(), 1, 1, 1, 0.2, 1, 1, 1, &con);
+    mjr_label(rect1, 0, real_time_text.c_str(), 1, 1, 1, 0.2f, 1, 1, 1, &con);
+    mjr_label(rect2, 0, sim_time_text.c_str(), 1, 1, 1, 0.2f, 1, 1, 1, &con);
+    mjr_label(rect3, 0, rtf_text.c_str(), 1, 1, 1, 0.2f, 1, 1, 1, &con);
+    mjr_label(rect4, 0, time_step_text.c_str(), 1, 1, 1, 0.2f, 1, 1, 1, &con);
+    mjr_label(rect5, 0, energy.c_str(), 1, 1, 1, 0.2f, 1, 1, 1, &con);
+    mjr_label(rect6, 0, rtf_ss.str().c_str(), 1, 1, 1, 0.2f, 1, 1, 1, &con);
 
     // swap OpenGL buffers (blocking call due to v-sync)
     glfwSwapBuffers(window);

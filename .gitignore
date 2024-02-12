@@ -49,6 +49,7 @@ multiverse/modules/multiverse_parser/resources/output
 multiverse/external
 multiverse/tests/**/output
 multiverse/saved
+multiverse/vcpkg_installed
 
 # VSC
 .vscode

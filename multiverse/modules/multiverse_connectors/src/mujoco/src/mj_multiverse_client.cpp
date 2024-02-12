@@ -18,6 +18,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#define _USE_MATH_DEFINES
+#include <cmath>
+
 #include "mj_multiverse_client.h"
 #include "mj_simulate.h"
 
@@ -31,7 +34,8 @@ std::mutex MjMultiverseClient::mutex;
 bool contains_tag(const boost::filesystem::path &file_path, const std::string &model_name)
 {
 	tinyxml2::XMLDocument doc;
-	if (doc.LoadFile(file_path.c_str()) == tinyxml2::XML_SUCCESS)
+
+	if (doc.LoadFile(file_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		for (const tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 			 mujoco_element != nullptr;
@@ -46,7 +50,7 @@ bool contains_tag(const boost::filesystem::path &file_path, const std::string &m
 	}
 	else
 	{
-		printf("Could not load file: %s\n", file_path.c_str());
+		printf("Could not load file: %s\n", file_path.string().c_str());
 	}
 	return false;
 }
@@ -125,14 +129,14 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 			if (!object_xml_paths.empty())
 			{
 				const boost::filesystem::path object_xml_path = object_xml_paths[0];
-				printf("Found XML file of [%s] at: %s.\n", object_name.c_str(), object_xml_path.c_str());
+				printf("Found XML file of [%s] at: %s.\n", object_name.c_str(), object_xml_path.string().c_str());
 
 				boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
 
 				{
-					boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_option::overwrite_if_exists);
+					boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_options::overwrite_existing);
 					tinyxml2::XMLDocument doc;
-					if (doc.LoadFile(new_object_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+					if (doc.LoadFile(new_object_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 					{
 						tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 						for (const std::string &asset_type : {"mesh", "texture"})
@@ -190,27 +194,27 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 								default_element->DeleteChild(child_to_remove);
 							}
 						}
-						doc.SaveFile(new_object_xml_path.c_str());
+						doc.SaveFile(new_object_xml_path.string().c_str());
 					}
 					else
 					{
-						printf("Could not load file: %s\n", new_object_xml_path.c_str());
+						printf("Could not load file: %s\n", new_object_xml_path.string().c_str());
 					}
 				}
 
 				tinyxml2::XMLDocument doc;
-				if (doc.LoadFile(scene_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+				if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 				{
 					tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 					tinyxml2::XMLElement *include_element = doc.NewElement("include");
 					mujoco_element->InsertEndChild(include_element);
 
 					include_element->SetAttribute("file", object_xml_path.filename().c_str());
-					doc.SaveFile(scene_xml_path.c_str());
+					doc.SaveFile(scene_xml_path.string().c_str());
 				}
 				else
 				{
-					printf("Could not load file: %s\n", scene_xml_path.c_str());
+					printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 				}
 				break;
 			}
@@ -947,14 +951,14 @@ void MjMultiverseClient::bind_send_data()
 {
 	if (send_buffer_size != send_data_vec.size())
 	{
-		printf("The size of send_data_vec (%ld) does not match with send_buffer_size (%ld)", send_data_vec.size(), send_buffer_size);
+		printf("The size of send_data_vec (%zd) does not match with send_buffer_size (%zd)", send_data_vec.size(), send_buffer_size);
 		return;
 	}
 
 	mtx.lock();
 	for (std::pair<const int, mjtNum *> &contact_effort : contact_efforts)
 	{
-		mjtNum jac[6 * m->nv];
+		mjtNum* jac = mj_stackAllocNum(d, 6 * m->nv);
 		mj_jacBodyCom(m, d, jac, jac + 3 * m->nv, contact_effort.first);
 		mju_mulMatVec(contact_effort.second, jac, d->qfrc_constraint, 6, m->nv);
 	}
@@ -970,7 +974,7 @@ void MjMultiverseClient::bind_receive_data()
 {
 	if (receive_buffer_size != receive_data_vec.size())
 	{
-		printf("[Client %s] The size of receive_data_vec (%ld) does not match with receive_buffer_size (%ld)\n", port.c_str(), receive_data_vec.size(), receive_buffer_size);
+		printf("[Client %s] The size of receive_data_vec (%zd) does not match with receive_buffer_size (%zd)\n", port.c_str(), receive_data_vec.size(), receive_buffer_size);
 		return;
 	}
 

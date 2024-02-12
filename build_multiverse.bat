@@ -2,7 +2,6 @@
 
 set "MULTIVERSE_DIR=%~dp0multiverse"
 
-rmdir /s /q "%MULTIVERSE_DIR%\build"
 cmake -S "%MULTIVERSE_DIR%" -B "%MULTIVERSE_DIR%\build" -DCMAKE_TOOLCHAIN_FILE"=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_INSTALL_PREFIX:PATH="%MULTIVERSE_DIR%"
 cmake --build "%MULTIVERSE_DIR%\build" --config Debug --target INSTALL
 

@@ -36,9 +36,37 @@ if not exist "%BLENDER_BUILD_DIR%" (
 
 if not exist "%BLENDER_EXT_DIR%\lib" (
     cd %BLENDER_EXT_DIR% && mkdir lib && cd lib && svn checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/win64_vc15 && cd %CURRENT_DIR%
-    cd %BLENDER_EXT_DIR%\blender && make update && cd %CURRENT_DIR%
+    cd %BLENDER_EXT_DIR%\blender && .\make update && cd %CURRENT_DIR%
 )
 
-cd "%BLENDER_EXT_DIR%\blender" && cmake -S . -B "../../../build/blender" && cmake --build "../../../build/blender" && cd "%CURRENT_DIR%"
-@REM cd "%BLENDER_BUILD_DIR%\bin\3.6\python\pip"
-@REM python3.10 -m pip install --upgrade pip build --no-warn-script-location
+@REM cd "%BLENDER_EXT_DIR%\blender" && cmake -S . -B "../../../build/blender" && cmake --build "../../../build/blender" && cd "%CURRENT_DIR%"
+@REM cd "%BLENDER_EXT_DIR%\lib\win64_vc15\python\310\bin" && python.exe -m pip install --upgrade pip build --no-warn-script-location && python.exe -m pip install bpy --no-warn-script-location
+
+@REM Build USD
+
+set "USD_BUILD_DIR=%BUILD_DIR%\USD"
+set "USD_EXT_DIR=%EXT_DIR%\USD"
+if not exist "%USD_BUILD_DIR%" (
+    @REM Create the folder if it doesn't exist
+    mkdir "%USD_BUILD_DIR%"
+    echo "Folder created: %USD_BUILD_DIR%"
+) else (
+    echo "Folder already exists: %USD_BUILD_DIR%"
+)
+
+@REM python %USD_EXT_DIR%\build_scripts\build_usd.py %USD_BUILD_DIR%
+
+@REM Build MuJoCo
+
+set "MUJOCO_BUILD_DIR=%BUILD_DIR%\mujoco"
+set "MUJOCO_EXT_DIR=%EXT_DIR%\mujoco"
+if not exist "%MUJOCO_BUILD_DIR%" (
+    @REM Create the folder if it doesn't exist
+    mkdir "%MUJOCO_BUILD_DIR%"
+    echo "Folder created: %MUJOCO_BUILD_DIR%"
+) else (
+    echo "Folder already exists: %MUJOCO_BUILD_DIR%"
+)
+
+cmake -S %MUJOCO_EXT_DIR% -B %MUJOCO_BUILD_DIR%
+cd %MUJOCO_BUILD_DIR% && cmake --build . && cd %CURRENT_DIR%

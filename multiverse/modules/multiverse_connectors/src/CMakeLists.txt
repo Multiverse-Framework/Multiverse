@@ -1,3 +1,5 @@
 add_subdirectory(mujoco)
 
-add_subdirectory(ros)
+if (UNIX)
+    add_subdirectory(ros)
+endif()
