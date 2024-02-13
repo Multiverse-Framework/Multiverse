@@ -14,9 +14,9 @@ set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
 
-if(UNIX)
-    set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)")
-endif()
+set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)")
+
+set(MULTIVERSE_CLIENT_LIBRARY_TYPE "STATIC" CACHE STRING "Type of library to create (SHARED or STATIC)")
 
 if(WIN32)
     include_directories(${BUILD_DIR}/vcpkg_installed/x64-windows/include)

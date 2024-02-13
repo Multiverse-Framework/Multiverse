@@ -9,12 +9,6 @@ set(MULTIVERSE_CLIENT_JSON multiverse_client_json)
 set(MULTIVERSE_CLIENT_PYBIND multiverse_client_pybind)
 
 if(UNIX)
-    set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
-    set(CMAKE_CXX_STANDARD 11)
-    set(CMAKE_CXX_FLAGS "-fPIC")
-
-    set(MULTIVERSE_CLIENT_LIBRARY_TYPE "STATIC" CACHE STRING "Type of library to create (SHARED or STATIC)")
-
     if(NOT MULTIVERSE_CLIENT_LIBRARY_TYPE STREQUAL "SHARED" AND NOT MULTIVERSE_CLIENT_LIBRARY_TYPE STREQUAL "STATIC")
         message(FATAL_ERROR "MULTIVERSE_CLIENT_LIBRARY_TYPE must be either SHARED or STATIC")
     endif()
@@ -22,6 +16,14 @@ if(UNIX)
     if(NOT STDLIB STREQUAL "libc++" AND NOT STDLIB STREQUAL "libstdc++")
         message(FATAL_ERROR "STDLIB must be either libc++ or libstdc++")
     endif()
+
+    set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+    if (STDLIB STREQUAL "libc++")
+        set(CMAKE_CXX_STANDARD 17)
+    elseif (STDLIB STREQUAL "libstdc++")
+        set(CMAKE_CXX_STANDARD 11)
+    endif()
+    set(CMAKE_CXX_FLAGS "-fPIC")
 endif()
 
 function(build_multiverse_client)
@@ -74,7 +76,7 @@ if (UNIX)
 
     build_multiverse_client()
 
-    if(MULTIVERSE_CLIENT_LIBRARY_TYPE STREQUAL "STATIC")
+    if(MULTIVERSE_CLIENT_LIBRARY_TYPE STREQUAL "STATIC" AND STDLIB STREQUAL "libstdc++")
         build_multiverse_client_json()
     endif()
 
