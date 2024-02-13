@@ -3,6 +3,7 @@
         <flag sensornoise="disable" energy="enable" contact="enable" />
     </option>
     <compiler angle="radian" />
+    <size memory="1G" />
 
     <asset>
         <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3"

@@ -48,7 +48,6 @@ multiverse_server:
 
 multiverse_clients:
   tiago_dual_in_apartment:
-    host: "tcp://127.0.0.1"
     port: 7500
     send:
       body: ["position", "quaternion"]
@@ -81,8 +80,7 @@ multiverse_clients:
     ros_nodes:
       services:
         socket:
-          - host: "tcp://127.0.0.1"
-            port: 7400
+          - port: 7400
 
       publishers:
         tf:
@@ -93,7 +91,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7301
             topic: /tf
             rate: 60
@@ -106,7 +103,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7302
             topic: /odom
             rate: 60
@@ -122,7 +118,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7200
             topic: /cmd_vel
             body: tiago_dual
@@ -150,7 +145,6 @@ multiverse_clients:
           mass_unit: kg
           time_unit: s
           handedness: rhs
-        host: "tcp://127.0.0.1"
         port: 7800
         controller_manager:
           robot: tiago_dual

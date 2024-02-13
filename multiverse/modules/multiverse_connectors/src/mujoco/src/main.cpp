@@ -60,6 +60,11 @@ void simulate(const double max_time_step, const double min_time_step)
         mtx.lock();
         mj_step2(m, d);
         mtx.unlock();
+        if (d->time <= m->opt.timestep)
+        {
+            start_time = get_time_now();
+            continue;
+        }
 
         // Calculate real time factor
         int num_step = (int)mju_ceil(1 / m->opt.timestep);

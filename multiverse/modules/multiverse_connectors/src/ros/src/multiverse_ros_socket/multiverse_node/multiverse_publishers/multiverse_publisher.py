@@ -66,7 +66,7 @@ class MultiversePublisher(MultiverseNode):
             else:
                 self._bind_receive_data(self.receive_data)
             self._publish()
-        except KeyboardInterrupt:
+        except:
             return
 
     def _publish(self) -> None:

@@ -77,7 +77,6 @@ multiverse_server:
 
 multiverse_clients:
   sim_1:
-    host: "tcp://127.0.0.1"
     port: 7501
     send:
       body: ["position", "quaternion"]
@@ -87,7 +86,6 @@ multiverse_clients:
       tiago_dual_2: ["odometric_velocity"]
 
   sim_2:
-    host: "tcp://127.0.0.1"
     port: 7502
     send:
       body: ["position", "quaternion"]
@@ -104,8 +102,7 @@ multiverse_clients:
     ros_nodes:
       services:
         socket:
-          - host: "tcp://127.0.0.1"
-            port: 7400
+          - port: 7400
 
       publishers:
         tf:
@@ -116,7 +113,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7301
             topic: /tf
             rate: 60
@@ -128,7 +124,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7302
             topic: /tf
             rate: 60
@@ -141,7 +136,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7303
             topic: /odom
             rate: 60
@@ -157,7 +151,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7202
             topic: /cmd_vel
             body: tiago_dual_1
@@ -170,7 +163,6 @@ multiverse_clients:
           mass_unit: kg
           time_unit: s
           handedness: rhs
-        host: "tcp://127.0.0.1"
         port: 7600
         controller_manager:
           robot: ur5e
@@ -193,8 +185,7 @@ multiverse_clients:
     ros_nodes:
       services:
         socket:
-          - host: "tcp://127.0.0.1"
-            port: 7900
+          - port: 7900
 
       publishers:
         tf:
@@ -205,7 +196,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7801
             topic: /tf
             rate: 60
@@ -217,7 +207,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7802
             topic: /tf
             rate: 60
@@ -230,7 +219,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7803
             topic: /odom
             rate: 60
@@ -246,7 +234,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7701
             topic: /cmd_vel
             body: tiago_dual_2

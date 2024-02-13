@@ -68,7 +68,6 @@ multiverse_server:
 
 multiverse_clients:
   ur5e_with_task_board:
-    host: "tcp://127.0.0.1"
     port: 7500
     send:
       body: ["position", "quaternion"]
@@ -93,7 +92,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7700
             msg_type: std_msgs/Float64
             send:
@@ -108,7 +106,6 @@ multiverse_clients:
           mass_unit: kg
           time_unit: s
           handedness: rhs
-        host: "tcp://127.0.0.1"
         port: 7601
         controller_manager:
           robot: ur5e
@@ -129,8 +126,7 @@ multiverse_clients:
 
     services:
       socket:
-        - host: "tcp://127.0.0.1"
-          port: 7400
+        - port: 7400
 
   ros2:
     ros_nodes:
@@ -143,7 +139,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7301
             topic: /tf
             rate: 60

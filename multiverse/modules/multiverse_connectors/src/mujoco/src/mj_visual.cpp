@@ -23,6 +23,7 @@
 
 #include "mj_visual.h"
 
+#include <thread>
 #include <iomanip>
 #include <sstream>
 
@@ -255,11 +256,8 @@ void MjVisual::run()
             break;
         }
 
-        if (d->time - sim_start > 1.0 / 60.0)
-        {
-            render();
-            sim_start = d->time;
-        }
+        render();
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 }
 

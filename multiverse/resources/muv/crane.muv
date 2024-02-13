@@ -65,7 +65,6 @@ multiverse_server:
 
 multiverse_clients:
   crane_simulation:
-    host: "tcp://127.0.0.1"
     port: 7500
     send:
       body: ["position", "quaternion"]
@@ -85,8 +84,7 @@ multiverse_clients:
     ros_nodes:
       services:
         socket:
-          - host: "tcp://127.0.0.1"
-            port: 7400
+          - port: 7400
 
       publishers:
         tf:
@@ -97,7 +95,6 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            host: "tcp://127.0.0.1"
             port: 7301
             topic: /tf
             rate: 60
@@ -111,7 +108,6 @@ multiverse_clients:
         mass_unit: kg
         time_unit: s
         handedness: rhs
-      host: "tcp://127.0.0.1"
       port: 7800
       controller_manager:
         robot: crane

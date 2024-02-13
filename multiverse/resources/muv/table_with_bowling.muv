@@ -54,7 +54,6 @@ multiverse_server:
 
 multiverse_clients:
   table_with_bowling_simulation:
-    host: "tcp://127.0.0.1"
     port: 7501
     send:
       cursor: ["position", "quaternion"]
@@ -66,7 +65,6 @@ multiverse_clients:
       cube: ["relative_velocity", "position", "quaternion"]
 
   bowling_simulation:
-    host: "tcp://127.0.0.1"
     port: 7502
     send:
       bowling: ["relative_velocity", "position", "quaternion"]
@@ -75,7 +73,6 @@ multiverse_clients:
       bowling: ["force", "torque"]
 
   table_simulation:
-    host: "tcp://127.0.0.1"
     port: 7503
     send:
       table: ["relative_velocity", "position", "quaternion"]
@@ -84,7 +81,6 @@ multiverse_clients:
       table: ["force", "torque"]
 
   cube_simulation:
-    host: "tcp://127.0.0.1"
     port: 7504
     send:
       cube: ["relative_velocity", "position", "quaternion"]
