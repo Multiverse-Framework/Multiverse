@@ -88,7 +88,7 @@ pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pyb
 pip install urdf_parser_py
 
 # Install MuJoCo
-pip install mujoco==3.1.0
+pip install mujoco==3.1.2
 
 # Install additional packages for Jupyter Notebook
 pip install panel jupyter-server bash_kernel
