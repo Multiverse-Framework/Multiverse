@@ -61,7 +61,9 @@ void MultiverseClient::connect_to_server()
     zmq_msg_t request;
     zmq_msg_init_size(&request, socket_addr.size());
     memcpy(zmq_msg_data(&request), socket_addr.c_str(), socket_addr.size());
+    printf("[Client %s] Sending request %s to %s.\n", port.c_str(), socket_addr.c_str(), server_socket_addr.c_str());
     zmq_msg_send(&request, client_socket, 0);
+    printf("[Client %s] Sent request %s to %s.\n", port.c_str(), socket_addr.c_str(), server_socket_addr.c_str());
     zmq_msg_close(&request);
 
     std::string receive_socket_addr;
@@ -71,6 +73,7 @@ void MultiverseClient::connect_to_server()
         zmq_msg_init(&response);
         zmq_msg_recv(&response, client_socket, 0);
         receive_socket_addr = std::string((char *)zmq_msg_data(&response), zmq_msg_size(&response));
+        printf("[Client %s] Received response %s from %s.\n", port.c_str(), socket_addr.c_str(), server_socket_addr.c_str());
         zmq_msg_close(&response);
     }
     catch (const zmq::error_t &e)
