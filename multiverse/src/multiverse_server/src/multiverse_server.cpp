@@ -953,7 +953,7 @@ void start_multiverse_server(const std::string &server_socket_addr)
     std::map<std::string, std::thread> workers;
     zmq::socket_t server_socket = zmq::socket_t(server_context, zmq::socket_type::rep);
     server_socket.bind(server_socket_addr);
-    printf("[Server] Create server socket %s, waiting for client...\n", server_socket_addr.c_str());
+    printf("[Server] Create server socket %s\n", server_socket_addr.c_str());
 
     std::string receive_addr;
     while (!should_shut_down)
@@ -961,8 +961,10 @@ void start_multiverse_server(const std::string &server_socket_addr)
         try
         {
             zmq::message_t request;
+            printf("[Server] Waiting for request...\n");
             zmq::recv_result_t recv_result_t = server_socket.recv(request, zmq::recv_flags::none);
             receive_addr = request.to_string();
+            printf("[Server] Received request from %s.\n", receive_addr.c_str());
         }
         catch (const zmq::error_t &e)
         {
@@ -979,7 +981,9 @@ void start_multiverse_server(const std::string &server_socket_addr)
 
         zmq::message_t response(receive_addr.size());
         memcpy(response.data(), receive_addr.c_str(), receive_addr.size());
+        printf("[Server] Sending response to %s.\n", receive_addr.c_str());
         server_socket.send(response, zmq::send_flags::none);
+        printf("[Server] Sent response to %s.\n", receive_addr.c_str());
     }
 
     for (std::pair<const std::string, std::thread> &worker : workers)
