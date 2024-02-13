@@ -1,3 +1,9 @@
+if(WIN32)
+    find_package(Zeromq REQUIRED)
+    find_package(cppzmq REQUIRED)
+    find_package(jsoncpp REQUIRED)
+endif()
+
 set(MULTIVERSE_CLIENT multiverse_client)
 set(MULTIVERSE_CLIENT_JSON multiverse_client_json)
 set(MULTIVERSE_CLIENT_PYBIND multiverse_client_pybind)

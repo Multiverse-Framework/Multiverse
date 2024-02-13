@@ -87,8 +87,8 @@ pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pyb
 # Install additional packages for multiverse_parser
 pip install urdf_parser_py
 
-# Install additional packages for MuJoCo
-pip install mujoco
+# Install MuJoCo
+pip install mujoco==3.1.0
 
 # Install additional packages for Jupyter Notebook
 pip install panel jupyter-server bash_kernel

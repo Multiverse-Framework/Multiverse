@@ -1,6 +1,15 @@
-execute_process(
-    COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/mujoco_compile.py ${BIN_DIR}/mujoco_compile
-)
+if (UNIX)
+    execute_process(
+        COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/mujoco_compile.py ${BIN_DIR}/mujoco_compile
+    )
+elseif (WIN32)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/scripts/mujoco_compile.py ${BIN_DIR}/mujoco_compile.py
+    )
+endif()
+
+set(mujoco_DIR ${BUILD_DIR}/mujoco/lib/cmake/mujoco)
+find_package(mujoco REQUIRED)
 
 find_package(Threads REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem)
@@ -10,7 +19,7 @@ find_package(OpenGL REQUIRED)
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${EXT_DIR}/mujoco/include
+    ${BUILD_DIR}/mujoco/include
     ${SRC_DIR}/multiverse_client/include
     ${Boost_INCLUDE_DIRS}
 )
@@ -39,9 +48,8 @@ elseif(WIN32)
         Threads::Threads
         Boost::filesystem
         tinyxml2::tinyxml2
-        ${BUILD_DIR}/mujoco/lib/Debug/mujoco.lib
+        mujoco::mujoco
     )
-    set_target_properties(mujoco_headless PROPERTIES INSTALL_RPATH "${BUILD_DIR}/mujoco/bin")
 endif()
 
 install(TARGETS mujoco_headless DESTINATION ${BIN_DIR})
@@ -73,9 +81,8 @@ elseif(WIN32)
         OpenGL::GL
         tinyxml2::tinyxml2
         Boost::filesystem
-        ${BUILD_DIR}/mujoco/lib/Debug/mujoco.lib
+        mujoco::mujoco
     )
-    set_target_properties(mujoco PROPERTIES INSTALL_RPATH "${BUILD_DIR}/mujoco/bin")
 endif()
 
 install(TARGETS mujoco DESTINATION ${BIN_DIR})

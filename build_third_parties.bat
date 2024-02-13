@@ -68,5 +68,5 @@ if not exist "%MUJOCO_BUILD_DIR%" (
     echo "Folder already exists: %MUJOCO_BUILD_DIR%"
 )
 
-cmake -S %MUJOCO_EXT_DIR% -B %MUJOCO_BUILD_DIR%
-cd %MUJOCO_BUILD_DIR% && cmake --build . && cd %CURRENT_DIR%
+cd %MUJOCO_BUILD_DIR% && cmake %MUJOCO_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%MUJOCO_BUILD_DIR% -Wno-deprecated -Wno-dev && cmake --build . --config Release && cmake --install . && cd "%CURRENT_DIR%"
+copy /y "%MUJOCO_BUILD_DIR%\bin\mujoco.dll" "%MULTIVERSE_DIR%\bin"

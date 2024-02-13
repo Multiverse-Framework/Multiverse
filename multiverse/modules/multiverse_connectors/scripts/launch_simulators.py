@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import re
 import subprocess
 from typing import List, Dict, Any
@@ -49,7 +50,15 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
 
     def run_simulator_compile(self, simulation_name, simulation_data):
         cmd = self.parse_simulator(simulation_data)
-        cmd = [f"{simulation_data['simulator']}_compile".replace("_headless", ""), f"--name={simulation_name}"] + cmd
+        if os.name == "nt":
+            current_file = os.path.abspath(__file__)
+            multiverse_bin_dir = os.path.join(os.path.dirname(current_file), "..", "..", "..", "bin")
+            simulator_compile_file = os.path.join(multiverse_bin_dir, f"{simulation_data['simulator']}_compile.py".replace("_headless", ""))
+            cmd = ["python", simulator_compile_file, f"--name={simulation_name}"] + cmd
+        elif os.name == "posix":
+            cmd = [f"{simulation_data['simulator']}_compile".replace("_headless", ""), f"--name={simulation_name}"] + cmd
+        else:
+            raise NotImplementedError(f"OS {os.name} not implemented")
         cmd_str = " ".join(cmd)
         print(f'Execute "{cmd_str}"')
         return subprocess.run(cmd, capture_output=True, text=True)

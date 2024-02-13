@@ -1,3 +1,9 @@
+if(WIN32)
+    find_package(Zeromq REQUIRED)
+    find_package(cppzmq REQUIRED)
+    find_package(jsoncpp REQUIRED)
+endif()
+
 add_executable(multiverse_server ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 target_include_directories(multiverse_server PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

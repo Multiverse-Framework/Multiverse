@@ -18,6 +18,10 @@ if(UNIX)
     set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)")
 endif()
 
+if(WIN32)
+    include_directories(${BUILD_DIR}/vcpkg_installed/x64-windows/include)
+endif()
+
 add_subdirectory(src)
 
 add_subdirectory(modules)

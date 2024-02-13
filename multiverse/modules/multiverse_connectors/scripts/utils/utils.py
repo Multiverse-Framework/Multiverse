@@ -26,7 +26,8 @@ def find_files(resources_paths: List[str], filename_pattern: str) -> str:
     else:
         if len(matches) > 1:
             print(f"Found multiple {filename_pattern} files, using the first one")
-        return matches[0]
+        match = os.path.normpath(matches[0])
+        return match
 
 
 def get_urdf_str_from_ros_package(mesh_abspath_prefix: str, ros_pkg_path: str, urdf_path: str) -> str:
