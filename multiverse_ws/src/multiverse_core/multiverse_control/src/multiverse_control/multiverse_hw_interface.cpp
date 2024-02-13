@@ -43,7 +43,7 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
 
     server_socket_addr = multiverse_params.at("server_host") + ":" + multiverse_params.at("server_port");
 
-    host = multiverse_params.at("client_host");
+    host = multiverse_params.at("server_host");
     port = multiverse_params.at("client_port");
 
     for (const std::pair<std::string, urdf::JointSharedPtr> &robot_joint : urdf_model.joints_)

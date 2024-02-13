@@ -134,7 +134,6 @@ class MultiverseRosLaunch(MultiverseLaunch):
         multiverse_dict = {
             "multiverse_server": self.multiverse_server,
             "multiverse_client": {
-                "host": ros_control["host"],
                 "port": ros_control["port"],
                 "meta_data": ros_control["meta_data"],
             },

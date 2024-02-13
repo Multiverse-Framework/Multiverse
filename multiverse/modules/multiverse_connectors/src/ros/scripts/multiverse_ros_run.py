@@ -41,10 +41,7 @@ class MultiverseNodeProperties:
                 time_unit=meta_data.get("time_unit", "s"),
                 handedness=meta_data.get("handedness", "rhs"),
             )
-        self.client_addr = SocketAddress(
-            host=self.ros_node_prop.pop("host"),
-            port=str(self.ros_node_prop.pop("port")),
-        )
+        self.client_addr = SocketAddress(port=str(self.ros_node_prop.pop("port")),)
 
     @property
     def ros_node_name(self):
@@ -225,9 +222,8 @@ def main():
     subscribers = parse_ros_node_from_str(args.subscribers)
     services = parse_ros_node_from_str(args.services)
 
-    socket_addr = SocketAddress(
-        host=multiverse_server["host"], port=str(multiverse_server["port"])
-    )
+    SocketAddress.host = multiverse_server["host"]
+    socket_addr = SocketAddress(port=str(multiverse_server["port"]))
     ros_node = RosNode(
         publishers=publishers, subscribers=subscribers, services=services
     )

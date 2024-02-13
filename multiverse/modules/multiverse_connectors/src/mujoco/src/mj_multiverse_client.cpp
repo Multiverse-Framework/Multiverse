@@ -89,7 +89,6 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 	multiverse_params["server_port"] = multiverse_server_params_json.isMember("port") ? multiverse_server_params_json["port"].asString() : "7000";
 
 	const Json::Value &multiverse_client_params_json = multiverse_params_json["multiverse_client"];
-	multiverse_params["client_host"] = multiverse_client_params_json.isMember("host") ? multiverse_client_params_json["host"].asString() : "tcp://127.0.0.1";
 	multiverse_params["client_port"] = multiverse_client_params_json["port"].asString();
 
 	const Json::Value &multiverse_client_meta_data_params_json = multiverse_client_params_json["meta_data"];
@@ -108,7 +107,7 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 
 	server_socket_addr = multiverse_params["server_host"] + ":" + multiverse_params["server_port"];
 
-	host = multiverse_params["client_host"];
+	host = multiverse_params["server_host"];
 	port = multiverse_params["client_port"];
 
 	connect();
