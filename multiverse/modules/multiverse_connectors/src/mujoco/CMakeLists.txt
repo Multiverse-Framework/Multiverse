@@ -12,10 +12,13 @@ set(mujoco_DIR ${BUILD_DIR}/mujoco/lib/cmake/mujoco)
 find_package(mujoco REQUIRED)
 
 find_package(Threads REQUIRED)
-find_package(Boost REQUIRED COMPONENTS filesystem)
-find_package(tinyxml2 REQUIRED)
-find_package(glfw3 REQUIRED)
-find_package(OpenGL REQUIRED)
+
+if(WIN32)
+    find_package(Boost REQUIRED COMPONENTS filesystem)
+    find_package(tinyxml2 REQUIRED)
+    find_package(glfw3 REQUIRED)
+    find_package(OpenGL REQUIRED)
+endif()
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -38,7 +41,7 @@ if(UNIX)
         Threads::Threads
         jsoncpp
         boost_filesystem
-        ${BUILD_DIR}/mujoco/lib/libmujoco.so
+        mujoco::mujoco
     )
     set_target_properties(mujoco_headless PROPERTIES INSTALL_RPATH "${BUILD_DIR}/mujoco/lib;${LIB_DIR}/libstdc++")
 elseif(WIN32)
@@ -69,7 +72,7 @@ if(UNIX)
         Threads::Threads
         jsoncpp
         boost_filesystem
-        ${BUILD_DIR}/mujoco/lib/libmujoco.so
+        mujoco::mujoco
     )
     set_target_properties(mujoco PROPERTIES INSTALL_RPATH "${BUILD_DIR}/mujoco/lib;${LIB_DIR}/libstdc++")
 elseif(WIN32)

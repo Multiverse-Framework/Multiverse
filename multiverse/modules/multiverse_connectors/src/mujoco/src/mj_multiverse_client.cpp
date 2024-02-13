@@ -132,9 +132,12 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 				printf("Found XML file of [%s] at: %s.\n", object_name.c_str(), object_xml_path.string().c_str());
 
 				boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
-
 				{
-					boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_options::overwrite_existing);
+#ifdef _WIN32
+						boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_options::overwrite_existing);
+#else
+						boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_option::overwrite_if_exists);
+#endif
 					tinyxml2::XMLDocument doc;
 					if (doc.LoadFile(new_object_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 					{

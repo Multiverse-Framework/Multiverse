@@ -36,12 +36,22 @@ fi
 
 if [ ! -d "$BLENDER_EXT_DIR/lib" ]; then
     (cd $BLENDER_EXT_DIR; mkdir lib; cd lib; svn checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/linux_x86_64_glibc_228)
+    FILE=$BLENDER_EXT_DIR/blender/source/blender/blenlib/intern/index_mask.cc
+    if [ -f "$FILE" ]; then
+        sed -i \
+            -e 's/const int16_t gap_first = indices\[size_before_gap - 1] + 1;/const int16_t gap_first = (int16_t)(indices[size_before_gap - 1] + 1);/' \
+            -e 's/const int16_t next = indices\[size_before_gap];/const int16_t next = (int16_t)indices[size_before_gap];/' \
+            -e 's/const int16_t gap_size = next - gap_first;/const int16_t gap_size = (int16_t)(next - gap_first);/' \
+            "$FILE"
+    else
+        echo "Error: File does not exist: $FILE"
+    fi
     (cd $BLENDER_EXT_DIR/blender; make update)
 fi
 
-(cd $BLENDER_BUILD_DIR && cmake ../../external/blender-git/blender && make -j$(nproc) && make install)
+(cd $BLENDER_BUILD_DIR && cmake -S ../../external/blender-git/blender -B . -Wno-deprecated -Wno-dev && make -j$(nproc) && make install)
 (cd $BLENDER_BUILD_DIR/bin/4.0/python/bin;
-./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
+    ./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
 ./python3.10 -m pip install bpy --no-warn-script-location) # For blender
 ln -sf $BLENDER_BUILD_DIR/bin/blender $BIN_DIR
 ln -sf $BLENDER_BUILD_DIR/bin/4.0/python/bin/python3.10 $BIN_DIR
@@ -75,8 +85,7 @@ else
     echo "Folder already exists: $MUJOCO_BUILD_DIR"
 fi
 
-cmake -S $MUJOCO_EXT_DIR -B $MUJOCO_BUILD_DIR
-(cd $MUJOCO_BUILD_DIR && make)
+(cd $MUJOCO_BUILD_DIR && cmake $MUJOCO_EXT_DIR -DCMAKE_INSTALL_PREFIX=$MUJOCO_BUILD_DIR -Wno-deprecated -Wno-dev && cmake --build . && cmake --install .)
 ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
 
 RELOAD=false
