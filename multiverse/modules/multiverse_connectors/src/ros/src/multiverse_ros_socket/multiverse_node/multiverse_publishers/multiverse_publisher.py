@@ -23,9 +23,9 @@ class MultiversePublisher(MultiverseNode):
 
     def __init__(
             self,
+            client_addr: SocketAddress,
             topic_name: str,
             rate: float = 60.0,
-            client_addr: SocketAddress = SocketAddress(),
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:

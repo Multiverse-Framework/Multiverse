@@ -21,10 +21,11 @@ class MultiverseMetaData:
     handedness: str = "rhs"
 
 
-@dataclasses.dataclass
 class SocketAddress:
     host: str = "tcp://127.0.0.1"
     port: str = ""
+    def __init__(self, port: str) -> None:
+        self.port = port
 
 
 if INTERFACE == Interface.ROS1:
@@ -38,7 +39,7 @@ else:
 
 
 class MultiverseNode(Node):
-    _server_addr: SocketAddress = SocketAddress(host="tcp://127.0.0.1", port="7000")
+    _server_addr: SocketAddress = SocketAddress(port="7000")
     _client_addr: SocketAddress
     _meta_data: MultiverseMetaData
     _multiverse_socket: MultiverseClientPybind

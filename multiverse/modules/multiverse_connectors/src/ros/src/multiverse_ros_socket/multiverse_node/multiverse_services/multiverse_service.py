@@ -26,7 +26,7 @@ class MultiverseService(MultiverseNode):
 
     def __init__(
             self,
-            client_addr: SocketAddress = SocketAddress(),
+            client_addr: SocketAddress,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:

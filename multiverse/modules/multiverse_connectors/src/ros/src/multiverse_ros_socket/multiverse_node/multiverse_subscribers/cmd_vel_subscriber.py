@@ -13,8 +13,8 @@ class CmdVelSubscriber(MultiverseSubscriber):
 
     def __init__(
             self,
+            client_addr: SocketAddress,
             topic_name: str = "/cmd_vel",
-            client_addr: SocketAddress = SocketAddress(),
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:
@@ -22,8 +22,8 @@ class CmdVelSubscriber(MultiverseSubscriber):
             raise Exception("Body not found.")
         self._body_name = str(kwargs["body"])
         super().__init__(
-            topic_name=topic_name,
             client_addr=client_addr,
+            topic_name=topic_name,
             multiverse_meta_data=multiverse_meta_data
         )
         self.request_meta_data["send"][self._body_name] = ["odometric_velocity"]

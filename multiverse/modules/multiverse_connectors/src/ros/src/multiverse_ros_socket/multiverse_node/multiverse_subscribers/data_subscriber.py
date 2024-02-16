@@ -12,8 +12,8 @@ class DataSubscriber(MultiverseSubscriber):
 
     def __init__(
             self,
-            topic_name: str = "/cmd_vel",
-            client_addr: SocketAddress = SocketAddress(),
+            client_addr: SocketAddress,
+            topic_name: str,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:
@@ -27,8 +27,8 @@ class DataSubscriber(MultiverseSubscriber):
         else:
             raise NotImplementedError(f"msg_type {msg_type} not implemented.")
         super().__init__(
-            topic_name=topic_name,
             client_addr=client_addr,
+            topic_name=topic_name,
             multiverse_meta_data=multiverse_meta_data
         )
         self.request_meta_data["send"] = kwargs["send"]

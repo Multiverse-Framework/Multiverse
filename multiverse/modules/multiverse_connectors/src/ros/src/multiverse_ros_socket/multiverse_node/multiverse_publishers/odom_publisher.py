@@ -20,16 +20,16 @@ class OdomPublisher(MultiversePublisher):
 
     def __init__(
             self,
+            client_addr: SocketAddress,
             topic_name: str = "/tf",
             rate: float = 60.0,
-            client_addr: SocketAddress = SocketAddress(),
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:
         super().__init__(
+            client_addr=client_addr,
             topic_name=topic_name,
             rate=rate,
-            client_addr=client_addr,
             multiverse_meta_data=multiverse_meta_data,
         )
         if "body" not in kwargs:
