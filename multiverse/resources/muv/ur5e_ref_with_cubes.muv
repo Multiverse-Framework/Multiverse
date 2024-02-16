@@ -1,0 +1,64 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  ur5e_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: work_table_with_cubes.xml
+    robots:
+      ur5e:
+        path: ur5e_with_ref.xml
+        apply:
+          body:
+            ur5e:
+              pos: [0.5, 0.0, 1.05]
+            reference:
+              pos: [0.25, 0.82, 1.113]
+        disable_self_collision: auto
+
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://192.168.178.153"
+  port: 7000
+
+multiverse_clients:
+  ur5e_simulation:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+    receive:
+      grab_cube_1_ref: ["position", "quaternion"]
+      grab_cube_2_ref: ["position", "quaternion"]
+
+    services:
+      socket:
+        - port: 7400
+
+  ros2:
+    ros_nodes:
+      publishers:
+        tf:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7301
+            topic: /tf
+            rate: 60
+            root_frame_id: map
