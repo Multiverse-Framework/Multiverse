@@ -327,7 +327,13 @@ bool MjMultiverseClient::init_objects(bool from_server)
 				{
 					for (int body_id = 0; body_id < m->nbody; body_id++)
 					{
-						send_objects[mj_id2name(m, mjtObj::mjOBJ_BODY, body_id)].insert(attribute_name);
+						const std::string body_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_id);
+						printf("body_name: %s\n", body_name.c_str());
+						if ((receive_objects.find(body_name) != receive_objects.end()) && (receive_objects[body_name].find(attribute_name) != receive_objects[body_name].end()))
+						{
+							continue;
+						}
+						send_objects[body_name].insert(attribute_name);
 					}
 				}
 			}
@@ -339,7 +345,12 @@ bool MjMultiverseClient::init_objects(bool from_server)
 					{
 						if (m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE)
 						{
-							send_objects[mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id)].insert(attribute_name);
+							const std::string joint_name = mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id);
+							if ((receive_objects.find(joint_name) != receive_objects.end()) && (receive_objects[joint_name].find(attribute_name) != receive_objects[joint_name].end()))
+							{
+								continue;
+							}
+							send_objects[joint_name].insert(attribute_name);
 						}
 					}
 				}
@@ -349,13 +360,22 @@ bool MjMultiverseClient::init_objects(bool from_server)
 					{
 						if (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)
 						{
-							send_objects[mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id)].insert(attribute_name);
+							const std::string joint_name = mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id);
+							if ((receive_objects.find(joint_name) != receive_objects.end()) && (receive_objects[joint_name].find(attribute_name) != receive_objects[joint_name].end()))
+							{
+								continue;
+							}
+							send_objects[joint_name].insert(attribute_name);
 						}
 					}
 				}
 			}
 			else
 			{
+				if ((receive_objects.find(object_name) != receive_objects.end()) && (receive_objects[object_name].find(attribute_name) != receive_objects[object_name].end()))
+				{
+					continue;
+				}
 				const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
 				const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str());
 				if (body_attributes.count(attribute_name) != 0 && body_id != -1)

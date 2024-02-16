@@ -23,10 +23,10 @@
             <geom type="box" pos="-.95 -.45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
         </body>
 
-        <body name="grab_cube_1_grab" pos="0.1 -0.4 1.12" mocap="true">
+        <body name="grab_cube_1_ref" pos="0.1 -0.4 1.12" mocap="true">
             <geom type="box" size=".06 .06 .06" rgba="1.0 0.0 0.0 1" mass="1" condim="4" friction="2 0.05 0.01" />
         </body>
-        <body name="grab_cube_2_grab" pos="0.1 0.4 1.12" mocap="true"/>
+        <body name="grab_cube_2_ref" pos="0.1 0.4 1.12" mocap="true"/>
 
         <body name="grab_cube_1" pos="0.1 -0.4 1.12" >
             <freejoint/>
@@ -40,7 +40,7 @@
     </worldbody>
 
     <equality>
-        <weld body1="grab_cube_1_grab" body2="grab_cube_1"/>
-        <weld body1="grab_cube_2_grab" body2="grab_cube_2"/>
+        <weld body1="grab_cube_1_ref" body2="grab_cube_1"/>
+        <weld body1="grab_cube_2_ref" body2="grab_cube_2"/>
     </equality>
 </mujoco>
