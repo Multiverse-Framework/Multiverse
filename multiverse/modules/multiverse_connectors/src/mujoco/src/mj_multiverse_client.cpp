@@ -328,7 +328,6 @@ bool MjMultiverseClient::init_objects(bool from_server)
 					for (int body_id = 0; body_id < m->nbody; body_id++)
 					{
 						const std::string body_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_id);
-						printf("body_name: %s\n", body_name.c_str());
 						if ((receive_objects.find(body_name) != receive_objects.end()) && (receive_objects[body_name].find(attribute_name) != receive_objects[body_name].end()))
 						{
 							continue;
