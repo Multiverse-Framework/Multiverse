@@ -15,14 +15,25 @@ simulations:
       name: world
       path: work_table_with_cubes.xml
     robots:
+      gripper:
+        path: gripper-2F-85.xml
+        prefix:
+          geom: gripper-2F-85_
+        disable_self_collision: "off"
       ur5e:
-        path: ur5e_with_ref.xml
+        path: mjcf2/ur5e.xml
         apply:
           body:
             ur5e:
               pos: [0.5, 0.0, 1.05]
+            gravcomp: 1
             reference:
-              pos: [0.25, 0.82, 1.113]
+              pos: [0.23, 0.82, 1.113]
+        attach:
+          wrist_3_link: 
+            gripper:
+              pos: [0.0, 0.1, 0.0]
+              quat: [-1.0, 1.0, 0.0, 0.0]
         disable_self_collision: auto
 
     config:
@@ -40,8 +51,27 @@ multiverse_clients:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
     receive:
+      fingers_actuator: ["cmd_joint_tvalue"]
       grab_cube_1_ref: ["position", "quaternion"]
       grab_cube_2_ref: ["position", "quaternion"]
+      reference: ["position", "quaternion"]
+
+  ros:
+    ros_nodes:
+      subscribers:
+        data:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7700
+            msg_type: std_msgs/Float64
+            send:
+              fingers_actuator: ["cmd_joint_tvalue"]
+            topic: /gripper_command
 
     services:
       socket:

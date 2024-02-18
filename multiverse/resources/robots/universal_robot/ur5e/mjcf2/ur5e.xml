@@ -3,7 +3,7 @@
 
   <option integrator="implicitfast"/>
 
-  <option timestep="0.001" integrator="RK4" gravity="0 0 0" noslip_iterations="5" noslip_tolerance="1e-6">
+  <option timestep="0.001" integrator="RK4" gravity="0 0 -9.81" noslip_iterations="5" noslip_tolerance="1e-6">
     <flag sensornoise="disable" energy="enable" contact="enable"/>
   </option>
 
@@ -126,7 +126,7 @@
       </body>
     </body>
 
-    <body name="reference" pos="0.23 0.82 1.113" quat="0 1 0 0" mocap="true">
+    <body name="reference" pos="0.23 0.82 1.113" quat="1 0 0 0" mocap="true">
       <geom type="sphere" size="0.02" rgba="1 0 0 1" contype="0" conaffinity="0"/>
     </body>
   </worldbody>
