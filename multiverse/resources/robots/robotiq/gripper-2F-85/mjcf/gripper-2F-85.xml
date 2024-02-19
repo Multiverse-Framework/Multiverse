@@ -29,7 +29,7 @@
         <joint range="0 0.8" armature="0.005" damping="0.1" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
       </default>
       <default class="follower">
-        <joint range="-0.872664 0.872664" pos="0 -0.018 0.0065" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
+        <joint range="-0.872664 0.872664" pos="0 0 0" solimplimit="0.95 0.99 0.001" solreflimit="0.005 1"/>
       </default>
       <default class="spring_link">
         <joint range="-0.29670597283 0.8" stiffness="0.05" springref="2.62" damping="0.00125"/>
@@ -87,19 +87,19 @@
             <joint name="right_spring_link_joint" class="spring_link"/>
             <geom class="gripper-2F-85_visual" mesh="spring_link" material="black"/>
             <geom class="gripper-2F-85_collision" mesh="spring_link"/>
-            <body name="right_follower" pos="0 0.055 0.0375">
-              <inertial mass="0.0125222" pos="0 -0.011046 0.0124786" quat="1 0.1664 0 0"
+            <body name="right_follower" pos="0 0.037 0.044">
+              <inertial mass="0.0125222" pos="0 -0.029046 0.0189786" quat="1 0.1664 0 0"
                 diaginertia="2.67415e-06 2.4559e-06 6.02031e-07"/>
               <joint name="right_follower_joint" class="follower"/>
               <geom class="gripper-2F-85_visual" mesh="follower" material="black"/>
               <geom class="gripper-2F-85_collision" mesh="follower"/>
-              <body name="right_pad" pos="0 -0.0189 0.01352">
+              <body name="right_pad" pos="0 -0.0009 0.00702">
                 <geom class="pad_box1" name="right_pad1"/>
                 <geom class="pad_box2" name="right_pad2"/>
                 <inertial mass="0.0035" pos="0 -0.0025 0.0185" quat="0.707107 0 0 0.707107"
                   diaginertia="4.73958e-07 3.64583e-07 1.23958e-07"/>
                 <geom class="gripper-2F-85_visual" mesh="pad"/>
-                <body name="right_silicone_pad">
+                <body name="right_silicone_pad" >
                   <geom class="gripper-2F-85_visual" mesh="silicone_pad" material="black"/>
                 </body>
               </body>
@@ -126,13 +126,13 @@
             <joint name="left_spring_link_joint" class="spring_link"/>
             <geom class="gripper-2F-85_visual" mesh="spring_link" material="black"/>
             <geom class="gripper-2F-85_collision" mesh="spring_link"/>
-            <body name="left_follower" pos="0 0.055 0.0375">
-              <inertial mass="0.0125222" pos="0 -0.011046 0.0124786" quat="1 0.1664 0 0"
+            <body name="left_follower" pos="0 0.037 0.044">
+              <inertial mass="0.0125222" pos="0 -0.029046 0.0189786" quat="1 0.1664 0 0"
                 diaginertia="2.67415e-06 2.4559e-06 6.02031e-07"/>
               <joint name="left_follower_joint" class="follower"/>
               <geom class="gripper-2F-85_visual" mesh="follower" material="black"/>
               <geom class="gripper-2F-85_collision" mesh="follower"/>
-              <body name="left_pad" pos="0 -0.0189 0.01352">
+              <body name="left_pad" pos="0 -0.0009 0.00702">
                 <geom class="pad_box1" name="left_pad1"/>
                 <geom class="pad_box2" name="left_pad2"/>
                 <inertial mass="0.0035" pos="0 -0.0025 0.0185" quat="1 0 0 1"
@@ -172,8 +172,8 @@
   </tendon>
 
   <equality>
-    <connect anchor="0 0 0" body1="right_follower" body2="right_coupler" solimp="0.95 0.99 0.001" solref="0.005 1"/>
-    <connect anchor="0 0 0" body1="left_follower" body2="left_coupler" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <connect anchor="0 0.018 -0.0065" body1="right_follower" body2="right_coupler" solimp="0.95 0.99 0.001" solref="0.005 1"/>
+    <connect anchor="0 0.018 -0.0065" body1="left_follower" body2="left_coupler" solimp="0.95 0.99 0.001" solref="0.005 1"/>
     <joint joint1="right_driver_joint" joint2="left_driver_joint" polycoef="0 1 0 0 0" solimp="0.95 0.99 0.001"
       solref="0.005 1"/>
   </equality>
