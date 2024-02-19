@@ -53,7 +53,7 @@ simulations:
       path: floor.xml
     robots:
       ur5e:
-        path: ur5e.xml
+        path: mjcf/ur5e.xml
         apply:
           body:
             ur5e:

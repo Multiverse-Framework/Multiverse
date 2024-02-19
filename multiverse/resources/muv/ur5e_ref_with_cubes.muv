@@ -9,7 +9,7 @@ worlds:
     rtf_desired: 1
 
 simulations:
-  ur5e_simulation:
+  ur5e_ref_with_cubes:
     simulator: mujoco
     world:
       name: world
@@ -28,7 +28,7 @@ simulations:
               pos: [0.5, 0.0, 1.05]
             gravcomp: 1
             reference:
-              pos: [0.23, 0.82, 1.113]
+              pos: [0.28, 0.82, 1.113]
         attach:
           wrist_3_link: 
             gripper:
@@ -45,7 +45,7 @@ multiverse_server:
   port: 7000
 
 multiverse_clients:
-  ur5e_simulation:
+  ur5e_ref_with_cubes:
     port: 7500
     send:
       body: ["position", "quaternion"]
@@ -73,9 +73,9 @@ multiverse_clients:
               fingers_actuator: ["cmd_joint_tvalue"]
             topic: /gripper_command
 
-    services:
-      socket:
-        - port: 7400
+      services:
+        socket:
+          - port: 7400
 
   ros2:
     ros_nodes:
@@ -92,3 +92,10 @@ multiverse_clients:
             topic: /tf
             rate: 60
             root_frame_id: map
+
+    ros_run:
+      rviz:
+        config: ur5e_ref_with_cubes/rviz.rviz2
+        robot_descriptions:
+          ur5e_description: ur5e/urdf/ur5e.urdf
+          gripper-2F-85_description: gripper-2F-85/urdf/gripper-2F-85.urdf
