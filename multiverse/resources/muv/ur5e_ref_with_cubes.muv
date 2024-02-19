@@ -28,7 +28,7 @@ simulations:
               pos: [0.5, 0.0, 1.05]
             gravcomp: 1
             reference:
-              pos: [0.260012, 0.81695183, 1.11348642]
+              pos: [0.22, 0.81695183, 1.11348642]
               quat: [-0.5, -0.5, 0.5, 0.5]
         attach:
           wrist_3_link: 
