@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
-<robot name="gripper_2F_85" version="1.0">
-  <link name="gripper_2F_85"/>
+<robot name="gripper-2F-85" version="1.0">
+  <link name="gripper-2F-85"/>
   <joint name="base_mount_joint" type="fixed">
     <origin xyz="0.0 0.0 0.007" rpy="0.0 0.0 0.0"/>
-    <parent link="gripper_2F_85"/>
+    <parent link="gripper-2F-85"/>
     <child link="base_mount"/>
   </joint>
   <link name="base_mount">
