@@ -1,9 +1,9 @@
 <?xml version="1.0" ?>
-<robot name="gripper-2F-85" version="1.0">
-  <link name="gripper-2F-85"/>
+<robot name="gripper_2F_85" version="1.0">
+  <link name="gripper_2F_85"/>
   <joint name="base_mount_joint" type="fixed">
     <origin xyz="0.0 0.0 0.007" rpy="0.0 0.0 0.0"/>
-    <parent link="gripper-2F-85"/>
+    <parent link="gripper_2F_85"/>
     <child link="base_mount"/>
   </joint>
   <link name="base_mount">
@@ -15,7 +15,7 @@
     <visual name="Geom_0">
       <origin xyz="-0.0003605835954658687 8.536274981452152e-05 -5.91993702983018e-05" rpy="0.010714522562921047 -1.5679504871368408 3.132357120513916"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/base_mount.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/base_mount.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_1">
@@ -39,7 +39,7 @@
     <visual name="Geom_2">
       <origin xyz="9.197026429319521e-08 -2.703939208004158e-05 0.0354674831032753" rpy="-0.003056990448385477 7.76175497207987e-08 2.5390105292899534e-05"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/base.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/base.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_3">
@@ -65,7 +65,7 @@
     <visual name="Geom_4">
       <origin xyz="2.9693094771160444e-12 0.0177546925842762 0.0010731416987255216" rpy="1.6425158977508545 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/driver.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/driver.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_5">
@@ -91,7 +91,7 @@
     <visual name="Geom_6">
       <origin xyz="8.458042209322225e-13 0.00301208533346653 0.023217538371682167" rpy="1.399413406969249e-17 0.1290387511253357 1.5707963705062866"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/coupler.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/coupler.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_7">
@@ -117,7 +117,7 @@
     <visual name="Geom_8">
       <origin xyz="-8.650050453695712e-09 0.018162399530410767 0.02126581035554409" rpy="0.0 0.7068434953689575 1.5707963705062866"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/spring_link.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/spring_link.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_9">
@@ -128,7 +128,7 @@
     </collision>
   </link>
   <joint name="right_follower_joint" type="revolute">
-    <origin xyz="0.0 0.054999999701976776 0.03750000149011612" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.0 0.03700000047683716 0.04399999976158142" rpy="0.0 0.0 0.0"/>
     <axis xyz="1.0 0.0 0.0"/>
     <parent link="right_spring_link"/>
     <child link="right_follower"/>
@@ -136,25 +136,25 @@
   </joint>
   <link name="right_follower">
     <inertial>
-      <origin xyz="0.0 -0.011045999825000763 0.012478600256145" rpy="0.32977840304374695 0.0 0.0"/>
+      <origin xyz="0.0 -0.02904600091278553 0.018978599458932877" rpy="0.32977840304374695 0.0 0.0"/>
       <mass value="0.012522200122475624"/>
       <inertia ixx="2.674149982340168e-06" ixy="0.0" ixz="0.0" iyy="2.4558999029977713e-06" iyz="0.0" izz="6.02030979734991e-07"/>
     </inertial>
     <visual name="Geom_10">
-      <origin xyz="-8.222505698540772e-08 -0.011045964434742928 0.012478641234338284" rpy="0.33435603976249695 1.1571604773052968e-05 4.019967491331045e-06"/>
+      <origin xyz="-8.221781655493032e-08 0.006954035256057978 0.0059786406345665455" rpy="0.33435606956481934 1.157242695626337e-05 4.020253072667401e-06"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/follower.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/follower.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_11">
-      <origin xyz="-8.222505698540772e-08 -0.011045964434742928 0.012478641234338284" rpy="0.33435603976249695 1.1571604773052968e-05 4.019967491331045e-06"/>
+      <origin xyz="-8.221781655493032e-08 0.006954035256057978 0.0059786406345665455" rpy="0.33435606956481934 1.157242695626337e-05 4.020253072667401e-06"/>
       <geometry>
         <mesh filename="file://../meshes/stl/follower.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
   <joint name="right_pad_joint" type="fixed">
-    <origin xyz="0.0 -0.0189 0.01352" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.0 -0.0009 0.00702" rpy="0.0 0.0 0.0"/>
     <parent link="right_follower"/>
     <child link="right_pad"/>
   </joint>
@@ -197,7 +197,7 @@
     <visual name="Geom_15">
       <origin xyz="1.9279010286528224e-14 -0.005799999926239252 0.018517374992370605" rpy="0.0 0.0 1.5707963705062866"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/silicone_pad.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/silicone_pad.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -217,7 +217,7 @@
     <visual name="Geom_16">
       <origin xyz="2.9693094771160444e-12 0.0177546925842762 0.0010731416987255216" rpy="1.6425158977508545 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/driver.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/driver.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_17">
@@ -243,7 +243,7 @@
     <visual name="Geom_18">
       <origin xyz="8.458042209322225e-13 0.00301208533346653 0.023217538371682167" rpy="1.399413406969249e-17 0.1290387511253357 1.5707963705062866"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/coupler.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/coupler.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_19">
@@ -269,7 +269,7 @@
     <visual name="Geom_20">
       <origin xyz="-8.650050453695712e-09 0.018162399530410767 0.02126581035554409" rpy="0.0 0.7068434953689575 1.5707963705062866"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/spring_link.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/spring_link.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_21">
@@ -280,7 +280,7 @@
     </collision>
   </link>
   <joint name="left_follower_joint" type="revolute">
-    <origin xyz="0.0 0.054999999701976776 0.03750000149011612" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.0 0.03700000047683716 0.04399999976158142" rpy="0.0 0.0 0.0"/>
     <axis xyz="1.0 0.0 0.0"/>
     <parent link="left_spring_link"/>
     <child link="left_follower"/>
@@ -288,25 +288,25 @@
   </joint>
   <link name="left_follower">
     <inertial>
-      <origin xyz="0.0 -0.011045999825000763 0.012478600256145" rpy="0.32977840304374695 0.0 0.0"/>
+      <origin xyz="0.0 -0.02904600091278553 0.018978599458932877" rpy="0.32977840304374695 0.0 0.0"/>
       <mass value="0.012522200122475624"/>
       <inertia ixx="2.674149982340168e-06" ixy="0.0" ixz="0.0" iyy="2.4558999029977713e-06" iyz="0.0" izz="6.02030979734991e-07"/>
     </inertial>
     <visual name="Geom_22">
-      <origin xyz="-8.222505698540772e-08 -0.011045964434742928 0.012478641234338284" rpy="0.33435603976249695 1.1571604773052968e-05 4.019967491331045e-06"/>
+      <origin xyz="-8.221781655493032e-08 0.006954035256057978 0.0059786406345665455" rpy="0.33435606956481934 1.157242695626337e-05 4.020253072667401e-06"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/follower.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/follower.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="Geom_23">
-      <origin xyz="-8.222505698540772e-08 -0.011045964434742928 0.012478641234338284" rpy="0.33435603976249695 1.1571604773052968e-05 4.019967491331045e-06"/>
+      <origin xyz="-8.221781655493032e-08 0.006954035256057978 0.0059786406345665455" rpy="0.33435606956481934 1.157242695626337e-05 4.020253072667401e-06"/>
       <geometry>
         <mesh filename="file://../meshes/stl/follower.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
   <joint name="left_pad_joint" type="fixed">
-    <origin xyz="0.0 -0.0189 0.01352" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.0 -0.0009 0.00702" rpy="0.0 0.0 0.0"/>
     <parent link="left_follower"/>
     <child link="left_pad"/>
   </joint>
@@ -349,7 +349,7 @@
     <visual name="Geom_27">
       <origin xyz="1.9279010286528224e-14 -0.005799999926239252 0.018517374992370605" rpy="0.0 0.0 1.5707963705062866"/>
       <geometry>
-        <mesh filename="file://../meshes/obj/silicone_pad.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../meshes/stl/silicone_pad.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
