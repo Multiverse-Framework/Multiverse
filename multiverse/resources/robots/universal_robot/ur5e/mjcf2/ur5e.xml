@@ -126,9 +126,7 @@
       </body>
     </body>
 
-    <body name="reference" pos="0.23 0.82 1.113" quat="1 0 -1 0" mocap="true">
-      <geom type="cylinder" size="0.03 0.05" rgba="1 0 0 1" contype="0" conaffinity="0"/>
-    </body>
+    <body name="reference" pos="0.23 0.82 1.113" quat="1 0 0 0" mocap="true" />
   </worldbody>
 
   <equality>
