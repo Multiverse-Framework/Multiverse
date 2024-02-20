@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Plant_Big_02"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Plant_Big_02" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Plant_Big_02.usda@
+        string name = "SM_Plant_Big_02"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Plant_Big_02.SM_Plant_Big_02"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.28"
+        }
+        string version = "97ABBA52D44985D6C123AEE1993C6A67DE9B838C"
+    }
+    prepend payload = @SM_Plant_Big_02_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Plant_Big_02/Materials/M_Metal_Black>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Black.M_Metal_Black"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Plant_Big_02/Materials/M_Metal_Rust>
+        custom string unrealMaterial = "/Game/Materials/M_Metal_Rust.M_Metal_Rust"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Plant_Big_02/Materials/M_Plant_01_Leaves>
+        custom string unrealMaterial = "/Game/Materials/M_Plant_01_Leaves.M_Plant_01_Leaves"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Metal_Black" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Black.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Rust" (
+            prepend references = @../../Materials/M_Metal_Rust.usda@
+        )
+        {
+        }
+
+        def Material "M_Plant_01_Leaves" (
+            prepend references = @../../Materials/M_Plant_01_Leaves.usda@
+        )
+        {
+        }
+    }
+}
+

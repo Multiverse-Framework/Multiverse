@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Kitchen_01_Base"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Kitchen_01_Base" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Kitchen/SM_Kitchen_01_Base.usda@
+        string name = "SM_Kitchen_01_Base"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_01_Base.SM_Kitchen_01_Base"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.23"
+        }
+        string version = "2FB5717A16271A91FD8DFFBD440A6F3A7634C0F7"
+    }
+    prepend payload = @SM_Kitchen_01_Base_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_01_Base/Materials/M_Plastic_White>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_01_Base/Materials/M_Kitchen_Fronts>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Kitchen_Fronts.M_Kitchen_Fronts"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_01_Base/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Plastic_White" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_White.usda@
+        )
+        {
+        }
+
+        def Material "M_Kitchen_Fronts" (
+            prepend references = @../../Materials_Laborraum/M_Kitchen_Fronts.usda@
+        )
+        {
+        }
+
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

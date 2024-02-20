@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Couchtisch_Schublade"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Couchtisch_Schublade" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesLiving/SM_Couchtisch_Schublade.usda@
+        string name = "SM_Couchtisch_Schublade"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesLiving/SM_Couchtisch_Schublade.SM_Couchtisch_Schublade"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.51"
+        }
+        string version = "313A482596E9C8F870B66E946BCC620AD5D7B887"
+    }
+    prepend payload = @SM_Couchtisch_Schublade_payload.usda@
+)
+{
+    rel material:binding = </SM_Couchtisch_Schublade/Materials/M_Wood_Furniture>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Wood_Furniture.M_Wood_Furniture"
+
+    def Scope "Materials"
+    {
+        def Material "M_Wood_Furniture" (
+            prepend references = @../../Materials_Laborraum/M_Wood_Furniture.usda@
+        )
+        {
+        }
+    }
+}
+

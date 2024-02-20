@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Socket_033"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Socket_033" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Steckdosen/SM_Socket_033.usda@
+        string name = "SM_Socket_033"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Steckdosen/SM_Socket_033.SM_Socket_033"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.48"
+        }
+        string version = "3B7B2D864ADD9B0E389834D2E5F327C694BD9368"
+    }
+    prepend payload = @SM_Socket_033_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Socket_033/Materials/M_Basic_Black>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Basic_Black.M_Basic_Black"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Socket_033/Materials/M_Metal_Brushed>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Brushed.M_Metal_Brushed"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Socket_033/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Basic_Black" (
+            prepend references = @../../Materials_Laborraum/M_Basic_Black.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Brushed" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Brushed.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Chrome.usda@
+        )
+        {
+        }
+    }
+}
+

@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Emissive_Red"
+    upAxis = "Z"
+)
+
+def Material "M_Emissive_Red" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Emissive_Red.usda@
+        string name = "M_Emissive_Red"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Emissive_Red.M_Emissive_Red"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-19.59.36"
+        }
+        string version = "8C488405FF07E9B8DD213707ECDF94F2D73A65D4"
+    }
+)
+{
+    token outputs:surface.connect = </M_Emissive_Red/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Emissive_Red/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Emissive_Red.M_Emissive_Red@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.3231432, 0.011612245, 0)
+        color3f inputs:emissiveColor = (0.6748047, 0, 0)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.20000002
+        float inputs:specular = 1
+        token outputs:surface
+    }
+}
+

@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Stove"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Stove" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesLiving/SM_Stove.usda@
+        string name = "SM_Stove"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesLiving/SM_Stove.SM_Stove"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.36"
+        }
+        string version = "DA6B2E59E88A9B3F6D32EA776AE91A6FF606FD6B"
+    }
+    prepend payload = @SM_Stove_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Stove/Materials/M_Stove>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Stove.M_Stove"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Stove/Materials/M_Glass_Oven>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Glass_Oven.M_Glass_Oven"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Stove/Materials/M_Basic_Black_02>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Basic_Black_02.M_Basic_Black_02"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Stove" (
+            prepend references = @../../Materials_Laborraum/M_Stove.usda@
+        )
+        {
+        }
+
+        def Material "M_Glass_Oven" (
+            prepend references = @../../Materials_Laborraum/M_Glass_Oven.usda@
+        )
+        {
+        }
+
+        def Material "M_Basic_Black_02" (
+            prepend references = @../../Materials_Laborraum/M_Basic_Black_02.usda@
+        )
+        {
+        }
+    }
+}
+

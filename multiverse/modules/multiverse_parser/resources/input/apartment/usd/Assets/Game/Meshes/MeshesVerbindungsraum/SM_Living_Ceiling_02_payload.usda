@@ -1,0 +1,22 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Living_Ceiling_02"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def Mesh "SM_Living_Ceiling_02"
+{
+    int[] faceVertexCounts = [3, 3]
+    int[] faceVertexIndices = [0, 1, 2, 1, 0, 3]
+    normal3f[] normals = [(0, -0, -1), (0, -0, -1), (0, -0, -1), (0, -0, -1)]
+    point3f[] points = [(-938.0225, -115.529755, -0.000061035156), (938.0225, 115.52966, -0.000061035156), (938.0225, -115.53003, -0.000061035156), (-938.0225, 115.52994, -0.000061035156)]
+    texCoord2f[] primvars:st = [(-8.875, 1.6552734), (9.875, -0.65527344), (9.875, 1.6552734), (-8.875, -0.65527344)] (
+        interpolation = "vertex"
+    )
+    texCoord2f[] primvars:st1 = [(0.42504883, 0.9995003), (0.30200195, 0.0009765625), (0.42504883, 0.0009765625), (0.30200195, 0.9995003)] (
+        interpolation = "vertex"
+    )
+    uniform token subdivisionScheme = "none"
+}
+

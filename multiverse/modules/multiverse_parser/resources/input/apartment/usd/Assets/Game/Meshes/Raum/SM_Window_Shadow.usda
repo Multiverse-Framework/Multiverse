@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Window_Shadow"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Window_Shadow" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Raum/SM_Window_Shadow.usda@
+        string name = "SM_Window_Shadow"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Raum/SM_Window_Shadow.SM_Window_Shadow"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.36"
+        }
+        string version = "DDB7A85D84D5DD60CBEE2F7371848FB50ACE8DB8"
+    }
+    prepend payload = @SM_Window_Shadow_payload.usda@
+)
+{
+    rel material:binding = </SM_Window_Shadow/Materials/WorldGridMaterial>
+    custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "Cube"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "Cube" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Engine/BasicShapes/Cube.usda@
+        string name = "Cube"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Engine/BasicShapes/Cube.Cube"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.48"
+        }
+        string version = "53F6D9867654704B41938D7824B75F77DC4634BE"
+    }
+    prepend payload = @Cube_payload.usda@
+)
+{
+    rel material:binding = </Cube/Materials/WorldGridMaterial>
+    custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

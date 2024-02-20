@@ -1,0 +1,82 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Metaltraeger"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Metaltraeger" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Raum/SM_Metaltraeger.usda@
+        string name = "SM_Metaltraeger"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Raum/SM_Metaltraeger.SM_Metaltraeger"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.18"
+        }
+        string version = "61337C3A246243B2CA3E99A82D698A43BA4C0059"
+    }
+    prepend payload = @SM_Metaltraeger_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Metaltraeger/Materials/M_Metal_Brushed_Inst>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Brushed_Inst.M_Metal_Brushed_Inst"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Metaltraeger/Materials/M_Metal_Brushed>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Brushed.M_Metal_Brushed"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Metaltraeger/Materials/M_Metal_Dark>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Dark.M_Metal_Dark"
+    }
+
+    over "Section3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Metaltraeger/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Metal_Brushed_Inst" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Brushed_Inst.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Brushed" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Brushed.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Dark" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Dark.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Chrome.usda@
+        )
+        {
+        }
+    }
+}
+

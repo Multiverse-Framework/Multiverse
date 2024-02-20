@@ -1,0 +1,38 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Button_6Floor"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Lift_Button_6Floor" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Button_6Floor.usda@
+        string name = "SM_Lift_Button_6Floor"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Button_6Floor.SM_Lift_Button_6Floor"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.23"
+        }
+        string version = "ECB286C6AB528EA513945DCFE618D703BAAC671D"
+    }
+    prepend payload = @SM_Lift_Button_6Floor_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section2"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+

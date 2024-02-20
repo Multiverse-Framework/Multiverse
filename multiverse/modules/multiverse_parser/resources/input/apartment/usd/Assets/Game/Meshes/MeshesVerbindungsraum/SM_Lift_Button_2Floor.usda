@@ -1,0 +1,56 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Button_2Floor"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Lift_Button_2Floor" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Button_2Floor.usda@
+        string name = "SM_Lift_Button_2Floor"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Button_2Floor.SM_Lift_Button_2Floor"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.15"
+        }
+        string version = "A94E80DF16D6197CCF8E3A2BED5DCCFEAF73DC40"
+    }
+    prepend payload = @SM_Lift_Button_2Floor_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Button_2Floor/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Button_2Floor/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Button_2Floor/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

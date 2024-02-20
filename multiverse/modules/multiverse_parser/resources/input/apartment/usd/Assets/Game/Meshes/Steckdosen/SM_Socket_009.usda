@@ -1,0 +1,48 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Socket_009"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Socket_009" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Steckdosen/SM_Socket_009.usda@
+        string name = "SM_Socket_009"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Steckdosen/SM_Socket_009.SM_Socket_009"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.18"
+        }
+        string version = "CA9A55248C251AC5C413EC39AD1E72A4048E3628"
+    }
+    prepend payload = @SM_Socket_009_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Socket_009/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Socket_009/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

@@ -1,0 +1,94 @@
+#usda 1.0
+(
+    defaultPrim = "Elderberry_LOD0_Var2_wfzobb2ia_2"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "Elderberry_LOD0_Var2_wfzobb2ia_2" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Elderberry_LOD0_Var2_wfzobb2ia_2.usda@
+        string name = "Elderberry_LOD0_Var2_wfzobb2ia_2"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Elderberry_LOD0_Var2_wfzobb2ia_2.Elderberry_LOD0_Var2_wfzobb2ia_2"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.31"
+        }
+        string version = "ED2D7A2B9407067D12DBDD16B7EAA4F3B8A3994F"
+    }
+    prepend payload = @Elderberry_LOD0_Var2_wfzobb2ia_2_payload.usda@
+)
+{
+    over "LOD0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Elderberry_LOD0_Var2_wfzobb2ia_2/Materials/Elderberry_wfzobb2ia_inst>
+        custom string unrealMaterial = "/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Elderberry_wfzobb2ia_inst.Elderberry_wfzobb2ia_inst"
+    }
+
+    over "LOD1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Elderberry_LOD0_Var2_wfzobb2ia_2/Materials/Elderberry_wfzobb2ia_inst>
+        custom string unrealMaterial = "/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Elderberry_wfzobb2ia_inst.Elderberry_wfzobb2ia_inst"
+    }
+
+    over "LOD2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Elderberry_LOD0_Var2_wfzobb2ia_2/Materials/Elderberry_wfzobb2ia_inst>
+        custom string unrealMaterial = "/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Elderberry_wfzobb2ia_inst.Elderberry_wfzobb2ia_inst"
+    }
+
+    over "LOD3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Elderberry_LOD0_Var2_wfzobb2ia_2/Materials/Elderberry_wfzobb2ia_inst>
+        custom string unrealMaterial = "/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Elderberry_wfzobb2ia_inst.Elderberry_wfzobb2ia_inst"
+    }
+
+    over "LOD4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Elderberry_LOD0_Var2_wfzobb2ia_2/Materials/Elderberry_wfzobb2ia_inst>
+        custom string unrealMaterial = "/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Elderberry_wfzobb2ia_inst.Elderberry_wfzobb2ia_inst"
+    }
+
+    over "LOD5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Elderberry_LOD0_Var2_wfzobb2ia_2/Materials/Elderberry_wfzobb2ia_inst>
+        custom string unrealMaterial = "/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Elderberry_wfzobb2ia_inst.Elderberry_wfzobb2ia_inst"
+    }
+
+    over "LOD6" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </Elderberry_LOD0_Var2_wfzobb2ia_2/Materials/Elderberry_wfzobb2ia_Billboard_inst>
+        custom string unrealMaterial = "/Game/Megascans/3D_Plants/Elderberry_wfzobb2ia/Billboard/Elderberry_wfzobb2ia_Billboard_inst.Elderberry_wfzobb2ia_Billboard_inst"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "Elderberry_wfzobb2ia_inst" (
+            prepend references = @Elderberry_wfzobb2ia_inst.usda@
+        )
+        {
+        }
+
+        def Material "Elderberry_wfzobb2ia_Billboard_inst" (
+            prepend references = @Billboard/Elderberry_wfzobb2ia_Billboard_inst.usda@
+        )
+        {
+        }
+    }
+}
+

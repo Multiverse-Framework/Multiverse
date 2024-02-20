@@ -1,0 +1,33 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Text_1_Retail"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Lift_Text_1_Retail" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_1_Retail.usda@
+        string name = "SM_Lift_Text_1_Retail"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_1_Retail.SM_Lift_Text_1_Retail"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.27"
+        }
+        string version = "8C1C0B1880AB5DAE840952823AD5091A97439D2F"
+    }
+    prepend payload = @SM_Lift_Text_1_Retail_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+

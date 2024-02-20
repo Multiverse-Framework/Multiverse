@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_elevator_button_deactivated"
+    upAxis = "Z"
+)
+
+def Material "M_elevator_button_deactivated" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Mechanics/Elevator/M_elevator_button_deactivated.usda@
+        string name = "M_elevator_button_deactivated"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Mechanics/Elevator/M_elevator_button_deactivated.M_elevator_button_deactivated"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-19.59.20"
+        }
+        string version = "5D5EDD658185DAFE5033C4493E0150B8383F48B7"
+    }
+)
+{
+    token outputs:surface.connect = </M_elevator_button_deactivated/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_elevator_button_deactivated/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Mechanics/Elevator/M_elevator_button_deactivated.M_elevator_button_deactivated@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.48514995, 0.4507858, 0.38642943)
+        color3f inputs:emissiveColor = (0, 0, 0)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.20000002
+        float inputs:specular = 0.49803925
+        token outputs:surface
+    }
+}
+

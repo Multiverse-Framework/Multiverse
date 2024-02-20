@@ -1,0 +1,33 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Text_4_RobotGarage"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Lift_Text_4_RobotGarage" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_4_RobotGarage.usda@
+        string name = "SM_Lift_Text_4_RobotGarage"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_4_RobotGarage.SM_Lift_Text_4_RobotGarage"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.17"
+        }
+        string version = "FE3CB3227F44B05D4127AB8A4AAD69D23D6C0A9F"
+    }
+    prepend payload = @SM_Lift_Text_4_RobotGarage_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+

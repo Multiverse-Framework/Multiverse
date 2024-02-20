@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Metal_Dark"
+    upAxis = "Z"
+)
+
+def Material "M_Metal_Dark" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials/M_Metal_Dark.usda@
+        string name = "M_Metal_Dark"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials/M_Metal_Dark.M_Metal_Dark"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-19.59.46"
+        }
+        string version = "3D17CA089ADD7C14FF4A64F66124E6205D65B4DA"
+    }
+)
+{
+    token outputs:surface.connect = </M_Metal_Dark/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Metal_Dark/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials/M_Metal_Dark.M_Metal_Dark@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.070360094, 0.070360094, 0.070360094)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.29803923
+        float inputs:specular = 0.49803925
+        token outputs:surface
+    }
+}
+

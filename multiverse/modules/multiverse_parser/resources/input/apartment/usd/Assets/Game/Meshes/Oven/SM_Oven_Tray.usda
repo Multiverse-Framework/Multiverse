@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Oven_Tray"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Oven_Tray" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Oven/SM_Oven_Tray.usda@
+        string name = "SM_Oven_Tray"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Oven/SM_Oven_Tray.SM_Oven_Tray"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.28"
+        }
+        string version = "CEAC32B1DA9D4D007F8E958EEDBDA2441F7DF5A1"
+    }
+    prepend payload = @SM_Oven_Tray_payload.usda@
+)
+{
+    rel material:binding = </SM_Oven_Tray/Materials/M_OvenBase>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_OvenBase.M_OvenBase"
+
+    def Scope "Materials"
+    {
+        def Material "M_OvenBase" (
+            prepend references = @../../Materials_Laborraum/M_OvenBase.usda@
+        )
+        {
+        }
+    }
+}
+

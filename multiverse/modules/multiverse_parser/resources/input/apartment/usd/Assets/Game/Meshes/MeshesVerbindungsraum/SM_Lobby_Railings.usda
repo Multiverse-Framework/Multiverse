@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lobby_Railings"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Lobby_Railings" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Railings.usda@
+        string name = "SM_Lobby_Railings"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Railings.SM_Lobby_Railings"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.49"
+        }
+        string version = "8E012D1DDCED6DB8D5F05D3D1DAA501B8AED181D"
+    }
+    prepend payload = @SM_Lobby_Railings_payload.usda@
+)
+{
+    rel material:binding = </SM_Lobby_Railings/Materials/M_Metal_Chrome>
+    custom string unrealMaterial = "/Game/StarterContent/Materials/M_Metal_Chrome.M_Metal_Chrome"
+
+    def Scope "Materials"
+    {
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../StarterContent/Materials/M_Metal_Chrome.usda@
+        )
+        {
+        }
+    }
+}
+

@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Coffeemachine_Plastic"
+    upAxis = "Z"
+)
+
+def Material "M_Coffeemachine_Plastic" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Coffeemachine_Plastic.usda@
+        string name = "M_Coffeemachine_Plastic"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Coffeemachine_Plastic.M_Coffeemachine_Plastic"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-19.59.30"
+        }
+        string version = "27CC4C6E81F4DEEA99635B547084D83624450258"
+    }
+)
+{
+    token outputs:surface.connect = </M_Coffeemachine_Plastic/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Coffeemachine_Plastic/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Coffeemachine_Plastic.M_Coffeemachine_Plastic@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0, 0.001214108, 0.0033465356)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:opacity = 0.8980393
+        float inputs:roughness = 0.098039225
+        float inputs:specular = 1
+        token outputs:surface
+    }
+}
+

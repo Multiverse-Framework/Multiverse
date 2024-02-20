@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "SM_TV_LG"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_TV_LG" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesLiving/SM_TV_LG.usda@
+        string name = "SM_TV_LG"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesLiving/SM_TV_LG.SM_TV_LG"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.25"
+        }
+        string version = "5F5D665EBA28F204A6B27062E5861E2952043B52"
+    }
+    prepend payload = @SM_TV_LG_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_TV_LG/Materials/M_OvenBase>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_OvenBase.M_OvenBase"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_TV_LG/Materials/M_Basic_Black>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Basic_Black.M_Basic_Black"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_TV_LG/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_OvenBase" (
+            prepend references = @../../Materials_Laborraum/M_OvenBase.usda@
+        )
+        {
+        }
+
+        def Material "M_Basic_Black" (
+            prepend references = @../../Materials_Laborraum/M_Basic_Black.usda@
+        )
+        {
+        }
+
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

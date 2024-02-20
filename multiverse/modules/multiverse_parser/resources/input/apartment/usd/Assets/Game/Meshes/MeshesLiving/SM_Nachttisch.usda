@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Nachttisch"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Nachttisch" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesLiving/SM_Nachttisch.usda@
+        string name = "SM_Nachttisch"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesLiving/SM_Nachttisch.SM_Nachttisch"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.50"
+        }
+        string version = "F4D81CCC495225D4E8C07A1BFAC19C2CCF3A32C7"
+    }
+    prepend payload = @SM_Nachttisch_payload.usda@
+)
+{
+    rel material:binding = </SM_Nachttisch/Materials/M_Nachttisch>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Nachttisch.M_Nachttisch"
+
+    def Scope "Materials"
+    {
+        def Material "M_Nachttisch" (
+            prepend references = @../../Materials_Laborraum/M_Nachttisch.usda@
+        )
+        {
+        }
+    }
+}
+

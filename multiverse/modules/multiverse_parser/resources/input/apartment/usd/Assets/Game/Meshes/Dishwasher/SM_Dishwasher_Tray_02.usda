@@ -1,0 +1,82 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Dishwasher_Tray_02"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Dishwasher_Tray_02" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Dishwasher/SM_Dishwasher_Tray_02.usda@
+        string name = "SM_Dishwasher_Tray_02"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Dishwasher/SM_Dishwasher_Tray_02.SM_Dishwasher_Tray_02"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.42"
+        }
+        string version = "3525A4AC0D7265C0FED9B0E3618611E60AB70E94"
+    }
+    prepend payload = @SM_Dishwasher_Tray_02_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Dishwasher_Tray_02/Materials/M_Plastic_White>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Dishwasher_Tray_02/Materials/M_Rubber_Plastic>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Rubber_Plastic.M_Rubber_Plastic"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Dishwasher_Tray_02/Materials/M_Metal_Brushed>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Brushed.M_Metal_Brushed"
+    }
+
+    over "Section3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Dishwasher_Tray_02/Materials/M_Plastic_Orange>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_Orange.M_Plastic_Orange"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Plastic_White" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_White.usda@
+        )
+        {
+        }
+
+        def Material "M_Rubber_Plastic" (
+            prepend references = @../../Materials_Laborraum/M_Rubber_Plastic.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Brushed" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Brushed.usda@
+        )
+        {
+        }
+
+        def Material "M_Plastic_Orange" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_Orange.usda@
+        )
+        {
+        }
+    }
+}
+

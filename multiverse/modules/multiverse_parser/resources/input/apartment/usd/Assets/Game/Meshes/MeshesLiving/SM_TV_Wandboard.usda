@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_TV_Wandboard"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_TV_Wandboard" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesLiving/SM_TV_Wandboard.usda@
+        string name = "SM_TV_Wandboard"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesLiving/SM_TV_Wandboard.SM_TV_Wandboard"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.20"
+        }
+        string version = "06853A199A578F69CF4B2956E7BFFD3E7212D446"
+    }
+    prepend payload = @SM_TV_Wandboard_payload.usda@
+)
+{
+    rel material:binding = </SM_TV_Wandboard/Materials/M_Plastic_White>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+
+    def Scope "Materials"
+    {
+        def Material "M_Plastic_White" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_White.usda@
+        )
+        {
+        }
+    }
+}
+

@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Plastic_Grey"
+    upAxis = "Z"
+)
+
+def Material "M_Plastic_Grey" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Plastic_Grey.usda@
+        string name = "M_Plastic_Grey"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Plastic_Grey.M_Plastic_Grey"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.13"
+        }
+        string version = "DC4E2A16A603172613A737FD7DA85D6D4012DA9A"
+    }
+)
+{
+    token outputs:surface.connect = </M_Plastic_Grey/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Plastic_Grey/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Plastic_Grey.M_Plastic_Grey@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.59720176, 0.59720176, 0.59720176)
+        float inputs:metallic = 0.6
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.20000002
+        float inputs:specular = 0.69803923
+        token outputs:surface
+    }
+}
+
