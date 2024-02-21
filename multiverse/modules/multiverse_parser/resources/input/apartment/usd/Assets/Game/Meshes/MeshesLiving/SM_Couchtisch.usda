@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Couchtisch"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Couchtisch" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Couchtisch.SM_Couchtisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.35"
+            string exportTime = "2024.02.21-21.32.46"
         }
-        string version = "E0DB856A852EA55A7E5D572679BE331234FE3C79"
+        string version = "6C4DF335385C6E402D1150DBBD0193C3C72269F0"
     }
     prepend payload = @SM_Couchtisch_payload.usda@
 )

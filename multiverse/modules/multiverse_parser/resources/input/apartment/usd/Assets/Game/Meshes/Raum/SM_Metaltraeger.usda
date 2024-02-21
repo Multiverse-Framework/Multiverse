@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Metaltraeger"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Metaltraeger" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Raum/SM_Metaltraeger.SM_Metaltraeger"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.18"
+            string exportTime = "2024.02.21-21.33.03"
         }
-        string version = "61337C3A246243B2CA3E99A82D698A43BA4C0059"
+        string version = "FB86831DE6C58168524370AD954357848E04F037"
     }
     prepend payload = @SM_Metaltraeger_payload.usda@
 )

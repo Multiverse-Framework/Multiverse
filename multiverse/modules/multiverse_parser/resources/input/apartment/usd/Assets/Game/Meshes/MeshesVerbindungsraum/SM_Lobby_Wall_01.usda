@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lobby_Wall_01"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lobby_Wall_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Wall_01.SM_Lobby_Wall_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.23"
+            string exportTime = "2024.02.21-21.33.09"
         }
-        string version = "58B25583ADFF8373340E911068A56FD5A3728EF3"
+        string version = "6BD747FD5C3F96F4BF416B1B921DFD051B78AB29"
     }
     prepend payload = @SM_Lobby_Wall_01_payload.usda@
 )

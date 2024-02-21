@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Window_01"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Window_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Raum/SM_Window_01.SM_Window_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.24"
+            string exportTime = "2024.02.21-21.32.43"
         }
-        string version = "FDDD14B1256B126B6B9DA1C4C18CC7C216BF9BDF"
+        string version = "80FCB99E3766443A5E09C8BCCE9AEBA2C5CDD0E9"
     }
     prepend payload = @SM_Window_01_payload.usda@
 )

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lobby_Window_Corridor"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lobby_Window_Corridor" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Window_Corridor.SM_Lobby_Window_Corridor"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.36"
+            string exportTime = "2024.02.21-21.32.46"
         }
-        string version = "F995017C231B5A68AD6AD6BE8EC5321D9F906A24"
+        string version = "ED4F880829EF15206AA70373AD9C1212CF8CD602"
     }
     prepend payload = @SM_Lobby_Window_Corridor_payload.usda@
 )

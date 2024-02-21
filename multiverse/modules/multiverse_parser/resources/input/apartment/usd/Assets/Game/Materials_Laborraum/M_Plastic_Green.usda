@@ -12,9 +12,9 @@ def Material "M_Plastic_Green" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Plastic_Green.M_Plastic_Green"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.58"
+            string exportTime = "2024.02.21-21.32.39"
         }
-        string version = "846E7EEB7A4906E7B9B8F8A341E4B87E280FE4E4"
+        string version = "0B70F563CF5B6E24A4F82A32A65E443D89B980FA"
     }
 )
 {

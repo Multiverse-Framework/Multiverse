@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Floor_Number_EG"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Floor_Number_EG" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Floor_Number_EG.SM_Floor_Number_EG"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.19"
+            string exportTime = "2024.02.21-21.33.01"
         }
-        string version = "3C007094FAD3BCA4FB0EB0C5FB02BB95A1911C16"
+        string version = "7770E62719366A774970BC6E411EFD03F56463DC"
     }
     prepend payload = @SM_Floor_Number_EG_payload.usda@
 )

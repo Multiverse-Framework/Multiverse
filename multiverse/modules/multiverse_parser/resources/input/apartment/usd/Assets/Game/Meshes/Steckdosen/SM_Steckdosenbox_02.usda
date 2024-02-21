@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Steckdosenbox_02"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Steckdosenbox_02" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Steckdosen/SM_Steckdosenbox_02.SM_Steckdosenbox_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.26"
+            string exportTime = "2024.02.21-21.33.04"
         }
-        string version = "59DBB95DEF753941F9BF17F6B91BE464FC6D3531"
+        string version = "E4C6FAA3BFDE33209B94EA632E7E38F77532BC43"
     }
     prepend payload = @SM_Steckdosenbox_02_payload.usda@
 )

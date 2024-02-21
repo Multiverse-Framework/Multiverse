@@ -12,9 +12,9 @@ def Material "M_Vive_Blue" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Vive_Blue.M_Vive_Blue"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.05"
+            string exportTime = "2024.02.21-21.32.38"
         }
-        string version = "4C72FF8D0287BEEBC32B0F1D434FA01A6A275595"
+        string version = "0A7BAB110DF0B591C23D7B29984D6781E59D56AA"
     }
 )
 {

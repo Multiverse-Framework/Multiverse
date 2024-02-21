@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Text_8_Education"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lift_Text_8_Education" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_8_Education.SM_Lift_Text_8_Education"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.19"
+            string exportTime = "2024.02.21-21.33.01"
         }
-        string version = "E377702FEF8741BD06112A780B0F1BB668A59463"
+        string version = "BF2E1B1A65111578E4184AC53D0B62DEBAF2545C"
     }
     prepend payload = @SM_Lift_Text_8_Education_payload.usda@
 )

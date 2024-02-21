@@ -12,9 +12,9 @@ def Material "M_Ashalt" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Ashalt.M_Ashalt"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.59.33"
+            string exportTime = "2024.02.21-21.32.41"
         }
-        string version = "12D4B7938003B22CA23AADB7DC73838EE772DC62"
+        string version = "AEF5C3289079382CFD7974D77872D8BC3D226869"
     }
 )
 {

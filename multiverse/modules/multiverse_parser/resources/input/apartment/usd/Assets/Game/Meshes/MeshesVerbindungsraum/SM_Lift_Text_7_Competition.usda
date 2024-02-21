@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Text_7_Competition"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lift_Text_7_Competition" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_7_Competition.SM_Lift_Text_7_Competition"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.28"
+            string exportTime = "2024.02.21-21.33.02"
         }
-        string version = "75CE81DB463B2BE900E64E74744B18CF2D74A4D2"
+        string version = "E3A50C6B038E7D1F4FF626C490BE62A59FD6D93F"
     }
     prepend payload = @SM_Lift_Text_7_Competition_payload.usda@
 )

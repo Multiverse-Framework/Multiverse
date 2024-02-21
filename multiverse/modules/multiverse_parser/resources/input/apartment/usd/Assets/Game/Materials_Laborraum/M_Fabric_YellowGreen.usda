@@ -12,9 +12,9 @@ def Material "M_Fabric_YellowGreen" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Fabric_YellowGreen.M_Fabric_YellowGreen"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.34"
+            string exportTime = "2024.02.21-21.32.39"
         }
-        string version = "136632E2BE62051655DBFABD2F05775872DAD60B"
+        string version = "B67B8CFAC18CDD9F3F09F64B381BBED9D23DF61A"
     }
 )
 {

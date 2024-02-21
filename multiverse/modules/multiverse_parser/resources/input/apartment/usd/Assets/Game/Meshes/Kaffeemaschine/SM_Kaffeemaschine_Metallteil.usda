@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Kaffeemaschine_Metallteil"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Kaffeemaschine_Metallteil" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Kaffeemaschine_Metallteil.SM_Kaffeemaschine_Metallteil"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.23"
+            string exportTime = "2024.02.21-21.33.07"
         }
-        string version = "270AFE54DCF218FA3997EB5CC0EDCFEF34B43A1C"
+        string version = "BD2F6410D009F16078E920B751D2154DB8EEF891"
     }
     prepend payload = @SM_Kaffeemaschine_Metallteil_payload.usda@
 )

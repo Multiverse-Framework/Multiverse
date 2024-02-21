@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Text_2_BioSignals"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lift_Text_2_BioSignals" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_2_BioSignals.SM_Lift_Text_2_BioSignals"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.41"
+            string exportTime = "2024.02.21-21.32.46"
         }
-        string version = "02FF718B461A225A99A3A9C31B5A5DDDD7CC8BCE"
+        string version = "FA4CA8F0A8FA8D197E650AD9D32535489EEBEF3F"
     }
     prepend payload = @SM_Lift_Text_2_BioSignals_payload.usda@
 )

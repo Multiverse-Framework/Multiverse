@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Nachttisch"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Nachttisch" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Nachttisch.SM_Nachttisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.50"
+            string exportTime = "2024.02.21-21.32.43"
         }
-        string version = "F4D81CCC495225D4E8C07A1BFAC19C2CCF3A32C7"
+        string version = "2F4200F77BA7AFB48857BF54291B6AEA25157A3C"
     }
     prepend payload = @SM_Nachttisch_payload.usda@
 )

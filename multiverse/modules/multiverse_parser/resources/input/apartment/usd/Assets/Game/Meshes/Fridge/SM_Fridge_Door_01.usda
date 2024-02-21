@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Fridge_Door_01"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Fridge_Door_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Fridge/SM_Fridge_Door_01.SM_Fridge_Door_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.25"
+            string exportTime = "2024.02.21-21.33.01"
         }
-        string version = "128521993481E16113C24CEF3418402E012DE60A"
+        string version = "9846FF8F80F0ED06760FA2C1D16E2826A5E962FF"
     }
     prepend payload = @SM_Fridge_Door_01_payload.usda@
 )

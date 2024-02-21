@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Text_3_CitizenScience"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lift_Text_3_CitizenScience" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_3_CitizenScience.SM_Lift_Text_3_CitizenScience"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.43"
+            string exportTime = "2024.02.21-21.32.54"
         }
-        string version = "84C6D5D80EB9FEB3BC114B446401474CA744EB5A"
+        string version = "FACA780469E9A32A0F2E71FBD5377C3D514ACA92"
     }
     prepend payload = @SM_Lift_Text_3_CitizenScience_payload.usda@
 )

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Schiene"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Schiene" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Raum/SM_Schiene.SM_Schiene"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.20"
+            string exportTime = "2024.02.21-21.32.59"
         }
-        string version = "CA0377188B454DC895CFC2DC0E8039D1A6E7860D"
+        string version = "EAFE8A61373DCEA504880426A1CFF8DCC4E8A432"
     }
     prepend payload = @SM_Schiene_payload.usda@
 )

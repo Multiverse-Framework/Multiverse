@@ -275,21 +275,22 @@ class GeomBuilder:
             capsule.CreateExtentAttr(((-radius, -radius, -height / 2), (radius, radius, height / 2)))
 
     def calculate_inertial(self) -> GeomInertial:
-        self._inertial = self.origin_inertial
+        if self.inertial is None:
+            self._inertial = self.origin_inertial
 
-        gprim_transform = self.gprim.GetLocalTransformation()
-        gprim_pos = gprim_transform.ExtractTranslation()
-        gprim_pos = numpy.array([[*gprim_pos]])
-        gprim_quat = gprim_transform.ExtractRotationQuat()
-        gprim_quat = numpy.array([*gprim_quat.GetImaginary(), gprim_quat.GetReal()])
-        self._inertial.inertia_tensor = shift_inertia_tensor(mass=self.inertial.mass,
-                                                             inertia_tensor=self.inertial.inertia_tensor,
-                                                             pos=gprim_pos,
-                                                             quat=gprim_quat)
-        self._inertial.center_of_mass = shift_center_of_mass(center_of_mass=self.inertial.center_of_mass,
-                                                             pos=gprim_pos,
-                                                             quat=gprim_quat)
-        return self._inertial
+            gprim_transform = self.gprim.GetLocalTransformation()
+            gprim_pos = gprim_transform.ExtractTranslation()
+            gprim_pos = numpy.array([[*gprim_pos]])
+            gprim_quat = gprim_transform.ExtractRotationQuat()
+            gprim_quat = numpy.array([*gprim_quat.GetImaginary(), gprim_quat.GetReal()])
+            self._inertial.inertia_tensor = shift_inertia_tensor(mass=self.inertial.mass,
+                                                                 inertia_tensor=self.inertial.inertia_tensor,
+                                                                 pos=gprim_pos,
+                                                                 quat=gprim_quat)
+            self._inertial.center_of_mass = shift_center_of_mass(center_of_mass=self.inertial.center_of_mass,
+                                                                 pos=gprim_pos,
+                                                                 quat=gprim_quat)
+        return self.inertial
 
     @property
     def origin_inertial(self) -> GeomInertial:

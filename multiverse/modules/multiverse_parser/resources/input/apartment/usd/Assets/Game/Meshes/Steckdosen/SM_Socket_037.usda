@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Socket_037"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Socket_037" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Steckdosen/SM_Socket_037.SM_Socket_037"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.36"
+            string exportTime = "2024.02.21-21.33.01"
         }
-        string version = "6FFE4CA32EEE5D066CFA44B9522C578A87227A37"
+        string version = "E96750033C8CC2B94A15B5D5BC5EE6C765425DDC"
     }
     prepend payload = @SM_Socket_037_payload.usda@
 )

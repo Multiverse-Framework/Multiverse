@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Kaffeemaschine_WasserbehaelterDeckel"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Kaffeemaschine_WasserbehaelterDeckel" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Kaffeemaschine_WasserbehaelterDeckel.SM_Kaffeemaschine_WasserbehaelterDeckel"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.48"
+            string exportTime = "2024.02.21-21.32.50"
         }
-        string version = "7D40BA1E382D6A3E8A917DACFC23F4F7DEFAAD12"
+        string version = "AEEEA269B2EBDB3BB77A96ECD1A6CD1EA2208039"
     }
     prepend payload = @SM_Kaffeemaschine_WasserbehaelterDeckel_payload.usda@
 )

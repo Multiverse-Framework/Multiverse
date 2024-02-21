@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Text_EG_Apartment"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lift_Text_EG_Apartment" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_EG_Apartment.SM_Lift_Text_EG_Apartment"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.31"
+            string exportTime = "2024.02.21-21.32.44"
         }
-        string version = "7085D28D37667C461597B3E0606B8133DEC5591B"
+        string version = "85FDDE87B8F57463D74A02D4219EEF35CA9502EA"
     }
     prepend payload = @SM_Lift_Text_EG_Apartment_payload.usda@
 )

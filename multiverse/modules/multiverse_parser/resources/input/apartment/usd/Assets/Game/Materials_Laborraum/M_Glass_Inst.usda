@@ -12,9 +12,9 @@ def Material "M_Glass_Inst" (
             string assetType = "MaterialInstanceConstant"
             string contentPath = "/Game/Materials_Laborraum/M_Glass_Inst.M_Glass_Inst"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.57.34"
+            string exportTime = "2024.02.21-21.32.39"
         }
-        string version = "33A49E944AE015315D4B6F33CB7CE63575E1AB1A"
+        string version = "19E34503D8BE416616A6119923B43D62F80910F0"
     }
 )
 {

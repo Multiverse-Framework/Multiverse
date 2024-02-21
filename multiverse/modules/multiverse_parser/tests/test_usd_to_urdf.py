@@ -18,10 +18,11 @@ class UsdToUrdfTestCase(unittest.TestCase):
 
     def test_usd_to_urdf(self):
         input_usd_path = os.path.join(self.resource_path, "input", "apartment", "usd", "Apartment.usda")
-        factory = UsdImporter(usd_file_path=input_usd_path,
+        factory = UsdImporter(file_path=input_usd_path,
                               with_physics=True,
                               with_visual=True,
-                              with_collision=True)
+                              with_collision=True,
+                              add_xform_for_each_geom=True)
         factory.config.default_rgba = numpy.array([0.9, 0.9, 0.9, 1.0])
 
         usd_file_path = factory.import_model()

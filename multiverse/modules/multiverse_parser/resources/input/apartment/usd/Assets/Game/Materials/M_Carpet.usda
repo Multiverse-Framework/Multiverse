@@ -12,9 +12,9 @@ def Material "M_Carpet" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Carpet.M_Carpet"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.12"
+            string exportTime = "2024.02.21-21.32.39"
         }
-        string version = "B165A971669C5536EDAA928756BEFA62429A0E1F"
+        string version = "1985CA9957A1BC843335052C8B4852E5F34309F2"
     }
 )
 {

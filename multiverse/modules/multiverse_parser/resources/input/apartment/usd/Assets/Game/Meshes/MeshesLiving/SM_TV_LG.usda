@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_TV_LG"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_TV_LG" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_TV_LG.SM_TV_LG"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.25"
+            string exportTime = "2024.02.21-21.33.04"
         }
-        string version = "5F5D665EBA28F204A6B27062E5861E2952043B52"
+        string version = "FD8C57F4B2EF9F2D2CB8245A326CC2853B255A5E"
     }
     prepend payload = @SM_TV_LG_payload.usda@
 )

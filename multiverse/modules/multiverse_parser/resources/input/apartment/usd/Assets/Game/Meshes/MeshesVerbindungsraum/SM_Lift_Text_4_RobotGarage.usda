@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Text_4_RobotGarage"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lift_Text_4_RobotGarage" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_4_RobotGarage.SM_Lift_Text_4_RobotGarage"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.17"
+            string exportTime = "2024.02.21-21.33.07"
         }
-        string version = "FE3CB3227F44B05D4127AB8A4AAD69D23D6C0A9F"
+        string version = "571DA0A3CB52528BE49BDBA370589AEE94D21AF8"
     }
     prepend payload = @SM_Lift_Text_4_RobotGarage_payload.usda@
 )

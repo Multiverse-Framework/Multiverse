@@ -491,6 +491,11 @@ class MjcfExporter:
             self._build_geom(geom_builder=geom_builder, body=body)
 
     def _build_geom(self, geom_builder: GeomBuilder, body: ET.Element) -> None:
+        geom_inertial = geom_builder.calculate_inertial()
+        if geom_inertial.mass < 1e-6:
+            print(f"Geom {geom_builder.gprim.GetPrim().GetName()} has very low mass {geom_inertial.mass}, ignored.")
+            return
+
         mujoco_geom_api = get_mujoco_geom_api(geom_builder=geom_builder)
 
         gprim_prim = geom_builder.gprim.GetPrim()

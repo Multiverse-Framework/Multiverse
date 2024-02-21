@@ -12,9 +12,9 @@ def Material "M_Granite_02" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Granite_02.M_Granite_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.56"
+            string exportTime = "2024.02.21-21.32.41"
         }
-        string version = "B810856CEB9881A24D8E4148B69ACB18EDC56BF0"
+        string version = "C0D229CA1360FE9687EDDB8B4C8CBB20632334CF"
     }
 )
 {

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Esstischstuhl"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Esstischstuhl" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Esstischstuhl.SM_Esstischstuhl"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.25"
+            string exportTime = "2024.02.21-21.32.55"
         }
-        string version = "A66DAD327631339FDF5B6D935AD9B24B7BC0C93A"
+        string version = "01FA238F4FD80C4C11BFD841CE37BAA74FC3B974"
     }
     prepend payload = @SM_Esstischstuhl_payload.usda@
 )

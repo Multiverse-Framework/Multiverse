@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_TV_Halterung"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_TV_Halterung" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_TV_Halterung.SM_TV_Halterung"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.40"
+            string exportTime = "2024.02.21-21.32.49"
         }
-        string version = "69D0C862D43BEA28969865B57B07C4B1CE94CEF1"
+        string version = "4FC327CEF03AF96FB35F66730108E3F8A5170A4E"
     }
     prepend payload = @SM_TV_Halterung_payload.usda@
 )

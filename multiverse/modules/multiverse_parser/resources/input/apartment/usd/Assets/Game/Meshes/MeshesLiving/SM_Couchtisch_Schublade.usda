@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Couchtisch_Schublade"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Couchtisch_Schublade" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Couchtisch_Schublade.SM_Couchtisch_Schublade"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.51"
+            string exportTime = "2024.02.21-21.33.04"
         }
-        string version = "313A482596E9C8F870B66E946BCC620AD5D7B887"
+        string version = "3C6456FAD121EA7AED9E356876735C9AB6B7DA0B"
     }
     prepend payload = @SM_Couchtisch_Schublade_payload.usda@
 )

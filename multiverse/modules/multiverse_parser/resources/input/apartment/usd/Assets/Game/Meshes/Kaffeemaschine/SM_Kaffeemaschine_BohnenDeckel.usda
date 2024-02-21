@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Kaffeemaschine_BohnenDeckel"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Kaffeemaschine_BohnenDeckel" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Kaffeemaschine_BohnenDeckel.SM_Kaffeemaschine_BohnenDeckel"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.40"
+            string exportTime = "2024.02.21-21.33.01"
         }
-        string version = "3E8FA7262A073EE6440AF9B10EC108E9A5A2393F"
+        string version = "D515F33D49F37654EB28045BC59E7ABA8F9C96C5"
     }
     prepend payload = @SM_Kaffeemaschine_BohnenDeckel_payload.usda@
 )

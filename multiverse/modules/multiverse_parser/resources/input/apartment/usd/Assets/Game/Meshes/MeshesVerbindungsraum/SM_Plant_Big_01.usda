@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Plant_Big_01"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Plant_Big_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Plant_Big_01.SM_Plant_Big_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.15"
+            string exportTime = "2024.02.21-21.32.48"
         }
-        string version = "0114E4EBB7200C6EA23E8F27E18D0C978DDC2775"
+        string version = "38CBA135A2BB560489D413E9B56336CB1F73E0D5"
     }
     prepend payload = @SM_Plant_Big_01_payload.usda@
 )

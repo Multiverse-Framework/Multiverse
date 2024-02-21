@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Counter_Sink_Tap"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Counter_Sink_Tap" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Counter_Sink_Tap.SM_Counter_Sink_Tap"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.36"
+            string exportTime = "2024.02.21-21.32.46"
         }
-        string version = "96CF54682C82FE3B66BFCC76FE164C745C9ED614"
+        string version = "4B057A838DB7C456AA91E07343E25B0C15FB4226"
     }
     prepend payload = @SM_Counter_Sink_Tap_payload.usda@
 )

@@ -12,9 +12,9 @@ def Material "M_Metal_Dishwasher" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Metal_Dishwasher.M_Metal_Dishwasher"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.59.03"
+            string exportTime = "2024.02.21-21.32.42"
         }
-        string version = "4822450F3C23FFF9463ABC5AD62CF69B86911341"
+        string version = "6E01F2621E2190D43E7104581BC6F28138FED7A8"
     }
 )
 {

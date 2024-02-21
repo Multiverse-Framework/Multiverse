@@ -12,9 +12,9 @@ def Material "BasicShapeMaterial" (
             string assetType = "Material"
             string contentPath = "/Engine/BasicShapes/BasicShapeMaterial.BasicShapeMaterial"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.59.28"
+            string exportTime = "2024.02.21-21.32.40"
         }
-        string version = "4ABAEB8E7B9F5E6BEF7849B24E33FF0BFCC2F42B"
+        string version = "8E18F1864EB31889449D5A9188342C1846CAD555"
     }
 )
 {

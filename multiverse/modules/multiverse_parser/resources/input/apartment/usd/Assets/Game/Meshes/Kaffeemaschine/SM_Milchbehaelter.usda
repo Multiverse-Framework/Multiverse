@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Milchbehaelter"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Milchbehaelter" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Milchbehaelter.SM_Milchbehaelter"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.14"
+            string exportTime = "2024.02.21-21.33.06"
         }
-        string version = "A0A0FC467B47AEA671829FAF8BA71B56B6877626"
+        string version = "4D3F503A684E8B22E76F698803BABAD58A939BF0"
     }
     prepend payload = @SM_Milchbehaelter_payload.usda@
 )

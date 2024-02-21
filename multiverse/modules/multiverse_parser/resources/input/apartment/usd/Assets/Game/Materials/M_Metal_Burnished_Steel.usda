@@ -12,9 +12,9 @@ def Material "M_Metal_Burnished_Steel" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Metal_Burnished_Steel.M_Metal_Burnished_Steel"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.14"
+            string exportTime = "2024.02.21-21.32.38"
         }
-        string version = "AB0EE4750B58CFAB153851D087F66D25CA514CC0"
+        string version = "7E3F35062820D75E5B8661C20AD15C5E7184838D"
     }
 )
 {

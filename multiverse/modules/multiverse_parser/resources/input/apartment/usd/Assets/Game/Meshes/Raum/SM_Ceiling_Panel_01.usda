@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Ceiling_Panel_01"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Ceiling_Panel_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Raum/SM_Ceiling_Panel_01.SM_Ceiling_Panel_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.41"
+            string exportTime = "2024.02.21-21.33.08"
         }
-        string version = "80C94D223BC7111CE11E98B22564BF93951F563B"
+        string version = "0731C053C50ADAA2051D145BC1F94A6271EA0B05"
     }
     prepend payload = @SM_Ceiling_Panel_01_payload.usda@
 )

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Counter_Sink_Stove"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Counter_Sink_Stove" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Counter_Sink_Stove.SM_Counter_Sink_Stove"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.16"
+            string exportTime = "2024.02.21-21.32.57"
         }
-        string version = "216DE70A47E1714EB2327D673221B3281BC9E501"
+        string version = "4B0345D4146C763DE2CADCB593ABAEB6B27FF79F"
     }
     prepend payload = @SM_Counter_Sink_Stove_payload.usda@
 )

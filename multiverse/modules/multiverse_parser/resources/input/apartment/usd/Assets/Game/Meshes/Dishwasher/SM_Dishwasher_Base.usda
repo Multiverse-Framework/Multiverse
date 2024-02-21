@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Dishwasher_Base"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Dishwasher_Base" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Dishwasher/SM_Dishwasher_Base.SM_Dishwasher_Base"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.31"
+            string exportTime = "2024.02.21-21.33.07"
         }
-        string version = "402AC27968B7372CE29A0D197D560FC1834FA09A"
+        string version = "03C8C945B5AAAA84EABEC47D05B640EE4A280A92"
     }
     prepend payload = @SM_Dishwasher_Base_payload.usda@
 )

@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Kleiderschrank_TurLinks"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Kleiderschrank_TurLinks" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Kleiderschrank/SM_Kleiderschrank_TurLinks.usda@
+        string name = "SM_Kleiderschrank_TurLinks"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kleiderschrank/SM_Kleiderschrank_TurLinks.SM_Kleiderschrank_TurLinks"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.08"
+        }
+        string version = "2CDFD573333348D2890D9DA0AF5D36E97B602269"
+    }
+    prepend payload = @SM_Kleiderschrank_TurLinks_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kleiderschrank_TurLinks/Materials/M_Wood_Furniture>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Wood_Furniture.M_Wood_Furniture"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kleiderschrank_TurLinks/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Wood_Furniture" (
+            prepend references = @../../Materials_Laborraum/M_Wood_Furniture.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Chrome.usda@
+        )
+        {
+        }
+    }
+}
+

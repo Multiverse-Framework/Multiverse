@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Floor"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lift_Floor" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Floor.SM_Lift_Floor"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.37"
+            string exportTime = "2024.02.21-21.33.04"
         }
-        string version = "3C0F4C709189DDD740DEDA25C1E46D7F620629DC"
+        string version = "B437A40E190D6F982DBCF0EE192F9ABC48B631F4"
     }
     prepend payload = @SM_Lift_Floor_payload.usda@
 )

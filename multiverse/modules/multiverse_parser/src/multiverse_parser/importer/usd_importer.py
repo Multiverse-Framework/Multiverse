@@ -1,21 +1,9 @@
 #!/usr/bin/env python3.10
 
-# import os
-# import shutil
-# from pxr import Usd, UsdGeom, UsdPhysics, UsdShade, Sdf, Gf
-# from multiverse_parser import WorldBuilder, GeomType, JointType
-# from multiverse_parser.factory.body_builder import body_dict
-# from multiverse_parser.utils import xform_cache
-# from multiverse_parser.utils import import_usd, export_usd
-# from multiverse_parser.utils import clear_meshes, copy_prim
-
 import os
-from math import degrees
-from typing import Optional, Union, Dict
+from typing import Optional, Dict
 
 import numpy
-from scipy.spatial.transform import Rotation
-from urdf_parser_py import urdf
 
 from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder,
@@ -24,15 +12,16 @@ from ..factory import (WorldBuilder,
                        GeomType, GeomProperty,
                        MeshProperty,
                        MaterialProperty)
-from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
+from ..utils import xform_cache
 
-from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade, Sdf
+from pxr import UsdPhysics, Usd, UsdGeom, UsdShade, Sdf
 
 
 def get_usd_mesh_file_path(gprim_prim: Usd.Prim) -> (str, Sdf.Path):
     prepended_items = gprim_prim.GetPrimStack()[0].referenceList.prependedItems
     if len(prepended_items) == 0:
-        return gprim_prim.GetStage().GetRootLayer().realPath, gprim_prim.GetPath()
+        raise NotImplementedError(f"No prepended item found for {gprim_prim}.")
+        # return gprim_prim.GetStage().GetRootLayer().realPath, gprim_prim.GetPath()
     elif len(prepended_items) == 1:
         prepended_item = prepended_items[0]
         file_abspath = prepended_item.assetPath
@@ -52,14 +41,16 @@ class UsdImporter(Factory):
 
     def __init__(
             self,
-            usd_file_path: str,
+            file_path: str,
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
             inertia_source: InertiaSource = InertiaSource.FROM_SRC,
             default_rgba: Optional[numpy.ndarray] = None,
+            add_xform_for_each_geom: bool = False
     ) -> None:
-        self._stage = Usd.Stage.Open(usd_file_path)
+        self._stage = Usd.Stage.Open(file_path)
+        self._add_xform_for_each_geom = add_xform_for_each_geom
         xform_root_prims = [prim for prim in self.stage.GetPseudoRoot().GetChildren() if prim.IsA(UsdGeom.Xform)]
         if len(xform_root_prims) > 1:
             print("Multiple root prim found, add a default root prim")
@@ -68,7 +59,7 @@ class UsdImporter(Factory):
         default_prim = self.stage.GetDefaultPrim()
         model_name = default_prim.GetName()
 
-        super().__init__(file_path=usd_file_path, config=Configuration(
+        super().__init__(file_path=file_path, config=Configuration(
             model_name=model_name,
             with_physics=with_physics,
             with_visual=with_visual,
@@ -91,8 +82,7 @@ class UsdImporter(Factory):
             child_prim = self.stage.GetPrimAtPath(UsdPhysics.Joint(joint_prim).GetBody1Rel().GetTargets()[0])
             self.parent_map[child_prim] = parent_prim
 
-        for xform_prim in [xform_prim for xform_prim in self.stage.Traverse() if xform_prim.IsA(UsdGeom.Xform)]:
-            self._import_body(xform_prim=xform_prim)
+        self._import_body(body_prim=root_prim)
 
         self.world_builder.export()
 
@@ -101,37 +91,40 @@ class UsdImporter(Factory):
         # if self.config.with_physics:
         #     self._import_joint(root_prim)
 
-    def _import_body(self, xform_prim: Usd.Prim) -> None:
-        if self.config.with_physics or self.parent_map.get(xform_prim) is None:
-            body_builder = self.world_builder.add_body(body_name=xform_prim.GetName(),
-                                                       parent_body_name=self.config.model_name)
-            body_builder.enable_rigid_body()
-            xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(xform_prim,
-                                                                                 self.stage.GetDefaultPrim())
-            body_builder.xform.ClearXformOpOrder()
-            body_builder.xform.AddTransformOp().Set(xform_local_transformation)
+    def _import_body(self, body_prim: Usd.Prim) -> None:
+        if self.config.with_physics or self.parent_map.get(body_prim) is None:
+            parent_xform_prim = self.stage.GetDefaultPrim()
+        elif self.parent_map.get(body_prim) is not None:
+            parent_xform_prim = self.parent_map[body_prim]
+        else:
+            raise ValueError(f"Parent of {body_prim} not found.")
 
-        elif self.parent_map.get(xform_prim) is not None:
-            parent_xform_prim = self.parent_map[xform_prim]
-            body_builder = self.world_builder.add_body(body_name=xform_prim.GetName(),
-                                                       parent_body_name=parent_xform_prim)
-            xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(xform_prim,
+        parent_xform_name = parent_xform_prim.GetName()
+        body_builder = self.world_builder.add_body(body_name=body_prim.GetName(),
+                                                   parent_body_name=parent_xform_name)
+        if body_prim.IsA(UsdGeom.Xform) and body_prim != self.stage.GetDefaultPrim():
+            xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(body_prim,
                                                                                  parent_xform_prim)
             body_builder.xform.AddTransformOp().Set(xform_local_transformation)
 
-        else:
-            return
+        for gprim_prim in [gprim_prim for gprim_prim in body_prim.GetChildren() if gprim_prim.IsA(UsdGeom.Gprim)]:
+            if self.add_xform_for_each_geom:
+                xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(gprim_prim, body_prim)
+                body_builder = self.world_builder.add_body(body_name=gprim_prim.GetName(),
+                                                           parent_body_name=body_prim.GetName())
+                body_builder.xform.AddTransformOp().Set(xform_local_transformation)
 
-        for gprim_prim in [gprim_prim for gprim_prim in xform_prim.GetChildren() if gprim_prim.IsA(UsdGeom.Gprim)]:
-            self._import_geom(gprim_prim=gprim_prim, body_builder=body_builder)
+            self._import_geom(gprim_prim=gprim_prim,
+                              body_builder=body_builder,
+                              zero_origin=self.add_xform_for_each_geom)
 
         body_builder.compute_and_set_inertial(inertia_source=self.config.inertia_source)
 
-        for child_xform_prim in [child_xform_prim for child_xform_prim in xform_prim.GetChildren() if
-                                 child_xform_prim.IsA(UsdGeom.Xform)]:
-            self._import_body(xform_prim=child_xform_prim)
+        for child_body_prim in [child_body_prim for child_body_prim in body_prim.GetChildren()
+                                if child_body_prim.IsA(UsdGeom.Xform) or child_body_prim.GetTypeName() == ""]:
+            self._import_body(body_prim=child_body_prim)
 
-    def _import_geom(self, gprim_prim: UsdGeom.Gprim, body_builder: BodyBuilder) -> None:
+    def _import_geom(self, gprim_prim: UsdGeom.Gprim, body_builder: BodyBuilder, zero_origin: bool = False) -> None:
         geom_is_visible = not gprim_prim.HasAPI(UsdPhysics.CollisionAPI)
         geom_is_collidable = not geom_is_visible
 
@@ -158,10 +151,14 @@ class UsdImporter(Factory):
             geom_name = gprim_prim.GetName()
             gprim = UsdGeom.Gprim(gprim_prim)
             transformation = gprim.GetLocalTransformation()
-            geom_pos = transformation.ExtractTranslation()
-            geom_pos = numpy.array([*geom_pos])
-            geom_quat = transformation.ExtractRotationQuat()
-            geom_quat = numpy.array([*geom_quat.GetImaginary(), geom_quat.GetReal()])
+            if zero_origin:
+                geom_pos = numpy.zeros(3)
+                geom_quat = numpy.array([0.0, 0.0, 0.0, 1.0])
+            else:
+                geom_pos = transformation.ExtractTranslation()
+                geom_pos = numpy.array([*geom_pos])
+                geom_quat = transformation.ExtractRotationQuat()
+                geom_quat = numpy.array([*geom_quat.GetImaginary(), geom_quat.GetReal()])
             geom_scale = numpy.array([transformation.GetRow(i).GetLength() for i in range(3)])
 
             if not gprim_prim.IsA(UsdGeom.Mesh):
@@ -248,3 +245,7 @@ class UsdImporter(Factory):
     @property
     def stage(self) -> Usd.Stage:
         return self._stage
+
+    @property
+    def add_xform_for_each_geom(self) -> bool:
+        return self._add_xform_for_each_geom

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Bodenspot_04"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Bodenspot_04" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Raum/SM_Bodenspot_04.SM_Bodenspot_04"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.52"
+            string exportTime = "2024.02.21-21.33.03"
         }
-        string version = "79BEF91BD71F24DB2E841EB1866D018D181F0CF6"
+        string version = "861E6750A83C62B3C4B1A2997EDD2D2F4E2848AE"
     }
     prepend payload = @SM_Bodenspot_04_payload.usda@
 )

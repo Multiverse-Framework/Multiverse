@@ -12,9 +12,9 @@ def Material "M_Metal_Dark" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Metal_Dark.M_Metal_Dark"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.59.46"
+            string exportTime = "2024.02.21-21.32.39"
         }
-        string version = "3D17CA089ADD7C14FF4A64F66124E6205D65B4DA"
+        string version = "E379EE81E6617BD1DCF36F379DB11E2877662F97"
     }
 )
 {

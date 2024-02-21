@@ -12,9 +12,9 @@ def Material "M_Floor_Wood" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Floor_Wood.M_Floor_Wood"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.59.55"
+            string exportTime = "2024.02.21-21.32.42"
         }
-        string version = "1B817FDD4FC7DCC97279E904ECEA14458A6E59A7"
+        string version = "1A9B84C01294072F8ECD5220B92CF5A9217A27B7"
     }
 )
 {

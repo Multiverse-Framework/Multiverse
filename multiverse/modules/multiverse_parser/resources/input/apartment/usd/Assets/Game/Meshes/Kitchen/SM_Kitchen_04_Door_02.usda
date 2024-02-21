@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Kitchen_04_Door_02"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Kitchen_04_Door_02" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_04_Door_02.SM_Kitchen_04_Door_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.28"
+            string exportTime = "2024.02.21-21.32.46"
         }
-        string version = "1C2AC0C18C03C5F73FC849E53C0A224C5424513A"
+        string version = "1901E368A619463BFFDF36D3322A454285EFBEA3"
     }
     prepend payload = @SM_Kitchen_04_Door_02_payload.usda@
 )

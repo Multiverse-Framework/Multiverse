@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lobby_Railings"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Lobby_Railings" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Railings.SM_Lobby_Railings"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.49"
+            string exportTime = "2024.02.21-21.32.59"
         }
-        string version = "8E012D1DDCED6DB8D5F05D3D1DAA501B8AED181D"
+        string version = "0DA42992BCCCD6EAA6FA0EC67E2D36E2E283187F"
     }
     prepend payload = @SM_Lobby_Railings_payload.usda@
 )

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Retail_Door_Part1"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Retail_Door_Part1" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Retail_Door_Part1.SM_Retail_Door_Part1"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.51"
+            string exportTime = "2024.02.21-21.32.55"
         }
-        string version = "D56C6D103437419A1025FED9C6702AF831A8DEC9"
+        string version = "39F61E9094B8F8AC8FB29107119218CC2A44E8EC"
     }
     prepend payload = @SM_Retail_Door_Part1_payload.usda@
 )

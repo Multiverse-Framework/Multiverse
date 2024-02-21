@@ -12,9 +12,9 @@ def Material "M_Metal_Rust" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Metal_Rust.M_Metal_Rust"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.59.46"
+            string exportTime = "2024.02.21-21.32.41"
         }
-        string version = "873D75CBB648B2A169BB5E2D7254B96F318FE3CE"
+        string version = "7B2B812CEC9709661E97D624208D058060E81B03"
     }
 )
 {

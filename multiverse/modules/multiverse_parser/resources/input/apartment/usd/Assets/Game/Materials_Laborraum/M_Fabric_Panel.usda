@@ -12,9 +12,9 @@ def Material "M_Fabric_Panel" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Fabric_Panel.M_Fabric_Panel"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.03"
+            string exportTime = "2024.02.21-21.32.37"
         }
-        string version = "9829935BB7AE232ACD13B1CD0A9F64375ECB2882"
+        string version = "7B7E915509C104387B921941D97A7997F0F755B6"
     }
 )
 {

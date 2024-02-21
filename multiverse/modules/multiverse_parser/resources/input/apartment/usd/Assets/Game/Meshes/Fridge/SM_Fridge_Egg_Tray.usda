@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Fridge_Egg_Tray"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Fridge_Egg_Tray" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Fridge/SM_Fridge_Egg_Tray.SM_Fridge_Egg_Tray"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.40"
+            string exportTime = "2024.02.21-21.32.46"
         }
-        string version = "6152153288A6E0044D0B70B7A0EFA96B7643594C"
+        string version = "AAB0E1880CC777AD14FB4E34BEB20F6B7CFE9FAD"
     }
     prepend payload = @SM_Fridge_Egg_Tray_payload.usda@
 )

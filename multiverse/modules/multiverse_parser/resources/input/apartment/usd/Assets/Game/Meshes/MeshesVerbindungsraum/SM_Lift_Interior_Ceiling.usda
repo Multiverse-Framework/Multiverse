@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Interior_Ceiling"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Lift_Interior_Ceiling" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Interior_Ceiling.SM_Lift_Interior_Ceiling"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.21"
+            string exportTime = "2024.02.21-21.33.07"
         }
-        string version = "44C8B8075357AFE6F5C652527F0EBE6C7A88DD34"
+        string version = "C13B5D1A1A663749BCD8536290E06139C0D49A3C"
     }
     prepend payload = @SM_Lift_Interior_Ceiling_payload.usda@
 )

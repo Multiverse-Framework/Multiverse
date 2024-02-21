@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Stove"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Stove" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Stove.SM_Stove"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.36"
+            string exportTime = "2024.02.21-21.33.06"
         }
-        string version = "DA6B2E59E88A9B3F6D32EA776AE91A6FF606FD6B"
+        string version = "335AB7E0156C7917414CC01A021ABDEC523BD3DD"
     }
     prepend payload = @SM_Stove_payload.usda@
 )

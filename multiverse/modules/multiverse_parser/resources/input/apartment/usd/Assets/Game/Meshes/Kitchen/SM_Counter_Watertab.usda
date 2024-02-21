@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Counter_Watertab"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Counter_Watertab" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Counter_Watertab.SM_Counter_Watertab"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.52"
+            string exportTime = "2024.02.21-21.32.52"
         }
-        string version = "1B3AEDC45DA8C15F182ED83CA4CC27FABF21E6E2"
+        string version = "5133D370CF0EF74A0DD1B99EF4E85CC48426E066"
     }
     prepend payload = @SM_Counter_Watertab_payload.usda@
 )

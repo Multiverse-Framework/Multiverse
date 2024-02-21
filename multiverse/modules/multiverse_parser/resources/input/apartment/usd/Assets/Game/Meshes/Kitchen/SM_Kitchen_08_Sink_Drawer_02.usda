@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Kitchen_08_Sink_Drawer_02"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Kitchen_08_Sink_Drawer_02" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_08_Sink_Drawer_02.SM_Kitchen_08_Sink_Drawer_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.24"
+            string exportTime = "2024.02.21-21.32.49"
         }
-        string version = "F2C6606952ABF245E23D6E59DCA0FCBD8E051E45"
+        string version = "1A8ACC8FD62B671BE31B84EF2683E14CA9765775"
     }
     prepend payload = @SM_Kitchen_08_Sink_Drawer_02_payload.usda@
 )

@@ -12,9 +12,9 @@ def Material "M_Wood_Counter" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Wood_Counter.M_Wood_Counter"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.21"
+            string exportTime = "2024.02.21-21.32.36"
         }
-        string version = "1C7C92BEA3EA90966D8F2083D7E8C15D16D26EBA"
+        string version = "2D09005FCF7371B864144949E7F232BFF03A44A5"
     }
 )
 {

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lift_Text_5_Bookstore"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lift_Text_5_Bookstore" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_5_Bookstore.SM_Lift_Text_5_Bookstore"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.30"
+            string exportTime = "2024.02.21-21.32.53"
         }
-        string version = "C5911A1981AC19CAF5AA53271214688E60BEC578"
+        string version = "FBBA0485E85145E08AB2770893EEEE17A83E886B"
     }
     prepend payload = @SM_Lift_Text_5_Bookstore_payload.usda@
 )

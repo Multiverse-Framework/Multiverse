@@ -12,9 +12,9 @@ def Material "M_Fabric_Schlafsofa" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Fabric_Schlafsofa.M_Fabric_Schlafsofa"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.08"
+            string exportTime = "2024.02.21-21.32.33"
         }
-        string version = "BF23AC25C9C8BCC8A6F3B322ED2E6E2A18D02C51"
+        string version = "44B4DDCF718BDAD757E3B73B20CCAF4D33C65B7F"
     }
 )
 {

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Schlafsofa_Kissen_02"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Schlafsofa_Kissen_02" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Schlafsofa_Kissen_02.SM_Schlafsofa_Kissen_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.20"
+            string exportTime = "2024.02.21-21.32.47"
         }
-        string version = "57E44F9F62D2753EBBBE2E5782369A2E08D1259E"
+        string version = "AEEB847B0D5AB1BAB146F5427989AE2AE611BBBD"
     }
     prepend payload = @SM_Schlafsofa_Kissen_02_payload.usda@
 )

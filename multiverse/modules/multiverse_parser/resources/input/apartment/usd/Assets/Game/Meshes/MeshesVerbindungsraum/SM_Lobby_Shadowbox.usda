@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lobby_Shadowbox"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Lobby_Shadowbox" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Shadowbox.SM_Lobby_Shadowbox"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.25"
+            string exportTime = "2024.02.21-21.33.02"
         }
-        string version = "9A715BDFCB233E1F98A821C30735D29871AA9D9C"
+        string version = "2671368B1E5466335D8ACE6015915ED2154BB16C"
     }
     prepend payload = @SM_Lobby_Shadowbox_payload.usda@
 )

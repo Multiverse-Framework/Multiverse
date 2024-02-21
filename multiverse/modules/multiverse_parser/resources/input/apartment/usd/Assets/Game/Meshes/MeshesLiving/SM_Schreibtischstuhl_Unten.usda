@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Schreibtischstuhl_Unten"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Schreibtischstuhl_Unten" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Schreibtischstuhl_Unten.SM_Schreibtischstuhl_Unten"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.35"
+            string exportTime = "2024.02.21-21.32.43"
         }
-        string version = "B6D3AC79210B70DA16098E28D2F13A071177B318"
+        string version = "5E16844AF81D3FF02B2B7B36F8C98C7ED3CA4B43"
     }
     prepend payload = @SM_Schreibtischstuhl_Unten_payload.usda@
 )

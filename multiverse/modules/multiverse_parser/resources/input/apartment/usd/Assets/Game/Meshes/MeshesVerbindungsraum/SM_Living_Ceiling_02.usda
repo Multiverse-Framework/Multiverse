@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Living_Ceiling_02"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Living_Ceiling_02" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Living_Ceiling_02.SM_Living_Ceiling_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.24"
+            string exportTime = "2024.02.21-21.32.59"
         }
-        string version = "B99418D73ABDC5F4C4E7FBB39D6B0AFB27C934E5"
+        string version = "32B9D23888BBACACA8BDDD630DC457705CFE7FCB"
     }
     prepend payload = @SM_Living_Ceiling_02_payload.usda@
 )

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Stehtisch"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Stehtisch" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Stehtisch.SM_Stehtisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.24"
+            string exportTime = "2024.02.21-21.32.47"
         }
-        string version = "D4327D4F326A0DDD2D658F4EE8533EE2F809A23C"
+        string version = "10FE0D870DCEEAF8899819A4C2D47AD39848AA55"
     }
     prepend payload = @SM_Stehtisch_payload.usda@
 )

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Akustiktrennwand"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Akustiktrennwand" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Akustiktrennwand.SM_Akustiktrennwand"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.19"
+            string exportTime = "2024.02.21-21.32.48"
         }
-        string version = "C45B01E9CD63D295F3234A76EF1551819D8DD248"
+        string version = "FF44BE9665F363F3EE39E9778CADAE0C79FE2CA1"
     }
     prepend payload = @SM_Akustiktrennwand_payload.usda@
 )

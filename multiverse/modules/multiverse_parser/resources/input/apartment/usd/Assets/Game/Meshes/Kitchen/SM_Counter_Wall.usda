@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Counter_Wall"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Counter_Wall" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Counter_Wall.SM_Counter_Wall"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.52"
+            string exportTime = "2024.02.21-21.32.43"
         }
-        string version = "949CC9EBA13258AD5EB840E94E5B357632028CB3"
+        string version = "B0FB61CAD7ABD50E189FA3EBDAA35F2612C28662"
     }
     prepend payload = @SM_Counter_Wall_payload.usda@
 )

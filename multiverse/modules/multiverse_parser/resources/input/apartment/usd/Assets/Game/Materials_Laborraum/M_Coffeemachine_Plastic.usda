@@ -12,9 +12,9 @@ def Material "M_Coffeemachine_Plastic" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Coffeemachine_Plastic.M_Coffeemachine_Plastic"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.59.30"
+            string exportTime = "2024.02.21-21.32.42"
         }
-        string version = "27CC4C6E81F4DEEA99635B547084D83624450258"
+        string version = "7F494F6212E7188821F9718091D6678EE5537D4E"
     }
 )
 {

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Living_Wall_04"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Living_Wall_04" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Living_Wall_04.SM_Living_Wall_04"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.28"
+            string exportTime = "2024.02.21-21.32.43"
         }
-        string version = "A4DDBFFDAA31D7163E0E61DDC25DCC00F396B843"
+        string version = "7231EFA27F1A7BB350A15362F9949AECCA3922B2"
     }
     prepend payload = @SM_Living_Wall_04_payload.usda@
 )

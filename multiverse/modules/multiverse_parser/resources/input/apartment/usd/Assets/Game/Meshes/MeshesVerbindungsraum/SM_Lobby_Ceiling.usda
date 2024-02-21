@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lobby_Ceiling"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Lobby_Ceiling" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Ceiling.SM_Lobby_Ceiling"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.52"
+            string exportTime = "2024.02.21-21.33.06"
         }
-        string version = "C44E6BD35A74603AC0AD7AAE8D177F450D2E8298"
+        string version = "DF759D3E6BFFB3E951A2A1E1AC82757D3C67F67A"
     }
     prepend payload = @SM_Lobby_Ceiling_payload.usda@
 )

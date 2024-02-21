@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Hexagon_Sign"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Hexagon_Sign" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Hexagon_Sign.SM_Hexagon_Sign"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.18"
+            string exportTime = "2024.02.21-21.33.04"
         }
-        string version = "629163E0AF4552DA209AB232ED2DA2DE9E4B2C59"
+        string version = "993CDF59D964F43777A8484D8197471BE004690B"
     }
     prepend payload = @SM_Hexagon_Sign_payload.usda@
 )

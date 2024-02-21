@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Esstisch"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Esstisch" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Esstisch.SM_Esstisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.39"
+            string exportTime = "2024.02.21-21.32.46"
         }
-        string version = "E08853A04DE13FF01DD9F6AB4A2CA9006DC96184"
+        string version = "223EC5B02E42196DF0B1D577D81636D4814CE9C9"
     }
     prepend payload = @SM_Esstisch_payload.usda@
 )

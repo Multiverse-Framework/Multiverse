@@ -12,9 +12,9 @@ def Material "M_Ground_Moss" (
             string assetType = "Material"
             string contentPath = "/Game/StarterContent/Materials/M_Ground_Moss.M_Ground_Moss"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.51"
+            string exportTime = "2024.02.21-21.32.41"
         }
-        string version = "7E9FF3FEAFB851F8D5F373EB633486A84F55AF38"
+        string version = "2018608A226D8A6E99E5BCA86718E8A5650BF56A"
     }
 )
 {

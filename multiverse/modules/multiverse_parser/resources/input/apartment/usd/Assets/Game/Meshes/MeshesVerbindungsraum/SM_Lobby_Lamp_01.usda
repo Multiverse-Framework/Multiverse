@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Lobby_Lamp_01"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Lobby_Lamp_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Lamp_01.SM_Lobby_Lamp_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.52"
+            string exportTime = "2024.02.21-21.32.46"
         }
-        string version = "E3084020F19893123A4A43D3B96141B7A993E4A7"
+        string version = "EF4494B2D52A7E8F54817A277C25E2A6B8367AD1"
     }
     prepend payload = @SM_Lobby_Lamp_01_payload.usda@
 )

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Oven_Tray"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Oven_Tray" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Oven/SM_Oven_Tray.SM_Oven_Tray"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.28"
+            string exportTime = "2024.02.21-21.32.49"
         }
-        string version = "CEAC32B1DA9D4D007F8E958EEDBDA2441F7DF5A1"
+        string version = "BEBE1F1ACD7481F342D2E1E9FC821D2C0A725BA2"
     }
     prepend payload = @SM_Oven_Tray_payload.usda@
 )

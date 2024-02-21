@@ -12,9 +12,9 @@ def Material "M_Blue" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Blue.M_Blue"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.59.41"
+            string exportTime = "2024.02.21-21.32.41"
         }
-        string version = "09259E745DB194101E28342DDF400977BBB4A49A"
+        string version = "A9A3995070E5216692A09A14ECCB34A239B4C7EB"
     }
 )
 {

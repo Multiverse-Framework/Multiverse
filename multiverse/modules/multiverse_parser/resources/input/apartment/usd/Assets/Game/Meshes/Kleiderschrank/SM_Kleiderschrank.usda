@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Kleiderschrank"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -13,9 +13,9 @@ def "SM_Kleiderschrank" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kleiderschrank/SM_Kleiderschrank.SM_Kleiderschrank"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.49"
+            string exportTime = "2024.02.21-21.32.50"
         }
-        string version = "A03F5EE479B4830E09161BBB531D959C60E6DDF2"
+        string version = "64B70AD959419FAE309BD732418ADC91C733BD85"
     }
     prepend payload = @SM_Kleiderschrank_payload.usda@
 )

@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_TV_Wandboard"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_TV_Wandboard" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_TV_Wandboard.SM_TV_Wandboard"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.20"
+            string exportTime = "2024.02.21-21.32.47"
         }
-        string version = "06853A199A578F69CF4B2956E7BFFD3E7212D446"
+        string version = "9FCF11774985584E79F880DCB0D14BD85DC5EF9E"
     }
     prepend payload = @SM_TV_Wandboard_payload.usda@
 )

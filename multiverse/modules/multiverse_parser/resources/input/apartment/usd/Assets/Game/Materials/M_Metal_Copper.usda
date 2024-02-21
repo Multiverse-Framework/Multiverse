@@ -12,9 +12,9 @@ def Material "M_Metal_Copper" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Metal_Copper.M_Metal_Copper"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-19.58.31"
+            string exportTime = "2024.02.21-21.32.40"
         }
-        string version = "99FFCC1D7AFAA7586FFDADE3EC0B65A25DEB7011"
+        string version = "C82B353B1BED713357D7566B17854B8E8EEEF455"
     }
 )
 {

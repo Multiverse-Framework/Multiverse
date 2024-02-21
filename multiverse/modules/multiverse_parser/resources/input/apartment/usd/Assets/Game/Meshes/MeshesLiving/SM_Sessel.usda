@@ -1,7 +1,7 @@
 #usda 1.0
 (
     defaultPrim = "SM_Sessel"
-    metersPerUnit = 0.009999999776482582
+    metersPerUnit = 1
     upAxis = "Z"
 )
 
@@ -14,9 +14,9 @@ def "SM_Sessel" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Sessel.SM_Sessel"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.20-20.00.23"
+            string exportTime = "2024.02.21-21.32.43"
         }
-        string version = "1A2F86500D88BF6806F1D697F3B0B6FF3D983A21"
+        string version = "E99D205C06C4DAAFF8460D84284BCF072ABC2384"
     }
     prepend payload = @SM_Sessel_payload.usda@
 )
