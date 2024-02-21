@@ -29,7 +29,7 @@ from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade, Sdf
 
 
-def get_usd_file_path(gprim_prim: Usd.Prim) -> (str, Sdf.Path):
+def get_usd_mesh_file_path(gprim_prim: Usd.Prim) -> (str, Sdf.Path):
     prepended_items = gprim_prim.GetPrimStack()[0].referenceList.prependedItems
     if len(prepended_items) == 0:
         return gprim_prim.GetStage().GetRootLayer().realPath, gprim_prim.GetPath()
@@ -112,12 +112,11 @@ class UsdImporter(Factory):
             body_builder.xform.AddTransformOp().Set(xform_local_transformation)
 
         elif self.parent_map.get(xform_prim) is not None:
-            body_builder = self.world_builder.add_body(
-                body_name=xform_prim.GetName(),
-                parent_body_name=xform_prim.GetName(),
-            )
+            parent_xform_prim = self.parent_map[xform_prim]
+            body_builder = self.world_builder.add_body(body_name=xform_prim.GetName(),
+                                                       parent_body_name=parent_xform_prim)
             xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(xform_prim,
-                                                                                 self.parent_map[xform_prim])
+                                                                                 parent_xform_prim)
             body_builder.xform.AddTransformOp().Set(xform_local_transformation)
 
         else:
@@ -125,6 +124,8 @@ class UsdImporter(Factory):
 
         for gprim_prim in [gprim_prim for gprim_prim in xform_prim.GetChildren() if gprim_prim.IsA(UsdGeom.Gprim)]:
             self._import_geom(gprim_prim=gprim_prim, body_builder=body_builder)
+
+        body_builder.compute_and_set_inertial(inertia_source=self.config.inertia_source)
 
         for child_xform_prim in [child_xform_prim for child_xform_prim in xform_prim.GetChildren() if
                                  child_xform_prim.IsA(UsdGeom.Xform)]:
@@ -156,7 +157,7 @@ class UsdImporter(Factory):
 
             geom_name = gprim_prim.GetName()
             gprim = UsdGeom.Gprim(gprim_prim)
-            transformation = gprim.GetLocalTransformation().RemoveScaleShear()
+            transformation = gprim.GetLocalTransformation()
             geom_pos = transformation.ExtractTranslation()
             geom_pos = numpy.array([*geom_pos])
             geom_quat = transformation.ExtractRotationQuat()
@@ -165,6 +166,7 @@ class UsdImporter(Factory):
 
             if not gprim_prim.IsA(UsdGeom.Mesh):
                 geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
+                geom_builder.build()
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
                 if gprim_prim.IsA(UsdGeom.Cube):
                     pass
@@ -180,15 +182,13 @@ class UsdImporter(Factory):
                 else:
                     raise ValueError(f"Geom type {gprim_prim} not implemented.")
 
-                geom_builder.build()
-
             else:
-                usd_file_path, mesh_path = get_usd_file_path(gprim_prim=gprim_prim)
-                tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
-                    mesh_file_path=usd_file_path, merge_mesh=False)
+                mesh_file_path, mesh_path = get_usd_mesh_file_path(gprim_prim=gprim_prim)
+                tmp_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(mesh_file_path=mesh_file_path,
+                                                                                 merge_mesh=False)
 
                 mesh_name = gprim_prim.GetName()
-                mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_usd_mesh_file_path,
+                mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_mesh_file_path,
                                                                  mesh_path=mesh_path,
                                                                  texture_coordinate_name="UVMap")
                 if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
@@ -197,10 +197,53 @@ class UsdImporter(Factory):
 
                 geom_builder = body_builder.add_geom(geom_name=f"{geom_name}_{mesh_name}",
                                                      geom_property=geom_property)
+                geom_builder.build()
                 geom_builder.add_mesh(mesh_name=mesh_name,
                                       mesh_property=mesh_property)
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
-                geom_builder.build()
+
+                if geom_is_visible:
+                    if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                        material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
+                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                        if len(material_paths) > 1:
+                            raise NotImplementedError(f"Mesh {geom_name} has more than one material.")
+                        if len(material_paths) == 0:
+                            raise ValueError(f"Mesh {geom_name} has no material.")
+                        material_prim = self.stage.GetPrimAtPath(material_paths[0])
+                        material_prim_stack = material_prim.GetPrimStack()[1]
+                        material_file_path = material_prim_stack.layer.realPath
+                        material_path = material_prim_stack.path
+                        material_property = MaterialProperty.from_material_file_path(
+                            material_file_path=material_file_path,
+                            material_path=material_path)
+                        if material_property.opacity == 0.0:
+                            print(f"Opacity of {material_path} is 0.0. Set to 1.0.")
+                            material_property._opacity = 1.0
+                        geom_builder.add_material(material_name=material_path.name,
+                                                  material_property=material_property)
+                    for subset_prim in [subset_prim for subset_prim in gprim_prim.GetChildren() if
+                                        subset_prim.IsA(UsdGeom.Subset)]:
+                        subset_name = subset_prim.GetName()
+                        material_binding_api = UsdShade.MaterialBindingAPI(subset_prim)
+                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                        if len(material_paths) > 1:
+                            raise NotImplementedError(f"Subset {subset_name} has more than one material.")
+                        if len(material_paths) == 0:
+                            raise ValueError(f"Subset {subset_name} has no material.")
+                        material_prim = self.stage.GetPrimAtPath(material_paths[0])
+                        material_prim_stack = material_prim.GetPrimStack()[1]
+                        material_file_path = material_prim_stack.layer.realPath
+                        material_path = material_prim_stack.path
+                        material_property = MaterialProperty.from_material_file_path(
+                            material_file_path=material_file_path,
+                            material_path=material_path)
+                        if material_property.opacity == 0.0:
+                            print(f"Opacity of {material_path} is 0.0. Set to 1.0.")
+                            material_property._opacity = 1.0
+                        geom_builder.add_material(material_name=material_path.name,
+                                                  material_property=material_property,
+                                                  subset=UsdGeom.Subset(subset_prim))
 
     @property
     def stage(self) -> Usd.Stage:

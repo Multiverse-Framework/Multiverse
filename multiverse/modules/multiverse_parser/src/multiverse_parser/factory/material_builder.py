@@ -83,7 +83,11 @@ class MaterialProperty:
 
         opacity = get_input(shader=pbr_shader, shader_input="opacity")
         if opacity is not None:
-            opacity = float(opacity)
+            if isinstance(opacity, str):
+                print(f"Opacity {opacity} not supported yet, using 1.0 instead.")
+                opacity = 1.0
+            else:
+                opacity = float(opacity)
 
         emissive_color = get_input(shader=pbr_shader, shader_input="emissiveColor")
         if isinstance(emissive_color, Gf.Vec3f):

@@ -390,15 +390,9 @@ class UrdfExporter:
             usd_mesh_file_abspath = self._get_file_abspath_from_reference(prim=gprim_prim)
             tmp_usd_mesh_file_abspath = usd_mesh_file_abspath
 
-            if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
-                material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
-                material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
-                material_prim = geom_builder.stage.GetPrimAtPath(material_path)
-                material_name = material_prim.GetName()
-                usd_material_file_abspath = self._get_file_abspath_from_reference(prim=material_prim)
-                usd_material_file_relpath = os.path.relpath(usd_material_file_abspath,
-                                                            os.path.dirname(usd_mesh_file_abspath))
-
+            subset_prims = [subset_prim for subset_prim in gprim_prim.GetChildren()
+                            if subset_prim.IsA(UsdGeom.Subset) and subset_prim.HasAPI(UsdShade.MaterialBindingAPI)]
+            if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI) or len(subset_prims) > 0:
                 tmp_usd_mesh_file_abspath = tmp_usd_mesh_file_abspath.replace(".usda", "_tmp.usda")
                 shutil.copy2(usd_mesh_file_abspath, tmp_usd_mesh_file_abspath)
                 mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_abspath)
@@ -406,18 +400,56 @@ class UrdfExporter:
                 mesh_path = mesh_prim.GetPath()
                 mesh_material_scope_path = mesh_path.AppendChild("Materials")
                 UsdGeom.Scope.Define(mesh_stage, mesh_material_scope_path)
-                mesh_material_path = mesh_material_scope_path.AppendChild(material_name)
-                mesh_material = UsdShade.Material.Define(mesh_stage, mesh_material_path)
-                mesh_material_prim = mesh_material.GetPrim()
-                material_stage = Usd.Stage.Open(usd_material_file_abspath)
-                ref_material_prim = material_stage.GetDefaultPrim()
-                ref_material_path = ref_material_prim.GetPath()
-                mesh_material_prim.GetReferences().AddReference(f"./{usd_material_file_relpath}", ref_material_path)
-                mesh_material_binding_api = UsdShade.MaterialBindingAPI.Apply(mesh_prim)
-                mesh_material_binding_api.Bind(mesh_material)
-                mesh_stage.GetRootLayer().Save()
 
-            tmp_mesh_file_relpath = self._get_mesh_file_relpath(geom_prim=gprim_prim,
+                if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                    material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
+                    material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
+                    material_prim = geom_builder.stage.GetPrimAtPath(material_path)
+                    material_name = material_prim.GetName()
+                    usd_material_file_abspath = self._get_file_abspath_from_reference(prim=material_prim)
+                    usd_material_file_relpath = os.path.relpath(usd_material_file_abspath,
+                                                                os.path.dirname(usd_mesh_file_abspath))
+
+                    mesh_material_path = mesh_material_scope_path.AppendChild(material_name)
+                    mesh_material = UsdShade.Material.Define(mesh_stage, mesh_material_path)
+                    mesh_material_prim = mesh_material.GetPrim()
+                    material_stage = Usd.Stage.Open(usd_material_file_abspath)
+                    ref_material_prim = material_stage.GetDefaultPrim()
+                    ref_material_path = ref_material_prim.GetPath()
+                    mesh_material_prim.GetReferences().AddReference(f"./{usd_material_file_relpath}", ref_material_path)
+                    mesh_material_binding_api = UsdShade.MaterialBindingAPI.Apply(mesh_prim)
+                    mesh_material_binding_api.Bind(mesh_material)
+                    mesh_stage.GetRootLayer().Save()
+
+                for subset_prim in subset_prims:
+                    material_binding_api = UsdShade.MaterialBindingAPI(subset_prim)
+                    material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
+                    material_prim = geom_builder.stage.GetPrimAtPath(material_path)
+                    material_name = material_prim.GetName()
+                    usd_material_file_abspath = self._get_file_abspath_from_reference(prim=material_prim)
+                    usd_material_file_relpath = os.path.relpath(usd_material_file_abspath,
+                                                                os.path.dirname(usd_mesh_file_abspath))
+
+                    subset_material_path = mesh_material_scope_path.AppendChild(material_name)
+                    subset_material = UsdShade.Material.Define(mesh_stage, subset_material_path)
+                    subset_material_prim = subset_material.GetPrim()
+                    material_stage = Usd.Stage.Open(usd_material_file_abspath)
+                    ref_material_prim = material_stage.GetDefaultPrim()
+                    ref_material_path = ref_material_prim.GetPath()
+                    subset_material_prim.GetReferences().AddReference(f"./{usd_material_file_relpath}", ref_material_path)
+
+                    subset = UsdGeom.Subset(subset_prim)
+                    mesh_subset_path = mesh_path.AppendChild(subset_prim.GetName())
+                    mesh_subset = UsdGeom.Subset.Define(mesh_stage, mesh_subset_path)
+                    mesh_subset.CreateElementTypeAttr(subset.GetElementTypeAttr().Get())
+                    mesh_subset.CreateIndicesAttr(subset.GetIndicesAttr().Get())
+                    mesh_subset.CreateFamilyNameAttr(subset.GetFamilyNameAttr().Get())
+
+                    subset_material_binding_api = UsdShade.MaterialBindingAPI.Apply(mesh_subset.GetPrim())
+                    subset_material_binding_api.Bind(subset_material)
+                    mesh_stage.GetRootLayer().Save()
+
+            tmp_mesh_file_relpath = self._get_mesh_file_relpath(gprim_prim=gprim_prim,
                                                                 usd_mesh_file_path=usd_mesh_file_abspath)
             tmp_mesh_file_abspath = os.path.join(self.factory.tmp_mesh_dir_path, tmp_mesh_file_relpath)
             self.factory.export_mesh(in_mesh_file_path=tmp_usd_mesh_file_abspath,
@@ -441,8 +473,9 @@ class UrdfExporter:
         else:
             raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
 
-    def _get_mesh_file_relpath(self, geom_prim: UsdGeom.Gprim, usd_mesh_file_path: str) -> str:
-        if geom_prim.HasAPI(UsdShade.MaterialBindingAPI):
+    def _get_mesh_file_relpath(self, gprim_prim: UsdGeom.Gprim, usd_mesh_file_path: str) -> str:
+        if (gprim_prim.HasAPI(UsdShade.MaterialBindingAPI) or
+                any([subset_prim.HasAPI(UsdShade.MaterialBindingAPI) for subset_prim in gprim_prim.GetChildren()])):
             file_extension = self.visual_mesh_file_extension
         else:
             file_extension = "stl"
