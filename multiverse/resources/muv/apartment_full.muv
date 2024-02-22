@@ -1,0 +1,38 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  apartment_full:
+    simulator: mujoco
+    world:
+      name: world
+      path: apartment_full_dynamic/Apartment.xml
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://192.168.101.137"
+  port: 7000
+
+multiverse_clients:
+  apartment_full:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
+
+    receive:
+      SM_Kitchen_Handle15_ref: ["position"]
+      SM_Kitchen_Handle16_ref: ["position"]
+      SM_Kitchen_Handle17_ref: ["position"]
+      SM_Kitchen_Handle18_ref: ["position"]
+      SM_Kitchen_Handle19_ref: ["position"]
+      SM_Kitchen_Handle20_ref: ["position"]

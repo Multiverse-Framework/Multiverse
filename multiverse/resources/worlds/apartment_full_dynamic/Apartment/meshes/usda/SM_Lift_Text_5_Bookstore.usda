@@ -1,0 +1,33 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Text_5_Bookstore"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Lift_Text_5_Bookstore" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_5_Bookstore.usda@
+        string name = "SM_Lift_Text_5_Bookstore"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_5_Bookstore.SM_Lift_Text_5_Bookstore"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.28"
+        }
+        string version = "FBBA0485E85145E08AB2770893EEEE17A83E886B"
+    }
+    prepend payload = @SM_Lift_Text_5_Bookstore_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+

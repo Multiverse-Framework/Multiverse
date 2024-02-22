@@ -1,0 +1,33 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Text_7_Competition"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Lift_Text_7_Competition" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_7_Competition.usda@
+        string name = "SM_Lift_Text_7_Competition"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_7_Competition.SM_Lift_Text_7_Competition"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.27"
+        }
+        string version = "E3A50C6B038E7D1F4FF626C490BE62A59FD6D93F"
+    }
+    prepend payload = @SM_Lift_Text_7_Competition_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+

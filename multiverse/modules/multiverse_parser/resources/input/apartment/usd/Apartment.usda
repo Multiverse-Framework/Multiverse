@@ -689,13 +689,6 @@ def Xform "Root" (
         }
     }
 
-    def Mesh "SM_Kitchen_Handle"
-    {
-        token visibility = "inherited"
-        matrix4d xformOp:transform = ( (0.000004261057743981667, -0.9999999999909218, 0, 0), (0.9999999999909218, 0.000004261057743981667, 0, 0), (0, 0, 1, 0), (9.074630534470884, -5.9382481582854325, 1.4180648486748737, 1) )
-        uniform token[] xformOpOrder = ["xformOp:transform"]
-    }
-
     def "SM_Socket_038" (
         prepend references = @Assets/Game/Meshes/Steckdosen/SM_Socket_038.usda@
     )

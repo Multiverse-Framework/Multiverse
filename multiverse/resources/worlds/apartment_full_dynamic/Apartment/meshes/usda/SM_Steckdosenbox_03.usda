@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Steckdosenbox_03"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Steckdosenbox_03" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Steckdosen/SM_Steckdosenbox_03.usda@
+        string name = "SM_Steckdosenbox_03"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Steckdosen/SM_Steckdosenbox_03.SM_Steckdosenbox_03"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.33"
+        }
+        string version = "31BE3D36DC6921F6ACA4B10710ADAC3E99F29CD2"
+    }
+    prepend payload = @SM_Steckdosenbox_03_payload.usda@
+)
+{
+    rel material:binding = </SM_Steckdosenbox_03/Materials/WorldGridMaterial>
+    custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

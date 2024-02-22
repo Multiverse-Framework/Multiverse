@@ -1,0 +1,21 @@
+#usda 1.0
+(
+    defaultPrim = "MI_Light"
+    upAxis = "Z"
+)
+
+def Material "MI_Light"
+{
+    token outputs:surface.connect = </MI_Light/PBRShader.outputs:surface>
+
+    def Shader "PBRShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor = (1, 1, 1)
+        color3f inputs:emissiveColor = (10, 10, 10)
+        float inputs:opacity = 1
+        int inputs:useSpecularWorkflow = 1
+        token outputs:surface
+    }
+}
+

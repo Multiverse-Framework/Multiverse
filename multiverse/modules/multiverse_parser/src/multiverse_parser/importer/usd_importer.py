@@ -118,6 +118,9 @@ class UsdImporter(Factory):
                               body_builder=body_builder,
                               zero_origin=self.add_xform_for_each_geom)
 
+            if any([child_body_prim.IsA(UsdGeom.Gprim) for child_body_prim in gprim_prim.GetChildren()]):
+                self._import_body(body_prim=gprim_prim)
+
         body_builder.compute_and_set_inertial(inertia_source=self.config.inertia_source)
 
         for child_body_prim in [child_body_prim for child_body_prim in body_prim.GetChildren()

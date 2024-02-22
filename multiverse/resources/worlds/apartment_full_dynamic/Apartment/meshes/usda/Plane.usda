@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "Plane"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "Plane" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Engine/BasicShapes/Plane.usda@
+        string name = "Plane"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Engine/BasicShapes/Plane.Plane"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.25"
+        }
+        string version = "5EA161B202897D91F8B8A52CA899BF569DF9A05F"
+    }
+    prepend payload = @Plane_payload.usda@
+)
+{
+    rel material:binding = </Plane/Materials/WorldGridMaterial>
+    custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

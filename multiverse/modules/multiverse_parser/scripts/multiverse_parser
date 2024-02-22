@@ -93,7 +93,8 @@ def main():
                               with_visual=with_visual,
                               with_collision=with_collision,
                               inertia_source=inertia_source,
-                              default_rgba=args.defaultrgba)
+                              default_rgba=args.defaultrgba,
+                              add_xform_for_each_geom=True)
     elif in_extension == ".urdf":
         factory = UrdfImporter(file_path=args.input,
                                with_physics=with_physics,

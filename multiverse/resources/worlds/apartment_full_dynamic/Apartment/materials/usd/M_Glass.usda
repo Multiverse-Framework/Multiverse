@@ -1,0 +1,20 @@
+#usda 1.0
+(
+    defaultPrim = "M_Glass"
+    upAxis = "Z"
+)
+
+def Material "M_Glass"
+{
+    token outputs:surface.connect = </M_Glass/PBRShader.outputs:surface>
+
+    def Shader "PBRShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor = (0, 0, 0)
+        float inputs:opacity = 0.050980397
+        int inputs:useSpecularWorkflow = 1
+        token outputs:surface
+    }
+}
+

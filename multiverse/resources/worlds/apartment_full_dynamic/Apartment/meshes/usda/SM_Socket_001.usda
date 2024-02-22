@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Socket_001"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Socket_001" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Steckdosen/SM_Socket_001.usda@
+        string name = "SM_Socket_001"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Steckdosen/SM_Socket_001.SM_Socket_001"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.28"
+        }
+        string version = "C6487530B8FF0E532B0106BC8BDAD28ACC443229"
+    }
+    prepend payload = @SM_Socket_001_payload.usda@
+)
+{
+    rel material:binding = </SM_Socket_001/Materials/M_Plastic_White>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+
+    def Scope "Materials"
+    {
+        def Material "M_Plastic_White" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_White.usda@
+        )
+        {
+        }
+    }
+}
+
