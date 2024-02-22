@@ -12,9 +12,9 @@ def Material "M_Fabric_Sofa_Inst" (
             string assetType = "MaterialInstanceConstant"
             string contentPath = "/Game/Materials_Laborraum/M_Fabric_Sofa_Inst.M_Fabric_Sofa_Inst"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.40"
+            string exportTime = "2024.02.22-11.35.18"
         }
-        string version = "CC790D7491FFE8D9DF0D29423FEB40949FB51A4B"
+        string version = "1FE3FA764CB874587746B15D8EED2EC06859D4BC"
     }
 )
 {

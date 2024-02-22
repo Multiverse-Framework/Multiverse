@@ -12,9 +12,9 @@ def Material "M_Glass_Oven" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Glass_Oven.M_Glass_Oven"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.41"
+            string exportTime = "2024.02.22-11.35.17"
         }
-        string version = "586ED6F0848EF01D650EC8A83BF475E8FD8C415A"
+        string version = "BBF111BC8E414157557C22A24D6CFFCF5AB00668"
     }
 )
 {

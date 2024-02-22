@@ -13,7 +13,7 @@ def "SM_Dishwasher_Front" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Dishwasher/SM_Dishwasher_Front.SM_Dishwasher_Front"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.05"
+            string exportTime = "2024.02.22-11.35.34"
         }
         string version = "CACDB70CF56EF63B39FE3809FB4726615B0AD117"
     }

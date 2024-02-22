@@ -13,7 +13,7 @@ def "SM_Fridge_Base" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Fridge/SM_Fridge_Base.SM_Fridge_Base"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.55"
+            string exportTime = "2024.02.22-11.35.33"
         }
         string version = "C1E3B348F36F12EB6BA10744B6EEB988C76443F2"
     }

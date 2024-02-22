@@ -13,7 +13,7 @@ def "SM_Schreibtischstuhl_Unten" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Schreibtischstuhl_Unten.SM_Schreibtischstuhl_Unten"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.43"
+            string exportTime = "2024.02.22-11.35.20"
         }
         string version = "5E16844AF81D3FF02B2B7B36F8C98C7ED3CA4B43"
     }

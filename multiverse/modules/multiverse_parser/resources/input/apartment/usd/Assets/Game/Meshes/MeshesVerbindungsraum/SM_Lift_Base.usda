@@ -13,7 +13,7 @@ def "SM_Lift_Base" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Base.SM_Lift_Base"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.56"
+            string exportTime = "2024.02.22-11.35.26"
         }
         string version = "A90C2E6A0DA6C56804F6E11ABED455FEB3E7BACD"
     }

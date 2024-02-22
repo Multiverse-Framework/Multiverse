@@ -13,7 +13,7 @@ def "SM_Kleiderschrank_TurRechts" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kleiderschrank/SM_Kleiderschrank_TurRechts.SM_Kleiderschrank_TurRechts"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.57"
+            string exportTime = "2024.02.22-11.35.26"
         }
         string version = "D6AA4915A228929C9948F48E979B0D47BE868398"
     }

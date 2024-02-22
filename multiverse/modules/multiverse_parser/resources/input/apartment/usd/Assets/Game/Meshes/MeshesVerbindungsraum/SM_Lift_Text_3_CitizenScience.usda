@@ -13,7 +13,7 @@ def "SM_Lift_Text_3_CitizenScience" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_3_CitizenScience.SM_Lift_Text_3_CitizenScience"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.54"
+            string exportTime = "2024.02.22-11.35.26"
         }
         string version = "FACA780469E9A32A0F2E71FBD5377C3D514ACA92"
     }

@@ -14,7 +14,7 @@ def "Cube" (
             string assetType = "StaticMesh"
             string contentPath = "/Engine/BasicShapes/Cube.Cube"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.43"
+            string exportTime = "2024.02.22-11.35.22"
         }
         string version = "DFB486806B77E4C2BDB91DEC7A1F35624437EE67"
     }

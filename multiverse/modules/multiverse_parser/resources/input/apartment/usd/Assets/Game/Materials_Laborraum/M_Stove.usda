@@ -12,9 +12,9 @@ def Material "M_Stove" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Stove.M_Stove"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.42"
+            string exportTime = "2024.02.22-11.35.17"
         }
-        string version = "5D0BB9846979120B3CC1209B9F0082CCF9AF7E62"
+        string version = "66741A6A6D1074A842E88E587C15C86D0C4613EC"
     }
 )
 {

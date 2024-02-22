@@ -14,7 +14,7 @@ def "SM_Couchtisch_Schublade" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Couchtisch_Schublade.SM_Couchtisch_Schublade"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.04"
+            string exportTime = "2024.02.22-11.35.24"
         }
         string version = "3C6456FAD121EA7AED9E356876735C9AB6B7DA0B"
     }

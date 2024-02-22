@@ -13,7 +13,7 @@ def "SM_Ledercouch" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Ledercouch.SM_Ledercouch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.05"
+            string exportTime = "2024.02.22-11.35.20"
         }
         string version = "CD37D34923FB56DBE151853EABA398DCA0630EE3"
     }

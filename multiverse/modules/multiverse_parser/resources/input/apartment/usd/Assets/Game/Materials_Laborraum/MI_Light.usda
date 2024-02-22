@@ -12,9 +12,9 @@ def Material "MI_Light" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/MI_Light.MI_Light"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.39"
+            string exportTime = "2024.02.22-11.35.16"
         }
-        string version = "972CCE7FD08158BD99BAED7D004A3B4190066E32"
+        string version = "4EE70055899CD60E937379150024B32DF953DCB0"
     }
 )
 {

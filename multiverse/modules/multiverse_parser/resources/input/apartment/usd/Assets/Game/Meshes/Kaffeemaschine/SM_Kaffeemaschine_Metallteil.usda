@@ -13,7 +13,7 @@ def "SM_Kaffeemaschine_Metallteil" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Kaffeemaschine_Metallteil.SM_Kaffeemaschine_Metallteil"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.07"
+            string exportTime = "2024.02.22-11.35.31"
         }
         string version = "BD2F6410D009F16078E920B751D2154DB8EEF891"
     }

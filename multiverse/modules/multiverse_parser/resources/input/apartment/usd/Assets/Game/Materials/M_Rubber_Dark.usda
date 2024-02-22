@@ -12,9 +12,9 @@ def Material "M_Rubber_Dark" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Rubber_Dark.M_Rubber_Dark"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.34"
+            string exportTime = "2024.02.22-11.35.17"
         }
-        string version = "1BE1AF61BDF068C4BDEBB590008DA2507D663F69"
+        string version = "820E5BFF0C14425391E9416639571F97EF415D13"
     }
 )
 {

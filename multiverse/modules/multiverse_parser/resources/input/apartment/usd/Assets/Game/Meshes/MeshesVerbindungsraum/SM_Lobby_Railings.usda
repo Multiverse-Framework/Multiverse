@@ -14,7 +14,7 @@ def "SM_Lobby_Railings" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Railings.SM_Lobby_Railings"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.59"
+            string exportTime = "2024.02.22-11.35.27"
         }
         string version = "0DA42992BCCCD6EAA6FA0EC67E2D36E2E283187F"
     }

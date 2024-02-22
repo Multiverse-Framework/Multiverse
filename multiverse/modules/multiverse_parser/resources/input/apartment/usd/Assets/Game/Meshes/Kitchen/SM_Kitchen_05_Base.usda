@@ -13,7 +13,7 @@ def "SM_Kitchen_05_Base" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_05_Base.SM_Kitchen_05_Base"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.06"
+            string exportTime = "2024.02.22-11.35.28"
         }
         string version = "CA523225B93B0BFCDA7AB8B138AFEBA92E8405DE"
     }

@@ -14,7 +14,7 @@ def "SM_Kitchen_Handle" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_Handle.SM_Kitchen_Handle"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.02"
+            string exportTime = "2024.02.22-11.35.30"
         }
         string version = "C5D02A9F25F5BE4EB62385E400BE52C584A4F206"
     }

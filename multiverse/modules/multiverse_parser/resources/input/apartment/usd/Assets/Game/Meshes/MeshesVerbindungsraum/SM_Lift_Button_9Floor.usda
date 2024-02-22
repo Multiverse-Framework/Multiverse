@@ -13,7 +13,7 @@ def "SM_Lift_Button_9Floor" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Button_9Floor.SM_Lift_Button_9Floor"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.46"
+            string exportTime = "2024.02.22-11.35.29"
         }
         string version = "BE47D2987B0EFEA9DBC37DE2D38EE7B32DCED19D"
     }

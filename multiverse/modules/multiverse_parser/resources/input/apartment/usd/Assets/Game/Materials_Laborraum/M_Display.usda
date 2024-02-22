@@ -12,9 +12,9 @@ def Material "M_Display" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Display.M_Display"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.42"
+            string exportTime = "2024.02.22-11.35.18"
         }
-        string version = "22FA633459E9F0E379A94D0D9418BC79776DA10B"
+        string version = "8E3917C03DE821B34589165E4DC22F33DF9D75EF"
     }
 )
 {

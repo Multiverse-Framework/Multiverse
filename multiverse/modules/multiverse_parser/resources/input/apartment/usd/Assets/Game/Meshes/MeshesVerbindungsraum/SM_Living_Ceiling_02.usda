@@ -14,7 +14,7 @@ def "SM_Living_Ceiling_02" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Living_Ceiling_02.SM_Living_Ceiling_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.59"
+            string exportTime = "2024.02.22-11.35.34"
         }
         string version = "32B9D23888BBACACA8BDDD630DC457705CFE7FCB"
     }

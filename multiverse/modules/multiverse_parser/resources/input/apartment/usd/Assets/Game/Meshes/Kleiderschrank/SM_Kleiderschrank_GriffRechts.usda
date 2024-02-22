@@ -14,7 +14,7 @@ def "SM_Kleiderschrank_GriffRechts" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kleiderschrank/SM_Kleiderschrank_GriffRechts.SM_Kleiderschrank_GriffRechts"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.08"
+            string exportTime = "2024.02.22-11.35.24"
         }
         string version = "4EA8831387B78F93976ED395D97FA9DD1AD3142C"
     }

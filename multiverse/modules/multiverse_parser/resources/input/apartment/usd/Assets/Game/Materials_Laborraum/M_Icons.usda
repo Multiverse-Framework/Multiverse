@@ -12,9 +12,9 @@ def Material "M_Icons" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Icons.M_Icons"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.36"
+            string exportTime = "2024.02.22-11.35.16"
         }
-        string version = "44B91B80DD9D7616D54753D52E4FEEF2D3C4A8B4"
+        string version = "7486081613551F307CA97A1E59849C7FD48195D6"
     }
 )
 {

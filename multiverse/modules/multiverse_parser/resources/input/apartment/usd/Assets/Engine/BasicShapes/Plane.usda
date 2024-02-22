@@ -14,7 +14,7 @@ def "Plane" (
             string assetType = "StaticMesh"
             string contentPath = "/Engine/BasicShapes/Plane.Plane"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.04"
+            string exportTime = "2024.02.22-11.35.25"
         }
         string version = "5EA161B202897D91F8B8A52CA899BF569DF9A05F"
     }

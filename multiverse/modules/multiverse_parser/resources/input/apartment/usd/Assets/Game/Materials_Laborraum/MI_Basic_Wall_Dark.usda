@@ -12,9 +12,9 @@ def Material "MI_Basic_Wall_Dark" (
             string assetType = "MaterialInstanceConstant"
             string contentPath = "/Game/Materials_Laborraum/MI_Basic_Wall_Dark.MI_Basic_Wall_Dark"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.34"
+            string exportTime = "2024.02.22-11.35.15"
         }
-        string version = "DA3DB326259F3F67E83BEF140F86C82391201826"
+        string version = "F2C7EEC2BE369257E0EC9E80C57C8D0C2183F5C4"
     }
 )
 {

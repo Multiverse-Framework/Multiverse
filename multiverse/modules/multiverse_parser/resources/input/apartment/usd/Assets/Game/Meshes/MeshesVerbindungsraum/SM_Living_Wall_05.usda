@@ -13,7 +13,7 @@ def "SM_Living_Wall_05" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Living_Wall_05.SM_Living_Wall_05"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.03"
+            string exportTime = "2024.02.22-11.35.26"
         }
         string version = "F091E371B1F44F9C57F506A977D51BE8A6C525A1"
     }

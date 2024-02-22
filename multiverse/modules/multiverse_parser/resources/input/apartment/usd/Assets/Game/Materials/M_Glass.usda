@@ -12,9 +12,9 @@ def Material "M_Glass" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Glass.M_Glass"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.40"
+            string exportTime = "2024.02.22-11.35.18"
         }
-        string version = "AACD4457FD83BBE0C2E48096C566F52A16BE7D20"
+        string version = "903B331179B5939C3B322520CE29BFE946D00377"
     }
 )
 {

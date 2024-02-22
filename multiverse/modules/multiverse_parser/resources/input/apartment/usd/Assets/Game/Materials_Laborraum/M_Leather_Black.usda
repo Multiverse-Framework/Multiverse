@@ -12,9 +12,9 @@ def Material "M_Leather_Black" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Leather_Black.M_Leather_Black"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.38"
+            string exportTime = "2024.02.22-11.35.19"
         }
-        string version = "90E373A663618B642711B5A7DAE411956D1D6826"
+        string version = "CA2DDF10E4326257061693841CE70627A075B353"
     }
 )
 {

@@ -14,7 +14,7 @@ def "SM_Nachttisch" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Nachttisch.SM_Nachttisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.43"
+            string exportTime = "2024.02.22-11.35.28"
         }
         string version = "2F4200F77BA7AFB48857BF54291B6AEA25157A3C"
     }

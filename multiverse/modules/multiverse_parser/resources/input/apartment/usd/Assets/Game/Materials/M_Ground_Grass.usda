@@ -12,9 +12,9 @@ def Material "M_Ground_Grass" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Ground_Grass.M_Ground_Grass"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.42"
+            string exportTime = "2024.02.22-11.35.19"
         }
-        string version = "949D4B30CB5326911CA64DCC844E599006163212"
+        string version = "4B8A0F91CDF36375047B13B02138070847C4808D"
     }
 )
 {

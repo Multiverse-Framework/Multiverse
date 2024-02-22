@@ -14,7 +14,7 @@ def "SM_Esstisch" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Esstisch.SM_Esstisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.46"
+            string exportTime = "2024.02.22-11.35.28"
         }
         string version = "223EC5B02E42196DF0B1D577D81636D4814CE9C9"
     }

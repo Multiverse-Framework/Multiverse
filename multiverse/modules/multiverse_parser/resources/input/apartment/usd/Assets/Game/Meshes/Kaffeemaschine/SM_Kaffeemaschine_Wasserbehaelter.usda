@@ -13,7 +13,7 @@ def "SM_Kaffeemaschine_Wasserbehaelter" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Kaffeemaschine_Wasserbehaelter.SM_Kaffeemaschine_Wasserbehaelter"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.02"
+            string exportTime = "2024.02.22-11.35.31"
         }
         string version = "F916818948978E8B20A66DD5F31AFD88416052D7"
     }

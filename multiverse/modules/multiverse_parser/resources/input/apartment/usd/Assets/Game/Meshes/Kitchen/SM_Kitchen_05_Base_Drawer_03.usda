@@ -13,7 +13,7 @@ def "SM_Kitchen_05_Base_Drawer_03" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_05_Base_Drawer_03.SM_Kitchen_05_Base_Drawer_03"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.01"
+            string exportTime = "2024.02.22-11.35.27"
         }
         string version = "761014BA0B50CAE58327816AE2AF43307337A280"
     }

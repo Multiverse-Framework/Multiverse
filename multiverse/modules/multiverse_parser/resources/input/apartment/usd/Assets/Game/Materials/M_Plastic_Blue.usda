@@ -12,9 +12,9 @@ def Material "M_Plastic_Blue" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Plastic_Blue.M_Plastic_Blue"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.34"
+            string exportTime = "2024.02.22-11.35.16"
         }
-        string version = "FD20E96B25C98BC62E3F395FF5B08C478D9F60F6"
+        string version = "5BCDEF236B31575DAAE823847A7A2897A9F7D129"
     }
 )
 {

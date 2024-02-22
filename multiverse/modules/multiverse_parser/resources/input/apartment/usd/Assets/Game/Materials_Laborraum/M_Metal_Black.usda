@@ -12,9 +12,9 @@ def Material "M_Metal_Black" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Metal_Black.M_Metal_Black"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.40"
+            string exportTime = "2024.02.22-11.35.18"
         }
-        string version = "82C97F8C9D52592C0B0EFB59D5AE579771F366F0"
+        string version = "5151867542EA202471F17276D45E85BA73B1202D"
     }
 )
 {

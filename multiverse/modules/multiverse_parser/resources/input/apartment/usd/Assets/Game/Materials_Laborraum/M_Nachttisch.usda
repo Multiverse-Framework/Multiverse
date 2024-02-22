@@ -12,9 +12,9 @@ def Material "M_Nachttisch" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Nachttisch.M_Nachttisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.37"
+            string exportTime = "2024.02.22-11.35.16"
         }
-        string version = "4DCDECC4A08B31995C786560AD99AF372172E662"
+        string version = "EC0CA7988C275A904B1EAB424254089E6CAC998C"
     }
 )
 {

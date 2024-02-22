@@ -14,7 +14,7 @@ def "SM_Kleiderschrank_GriffLinks" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kleiderschrank/SM_Kleiderschrank_GriffLinks.SM_Kleiderschrank_GriffLinks"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.44"
+            string exportTime = "2024.02.22-11.35.22"
         }
         string version = "8583E751A33C880551E64A2B4B51FEA6C4D241A2"
     }

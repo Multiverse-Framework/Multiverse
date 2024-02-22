@@ -13,7 +13,7 @@ def "SM_Milchbehaelter" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Milchbehaelter.SM_Milchbehaelter"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.06"
+            string exportTime = "2024.02.22-11.35.27"
         }
         string version = "4D3F503A684E8B22E76F698803BABAD58A939BF0"
     }

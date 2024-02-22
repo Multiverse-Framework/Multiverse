@@ -14,7 +14,7 @@ def "SM_Lobby_Shadowbox" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Shadowbox.SM_Lobby_Shadowbox"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.02"
+            string exportTime = "2024.02.22-11.35.19"
         }
         string version = "2671368B1E5466335D8ACE6015915ED2154BB16C"
     }

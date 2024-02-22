@@ -13,7 +13,7 @@ def "SM_Lift_Text_4_RobotGarage" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_4_RobotGarage.SM_Lift_Text_4_RobotGarage"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.07"
+            string exportTime = "2024.02.22-11.35.27"
         }
         string version = "571DA0A3CB52528BE49BDBA370589AEE94D21AF8"
     }

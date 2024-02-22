@@ -14,7 +14,7 @@ def "SM_Kaffeemaschine_Gitter" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Kaffeemaschine_Gitter.SM_Kaffeemaschine_Gitter"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.51"
+            string exportTime = "2024.02.22-11.35.31"
         }
         string version = "B921E5407DA9E113B4773488B56601BE4790FDB9"
     }

@@ -13,7 +13,7 @@ def "SM_Kitchen_08_Sink_Drawer_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_08_Sink_Drawer_01.SM_Kitchen_08_Sink_Drawer_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.50"
+            string exportTime = "2024.02.22-11.35.32"
         }
         string version = "4A245EE66A6B2E3FF97C7DDF9B4667644328626D"
     }

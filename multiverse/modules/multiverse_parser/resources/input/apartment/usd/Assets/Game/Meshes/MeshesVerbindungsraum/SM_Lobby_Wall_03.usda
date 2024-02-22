@@ -13,7 +13,7 @@ def "SM_Lobby_Wall_03" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Wall_03.SM_Lobby_Wall_03"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.44"
+            string exportTime = "2024.02.22-11.35.23"
         }
         string version = "340A20E215FFF1B5B32A53D85E74893925AA3B3B"
     }

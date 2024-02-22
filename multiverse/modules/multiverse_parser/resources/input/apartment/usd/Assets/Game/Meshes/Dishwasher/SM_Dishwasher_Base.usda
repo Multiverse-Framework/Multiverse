@@ -13,7 +13,7 @@ def "SM_Dishwasher_Base" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Dishwasher/SM_Dishwasher_Base.SM_Dishwasher_Base"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.07"
+            string exportTime = "2024.02.22-11.35.25"
         }
         string version = "03C8C945B5AAAA84EABEC47D05B640EE4A280A92"
     }

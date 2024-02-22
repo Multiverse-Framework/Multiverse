@@ -12,9 +12,9 @@ def Material "M_IAIDoorAGlass" (
             string assetType = "Material"
             string contentPath = "/Game/Models/IAILab/IAIDoors/IAIDoorA/M_IAIDoorAGlass.M_IAIDoorAGlass"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.41"
+            string exportTime = "2024.02.22-11.35.17"
         }
-        string version = "BFA80FB70989636E9EE8C228015727DA5BA52D5C"
+        string version = "4684A958EB54B0CD62D69A13914728D1E42078C1"
     }
 )
 {

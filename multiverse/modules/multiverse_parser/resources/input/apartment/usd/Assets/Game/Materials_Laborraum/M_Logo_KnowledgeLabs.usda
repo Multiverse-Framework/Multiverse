@@ -12,9 +12,9 @@ def Material "M_Logo_KnowledgeLabs" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Logo_KnowledgeLabs.M_Logo_KnowledgeLabs"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.41"
+            string exportTime = "2024.02.22-11.35.15"
         }
-        string version = "D8BFB6CEACD902191A04A7814EC201A7D9EE69FE"
+        string version = "B8266A332174E4F043F9552F3D169BC9E1E84216"
     }
 )
 {

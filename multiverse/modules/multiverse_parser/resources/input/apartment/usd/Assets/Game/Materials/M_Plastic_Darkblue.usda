@@ -12,9 +12,9 @@ def Material "M_Plastic_Darkblue" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Plastic_Darkblue.M_Plastic_Darkblue"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.34"
+            string exportTime = "2024.02.22-11.35.17"
         }
-        string version = "617960E8C004561028DBFCCE7B983B5D57E4A1ED"
+        string version = "8522FE7B34D142CB72B9571CF0C04BBFD293FFE3"
     }
 )
 {

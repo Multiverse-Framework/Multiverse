@@ -14,7 +14,7 @@ def "SM_Couchtisch" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Couchtisch.SM_Couchtisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.46"
+            string exportTime = "2024.02.22-11.35.21"
         }
         string version = "6C4DF335385C6E402D1150DBBD0193C3C72269F0"
     }

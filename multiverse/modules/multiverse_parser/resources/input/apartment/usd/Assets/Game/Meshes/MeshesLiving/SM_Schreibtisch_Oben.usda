@@ -13,7 +13,7 @@ def "SM_Schreibtisch_Oben" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Schreibtisch_Oben.SM_Schreibtisch_Oben"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.48"
+            string exportTime = "2024.02.22-11.35.31"
         }
         string version = "A1AA63496BD0B06B002DF25AC418D43496672C3D"
     }

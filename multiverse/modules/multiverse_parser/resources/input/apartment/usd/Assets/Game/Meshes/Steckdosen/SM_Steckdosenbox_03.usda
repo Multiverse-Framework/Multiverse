@@ -14,7 +14,7 @@ def "SM_Steckdosenbox_03" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Steckdosen/SM_Steckdosenbox_03.SM_Steckdosenbox_03"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.47"
+            string exportTime = "2024.02.22-11.35.33"
         }
         string version = "31BE3D36DC6921F6ACA4B10710ADAC3E99F29CD2"
     }

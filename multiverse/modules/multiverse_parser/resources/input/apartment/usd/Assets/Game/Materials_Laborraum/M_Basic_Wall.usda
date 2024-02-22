@@ -12,9 +12,9 @@ def Material "M_Basic_Wall" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Basic_Wall.M_Basic_Wall"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.41"
+            string exportTime = "2024.02.22-11.35.17"
         }
-        string version = "CAFFD258A6A2492E5609962576ACC7FF3183CFF1"
+        string version = "7A55C634C2F1F0226CF281D97BAA94135B7F0AF2"
     }
 )
 {

@@ -13,7 +13,7 @@ def "SM_Lift_Text_1_Retail" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_1_Retail.SM_Lift_Text_1_Retail"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.44"
+            string exportTime = "2024.02.22-11.35.24"
         }
         string version = "1EAD7ED40524F46D9C1CE09C911E9C2B39B36992"
     }

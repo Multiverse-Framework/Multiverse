@@ -14,7 +14,7 @@ def "SM_Sessel" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesLiving/SM_Sessel.SM_Sessel"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.43"
+            string exportTime = "2024.02.22-11.35.25"
         }
         string version = "E99D205C06C4DAAFF8460D84284BCF072ABC2384"
     }

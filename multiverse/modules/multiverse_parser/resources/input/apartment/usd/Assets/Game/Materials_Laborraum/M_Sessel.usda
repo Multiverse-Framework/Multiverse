@@ -12,9 +12,9 @@ def Material "M_Sessel" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Sessel.M_Sessel"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.34"
+            string exportTime = "2024.02.22-11.35.15"
         }
-        string version = "A496DE1363100BF4DFE649BBA2F13C76992B7A81"
+        string version = "A0DF706CD06B937B418ED247A751DA4A8A51EDC9"
     }
 )
 {

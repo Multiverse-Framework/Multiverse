@@ -12,9 +12,9 @@ def Material "M_Drawer_Mat" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Drawer_Mat.M_Drawer_Mat"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.42"
+            string exportTime = "2024.02.22-11.35.18"
         }
-        string version = "49DB5F061E927510FFCF0221735EBA762CB78B47"
+        string version = "2119222999B296704B48D6E35AF9AA236A11C642"
     }
 )
 {

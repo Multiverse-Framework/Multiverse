@@ -13,7 +13,7 @@ def "SM_Kitchen_03_Fridge" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_03_Fridge.SM_Kitchen_03_Fridge"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.07"
+            string exportTime = "2024.02.22-11.35.25"
         }
         string version = "354C0B35CE63D90DDA6D56363AD0FE388E29E412"
     }

@@ -14,7 +14,7 @@ def "SM_Counter_Watertab" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Kitchen/SM_Counter_Watertab.SM_Counter_Watertab"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.52"
+            string exportTime = "2024.02.22-11.35.28"
         }
         string version = "5133D370CF0EF74A0DD1B99EF4E85CC48426E066"
     }

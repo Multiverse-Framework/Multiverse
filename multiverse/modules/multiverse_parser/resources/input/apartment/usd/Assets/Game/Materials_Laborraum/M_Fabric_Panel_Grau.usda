@@ -12,9 +12,9 @@ def Material "M_Fabric_Panel_Grau" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Fabric_Panel_Grau.M_Fabric_Panel_Grau"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.34"
+            string exportTime = "2024.02.22-11.35.15"
         }
-        string version = "F4E9FBE9F617E3D85F9B5E944E20E2BD78AB1F5D"
+        string version = "9DCAB96E1E2396F7890A6C59AA712FEFD393B8E4"
     }
 )
 {

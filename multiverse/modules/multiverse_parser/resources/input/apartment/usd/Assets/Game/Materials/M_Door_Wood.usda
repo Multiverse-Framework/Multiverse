@@ -12,9 +12,9 @@ def Material "M_Door_Wood" (
             string assetType = "Material"
             string contentPath = "/Game/Materials/M_Door_Wood.M_Door_Wood"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.34"
+            string exportTime = "2024.02.22-11.35.16"
         }
-        string version = "F5992F3375D1BC939440FA5E33FE35F47322AD7B"
+        string version = "9B7D59CC06233A01738C0822B916C4051315A265"
     }
 )
 {

@@ -12,9 +12,9 @@ def Material "M_Fabric_Esstischstuhl" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Fabric_Esstischstuhl.M_Fabric_Esstischstuhl"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.39"
+            string exportTime = "2024.02.22-11.35.18"
         }
-        string version = "FF096C693FB82F05422BE56F0F42AEC3A788D680"
+        string version = "73C9602E3E661A16135AF84EE85C6E02EC10B951"
     }
 )
 {

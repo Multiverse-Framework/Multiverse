@@ -13,7 +13,7 @@ def "SM_Socket_013" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Steckdosen/SM_Socket_013.SM_Socket_013"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.55"
+            string exportTime = "2024.02.22-11.35.24"
         }
         string version = "9B28CD170E471A5525ED27EC5C11937B8B74A0AE"
     }

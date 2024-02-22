@@ -12,9 +12,9 @@ def Material "M_Emissive" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Emissive.M_Emissive"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.34"
+            string exportTime = "2024.02.22-11.35.16"
         }
-        string version = "44602CE9C6C3D5558EC3A48C335321A3ACDA18A2"
+        string version = "78034676A95B790A0A28ECEF8FB2A756C1551CF7"
     }
 )
 {

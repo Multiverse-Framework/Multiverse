@@ -13,7 +13,7 @@ def "SM_Lobby_Doorelement_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Doorelement_01.SM_Lobby_Doorelement_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.50"
+            string exportTime = "2024.02.22-11.35.29"
         }
         string version = "22B0E0A7FCA5A862FBBC53E9A5AC787257013261"
     }

@@ -12,9 +12,9 @@ def Material "M_Esstisch" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Esstisch.M_Esstisch"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.40"
+            string exportTime = "2024.02.22-11.35.18"
         }
-        string version = "E18D141F9BD7CD76E200BE727B0F87B61C5CE3AD"
+        string version = "A27EAC511CD8DC52B08B9F8B19A04307F952C8F8"
     }
 )
 {

@@ -13,7 +13,7 @@ def "SM_Dishwasher_Tray_02" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Dishwasher/SM_Dishwasher_Tray_02.SM_Dishwasher_Tray_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.04"
+            string exportTime = "2024.02.22-11.35.21"
         }
         string version = "A5603238986243300B457A58B67E136CAC47172E"
     }

@@ -12,9 +12,9 @@ def Material "M_Fabric_YellowGreen_Mesh_2" (
             string assetType = "Material"
             string contentPath = "/Game/Materials_Laborraum/M_Fabric_YellowGreen_Mesh_2.M_Fabric_YellowGreen_Mesh_2"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.42"
+            string exportTime = "2024.02.22-11.35.18"
         }
-        string version = "C56817681136C242120A6E8A6D30A4931E3A5E3D"
+        string version = "A6AC4C620866B219DED95C58136C1B246F3813E2"
     }
 )
 {

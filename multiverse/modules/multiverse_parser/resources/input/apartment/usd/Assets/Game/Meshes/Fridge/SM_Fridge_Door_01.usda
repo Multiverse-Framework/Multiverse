@@ -13,7 +13,7 @@ def "SM_Fridge_Door_01" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/Fridge/SM_Fridge_Door_01.SM_Fridge_Door_01"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.33.01"
+            string exportTime = "2024.02.22-11.35.30"
         }
         string version = "9846FF8F80F0ED06760FA2C1D16E2826A5E962FF"
     }

@@ -13,7 +13,7 @@ def "SM_Plant_Big_02" (
             string assetType = "StaticMesh"
             string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Plant_Big_02.SM_Plant_Big_02"
             string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
-            string exportTime = "2024.02.21-21.32.53"
+            string exportTime = "2024.02.22-11.35.29"
         }
         string version = "A2E873FDBCF49898C59A2AE17769B6DCA49C371E"
     }
