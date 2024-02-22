@@ -19,6 +19,31 @@ def Xform "Root" (
     }
 )
 {
+    def "Cube5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        prepend references = @Assets/Engine/BasicShapes/Cube.usda@
+    )
+    {
+        rel material:binding = </Root/Cube5/UnrealMaterial>
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (-1.7760499715663336, -0.000007094860767974271, 0, 0), (-1.7924405478738468e-8, 0.0044869999400913305, -0, 0), (0, 0, 2.8326780796051025, 0), (5.443027222088858, -7.713990306094502, 1.4128619068966373, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Material "UnrealMaterial" (
+            prepend references = @Assets/Game/Materials_Laborraum/M_Glass.usda@
+        )
+        {
+            token outputs:unreal:surface.connect = </Root/Cube5/UnrealMaterial/UnrealShader.outputs:out>
+
+            def Shader "UnrealShader"
+            {
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Glass.M_Glass@
+                token outputs:out
+            }
+        }
+    }
+
     def "Furnitures"
     {
         def "SM_Kleiderschrank_GriffLinks" (

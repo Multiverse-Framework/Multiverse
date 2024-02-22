@@ -54,7 +54,7 @@ class MaterialProperty:
         self._diffuse_color = diffuse_color if isinstance(diffuse_color, str) \
             else numpy.array(diffuse_color) if diffuse_color is not None \
             else None
-        self._opacity = opacity if isinstance(opacity, float) else None
+        self._opacity = opacity if isinstance(opacity, float) else 1.0
         self._emissive_color = numpy.array(emissive_color) if emissive_color is not None else None
         self._specular_color = numpy.array(specular_color) if specular_color is not None else None
 
