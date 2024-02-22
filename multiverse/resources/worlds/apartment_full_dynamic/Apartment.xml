@@ -530,6 +530,7 @@
 				<geom name="SM_Window_05_SM_Window_05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Window_05" class="visual"/>
 			</body>
 			<body name="SM_Kitchen_01_Door_01" pos="8.887999534606934 -3.7652812004089355 1.7192974090576172" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_01_Door_01_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 -1.0" limited="true" range="0.0 1.5707963267948966" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_01_Door_01_SM_Kitchen_01_Door_01" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_01_Door_01" class="visual"/>
 				<body name="SM_Kitchen_Handle4" pos="0.4631551504135132 -0.01559523493051529 -0.38983428478240967" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="0.4631551504135132 -0.01559523493051529 -0.38983428478240967" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -555,6 +556,7 @@
 				<geom name="SM_Lamp_12_SM_Lamp_12" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Lamp_12" class="visual"/>
 			</body>
 			<body name="SM_Kitchen_01_Drawer_01" pos="9.120807647705078 -4.050665378570557 0.5552511215209961" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_01_Drawer_01_joint" type="slide" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.4" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_01_Drawer_01_SM_Kitchen_01_Drawer_01" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_01_Drawer_01" class="visual"/>
 				<body name="SM_Kitchen_Handle2" pos="0.0009132502018474042 -0.24792969226837158 0.08401428163051605" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="0.0009132502018474042 -0.24792969226837158 0.08401428163051605" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -682,6 +684,7 @@
 				<geom name="SM_Lobby_Railings_SM_Lobby_Railings" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Lobby_Railings" material="M_Metal_Chrome" class="visual"/>
 			</body>
 			<body name="SM_Kitchen_06_Base_Drawer_01" pos="9.124244689941406 -6.156850337982178 0.7529809474945068" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_06_Base_Drawer_01_joint" type="slide" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.4" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_06_Base_Drawer_01_SM_Kitchen_06_Base_Drawer_01" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_06_Base_Drawer_01" class="visual"/>
 				<body name="SM_Kitchen_Handle9" pos="0.001248949090950191 -0.24662108719348907 0.01720382645726204" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="0.001248949090950191 -0.24662108719348907 0.01720382645726204" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -827,6 +830,7 @@
 				<geom name="SM_Nachttisch_SM_Nachttisch" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Nachttisch" material="M_Nachttisch" class="visual"/>
 			</body>
 			<body name="SM_Kitchen_05_Base_Drawer_03" pos="9.124014854431152 -5.657559871673584 0.22597000002861023" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_05_Base_Drawer_03_joint" type="slide" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.4" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_05_Base_Drawer_03_SM_Kitchen_05_Base_Drawer_03" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_05_Base_Drawer_03" class="visual"/>
 				<body name="SM_Kitchen_Handle11" pos="-0.001032554660923779 -0.24888183176517487 0.15027038753032684" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="-0.001032554660923779 -0.24888183176517487 0.15027038753032684" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -840,6 +844,7 @@
 				<geom name="SM_Exterior_Plane_VertexColor_SM_Exterior_Plane_VertexColor" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Exterior_Plane_VertexColor" class="visual"/>
 			</body>
 			<body name="SM_Kitchen_01_Drawer_02" pos="9.121969223022461 -4.050127029418945 0.22633399069309235" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_01_Drawer_02_joint" type="slide" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.4" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_01_Drawer_02_SM_Kitchen_01_Drawer_02" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_01_Drawer_02" class="visual"/>
 				<body name="SM_Kitchen_Handle3" pos="0.001451575313694775 -0.24909180402755737 0.15060600638389587" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="0.001451575313694775 -0.24909180402755737 0.15060600638389587" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -1075,6 +1080,7 @@
 				<geom name="SM_Socket_028_SM_Socket_028" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Socket_028" class="visual"/>
 			</body>
 			<body name="SM_Kitchen_06_Base_Drawer_03" pos="9.12474536895752 -6.157220363616943 0.22507452964782715" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_06_Base_Drawer_03_joint" type="slide" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.4" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_06_Base_Drawer_03_SM_Kitchen_06_Base_Drawer_03" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_06_Base_Drawer_03" class="visual"/>
 				<body name="SM_Kitchen_Handle10" pos="0.004023605026304722 -0.24711915850639343 0.15116584300994873" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="0.004023605026304722 -0.24711915850639343 0.15116584300994873" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -1136,6 +1142,7 @@
 				<geom name="SM_Socket_019_SM_Socket_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Socket_019" class="visual"/>
 			</body>
 			<body name="SM_Kitchen_06_Base_Drawer_02" pos="9.124488830566406 -6.157266616821289 0.554952085018158" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_06_Base_Drawer_02_joint" type="slide" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.4" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_06_Base_Drawer_02_SM_Kitchen_06_Base_Drawer_02" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_06_Base_Drawer_02" class="visual"/>
 				<body name="SM_Kitchen_Handle8" pos="0.003977219574153423 -0.24686279892921448 0.08541778475046158" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="0.003977219574153423 -0.24686279892921448 0.08541778475046158" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -1181,6 +1188,7 @@
 				<geom name="SM_Socket_023_SM_Socket_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Socket_023" class="visual"/>
 			</body>
 			<body name="SM_Kitchen_05_Base_Drawer_01" pos="9.124837875366211 -5.657802581787109 0.7534152269363403" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_05_Base_Drawer_01_joint" type="slide" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.4" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_05_Base_Drawer_01_SM_Kitchen_05_Base_Drawer_01" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_05_Base_Drawer_01" class="visual"/>
 				<body name="SM_Kitchen_Handle12" pos="-0.0014231835957616568 -0.24980711936950684 0.016769561916589737" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="-0.0014231835957616568 -0.24980711936950684 0.016769561916589737" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -1188,6 +1196,7 @@
 				</body>
 			</body>
 			<body name="SM_Kitchen_05_Base_Drawer_02" pos="9.124430656433105 -5.657596111297607 0.5553614497184753" quat="0.7071082592010498 0.0 0.0 -0.707105278968811">
+				<joint name="SM_Kitchen_05_Base_Drawer_02_joint" type="slide" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.4" damping="0.0" stiffness="0.0"/>
 				<geom name="SM_Kitchen_05_Base_Drawer_02_SM_Kitchen_05_Base_Drawer_02" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_05_Base_Drawer_02" class="visual"/>
 				<body name="SM_Kitchen_Handle7" pos="-0.0010679628467187285 -0.2507079839706421 0.08500839024782181" quat="0.7071056365966797 0.0 0.0 0.7071079015731812">
 					<inertial mass="0.0" pos="-0.0010679628467187285 -0.2507079839706421 0.08500839024782181" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -1371,6 +1380,7 @@
 					<geom name="SM_Kitchen_02_Drawer_02_SM_Kitchen_02_Drawer_02" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_02_Drawer_02" class="visual"/>
 				</body>
 				<body name="SM_Kitchen_02_Door" pos="-0.17997504770755768 -0.29853156208992004 0.0010586547432467341" quat="1.0 0.0 0.0 -4.805505900975712e-16">
+					<joint name="SM_Kitchen_02_Door_joint" type="hinge" axis="0.0 0.0 -1.0" limited="true" range="0.0 1.5707" damping="0.0" stiffness="0.0"/>
 					<geom name="SM_Kitchen_02_Door_SM_Kitchen_02_Door" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_02_Door" class="visual"/>
 					<body name="SM_Kitchen_Handle5" pos="0.2588561773300171 -0.0018449161434546113 -0.05118865892291069" quat="0.7071064114570618 0.0 0.0 0.7071071863174438">
 						<inertial mass="0.0" pos="0.2588561773300171 -0.0018449161434546113 -0.05118865892291069" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -1461,6 +1471,7 @@
 						<geom name="SM_Fridge_Shelf_SM_Fridge_Shelf" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Shelf" class="visual"/>
 					</body>
 					<body name="SM_Fridge_Door_01" pos="-0.3019707500934601 -0.27809375524520874 0.3384344279766083" quat="1.0 0.0 0.0 -2.5360870949953096e-06">
+						<joint name="SM_Fridge_Door_01_joint" type="hinge" axis="0.0 0.0 -1.0" limited="true" range="0.0 1.5707963267948966" damping="0.0" stiffness="0.0"/>
 						<inertial mass="0.0" pos="-0.3019707500934601 -0.27809375524520874 0.3384344279766083" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 						<geom name="SM_Fridge_Door_01_SM_Fridge_Door_01" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Door_01" class="visual"/>
 						<body name="SM_Fridge_Egg_Tray" pos="0.21315930783748627 0.09950777143239975 0.22457091510295868" quat="0.7071049809455872 0.0 0.0 0.7071085572242737">
@@ -1493,6 +1504,7 @@
 						<geom name="SM_Fridge_Drawer_05_SM_Fridge_Drawer_05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Drawer_05" class="visual"/>
 					</body>
 					<body name="SM_Fridge_Door_02" pos="-0.30201226472854614 -0.27803272008895874 -0.5563140511512756" quat="1.0 0.0 0.0 -2.5360870949953096e-06">
+						<joint name="SM_Fridge_Door_02_joint" type="hinge" axis="0.0 0.0 -1.0" limited="true" range="0.0 1.5707963267948966" damping="0.0" stiffness="0.0"/>
 						<inertial mass="0.0" pos="-0.30201226472854614 -0.27803272008895874 -0.5563140511512756" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 						<geom name="SM_Fridge_Door_02_SM_Fridge_Door_02" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Door_02" class="visual"/>
 						<body name="SM_Kitchen_Handle25" pos="0.46538814902305603 -0.008047494105994701 0.2848682999610901" quat="0.7071040272712708 0.0 0.0 0.7071095108985901">
