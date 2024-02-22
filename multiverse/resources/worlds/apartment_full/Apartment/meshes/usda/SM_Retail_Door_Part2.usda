@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Retail_Door_Part2"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Retail_Door_Part2" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Retail_Door_Part2.usda@
+        string name = "SM_Retail_Door_Part2"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Retail_Door_Part2.SM_Retail_Door_Part2"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.08"
+        }
+        string version = "5418A8E8F220114E2CEB5E72BAB7A47029D75A05"
+    }
+    prepend payload = @SM_Retail_Door_Part2_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Retail_Door_Part2/Materials/M_Door_Wood>
+        custom string unrealMaterial = "/Game/Materials/M_Door_Wood.M_Door_Wood"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Retail_Door_Part2/Materials/M_Glass>
+        custom string unrealMaterial = "/Game/Materials/M_Glass.M_Glass"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Retail_Door_Part2/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/Materials/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Door_Wood" (
+            prepend references = @../../Materials/M_Door_Wood.usda@
+        )
+        {
+        }
+
+        def Material "M_Glass" (
+            prepend references = @../../Materials/M_Glass.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../Materials/M_Metal_Chrome.usda@
+        )
+        {
+        }
+    }
+}
+

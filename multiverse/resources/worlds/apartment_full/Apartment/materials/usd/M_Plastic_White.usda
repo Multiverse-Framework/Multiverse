@@ -1,0 +1,21 @@
+#usda 1.0
+(
+    defaultPrim = "M_Plastic_White"
+    upAxis = "Z"
+)
+
+def Material "M_Plastic_White"
+{
+    token outputs:surface.connect = </M_Plastic_White/PBRShader.outputs:surface>
+
+    def Shader "PBRShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor = (0.7991027, 0.7991027, 0.7991027)
+        color3f inputs:emissiveColor = (0, 0, 0)
+        float inputs:opacity = 1
+        int inputs:useSpecularWorkflow = 1
+        token outputs:surface
+    }
+}
+

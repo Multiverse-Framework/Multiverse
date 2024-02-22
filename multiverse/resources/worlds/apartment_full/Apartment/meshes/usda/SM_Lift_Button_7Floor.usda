@@ -1,0 +1,38 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Button_7Floor"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_Lift_Button_7Floor" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Button_7Floor.usda@
+        string name = "SM_Lift_Button_7Floor"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Button_7Floor.SM_Lift_Button_7Floor"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.44"
+        }
+        string version = "119DD362183449E378F53A7F52C2F943E5B1C655"
+    }
+    prepend payload = @SM_Lift_Button_7Floor_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section2"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+

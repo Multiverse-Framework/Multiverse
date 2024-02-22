@@ -1,0 +1,33 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Text_6_Challenges"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Lift_Text_6_Challenges" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_6_Challenges.usda@
+        string name = "SM_Lift_Text_6_Challenges"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_6_Challenges.SM_Lift_Text_6_Challenges"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.06"
+        }
+        string version = "41C987EB4FA92BDC815E386FF0A18C91C08FAFB3"
+    }
+    prepend payload = @SM_Lift_Text_6_Challenges_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+

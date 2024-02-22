@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Floor"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Floor" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Raum/SM_Floor.usda@
+        string name = "SM_Floor"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Raum/SM_Floor.SM_Floor"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.01"
+        }
+        string version = "A956F686201349AC3C7A500451649E7196B96058"
+    }
+    prepend payload = @SM_Floor_payload.usda@
+)
+{
+    rel material:binding = </SM_Floor/Materials/M_Floor_Wood>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Floor_Wood.M_Floor_Wood"
+
+    def Scope "Materials"
+    {
+        def Material "M_Floor_Wood" (
+            prepend references = @../../Materials_Laborraum/M_Floor_Wood.usda@
+        )
+        {
+        }
+    }
+}
+

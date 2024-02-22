@@ -1,0 +1,99 @@
+#usda 1.0
+(
+    defaultPrim = "SM_elevator_door"
+    doc = "Blender v3.6.8"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "SM_elevator_door"
+{
+    matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+    uniform token[] xformOpOrder = ["xformOp:transform"]
+
+    def Mesh "SM_elevator_door" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        float3[] extent = [(-1.5, 0, 0), (1.5, 70, 220)]
+        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+        int[] faceVertexIndices = [0, 1, 2, 1, 0, 3, 4, 5, 6, 5, 4, 7, 8, 9, 10, 9, 8, 11, 12, 13, 14, 13, 12, 15, 16, 17, 18, 18, 17, 19, 20, 21, 22, 22, 21, 23]
+        rel material:binding = </_materials/WorldGridMaterial>
+        normal3f[] normals = [(-0.99999994, 0, 0), (-0.99999994, 0, 0), (-1, 0, 0), (-0.99999994, 0, 0), (-0.99999994, 0, 0), (-1, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (1, 0, 0), (0.99999994, 0, 0), (0.99999994, 0, 0), (1, 0, 0), (0, 0.99999994, 0), (0, 0.99999994, 0), (0, 1, 0), (0, 0.99999994, 0), (0, 0.99999994, 0), (0, 1, 0), (0, -0.99999994, 0), (0, -0.99999994, 0), (0, -1, 0), (0, -0.99999994, 0), (0, -0.99999994, 0), (0, -1, 0), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)] (
+            interpolation = "faceVarying"
+        )
+        point3f[] points = [(-1.5, 70, 220), (-1.5, 0, 0), (-1.5, 0, 220), (-1.5, 70, 0), (1.5, 0, 220), (1.5, 70, 0), (1.5, 70, 220), (1.5, 0, 0), (1.5, 70, 220), (-1.5, 70, 0), (-1.5, 70, 220), (1.5, 70, 0), (-1.5, 0, 220), (1.5, 0, 0), (1.5, 0, 220), (-1.5, 0, 0), (-1.5, 0, 0), (-1.5, 70, 0), (1.5, 0, 0), (1.5, 70, 0), (-1.5, 70, 220), (-1.5, 0, 220), (1.5, 70, 220), (1.5, 0, 220)]
+        texCoord2f[] primvars:st = [(0.32202148, 1), (0.64404297, 0), (0.64404297, 1), (0.64404297, 0), (0.32202148, 1), (0.32202148, 0), (0, 1), (0.32202148, 0), (0.32202148, 1), (0.32202148, 0), (0, 1), (1.1920929e-7, 0), (0.65722656, 1), (0.67041016, 0), (0.67041016, 1), (0.67041016, 0), (0.65722656, 1), (0.65722656, 0), (0.64404297, 1), (0.65722656, 0), (0.65722656, 1), (0.65722656, 0), (0.64404297, 1), (0.64404297, 0), (0.67041016, 0.64453125), (0.67041016, 0.32226562), (0.68359375, 0.64453125), (0.68359375, 0.64453125), (0.67041016, 0.32226562), (0.68359375, 0.32226562), (0.68359375, 0), (0.68359375, 0.32226562), (0.67041016, 0), (0.67041016, 0), (0.68359375, 0.32226562), (0.67041016, 0.32226562)] (
+            interpolation = "faceVarying"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Xform "Materials"
+    {
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+}
+
+def "_materials"
+{
+    def Material "WorldGridMaterial"
+    {
+        token outputs:surface.connect = </_materials/WorldGridMaterial/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            float3 inputs:diffuseColor.connect = </_materials/WorldGridMaterial/Image_Texture.outputs:rgb>
+            float3 inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float3 inputs:normal.connect = </_materials/WorldGridMaterial/Image_Texture_002.outputs:rgb>
+            float inputs:opacity = 1
+            float inputs:roughness.connect = </_materials/WorldGridMaterial/Image_Texture_001.outputs:r>
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+
+        def Shader "Image_Texture"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @../../../textures/Engine_EngineMaterials_WorldGridMaterial_BaseColor.png@
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </_materials/WorldGridMaterial/UV_Map.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "UV_Map"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "st"
+            float2 outputs:result
+        }
+
+        def Shader "Image_Texture_001"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @./textures/Engine_EngineMaterials_WorldGridMaterial_Roughness.png@
+            token inputs:sourceColorSpace = "raw"
+            float2 inputs:st.connect = </_materials/WorldGridMaterial/UV_Map.outputs:result>
+            float outputs:r
+        }
+
+        def Shader "Image_Texture_002"
+        {
+            uniform token info:id = "UsdUVTexture"
+            float4 inputs:bias = (-1, -1, -1, -1)
+            asset inputs:file = @./textures/Engine_EngineMaterials_WorldGridMaterial_Normal.png@
+            float4 inputs:scale = (2, 2, 2, 2)
+            token inputs:sourceColorSpace = "raw"
+            float2 inputs:st.connect = </_materials/WorldGridMaterial/UV_Map.outputs:result>
+            float3 outputs:rgb
+        }
+    }
+}
+

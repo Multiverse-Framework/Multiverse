@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Kitchen_08_Sink_Drawer_01"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Kitchen_08_Sink_Drawer_01" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Kitchen/SM_Kitchen_08_Sink_Drawer_01.usda@
+        string name = "SM_Kitchen_08_Sink_Drawer_01"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_08_Sink_Drawer_01.SM_Kitchen_08_Sink_Drawer_01"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.32.50"
+        }
+        string version = "4A245EE66A6B2E3FF97C7DDF9B4667644328626D"
+    }
+    prepend payload = @SM_Kitchen_08_Sink_Drawer_01_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_08_Sink_Drawer_01/Materials/M_Plastic_White>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_08_Sink_Drawer_01/Materials/M_Kitchen_Fronts>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Kitchen_Fronts.M_Kitchen_Fronts"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_08_Sink_Drawer_01/Materials/M_Rubber_Plastic>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Rubber_Plastic.M_Rubber_Plastic"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Plastic_White" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_White.usda@
+        )
+        {
+        }
+
+        def Material "M_Kitchen_Fronts" (
+            prepend references = @../../Materials_Laborraum/M_Kitchen_Fronts.usda@
+        )
+        {
+        }
+
+        def Material "M_Rubber_Plastic" (
+            prepend references = @../../Materials_Laborraum/M_Rubber_Plastic.usda@
+        )
+        {
+        }
+    }
+}
+

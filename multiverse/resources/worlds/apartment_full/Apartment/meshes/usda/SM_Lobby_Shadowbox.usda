@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lobby_Shadowbox"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Lobby_Shadowbox" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Shadowbox.usda@
+        string name = "SM_Lobby_Shadowbox"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Shadowbox.SM_Lobby_Shadowbox"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.02"
+        }
+        string version = "2671368B1E5466335D8ACE6015915ED2154BB16C"
+    }
+    prepend payload = @SM_Lobby_Shadowbox_payload.usda@
+)
+{
+    rel material:binding = </SM_Lobby_Shadowbox/Materials/M_Basic_Wall>
+    custom string unrealMaterial = "/Game/Materials/M_Basic_Wall.M_Basic_Wall"
+
+    def Scope "Materials"
+    {
+        def Material "M_Basic_Wall" (
+            prepend references = @../../Materials/M_Basic_Wall.usda@
+        )
+        {
+        }
+    }
+}
+

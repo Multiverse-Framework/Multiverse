@@ -1,0 +1,20 @@
+#usda 1.0
+(
+    defaultPrim = "M_Glass_Stove"
+    upAxis = "Z"
+)
+
+def Material "M_Glass_Stove"
+{
+    token outputs:surface.connect = </M_Glass_Stove/PBRShader.outputs:surface>
+
+    def Shader "PBRShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor = (0, 0, 0)
+        float inputs:opacity = 0.2784314
+        int inputs:useSpecularWorkflow = 1
+        token outputs:surface
+    }
+}
+

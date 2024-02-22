@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lobby_Wall_05"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Lobby_Wall_05" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Wall_05.usda@
+        string name = "SM_Lobby_Wall_05"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Wall_05.SM_Lobby_Wall_05"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.32.48"
+        }
+        string version = "FB1736487590D3EA0FF170E9FCC0A111275D47CE"
+    }
+    prepend payload = @SM_Lobby_Wall_05_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lobby_Wall_05/Materials/M_Glass>
+        custom string unrealMaterial = "/Game/StarterContent/Materials/M_Glass.M_Glass"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lobby_Wall_05/Materials/M_Metal_Brushed>
+        custom string unrealMaterial = "/Game/Materials/M_Metal_Brushed.M_Metal_Brushed"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Glass" (
+            prepend references = @../../StarterContent/Materials/M_Glass.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Brushed" (
+            prepend references = @../../Materials/M_Metal_Brushed.usda@
+        )
+        {
+        }
+    }
+}
+

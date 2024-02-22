@@ -1,0 +1,82 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Kitchen_06_Base_Drawer_01"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Kitchen_06_Base_Drawer_01" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Kitchen/SM_Kitchen_06_Base_Drawer_01.usda@
+        string name = "SM_Kitchen_06_Base_Drawer_01"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_06_Base_Drawer_01.SM_Kitchen_06_Base_Drawer_01"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.06"
+        }
+        string version = "3A4379C61310E58373F8E6B4BF9690F07FA04E13"
+    }
+    prepend payload = @SM_Kitchen_06_Base_Drawer_01_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_06_Base_Drawer_01/Materials/M_Plastic_White>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_06_Base_Drawer_01/Materials/M_Kitchen_Fronts>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Kitchen_Fronts.M_Kitchen_Fronts"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_06_Base_Drawer_01/Materials/M_Metal_Brushed>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Brushed.M_Metal_Brushed"
+    }
+
+    over "Section3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_06_Base_Drawer_01/Materials/M_Drawer_Mat>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Drawer_Mat.M_Drawer_Mat"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Plastic_White" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_White.usda@
+        )
+        {
+        }
+
+        def Material "M_Kitchen_Fronts" (
+            prepend references = @../../Materials_Laborraum/M_Kitchen_Fronts.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Brushed" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Brushed.usda@
+        )
+        {
+        }
+
+        def Material "M_Drawer_Mat" (
+            prepend references = @../../Materials_Laborraum/M_Drawer_Mat.usda@
+        )
+        {
+        }
+    }
+}
+

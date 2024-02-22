@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_elevator_door"
+    metersPerUnit = 0.009999999776482582
+    upAxis = "Z"
+)
+
+def "SM_elevator_door" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Mechanics/Elevator/SM_elevator_door.usda@
+        string name = "SM_elevator_door"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Mechanics/Elevator/SM_elevator_door.SM_elevator_door"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.20-20.00.39"
+        }
+        string version = "38EF38C4D36365D376A1B4E55DA5DC2DC54D6EA2"
+    }
+    prepend payload = @SM_elevator_door_payload.usda@
+)
+{
+    rel material:binding = </SM_elevator_door/Materials/WorldGridMaterial>
+    custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

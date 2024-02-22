@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Living_Ceiling_02"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Living_Ceiling_02" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Living_Ceiling_02.usda@
+        string name = "SM_Living_Ceiling_02"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Living_Ceiling_02.SM_Living_Ceiling_02"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.32.59"
+        }
+        string version = "32B9D23888BBACACA8BDDD630DC457705CFE7FCB"
+    }
+    prepend payload = @SM_Living_Ceiling_02_payload.usda@
+)
+{
+    rel material:binding = </SM_Living_Ceiling_02/Materials/WorldGridMaterial>
+    custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

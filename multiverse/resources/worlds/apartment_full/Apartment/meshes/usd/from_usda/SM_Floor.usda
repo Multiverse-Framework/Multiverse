@@ -1,0 +1,81 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Floor"
+    doc = "Blender v3.6.8"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "SM_Floor"
+{
+    matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+    uniform token[] xformOpOrder = ["xformOp:transform"]
+
+    def Mesh "SM_Floor" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        uniform bool doubleSided = 1
+        float3[] extent = [(-9.474999, -2.57, -5.00679e-7), (9.474999, 2.57, -5.00679e-7)]
+        int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3]
+        int[] faceVertexIndices = [0, 1, 2, 1, 0, 3, 4, 5, 6, 5, 4, 7, 8, 9, 10, 9, 8, 11, 12, 13, 14, 13, 15, 14]
+        rel material:binding = </_materials/M_Floor_Wood>
+        normal3f[] normals = [(0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1)] (
+            interpolation = "faceVarying"
+        )
+        point3f[] points = [(-4.7374997, 2.57, -5.00679e-7), (0, -2.57, -5.00679e-7), (0, 2.57, -5.00679e-7), (-4.7374997, -2.57, -5.00679e-7), (4.7374997, 2.57, -5.00679e-7), (9.474999, -2.57, -5.00679e-7), (9.474999, 2.57, -5.00679e-7), (4.7374997, -2.57, -5.00679e-7), (0, 2.57, -5.00679e-7), (4.7374997, -2.57, -5.00679e-7), (4.7374997, 2.57, -5.00679e-7), (0, -2.57, -5.00679e-7), (-4.7374997, 2.57, -5.00679e-7), (-9.474999, 2.57, -5.00679e-7), (-4.7374997, -2.57, -5.00679e-7), (-9.474999, -2.57, -5.00679e-7)]
+        texCoord2f[] primvars:st = [(1.515625, 2.1894531), (-0.5161133, 0.50024414), (1.515625, 0.5), (-0.5161133, 0.50024414), (1.515625, 2.1894531), (-0.5161133, 2.1894531), (1.515625, -1.1894531), (-0.5161133, -2.8789062), (1.515625, -2.8789062), (-0.5161133, -2.8789062), (1.515625, -1.1894531), (-0.5161133, -1.1894531), (1.515625, 0.5), (-0.5161133, -1.1894531), (1.515625, -1.1894531), (-0.5161133, -1.1894531), (1.515625, 0.5), (-0.5161133, 0.50024414), (1.515625, 2.1894531), (1.515625, 3.8789062), (-0.5161133, 2.1894531), (1.515625, 3.8789062), (-0.5161133, 3.8789062), (-0.5161133, 2.1894531)] (
+            interpolation = "faceVarying"
+        )
+        texCoord2f[] primvars:st1 = [(0.49658203, 0.49267578), (0.92578125, 0.02734375), (0.92578125, 0.49267578), (0.92578125, 0.02734375), (0.49658203, 0.49267578), (0.49658203, 0.02734375), (0.031280518, 0.49267578), (0.46020508, 0.02734375), (0.46020508, 0.49267578), (0.46020508, 0.02734375), (0.031280518, 0.49267578), (0.031280518, 0.02734375), (0.031280518, 0.9846115), (0.46020508, 0.5192871), (0.46020508, 0.9846115), (0.46020508, 0.5192871), (0.031280518, 0.9846115), (0.031280518, 0.5192871), (0.92578125, 0.9846115), (0.49658203, 0.9846115), (0.92578125, 0.5192871), (0.49658203, 0.9846115), (0.49658203, 0.5192871), (0.92578125, 0.5192871)] (
+            interpolation = "faceVarying"
+        )
+        uniform token subdivisionScheme = "none"
+    }
+
+    def Xform "Materials"
+    {
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+}
+
+def "_materials"
+{
+    def Material "M_Floor_Wood"
+    {
+        token outputs:surface.connect = </_materials/M_Floor_Wood/Principled_BSDF.outputs:surface>
+
+        def Shader "Principled_BSDF"
+        {
+            uniform token info:id = "UsdPreviewSurface"
+            float inputs:clearcoat = 0
+            float inputs:clearcoatRoughness = 0.03
+            float3 inputs:diffuseColor.connect = </_materials/M_Floor_Wood/Image_Texture.outputs:rgb>
+            float3 inputs:emissiveColor = (0, 0, 0)
+            float inputs:ior = 1.45
+            float inputs:metallic = 0
+            float inputs:opacity = 1
+            float inputs:roughness = 0.40000004
+            float inputs:specular = 0.5
+            token outputs:surface
+        }
+
+        def Shader "Image_Texture"
+        {
+            uniform token info:id = "UsdUVTexture"
+            asset inputs:file = @../../../textures/Game_Materials_Laborraum_M_Floor_Wood_BaseColor.png@
+            token inputs:sourceColorSpace = "sRGB"
+            float2 inputs:st.connect = </_materials/M_Floor_Wood/UV_Map.outputs:result>
+            float3 outputs:rgb
+        }
+
+        def Shader "UV_Map"
+        {
+            uniform token info:id = "UsdPrimvarReader_float2"
+            token inputs:varname = "st"
+            float2 outputs:result
+        }
+    }
+}
+

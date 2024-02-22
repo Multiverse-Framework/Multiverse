@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Ledercouch"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Ledercouch" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesLiving/SM_Ledercouch.usda@
+        string name = "SM_Ledercouch"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesLiving/SM_Ledercouch.SM_Ledercouch"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.05"
+        }
+        string version = "CD37D34923FB56DBE151853EABA398DCA0630EE3"
+    }
+    prepend payload = @SM_Ledercouch_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Ledercouch/Materials/M_Leather_Black>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Leather_Black.M_Leather_Black"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Ledercouch/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Leather_Black" (
+            prepend references = @../../Materials_Laborraum/M_Leather_Black.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Chrome.usda@
+        )
+        {
+        }
+    }
+}
+

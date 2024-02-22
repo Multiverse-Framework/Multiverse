@@ -1,0 +1,20 @@
+#usda 1.0
+(
+    defaultPrim = "M_Coffeemachine_Plastic"
+    upAxis = "Z"
+)
+
+def Material "M_Coffeemachine_Plastic"
+{
+    token outputs:surface.connect = </M_Coffeemachine_Plastic/PBRShader.outputs:surface>
+
+    def Shader "PBRShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor = (0, 0.001214108, 0.0033465356)
+        float inputs:opacity = 0.8980393
+        int inputs:useSpecularWorkflow = 1
+        token outputs:surface
+    }
+}
+

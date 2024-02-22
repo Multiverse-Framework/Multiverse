@@ -1,0 +1,21 @@
+#usda 1.0
+(
+    defaultPrim = "M_Emissive_Red"
+    upAxis = "Z"
+)
+
+def Material "M_Emissive_Red"
+{
+    token outputs:surface.connect = </M_Emissive_Red/PBRShader.outputs:surface>
+
+    def Shader "PBRShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        color3f inputs:diffuseColor = (0.3231432, 0.011612245, 0)
+        color3f inputs:emissiveColor = (0.6748047, 0, 0)
+        float inputs:opacity = 1
+        int inputs:useSpecularWorkflow = 1
+        token outputs:surface
+    }
+}
+

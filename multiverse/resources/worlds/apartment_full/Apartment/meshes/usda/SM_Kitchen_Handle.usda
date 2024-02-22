@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Kitchen_Handle"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Kitchen_Handle" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Kitchen/SM_Kitchen_Handle.usda@
+        string name = "SM_Kitchen_Handle"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_Handle.SM_Kitchen_Handle"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.02"
+        }
+        string version = "C5D02A9F25F5BE4EB62385E400BE52C584A4F206"
+    }
+    prepend payload = @SM_Kitchen_Handle_payload.usda@
+)
+{
+    rel material:binding = </SM_Kitchen_Handle/Materials/M_Metal_Brushed>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Brushed.M_Metal_Brushed"
+
+    def Scope "Materials"
+    {
+        def Material "M_Metal_Brushed" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Brushed.usda@
+        )
+        {
+        }
+    }
+}
+

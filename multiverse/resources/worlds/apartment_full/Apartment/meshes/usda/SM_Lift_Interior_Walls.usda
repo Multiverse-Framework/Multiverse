@@ -1,0 +1,126 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Interior_Walls"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Lift_Interior_Walls" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Interior_Walls.usda@
+        string name = "SM_Lift_Interior_Walls"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Interior_Walls.SM_Lift_Interior_Walls"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.33.08"
+        }
+        string version = "A0FC9EDA9AFB12855386AF8E16D6107DCA81CDA9"
+    }
+    prepend payload = @SM_Lift_Interior_Walls_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Interior_Walls/Materials/M_Metal_Dark>
+        custom string unrealMaterial = "/Game/Materials/M_Metal_Dark.M_Metal_Dark"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Interior_Walls/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/StarterContent/Materials/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Interior_Walls/Materials/M_Metal_Burnished_Steel>
+        custom string unrealMaterial = "/Game/Materials/M_Metal_Burnished_Steel.M_Metal_Burnished_Steel"
+    }
+
+    over "Section3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Interior_Walls/Materials/M_Coffeemachine_Black>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Coffeemachine_Black.M_Coffeemachine_Black"
+    }
+
+    over "Section4" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Interior_Walls/Materials/M_Metal_Brushed>
+        custom string unrealMaterial = "/Game/Materials/M_Metal_Brushed.M_Metal_Brushed"
+    }
+
+    over "Section5" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Interior_Walls/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/StarterContent/Materials/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    over "Section6" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Interior_Walls/Materials/M_Metal_Dark>
+        custom string unrealMaterial = "/Game/Materials/M_Metal_Dark.M_Metal_Dark"
+    }
+
+    over "Section7" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lift_Interior_Walls/Materials/M_Emissive>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Emissive.M_Emissive"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Metal_Dark" (
+            prepend references = @../../Materials/M_Metal_Dark.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../StarterContent/Materials/M_Metal_Chrome.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Burnished_Steel" (
+            prepend references = @../../Materials/M_Metal_Burnished_Steel.usda@
+        )
+        {
+        }
+
+        def Material "M_Coffeemachine_Black" (
+            prepend references = @../../Materials_Laborraum/M_Coffeemachine_Black.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Brushed" (
+            prepend references = @../../Materials/M_Metal_Brushed.usda@
+        )
+        {
+        }
+
+        def Material "M_Emissive" (
+            prepend references = @../../Materials_Laborraum/M_Emissive.usda@
+        )
+        {
+        }
+    }
+}
+

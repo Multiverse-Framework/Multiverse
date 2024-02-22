@@ -1,0 +1,33 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lift_Text_3_CitizenScience"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Lift_Text_3_CitizenScience" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_3_CitizenScience.usda@
+        string name = "SM_Lift_Text_3_CitizenScience"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lift_Text_3_CitizenScience.SM_Lift_Text_3_CitizenScience"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.21-21.32.54"
+        }
+        string version = "FACA780469E9A32A0F2E71FBD5377C3D514ACA92"
+    }
+    prepend payload = @SM_Lift_Text_3_CitizenScience_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+
