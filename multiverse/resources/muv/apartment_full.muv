@@ -19,7 +19,7 @@ simulations:
       min_time_step: 0.001
 
 multiverse_server:
-  host: "tcp://192.168.101.137"
+  host: "tcp://192.168.178.153"
   port: 7000
 
 multiverse_clients:
@@ -30,9 +30,14 @@ multiverse_clients:
       joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
 
     receive:
+      SM_Kitchen_Handle13_ref: ["position"]
+      SM_Kitchen_Handle14_ref: ["position", "quaternion"]
       SM_Kitchen_Handle15_ref: ["position"]
       SM_Kitchen_Handle16_ref: ["position"]
       SM_Kitchen_Handle17_ref: ["position"]
       SM_Kitchen_Handle18_ref: ["position"]
       SM_Kitchen_Handle19_ref: ["position"]
       SM_Kitchen_Handle20_ref: ["position"]
+      SM_Kitchen_Handle21_ref: ["position"]
+      SM_Kitchen_Handle22_ref: ["position"]
+      SM_Kitchen_Handle23_ref: ["position"]
