@@ -13,7 +13,7 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: apartment_full_dynamic/Apartment.xml
+      path: apartment_full/Apartment.xml
     config:
       max_time_step: 0.002
       min_time_step: 0.001
@@ -30,14 +30,28 @@ multiverse_clients:
       joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
 
     receive:
-      SM_Kitchen_Handle13_ref: ["position"]
+      SM_Kitchen_Handle2_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle3_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle3_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle4_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle5_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle7_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle8_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle9_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle10_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle11_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle12_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle13_ref: ["position", "quaternion"]
       SM_Kitchen_Handle14_ref: ["position", "quaternion"]
-      SM_Kitchen_Handle15_ref: ["position"]
-      SM_Kitchen_Handle16_ref: ["position"]
-      SM_Kitchen_Handle17_ref: ["position"]
-      SM_Kitchen_Handle18_ref: ["position"]
-      SM_Kitchen_Handle19_ref: ["position"]
-      SM_Kitchen_Handle20_ref: ["position"]
-      SM_Kitchen_Handle21_ref: ["position"]
-      SM_Kitchen_Handle22_ref: ["position"]
-      SM_Kitchen_Handle23_ref: ["position"]
+      SM_Kitchen_Handle15_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle16_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle17_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle18_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle19_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle20_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle21_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle22_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle23_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle24_ref: ["position", "quaternion"]
+      SM_Kitchen_Handle25_ref: ["position", "quaternion"]
+      SM_Counter_Sink_Tap_ref: ["position", "quaternion"]
