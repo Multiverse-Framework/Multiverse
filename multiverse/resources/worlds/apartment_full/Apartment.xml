@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <mujoco model="Apartment">
 	<compiler meshdir="Apartment/meshes" texturedir="Apartment/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="1.0" boundinertia="1.0"/>
+	<option timestep="0.001" integrator="RK4" gravity="0 0 0" noslip_iterations="5" noslip_tolerance="1e-6" />
 	<default>
 		<default class="visual">
 			<geom contype="0" conaffinity="0"/>
@@ -1410,7 +1411,7 @@
 				<geom name="SM_Counter_Watertab_SM_Counter_Watertab" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Counter_Watertab" material="M_Metal_Chrome_Matte" class="visual"/>
 				<body name="SM_Counter_Sink_Tap" pos="0.04055444151163101 0.11371085047721863 -0.07370452582836151" quat="-2.1305288555595325e-06 1.2238351303239022e-15 7.595828834996022e-16 1.0">
 					<joint name="SM_Counter_Sink_Tap_On_Off_joint" type="hinge" axis="0.0 -1.0 0.0" limited="true" range="0.0 0.5" damping="0.0" stiffness="0.0"/>
-					<joint name="SM_Counter_Sink_Tap_Hot_Cold_joint" type="hinge" axis="1.0 0.0 0.0" limited="true" range="-0.5 0.5" damping="0.0" stiffness="0.0"/>
+					<joint name="SM_Counter_Sink_Tap_Hot_Cold_joint" type="hinge" axis="1.0 0.0 0.0" limited="true" range="-0.707 0.707" damping="0.0" stiffness="0.0"/>
 					<inertial mass="0.0" pos="0.04055444151163101 0.11371085047721863 -0.07370452582836151" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 					<geom name="SM_Counter_Sink_Tap_SM_Counter_Sink_Tap" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Counter_Sink_Tap" class="visual"/>
 				</body>
