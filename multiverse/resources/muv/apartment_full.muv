@@ -11,6 +11,41 @@ worlds:
 simulations:
   apartment_full:
     simulator: mujoco
+    objects:
+      pan:
+        path: pan/pan.xml
+        apply:
+          body:
+            pan:
+              pos: [7.0354, -4.3518, 1.0828]
+      cold_cutting_1:
+        path: cold_cutting_1/cold_cutting_1.xml
+        apply:
+          body:
+            cold_cutting_1:
+              pos: [7.0354, -5.3518, 1.0828]
+      chopstick_1:
+        path: chopstick/mjcf/chopstick.xml
+        apply:
+          body:
+            chopstick:
+              pos: [7.0354, -4.5518, 1.0828]
+            chopstick_ref:
+              pos: [7.0354, -4.5518, 1.0828]
+        suffix:
+          body: _1
+          geom: _1
+      chopstick_2:
+        path: chopstick/mjcf/chopstick.xml
+        apply:
+          body:
+            chopstick:
+              pos: [7.0354, -4.6518, 1.0828]
+            chopstick_ref:
+              pos: [7.0354, -4.6518, 1.0828]
+        suffix:
+          body: _2
+          geom: _2
     world:
       name: world
       path: apartment_full/Apartment.xml
@@ -58,3 +93,5 @@ multiverse_clients:
       SM_Kitchen_Handle24_ref: ["position", "quaternion"]
       SM_Kitchen_Handle25_ref: ["position", "quaternion"]
       SM_Counter_Sink_Tap_ref: ["position", "quaternion"]
+      chopstick_ref_1: ["position", "quaternion"]
+      chopstick_ref_2: ["position", "quaternion"]

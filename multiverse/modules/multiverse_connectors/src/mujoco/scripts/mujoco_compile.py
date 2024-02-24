@@ -245,6 +245,14 @@ def add_prefix_and_suffix(root: ET.Element, prefix, suffix):
             joint2_name = f"{joint_prefix}{joint2_name}{joint_suffix}"
             joint_element.set("joint2", f"{joint2_name}")
 
+        for weld_element in equality_element.findall("weld"):
+            body1_name = weld_element.get("body1")
+            body1_name = f"{body_prefix}{body1_name}{body_suffix}"
+            weld_element.set("body1", body1_name)
+            body2_name = weld_element.get("body2")
+            body2_name = f"{body_prefix}{body2_name}{body_suffix}"
+            weld_element.set("body2", body2_name)
+
 
 def add_key_frame_element(
     root: ET.Element, keyframe_dict: Dict[str, ET.Element]
