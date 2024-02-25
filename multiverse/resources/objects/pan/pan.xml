@@ -188,6 +188,10 @@
 		<mesh name="UCX_Pan_167" file="stl/UCX_Pan_167.stl" />
 		<mesh name="UCX_Pan_168" file="stl/UCX_Pan_168.stl" />
 		<mesh name="UCX_Pan_169" file="stl/UCX_Pan_169.stl" />
+		<mesh name="UCX_Pan_170" file="stl/UCX_Pan_170.stl" />
+		<mesh name="UCX_Pan_171" file="stl/UCX_Pan_171.stl" />
+		<mesh name="UCX_Pan_172" file="stl/UCX_Pan_172.stl" />
+		<mesh name="UCX_Pan_173" file="stl/UCX_Pan_173.stl" />
 	</asset>
 	<worldbody>
 		<body name="pan" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
@@ -361,17 +365,21 @@
 			<geom name="UCX_Pan_167" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Pan_167" class="pan_collision"/>
 			<geom name="UCX_Pan_168" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Pan_168" class="pan_collision"/>
 			<geom name="UCX_Pan_169" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Pan_169" class="pan_collision"/>
+			<geom name="UCX_Pan_170" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Pan_170" class="pan_collision"/>
+			<geom name="UCX_Pan_171" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Pan_171" class="pan_collision"/>
+			<geom name="UCX_Pan_172" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Pan_172" class="pan_collision"/>
+			<geom name="UCX_Pan_173" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Pan_173" class="pan_collision"/>
+			<geom name="PanMetal" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PanMetal" material="M_PanMetal" class="pan_visual"/>
+			<geom name="HandleWooden" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="HandleWooden" material="M_HandleWooden" class="pan_visual"/>
+			<geom name="HandleMetal" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="HandleMetal" material="M_HandleMetal" class="pan_visual"/>
 			<body name="pan_metal" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<inertial mass="2.6286439895629883" pos="0.08990475535392761 -2.732915334036079e-07 -0.006082954816520214" quat="0.9998741745948792 -2.2729412307853636e-07 0.015862658619880676 -1.6148235317814397e-06" diaginertia="0.02098214253783226 0.04000343754887581 0.05947813764214516"/>
-				<geom name="PanMetal" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PanMetal" material="M_PanMetal" class="pan_visual"/>
 			</body>
 			<body name="handle_wooden" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<inertial mass="0.5336440801620483" pos="-0.13276457786560059 0.000123787292977795 0.00931735523045063" quat="0.712058424949646 0.701295793056488 0.023928305134177208 -0.024174852296710014" diaginertia="3.8637517718598247e-05 0.010447471402585506 0.010448549874126911"/>
-				<geom name="HandleWooden" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="HandleWooden" material="M_HandleWooden" class="pan_visual"/>
 			</body>
 			<body name="handle_metal" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<inertial mass="0.09857194870710373" pos="-0.09976198524236679 0.00013171879982110113 0.009249822236597538" quat="0.9992324113845825 0.002873531775549054 0.03906231001019478 -0.0006392072536982596" diaginertia="1.0279828529746737e-05 0.0014953159261494875 0.0014964917208999395"/>
-				<geom name="HandleMetal" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="HandleMetal" material="M_HandleMetal" class="pan_visual"/>
 			</body>
 		</body>
 	</worldbody>
