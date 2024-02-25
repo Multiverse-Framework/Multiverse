@@ -18,6 +18,7 @@
 	<worldbody>
 		<body name="chopstick" gravcomp="1">
 			<freejoint />
+			<inertial pos="0 0 0" mass="3" diaginertia="0.01 0.01 0.001" />
 			<geom type="mesh" mesh="Chopstick" class="chopstick_visual" />
 			<geom type="mesh" mesh="UCX_Chopstick_001" class="chopstick_collision"/>
 		</body>

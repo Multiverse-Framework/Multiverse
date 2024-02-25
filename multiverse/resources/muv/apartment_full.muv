@@ -17,21 +17,22 @@ simulations:
         apply:
           body:
             pan:
-              pos: [7.0354, -4.3518, 1.0828]
+              pos: [7.052, -4.76558301, 0.89]
+              quat: [0, 0, 0, 1]
       cold_cutting_1:
         path: cold_cutting_1/cold_cutting_1.xml
         apply:
           body:
             cold_cutting_1:
-              pos: [7.0354, -5.3518, 1.0828]
+              pos: [7.12792047, -5.3180443, 0.9]
       chopstick_1:
         path: chopstick/mjcf/chopstick.xml
         apply:
           body:
             chopstick:
-              pos: [7.0354, -4.5518, 1.0828]
+              pos: [7.14501707, -5.0776081, 0.86475615]
             chopstick_ref:
-              pos: [7.0354, -4.5518, 1.0828]
+              pos: [7.14501707, -5.0776081, 0.86475615]
         suffix:
           body: _1
           geom: _1
@@ -40,9 +41,9 @@ simulations:
         apply:
           body:
             chopstick:
-              pos: [7.0354, -4.6518, 1.0828]
+              pos: [7.14501707, -5.0476081, 0.86475615]
             chopstick_ref:
-              pos: [7.0354, -4.6518, 1.0828]
+              pos: [7.14501707, -5.0476081, 0.86475615]
         suffix:
           body: _2
           geom: _2
