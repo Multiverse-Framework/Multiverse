@@ -27,7 +27,7 @@ def import_usd(in_usds: List[str],
     return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
 for in_usd in {in_usds}:
     bpy.ops.wm.usd_import(filepath=in_usd, scale=1.0)
-    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
+    # bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
     bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
 """
 

@@ -1,4 +1,4 @@
-from multiverse_parser.importer import UrdfImporter, MjcfImporter
+from multiverse_parser.importer import UrdfImporter, MjcfImporter, UsdImporter
 from multiverse_parser.exporter import UrdfExporter, MjcfExporter
 from multiverse_parser.factory import Factory, Configuration
 from multiverse_parser.factory import merge_folders
