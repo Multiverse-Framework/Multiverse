@@ -18,7 +18,7 @@ class MultiversePycramLaunch(MultiverseLaunch):
 
     def run_multiverse_pycram(self) -> Optional[subprocess.Popen]:
         cmd = [
-            "python multiverse_pycram_run",
+            "multiverse_pycram_run",
             f'--multiverse_server="{self.multiverse_server}"',
         ]
         return run_subprocess(cmd)
