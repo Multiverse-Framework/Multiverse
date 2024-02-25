@@ -352,6 +352,8 @@ def add_mocap(tree: ET.ElementTree, mocap_dict: Dict[str, List[float]], m: mujoc
         geom_num = m.body_geomnum[body_id]
         for geom_id in range(geom_adr, geom_adr + geom_num):
             geom = m.geom(geom_id)
+            if geom.conaffinity[0] != 0 or geom.contype[0] != 0:
+                continue
             geom_name = geom.name
             if geom_name == "":
                 geom_name = f"geom_{geom_id}"
