@@ -671,21 +671,15 @@ class MujocoCompiler:
         for element_type, attributes in apply.items():
             for attribute_name, attribute_props in attributes.items():
                 if isinstance(attribute_props, dict):
-                    for (
-                            attribute_child_name,
-                            attribute_child_prop,
-                    ) in attribute_props.items():
+                    element_name = attribute_name
+                    for (attribute_child_name, attribute_child_prop) in attribute_props.items():
                         for element in list(root.iter(element_type)):
-                            if element.get("name") == attribute_name:
+                            if element.get("name") == element_name:
                                 if isinstance(attribute_child_prop, list):
-                                    element.set(
-                                        attribute_child_name,
-                                        " ".join(map(str, attribute_child_prop)),
-                                    )
-                                elif isinstance(attribute_child_prop, int):
-                                    element.set(
-                                        attribute_child_name, str(attribute_child_prop)
-                                    )
+                                    element.set(attribute_child_name, " ".join(map(str, attribute_child_prop)))
+                                else:
+                                    element.set(attribute_child_name, f"{attribute_child_prop}")
+
                 elif isinstance(attribute_props, list):
                     for element in list(root.iter(element_type)):
                         element.set(attribute_name, " ".join(map(str, attribute_props)))
