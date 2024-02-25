@@ -26,7 +26,7 @@ class Multiverse(MultiverseSocket, World):
     def __init__(self, mode: Optional[WorldMode] = WorldMode.DIRECT,
                  is_prospection: Optional[bool] = False,
                  simulation_frequency: Optional[float] = 60.0,
-                 client_addr: Optional[SocketAddress] = None):
+                 client_addr: Optional[SocketAddress] = SocketAddress(port="7000")):
         """
         Initialize the Multiverse Socket and the PyCram World.
         """
