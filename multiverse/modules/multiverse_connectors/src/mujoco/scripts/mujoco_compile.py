@@ -335,7 +335,11 @@ def indent(elem, space="    ", level=0):
             elem.tail = i
 
 
-def add_mocap(tree: ET.ElementTree, mocap_dict: Dict[str, List[float]], m: mujoco.MjModel, d: mujoco.MjData) -> None:
+def add_mocap(save_xml_path: str,
+              tree: ET.ElementTree,
+              mocap_dict: Dict[str, List[float]],
+              m: mujoco.MjModel,
+              d: mujoco.MjData) -> None:
     worldbody_element = ET.Element("worldbody")
     root = tree.getroot()
     root.append(worldbody_element)
@@ -356,15 +360,33 @@ def add_mocap(tree: ET.ElementTree, mocap_dict: Dict[str, List[float]], m: mujoc
                 continue
             geom_name = geom.name
             if geom_name == "":
-                geom_name = f"geom_{geom_id}"
+                raise RuntimeError(f"Geom {geom_id} has no name")
             geom_name += "_ref"
-            geom_pos = "0 0 0"
-            geom_quat = "1 0 0 0"
+
+            geom_pos = None
+            geom_quat = None
+            xml_file_dir = os.path.dirname(save_xml_path)
             for geom_element in tree.iter("geom"):
-                if geom_element.get("name") == geom_name:
+                if geom_element.get("name") == geom.name:
                     geom_pos = geom_element.get("pos", "0 0 0")
                     geom_quat = geom_element.get("quat", "1 0 0 0")
                     break
+            else:
+                for include_element in root.iter("include"):
+                    file_path = include_element.get("file")
+                    file_path = os.path.join(xml_file_dir, file_path)
+                    include_tree = ET.parse(file_path)
+                    for geom_element in include_tree.iter("geom"):
+                        if geom_element.get("name") == geom.name:
+                            geom_pos = geom_element.get("pos", "0 0 0")
+                            geom_quat = geom_element.get("quat", "1 0 0 0")
+                            break
+                    else:
+                        continue
+                    break
+
+            if geom_pos is None or geom_quat is None:
+                raise RuntimeError(f"Failed to find geom {geom_name} in the xml")
 
             geom_type = geom.type[0]
             geom_element = ET.Element(
@@ -451,7 +473,7 @@ def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) 
                 weld_element.set(prop_key, f"{prop_value}")
         equality_element.append(weld_element)
 
-    add_mocap(tree, mocap_dict, m, d)
+    add_mocap(save_xml_path, tree, mocap_dict, m, d)
     indent(tree.getroot(), space="\t", level=0)
     tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
 
@@ -508,9 +530,7 @@ class MujocoCompiler:
             if entity.disable_self_collision == "off":
                 not_exclude_collision_bodies.append(entity.name)
             self.modify_entity(entity)
-            include_element = ET.Element(
-                "include", {"file": os.path.basename(entity.saved_path)}
-            )
+            include_element = ET.Element("include", {"file": os.path.basename(entity.saved_path)})
             root.append(include_element)
             tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 

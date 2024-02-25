@@ -104,8 +104,7 @@ class MjcfImporter(Factory):
                                                                          InertiaSource.FROM_COLLISION_MESH]:
             body_name = self.mj_model.body(1).name
             body_builder = self.world_builder.get_body_builder(body_name=body_name)
-            for child_body_builder in body_builder.child_body_builders:
-                child_body_builder.compute_and_set_inertial(self._config.inertia_source)
+            body_builder.compute_and_set_inertial(self._config.inertia_source)
 
         self._import_equality()
 

@@ -26,7 +26,7 @@ simulations:
             cold_cutting_1:
               pos: [7.12792047, -5.3180443, 0.9]
       chopstick_1:
-        path: chopstick/mjcf/chopstick.xml
+        path: chopstick/chopstick.xml
         apply:
           body:
             chopstick:
@@ -35,7 +35,7 @@ simulations:
           body: _1
           geom: _1
       chopstick_2:
-        path: chopstick/mjcf/chopstick.xml
+        path: chopstick/chopstick.xml
         apply:
           body:
             chopstick:
