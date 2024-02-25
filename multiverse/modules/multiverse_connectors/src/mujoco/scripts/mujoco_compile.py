@@ -386,7 +386,7 @@ def add_mocap(save_xml_path: str,
                     break
 
             if geom_pos is None or geom_quat is None:
-                raise RuntimeError(f"Failed to find geom {geom_name} in the xml")
+                raise RuntimeError(f"Failed to find geom {geom.name} in the xml")
 
             geom_type = geom.type[0]
             geom_element = ET.Element(
