@@ -7,6 +7,7 @@ src/multiverse_ros_socket.egg-info/dependency_links.txt
 src/multiverse_ros_socket.egg-info/top_level.txt
 src/multiverse_ros_socket/multiverse_node/__init__.py
 src/multiverse_ros_socket/multiverse_node/multiverse_node.py
+src/multiverse_ros_socket/multiverse_node/multiverse_node_properties.py
 src/multiverse_ros_socket/multiverse_node/multiverse_publishers/__init__.py
 src/multiverse_ros_socket/multiverse_node/multiverse_publishers/multiverse_publisher.py
 src/multiverse_ros_socket/multiverse_node/multiverse_publishers/odom_publisher.py

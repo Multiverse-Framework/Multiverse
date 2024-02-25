@@ -12,7 +12,7 @@ T = TypeVar("T")
 @dataclasses.dataclass
 class MultiverseMetaData:
     world_name: str = "world"
-    simulation_name: str = "pycram"
+    simulation_name: str = "cram"
     length_unit: str = "m"
     angle_unit: str = "rad"
     mass_unit: str = "kg"
@@ -28,7 +28,7 @@ class SocketAddress:
         self.port = port
 
 
-class MultiversePycramInterface:
+class MultiverseSocket:
     _server_addr: SocketAddress = SocketAddress(port="7000")
     _client_addr: SocketAddress
     _meta_data: MultiverseMetaData
