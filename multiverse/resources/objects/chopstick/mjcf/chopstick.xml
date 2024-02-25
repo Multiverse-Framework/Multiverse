@@ -23,12 +23,4 @@
 			<geom type="mesh" mesh="UCX_Chopstick_001" class="chopstick_collision"/>
 		</body>
 	</worldbody>
-	<worldbody>
-		<body name="chopstick_ref" mocap="true">
-			<geom type="mesh" mesh="Chopstick" class="chopstick_reference" />
-		</body>
-	</worldbody>
-	<equality>
-		<weld body1="chopstick" body2="chopstick_ref" torquescale="10"/>
-	</equality>
 </mujoco>

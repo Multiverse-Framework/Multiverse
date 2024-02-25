@@ -22,6 +22,8 @@ def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
                                                                                   "path"])
             entity_dict = mujoco_data[entity_str]
             mujoco_args.append(f"--{entity_str}={entity_dict}".replace(" ", ""))
+    if "references" in mujoco_data:
+        mujoco_args.append(f"--references={mujoco_data['references']}".replace(" ", ""))
 
     return mujoco_args
 
@@ -53,10 +55,12 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         if os.name == "nt":
             current_file = os.path.abspath(__file__)
             multiverse_bin_dir = os.path.join(os.path.dirname(current_file), "..", "..", "..", "bin")
-            simulator_compile_file = os.path.join(multiverse_bin_dir, f"{simulation_data['simulator']}_compile.py".replace("_headless", ""))
+            simulator_compile_file = os.path.join(multiverse_bin_dir,
+                                                  f"{simulation_data['simulator']}_compile.py".replace("_headless", ""))
             cmd = ["python", simulator_compile_file, f"--name={simulation_name}"] + cmd
         elif os.name == "posix":
-            cmd = [f"{simulation_data['simulator']}_compile".replace("_headless", ""), f"--name={simulation_name}"] + cmd
+            cmd = [f"{simulation_data['simulator']}_compile".replace("_headless", ""),
+                   f"--name={simulation_name}"] + cmd
         else:
             raise NotImplementedError(f"OS {os.name} not implemented")
         cmd_str = " ".join(cmd)

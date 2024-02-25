@@ -31,8 +31,6 @@ simulations:
           body:
             chopstick:
               pos: [7.14501707, -5.0776081, 0.86475615]
-            chopstick_ref:
-              pos: [7.14501707, -5.0776081, 0.86475615]
         suffix:
           body: _1
           geom: _1
@@ -41,8 +39,6 @@ simulations:
         apply:
           body:
             chopstick:
-              pos: [7.14501707, -5.0476081, 0.86475615]
-            chopstick_ref:
               pos: [7.14501707, -5.0476081, 0.86475615]
         suffix:
           body: _2
@@ -53,6 +49,90 @@ simulations:
       apply:
         body:
           gravcomp: 1
+    references:
+      SM_Kitchen_Handle2:
+        body1: SM_Kitchen_Handle2_ref
+        body2: SM_Kitchen_Handle2
+      SM_Kitchen_Handle3:
+        body1: SM_Kitchen_Handle3_ref
+        body2: SM_Kitchen_Handle3
+      SM_Kitchen_Handle4:
+        body1: SM_Kitchen_Handle4_ref
+        body2: SM_Kitchen_Handle4
+      SM_Kitchen_Handle5:
+        body1: SM_Kitchen_Handle5_ref
+        body2: SM_Kitchen_Handle5
+      SM_Kitchen_Handle7:
+        body1: SM_Kitchen_Handle7_ref
+        body2: SM_Kitchen_Handle7
+      SM_Kitchen_Handle8:
+        body1: SM_Kitchen_Handle8_ref
+        body2: SM_Kitchen_Handle8
+      SM_Kitchen_Handle9:
+        body1: SM_Kitchen_Handle9_ref
+        body2: SM_Kitchen_Handle9
+      SM_Kitchen_Handle10:
+        body1: SM_Kitchen_Handle10_ref
+        body2: SM_Kitchen_Handle10
+      SM_Kitchen_Handle11:
+        body1: SM_Kitchen_Handle11_ref
+        body2: SM_Kitchen_Handle11
+      SM_Kitchen_Handle12:
+        body1: SM_Kitchen_Handle12_ref
+        body2: SM_Kitchen_Handle12
+      SM_Kitchen_Handle13:  
+        body1: SM_Kitchen_Handle13_ref
+        body2: SM_Kitchen_Handle13
+      SM_Kitchen_Handle14:
+        body1: SM_Kitchen_Handle14_ref
+        body2: SM_Kitchen_Handle14
+      SM_Kitchen_Handle15:
+        body1: SM_Kitchen_Handle15_ref
+        body2: SM_Kitchen_Handle15
+      SM_Kitchen_Handle16:
+        body1: SM_Kitchen_Handle16_ref
+        body2: SM_Kitchen_Handle16
+      SM_Kitchen_Handle17:
+        body1: SM_Kitchen_Handle17_ref
+        body2: SM_Kitchen_Handle17
+      SM_Kitchen_Handle18:
+        body1: SM_Kitchen_Handle18_ref
+        body2: SM_Kitchen_Handle18
+      SM_Kitchen_Handle19:
+        body1: SM_Kitchen_Handle19_ref
+        body2: SM_Kitchen_Handle19
+      SM_Kitchen_Handle20:
+        body1: SM_Kitchen_Handle20_ref
+        body2: SM_Kitchen_Handle20
+      SM_Kitchen_Handle21:
+        body1: SM_Kitchen_Handle21_ref
+        body2: SM_Kitchen_Handle21
+      SM_Kitchen_Handle22:
+        body1: SM_Kitchen_Handle22_ref
+        body2: SM_Kitchen_Handle22
+      SM_Kitchen_Handle23:
+        body1: SM_Kitchen_Handle23_ref
+        body2: SM_Kitchen_Handle23
+      SM_Kitchen_Handle24:  
+        body1: SM_Kitchen_Handle24_ref
+        body2: SM_Kitchen_Handle24
+      SM_Kitchen_Handle25:
+        body1: SM_Kitchen_Handle25_ref
+        body2: SM_Kitchen_Handle25
+      SM_Counter_Sink_Tap:
+        body1: SM_Counter_Sink_Tap_ref
+        body2: SM_Counter_Sink_Tap
+      chopstick_1:
+        body1: chopstick_ref_1
+        body2: chopstick_1
+        torquescale: 10
+      chopstick_2:
+        body1: chopstick_ref_2
+        body2: chopstick_2
+        torquescale: 10
+      pan:
+        body1: pan_ref
+        body2: pan
     config:
       max_time_step: 0.002
       min_time_step: 0.001
@@ -70,7 +150,6 @@ multiverse_clients:
 
     receive:
       SM_Kitchen_Handle2_ref: ["position", "quaternion"]
-      SM_Kitchen_Handle3_ref: ["position", "quaternion"]
       SM_Kitchen_Handle3_ref: ["position", "quaternion"]
       SM_Kitchen_Handle4_ref: ["position", "quaternion"]
       SM_Kitchen_Handle5_ref: ["position", "quaternion"]
@@ -96,3 +175,4 @@ multiverse_clients:
       SM_Counter_Sink_Tap_ref: ["position", "quaternion"]
       chopstick_ref_1: ["position", "quaternion"]
       chopstick_ref_2: ["position", "quaternion"]
+      pan_ref: ["position", "quaternion"]
