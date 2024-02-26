@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 import logging
+import os.path
 
 from typing_extensions import List, Dict, Optional
 
 from pycram.enums import WorldMode, JointType
 from .multiverse_socket import MultiverseSocket, SocketAddress
 from pycram.pose import Pose
-from pycram.world import World, Link, Object, Constraint, Joint
+from pycram.world import World
+from pycram.description import Link, Joint
+from pycram.world_object import Object
+from pycram.world_constraints import Constraint
 from pycram.world_dataclasses import AxisAlignedBoundingBox, Color
 
 
@@ -33,6 +37,14 @@ class Multiverse(MultiverseSocket, World):
         MultiverseSocket.__init__(self, client_addr)
         World.__init__(self, mode, is_prospection, simulation_frequency)
         self.last_object_id = -1
+        self.request_meta_data["receive"]["wooden_log_1"] = ["position", "quaternion"]
+        self.request_meta_data["send"]["wooden_log_1"] = ["position", "quaternion"]
+        self._run()
+
+    def _run(self) -> None:
+        """
+        Start the Multiverse Socket.
+        """
         self._connect_and_start()
 
     def get_joint_attribute(self, joint: Joint) -> str:
@@ -66,7 +78,7 @@ class Multiverse(MultiverseSocket, World):
         self.request_meta_data["receive"][joint.name] = [attribute]
         self._communicate()
         self._bind_receive_data(self.receive_data)
-        if len(self.receive_data) != 1:
+        if len(self.receive_data) != 2:
             logging.error(f"Invalid joint position data: {self.receive_data}")
             raise ValueError
         return self.receive_data[0]
@@ -85,17 +97,21 @@ class Multiverse(MultiverseSocket, World):
         return self._get_body_pose(obj.name)
 
     def _get_body_pose(self, body_name: str) -> Pose:
-        self.request_meta_data["receive"][body_name] = ["position", "quaternion"]
+        # self.request_meta_data["receive"][body_name] = ["position", "quaternion"]
         self._communicate()
-        self._bind_receive_data(self.receive_data)
-        if len(self.receive_data) != 6:
-            logging.error(f"Invalid body pose data: {self.receive_data}")
-            raise ValueError
-        return Pose(*self.receive_data[:3], *self.receive_data[3:])
+        try:
+            print("recieved_data", self.receive_data)
+            if len(self.receive_data) != 8:
+                logging.error(f"Invalid body pose data: {self.receive_data}")
+                raise ValueError
+            return Pose(self.receive_data[1:4])
+        except ValueError:
+            return Pose()
 
     def reset_object_base_pose(self, obj: Object, pose: Pose):
-        self.request_meta_data["send"][obj.name] = ["position", "quaternion"]
+        # self.request_meta_data["send"][obj.name] = ["position", "quaternion"]
         self.send_data = [0.0, *pose.position_as_list(), *pose.orientation_as_list()]
+        print("send_data", self.send_data)
         # first element of send_data is for time.
         self._communicate()
 
@@ -163,8 +179,3 @@ class Multiverse(MultiverseSocket, World):
                        num_threads: int = 1) -> List[int]:
         logging.error("ray_test_batch is not implemented in Multiverse")
         raise NotImplementedError
-
-
-if __name__ == "__main__":
-    # main()
-    Multiverse()

@@ -20,6 +20,7 @@ src/multiverse_parser/factory/world_builder.py
 src/multiverse_parser/importer/__init__.py
 src/multiverse_parser/importer/mjcf_importer.py
 src/multiverse_parser/importer/urdf_importer.py
+src/multiverse_parser/importer/usd_importer.py
 src/multiverse_parser/utils/__init__.py
 src/multiverse_parser/utils/mesh_exporter.py
 src/multiverse_parser/utils/mesh_importer.py
@@ -32,3 +33,4 @@ tests/test_mjcf_to_usd.py
 tests/test_urdf_to_mjcf.py
 tests/test_urdf_to_urdf.py
 tests/test_urdf_to_usd.py
+tests/test_usd_to_urdf.py
