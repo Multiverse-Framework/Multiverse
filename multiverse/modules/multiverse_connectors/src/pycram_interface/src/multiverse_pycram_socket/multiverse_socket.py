@@ -56,10 +56,7 @@ class MultiverseSocket:
     def run(self) -> None:
         message = f"[Client {self._client_addr.port}] Start {self.__class__.__name__}{self._client_addr.port}"
         logging.info(message)
-        self._run()
-
-    def _run(self) -> None:
-        raise NotImplementedError(f"Must implement _run() for {self.__class__.__name__}")
+        self._connect_and_start()
 
     def stop(self) -> None:
         self._disconnect()
@@ -97,18 +94,6 @@ class MultiverseSocket:
             message = f"[Client {self._client_addr.port}] Receive empty data."
             logging.warning(message)
         return receive_data
-
-    def _bind_request_meta_data(self, request_meta_data: T) -> T:
-        pass
-
-    def _bind_response_meta_data(self, response_meta_data: T) -> T:
-        pass
-
-    def _bind_send_data(self, send_data: T) -> T:
-        pass
-
-    def _bind_receive_data(self, receive_data: T) -> T:
-        pass
 
     def _connect_and_start(self) -> None:
         self._multiverse_socket.connect(self._client_addr.host, self._client_addr.port)

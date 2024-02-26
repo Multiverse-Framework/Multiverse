@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import logging
-import os.path
+import os
+import time
+from pathlib import Path
 
 from typing_extensions import List, Dict, Optional
 
@@ -12,6 +14,29 @@ from pycram.description import Link, Joint
 from pycram.world_object import Object
 from pycram.world_constraints import Constraint
 from pycram.world_dataclasses import AxisAlignedBoundingBox, Color
+
+
+def get_resource_paths(dirname: str) -> List[str]:
+
+    resources_paths = ["../robots", "../worlds", "../objects"]
+    resources_paths = [
+        os.path.join(dirname, resources_path.replace('../', '')) if not os.path.isabs(
+            resources_path) else resources_path
+        for resources_path in resources_paths
+    ]
+
+    def add_directories(path: str) -> List[str]:
+        with os.scandir(path) as entries:
+            for entry in entries:
+                if entry.is_dir():
+                    resources_paths.append(entry.path)
+                    add_directories(entry.path)
+
+    resources_path_copy = resources_paths.copy()
+    for resources_path in resources_path_copy:
+        add_directories(resources_path)
+
+    return resources_paths
 
 
 class Multiverse(MultiverseSocket, World):
@@ -27,25 +52,39 @@ class Multiverse(MultiverseSocket, World):
     A dictionary to map JointType to the corresponding multiverse attribute name.
     """
 
-    def __init__(self, mode: Optional[WorldMode] = WorldMode.DIRECT,
+    added_multiverse_resources: bool = False
+    """
+    A flag to check if the multiverse resources have been added.
+    """
+
+    def __init__(self, simulation: str, mode: Optional[WorldMode] = WorldMode.DIRECT,
                  is_prospection: Optional[bool] = False,
                  simulation_frequency: Optional[float] = 60.0,
                  client_addr: Optional[SocketAddress] = SocketAddress(port="7000")):
         """
         Initialize the Multiverse Socket and the PyCram World.
+        param mode: The mode of the world (DIRECT or GUI).
+        param is_prospection: Whether the world is prospection or not.
+        param simulation_frequency: The frequency of the simulation.
+        param client_addr: The address of the multiverse client.
         """
         MultiverseSocket.__init__(self, client_addr)
         World.__init__(self, mode, is_prospection, simulation_frequency)
-        self.last_object_id = -1
-        self.request_meta_data["receive"]["wooden_log_1"] = ["position", "quaternion"]
-        self.request_meta_data["send"]["wooden_log_1"] = ["position", "quaternion"]
-        self._run()
+        self.simulation: str = simulation
+        self._make_sure_multiverse_resources_are_added()
+        self.last_object_id: int = -1
+        self.run()
 
-    def _run(self) -> None:
+    def _make_sure_multiverse_resources_are_added(self):
         """
-        Start the Multiverse Socket.
+        Add the multiverse resources to the pycram world resources.
         """
-        self._connect_and_start()
+        if not self.added_multiverse_resources:
+            dirname = Path("../../../../../resources").resolve().__str__()
+            resources_paths = get_resource_paths(dirname)
+            for resource_path in resources_paths:
+                self.add_resource_path(resource_path)
+            self.added_multiverse_resources = True
 
     def get_joint_attribute(self, joint: Joint) -> str:
         if joint.type not in self._joint_type_to_attribute:
@@ -54,6 +93,9 @@ class Multiverse(MultiverseSocket, World):
         return self._joint_type_to_attribute[joint.type]
 
     def load_description_and_get_object_id(self, path: str, pose: Pose) -> int:
+        """
+        This is a placeholder until a proper spawning mechanism is available in Multiverse.
+        """
         self.last_object_id += 1
         return self.last_object_id
 
@@ -73,21 +115,33 @@ class Multiverse(MultiverseSocket, World):
     def remove_constraint(self, constraint_id) -> None:
         logging.warning("remove_constraint is not implemented in Multiverse")
 
+    def _init_getter(self):
+        self.request_meta_data["receive"] = {}
+        self.request_meta_data["send"] = {}
+        self.request_meta_data["meta_data"]["simulation_name"] = self._meta_data.simulation_name
+
     def get_joint_position(self, joint: Joint) -> float:
+        self._init_getter()
         attribute = self.get_joint_attribute(joint)
         self.request_meta_data["receive"][joint.name] = [attribute]
-        self._communicate()
-        self._bind_receive_data(self.receive_data)
-        if len(self.receive_data) != 2:
-            logging.error(f"Invalid joint position data: {self.receive_data}")
+        self._communicate(True)
+        receive_data = self.response_meta_data["receive"][joint.name][attribute]
+        if len(receive_data) != 1:
+            logging.error(f"Invalid joint position data: {receive_data}")
             raise ValueError
-        return self.receive_data[0]
+        return receive_data[0]
+
+    def _init_setter(self):
+        self.request_meta_data["send"] = {}
+        self.request_meta_data["receive"] = {}
+        self.request_meta_data["meta_data"]["simulation_name"] = self.simulation
 
     def reset_joint_position(self, joint: Joint, joint_position: float) -> None:
+        self._init_setter()
+        self._communicate(True)
         attribute = self.get_joint_attribute(joint)
         self.request_meta_data["send"][joint.name] = [attribute]
-        self.send_data = [0.0, joint_position]
-        # first element of send_data is for time.
+        self.send_data = [time.time(), joint_position]
         self._communicate()
 
     def get_link_pose(self, link: Link) -> Pose:
@@ -97,23 +151,23 @@ class Multiverse(MultiverseSocket, World):
         return self._get_body_pose(obj.name)
 
     def _get_body_pose(self, body_name: str) -> Pose:
-        # self.request_meta_data["receive"][body_name] = ["position", "quaternion"]
+        self._init_getter()
+        self.request_meta_data["receive"][body_name] = ["position", "quaternion"]
+        self._communicate(True)
         self._communicate()
-        try:
-            print("recieved_data", self.receive_data)
-            if len(self.receive_data) != 8:
-                logging.error(f"Invalid body pose data: {self.receive_data}")
-                raise ValueError
-            return Pose(self.receive_data[1:4])
-        except ValueError:
-            return Pose()
+        if len(self.receive_data) != 8:
+            logging.error(f"Invalid body pose data: {self.receive_data}")
+            raise ValueError
+        return Pose(self.receive_data[1:4], self.receive_data[4:])
 
     def reset_object_base_pose(self, obj: Object, pose: Pose):
-        # self.request_meta_data["send"][obj.name] = ["position", "quaternion"]
-        self.send_data = [0.0, *pose.position_as_list(), *pose.orientation_as_list()]
-        print("send_data", self.send_data)
-        # first element of send_data is for time.
-        self._communicate()
+        self.request_meta_data["send"] = {}
+        self.request_meta_data["receive"] = {}
+        self.request_meta_data["meta_data"]["simulation_name"] = "crane_simulation"
+        self.request_meta_data["send"][obj.name] = ["position", "quaternion"]
+        self._communicate(True)
+        self.send_data = [time.time(), *pose.position_as_list(), *pose.orientation_as_list()]
+        self._communicate(False)
 
     def perform_collision_detection(self) -> None:
         logging.warning("perform_collision_detection is not implemented in Multiverse")
