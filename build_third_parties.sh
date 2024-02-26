@@ -52,7 +52,7 @@ fi
 (cd $BLENDER_BUILD_DIR && cmake -S ../../external/blender-git/blender -B . -Wno-deprecated -Wno-dev && make -j$(nproc) && make install)
 (cd $BLENDER_BUILD_DIR/bin/4.0/python/bin;
     ./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
-./python3.10 -m pip install bpy --no-warn-script-location) # For blender
+./python3.10 -m pip install bpy Pillow --no-warn-script-location) # For blender
 ln -sf $BLENDER_BUILD_DIR/bin/blender $BIN_DIR
 ln -sf $BLENDER_BUILD_DIR/bin/4.0/python/bin/python3.10 $BIN_DIR
 

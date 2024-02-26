@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "White"
+    upAxis = "Z"
+)
+
+def Material "White" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/White.usda@
+        string name = "White"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/White.White"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.19"
+        }
+        string version = "8C8025825F8EDFE1ECDEBB1C118D203213853B6C"
+    }
+)
+{
+    token outputs:surface.connect = </White/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </White/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/White.White@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.7011019, 0.7011019, 0.7011019)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.49803925
+        float inputs:specular = 0.29803923
+        token outputs:surface
+    }
+}
+

@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Glass_Stove"
+    upAxis = "Z"
+)
+
+def Material "M_Glass_Stove" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Glass_Stove.usda@
+        string name = "M_Glass_Stove"
+        dictionary unreal = {
+            string assetType = "MaterialInstanceConstant"
+            string contentPath = "/Game/Materials_Laborraum/M_Glass_Stove.M_Glass_Stove"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.19"
+        }
+        string version = "371D9E5CFBCF9ABBCB4C86B1D107AAF1A0D240CD"
+    }
+)
+{
+    token outputs:surface.connect = </M_Glass_Stove/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Glass_Stove/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Glass_Stove.M_Glass_Stove@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0, 0, 0)
+        float inputs:metallic = 0.2784314
+        float inputs:occlusion = 1
+        float inputs:opacity = 0.2784314
+        float inputs:roughness = 0
+        float inputs:specular = 1
+        token outputs:surface
+    }
+}
+

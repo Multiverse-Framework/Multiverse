@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Metal_White"
+    upAxis = "Z"
+)
+
+def Material "M_Metal_White" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Metal_White.usda@
+        string name = "M_Metal_White"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Metal_White.M_Metal_White"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.15"
+        }
+        string version = "60872F1797F600859FD239B01E1B2D394F251078"
+    }
+)
+{
+    token outputs:surface.connect = </M_Metal_White/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Metal_White/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Metal_White.M_Metal_White@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.9734453, 0.9734453, 0.9734453)
+        float inputs:metallic = 0.40000004
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.6
+        float inputs:specular = 0.098039225
+        token outputs:surface
+    }
+}
+

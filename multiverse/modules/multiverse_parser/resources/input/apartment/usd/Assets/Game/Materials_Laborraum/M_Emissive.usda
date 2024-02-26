@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Emissive"
+    upAxis = "Z"
+)
+
+def Material "M_Emissive" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Emissive.usda@
+        string name = "M_Emissive"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Emissive.M_Emissive"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.16"
+        }
+        string version = "78034676A95B790A0A28ECEF8FB2A756C1551CF7"
+    }
+)
+{
+    token outputs:surface.connect = </M_Emissive/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Emissive/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Emissive.M_Emissive@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (1, 1, 1)
+        color3f inputs:emissiveColor = (4, 4, 4)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.49803925
+        float inputs:specular = 0.49803925
+        token outputs:surface
+    }
+}
+

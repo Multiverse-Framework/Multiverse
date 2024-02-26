@@ -1,0 +1,64 @@
+#usda 1.0
+(
+    defaultPrim = "M_Fabric_Panel"
+    upAxis = "Z"
+)
+
+def Material "M_Fabric_Panel" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Fabric_Panel.usda@
+        string name = "M_Fabric_Panel"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Fabric_Panel.M_Fabric_Panel"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.18"
+        }
+        string version = "18B0F72A482BCE5D086ACA7D0436E2E0E5DE8A4C"
+    }
+)
+{
+    token inputs:stPrimvarName = "st"
+    token outputs:surface.connect = </M_Fabric_Panel/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Fabric_Panel/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Fabric_Panel.M_Fabric_Panel@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor.connect = </M_Fabric_Panel/diffuseTexture.outputs:rgb>
+        float inputs:metallic = 0
+        normal3f inputs:normal = (0.49803925, -0.49803925, 1)
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.8470589
+        float inputs:specular = 0.49803925
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </M_Fabric_Panel.inputs:stPrimvarName>
+        token outputs:result
+    }
+
+    def Shader "diffuseTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 0, 1)
+        asset inputs:file = @Textures/Game_Materials_Laborraum_M_Fabric_Panel_BaseColor.png@
+        token inputs:sourceColorSpace = "sRGB"
+        float2 inputs:st.connect = </M_Fabric_Panel/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        color3f outputs:rgb
+    }
+}
+

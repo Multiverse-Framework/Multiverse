@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Lobby_Stairs_02"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Lobby_Stairs_02" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Stairs_02.usda@
+        string name = "SM_Lobby_Stairs_02"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Lobby_Stairs_02.SM_Lobby_Stairs_02"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.30"
+        }
+        string version = "683F39B4B257D96B30ADD340657566570F068210"
+    }
+    prepend payload = @SM_Lobby_Stairs_02_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lobby_Stairs_02/Materials/M_Granite>
+        custom string unrealMaterial = "/Game/Materials/M_Granite.M_Granite"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Lobby_Stairs_02/Materials/M_Rubber_Dark>
+        custom string unrealMaterial = "/Game/Materials/M_Rubber_Dark.M_Rubber_Dark"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Granite" (
+            prepend references = @../../Materials/M_Granite.usda@
+        )
+        {
+        }
+
+        def Material "M_Rubber_Dark" (
+            prepend references = @../../Materials/M_Rubber_Dark.usda@
+        )
+        {
+        }
+    }
+}
+

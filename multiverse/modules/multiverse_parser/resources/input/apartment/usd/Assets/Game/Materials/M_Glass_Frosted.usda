@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Glass_Frosted"
+    upAxis = "Z"
+)
+
+def Material "M_Glass_Frosted" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials/M_Glass_Frosted.usda@
+        string name = "M_Glass_Frosted"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials/M_Glass_Frosted.M_Glass_Frosted"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.15"
+        }
+        string version = "957B275A17704CC5354211D2E193C42070BECB3C"
+    }
+)
+{
+    token outputs:surface.connect = </M_Glass_Frosted/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Glass_Frosted/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials/M_Glass_Frosted.M_Glass_Frosted@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.104616486, 0.38642943, 0.30946892)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:opacity = 0.69803923
+        float inputs:roughness = 0.20000002
+        float inputs:specular = 0.6
+        token outputs:surface
+    }
+}
+

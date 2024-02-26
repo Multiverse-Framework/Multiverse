@@ -1,0 +1,82 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Akustiktrennwand"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Akustiktrennwand" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesLiving/SM_Akustiktrennwand.usda@
+        string name = "SM_Akustiktrennwand"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesLiving/SM_Akustiktrennwand.SM_Akustiktrennwand"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.30"
+        }
+        string version = "FF44BE9665F363F3EE39E9778CADAE0C79FE2CA1"
+    }
+    prepend payload = @SM_Akustiktrennwand_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Akustiktrennwand/Materials/M_Fabric_Panel>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Fabric_Panel.M_Fabric_Panel"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Akustiktrennwand/Materials/M_Basic_Black>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Basic_Black.M_Basic_Black"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Akustiktrennwand/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    over "Section3" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Akustiktrennwand/Materials/M_Plastic_White>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Fabric_Panel" (
+            prepend references = @../../Materials_Laborraum/M_Fabric_Panel.usda@
+        )
+        {
+        }
+
+        def Material "M_Basic_Black" (
+            prepend references = @../../Materials_Laborraum/M_Basic_Black.usda@
+        )
+        {
+        }
+
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+
+        def Material "M_Plastic_White" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_White.usda@
+        )
+        {
+        }
+    }
+}
+

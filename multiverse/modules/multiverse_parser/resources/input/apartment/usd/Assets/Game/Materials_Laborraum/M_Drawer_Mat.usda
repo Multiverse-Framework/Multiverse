@@ -1,0 +1,64 @@
+#usda 1.0
+(
+    defaultPrim = "M_Drawer_Mat"
+    upAxis = "Z"
+)
+
+def Material "M_Drawer_Mat" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Drawer_Mat.usda@
+        string name = "M_Drawer_Mat"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Drawer_Mat.M_Drawer_Mat"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.18"
+        }
+        string version = "2119222999B296704B48D6E35AF9AA236A11C642"
+    }
+)
+{
+    token inputs:stPrimvarName = "st"
+    token outputs:surface.connect = </M_Drawer_Mat/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Drawer_Mat/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Drawer_Mat.M_Drawer_Mat@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.020288562, 0.02121901, 0.02518686)
+        float inputs:metallic = 0
+        normal3f inputs:normal.connect = </M_Drawer_Mat/normalTexture.outputs:rgb>
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.69803923
+        float inputs:specular = 0.49803925
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </M_Drawer_Mat.inputs:stPrimvarName>
+        token outputs:result
+    }
+
+    def Shader "normalTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 1, 1)
+        asset inputs:file = @Textures/Game_Materials_Laborraum_M_Drawer_Mat_Normal.png@
+        token inputs:sourceColorSpace = "raw"
+        float2 inputs:st.connect = </M_Drawer_Mat/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        normal3f outputs:rgb
+    }
+}
+

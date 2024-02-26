@@ -54,7 +54,7 @@ class MaterialProperty:
         self._diffuse_color = diffuse_color if isinstance(diffuse_color, str) \
             else numpy.array(diffuse_color) if diffuse_color is not None \
             else None
-        self._opacity = opacity if isinstance(opacity, float) else None
+        self._opacity = opacity if isinstance(opacity, float) else 1.0
         self._emissive_color = numpy.array(emissive_color) if emissive_color is not None else None
         self._specular_color = numpy.array(specular_color) if specular_color is not None else None
 
@@ -83,7 +83,11 @@ class MaterialProperty:
 
         opacity = get_input(shader=pbr_shader, shader_input="opacity")
         if opacity is not None:
-            opacity = float(opacity)
+            if isinstance(opacity, str):
+                print(f"Opacity {opacity} not supported yet, using 1.0 instead.")
+                opacity = 1.0
+            else:
+                opacity = float(opacity)
 
         emissive_color = get_input(shader=pbr_shader, shader_input="emissiveColor")
         if isinstance(emissive_color, Gf.Vec3f):

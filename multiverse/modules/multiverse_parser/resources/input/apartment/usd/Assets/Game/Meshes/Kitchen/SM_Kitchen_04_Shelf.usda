@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Kitchen_04_Shelf"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Kitchen_04_Shelf" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Kitchen/SM_Kitchen_04_Shelf.usda@
+        string name = "SM_Kitchen_04_Shelf"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_04_Shelf.SM_Kitchen_04_Shelf"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.27"
+        }
+        string version = "BD7F75454ECA7B6FC1A2DC5C10C2C8BA2675F014"
+    }
+    prepend payload = @SM_Kitchen_04_Shelf_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_04_Shelf/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_04_Shelf/Materials/M_Glass>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Glass.M_Glass"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Chrome.usda@
+        )
+        {
+        }
+
+        def Material "M_Glass" (
+            prepend references = @../../Materials_Laborraum/M_Glass.usda@
+        )
+        {
+        }
+    }
+}
+

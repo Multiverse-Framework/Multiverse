@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Glass_Oven_Door"
+    upAxis = "Z"
+)
+
+def Material "M_Glass_Oven_Door" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Glass_Oven_Door.usda@
+        string name = "M_Glass_Oven_Door"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Glass_Oven_Door.M_Glass_Oven_Door"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.17"
+        }
+        string version = "F39CB13A003F152A8A37699886F01725CDD35C7E"
+    }
+)
+{
+    token outputs:surface.connect = </M_Glass_Oven_Door/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Glass_Oven_Door/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Glass_Oven_Door.M_Glass_Oven_Door@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0, 0, 0)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:opacity = 1
+        float inputs:roughness = 0
+        float inputs:specular = 1
+        token outputs:surface
+    }
+}
+

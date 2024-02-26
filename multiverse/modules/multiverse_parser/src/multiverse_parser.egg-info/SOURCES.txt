@@ -33,4 +33,5 @@ tests/test_mjcf_to_usd.py
 tests/test_urdf_to_mjcf.py
 tests/test_urdf_to_urdf.py
 tests/test_urdf_to_usd.py
+tests/test_usd_to_mjcf.py
 tests/test_usd_to_urdf.py

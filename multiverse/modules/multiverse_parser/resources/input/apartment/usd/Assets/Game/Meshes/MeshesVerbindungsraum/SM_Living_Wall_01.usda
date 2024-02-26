@@ -1,0 +1,38 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Living_Wall_01"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Living_Wall_01" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Living_Wall_01.usda@
+        string name = "SM_Living_Wall_01"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Living_Wall_01.SM_Living_Wall_01"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.26"
+        }
+        string version = "6FD98678F15F792CC089173415F12A4DFC1F0A5A"
+    }
+    prepend payload = @SM_Living_Wall_01_payload.usda@
+)
+{
+    over "Section0"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section1"
+    {
+        custom string unrealMaterial = ""
+    }
+
+    over "Section2"
+    {
+        custom string unrealMaterial = ""
+    }
+}
+

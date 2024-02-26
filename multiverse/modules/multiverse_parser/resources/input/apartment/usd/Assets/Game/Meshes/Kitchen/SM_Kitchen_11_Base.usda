@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Kitchen_11_Base"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Kitchen_11_Base" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/Kitchen/SM_Kitchen_11_Base.usda@
+        string name = "SM_Kitchen_11_Base"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_11_Base.SM_Kitchen_11_Base"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.33"
+        }
+        string version = "606689130B43DC25F74FDB91DA5C98C55580B9D5"
+    }
+    prepend payload = @SM_Kitchen_11_Base_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_11_Base/Materials/M_Plastic_White>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Kitchen_11_Base/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Plastic_White" (
+            prepend references = @../../Materials_Laborraum/M_Plastic_White.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Chrome.usda@
+        )
+        {
+        }
+    }
+}
+

@@ -1,0 +1,88 @@
+#usda 1.0
+(
+    defaultPrim = "M_Metal_Rust"
+    upAxis = "Z"
+)
+
+def Material "M_Metal_Rust" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials/M_Metal_Rust.usda@
+        string name = "M_Metal_Rust"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials/M_Metal_Rust.M_Metal_Rust"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.18"
+        }
+        string version = "5276B5B40EB845C991B02B306362DB26AAFEA161"
+    }
+)
+{
+    token inputs:stPrimvarName = "st"
+    token outputs:surface.connect = </M_Metal_Rust/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Metal_Rust/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials/M_Metal_Rust.M_Metal_Rust@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor.connect = </M_Metal_Rust/diffuseTexture.outputs:rgb>
+        float inputs:metallic = 0
+        normal3f inputs:normal.connect = </M_Metal_Rust/normalTexture.outputs:rgb>
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.9803922
+        float inputs:specular.connect = </M_Metal_Rust/specularTexture.outputs:r>
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </M_Metal_Rust.inputs:stPrimvarName>
+        token outputs:result
+    }
+
+    def Shader "diffuseTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 0, 1)
+        asset inputs:file = @Textures/Game_Materials_M_Metal_Rust_BaseColor.png@
+        token inputs:sourceColorSpace = "sRGB"
+        float2 inputs:st.connect = </M_Metal_Rust/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        color3f outputs:rgb
+    }
+
+    def Shader "specularTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0.5, 0.5, 0.5, 1)
+        asset inputs:file = @Textures/Game_Materials_M_Metal_Rust_Specular.png@
+        token inputs:sourceColorSpace = "raw"
+        float2 inputs:st.connect = </M_Metal_Rust/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        float outputs:r
+    }
+
+    def Shader "normalTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 1, 1)
+        asset inputs:file = @Textures/Game_Materials_M_Metal_Rust_Normal.png@
+        token inputs:sourceColorSpace = "raw"
+        float2 inputs:st.connect = </M_Metal_Rust/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        normal3f outputs:rgb
+    }
+}
+

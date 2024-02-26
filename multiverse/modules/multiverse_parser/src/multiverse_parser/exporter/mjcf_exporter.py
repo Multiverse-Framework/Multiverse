@@ -139,7 +139,9 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
                 geom_size = urdf_geometry_mesh_api.GetScaleAttr().Get()
                 geom_size = numpy.array([*geom_size]) if geom_size is not None else numpy.array([1.0, 1.0, 1.0])
             else:
-                geom_size = numpy.array([1.0, 1.0, 1.0])
+                xform = UsdGeom.Xform(gprim_prim)
+                transformation = xform.GetLocalTransformation()
+                geom_size = numpy.array([round(transformation.GetRow(i).GetLength(), 3) for i in range(3)])
             geom_type = "mesh"
         else:
             raise NotImplementedError(f"Geom type {geom_builder.type} not implemented.")
@@ -160,7 +162,8 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
 
             mujoco_asset_prim = stage.GetPrimAtPath("/mujoco/asset")
             mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
-            if not stage.GetPrimAtPath(mujoco_mesh_path).IsA(UsdMujoco.MujocoMesh):
+            if (not stage.GetPrimAtPath(mujoco_mesh_path).IsValid() or
+                    not stage.GetPrimAtPath(mujoco_mesh_path).IsA(UsdMujoco.MujocoMesh)):
                 raise ValueError(f"Mesh {mesh_name} does not exist.")
             mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
@@ -194,7 +197,7 @@ class MjcfExporter:
     def __init__(
             self,
             factory: Factory,
-            file_path: str
+            file_path: str,
     ) -> None:
         self._factory = factory
         self._file_path = file_path
@@ -375,7 +378,9 @@ class MjcfExporter:
                         mesh_scale = urdf_geometry_mesh_api.GetScaleAttr().Get()
                         mesh_scale = tuple(mesh_scale) if mesh_scale is not None else (1.0, 1.0, 1.0)
                     else:
-                        mesh_scale = (1.0, 1.0, 1.0)
+                        xform = UsdGeom.Xform(prim)
+                        transformation = xform.GetLocalTransformation()
+                        mesh_scale = tuple(round(transformation.GetRow(i).GetLength(), 3) for i in range(3))
 
                     mesh_has_texture = False
                     if prim.HasAPI(UsdShade.MaterialBindingAPI):

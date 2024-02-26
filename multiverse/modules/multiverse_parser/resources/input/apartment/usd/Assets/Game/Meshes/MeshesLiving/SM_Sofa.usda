@@ -1,0 +1,54 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Sofa"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Sofa" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Meshes/MeshesLiving/SM_Sofa.usda@
+        string name = "SM_Sofa"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesLiving/SM_Sofa.SM_Sofa"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.24"
+        }
+        string version = "EE0E1FC47EAEC2368305D1E443EC53EB979857C6"
+    }
+    prepend payload = @SM_Sofa_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Sofa/Materials/M_Fabric_Sofa_Inst>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Fabric_Sofa_Inst.M_Fabric_Sofa_Inst"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Sofa/Materials/M_Basic_Black>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Basic_Black.M_Basic_Black"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Fabric_Sofa_Inst" (
+            prepend references = @../../Materials_Laborraum/M_Fabric_Sofa_Inst.usda@
+        )
+        {
+        }
+
+        def Material "M_Basic_Black" (
+            prepend references = @../../Materials_Laborraum/M_Basic_Black.usda@
+        )
+        {
+        }
+    }
+}
+

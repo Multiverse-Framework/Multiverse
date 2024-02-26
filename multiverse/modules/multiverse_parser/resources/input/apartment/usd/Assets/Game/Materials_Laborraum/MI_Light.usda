@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "MI_Light"
+    upAxis = "Z"
+)
+
+def Material "MI_Light" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/MI_Light.usda@
+        string name = "MI_Light"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/MI_Light.MI_Light"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.16"
+        }
+        string version = "4EE70055899CD60E937379150024B32DF953DCB0"
+    }
+)
+{
+    token outputs:surface.connect = </MI_Light/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </MI_Light/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/MI_Light.MI_Light@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (1, 1, 1)
+        color3f inputs:emissiveColor = (10, 10, 10)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.49803925
+        float inputs:specular = 0.49803925
+        token outputs:surface
+    }
+}
+

@@ -169,7 +169,7 @@ class Factory:
         mesh_file_name = os.path.basename(mesh_file_path).split(".")[0]
         mesh_file_extension = os.path.splitext(mesh_file_path)[1]
         tmp_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
-                                          mesh_file_extension[1:],
+                                          mesh_file_extension[1:].replace("usda", "usd").replace("usdz", "usd").replace("usd", "usda"),
                                           f"{mesh_file_name}{mesh_file_extension}")
         tmp_usd_mesh_file_path = os.path.join(self.tmp_mesh_dir_path,
                                               "usd",
@@ -179,6 +179,8 @@ class Factory:
         print("Importing mesh from", mesh_file_path, "to", tmp_usd_mesh_file_path, "and", tmp_mesh_file_path, ".")
         if mesh_file_extension in [".usd", ".usda", ".usdz"]:
             cmd = import_usd([mesh_file_path], mesh_scale) + export_usd(tmp_usd_mesh_file_path, merge_mesh)
+            os.makedirs(name=os.path.dirname(tmp_mesh_file_path), exist_ok=True)
+            shutil.copyfile(mesh_file_path, tmp_mesh_file_path)
         elif mesh_file_extension == ".obj":
             cmd = import_obj([mesh_file_path], mesh_scale) + export_obj(tmp_mesh_file_path) + export_usd(
                 tmp_usd_mesh_file_path, merge_mesh)

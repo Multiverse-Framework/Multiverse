@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Glass"
+    upAxis = "Z"
+)
+
+def Material "M_Glass" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/StarterContent/Materials/M_Glass.usda@
+        string name = "M_Glass"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/StarterContent/Materials/M_Glass.M_Glass"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.18"
+        }
+        string version = "1893D9C082C370CABD7C4D65A1A4E4F2DA43091E"
+    }
+)
+{
+    token outputs:surface.connect = </M_Glass/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Glass/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/StarterContent/Materials/M_Glass.M_Glass@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0, 0.001214108, 0.0033465356)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:opacity = 0.34901962
+        float inputs:roughness = 0
+        float inputs:specular = 1
+        token outputs:surface
+    }
+}
+

@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Metal_Dishwasher"
+    upAxis = "Z"
+)
+
+def Material "M_Metal_Dishwasher" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials_Laborraum/M_Metal_Dishwasher.usda@
+        string name = "M_Metal_Dishwasher"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Metal_Dishwasher.M_Metal_Dishwasher"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.16"
+        }
+        string version = "52F0579B3F32B012D80CCCC1C9C488C89C6D9227"
+    }
+)
+{
+    token outputs:surface.connect = </M_Metal_Dishwasher/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Metal_Dishwasher/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Metal_Dishwasher.M_Metal_Dishwasher@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (1, 1, 1)
+        float inputs:metallic = 1
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.098039225
+        float inputs:specular = 0.8000001
+        token outputs:surface
+    }
+}
+

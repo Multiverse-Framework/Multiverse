@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<mujoco model="cold_cutting_1">
+	<compiler meshdir="cold_cutting_1/meshes" texturedir="cold_cutting_1/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<default>
+		<default class="cold_cutting_1_visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="cold_cutting_1_collision">
+			<geom rgba="1.0 0.0 0.0 1.0" solimp="0.95 0.99 0.001" solref="0.004 1"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="ColdCuttingMeat" file="obj/ColdCuttingMeat.obj" scale="1.0 1.0 1.0"/>
+		<mesh name="ColdCuttingExodermis" file="obj/ColdCuttingExodermis.obj" scale="1.0 1.0 1.0"/>
+		<material name="M_ColdCuttingMeat" texture="T_ColdCuttingMeat"/>
+		<material name="M_ColdCuttingExodermis" texture="T_ColdCuttingExodermis"/>
+		<texture name="T_ColdCuttingMeat" type="2d" file="T_ColdCuttingMeat.png"/>
+		<texture name="T_ColdCuttingExodermis" type="2d" file="T_ColdCuttingExodermis.png"/>
+	</asset>
+	<asset>
+		<mesh name="UCX_ColdCutting_001" file="stl/UCX_ColdCutting_001.stl" />
+	</asset>
+	<worldbody>
+		<body name="cold_cutting_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<freejoint />
+			<geom name="UCX_ColdCutting_001" type="mesh" mesh="UCX_ColdCutting_001" class="cold_cutting_1_collision"/>
+			<body name="cold_cutting_meat" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="0.5316651463508606" pos="-1.3047480251771049e-06 -4.2225066863466054e-05 -4.222921052132733e-05" quat="0.9238739609718323 0.3826969563961029 8.981351129477844e-07 -2.013482117035892e-06" diaginertia="0.00023565333685837686 0.0016169100999832153 0.0016169962473213673"/>
+				<geom name="ColdCuttingMeat" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="ColdCuttingMeat" material="M_ColdCuttingMeat" class="cold_cutting_1_visual"/>
+			</body>
+			<body name="cold_cutting_exodermis" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="0.029258714988827705" pos="1.9871227152634674e-07 -2.76368828053819e-05 -2.7639065592666157e-05" quat="0.9235755801200867 0.3834163546562195 5.397649260885373e-07 -1.7164622931886697e-06" diaginertia="2.5001927497214638e-05 0.00011326310050208122 0.00011326515959808603"/>
+				<geom name="ColdCuttingExodermis" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="ColdCuttingExodermis" material="M_ColdCuttingExodermis" class="cold_cutting_1_visual"/>
+			</body>
+		</body>
+	</worldbody>
+	<equality/>
+</mujoco>

@@ -5,7 +5,7 @@ import os
 import numpy
 
 from multiverse_parser import InertiaSource
-from multiverse_parser import UrdfImporter, MjcfImporter
+from multiverse_parser import UrdfImporter, MjcfImporter, UsdImporter
 from multiverse_parser import UrdfExporter, MjcfExporter
 
 def main():
@@ -88,7 +88,13 @@ def main():
         raise NotImplementedError(f"Inertia source {args.inertiasource} is not supported yet.")
 
     if in_extension in [".usd", ".usda", ".usdc"]:
-        raise NotImplementedError("Importing from USD is not supported yet.")
+        factory = UsdImporter(file_path=args.input,
+                              with_physics=with_physics,
+                              with_visual=with_visual,
+                              with_collision=with_collision,
+                              inertia_source=inertia_source,
+                              default_rgba=args.defaultrgba,
+                              add_xform_for_each_geom=True)
     elif in_extension == ".urdf":
         factory = UrdfImporter(file_path=args.input,
                                with_physics=with_physics,

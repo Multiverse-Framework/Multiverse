@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Basic_Black"
+    upAxis = "Z"
+)
+
+def Material "M_Basic_Black" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials/M_Basic_Black.usda@
+        string name = "M_Basic_Black"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials/M_Basic_Black.M_Basic_Black"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.15"
+        }
+        string version = "7EF735580F6B2135EFA7F3AC153A02914A967D8A"
+    }
+)
+{
+    token outputs:surface.connect = </M_Basic_Black/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Basic_Black/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials/M_Basic_Black.M_Basic_Black@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0, 0, 0)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.49803925
+        float inputs:specular = 0.098039225
+        token outputs:surface
+    }
+}
+

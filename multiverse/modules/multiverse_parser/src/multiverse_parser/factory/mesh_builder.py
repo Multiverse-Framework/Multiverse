@@ -43,9 +43,19 @@ class MeshProperty:
                             mesh_path: Sdf.Path,
                             texture_coordinate_name: str = "st") -> "MeshProperty":
         mesh_stage = Usd.Stage.Open(mesh_file_path)
-        mesh_prim = mesh_stage.GetPrimAtPath(mesh_path)
+        mesh_prim = mesh_stage.GetPrimAtPath(mesh_path) if not mesh_path.isEmpty else mesh_stage.GetDefaultPrim()
         if not mesh_prim.IsA(UsdGeom.Mesh):
-            raise TypeError(f"{mesh_path} is not a mesh")
+            mesh_path = mesh_prim.GetPath().AppendChild(mesh_prim.GetName())
+            if mesh_stage.GetPrimAtPath(mesh_path).IsValid():
+                mesh_prim = mesh_stage.GetPrimAtPath(mesh_path)
+            else:
+                print(f"Prim {mesh_prim} from {mesh_file_path} is not a mesh, try to get its child.")
+                mesh_prims = mesh_prim.GetChildren()
+                if len(mesh_prims) == 0:
+                    raise ValueError(f"{mesh_prim} has no child.")
+                mesh_prim = mesh_prims[0]
+                if not mesh_prim.IsA(UsdGeom.Mesh):
+                    raise TypeError(f"Prim {mesh_prim} is not a mesh")
 
         return cls.from_prim(mesh_prim, texture_coordinate_name)
 

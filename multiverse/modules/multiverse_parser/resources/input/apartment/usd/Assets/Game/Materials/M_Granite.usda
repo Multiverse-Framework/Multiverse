@@ -1,0 +1,63 @@
+#usda 1.0
+(
+    defaultPrim = "M_Granite"
+    upAxis = "Z"
+)
+
+def Material "M_Granite" (
+    assetInfo = {
+        asset identifier = @../../../../../../Users/giang/Documents/USD/Assets/Game/Materials/M_Granite.usda@
+        string name = "M_Granite"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials/M_Granite.M_Granite"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.02.22-11.35.15"
+        }
+        string version = "0C4C97BC56EAFF6B2998A1C95A2CEB720C7C8C3F"
+    }
+)
+{
+    token inputs:stPrimvarName = "st"
+    token outputs:surface.connect = </M_Granite/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Granite/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials/M_Granite.M_Granite@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor.connect = </M_Granite/diffuseTexture.outputs:rgb>
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.019607844
+        float inputs:specular = 0.098039225
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </M_Granite.inputs:stPrimvarName>
+        token outputs:result
+    }
+
+    def Shader "diffuseTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 0, 1)
+        asset inputs:file = @Textures/Game_Materials_M_Granite_BaseColor.png@
+        token inputs:sourceColorSpace = "sRGB"
+        float2 inputs:st.connect = </M_Granite/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        color3f outputs:rgb
+    }
+}
+
