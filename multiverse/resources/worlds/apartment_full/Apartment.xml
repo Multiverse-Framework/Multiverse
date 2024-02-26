@@ -588,6 +588,27 @@
 		<mesh name="UCX_Kitchen_08_Sink_Drawer_01_011" file="stl/UCX_Kitchen_08_Sink_Drawer_01_011.stl" />
 		<mesh name="UCX_Kitchen_08_Sink_Drawer_01_012" file="stl/UCX_Kitchen_08_Sink_Drawer_01_012.stl" />
 		<mesh name="UCX_Kitchen_08_Sink_Drawer_01_013" file="stl/UCX_Kitchen_08_Sink_Drawer_01_013.stl" />
+
+		<mesh name="UCX_Fridge_Door_01_001" file="stl/UCX_Fridge_Door_01_001.stl" />
+		<mesh name="UCX_Fridge_Door_01_002" file="stl/UCX_Fridge_Door_01_002.stl" />
+		<mesh name="UCX_Fridge_Door_01_003" file="stl/UCX_Fridge_Door_01_003.stl" />
+		<mesh name="UCX_Fridge_Door_01_004" file="stl/UCX_Fridge_Door_01_004.stl" />
+
+		<mesh name="UCX_Fridge_Door_02_001" file="stl/UCX_Fridge_Door_02_001.stl" />
+		<mesh name="UCX_Fridge_Door_02_002" file="stl/UCX_Fridge_Door_02_002.stl" />
+		<mesh name="UCX_Fridge_Door_02_003" file="stl/UCX_Fridge_Door_02_003.stl" />
+
+		<mesh name="UCX_Fridge_Door_Tray_01_001" file="stl/UCX_Fridge_Door_Tray_01_001.stl" />
+		<mesh name="UCX_Fridge_Door_Tray_01_002" file="stl/UCX_Fridge_Door_Tray_01_002.stl" />
+		<mesh name="UCX_Fridge_Door_Tray_01_003" file="stl/UCX_Fridge_Door_Tray_01_003.stl" />
+		<mesh name="UCX_Fridge_Door_Tray_01_004" file="stl/UCX_Fridge_Door_Tray_01_004.stl" />
+		<mesh name="UCX_Fridge_Door_Tray_01_005" file="stl/UCX_Fridge_Door_Tray_01_005.stl" />
+
+		<mesh name="UCX_Fridge_Door_Tray_02_001" file="stl/UCX_Fridge_Door_Tray_02_001.stl" />
+		<mesh name="UCX_Fridge_Door_Tray_02_002" file="stl/UCX_Fridge_Door_Tray_02_002.stl" />
+		<mesh name="UCX_Fridge_Door_Tray_02_003" file="stl/UCX_Fridge_Door_Tray_02_003.stl" />
+		<mesh name="UCX_Fridge_Door_Tray_02_004" file="stl/UCX_Fridge_Door_Tray_02_004.stl" />
+		<mesh name="UCX_Fridge_Door_Tray_02_005" file="stl/UCX_Fridge_Door_Tray_02_005.stl" />
 	</asset>
 	<asset>
     <texture type="2d" name="texplane" builtin="checker" mark="cross" rgb1="0.2 0.3 0.4" rgb2="0.1 0.15 0.2" markrgb="0.8 0.8 0.8" width="512" height="512"/>
@@ -1748,17 +1769,34 @@
 						<joint name="SM_Fridge_Door_01_joint" type="hinge" axis="0.0 0.0 -1.0" limited="true" range="0.0 1.5707963267948966" damping="0.0" stiffness="0.0"/>
 						<inertial mass="0.0" pos="-0.3019707500934601 -0.27809375524520874 0.3384344279766083" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 						<geom name="SM_Fridge_Door_01_SM_Fridge_Door_01" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Door_01" class="apartment_visual"/>
+						<geom name="UCX_Fridge_Door_01_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_01_001" class="apartment_collision"/>
+						<geom name="UCX_Fridge_Door_01_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_01_002" class="apartment_collision"/>
+						<geom name="UCX_Fridge_Door_01_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_01_003" class="apartment_collision"/>
+						<geom name="UCX_Fridge_Door_01_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_01_004" class="apartment_collision"/>
+
 						<body name="SM_Fridge_Egg_Tray" pos="0.21315930783748627 0.09950777143239975 0.22457091510295868" quat="0.7071049809455872 0.0 0.0 0.7071085572242737">
 							<inertial mass="0.0" pos="0.21315930783748627 0.09950777143239975 0.22457091510295868" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 							<geom name="SM_Fridge_Egg_Tray_SM_Fridge_Egg_Tray" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Egg_Tray" material="M_Rubber_Plastic" class="apartment_visual"/>
 						</body>
+
 						<body name="SM_Fridge_Door_Tray_01" pos="0.2972511053085327 0.10379232466220856 -0.01565246470272541" quat="0.7071049809455872 0.0 0.0 0.7071085572242737">
 							<inertial mass="0.0" pos="0.2972511053085327 0.10379232466220856 -0.01565246470272541" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 							<geom name="SM_Fridge_Door_Tray_01_SM_Fridge_Door_Tray_01" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Door_Tray_01" class="apartment_visual"/>
+							<geom name="UCX_Fridge_Door_Tray_01_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_01_001" class="apartment_collision"/>
+							<geom name="UCX_Fridge_Door_Tray_01_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_01_002" class="apartment_collision"/>
+							<geom name="UCX_Fridge_Door_Tray_01_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_01_003" class="apartment_collision"/>
+							<geom name="UCX_Fridge_Door_Tray_01_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_01_004" class="apartment_collision"/>
+							<geom name="UCX_Fridge_Door_Tray_01_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_01_005" class="apartment_collision"/>
 						</body>
+
 						<body name="SM_Fridge_Door_Tray_02" pos="0.29846447706222534 0.10177694261074066 0.2238723635673523" quat="0.7071049809455872 0.0 0.0 0.7071085572242737">
 							<inertial mass="0.0" pos="0.29846447706222534 0.10177694261074066 0.2238723635673523" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 							<geom name="SM_Fridge_Door_Tray_02_SM_Fridge_Door_Tray_02" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Door_Tray_02" class="apartment_visual"/>
+							<geom name="UCX_Fridge_Door_Tray_02_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_02_001" class="apartment_collision"/>
+							<geom name="UCX_Fridge_Door_Tray_02_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_02_002" class="apartment_collision"/>
+							<geom name="UCX_Fridge_Door_Tray_02_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_02_003" class="apartment_collision"/>
+							<geom name="UCX_Fridge_Door_Tray_02_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_02_004" class="apartment_collision"/>
+							<geom name="UCX_Fridge_Door_Tray_02_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_Tray_02_005" class="apartment_collision"/>
 						</body>
 						<body name="SM_Kitchen_Handle24" pos="0.46534666419029236 -0.007986458949744701 -0.4736875891685486" quat="0.7071040272712708 0.0 0.0 0.7071095108985901">
 							<inertial mass="0.0" pos="0.46534666419029236 -0.007986458949744701 -0.4736875891685486" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
@@ -1781,6 +1819,10 @@
 						<joint name="SM_Fridge_Door_02_joint" type="hinge" axis="0.0 0.0 -1.0" limited="true" range="0.0 1.5707963267948966" damping="0.0" stiffness="0.0"/>
 						<inertial mass="0.0" pos="-0.30201226472854614 -0.27803272008895874 -0.5563140511512756" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 						<geom name="SM_Fridge_Door_02_SM_Fridge_Door_02" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Fridge_Door_02" class="apartment_visual"/>
+						<geom name="UCX_Fridge_Door_02_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_02_001" class="apartment_collision"/>
+						<geom name="UCX_Fridge_Door_02_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_02_002" class="apartment_collision"/>
+						<geom name="UCX_Fridge_Door_02_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_Door_02_003" class="apartment_collision"/>
+
 						<body name="SM_Kitchen_Handle25" pos="0.46538814902305603 -0.008047494105994701 0.2848682999610901" quat="0.7071040272712708 0.0 0.0 0.7071095108985901">
 							<inertial mass="0.0" pos="0.46538814902305603 -0.008047494105994701 0.2848682999610901" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 							<geom name="SM_Kitchen_Handle25_SM_Kitchen_Handle25" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SM_Kitchen_Handle25" material="M_Metal_Brushed" class="apartment_visual"/>
