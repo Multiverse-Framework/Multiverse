@@ -6,14 +6,14 @@ from pathlib import Path
 
 from typing_extensions import List, Dict, Optional
 
-from pycram.enums import WorldMode, JointType
+from pycram.worlds.datastructures.enums import WorldMode, JointType
 from .multiverse_socket import MultiverseSocket, SocketAddress
-from pycram.pose import Pose
+from pycram.worlds.datastructures.pose import Pose
 from pycram.world import World
 from pycram.description import Link, Joint
-from pycram.world_object import Object
-from pycram.world_constraints import Constraint
-from pycram.world_dataclasses import AxisAlignedBoundingBox, Color
+from pycram.worlds.concepts.world_object import Object
+from pycram.worlds.concepts.constraints import Constraint
+from pycram.worlds.datastructures.dataclasses import AxisAlignedBoundingBox, Color
 
 
 def get_resource_paths(dirname: str) -> List[str]:

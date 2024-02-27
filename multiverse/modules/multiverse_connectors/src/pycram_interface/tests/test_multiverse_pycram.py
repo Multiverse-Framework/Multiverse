@@ -5,10 +5,10 @@ import unittest
 
 from multiverse_pycram_socket.multiverse_pycram_interface import Multiverse
 from multiverse_pycram_socket.multiverse_socket import SocketAddress
-from pycram.enums import ObjectType
-from pycram.pose import Pose
-from pycram.urdf_interface import ObjectDescription
-from pycram.world_object import Object
+from pycram.worlds.datastructures.enums import ObjectType
+from pycram.worlds.datastructures.pose import Pose
+from pycram.object_descriptors.urdf import ObjectDescription
+from pycram.worlds.concepts.world_object import Object
 
 
 class MultiversePyCRAMTestCase(unittest.TestCase):
