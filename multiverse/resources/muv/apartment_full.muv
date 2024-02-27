@@ -61,6 +61,12 @@ simulations:
         suffix:
           body: _2
           geom: _2
+      classic_plate_26cm:
+        path: classic_plate_26cm/mjcf/classic_plate_26cm.xml
+        apply:
+          body:
+            classic_plate_26cm:
+              pos: [7.03, -5.50, .8675]
     world:
       name: world
       path: apartment_full/Apartment.xml
