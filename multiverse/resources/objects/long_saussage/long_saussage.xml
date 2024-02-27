@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<mujoco model="long_saussage">
+	<compiler meshdir="long_saussage/meshes" texturedir="long_saussage/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<default>
+		<default class="visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="collision">
+			<geom rgba="1.0 0.0 0.0 0.0"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="LongSaussage" file="obj/LongSaussage.obj" scale="1.0 1.0 1.0"/>
+		<mesh name="LongSaussage_001" file="stl/LongSaussage_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="LongSaussage_002" file="stl/LongSaussage_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="LongSaussage_003" file="stl/LongSaussage_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="LongSaussage_004" file="stl/LongSaussage_004.stl" scale="1.0 1.0 1.0"/>
+		<material name="M_LongSaussage" texture="T_LongSaussage"/>
+		<texture name="T_LongSaussage" type="2d" file="T_LongSaussage.png"/>
+	</asset>
+	<worldbody>
+		<body name="long_saussage" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<inertial mass="0.5017728805541992" pos="0.0008910206379368901 0.00014126165478955954 -0.01130351610481739" quat="0.7078753709793091 -0.706276535987854 -0.006385028827935457 -0.00672185979783535" diaginertia="0.0003000003343913704 0.00727943517267704 0.007491144351661205"/>
+			<geom name="LongSaussage" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LongSaussage" material="M_LongSaussage" class="visual"/>
+			<geom name="LongSaussage_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LongSaussage_001" class="collision"/>
+			<geom name="LongSaussage_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LongSaussage_002" class="collision"/>
+			<geom name="LongSaussage_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LongSaussage_003" class="collision"/>
+			<geom name="LongSaussage_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="LongSaussage_004" class="collision"/>
+		</body>
+	</worldbody>
+	<equality/>
+</mujoco>

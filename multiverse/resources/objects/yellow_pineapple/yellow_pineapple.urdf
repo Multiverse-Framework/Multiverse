@@ -1,0 +1,2170 @@
+<?xml version="1.0" ?>
+<robot name="yellow_pineapple" version="1.0">
+  <link name="yellow_pineapple"/>
+  <joint name="pineapple_fruit_peduncle_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="yellow_pineapple"/>
+    <child link="pineapple_fruit_peduncle"/>
+  </joint>
+  <link name="pineapple_fruit_peduncle">
+    <inertial>
+      <origin xyz="0.0007257588440552354 0.00878545269370079 -0.15430569648742676" rpy="5.51804005226586e-05 -1.5133953094482422 -1.6532188653945923"/>
+      <mass value="0.011526642367243767"/>
+      <inertia ixx="3.4394149679428665e-06" ixy="0.0" ixz="0.0" iyy="0.00027718814089894295" iyz="0.0" izz="0.00027719337958842516"/>
+    </inertial>
+    <visual name="PineappleFruitPeduncle">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/obj/PineappleFruitPeduncle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="PineappleFruitPeduncle_001">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPeduncle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="pineapple_fruit_pit_leaf_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="yellow_pineapple"/>
+    <child link="pineapple_fruit_pit_leaf"/>
+  </joint>
+  <link name="pineapple_fruit_pit_leaf">
+    <inertial>
+      <origin xyz="0.0029757895972579718 0.0060901460237801075 -0.1574786901473999" rpy="1.9451391696929932 -1.5269505977630615 -2.023956537246704"/>
+      <mass value="0.0007612069603055716"/>
+      <inertia ixx="6.620387011935236e-07" ixy="0.0" ixz="0.0" iyy="1.9203967895009555e-05" iyz="0.0" izz="1.9286717360955663e-05"/>
+    </inertial>
+    <visual name="PineappleFruitPitLeaf">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/obj/PineappleFruitPitLeaf.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="PineappleFruitPitLeaf_001">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_002">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_003">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_004">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_005">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_006">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_007">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_008">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_008.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_009">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_009.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitPitLeaf_010">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitPitLeaf_010.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="pineapple_fruit_leaf_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="yellow_pineapple"/>
+    <child link="pineapple_fruit_leaf"/>
+  </joint>
+  <link name="pineapple_fruit_leaf">
+    <inertial>
+      <origin xyz="0.0013215804938226938 0.002843083580955863 0.07261453568935394" rpy="2.531543016433716 1.5215650796890259 -2.8077783584594727"/>
+      <mass value="0.05035542696714401"/>
+      <inertia ixx="9.483648318564519e-05" ixy="0.0" ixz="0.0" iyy="0.00035701468004845083" iyz="0.0" izz="0.0003715577186085284"/>
+    </inertial>
+    <visual name="PineappleFruitLeaf">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/obj/PineappleFruitLeaf.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="PineappleFruitLeaf_001">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_002">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_003">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_004">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_005">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_006">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_007">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_008">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_008.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_009">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_009.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_010">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_010.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_011">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_011.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_012">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_012.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_013">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_013.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_014">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_014.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_015">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_015.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_016">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_016.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_017">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_017.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_018">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_018.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_019">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_019.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_020">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_020.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_021">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_021.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_022">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_022.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_023">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_023.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_024">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_024.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_025">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_025.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_026">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_026.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_027">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_027.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_028">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_028.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_029">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_029.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_030">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_030.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_031">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_031.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_032">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_032.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_033">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_033.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_034">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_034.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_035">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_035.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_036">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_036.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_037">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_037.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_038">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_038.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_039">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_039.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_040">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_040.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_041">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_041.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_042">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_042.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_043">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_043.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_044">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_044.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_045">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_045.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_046">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_046.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_047">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_047.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_048">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_048.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_049">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_049.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_050">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_050.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_051">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_051.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_052">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_052.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_053">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_053.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_054">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_054.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_055">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_055.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_056">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_056.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_057">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_057.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_058">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_058.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_059">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_059.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_060">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_060.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_061">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_061.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_062">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_062.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_063">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_063.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_064">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_064.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_065">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_065.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_066">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_066.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_067">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_067.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_068">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_068.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_069">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_069.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_070">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_070.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_071">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_071.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_072">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_072.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_073">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_073.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_074">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_074.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_075">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_075.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_076">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_076.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_077">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_077.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_078">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_078.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_079">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_079.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_080">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_080.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_081">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_081.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_082">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_082.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_083">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_083.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_084">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_084.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_085">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_085.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_086">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_086.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_087">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_087.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_088">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_088.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_089">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_089.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_090">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_090.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_091">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_091.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_092">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_092.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_093">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_093.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_094">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_094.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_095">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_095.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_096">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_096.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_097">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_097.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_098">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_098.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_099">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_099.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_100">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_100.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_101">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_101.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_102">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_102.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_103">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_103.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_104">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_104.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_105">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_105.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_106">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_106.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_107">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_107.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_108">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_108.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_109">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_109.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_110">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_110.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_111">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_111.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_112">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_112.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_113">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_113.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_114">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_114.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_115">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_115.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_116">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_116.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_117">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_117.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_118">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_118.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_119">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_119.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_120">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_120.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_121">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_121.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_122">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_122.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_123">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_123.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_124">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_124.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_125">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_125.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_126">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_126.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_127">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_127.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_128">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_128.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_129">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_129.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_130">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_130.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_131">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_131.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_132">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_132.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_133">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_133.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_134">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_134.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_135">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_135.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_136">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_136.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_137">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_137.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_138">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_138.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_139">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_139.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_140">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_140.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_141">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_141.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_142">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_142.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_143">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_143.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_144">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_144.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_145">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_145.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_146">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_146.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_147">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_147.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_148">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_148.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_149">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_149.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_150">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_150.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_151">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_151.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_152">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_152.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_153">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_153.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_154">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_154.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_155">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_155.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_156">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_156.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_157">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_157.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_158">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_158.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_159">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_159.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_160">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_160.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_161">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_161.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_162">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_162.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_163">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_163.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_164">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_164.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_165">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_165.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_166">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_166.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_167">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_167.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_168">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_168.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_169">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_169.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_170">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_170.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_171">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_171.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_173">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_173.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_174">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_174.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_175">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_175.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_176">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_176.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_177">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_177.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_178">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_178.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_179">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_179.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_180">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_180.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_181">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_181.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_182">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_182.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_183">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_183.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_184">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_184.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_185">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_185.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_186">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_186.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_187">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_187.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_188">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_188.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_189">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_189.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_190">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_190.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_191">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_191.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_192">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_192.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_193">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_193.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_194">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_194.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFruitLeaf_195">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFruitLeaf_195.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="pineapple_flesh_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="yellow_pineapple"/>
+    <child link="pineapple_flesh"/>
+  </joint>
+  <link name="pineapple_flesh">
+    <inertial>
+      <origin xyz="0.0009946395875886083 0.008379538543522358 -0.05779716745018959" rpy="1.5782723426818848 -1.4697320461273193 -1.6901679039001465"/>
+      <mass value="1.0977749824523926"/>
+      <inertia ixx="0.0019680236000567675" ixy="0.0" ixz="0.0" iyy="0.007302682381123304" iyz="0.0" izz="0.00732726464048028"/>
+    </inertial>
+    <visual name="PineappleFlesh">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/obj/PineappleFlesh.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="PineappleFlesh_001">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_002">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_003">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_004">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_005">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_006">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_007">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_008">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_008.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_009">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_009.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_010">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_010.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_011">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_011.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_012">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_012.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_013">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_013.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_014">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_014.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineappleFlesh_015">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineappleFlesh_015.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="pineapple_peel_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="yellow_pineapple"/>
+    <child link="pineapple_peel"/>
+  </joint>
+  <link name="pineapple_peel">
+    <inertial>
+      <origin xyz="0.0009605546947568655 0.008379550650715828 -0.05627276003360748" rpy="1.6012325286865234 -1.4448858499526978 -1.6869161128997803"/>
+      <mass value="0.3418968915939331"/>
+      <inertia ixx="0.001369905541650951" ixy="0.0" ixz="0.0" iyy="0.0026727456133812666" iyz="0.0" izz="0.002677279058843851"/>
+    </inertial>
+    <visual name="PineapplePeel">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/obj/PineapplePeel.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="PineapplePeel_001">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_002">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_003">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_004">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_005">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_006">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_007">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_008">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_008.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_009">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_009.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_010">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_010.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_011">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_011.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_012">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_012.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_013">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_013.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_014">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_014.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_015">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_015.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_016">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_016.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_017">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_017.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_018">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_018.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_019">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_019.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_020">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_020.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_021">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_021.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_022">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_022.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_023">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_023.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_024">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_024.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_025">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_025.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_026">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_026.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_027">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_027.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_028">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_028.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_029">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_029.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_030">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_030.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_031">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_031.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_032">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_032.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_033">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_033.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_034">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_034.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_035">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_035.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_036">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_036.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_037">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_037.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_038">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_038.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_039">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_039.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_040">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_040.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_041">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_041.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_042">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_042.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_043">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_043.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_044">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_044.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_045">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_045.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_046">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_046.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_047">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_047.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_048">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_048.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_049">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_049.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_050">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_050.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_051">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_051.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_052">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_052.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_053">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_053.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_054">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_054.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_055">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_055.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_056">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_056.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_057">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_057.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_058">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_058.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_059">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_059.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_060">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_060.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_061">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_061.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_062">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_062.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_063">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_063.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_064">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_064.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_065">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_065.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_066">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_066.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_067">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_067.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_068">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_068.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_069">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_069.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_070">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_070.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_071">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_071.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_072">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_072.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_073">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_073.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_074">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_074.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_075">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_075.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_076">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_076.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_077">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_077.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_078">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_078.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_079">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_079.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_080">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_080.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_081">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_081.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_082">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_082.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_083">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_083.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_084">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_084.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_085">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_085.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_086">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_086.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_087">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_087.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_088">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_088.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_089">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_089.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_090">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_090.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_091">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_091.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_092">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_092.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_093">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_093.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_094">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_094.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_095">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_095.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_096">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_096.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_097">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_097.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_098">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_098.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_099">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_099.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_100">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_100.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_101">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_101.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_102">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_102.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_103">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_103.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_104">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_104.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_105">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_105.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_106">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_106.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_107">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_107.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_108">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_108.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_109">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_109.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_110">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_110.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_111">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_111.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_112">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_112.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_113">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_113.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_114">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_114.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_115">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_115.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_116">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_116.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_117">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_117.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_118">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_118.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_119">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_119.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_120">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_120.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_121">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_121.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_122">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_122.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_123">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_123.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_124">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_124.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_125">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_125.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="PineapplePeel_126">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://yellow_pineapple/meshes/stl/PineapplePeel_126.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

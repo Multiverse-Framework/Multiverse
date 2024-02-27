@@ -1,0 +1,204 @@
+#usda 1.0
+(
+    defaultPrim = "long_saussage"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "long_saussage" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI", "UrdfLinkInertialAPI", "MujocoBodyInertialAPI", "MujocoBodyAPI"]
+)
+{
+    float3 mujoco:body:inertial:diaginertia = (0.00030000033, 0.007279435, 0.0074911444)
+    float mujoco:body:inertial:mass = 0.5017729
+    point3f mujoco:body:inertial:pos = (0.00089102064, 0.00014126165, -0.011303516)
+    quatf mujoco:body:inertial:quat = (0.7078754, -0.70627654, -0.006385029, -0.00672186)
+    point3f mujoco:body:pos = (0, 0, 0)
+    quatf mujoco:body:quat = (1, 0, 0, 0)
+    point3f physics:centerOfMass = (0.00089102064, 0.00014126165, -0.011303516)
+    float3 physics:diagonalInertia = (0.00030000033, 0.007279435, 0.0074911444)
+    float physics:mass = 0.5017729
+    quatf physics:principalAxes = (0.7078754, -0.70627654, -0.006385029, -0.00672186)
+    bool physics:rigidBodyEnabled = 1
+    float urdf:link:inertial:inertia:ixx = 0.00030000033
+    float urdf:link:inertial:inertia:iyy = 0.007279435
+    float urdf:link:inertial:inertia:izz = 0.0074911444
+    float urdf:link:inertial:mass = 0.5017729
+    float3 urdf:link:inertial:origin:rpy = (-1.5685306, -0.018535653, -0.00049737137)
+    point3f urdf:link:inertial:origin:xyz = (0.00089102064, 0.00014126165, -0.011303516)
+
+    def Mesh "LongSaussage" (
+        prepend apiSchemas = ["MaterialBindingAPI", "UrdfLinkVisualAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
+        prepend references = @./long_saussage/meshes/usd/LongSaussage.usda@</LongSaussage>
+    )
+    {
+        rel material:binding = </long_saussage/LongSaussage/Materials/M_LongSaussage>
+        rel mujoco:geom:material = </mujoco/asset/materials/M_LongSaussage>
+        rel mujoco:geom:mesh = </mujoco/asset/meshes/LongSaussage>
+        point3f mujoco:geom:pos = (0, 0, 0)
+        quatf mujoco:geom:quat = (1, 0, 0, 0)
+        vector3f mujoco:geom:size = (1, 1, 1)
+        uniform token mujoco:geom:type = "mesh"
+        asset urdf:geometry:mesh:filename = @./long_saussage/meshes/obj/LongSaussage.obj@
+        float3 urdf:geometry:mesh:scale = (1, 1, 1)
+        float3 urdf:visual:origin:rpy = (0, 0, 0)
+        point3f urdf:visual:origin:xyz = (0, 0, 0)
+
+        def Scope "Materials"
+        {
+            def Material "M_LongSaussage" (
+                prepend references = @./long_saussage/materials/usd/M_LongSaussage.usda@</M_LongSaussage>
+            )
+            {
+            }
+        }
+    }
+
+    def Mesh "LongSaussage_001" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
+        prepend references = @./long_saussage/meshes/usd/LongSaussage_001.usda@</LongSaussage_001>
+    )
+    {
+        rel mujoco:geom:mesh = </mujoco/asset/meshes/LongSaussage_001>
+        point3f mujoco:geom:pos = (0, 0, 0)
+        quatf mujoco:geom:quat = (1, 0, 0, 0)
+        vector3f mujoco:geom:size = (1, 1, 1)
+        uniform token mujoco:geom:type = "mesh"
+        uniform token physics:approximation = "convexHull"
+        bool physics:collisionEnabled = 1
+        float[] primvars:displayOpacity = [0]
+        float3 urdf:collision:origin:rpy = (0, 0, 0)
+        point3f urdf:collision:origin:xyz = (0, 0, 0)
+        asset urdf:geometry:mesh:filename = @./long_saussage/meshes/stl/LongSaussage_001.stl@
+        float3 urdf:geometry:mesh:scale = (1, 1, 1)
+        token visibility = "invisible"
+    }
+
+    def Mesh "LongSaussage_002" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
+        prepend references = @./long_saussage/meshes/usd/LongSaussage_002.usda@</LongSaussage_002>
+    )
+    {
+        rel mujoco:geom:mesh = </mujoco/asset/meshes/LongSaussage_002>
+        point3f mujoco:geom:pos = (0, 0, 0)
+        quatf mujoco:geom:quat = (1, 0, 0, 0)
+        vector3f mujoco:geom:size = (1, 1, 1)
+        uniform token mujoco:geom:type = "mesh"
+        uniform token physics:approximation = "convexHull"
+        bool physics:collisionEnabled = 1
+        float[] primvars:displayOpacity = [0]
+        float3 urdf:collision:origin:rpy = (0, 0, 0)
+        point3f urdf:collision:origin:xyz = (0, 0, 0)
+        asset urdf:geometry:mesh:filename = @./long_saussage/meshes/stl/LongSaussage_002.stl@
+        float3 urdf:geometry:mesh:scale = (1, 1, 1)
+        token visibility = "invisible"
+    }
+
+    def Mesh "LongSaussage_003" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
+        prepend references = @./long_saussage/meshes/usd/LongSaussage_003.usda@</LongSaussage_003>
+    )
+    {
+        rel mujoco:geom:mesh = </mujoco/asset/meshes/LongSaussage_003>
+        point3f mujoco:geom:pos = (0, 0, 0)
+        quatf mujoco:geom:quat = (1, 0, 0, 0)
+        vector3f mujoco:geom:size = (1, 1, 1)
+        uniform token mujoco:geom:type = "mesh"
+        uniform token physics:approximation = "convexHull"
+        bool physics:collisionEnabled = 1
+        float[] primvars:displayOpacity = [0]
+        float3 urdf:collision:origin:rpy = (0, 0, 0)
+        point3f urdf:collision:origin:xyz = (0, 0, 0)
+        asset urdf:geometry:mesh:filename = @./long_saussage/meshes/stl/LongSaussage_003.stl@
+        float3 urdf:geometry:mesh:scale = (1, 1, 1)
+        token visibility = "invisible"
+    }
+
+    def Mesh "LongSaussage_004" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
+        prepend references = @./long_saussage/meshes/usd/LongSaussage_004.usda@</LongSaussage_004>
+    )
+    {
+        rel mujoco:geom:mesh = </mujoco/asset/meshes/LongSaussage_004>
+        point3f mujoco:geom:pos = (0, 0, 0)
+        quatf mujoco:geom:quat = (1, 0, 0, 0)
+        vector3f mujoco:geom:size = (1, 1, 1)
+        uniform token mujoco:geom:type = "mesh"
+        uniform token physics:approximation = "convexHull"
+        bool physics:collisionEnabled = 1
+        float[] primvars:displayOpacity = [0]
+        float3 urdf:collision:origin:rpy = (0, 0, 0)
+        point3f urdf:collision:origin:xyz = (0, 0, 0)
+        asset urdf:geometry:mesh:filename = @./long_saussage/meshes/stl/LongSaussage_004.stl@
+        float3 urdf:geometry:mesh:scale = (1, 1, 1)
+        token visibility = "invisible"
+    }
+}
+
+def Urdf "urdf"
+{
+    string urdf:name = "long_saussage"
+}
+
+def Mujoco "mujoco"
+{
+    string mujoco:model = "long_saussage"
+
+    def MujocoAsset "asset"
+    {
+        def MujocoMesh "meshes"
+        {
+            def MujocoMesh "LongSaussage"
+            {
+                asset mujoco:mesh:file = @long_saussage/meshes/obj/LongSaussage.obj@
+                float3 mujoco:mesh:scale = (1, 1, 1)
+            }
+
+            def MujocoMesh "LongSaussage_001"
+            {
+                asset mujoco:mesh:file = @long_saussage/meshes/stl/LongSaussage_001.stl@
+                float3 mujoco:mesh:scale = (1, 1, 1)
+            }
+
+            def MujocoMesh "LongSaussage_002"
+            {
+                asset mujoco:mesh:file = @long_saussage/meshes/stl/LongSaussage_002.stl@
+                float3 mujoco:mesh:scale = (1, 1, 1)
+            }
+
+            def MujocoMesh "LongSaussage_003"
+            {
+                asset mujoco:mesh:file = @long_saussage/meshes/stl/LongSaussage_003.stl@
+                float3 mujoco:mesh:scale = (1, 1, 1)
+            }
+
+            def MujocoMesh "LongSaussage_004"
+            {
+                asset mujoco:mesh:file = @long_saussage/meshes/stl/LongSaussage_004.stl@
+                float3 mujoco:mesh:scale = (1, 1, 1)
+            }
+        }
+
+        def MujocoMaterial "materials"
+        {
+            def MujocoMaterial "M_LongSaussage"
+            {
+                rel mujoco:material:texture = </mujoco/asset/textures/T_LongSaussage>
+            }
+        }
+
+        def MujocoTexture "textures"
+        {
+            def MujocoTexture "T_LongSaussage"
+            {
+                asset mujoco:texture:file = @T_LongSaussage.png@
+                string mujoco:texture:type = "2d"
+            }
+        }
+    }
+
+    def MujocoEquality "equality"
+    {
+    }
+}
+

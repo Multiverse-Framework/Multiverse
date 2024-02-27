@@ -1,0 +1,412 @@
+<mujoco model="big_bowl">
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
+        autolimits="true" />
+    <asset>
+        <mesh name="big_bowl_visual" file="obj/BigBowl.obj" />
+        <mesh name="UCX_BigBowl_001" file="stl/UCX_BigBowl_001.stl" />
+		<mesh name="UCX_BigBowl_002" file="stl/UCX_BigBowl_002.stl" />
+		<mesh name="UCX_BigBowl_003" file="stl/UCX_BigBowl_003.stl" />
+		<mesh name="UCX_BigBowl_004" file="stl/UCX_BigBowl_004.stl" />
+		<mesh name="UCX_BigBowl_005" file="stl/UCX_BigBowl_005.stl" />
+		<mesh name="UCX_BigBowl_006" file="stl/UCX_BigBowl_006.stl" />
+		<mesh name="UCX_BigBowl_007" file="stl/UCX_BigBowl_007.stl" />
+		<mesh name="UCX_BigBowl_008" file="stl/UCX_BigBowl_008.stl" />
+		<mesh name="UCX_BigBowl_009" file="stl/UCX_BigBowl_009.stl" />
+		<mesh name="UCX_BigBowl_010" file="stl/UCX_BigBowl_010.stl" />
+		<mesh name="UCX_BigBowl_011" file="stl/UCX_BigBowl_011.stl" />
+		<mesh name="UCX_BigBowl_012" file="stl/UCX_BigBowl_012.stl" />
+		<mesh name="UCX_BigBowl_013" file="stl/UCX_BigBowl_013.stl" />
+		<mesh name="UCX_BigBowl_014" file="stl/UCX_BigBowl_014.stl" />
+		<mesh name="UCX_BigBowl_015" file="stl/UCX_BigBowl_015.stl" />
+		<mesh name="UCX_BigBowl_016" file="stl/UCX_BigBowl_016.stl" />
+		<mesh name="UCX_BigBowl_017" file="stl/UCX_BigBowl_017.stl" />
+		<mesh name="UCX_BigBowl_018" file="stl/UCX_BigBowl_018.stl" />
+		<mesh name="UCX_BigBowl_019" file="stl/UCX_BigBowl_019.stl" />
+		<mesh name="UCX_BigBowl_020" file="stl/UCX_BigBowl_020.stl" />
+		<mesh name="UCX_BigBowl_021" file="stl/UCX_BigBowl_021.stl" />
+		<mesh name="UCX_BigBowl_022" file="stl/UCX_BigBowl_022.stl" />
+		<mesh name="UCX_BigBowl_023" file="stl/UCX_BigBowl_023.stl" />
+		<mesh name="UCX_BigBowl_024" file="stl/UCX_BigBowl_024.stl" />
+		<mesh name="UCX_BigBowl_025" file="stl/UCX_BigBowl_025.stl" />
+		<mesh name="UCX_BigBowl_026" file="stl/UCX_BigBowl_026.stl" />
+		<mesh name="UCX_BigBowl_027" file="stl/UCX_BigBowl_027.stl" />
+		<mesh name="UCX_BigBowl_028" file="stl/UCX_BigBowl_028.stl" />
+		<mesh name="UCX_BigBowl_029" file="stl/UCX_BigBowl_029.stl" />
+		<mesh name="UCX_BigBowl_030" file="stl/UCX_BigBowl_030.stl" />
+		<mesh name="UCX_BigBowl_031" file="stl/UCX_BigBowl_031.stl" />
+		<mesh name="UCX_BigBowl_032" file="stl/UCX_BigBowl_032.stl" />
+		<mesh name="UCX_BigBowl_033" file="stl/UCX_BigBowl_033.stl" />
+		<mesh name="UCX_BigBowl_034" file="stl/UCX_BigBowl_034.stl" />
+		<mesh name="UCX_BigBowl_035" file="stl/UCX_BigBowl_035.stl" />
+		<mesh name="UCX_BigBowl_036" file="stl/UCX_BigBowl_036.stl" />
+		<mesh name="UCX_BigBowl_037" file="stl/UCX_BigBowl_037.stl" />
+		<mesh name="UCX_BigBowl_038" file="stl/UCX_BigBowl_038.stl" />
+		<mesh name="UCX_BigBowl_039" file="stl/UCX_BigBowl_039.stl" />
+		<mesh name="UCX_BigBowl_040" file="stl/UCX_BigBowl_040.stl" />
+		<mesh name="UCX_BigBowl_041" file="stl/UCX_BigBowl_041.stl" />
+		<mesh name="UCX_BigBowl_042" file="stl/UCX_BigBowl_042.stl" />
+		<mesh name="UCX_BigBowl_043" file="stl/UCX_BigBowl_043.stl" />
+		<mesh name="UCX_BigBowl_044" file="stl/UCX_BigBowl_044.stl" />
+		<mesh name="UCX_BigBowl_045" file="stl/UCX_BigBowl_045.stl" />
+		<mesh name="UCX_BigBowl_046" file="stl/UCX_BigBowl_046.stl" />
+		<mesh name="UCX_BigBowl_047" file="stl/UCX_BigBowl_047.stl" />
+		<mesh name="UCX_BigBowl_048" file="stl/UCX_BigBowl_048.stl" />
+		<mesh name="UCX_BigBowl_049" file="stl/UCX_BigBowl_049.stl" />
+		<mesh name="UCX_BigBowl_050" file="stl/UCX_BigBowl_050.stl" />
+		<mesh name="UCX_BigBowl_051" file="stl/UCX_BigBowl_051.stl" />
+		<mesh name="UCX_BigBowl_052" file="stl/UCX_BigBowl_052.stl" />
+		<mesh name="UCX_BigBowl_053" file="stl/UCX_BigBowl_053.stl" />
+		<mesh name="UCX_BigBowl_054" file="stl/UCX_BigBowl_054.stl" />
+		<mesh name="UCX_BigBowl_055" file="stl/UCX_BigBowl_055.stl" />
+		<mesh name="UCX_BigBowl_056" file="stl/UCX_BigBowl_056.stl" />
+		<mesh name="UCX_BigBowl_057" file="stl/UCX_BigBowl_057.stl" />
+		<mesh name="UCX_BigBowl_058" file="stl/UCX_BigBowl_058.stl" />
+		<mesh name="UCX_BigBowl_059" file="stl/UCX_BigBowl_059.stl" />
+		<mesh name="UCX_BigBowl_060" file="stl/UCX_BigBowl_060.stl" />
+		<mesh name="UCX_BigBowl_061" file="stl/UCX_BigBowl_061.stl" />
+		<mesh name="UCX_BigBowl_062" file="stl/UCX_BigBowl_062.stl" />
+		<mesh name="UCX_BigBowl_063" file="stl/UCX_BigBowl_063.stl" />
+		<mesh name="UCX_BigBowl_064" file="stl/UCX_BigBowl_064.stl" />
+		<mesh name="UCX_BigBowl_065" file="stl/UCX_BigBowl_065.stl" />
+		<mesh name="UCX_BigBowl_066" file="stl/UCX_BigBowl_066.stl" />
+		<mesh name="UCX_BigBowl_067" file="stl/UCX_BigBowl_067.stl" />
+		<mesh name="UCX_BigBowl_068" file="stl/UCX_BigBowl_068.stl" />
+		<mesh name="UCX_BigBowl_069" file="stl/UCX_BigBowl_069.stl" />
+		<mesh name="UCX_BigBowl_070" file="stl/UCX_BigBowl_070.stl" />
+		<mesh name="UCX_BigBowl_071" file="stl/UCX_BigBowl_071.stl" />
+		<mesh name="UCX_BigBowl_072" file="stl/UCX_BigBowl_072.stl" />
+		<mesh name="UCX_BigBowl_073" file="stl/UCX_BigBowl_073.stl" />
+		<mesh name="UCX_BigBowl_074" file="stl/UCX_BigBowl_074.stl" />
+		<mesh name="UCX_BigBowl_075" file="stl/UCX_BigBowl_075.stl" />
+		<mesh name="UCX_BigBowl_076" file="stl/UCX_BigBowl_076.stl" />
+		<mesh name="UCX_BigBowl_077" file="stl/UCX_BigBowl_077.stl" />
+		<mesh name="UCX_BigBowl_078" file="stl/UCX_BigBowl_078.stl" />
+		<mesh name="UCX_BigBowl_079" file="stl/UCX_BigBowl_079.stl" />
+		<mesh name="UCX_BigBowl_080" file="stl/UCX_BigBowl_080.stl" />
+		<mesh name="UCX_BigBowl_081" file="stl/UCX_BigBowl_081.stl" />
+		<mesh name="UCX_BigBowl_082" file="stl/UCX_BigBowl_082.stl" />
+		<mesh name="UCX_BigBowl_083" file="stl/UCX_BigBowl_083.stl" />
+		<mesh name="UCX_BigBowl_084" file="stl/UCX_BigBowl_084.stl" />
+		<mesh name="UCX_BigBowl_085" file="stl/UCX_BigBowl_085.stl" />
+		<mesh name="UCX_BigBowl_086" file="stl/UCX_BigBowl_086.stl" />
+		<mesh name="UCX_BigBowl_087" file="stl/UCX_BigBowl_087.stl" />
+		<mesh name="UCX_BigBowl_088" file="stl/UCX_BigBowl_088.stl" />
+		<mesh name="UCX_BigBowl_089" file="stl/UCX_BigBowl_089.stl" />
+		<mesh name="UCX_BigBowl_090" file="stl/UCX_BigBowl_090.stl" />
+		<mesh name="UCX_BigBowl_091" file="stl/UCX_BigBowl_091.stl" />
+		<mesh name="UCX_BigBowl_092" file="stl/UCX_BigBowl_092.stl" />
+		<mesh name="UCX_BigBowl_093" file="stl/UCX_BigBowl_093.stl" />
+		<mesh name="UCX_BigBowl_094" file="stl/UCX_BigBowl_094.stl" />
+		<mesh name="UCX_BigBowl_095" file="stl/UCX_BigBowl_095.stl" />
+		<mesh name="UCX_BigBowl_096" file="stl/UCX_BigBowl_096.stl" />
+		<mesh name="UCX_BigBowl_097" file="stl/UCX_BigBowl_097.stl" />
+		<mesh name="UCX_BigBowl_098" file="stl/UCX_BigBowl_098.stl" />
+		<mesh name="UCX_BigBowl_099" file="stl/UCX_BigBowl_099.stl" />
+        <mesh name="UCX_BigBowl_100" file="stl/UCX_BigBowl_100.stl" />
+
+        <mesh name="UCX_BigBowl_101" file="stl/UCX_BigBowl_101.stl" />
+		<mesh name="UCX_BigBowl_102" file="stl/UCX_BigBowl_102.stl" />
+		<mesh name="UCX_BigBowl_103" file="stl/UCX_BigBowl_103.stl" />
+		<mesh name="UCX_BigBowl_104" file="stl/UCX_BigBowl_104.stl" />
+		<mesh name="UCX_BigBowl_105" file="stl/UCX_BigBowl_105.stl" />
+		<mesh name="UCX_BigBowl_106" file="stl/UCX_BigBowl_106.stl" />
+		<mesh name="UCX_BigBowl_107" file="stl/UCX_BigBowl_107.stl" />
+		<mesh name="UCX_BigBowl_108" file="stl/UCX_BigBowl_108.stl" />
+		<mesh name="UCX_BigBowl_109" file="stl/UCX_BigBowl_109.stl" />
+		<mesh name="UCX_BigBowl_110" file="stl/UCX_BigBowl_110.stl" />
+		<mesh name="UCX_BigBowl_111" file="stl/UCX_BigBowl_111.stl" />
+		<mesh name="UCX_BigBowl_112" file="stl/UCX_BigBowl_112.stl" />
+		<mesh name="UCX_BigBowl_113" file="stl/UCX_BigBowl_113.stl" />
+		<mesh name="UCX_BigBowl_114" file="stl/UCX_BigBowl_114.stl" />
+		<mesh name="UCX_BigBowl_115" file="stl/UCX_BigBowl_115.stl" />
+		<mesh name="UCX_BigBowl_116" file="stl/UCX_BigBowl_116.stl" />
+		<mesh name="UCX_BigBowl_117" file="stl/UCX_BigBowl_117.stl" />
+		<mesh name="UCX_BigBowl_118" file="stl/UCX_BigBowl_118.stl" />
+		<mesh name="UCX_BigBowl_119" file="stl/UCX_BigBowl_119.stl" />
+		<mesh name="UCX_BigBowl_120" file="stl/UCX_BigBowl_120.stl" />
+		<mesh name="UCX_BigBowl_121" file="stl/UCX_BigBowl_121.stl" />
+		<mesh name="UCX_BigBowl_122" file="stl/UCX_BigBowl_122.stl" />
+		<mesh name="UCX_BigBowl_123" file="stl/UCX_BigBowl_123.stl" />
+		<mesh name="UCX_BigBowl_124" file="stl/UCX_BigBowl_124.stl" />
+		<mesh name="UCX_BigBowl_125" file="stl/UCX_BigBowl_125.stl" />
+		<mesh name="UCX_BigBowl_126" file="stl/UCX_BigBowl_126.stl" />
+		<mesh name="UCX_BigBowl_127" file="stl/UCX_BigBowl_127.stl" />
+		<mesh name="UCX_BigBowl_128" file="stl/UCX_BigBowl_128.stl" />
+		<mesh name="UCX_BigBowl_129" file="stl/UCX_BigBowl_129.stl" />
+		<mesh name="UCX_BigBowl_130" file="stl/UCX_BigBowl_130.stl" />
+		<mesh name="UCX_BigBowl_131" file="stl/UCX_BigBowl_131.stl" />
+		<mesh name="UCX_BigBowl_132" file="stl/UCX_BigBowl_132.stl" />
+		<mesh name="UCX_BigBowl_133" file="stl/UCX_BigBowl_133.stl" />
+		<mesh name="UCX_BigBowl_134" file="stl/UCX_BigBowl_134.stl" />
+		<mesh name="UCX_BigBowl_135" file="stl/UCX_BigBowl_135.stl" />
+		<mesh name="UCX_BigBowl_136" file="stl/UCX_BigBowl_136.stl" />
+		<mesh name="UCX_BigBowl_137" file="stl/UCX_BigBowl_137.stl" />
+		<mesh name="UCX_BigBowl_138" file="stl/UCX_BigBowl_138.stl" />
+		<mesh name="UCX_BigBowl_139" file="stl/UCX_BigBowl_139.stl" />
+		<mesh name="UCX_BigBowl_140" file="stl/UCX_BigBowl_140.stl" />
+		<mesh name="UCX_BigBowl_141" file="stl/UCX_BigBowl_141.stl" />
+		<mesh name="UCX_BigBowl_142" file="stl/UCX_BigBowl_142.stl" />
+		<mesh name="UCX_BigBowl_143" file="stl/UCX_BigBowl_143.stl" />
+		<mesh name="UCX_BigBowl_144" file="stl/UCX_BigBowl_144.stl" />
+		<mesh name="UCX_BigBowl_145" file="stl/UCX_BigBowl_145.stl" />
+		<mesh name="UCX_BigBowl_146" file="stl/UCX_BigBowl_146.stl" />
+		<mesh name="UCX_BigBowl_147" file="stl/UCX_BigBowl_147.stl" />
+		<mesh name="UCX_BigBowl_148" file="stl/UCX_BigBowl_148.stl" />
+		<mesh name="UCX_BigBowl_149" file="stl/UCX_BigBowl_149.stl" />
+		<mesh name="UCX_BigBowl_150" file="stl/UCX_BigBowl_150.stl" />
+		<mesh name="UCX_BigBowl_151" file="stl/UCX_BigBowl_151.stl" />
+		<mesh name="UCX_BigBowl_152" file="stl/UCX_BigBowl_152.stl" />
+		<mesh name="UCX_BigBowl_153" file="stl/UCX_BigBowl_153.stl" />
+		<mesh name="UCX_BigBowl_154" file="stl/UCX_BigBowl_154.stl" />
+		<mesh name="UCX_BigBowl_155" file="stl/UCX_BigBowl_155.stl" />
+		<mesh name="UCX_BigBowl_156" file="stl/UCX_BigBowl_156.stl" />
+		<mesh name="UCX_BigBowl_157" file="stl/UCX_BigBowl_157.stl" />
+		<mesh name="UCX_BigBowl_158" file="stl/UCX_BigBowl_158.stl" />
+		<mesh name="UCX_BigBowl_159" file="stl/UCX_BigBowl_159.stl" />
+		<mesh name="UCX_BigBowl_160" file="stl/UCX_BigBowl_160.stl" />
+		<mesh name="UCX_BigBowl_161" file="stl/UCX_BigBowl_161.stl" />
+		<mesh name="UCX_BigBowl_162" file="stl/UCX_BigBowl_162.stl" />
+		<mesh name="UCX_BigBowl_163" file="stl/UCX_BigBowl_163.stl" />
+		<mesh name="UCX_BigBowl_164" file="stl/UCX_BigBowl_164.stl" />
+		<mesh name="UCX_BigBowl_165" file="stl/UCX_BigBowl_165.stl" />
+		<mesh name="UCX_BigBowl_166" file="stl/UCX_BigBowl_166.stl" />
+		<mesh name="UCX_BigBowl_167" file="stl/UCX_BigBowl_167.stl" />
+		<mesh name="UCX_BigBowl_168" file="stl/UCX_BigBowl_168.stl" />
+		<mesh name="UCX_BigBowl_169" file="stl/UCX_BigBowl_169.stl" />
+		<mesh name="UCX_BigBowl_170" file="stl/UCX_BigBowl_170.stl" />
+		<mesh name="UCX_BigBowl_171" file="stl/UCX_BigBowl_171.stl" />
+		<mesh name="UCX_BigBowl_172" file="stl/UCX_BigBowl_172.stl" />
+		<mesh name="UCX_BigBowl_173" file="stl/UCX_BigBowl_173.stl" />
+		<mesh name="UCX_BigBowl_174" file="stl/UCX_BigBowl_174.stl" />
+		<mesh name="UCX_BigBowl_175" file="stl/UCX_BigBowl_175.stl" />
+		<mesh name="UCX_BigBowl_176" file="stl/UCX_BigBowl_176.stl" />
+		<mesh name="UCX_BigBowl_177" file="stl/UCX_BigBowl_177.stl" />
+		<mesh name="UCX_BigBowl_178" file="stl/UCX_BigBowl_178.stl" />
+		<mesh name="UCX_BigBowl_179" file="stl/UCX_BigBowl_179.stl" />
+		<mesh name="UCX_BigBowl_180" file="stl/UCX_BigBowl_180.stl" />
+		<mesh name="UCX_BigBowl_181" file="stl/UCX_BigBowl_181.stl" />
+		<mesh name="UCX_BigBowl_182" file="stl/UCX_BigBowl_182.stl" />
+		<mesh name="UCX_BigBowl_183" file="stl/UCX_BigBowl_183.stl" />
+		<mesh name="UCX_BigBowl_184" file="stl/UCX_BigBowl_184.stl" />
+		<mesh name="UCX_BigBowl_185" file="stl/UCX_BigBowl_185.stl" />
+		<mesh name="UCX_BigBowl_186" file="stl/UCX_BigBowl_186.stl" />
+		<mesh name="UCX_BigBowl_187" file="stl/UCX_BigBowl_187.stl" />
+		<mesh name="UCX_BigBowl_188" file="stl/UCX_BigBowl_188.stl" />
+		<mesh name="UCX_BigBowl_189" file="stl/UCX_BigBowl_189.stl" />
+		<mesh name="UCX_BigBowl_190" file="stl/UCX_BigBowl_190.stl" />
+		<mesh name="UCX_BigBowl_191" file="stl/UCX_BigBowl_191.stl" />
+		<mesh name="UCX_BigBowl_192" file="stl/UCX_BigBowl_192.stl" />
+		<mesh name="UCX_BigBowl_193" file="stl/UCX_BigBowl_193.stl" />
+    </asset>
+    <default>
+        <default class="big_bowl_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="big_bowl_collision">
+            <geom rgba="1.0 0.0 0.0 0.5" />
+        </default>
+    </default>
+    <worldbody>
+        <body name="big_bowl">
+            <freejoint />
+            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <geom name="big_bowl_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="big_bowl_visual" class="big_bowl_visual" />
+            <geom name="UCX_BigBowl_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_001" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_002" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_003" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_004" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_005" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_006" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_007" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_008" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_009" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_010" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_011" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_012" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_013" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_014" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_015" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_016" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_016" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_017" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_018" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_018" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_019" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_020" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_020" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_021" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_021" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_022" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_022" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_023" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_024" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_024" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_025" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_025" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_026" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_026" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_027" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_027" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_028" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_028" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_029" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_029" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_030" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_030" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_031" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_031" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_032" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_032" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_033" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_033" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_034" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_034" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_035" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_035" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_036" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_036" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_037" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_037" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_038" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_038" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_039" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_039" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_040" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_040" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_041" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_041" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_042" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_042" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_043" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_043" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_044" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_044" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_045" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_045" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_046" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_046" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_047" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_047" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_048" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_048" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_049" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_049" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_050" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_050" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_051" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_051" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_052" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_052" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_053" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_053" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_054" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_054" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_055" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_055" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_056" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_056" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_057" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_057" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_058" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_058" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_059" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_059" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_060" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_060" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_061" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_061" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_062" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_062" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_063" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_063" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_064" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_064" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_065" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_065" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_066" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_066" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_067" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_067" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_068" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_068" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_069" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_069" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_070" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_070" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_071" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_071" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_072" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_072" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_073" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_073" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_074" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_074" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_075" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_075" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_076" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_076" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_077" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_077" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_078" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_078" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_079" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_079" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_080" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_080" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_081" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_081" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_082" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_082" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_083" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_083" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_084" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_084" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_085" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_085" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_086" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_086" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_087" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_087" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_088" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_088" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_089" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_089" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_090" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_090" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_091" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_091" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_092" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_092" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_093" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_093" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_094" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_094" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_095" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_095" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_096" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_096" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_097" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_097" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_098" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_098" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_099" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_099" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_100" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_100" class="big_bowl_collision"/>
+
+            <geom name="UCX_BigBowl_101" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_101" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_102" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_102" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_103" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_103" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_104" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_104" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_105" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_105" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_106" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_106" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_107" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_107" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_108" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_108" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_109" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_109" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_110" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_110" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_111" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_111" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_112" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_112" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_113" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_113" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_114" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_114" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_115" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_115" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_116" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_116" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_117" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_117" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_118" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_118" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_119" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_119" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_120" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_120" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_121" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_121" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_122" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_122" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_123" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_123" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_124" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_124" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_125" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_125" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_126" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_126" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_127" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_127" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_128" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_128" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_129" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_129" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_130" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_130" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_131" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_131" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_132" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_132" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_133" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_133" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_134" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_134" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_135" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_135" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_136" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_136" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_137" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_137" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_138" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_138" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_139" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_139" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_140" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_140" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_141" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_141" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_142" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_142" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_143" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_143" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_144" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_144" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_145" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_145" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_146" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_146" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_147" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_147" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_148" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_148" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_149" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_149" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_150" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_150" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_151" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_151" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_152" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_152" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_153" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_153" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_154" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_154" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_155" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_155" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_156" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_156" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_157" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_157" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_158" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_158" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_159" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_159" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_160" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_160" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_161" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_161" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_162" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_162" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_163" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_163" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_164" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_164" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_165" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_165" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_166" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_166" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_167" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_167" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_168" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_168" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_169" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_169" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_170" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_170" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_171" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_171" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_172" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_172" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_173" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_173" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_174" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_174" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_175" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_175" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_176" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_176" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_177" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_177" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_178" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_178" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_179" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_179" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_180" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_180" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_181" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_181" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_182" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_182" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_183" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_183" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_184" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_184" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_185" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_185" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_186" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_186" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_187" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_187" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_188" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_188" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_189" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_189" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_190" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_190" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_191" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_191" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_192" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_192" class="big_bowl_collision"/>
+            <geom name="UCX_BigBowl_193" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_BigBowl_193" class="big_bowl_collision"/>
+        </body>
+    </worldbody>
+    <equality />
+    <contact />
+</mujoco>

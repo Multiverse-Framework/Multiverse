@@ -1,0 +1,478 @@
+<mujoco model="small_bowl">
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
+        autolimits="true" />
+    <asset>
+        <mesh name="small_bowl_visual" file="obj/SmallBowl.obj" />
+        <mesh name="UCX_SmallBowl_001" file="stl/UCX_SmallBowl_001.stl" />
+		<mesh name="UCX_SmallBowl_002" file="stl/UCX_SmallBowl_002.stl" />
+		<mesh name="UCX_SmallBowl_003" file="stl/UCX_SmallBowl_003.stl" />
+		<mesh name="UCX_SmallBowl_004" file="stl/UCX_SmallBowl_004.stl" />
+		<mesh name="UCX_SmallBowl_005" file="stl/UCX_SmallBowl_005.stl" />
+		<mesh name="UCX_SmallBowl_006" file="stl/UCX_SmallBowl_006.stl" />
+		<mesh name="UCX_SmallBowl_007" file="stl/UCX_SmallBowl_007.stl" />
+		<mesh name="UCX_SmallBowl_008" file="stl/UCX_SmallBowl_008.stl" />
+		<mesh name="UCX_SmallBowl_009" file="stl/UCX_SmallBowl_009.stl" />
+		<mesh name="UCX_SmallBowl_010" file="stl/UCX_SmallBowl_010.stl" />
+		<mesh name="UCX_SmallBowl_011" file="stl/UCX_SmallBowl_011.stl" />
+		<mesh name="UCX_SmallBowl_012" file="stl/UCX_SmallBowl_012.stl" />
+		<mesh name="UCX_SmallBowl_013" file="stl/UCX_SmallBowl_013.stl" />
+		<mesh name="UCX_SmallBowl_014" file="stl/UCX_SmallBowl_014.stl" />
+		<mesh name="UCX_SmallBowl_015" file="stl/UCX_SmallBowl_015.stl" />
+		<mesh name="UCX_SmallBowl_016" file="stl/UCX_SmallBowl_016.stl" />
+		<mesh name="UCX_SmallBowl_017" file="stl/UCX_SmallBowl_017.stl" />
+		<mesh name="UCX_SmallBowl_018" file="stl/UCX_SmallBowl_018.stl" />
+		<mesh name="UCX_SmallBowl_019" file="stl/UCX_SmallBowl_019.stl" />
+		<mesh name="UCX_SmallBowl_020" file="stl/UCX_SmallBowl_020.stl" />
+		<mesh name="UCX_SmallBowl_021" file="stl/UCX_SmallBowl_021.stl" />
+		<mesh name="UCX_SmallBowl_022" file="stl/UCX_SmallBowl_022.stl" />
+		<mesh name="UCX_SmallBowl_023" file="stl/UCX_SmallBowl_023.stl" />
+		<mesh name="UCX_SmallBowl_024" file="stl/UCX_SmallBowl_024.stl" />
+		<mesh name="UCX_SmallBowl_025" file="stl/UCX_SmallBowl_025.stl" />
+		<mesh name="UCX_SmallBowl_026" file="stl/UCX_SmallBowl_026.stl" />
+		<mesh name="UCX_SmallBowl_027" file="stl/UCX_SmallBowl_027.stl" />
+		<mesh name="UCX_SmallBowl_028" file="stl/UCX_SmallBowl_028.stl" />
+		<mesh name="UCX_SmallBowl_029" file="stl/UCX_SmallBowl_029.stl" />
+		<mesh name="UCX_SmallBowl_030" file="stl/UCX_SmallBowl_030.stl" />
+		<mesh name="UCX_SmallBowl_031" file="stl/UCX_SmallBowl_031.stl" />
+		<mesh name="UCX_SmallBowl_032" file="stl/UCX_SmallBowl_032.stl" />
+		<mesh name="UCX_SmallBowl_033" file="stl/UCX_SmallBowl_033.stl" />
+		<mesh name="UCX_SmallBowl_034" file="stl/UCX_SmallBowl_034.stl" />
+		<mesh name="UCX_SmallBowl_035" file="stl/UCX_SmallBowl_035.stl" />
+		<mesh name="UCX_SmallBowl_036" file="stl/UCX_SmallBowl_036.stl" />
+		<mesh name="UCX_SmallBowl_037" file="stl/UCX_SmallBowl_037.stl" />
+		<mesh name="UCX_SmallBowl_038" file="stl/UCX_SmallBowl_038.stl" />
+		<mesh name="UCX_SmallBowl_039" file="stl/UCX_SmallBowl_039.stl" />
+		<mesh name="UCX_SmallBowl_040" file="stl/UCX_SmallBowl_040.stl" />
+		<mesh name="UCX_SmallBowl_041" file="stl/UCX_SmallBowl_041.stl" />
+		<mesh name="UCX_SmallBowl_042" file="stl/UCX_SmallBowl_042.stl" />
+		<mesh name="UCX_SmallBowl_043" file="stl/UCX_SmallBowl_043.stl" />
+		<mesh name="UCX_SmallBowl_044" file="stl/UCX_SmallBowl_044.stl" />
+		<mesh name="UCX_SmallBowl_045" file="stl/UCX_SmallBowl_045.stl" />
+		<mesh name="UCX_SmallBowl_046" file="stl/UCX_SmallBowl_046.stl" />
+		<mesh name="UCX_SmallBowl_047" file="stl/UCX_SmallBowl_047.stl" />
+		<mesh name="UCX_SmallBowl_048" file="stl/UCX_SmallBowl_048.stl" />
+		<mesh name="UCX_SmallBowl_049" file="stl/UCX_SmallBowl_049.stl" />
+		<mesh name="UCX_SmallBowl_050" file="stl/UCX_SmallBowl_050.stl" />
+		<mesh name="UCX_SmallBowl_051" file="stl/UCX_SmallBowl_051.stl" />
+		<mesh name="UCX_SmallBowl_052" file="stl/UCX_SmallBowl_052.stl" />
+		<mesh name="UCX_SmallBowl_053" file="stl/UCX_SmallBowl_053.stl" />
+		<mesh name="UCX_SmallBowl_054" file="stl/UCX_SmallBowl_054.stl" />
+		<mesh name="UCX_SmallBowl_055" file="stl/UCX_SmallBowl_055.stl" />
+		<mesh name="UCX_SmallBowl_056" file="stl/UCX_SmallBowl_056.stl" />
+		<mesh name="UCX_SmallBowl_057" file="stl/UCX_SmallBowl_057.stl" />
+		<mesh name="UCX_SmallBowl_058" file="stl/UCX_SmallBowl_058.stl" />
+		<mesh name="UCX_SmallBowl_059" file="stl/UCX_SmallBowl_059.stl" />
+		<mesh name="UCX_SmallBowl_060" file="stl/UCX_SmallBowl_060.stl" />
+		<mesh name="UCX_SmallBowl_061" file="stl/UCX_SmallBowl_061.stl" />
+		<mesh name="UCX_SmallBowl_062" file="stl/UCX_SmallBowl_062.stl" />
+		<mesh name="UCX_SmallBowl_063" file="stl/UCX_SmallBowl_063.stl" />
+		<mesh name="UCX_SmallBowl_064" file="stl/UCX_SmallBowl_064.stl" />
+		<mesh name="UCX_SmallBowl_065" file="stl/UCX_SmallBowl_065.stl" />
+		<mesh name="UCX_SmallBowl_066" file="stl/UCX_SmallBowl_066.stl" />
+		<mesh name="UCX_SmallBowl_067" file="stl/UCX_SmallBowl_067.stl" />
+		<mesh name="UCX_SmallBowl_068" file="stl/UCX_SmallBowl_068.stl" />
+		<mesh name="UCX_SmallBowl_069" file="stl/UCX_SmallBowl_069.stl" />
+		<mesh name="UCX_SmallBowl_070" file="stl/UCX_SmallBowl_070.stl" />
+		<mesh name="UCX_SmallBowl_071" file="stl/UCX_SmallBowl_071.stl" />
+		<mesh name="UCX_SmallBowl_072" file="stl/UCX_SmallBowl_072.stl" />
+		<mesh name="UCX_SmallBowl_073" file="stl/UCX_SmallBowl_073.stl" />
+		<mesh name="UCX_SmallBowl_074" file="stl/UCX_SmallBowl_074.stl" />
+		<mesh name="UCX_SmallBowl_075" file="stl/UCX_SmallBowl_075.stl" />
+		<mesh name="UCX_SmallBowl_076" file="stl/UCX_SmallBowl_076.stl" />
+		<mesh name="UCX_SmallBowl_077" file="stl/UCX_SmallBowl_077.stl" />
+		<mesh name="UCX_SmallBowl_078" file="stl/UCX_SmallBowl_078.stl" />
+		<mesh name="UCX_SmallBowl_079" file="stl/UCX_SmallBowl_079.stl" />
+		<mesh name="UCX_SmallBowl_080" file="stl/UCX_SmallBowl_080.stl" />
+		<mesh name="UCX_SmallBowl_081" file="stl/UCX_SmallBowl_081.stl" />
+		<mesh name="UCX_SmallBowl_082" file="stl/UCX_SmallBowl_082.stl" />
+		<mesh name="UCX_SmallBowl_083" file="stl/UCX_SmallBowl_083.stl" />
+		<mesh name="UCX_SmallBowl_084" file="stl/UCX_SmallBowl_084.stl" />
+		<mesh name="UCX_SmallBowl_085" file="stl/UCX_SmallBowl_085.stl" />
+		<mesh name="UCX_SmallBowl_086" file="stl/UCX_SmallBowl_086.stl" />
+		<mesh name="UCX_SmallBowl_087" file="stl/UCX_SmallBowl_087.stl" />
+		<mesh name="UCX_SmallBowl_088" file="stl/UCX_SmallBowl_088.stl" />
+		<mesh name="UCX_SmallBowl_089" file="stl/UCX_SmallBowl_089.stl" />
+		<mesh name="UCX_SmallBowl_090" file="stl/UCX_SmallBowl_090.stl" />
+		<mesh name="UCX_SmallBowl_091" file="stl/UCX_SmallBowl_091.stl" />
+		<mesh name="UCX_SmallBowl_092" file="stl/UCX_SmallBowl_092.stl" />
+		<mesh name="UCX_SmallBowl_093" file="stl/UCX_SmallBowl_093.stl" />
+		<mesh name="UCX_SmallBowl_094" file="stl/UCX_SmallBowl_094.stl" />
+		<mesh name="UCX_SmallBowl_095" file="stl/UCX_SmallBowl_095.stl" />
+		<mesh name="UCX_SmallBowl_096" file="stl/UCX_SmallBowl_096.stl" />
+		<mesh name="UCX_SmallBowl_097" file="stl/UCX_SmallBowl_097.stl" />
+		<mesh name="UCX_SmallBowl_098" file="stl/UCX_SmallBowl_098.stl" />
+		<mesh name="UCX_SmallBowl_099" file="stl/UCX_SmallBowl_099.stl" />
+        <mesh name="UCX_SmallBowl_100" file="stl/UCX_SmallBowl_100.stl" />
+
+        <mesh name="UCX_SmallBowl_101" file="stl/UCX_SmallBowl_101.stl" />
+		<mesh name="UCX_SmallBowl_102" file="stl/UCX_SmallBowl_102.stl" />
+		<mesh name="UCX_SmallBowl_103" file="stl/UCX_SmallBowl_103.stl" />
+		<mesh name="UCX_SmallBowl_104" file="stl/UCX_SmallBowl_104.stl" />
+		<mesh name="UCX_SmallBowl_105" file="stl/UCX_SmallBowl_105.stl" />
+		<mesh name="UCX_SmallBowl_106" file="stl/UCX_SmallBowl_106.stl" />
+		<mesh name="UCX_SmallBowl_107" file="stl/UCX_SmallBowl_107.stl" />
+		<mesh name="UCX_SmallBowl_108" file="stl/UCX_SmallBowl_108.stl" />
+		<mesh name="UCX_SmallBowl_109" file="stl/UCX_SmallBowl_109.stl" />
+		<mesh name="UCX_SmallBowl_110" file="stl/UCX_SmallBowl_110.stl" />
+		<mesh name="UCX_SmallBowl_111" file="stl/UCX_SmallBowl_111.stl" />
+		<mesh name="UCX_SmallBowl_112" file="stl/UCX_SmallBowl_112.stl" />
+		<mesh name="UCX_SmallBowl_113" file="stl/UCX_SmallBowl_113.stl" />
+		<mesh name="UCX_SmallBowl_114" file="stl/UCX_SmallBowl_114.stl" />
+		<mesh name="UCX_SmallBowl_115" file="stl/UCX_SmallBowl_115.stl" />
+		<mesh name="UCX_SmallBowl_116" file="stl/UCX_SmallBowl_116.stl" />
+		<mesh name="UCX_SmallBowl_117" file="stl/UCX_SmallBowl_117.stl" />
+		<mesh name="UCX_SmallBowl_118" file="stl/UCX_SmallBowl_118.stl" />
+		<mesh name="UCX_SmallBowl_119" file="stl/UCX_SmallBowl_119.stl" />
+		<mesh name="UCX_SmallBowl_120" file="stl/UCX_SmallBowl_120.stl" />
+		<mesh name="UCX_SmallBowl_121" file="stl/UCX_SmallBowl_121.stl" />
+		<mesh name="UCX_SmallBowl_122" file="stl/UCX_SmallBowl_122.stl" />
+		<mesh name="UCX_SmallBowl_123" file="stl/UCX_SmallBowl_123.stl" />
+		<mesh name="UCX_SmallBowl_124" file="stl/UCX_SmallBowl_124.stl" />
+		<mesh name="UCX_SmallBowl_125" file="stl/UCX_SmallBowl_125.stl" />
+		<mesh name="UCX_SmallBowl_126" file="stl/UCX_SmallBowl_126.stl" />
+		<mesh name="UCX_SmallBowl_127" file="stl/UCX_SmallBowl_127.stl" />
+		<mesh name="UCX_SmallBowl_128" file="stl/UCX_SmallBowl_128.stl" />
+		<mesh name="UCX_SmallBowl_129" file="stl/UCX_SmallBowl_129.stl" />
+		<mesh name="UCX_SmallBowl_130" file="stl/UCX_SmallBowl_130.stl" />
+		<mesh name="UCX_SmallBowl_131" file="stl/UCX_SmallBowl_131.stl" />
+		<mesh name="UCX_SmallBowl_132" file="stl/UCX_SmallBowl_132.stl" />
+		<mesh name="UCX_SmallBowl_133" file="stl/UCX_SmallBowl_133.stl" />
+		<mesh name="UCX_SmallBowl_134" file="stl/UCX_SmallBowl_134.stl" />
+		<mesh name="UCX_SmallBowl_135" file="stl/UCX_SmallBowl_135.stl" />
+		<mesh name="UCX_SmallBowl_136" file="stl/UCX_SmallBowl_136.stl" />
+		<mesh name="UCX_SmallBowl_137" file="stl/UCX_SmallBowl_137.stl" />
+		<mesh name="UCX_SmallBowl_138" file="stl/UCX_SmallBowl_138.stl" />
+		<mesh name="UCX_SmallBowl_139" file="stl/UCX_SmallBowl_139.stl" />
+		<mesh name="UCX_SmallBowl_140" file="stl/UCX_SmallBowl_140.stl" />
+		<mesh name="UCX_SmallBowl_141" file="stl/UCX_SmallBowl_141.stl" />
+		<mesh name="UCX_SmallBowl_142" file="stl/UCX_SmallBowl_142.stl" />
+		<mesh name="UCX_SmallBowl_143" file="stl/UCX_SmallBowl_143.stl" />
+		<mesh name="UCX_SmallBowl_144" file="stl/UCX_SmallBowl_144.stl" />
+		<mesh name="UCX_SmallBowl_145" file="stl/UCX_SmallBowl_145.stl" />
+		<mesh name="UCX_SmallBowl_146" file="stl/UCX_SmallBowl_146.stl" />
+		<mesh name="UCX_SmallBowl_147" file="stl/UCX_SmallBowl_147.stl" />
+		<mesh name="UCX_SmallBowl_148" file="stl/UCX_SmallBowl_148.stl" />
+		<mesh name="UCX_SmallBowl_149" file="stl/UCX_SmallBowl_149.stl" />
+		<mesh name="UCX_SmallBowl_150" file="stl/UCX_SmallBowl_150.stl" />
+		<mesh name="UCX_SmallBowl_151" file="stl/UCX_SmallBowl_151.stl" />
+		<mesh name="UCX_SmallBowl_152" file="stl/UCX_SmallBowl_152.stl" />
+		<mesh name="UCX_SmallBowl_153" file="stl/UCX_SmallBowl_153.stl" />
+		<mesh name="UCX_SmallBowl_154" file="stl/UCX_SmallBowl_154.stl" />
+		<mesh name="UCX_SmallBowl_155" file="stl/UCX_SmallBowl_155.stl" />
+		<mesh name="UCX_SmallBowl_156" file="stl/UCX_SmallBowl_156.stl" />
+		<mesh name="UCX_SmallBowl_157" file="stl/UCX_SmallBowl_157.stl" />
+		<mesh name="UCX_SmallBowl_158" file="stl/UCX_SmallBowl_158.stl" />
+		<mesh name="UCX_SmallBowl_159" file="stl/UCX_SmallBowl_159.stl" />
+		<mesh name="UCX_SmallBowl_160" file="stl/UCX_SmallBowl_160.stl" />
+		<mesh name="UCX_SmallBowl_161" file="stl/UCX_SmallBowl_161.stl" />
+		<mesh name="UCX_SmallBowl_162" file="stl/UCX_SmallBowl_162.stl" />
+		<mesh name="UCX_SmallBowl_163" file="stl/UCX_SmallBowl_163.stl" />
+		<mesh name="UCX_SmallBowl_164" file="stl/UCX_SmallBowl_164.stl" />
+		<mesh name="UCX_SmallBowl_165" file="stl/UCX_SmallBowl_165.stl" />
+		<mesh name="UCX_SmallBowl_166" file="stl/UCX_SmallBowl_166.stl" />
+		<mesh name="UCX_SmallBowl_167" file="stl/UCX_SmallBowl_167.stl" />
+		<mesh name="UCX_SmallBowl_168" file="stl/UCX_SmallBowl_168.stl" />
+		<mesh name="UCX_SmallBowl_169" file="stl/UCX_SmallBowl_169.stl" />
+		<mesh name="UCX_SmallBowl_170" file="stl/UCX_SmallBowl_170.stl" />
+		<mesh name="UCX_SmallBowl_171" file="stl/UCX_SmallBowl_171.stl" />
+		<mesh name="UCX_SmallBowl_172" file="stl/UCX_SmallBowl_172.stl" />
+		<mesh name="UCX_SmallBowl_173" file="stl/UCX_SmallBowl_173.stl" />
+		<mesh name="UCX_SmallBowl_174" file="stl/UCX_SmallBowl_174.stl" />
+		<mesh name="UCX_SmallBowl_175" file="stl/UCX_SmallBowl_175.stl" />
+		<mesh name="UCX_SmallBowl_176" file="stl/UCX_SmallBowl_176.stl" />
+		<mesh name="UCX_SmallBowl_177" file="stl/UCX_SmallBowl_177.stl" />
+		<mesh name="UCX_SmallBowl_178" file="stl/UCX_SmallBowl_178.stl" />
+		<mesh name="UCX_SmallBowl_179" file="stl/UCX_SmallBowl_179.stl" />
+		<mesh name="UCX_SmallBowl_180" file="stl/UCX_SmallBowl_180.stl" />
+		<mesh name="UCX_SmallBowl_181" file="stl/UCX_SmallBowl_181.stl" />
+		<mesh name="UCX_SmallBowl_182" file="stl/UCX_SmallBowl_182.stl" />
+		<mesh name="UCX_SmallBowl_183" file="stl/UCX_SmallBowl_183.stl" />
+		<mesh name="UCX_SmallBowl_184" file="stl/UCX_SmallBowl_184.stl" />
+		<mesh name="UCX_SmallBowl_185" file="stl/UCX_SmallBowl_185.stl" />
+		<mesh name="UCX_SmallBowl_186" file="stl/UCX_SmallBowl_186.stl" />
+		<mesh name="UCX_SmallBowl_187" file="stl/UCX_SmallBowl_187.stl" />
+		<mesh name="UCX_SmallBowl_188" file="stl/UCX_SmallBowl_188.stl" />
+		<mesh name="UCX_SmallBowl_189" file="stl/UCX_SmallBowl_189.stl" />
+		<mesh name="UCX_SmallBowl_190" file="stl/UCX_SmallBowl_190.stl" />
+		<mesh name="UCX_SmallBowl_191" file="stl/UCX_SmallBowl_191.stl" />
+		<mesh name="UCX_SmallBowl_192" file="stl/UCX_SmallBowl_192.stl" />
+		<mesh name="UCX_SmallBowl_193" file="stl/UCX_SmallBowl_193.stl" />
+		<mesh name="UCX_SmallBowl_194" file="stl/UCX_SmallBowl_194.stl" />
+		<mesh name="UCX_SmallBowl_195" file="stl/UCX_SmallBowl_195.stl" />
+		<mesh name="UCX_SmallBowl_196" file="stl/UCX_SmallBowl_196.stl" />
+		<mesh name="UCX_SmallBowl_197" file="stl/UCX_SmallBowl_197.stl" />
+		<mesh name="UCX_SmallBowl_198" file="stl/UCX_SmallBowl_198.stl" />
+		<mesh name="UCX_SmallBowl_199" file="stl/UCX_SmallBowl_199.stl" />
+        
+        <mesh name="UCX_SmallBowl_200" file="stl/UCX_SmallBowl_200.stl" />
+        <mesh name="UCX_SmallBowl_201" file="stl/UCX_SmallBowl_201.stl" />
+		<mesh name="UCX_SmallBowl_202" file="stl/UCX_SmallBowl_202.stl" />
+		<mesh name="UCX_SmallBowl_203" file="stl/UCX_SmallBowl_203.stl" />
+		<mesh name="UCX_SmallBowl_204" file="stl/UCX_SmallBowl_204.stl" />
+		<mesh name="UCX_SmallBowl_205" file="stl/UCX_SmallBowl_205.stl" />
+		<mesh name="UCX_SmallBowl_206" file="stl/UCX_SmallBowl_206.stl" />
+		<mesh name="UCX_SmallBowl_207" file="stl/UCX_SmallBowl_207.stl" />
+		<mesh name="UCX_SmallBowl_208" file="stl/UCX_SmallBowl_208.stl" />
+		<mesh name="UCX_SmallBowl_209" file="stl/UCX_SmallBowl_209.stl" />
+		<mesh name="UCX_SmallBowl_210" file="stl/UCX_SmallBowl_210.stl" />
+		<mesh name="UCX_SmallBowl_211" file="stl/UCX_SmallBowl_211.stl" />
+		<mesh name="UCX_SmallBowl_212" file="stl/UCX_SmallBowl_212.stl" />
+		<mesh name="UCX_SmallBowl_213" file="stl/UCX_SmallBowl_213.stl" />
+		<mesh name="UCX_SmallBowl_214" file="stl/UCX_SmallBowl_214.stl" />
+		<mesh name="UCX_SmallBowl_215" file="stl/UCX_SmallBowl_215.stl" />
+		<mesh name="UCX_SmallBowl_216" file="stl/UCX_SmallBowl_216.stl" />
+		<mesh name="UCX_SmallBowl_217" file="stl/UCX_SmallBowl_217.stl" />
+		<mesh name="UCX_SmallBowl_218" file="stl/UCX_SmallBowl_218.stl" />
+		<mesh name="UCX_SmallBowl_219" file="stl/UCX_SmallBowl_219.stl" />
+		<mesh name="UCX_SmallBowl_220" file="stl/UCX_SmallBowl_220.stl" />
+		<mesh name="UCX_SmallBowl_221" file="stl/UCX_SmallBowl_221.stl" />
+		<mesh name="UCX_SmallBowl_222" file="stl/UCX_SmallBowl_222.stl" />
+		<mesh name="UCX_SmallBowl_223" file="stl/UCX_SmallBowl_223.stl" />
+		<mesh name="UCX_SmallBowl_224" file="stl/UCX_SmallBowl_224.stl" />
+		<mesh name="UCX_SmallBowl_225" file="stl/UCX_SmallBowl_225.stl" />
+    </asset>
+    <default>
+        <default class="small_bowl_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="small_bowl_collision">
+            <geom rgba="1.0 0.0 0.0 0.5" />
+        </default>
+    </default>
+    <worldbody>
+        <body name="small_bowl">
+            <freejoint />
+            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <geom name="small_bowl_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="small_bowl_visual" class="small_bowl_visual" />
+            <geom name="UCX_SmallBowl_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_001" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_002" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_003" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_004" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_005" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_006" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_007" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_008" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_009" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_010" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_011" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_012" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_013" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_014" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_015" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_016" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_016" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_017" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_018" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_018" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_019" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_020" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_020" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_021" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_021" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_022" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_022" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_023" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_024" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_024" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_025" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_025" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_026" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_026" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_027" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_027" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_028" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_028" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_029" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_029" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_030" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_030" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_031" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_031" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_032" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_032" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_033" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_033" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_034" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_034" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_035" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_035" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_036" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_036" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_037" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_037" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_038" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_038" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_039" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_039" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_040" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_040" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_041" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_041" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_042" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_042" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_043" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_043" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_044" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_044" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_045" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_045" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_046" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_046" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_047" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_047" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_048" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_048" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_049" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_049" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_050" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_050" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_051" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_051" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_052" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_052" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_053" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_053" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_054" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_054" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_055" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_055" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_056" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_056" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_057" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_057" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_058" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_058" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_059" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_059" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_060" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_060" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_061" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_061" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_062" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_062" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_063" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_063" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_064" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_064" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_065" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_065" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_066" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_066" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_067" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_067" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_068" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_068" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_069" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_069" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_070" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_070" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_071" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_071" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_072" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_072" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_073" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_073" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_074" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_074" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_075" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_075" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_076" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_076" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_077" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_077" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_078" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_078" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_079" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_079" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_080" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_080" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_081" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_081" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_082" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_082" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_083" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_083" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_084" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_084" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_085" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_085" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_086" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_086" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_087" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_087" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_088" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_088" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_089" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_089" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_090" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_090" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_091" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_091" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_092" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_092" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_093" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_093" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_094" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_094" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_095" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_095" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_096" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_096" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_097" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_097" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_098" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_098" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_099" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_099" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_100" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_100" class="small_bowl_collision"/>
+
+            <geom name="UCX_SmallBowl_101" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_101" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_102" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_102" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_103" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_103" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_104" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_104" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_105" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_105" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_106" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_106" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_107" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_107" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_108" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_108" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_109" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_109" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_110" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_110" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_111" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_111" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_112" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_112" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_113" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_113" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_114" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_114" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_115" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_115" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_116" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_116" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_117" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_117" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_118" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_118" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_119" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_119" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_120" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_120" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_121" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_121" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_122" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_122" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_123" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_123" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_124" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_124" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_125" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_125" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_126" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_126" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_127" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_127" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_128" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_128" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_129" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_129" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_130" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_130" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_131" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_131" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_132" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_132" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_133" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_133" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_134" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_134" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_135" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_135" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_136" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_136" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_137" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_137" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_138" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_138" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_139" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_139" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_140" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_140" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_141" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_141" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_142" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_142" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_143" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_143" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_144" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_144" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_145" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_145" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_146" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_146" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_147" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_147" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_148" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_148" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_149" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_149" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_150" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_150" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_151" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_151" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_152" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_152" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_153" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_153" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_154" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_154" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_155" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_155" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_156" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_156" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_157" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_157" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_158" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_158" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_159" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_159" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_160" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_160" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_161" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_161" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_162" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_162" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_163" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_163" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_164" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_164" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_165" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_165" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_166" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_166" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_167" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_167" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_168" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_168" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_169" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_169" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_170" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_170" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_171" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_171" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_172" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_172" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_173" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_173" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_174" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_174" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_175" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_175" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_176" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_176" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_177" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_177" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_178" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_178" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_179" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_179" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_180" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_180" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_181" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_181" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_182" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_182" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_183" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_183" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_184" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_184" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_185" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_185" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_186" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_186" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_187" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_187" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_188" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_188" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_189" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_189" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_190" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_190" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_191" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_191" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_192" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_192" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_193" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_193" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_194" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_194" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_195" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_195" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_196" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_196" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_197" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_197" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_198" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_198" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_199" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_199" class="small_bowl_collision"/>
+
+            <geom name="UCX_SmallBowl_200" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_200" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_201" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_201" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_202" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_202" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_203" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_203" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_204" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_204" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_205" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_205" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_206" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_206" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_207" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_207" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_208" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_208" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_209" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_209" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_210" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_210" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_211" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_211" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_212" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_212" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_213" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_213" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_214" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_214" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_215" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_215" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_216" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_216" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_217" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_217" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_218" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_218" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_219" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_219" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_220" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_220" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_221" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_221" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_222" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_222" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_223" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_223" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_224" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_224" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_225" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_225" class="small_bowl_collision"/>
+        </body>
+    </worldbody>
+    <equality />
+    <contact />
+</mujoco>
