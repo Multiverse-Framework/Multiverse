@@ -1,0 +1,263 @@
+<mujoco model="classic_plate_26cm">
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
+        autolimits="true" />
+    <asset>
+        <mesh name="classic_plate_26cm_visual" file="obj/ClassicPlate26cm.obj" />
+        <mesh name="UCX_ClassicPlate26cm_01" file="stl/UCX_ClassicPlate26cm_01.stl" />
+        <mesh name="UCX_ClassicPlate26cm_02" file="stl/UCX_ClassicPlate26cm_02.stl" />
+		<mesh name="UCX_ClassicPlate26cm_03" file="stl/UCX_ClassicPlate26cm_03.stl" />
+		<mesh name="UCX_ClassicPlate26cm_04" file="stl/UCX_ClassicPlate26cm_04.stl" />
+		<mesh name="UCX_ClassicPlate26cm_05" file="stl/UCX_ClassicPlate26cm_05.stl" />
+		<mesh name="UCX_ClassicPlate26cm_06" file="stl/UCX_ClassicPlate26cm_06.stl" />
+		<mesh name="UCX_ClassicPlate26cm_07" file="stl/UCX_ClassicPlate26cm_07.stl" />
+		<mesh name="UCX_ClassicPlate26cm_08" file="stl/UCX_ClassicPlate26cm_08.stl" />
+		<mesh name="UCX_ClassicPlate26cm_09" file="stl/UCX_ClassicPlate26cm_09.stl" />
+		<mesh name="UCX_ClassicPlate26cm_10" file="stl/UCX_ClassicPlate26cm_10.stl" />
+		<mesh name="UCX_ClassicPlate26cm_11" file="stl/UCX_ClassicPlate26cm_11.stl" />
+		<mesh name="UCX_ClassicPlate26cm_12" file="stl/UCX_ClassicPlate26cm_12.stl" />
+		<mesh name="UCX_ClassicPlate26cm_13" file="stl/UCX_ClassicPlate26cm_13.stl" />
+		<mesh name="UCX_ClassicPlate26cm_14" file="stl/UCX_ClassicPlate26cm_14.stl" />
+		<mesh name="UCX_ClassicPlate26cm_15" file="stl/UCX_ClassicPlate26cm_15.stl" />
+		<mesh name="UCX_ClassicPlate26cm_16" file="stl/UCX_ClassicPlate26cm_16.stl" />
+		<mesh name="UCX_ClassicPlate26cm_17" file="stl/UCX_ClassicPlate26cm_17.stl" />
+		<mesh name="UCX_ClassicPlate26cm_18" file="stl/UCX_ClassicPlate26cm_18.stl" />
+		<mesh name="UCX_ClassicPlate26cm_19" file="stl/UCX_ClassicPlate26cm_19.stl" />
+		<mesh name="UCX_ClassicPlate26cm_20" file="stl/UCX_ClassicPlate26cm_20.stl" />
+		<mesh name="UCX_ClassicPlate26cm_21" file="stl/UCX_ClassicPlate26cm_21.stl" />
+		<mesh name="UCX_ClassicPlate26cm_22" file="stl/UCX_ClassicPlate26cm_22.stl" />
+		<mesh name="UCX_ClassicPlate26cm_23" file="stl/UCX_ClassicPlate26cm_23.stl" />
+		<mesh name="UCX_ClassicPlate26cm_24" file="stl/UCX_ClassicPlate26cm_24.stl" />
+		<mesh name="UCX_ClassicPlate26cm_25" file="stl/UCX_ClassicPlate26cm_25.stl" />
+		<mesh name="UCX_ClassicPlate26cm_26" file="stl/UCX_ClassicPlate26cm_26.stl" />
+		<mesh name="UCX_ClassicPlate26cm_27" file="stl/UCX_ClassicPlate26cm_27.stl" />
+		<mesh name="UCX_ClassicPlate26cm_28" file="stl/UCX_ClassicPlate26cm_28.stl" />
+		<mesh name="UCX_ClassicPlate26cm_29" file="stl/UCX_ClassicPlate26cm_29.stl" />
+		<mesh name="UCX_ClassicPlate26cm_30" file="stl/UCX_ClassicPlate26cm_30.stl" />
+		<mesh name="UCX_ClassicPlate26cm_31" file="stl/UCX_ClassicPlate26cm_31.stl" />
+		<mesh name="UCX_ClassicPlate26cm_32" file="stl/UCX_ClassicPlate26cm_32.stl" />
+		<mesh name="UCX_ClassicPlate26cm_33" file="stl/UCX_ClassicPlate26cm_33.stl" />
+		<mesh name="UCX_ClassicPlate26cm_34" file="stl/UCX_ClassicPlate26cm_34.stl" />
+		<mesh name="UCX_ClassicPlate26cm_35" file="stl/UCX_ClassicPlate26cm_35.stl" />
+		<mesh name="UCX_ClassicPlate26cm_36" file="stl/UCX_ClassicPlate26cm_36.stl" />
+		<mesh name="UCX_ClassicPlate26cm_37" file="stl/UCX_ClassicPlate26cm_37.stl" />
+		<mesh name="UCX_ClassicPlate26cm_38" file="stl/UCX_ClassicPlate26cm_38.stl" />
+		<mesh name="UCX_ClassicPlate26cm_39" file="stl/UCX_ClassicPlate26cm_39.stl" />
+		<mesh name="UCX_ClassicPlate26cm_40" file="stl/UCX_ClassicPlate26cm_40.stl" />
+		<mesh name="UCX_ClassicPlate26cm_41" file="stl/UCX_ClassicPlate26cm_41.stl" />
+		<mesh name="UCX_ClassicPlate26cm_42" file="stl/UCX_ClassicPlate26cm_42.stl" />
+		<mesh name="UCX_ClassicPlate26cm_43" file="stl/UCX_ClassicPlate26cm_43.stl" />
+		<mesh name="UCX_ClassicPlate26cm_44" file="stl/UCX_ClassicPlate26cm_44.stl" />
+		<mesh name="UCX_ClassicPlate26cm_45" file="stl/UCX_ClassicPlate26cm_45.stl" />
+		<mesh name="UCX_ClassicPlate26cm_46" file="stl/UCX_ClassicPlate26cm_46.stl" />
+		<mesh name="UCX_ClassicPlate26cm_47" file="stl/UCX_ClassicPlate26cm_47.stl" />
+		<mesh name="UCX_ClassicPlate26cm_48" file="stl/UCX_ClassicPlate26cm_48.stl" />
+		<mesh name="UCX_ClassicPlate26cm_49" file="stl/UCX_ClassicPlate26cm_49.stl" />
+		<mesh name="UCX_ClassicPlate26cm_50" file="stl/UCX_ClassicPlate26cm_50.stl" />
+		<mesh name="UCX_ClassicPlate26cm_51" file="stl/UCX_ClassicPlate26cm_51.stl" />
+		<mesh name="UCX_ClassicPlate26cm_52" file="stl/UCX_ClassicPlate26cm_52.stl" />
+		<mesh name="UCX_ClassicPlate26cm_53" file="stl/UCX_ClassicPlate26cm_53.stl" />
+		<mesh name="UCX_ClassicPlate26cm_54" file="stl/UCX_ClassicPlate26cm_54.stl" />
+		<mesh name="UCX_ClassicPlate26cm_55" file="stl/UCX_ClassicPlate26cm_55.stl" />
+		<mesh name="UCX_ClassicPlate26cm_56" file="stl/UCX_ClassicPlate26cm_56.stl" />
+		<mesh name="UCX_ClassicPlate26cm_57" file="stl/UCX_ClassicPlate26cm_57.stl" />
+		<mesh name="UCX_ClassicPlate26cm_58" file="stl/UCX_ClassicPlate26cm_58.stl" />
+		<mesh name="UCX_ClassicPlate26cm_59" file="stl/UCX_ClassicPlate26cm_59.stl" />
+		<mesh name="UCX_ClassicPlate26cm_60" file="stl/UCX_ClassicPlate26cm_60.stl" />
+		<mesh name="UCX_ClassicPlate26cm_61" file="stl/UCX_ClassicPlate26cm_61.stl" />
+		<mesh name="UCX_ClassicPlate26cm_62" file="stl/UCX_ClassicPlate26cm_62.stl" />
+		<mesh name="UCX_ClassicPlate26cm_63" file="stl/UCX_ClassicPlate26cm_63.stl" />
+		<mesh name="UCX_ClassicPlate26cm_64" file="stl/UCX_ClassicPlate26cm_64.stl" />
+		<mesh name="UCX_ClassicPlate26cm_65" file="stl/UCX_ClassicPlate26cm_65.stl" />
+		<mesh name="UCX_ClassicPlate26cm_66" file="stl/UCX_ClassicPlate26cm_66.stl" />
+		<mesh name="UCX_ClassicPlate26cm_67" file="stl/UCX_ClassicPlate26cm_67.stl" />
+		<mesh name="UCX_ClassicPlate26cm_68" file="stl/UCX_ClassicPlate26cm_68.stl" />
+		<mesh name="UCX_ClassicPlate26cm_69" file="stl/UCX_ClassicPlate26cm_69.stl" />
+		<mesh name="UCX_ClassicPlate26cm_70" file="stl/UCX_ClassicPlate26cm_70.stl" />
+		<mesh name="UCX_ClassicPlate26cm_71" file="stl/UCX_ClassicPlate26cm_71.stl" />
+		<mesh name="UCX_ClassicPlate26cm_72" file="stl/UCX_ClassicPlate26cm_72.stl" />
+		<mesh name="UCX_ClassicPlate26cm_73" file="stl/UCX_ClassicPlate26cm_73.stl" />
+		<mesh name="UCX_ClassicPlate26cm_74" file="stl/UCX_ClassicPlate26cm_74.stl" />
+		<mesh name="UCX_ClassicPlate26cm_75" file="stl/UCX_ClassicPlate26cm_75.stl" />
+		<mesh name="UCX_ClassicPlate26cm_76" file="stl/UCX_ClassicPlate26cm_76.stl" />
+		<mesh name="UCX_ClassicPlate26cm_77" file="stl/UCX_ClassicPlate26cm_77.stl" />
+		<mesh name="UCX_ClassicPlate26cm_78" file="stl/UCX_ClassicPlate26cm_78.stl" />
+		<mesh name="UCX_ClassicPlate26cm_79" file="stl/UCX_ClassicPlate26cm_79.stl" />
+		<mesh name="UCX_ClassicPlate26cm_80" file="stl/UCX_ClassicPlate26cm_80.stl" />
+		<mesh name="UCX_ClassicPlate26cm_81" file="stl/UCX_ClassicPlate26cm_81.stl" />
+		<mesh name="UCX_ClassicPlate26cm_82" file="stl/UCX_ClassicPlate26cm_82.stl" />
+		<mesh name="UCX_ClassicPlate26cm_83" file="stl/UCX_ClassicPlate26cm_83.stl" />
+		<mesh name="UCX_ClassicPlate26cm_84" file="stl/UCX_ClassicPlate26cm_84.stl" />
+		<mesh name="UCX_ClassicPlate26cm_85" file="stl/UCX_ClassicPlate26cm_85.stl" />
+		<mesh name="UCX_ClassicPlate26cm_86" file="stl/UCX_ClassicPlate26cm_86.stl" />
+		<mesh name="UCX_ClassicPlate26cm_87" file="stl/UCX_ClassicPlate26cm_87.stl" />
+		<mesh name="UCX_ClassicPlate26cm_88" file="stl/UCX_ClassicPlate26cm_88.stl" />
+		<mesh name="UCX_ClassicPlate26cm_89" file="stl/UCX_ClassicPlate26cm_89.stl" />
+		<mesh name="UCX_ClassicPlate26cm_90" file="stl/UCX_ClassicPlate26cm_90.stl" />
+		<mesh name="UCX_ClassicPlate26cm_91" file="stl/UCX_ClassicPlate26cm_91.stl" />
+		<mesh name="UCX_ClassicPlate26cm_92" file="stl/UCX_ClassicPlate26cm_92.stl" />
+		<mesh name="UCX_ClassicPlate26cm_93" file="stl/UCX_ClassicPlate26cm_93.stl" />
+		<mesh name="UCX_ClassicPlate26cm_94" file="stl/UCX_ClassicPlate26cm_94.stl" />
+		<mesh name="UCX_ClassicPlate26cm_95" file="stl/UCX_ClassicPlate26cm_95.stl" />
+		<mesh name="UCX_ClassicPlate26cm_96" file="stl/UCX_ClassicPlate26cm_96.stl" />
+		<mesh name="UCX_ClassicPlate26cm_97" file="stl/UCX_ClassicPlate26cm_97.stl" />
+		<mesh name="UCX_ClassicPlate26cm_98" file="stl/UCX_ClassicPlate26cm_98.stl" />
+		<mesh name="UCX_ClassicPlate26cm_99" file="stl/UCX_ClassicPlate26cm_99.stl" />
+		<mesh name="UCX_ClassicPlate26cm_110" file="stl/UCX_ClassicPlate26cm_110.stl" />
+		<mesh name="UCX_ClassicPlate26cm_111" file="stl/UCX_ClassicPlate26cm_111.stl" />
+		<mesh name="UCX_ClassicPlate26cm_112" file="stl/UCX_ClassicPlate26cm_112.stl" />
+		<mesh name="UCX_ClassicPlate26cm_113" file="stl/UCX_ClassicPlate26cm_113.stl" />
+		<mesh name="UCX_ClassicPlate26cm_114" file="stl/UCX_ClassicPlate26cm_114.stl" />
+		<mesh name="UCX_ClassicPlate26cm_115" file="stl/UCX_ClassicPlate26cm_115.stl" />
+		<mesh name="UCX_ClassicPlate26cm_116" file="stl/UCX_ClassicPlate26cm_116.stl" />
+		<mesh name="UCX_ClassicPlate26cm_117" file="stl/UCX_ClassicPlate26cm_117.stl" />
+		<mesh name="UCX_ClassicPlate26cm_118" file="stl/UCX_ClassicPlate26cm_118.stl" />
+		<mesh name="UCX_ClassicPlate26cm_119" file="stl/UCX_ClassicPlate26cm_119.stl" />
+		<mesh name="UCX_ClassicPlate26cm_120" file="stl/UCX_ClassicPlate26cm_120.stl" />
+		<mesh name="UCX_ClassicPlate26cm_121" file="stl/UCX_ClassicPlate26cm_121.stl" />
+		<mesh name="UCX_ClassicPlate26cm_122" file="stl/UCX_ClassicPlate26cm_122.stl" />
+		<mesh name="UCX_ClassicPlate26cm_123" file="stl/UCX_ClassicPlate26cm_123.stl" />
+		<mesh name="UCX_ClassicPlate26cm_124" file="stl/UCX_ClassicPlate26cm_124.stl" />
+		<mesh name="UCX_ClassicPlate26cm_125" file="stl/UCX_ClassicPlate26cm_125.stl" />
+		<mesh name="UCX_ClassicPlate26cm_126" file="stl/UCX_ClassicPlate26cm_126.stl" />
+		<mesh name="UCX_ClassicPlate26cm_127" file="stl/UCX_ClassicPlate26cm_127.stl" />
+		<mesh name="UCX_ClassicPlate26cm_128" file="stl/UCX_ClassicPlate26cm_128.stl" />
+		<mesh name="UCX_ClassicPlate26cm_129" file="stl/UCX_ClassicPlate26cm_129.stl" />
+		<mesh name="UCX_ClassicPlate26cm_130" file="stl/UCX_ClassicPlate26cm_130.stl" />
+    </asset>
+    <default>
+        <default class="classic_plate_26cm_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="classic_plate_26cm_collision">
+            <geom rgba="1.0 0.0 0.0 0.5" />
+        </default>
+    </default>
+    <worldbody>
+        <body name="classic_plate_26cm">
+            <freejoint />
+            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <geom name="classic_plate_26cm_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="classic_plate_26cm_visual" class="classic_plate_26cm_visual" />
+            <geom name="UCX_ClassicPlate26cm_01" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_01" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_02" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_02" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_03" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_03" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_04" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_04" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_05" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_06" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_06" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_07" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_07" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_08" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_08" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_09" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_09" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_10" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_10" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_11" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_11" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_12" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_12" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_13" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_13" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_14" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_14" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_15" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_15" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_16" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_16" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_17" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_17" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_18" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_18" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_19" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_19" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_20" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_20" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_21" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_21" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_22" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_22" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_23" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_23" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_24" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_24" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_25" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_25" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_26" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_26" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_27" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_27" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_28" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_28" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_29" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_29" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_30" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_30" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_31" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_31" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_32" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_32" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_33" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_33" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_34" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_34" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_35" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_35" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_36" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_36" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_37" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_37" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_38" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_38" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_39" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_39" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_40" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_40" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_41" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_41" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_42" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_42" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_43" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_43" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_44" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_44" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_45" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_45" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_46" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_46" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_47" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_47" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_48" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_48" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_49" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_49" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_50" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_50" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_51" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_51" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_52" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_52" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_53" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_53" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_54" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_54" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_55" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_55" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_56" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_56" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_57" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_57" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_58" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_58" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_59" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_59" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_60" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_60" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_61" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_61" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_62" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_62" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_63" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_63" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_64" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_64" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_65" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_65" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_66" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_66" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_67" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_67" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_68" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_68" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_69" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_69" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_70" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_70" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_71" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_71" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_72" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_72" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_73" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_73" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_74" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_74" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_75" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_75" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_76" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_76" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_77" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_77" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_78" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_78" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_79" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_79" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_80" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_80" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_81" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_81" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_82" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_82" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_83" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_83" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_84" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_84" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_85" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_85" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_86" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_86" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_87" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_87" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_88" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_88" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_89" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_89" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_90" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_90" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_91" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_91" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_92" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_92" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_93" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_93" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_94" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_94" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_95" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_95" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_96" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_96" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_97" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_97" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_98" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_98" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_99" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_99" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_110" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_110" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_111" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_111" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_112" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_112" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_113" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_113" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_114" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_114" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_115" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_115" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_116" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_116" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_117" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_117" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_118" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_118" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_119" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_119" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_120" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_120" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_121" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_121" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_122" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_122" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_123" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_123" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_124" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_124" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_125" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_125" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_127" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_127" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_128" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_128" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_129" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_129" class="classic_plate_26cm_collision"/>
+            <geom name="UCX_ClassicPlate26cm_130" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate26cm_130" class="classic_plate_26cm_collision"/>
+        </body>
+    </worldbody>
+    <equality />
+    <contact />
+</mujoco>

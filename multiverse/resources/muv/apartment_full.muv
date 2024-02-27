@@ -140,6 +140,15 @@ simulations:
       SM_Counter_Sink_Tap:
         body1: SM_Counter_Sink_Tap_ref
         body2: SM_Counter_Sink_Tap
+      SM_Dishwasher_Tray_01:  
+        body1: SM_Dishwasher_Tray_01_ref
+        body2: SM_Dishwasher_Tray_01
+      SM_Dishwasher_Tray_02:  
+        body1: SM_Dishwasher_Tray_02_ref
+        body2: SM_Dishwasher_Tray_02
+      SM_Dishwasher_Tray_03:  
+        body1: SM_Dishwasher_Tray_03_ref
+        body2: SM_Dishwasher_Tray_03
       chopstick_1:
         body1: chopstick_ref_1
         body2: chopstick_1
@@ -156,7 +165,7 @@ simulations:
       min_time_step: 0.001
 
 multiverse_server:
-  host: "tcp://192.168.178.153"
+  host: "tcp://192.168.101.137"
   port: 7000
 
 multiverse_clients:
@@ -191,6 +200,9 @@ multiverse_clients:
       SM_Kitchen_Handle24_ref: ["position", "quaternion"]
       SM_Kitchen_Handle25_ref: ["position", "quaternion"]
       SM_Counter_Sink_Tap_ref: ["position", "quaternion"]
+      SM_Dishwasher_Tray_01_ref: ["position", "quaternion"]
+      SM_Dishwasher_Tray_02_ref: ["position", "quaternion"]
+      SM_Dishwasher_Tray_03_ref: ["position", "quaternion"]
       chopstick_ref_1: ["position", "quaternion"]
       chopstick_ref_2: ["position", "quaternion"]
       pan_ref: ["position", "quaternion"]
