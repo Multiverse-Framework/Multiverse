@@ -1,0 +1,554 @@
+<mujoco model="cup">
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
+        autolimits="true" />
+    <asset>
+        <mesh name="cup_visual" file="obj/Cup.obj" />
+        <mesh name="UCX_Cup_001" file="stl/UCX_Cup_001.stl" />
+		<mesh name="UCX_Cup_002" file="stl/UCX_Cup_002.stl" />
+		<mesh name="UCX_Cup_003" file="stl/UCX_Cup_003.stl" />
+		<mesh name="UCX_Cup_004" file="stl/UCX_Cup_004.stl" />
+		<mesh name="UCX_Cup_005" file="stl/UCX_Cup_005.stl" />
+		<mesh name="UCX_Cup_006" file="stl/UCX_Cup_006.stl" />
+		<mesh name="UCX_Cup_007" file="stl/UCX_Cup_007.stl" />
+		<mesh name="UCX_Cup_008" file="stl/UCX_Cup_008.stl" />
+		<mesh name="UCX_Cup_009" file="stl/UCX_Cup_009.stl" />
+		<mesh name="UCX_Cup_010" file="stl/UCX_Cup_010.stl" />
+		<mesh name="UCX_Cup_011" file="stl/UCX_Cup_011.stl" />
+		<mesh name="UCX_Cup_012" file="stl/UCX_Cup_012.stl" />
+		<mesh name="UCX_Cup_013" file="stl/UCX_Cup_013.stl" />
+		<mesh name="UCX_Cup_014" file="stl/UCX_Cup_014.stl" />
+		<mesh name="UCX_Cup_015" file="stl/UCX_Cup_015.stl" />
+		<mesh name="UCX_Cup_016" file="stl/UCX_Cup_016.stl" />
+		<mesh name="UCX_Cup_017" file="stl/UCX_Cup_017.stl" />
+		<mesh name="UCX_Cup_018" file="stl/UCX_Cup_018.stl" />
+		<mesh name="UCX_Cup_019" file="stl/UCX_Cup_019.stl" />
+		<mesh name="UCX_Cup_020" file="stl/UCX_Cup_020.stl" />
+		<mesh name="UCX_Cup_021" file="stl/UCX_Cup_021.stl" />
+		<mesh name="UCX_Cup_022" file="stl/UCX_Cup_022.stl" />
+		<mesh name="UCX_Cup_023" file="stl/UCX_Cup_023.stl" />
+		<mesh name="UCX_Cup_024" file="stl/UCX_Cup_024.stl" />
+		<mesh name="UCX_Cup_025" file="stl/UCX_Cup_025.stl" />
+		<mesh name="UCX_Cup_026" file="stl/UCX_Cup_026.stl" />
+		<mesh name="UCX_Cup_027" file="stl/UCX_Cup_027.stl" />
+		<mesh name="UCX_Cup_028" file="stl/UCX_Cup_028.stl" />
+		<mesh name="UCX_Cup_029" file="stl/UCX_Cup_029.stl" />
+		<mesh name="UCX_Cup_030" file="stl/UCX_Cup_030.stl" />
+		<mesh name="UCX_Cup_031" file="stl/UCX_Cup_031.stl" />
+		<mesh name="UCX_Cup_032" file="stl/UCX_Cup_032.stl" />
+		<mesh name="UCX_Cup_033" file="stl/UCX_Cup_033.stl" />
+		<mesh name="UCX_Cup_034" file="stl/UCX_Cup_034.stl" />
+		<mesh name="UCX_Cup_035" file="stl/UCX_Cup_035.stl" />
+		<mesh name="UCX_Cup_036" file="stl/UCX_Cup_036.stl" />
+		<mesh name="UCX_Cup_037" file="stl/UCX_Cup_037.stl" />
+		<mesh name="UCX_Cup_038" file="stl/UCX_Cup_038.stl" />
+		<mesh name="UCX_Cup_039" file="stl/UCX_Cup_039.stl" />
+		<mesh name="UCX_Cup_040" file="stl/UCX_Cup_040.stl" />
+		<mesh name="UCX_Cup_041" file="stl/UCX_Cup_041.stl" />
+		<mesh name="UCX_Cup_042" file="stl/UCX_Cup_042.stl" />
+		<mesh name="UCX_Cup_043" file="stl/UCX_Cup_043.stl" />
+		<mesh name="UCX_Cup_044" file="stl/UCX_Cup_044.stl" />
+		<mesh name="UCX_Cup_045" file="stl/UCX_Cup_045.stl" />
+		<mesh name="UCX_Cup_046" file="stl/UCX_Cup_046.stl" />
+		<mesh name="UCX_Cup_047" file="stl/UCX_Cup_047.stl" />
+		<mesh name="UCX_Cup_048" file="stl/UCX_Cup_048.stl" />
+		<mesh name="UCX_Cup_049" file="stl/UCX_Cup_049.stl" />
+		<mesh name="UCX_Cup_050" file="stl/UCX_Cup_050.stl" />
+		<mesh name="UCX_Cup_051" file="stl/UCX_Cup_051.stl" />
+		<mesh name="UCX_Cup_052" file="stl/UCX_Cup_052.stl" />
+		<mesh name="UCX_Cup_053" file="stl/UCX_Cup_053.stl" />
+		<mesh name="UCX_Cup_054" file="stl/UCX_Cup_054.stl" />
+		<mesh name="UCX_Cup_055" file="stl/UCX_Cup_055.stl" />
+		<mesh name="UCX_Cup_056" file="stl/UCX_Cup_056.stl" />
+		<mesh name="UCX_Cup_057" file="stl/UCX_Cup_057.stl" />
+		<mesh name="UCX_Cup_058" file="stl/UCX_Cup_058.stl" />
+		<mesh name="UCX_Cup_059" file="stl/UCX_Cup_059.stl" />
+		<mesh name="UCX_Cup_060" file="stl/UCX_Cup_060.stl" />
+		<mesh name="UCX_Cup_061" file="stl/UCX_Cup_061.stl" />
+		<mesh name="UCX_Cup_062" file="stl/UCX_Cup_062.stl" />
+		<mesh name="UCX_Cup_063" file="stl/UCX_Cup_063.stl" />
+		<mesh name="UCX_Cup_064" file="stl/UCX_Cup_064.stl" />
+		<mesh name="UCX_Cup_065" file="stl/UCX_Cup_065.stl" />
+		<mesh name="UCX_Cup_066" file="stl/UCX_Cup_066.stl" />
+		<mesh name="UCX_Cup_067" file="stl/UCX_Cup_067.stl" />
+		<mesh name="UCX_Cup_068" file="stl/UCX_Cup_068.stl" />
+		<mesh name="UCX_Cup_069" file="stl/UCX_Cup_069.stl" />
+		<mesh name="UCX_Cup_070" file="stl/UCX_Cup_070.stl" />
+		<mesh name="UCX_Cup_071" file="stl/UCX_Cup_071.stl" />
+		<mesh name="UCX_Cup_072" file="stl/UCX_Cup_072.stl" />
+		<mesh name="UCX_Cup_073" file="stl/UCX_Cup_073.stl" />
+		<mesh name="UCX_Cup_074" file="stl/UCX_Cup_074.stl" />
+		<mesh name="UCX_Cup_075" file="stl/UCX_Cup_075.stl" />
+		<mesh name="UCX_Cup_076" file="stl/UCX_Cup_076.stl" />
+		<mesh name="UCX_Cup_077" file="stl/UCX_Cup_077.stl" />
+		<mesh name="UCX_Cup_078" file="stl/UCX_Cup_078.stl" />
+		<mesh name="UCX_Cup_079" file="stl/UCX_Cup_079.stl" />
+		<mesh name="UCX_Cup_080" file="stl/UCX_Cup_080.stl" />
+		<mesh name="UCX_Cup_081" file="stl/UCX_Cup_081.stl" />
+		<mesh name="UCX_Cup_082" file="stl/UCX_Cup_082.stl" />
+		<mesh name="UCX_Cup_083" file="stl/UCX_Cup_083.stl" />
+		<mesh name="UCX_Cup_084" file="stl/UCX_Cup_084.stl" />
+		<mesh name="UCX_Cup_085" file="stl/UCX_Cup_085.stl" />
+		<mesh name="UCX_Cup_086" file="stl/UCX_Cup_086.stl" />
+		<mesh name="UCX_Cup_087" file="stl/UCX_Cup_087.stl" />
+		<mesh name="UCX_Cup_088" file="stl/UCX_Cup_088.stl" />
+		<mesh name="UCX_Cup_089" file="stl/UCX_Cup_089.stl" />
+		<mesh name="UCX_Cup_090" file="stl/UCX_Cup_090.stl" />
+		<mesh name="UCX_Cup_091" file="stl/UCX_Cup_091.stl" />
+		<mesh name="UCX_Cup_092" file="stl/UCX_Cup_092.stl" />
+		<mesh name="UCX_Cup_093" file="stl/UCX_Cup_093.stl" />
+		<mesh name="UCX_Cup_094" file="stl/UCX_Cup_094.stl" />
+		<mesh name="UCX_Cup_095" file="stl/UCX_Cup_095.stl" />
+		<mesh name="UCX_Cup_096" file="stl/UCX_Cup_096.stl" />
+		<mesh name="UCX_Cup_097" file="stl/UCX_Cup_097.stl" />
+		<mesh name="UCX_Cup_098" file="stl/UCX_Cup_098.stl" />
+		<mesh name="UCX_Cup_099" file="stl/UCX_Cup_099.stl" />
+        <mesh name="UCX_Cup_100" file="stl/UCX_Cup_100.stl" />
+
+        <mesh name="UCX_Cup_101" file="stl/UCX_Cup_101.stl" />
+		<mesh name="UCX_Cup_102" file="stl/UCX_Cup_102.stl" />
+		<mesh name="UCX_Cup_103" file="stl/UCX_Cup_103.stl" />
+		<mesh name="UCX_Cup_104" file="stl/UCX_Cup_104.stl" />
+		<mesh name="UCX_Cup_105" file="stl/UCX_Cup_105.stl" />
+		<mesh name="UCX_Cup_106" file="stl/UCX_Cup_106.stl" />
+		<mesh name="UCX_Cup_107" file="stl/UCX_Cup_107.stl" />
+		<mesh name="UCX_Cup_108" file="stl/UCX_Cup_108.stl" />
+		<mesh name="UCX_Cup_109" file="stl/UCX_Cup_109.stl" />
+		<mesh name="UCX_Cup_110" file="stl/UCX_Cup_110.stl" />
+		<mesh name="UCX_Cup_111" file="stl/UCX_Cup_111.stl" />
+		<mesh name="UCX_Cup_112" file="stl/UCX_Cup_112.stl" />
+		<mesh name="UCX_Cup_113" file="stl/UCX_Cup_113.stl" />
+		<mesh name="UCX_Cup_114" file="stl/UCX_Cup_114.stl" />
+		<mesh name="UCX_Cup_115" file="stl/UCX_Cup_115.stl" />
+		<mesh name="UCX_Cup_116" file="stl/UCX_Cup_116.stl" />
+		<mesh name="UCX_Cup_117" file="stl/UCX_Cup_117.stl" />
+		<mesh name="UCX_Cup_118" file="stl/UCX_Cup_118.stl" />
+		<mesh name="UCX_Cup_119" file="stl/UCX_Cup_119.stl" />
+		<mesh name="UCX_Cup_120" file="stl/UCX_Cup_120.stl" />
+		<mesh name="UCX_Cup_121" file="stl/UCX_Cup_121.stl" />
+		<mesh name="UCX_Cup_122" file="stl/UCX_Cup_122.stl" />
+		<mesh name="UCX_Cup_123" file="stl/UCX_Cup_123.stl" />
+		<mesh name="UCX_Cup_124" file="stl/UCX_Cup_124.stl" />
+		<mesh name="UCX_Cup_125" file="stl/UCX_Cup_125.stl" />
+		<mesh name="UCX_Cup_126" file="stl/UCX_Cup_126.stl" />
+		<mesh name="UCX_Cup_127" file="stl/UCX_Cup_127.stl" />
+		<mesh name="UCX_Cup_128" file="stl/UCX_Cup_128.stl" />
+		<mesh name="UCX_Cup_129" file="stl/UCX_Cup_129.stl" />
+		<mesh name="UCX_Cup_130" file="stl/UCX_Cup_130.stl" />
+		<mesh name="UCX_Cup_131" file="stl/UCX_Cup_131.stl" />
+		<mesh name="UCX_Cup_132" file="stl/UCX_Cup_132.stl" />
+		<mesh name="UCX_Cup_133" file="stl/UCX_Cup_133.stl" />
+		<mesh name="UCX_Cup_134" file="stl/UCX_Cup_134.stl" />
+		<mesh name="UCX_Cup_135" file="stl/UCX_Cup_135.stl" />
+		<mesh name="UCX_Cup_136" file="stl/UCX_Cup_136.stl" />
+		<mesh name="UCX_Cup_137" file="stl/UCX_Cup_137.stl" />
+		<mesh name="UCX_Cup_138" file="stl/UCX_Cup_138.stl" />
+		<mesh name="UCX_Cup_139" file="stl/UCX_Cup_139.stl" />
+		<mesh name="UCX_Cup_140" file="stl/UCX_Cup_140.stl" />
+		<mesh name="UCX_Cup_141" file="stl/UCX_Cup_141.stl" />
+		<mesh name="UCX_Cup_142" file="stl/UCX_Cup_142.stl" />
+		<mesh name="UCX_Cup_143" file="stl/UCX_Cup_143.stl" />
+		<mesh name="UCX_Cup_144" file="stl/UCX_Cup_144.stl" />
+		<mesh name="UCX_Cup_145" file="stl/UCX_Cup_145.stl" />
+		<mesh name="UCX_Cup_146" file="stl/UCX_Cup_146.stl" />
+		<mesh name="UCX_Cup_147" file="stl/UCX_Cup_147.stl" />
+		<mesh name="UCX_Cup_148" file="stl/UCX_Cup_148.stl" />
+		<mesh name="UCX_Cup_149" file="stl/UCX_Cup_149.stl" />
+		<mesh name="UCX_Cup_150" file="stl/UCX_Cup_150.stl" />
+		<mesh name="UCX_Cup_151" file="stl/UCX_Cup_151.stl" />
+		<mesh name="UCX_Cup_152" file="stl/UCX_Cup_152.stl" />
+		<mesh name="UCX_Cup_153" file="stl/UCX_Cup_153.stl" />
+		<mesh name="UCX_Cup_154" file="stl/UCX_Cup_154.stl" />
+		<mesh name="UCX_Cup_155" file="stl/UCX_Cup_155.stl" />
+		<mesh name="UCX_Cup_156" file="stl/UCX_Cup_156.stl" />
+		<mesh name="UCX_Cup_157" file="stl/UCX_Cup_157.stl" />
+		<mesh name="UCX_Cup_158" file="stl/UCX_Cup_158.stl" />
+		<mesh name="UCX_Cup_159" file="stl/UCX_Cup_159.stl" />
+		<mesh name="UCX_Cup_160" file="stl/UCX_Cup_160.stl" />
+		<mesh name="UCX_Cup_161" file="stl/UCX_Cup_161.stl" />
+		<mesh name="UCX_Cup_162" file="stl/UCX_Cup_162.stl" />
+		<mesh name="UCX_Cup_163" file="stl/UCX_Cup_163.stl" />
+		<mesh name="UCX_Cup_164" file="stl/UCX_Cup_164.stl" />
+		<mesh name="UCX_Cup_165" file="stl/UCX_Cup_165.stl" />
+		<mesh name="UCX_Cup_166" file="stl/UCX_Cup_166.stl" />
+		<mesh name="UCX_Cup_167" file="stl/UCX_Cup_167.stl" />
+		<mesh name="UCX_Cup_168" file="stl/UCX_Cup_168.stl" />
+		<mesh name="UCX_Cup_169" file="stl/UCX_Cup_169.stl" />
+		<mesh name="UCX_Cup_170" file="stl/UCX_Cup_170.stl" />
+		<mesh name="UCX_Cup_171" file="stl/UCX_Cup_171.stl" />
+		<mesh name="UCX_Cup_172" file="stl/UCX_Cup_172.stl" />
+		<mesh name="UCX_Cup_173" file="stl/UCX_Cup_173.stl" />
+		<mesh name="UCX_Cup_174" file="stl/UCX_Cup_174.stl" />
+		<mesh name="UCX_Cup_175" file="stl/UCX_Cup_175.stl" />
+		<mesh name="UCX_Cup_176" file="stl/UCX_Cup_176.stl" />
+		<mesh name="UCX_Cup_177" file="stl/UCX_Cup_177.stl" />
+		<mesh name="UCX_Cup_178" file="stl/UCX_Cup_178.stl" />
+		<mesh name="UCX_Cup_179" file="stl/UCX_Cup_179.stl" />
+		<mesh name="UCX_Cup_180" file="stl/UCX_Cup_180.stl" />
+		<mesh name="UCX_Cup_181" file="stl/UCX_Cup_181.stl" />
+		<mesh name="UCX_Cup_182" file="stl/UCX_Cup_182.stl" />
+		<mesh name="UCX_Cup_183" file="stl/UCX_Cup_183.stl" />
+		<mesh name="UCX_Cup_184" file="stl/UCX_Cup_184.stl" />
+		<mesh name="UCX_Cup_185" file="stl/UCX_Cup_185.stl" />
+		<mesh name="UCX_Cup_186" file="stl/UCX_Cup_186.stl" />
+		<mesh name="UCX_Cup_187" file="stl/UCX_Cup_187.stl" />
+		<mesh name="UCX_Cup_188" file="stl/UCX_Cup_188.stl" />
+		<mesh name="UCX_Cup_189" file="stl/UCX_Cup_189.stl" />
+		<mesh name="UCX_Cup_190" file="stl/UCX_Cup_190.stl" />
+		<mesh name="UCX_Cup_191" file="stl/UCX_Cup_191.stl" />
+		<mesh name="UCX_Cup_192" file="stl/UCX_Cup_192.stl" />
+		<mesh name="UCX_Cup_193" file="stl/UCX_Cup_193.stl" />
+		<mesh name="UCX_Cup_194" file="stl/UCX_Cup_194.stl" />
+		<mesh name="UCX_Cup_195" file="stl/UCX_Cup_195.stl" />
+		<mesh name="UCX_Cup_196" file="stl/UCX_Cup_196.stl" />
+		<mesh name="UCX_Cup_197" file="stl/UCX_Cup_197.stl" />
+		<mesh name="UCX_Cup_198" file="stl/UCX_Cup_198.stl" />
+		<mesh name="UCX_Cup_199" file="stl/UCX_Cup_199.stl" />
+        
+        <mesh name="UCX_Cup_200" file="stl/UCX_Cup_200.stl" />
+        <mesh name="UCX_Cup_201" file="stl/UCX_Cup_201.stl" />
+		<mesh name="UCX_Cup_202" file="stl/UCX_Cup_202.stl" />
+		<mesh name="UCX_Cup_203" file="stl/UCX_Cup_203.stl" />
+		<mesh name="UCX_Cup_204" file="stl/UCX_Cup_204.stl" />
+		<mesh name="UCX_Cup_205" file="stl/UCX_Cup_205.stl" />
+		<mesh name="UCX_Cup_206" file="stl/UCX_Cup_206.stl" />
+		<mesh name="UCX_Cup_207" file="stl/UCX_Cup_207.stl" />
+		<mesh name="UCX_Cup_208" file="stl/UCX_Cup_208.stl" />
+		<mesh name="UCX_Cup_209" file="stl/UCX_Cup_209.stl" />
+		<mesh name="UCX_Cup_210" file="stl/UCX_Cup_210.stl" />
+		<mesh name="UCX_Cup_211" file="stl/UCX_Cup_211.stl" />
+		<mesh name="UCX_Cup_212" file="stl/UCX_Cup_212.stl" />
+		<mesh name="UCX_Cup_213" file="stl/UCX_Cup_213.stl" />
+		<mesh name="UCX_Cup_214" file="stl/UCX_Cup_214.stl" />
+		<mesh name="UCX_Cup_215" file="stl/UCX_Cup_215.stl" />
+		<mesh name="UCX_Cup_216" file="stl/UCX_Cup_216.stl" />
+		<mesh name="UCX_Cup_217" file="stl/UCX_Cup_217.stl" />
+		<mesh name="UCX_Cup_218" file="stl/UCX_Cup_218.stl" />
+		<mesh name="UCX_Cup_219" file="stl/UCX_Cup_219.stl" />
+		<mesh name="UCX_Cup_220" file="stl/UCX_Cup_220.stl" />
+		<mesh name="UCX_Cup_221" file="stl/UCX_Cup_221.stl" />
+		<mesh name="UCX_Cup_222" file="stl/UCX_Cup_222.stl" />
+		<mesh name="UCX_Cup_223" file="stl/UCX_Cup_223.stl" />
+		<mesh name="UCX_Cup_224" file="stl/UCX_Cup_224.stl" />
+		<mesh name="UCX_Cup_225" file="stl/UCX_Cup_225.stl" />
+		<mesh name="UCX_Cup_226" file="stl/UCX_Cup_226.stl" />
+		<mesh name="UCX_Cup_227" file="stl/UCX_Cup_227.stl" />
+		<mesh name="UCX_Cup_228" file="stl/UCX_Cup_228.stl" />
+		<mesh name="UCX_Cup_229" file="stl/UCX_Cup_229.stl" />
+		<mesh name="UCX_Cup_230" file="stl/UCX_Cup_230.stl" />
+		<mesh name="UCX_Cup_231" file="stl/UCX_Cup_231.stl" />
+		<mesh name="UCX_Cup_232" file="stl/UCX_Cup_232.stl" />
+		<mesh name="UCX_Cup_233" file="stl/UCX_Cup_233.stl" />
+		<mesh name="UCX_Cup_234" file="stl/UCX_Cup_234.stl" />
+		<mesh name="UCX_Cup_235" file="stl/UCX_Cup_235.stl" />
+		<mesh name="UCX_Cup_236" file="stl/UCX_Cup_236.stl" />
+		<mesh name="UCX_Cup_237" file="stl/UCX_Cup_237.stl" />
+		<mesh name="UCX_Cup_238" file="stl/UCX_Cup_238.stl" />
+		<mesh name="UCX_Cup_239" file="stl/UCX_Cup_239.stl" />
+		<mesh name="UCX_Cup_240" file="stl/UCX_Cup_240.stl" />
+		<mesh name="UCX_Cup_241" file="stl/UCX_Cup_241.stl" />
+		<mesh name="UCX_Cup_242" file="stl/UCX_Cup_242.stl" />
+		<mesh name="UCX_Cup_243" file="stl/UCX_Cup_243.stl" />
+        <mesh name="UCX_Cup_244" file="stl/UCX_Cup_244.stl" />
+		<mesh name="UCX_Cup_245" file="stl/UCX_Cup_245.stl" />
+		<mesh name="UCX_Cup_246" file="stl/UCX_Cup_246.stl" />
+		<mesh name="UCX_Cup_247" file="stl/UCX_Cup_247.stl" />
+		<mesh name="UCX_Cup_248" file="stl/UCX_Cup_248.stl" />
+		<mesh name="UCX_Cup_249" file="stl/UCX_Cup_249.stl" />
+		<mesh name="UCX_Cup_250" file="stl/UCX_Cup_250.stl" />
+		<mesh name="UCX_Cup_251" file="stl/UCX_Cup_251.stl" />
+		<mesh name="UCX_Cup_252" file="stl/UCX_Cup_252.stl" />
+		<mesh name="UCX_Cup_253" file="stl/UCX_Cup_253.stl" />
+		<mesh name="UCX_Cup_254" file="stl/UCX_Cup_254.stl" />
+		<mesh name="UCX_Cup_255" file="stl/UCX_Cup_255.stl" />
+		<mesh name="UCX_Cup_256" file="stl/UCX_Cup_256.stl" />
+		<mesh name="UCX_Cup_257" file="stl/UCX_Cup_257.stl" />
+		<mesh name="UCX_Cup_258" file="stl/UCX_Cup_258.stl" />
+		<mesh name="UCX_Cup_259" file="stl/UCX_Cup_259.stl" />
+		<mesh name="UCX_Cup_260" file="stl/UCX_Cup_260.stl" />
+		<mesh name="UCX_Cup_261" file="stl/UCX_Cup_261.stl" />
+		<mesh name="UCX_Cup_262" file="stl/UCX_Cup_262.stl" />
+		<mesh name="UCX_Cup_263" file="stl/UCX_Cup_263.stl" />
+    </asset>
+    <default>
+        <default class="cup_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="cup_collision">
+            <geom rgba="1.0 0.0 0.0 0.5" />
+        </default>
+    </default>
+    <worldbody>
+        <body name="cup">
+            <freejoint />
+            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <geom name="cup_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="cup_visual" class="cup_visual" />
+            <geom name="UCX_Cup_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_001" class="cup_collision"/>
+            <geom name="UCX_Cup_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_002" class="cup_collision"/>
+            <geom name="UCX_Cup_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_003" class="cup_collision"/>
+            <geom name="UCX_Cup_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_004" class="cup_collision"/>
+            <geom name="UCX_Cup_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_005" class="cup_collision"/>
+            <geom name="UCX_Cup_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_006" class="cup_collision"/>
+            <geom name="UCX_Cup_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_007" class="cup_collision"/>
+            <geom name="UCX_Cup_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_008" class="cup_collision"/>
+            <geom name="UCX_Cup_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_009" class="cup_collision"/>
+            <geom name="UCX_Cup_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_010" class="cup_collision"/>
+            <geom name="UCX_Cup_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_011" class="cup_collision"/>
+            <geom name="UCX_Cup_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_012" class="cup_collision"/>
+            <geom name="UCX_Cup_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_013" class="cup_collision"/>
+            <geom name="UCX_Cup_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_014" class="cup_collision"/>
+            <geom name="UCX_Cup_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_015" class="cup_collision"/>
+            <geom name="UCX_Cup_016" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_016" class="cup_collision"/>
+            <geom name="UCX_Cup_017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_017" class="cup_collision"/>
+            <geom name="UCX_Cup_018" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_018" class="cup_collision"/>
+            <geom name="UCX_Cup_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_019" class="cup_collision"/>
+            <geom name="UCX_Cup_020" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_020" class="cup_collision"/>
+            <geom name="UCX_Cup_021" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_021" class="cup_collision"/>
+            <geom name="UCX_Cup_022" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_022" class="cup_collision"/>
+            <geom name="UCX_Cup_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_023" class="cup_collision"/>
+            <geom name="UCX_Cup_024" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_024" class="cup_collision"/>
+            <geom name="UCX_Cup_025" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_025" class="cup_collision"/>
+            <geom name="UCX_Cup_026" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_026" class="cup_collision"/>
+            <geom name="UCX_Cup_027" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_027" class="cup_collision"/>
+            <geom name="UCX_Cup_028" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_028" class="cup_collision"/>
+            <geom name="UCX_Cup_029" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_029" class="cup_collision"/>
+            <geom name="UCX_Cup_030" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_030" class="cup_collision"/>
+            <geom name="UCX_Cup_031" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_031" class="cup_collision"/>
+            <geom name="UCX_Cup_032" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_032" class="cup_collision"/>
+            <geom name="UCX_Cup_033" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_033" class="cup_collision"/>
+            <geom name="UCX_Cup_034" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_034" class="cup_collision"/>
+            <geom name="UCX_Cup_035" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_035" class="cup_collision"/>
+            <geom name="UCX_Cup_036" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_036" class="cup_collision"/>
+            <geom name="UCX_Cup_037" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_037" class="cup_collision"/>
+            <geom name="UCX_Cup_038" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_038" class="cup_collision"/>
+            <geom name="UCX_Cup_039" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_039" class="cup_collision"/>
+            <geom name="UCX_Cup_040" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_040" class="cup_collision"/>
+            <geom name="UCX_Cup_041" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_041" class="cup_collision"/>
+            <geom name="UCX_Cup_042" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_042" class="cup_collision"/>
+            <geom name="UCX_Cup_043" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_043" class="cup_collision"/>
+            <geom name="UCX_Cup_044" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_044" class="cup_collision"/>
+            <geom name="UCX_Cup_045" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_045" class="cup_collision"/>
+            <geom name="UCX_Cup_046" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_046" class="cup_collision"/>
+            <geom name="UCX_Cup_047" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_047" class="cup_collision"/>
+            <geom name="UCX_Cup_048" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_048" class="cup_collision"/>
+            <geom name="UCX_Cup_049" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_049" class="cup_collision"/>
+            <geom name="UCX_Cup_050" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_050" class="cup_collision"/>
+            <geom name="UCX_Cup_051" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_051" class="cup_collision"/>
+            <geom name="UCX_Cup_052" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_052" class="cup_collision"/>
+            <geom name="UCX_Cup_053" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_053" class="cup_collision"/>
+            <geom name="UCX_Cup_054" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_054" class="cup_collision"/>
+            <geom name="UCX_Cup_055" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_055" class="cup_collision"/>
+            <geom name="UCX_Cup_056" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_056" class="cup_collision"/>
+            <geom name="UCX_Cup_057" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_057" class="cup_collision"/>
+            <geom name="UCX_Cup_058" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_058" class="cup_collision"/>
+            <geom name="UCX_Cup_059" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_059" class="cup_collision"/>
+            <geom name="UCX_Cup_060" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_060" class="cup_collision"/>
+            <geom name="UCX_Cup_061" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_061" class="cup_collision"/>
+            <geom name="UCX_Cup_062" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_062" class="cup_collision"/>
+            <geom name="UCX_Cup_063" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_063" class="cup_collision"/>
+            <geom name="UCX_Cup_064" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_064" class="cup_collision"/>
+            <geom name="UCX_Cup_065" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_065" class="cup_collision"/>
+            <geom name="UCX_Cup_066" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_066" class="cup_collision"/>
+            <geom name="UCX_Cup_067" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_067" class="cup_collision"/>
+            <geom name="UCX_Cup_068" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_068" class="cup_collision"/>
+            <geom name="UCX_Cup_069" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_069" class="cup_collision"/>
+            <geom name="UCX_Cup_070" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_070" class="cup_collision"/>
+            <geom name="UCX_Cup_071" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_071" class="cup_collision"/>
+            <geom name="UCX_Cup_072" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_072" class="cup_collision"/>
+            <geom name="UCX_Cup_073" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_073" class="cup_collision"/>
+            <geom name="UCX_Cup_074" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_074" class="cup_collision"/>
+            <geom name="UCX_Cup_075" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_075" class="cup_collision"/>
+            <geom name="UCX_Cup_076" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_076" class="cup_collision"/>
+            <geom name="UCX_Cup_077" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_077" class="cup_collision"/>
+            <geom name="UCX_Cup_078" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_078" class="cup_collision"/>
+            <geom name="UCX_Cup_079" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_079" class="cup_collision"/>
+            <geom name="UCX_Cup_080" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_080" class="cup_collision"/>
+            <geom name="UCX_Cup_081" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_081" class="cup_collision"/>
+            <geom name="UCX_Cup_082" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_082" class="cup_collision"/>
+            <geom name="UCX_Cup_083" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_083" class="cup_collision"/>
+            <geom name="UCX_Cup_084" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_084" class="cup_collision"/>
+            <geom name="UCX_Cup_085" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_085" class="cup_collision"/>
+            <geom name="UCX_Cup_086" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_086" class="cup_collision"/>
+            <geom name="UCX_Cup_087" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_087" class="cup_collision"/>
+            <geom name="UCX_Cup_088" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_088" class="cup_collision"/>
+            <geom name="UCX_Cup_089" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_089" class="cup_collision"/>
+            <geom name="UCX_Cup_090" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_090" class="cup_collision"/>
+            <geom name="UCX_Cup_091" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_091" class="cup_collision"/>
+            <geom name="UCX_Cup_092" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_092" class="cup_collision"/>
+            <geom name="UCX_Cup_093" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_093" class="cup_collision"/>
+            <geom name="UCX_Cup_094" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_094" class="cup_collision"/>
+            <geom name="UCX_Cup_095" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_095" class="cup_collision"/>
+            <geom name="UCX_Cup_096" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_096" class="cup_collision"/>
+            <geom name="UCX_Cup_097" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_097" class="cup_collision"/>
+            <geom name="UCX_Cup_098" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_098" class="cup_collision"/>
+            <geom name="UCX_Cup_099" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_099" class="cup_collision"/>
+            <geom name="UCX_Cup_100" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_100" class="cup_collision"/>
+
+            <geom name="UCX_Cup_101" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_101" class="cup_collision"/>
+            <geom name="UCX_Cup_102" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_102" class="cup_collision"/>
+            <geom name="UCX_Cup_103" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_103" class="cup_collision"/>
+            <geom name="UCX_Cup_104" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_104" class="cup_collision"/>
+            <geom name="UCX_Cup_105" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_105" class="cup_collision"/>
+            <geom name="UCX_Cup_106" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_106" class="cup_collision"/>
+            <geom name="UCX_Cup_107" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_107" class="cup_collision"/>
+            <geom name="UCX_Cup_108" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_108" class="cup_collision"/>
+            <geom name="UCX_Cup_109" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_109" class="cup_collision"/>
+            <geom name="UCX_Cup_110" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_110" class="cup_collision"/>
+            <geom name="UCX_Cup_111" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_111" class="cup_collision"/>
+            <geom name="UCX_Cup_112" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_112" class="cup_collision"/>
+            <geom name="UCX_Cup_113" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_113" class="cup_collision"/>
+            <geom name="UCX_Cup_114" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_114" class="cup_collision"/>
+            <geom name="UCX_Cup_115" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_115" class="cup_collision"/>
+            <geom name="UCX_Cup_116" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_116" class="cup_collision"/>
+            <geom name="UCX_Cup_117" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_117" class="cup_collision"/>
+            <geom name="UCX_Cup_118" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_118" class="cup_collision"/>
+            <geom name="UCX_Cup_119" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_119" class="cup_collision"/>
+            <geom name="UCX_Cup_120" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_120" class="cup_collision"/>
+            <geom name="UCX_Cup_121" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_121" class="cup_collision"/>
+            <geom name="UCX_Cup_122" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_122" class="cup_collision"/>
+            <geom name="UCX_Cup_123" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_123" class="cup_collision"/>
+            <geom name="UCX_Cup_124" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_124" class="cup_collision"/>
+            <geom name="UCX_Cup_125" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_125" class="cup_collision"/>
+            <geom name="UCX_Cup_126" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_126" class="cup_collision"/>
+            <geom name="UCX_Cup_127" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_127" class="cup_collision"/>
+            <geom name="UCX_Cup_128" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_128" class="cup_collision"/>
+            <geom name="UCX_Cup_129" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_129" class="cup_collision"/>
+            <geom name="UCX_Cup_130" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_130" class="cup_collision"/>
+            <geom name="UCX_Cup_131" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_131" class="cup_collision"/>
+            <geom name="UCX_Cup_132" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_132" class="cup_collision"/>
+            <geom name="UCX_Cup_133" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_133" class="cup_collision"/>
+            <geom name="UCX_Cup_134" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_134" class="cup_collision"/>
+            <geom name="UCX_Cup_135" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_135" class="cup_collision"/>
+            <geom name="UCX_Cup_136" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_136" class="cup_collision"/>
+            <geom name="UCX_Cup_137" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_137" class="cup_collision"/>
+            <geom name="UCX_Cup_138" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_138" class="cup_collision"/>
+            <geom name="UCX_Cup_139" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_139" class="cup_collision"/>
+            <geom name="UCX_Cup_140" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_140" class="cup_collision"/>
+            <geom name="UCX_Cup_141" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_141" class="cup_collision"/>
+            <geom name="UCX_Cup_142" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_142" class="cup_collision"/>
+            <geom name="UCX_Cup_143" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_143" class="cup_collision"/>
+            <geom name="UCX_Cup_144" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_144" class="cup_collision"/>
+            <geom name="UCX_Cup_145" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_145" class="cup_collision"/>
+            <geom name="UCX_Cup_146" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_146" class="cup_collision"/>
+            <geom name="UCX_Cup_147" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_147" class="cup_collision"/>
+            <geom name="UCX_Cup_148" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_148" class="cup_collision"/>
+            <geom name="UCX_Cup_149" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_149" class="cup_collision"/>
+            <geom name="UCX_Cup_150" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_150" class="cup_collision"/>
+            <geom name="UCX_Cup_151" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_151" class="cup_collision"/>
+            <geom name="UCX_Cup_152" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_152" class="cup_collision"/>
+            <geom name="UCX_Cup_153" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_153" class="cup_collision"/>
+            <geom name="UCX_Cup_154" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_154" class="cup_collision"/>
+            <geom name="UCX_Cup_155" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_155" class="cup_collision"/>
+            <geom name="UCX_Cup_156" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_156" class="cup_collision"/>
+            <geom name="UCX_Cup_157" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_157" class="cup_collision"/>
+            <geom name="UCX_Cup_158" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_158" class="cup_collision"/>
+            <geom name="UCX_Cup_159" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_159" class="cup_collision"/>
+            <geom name="UCX_Cup_160" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_160" class="cup_collision"/>
+            <geom name="UCX_Cup_161" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_161" class="cup_collision"/>
+            <geom name="UCX_Cup_162" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_162" class="cup_collision"/>
+            <geom name="UCX_Cup_163" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_163" class="cup_collision"/>
+            <geom name="UCX_Cup_164" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_164" class="cup_collision"/>
+            <geom name="UCX_Cup_165" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_165" class="cup_collision"/>
+            <geom name="UCX_Cup_166" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_166" class="cup_collision"/>
+            <geom name="UCX_Cup_167" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_167" class="cup_collision"/>
+            <geom name="UCX_Cup_168" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_168" class="cup_collision"/>
+            <geom name="UCX_Cup_169" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_169" class="cup_collision"/>
+            <geom name="UCX_Cup_170" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_170" class="cup_collision"/>
+            <geom name="UCX_Cup_171" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_171" class="cup_collision"/>
+            <geom name="UCX_Cup_172" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_172" class="cup_collision"/>
+            <geom name="UCX_Cup_173" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_173" class="cup_collision"/>
+            <geom name="UCX_Cup_174" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_174" class="cup_collision"/>
+            <geom name="UCX_Cup_175" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_175" class="cup_collision"/>
+            <geom name="UCX_Cup_176" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_176" class="cup_collision"/>
+            <geom name="UCX_Cup_177" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_177" class="cup_collision"/>
+            <geom name="UCX_Cup_178" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_178" class="cup_collision"/>
+            <geom name="UCX_Cup_179" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_179" class="cup_collision"/>
+            <geom name="UCX_Cup_180" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_180" class="cup_collision"/>
+            <geom name="UCX_Cup_181" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_181" class="cup_collision"/>
+            <geom name="UCX_Cup_182" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_182" class="cup_collision"/>
+            <geom name="UCX_Cup_183" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_183" class="cup_collision"/>
+            <geom name="UCX_Cup_184" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_184" class="cup_collision"/>
+            <geom name="UCX_Cup_185" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_185" class="cup_collision"/>
+            <geom name="UCX_Cup_186" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_186" class="cup_collision"/>
+            <geom name="UCX_Cup_187" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_187" class="cup_collision"/>
+            <geom name="UCX_Cup_188" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_188" class="cup_collision"/>
+            <geom name="UCX_Cup_189" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_189" class="cup_collision"/>
+            <geom name="UCX_Cup_190" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_190" class="cup_collision"/>
+            <geom name="UCX_Cup_191" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_191" class="cup_collision"/>
+            <geom name="UCX_Cup_192" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_192" class="cup_collision"/>
+            <geom name="UCX_Cup_193" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_193" class="cup_collision"/>
+            <geom name="UCX_Cup_194" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_194" class="cup_collision"/>
+            <geom name="UCX_Cup_195" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_195" class="cup_collision"/>
+            <geom name="UCX_Cup_196" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_196" class="cup_collision"/>
+            <geom name="UCX_Cup_197" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_197" class="cup_collision"/>
+            <geom name="UCX_Cup_198" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_198" class="cup_collision"/>
+            <geom name="UCX_Cup_199" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_199" class="cup_collision"/>
+
+            <geom name="UCX_Cup_200" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_200" class="cup_collision"/>
+            <geom name="UCX_Cup_201" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_201" class="cup_collision"/>
+            <geom name="UCX_Cup_202" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_202" class="cup_collision"/>
+            <geom name="UCX_Cup_203" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_203" class="cup_collision"/>
+            <geom name="UCX_Cup_204" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_204" class="cup_collision"/>
+            <geom name="UCX_Cup_205" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_205" class="cup_collision"/>
+            <geom name="UCX_Cup_206" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_206" class="cup_collision"/>
+            <geom name="UCX_Cup_207" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_207" class="cup_collision"/>
+            <geom name="UCX_Cup_208" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_208" class="cup_collision"/>
+            <geom name="UCX_Cup_209" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_209" class="cup_collision"/>
+            <geom name="UCX_Cup_210" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_210" class="cup_collision"/>
+            <geom name="UCX_Cup_211" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_211" class="cup_collision"/>
+            <geom name="UCX_Cup_212" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_212" class="cup_collision"/>
+            <geom name="UCX_Cup_213" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_213" class="cup_collision"/>
+            <geom name="UCX_Cup_214" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_214" class="cup_collision"/>
+            <geom name="UCX_Cup_215" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_215" class="cup_collision"/>
+            <geom name="UCX_Cup_216" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_216" class="cup_collision"/>
+            <geom name="UCX_Cup_217" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_217" class="cup_collision"/>
+            <geom name="UCX_Cup_218" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_218" class="cup_collision"/>
+            <geom name="UCX_Cup_219" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_219" class="cup_collision"/>
+            <geom name="UCX_Cup_220" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_220" class="cup_collision"/>
+            <geom name="UCX_Cup_221" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_221" class="cup_collision"/>
+            <geom name="UCX_Cup_222" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_222" class="cup_collision"/>
+            <geom name="UCX_Cup_223" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_223" class="cup_collision"/>
+            <geom name="UCX_Cup_224" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_224" class="cup_collision"/>
+            <geom name="UCX_Cup_225" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_225" class="cup_collision"/>
+            <geom name="UCX_Cup_226" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_226" class="cup_collision"/>
+            <geom name="UCX_Cup_227" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_227" class="cup_collision"/>
+            <geom name="UCX_Cup_228" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_228" class="cup_collision"/>
+            <geom name="UCX_Cup_229" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_229" class="cup_collision"/>
+            <geom name="UCX_Cup_230" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_230" class="cup_collision"/>
+            <geom name="UCX_Cup_231" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_231" class="cup_collision"/>
+            <geom name="UCX_Cup_232" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_232" class="cup_collision"/>
+            <geom name="UCX_Cup_233" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_233" class="cup_collision"/>
+            <geom name="UCX_Cup_234" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_234" class="cup_collision"/>
+            <geom name="UCX_Cup_235" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_235" class="cup_collision"/>
+            <geom name="UCX_Cup_236" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_236" class="cup_collision"/>
+            <geom name="UCX_Cup_237" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_237" class="cup_collision"/>
+            <geom name="UCX_Cup_238" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_238" class="cup_collision"/>
+            <geom name="UCX_Cup_239" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_239" class="cup_collision"/>
+            <geom name="UCX_Cup_240" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_240" class="cup_collision"/>
+            <geom name="UCX_Cup_241" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_241" class="cup_collision"/>
+            <geom name="UCX_Cup_242" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_242" class="cup_collision"/>
+            <geom name="UCX_Cup_243" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_243" class="cup_collision"/>
+            <geom name="UCX_Cup_244" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_244" class="cup_collision"/>
+            <geom name="UCX_Cup_245" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_245" class="cup_collision"/>
+            <geom name="UCX_Cup_246" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_246" class="cup_collision"/>
+            <geom name="UCX_Cup_247" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_247" class="cup_collision"/>
+            <geom name="UCX_Cup_248" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_248" class="cup_collision"/>
+            <geom name="UCX_Cup_249" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_249" class="cup_collision"/>
+            <geom name="UCX_Cup_250" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_250" class="cup_collision"/>
+            <geom name="UCX_Cup_251" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_251" class="cup_collision"/>
+            <geom name="UCX_Cup_252" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_252" class="cup_collision"/>
+            <geom name="UCX_Cup_253" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_253" class="cup_collision"/>
+            <geom name="UCX_Cup_254" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_254" class="cup_collision"/>
+            <geom name="UCX_Cup_255" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_255" class="cup_collision"/>
+            <geom name="UCX_Cup_256" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_256" class="cup_collision"/>
+            <geom name="UCX_Cup_257" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_257" class="cup_collision"/>
+            <geom name="UCX_Cup_258" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_258" class="cup_collision"/>
+            <geom name="UCX_Cup_259" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_259" class="cup_collision"/>
+            <geom name="UCX_Cup_260" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_260" class="cup_collision"/>
+            <geom name="UCX_Cup_261" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_261" class="cup_collision"/>
+            <geom name="UCX_Cup_262" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_262" class="cup_collision"/>
+            <geom name="UCX_Cup_263" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_263" class="cup_collision"/>
+        </body>
+    </worldbody>
+    <equality />
+    <contact />
+</mujoco>

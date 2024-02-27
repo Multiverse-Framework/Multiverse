@@ -1,0 +1,52 @@
+<mujoco model="wooden_spoon_2">
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
+        autolimits="true" />
+    <asset>
+        <mesh name="wooden_spoon_2_visual" file="obj/WoodenSpoon2.obj" />
+        <mesh name="UCX_WoodenSpoon2_001" file="stl/UCX_WoodenSpoon2_001.stl" />
+		<mesh name="UCX_WoodenSpoon2_002" file="stl/UCX_WoodenSpoon2_002.stl" />
+		<mesh name="UCX_WoodenSpoon2_003" file="stl/UCX_WoodenSpoon2_003.stl" />
+		<mesh name="UCX_WoodenSpoon2_004" file="stl/UCX_WoodenSpoon2_004.stl" />
+		<mesh name="UCX_WoodenSpoon2_005" file="stl/UCX_WoodenSpoon2_005.stl" />
+		<mesh name="UCX_WoodenSpoon2_006" file="stl/UCX_WoodenSpoon2_006.stl" />
+		<mesh name="UCX_WoodenSpoon2_007" file="stl/UCX_WoodenSpoon2_007.stl" />
+		<mesh name="UCX_WoodenSpoon2_008" file="stl/UCX_WoodenSpoon2_008.stl" />
+		<mesh name="UCX_WoodenSpoon2_009" file="stl/UCX_WoodenSpoon2_009.stl" />
+		<mesh name="UCX_WoodenSpoon2_010" file="stl/UCX_WoodenSpoon2_010.stl" />
+		<mesh name="UCX_WoodenSpoon2_011" file="stl/UCX_WoodenSpoon2_011.stl" />
+		<mesh name="UCX_WoodenSpoon2_012" file="stl/UCX_WoodenSpoon2_012.stl" />
+		<mesh name="UCX_WoodenSpoon2_013" file="stl/UCX_WoodenSpoon2_013.stl" />
+		<mesh name="UCX_WoodenSpoon2_014" file="stl/UCX_WoodenSpoon2_014.stl" />
+    </asset>
+    <default>
+        <default class="wooden_spoon_2_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="wooden_spoon_2_collision">
+            <geom rgba="1.0 0.0 0.0 0.5" />
+        </default>
+    </default>
+    <worldbody>
+        <body name="wooden_spoon_2">
+            <freejoint />
+            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <geom name="wooden_spoon_2_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="wooden_spoon_2_visual" class="wooden_spoon_2_visual" />
+            <geom name="UCX_WoodenSpoon2_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_001" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_002" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_003" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_004" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_005" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_006" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_007" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_008" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_009" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_010" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_011" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_012" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_013" class="wooden_spoon_2_collision"/>
+            <geom name="UCX_WoodenSpoon2_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon2_014" class="wooden_spoon_2_collision"/>
+        </body>
+    </worldbody>
+    <equality />
+    <contact />
+</mujoco>

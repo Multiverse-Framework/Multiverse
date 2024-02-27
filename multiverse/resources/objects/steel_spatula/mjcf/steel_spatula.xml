@@ -1,0 +1,78 @@
+<mujoco model="steel_spatula">
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
+        autolimits="true" />
+    <asset>
+        <mesh name="steel_spatula_visual" file="obj/SteelSpatula.obj" />
+        <mesh name="UCX_SteelSpatula_001" file="stl/UCX_SteelSpatula_001.stl" />
+		<mesh name="UCX_SteelSpatula_002" file="stl/UCX_SteelSpatula_002.stl" />
+		<mesh name="UCX_SteelSpatula_003" file="stl/UCX_SteelSpatula_003.stl" />
+		<mesh name="UCX_SteelSpatula_004" file="stl/UCX_SteelSpatula_004.stl" />
+		<mesh name="UCX_SteelSpatula_005" file="stl/UCX_SteelSpatula_005.stl" />
+		<mesh name="UCX_SteelSpatula_006" file="stl/UCX_SteelSpatula_006.stl" />
+		<mesh name="UCX_SteelSpatula_007" file="stl/UCX_SteelSpatula_007.stl" />
+		<mesh name="UCX_SteelSpatula_008" file="stl/UCX_SteelSpatula_008.stl" />
+		<mesh name="UCX_SteelSpatula_009" file="stl/UCX_SteelSpatula_009.stl" />
+		<mesh name="UCX_SteelSpatula_010" file="stl/UCX_SteelSpatula_010.stl" />
+		<mesh name="UCX_SteelSpatula_011" file="stl/UCX_SteelSpatula_011.stl" />
+		<mesh name="UCX_SteelSpatula_012" file="stl/UCX_SteelSpatula_012.stl" />
+		<mesh name="UCX_SteelSpatula_013" file="stl/UCX_SteelSpatula_013.stl" />
+		<mesh name="UCX_SteelSpatula_014" file="stl/UCX_SteelSpatula_014.stl" />
+		<mesh name="UCX_SteelSpatula_015" file="stl/UCX_SteelSpatula_015.stl" />
+		<mesh name="UCX_SteelSpatula_016" file="stl/UCX_SteelSpatula_016.stl" />
+		<mesh name="UCX_SteelSpatula_017" file="stl/UCX_SteelSpatula_017.stl" />
+		<mesh name="UCX_SteelSpatula_018" file="stl/UCX_SteelSpatula_018.stl" />
+		<mesh name="UCX_SteelSpatula_019" file="stl/UCX_SteelSpatula_019.stl" />
+		<mesh name="UCX_SteelSpatula_020" file="stl/UCX_SteelSpatula_020.stl" />
+		<mesh name="UCX_SteelSpatula_021" file="stl/UCX_SteelSpatula_021.stl" />
+		<mesh name="UCX_SteelSpatula_022" file="stl/UCX_SteelSpatula_022.stl" />
+		<mesh name="UCX_SteelSpatula_023" file="stl/UCX_SteelSpatula_023.stl" />
+		<mesh name="UCX_SteelSpatula_024" file="stl/UCX_SteelSpatula_024.stl" />
+		<mesh name="UCX_SteelSpatula_025" file="stl/UCX_SteelSpatula_025.stl" />
+		<mesh name="UCX_SteelSpatula_026" file="stl/UCX_SteelSpatula_026.stl" />
+		<mesh name="UCX_SteelSpatula_027" file="stl/UCX_SteelSpatula_027.stl" />
+    </asset>
+    <default>
+        <default class="steel_spatula_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="steel_spatula_collision">
+            <geom rgba="1.0 0.0 0.0 0.5" />
+        </default>
+    </default>
+    <worldbody>
+        <body name="steel_spatula">
+            <freejoint />
+            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <geom name="steel_spatula_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="steel_spatula_visual" class="steel_spatula_visual" />
+            <geom name="UCX_SteelSpatula_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_001" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_002" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_003" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_004" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_005" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_006" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_007" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_008" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_009" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_010" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_011" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_012" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_013" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_014" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_015" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_016" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_016" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_017" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_018" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_018" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_019" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_020" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_020" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_021" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_021" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_022" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_022" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_023" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_024" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_024" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_025" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_025" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_026" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_026" class="steel_spatula_collision"/>
+            <geom name="UCX_SteelSpatula_027" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SteelSpatula_027" class="steel_spatula_collision"/>
+        </body>
+    </worldbody>
+    <equality />
+    <contact />
+</mujoco>
