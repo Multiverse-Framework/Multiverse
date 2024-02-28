@@ -251,7 +251,7 @@
     </asset>
     <default>
         <default class="cutlery_holder_visual">
-            <geom contype="0" conaffinity="0" />
+            <geom contype="0" conaffinity="0" solimp="0.95 0.99 0.001" solref="0.004 1"/>
         </default>
         <default class="cutlery_holder_collision">
             <geom rgba="1.0 0.0 0.0 0.5" />
@@ -259,7 +259,6 @@
     </default>
     <worldbody>
         <body name="cutlery_holder">
-            <freejoint />
             <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
             <geom name="cutlery_holder_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="cutlery_holder_visual" class="cutlery_holder_visual" />
             <geom name="UCX_CutleryHolder_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_001" class="cutlery_holder_collision"/>

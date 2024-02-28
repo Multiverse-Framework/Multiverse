@@ -30,7 +30,7 @@ simulations:
         apply:
           body:
             pan:
-              pos: [7.10, -4.42, 0.8927]
+              pos: [7.10, -4.42, 0.90]
               quat: [0, 0, 0, 1]
         suffix:
           body: _mujoco
@@ -40,7 +40,47 @@ simulations:
         apply:
           body:
             cold_cutting_1:
-              pos: [7.12792047, -5.3180443, 0.9]
+              pos: [7.18, -5.34, 0.9096]
+      bread_1:
+        path: bread_1/mjcf/bread_1.xml
+        apply:
+          body:
+            bread_1:
+              pos: [6.91, -5.22, 0.944]
+      cutlery_holder:
+        path: cutlery_holder/mjcf/cutlery_holder.xml
+        apply:
+          body:
+            cutlery_holder:
+              pos: [6.924, -5.01, 0.9204]
+      steel_spatula:
+        path: steel_spatula/mjcf/steel_spatula.xml
+        apply:
+          body:
+            steel_spatula:
+              pos: [6.97, -3.96, 0.90]
+              quat: [0, 0, 0, 1]
+      wooden_spoon_1:
+        path: wooden_spoon_1/mjcf/wooden_spoon_1.xml
+        apply:
+          body:
+            wooden_spoon_1:
+              pos: [6.98, -4.11, 0.87]
+              quat: [0, 0, 0, 1]
+      wooden_spoon_2:
+        path: wooden_spoon_2/mjcf/wooden_spoon_2.xml
+        apply:
+          body:
+            wooden_spoon_2:
+              pos: [6.92, -3.89, 0.89]
+              quat: [0, 0, 0, 1]
+      wooden_fork:
+        path: wooden_fork/mjcf/wooden_fork.xml
+        apply:
+          body:
+            wooden_fork:
+              pos: [6.91, -4.17, 0.87]
+              quat: [0, 0, 0, 1]
       chopstick_1:
         path: chopstick/chopstick.xml
         apply:
@@ -66,7 +106,29 @@ simulations:
         apply:
           body:
             classic_plate_26cm:
-              pos: [7.03, -5.50, .8675]
+              pos: [7.03, -5.56, .89]
+      classic_plate_21cm_1:
+        path: classic_plate_21cm/mjcf/classic_plate_21cm.xml
+        apply:
+          body:
+            classic_plate_21cm:
+              pos: [6.78, -5.56, .8675]
+        suffix:
+          body: _1
+          geom: _1
+      cutting_board:
+        path: cutting_board/cutting_board.xml
+        apply:
+          body:
+            cutting_board:
+              pos: [7.1718, -5.2711753, .8693183]
+              quat: [0.707, 0.0, 0.0, 0.707]
+      yellow_pineapple:
+        path: yellow_pineapple/yellow_pineapple.xml
+        apply:
+          body:
+            yellow_pineapple:
+              pos: [7.06, -5.93, .91]
     world:
       name: world
       path: apartment_full/Apartment.xml
@@ -83,9 +145,11 @@ simulations:
       SM_Kitchen_Handle4:
         body1: SM_Kitchen_Handle4_ref
         body2: SM_Kitchen_Handle4
+        torquescale: 0.1
       SM_Kitchen_Handle5:
         body1: SM_Kitchen_Handle5_ref
         body2: SM_Kitchen_Handle5
+        torquescale: 0.1
       SM_Kitchen_Handle7:
         body1: SM_Kitchen_Handle7_ref
         body2: SM_Kitchen_Handle7
@@ -110,6 +174,7 @@ simulations:
       SM_Kitchen_Handle14:
         body1: SM_Kitchen_Handle14_ref
         body2: SM_Kitchen_Handle14
+        torquescale: 0.1
       SM_Kitchen_Handle15:
         body1: SM_Kitchen_Handle15_ref
         body2: SM_Kitchen_Handle15
@@ -140,9 +205,11 @@ simulations:
       SM_Kitchen_Handle24:  
         body1: SM_Kitchen_Handle24_ref
         body2: SM_Kitchen_Handle24
+        torquescale: 0.1
       SM_Kitchen_Handle25:
         body1: SM_Kitchen_Handle25_ref
         body2: SM_Kitchen_Handle25
+        torquescale: 0.1
       SM_Counter_Sink_Tap:
         body1: SM_Counter_Sink_Tap_ref
         body2: SM_Counter_Sink_Tap
@@ -166,12 +233,46 @@ simulations:
       pan:
         body1: pan_ref
         body2: pan
+      yellow_pineapple:
+        body1: yellow_pineapple_ref
+        body2: yellow_pineapple
+        torquescale: 10
+      steel_spatula:
+        body1: steel_spatula_ref
+        body2: steel_spatula
+      wooden_spoon_1:
+        body1: wooden_spoon_1_ref
+        body2: wooden_spoon_1
+      wooden_spoon_2:
+        body1: wooden_spoon_2_ref
+        body2: wooden_spoon_2
+      wooden_fork:
+        body1: wooden_fork_ref
+        body2: wooden_fork
+      SM_Fridge_Drawer_01:
+        body1: SM_Fridge_Drawer_01_ref
+        body2: SM_Fridge_Drawer_01
+      SM_Fridge_Drawer_02:
+        body1: SM_Fridge_Drawer_02_ref
+        body2: SM_Fridge_Drawer_02
+      SM_Fridge_Drawer_03:
+        body1: SM_Fridge_Drawer_03_ref
+        body2: SM_Fridge_Drawer_03
+      SM_Fridge_Drawer_04:
+        body1: SM_Fridge_Drawer_04_ref
+        body2: SM_Fridge_Drawer_04
+      SM_Fridge_Drawer_05:
+        body1: SM_Fridge_Drawer_05_ref
+        body2: SM_Fridge_Drawer_05
+      classic_plate_26cm:
+        body1: classic_plate_26cm_ref
+        body2: classic_plate_26cm
     config:
       max_time_step: 0.002
       min_time_step: 0.001
 
 multiverse_server:
-  host: "tcp://192.168.101.137"
+  host: "tcp://192.168.178.153"
   port: 7000
 
 multiverse_clients:
@@ -209,6 +310,17 @@ multiverse_clients:
       SM_Dishwasher_Tray_01_ref: ["position", "quaternion"]
       SM_Dishwasher_Tray_02_ref: ["position", "quaternion"]
       SM_Dishwasher_Tray_03_ref: ["position", "quaternion"]
+      SM_Fridge_Drawer_01_ref: ["position", "quaternion"]
+      SM_Fridge_Drawer_02_ref: ["position", "quaternion"]
+      SM_Fridge_Drawer_03_ref: ["position", "quaternion"]
+      SM_Fridge_Drawer_04_ref: ["position", "quaternion"]
+      SM_Fridge_Drawer_05_ref: ["position", "quaternion"]
       chopstick_ref_1: ["position", "quaternion"]
       chopstick_ref_2: ["position", "quaternion"]
       pan_ref: ["position", "quaternion"]
+      steel_spatula_ref: ["position", "quaternion"]
+      wooden_spoon_1_ref: ["position", "quaternion"]
+      wooden_spoon_2_ref: ["position", "quaternion"]
+      wooden_fork_ref: ["position", "quaternion"]
+      yellow_pineapple_ref: ["position", "quaternion"]
+      classic_plate_26cm_ref: ["position", "quaternion"]

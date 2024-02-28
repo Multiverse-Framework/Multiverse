@@ -25,7 +25,7 @@
     <worldbody>
         <body name="wooden_fork">
             <freejoint />
-            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <inertial pos="0.0 0.0 0.0" mass="1" diaginertia="0.00056 0.00757 0.00788" />
             <geom name="wooden_fork_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="wooden_fork_visual" class="wooden_fork_visual" />
             <geom name="UCX_WoodenFork_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenFork_001" class="wooden_fork_collision"/>
             <geom name="UCX_WoodenFork_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenFork_002" class="wooden_fork_collision"/>

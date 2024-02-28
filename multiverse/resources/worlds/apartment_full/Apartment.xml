@@ -4,7 +4,7 @@
 	<option timestep="0.001" integrator="RK4" gravity="0 0 -9.81" />
 	<default>
 		<default class="apartment_visual">
-			<geom contype="0" conaffinity="0" />
+			<geom contype="0" conaffinity="0" rgba="0 0 0 0"/>
 		</default>
 		<default class="apartment_collision">
 			<geom rgba="1.0 0.0 0.0 1.0" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
@@ -1012,9 +1012,18 @@
     <texture type="2d" name="texplane" builtin="checker" mark="cross" rgb1="0.2 0.3 0.4" rgb2="0.1 0.15 0.2" markrgb="0.8 0.8 0.8" width="512" height="512"/>
     <material name="matplane" texture="texplane" texuniform="true" reflectance="0.3"/>
   </asset>
+  <visual>
+    <global azimuth="115" elevation="-20"/>
+  </visual>
   <worldbody>
     <geom name="ground" size="0 0 1" type="plane" condim="1" material="matplane"/>
     <light pos="2 2 2" dir="0 0 -1" directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2"/>
+
+	<body name="cursor" pos="6.2824 -3.4229 0" mocap="true">
+      <site name="cursor_x" pos="0.1 0 0" quat="0.707105 0 0.707108 0" size="0.01 0.1" type="cylinder" rgba="1 0 0 0.5"/>
+      <site name="cursor_y" pos="0 0.1 0" quat="0.707105 0.707108 0 0" size="0.01 0.1" type="cylinder" rgba="0 1 0 0.5"/>
+      <site name="cursor_z" pos="0 0 0.1" size="0.01 0.1" type="cylinder" rgba="0 0 1 0.5"/>
+    </body>
   </worldbody>
 	<worldbody>
 		<body name="Root" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">

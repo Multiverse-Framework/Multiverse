@@ -375,6 +375,7 @@
 	<worldbody>
 		<body name="yellow_pineapple" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 			<freejoint />
+			<inertial mass="1.0977749824523926" pos="0.0009946395875886083 0.008379538543522358 -0.05779716745018959" quat="-0.7028354406356812 0.0038453422021120787 0.707362949848175 0.07513457536697388" diaginertia="0.0019680236000567675 0.007302682381123304 0.00732726464048028"/>
 			<body name="pineapple_fruit_peduncle" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<inertial mass="0.011526642367243767" pos="0.0007257588440552354 0.00878545269370079 -0.15430569648742676" quat="-0.49253731966018677 0.5050202012062073 0.465048223733902 0.5348754525184631" diaginertia="3.4394149679428665e-06 0.00027718814089894295 0.00027719337958842516"/>
 				<geom name="PineappleFruitPeduncle" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPeduncle" material="M_PineappleFruitPeduncle" class="visual"/>
@@ -723,7 +724,6 @@
 				<geom name="PineappleFruitPitLeaf_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_010" class="collision"/>
 			</body>
 			<body name="pineapple_flesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-				<inertial mass="1.0977749824523926" pos="0.0009946395875886083 0.008379538543522358 -0.05779716745018959" quat="-0.7028354406356812 0.0038453422021120787 0.707362949848175 0.07513457536697388" diaginertia="0.0019680236000567675 0.007302682381123304 0.00732726464048028"/>
 				<geom name="PineappleFlesh" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh" material="M_PineappleFlesh" class="visual"/>
 				<geom name="PineappleFlesh_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_001" class="collision"/>
 				<geom name="PineappleFlesh_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_002" class="collision"/>
