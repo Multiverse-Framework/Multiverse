@@ -32,10 +32,12 @@ class SocketService(MultiverseService):
             self,
             client_addr: SocketAddress,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
+            **kwargs: Dict
     ) -> None:
         super().__init__(
             client_addr=client_addr,
-            multiverse_meta_data=multiverse_meta_data
+            multiverse_meta_data=multiverse_meta_data,
+            **kwargs
         )
 
     def update_world(self, world_name) -> None:

@@ -23,9 +23,9 @@ elif INTERFACE == Interface.ROS2:
 else:
     raise ValueError(f"Invalid interface {INTERFACE}")
 
-from multiverse_socket_node import MultiverseNodeProperties
 from multiverse_ros_socket.multiverse_node import *
 from multiverse_ros_socket.multiverse_node.multiverse_node import MultiverseMetaData
+from multiverse_ros_socket.multiverse_node.multiverse_node_properties import MultiverseNodeProperties
 
 import os
 from enum import Enum
