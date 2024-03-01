@@ -4,5 +4,4 @@ endif()
 
 if (UNIX)
     add_subdirectory(ros)
-    add_subdirectory(pycram_interface)
 endif()
