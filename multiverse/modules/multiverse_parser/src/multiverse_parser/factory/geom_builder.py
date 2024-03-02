@@ -388,10 +388,14 @@ class GeomBuilder:
             mesh_mass, mesh_inertia_tensor, mesh_center_of_mass = calculate_mesh_inertial(vertices=vertices,
                                                                                           faces=faces,
                                                                                           density=self.density)
+            transformation = mesh.GetLocalTransformation()
+            scale = numpy.array([transformation.GetRow(i).GetLength() for i in range(3)])
+            scale_mass = scale[0] * scale[1] * scale[2]
+            scale_volume = scale_mass * scale_mass
 
-            origin_inertial.mass += mesh_mass
-            origin_inertial.inertia_tensor += mesh_inertia_tensor * mesh_mass
-            origin_inertial.center_of_mass += mesh_center_of_mass
+            origin_inertial.mass += mesh_mass * scale_mass
+            origin_inertial.inertia_tensor += mesh_inertia_tensor * scale_volume * mesh_mass * scale_mass
+            origin_inertial.center_of_mass += mesh_center_of_mass * scale
 
             if origin_inertial.mass > 0.0:
                 origin_inertial.inertia_tensor /= origin_inertial.mass

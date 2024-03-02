@@ -80,6 +80,26 @@ class UrdfToMjcfTestCase(unittest.TestCase):
         exporter.build()
         exporter.export()
 
+    def test_urdf_to_mjcf_4(self):
+        input_urdf_path = os.path.join(self.resource_path, "input", "rollin_justin", "urdf", "justin.urdf")
+        factory = UrdfImporter(file_path=input_urdf_path,
+                               with_physics=True,
+                               with_visual=True,
+                               with_collision=True,
+                               default_rgba=numpy.array([1.0, 0.0, 0.0, 0.1]),
+                               inertia_source=InertiaSource.FROM_COLLISION_MESH)
+        self.assertEqual(factory.source_file_path, input_urdf_path)
+        self.assertEqual(factory._config.model_name, "justin")
+
+        usd_file_path = factory.import_model()
+        self.assertTrue(os.path.exists(usd_file_path))
+
+        output_mjcf_path = os.path.join(self.resource_path, "output", "test_urdf_to_mjcf",  "justin.xml")
+        exporter = MjcfExporter(file_path=output_mjcf_path,
+                                factory=factory)
+        exporter.build()
+        exporter.export()
+
     @classmethod
     def tearDownClass(cls):
         tracemalloc.stop()

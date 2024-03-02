@@ -23,7 +23,8 @@ class MjcfToMjcfTestCase(unittest.TestCase):
         factory = MjcfImporter(file_path=input_mjcf_path,
                                with_physics=True,
                                with_visual=True,
-                               with_collision=True)
+                               with_collision=True,
+                               inertia_source=InertiaSource.FROM_VISUAL_MESH)
         factory.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
         self.assertEqual(factory.source_file_path, input_mjcf_path)
         self.assertEqual(factory._config.model_name, "ur5e")
@@ -46,7 +47,8 @@ class MjcfToMjcfTestCase(unittest.TestCase):
         factory = MjcfImporter(file_path=input_mjcf_path,
                                with_physics=True,
                                with_visual=True,
-                               with_collision=True)
+                               with_collision=True,
+                               inertia_source=InertiaSource.FROM_VISUAL_MESH)
         factory.config.default_rgba = numpy.array([1.0, 0.0, 0.0, 0.1])
         self.assertEqual(factory.source_file_path, input_mjcf_path)
         self.assertEqual(factory._config.model_name, "milk_box")

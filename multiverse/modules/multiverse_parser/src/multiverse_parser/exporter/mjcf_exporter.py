@@ -521,6 +521,10 @@ class MjcfExporter:
             material_rel_path = mujoco_geom_api.GetMaterialRel().GetTargets()[0]
             material_name = material_rel_path.name
             geom.set("material", material_name)
+        elif not gprim_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
+            rgba = geom_builder.rgba
+            if rgba is not None:
+                geom.set("rgba", " ".join(map(str, rgba)))
 
         if gprim_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
             geom.set("class", "collision")
