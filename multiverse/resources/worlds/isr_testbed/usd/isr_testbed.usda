@@ -949,7 +949,7 @@ def Xform "isr_testbed" (
 
         def Mesh "cone1__Construction_Cone__link_geom_collision_0_construction_cone" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/construction_cone.usda@</construction_cone>
+            prepend references = @./../assets//meshes/usd/construction_cone.usda@</construction_cone>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/construction_cone_10_0_10_0_10_0>
@@ -963,7 +963,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/construction_cone.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/construction_cone.stl@
             float3 urdf:geometry:mesh:scale = (10, 10, 10)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (10, 0, 0, 0), (0, 10, 0, 0), (0, 0, 10, 0), (0, 0, 0, 1) )
@@ -996,7 +996,7 @@ def Xform "isr_testbed" (
 
         def Mesh "cone2__Construction_Cone__link_geom_collision_0_construction_cone" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/construction_cone.usda@</construction_cone>
+            prepend references = @./../assets//meshes/usd/construction_cone.usda@</construction_cone>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/construction_cone_10_0_10_0_10_0>
@@ -1010,7 +1010,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/construction_cone.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/construction_cone.stl@
             float3 urdf:geometry:mesh:scale = (10, 10, 10)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (10, 0, 0, 0), (0, 10, 0, 0), (0, 0, 10, 0), (0, 0, 0, 1) )
@@ -1043,7 +1043,7 @@ def Xform "isr_testbed" (
 
         def Mesh "cone3__Construction_Cone__link_geom_collision_0_construction_cone" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/construction_cone.usda@</construction_cone>
+            prepend references = @./../assets//meshes/usd/construction_cone.usda@</construction_cone>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/construction_cone_10_0_10_0_10_0>
@@ -1057,7 +1057,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/construction_cone.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/construction_cone.stl@
             float3 urdf:geometry:mesh:scale = (10, 10, 10)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (10, 0, 0, 0), (0, 10, 0, 0), (0, 0, 10, 0), (0, 0, 0, 1) )
@@ -1090,7 +1090,7 @@ def Xform "isr_testbed" (
 
         def Mesh "cone4__Construction_Cone__link_geom_collision_0_construction_cone" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/construction_cone.usda@</construction_cone>
+            prepend references = @./../assets//meshes/usd/construction_cone.usda@</construction_cone>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/construction_cone_10_0_10_0_10_0>
@@ -1104,7 +1104,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/construction_cone.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/construction_cone.stl@
             float3 urdf:geometry:mesh:scale = (10, 10, 10)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (10, 0, 0, 0), (0, 10, 0, 0), (0, 0, 10, 0), (0, 0, 0, 1) )
@@ -1221,7 +1221,7 @@ def Xform "isr_testbed" (
 
         def Mesh "hydrant1__fire_hydrant__link_geom_collision_0_fire_hydrant" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/fire_hydrant.usda@</fire_hydrant>
+            prepend references = @./../assets//meshes/usd/fire_hydrant.usda@</fire_hydrant>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/fire_hydrant>
@@ -1235,7 +1235,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/fire_hydrant.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/fire_hydrant.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1268,7 +1268,7 @@ def Xform "isr_testbed" (
 
         def Mesh "hydrant2__fire_hydrant__link_geom_collision_0_fire_hydrant" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/fire_hydrant.usda@</fire_hydrant>
+            prepend references = @./../assets//meshes/usd/fire_hydrant.usda@</fire_hydrant>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/fire_hydrant>
@@ -1282,7 +1282,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/fire_hydrant.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/fire_hydrant.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1315,7 +1315,7 @@ def Xform "isr_testbed" (
 
         def Mesh "tree1__pine_tree__link_geom_collision_0_pine_tree" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/pine_tree.usda@</pine_tree>
+            prepend references = @./../assets//meshes/usd/pine_tree.usda@</pine_tree>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/pine_tree>
@@ -1329,7 +1329,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/pine_tree.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/pine_tree.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1362,7 +1362,7 @@ def Xform "isr_testbed" (
 
         def Mesh "tree2__pine_tree__link_geom_collision_0_pine_tree" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/pine_tree.usda@</pine_tree>
+            prepend references = @./../assets//meshes/usd/pine_tree.usda@</pine_tree>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/pine_tree>
@@ -1376,7 +1376,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/pine_tree.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/pine_tree.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1429,7 +1429,7 @@ def Xform "isr_testbed" (
 
         def Mesh "human__person_standing__link_geom_collision_1_standing" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/standing.usda@</standing>
+            prepend references = @./../assets//meshes/usd/standing.usda@</standing>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/standing>
@@ -1443,7 +1443,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0.04, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0.02)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/standing.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/standing.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 0.9992001066609779, 0.03998933418663416, 0), (0, -0.03998933418663416, 0.9992001066609779, 0), (0, 0, 0.02, 1) )
@@ -1699,7 +1699,7 @@ def Xform "isr_testbed" (
 
         def Mesh "cup1__plastic_cup__link_geom_collision_0_plastic_cup" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/plastic_cup.usda@</plastic_cup>
+            prepend references = @./../assets//meshes/usd/plastic_cup.usda@</plastic_cup>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/plastic_cup>
@@ -1713,7 +1713,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0.065)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/plastic_cup.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/plastic_cup.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0.065, 1) )
@@ -1746,7 +1746,7 @@ def Xform "isr_testbed" (
 
         def Mesh "cup2__plastic_cup__link_geom_collision_0_plastic_cup" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/plastic_cup.usda@</plastic_cup>
+            prepend references = @./../assets//meshes/usd/plastic_cup.usda@</plastic_cup>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/plastic_cup>
@@ -1760,7 +1760,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0.065)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/plastic_cup.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/plastic_cup.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0.065, 1) )
@@ -1793,7 +1793,7 @@ def Xform "isr_testbed" (
 
         def Mesh "shelf__shelf__base_link_geom_collision_0_shelf" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/shelf.usda@</shelf>
+            prepend references = @./../assets//meshes/usd/shelf.usda@</shelf>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/shelf_0_15000000596046448_0_20000000298023224_0_20000000298023224>
@@ -1807,7 +1807,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/shelf.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/shelf.stl@
             float3 urdf:geometry:mesh:scale = (0.15, 0.2, 0.2)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (0.15, 0, 0, 0), (0, 0.2, 0, 0), (0, 0, 0.2, 0), (0, 0, 0, 1) )
@@ -1933,7 +1933,7 @@ def Xform "isr_testbed" (
 
         def Mesh "plant_floor_small__plant_floor_small__base_link_geom_collision_0_plant_floor_small" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/plant_floor_small.usda@</plant_floor_small>
+            prepend references = @./../assets//meshes/usd/plant_floor_small.usda@</plant_floor_small>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/plant_floor_small>
@@ -1947,7 +1947,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/plant_floor_small.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/plant_floor_small.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -2112,7 +2112,7 @@ def Xform "isr_testbed" (
 
         def Mesh "nightstand1__bedroom_nightstand__link_0_geom_collision_0_bedroom_nightstand" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/bedroom_nightstand.usda@</bedroom_nightstand>
+            prepend references = @./../assets//meshes/usd/bedroom_nightstand.usda@</bedroom_nightstand>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/bedroom_nightstand>
@@ -2126,7 +2126,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/bedroom_nightstand.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/bedroom_nightstand.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -2159,7 +2159,7 @@ def Xform "isr_testbed" (
 
         def Mesh "nightstand2__bedroom_nightstand__link_0_geom_collision_0_bedroom_nightstand" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/bedroom_nightstand.usda@</bedroom_nightstand>
+            prepend references = @./../assets//meshes/usd/bedroom_nightstand.usda@</bedroom_nightstand>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/bedroom_nightstand>
@@ -2173,7 +2173,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/bedroom_nightstand.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/bedroom_nightstand.stl@
             float3 urdf:geometry:mesh:scale = (1, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -2486,7 +2486,7 @@ def Xform "isr_testbed" (
 
         def Mesh "cabinet_diamondback__cabinet_diamondback__base_link_geom_collision_0_cabinet_diamondback" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/cabinet_diamondback.usda@</cabinet_diamondback>
+            prepend references = @./../assets//meshes/usd/cabinet_diamondback.usda@</cabinet_diamondback>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/cabinet_diamondback_1_7999999523162842_1_0_1_0>
@@ -2500,7 +2500,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/cabinet_diamondback.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/cabinet_diamondback.stl@
             float3 urdf:geometry:mesh:scale = (1.8, 1, 1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1.8, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -3861,7 +3861,7 @@ def Xform "isr_testbed" (
 
         def Mesh "aruco_marker_0__aruco_marker_0__link_0_geom_collision_0_aruco_marker_0" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./isr_testbed/meshes/usd/aruco_marker_0.usda@</aruco_marker_0>
+            prepend references = @./../assets//meshes/usd/aruco_marker_0.usda@</aruco_marker_0>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/aruco_marker_0_0_10000000149011612_0_10000000149011612_0_10000000149011612>
@@ -3875,7 +3875,7 @@ def Xform "isr_testbed" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./isr_testbed/meshes/stl/aruco_marker_0.stl@
+            asset urdf:geometry:mesh:filename = @./../assets//meshes/stl/aruco_marker_0.stl@
             float3 urdf:geometry:mesh:scale = (0.1, 0.1, 0.1)
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (0.1, 0, 0, 0), (0, 0.1, 0, 0), (0, 0, 0.1, 0), (0, 0, 0, 1) )

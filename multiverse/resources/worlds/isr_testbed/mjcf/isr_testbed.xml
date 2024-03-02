@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="isr_testbed">
-	<compiler meshdir="isr_testbed/meshes" texturedir="isr_testbed/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<compiler meshdir="../assets/meshes" texturedir="../assets/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
 		<default class="isr_testbed_collision">
 			<geom rgba="0.9 0.9 0.9 1.0"/>

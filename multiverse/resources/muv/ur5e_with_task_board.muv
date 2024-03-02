@@ -21,7 +21,7 @@ simulations:
           geom: gripper-2F-85_
         disable_self_collision: "off"
       ur5e:
-        path: ur5e.xml
+        path: ur5e/mjcf/ur5e.xml
         apply:
           body:
             ur5e:
@@ -110,7 +110,7 @@ multiverse_clients:
         controller_manager:
           robot: ur5e
           robot_description: /robot_description
-          urdf: ur5e.urdf
+          urdf: ur5e/urdf/ur5e.urdf
           config: ur5e/config/ros_control.yaml
           actuators:
             shoulder_pan: shoulder_pan_joint

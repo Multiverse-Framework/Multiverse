@@ -387,7 +387,7 @@
     <collision name="cone1__Construction_Cone__link_geom_collision_0_construction_cone">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/construction_cone.stl" scale="10.0 10.0 10.0"/>
+        <mesh filename="file://../assets/meshes/stl/construction_cone.stl" scale="10.0 10.0 10.0"/>
       </geometry>
     </collision>
   </link>
@@ -405,7 +405,7 @@
     <collision name="cone2__Construction_Cone__link_geom_collision_0_construction_cone">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/construction_cone.stl" scale="10.0 10.0 10.0"/>
+        <mesh filename="file://../assets/meshes/stl/construction_cone.stl" scale="10.0 10.0 10.0"/>
       </geometry>
     </collision>
   </link>
@@ -423,7 +423,7 @@
     <collision name="cone3__Construction_Cone__link_geom_collision_0_construction_cone">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/construction_cone.stl" scale="10.0 10.0 10.0"/>
+        <mesh filename="file://../assets/meshes/stl/construction_cone.stl" scale="10.0 10.0 10.0"/>
       </geometry>
     </collision>
   </link>
@@ -441,7 +441,7 @@
     <collision name="cone4__Construction_Cone__link_geom_collision_0_construction_cone">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/construction_cone.stl" scale="10.0 10.0 10.0"/>
+        <mesh filename="file://../assets/meshes/stl/construction_cone.stl" scale="10.0 10.0 10.0"/>
       </geometry>
     </collision>
   </link>
@@ -489,7 +489,7 @@
     <collision name="hydrant1__fire_hydrant__link_geom_collision_0_fire_hydrant">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/fire_hydrant.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/fire_hydrant.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -507,7 +507,7 @@
     <collision name="hydrant2__fire_hydrant__link_geom_collision_0_fire_hydrant">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/fire_hydrant.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/fire_hydrant.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -525,7 +525,7 @@
     <collision name="tree1__pine_tree__link_geom_collision_0_pine_tree">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/pine_tree.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/pine_tree.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -543,7 +543,7 @@
     <collision name="tree2__pine_tree__link_geom_collision_0_pine_tree">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/pine_tree.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/pine_tree.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -567,7 +567,7 @@
     <collision name="human__person_standing__link_geom_collision_1_standing">
       <origin xyz="0.0 0.0 0.019999999552965164" rpy="0.03999999910593033 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/standing.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/standing.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -675,7 +675,7 @@
     <collision name="cup1__plastic_cup__link_geom_collision_0_plastic_cup">
       <origin xyz="0.0 0.0 0.06499999761581421" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/plastic_cup.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/plastic_cup.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -693,7 +693,7 @@
     <collision name="cup2__plastic_cup__link_geom_collision_0_plastic_cup">
       <origin xyz="0.0 0.0 0.06499999761581421" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/plastic_cup.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/plastic_cup.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -711,7 +711,7 @@
     <collision name="shelf__shelf__base_link_geom_collision_0_shelf">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/shelf.stl" scale="0.15000000596046448 0.20000000298023224 0.20000000298023224"/>
+        <mesh filename="file://../assets/meshes/stl/shelf.stl" scale="0.15000000596046448 0.20000000298023224 0.20000000298023224"/>
       </geometry>
     </collision>
   </link>
@@ -759,7 +759,7 @@
     <collision name="plant_floor_small__plant_floor_small__base_link_geom_collision_0_plant_floor_small">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/plant_floor_small.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/plant_floor_small.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -831,7 +831,7 @@
     <collision name="nightstand1__bedroom_nightstand__link_0_geom_collision_0_bedroom_nightstand">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/bedroom_nightstand.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/bedroom_nightstand.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -849,7 +849,7 @@
     <collision name="nightstand2__bedroom_nightstand__link_0_geom_collision_0_bedroom_nightstand">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/bedroom_nightstand.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/bedroom_nightstand.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -957,7 +957,7 @@
     <collision name="cabinet_diamondback__cabinet_diamondback__base_link_geom_collision_0_cabinet_diamondback">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/cabinet_diamondback.stl" scale="1.7999999523162842 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/cabinet_diamondback.stl" scale="1.7999999523162842 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -1431,7 +1431,7 @@
     <collision name="aruco_marker_0__aruco_marker_0__link_0_geom_collision_0_aruco_marker_0">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://isr_testbed/meshes/stl/aruco_marker_0.stl" scale="0.10000000149011612 0.10000000149011612 0.10000000149011612"/>
+        <mesh filename="file://../assets/meshes/stl/aruco_marker_0.stl" scale="0.10000000149011612 0.10000000149011612 0.10000000149011612"/>
       </geometry>
     </collision>
   </link>

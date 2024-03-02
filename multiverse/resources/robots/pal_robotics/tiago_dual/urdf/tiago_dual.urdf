@@ -21,13 +21,13 @@
     <visual name="base_link_geom_visual_0_base">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/base.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/base.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="base_link_geom_collision_0_base_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/base_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/base_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -45,7 +45,7 @@
     <visual name="base_laser_link_geom_visual_0_sick_tim551">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/sick_tim551.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/sick_tim551.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -63,7 +63,7 @@
     <visual name="base_sonar_03_link_geom_visual_0_srf05">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -81,7 +81,7 @@
     <visual name="base_sonar_02_link_geom_visual_0_srf05">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -99,7 +99,7 @@
     <visual name="base_sonar_01_link_geom_visual_0_srf05">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/srf05.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -141,7 +141,7 @@
     <visual name="base_antenna_left_link_geom_visual_0_antenna">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/antenna.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/antenna.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="base_antenna_left_link_geom_collision_0">
@@ -165,7 +165,7 @@
     <visual name="base_antenna_right_link_geom_visual_0_antenna">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/antenna.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/antenna.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="base_antenna_right_link_geom_collision_0">
@@ -204,7 +204,7 @@
     <visual name="wheel_right_link_geom_visual_0_wheel">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/wheel.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/wheel.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="wheel_right_link_geom_collision_0">
@@ -237,7 +237,7 @@
     <visual name="wheel_left_link_geom_visual_0_wheel">
       <origin xyz="0.0 0.0 0.0" rpy="-3.1415927410125732 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/wheel.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/wheel.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="wheel_left_link_geom_collision_0">
@@ -262,7 +262,7 @@
     <visual name="caster_front_right_1_link_geom_visual_0_caster_1">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -281,7 +281,7 @@
     <visual name="caster_front_right_2_link_geom_visual_0_caster_2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="caster_front_right_2_link_geom_collision_0">
@@ -306,7 +306,7 @@
     <visual name="caster_front_left_1_link_geom_visual_0_caster_1">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -325,7 +325,7 @@
     <visual name="caster_front_left_2_link_geom_visual_0_caster_2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="caster_front_left_2_link_geom_collision_0">
@@ -350,7 +350,7 @@
     <visual name="caster_back_right_1_link_geom_visual_0_caster_1">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -369,7 +369,7 @@
     <visual name="caster_back_right_2_link_geom_visual_0_caster_2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="caster_back_right_2_link_geom_collision_0">
@@ -394,7 +394,7 @@
     <visual name="caster_back_left_1_link_geom_visual_0_caster_1">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/caster_1.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>
@@ -413,7 +413,7 @@
     <visual name="caster_back_left_2_link_geom_visual_0_caster_2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/caster_2.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="caster_back_left_2_link_geom_collision_0">
@@ -437,7 +437,7 @@
     <visual name="torso_fixed_link_geom_visual_0_torso_fix">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/torso_fix.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/torso_fix.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="torso_fixed_link_geom_collision_0">
@@ -469,31 +469,31 @@
     <visual name="torso_lift_link_geom_visual_0_torso_lift_dual_arm">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/torso_lift_dual_arm.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/torso_lift_dual_arm.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="torso_lift_link_geom_collision_0_torso_lift_collision_shoulder">
       <origin xyz="-0.13099999725818634 0.17000000178813934 -0.02556000091135502" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/torso_lift_collision_shoulder.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/torso_lift_collision_shoulder.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
     <collision name="torso_lift_link_geom_collision_1_torso_lift_collision_shoulder">
       <origin xyz="-0.13099999725818634 -0.1899999976158142 -0.02556000091135502" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/torso_lift_collision_shoulder.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/torso_lift_collision_shoulder.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
     <collision name="torso_lift_link_geom_collision_2_torso_lift_collision_core">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/torso_lift_collision_core.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/torso_lift_collision_core.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
     <collision name="torso_lift_link_geom_collision_3_torso_lift_collision_neck">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/torso_lift_collision_neck.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/torso_lift_collision_neck.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -513,13 +513,13 @@
     <visual name="head_1_link_geom_visual_0_head_1">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/head_1.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/head_1.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="head_1_link_geom_collision_0_head_1_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/head_1_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/head_1_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -539,13 +539,13 @@
     <visual name="head_2_link_geom_visual_0_head_2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/head_2.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/head_2.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="head_2_link_geom_collision_0_head_2_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/head_2_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/head_2_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -607,13 +607,13 @@
     <visual name="arm_left_1_link_geom_visual_0_arm_1">
       <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_1.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_1.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="arm_left_1_link_geom_collision_0_arm_1_collision">
       <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_1_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_1_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -633,13 +633,13 @@
     <visual name="arm_left_2_link_geom_visual_0_arm_2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1415927410125732"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_2.obj" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_2.obj" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </visual>
     <collision name="arm_left_2_link_geom_collision_0_arm_2_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1415927410125732"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_2_collision.stl" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_2_collision.stl" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </collision>
   </link>
@@ -659,13 +659,13 @@
     <visual name="arm_left_3_link_geom_visual_0_arm_3">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1415927410125732"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_3.obj" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_3.obj" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </visual>
     <collision name="arm_left_3_link_geom_collision_0_arm_3_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1415927410125732"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_3_collision.stl" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_3_collision.stl" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </collision>
   </link>
@@ -685,13 +685,13 @@
     <visual name="arm_left_4_link_geom_visual_0_arm_4">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_4.obj" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_4.obj" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </visual>
     <collision name="arm_left_4_link_geom_collision_0_arm_4_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_4_collision.stl" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_4_collision.stl" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </collision>
   </link>
@@ -711,13 +711,13 @@
     <visual name="arm_left_5_link_geom_visual_0_arm_5_wrist_2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_5_wrist_2017.obj" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_5_wrist_2017.obj" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </visual>
     <collision name="arm_left_5_link_geom_collision_0_arm_5_collision_wrist_2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_5_collision_wrist_2017.stl" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_5_collision_wrist_2017.stl" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </collision>
   </link>
@@ -737,13 +737,13 @@
     <visual name="arm_left_6_link_geom_visual_0_arm_6_wrist_2017">
       <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_6_wrist_2017.obj" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_6_wrist_2017.obj" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </visual>
     <collision name="arm_left_6_link_geom_collision_0_arm_6_collision_wrist_2017">
       <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_6_collision_wrist_2017.stl" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_6_collision_wrist_2017.stl" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </collision>
   </link>
@@ -847,13 +847,13 @@
     <visual name="gripper_left_link_geom_visual_0_gripper_link">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/gripper_link.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/gripper_link.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="gripper_left_link_geom_collision_0_gripper_link_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/gripper_link_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/gripper_link_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -873,7 +873,7 @@
     <visual name="gripper_left_right_finger_link_geom_visual_0_gripper_finger_link">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -9.265358676202595e-05"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/gripper_finger_link.obj" scale="-1.000092625617981 -0.9999073147773743 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/gripper_finger_link.obj" scale="-1.000092625617981 -0.9999073147773743 1.0"/>
       </geometry>
     </visual>
     <collision name="gripper_left_right_finger_link_geom_collision_0">
@@ -899,7 +899,7 @@
     <visual name="gripper_left_left_finger_link_geom_visual_0_gripper_finger_link">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1414999961853027"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/gripper_finger_link.obj" scale="1.000092625617981 0.9999073147773743 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/gripper_finger_link.obj" scale="1.000092625617981 0.9999073147773743 1.0"/>
       </geometry>
     </visual>
     <collision name="gripper_left_left_finger_link_geom_collision_0">
@@ -931,13 +931,13 @@
     <visual name="arm_right_1_link_geom_visual_0_arm_1">
       <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 3.1415927410125732"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_1.obj" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_1.obj" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </visual>
     <collision name="arm_right_1_link_geom_collision_0_arm_1_collision">
       <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -0.0 3.1415927410125732"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_1_collision.stl" scale="-1.0 -1.0 -1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_1_collision.stl" scale="-1.0 -1.0 -1.0"/>
       </geometry>
     </collision>
   </link>
@@ -957,13 +957,13 @@
     <visual name="arm_right_2_link_geom_visual_0_arm_2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_2.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_2.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="arm_right_2_link_geom_collision_0_arm_2_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_2_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_2_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -983,13 +983,13 @@
     <visual name="arm_right_3_link_geom_visual_0_arm_3">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_3.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_3.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="arm_right_3_link_geom_collision_0_arm_3_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_3_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_3_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -1009,13 +1009,13 @@
     <visual name="arm_right_4_link_geom_visual_0_arm_4">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_4.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_4.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="arm_right_4_link_geom_collision_0_arm_4_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_4_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_4_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -1035,13 +1035,13 @@
     <visual name="arm_right_5_link_geom_visual_0_arm_5_wrist_2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_5_wrist_2017.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_5_wrist_2017.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="arm_right_5_link_geom_collision_0_arm_5_collision_wrist_2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_5_collision_wrist_2017.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_5_collision_wrist_2017.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -1061,13 +1061,13 @@
     <visual name="arm_right_6_link_geom_visual_0_arm_6_wrist_2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/arm_6_wrist_2017.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/arm_6_wrist_2017.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="arm_right_6_link_geom_collision_0_arm_6_collision_wrist_2017">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/arm_6_collision_wrist_2017.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/arm_6_collision_wrist_2017.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -1171,13 +1171,13 @@
     <visual name="gripper_right_link_geom_visual_0_gripper_link">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/gripper_link.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/gripper_link.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
     <collision name="gripper_right_link_geom_collision_0_gripper_link_collision">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/stl/gripper_link_collision.stl" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/stl/gripper_link_collision.stl" scale="1.0 1.0 1.0"/>
       </geometry>
     </collision>
   </link>
@@ -1197,7 +1197,7 @@
     <visual name="gripper_right_right_finger_link_geom_visual_0_gripper_finger_link">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 -9.265358676202595e-05"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/gripper_finger_link.obj" scale="-1.000092625617981 -0.9999073147773743 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/gripper_finger_link.obj" scale="-1.000092625617981 -0.9999073147773743 1.0"/>
       </geometry>
     </visual>
     <collision name="gripper_right_right_finger_link_geom_collision_0">
@@ -1223,7 +1223,7 @@
     <visual name="gripper_right_left_finger_link_geom_visual_0_gripper_finger_link">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 3.1414999961853027"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/gripper_finger_link.obj" scale="1.000092625617981 0.9999073147773743 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/gripper_finger_link.obj" scale="1.000092625617981 0.9999073147773743 1.0"/>
       </geometry>
     </visual>
     <collision name="gripper_right_left_finger_link_geom_collision_0">
@@ -1277,7 +1277,7 @@
     <visual name="base_cover_link_geom_visual_0_base_ring">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 -0.0 0.0"/>
       <geometry>
-        <mesh filename="file://tiago_dual/meshes/obj/base_ring.obj" scale="1.0 1.0 1.0"/>
+        <mesh filename="file://../assets/meshes/obj/base_ring.obj" scale="1.0 1.0 1.0"/>
       </geometry>
     </visual>
   </link>

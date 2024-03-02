@@ -126,7 +126,7 @@ multiverse_clients:
       rviz:
         config: tiago_dual_in_apartment/config/rviz.rviz
         robot_descriptions:
-          tiago_dual_description: tiago_dual/tiago_dual.urdf
+          tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
           apartment_description: apartment/urdf/apartment.urdf
 
       map_server:
@@ -149,7 +149,7 @@ multiverse_clients:
         controller_manager:
           robot: tiago_dual
           robot_description: /robot_description
-          urdf: tiago_dual/tiago_dual.urdf
+          urdf: tiago_dual/urdf/tiago_dual.urdf
           config: tiago_dual/config/ros_control.yaml
           actuators:
             torso_lift_actuator: torso_lift_joint

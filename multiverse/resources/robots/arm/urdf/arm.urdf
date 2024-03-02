@@ -15,13 +15,13 @@
     <visual name="BASE_geom_visual_0_BASE">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/BASE.stl"/>
+        <mesh filename="file://../assets/meshes/stl/BASE.stl"/>
       </geometry>
     </visual>
     <collision name="BASE_geom_collision_0_BASE">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/BASE.stl"/>
+        <mesh filename="file://../assets/meshes/stl/BASE.stl"/>
       </geometry>
     </collision>
   </link>
@@ -41,13 +41,13 @@
     <visual name="LINK1_geom_visual_0_LINK1">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK1.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK1.stl"/>
       </geometry>
     </visual>
     <collision name="LINK1_geom_collision_0_LINK1">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK1.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK1.stl"/>
       </geometry>
     </collision>
   </link>
@@ -67,13 +67,13 @@
     <visual name="LINK2_geom_visual_0_LINK2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK2.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK2.stl"/>
       </geometry>
     </visual>
     <collision name="LINK2_geom_collision_0_LINK2">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK2.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK2.stl"/>
       </geometry>
     </collision>
   </link>
@@ -93,13 +93,13 @@
     <visual name="LINK3_geom_visual_0_LINK3">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK3.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK3.stl"/>
       </geometry>
     </visual>
     <collision name="LINK3_geom_collision_0_LINK3">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK3.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK3.stl"/>
       </geometry>
     </collision>
   </link>
@@ -119,13 +119,13 @@
     <visual name="LINK4_geom_visual_0_LINK4">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK4.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK4.stl"/>
       </geometry>
     </visual>
     <collision name="LINK4_geom_collision_0_LINK4">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK4.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK4.stl"/>
       </geometry>
     </collision>
   </link>
@@ -145,13 +145,13 @@
     <visual name="LINK5_geom_visual_0_LINK5">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK5.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK5.stl"/>
       </geometry>
     </visual>
     <collision name="LINK5_geom_collision_0_LINK5">
       <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
       <geometry>
-        <mesh filename="file://arm/meshes/stl/LINK5.stl"/>
+        <mesh filename="file://../assets/meshes/stl/LINK5.stl"/>
       </geometry>
     </collision>
   </link>

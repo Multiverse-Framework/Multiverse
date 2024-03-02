@@ -112,8 +112,8 @@ multiverse_clients:
       rviz:
         config: tiago_dual_in_isr_testbed/config/rviz.rviz
         robot_descriptions:
-          tiago_dual_description: tiago_dual/tiago_dual.urdf
-          isr_testbed_description: isr_testbed/isr_testbed.urdf
+          tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
+          isr_testbed_description: isr_testbed/urdf/isr_testbed.urdf
 
       map_server:
         map: isr_testbed/map/isr-testbed.yaml
@@ -135,7 +135,7 @@ multiverse_clients:
         controller_manager:
           robot: tiago_dual
           robot_description: /robot_description
-          urdf: tiago_dual/tiago_dual.urdf
+          urdf: tiago_dual/urdf/tiago_dual.urdf
           config: tiago_dual/config/ros_control.yaml
           actuators:
             torso_lift_actuator: torso_lift_joint

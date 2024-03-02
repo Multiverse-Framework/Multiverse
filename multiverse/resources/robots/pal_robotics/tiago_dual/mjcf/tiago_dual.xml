@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="tiago_dual">
-	<compiler meshdir="tiago_dual/meshes" texturedir="tiago_dual/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<compiler meshdir="../assets/meshes" texturedir="../assets/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
 		<default class="visual">
 			<geom contype="0" conaffinity="0"/>

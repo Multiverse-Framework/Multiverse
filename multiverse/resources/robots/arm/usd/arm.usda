@@ -48,7 +48,7 @@ def Xform "arm" (
 
         def Mesh "BASE_geom_visual_0_BASE" (
             prepend apiSchemas = ["UrdfLinkVisualAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/BASE.usda@</BASE>
+            prepend references = @./../assets/meshes/usd/BASE.usda@</BASE>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/BASE>
@@ -58,7 +58,7 @@ def Xform "arm" (
             uniform token mujoco:geom:type = "mesh"
             color3f[] primvars:displayColor = [(0.7529412, 0.7529412, 0.7529412)]
             float[] primvars:displayOpacity = [1]
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/BASE.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/BASE.stl@
             float3 urdf:visual:origin:rpy = (0, 0, 0)
             point3f urdf:visual:origin:xyz = (0, 0, 0)
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -67,7 +67,7 @@ def Xform "arm" (
 
         def Mesh "BASE_geom_collision_0_BASE" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/BASE.usda@</BASE>
+            prepend references = @./../assets/meshes/usd/BASE.usda@</BASE>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/BASE>
@@ -81,7 +81,7 @@ def Xform "arm" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/BASE.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/BASE.stl@
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
             uniform token[] xformOpOrder = ["xformOp:transform"]
@@ -144,7 +144,7 @@ def Xform "arm" (
 
         def Mesh "LINK1_geom_visual_0_LINK1" (
             prepend apiSchemas = ["UrdfLinkVisualAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK1.usda@</LINK1>
+            prepend references = @./../assets/meshes/usd/LINK1.usda@</LINK1>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK1>
@@ -154,7 +154,7 @@ def Xform "arm" (
             uniform token mujoco:geom:type = "mesh"
             color3f[] primvars:displayColor = [(0.7529412, 0.7529412, 0.7529412)]
             float[] primvars:displayOpacity = [1]
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK1.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK1.stl@
             float3 urdf:visual:origin:rpy = (0, 0, 0)
             point3f urdf:visual:origin:xyz = (0, 0, 0)
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -163,7 +163,7 @@ def Xform "arm" (
 
         def Mesh "LINK1_geom_collision_0_LINK1" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK1.usda@</LINK1>
+            prepend references = @./../assets/meshes/usd/LINK1.usda@</LINK1>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK1>
@@ -177,7 +177,7 @@ def Xform "arm" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK1.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK1.stl@
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
             uniform token[] xformOpOrder = ["xformOp:transform"]
@@ -240,7 +240,7 @@ def Xform "arm" (
 
         def Mesh "LINK2_geom_visual_0_LINK2" (
             prepend apiSchemas = ["UrdfLinkVisualAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK2.usda@</LINK2>
+            prepend references = @./../assets/meshes/usd/LINK2.usda@</LINK2>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK2>
@@ -250,7 +250,7 @@ def Xform "arm" (
             uniform token mujoco:geom:type = "mesh"
             color3f[] primvars:displayColor = [(0.7529412, 0.7529412, 0.7529412)]
             float[] primvars:displayOpacity = [1]
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK2.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK2.stl@
             float3 urdf:visual:origin:rpy = (0, 0, 0)
             point3f urdf:visual:origin:xyz = (0, 0, 0)
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -259,7 +259,7 @@ def Xform "arm" (
 
         def Mesh "LINK2_geom_collision_0_LINK2" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK2.usda@</LINK2>
+            prepend references = @./../assets/meshes/usd/LINK2.usda@</LINK2>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK2>
@@ -273,7 +273,7 @@ def Xform "arm" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK2.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK2.stl@
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
             uniform token[] xformOpOrder = ["xformOp:transform"]
@@ -336,7 +336,7 @@ def Xform "arm" (
 
         def Mesh "LINK3_geom_visual_0_LINK3" (
             prepend apiSchemas = ["UrdfLinkVisualAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK3.usda@</LINK3>
+            prepend references = @./../assets/meshes/usd/LINK3.usda@</LINK3>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK3>
@@ -346,7 +346,7 @@ def Xform "arm" (
             uniform token mujoco:geom:type = "mesh"
             color3f[] primvars:displayColor = [(0.7529412, 0.7529412, 0.7529412)]
             float[] primvars:displayOpacity = [1]
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK3.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK3.stl@
             float3 urdf:visual:origin:rpy = (0, 0, 0)
             point3f urdf:visual:origin:xyz = (0, 0, 0)
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -355,7 +355,7 @@ def Xform "arm" (
 
         def Mesh "LINK3_geom_collision_0_LINK3" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK3.usda@</LINK3>
+            prepend references = @./../assets/meshes/usd/LINK3.usda@</LINK3>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK3>
@@ -369,7 +369,7 @@ def Xform "arm" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK3.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK3.stl@
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
             uniform token[] xformOpOrder = ["xformOp:transform"]
@@ -432,7 +432,7 @@ def Xform "arm" (
 
         def Mesh "LINK4_geom_visual_0_LINK4" (
             prepend apiSchemas = ["UrdfLinkVisualAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK4.usda@</LINK4>
+            prepend references = @./../assets/meshes/usd/LINK4.usda@</LINK4>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK4>
@@ -442,7 +442,7 @@ def Xform "arm" (
             uniform token mujoco:geom:type = "mesh"
             color3f[] primvars:displayColor = [(0.7529412, 0.7529412, 0.7529412)]
             float[] primvars:displayOpacity = [1]
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK4.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK4.stl@
             float3 urdf:visual:origin:rpy = (0, 0, 0)
             point3f urdf:visual:origin:xyz = (0, 0, 0)
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -451,7 +451,7 @@ def Xform "arm" (
 
         def Mesh "LINK4_geom_collision_0_LINK4" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK4.usda@</LINK4>
+            prepend references = @./../assets/meshes/usd/LINK4.usda@</LINK4>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK4>
@@ -465,7 +465,7 @@ def Xform "arm" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK4.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK4.stl@
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
             uniform token[] xformOpOrder = ["xformOp:transform"]
@@ -528,7 +528,7 @@ def Xform "arm" (
 
         def Mesh "LINK5_geom_visual_0_LINK5" (
             prepend apiSchemas = ["UrdfLinkVisualAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK5.usda@</LINK5>
+            prepend references = @./../assets/meshes/usd/LINK5.usda@</LINK5>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK5>
@@ -538,7 +538,7 @@ def Xform "arm" (
             uniform token mujoco:geom:type = "mesh"
             color3f[] primvars:displayColor = [(0.7529412, 0.7529412, 0.7529412)]
             float[] primvars:displayOpacity = [1]
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK5.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK5.stl@
             float3 urdf:visual:origin:rpy = (0, 0, 0)
             point3f urdf:visual:origin:xyz = (0, 0, 0)
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -547,7 +547,7 @@ def Xform "arm" (
 
         def Mesh "LINK5_geom_collision_0_LINK5" (
             prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "UrdfLinkCollisionAPI", "UrdfGeometryMeshAPI", "MujocoGeomAPI"]
-            prepend references = @./arm/meshes/usd/LINK5.usda@</LINK5>
+            prepend references = @./../assets/meshes/usd/LINK5.usda@</LINK5>
         )
         {
             rel mujoco:geom:mesh = </mujoco/asset/meshes/LINK5>
@@ -561,7 +561,7 @@ def Xform "arm" (
             float[] primvars:displayOpacity = [0]
             float3 urdf:collision:origin:rpy = (0, 0, 0)
             point3f urdf:collision:origin:xyz = (0, 0, 0)
-            asset urdf:geometry:mesh:filename = @./arm/meshes/stl/LINK5.stl@
+            asset urdf:geometry:mesh:filename = @./../assets/meshes/stl/LINK5.stl@
             token visibility = "invisible"
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
             uniform token[] xformOpOrder = ["xformOp:transform"]

@@ -103,7 +103,7 @@ multiverse_clients:
         controller_manager:
           robot: arm
           robot_description: /robot_description
-          urdf: arm/arm.urdf
+          urdf: arm/urdf/arm.urdf
           config: arm/config/ros_control.yaml
           actuators:
             JOINT1_actuator: JOINT1
@@ -120,5 +120,5 @@ multiverse_clients:
       rviz:
         config: arm/config/rviz.rviz
         robot_descriptions:
-          arm_description: arm/arm.urdf
+          arm_description: arm/urdf/arm.urdf
           gripper_description: gripper-2F-85/urdf/gripper-2F-85.urdf
