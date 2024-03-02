@@ -528,7 +528,11 @@ class MujocoCompiler:
 
         for entity in entities:
             if entity.disable_self_collision == "off":
-                not_exclude_collision_bodies.append(entity.name)
+                entity_tree = ET.parse(entity.path)
+                entity_root = entity_tree.getroot()
+                for body_element in entity_root.findall(".//body"):
+                    body_name = body_element.get("name")
+                    not_exclude_collision_bodies.append(body_name)
             self.modify_entity(entity)
             include_element = ET.Element("include", {"file": os.path.basename(entity.saved_path)})
             root.append(include_element)
