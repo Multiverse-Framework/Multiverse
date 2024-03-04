@@ -18,19 +18,19 @@
       <default class="collision">
         <geom type="mesh" group="3"/>
         <default class="fingertip_pad_collision_1">
-          <geom type="box" size="0.0085 0.004 0.0085" pos="0 0.0055 0.0445"/>
+          <geom type="box" size="0.0085 0.004 0.0085" pos="0 0.0055 0.0445" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
         </default>
         <default class="fingertip_pad_collision_2">
-          <geom type="box" size="0.003 0.002 0.003" pos="0.0055 0.002 0.05"/>
+          <geom type="box" size="0.003 0.002 0.003" pos="0.0055 0.002 0.05" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
         </default>
         <default class="fingertip_pad_collision_3">
-          <geom type="box" size="0.003 0.002 0.003" pos="-0.0055 0.002 0.05"/>
+          <geom type="box" size="0.003 0.002 0.003" pos="-0.0055 0.002 0.05" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
         </default>
         <default class="fingertip_pad_collision_4">
-          <geom type="box" size="0.003 0.002 0.0035" pos="0.0055 0.002 0.0395"/>
+          <geom type="box" size="0.003 0.002 0.0035" pos="0.0055 0.002 0.0395" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
         </default>
         <default class="fingertip_pad_collision_5">
-          <geom type="box" size="0.003 0.002 0.0035" pos="-0.0055 0.002 0.0395"/>
+          <geom type="box" size="0.003 0.002 0.0035" pos="-0.0055 0.002 0.0395" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
         </default>
       </default>
     </default>

@@ -21,6 +21,7 @@ simulations:
           body:
             panda:
               pos: [0.5, 0.0, 1.05]
+            gravcomp: 1
         disable_self_collision: "off"
     objects:
       task_board:
@@ -50,7 +51,7 @@ simulations:
       min_time_step: 0.001
 
 multiverse_server:
-  host: "tcp://172.18.0.1"
+  host: "tcp://127.0.0.1"
   port: 7000
 
 multiverse_clients:
@@ -61,9 +62,9 @@ multiverse_clients:
       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
     receive:
       fingers_actuator: ["cmd_joint_tvalue"]
-    #   grab_cube_1_ref: ["position", "quaternion"]
-    #   grab_cube_2_ref: ["position", "quaternion"]
-    #   reference: ["position", "quaternion"]
+      grab_cube_1_ref: ["position", "quaternion"]
+      grab_cube_2_ref: ["position", "quaternion"]
+      hand_ref: ["position", "quaternion"]
 
   ros:
     ros_nodes:
