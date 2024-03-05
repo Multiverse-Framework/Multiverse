@@ -20,8 +20,8 @@ from pxr import UsdPhysics, Usd, UsdGeom, UsdShade, Sdf
 def get_usd_mesh_file_path(gprim_prim: Usd.Prim) -> (str, Sdf.Path):
     prepended_items = gprim_prim.GetPrimStack()[0].referenceList.prependedItems
     if len(prepended_items) == 0:
-        raise NotImplementedError(f"No prepended item found for {gprim_prim}.")
-        # return gprim_prim.GetStage().GetRootLayer().realPath, gprim_prim.GetPath()
+        # raise NotImplementedError(f"No prepended item found for {gprim_prim}.")
+        return gprim_prim.GetStage().GetRootLayer().realPath, gprim_prim.GetPath()
     elif len(prepended_items) == 1:
         prepended_item = prepended_items[0]
         file_abspath = prepended_item.assetPath
@@ -105,6 +105,7 @@ class UsdImporter(Factory):
         if body_prim.IsA(UsdGeom.Xform) and body_prim != self.stage.GetDefaultPrim():
             xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(body_prim,
                                                                                  parent_xform_prim)
+            body_builder.xform.ClearXformOpOrder()
             body_builder.xform.AddTransformOp().Set(xform_local_transformation)
 
         for gprim_prim in [gprim_prim for gprim_prim in body_prim.GetChildren() if gprim_prim.IsA(UsdGeom.Gprim)]:
@@ -211,9 +212,13 @@ class UsdImporter(Factory):
                         if len(material_paths) == 0:
                             raise ValueError(f"Mesh {geom_name} has no material.")
                         material_prim = self.stage.GetPrimAtPath(material_paths[0])
-                        material_prim_stack = material_prim.GetPrimStack()[1]
-                        material_file_path = material_prim_stack.layer.realPath
-                        material_path = material_prim_stack.path
+                        if len(material_prim.GetPrimStack()) >= 2:
+                            material_prim_stack = material_prim.GetPrimStack()[1]
+                            material_file_path = material_prim_stack.layer.realPath
+                            material_path = material_prim_stack.path
+                        else:
+                            material_file_path = material_prim.GetStage().GetRootLayer().realPath
+                            material_path = material_prim.GetPath()
                         material_property = MaterialProperty.from_material_file_path(
                             material_file_path=material_file_path,
                             material_path=material_path)
@@ -232,9 +237,13 @@ class UsdImporter(Factory):
                         if len(material_paths) == 0:
                             raise ValueError(f"Subset {subset_name} has no material.")
                         material_prim = self.stage.GetPrimAtPath(material_paths[0])
-                        material_prim_stack = material_prim.GetPrimStack()[1]
-                        material_file_path = material_prim_stack.layer.realPath
-                        material_path = material_prim_stack.path
+                        if len(material_prim.GetPrimStack()) >= 2:
+                            material_prim_stack = material_prim.GetPrimStack()[1]
+                            material_file_path = material_prim_stack.layer.realPath
+                            material_path = material_prim_stack.path
+                        else:
+                            material_file_path = material_prim.GetStage().GetRootLayer().realPath
+                            material_path = material_prim.GetPath()
                         material_property = MaterialProperty.from_material_file_path(
                             material_file_path=material_file_path,
                             material_path=material_path)

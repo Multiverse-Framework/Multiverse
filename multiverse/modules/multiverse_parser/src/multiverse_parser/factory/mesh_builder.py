@@ -7,6 +7,7 @@ import numpy
 
 from pxr import Usd, UsdGeom, Sdf
 
+cache_mesh_stages = {}
 
 @dataclass(init=False)
 class MeshProperty:
@@ -42,7 +43,11 @@ class MeshProperty:
                             mesh_file_path: str,
                             mesh_path: Sdf.Path,
                             texture_coordinate_name: str = "st") -> "MeshProperty":
-        mesh_stage = Usd.Stage.Open(mesh_file_path)
+        if mesh_file_path in cache_mesh_stages:
+            mesh_stage = cache_mesh_stages[mesh_file_path]
+        else:
+            mesh_stage = Usd.Stage.Open(mesh_file_path)
+            cache_mesh_stages[mesh_file_path] = mesh_stage
         mesh_prim = mesh_stage.GetPrimAtPath(mesh_path) if not mesh_path.isEmpty else mesh_stage.GetDefaultPrim()
         if not mesh_prim.IsA(UsdGeom.Mesh):
             mesh_path = mesh_prim.GetPath().AppendChild(mesh_prim.GetName())

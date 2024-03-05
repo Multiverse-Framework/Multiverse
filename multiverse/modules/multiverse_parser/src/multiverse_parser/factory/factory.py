@@ -176,11 +176,19 @@ class Factory:
                                               f"from_{mesh_file_extension[1:]}",
                                               f"{mesh_file_name}.usda")
 
+        self.mesh_file_path_dict[mesh_file_path] = tmp_usd_mesh_file_path, tmp_mesh_file_path
+
         print("Importing mesh from", mesh_file_path, "to", tmp_usd_mesh_file_path, "and", tmp_mesh_file_path, ".")
+        mesh_file_path_clone = os.path.join(os.path.dirname(mesh_file_path),
+                                            f"clone_{os.path.basename(mesh_file_path)}")
         if mesh_file_extension in [".usd", ".usda", ".usdz"]:
-            cmd = import_usd([mesh_file_path], mesh_scale) + export_usd(tmp_usd_mesh_file_path, merge_mesh)
             os.makedirs(name=os.path.dirname(tmp_mesh_file_path), exist_ok=True)
             shutil.copyfile(mesh_file_path, tmp_mesh_file_path)
+            if mesh_file_path != self.source_file_path:
+                cmd = import_usd([mesh_file_path], mesh_scale) + export_usd(tmp_usd_mesh_file_path, merge_mesh)
+            else:
+                shutil.copyfile(mesh_file_path, mesh_file_path_clone)
+                cmd = import_usd([mesh_file_path_clone], mesh_scale) + export_usd(tmp_usd_mesh_file_path, merge_mesh)
         elif mesh_file_extension == ".obj":
             cmd = import_obj([mesh_file_path], mesh_scale) + export_obj(tmp_mesh_file_path) + export_usd(
                 tmp_usd_mesh_file_path, merge_mesh)
@@ -202,9 +210,10 @@ class Factory:
         process = subprocess.Popen(cmd)
         process.wait()
 
-        fix_texture_path(usd_mesh_file_path=tmp_usd_mesh_file_path)
+        if mesh_file_path == self.source_file_path:
+            os.remove(mesh_file_path_clone)
 
-        self.mesh_file_path_dict[mesh_file_path] = tmp_usd_mesh_file_path, tmp_mesh_file_path
+        fix_texture_path(usd_mesh_file_path=tmp_usd_mesh_file_path)
 
         return tmp_usd_mesh_file_path, tmp_mesh_file_path
 
