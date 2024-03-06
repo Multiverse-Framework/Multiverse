@@ -1,426 +1,426 @@
 <?xml version="1.0"?>
 <robot name="rollin-justin">
-  <joint name="torso1" type="revolute">
+  <joint name="torso1_joint" type="revolute">
     <parent link="base_link"/>
     <child link="torso1"/>
     <origin rpy="0  0  0" xyz="0      0      0.6939"/>
     <axis xyz="0  0  1"/>
     <limit effort="150.0" lower="-1.74533" upper="3.31613" velocity="0.85"/>
   </joint>
-  <joint name="torso2" type="revolute">
+  <joint name="torso2_joint" type="revolute">
     <parent link="torso1"/>
     <child link="torso2"/>
     <origin rpy="-1.57079 -1.57079  0" xyz="0  0  0"/>
     <axis xyz="0  0  1"/>
     <limit effort="150.0" lower="-1.22173" upper="0.52360" velocity="0.85"/>
   </joint>
-  <joint name="torso3" type="revolute">
+  <joint name="torso3_joint" type="revolute">
     <parent link="torso2"/>
     <child link="torso3"/>
     <origin rpy="0  0  0" xyz="0.3  0   0"/>
     <axis xyz="0  0  1"/>
     <limit effort="150.0" lower="0.174533" upper="2.33874" velocity="0.85"/>
   </joint>
-  <joint name="torso4" type="revolute">
+  <joint name="torso4_joint" type="revolute">
     <parent link="torso3"/>
     <child link="torso4"/>
     <origin rpy="0  0  0" xyz="0.3  0   0"/>
     <axis xyz="0  0  1"/>
     <limit effort="150.0" lower="-1.57" upper="0.0" velocity="0.85"/>
   </joint>
-  <joint name="head1" type="revolute">
+  <joint name="head1_joint" type="revolute">
     <parent link="torso4"/>
     <child link="head1"/>
     <origin rpy="1.57079  0       1.57079" xyz="0.235  0.088  0"/>
     <axis xyz="0  0  1"/>
     <limit effort="150.0" lower="-0.785398" upper="0.785398" velocity="0.85"/>
   </joint>
-  <joint name="head2" type="revolute">
+  <joint name="head2_joint" type="revolute">
     <parent link="head1"/>
     <child link="head2"/>
     <origin rpy="-1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0  0  1"/>
     <limit effort="150.0" lower="-0.436332" upper="0.785398" velocity="0.85"/>
   </joint>
-  <joint name="left_arm1" type="revolute">
+  <joint name="left_arm1_joint" type="revolute">
     <parent link="torso4"/>
     <child link="left_arm1"/>
     <origin rpy="-3.14159  0.52359  0" xyz="0.19   0.088  0.256"/>
     <axis xyz="0  0  1"/>
     <limit effort="150.0" lower="-2.96706" upper="2.96706" velocity="0.85"/>
   </joint>
-  <joint name="left_arm2" type="revolute">
+  <joint name="left_arm2_joint" type="revolute">
     <parent link="left_arm1"/>
     <child link="left_arm2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0  0  1"/>
     <limit effort="150.0" lower="-2.0944" upper="2.0944" velocity="0.85"/>
   </joint>
-  <joint name="left_arm3" type="revolute">
+  <joint name="left_arm3_joint" type="revolute">
     <parent link="left_arm2"/>
     <child link="left_arm3"/>
     <origin rpy="-2.87979 -1.57079  1.30899" xyz="0  -0.4  0"/>
     <axis xyz="0  0 1"/>
     <limit effort="150.0" lower="-2.96706" upper="2.96706" velocity="0.85"/>
   </joint>
-  <joint name="left_arm4" type="revolute">
+  <joint name="left_arm4_joint" type="revolute">
     <parent link="left_arm3"/>
     <child link="left_arm4"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-2.0944" upper="2.0944" velocity="0.85"/>
   </joint>
-  <joint name="left_arm5" type="revolute">
+  <joint name="left_arm5_joint" type="revolute">
     <parent link="left_arm4"/>
     <child link="left_arm5"/>
     <origin rpy="-1.57079  0       0" xyz="0   -0.39  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-2.96706" upper="2.96706" velocity="0.85"/>
   </joint>
-  <joint name="left_arm6" type="revolute">
+  <joint name="left_arm6_joint" type="revolute">
     <parent link="left_arm5"/>
     <child link="left_arm6"/>
     <origin rpy="-0.71372  1.57079  0.85707" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-0.785398" upper="1.39626" velocity="0.85"/>
   </joint>
-  <joint name="left_arm7" type="revolute">
+  <joint name="left_arm7_joint" type="revolute">
     <parent link="left_arm6"/>
     <child link="left_arm7"/>
     <origin rpy="-1.11887 -1.57079 -0.45192" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-0.785398" upper="2.35619" velocity="0.85"/>
   </joint>
-  <joint name="left_palm" type="fixed">
+  <joint name="left_palm_joint" type="fixed">
     <parent link="left_arm7"/>
     <child link="left_palm"/>
     <origin rpy="1.57079 0.0 3.14159" xyz="0  0.1011  0"/>
   </joint>
-  <joint name="left_1thumb_base" type="fixed">
+  <joint name="left_1thumb_base_joint" type="fixed">
     <parent link="left_arm7"/>
     <child link="left_1thumb_base"/>
     <origin rpy="1.34429  0.02834  2.14927" xyz="-0.0504  0.2029 -0.0462"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <joint name="left_1thumb1" type="revolute">
+  <joint name="left_1thumb1_joint" type="revolute">
     <parent link="left_1thumb_base"/>
     <child link="left_1thumb1"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.523599" upper="0.523599" velocity="0.85"/>
   </joint>
-  <joint name="left_1thumb2" type="revolute">
+  <joint name="left_1thumb2_joint" type="revolute">
     <parent link="left_1thumb1"/>
     <child link="left_1thumb2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.349066" upper="1.50098" velocity="0.85"/>
   </joint>
-  <joint name="left_1thumb3" type="revolute">
+  <joint name="left_1thumb3_joint" type="revolute">
     <parent link="left_1thumb2"/>
     <child link="left_1thumb3"/>
     <origin rpy="0  0  0" xyz="0.075  0     0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
   </joint>
-  <joint name="left_1thumb4" type="revolute">
+  <joint name="left_1thumb4_joint" type="revolute">
     <parent link="left_1thumb3"/>
     <child link="left_1thumb4"/>
     <origin rpy="0       0      -1.57079" xyz="0.03999  0       0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
-    <mimic joint="left_1thumb3" multiplier="1" offset="0"/>
+    <mimic joint="left_1thumb3_joint" multiplier="1" offset="0"/>
   </joint>
-  <joint name="left_2tip_base" type="fixed">
+  <joint name="left_2tip_base_joint" type="fixed">
     <parent link="left_arm7"/>
     <child link="left_2tip_base"/>
     <origin rpy="-1.69632 -0.11527  1.36803" xyz="0.0482  0.2409 -0.0236"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <joint name="left_2tip1" type="revolute">
+  <joint name="left_2tip1_joint" type="revolute">
     <parent link="left_2tip_base"/>
     <child link="left_2tip1"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.523599" upper="0.523599" velocity="0.85"/>
   </joint>
-  <joint name="left_2tip2" type="revolute">
+  <joint name="left_2tip2_joint" type="revolute">
     <parent link="left_2tip1"/>
     <child link="left_2tip2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.349066" upper="1.50098" velocity="0.85"/>
   </joint>
-  <joint name="left_2tip3" type="revolute">
+  <joint name="left_2tip3_joint" type="revolute">
     <parent link="left_2tip2"/>
     <child link="left_2tip3"/>
     <origin rpy="0  0  0" xyz="0.075  0     0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
   </joint>
-  <joint name="left_2tip4" type="revolute">
+  <joint name="left_2tip4_joint" type="revolute">
     <parent link="left_2tip3"/>
     <child link="left_2tip4"/>
     <origin rpy="0       0      -1.57079" xyz="0.04  0    0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
-    <mimic joint="left_2tip3" multiplier="1.0" offset="0"/>
+    <mimic joint="left_2tip3_joint" multiplier="1.0" offset="0"/>
   </joint>
-  <joint name="left_3middle_base" type="fixed">
+  <joint name="left_3middle_base_joint" type="fixed">
     <parent link="left_arm7"/>
     <child link="left_3middle_base"/>
     <origin rpy="-1.69632 -0.11527  1.36803" xyz="0.0469   0.2353   0.01629"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <joint name="left_3middle1" type="revolute">
+  <joint name="left_3middle1_joint" type="revolute">
     <parent link="left_3middle_base"/>
     <child link="left_3middle1"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.523599" upper="0.523599" velocity="0.85"/>
   </joint>
-  <joint name="left_3middle2" type="revolute">
+  <joint name="left_3middle2_joint" type="revolute">
     <parent link="left_3middle1"/>
     <child link="left_3middle2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.349066" upper="1.50098" velocity="0.85"/>
   </joint>
-  <joint name="left_3middle3" type="revolute">
+  <joint name="left_3middle3_joint" type="revolute">
     <parent link="left_3middle2"/>
     <child link="left_3middle3"/>
     <origin rpy="0  0  0" xyz="0.07499  0       0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
   </joint>
-  <joint name="left_3middle4" type="revolute">
+  <joint name="left_3middle4_joint" type="revolute">
     <parent link="left_3middle3"/>
     <child link="left_3middle4"/>
     <origin rpy="0       0      -1.57079" xyz="0.04  0    0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
-    <mimic joint="left_3middle3" multiplier="1" offset="0"/>
+    <mimic joint="left_3middle3_joint" multiplier="1" offset="0"/>
   </joint>
-  <joint name="left_4ring_base" type="fixed">
+  <joint name="left_4ring_base_joint" type="fixed">
     <parent link="left_arm7"/>
     <child link="left_4ring_base"/>
     <origin rpy="-1.69632 -0.11527  1.36803" xyz="0.0374  0.2299  0.0623"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <joint name="left_4ring1" type="revolute">
+  <joint name="left_4ring1_joint" type="revolute">
     <parent link="left_4ring_base"/>
     <child link="left_4ring1"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.523599" upper="0.523599" velocity="0.85"/>
   </joint>
-  <joint name="left_4ring2" type="revolute">
+  <joint name="left_4ring2_joint" type="revolute">
     <parent link="left_4ring1"/>
     <child link="left_4ring2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.349066" upper="1.50098" velocity="0.85"/>
   </joint>
-  <joint name="left_4ring3" type="revolute">
+  <joint name="left_4ring3_joint" type="revolute">
     <parent link="left_4ring2"/>
     <child link="left_4ring3"/>
     <origin rpy="0  0  0" xyz="0.075  0     0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
   </joint>
-  <joint name="left_4ring4" type="revolute">
+  <joint name="left_4ring4_joint" type="revolute">
     <parent link="left_4ring3"/>
     <child link="left_4ring4"/>
     <origin rpy="0       0      -1.57079" xyz="0.04  0    0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
-    <mimic joint="left_4ring3" multiplier="1" offset="0"/>
+    <mimic joint="left_4ring3_joint" multiplier="1" offset="0"/>
   </joint>
-  <joint name="right_arm1" type="revolute">
+  <joint name="right_arm1_joint" type="revolute">
     <parent link="torso4"/>
     <child link="right_arm1"/>
     <origin rpy="3.14159  0.52359  3.14159" xyz="0.19   0.088 -0.256"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-2.96706" upper="2.96706" velocity="0.85"/>
   </joint>
-  <joint name="right_arm2" type="revolute">
+  <joint name="right_arm2_joint" type="revolute">
     <parent link="right_arm1"/>
     <child link="right_arm2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-2.0944" upper="2.0944" velocity="0.85"/>
   </joint>
-  <joint name="right_arm3" type="revolute">
+  <joint name="right_arm3_joint" type="revolute">
     <parent link="right_arm2"/>
     <child link="right_arm3"/>
     <origin rpy="0.35435 -1.57079 -1.92515" xyz="0   0.4  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-2.96706" upper="2.96706" velocity="0.85"/>
   </joint>
-  <joint name="right_arm4" type="revolute">
+  <joint name="right_arm4_joint" type="revolute">
     <parent link="right_arm3"/>
     <child link="right_arm4"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-2.0944" upper="2.0944" velocity="0.85"/>
   </joint>
-  <joint name="right_arm5" type="revolute">
+  <joint name="right_arm5_joint" type="revolute">
     <parent link="right_arm4"/>
     <child link="right_arm5"/>
     <origin rpy="1.57079  0      -3.14159" xyz="0    0.39  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-2.96706" upper="2.96706" velocity="0.85"/>
   </joint>
-  <joint name="right_arm6" type="revolute">
+  <joint name="right_arm6_joint" type="revolute">
     <parent link="right_arm5"/>
     <child link="right_arm6"/>
     <origin rpy="0.39796 -1.57079  1.17283" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-0.785398" upper="1.39626" velocity="0.85"/>
   </joint>
-  <joint name="right_arm7" type="revolute">
+  <joint name="right_arm7_joint" type="revolute">
     <parent link="right_arm6"/>
     <child link="right_arm7"/>
     <origin rpy="1.59992  1.57079  0.02912" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="150.0" lower="-0.785398" upper="2.35619" velocity="0.85"/>
   </joint>
-  <joint name="right_palm" type="fixed">
+  <joint name="right_palm_joint" type="fixed">
     <parent link="right_arm7"/>
     <child link="right_palm"/>
     <origin rpy="1.57079 0.0 3.14159" xyz="0  0.1011  0"/>
   </joint>
-  <joint name="right_1thumb_base" type="fixed">
+  <joint name="right_1thumb_base_joint" type="fixed">
     <parent link="right_arm7"/>
     <child link="right_1thumb_base"/>
     <origin rpy="1.79407 -0.02832  2.14923" xyz="-0.0504  0.2029  0.0462"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <joint name="right_1thumb1" type="revolute">
+  <joint name="right_1thumb1_joint" type="revolute">
     <parent link="right_1thumb_base"/>
     <child link="right_1thumb1"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.523599" upper="0.523599" velocity="0.85"/>
   </joint>
-  <joint name="right_1thumb2" type="revolute">
+  <joint name="right_1thumb2_joint" type="revolute">
     <parent link="right_1thumb1"/>
     <child link="right_1thumb2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.349066" upper="1.50098" velocity="0.85"/>
   </joint>
-  <joint name="right_1thumb3" type="revolute">
+  <joint name="right_1thumb3_joint" type="revolute">
     <parent link="right_1thumb2"/>
     <child link="right_1thumb3"/>
     <origin rpy="0  0  0" xyz="0.075  0     0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
   </joint>
-  <joint name="right_1thumb4" type="revolute">
+  <joint name="right_1thumb4_joint" type="revolute">
     <parent link="right_1thumb3"/>
     <child link="right_1thumb4"/>
     <origin rpy="0       0      -1.57079" xyz="0.04  0    0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
-    <mimic joint="right_1thumb3" multiplier="1.0" offset="0"/>
+    <mimic joint="right_1thumb3_joint" multiplier="1.0" offset="0"/>
   </joint>
-  <joint name="right_3middle_base" type="fixed">
+  <joint name="right_3middle_base_joint" type="fixed">
     <parent link="right_arm7"/>
     <child link="right_3middle_base"/>
     <origin rpy="-1.44842  0.11516  1.36812" xyz="0.0469   0.2353  -0.01629"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <joint name="right_3middle1" type="revolute">
+  <joint name="right_3middle1_joint" type="revolute">
     <parent link="right_3middle_base"/>
     <child link="right_3middle1"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.523599" upper="0.523599" velocity="0.85"/>
   </joint>
-  <joint name="right_3middle2" type="revolute">
+  <joint name="right_3middle2_joint" type="revolute">
     <parent link="right_3middle1"/>
     <child link="right_3middle2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.349066" upper="1.50098" velocity="0.85"/>
   </joint>
-  <joint name="right_3middle3" type="revolute">
+  <joint name="right_3middle3_joint" type="revolute">
     <parent link="right_3middle2"/>
     <child link="right_3middle3"/>
     <origin rpy="0  0  0" xyz="0.075  0     0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
   </joint>
-  <joint name="right_3middle4" type="revolute">
+  <joint name="right_3middle4_joint" type="revolute">
     <parent link="right_3middle3"/>
     <child link="right_3middle4"/>
     <origin rpy="0       0      -1.57079" xyz="0.04  0    0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
-    <mimic joint="right_3middle3" multiplier="1.0" offset="0"/>
+    <mimic joint="right_3middle3_joint" multiplier="1.0" offset="0"/>
   </joint>
-  <joint name="right_4ring_base" type="fixed">
+  <joint name="right_4ring_base_joint" type="fixed">
     <parent link="right_arm7"/>
     <child link="right_4ring_base"/>
     <origin rpy="-1.44842  0.11516  1.36812" xyz="0.0374  0.2299 -0.0623"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <joint name="right_4ring1" type="revolute">
+  <joint name="right_4ring1_joint" type="revolute">
     <parent link="right_4ring_base"/>
     <child link="right_4ring1"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.523599" upper="0.523599" velocity="0.85"/>
   </joint>
-  <joint name="right_4ring2" type="revolute">
+  <joint name="right_4ring2_joint" type="revolute">
     <parent link="right_4ring1"/>
     <child link="right_4ring2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.349066" upper="1.50098" velocity="0.85"/>
   </joint>
-  <joint name="right_4ring3" type="revolute">
+  <joint name="right_4ring3_joint" type="revolute">
     <parent link="right_4ring2"/>
     <child link="right_4ring3"/>
     <origin rpy="0  0  0" xyz="0.075  0     0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
   </joint>
-  <joint name="right_4ring4" type="revolute">
+  <joint name="right_4ring4_joint" type="revolute">
     <parent link="right_4ring3"/>
     <child link="right_4ring4"/>
     <origin rpy="0       0      -1.57079" xyz="0.04  0    0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
-    <mimic joint="right_4ring3" multiplier="1.0" offset="0"/>
+    <mimic joint="right_4ring3_joint" multiplier="1.0" offset="0"/>
   </joint>
-  <joint name="right_2tip_base" type="fixed">
+  <joint name="right_2tip_base_joint" type="fixed">
     <parent link="right_arm7"/>
     <child link="right_2tip_base"/>
     <origin rpy="-1.44842  0.11516  1.36812" xyz="0.0482  0.2409  0.0236"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <joint name="right_2tip1" type="revolute">
+  <joint name="right_2tip1_joint" type="revolute">
     <parent link="right_2tip_base"/>
     <child link="right_2tip1"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.523599" upper="0.523599" velocity="0.85"/>
   </joint>
-  <joint name="right_2tip2" type="revolute">
+  <joint name="right_2tip2_joint" type="revolute">
     <parent link="right_2tip1"/>
     <child link="right_2tip2"/>
     <origin rpy="1.57079  0       0" xyz="0  0  0"/>
     <axis xyz="0 0 1"/>
     <limit effort="3.5" lower="-0.349066" upper="1.50098" velocity="0.85"/>
   </joint>
-  <joint name="right_2tip3" type="revolute">
+  <joint name="right_2tip3_joint" type="revolute">
     <parent link="right_2tip2"/>
     <child link="right_2tip3"/>
     <origin rpy="0  0  0" xyz="0.075  0     0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
   </joint>
-  <joint name="right_2tip4" type="revolute">
+  <joint name="right_2tip4_joint" type="revolute">
     <parent link="right_2tip3"/>
     <child link="right_2tip4"/>
     <origin rpy="0       0      -1.57079" xyz="0.04  0    0"/>
     <axis xyz="0 0 1"/>
     <limit effort="1.75" lower="-0.174533" upper="1.76278" velocity="0.85"/>
-    <mimic joint="right_2tip3" multiplier="1.0" offset="0"/>
+    <mimic joint="right_2tip3_joint" multiplier="1.0" offset="0"/>
   </joint>
   <link name="base_link">
     <inertial>
