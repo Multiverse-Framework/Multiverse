@@ -20,19 +20,20 @@ simulations:
         apply:
           body:
             rollin-justin:
-              pos: [0.0, 0.0, 0.1]
+              pos: [1.8, 0.0, 0.1]
+              quat: [0.0, 0.0, 0.0, 1.0]
     references:
-      left_hand_base_link:
-        body1: left_hand_base_link_ref
-        body2: left_hand_base_link
+      left_arm7:
+        body1: left_arm7_ref
+        body2: left_arm7
 
-      right_hand_base_link:
-        body1: right_hand_base_link_ref
-        body2: right_hand_base_link
+      right_arm7:
+        body1: right_arm7_ref
+        body2: right_arm7
 
-      head2_link:
-        body1: head2_link_ref
-        body2: head2_link
+      head2:
+        body1: head2_ref
+        body2: head2
 
     config:
       max_time_step: 0.002
@@ -48,32 +49,16 @@ multiverse_clients:
     send:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
-    # receive:
-    #   fingers_actuator: ["cmd_joint_tvalue"]
-    #   grab_cube_1_ref: ["position", "quaternion"]
-    #   grab_cube_2_ref: ["position", "quaternion"]
-    #   reference: ["position", "quaternion"]
+    receive:
+      left_arm7_ref: ["position", "quaternion"]
+      right_arm7_ref: ["position", "quaternion"]
+      head2_ref: ["position", "quaternion"]
 
-#   ros:
-#     ros_nodes:
-#       subscribers:
-#         data:
-#           - meta_data:
-#               world_name: world
-#               length_unit: m
-#               angle_unit: rad
-#               mass_unit: kg
-#               time_unit: s
-#               handedness: rhs
-#             port: 7700
-#             msg_type: std_msgs/Float64
-#             send:
-#               fingers_actuator: ["cmd_joint_tvalue"]
-#             topic: /gripper_command
-
-#       services:
-#         socket:
-#           - port: 7400
+  ros:
+    ros_nodes:
+      services:
+        socket:
+          - port: 7400
 
 #   ros2:
 #     ros_nodes:
