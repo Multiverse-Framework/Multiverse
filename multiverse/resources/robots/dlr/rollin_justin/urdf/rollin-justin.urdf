@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<robot name="justin">
+<robot name="rollin-justin">
   <joint name="torso1" type="revolute">
     <parent link="base_link"/>
     <child link="torso1"/>

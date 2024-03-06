@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<mujoco model="justin">
+<mujoco model="rollin-justin">
 	<compiler meshdir="rollin-justin/meshes" texturedir="rollin-justin/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
 		<default class="rollin-justin_visual">
@@ -50,7 +50,7 @@
 		<material name="material_6" rgba="0.13750000298023224 0.19694800674915314 0.25 1.0" emission="0.0"/>
 	</asset>
 	<worldbody>
-		<body name="justin" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+		<body name="rollin-justin" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 			<body name="base_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<inertial mass="224.7355194091797" pos="-0.00018272799206897616 1.6127123672049493e-05 0.23259808123111725" quat="0.5002467036247253 0.5003892779350281 0.4996047914028168 -0.499758780002594" diaginertia="14.472777366638184 23.62435531616211 27.990686416625977"/>
 				<geom name="base_link_geom_collision_0_Mobile_Wheel_Flat_Ch_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="base" material="material_1_003" class="rollin-justin_collision"/>
