@@ -4,10 +4,12 @@ from dataclasses import dataclass
 from typing import Optional
 
 import numpy
+import os
 
 from pxr import Usd, UsdGeom, Sdf
 
 cache_mesh_stages = {}
+
 
 @dataclass(init=False)
 class MeshProperty:
@@ -16,18 +18,21 @@ class MeshProperty:
     face_vertex_counts: numpy.ndarray
     face_vertex_indices: numpy.ndarray
     texture_coordinates: Optional[numpy.ndarray]
+    mesh_file_name: Optional[str]
 
     def __init__(self,
                  points: numpy.ndarray,
                  normals: numpy.ndarray,
                  face_vertex_counts: numpy.ndarray,
                  face_vertex_indices: numpy.ndarray,
-                 texture_coordinates: Optional[numpy.ndarray] = None) -> None:
+                 texture_coordinates: Optional[numpy.ndarray] = None,
+                 mesh_file_name: Optional[str] = None) -> None:
         self._points = points
         self._normals = normals
         self._face_vertex_counts = face_vertex_counts
         self._face_vertex_indices = face_vertex_indices
         self._texture_coordinates = texture_coordinates
+        self._mesh_file_name = mesh_file_name
         self.check_validity()
 
     def check_validity(self):
@@ -62,10 +67,12 @@ class MeshProperty:
                 if not mesh_prim.IsA(UsdGeom.Mesh):
                     raise TypeError(f"Prim {mesh_prim} is not a mesh")
 
-        return cls.from_prim(mesh_prim, texture_coordinate_name)
+        mesh_file_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
+        return cls.from_prim(mesh_prim, texture_coordinate_name, mesh_file_name)
 
     @classmethod
-    def from_prim(cls, mesh_prim: Usd.Prim, texture_coordinate_name: str = "st") -> "MeshProperty":
+    def from_prim(cls, mesh_prim: Usd.Prim, texture_coordinate_name: str = "st",
+                  mesh_file_name: Optional[str] = None) -> "MeshProperty":
         mesh = UsdGeom.Mesh(mesh_prim)
         prim_vars_api = UsdGeom.PrimvarsAPI(mesh_prim)
         if prim_vars_api.HasPrimvar(texture_coordinate_name):
@@ -78,7 +85,8 @@ class MeshProperty:
                    normals=numpy.array(mesh.GetNormalsAttr().Get()),
                    face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
                    face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get()),
-                   texture_coordinates=texture_coordinates)
+                   texture_coordinates=texture_coordinates,
+                   mesh_file_name=mesh_file_name)
 
     @property
     def points(self):
@@ -99,6 +107,10 @@ class MeshProperty:
     @property
     def texture_coordinates(self):
         return self._texture_coordinates
+
+    @property
+    def mesh_file_name(self):
+        return self._mesh_file_name
 
 
 class MeshBuilder:

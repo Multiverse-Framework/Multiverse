@@ -207,10 +207,10 @@ class UrdfImporter(Factory):
 
     def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> None:
         geom_name = f"{link.name}_geom"
-        if self._config.with_visual:
-            for i, visual in enumerate(link.visuals):
-                visual_geom_name = f"{geom_name}_visual_{i}"
-                self._import_geom(geom_name=visual_geom_name, geom=visual, body_builder=body_builder)
+        # if self._config.with_visual:
+        #     for i, visual in enumerate(link.visuals):
+        #         visual_geom_name = f"{geom_name}_visual_{i}"
+        #         self._import_geom(geom_name=visual_geom_name, geom=visual, body_builder=body_builder)
         if self._config.with_collision:
             for i, collision in enumerate(link.collisions):
                 collision_geom_name = f"{geom_name}_collision_{i}"

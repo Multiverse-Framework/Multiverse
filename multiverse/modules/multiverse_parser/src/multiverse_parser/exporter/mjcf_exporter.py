@@ -157,14 +157,16 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
                 raise NotImplementedError(f"Geom {gprim_prim.GetName()} has {len(prepended_items)} prepended items.")
 
             stage = gprim_prim.GetStage()
-            mesh_name = prepended_items[0].primPath.name
+            mesh_file_path = prepended_items[0].assetPath
+            mesh_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
             mesh_name = add_scale_to_mesh_name(mesh_name=mesh_name, mesh_scale=geom_size)
 
             mujoco_asset_prim = stage.GetPrimAtPath("/mujoco/asset")
             mujoco_mesh_path = mujoco_asset_prim.GetPath().AppendChild("meshes").AppendChild(mesh_name)
             if (not stage.GetPrimAtPath(mujoco_mesh_path).IsValid() or
                     not stage.GetPrimAtPath(mujoco_mesh_path).IsA(UsdMujoco.MujocoMesh)):
-                raise ValueError(f"Mesh {mesh_name} does not exist.")
+                stage.GetRootLayer().Save()
+                raise ValueError(f"Mesh {mujoco_mesh_path} does not exist in {stage.GetRootLayer().realPath}")
             mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
             if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
@@ -400,7 +402,7 @@ class MjcfExporter:
                         mesh_files[mesh_file_path].add(mesh_file_property)
 
         for mesh_file_path, mesh_file_properties in mesh_files.items():
-            mesh_file_name = os.path.basename(mesh_file_path).split(".")[0]
+            mesh_file_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
             for mesh_file_property in mesh_file_properties:
                 mesh_file_ext = "obj" if mesh_file_property.has_texture else "stl"
                 tmp_mesh_file_path = os.path.join(self.factory.tmp_mesh_dir_path,
@@ -410,9 +412,9 @@ class MjcfExporter:
                     self.factory.export_mesh(in_mesh_file_path=mesh_file_path,
                                              out_mesh_file_path=tmp_mesh_file_path)
 
-                mesh_name = add_scale_to_mesh_name(mesh_name=mesh_file_name,
+                mesh_file_name = add_scale_to_mesh_name(mesh_name=mesh_file_name,
                                                    mesh_scale=numpy.array(mesh_file_property.scale))
-                mujoco_mesh_path = self.mujoco_meshes_prim.GetPath().AppendChild(mesh_name)
+                mujoco_mesh_path = self.mujoco_meshes_prim.GetPath().AppendChild(mesh_file_name)
                 if stage.GetPrimAtPath(mujoco_mesh_path).IsValid():
                     continue
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(stage, mujoco_mesh_path)
