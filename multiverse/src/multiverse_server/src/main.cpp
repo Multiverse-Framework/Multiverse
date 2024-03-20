@@ -72,6 +72,8 @@ int main(int argc, char **argv)
 
     server_context.shutdown();
 
+    server_context.close();
+
     if (multiverse_server_thread.joinable())
     {
         multiverse_server_thread.join();

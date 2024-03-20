@@ -187,8 +187,7 @@ static double get_time_now()
 
 MultiverseServer::MultiverseServer(const std::string &in_socket_addr)
 {
-    context = zmq::context_t(1);
-    socket = zmq::socket_t(context, zmq::socket_type::rep);
+    socket = zmq::socket_t(server_context, zmq::socket_type::rep);
     socket_addr = in_socket_addr;
     socket.bind(socket_addr);
     sockets_need_clean_up[socket_addr] = false;
@@ -221,19 +220,37 @@ void MultiverseServer::start()
         case EMultiverseServerState::ReceiveRequestMetaData:
         {
             receive_request_meta_data();
-            const std::string &message_str = message.to_string();
-            if (message_str[0] != '{' ||
-                message_str[0] == '{' && message_str[1] == '}' && message_str.size() == 2 ||
-                message_str.empty() ||
-                !reader.parse(message_str, request_meta_data_json))
+            if (message.to_string()[0] == '{')
             {
-                flag = EMultiverseServerState::BindReceiveData;
+                const std::string &message_str = message.to_string();
+                if (message_str[1] == '}' && message_str.size() == 2)
+                {
+                    printf("[Server] Received close signal %s from socket %s.\n", message_str.c_str(), socket_addr.c_str());
+                    send_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
+                    receive_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
+                    flag = EMultiverseServerState::SendResponseMetaData;
+                }
+                else if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
+                {
+                    send_data_vec.clear();
+                    receive_data_vec.clear();
+                    flag = EMultiverseServerState::BindObjects;
+                }
+                else if (std::isnan(send_buffer[0]))
+                {
+                    printf("[Server] Received [%s] from socket %s.\n", message_str.c_str(), socket_addr.c_str());
+                    flag = EMultiverseServerState::BindReceiveData;
+                }
+                else
+                {
+                    flag = EMultiverseServerState::BindSendData;
+                }
             }
             else
             {
-                sockets_need_clean_up[socket_addr] = false;
-                flag = EMultiverseServerState::BindObjects;
+                flag = EMultiverseServerState::BindSendData;
             }
+            
             break;
         }
 
@@ -263,8 +280,6 @@ void MultiverseServer::start()
 
             if (send_buffer_size == 1 && receive_buffer_size == 1)
             {
-                send_data_vec.clear();
-                receive_data_vec.clear();
                 flag = EMultiverseServerState::ReceiveRequestMetaData;
             }
             else
@@ -284,8 +299,8 @@ void MultiverseServer::start()
                 if (message_str[1] == '}' && message_str.size() == 2)
                 {
                     printf("[Server] Received close signal %s from socket %s.\n", message_str.c_str(), socket_addr.c_str());
-                    send_data_vec.clear();
-                    receive_data_vec.clear();
+                    send_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
+                    receive_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
                     flag = EMultiverseServerState::SendResponseMetaData;
                 }
                 else if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
@@ -401,8 +416,8 @@ void MultiverseServer::start()
                 socket.send(request_message, zmq::send_flags::none);
                 simulation.meta_data_state = EMetaDataState::None;
 
-                send_data_vec.clear();
-                receive_data_vec.clear();
+                send_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
+                receive_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
                 flag = EMultiverseServerState::ReceiveRequestMetaData;
             }
             else
@@ -450,7 +465,9 @@ void MultiverseServer::receive_request_meta_data()
     try
     {
         sockets_need_clean_up[socket_addr] = false;
+        printf("[Server] Socket %s is waiting for meta data.\n", socket_addr.c_str());
         zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
+        printf("[Server] Socket %s received meta data.\n", socket_addr.c_str());
         sockets_need_clean_up[socket_addr] = true;
     }
     catch (const zmq::error_t &e)

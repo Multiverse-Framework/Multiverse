@@ -111,8 +111,6 @@ private:
 
     zmq::socket_t socket;
 
-    zmq::context_t context;
-
     Json::Value request_meta_data_json;
 
     Json::Value send_objects_json;
