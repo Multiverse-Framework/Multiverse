@@ -222,7 +222,7 @@ private:
 
     void reset() override
     {
-        
+        printf("[Client %s] Resetting the client (will be implemented).\n", port.c_str());
     }
 
     void init_send_and_receive_data() override
@@ -245,8 +245,7 @@ private:
             return;
         }
         
-        send_buffer[0] = std::numeric_limits<double>::quiet_NaN();
-        for (size_t i = 1; i < send_buffer_size; i++)
+        for (size_t i = 0; i < send_buffer_size; i++)
         {
             send_buffer[i] = send_data[i].cast<double>();
         }
