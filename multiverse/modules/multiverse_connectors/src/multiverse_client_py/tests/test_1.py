@@ -42,12 +42,73 @@ if __name__ == "__main__":
     multiverse_client_test_send.run()
 
     i = 0
-    while i < 100:
-        sleep(1)
-        time_now = time() - time_start
-        i += 1
+    # while i < 100:
+    #     sleep(1)
+    #     time_now = time() - time_start
+    #     i += 1
+    #
+    #     multiverse_client_test_send.send_data = [time_now, i, i, i, 0.0, 0.0, 0.0, 1.0]
+    #     multiverse_client_test_send.send_and_receive_data()
 
-        multiverse_client_test_send.send_data = [time_now, i, i, i, 0.0, 0.0, 0.0, 1.0]
-        multiverse_client_test_send.send_and_receive_data()
+    time_now = time() - time_start
+    i += 1
+
+    print("NOW")
+
+    multiverse_client_test_send.send_data = [time_now, i, i, i, 0.0, 0.0, 0.0, 1.0]
+    multiverse_client_test_send.send_and_receive_data()
+
+    sleep(5)
+    time_now = time() - time_start
+    i += 1
+
+    multiverse_client_test_send.send_data = [time_now, i, i, i, 0.0, 0.0, 0.0, 1.0]
+    multiverse_client_test_send.send_and_receive_data()
+    print(multiverse_client_test_send.request_meta_data)
+    print(multiverse_client_test_send.response_meta_data)
+
+    sleep(5)
+    time_now = time() - time_start
+    i += 1
+
+    meta_data_receive = meta_data
+    meta_data_receive.simulation_name = "sim_test_receive"
+    multiverse_client_test_receive = MultiverseClientTest(client_addr=SocketAddress(port="1239"),
+                                                          multiverse_meta_data=meta_data_receive)
+    multiverse_client_test_receive.request_meta_data["receive"]["object_1"] = ["position", "quaternion"]
+    multiverse_client_test_receive.request_meta_data["receive"]["object_2"] = ["position", "quaternion"]
+    multiverse_client_test_receive.run()
+    multiverse_client_test_receive.send_data = [time_now]
+    multiverse_client_test_receive.send_and_receive_data()
+    print(multiverse_client_test_receive.receive_data)
+
+    multiverse_client_test_send.send_data = [time_now, i, i, i, 0.0, 0.0, 0.0, 1.0, i, i, i, 0.0, 0.0, 0.0, 1.0]
+    multiverse_client_test_send.send_and_receive_data()
+
+    sleep(1)
+    time_now = time() - time_start
+    i += 1
+
+    multiverse_client_test_receive.send_data = [time_now]
+    multiverse_client_test_receive.send_and_receive_data()
+    print(multiverse_client_test_receive.receive_data)
+
+    multiverse_client_test_send.send_data = [time_now, i, i, i, 0.0, 0.0, 0.0, 1.0, i, i, i, 0.0, 0.0, 0.0, 1.0]
+    multiverse_client_test_send.send_and_receive_data()
+
+    sleep(1)
+    time_now = time() - time_start
+    i += 1
+
+    multiverse_client_test_receive.send_data = [time_now]
+    multiverse_client_test_receive.send_and_receive_data()
+    print(multiverse_client_test_receive.receive_data)
+
+    multiverse_client_test_send.send_data = [time_now, i, i, i, 0.0, 0.0, 0.0, 1.0, i, i, i, 0.0, 0.0, 0.0, 1.0]
+    multiverse_client_test_send.send_and_receive_data()
+
+    multiverse_client_test_receive.send_data = [time_now]
+    multiverse_client_test_receive.send_and_receive_data()
+    print(multiverse_client_test_receive.receive_data)
 
     multiverse_client_test_send.stop()

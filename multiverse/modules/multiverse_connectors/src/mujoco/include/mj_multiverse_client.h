@@ -91,7 +91,7 @@ private:
 
     void wait_for_meta_data_thread_finish() override;
 
-    bool init_objects(bool from_server = false) override;
+    bool init_objects(bool from_request_meta_data = false) override;
 
     void bind_request_meta_data() override;
 

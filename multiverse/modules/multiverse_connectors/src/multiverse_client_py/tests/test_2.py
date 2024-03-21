@@ -47,7 +47,7 @@ if __name__ == "__main__":
     time_start = time()
     world_time_now = time() - time_start + world_time_start
 
-    multiverse_client_test_spawn.send_data = [world_time_now, 0, 0, 0, 0.0, 0.0, 0.0, 1.0]
+    multiverse_client_test_spawn.send_data = [world_time_now, 12, 11, 10, 0.0, 0.0, 0.0, 1.0]
     multiverse_client_test_spawn.send_and_receive_data()
 
     print(multiverse_client_test_spawn.receive_data)

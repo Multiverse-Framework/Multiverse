@@ -37,40 +37,6 @@ class MultiverseClientTest(MultiverseClient):
         self._communicate(False)
 
 
-class MultiverseClientCreationTestCase(unittest.TestCase):
-    meta_data = MultiverseMetaData(
-        world_name="world",
-        simulation_name="sim_test",
-        length_unit="m",
-        angle_unit="rad",
-        mass_unit="kg",
-        time_unit="s",
-        handedness="rhs",
-    )
-
-    def test_multiverse_client_creation(self):
-        server_port = "6000"
-
-        process = start_multiverse_server(server_port)
-        MultiverseClientTest._server_addr.port = server_port
-        multiverse_client_test = MultiverseClientTest(client_addr=SocketAddress(port="1234"),
-                                                      multiverse_meta_data=self.meta_data)
-        multiverse_client_test.run()
-        sleep(1)
-        multiverse_client_test.stop()
-        kill_multiverse_server(process)
-
-
-def communicate(multiverse_client):
-    time_start = time()
-    sleep(5)
-    multiverse_client.send_data = [time() - time_start, 5, 5, 5, 0, 0, 0, 1]
-    multiverse_client.send_and_receive_data()
-    sleep(1)
-    multiverse_client.send_data = [time() - time_start, 1, 2, 3, 0, 0, 0, 1]
-    multiverse_client.send_and_receive_data()
-
-
 class MultiverseClientTestCase(unittest.TestCase):
     meta_data = MultiverseMetaData(
         world_name="world",
@@ -80,113 +46,145 @@ class MultiverseClientTestCase(unittest.TestCase):
         time_unit="s",
         handedness="rhs",
     )
-    _server_port = "7000"
+    time_start = 0.0
+    _server_port = "6500"
     _process = None
 
-    # @classmethod
-    # def setUpClass(cls) -> None:
-    #     MultiverseClientTest._server_addr.port = cls._server_port
-    #     cls._process = start_multiverse_server(cls._server_port)
-    #
-    # @classmethod
-    # def tearDownClass(cls) -> None:
-    #     kill_multiverse_server(cls._process)
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.time_start = time()
 
-    def test_multiverse_client(self):
-        time_start = time()
-        meta_data_send = self.meta_data
-        meta_data_send.simulation_name = "sim_test_send"
-        multiverse_client_test_send = MultiverseClientTest(client_addr=SocketAddress(port="1235"),
-                                                           multiverse_meta_data=meta_data_send)
-        multiverse_client_test_send.request_meta_data["send"]["object_1"] = ["position", "quaternion"]
-        multiverse_client_test_send.run()
-        # self.assertDictEqual(multiverse_client_test_send.response_meta_data, {
-        #     'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg',
-        #                   'simulation_name': 'sim_test_send', 'time_unit': 's', 'world_name': 'world'},
-        #     'send': {'object_1': {'position': [None, None, None], 'quaternion': [None, None, None, None]}}, 'time': 0})
+        MultiverseClientTest._server_addr.port = cls._server_port
+        cls._process = start_multiverse_server(cls._server_port)
 
-        time_now = 0.0
-        multiverse_client_test_send.send_data = [time_now, 1.0, 2.0, 3.0, 0.0, 0.0, 0.0, 1.0]
-        multiverse_client_test_send.send_and_receive_data()
+    @classmethod
+    def tearDownClass(cls) -> None:
+        kill_multiverse_server(cls._process)
 
-        # meta_data_receive = self.meta_data
-        # meta_data_receive.simulation_name = "sim_test_receive"
-        # multiverse_client_test_receive = MultiverseClientTest(client_addr=SocketAddress(port="1236"),
-        #                                                       multiverse_meta_data=meta_data_receive)
-        # multiverse_client_test_receive.request_meta_data["receive"]["object_1"] = ["position", "quaternion"]
-        # multiverse_client_test_receive.run()
-        # self.assertDictEqual(multiverse_client_test_receive.response_meta_data, {
-        #     'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg',
-        #                   'simulation_name': 'sim_test_receive', 'time_unit': 's', 'world_name': 'world'},
-        #     'receive': {'object_1': {'position': [1.0, 2.0, 3.0], 'quaternion': [0.0, 0.0, 0.0, 1.0]}},
-        #     'time': time_now})
+    def create_multiverse_client_send(self, port, object_name, attribute_names):
+        meta_data = self.meta_data
+        meta_data.simulation_name = "sim_test_send"
+        multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
+                                                 multiverse_meta_data=meta_data)
+        multiverse_client.request_meta_data["send"][object_name] = attribute_names
+        multiverse_client.run()
+        return multiverse_client
 
-        # time_now = time() - time_start
-        # multiverse_client_test_send.send_data = [time_now, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0]
-        # multiverse_client_test_send.send_and_receive_data()
-        # self.assertEqual(multiverse_client_test_send.receive_data, [time_now])
+    def multiverse_client_send_data(self, multiverse_client, send_data):
+        multiverse_client.send_data = send_data
+        multiverse_client.send_and_receive_data()
 
-        # multiverse_client_test_receive.send_data = [time_now]
-        # multiverse_client_test_receive.send_and_receive_data()
-        # self.assertEqual(multiverse_client_test_receive.receive_data, [time_now, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0])
-        #
-        # meta_data_reset = self.meta_data
-        # meta_data_reset.simulation_name = "sim_test_reset"
-        # multiverse_client_test_reset = MultiverseClientTest(client_addr=SocketAddress(port="1237"),
-        #                                                     multiverse_meta_data=meta_data_reset)
-        # multiverse_client_test_reset.run()
-        # multiverse_client_test_reset.send_data = [0.0]
-        # multiverse_client_test_reset.send_and_receive_data()
-        # self.assertEqual(multiverse_client_test_reset.receive_data, [0.0])
-        #
-        # time_now = time() - time_start
-        # multiverse_client_test_send.send_data = [time_now, 5.0, 2.0, 3.0, 0.0, 1.0, 0.0, 0.0]
-        # multiverse_client_test_send.send_and_receive_data()
-        # self.assertEqual(multiverse_client_test_send.receive_data, [0.0])
-        # multiverse_client_test_send.send_and_receive_data()
-        # self.assertEqual(multiverse_client_test_send.receive_data, [time_now])
-        #
-        # multiverse_client_test_receive.send_data = [time_now]
-        # multiverse_client_test_receive.send_and_receive_data()
-        # self.assertEqual(multiverse_client_test_receive.receive_data, [0.0, 5.0, 2.0, 3.0, 0.0, 1.0, 0.0, 0.0])
-        # multiverse_client_test_receive.send_and_receive_data()
-        # self.assertEqual(multiverse_client_test_receive.receive_data, [time_now, 5.0, 2.0, 3.0, 0.0, 1.0, 0.0, 0.0])
+    def create_multiverse_client_receive(self, port, object_name, attribute_names):
+        meta_data = self.meta_data
+        meta_data.simulation_name = "sim_test_receive"
+        multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
+                                                 multiverse_meta_data=meta_data)
+        multiverse_client.request_meta_data["receive"][object_name] = attribute_names
+        multiverse_client.run()
+        return multiverse_client
 
-        thread = threading.Thread(target=communicate, args=(multiverse_client_test_send,))
-        thread.start()
-        #
-        sleep(2)
-        #
-        time_now = time() - time_start
-        meta_data_spawn = self.meta_data
-        meta_data_spawn.simulation_name = "sim_test_spawn"
-        multiverse_client_test_spawn = MultiverseClientTest(client_addr=SocketAddress(port="1238"),
-                                                            multiverse_meta_data=meta_data_spawn)
-        multiverse_client_test_spawn.run()
-        multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "sim_test_send"
-        multiverse_client_test_spawn.request_meta_data["send"]["object_2"] = ["position", "quaternion"]
-        multiverse_client_test_spawn.send_and_receive_meta_data()
-        multiverse_client_test_spawn.send_data = [time_now, 4.0, 3.0, 2.0, 0.0, 1.0, 0.0, 0.0]
-        multiverse_client_test_spawn.send_and_receive_data()
+    def create_multiverse_client_reset(self, port):
+        meta_data = self.meta_data
+        meta_data.simulation_name = "sim_test_reset"
+        multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
+                                                 multiverse_meta_data=meta_data)
+        multiverse_client.run()
+        return multiverse_client
+
+    def create_multiverse_client_spawn(self, port):
+        meta_data = self.meta_data
+        meta_data.simulation_name = "sim_test_spawn"
+        multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
+                                                 multiverse_meta_data=meta_data)
+        multiverse_client.run()
+        return multiverse_client
+
+    def test_multiverse_client_send_creation(self):
+        multiverse_client_test_send = self.create_multiverse_client_send("1234", "object_1", ["position", "quaternion"])
+        self.assertIn("time", multiverse_client_test_send.response_meta_data)
+        time_send = multiverse_client_test_send.response_meta_data["time"]
+        self.assertIn("send", multiverse_client_test_send.response_meta_data)
+        send_objects = multiverse_client_test_send.response_meta_data["send"]
+        self.assertDictEqual(multiverse_client_test_send.response_meta_data, {
+            'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg',
+                          'simulation_name': 'sim_test_send', 'time_unit': 's', 'world_name': 'world'},
+            'send': send_objects,
+            'time': time_send})
+        multiverse_client_test_send.stop()
+
+    def test_multiverse_client_send_data(self):
+        multiverse_client_test_send = self.create_multiverse_client_send("1234", "object_1", ["position", "quaternion"])
+
+        time_now = time() - self.time_start
+        self.multiverse_client_send_data(multiverse_client_test_send, [time_now, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0])
+
+        self.assertEqual(multiverse_client_test_send.receive_data, [time_now])
+        multiverse_client_test_send.stop()
+
+        return multiverse_client_test_send, time_now
+
+    def test_multiverse_client_receive_creation(self):
+        _, time_send = self.test_multiverse_client_send_data()
+
+        multiverse_client_test_receive = self.create_multiverse_client_receive("1235", "object_1",
+                                                                               ["position", "quaternion"])
+
+        self.assertDictEqual(multiverse_client_test_receive.response_meta_data, {
+            'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg',
+                          'simulation_name': 'sim_test_receive', 'time_unit': 's', 'world_name': 'world'},
+            'receive': {'object_1': {'position': [3, 2, 1], 'quaternion': [1, 0, 0, 0]}}, 'time': time_send})
+
+        multiverse_client_test_receive.stop()
+
+    def test_multiverse_client_reset_creation(self):
+        multiverse_client_test_reset = self.create_multiverse_client_reset("1236")
+        self.assertIn("time", multiverse_client_test_reset.response_meta_data)
+        time_reset = multiverse_client_test_reset.response_meta_data["time"]
+        self.assertDictEqual(multiverse_client_test_reset.response_meta_data, {
+            'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg',
+                          'simulation_name': 'sim_test_reset', 'time_unit': 's', 'world_name': 'world'},
+            'time': time_reset})
+        multiverse_client_test_reset.stop()
+
+    def test_multiverse_client_reset(self):
+        self.test_multiverse_client_send_data()
+        multiverse_client_test_reset = self.create_multiverse_client_reset("1236")
+
+        multiverse_client_test_reset.send_data = [0.0]
+        multiverse_client_test_reset.send_and_receive_data()
+
+        self.assertEqual(multiverse_client_test_reset.receive_data, [0.0])
+        multiverse_client_test_reset.stop()
+
+    def test_multiverse_client_spawn_creation(self):
+        multiverse_client_test_spawn = self.create_multiverse_client_spawn("1237")
+
+        self.assertIn("time", multiverse_client_test_spawn.response_meta_data)
+        time_spawn = multiverse_client_test_spawn.response_meta_data["time"]
+        self.assertDictEqual(multiverse_client_test_spawn.response_meta_data, {
+            'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg',
+                          'simulation_name': 'sim_test_spawn', 'time_unit': 's', 'world_name': 'world'},
+            'time': time_spawn})
+
         multiverse_client_test_spawn.stop()
 
-        thread.join()
-
-        # multiverse_client_test_send.send_data = [time_now, 2.0, 5.0, 2.0, 0.0, 0.0, 1.0, 0.0]
-        # multiverse_client_test_send.send_and_receive_data()
-
-        multiverse_client_test_send.stop()
-        # multiverse_client_test_receive.stop()
-        # multiverse_client_test_reset.stop()
-
-    def test_multiverse_client_send_creation_2(self):
-        meta_data_send_3 = self.meta_data
-        meta_data_send_3.simulation_name = "sim_test_send_3"
-        multiverse_client_test_send_1 = MultiverseClientTest(client_addr=SocketAddress(port="1237"),
-                                                             multiverse_meta_data=meta_data_send_3)
-        multiverse_client_test_send_1.request_meta_data["send"]["object_1"] = ["position", "quaternion"]
-        multiverse_client_test_send_1.run()
-        multiverse_client_test_send_1.stop()
+    # def test_multiverse_client_spawn(self):
+    #     multiverse_client_test_send, time_send = self.test_multiverse_client_send_data()
+    #     multiverse_client_test_spawn = self.create_multiverse_client_spawn("1237")
+    #     multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "sim_test_send"
+    #     multiverse_client_test_spawn.request_meta_data["send"]["object_2"] = ["position", "quaternion"]
+    #     multiverse_client_test_spawn.send_and_receive_meta_data()
+    #     print(multiverse_client_test_spawn.response_meta_data)
+    #     time_now = time() - self.time_start
+    #     multiverse_client_test_spawn.send_data = [time_now, 12, 11, 10, 0.0, 0.0, 0.0, 1.0]
+    #     multiverse_client_test_send.send_data = [time_now, 2, 3, 4, 0.0, 0.0, 1.0, 0.0]
+    #     thread_1 = threading.Thread(target=multiverse_client_test_spawn.send_and_receive_data)
+    #     thread_2 = threading.Thread(target=multiverse_client_test_send.send_and_receive_data)
+    #     thread_1.start()
+    #     sleep(1)
+    #     thread_2.start()
+    #     sleep(1)
+    #     multiverse_client_test_spawn.stop()
 
 
 if __name__ == "__main__":

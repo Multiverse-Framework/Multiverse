@@ -244,9 +244,9 @@ bool MjMultiverseClient::destroy_objects(const std::set<std::string> objects)
 	return true;
 }
 
-bool MjMultiverseClient::init_objects(bool from_server)
+bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 {
-	if (from_server && reader.parse(request_meta_data_str, request_meta_data_json))
+	if (from_request_meta_data)
 	{
 		receive_objects_json = request_meta_data_json["receive"];
 		send_objects_json = request_meta_data_json["send"];

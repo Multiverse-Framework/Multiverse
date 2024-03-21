@@ -97,7 +97,7 @@ private:
     pybind11::list receive_data;
 
 private:
-    bool compute_response_meta_data() override
+    bool compute_request_and_response_meta_data() override
     {
         if (response_meta_data_str.empty())
         {
@@ -112,8 +112,43 @@ private:
         pybind11::object parsed_dict = json_loads(response_meta_data_str);
 
         response_meta_data_dict = parsed_dict.cast<pybind11::dict>();
+
+        if (response_meta_data_dict.contains("time"))
+        {
+            request_meta_data_dict["meta_data"] = response_meta_data_dict["meta_data"];
+            request_meta_data_dict["send"] = pybind11::dict();
+            request_meta_data_dict["receive"] = pybind11::dict();
+
+            if (response_meta_data_dict.contains("send"))
+            {
+                for (const auto &send_objects : response_meta_data_dict["send"].cast<pybind11::dict>())
+                {
+                    request_meta_data_dict["send"][send_objects.first] = pybind11::list();
+                    const pybind11::dict attributes = send_objects.second.cast<pybind11::dict>();
+                    for (const auto &attribute : attributes)
+                    {
+                        request_meta_data_dict["send"][send_objects.first].cast<pybind11::list>().append(attribute.first.cast<std::string>());
+                    }
+                }
+            }
+            
+            if (response_meta_data_dict.contains("receive"))
+            {
+                for (const auto &receive_objects : response_meta_data_dict["receive"].cast<pybind11::dict>())
+                {
+                    request_meta_data_dict["receive"][receive_objects.first] = pybind11::list();
+                    const pybind11::dict attributes = receive_objects.second.cast<pybind11::dict>();
+                    for (const auto &attribute : attributes)
+                    {
+                        request_meta_data_dict["receive"][receive_objects.first].cast<pybind11::list>().append(attribute.first.cast<std::string>());
+                    }
+                }
+            }
+
+            return true;
+        }
         
-        return response_meta_data_dict.contains("time");
+        return false;
     }
 
     void compute_request_buffer_sizes(size_t &req_send_buffer_size, size_t &req_receive_buffer_size) const override
@@ -198,7 +233,7 @@ private:
         
     }
 
-    bool init_objects(bool from_server = false) override
+    bool init_objects(bool from_response_meta_data = false) override
     {
         return true;
     }
