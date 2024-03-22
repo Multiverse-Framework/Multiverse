@@ -45,7 +45,7 @@ public:
 private:
     bool spawn_objects(std::set<std::string> &objects);
 
-    bool destroy_objects(const std::set<std::string> objects);
+    bool destroy_objects(std::set<std::string> &objects);
 
 public:
     void communicate(const bool resend_meta_data = false) override;

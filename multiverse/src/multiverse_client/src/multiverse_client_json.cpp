@@ -60,6 +60,7 @@ bool MultiverseClientJson::compute_request_and_response_meta_data()
         {
             for (const std::string &object_name : response_meta_data_json["send"].getMemberNames())
             {
+                request_meta_data_json["send"][object_name] = Json::arrayValue;
                 for (const std::string &attribute_name : response_meta_data_json["send"][object_name].getMemberNames())
                 {
                     request_meta_data_json["send"][object_name].append(attribute_name);
@@ -70,6 +71,7 @@ bool MultiverseClientJson::compute_request_and_response_meta_data()
         {
             for (const std::string &object_name : response_meta_data_json["receive"].getMemberNames())
             {
+                request_meta_data_json["receive"][object_name] = Json::arrayValue;
                 for (const std::string &attribute_name : response_meta_data_json["receive"][object_name].getMemberNames())
                 {
                     request_meta_data_json["receive"][object_name].append(attribute_name);

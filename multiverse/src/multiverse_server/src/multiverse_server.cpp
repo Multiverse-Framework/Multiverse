@@ -516,14 +516,16 @@ void MultiverseServer::bind_meta_data()
                     break;
                 }
 
+                Json::Value &attributes = request_simulation.request_meta_data_json[type_str][object_name];
+
+                if (request_meta_data_json[type_str][object_name].empty())
+                {
+                    attributes = Json::Value(Json::arrayValue);
+                    continue;
+                }
+                
                 for (const Json::Value &attribute : request_meta_data_json[type_str][object_name])
                 {
-                    if (attribute.asString().empty())
-                    {
-                        break;
-                    }
-
-                    Json::Value &attributes = request_simulation.request_meta_data_json[type_str][object_name];
                     if (std::find(attributes.begin(), attributes.end(), attribute) == attributes.end())
                     {
                         attributes.append(attribute);
@@ -654,6 +656,7 @@ void MultiverseServer::bind_send_objects()
 
     for (const std::string &object_name : send_objects_json.getMemberNames())
     {
+        response_meta_data_json["send"][object_name] = Json::objectValue;
         Object &object = objects[object_name];
         simulation.objects[object_name] = &object;
         for (const Json::Value &attribute_json : send_objects_json[object_name])
@@ -712,7 +715,7 @@ void MultiverseServer::validate_meta_data()
     if (receive_objects_json.isMember("") &&
         std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
     {
-        receive_objects_json = {};
+        receive_objects_json = Json::objectValue;
         for (const std::pair<std::string, Object> &object : worlds[world_name].objects)
         {
             for (const std::pair<std::string, Attribute> &attribute_pair : object.second.attributes)
@@ -735,7 +738,7 @@ void MultiverseServer::validate_meta_data()
                     continue;
                 }
 
-                receive_objects_json[object_name] = {};
+                receive_objects_json[object_name] = Json::objectValue;
                 for (const std::pair<std::string, Attribute> &attribute_pair : worlds[world_name].objects[object_name].attributes)
                 {
                     receive_objects_json[object_name].append(attribute_pair.first);
@@ -798,6 +801,7 @@ void MultiverseServer::bind_receive_objects()
     receive_data_vec.emplace_back(&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]);
     for (const std::string &object_name : receive_objects_json.getMemberNames())
     {
+        response_meta_data_json["receive"][object_name] = Json::objectValue;
         for (const Json::Value &attribute_json : receive_objects_json[object_name])
         {
             const std::string attribute_name = attribute_json.asString();
