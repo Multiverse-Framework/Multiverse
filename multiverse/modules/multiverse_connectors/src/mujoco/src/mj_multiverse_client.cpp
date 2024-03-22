@@ -244,6 +244,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 				else
 				{
 					printf("Could not load file: %s\n", new_object_xml_path.string().c_str());
+					return false;
 				}
 			}
 
@@ -260,8 +261,8 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 			else
 			{
 				printf("Could not load file: %s\n", scene_xml_path.string().c_str());
+				return false;
 			}
-			break;
 		}
 		else
 		{
@@ -832,7 +833,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		}
 		if (qpos_str.size() > 0)
 		{
-			qpos_str = qpos_str.substr(0, qpos_str.size() - 1);
+			qpos_str.pop_back();
 			key_element->SetAttribute("qpos", qpos_str.c_str());
 		}
 
@@ -843,7 +844,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		}
 		if (qvel_str.size() > 0)
 		{
-			qvel_str = qvel_str.substr(0, qvel_str.size() - 1);
+			qvel_str.pop_back();
 			key_element->SetAttribute("qvel", qvel_str.c_str());
 		}
 
@@ -854,7 +855,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		}
 		if (act_str.size() > 0)
 		{
-			act_str = act_str.substr(0, act_str.size() - 1);
+			act_str.pop_back();
 			key_element->SetAttribute("act", act_str.c_str());
 		}
 
@@ -865,7 +866,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		}
 		if (ctrl_str.size() > 0)
 		{
-			ctrl_str = ctrl_str.substr(0, ctrl_str.size() - 1);
+			ctrl_str.pop_back();
 			key_element->SetAttribute("ctrl", ctrl_str.c_str());
 		}
 

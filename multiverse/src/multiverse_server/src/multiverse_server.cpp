@@ -329,10 +329,10 @@ void MultiverseServer::start()
 
             if (worlds[world_name].time == 0.0)
             {
-                printf("[Server] Reset all simulations in world %s.\n", world_name.c_str());
+                // printf("[Server] Reset all simulations in world %s.\n", world_name.c_str());
                 for (std::pair<const std::string, Simulation> &simulation : worlds[world_name].simulations)
                 {
-                    printf("[Server] Reset simulation %s.\n", simulation.first.c_str());
+                    // printf("[Server] Reset simulation %s.\n", simulation.first.c_str());
                     simulation.second.meta_data_state = EMetaDataState::Reset;
                 }
             }
