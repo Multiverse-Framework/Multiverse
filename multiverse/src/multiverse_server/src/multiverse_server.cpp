@@ -325,10 +325,6 @@ void MultiverseServer::start()
             {
                 *send_data_vec[0].first = send_buffer[0] * send_data_vec[0].second;
             }
-            for (size_t i = 1; i < send_buffer_size; i++)
-            {
-                *send_data_vec[i].first = send_buffer[i] * send_data_vec[i].second;
-            }
             mtx.unlock();
 
             if (worlds[world_name].time == 0.0)
@@ -361,6 +357,13 @@ void MultiverseServer::start()
                 }
                 request_meta_data_state = EMetaDataState::WaitAfterOtherSendRequestMetaData;
             }
+
+            mtx.lock();
+            for (size_t i = 1; i < send_buffer_size; i++)
+            {
+                *send_data_vec[i].first = send_buffer[i] * send_data_vec[i].second;
+            }
+            mtx.unlock();
 
             flag = EMultiverseServerState::BindReceiveData;
             break;

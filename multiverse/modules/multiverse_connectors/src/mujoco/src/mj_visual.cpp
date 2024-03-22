@@ -149,11 +149,10 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
     if (act == GLFW_PRESS && key == GLFW_KEY_BACKSPACE)
     {
         mtx.lock();
-        d->time = 0.0;
         sim_start = 0.0;
         start_time += real_time;
         mj_resetDataKeyframe(m, d, 0);
-        mj_forward(m, d);
+        d->time = 0.0;
         cam.distance = cam_distance_0;
         cam.elevation = m->vis.global.elevation;
         cam.azimuth = m->vis.global.azimuth;
@@ -165,10 +164,9 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
     {
         mtx.lock();
         rtf_desired *= 2;
-        d->time = 0.0;
         start_time += real_time;
         mj_resetDataKeyframe(m, d, 0);
-        mj_forward(m, d);
+        d->time = 0.0;
         cam.distance = cam_distance_0;
         cam.elevation = m->vis.global.elevation;
         cam.azimuth = m->vis.global.azimuth;
@@ -180,10 +178,9 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
     {
         mtx.lock();
         rtf_desired /= 2;
-        d->time = 0.0;
         start_time += real_time;
         mj_resetDataKeyframe(m, d, 0);
-        mj_forward(m, d);
+        d->time = 0.0;
         cam.distance = cam_distance_0;
         cam.elevation = m->vis.global.elevation;
         cam.azimuth = m->vis.global.azimuth;
@@ -233,21 +230,16 @@ bool MjVisual::is_window_closed()
 void MjVisual::run()
 {
     sim_start = d->time;
+    reload_model();
+    int nmesh = m->nmesh;
+    int ntex = m->ntex;
     while (!stop)
     {
-        if (d->time <= m->opt.timestep)
+        if (nmesh != m->nmesh || ntex != m->ntex)
         {
-            listAllocate(&con.baseMesh, &con.rangeMesh, 2 * m->nmesh);
-
-            // process meshes
-            for (int i = 0; i < m->nmesh; i++)
-            {
-                mjr_uploadMesh(m, &con, i);
-            }
-            for (int i = 0; i < m->ntex; i++)
-            {
-                mjr_uploadTexture(m, &con, i);
-            }
+            reload_model();
+            nmesh = m->nmesh;
+            ntex = m->ntex;
         }
 
         if (is_window_closed())
@@ -258,6 +250,21 @@ void MjVisual::run()
 
         render();
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+}
+
+void MjVisual::reload_model()
+{
+    listAllocate(&con.baseMesh, &con.rangeMesh, 2 * m->nmesh);
+
+    // process meshes
+    for (int i = 0; i < m->nmesh; i++)
+    {
+        mjr_uploadMesh(m, &con, i);
+    }
+    for (int i = 0; i < m->ntex; i++)
+    {
+        mjr_uploadTexture(m, &con, i);
     }
 }
 

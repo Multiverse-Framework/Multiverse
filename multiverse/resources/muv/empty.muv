@@ -1,0 +1,26 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+
+worlds:
+  crane_simulation:
+    rtf_desired: 1
+
+simulations:
+  empty_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: floor.xml
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  empty_simulation:
+    port: 7500
+    send:
+      body: ["position", "quaternion", "relative_velocity"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]

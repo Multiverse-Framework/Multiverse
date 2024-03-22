@@ -83,6 +83,12 @@ public:
     static void scroll(GLFWwindow *window, double xoffset, double yoffset);
 
     /**
+     * @brief Reload the model
+     * 
+     */
+    static void reload_model();
+
+    /**
      * @brief Return true if window is closed
      *
      */

@@ -757,6 +757,7 @@ class MujocoCompiler:
                     "key",
                     {
                         "name": "home",
+                        "time": "0",
                         "qpos": " ".join(map(str, qpos_tuple)),
                         "ctrl": " ".join(map(str, ctrl_tuple)),
                     },

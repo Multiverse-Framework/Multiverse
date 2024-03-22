@@ -44,10 +44,10 @@ public:
 
 public:
     /**
-     * @brief Reset the simulation
+     * @brief Load a new model and keep the old data
      * 
      */
-    static void reset();
+    static void load_new_model_and_keep_old_data();
 
 private:
     MjSimulate() = default; // Singleton
