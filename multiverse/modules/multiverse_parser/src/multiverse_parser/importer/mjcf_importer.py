@@ -337,7 +337,8 @@ class MjcfImporter(Factory):
                                              normals=normals,
                                              face_vertex_counts=face_vertex_counts,
                                              face_vertex_indices=face_vertex_indices,
-                                             texture_coordinates=texture_coordinates)
+                                             texture_coordinates=texture_coordinates,
+                                             mesh_file_name=mesh_name)
                 mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
                 mesh_name = mesh_builder.mesh.GetPrim().GetPath().name
 
