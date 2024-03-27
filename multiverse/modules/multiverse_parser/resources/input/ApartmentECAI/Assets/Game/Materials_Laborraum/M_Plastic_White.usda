@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Plastic_White"
+    upAxis = "Z"
+)
+
+def Material "M_Plastic_White" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Game/Materials_Laborraum/M_Plastic_White.usda@
+        string name = "M_Plastic_White"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.48"
+        }
+        string version = "DE06C151CB618DFAF1FC21CBC3A594BA3F6930B1"
+    }
+)
+{
+    token outputs:surface.connect = </M_Plastic_White/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Plastic_White/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Plastic_White.M_Plastic_White@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.7991027, 0.7991027, 0.7991027)
+        color3f inputs:emissiveColor = (0, 0, 0)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.29803923
+        float inputs:specular = 0.40000004
+        token outputs:surface
+    }
+}
+

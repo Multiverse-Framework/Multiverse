@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "cup"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "cup" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../USD/Assets/Game/Demos/Assets/Istabraq/Cup/cup.usda@
+        string name = "cup"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Demos/Assets/Istabraq/Cup/cup.cup"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.49.03"
+        }
+        string version = "24E01529B3AFFB1306A9278EABB3102F786EA06A"
+    }
+    prepend payload = @cup_payload.usda@
+)
+{
+    rel material:binding = </cup/Materials/M_Cup>
+    custom string unrealMaterial = "/Game/Demos/Assets/Istabraq/Cup/M_Cup.M_Cup"
+
+    def Scope "Materials"
+    {
+        def Material "M_Cup" (
+            prepend references = @M_Cup.usda@
+        )
+        {
+        }
+    }
+}
+

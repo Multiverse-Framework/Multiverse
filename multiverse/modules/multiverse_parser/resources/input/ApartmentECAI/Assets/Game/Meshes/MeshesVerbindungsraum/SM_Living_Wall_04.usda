@@ -1,0 +1,48 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Living_Wall_04"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Living_Wall_04" (
+    assetInfo = {
+        asset identifier = @../../../../../../USD/Assets/Game/Meshes/MeshesVerbindungsraum/SM_Living_Wall_04.usda@
+        string name = "SM_Living_Wall_04"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/MeshesVerbindungsraum/SM_Living_Wall_04.SM_Living_Wall_04"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.49.10"
+        }
+        string version = "B72560C379AF5B629151FDE75D6F7BB34E95E08B"
+    }
+    prepend payload = @SM_Living_Wall_04_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Living_Wall_04/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Living_Wall_04/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

@@ -1,0 +1,48 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Vents_Short"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Vents_Short" (
+    assetInfo = {
+        asset identifier = @../../../../../../USD/Assets/Game/Meshes/Raum/SM_Vents_Short.usda@
+        string name = "SM_Vents_Short"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Raum/SM_Vents_Short.SM_Vents_Short"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.49.14"
+        }
+        string version = "858ADC4E8DCBFC2AA0FFE16B95A6EC85D2D85972"
+    }
+    prepend payload = @SM_Vents_Short_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Vents_Short/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Vents_Short/Materials/WorldGridMaterial>
+        custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

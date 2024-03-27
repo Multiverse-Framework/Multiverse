@@ -1,0 +1,44 @@
+#usda 1.0
+(
+    defaultPrim = "M_Glass_Blue"
+    upAxis = "Z"
+)
+
+def Material "M_Glass_Blue" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Game/Materials_Laborraum/M_Glass_Blue.usda@
+        string name = "M_Glass_Blue"
+        dictionary unreal = {
+            string assetType = "MaterialInstanceConstant"
+            string contentPath = "/Game/Materials_Laborraum/M_Glass_Blue.M_Glass_Blue"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.49"
+        }
+        string version = "F3DB2581D22496F110BCF507155A6AE212E0B2FD"
+    }
+)
+{
+    token outputs:surface.connect = </M_Glass_Blue/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Glass_Blue/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Glass_Blue.M_Glass_Blue@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.064803265, 0.28314874, 0.33245152)
+        float inputs:metallic = 0.7058824
+        float inputs:occlusion = 1
+        float inputs:opacity = 0.7058824
+        float inputs:roughness = 0.23529413
+        float inputs:specular = 0.9294118
+        token outputs:surface
+    }
+}
+

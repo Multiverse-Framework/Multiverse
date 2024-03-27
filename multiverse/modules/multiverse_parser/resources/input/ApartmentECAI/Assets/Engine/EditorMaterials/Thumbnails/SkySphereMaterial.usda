@@ -1,0 +1,64 @@
+#usda 1.0
+(
+    defaultPrim = "SkySphereMaterial"
+    upAxis = "Z"
+)
+
+def Material "SkySphereMaterial" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Engine/EditorMaterials/Thumbnails/SkySphereMaterial.usda@
+        string name = "SkySphereMaterial"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Engine/EditorMaterials/Thumbnails/SkySphereMaterial.SkySphereMaterial"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.48"
+        }
+        string version = "B6486F4067AB053C692922E88B3182C51A00EBDD"
+    }
+)
+{
+    token inputs:stPrimvarName = "st"
+    token outputs:surface.connect = </SkySphereMaterial/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </SkySphereMaterial/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Engine/EditorMaterials/Thumbnails/SkySphereMaterial.SkySphereMaterial@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0, 0, 0)
+        color3f inputs:emissiveColor.connect = </SkySphereMaterial/emissiveTexture.outputs:rgb>
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.49803925
+        float inputs:specular = 0
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </SkySphereMaterial.inputs:stPrimvarName>
+        token outputs:result
+    }
+
+    def Shader "emissiveTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 0, 1)
+        asset inputs:file = @Textures/Engine_EditorMaterials_Thumbnails_SkySphereMaterial_EmissiveColor.exr@
+        token inputs:sourceColorSpace = "raw"
+        float2 inputs:st.connect = </SkySphereMaterial/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        color3f outputs:rgb
+    }
+}
+

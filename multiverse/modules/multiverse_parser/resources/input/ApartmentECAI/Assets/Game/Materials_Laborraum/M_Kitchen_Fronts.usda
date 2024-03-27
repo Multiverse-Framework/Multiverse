@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Kitchen_Fronts"
+    upAxis = "Z"
+)
+
+def Material "M_Kitchen_Fronts" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Game/Materials_Laborraum/M_Kitchen_Fronts.usda@
+        string name = "M_Kitchen_Fronts"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Kitchen_Fronts.M_Kitchen_Fronts"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.48"
+        }
+        string version = "B88CF42A0D38AE9B8A034BDD86BB0361ED944B62"
+    }
+)
+{
+    token outputs:surface.connect = </M_Kitchen_Fronts/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Kitchen_Fronts/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Kitchen_Fronts.M_Kitchen_Fronts@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.01850022, 0.017641954, 0.02518686)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.29803923
+        float inputs:specular = 0.40000004
+        token outputs:surface
+    }
+}
+

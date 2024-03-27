@@ -1,0 +1,73 @@
+#usda 1.0
+(
+    defaultPrim = "Root"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "Root" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/ApartmentECAI2024.usda@
+        string name = "DemoECAI"
+        dictionary unreal = {
+            string assetType = "World"
+            string contentPath = "/Game/Demos/Maps/DemoECAI.DemoECAI"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.57.00"
+        }
+        string version = "D07D19BF5E59990E09D0B9BE14AD8C744B7F649F"
+    }
+)
+{
+    def "SM_Esstischstuhl" (
+        prepend references = @Assets/Game/Meshes/MeshesLiving/SM_Esstischstuhl.usda@
+    )
+    {
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (-0.8660223407153511, -0.5000053053537579, 0, 0), (0.5000053053537579, -0.8660223407153511, 0, 0), (0, 0, 1, 0), (2.1341927646501295, -3.991321930787001, 0.412673902031433, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        over "Section2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Root/SM_Esstischstuhl/Section2/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_Esstischstuhl.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </Root/SM_Esstischstuhl/Section2/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Fabric_Esstischstuhl.M_Fabric_Esstischstuhl@
+                    token outputs:out
+                }
+            }
+        }
+
+        over "Section0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </Root/SM_Esstischstuhl/Section0/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Esstisch.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </Root/SM_Esstischstuhl/Section0/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Esstisch.M_Esstisch@
+                    token outputs:out
+                }
+            }
+        }
+    }
+}
+

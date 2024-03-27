@@ -191,12 +191,12 @@ class UsdImporter(Factory):
                 mesh_name = gprim_prim.GetName()
                 mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_mesh_file_path,
                                                                  mesh_path=mesh_path,
-                                                                 texture_coordinate_name="UVMap")
+                                                                 texture_coordinate_name="st")
                 if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
                     # TODO: Fix empty mesh
                     return
 
-                geom_builder = body_builder.add_geom(geom_name=f"{geom_name}_{mesh_name}",
+                geom_builder = body_builder.add_geom(geom_name=f"{mesh_name}",
                                                      geom_property=geom_property)
                 geom_builder.build()
                 geom_builder.add_mesh(mesh_name=mesh_name,

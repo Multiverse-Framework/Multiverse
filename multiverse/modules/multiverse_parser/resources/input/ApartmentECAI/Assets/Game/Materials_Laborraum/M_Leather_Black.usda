@@ -1,0 +1,64 @@
+#usda 1.0
+(
+    defaultPrim = "M_Leather_Black"
+    upAxis = "Z"
+)
+
+def Material "M_Leather_Black" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Game/Materials_Laborraum/M_Leather_Black.usda@
+        string name = "M_Leather_Black"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Leather_Black.M_Leather_Black"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.49"
+        }
+        string version = "B63259CB0823A2352409723791FEB38BF8210463"
+    }
+)
+{
+    token inputs:stPrimvarName = "st"
+    token outputs:surface.connect = </M_Leather_Black/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Leather_Black/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Leather_Black.M_Leather_Black@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0, 0, 0)
+        float inputs:metallic = 0
+        normal3f inputs:normal.connect = </M_Leather_Black/normalTexture.outputs:rgb>
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.40000004
+        float inputs:specular = 0.098039225
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </M_Leather_Black.inputs:stPrimvarName>
+        token outputs:result
+    }
+
+    def Shader "normalTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 1, 1)
+        asset inputs:file = @Textures/Game_Materials_Laborraum_M_Leather_Black_Normal.png@
+        token inputs:sourceColorSpace = "raw"
+        float2 inputs:st.connect = </M_Leather_Black/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        normal3f outputs:rgb
+    }
+}
+

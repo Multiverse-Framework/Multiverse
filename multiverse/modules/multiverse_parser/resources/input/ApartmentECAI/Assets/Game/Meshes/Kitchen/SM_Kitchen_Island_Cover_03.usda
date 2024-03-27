@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Kitchen_Island_Cover_03"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Kitchen_Island_Cover_03" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../USD/Assets/Game/Meshes/Kitchen/SM_Kitchen_Island_Cover_03.usda@
+        string name = "SM_Kitchen_Island_Cover_03"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kitchen/SM_Kitchen_Island_Cover_03.SM_Kitchen_Island_Cover_03"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.49.11"
+        }
+        string version = "31D83F41EE9FA1B91720FC59D0A725DD34856D0B"
+    }
+    prepend payload = @SM_Kitchen_Island_Cover_03_payload.usda@
+)
+{
+    rel material:binding = </SM_Kitchen_Island_Cover_03/Materials/M_Kitchen_Fronts>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Kitchen_Fronts.M_Kitchen_Fronts"
+
+    def Scope "Materials"
+    {
+        def Material "M_Kitchen_Fronts" (
+            prepend references = @../../Materials_Laborraum/M_Kitchen_Fronts.usda@
+        )
+        {
+        }
+    }
+}
+

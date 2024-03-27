@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Steckdosenbox_05"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Steckdosenbox_05" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../USD/Assets/Game/Meshes/Steckdosen/SM_Steckdosenbox_05.usda@
+        string name = "SM_Steckdosenbox_05"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Steckdosen/SM_Steckdosenbox_05.SM_Steckdosenbox_05"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.49.14"
+        }
+        string version = "4E02641C740DE6124E92E2E30B7814BB2F69BB16"
+    }
+    prepend payload = @SM_Steckdosenbox_05_payload.usda@
+)
+{
+    rel material:binding = </SM_Steckdosenbox_05/Materials/M_Metal_Brushed>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Brushed.M_Metal_Brushed"
+
+    def Scope "Materials"
+    {
+        def Material "M_Metal_Brushed" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Brushed.usda@
+        )
+        {
+        }
+    }
+}
+

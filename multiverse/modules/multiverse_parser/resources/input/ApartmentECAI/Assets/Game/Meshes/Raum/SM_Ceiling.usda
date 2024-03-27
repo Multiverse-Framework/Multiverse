@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Ceiling"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Ceiling" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../USD/Assets/Game/Meshes/Raum/SM_Ceiling.usda@
+        string name = "SM_Ceiling"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Raum/SM_Ceiling.SM_Ceiling"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.49.05"
+        }
+        string version = "4A3043E417843F9DDFCFDC03CFE4072512EE86D6"
+    }
+    prepend payload = @SM_Ceiling_payload.usda@
+)
+{
+    rel material:binding = </SM_Ceiling/Materials/M_Basic_Wall>
+    custom string unrealMaterial = "/Game/Materials_Laborraum/M_Basic_Wall.M_Basic_Wall"
+
+    def Scope "Materials"
+    {
+        def Material "M_Basic_Wall" (
+            prepend references = @../../Materials_Laborraum/M_Basic_Wall.usda@
+        )
+        {
+        }
+    }
+}
+

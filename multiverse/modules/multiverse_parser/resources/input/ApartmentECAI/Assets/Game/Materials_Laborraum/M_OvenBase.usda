@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_OvenBase"
+    upAxis = "Z"
+)
+
+def Material "M_OvenBase" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Game/Materials_Laborraum/M_OvenBase.usda@
+        string name = "M_OvenBase"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_OvenBase.M_OvenBase"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.49"
+        }
+        string version = "2BA518632DF5F75CDB38C83ED80B88ABB69CFE6D"
+    }
+)
+{
+    token outputs:surface.connect = </M_OvenBase/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_OvenBase/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_OvenBase.M_OvenBase@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.1746474, 0.1746474, 0.1746474)
+        float inputs:metallic = 1
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.20000002
+        float inputs:specular = 0.8000001
+        token outputs:surface
+    }
+}
+

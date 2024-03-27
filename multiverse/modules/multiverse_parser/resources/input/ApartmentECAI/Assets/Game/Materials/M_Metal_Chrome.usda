@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Metal_Chrome"
+    upAxis = "Z"
+)
+
+def Material "M_Metal_Chrome" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Game/Materials/M_Metal_Chrome.usda@
+        string name = "M_Metal_Chrome"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials/M_Metal_Chrome.M_Metal_Chrome"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.48"
+        }
+        string version = "E14C7EF44BAE77232FF82A2AB7E780201A5286FC"
+    }
+)
+{
+    token outputs:surface.connect = </M_Metal_Chrome/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Metal_Chrome/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials/M_Metal_Chrome.M_Metal_Chrome@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (1, 1, 1)
+        float inputs:metallic = 1
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.050980397
+        float inputs:specular = 0.49803925
+        token outputs:surface
+    }
+}
+

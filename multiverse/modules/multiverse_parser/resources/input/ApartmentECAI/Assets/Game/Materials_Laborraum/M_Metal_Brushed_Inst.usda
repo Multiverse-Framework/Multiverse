@@ -1,0 +1,63 @@
+#usda 1.0
+(
+    defaultPrim = "M_Metal_Brushed_Inst"
+    upAxis = "Z"
+)
+
+def Material "M_Metal_Brushed_Inst" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Game/Materials_Laborraum/M_Metal_Brushed_Inst.usda@
+        string name = "M_Metal_Brushed_Inst"
+        dictionary unreal = {
+            string assetType = "MaterialInstanceConstant"
+            string contentPath = "/Game/Materials_Laborraum/M_Metal_Brushed_Inst.M_Metal_Brushed_Inst"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.48"
+        }
+        string version = "8C9C4A8FF15F43B62F1203969AC0E9C96B234CF7"
+    }
+)
+{
+    token inputs:stPrimvarName = "st"
+    token outputs:surface.connect = </M_Metal_Brushed_Inst/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Metal_Brushed_Inst/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Metal_Brushed_Inst.M_Metal_Brushed_Inst@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor.connect = </M_Metal_Brushed_Inst/diffuseTexture.outputs:rgb>
+        float inputs:metallic = 0.8980393
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.49803925
+        float inputs:specular = 0.8980393
+        token outputs:surface
+    }
+
+    def Shader "PrimvarReader"
+    {
+        uniform token info:id = "UsdPrimvarReader_float2"
+        string inputs:varname.connect = </M_Metal_Brushed_Inst.inputs:stPrimvarName>
+        token outputs:result
+    }
+
+    def Shader "diffuseTexture"
+    {
+        uniform token info:id = "UsdUVTexture"
+        float4 inputs:fallback = (0, 0, 0, 1)
+        asset inputs:file = @Textures/Game_Materials_Laborraum_M_Metal_Brushed_Inst_BaseColor.png@
+        token inputs:sourceColorSpace = "sRGB"
+        float2 inputs:st.connect = </M_Metal_Brushed_Inst/PrimvarReader.outputs:result>
+        token inputs:wrapS = "repeat"
+        token inputs:wrapT = "repeat"
+        color3f outputs:rgb
+    }
+}
+

@@ -1,0 +1,36 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Ceiling_Panel_01"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Ceiling_Panel_01" (
+    prepend apiSchemas = ["MaterialBindingAPI"]
+    assetInfo = {
+        asset identifier = @../../../../../../USD/Assets/Game/Meshes/Raum/SM_Ceiling_Panel_01.usda@
+        string name = "SM_Ceiling_Panel_01"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Raum/SM_Ceiling_Panel_01.SM_Ceiling_Panel_01"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.49.05"
+        }
+        string version = "A5D4688689E62D84CF6E5B4C3FDCFB5707960AF1"
+    }
+    prepend payload = @SM_Ceiling_Panel_01_payload.usda@
+)
+{
+    rel material:binding = </SM_Ceiling_Panel_01/Materials/WorldGridMaterial>
+    custom string unrealMaterial = "/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"
+
+    def Scope "Materials"
+    {
+        def Material "WorldGridMaterial" (
+            prepend references = @../../../Engine/EngineMaterials/WorldGridMaterial.usda@
+        )
+        {
+        }
+    }
+}
+

@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Rubber_Plastic"
+    upAxis = "Z"
+)
+
+def Material "M_Rubber_Plastic" (
+    assetInfo = {
+        asset identifier = @../../../../../../ApartmentECAI/Assets/Game/Materials_Laborraum/M_Rubber_Plastic.usda@
+        string name = "M_Rubber_Plastic"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Rubber_Plastic.M_Rubber_Plastic"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.56.48"
+        }
+        string version = "639CF570C8AA28B7B1CA72EE3319C1B7C67E2E79"
+    }
+)
+{
+    token outputs:surface.connect = </M_Rubber_Plastic/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Rubber_Plastic/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Rubber_Plastic.M_Rubber_Plastic@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.054480277, 0.054480277, 0.054480277)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.49803925
+        float inputs:specular = 0.49803925
+        token outputs:surface
+    }
+}
+

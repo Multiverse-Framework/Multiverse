@@ -1,0 +1,68 @@
+#usda 1.0
+(
+    defaultPrim = "SM_Milchbehaelter"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def "SM_Milchbehaelter" (
+    assetInfo = {
+        asset identifier = @../../../../../../USD/Assets/Game/Meshes/Kaffeemaschine/SM_Milchbehaelter.usda@
+        string name = "SM_Milchbehaelter"
+        dictionary unreal = {
+            string assetType = "StaticMesh"
+            string contentPath = "/Game/Meshes/Kaffeemaschine/SM_Milchbehaelter.SM_Milchbehaelter"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.03.27-09.49.06"
+        }
+        string version = "08A7712A156739EA609F2085AC1C8F8B5D50F2A9"
+    }
+    prepend payload = @SM_Milchbehaelter_payload.usda@
+)
+{
+    over "Section0" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Milchbehaelter/Materials/M_Glass_Oven>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Glass_Oven.M_Glass_Oven"
+    }
+
+    over "Section1" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Milchbehaelter/Materials/M_Basic_Black>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Basic_Black.M_Basic_Black"
+    }
+
+    over "Section2" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+    )
+    {
+        rel material:binding = </SM_Milchbehaelter/Materials/M_Metal_Chrome>
+        custom string unrealMaterial = "/Game/Materials_Laborraum/M_Metal_Chrome.M_Metal_Chrome"
+    }
+
+    def Scope "Materials"
+    {
+        def Material "M_Glass_Oven" (
+            prepend references = @../../Materials_Laborraum/M_Glass_Oven.usda@
+        )
+        {
+        }
+
+        def Material "M_Basic_Black" (
+            prepend references = @../../Materials_Laborraum/M_Basic_Black.usda@
+        )
+        {
+        }
+
+        def Material "M_Metal_Chrome" (
+            prepend references = @../../Materials_Laborraum/M_Metal_Chrome.usda@
+        )
+        {
+        }
+    }
+}
+
