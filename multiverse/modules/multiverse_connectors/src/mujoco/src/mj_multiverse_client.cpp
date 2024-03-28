@@ -280,8 +280,9 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
-		for (const std::string &object_name : object_names)
+		for (const std::string &object_name : std::set<std::string>(object_names))
 		{
+			printf("Trying to remove object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 			for (tinyxml2::XMLElement *include_element = mujoco_element->FirstChildElement("include");
 				 include_element != nullptr; include_element = include_element->NextSiblingElement("include"))
 			{
@@ -293,8 +294,30 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 
 				if (contains_tag(include_file_path, object_name))
 				{
-					printf("Remove object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 					mujoco_element->DeleteChild(include_element);
+					printf("Removed object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
+					mjModel *m_include = mj_loadXML(include_file_path.string().c_str(), nullptr, nullptr, 0);
+					for (int body_id = 1; body_id < m_include->nbody; body_id++)
+					{
+						const std::string body_name = mj_id2name(m_include, mjtObj::mjOBJ_BODY, body_id);
+						if (send_objects_json.isMember(body_name))
+						{
+							send_objects_json.removeMember(body_name);
+							printf("Removed object [%s] from the request meta data.\n", body_name.c_str());
+						}
+					}
+					for (int joint_id = 0; joint_id < m_include->njnt; joint_id++)
+					{
+						if (mj_id2name(m_include, mjtObj::mjOBJ_JOINT, joint_id))
+						{
+							const std::string joint_name = mj_id2name(m_include, mjtObj::mjOBJ_JOINT, joint_id);
+							if (send_objects_json.isMember(joint_name))
+							{
+								send_objects_json.removeMember(joint_name);
+								printf("Removed object [%s] from the request meta data.\n", joint_name.c_str());
+							}
+						}
+					}
 					break;
 				}
 			}
@@ -315,8 +338,14 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 {
 	if (from_request_meta_data)
 	{
-		receive_objects_json = request_meta_data_json["receive"];
-		send_objects_json = request_meta_data_json["send"];
+		for (const std::string &object_name : request_meta_data_json["receive"].getMemberNames())
+		{
+			receive_objects_json[object_name] = request_meta_data_json["receive"][object_name];
+		}
+		for (const std::string &object_name : request_meta_data_json["send"].getMemberNames())
+		{
+			send_objects_json[object_name] = request_meta_data_json["send"][object_name];
+		}
 	}
 
 	std::set<std::string> objects_to_spawn;
@@ -329,6 +358,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 		}
 
 		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
+			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
 			!(receive_objects_json.isMember(object_name) &&
 			  receive_objects_json[object_name].empty()))
 		{
@@ -349,6 +379,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 		}
 
 		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
+			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
 			!(send_objects_json.isMember(object_name) &&
 			  send_objects_json[object_name].empty()))
 		{
@@ -403,6 +434,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 	std::set<std::string> receive_hinge_joint_attributes = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
 	std::set<std::string> receive_slide_joint_attributes = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
 
+	receive_objects.clear();
 	for (const std::string &object_name : receive_objects_json.getMemberNames())
 	{
 		receive_objects[object_name] = {};
@@ -429,6 +461,8 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 
 	std::set<std::string> send_hinge_joint_attributes = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
 	std::set<std::string> send_slide_joint_attributes = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
+
+	send_objects.clear();
 	for (const std::string &object_name : send_objects_json.getMemberNames())
 	{
 		for (const Json::Value &attribute_json : send_objects_json[object_name])

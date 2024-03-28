@@ -232,6 +232,8 @@ void MultiverseClient::run()
 
                     init_objects(true);
 
+                    flag = EMultiverseClientState::BindRequestMetaData;
+
                     break;
                 }
                 else if (*receive_buffer == 0.0)
