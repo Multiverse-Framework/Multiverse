@@ -1265,7 +1265,7 @@ void MjMultiverseClient::bind_send_data()
 {
 	if (send_buffer_size != send_data_vec.size())
 	{
-		// printf("The size of send_data_vec (%zd) does not match with send_buffer_size (%zd)", send_data_vec.size(), send_buffer_size);
+		printf("The size of send_data_vec (%zd) does not match with send_buffer_size (%zd)", send_data_vec.size(), send_buffer_size);
 		return;
 	}
 
