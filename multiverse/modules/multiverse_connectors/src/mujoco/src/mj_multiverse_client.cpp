@@ -472,7 +472,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 			{
 				if (body_attributes.count(attribute_name) != 0)
 				{
-					for (int body_id = 0; body_id < m->nbody; body_id++)
+					for (int body_id = 1; body_id < m->nbody; body_id++)
 					{
 						const std::string body_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_id);
 						if ((receive_objects.find(body_name) != receive_objects.end()) && (receive_objects[body_name].find(attribute_name) != receive_objects[body_name].end()))
@@ -484,7 +484,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 							 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE) ||
 							strcmp(attribute_name.c_str(), "relative_velocity") != 0)
 						{
-							send_objects[object_name].insert(attribute_name);
+							send_objects[body_name].insert(attribute_name);
 						}
 					}
 				}
