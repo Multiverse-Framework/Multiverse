@@ -64,7 +64,7 @@ class UsdImporter(Factory):
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            default_rgba=default_rgba if default_rgba is not None else numpy.array([1.0, 0.0, 0.0, 0.0]),
+            default_rgba=default_rgba if default_rgba is not None else numpy.array([0.9, 0.9, 0.9, 1.0]),
             inertia_source=inertia_source
         ))
 
@@ -128,9 +128,10 @@ class UsdImporter(Factory):
                                 if child_body_prim.IsA(UsdGeom.Xform) or child_body_prim.GetTypeName() == ""]:
             self._import_body(body_prim=child_body_prim)
 
-    def _import_geom(self, gprim_prim: UsdGeom.Gprim, body_builder: BodyBuilder, zero_origin: bool = False) -> None:
-        geom_is_visible = not gprim_prim.HasAPI(UsdPhysics.CollisionAPI)
-        geom_is_collidable = not geom_is_visible
+    def _import_geom(self, gprim_prim: Usd.Prim, body_builder: BodyBuilder, zero_origin: bool = False) -> None:
+        gprim = UsdGeom.Gprim(gprim_prim)
+        geom_is_visible = gprim.GetVisibilityAttr().Get() != UsdGeom.Tokens.invisible
+        geom_is_collidable = gprim_prim.HasAPI(UsdPhysics.CollisionAPI)
 
         if (geom_is_visible and self.config.with_visual) or (not geom_is_visible and self.config.with_collision):
             if gprim_prim.IsA(UsdGeom.Cube):
@@ -153,7 +154,6 @@ class UsdImporter(Factory):
                                          density=geom_density)
 
             geom_name = gprim_prim.GetName()
-            gprim = UsdGeom.Gprim(gprim_prim)
             transformation = gprim.GetLocalTransformation()
             if zero_origin:
                 geom_pos = numpy.zeros(3)

@@ -59,6 +59,7 @@ class MjcfImporter(Factory):
     def __init__(
             self,
             file_path: str,
+            fixed_base: bool,
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
@@ -77,10 +78,11 @@ class MjcfImporter(Factory):
         model_name = get_model_name(xml_file_path=file_path)
         super().__init__(file_path=file_path, config=Configuration(
             model_name=model_name,
+            fixed_base=fixed_base,
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            default_rgba=default_rgba if default_rgba is not None else numpy.array([1.0, 0.0, 0.0, 0.0]),
+            default_rgba=default_rgba if default_rgba is not None else numpy.array([0.9, 0.9, 0.9, 1.0]),
             inertia_source=inertia_source
         ))
 
@@ -138,7 +140,6 @@ class MjcfImporter(Factory):
                 body_builder = self.world_builder.add_body(body_name=body_name,
                                                            parent_body_name=self._config.model_name,
                                                            body_id=mj_body.id)
-                body_builder.enable_rigid_body()
             else:
                 body_builder = self.world_builder.add_body(body_name=body_name,
                                                            parent_body_name=parent_body_name,
@@ -157,22 +158,23 @@ class MjcfImporter(Factory):
                 relative_to_xform=relative_to_xform,
             )
 
-            if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC:
-                body_mass = mj_body.mass[0]
-                body_center_of_mass = mj_body.ipos
-                body_diagonal_inertia = mj_body.inertia
-                body_principal_axes = numpy.array([mj_body.iquat[1],
-                                                   mj_body.iquat[2],
-                                                   mj_body.iquat[3],
-                                                   mj_body.iquat[0]])
-                body_builder.set_inertial(mass=body_mass,
-                                          center_of_mass=body_center_of_mass,
-                                          diagonal_inertia=body_diagonal_inertia,
-                                          principal_axes=body_principal_axes)
-
             mujoco_body_api = UsdMujoco.MujocoBodyAPI.Apply(body_builder.xform.GetPrim())
             mujoco_body_api.CreatePosAttr(Gf.Vec3f(*body_pos))
             mujoco_body_api.CreateQuatAttr(Gf.Quatf(body_quat[3], *body_quat[:3]))
+
+        if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC and not (
+                self._config.fixed_base and mj_body.id == 1):
+            body_mass = mj_body.mass[0]
+            body_center_of_mass = mj_body.ipos
+            body_diagonal_inertia = mj_body.inertia
+            body_principal_axes = numpy.array([mj_body.iquat[1],
+                                               mj_body.iquat[2],
+                                               mj_body.iquat[3],
+                                               mj_body.iquat[0]])
+            body_builder.set_inertial(mass=body_mass,
+                                      center_of_mass=body_center_of_mass,
+                                      diagonal_inertia=body_diagonal_inertia,
+                                      principal_axes=body_principal_axes)
 
         return body_builder
 
@@ -451,7 +453,7 @@ class MjcfImporter(Factory):
         equality_prim = UsdMujoco.MujocoEquality.Define(self.world_builder.stage, "/mujoco/equality")
         for equality_id in range(self.mj_model.neq):
             equality = self.mj_model.equality(equality_id)
-            if equality.type == mujoco.mjtEq.mjEQ_JOINT:
+            if equality.type == mujoco.mjtEq.mjEQ_JOINT and self.config.with_physics:
                 equality_name = equality.name
                 if equality_name == "":
                     equality_name = "Equality_" + str(equality_id)

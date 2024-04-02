@@ -113,6 +113,8 @@ class BodyBuilder:
                      center_of_mass: numpy.ndarray,
                      diagonal_inertia: numpy.ndarray,
                      principal_axes: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])) -> UsdPhysics.MassAPI:
+        self.enable_rigid_body()
+
         physics_mass_api = UsdPhysics.MassAPI(self.xform)
         physics_mass_api.CreateMassAttr(mass)
         physics_mass_api.CreateCenterOfMassAttr(Gf.Vec3f(*center_of_mass))
