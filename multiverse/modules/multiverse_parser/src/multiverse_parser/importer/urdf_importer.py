@@ -81,6 +81,7 @@ class UrdfImporter(Factory):
     def __init__(
             self,
             file_path: str,
+            fixed_base: bool,
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
@@ -94,10 +95,11 @@ class UrdfImporter(Factory):
         model_name = self.urdf_model.name
         super().__init__(file_path=file_path, config=Configuration(
             model_name=model_name,
+            fixed_base=fixed_base,
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            default_rgba=default_rgba if default_rgba is not None else numpy.array([1.0, 0.0, 0.0, 0.0]),
+            default_rgba=default_rgba if default_rgba is not None else numpy.array([0.9, 0.9, 0.9, 1.0]),
             inertia_source=inertia_source
         ))
 
@@ -112,7 +114,6 @@ class UrdfImporter(Factory):
                   f"add it as a root body.")
             body_builder = self.world_builder.add_body(body_name=self.urdf_model.get_root(),
                                                        parent_body_name=self._config.model_name)
-            body_builder.enable_rigid_body()
 
         self._import_geoms(link=self.urdf_model.link_map[self.urdf_model.get_root()],
                            body_builder=body_builder)
@@ -160,7 +161,6 @@ class UrdfImporter(Factory):
         if self._config.with_physics and joint.type != "fixed":
             body_builder = self.world_builder.add_body(body_name=child_body_name,
                                                        parent_body_name=self._config.model_name)
-            body_builder.enable_rigid_body()
         else:
             body_builder = self.world_builder.add_body(body_name=child_body_name,
                                                        parent_body_name=body_name)
@@ -207,10 +207,10 @@ class UrdfImporter(Factory):
 
     def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> None:
         geom_name = f"{link.name}_geom"
-        # if self._config.with_visual:
-        #     for i, visual in enumerate(link.visuals):
-        #         visual_geom_name = f"{geom_name}_visual_{i}"
-        #         self._import_geom(geom_name=visual_geom_name, geom=visual, body_builder=body_builder)
+        if self._config.with_visual:
+            for i, visual in enumerate(link.visuals):
+                visual_geom_name = f"{geom_name}_visual_{i}"
+                self._import_geom(geom_name=visual_geom_name, geom=visual, body_builder=body_builder)
         if self._config.with_collision:
             for i, collision in enumerate(link.collisions):
                 collision_geom_name = f"{geom_name}_collision_{i}"
