@@ -1,0 +1,5 @@
+Sphinx>=5,<6
+breathe
+myst-parser
+sphinxcontrib-video
+sphinx_rtd_theme
