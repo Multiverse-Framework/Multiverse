@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Dict
 
 import numpy
 import os
 
-from pxr import Usd, UsdGeom, Sdf
+from pxr import Usd, UsdGeom, Sdf, UsdShade
 
 cache_mesh_stages = {}
 
@@ -18,6 +18,7 @@ class MeshProperty:
     face_vertex_counts: numpy.ndarray
     face_vertex_indices: numpy.ndarray
     texture_coordinates: Optional[numpy.ndarray]
+    geom_subsets: Optional[Dict[str, numpy.ndarray]]
     mesh_file_name: Optional[str]
 
     def __init__(self,
@@ -26,12 +27,14 @@ class MeshProperty:
                  face_vertex_counts: numpy.ndarray,
                  face_vertex_indices: numpy.ndarray,
                  texture_coordinates: Optional[numpy.ndarray] = None,
+                 geom_subsets: Optional[Dict[str, numpy.ndarray]] = None,
                  mesh_file_name: Optional[str] = None) -> None:
         self._points = points
         self._normals = normals
         self._face_vertex_counts = face_vertex_counts
         self._face_vertex_indices = face_vertex_indices
         self._texture_coordinates = texture_coordinates
+        self._geom_subsets = geom_subsets
         self._mesh_file_name = mesh_file_name
         self.check_validity()
 
@@ -81,11 +84,31 @@ class MeshProperty:
         else:
             texture_coordinates = None
 
+        geom_subsets = {}
+        for geom_subset_prim in [prim for prim in mesh_prim.GetChildren() if
+                                 prim.IsA(UsdGeom.Subset)]:
+            if not geom_subset_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                continue
+            geom_subset_name = geom_subset_prim.GetName()
+            material_binding_api = UsdShade.MaterialBindingAPI(geom_subset_prim)
+            material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+            if len(material_paths) > 1:
+                raise NotImplementedError(f"GeomSubset {geom_subset_name} has more than one material.")
+            material_name = material_paths[0].name
+            geom_subset = UsdGeom.Subset(geom_subset_prim)
+            if geom_subset.GetElementTypeAttr().Get() != UsdGeom.Tokens.face:
+                raise ValueError(
+                    f"Only face subset is supported, but {geom_subset} is {geom_subset.GetElementTypeAttr().Get()}")
+
+            geom_subset_indices = numpy.array(geom_subset.GetIndicesAttr().Get())
+            geom_subsets[material_name] = geom_subset_indices
+
         return cls(points=numpy.array(mesh.GetPointsAttr().Get()),
                    normals=numpy.array(mesh.GetNormalsAttr().Get()),
                    face_vertex_counts=numpy.array(mesh.GetFaceVertexCountsAttr().Get()),
                    face_vertex_indices=numpy.array(mesh.GetFaceVertexIndicesAttr().Get()),
                    texture_coordinates=texture_coordinates,
+                   geom_subsets=geom_subsets,
                    mesh_file_name=mesh_file_name)
 
     @property
@@ -107,6 +130,10 @@ class MeshProperty:
     @property
     def texture_coordinates(self):
         return self._texture_coordinates
+
+    @property
+    def geom_subsets(self):
+        return self._geom_subsets
 
     @property
     def mesh_file_name(self):
@@ -135,6 +162,12 @@ class MeshBuilder:
                                                               Sdf.ValueTypeNames.TexCoord2fArray,
                                                               UsdGeom.Tokens.faceVarying)
             texture_coordinates.Set(self.texture_coordinates)
+
+        # for material_name, geom_subset_indices in self.geom_subsets.items():
+        #     geom_subset = UsdGeom.Subset.Define(self.stage, mesh.GetPath().AppendChild(material_name))
+        #     geom_subset.CreateElementTypeAttr(UsdGeom.Tokens.face)
+        #     geom_subset.CreateIndicesAttr().Set(geom_subset_indices)
+        #     UsdShade.MaterialBindingAPI.Apply(geom_subset.GetPrim())
 
         self.stage.GetRootLayer().Save()
 
@@ -171,3 +204,7 @@ class MeshBuilder:
     @property
     def texture_coordinates(self):
         return self._mesh_property.texture_coordinates
+
+    @property
+    def geom_subsets(self):
+        return self._mesh_property.geom_subsets

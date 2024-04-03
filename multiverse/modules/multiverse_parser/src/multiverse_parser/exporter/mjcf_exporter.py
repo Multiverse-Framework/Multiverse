@@ -172,7 +172,7 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
             if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
                 material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
                 material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
-                material_name = stage.GetPrimAtPath(material_path).GetName()
+                material_name = material_path.name
                 mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
                     material_name)
                 if not stage.GetPrimAtPath(mujoco_material_path).IsA(UsdMujoco.MujocoMaterial):

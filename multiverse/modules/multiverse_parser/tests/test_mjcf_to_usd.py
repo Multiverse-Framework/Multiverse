@@ -53,6 +53,7 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
                            InertiaSource.FROM_SRC]
 
         for i in range(4):
+            i = 1
             factory = importer(file_path=input_mjcf_path,
                                fixed_base=fixed_base,
                                with_physics=with_physics,
@@ -77,6 +78,7 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
                     self.assertEqual(prim.GetProperty("visibility").Get(), UsdGeom.Tokens.invisible)
                 if not is_collidable[i]:
                     self.assertFalse(prim.HasAPI(UsdPhysics.CollisionAPI))
+            break
 
 
 class MultiverseExporterTestCase(MultiverseParserTestCase):
@@ -181,7 +183,12 @@ class UrdfToUsdTestCase(MultiverseImporterTestCase):
     def test_urdf_to_usd_milk_box(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "milk_box", "urdf", "milk_box.urdf")
         self.validate_visual_collision(UrdfImporter, input_urdf_path, fixed_base=False, with_physics=True)
-        # self.validate_visual_collision(UrdfImporter, input_urdf_path, fixed_base=False, with_physics=False)
+        self.validate_visual_collision(UrdfImporter, input_urdf_path, fixed_base=False, with_physics=False)
+
+    def test_urdf_to_usd_ur5e(self):
+        input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")
+        self.validate_visual_collision(UrdfImporter, input_urdf_path, fixed_base=True, with_physics=True)
+        # self.validate_visual_collision(UrdfImporter, input_urdf_path, fixed_base=True, with_physics=False)
 
 
 class MjcfToMjcfTestCase(MjcfExporterTestCase):

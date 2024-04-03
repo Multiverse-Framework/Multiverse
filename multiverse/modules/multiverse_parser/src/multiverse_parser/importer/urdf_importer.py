@@ -174,9 +174,9 @@ class UrdfImporter(Factory):
         return body_builder
 
     def _import_inertial(self, body: urdf.Link, body_builder: BodyBuilder) -> None:
-        if (self._config.with_physics and
-                (len(body_builder.child_body_builders) > 0 or len(body_builder.geom_builders) > 0)):
-            if self._config.inertia_source == InertiaSource.FROM_SRC:
+        if self._config.with_physics:
+            if self._config.inertia_source == InertiaSource.FROM_SRC and not (
+                    self._config.fixed_base and body.name == self._config.model_name):
                 if body.inertial is not None:
                     body_mass = body.inertial.mass
                     body_center_of_mass = body.inertial.origin.xyz
@@ -196,7 +196,8 @@ class UrdfImporter(Factory):
                                                                  diagonal_inertia=body_diagonal_inertia,
                                                                  principal_axes=body_principal_axes)
                 else:
-                    _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
+                    _, physics_mass_api = body_builder.compute_and_set_inertial(
+                        inertia_source=self._config.inertia_source)
 
             elif self._config.inertia_source in [InertiaSource.FROM_VISUAL_MESH, InertiaSource.FROM_COLLISION_MESH]:
                 _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
@@ -330,6 +331,19 @@ class UrdfImporter(Factory):
 
                         urdf_link_visual_api = UsdUrdf.UrdfLinkVisualAPI(gprim_prim)
                         urdf_link_visual_api.CreateMaterialRel().SetTargets([urdf_material_path])
+
+                    for child_prim in [prim for prim in mesh_prim.GetChildren() if prim.IsA(UsdGeom.Subset)]:
+                        material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
+                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                        if len(material_paths) > 1:
+                            raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
+                        material_path = material_paths[0]
+                        material_property = MaterialProperty.from_material_file_path(
+                            material_file_path=tmp_usd_mesh_file_path,
+                            material_path=material_path)
+                        material_builder = geom_builder.add_material(material_name=material_path.name,
+                                                                     material_property=material_property,
+                                                                     subset=UsdGeom.Subset(child_prim))
 
     def get_mesh_file_path(self, urdf_mesh_file_path: str) -> Optional[str]:
         mesh_file_path = None
