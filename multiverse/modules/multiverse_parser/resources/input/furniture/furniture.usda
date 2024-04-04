@@ -1,13 +1,13 @@
 #usda 1.0
 (
-    defaultPrim = "furnitures"
+    defaultPrim = "furniture"
     metersPerUnit = 1
     upAxis = "Z"
 )
 
-def Xform "furnitures" (
+def Xform "furniture" (
     assetInfo = {
-        asset identifier = @../../../../../../UnrealProjects/USD/furnitures.usda@
+        asset identifier = @../../../../../../UnrealProjects/USD/furniture.usda@
         string name = "DemoCollab3_2"
         dictionary unreal = {
             string assetType = "World"
@@ -31,13 +31,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtisch_Oben/Section0/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtisch_Oben/Section0/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/White.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Oben/Section0/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtisch_Oben/Section0/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -52,13 +52,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtisch_Oben/Section3/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtisch_Oben/Section3/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Basic_Black.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Oben/Section3/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtisch_Oben/Section3/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -73,13 +73,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtisch_Oben/Section1/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtisch_Oben/Section1/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Basic_Black.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Oben/Section1/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtisch_Oben/Section1/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -94,13 +94,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtisch_Oben/Section2/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtisch_Oben/Section2/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Metal_Brushed.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Oben/Section2/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtisch_Oben/Section2/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -124,13 +124,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtischstuhl_Unten3/Section2/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtischstuhl_Unten3/Section2/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Basic_Black_02.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtischstuhl_Unten3/Section2/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtischstuhl_Unten3/Section2/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -154,13 +154,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtischstuhl_Oben3/Section4/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtischstuhl_Oben3/Section4/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_Schlafsofa.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtischstuhl_Oben3/Section4/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtischstuhl_Oben3/Section4/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -175,13 +175,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtischstuhl_Oben3/Section1/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtischstuhl_Oben3/Section1/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_Grey_2.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtischstuhl_Oben3/Section1/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtischstuhl_Oben3/Section1/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -196,13 +196,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtischstuhl_Oben3/Section2/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtischstuhl_Oben3/Section2/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_YellowGreen_Mesh_2.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtischstuhl_Oben3/Section2/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtischstuhl_Oben3/Section2/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -226,13 +226,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtisch_Unten/Section0/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtisch_Unten/Section0/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/White.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Unten/Section0/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtisch_Unten/Section0/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -247,13 +247,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Schreibtisch_Unten/Section1/UnrealMaterial>
+            rel material:binding = </furniture/SM_Schreibtisch_Unten/Section1/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Basic_Black.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Unten/Section1/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Schreibtisch_Unten/Section1/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -286,13 +286,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Esstischstuhl/Section2/UnrealMaterial>
+            rel material:binding = </furniture/SM_Esstischstuhl/Section2/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_Esstischstuhl.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Esstischstuhl/Section2/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Esstischstuhl/Section2/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {
@@ -307,13 +307,13 @@ def Xform "furnitures" (
             prepend apiSchemas = ["MaterialBindingAPI"]
         )
         {
-            rel material:binding = </furnitures/SM_Esstischstuhl/Section0/UnrealMaterial>
+            rel material:binding = </furniture/SM_Esstischstuhl/Section0/UnrealMaterial>
 
             def Material "UnrealMaterial" (
                 prepend references = @Assets/Game/Materials_Laborraum/M_Esstisch.usda@
             )
             {
-                token outputs:unreal:surface.connect = </furnitures/SM_Esstischstuhl/Section0/UnrealMaterial/UnrealShader.outputs:out>
+                token outputs:unreal:surface.connect = </furniture/SM_Esstischstuhl/Section0/UnrealMaterial/UnrealShader.outputs:out>
 
                 def Shader "UnrealShader"
                 {

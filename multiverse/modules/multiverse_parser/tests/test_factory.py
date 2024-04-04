@@ -882,7 +882,7 @@ class FactoryTestCase(unittest.TestCase):
     def test_inertia_of_mesh_3(self, pos=numpy.array([[0.0, 0.0, 0.0]]), quat=numpy.array([0.0, 0.0, 0.0, 1.0])):
         mesh_file_path = os.path.join(self.resource_path,
                                       "input",
-                                      "furnitures",
+                                      "furniture",
                                       "Assets",
                                       "Game",
                                       "Meshes",
@@ -900,7 +900,7 @@ class FactoryTestCase(unittest.TestCase):
     def test_inertia_of_mesh_4(self):
         mesh_file_path_0 = os.path.join(self.resource_path,
                                       "input",
-                                      "furnitures",
+                                      "furniture",
                                       "Assets",
                                       "Game",
                                       "Meshes",
@@ -908,7 +908,7 @@ class FactoryTestCase(unittest.TestCase):
                                       "SM_Schreibtisch_Oben_payload.usda")
         mesh_file_path_1 = os.path.join(self.resource_path,
                                       "input",
-                                      "furnitures",
+                                      "furniture",
                                       "Assets",
                                       "Game",
                                       "Meshes",

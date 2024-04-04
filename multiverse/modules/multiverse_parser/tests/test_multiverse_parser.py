@@ -72,7 +72,6 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
                             and (any([childPrim.IsA(UsdGeom.Xform) for childPrim in prim.GetChildren()])
                                  or fixed_base)):
                         continue
-                    print(prim, with_physics)
                     self.assertEqual(prim.HasAPI(UsdPhysics.MassAPI), with_physics)
                     self.assertEqual(prim.HasAPI(UsdPhysics.RigidBodyAPI), with_physics)
                 if not prim.IsA(UsdGeom.Gprim):
@@ -168,8 +167,8 @@ class UsdToUsdTestCase(MultiverseImporterTestCase):
         self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=False, with_physics=False,
                                        add_xform_for_each_geom=False)
 
-    def test_usd_to_usd_furnitures(self):
-        input_usd_path = os.path.join(self.resource_path, "input", "furnitures", "furnitures.usda")
+    def test_usd_to_usd_furniture(self):
+        input_usd_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
         self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=True,
                                        add_xform_for_each_geom=True)
         self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False,
@@ -231,8 +230,8 @@ class UsdToMjcfTestCase(MjcfExporterTestCase):
         self.validate_visual_collision(UsdImporter, MjcfExporter, input_usd_path,
                                        fixed_base=False, with_physics=False)
 
-    def test_usd_to_mjcf_furnitures(self):
-        input_mjcf_path = os.path.join(self.resource_path, "input", "furnitures", "furnitures.usda")
+    def test_usd_to_mjcf_furniture(self):
+        input_mjcf_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
         self.validate_visual_collision(UsdImporter, MjcfExporter, input_mjcf_path,
                                        fixed_base=True, with_physics=True)
         self.validate_visual_collision(UsdImporter, MjcfExporter, input_mjcf_path,
