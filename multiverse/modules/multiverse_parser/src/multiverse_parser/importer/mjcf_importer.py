@@ -102,12 +102,6 @@ class MjcfImporter(Factory):
             if self._config.with_physics:
                 self.import_joints(mj_body=mj_body, body_builder=body_builder)
 
-        if self._config.with_physics and self._config.inertia_source in [InertiaSource.FROM_VISUAL_MESH,
-                                                                         InertiaSource.FROM_COLLISION_MESH]:
-            body_name = self.mj_model.body(1).name
-            body_builder = self.world_builder.get_body_builder(body_name=body_name)
-            body_builder.compute_and_set_inertial(self._config.inertia_source)
-
         self._import_equality()
 
         self.world_builder.export()
@@ -162,19 +156,22 @@ class MjcfImporter(Factory):
             mujoco_body_api.CreatePosAttr(Gf.Vec3f(*body_pos))
             mujoco_body_api.CreateQuatAttr(Gf.Quatf(body_quat[3], *body_quat[:3]))
 
-        if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC and not (
+        if self._config.with_physics and not (
                 self._config.fixed_base and mj_body.id == 1):
-            body_mass = mj_body.mass[0]
-            body_center_of_mass = mj_body.ipos
-            body_diagonal_inertia = mj_body.inertia
-            body_principal_axes = numpy.array([mj_body.iquat[1],
-                                               mj_body.iquat[2],
-                                               mj_body.iquat[3],
-                                               mj_body.iquat[0]])
-            body_builder.set_inertial(mass=body_mass,
-                                      center_of_mass=body_center_of_mass,
-                                      diagonal_inertia=body_diagonal_inertia,
-                                      principal_axes=body_principal_axes)
+            if self._config.inertia_source == InertiaSource.FROM_SRC:
+                body_mass = mj_body.mass[0]
+                body_center_of_mass = mj_body.ipos
+                body_diagonal_inertia = mj_body.inertia
+                body_principal_axes = numpy.array([mj_body.iquat[1],
+                                                   mj_body.iquat[2],
+                                                   mj_body.iquat[3],
+                                                   mj_body.iquat[0]])
+                body_builder.set_inertial(mass=body_mass,
+                                          center_of_mass=body_center_of_mass,
+                                          diagonal_inertia=body_diagonal_inertia,
+                                          principal_axes=body_principal_axes)
+            else:
+                _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
 
         return body_builder
 

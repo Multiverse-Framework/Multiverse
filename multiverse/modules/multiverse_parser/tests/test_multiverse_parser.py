@@ -53,7 +53,6 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
                            InertiaSource.FROM_SRC]
 
         for i in range(4):
-            i = 1
             factory = importer(file_path=input_mjcf_path,
                                fixed_base=fixed_base,
                                with_physics=with_physics,
@@ -78,7 +77,6 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
                     self.assertEqual(prim.GetProperty("visibility").Get(), UsdGeom.Tokens.invisible)
                 if not is_collidable[i]:
                     self.assertFalse(prim.HasAPI(UsdPhysics.CollisionAPI))
-            break
 
 
 class MultiverseExporterTestCase(MultiverseParserTestCase):
@@ -188,7 +186,7 @@ class UrdfToUsdTestCase(MultiverseImporterTestCase):
     def test_urdf_to_usd_ur5e(self):
         input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")
         self.validate_visual_collision(UrdfImporter, input_urdf_path, fixed_base=True, with_physics=True)
-        # self.validate_visual_collision(UrdfImporter, input_urdf_path, fixed_base=True, with_physics=False)
+        self.validate_visual_collision(UrdfImporter, input_urdf_path, fixed_base=True, with_physics=False)
 
 
 class MjcfToMjcfTestCase(MjcfExporterTestCase):
@@ -204,9 +202,27 @@ class MjcfToMjcfTestCase(MjcfExporterTestCase):
     def test_mjcf_to_mjcf_ur5e(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e.xml")
         self.validate_visual_collision(MjcfImporter, MjcfExporter, input_mjcf_path,
-                                       fixed_base=False, with_physics=True)
+                                       fixed_base=True, with_physics=True)
         self.validate_visual_collision(MjcfImporter, MjcfExporter, input_mjcf_path,
+                                       fixed_base=True, with_physics=False)
+
+
+class UrdfToMjcfTestCase(MjcfExporterTestCase):
+    output_dir = "test_urdf_to_mjcf"
+
+    def test_urdf_to_mjcf_milk_box(self):
+        input_urdf_path = os.path.join(self.resource_path, "input", "milk_box", "urdf", "milk_box.urdf")
+        self.validate_visual_collision(UrdfImporter, MjcfExporter, input_urdf_path,
+                                       fixed_base=False, with_physics=True)
+        self.validate_visual_collision(UrdfImporter, MjcfExporter, input_urdf_path,
                                        fixed_base=False, with_physics=False)
+
+    def test_urdf_to_mjcf_ur5e(self):
+        input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")
+        self.validate_visual_collision(UrdfImporter, MjcfExporter, input_urdf_path,
+                                       fixed_base=True, with_physics=True)
+        self.validate_visual_collision(UrdfImporter, MjcfExporter, input_urdf_path,
+                                       fixed_base=True, with_physics=False)
 
 
 class MjcfToUrdfTestCase(UrdfExporterTestCase):
@@ -222,9 +238,27 @@ class MjcfToUrdfTestCase(UrdfExporterTestCase):
     def test_mjcf_to_urdf_ur5e(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "ur5e", "mjcf", "ur5e.xml")
         self.validate_visual_collision(MjcfImporter, UrdfExporter, input_mjcf_path,
-                                       fixed_base=False, with_physics=True)
+                                       fixed_base=True, with_physics=True)
         self.validate_visual_collision(MjcfImporter, UrdfExporter, input_mjcf_path,
+                                       fixed_base=True, with_physics=False)
+
+
+class UrdfToUrdfTestCase(UrdfExporterTestCase):
+    output_dir = "test_urdf_to_urdf"
+
+    def test_urdf_to_urdf_milk_box(self):
+        input_urdf_path = os.path.join(self.resource_path, "input", "milk_box", "urdf", "milk_box.urdf")
+        self.validate_visual_collision(UrdfImporter, UrdfExporter, input_urdf_path,
+                                       fixed_base=False, with_physics=True)
+        self.validate_visual_collision(UrdfImporter, UrdfExporter, input_urdf_path,
                                        fixed_base=False, with_physics=False)
+
+    def test_urdf_to_urdf_ur5e(self):
+        input_urdf_path = os.path.join(self.resource_path, "input", "ur5e", "urdf", "ur5e.urdf")
+        self.validate_visual_collision(UrdfImporter, UrdfExporter, input_urdf_path,
+                                       fixed_base=True, with_physics=True)
+        self.validate_visual_collision(UrdfImporter, UrdfExporter, input_urdf_path,
+                                       fixed_base=True, with_physics=False)
 
 
 if __name__ == '__main__':

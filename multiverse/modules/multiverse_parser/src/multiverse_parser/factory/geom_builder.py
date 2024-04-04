@@ -209,7 +209,7 @@ class GeomBuilder:
             self.gprim.CreateDisplayColorAttr(self.rgba[:3])
             self.gprim.CreateDisplayOpacityAttr(self.rgba[3])
         if not self.is_visible:
-            self.gprim.CreateDisplayOpacityAttr([0.0])
+            self.gprim.CreateDisplayOpacityAttr([1.0])
             self.gprim.CreateVisibilityAttr("invisible")
 
         if self.is_collidable:

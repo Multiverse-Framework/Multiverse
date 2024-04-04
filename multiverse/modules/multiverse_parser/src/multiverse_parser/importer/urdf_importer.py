@@ -153,7 +153,7 @@ class UrdfImporter(Factory):
                                    parent_body_name=urdf_link_name,
                                    child_body_name=child_urdf_link_name)
 
-                self._import_body_and_joint(urdf_link_name=child_urdf_link_name)
+            self._import_body_and_joint(urdf_link_name=child_urdf_link_name)
 
     def _import_body(self, body_name: str, child_body_name: str, joint: urdf.Joint) -> BodyBuilder:
         joint_pos, joint_quat = get_joint_pos_and_quat(joint)
@@ -174,9 +174,9 @@ class UrdfImporter(Factory):
         return body_builder
 
     def _import_inertial(self, body: urdf.Link, body_builder: BodyBuilder) -> None:
-        if self._config.with_physics:
-            if self._config.inertia_source == InertiaSource.FROM_SRC and not (
-                    self._config.fixed_base and body.name == self._config.model_name):
+        if self._config.with_physics and not (
+                self._config.fixed_base and body.name == self._config.model_name):
+            if self._config.inertia_source == InertiaSource.FROM_SRC:
                 if body.inertial is not None:
                     body_mass = body.inertial.mass
                     body_center_of_mass = body.inertial.origin.xyz
@@ -199,10 +199,8 @@ class UrdfImporter(Factory):
                     _, physics_mass_api = body_builder.compute_and_set_inertial(
                         inertia_source=self._config.inertia_source)
 
-            elif self._config.inertia_source in [InertiaSource.FROM_VISUAL_MESH, InertiaSource.FROM_COLLISION_MESH]:
-                _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
             else:
-                raise ValueError(f"Inertia source {self._config.inertia_source} not implemented.")
+                _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
 
             build_urdf_inertial_api(physics_mass_api=physics_mass_api)
 
@@ -333,7 +331,7 @@ class UrdfImporter(Factory):
                         urdf_link_visual_api.CreateMaterialRel().SetTargets([urdf_material_path])
 
                     for child_prim in [prim for prim in mesh_prim.GetChildren() if prim.IsA(UsdGeom.Subset)]:
-                        material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
+                        material_binding_api = UsdShade.MaterialBindingAPI(child_prim)
                         material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
                         if len(material_paths) > 1:
                             raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
@@ -341,9 +339,9 @@ class UrdfImporter(Factory):
                         material_property = MaterialProperty.from_material_file_path(
                             material_file_path=tmp_usd_mesh_file_path,
                             material_path=material_path)
-                        material_builder = geom_builder.add_material(material_name=material_path.name,
-                                                                     material_property=material_property,
-                                                                     subset=UsdGeom.Subset(child_prim))
+                        geom_builder.add_material(material_name=material_path.name,
+                                                  material_property=material_property,
+                                                  subset=UsdGeom.Subset(child_prim))
 
     def get_mesh_file_path(self, urdf_mesh_file_path: str) -> Optional[str]:
         mesh_file_path = None
