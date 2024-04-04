@@ -23,6 +23,12 @@ def main():
         help="Export scene description as (URDF, MJCF, WORLD or USD)",
     )
     parser.add_argument(
+        "--fixed_base",
+        action='store_true',
+        help="Whether to fix the base link or not",
+    )
+    parser.set_defaults(fixed_base=False)
+    parser.add_argument(
         "--relative_to_ros_package",
         type=str,
         required=False,
@@ -70,6 +76,7 @@ def main():
 
     args = parser.parse_args()
 
+    fixed_base = args.fixed_base
     with_physics = not args.nophysics
     with_visual = not args.novisual
     with_collision = not args.nocollision
@@ -89,6 +96,7 @@ def main():
 
     if in_extension in [".usd", ".usda", ".usdc"]:
         factory = UsdImporter(file_path=args.input,
+                              fixed_base=fixed_base,
                               with_physics=with_physics,
                               with_visual=with_visual,
                               with_collision=with_collision,
@@ -97,6 +105,7 @@ def main():
                               add_xform_for_each_geom=True)
     elif in_extension == ".urdf":
         factory = UrdfImporter(file_path=args.input,
+                               fixed_base=fixed_base,
                                with_physics=with_physics,
                                with_visual=with_visual,
                                with_collision=with_collision,
@@ -104,6 +113,7 @@ def main():
                                default_rgba=args.defaultrgba)
     elif in_extension == ".xml":
         factory = MjcfImporter(file_path=args.input,
+                               fixed_base=fixed_base,
                                with_physics=with_physics,
                                with_visual=with_visual,
                                with_collision=with_collision,

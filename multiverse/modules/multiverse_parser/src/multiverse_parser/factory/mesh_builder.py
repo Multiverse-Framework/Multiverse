@@ -44,13 +44,14 @@ class MeshProperty:
             raise ValueError("Only triangular meshes are supported.")
         assert self.face_vertex_counts.size * 3 == self.face_vertex_indices.size
         if self.texture_coordinates is not None:
-            assert self.texture_coordinates.size == self.face_vertex_indices.size * 2
+            if self.texture_coordinates.size != self.face_vertex_indices.size * 2:
+                print(f"Texture coordinates size {self.texture_coordinates.size} "
+                      f"is not equal to {self.face_vertex_indices.size * 2}.")
 
     @classmethod
     def from_mesh_file_path(cls,
                             mesh_file_path: str,
-                            mesh_path: Sdf.Path,
-                            texture_coordinate_name: str = "st") -> "MeshProperty":
+                            mesh_path: Sdf.Path) -> "MeshProperty":
         if mesh_file_path in cache_mesh_stages:
             mesh_stage = cache_mesh_stages[mesh_file_path]
         else:
@@ -71,18 +72,18 @@ class MeshProperty:
                     raise TypeError(f"Prim {mesh_prim} is not a mesh")
 
         mesh_file_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
-        return cls.from_prim(mesh_prim, texture_coordinate_name, mesh_file_name)
+        return cls.from_prim(mesh_prim, mesh_file_name)
 
     @classmethod
-    def from_prim(cls, mesh_prim: Usd.Prim, texture_coordinate_name: str = "st",
-                  mesh_file_name: Optional[str] = None) -> "MeshProperty":
+    def from_prim(cls, mesh_prim: Usd.Prim, mesh_file_name: Optional[str] = None) -> "MeshProperty":
         mesh = UsdGeom.Mesh(mesh_prim)
         prim_vars_api = UsdGeom.PrimvarsAPI(mesh_prim)
-        if prim_vars_api.HasPrimvar(texture_coordinate_name):
-            texture_coordinates = prim_vars_api.GetPrimvar(texture_coordinate_name).Get()
-            texture_coordinates = numpy.array(texture_coordinates, dtype=numpy.float32)
-        else:
-            texture_coordinates = None
+        texture_coordinates = None
+        for texture_coordinate_name in ["st", "UVMap"]:
+            if prim_vars_api.HasPrimvar(texture_coordinate_name):
+                texture_coordinates = prim_vars_api.GetPrimvar(texture_coordinate_name).Get()
+                texture_coordinates = numpy.array(texture_coordinates, dtype=numpy.float32)
+                break
 
         geom_subsets = {}
         for geom_subset_prim in [prim for prim in mesh_prim.GetChildren() if

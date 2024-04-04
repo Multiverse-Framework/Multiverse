@@ -27,11 +27,8 @@ src/multiverse_parser/utils/mesh_importer.py
 src/multiverse_parser/utils/utils.py
 tests/test_create_scene.py
 tests/test_factory.py
-tests/test_mjcf_to_mjcf.py
-tests/test_mjcf_to_urdf.py
-tests/test_mjcf_to_usd.py
+tests/test_multiverse_parser.py
 tests/test_urdf_to_mjcf.py
-tests/test_urdf_to_urdf.py
-tests/test_urdf_to_usd.py
 tests/test_usd_to_mjcf.py
 tests/test_usd_to_urdf.py
+tests/test_usd_to_usd.py

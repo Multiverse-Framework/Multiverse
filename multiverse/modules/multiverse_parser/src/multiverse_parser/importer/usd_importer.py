@@ -42,6 +42,7 @@ class UsdImporter(Factory):
     def __init__(
             self,
             file_path: str,
+            fixed_base: bool,
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
@@ -61,6 +62,7 @@ class UsdImporter(Factory):
 
         super().__init__(file_path=file_path, config=Configuration(
             model_name=model_name,
+            fixed_base=fixed_base,
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
@@ -119,10 +121,11 @@ class UsdImporter(Factory):
                               body_builder=body_builder,
                               zero_origin=self.add_xform_for_each_geom)
 
-            if any([child_body_prim.IsA(UsdGeom.Gprim) for child_body_prim in gprim_prim.GetChildren()]):
-                self._import_body(body_prim=gprim_prim)
+            if self.add_xform_for_each_geom:
+                self._import_inertial(body_prim=gprim_prim, body_builder=body_builder)
 
-        body_builder.compute_and_set_inertial(inertia_source=self.config.inertia_source)
+        if not self.add_xform_for_each_geom:
+            self._import_inertial(body_prim=body_prim, body_builder=body_builder)
 
         for child_body_prim in [child_body_prim for child_body_prim in body_prim.GetChildren()
                                 if child_body_prim.IsA(UsdGeom.Xform) or child_body_prim.GetTypeName() == ""]:
@@ -190,8 +193,7 @@ class UsdImporter(Factory):
 
                 mesh_name = gprim_prim.GetName()
                 mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_mesh_file_path,
-                                                                 mesh_path=mesh_path,
-                                                                 texture_coordinate_name="st")
+                                                                 mesh_path=mesh_path)
                 if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
                     # TODO: Fix empty mesh
                     return
@@ -253,6 +255,30 @@ class UsdImporter(Factory):
                         geom_builder.add_material(material_name=material_path.name,
                                                   material_property=material_property,
                                                   subset=UsdGeom.Subset(subset_prim))
+
+    def _import_inertial(self, body_prim: Usd.Prim, body_builder: BodyBuilder) -> None:
+        if self._config.with_physics and not (
+                self._config.fixed_base
+                and body_prim == self.stage.GetDefaultPrim()
+                and not any([childPrim.IsA(UsdGeom.Xform) for childPrim in body_prim.GetChildren()])):
+            if self._config.inertia_source == InertiaSource.FROM_SRC:
+                body_prim_api = UsdPhysics.MassAPI(body_prim)
+                body_mass = body_prim_api.GetMassAttr().Get()
+                body_center_of_mass = body_prim_api.GetCenterOfMassAttr().Get()
+                body_center_of_mass = numpy.array([*body_center_of_mass]) \
+                    if body_center_of_mass is not None else numpy.zeros(3)
+                body_diagonal_inertia = body_prim_api.GetDiagonalInertiaAttr().Get()
+                body_diagonal_inertia = numpy.array([*body_diagonal_inertia]) \
+                    if body_diagonal_inertia is not None else numpy.zeros(3)
+                body_principal_axes = body_prim_api.GetPrincipalAxesAttr().Get()
+                body_principal_axes = numpy.array([*body_principal_axes.GetImaginary(), body_principal_axes.GetReal()]) \
+                    if body_principal_axes is not None else numpy.array([0.0, 0.0, 0.0, 1.0])
+                body_builder.set_inertial(mass=body_mass,
+                                              center_of_mass=body_center_of_mass,
+                                              diagonal_inertia=body_diagonal_inertia,
+                                              principal_axes=body_principal_axes)
+            else:
+                _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
 
     @property
     def stage(self) -> Usd.Stage:

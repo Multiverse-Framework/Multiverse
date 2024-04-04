@@ -148,22 +148,13 @@ class BodyBuilder:
         if body_inertial.mass > 0.0:
             body_inertial.center_of_mass /= body_inertial.mass
 
-        xform_transform = self.xform.GetLocalTransformation()
-        xform_pos = xform_transform.ExtractTranslation()
-        xform_pos = numpy.array(xform_pos)
-        xform_quat = xform_transform.ExtractRotationQuat()
-        xform_quat = numpy.array([*xform_quat.GetImaginary(), xform_quat.GetReal()])
-
-        body_center_of_mass = shift_center_of_mass(center_of_mass=body_inertial.center_of_mass,
-                                                   pos=xform_pos,
-                                                   quat=xform_quat)
         body_inertia_tensor = shift_inertia_tensor(mass=body_inertial.mass,
                                                    inertia_tensor=body_inertial.inertia_tensor)
 
         diagonal_inertia, principal_axes = diagonalize_inertia(inertia_tensor=body_inertia_tensor)
 
         return body_inertial, self.set_inertial(mass=body_inertial.mass,
-                                                center_of_mass=body_center_of_mass[0],
+                                                center_of_mass=body_inertial.center_of_mass[0],
                                                 diagonal_inertia=diagonal_inertia,
                                                 principal_axes=principal_axes)
 

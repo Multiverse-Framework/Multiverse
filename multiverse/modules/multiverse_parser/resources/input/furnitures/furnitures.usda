@@ -1,0 +1,328 @@
+#usda 1.0
+(
+    defaultPrim = "furnitures"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "furnitures" (
+    assetInfo = {
+        asset identifier = @../../../../../../UnrealProjects/USD/furnitures.usda@
+        string name = "DemoCollab3_2"
+        dictionary unreal = {
+            string assetType = "World"
+            string contentPath = "/Game/Demos/Maps/MixDemos/DemoCollab3_2.DemoCollab3_2"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.04.04-13.43.00"
+        }
+        string version = "6069709CA662545177A47A4C65F677859FD96C7C"
+    }
+)
+{
+    def "SM_Schreibtisch_Oben" (
+        prepend references = @Assets/Game/Meshes/MeshesLiving/SM_Schreibtisch_Oben.usda@
+    )
+    {
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (-0.6427839329297538, -0.7660475282692036, 0, 0), (0.7660475282692036, -0.6427839329297538, 0, 0), (0, 0, 1, 0), (2.8443413664240147, -6.732852019509027, 0.4423281801131945, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        over "Section0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtisch_Oben/Section0/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/White.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Oben/Section0/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/White.White@
+                    token outputs:out
+                }
+            }
+        }
+
+        over "Section3" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtisch_Oben/Section3/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Basic_Black.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Oben/Section3/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Basic_Black.M_Basic_Black@
+                    token outputs:out
+                }
+            }
+        }
+
+        over "Section1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtisch_Oben/Section1/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Basic_Black.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Oben/Section1/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Basic_Black.M_Basic_Black@
+                    token outputs:out
+                }
+            }
+        }
+
+        over "Section2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtisch_Oben/Section2/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Metal_Brushed.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Oben/Section2/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Metal_Brushed.M_Metal_Brushed@
+                    token outputs:out
+                }
+            }
+        }
+    }
+
+    def "SM_Schreibtischstuhl_Unten3" (
+        prepend references = @Assets/Game/Meshes/MeshesLiving/SM_Schreibtischstuhl_Unten.usda@
+    )
+    {
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (0.17364752451765608, 0.9848078681798244, 0, 0), (-0.9848078681798244, 0.17364752451765608, 0, 0), (0, 0, 1, 0), (2.3611973072231263, -6.5161094743536, 0.04246505905083194, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        over "Section2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtischstuhl_Unten3/Section2/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Basic_Black_02.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtischstuhl_Unten3/Section2/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Basic_Black_02.M_Basic_Black_02@
+                    token outputs:out
+                }
+            }
+        }
+    }
+
+    def "SM_Schreibtischstuhl_Oben3" (
+        prepend references = @Assets/Game/Meshes/MeshesLiving/SM_Schreibtischstuhl_Oben.usda@
+    )
+    {
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (0.17364752451765608, 0.9848078681798244, 0, 0), (-0.9848078681798244, 0.17364752451765608, 0, 0), (0, 0, 1, 0), (2.3468041475448387, -6.514136814397692, 0.5532696376334597, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        over "Section4" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtischstuhl_Oben3/Section4/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_Schlafsofa.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtischstuhl_Oben3/Section4/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Fabric_Schlafsofa.M_Fabric_Schlafsofa@
+                    token outputs:out
+                }
+            }
+        }
+
+        over "Section1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtischstuhl_Oben3/Section1/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_Grey_2.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtischstuhl_Oben3/Section1/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Fabric_Grey_2.M_Fabric_Grey_2@
+                    token outputs:out
+                }
+            }
+        }
+
+        over "Section2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtischstuhl_Oben3/Section2/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_YellowGreen_Mesh_2.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtischstuhl_Oben3/Section2/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Fabric_YellowGreen_Mesh_2.M_Fabric_YellowGreen_Mesh_2@
+                    token outputs:out
+                }
+            }
+        }
+    }
+
+    def "SM_Schreibtisch_Unten" (
+        prepend references = @Assets/Game/Meshes/MeshesLiving/SM_Schreibtisch_Unten.usda@
+    )
+    {
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (-0.6427839329297538, -0.7660475282692036, 0, 0), (0.7660475282692036, -0.6427839329297538, 0, 0), (0, 0, 1, 0), (2.8505327762856263, -6.73804610939293, 0.12419944722392597, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        over "Section0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtisch_Unten/Section0/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/White.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Unten/Section0/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/White.White@
+                    token outputs:out
+                }
+            }
+        }
+
+        over "Section1" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Schreibtisch_Unten/Section1/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Basic_Black.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Schreibtisch_Unten/Section1/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Basic_Black.M_Basic_Black@
+                    token outputs:out
+                }
+            }
+        }
+    }
+
+    def "SM_Esstisch" (
+        prepend references = @Assets/Game/Meshes/MeshesLiving/SM_Esstisch.usda@
+    )
+    {
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (-0.000002129301688080787, 0.9999999999977333, 0, 0), (-0.9999999999977333, -0.000002129301688080787, 0, 0), (0, 0, 1, 0), (2.0898295132886693, -3.4183721135934273, 0.30447234319451266, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+
+    def "SM_Esstischstuhl" (
+        prepend references = @Assets/Game/Meshes/MeshesLiving/SM_Esstischstuhl.usda@
+    )
+    {
+        token visibility = "inherited"
+        matrix4d xformOp:transform = ( (-0.8660223407153511, -0.5000053053537579, 0, 0), (0.5000053053537579, -0.8660223407153511, 0, 0), (0, 0, 1, 0), (2.1341927622970736, -3.991321930787001, 0.3411251723752581, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        over "Section2" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Esstischstuhl/Section2/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Fabric_Esstischstuhl.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Esstischstuhl/Section2/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Fabric_Esstischstuhl.M_Fabric_Esstischstuhl@
+                    token outputs:out
+                }
+            }
+        }
+
+        over "Section0" (
+            prepend apiSchemas = ["MaterialBindingAPI"]
+        )
+        {
+            rel material:binding = </furnitures/SM_Esstischstuhl/Section0/UnrealMaterial>
+
+            def Material "UnrealMaterial" (
+                prepend references = @Assets/Game/Materials_Laborraum/M_Esstisch.usda@
+            )
+            {
+                token outputs:unreal:surface.connect = </furnitures/SM_Esstischstuhl/Section0/UnrealMaterial/UnrealShader.outputs:out>
+
+                def Shader "UnrealShader"
+                {
+                    uniform token info:implementationSource = "sourceAsset"
+                    uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Esstisch.M_Esstisch@
+                    token outputs:out
+                }
+            }
+        }
+    }
+}
+
