@@ -279,8 +279,7 @@ class UrdfImporter(Factory):
                     mesh_name = mesh_prim.GetName()
                     mesh_path = mesh_prim.GetPath()
                     mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_usd_mesh_file_path,
-                                                                     mesh_path=mesh_path,
-                                                                     texture_coordinate_name="UVMap")
+                                                                     mesh_path=mesh_path)
                     if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
                         # TODO: Fix empty mesh
                         continue
