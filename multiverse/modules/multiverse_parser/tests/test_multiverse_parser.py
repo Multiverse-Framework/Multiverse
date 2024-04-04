@@ -72,6 +72,7 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
                             and (any([childPrim.IsA(UsdGeom.Xform) for childPrim in prim.GetChildren()])
                                  or fixed_base)):
                         continue
+                    print(prim, with_physics)
                     self.assertEqual(prim.HasAPI(UsdPhysics.MassAPI), with_physics)
                     self.assertEqual(prim.HasAPI(UsdPhysics.RigidBodyAPI), with_physics)
                 if not prim.IsA(UsdGeom.Gprim):
@@ -173,6 +174,13 @@ class UsdToUsdTestCase(MultiverseImporterTestCase):
                                        add_xform_for_each_geom=True)
         self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False,
                                        add_xform_for_each_geom=True)
+
+    # def test_usd_to_usd_ur5e(self):
+    #     input_usd_path = os.path.join(self.resource_path, "input", "ur5e_usd", "test_mjcf_to_usd", "ur5e.usda")
+    #     self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=True,
+    #                                    add_xform_for_each_geom=False)
+    #     self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False,
+    #                                    add_xform_for_each_geom=True)
 
 
 class MjcfToUsdTestCase(MultiverseImporterTestCase):
