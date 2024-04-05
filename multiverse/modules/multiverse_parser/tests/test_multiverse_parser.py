@@ -288,6 +288,24 @@ class UrdfToMjcfTestCase(MjcfExporterTestCase):
                                        fixed_base=True, with_physics=False)
 
 
+class UsdToUrdfTestCase(UrdfExporterTestCase):
+    output_dir = "test_usd_to_urdf"
+
+    def test_usd_to_urdf_milk_box(self):
+        input_usd_path = os.path.join(self.resource_path, "input", "milk_box", "usd", "milk_box.usda")
+        self.validate_visual_collision(UsdImporter, UrdfExporter, input_usd_path,
+                                       fixed_base=False, with_physics=True)
+        self.validate_visual_collision(UsdImporter, UrdfExporter, input_usd_path,
+                                       fixed_base=False, with_physics=False)
+
+    def test_usd_to_urdf_furniture(self):
+        input_mjcf_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
+        self.validate_visual_collision(UsdImporter, UrdfExporter, input_mjcf_path,
+                                       fixed_base=True, with_physics=True)
+        self.validate_visual_collision(UsdImporter, UrdfExporter, input_mjcf_path,
+                                       fixed_base=True, with_physics=False)
+
+
 class MjcfToUrdfTestCase(UrdfExporterTestCase):
     output_dir = "test_mjcf_to_urdf"
 
