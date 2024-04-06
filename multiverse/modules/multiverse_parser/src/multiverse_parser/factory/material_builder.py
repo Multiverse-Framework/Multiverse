@@ -45,8 +45,8 @@ class MaterialProperty:
     opacity: Optional[float]
     emissive_color: Optional[numpy.ndarray]
     specular_color: Optional[numpy.ndarray]
-    wrap_s = "repeat"
-    wrap_t = "repeat"
+    wrap_s: str
+    wrap_t: str
 
     def __init__(self,
                  diffuse_color: Any = None,
