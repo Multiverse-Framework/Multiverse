@@ -208,7 +208,8 @@ def add_prefix_and_suffix(root: ET.Element, prefix, suffix):
         ]
         element_prefix = prefix.get(element_type, "")
         element_suffix = suffix.get(element_type, "")
-        update_element_name(elements, element_type, element_prefix, element_suffix)
+        if element_prefix != "" or element_suffix != "":
+            update_element_name(elements, element_type, element_prefix, element_suffix)
 
     body_prefix = prefix.get("body", "")
     body_suffix = suffix.get("body", "")
@@ -497,10 +498,12 @@ class MujocoCompiler:
     robots: List[Robot]
     objects: List[Object]
     default_dict: Dict[str, List[ET.Element]]
+    should_add_key_frame: bool
 
     def __init__(self, args):
         self.world_xml_path = args.world
         print(f"World: {self.world_xml_path}")
+        self.should_add_key_frame = args.should_add_key_frame
         self.scene_name = args.name
         self.save_dir_path = os.path.join(args.save_dir, self.scene_name)
         self.save_xml_dir = args.save_dir
@@ -548,9 +551,10 @@ class MujocoCompiler:
 
         exclude_collision(root, self.save_xml_path, not_exclude_collision_bodies)
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
-
-        add_key_frame_element(root, self.keyframe_dict)
-        tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
+        
+        if self.should_add_key_frame:
+            add_key_frame_element(root, self.keyframe_dict)
+            tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         self.add_visual_and_cursor_element(root)
         indent(tree.getroot(), space="\t", level=0)
@@ -584,7 +588,8 @@ class MujocoCompiler:
 
         self.append_asset_and_remove_from_root(root, meshdir, texturedir)
 
-        self.append_key_frame_and_remove_from_root(root, entity.path, entity.joint_state)
+        if self.should_add_key_frame:
+            self.append_key_frame_and_remove_from_root(root, entity.path, entity.joint_state)
 
         self.apply_properties(root, entity.path, entity.apply)
 
@@ -661,7 +666,7 @@ class MujocoCompiler:
                                               entity_path: str,
                                               joint_state: Dict[str, float] = None) -> None:
         m = mujoco.MjModel.from_xml_path(entity_path)
-
+        
         qpos_list, ctrl_list = get_qpos_and_ctrl(m, joint_state)
 
         self.append_local_key_frame(root, qpos_list, ctrl_list)
@@ -691,7 +696,8 @@ class MujocoCompiler:
                     for element in list(root.iter(element_type)):
                         element.set(attribute_name, f"{attribute_props}")
 
-        self.apply_key_frame(entity_xml_path, apply)
+        if self.should_add_key_frame:
+            self.apply_key_frame(entity_xml_path, apply)
 
     def apply_key_frame(self, entity_xml_path: str, apply: Dict[str, Dict[str, Any]]) -> None:
         m = mujoco.MjModel.from_xml_path(entity_xml_path)
@@ -843,6 +849,7 @@ def main():
     parser.add_argument("--robots", help="JSON string with robots' data", required=False)
     parser.add_argument("--objects", help="JSON string with objects' data", required=False)
     parser.add_argument("--references", help="JSON string with references' data", required=False)
+    parser.add_argument("--should_add_key_frame", help="Add key frame to the model", action="store_true")
     if os.path.basename(__file__) == "mujoco_compile":
         save_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "..", "saved"

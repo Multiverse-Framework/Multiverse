@@ -1,0 +1,343 @@
+<?xml version="1.0"?>
+<mujoco model="cooking_pot_body">
+    <compiler meshdir="../cooking_pot/meshes" texturedir="cooking_pot/textures" angle="radian"
+        autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" />
+    <default>
+        <default class="cooking_body_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="cooking_body_collision">
+            <geom rgba="0.9 0.9 0.9 1.0" />
+        </default>
+    </default>
+    <asset>
+        <mesh name="CookingPotBody" file="obj/CookingPotBody.obj" />
+        <mesh name="CookingPotBody_001" file="stl/CookingPotBody_001.stl" />
+        <mesh name="CookingPotBody_002" file="stl/CookingPotBody_002.stl" />
+        <mesh name="CookingPotBody_003" file="stl/CookingPotBody_003.stl" />
+        <mesh name="CookingPotBody_004" file="stl/CookingPotBody_004.stl" />
+        <mesh name="CookingPotBody_005" file="stl/CookingPotBody_005.stl" />
+        <mesh name="CookingPotBody_006" file="stl/CookingPotBody_006.stl" />
+        <mesh name="CookingPotBody_007" file="stl/CookingPotBody_007.stl" />
+        <mesh name="CookingPotBody_008" file="stl/CookingPotBody_008.stl" />
+        <mesh name="CookingPotBody_009" file="stl/CookingPotBody_009.stl" />
+        <mesh name="CookingPotBody_010" file="stl/CookingPotBody_010.stl" />
+        <mesh name="CookingPotBody_011" file="stl/CookingPotBody_011.stl" />
+        <mesh name="CookingPotBody_012" file="stl/CookingPotBody_012.stl" />
+        <mesh name="CookingPotBody_013" file="stl/CookingPotBody_013.stl" />
+        <mesh name="CookingPotBody_014" file="stl/CookingPotBody_014.stl" />
+        <mesh name="CookingPotBody_015" file="stl/CookingPotBody_015.stl" />
+        <mesh name="CookingPotBody_016" file="stl/CookingPotBody_016.stl" />
+        <mesh name="CookingPotBody_017" file="stl/CookingPotBody_017.stl" />
+        <mesh name="CookingPotBody_018" file="stl/CookingPotBody_018.stl" />
+        <mesh name="CookingPotBody_019" file="stl/CookingPotBody_019.stl" />
+        <mesh name="CookingPotBody_020" file="stl/CookingPotBody_020.stl" />
+        <mesh name="CookingPotBody_021" file="stl/CookingPotBody_021.stl" />
+        <mesh name="CookingPotBody_022" file="stl/CookingPotBody_022.stl" />
+        <mesh name="CookingPotBody_023" file="stl/CookingPotBody_023.stl" />
+        <mesh name="CookingPotBody_024" file="stl/CookingPotBody_024.stl" />
+        <mesh name="CookingPotBody_025" file="stl/CookingPotBody_025.stl" />
+        <mesh name="CookingPotBody_026" file="stl/CookingPotBody_026.stl" />
+        <mesh name="CookingPotBody_027" file="stl/CookingPotBody_027.stl" />
+        <mesh name="CookingPotBody_028" file="stl/CookingPotBody_028.stl" />
+        <mesh name="CookingPotBody_029" file="stl/CookingPotBody_029.stl" />
+        <mesh name="CookingPotBody_030" file="stl/CookingPotBody_030.stl" />
+        <mesh name="CookingPotBody_031" file="stl/CookingPotBody_031.stl" />
+        <mesh name="CookingPotBody_032" file="stl/CookingPotBody_032.stl" />
+        <mesh name="CookingPotBody_033" file="stl/CookingPotBody_033.stl" />
+        <mesh name="CookingPotBody_034" file="stl/CookingPotBody_034.stl" />
+        <mesh name="CookingPotBody_035" file="stl/CookingPotBody_035.stl" />
+        <mesh name="CookingPotBody_036" file="stl/CookingPotBody_036.stl" />
+        <mesh name="CookingPotBody_037" file="stl/CookingPotBody_037.stl" />
+        <mesh name="CookingPotBody_038" file="stl/CookingPotBody_038.stl" />
+        <mesh name="CookingPotBody_039" file="stl/CookingPotBody_039.stl" />
+        <mesh name="CookingPotBody_040" file="stl/CookingPotBody_040.stl" />
+        <mesh name="CookingPotBody_041" file="stl/CookingPotBody_041.stl" />
+        <mesh name="CookingPotBody_042" file="stl/CookingPotBody_042.stl" />
+        <mesh name="CookingPotBody_043" file="stl/CookingPotBody_043.stl" />
+        <mesh name="CookingPotBody_044" file="stl/CookingPotBody_044.stl" />
+        <mesh name="CookingPotBody_045" file="stl/CookingPotBody_045.stl" />
+        <mesh name="CookingPotBody_046" file="stl/CookingPotBody_046.stl" />
+        <mesh name="CookingPotBody_047" file="stl/CookingPotBody_047.stl" />
+        <mesh name="CookingPotBody_048" file="stl/CookingPotBody_048.stl" />
+        <mesh name="CookingPotBody_049" file="stl/CookingPotBody_049.stl" />
+        <mesh name="CookingPotBody_050" file="stl/CookingPotBody_050.stl" />
+        <mesh name="CookingPotBody_051" file="stl/CookingPotBody_051.stl" />
+        <mesh name="CookingPotBody_052" file="stl/CookingPotBody_052.stl" />
+        <mesh name="CookingPotBody_053" file="stl/CookingPotBody_053.stl" />
+        <mesh name="CookingPotBody_054" file="stl/CookingPotBody_054.stl" />
+        <mesh name="CookingPotBody_055" file="stl/CookingPotBody_055.stl" />
+        <mesh name="CookingPotBody_056" file="stl/CookingPotBody_056.stl" />
+        <mesh name="CookingPotBody_057" file="stl/CookingPotBody_057.stl" />
+        <mesh name="CookingPotBody_058" file="stl/CookingPotBody_058.stl" />
+        <mesh name="CookingPotBody_059" file="stl/CookingPotBody_059.stl" />
+        <mesh name="CookingPotBody_060" file="stl/CookingPotBody_060.stl" />
+        <mesh name="CookingPotBody_061" file="stl/CookingPotBody_061.stl" />
+        <mesh name="CookingPotBody_062" file="stl/CookingPotBody_062.stl" />
+        <mesh name="CookingPotBody_063" file="stl/CookingPotBody_063.stl" />
+        <mesh name="CookingPotBody_064" file="stl/CookingPotBody_064.stl" />
+        <mesh name="CookingPotBody_065" file="stl/CookingPotBody_065.stl" />
+        <mesh name="CookingPotBody_066" file="stl/CookingPotBody_066.stl" />
+        <mesh name="CookingPotBody_067" file="stl/CookingPotBody_067.stl" />
+        <mesh name="CookingPotBody_068" file="stl/CookingPotBody_068.stl" />
+        <mesh name="CookingPotBody_069" file="stl/CookingPotBody_069.stl" />
+        <mesh name="CookingPotBody_070" file="stl/CookingPotBody_070.stl" />
+        <mesh name="CookingPotBody_071" file="stl/CookingPotBody_071.stl" />
+        <mesh name="CookingPotBody_072" file="stl/CookingPotBody_072.stl" />
+        <mesh name="CookingPotBody_073" file="stl/CookingPotBody_073.stl" />
+        <mesh name="CookingPotBody_074" file="stl/CookingPotBody_074.stl" />
+        <mesh name="CookingPotBody_075" file="stl/CookingPotBody_075.stl" />
+        <mesh name="CookingPotBody_076" file="stl/CookingPotBody_076.stl" />
+        <mesh name="CookingPotBody_077" file="stl/CookingPotBody_077.stl" />
+        <mesh name="CookingPotBody_078" file="stl/CookingPotBody_078.stl" />
+        <mesh name="CookingPotBody_079" file="stl/CookingPotBody_079.stl" />
+        <mesh name="CookingPotBody_080" file="stl/CookingPotBody_080.stl" />
+        <mesh name="CookingPotBody_081" file="stl/CookingPotBody_081.stl" />
+        <mesh name="CookingPotBody_082" file="stl/CookingPotBody_082.stl" />
+        <mesh name="CookingPotBody_083" file="stl/CookingPotBody_083.stl" />
+        <mesh name="CookingPotBody_084" file="stl/CookingPotBody_084.stl" />
+        <mesh name="CookingPotBody_085" file="stl/CookingPotBody_085.stl" />
+        <mesh name="CookingPotBody_086" file="stl/CookingPotBody_086.stl" />
+        <mesh name="CookingPotBody_087" file="stl/CookingPotBody_087.stl" />
+        <mesh name="CookingPotBody_088" file="stl/CookingPotBody_088.stl" />
+        <mesh name="CookingPotBody_089" file="stl/CookingPotBody_089.stl" />
+        <mesh name="CookingPotBody_090" file="stl/CookingPotBody_090.stl" />
+        <mesh name="CookingPotBody_091" file="stl/CookingPotBody_091.stl" />
+        <mesh name="CookingPotBody_092" file="stl/CookingPotBody_092.stl" />
+        <mesh name="CookingPotBody_093" file="stl/CookingPotBody_093.stl" />
+        <mesh name="CookingPotBody_094" file="stl/CookingPotBody_094.stl" />
+        <mesh name="CookingPotBody_095" file="stl/CookingPotBody_095.stl" />
+        <mesh name="CookingPotBody_096" file="stl/CookingPotBody_096.stl" />
+        <mesh name="CookingPotBody_097" file="stl/CookingPotBody_097.stl" />
+        <mesh name="CookingPotBody_098" file="stl/CookingPotBody_098.stl" />
+        <mesh name="CookingPotBody_099" file="stl/CookingPotBody_099.stl" />
+        <mesh name="CookingPotBody_100" file="stl/CookingPotBody_100.stl" />
+        <mesh name="CookingPotBody_101" file="stl/CookingPotBody_101.stl" />
+        <mesh name="CookingPotBody_102" file="stl/CookingPotBody_102.stl" />
+        <mesh name="CookingPotBody_103" file="stl/CookingPotBody_103.stl" />
+        <mesh name="CookingPotBody_104" file="stl/CookingPotBody_104.stl" />
+        <mesh name="CookingPotBody_105" file="stl/CookingPotBody_105.stl" />
+        <mesh name="CookingPotBody_106" file="stl/CookingPotBody_106.stl" />
+        <mesh name="CookingPotBody_107" file="stl/CookingPotBody_107.stl" />
+        <mesh name="CookingPotBody_108" file="stl/CookingPotBody_108.stl" />
+        <mesh name="CookingPotBody_109" file="stl/CookingPotBody_109.stl" />
+        <mesh name="CookingPotBody_110" file="stl/CookingPotBody_110.stl" />
+        <mesh name="CookingPotBody_111" file="stl/CookingPotBody_111.stl" />
+        <mesh name="CookingPotBody_112" file="stl/CookingPotBody_112.stl" />
+        <mesh name="CookingPotBody_113" file="stl/CookingPotBody_113.stl" />
+        <mesh name="CookingPotBody_114" file="stl/CookingPotBody_114.stl" />
+        <mesh name="CookingPotBody_115" file="stl/CookingPotBody_115.stl" />
+        <mesh name="CookingPotBody_116" file="stl/CookingPotBody_116.stl" />
+        <mesh name="CookingPotBody_117" file="stl/CookingPotBody_117.stl" />
+        <mesh name="CookingPotBody_118" file="stl/CookingPotBody_118.stl" />
+        <mesh name="CookingPotBody_119" file="stl/CookingPotBody_119.stl" />
+        <mesh name="CookingPotBody_120" file="stl/CookingPotBody_120.stl" />
+        <mesh name="CookingPotBody_121" file="stl/CookingPotBody_121.stl" />
+        <mesh name="CookingPotBody_122" file="stl/CookingPotBody_122.stl" />
+        <mesh name="CookingPotBody_123" file="stl/CookingPotBody_123.stl" />
+        <mesh name="CookingPotBody_124" file="stl/CookingPotBody_124.stl" />
+        <mesh name="CookingPotBody_125" file="stl/CookingPotBody_125.stl" />
+        <mesh name="CookingPotBody_126" file="stl/CookingPotBody_126.stl" />
+        <mesh name="CookingPotBody_127" file="stl/CookingPotBody_127.stl" />
+        <mesh name="CookingPotBody_128" file="stl/CookingPotBody_128.stl" />
+        <mesh name="CookingPotBody_129" file="stl/CookingPotBody_129.stl" />
+        <mesh name="CookingPotBody_130" file="stl/CookingPotBody_130.stl" />
+        <mesh name="CookingPotBody_131" file="stl/CookingPotBody_131.stl" />
+        <mesh name="CookingPotBody_132" file="stl/CookingPotBody_132.stl" />
+        <mesh name="CookingPotBody_133" file="stl/CookingPotBody_133.stl" />
+        <mesh name="CookingPotBody_134" file="stl/CookingPotBody_134.stl" />
+        <mesh name="CookingPotBody_135" file="stl/CookingPotBody_135.stl" />
+        <mesh name="CookingPotBody_136" file="stl/CookingPotBody_136.stl" />
+        <mesh name="CookingPotBody_137" file="stl/CookingPotBody_137.stl" />
+        <mesh name="CookingPotBody_138" file="stl/CookingPotBody_138.stl" />
+        <mesh name="CookingPotBody_139" file="stl/CookingPotBody_139.stl" />
+        <mesh name="CookingPotBody_140" file="stl/CookingPotBody_140.stl" />
+        <mesh name="CookingPotBody_141" file="stl/CookingPotBody_141.stl" />
+        <mesh name="CookingPotBody_142" file="stl/CookingPotBody_142.stl" />
+        <mesh name="CookingPotBody_143" file="stl/CookingPotBody_143.stl" />
+        <mesh name="CookingPotBody_144" file="stl/CookingPotBody_144.stl" />
+        <mesh name="CookingPotBody_145" file="stl/CookingPotBody_145.stl" />
+        <mesh name="CookingPotBody_146" file="stl/CookingPotBody_146.stl" />
+        <mesh name="CookingPotBody_147" file="stl/CookingPotBody_147.stl" />
+        <mesh name="CookingPotBody_148" file="stl/CookingPotBody_148.stl" />
+        <mesh name="CookingPotBody_149" file="stl/CookingPotBody_149.stl" />
+        <mesh name="CookingPotBody_150" file="stl/CookingPotBody_150.stl" />
+        <mesh name="CookingPotBody_151" file="stl/CookingPotBody_151.stl" />
+        <mesh name="CookingPotBody_152" file="stl/CookingPotBody_152.stl" />
+        <mesh name="CookingPotBody_153" file="stl/CookingPotBody_153.stl" />
+        <mesh name="CookingPotBody_154" file="stl/CookingPotBody_154.stl" />
+        <mesh name="CookingPotBody_155" file="stl/CookingPotBody_155.stl" />
+        <mesh name="CookingPotBody_156" file="stl/CookingPotBody_156.stl" />
+        <mesh name="CookingPotBody_157" file="stl/CookingPotBody_157.stl" />
+        <mesh name="CookingPotBody_158" file="stl/CookingPotBody_158.stl" />
+        <mesh name="CookingPotBody_159" file="stl/CookingPotBody_159.stl" />
+        <mesh name="CookingPotBody_160" file="stl/CookingPotBody_160.stl" />
+        <mesh name="CookingPotBody_161" file="stl/CookingPotBody_161.stl" />
+    </asset>
+    <worldbody>            
+        <body name="cooking_pot_body" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" >
+            <geom name="CookingPotBody" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody" class="cooking_body_visual"/>
+            <geom name="CookingPotBody_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_001" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_002" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_003" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_004" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_005" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_006" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_007" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_008" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_009" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_010" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_011" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_012" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_013" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_014" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_015" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_016" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_016" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_017" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_018" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_018" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_019" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_020" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_020" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_021" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_021" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_022" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_022" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_023" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_024" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_024" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_025" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_025" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_026" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_026" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_027" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_027" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_028" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_028" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_029" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_029" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_030" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_030" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_031" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_031" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_032" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_032" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_033" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_033" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_034" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_034" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_035" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_035" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_036" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_036" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_037" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_037" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_038" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_038" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_039" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_039" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_040" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_040" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_041" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_041" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_042" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_042" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_043" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_043" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_044" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_044" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_045" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_045" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_046" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_046" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_047" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_047" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_048" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_048" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_049" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_049" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_050" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_050" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_051" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_051" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_052" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_052" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_053" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_053" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_054" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_054" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_055" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_055" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_056" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_056" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_057" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_057" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_058" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_058" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_059" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_059" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_060" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_060" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_061" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_061" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_062" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_062" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_063" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_063" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_064" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_064" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_065" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_065" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_066" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_066" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_067" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_067" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_068" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_068" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_069" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_069" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_070" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_070" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_071" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_071" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_072" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_072" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_073" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_073" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_074" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_074" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_075" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_075" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_076" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_076" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_077" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_077" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_078" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_078" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_079" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_079" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_080" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_080" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_081" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_081" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_082" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_082" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_083" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_083" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_084" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_084" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_085" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_085" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_086" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_086" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_087" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_087" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_088" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_088" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_089" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_089" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_090" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_090" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_091" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_091" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_092" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_092" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_093" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_093" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_094" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_094" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_095" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_095" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_096" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_096" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_097" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_097" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_098" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_098" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_099" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_099" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_100" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_100" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_101" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_101" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_102" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_102" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_103" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_103" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_104" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_104" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_105" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_105" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_106" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_106" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_107" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_107" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_108" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_108" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_109" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_109" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_110" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_110" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_111" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_111" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_112" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_112" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_113" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_113" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_114" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_114" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_115" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_115" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_116" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_116" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_117" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_117" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_118" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_118" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_119" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_119" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_120" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_120" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_121" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_121" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_122" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_122" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_123" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_123" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_124" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_124" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_125" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_125" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_126" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_126" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_127" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_127" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_128" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_128" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_129" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_129" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_130" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_130" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_131" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_131" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_132" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_132" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_133" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_133" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_134" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_134" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_135" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_135" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_136" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_136" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_137" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_137" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_138" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_138" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_139" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_139" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_140" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_140" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_141" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_141" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_142" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_142" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_143" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_143" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_144" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_144" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_145" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_145" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_146" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_146" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_147" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_147" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_148" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_148" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_149" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_149" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_150" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_150" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_151" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_151" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_152" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_152" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_153" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_153" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_154" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_154" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_155" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_155" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_156" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_156" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_157" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_157" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_158" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_158" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_159" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_159" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_160" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_160" class="cooking_body_collision"/>
+            <geom name="CookingPotBody_161" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_161" class="cooking_body_collision"/>
+        </body>
+    </worldbody>
+</mujoco>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<mujoco model="cooking_pot_soup">
+    <option solver="CG" tolerance="1e-6" timestep=".005" />
+
+    <size memory="1G" />
+
+    <worldbody>
+        <body name="cooking_pot_soup" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+            <composite type="particle" count="7 7 10" spacing="0.014" offset="0.01 0.005 0.03">
+                <geom size=".0075" rgba=".8 .2 .1 1" />
+            </composite>
+        </body>
+    </worldbody>
+</mujoco>

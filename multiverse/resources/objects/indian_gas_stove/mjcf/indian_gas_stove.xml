@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<mujoco model="indian_gas_stove">
+    <compiler meshdir="../indian_gas_stove/meshes" texturedir="indian_gas_stove/textures" angle="radian"
+        autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" />
+    <default>
+        <default class="indian_gas_stove_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="indian_gas_stove_collision">
+            <geom rgba="0.9 0.9 0.9 1.0" />
+        </default>
+    </default>
+    <asset>
+        <mesh name="IndianGasStove" file="obj/IndianGasStove.obj" />
+        <mesh name="IndianGasStove_001" file="stl/IndianGasStove_001.stl" />
+        <mesh name="IndianGasStove_002" file="stl/IndianGasStove_002.stl" />
+        <mesh name="IndianGasStove_003" file="stl/IndianGasStove_003.stl" />
+    </asset>
+    <worldbody>
+        <body name="indian_gas_stove" pos="0.0 0.0 0.2" quat="1.0 0.0 0.0 0.0" >
+            <geom name="IndianGasStove" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="IndianGasStove" class="indian_gas_stove_visual"/>
+            <geom name="IndianGasStove_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="IndianGasStove_001" class="indian_gas_stove_collision"/>
+            <geom name="IndianGasStove_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="IndianGasStove_002" class="indian_gas_stove_collision"/>
+            <geom name="IndianGasStove_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="IndianGasStove_003" class="indian_gas_stove_collision"/>
+        </body>
+    </worldbody>
+</mujoco>

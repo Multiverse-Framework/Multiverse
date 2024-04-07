@@ -1,0 +1,43 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  preparing_soup:
+    simulator: mujoco
+    world:
+      name: world
+      path: work_table.xml
+
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+    objects:
+      cooking_pot_body:
+        path: cooking_pot_body.xml
+        apply:
+          body:
+            cooking_pot_body:
+              pos: [0.14, -0.3, 1.145]
+
+      cooking_pot_lid:
+        path: cooking_pot_lid.xml
+        apply:
+          body:
+            cooking_pot_lid:
+              pos: [0.14, -0.3, 1.345]
+
+
+      indian_gas_stove:
+        path: indian_gas_stove.xml
+        apply:
+          body:
+            indian_gas_stove:
+              pos: [0.0, -0.3, 1.08]

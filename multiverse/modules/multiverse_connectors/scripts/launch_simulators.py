@@ -24,6 +24,9 @@ def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
             mujoco_args.append(f"--{entity_str}={entity_dict}".replace(" ", ""))
     if "references" in mujoco_data:
         mujoco_args.append(f"--references={mujoco_data['references']}".replace(" ", ""))
+    should_add_key_frame = mujoco_data.get("should_add_key_frame", True)
+    if should_add_key_frame:
+        mujoco_args.append(f"--should_add_key_frame")
 
     return mujoco_args
 
