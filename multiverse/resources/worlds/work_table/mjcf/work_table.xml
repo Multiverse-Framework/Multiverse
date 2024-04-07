@@ -1,7 +1,7 @@
 <mujoco>
-    <option timestep="0.001" integrator="RK4" gravity="0 0 -9.81" noslip_iterations="5" noslip_tolerance="1e-6">
+    <!-- <option timestep="0.001" integrator="RK4" gravity="0 0 -9.81" noslip_iterations="5" noslip_tolerance="1e-6">
         <flag sensornoise="disable" energy="enable" contact="enable" />
-    </option>
+    </option> -->
 
     <asset>
         <texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4" />

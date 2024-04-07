@@ -16,8 +16,8 @@ simulations:
       path: work_table.xml
 
     config:
-      max_time_step: 0.002
-      min_time_step: 0.001
+      max_time_step: 0.01
+      min_time_step: 0.005
 
     objects:
       cooking_pot_body:
@@ -27,13 +27,12 @@ simulations:
             cooking_pot_body:
               pos: [0.14, -0.3, 1.145]
 
-      cooking_pot_lid:
-        path: cooking_pot_lid.xml
+      cooking_pot_soup:
+        path: cooking_pot_soup.xml
         apply:
           body:
-            cooking_pot_lid:
-              pos: [0.14, -0.3, 1.345]
-
+            cooking_pot_soup:
+              pos: [0.14, -0.3, 1.145]
 
       indian_gas_stove:
         path: indian_gas_stove.xml
@@ -41,3 +40,12 @@ simulations:
           body:
             indian_gas_stove:
               pos: [0.0, -0.3, 1.08]
+
+      soup_spoon:
+        path: soup_spoon.xml
+        apply:
+          body:
+            soup_spoon:
+              pos: [0.295, -0.3, 1.09]
+
+    should_add_key_frame: false

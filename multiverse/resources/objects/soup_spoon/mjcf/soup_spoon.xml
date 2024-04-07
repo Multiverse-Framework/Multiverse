@@ -1,0 +1,283 @@
+<?xml version="1.0"?>
+<mujoco model="soup_spoon">
+    <compiler meshdir="../soup_spoon/meshes" texturedir="soup_spoon/textures" angle="radian"
+        autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" />
+    <default>
+        <default class="soup_spoon_visual">
+            <geom contype="0" conaffinity="0" />
+        </default>
+        <default class="soup_spoon_collision">
+            <geom rgba="0.9 0.9 0.9 1.0" />
+        </default>
+    </default>
+    <asset>
+        <mesh name="SoupSpoon" file="obj/SoupSpoon.obj" />
+        <mesh name="SoupSpoon_001" file="stl/SoupSpoon_001.stl" />
+        <mesh name="SoupSpoon_002" file="stl/SoupSpoon_002.stl" />
+        <mesh name="SoupSpoon_003" file="stl/SoupSpoon_003.stl" />
+        <mesh name="SoupSpoon_004" file="stl/SoupSpoon_004.stl" />
+        <mesh name="SoupSpoon_005" file="stl/SoupSpoon_005.stl" />
+        <mesh name="SoupSpoon_006" file="stl/SoupSpoon_006.stl" />
+        <mesh name="SoupSpoon_007" file="stl/SoupSpoon_007.stl" />
+        <mesh name="SoupSpoon_008" file="stl/SoupSpoon_008.stl" />
+        <mesh name="SoupSpoon_009" file="stl/SoupSpoon_009.stl" />
+        <mesh name="SoupSpoon_010" file="stl/SoupSpoon_010.stl" />
+        <mesh name="SoupSpoon_011" file="stl/SoupSpoon_011.stl" />
+        <mesh name="SoupSpoon_012" file="stl/SoupSpoon_012.stl" />
+        <mesh name="SoupSpoon_013" file="stl/SoupSpoon_013.stl" />
+        <mesh name="SoupSpoon_014" file="stl/SoupSpoon_014.stl" />
+        <mesh name="SoupSpoon_015" file="stl/SoupSpoon_015.stl" />
+        <mesh name="SoupSpoon_016" file="stl/SoupSpoon_016.stl" />
+        <mesh name="SoupSpoon_017" file="stl/SoupSpoon_017.stl" />
+        <mesh name="SoupSpoon_018" file="stl/SoupSpoon_018.stl" />
+        <mesh name="SoupSpoon_019" file="stl/SoupSpoon_019.stl" />
+        <mesh name="SoupSpoon_020" file="stl/SoupSpoon_020.stl" />
+        <mesh name="SoupSpoon_021" file="stl/SoupSpoon_021.stl" />
+        <mesh name="SoupSpoon_022" file="stl/SoupSpoon_022.stl" />
+        <mesh name="SoupSpoon_023" file="stl/SoupSpoon_023.stl" />
+        <mesh name="SoupSpoon_024" file="stl/SoupSpoon_024.stl" />
+        <mesh name="SoupSpoon_025" file="stl/SoupSpoon_025.stl" />
+        <mesh name="SoupSpoon_026" file="stl/SoupSpoon_026.stl" />
+        <mesh name="SoupSpoon_027" file="stl/SoupSpoon_027.stl" />
+        <mesh name="SoupSpoon_028" file="stl/SoupSpoon_028.stl" />
+        <mesh name="SoupSpoon_029" file="stl/SoupSpoon_029.stl" />
+        <mesh name="SoupSpoon_030" file="stl/SoupSpoon_030.stl" />
+        <mesh name="SoupSpoon_031" file="stl/SoupSpoon_031.stl" />
+        <mesh name="SoupSpoon_032" file="stl/SoupSpoon_032.stl" />
+        <mesh name="SoupSpoon_033" file="stl/SoupSpoon_033.stl" />
+        <mesh name="SoupSpoon_034" file="stl/SoupSpoon_034.stl" />
+        <mesh name="SoupSpoon_035" file="stl/SoupSpoon_035.stl" />
+        <mesh name="SoupSpoon_036" file="stl/SoupSpoon_036.stl" />
+        <mesh name="SoupSpoon_037" file="stl/SoupSpoon_037.stl" />
+        <mesh name="SoupSpoon_038" file="stl/SoupSpoon_038.stl" />
+        <mesh name="SoupSpoon_039" file="stl/SoupSpoon_039.stl" />
+        <mesh name="SoupSpoon_040" file="stl/SoupSpoon_040.stl" />
+        <mesh name="SoupSpoon_041" file="stl/SoupSpoon_041.stl" />
+        <mesh name="SoupSpoon_042" file="stl/SoupSpoon_042.stl" />
+        <mesh name="SoupSpoon_043" file="stl/SoupSpoon_043.stl" />
+        <mesh name="SoupSpoon_044" file="stl/SoupSpoon_044.stl" />
+        <mesh name="SoupSpoon_045" file="stl/SoupSpoon_045.stl" />
+        <mesh name="SoupSpoon_046" file="stl/SoupSpoon_046.stl" />
+        <mesh name="SoupSpoon_047" file="stl/SoupSpoon_047.stl" />
+        <mesh name="SoupSpoon_048" file="stl/SoupSpoon_048.stl" />
+        <mesh name="SoupSpoon_049" file="stl/SoupSpoon_049.stl" />
+        <mesh name="SoupSpoon_050" file="stl/SoupSpoon_050.stl" />
+        <mesh name="SoupSpoon_051" file="stl/SoupSpoon_051.stl" />
+        <mesh name="SoupSpoon_052" file="stl/SoupSpoon_052.stl" />
+        <mesh name="SoupSpoon_053" file="stl/SoupSpoon_053.stl" />
+        <mesh name="SoupSpoon_054" file="stl/SoupSpoon_054.stl" />
+        <mesh name="SoupSpoon_055" file="stl/SoupSpoon_055.stl" />
+        <mesh name="SoupSpoon_056" file="stl/SoupSpoon_056.stl" />
+        <mesh name="SoupSpoon_057" file="stl/SoupSpoon_057.stl" />
+        <mesh name="SoupSpoon_058" file="stl/SoupSpoon_058.stl" />
+        <mesh name="SoupSpoon_059" file="stl/SoupSpoon_059.stl" />
+        <mesh name="SoupSpoon_060" file="stl/SoupSpoon_060.stl" />
+        <mesh name="SoupSpoon_061" file="stl/SoupSpoon_061.stl" />
+        <mesh name="SoupSpoon_062" file="stl/SoupSpoon_062.stl" />
+        <mesh name="SoupSpoon_063" file="stl/SoupSpoon_063.stl" />
+        <mesh name="SoupSpoon_064" file="stl/SoupSpoon_064.stl" />
+        <mesh name="SoupSpoon_065" file="stl/SoupSpoon_065.stl" />
+        <mesh name="SoupSpoon_066" file="stl/SoupSpoon_066.stl" />
+        <mesh name="SoupSpoon_067" file="stl/SoupSpoon_067.stl" />
+        <mesh name="SoupSpoon_068" file="stl/SoupSpoon_068.stl" />
+        <mesh name="SoupSpoon_069" file="stl/SoupSpoon_069.stl" />
+        <mesh name="SoupSpoon_070" file="stl/SoupSpoon_070.stl" />
+        <mesh name="SoupSpoon_071" file="stl/SoupSpoon_071.stl" />
+        <mesh name="SoupSpoon_072" file="stl/SoupSpoon_072.stl" />
+        <mesh name="SoupSpoon_073" file="stl/SoupSpoon_073.stl" />
+        <mesh name="SoupSpoon_074" file="stl/SoupSpoon_074.stl" />
+        <mesh name="SoupSpoon_075" file="stl/SoupSpoon_075.stl" />
+        <mesh name="SoupSpoon_076" file="stl/SoupSpoon_076.stl" />
+        <mesh name="SoupSpoon_077" file="stl/SoupSpoon_077.stl" />
+        <mesh name="SoupSpoon_078" file="stl/SoupSpoon_078.stl" />
+        <mesh name="SoupSpoon_079" file="stl/SoupSpoon_079.stl" />
+        <mesh name="SoupSpoon_080" file="stl/SoupSpoon_080.stl" />
+        <mesh name="SoupSpoon_081" file="stl/SoupSpoon_081.stl" />
+        <mesh name="SoupSpoon_082" file="stl/SoupSpoon_082.stl" />
+        <mesh name="SoupSpoon_083" file="stl/SoupSpoon_083.stl" />
+        <mesh name="SoupSpoon_084" file="stl/SoupSpoon_084.stl" />
+        <mesh name="SoupSpoon_085" file="stl/SoupSpoon_085.stl" />
+        <mesh name="SoupSpoon_086" file="stl/SoupSpoon_086.stl" />
+        <mesh name="SoupSpoon_087" file="stl/SoupSpoon_087.stl" />
+        <mesh name="SoupSpoon_088" file="stl/SoupSpoon_088.stl" />
+        <mesh name="SoupSpoon_089" file="stl/SoupSpoon_089.stl" />
+        <mesh name="SoupSpoon_090" file="stl/SoupSpoon_090.stl" />
+        <mesh name="SoupSpoon_091" file="stl/SoupSpoon_091.stl" />
+        <mesh name="SoupSpoon_092" file="stl/SoupSpoon_092.stl" />
+        <mesh name="SoupSpoon_093" file="stl/SoupSpoon_093.stl" />
+        <mesh name="SoupSpoon_094" file="stl/SoupSpoon_094.stl" />
+        <mesh name="SoupSpoon_095" file="stl/SoupSpoon_095.stl" />
+        <mesh name="SoupSpoon_096" file="stl/SoupSpoon_096.stl" />
+        <mesh name="SoupSpoon_097" file="stl/SoupSpoon_097.stl" />
+        <mesh name="SoupSpoon_098" file="stl/SoupSpoon_098.stl" />
+        <mesh name="SoupSpoon_099" file="stl/SoupSpoon_099.stl" />
+        <mesh name="SoupSpoon_100" file="stl/SoupSpoon_100.stl" />
+        <mesh name="SoupSpoon_101" file="stl/SoupSpoon_101.stl" />
+        <mesh name="SoupSpoon_102" file="stl/SoupSpoon_102.stl" />
+        <mesh name="SoupSpoon_103" file="stl/SoupSpoon_103.stl" />
+        <mesh name="SoupSpoon_104" file="stl/SoupSpoon_104.stl" />
+        <mesh name="SoupSpoon_105" file="stl/SoupSpoon_105.stl" />
+        <mesh name="SoupSpoon_106" file="stl/SoupSpoon_106.stl" />
+        <mesh name="SoupSpoon_107" file="stl/SoupSpoon_107.stl" />
+        <mesh name="SoupSpoon_108" file="stl/SoupSpoon_108.stl" />
+        <mesh name="SoupSpoon_109" file="stl/SoupSpoon_109.stl" />
+        <mesh name="SoupSpoon_110" file="stl/SoupSpoon_110.stl" />
+        <mesh name="SoupSpoon_111" file="stl/SoupSpoon_111.stl" />
+        <mesh name="SoupSpoon_112" file="stl/SoupSpoon_112.stl" />
+        <mesh name="SoupSpoon_113" file="stl/SoupSpoon_113.stl" />
+        <mesh name="SoupSpoon_114" file="stl/SoupSpoon_114.stl" />
+        <mesh name="SoupSpoon_115" file="stl/SoupSpoon_115.stl" />
+        <mesh name="SoupSpoon_116" file="stl/SoupSpoon_116.stl" />
+        <mesh name="SoupSpoon_117" file="stl/SoupSpoon_117.stl" />
+        <mesh name="SoupSpoon_118" file="stl/SoupSpoon_118.stl" />
+        <mesh name="SoupSpoon_119" file="stl/SoupSpoon_119.stl" />
+        <mesh name="SoupSpoon_120" file="stl/SoupSpoon_120.stl" />
+        <mesh name="SoupSpoon_121" file="stl/SoupSpoon_121.stl" />
+        <mesh name="SoupSpoon_122" file="stl/SoupSpoon_122.stl" />
+        <mesh name="SoupSpoon_123" file="stl/SoupSpoon_123.stl" />
+        <mesh name="SoupSpoon_124" file="stl/SoupSpoon_124.stl" />
+        <mesh name="SoupSpoon_125" file="stl/SoupSpoon_125.stl" />
+        <mesh name="SoupSpoon_126" file="stl/SoupSpoon_126.stl" />
+        <mesh name="SoupSpoon_127" file="stl/SoupSpoon_127.stl" />
+        <mesh name="SoupSpoon_128" file="stl/SoupSpoon_128.stl" />
+        <mesh name="SoupSpoon_129" file="stl/SoupSpoon_129.stl" />
+        <mesh name="SoupSpoon_130" file="stl/SoupSpoon_130.stl" />
+    </asset>
+    <worldbody>            
+        <body name="soup_spoon" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" >
+            <freejoint/>
+            <inertial mass="0.014195333234965801" pos="-0.015411965548992157 -1.4716490248645187e-09 0.008130344562232494" quat="0.5998083353042603 0.5998082756996155 0.3744729161262512 -0.374472975730896" diaginertia="9.091835636354517e-06 5.7811525039142e-05 5.884267739020288e-05"/>
+            <geom name="SoupSpoon" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon" class="soup_spoon_visual"/>
+            <geom name="SoupSpoon_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_001" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_002" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_003" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_004" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_005" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_006" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_007" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_008" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_009" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_010" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_011" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_012" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_013" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_014" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_015" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_016" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_016" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_017" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_018" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_018" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_019" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_020" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_020" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_021" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_021" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_022" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_022" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_023" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_024" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_024" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_025" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_025" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_026" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_026" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_027" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_027" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_028" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_028" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_029" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_029" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_030" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_030" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_031" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_031" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_032" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_032" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_033" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_033" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_034" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_034" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_035" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_035" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_036" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_036" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_037" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_037" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_038" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_038" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_039" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_039" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_040" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_040" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_041" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_041" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_042" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_042" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_043" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_043" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_044" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_044" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_045" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_045" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_046" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_046" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_047" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_047" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_048" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_048" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_049" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_049" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_050" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_050" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_051" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_051" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_052" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_052" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_053" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_053" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_054" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_054" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_055" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_055" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_056" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_056" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_057" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_057" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_058" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_058" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_059" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_059" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_060" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_060" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_061" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_061" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_062" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_062" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_063" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_063" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_064" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_064" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_065" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_065" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_066" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_066" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_067" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_067" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_068" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_068" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_069" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_069" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_070" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_070" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_071" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_071" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_072" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_072" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_073" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_073" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_074" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_074" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_075" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_075" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_076" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_076" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_077" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_077" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_078" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_078" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_079" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_079" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_080" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_080" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_081" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_081" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_082" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_082" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_083" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_083" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_084" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_084" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_085" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_085" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_086" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_086" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_087" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_087" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_088" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_088" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_089" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_089" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_090" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_090" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_091" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_091" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_092" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_092" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_093" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_093" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_094" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_094" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_095" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_095" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_096" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_096" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_097" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_097" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_098" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_098" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_099" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_099" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_100" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_100" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_101" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_101" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_102" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_102" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_103" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_103" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_104" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_104" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_105" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_105" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_106" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_106" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_107" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_107" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_108" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_108" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_109" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_109" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_110" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_110" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_111" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_111" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_112" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_112" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_113" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_113" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_114" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_114" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_115" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_115" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_116" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_116" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_117" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_117" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_118" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_118" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_119" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_119" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_120" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_120" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_121" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_121" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_122" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_122" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_123" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_123" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_124" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_124" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_125" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_125" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_126" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_126" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_127" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_127" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_128" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_128" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_129" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_129" class="soup_spoon_collision"/>
+            <geom name="SoupSpoon_130" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="SoupSpoon_130" class="soup_spoon_collision"/>
+        </body>
+    </worldbody>
+</mujoco>
