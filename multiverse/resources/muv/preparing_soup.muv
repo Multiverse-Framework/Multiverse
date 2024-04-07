@@ -25,37 +25,37 @@ simulations:
         apply:
           body:
             cooking_pot_body:
-              pos: [0.3, 0.14, 1.145]
+              pos: [-0.3, -0.14, 1.151]
 
       cooking_pot_soup:
         path: cooking_pot_soup.xml
         apply:
           body:
             cooking_pot_soup:
-              pos: [0.3, 0.14, 1.145]
+              pos: [-0.3, -0.14, 1.151]
 
       indian_gas_stove:
         path: indian_gas_stove.xml
         apply:
           body:
             indian_gas_stove:
-              pos: [0.3, 0.0, 1.08]
-              quat: [0.707, 0.0, 0.0, 0.707]
+              pos: [-0.3, 0.0, 1.085]
+              quat: [0.707, 0.0, 0.0, -0.707]
 
       soup_spoon:
         path: soup_spoon.xml
         apply:
           body:
             soup_spoon:
-              pos: [0.3, 0.295, 1.09]
-              quat: [0.707, 0.0, 0.0, 0.707]
+              pos: [-0.3, -0.295, 1.09]
+              quat: [0.707, 0.0, 0.0, -0.707]
 
       small_bowl_1:
         path: small_bowl.xml
         apply:
           body:
             small_bowl:
-              pos: [0.0, -0.2, 1.085]
+              pos: [0.0, 0.2, 1.085]
         suffix:
           body: _1
           geom: _1
@@ -75,7 +75,7 @@ simulations:
         apply:
           body:
             small_bowl:
-              pos: [0.0, 0.2, 1.085]
+              pos: [0.0, -0.2, 1.085]
         suffix:
           body: _3
           geom: _3
