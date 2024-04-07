@@ -48,4 +48,61 @@ simulations:
             soup_spoon:
               pos: [0.295, -0.3, 1.09]
 
+      small_bowl_1:
+        path: small_bowl.xml
+        apply:
+          body:
+            small_bowl:
+              pos: [0.0, 0.0, 1.085]
+        suffix:
+          body: _1
+          geom: _1
+
+      small_bowl_2:
+        path: small_bowl.xml
+        apply:
+          body:
+            small_bowl:
+              pos: [0.2, 0.0, 1.085]
+        suffix:
+          body: _2
+          geom: _2
+
+      small_bowl_3:
+        path: small_bowl.xml
+        apply:
+          body:
+            small_bowl:
+              pos: [-0.2, 0.0, 1.085]
+        suffix:
+          body: _3
+          geom: _3
+
     should_add_key_frame: false
+
+    references:
+      soup_spoon:
+        body1: soup_spoon_ref
+        body2: soup_spoon
+
+      small_bowl_1:
+        body1: small_bowl_1_ref
+        body2: small_bowl_1
+
+      small_bowl_2:
+        body1: small_bowl_2_ref
+        body2: small_bowl_2
+
+      small_bowl_3:
+        body1: small_bowl_3_ref
+        body2: small_bowl_3
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  preparing_soup:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]

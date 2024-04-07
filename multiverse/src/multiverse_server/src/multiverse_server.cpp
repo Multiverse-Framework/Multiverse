@@ -523,7 +523,7 @@ void MultiverseServer::bind_meta_data()
                     attributes = Json::Value(Json::arrayValue);
                     continue;
                 }
-                
+
                 for (const Json::Value &attribute : request_meta_data_json[type_str][object_name])
                 {
                     if (std::find(attributes.begin(), attributes.end(), attribute) == attributes.end())
@@ -860,7 +860,7 @@ void MultiverseServer::receive_send_data()
         sockets_need_clean_up[socket_addr] = false;
         zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
         sockets_need_clean_up[socket_addr] = true;
-        if (message.to_string()[0] != '{' && message.to_string()[1] != '}')
+        if (message.to_string()[0] != '{' || message.to_string()[1] != '}')
         {
             memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
         }

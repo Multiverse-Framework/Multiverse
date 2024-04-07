@@ -141,7 +141,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 						boost::filesystem::path asset_dir_path = object_xml_path;
 						const char *asset_type_dir = (asset_type + "dir").c_str();
 						for (tinyxml2::XMLElement *compiler_element = mujoco_element->FirstChildElement("compiler");
-								compiler_element != nullptr; compiler_element = compiler_element->NextSiblingElement("compiler"))
+							 compiler_element != nullptr; compiler_element = compiler_element->NextSiblingElement("compiler"))
 						{
 							if (compiler_element->Attribute(asset_type_dir) == nullptr)
 							{
@@ -155,10 +155,10 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 							compiler_element->DeleteAttribute(asset_type_dir);
 						}
 						for (tinyxml2::XMLElement *asset_element = mujoco_element->FirstChildElement("asset");
-								asset_element != nullptr; asset_element = asset_element->NextSiblingElement("asset"))
+							 asset_element != nullptr; asset_element = asset_element->NextSiblingElement("asset"))
 						{
 							for (tinyxml2::XMLElement *asset_type_element = asset_element->FirstChildElement(asset_type.c_str());
-									asset_type_element != nullptr; asset_type_element = asset_type_element->NextSiblingElement(asset_type.c_str()))
+								 asset_type_element != nullptr; asset_type_element = asset_type_element->NextSiblingElement(asset_type.c_str()))
 							{
 								if (asset_type_element->Attribute("file") == nullptr)
 								{
@@ -218,10 +218,10 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 						}
 
 						for (tinyxml2::XMLElement *worldbody_element = mujoco_element->FirstChildElement("worldbody");
-								worldbody_element != nullptr; worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
+							 worldbody_element != nullptr; worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
 						{
 							for (tinyxml2::XMLElement *body_element = worldbody_element->FirstChildElement("body");
-									body_element != nullptr; body_element = body_element->NextSiblingElement("body"))
+								 body_element != nullptr; body_element = body_element->NextSiblingElement("body"))
 							{
 								if (strcmp(body_element->Attribute("name"), object_name.c_str()) == 0)
 								{
@@ -233,7 +233,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 						}
 
 						for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
-								keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
+							 keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
 						{
 							keyframe_element->DeleteChildren();
 						}
@@ -399,10 +399,10 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 		{
 			tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 			for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
-				keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
+				 keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
 			{
 				for (tinyxml2::XMLElement *key_element = keyframe_element->FirstChildElement("key");
-						key_element != nullptr; key_element = key_element->NextSiblingElement("key"))
+					 key_element != nullptr; key_element = key_element->NextSiblingElement("key"))
 				{
 					key_element->DeleteAttribute("qpos");
 					key_element->DeleteAttribute("qvel");
@@ -479,10 +479,29 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 						{
 							continue;
 						}
-						if ((m->body_dofnum[body_id] == 6 &&
-							 m->body_jntadr[body_id] != -1 &&
-							 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE) ||
-							strcmp(attribute_name.c_str(), "relative_velocity") != 0)
+						if (strcmp(attribute_name.c_str(), "relative_velocity") == 0)
+						{
+							if ((m->body_dofnum[body_id] == 6 &&
+								 m->body_jntadr[body_id] != -1 &&
+								 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
+							{
+								send_objects[body_name].insert(attribute_name);
+							}
+						} else if (strcmp(attribute_name.c_str(), "position") == 0 &&
+								 (m->body_dofnum[body_id] == 3 &&
+									  m->body_jntadr[body_id] != -1 &&
+									  m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_SLIDE &&
+									  m->jnt_type[m->body_jntadr[body_id] + 1] == mjtJoint::mjJNT_SLIDE &&
+									  m->jnt_type[m->body_jntadr[body_id] + 2] == mjtJoint::mjJNT_SLIDE ||
+								  m->body_dofnum[body_id] == 6 &&
+									  m->body_jntadr[body_id] != -1 &&
+									  m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
+						{
+							send_objects[body_name].insert(attribute_name);
+						} else if (strcmp(attribute_name.c_str(), "quaternion") == 0 &&
+								 (m->body_dofnum[body_id] == 6 &&
+									  m->body_jntadr[body_id] != -1 &&
+									  m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
 						{
 							send_objects[body_name].insert(attribute_name);
 						}
@@ -857,6 +876,10 @@ void MjMultiverseClient::bind_response_meta_data()
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 		tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
+		if (keyframe_element == nullptr)
+		{
+			return;
+		}
 		tinyxml2::XMLElement *key_element = keyframe_element->FirstChildElement("key");
 
 		key_element->SetAttribute("time", d->time);
