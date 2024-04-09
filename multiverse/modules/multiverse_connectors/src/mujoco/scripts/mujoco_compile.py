@@ -201,15 +201,21 @@ def exclude_collision(
 
 def add_prefix_and_suffix(root: ET.Element, prefix, suffix):
     for element_type in ["body", "joint", "geom"]:
-        elements = [
-            element
-            for worldbody in root.findall(".//worldbody")
-            for element in worldbody.findall(f".//{element_type}")
-        ]
+        if element_type == "geom":
+            elements = [
+                element
+                for worldbody in root.findall(".//worldbody")
+                for element in worldbody.findall(f".//body/{element_type}")
+            ]
+        else:
+            elements = [
+                element
+                for worldbody in root.findall(".//worldbody")
+                for element in worldbody.findall(f".//{element_type}")
+            ]
         element_prefix = prefix.get(element_type, "")
         element_suffix = suffix.get(element_type, "")
-        if element_prefix != "" or element_suffix != "":
-            update_element_name(elements, element_type, element_prefix, element_suffix)
+        update_element_name(elements, element_type, element_prefix, element_suffix)
 
     body_prefix = prefix.get("body", "")
     body_suffix = suffix.get("body", "")

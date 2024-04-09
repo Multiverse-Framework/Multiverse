@@ -406,7 +406,6 @@ multiverse_clients:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
     receive:
-      fingers_actuator: ["cmd_joint_tvalue"]
       grab_cube_1_ref: ["position", "quaternion"]
       grab_cube_2_ref: ["position", "quaternion"]
       hand_ref: ["position", "quaternion"]
@@ -457,11 +456,3 @@ multiverse_clients:
             topic: /tf
             rate: 60
             root_frame_id: map
-
-    ros_run:
-      rviz:
-        config: panda_ref_with_task_board/config/rviz.rviz2
-        robot_descriptions:
-          ur5e_description: panda/urdf/panda.urdf
-          task_board_description: task_board/urdf/task_board.urdf
-          task_board_tool_description: task_board/urdf/task_board_tool.urdf

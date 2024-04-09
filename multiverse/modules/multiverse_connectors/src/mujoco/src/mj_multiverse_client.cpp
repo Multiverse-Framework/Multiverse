@@ -487,21 +487,9 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 							{
 								send_objects[body_name].insert(attribute_name);
 							}
-						} else if (strcmp(attribute_name.c_str(), "position") == 0 &&
-								 (m->body_dofnum[body_id] == 3 &&
-									  m->body_jntadr[body_id] != -1 &&
-									  m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_SLIDE &&
-									  m->jnt_type[m->body_jntadr[body_id] + 1] == mjtJoint::mjJNT_SLIDE &&
-									  m->jnt_type[m->body_jntadr[body_id] + 2] == mjtJoint::mjJNT_SLIDE ||
-								  m->body_dofnum[body_id] == 6 &&
-									  m->body_jntadr[body_id] != -1 &&
-									  m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
-						{
-							send_objects[body_name].insert(attribute_name);
-						} else if (strcmp(attribute_name.c_str(), "quaternion") == 0 &&
-								 (m->body_dofnum[body_id] == 6 &&
-									  m->body_jntadr[body_id] != -1 &&
-									  m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
+						}
+						else if (strcmp(attribute_name.c_str(), "position") == 0 ||
+								 strcmp(attribute_name.c_str(), "quaternion") == 0)
 						{
 							send_objects[body_name].insert(attribute_name);
 						}
