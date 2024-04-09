@@ -25,14 +25,14 @@ simulations:
         apply:
           body:
             cooking_pot_body:
-              pos: [-0.15, -0.28, 1.22]
+              pos: [-0.15, -0.28, 1.25]
 
       cooking_pot_soup:
         path: cooking_pot_soup.xml
         apply:
           body:
             cooking_pot_soup:
-              pos: [-0.15, -0.28, 1.22]
+              pos: [-0.15, -0.28, 1.25]
 
       indian_gas_stove:
         path: indian_gas_stove.xml
@@ -108,5 +108,8 @@ multiverse_clients:
     port: 7500
     send:
       body: ["position", "quaternion"]
-    # receive:
-    #   soup_spoon_ref: ["position", "quaternion"]
+    receive:
+      soup_spoon_ref: ["position", "quaternion"]
+      small_bowl_1_ref: ["position", "quaternion"]
+      small_bowl_2_ref: ["position", "quaternion"]
+      small_bowl_3_ref: ["position", "quaternion"]
