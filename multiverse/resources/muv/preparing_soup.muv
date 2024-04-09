@@ -16,8 +16,8 @@ simulations:
       path: work_table.xml
 
     config:
-      max_time_step: 0.01
-      min_time_step: 0.005
+      max_time_step: 0.0075
+      min_time_step: 0.001
 
     objects:
       cooking_pot_body:
@@ -25,21 +25,21 @@ simulations:
         apply:
           body:
             cooking_pot_body:
-              pos: [-0.3, -0.14, 1.151]
+              pos: [-0.15, -0.28, 1.25]
 
       cooking_pot_soup:
         path: cooking_pot_soup.xml
         apply:
           body:
             cooking_pot_soup:
-              pos: [-0.3, -0.14, 1.151]
+              pos: [-0.15, -0.28, 1.25]
 
       indian_gas_stove:
         path: indian_gas_stove.xml
         apply:
           body:
             indian_gas_stove:
-              pos: [-0.3, 0.0, 1.085]
+              pos: [-0.15, 0.0, 1.115]
               quat: [0.707, 0.0, 0.0, -0.707]
 
       soup_spoon:
@@ -47,7 +47,7 @@ simulations:
         apply:
           body:
             soup_spoon:
-              pos: [-0.3, -0.295, 1.09]
+              pos: [-0.3, -0.6, 1.105]
               quat: [0.707, 0.0, 0.0, -0.707]
 
       small_bowl_1:
@@ -55,7 +55,7 @@ simulations:
         apply:
           body:
             small_bowl:
-              pos: [0.0, 0.2, 1.085]
+              pos: [0.3, 0.2, 1.085]
         suffix:
           body: _1
           geom: _1
@@ -65,7 +65,7 @@ simulations:
         apply:
           body:
             small_bowl:
-              pos: [0.0, 0.0, 1.085]
+              pos: [0.3, 0.0, 1.085]
         suffix:
           body: _2
           geom: _2
@@ -75,7 +75,7 @@ simulations:
         apply:
           body:
             small_bowl:
-              pos: [0.0, -0.2, 1.085]
+              pos: [0.3, -0.2, 1.085]
         suffix:
           body: _3
           geom: _3
@@ -108,3 +108,5 @@ multiverse_clients:
     port: 7500
     send:
       body: ["position", "quaternion"]
+    # receive:
+    #   soup_spoon_ref: ["position", "quaternion"]

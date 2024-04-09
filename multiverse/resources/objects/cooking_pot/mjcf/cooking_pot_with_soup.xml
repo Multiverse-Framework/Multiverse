@@ -2,5 +2,5 @@
 <mujoco model="cooking_pot">
     <include file="cooking_pot_body.xml" />
     <include file="cooking_pot_soup.xml" />
-    <include file="cooking_pot_lid.xml" />
+    <!-- <include file="cooking_pot_lid.xml" /> -->
 </mujoco>
