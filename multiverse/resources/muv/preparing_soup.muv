@@ -25,14 +25,14 @@ simulations:
         apply:
           body:
             cooking_pot_body:
-              pos: [-0.15, -0.28, 1.25]
+              pos: [-0.15, -0.28, 1.22]
 
       cooking_pot_soup:
         path: cooking_pot_soup.xml
         apply:
           body:
             cooking_pot_soup:
-              pos: [-0.15, -0.28, 1.25]
+              pos: [-0.15, -0.28, 1.22]
 
       indian_gas_stove:
         path: indian_gas_stove.xml
