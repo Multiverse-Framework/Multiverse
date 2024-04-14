@@ -87,7 +87,7 @@ def get_mujoco_joint_api(joint_builder: JointBuilder) -> UsdMujoco.MujocoJointAP
             raise NotImplementedError(f"Joint type {joint_builder.type} not supported.")
 
         mj_joint_pos = joint_builder.pos
-        mj_joint_axis = joint_builder.axis.to_array()
+        mj_joint_axis = joint_builder.quat.Transform(Gf.Vec3d([0.0, 0.0, 1.0]))
 
         mujoco_joint_api = UsdMujoco.MujocoJointAPI.Apply(joint_prim)
         mujoco_joint_api.CreateTypeAttr(mj_joint_type)

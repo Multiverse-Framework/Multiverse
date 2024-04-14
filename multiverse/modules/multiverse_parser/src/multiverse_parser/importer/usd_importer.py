@@ -47,11 +47,9 @@ class UsdImporter(Factory):
             with_visual: bool,
             with_collision: bool,
             inertia_source: InertiaSource = InertiaSource.FROM_SRC,
-            default_rgba: Optional[numpy.ndarray] = None,
-            add_xform_for_each_geom: bool = False
+            default_rgba: Optional[numpy.ndarray] = None
     ) -> None:
         self._stage = Usd.Stage.Open(file_path)
-        self._add_xform_for_each_geom = add_xform_for_each_geom
         xform_root_prims = [prim for prim in self.stage.GetPseudoRoot().GetChildren() if prim.IsA(UsdGeom.Xform)]
         if len(xform_root_prims) > 1:
             print("Multiple root prim found, add a default root prim")
@@ -69,6 +67,12 @@ class UsdImporter(Factory):
             default_rgba=default_rgba if default_rgba is not None else numpy.array([0.9, 0.9, 0.9, 1.0]),
             inertia_source=inertia_source
         ))
+
+        self._add_xform_for_each_geom = len([prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Xform)]) == 1
+        for prim in self.stage.Traverse():
+            if prim.IsA(UsdGeom.Mesh) and any([child_prim.IsA(UsdGeom.Mesh) for child_prim in prim.GetChildren()]):
+                self._add_xform_for_each_geom = True
+                break
 
         self.parent_map = {}
         self.usd_mesh_path_dict = {}
@@ -284,9 +288,12 @@ class UsdImporter(Factory):
         for joint_prim in [joint_prim for joint_prim in self.stage.Traverse() if joint_prim.IsA(UsdPhysics.Joint)]:
             joint = UsdPhysics.Joint(joint_prim)
             joint_name = joint.GetPrim().GetName()
-            parent_prim = self.world_builder.stage.GetPrimAtPath(joint.GetBody0Rel().GetTargets()[0])
-            child_prim = self.world_builder.stage.GetPrimAtPath(joint.GetBody1Rel().GetTargets()[0])
-            body_builder = self.world_builder.get_body_builder(body_name=child_prim.GetName())
+            parent_prim_name = joint.GetBody0Rel().GetTargets()[0].name
+            parent_body_builder = self.world_builder.get_body_builder(body_name=parent_prim_name)
+            parent_prim = parent_body_builder.xform.GetPrim()
+            child_prim_name = joint.GetBody1Rel().GetTargets()[0].name
+            child_body_builder = self.world_builder.get_body_builder(body_name=child_prim_name)
+            child_prim = child_body_builder.xform.GetPrim()
 
             joint_axis = "Z"
             if joint_prim.IsA(UsdPhysics.FixedJoint):
@@ -304,12 +311,10 @@ class UsdImporter(Factory):
             else:
                 raise ValueError(f"Joint type {joint_prim} not supported.")
 
-            body1_transform = xform_cache.GetLocalToWorldTransform(
-                self.stage.GetPrimAtPath(joint.GetBody0Rel().GetTargets()[0]).GetPrim())
+            body1_transform = xform_cache.GetLocalToWorldTransform(parent_prim)
             body1_rot = body1_transform.ExtractRotationQuat()
 
-            body2_transform = xform_cache.GetLocalToWorldTransform(
-                self.stage.GetPrimAtPath(joint.GetBody1Rel().GetTargets()[0]).GetPrim())
+            body2_transform = xform_cache.GetLocalToWorldTransform(child_prim)
             body1_to_body2_transform = body2_transform * body1_transform.GetInverse()
             body1_to_body2_pos = body1_to_body2_transform.ExtractTranslation()
 
@@ -325,8 +330,11 @@ class UsdImporter(Factory):
                                            joint_quat=joint_quat,
                                            joint_axis=JointAxis.from_string(joint_axis),
                                            joint_type=joint_type)
-            body_builder.add_joint(joint_name=joint_name,
-                                   joint_property=joint_property)
+            joint_builder = child_body_builder.add_joint(joint_name=joint_name,
+                                                         joint_property=joint_property)
+            if joint_prim.IsA(UsdPhysics.RevoluteJoint) or joint_prim.IsA(UsdPhysics.PrismaticJoint):
+                joint_builder.joint.CreateUpperLimitAttr(joint.GetUpperLimitAttr().Get())
+                joint_builder.joint.CreateLowerLimitAttr(joint.GetLowerLimitAttr().Get())
 
     @property
     def stage(self) -> Usd.Stage:

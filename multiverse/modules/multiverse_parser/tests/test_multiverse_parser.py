@@ -162,17 +162,13 @@ class UsdToUsdTestCase(MultiverseImporterTestCase):
 
     def test_usd_to_usd_milk_box(self):
         input_usd_path = os.path.join(self.resource_path, "input", "milk_box", "usd", "milk_box.usda")
-        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=False, with_physics=True,
-                                       add_xform_for_each_geom=False)
-        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=False, with_physics=False,
-                                       add_xform_for_each_geom=False)
+        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=False, with_physics=True)
+        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=False, with_physics=False)
 
     def test_usd_to_usd_furniture(self):
         input_usd_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
-        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=True,
-                                       add_xform_for_each_geom=True)
-        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False,
-                                       add_xform_for_each_geom=True)
+        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=True)
+        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False)
 
     # def test_usd_to_usd_ur5e(self):
     #     input_usd_path = os.path.join(self.resource_path, "input", "ur5e_usd", "test_mjcf_to_usd", "ur5e.usda")
@@ -231,10 +227,10 @@ class UsdToMjcfTestCase(MjcfExporterTestCase):
                                        fixed_base=False, with_physics=False)
 
     def test_usd_to_mjcf_furniture(self):
-        input_mjcf_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
-        self.validate_visual_collision(UsdImporter, MjcfExporter, input_mjcf_path,
+        input_usd_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
+        self.validate_visual_collision(UsdImporter, MjcfExporter, input_usd_path,
                                        fixed_base=True, with_physics=True)
-        self.validate_visual_collision(UsdImporter, MjcfExporter, input_mjcf_path,
+        self.validate_visual_collision(UsdImporter, MjcfExporter, input_usd_path,
                                        fixed_base=True, with_physics=False)
 
 
@@ -299,10 +295,10 @@ class UsdToUrdfTestCase(UrdfExporterTestCase):
                                        fixed_base=False, with_physics=False)
 
     def test_usd_to_urdf_furniture(self):
-        input_mjcf_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
-        self.validate_visual_collision(UsdImporter, UrdfExporter, input_mjcf_path,
+        input_usd_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
+        self.validate_visual_collision(UsdImporter, UrdfExporter, input_usd_path,
                                        fixed_base=True, with_physics=True)
-        self.validate_visual_collision(UsdImporter, UrdfExporter, input_mjcf_path,
+        self.validate_visual_collision(UsdImporter, UrdfExporter, input_usd_path,
                                        fixed_base=True, with_physics=False)
 
 

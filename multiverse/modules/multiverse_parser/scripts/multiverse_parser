@@ -27,7 +27,7 @@ def main():
         action='store_true',
         help="Whether to fix the base link or not",
     )
-    parser.set_defaults(fixed_base=False)
+    parser.set_defaults(fixed_base=True)
     parser.add_argument(
         "--relative_to_ros_package",
         type=str,
@@ -101,8 +101,7 @@ def main():
                               with_visual=with_visual,
                               with_collision=with_collision,
                               inertia_source=inertia_source,
-                              default_rgba=args.defaultrgba,
-                              add_xform_for_each_geom=True)
+                              default_rgba=args.defaultrgba)
     elif in_extension == ".urdf":
         factory = UrdfImporter(file_path=args.input,
                                fixed_base=fixed_base,
