@@ -45,6 +45,46 @@ sem_labels = {
     "cabinet11_drawer1": ["_class_Drawer"],
     "cabinet11_drawer2": ["_class_Drawer"],
     "cabinet11_drawer3": ["_class_Drawer"],
+
+    "SM_Cup": ["_class_Cup"],
+    "SM_CerealBox": ["_class_CerealBox"],
+    "SM_SmallBowl": ["_class_Bowl"],
+    "SM_MilkBox": ["_class_MilkBottle"],
+    "SM_Apartment": ["_class_Kitchen"],
+    "SM_Kitchen_01_Base": ["_class_KitchenCabinet"],
+    "SM_Kitchen_02_Base": ["_class_KitchenCabinet"],
+    "SM_Kitchen_03_Fridge": ["_class_KitchenCabinet"],
+    "SM_Kitchen_04_Base": ["_class_KitchenCabinet"],
+    "SM_Kitchen_05_Base": ["_class_KitchenCabinet"],
+    "SM_Kitchen_06_Base": ["_class_KitchenCabinet"],
+    "SM_Kitchen_08_Sink_Base": ["_class_KitchenCabinet"],
+    "SM_Kitchen_09_Base": ["_class_KitchenCabinet"],
+    "SM_Kitchen_10_Base": ["_class_KitchenCabinet"],
+    "SM_Kitchen_11_Base": ["_class_KitchenCabinet"],
+    "SM_Fridge_Base": ["_class_Refrigerator"],
+    "SM_Kitchen_01_Drawer_01": ["_class_Drawer"],
+    "SM_Kitchen_01_Drawer_02": ["_class_Drawer"],
+    "SM_Kitchen_02_Drawer_01": ["_class_Drawer"],
+    "SM_Kitchen_02_Drawer_02": ["_class_Drawer"],
+    "SM_Kitchen_02_Drawer_3": ["_class_Drawer"],
+    "SM_Kitchen_02_Drawer_4": ["_class_Drawer"],
+    "SM_Kitchen_02_Drawer_5": ["_class_Drawer"],
+    "SM_Kitchen_02_Drawer_6": ["_class_Drawer"],
+    "SM_Kitchen_05_Base_Drawer_01": ["_class_Drawer"],
+    "SM_Kitchen_05_Base_Drawer_02": ["_class_Drawer"],
+    "SM_Kitchen_05_Base_Drawer_03": ["_class_Drawer"],
+    "SM_Kitchen_06_Base_Drawer_01": ["_class_Drawer"],
+    "SM_Kitchen_06_Base_Drawer_02": ["_class_Drawer"],
+    "SM_Kitchen_06_Base_Drawer_03": ["_class_Drawer"],
+    "SM_Kitchen_09_Drawer_01": ["_class_Drawer"],
+    "SM_Kitchen_09_Drawer_02": ["_class_Drawer"],
+    "SM_Kitchen_09_Drawer_03": ["_class_Drawer"],
+    "SM_Kitchen_10_Drawer_01": ["_class_Drawer"],
+    "SM_Kitchen_10_Drawer_02": ["_class_Drawer"],
+    "SM_Kitchen_10_Drawer_03": ["_class_Drawer"],
+    "SM_Kitchen_11_Base_Drawer_01": ["_class_Drawer"],
+    "SM_Kitchen_11_Base_Drawer_02": ["_class_Drawer"],
+    "SM_Kitchen_11_Base_Drawer_03": ["_class_Drawer"],
 }
 
 sem_TBox = {}
@@ -88,7 +128,7 @@ def auto_sem_tag(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_usd_file
             for mesh_dir_abs_path, prim_path in zip(mesh_dir_abs_paths, prim_paths):
                 prim.GetPrim().GetReferences().AddReference(mesh_dir_abs_path, prim_path)
 
-        if prim.GetName() in sem_labels:
+        if prim.IsA(UsdGeom.Xform) and prim.GetName() in sem_labels:
             semanticTagAPI = UsdOntology.SemanticTagAPI.Apply(prim)
             for sem_class in sem_labels[prim.GetName()]:
                 if sem_class in sem_TBox:
