@@ -132,7 +132,7 @@ def auto_sem_tag(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_usd_file
             semanticTagAPI = UsdOntology.SemanticTagAPI.Apply(prim)
             for sem_class in sem_labels[prim.GetName()]:
                 if sem_class in sem_TBox:
-                    semanticTagAPI.CreateSemanticLabelRel().AddTarget(sem_TBox[sem_class])
+                    semanticTagAPI.CreateSemanticLabelsRel().AddTarget(sem_TBox[sem_class])
 
     print(f"Save usd stage to {out_ABox_usd_file} that has semantic labels from {in_TBox_Usd_file}")
     stage_ABox.GetRootLayer().Save()

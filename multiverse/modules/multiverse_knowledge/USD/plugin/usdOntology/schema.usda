@@ -44,16 +44,30 @@ class "RdfAPI" (
         }
         doc = "Concept name"
     )
+
+    string rdf:definition (
+        customData = {
+            string apiName = "rdfDefinition"
+        }
+        doc = "Definition of the concept"
+    )
 }
-    
+
 class "SemanticTagAPI" (
     inherits = </APISchemaBase>
 )
 {
-    rel semanticTag:semanticLabel (
+    rel semanticTag:semanticReports (
         customData = {
-            string apiName = "semanticLabel"
+            string apiName = "semanticReports"
         }
-        doc = "Semantic label"
+        doc = "Semantic reports"
+    )
+
+    rel semanticTag:semanticLabels (
+        customData = {
+            string apiName = "semanticLabels"
+        }
+        doc = "Semantic labels"
     )
 }
