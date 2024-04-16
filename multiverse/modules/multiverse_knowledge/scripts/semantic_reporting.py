@@ -85,7 +85,13 @@ def semantic_reporting(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_us
 
                 prim_name_list = [prim_name.lower()]
 
-                prim_name_list += [prim_name.lower().replace(word, synonym) for word in synonyms for synonym in synonyms[word] if word in prim_name.lower()]
+                prim_name_synonym = prim_name.lower()
+                for word in synonyms:
+                    if word in prim_name_synonym:
+                        for synonym in synonyms[word]:
+                            prim_name_synonym = prim_name_synonym.replace(word, synonym)
+                if prim_name_synonym != prim_name.lower():
+                    prim_name_list.append(prim_name_synonym)
 
                 if (any(char.isupper() for char in prim_name)):
                     prim_name = prim_name[0].upper() + prim_name[1:]
