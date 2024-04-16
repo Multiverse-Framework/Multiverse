@@ -78,12 +78,14 @@ def semantic_reporting(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_us
 
             report = []
 
+            prim_name_list = [prim_name.lower()]
+
             prim_names = prim_name.split("_")
             for prim_name in prim_names:
                 if prim_name == '':
                     continue
 
-                prim_name_list = [prim_name.lower()]
+                prim_name_list += [prim_name.lower()]
 
                 prim_name_synonym = prim_name.lower()
                 for word in synonyms:
@@ -99,12 +101,12 @@ def semantic_reporting(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_us
 
                 prim_name_list += [synonym for p in prim_name_list if p.lower() in synonyms for synonym in synonyms[p.lower()]]
 
-                prim_name_set = set(p for p in prim_name_list if p != '')
+            prim_name_set = set(p for p in prim_name_list if p != '')
 
-                for p in prim_name_set:
-                    if p not in report_cached:
-                        report_cached[p] = [x["SOMA_DFL"] for x in semrep.semanticReport(p) if "SOMA_DFL" in x]
-                    report += report_cached[p]
+            for p in prim_name_set:
+                if p not in report_cached:
+                    report_cached[p] = [x["SOMA_DFL"] for x in semrep.semanticReport(p) if "SOMA_DFL" in x]
+                report += report_cached[p]
 
             report = sorted(tuple(set(report)))
 
@@ -112,9 +114,9 @@ def semantic_reporting(in_ABox_usd_file: str, in_TBox_Usd_file: str, out_ABox_us
 
             for sem_class in report:
                 dfl, sem_class = sem_class.split(":")
-                sem_class = sem_class.replace('.', '').replace('_', '')
+                sem_class = sem_class.replace('.', '')
                 if dfl == 'dfl':
-                    sem_path = f"/SOMADFL/_class_{sem_class}"
+                    sem_path = f"/SOMA_DFL/_class_{sem_class}"
                     if stage_TBox.GetPrimAtPath(sem_path):
                         semanticTagAPI.CreateSemanticReportsRel().AddTarget(sem_path)
                     else:

@@ -18,7 +18,7 @@ def create_path(name: str, is_ns: bool, prefix="/_class_") -> str:
     usd_path = usd_path.replace("www", "")
     usd_path = usd_path.replace(".owl/", ".owl#")
     usd_path = usd_path.replace(".owl", "")
-    usd_path = re.sub(r"[^a-zA-Z/]+", "", usd_path)
+    usd_path = re.sub(r"[^a-zA-Z/_]+", "", usd_path)
     words = usd_path.split("/")[-N:]
     if is_ns:
         usd_path = prefix + "/".join(words) + "_namespace"
