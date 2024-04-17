@@ -37,25 +37,28 @@ def main():
     parser.set_defaults(relative_to_ros_package=None)
     parser.add_argument(
         "--no-physics",
-        action='store_true',
+        dest="physics",
+        action='store_false',
         help="Whether to include physics properties or not",
     )
-    parser.set_defaults(nophysics=False)
+    parser.set_defaults(physics=True)
     parser.add_argument(
         "--no-visual",
-        action='store_true',
+        dest="visual",
+        action='store_false',
         help="Whether to include visual meshes or not",
     )
-    parser.set_defaults(novisual=False)
+    parser.set_defaults(visual=True)
     parser.add_argument(
         "--no-collision",
-        action='store_true',
+        dest="collision",
+        action='store_false',
         help="Whether to include collision meshes or not",
     )
-    parser.set_defaults(nocollision=False)
+    parser.set_defaults(collision=True)
     parser.add_argument(
         "--keepusd",
-        action='store_true',
+        action='store_false',
         help="Whether to keep the USD file or not",
     )
     parser.set_defaults(keepusd=False)
@@ -72,14 +75,14 @@ def main():
         type=float,
         help="The default color of the meshes",
     )
-    parser.set_defaults(defaultrgba=numpy.array([1.0, 0.0, 0.0, 0.0]))
+    parser.set_defaults(defaultrgba=numpy.array([0.9, 0.9, 0.9, 1.0]))
 
     args = parser.parse_args()
 
     fixed_base = args.fixed_base
-    with_physics = not args.nophysics
-    with_visual = not args.novisual
-    with_collision = not args.nocollision
+    with_physics = args.physics
+    with_visual = args.visual
+    with_collision = args.collision
     keep_usd = args.keepusd
 
     in_extension = os.path.splitext(args.input)[1]

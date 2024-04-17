@@ -79,10 +79,9 @@ class MeshProperty:
         mesh = UsdGeom.Mesh(mesh_prim)
         prim_vars_api = UsdGeom.PrimvarsAPI(mesh_prim)
         texture_coordinates = None
-        for texture_coordinate_name in ["st", "UVMap"]:
-            if prim_vars_api.HasPrimvar(texture_coordinate_name):
-                texture_coordinates = prim_vars_api.GetPrimvar(texture_coordinate_name).Get()
-                texture_coordinates = numpy.array(texture_coordinates, dtype=numpy.float32)
+        for prim_var in prim_vars_api.GetPrimvars():
+            if prim_var.GetName() != "st1" and prim_var.GetTypeName().cppTypeName == "VtArray<GfVec2f>":
+                texture_coordinates = numpy.array(prim_var.Get(), dtype=numpy.float32)
                 break
 
         geom_subsets = {}

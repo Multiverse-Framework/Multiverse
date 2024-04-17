@@ -36,10 +36,17 @@ def import_dae(in_daes: List[str],
                mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
                clean_up: bool = True) -> str:
     return (f"{clean_up_meshes_script}" if clean_up else "") + f"""
+import math
 for in_dae in {in_daes}:
     bpy.ops.wm.collada_import(filepath=in_dae)
+    bpy.context.active_object.rotation_euler[0] += math.radians(-90)
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
     bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
+    
+# Set alpha to 1
+for mat in bpy.data.materials:
+    if hasattr(mat.node_tree, "nodes"):
+        mat.node_tree.nodes["Principled BSDF"].inputs["Alpha"].default_value = 1.0
 """
 
 

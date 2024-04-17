@@ -205,14 +205,13 @@ class UrdfImporter(Factory):
             build_urdf_inertial_api(physics_mass_api=physics_mass_api)
 
     def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> None:
-        geom_name = f"{link.name}_geom"
         if self._config.with_visual:
             for i, visual in enumerate(link.visuals):
-                visual_geom_name = f"{geom_name}_visual_{i}"
+                visual_geom_name = f"{link.name}_visual_{i}"
                 self._import_geom(geom_name=visual_geom_name, geom=visual, body_builder=body_builder)
         if self._config.with_collision:
             for i, collision in enumerate(link.collisions):
-                collision_geom_name = f"{geom_name}_collision_{i}"
+                collision_geom_name = f"{link.name}_collision_{i}"
                 self._import_geom(geom_name=collision_geom_name, geom=collision, body_builder=body_builder)
 
     def _import_geom(self,
@@ -242,7 +241,7 @@ class UrdfImporter(Factory):
                                      density=geom_density)
 
         if not type(geom.geometry) is urdf.Mesh:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
+            geom_builder = body_builder.add_geom(geom_name=f"SM_{geom_name}", geom_property=geom_property)
             geom_builder.build()
 
             gprim_prim = geom_builder.gprim.GetPrim()
@@ -284,10 +283,10 @@ class UrdfImporter(Factory):
                         # TODO: Fix empty mesh
                         continue
 
-                    geom_builder = body_builder.add_geom(geom_name=f"{geom_name}_{mesh_name}",
+                    geom_builder = body_builder.add_geom(geom_name=f"SM_{geom_name}",
                                                          geom_property=geom_property)
 
-                    geom_builder.add_mesh(mesh_name=mesh_name,
+                    geom_builder.add_mesh(mesh_name=f"SM_{mesh_name}",
                                           mesh_property=mesh_property)
                     geom_builder.build()
                     geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
@@ -310,11 +309,12 @@ class UrdfImporter(Factory):
                         material_property = MaterialProperty.from_material_file_path(
                             material_file_path=tmp_usd_mesh_file_path,
                             material_path=material_path)
-                        material_builder = geom_builder.add_material(material_name=material_path.name,
+                        material_name = f"M_{geom_name}"
+                        material_builder = geom_builder.add_material(material_name=material_name,
                                                                      material_property=material_property)
 
                         stage = self.world_builder.stage
-                        urdf_material_path = self.urdf_materials_prim.GetPath().AppendChild(material_path.name)
+                        urdf_material_path = self.urdf_materials_prim.GetPath().AppendChild(material_name)
                         if not stage.GetPrimAtPath(urdf_material_path).IsValid():
                             urdf_material = UsdUrdf.UrdfMaterial.Define(stage, urdf_material_path)
 
@@ -338,7 +338,7 @@ class UrdfImporter(Factory):
                         material_property = MaterialProperty.from_material_file_path(
                             material_file_path=tmp_usd_mesh_file_path,
                             material_path=material_path)
-                        geom_builder.add_material(material_name=material_path.name,
+                        geom_builder.add_material(material_name=material_name,
                                                   material_property=material_property,
                                                   subset=UsdGeom.Subset(child_prim))
 
