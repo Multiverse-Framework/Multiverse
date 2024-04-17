@@ -77,7 +77,13 @@ class BodyBuilder:
         return joint_builder
 
     def enable_rigid_body(self) -> None:
-        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self._xform)
+        parent_prim = self._xform.GetPrim().GetParent()
+        while parent_prim.GetPath() != Sdf.Path("/"):
+            if parent_prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                return
+            parent_prim = parent_prim.GetParent()
+
+        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self._xform.GetPrim())
         physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
         physics_rigid_body_api.Apply(self._xform.GetPrim())
 
