@@ -303,7 +303,8 @@ PYBIND11_MODULE(multiverse_client_pybind, handle)
         .def("connect", static_cast<void (MultiverseClient::*)(const std::string &, const std::string &)>(&MultiverseClient::connect))
         .def("start", &MultiverseClient::start)
         .def("communicate", &MultiverseClient::communicate)
-        .def("disconnect", &MultiverseClient::disconnect);
+        .def("disconnect", &MultiverseClient::disconnect)
+        .def("get_time_now", &MultiverseClient::get_time_now);
 
     pybind11::class_<MultiverseClientPybind, MultiverseClient>(handle, "MultiverseClientPybind")
         .def(pybind11::init<const std::string &>())

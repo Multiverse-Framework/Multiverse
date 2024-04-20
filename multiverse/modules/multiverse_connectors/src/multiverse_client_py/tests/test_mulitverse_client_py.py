@@ -16,7 +16,9 @@ def kill_multiverse_server(process: subprocess.Popen):
 
 
 class MultiverseClientTest(MultiverseClient):
-    def __init__(self, client_addr: SocketAddress, multiverse_meta_data: MultiverseMetaData) -> None:
+    def __init__(self, 
+                 client_addr: SocketAddress, 
+                 multiverse_meta_data: MultiverseMetaData) -> None:
         super().__init__(client_addr, multiverse_meta_data)
 
     def loginfo(self, message: str) -> None:

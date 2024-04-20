@@ -97,7 +97,7 @@ class SocketService(MultiverseService):
         request_meta_data["meta_data"]["time_unit"] = "s" if meta_data.time_unit == "" else meta_data.time_unit
         request_meta_data["meta_data"]["handedness"] = "rhs" if meta_data.handedness == "" else meta_data.handedness
 
-        send_data = [0]
+        send_data = [self.world_time + self.sim_time]
 
         for object_data in request.send:
             is_object_name_empty = object_data.object_name == ""

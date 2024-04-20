@@ -380,6 +380,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 
 		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
 			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
+			mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, object_name.c_str()) == -1 &&
 			!(send_objects_json.isMember(object_name) &&
 			  send_objects_json[object_name].empty()))
 		{

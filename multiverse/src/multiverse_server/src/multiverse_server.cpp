@@ -738,7 +738,7 @@ void MultiverseServer::validate_meta_data()
                     continue;
                 }
 
-                receive_objects_json[object_name] = Json::objectValue;
+                receive_objects_json[object_name] = Json::arrayValue;
                 for (const std::pair<std::string, Attribute> &attribute_pair : worlds[world_name].objects[object_name].attributes)
                 {
                     receive_objects_json[object_name].append(attribute_pair.first);

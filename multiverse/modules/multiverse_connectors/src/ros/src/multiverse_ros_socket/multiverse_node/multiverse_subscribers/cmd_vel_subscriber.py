@@ -30,6 +30,7 @@ class CmdVelSubscriber(MultiverseSubscriber):
 
     def _init_send_data(self) -> None:
         self.send_data = [0.0] * 7
+        self.send_data[0] = self.world_time + self.sim_time
 
     def _bind_send_data(self, twist_msg: Twist) -> Twist:
         self.send_data[1:] = [
