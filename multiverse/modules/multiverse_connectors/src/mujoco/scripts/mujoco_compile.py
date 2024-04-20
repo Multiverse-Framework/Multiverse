@@ -541,6 +541,7 @@ class MujocoCompiler:
                 entity_root = entity_tree.getroot()
                 for body_element in entity_root.findall(".//body"):
                     body_name = body_element.get("name")
+                    body_name = f"{entity.prefix.get('body', '')}{body_name}{entity.suffix.get('body', '')}"
                     not_exclude_collision_bodies.append(body_name)
             self.modify_entity(entity)
             include_element = ET.Element("include", {"file": os.path.basename(entity.saved_path)})
