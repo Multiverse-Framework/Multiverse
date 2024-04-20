@@ -5,3 +5,5 @@ endif()
 if (UNIX)
     add_subdirectory(ros)
 endif()
+
+add_subdirectory(multiverse_client_py)

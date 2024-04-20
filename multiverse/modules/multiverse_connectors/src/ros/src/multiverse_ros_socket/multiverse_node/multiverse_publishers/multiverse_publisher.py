@@ -64,6 +64,7 @@ class MultiversePublisher(MultiverseNode):
             if self._use_meta_data:
                 self._bind_response_meta_data(self.response_meta_data)
             else:
+                self.send_data = [self.world_time + self.sim_time]
                 self._bind_receive_data(self.receive_data)
             self._publish()
         except:

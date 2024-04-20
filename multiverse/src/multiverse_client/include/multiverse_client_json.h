@@ -30,7 +30,7 @@
 class MultiverseClientJson : public MultiverseClient
 {
 protected:
-    bool compute_response_meta_data() override final;
+    bool compute_request_and_response_meta_data() override final;
 
     void compute_request_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const override final;
 

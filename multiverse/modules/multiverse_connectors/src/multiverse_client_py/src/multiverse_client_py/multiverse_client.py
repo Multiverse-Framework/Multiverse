@@ -32,6 +32,7 @@ class MultiverseClient:
     _client_addr: SocketAddress
     _meta_data: MultiverseMetaData
     _multiverse_socket: MultiverseClientPybind
+    _start_time: float
 
     def __init__(
             self,
@@ -53,6 +54,7 @@ class MultiverseClient:
             "send": {},
             "receive": {},
         }
+        self._start_time = 0.0
 
     def loginfo(self, message: str) -> None:
         raise NotImplementedError(f"Must implement loginfo() for {self.__class__.__name__}.")
@@ -102,7 +104,7 @@ class MultiverseClient:
     def receive_data(self) -> List[float]:
         receive_data = self._multiverse_socket.get_receive_data()
         assert isinstance(receive_data, list)
-        if receive_data == []:
+        if len(receive_data) == 0:
             message = f"[Client {self._client_addr.port}] Receive empty data."
             self.logwarn(message)
         return receive_data
@@ -122,6 +124,7 @@ class MultiverseClient:
     def _connect_and_start(self) -> None:
         self._multiverse_socket.connect(self._client_addr.host, self._client_addr.port)
         self._multiverse_socket.start()
+        self._start_time = self._multiverse_socket.get_time_now()
 
     def _disconnect(self) -> None:
         self._multiverse_socket.disconnect()
@@ -132,3 +135,11 @@ class MultiverseClient:
     def _restart(self) -> None:
         self._disconnect()
         self._connect_and_start()
+
+    @property
+    def world_time(self) -> float:
+        return self.response_meta_data["time"]
+    
+    @property
+    def sim_time(self) -> float:
+        return self._multiverse_socket.get_time_now() - self._start_time

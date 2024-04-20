@@ -81,6 +81,7 @@ class UrdfImporter(Factory):
     def __init__(
             self,
             file_path: str,
+            fixed_base: bool,
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
@@ -94,10 +95,11 @@ class UrdfImporter(Factory):
         model_name = self.urdf_model.name
         super().__init__(file_path=file_path, config=Configuration(
             model_name=model_name,
+            fixed_base=fixed_base,
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            default_rgba=default_rgba if default_rgba is not None else numpy.array([1.0, 0.0, 0.0, 0.0]),
+            default_rgba=default_rgba if default_rgba is not None else numpy.array([0.9, 0.9, 0.9, 1.0]),
             inertia_source=inertia_source
         ))
 
@@ -112,7 +114,6 @@ class UrdfImporter(Factory):
                   f"add it as a root body.")
             body_builder = self.world_builder.add_body(body_name=self.urdf_model.get_root(),
                                                        parent_body_name=self._config.model_name)
-            body_builder.enable_rigid_body()
 
         self._import_geoms(link=self.urdf_model.link_map[self.urdf_model.get_root()],
                            body_builder=body_builder)
@@ -152,7 +153,7 @@ class UrdfImporter(Factory):
                                    parent_body_name=urdf_link_name,
                                    child_body_name=child_urdf_link_name)
 
-                self._import_body_and_joint(urdf_link_name=child_urdf_link_name)
+            self._import_body_and_joint(urdf_link_name=child_urdf_link_name)
 
     def _import_body(self, body_name: str, child_body_name: str, joint: urdf.Joint) -> BodyBuilder:
         joint_pos, joint_quat = get_joint_pos_and_quat(joint)
@@ -160,7 +161,6 @@ class UrdfImporter(Factory):
         if self._config.with_physics and joint.type != "fixed":
             body_builder = self.world_builder.add_body(body_name=child_body_name,
                                                        parent_body_name=self._config.model_name)
-            body_builder.enable_rigid_body()
         else:
             body_builder = self.world_builder.add_body(body_name=child_body_name,
                                                        parent_body_name=body_name)
@@ -174,8 +174,8 @@ class UrdfImporter(Factory):
         return body_builder
 
     def _import_inertial(self, body: urdf.Link, body_builder: BodyBuilder) -> None:
-        if (self._config.with_physics and
-                (len(body_builder.child_body_builders) > 0 or len(body_builder.geom_builders) > 0)):
+        if self._config.with_physics and not (
+                self._config.fixed_base and body.name == self._config.model_name):
             if self._config.inertia_source == InertiaSource.FROM_SRC:
                 if body.inertial is not None:
                     body_mass = body.inertial.mass
@@ -196,24 +196,22 @@ class UrdfImporter(Factory):
                                                                  diagonal_inertia=body_diagonal_inertia,
                                                                  principal_axes=body_principal_axes)
                 else:
-                    _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
+                    _, physics_mass_api = body_builder.compute_and_set_inertial(
+                        inertia_source=self._config.inertia_source)
 
-            elif self._config.inertia_source in [InertiaSource.FROM_VISUAL_MESH, InertiaSource.FROM_COLLISION_MESH]:
-                _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
             else:
-                raise ValueError(f"Inertia source {self._config.inertia_source} not implemented.")
+                _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
 
             build_urdf_inertial_api(physics_mass_api=physics_mass_api)
 
     def _import_geoms(self, link: urdf.Link, body_builder: BodyBuilder) -> None:
-        geom_name = f"{link.name}_geom"
-        # if self._config.with_visual:
-        #     for i, visual in enumerate(link.visuals):
-        #         visual_geom_name = f"{geom_name}_visual_{i}"
-        #         self._import_geom(geom_name=visual_geom_name, geom=visual, body_builder=body_builder)
+        if self._config.with_visual:
+            for i, visual in enumerate(link.visuals):
+                visual_geom_name = f"{link.name}_visual_{i}"
+                self._import_geom(geom_name=visual_geom_name, geom=visual, body_builder=body_builder)
         if self._config.with_collision:
             for i, collision in enumerate(link.collisions):
-                collision_geom_name = f"{geom_name}_collision_{i}"
+                collision_geom_name = f"{link.name}_collision_{i}"
                 self._import_geom(geom_name=collision_geom_name, geom=collision, body_builder=body_builder)
 
     def _import_geom(self,
@@ -243,7 +241,7 @@ class UrdfImporter(Factory):
                                      density=geom_density)
 
         if not type(geom.geometry) is urdf.Mesh:
-            geom_builder = body_builder.add_geom(geom_name=geom_name, geom_property=geom_property)
+            geom_builder = body_builder.add_geom(geom_name=f"SM_{geom_name}", geom_property=geom_property)
             geom_builder.build()
 
             gprim_prim = geom_builder.gprim.GetPrim()
@@ -280,16 +278,15 @@ class UrdfImporter(Factory):
                     mesh_name = mesh_prim.GetName()
                     mesh_path = mesh_prim.GetPath()
                     mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_usd_mesh_file_path,
-                                                                     mesh_path=mesh_path,
-                                                                     texture_coordinate_name="UVMap")
+                                                                     mesh_path=mesh_path)
                     if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
                         # TODO: Fix empty mesh
                         continue
 
-                    geom_builder = body_builder.add_geom(geom_name=f"{geom_name}_{mesh_name}",
+                    geom_builder = body_builder.add_geom(geom_name=f"SM_{geom_name}",
                                                          geom_property=geom_property)
 
-                    geom_builder.add_mesh(mesh_name=mesh_name,
+                    geom_builder.add_mesh(mesh_name=f"SM_{mesh_name}",
                                           mesh_property=mesh_property)
                     geom_builder.build()
                     geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
@@ -312,11 +309,12 @@ class UrdfImporter(Factory):
                         material_property = MaterialProperty.from_material_file_path(
                             material_file_path=tmp_usd_mesh_file_path,
                             material_path=material_path)
-                        material_builder = geom_builder.add_material(material_name=material_path.name,
+                        material_name = f"M_{geom_name}"
+                        material_builder = geom_builder.add_material(material_name=material_name,
                                                                      material_property=material_property)
 
                         stage = self.world_builder.stage
-                        urdf_material_path = self.urdf_materials_prim.GetPath().AppendChild(material_path.name)
+                        urdf_material_path = self.urdf_materials_prim.GetPath().AppendChild(material_name)
                         if not stage.GetPrimAtPath(urdf_material_path).IsValid():
                             urdf_material = UsdUrdf.UrdfMaterial.Define(stage, urdf_material_path)
 
@@ -330,6 +328,19 @@ class UrdfImporter(Factory):
 
                         urdf_link_visual_api = UsdUrdf.UrdfLinkVisualAPI(gprim_prim)
                         urdf_link_visual_api.CreateMaterialRel().SetTargets([urdf_material_path])
+
+                    for child_prim in [prim for prim in mesh_prim.GetChildren() if prim.IsA(UsdGeom.Subset)]:
+                        material_binding_api = UsdShade.MaterialBindingAPI(child_prim)
+                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                        if len(material_paths) > 1:
+                            raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
+                        material_path = material_paths[0]
+                        material_property = MaterialProperty.from_material_file_path(
+                            material_file_path=tmp_usd_mesh_file_path,
+                            material_path=material_path)
+                        geom_builder.add_material(material_name=material_name,
+                                                  material_property=material_property,
+                                                  subset=UsdGeom.Subset(child_prim))
 
     def get_mesh_file_path(self, urdf_mesh_file_path: str) -> Optional[str]:
         mesh_file_path = None

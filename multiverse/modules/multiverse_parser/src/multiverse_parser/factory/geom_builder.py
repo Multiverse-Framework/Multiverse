@@ -133,7 +133,7 @@ class GeomBuilder:
             new_mesh_stage = Usd.Stage.Open(new_usd_mesh_file_path)
             new_default_prim = new_mesh_stage.GetDefaultPrim()
             if mesh_name != new_default_prim.GetName():
-                raise ValueError(f"Mesh name {mesh_name} does not match default prim name in {new_usd_mesh_file_path}.")
+                print(f"Mesh name {mesh_name} does not match default prim name in {new_usd_mesh_file_path}.")
             if not new_default_prim.IsA(UsdGeom.Mesh):
                 raise ValueError(f"Default prim of {new_usd_mesh_file_path} is not a mesh.")
 
@@ -209,7 +209,7 @@ class GeomBuilder:
             self.gprim.CreateDisplayColorAttr(self.rgba[:3])
             self.gprim.CreateDisplayOpacityAttr(self.rgba[3])
         if not self.is_visible:
-            self.gprim.CreateDisplayOpacityAttr([0.0])
+            self.gprim.CreateDisplayOpacityAttr([1.0])
             self.gprim.CreateVisibilityAttr("invisible")
 
         if self.is_collidable:

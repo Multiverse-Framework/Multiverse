@@ -115,144 +115,241 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 
 bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 {
-	if (object_names.size() == 0)
+	boost::filesystem::path scene_xml_folder = scene_xml_path.parent_path();
+	for (const std::string &object_name : object_names)
 	{
-		return true;
-	}
-	else
-	{
-		boost::filesystem::path scene_xml_folder = scene_xml_path.parent_path();
-		for (const std::string &object_name : object_names)
+		const std::vector<boost::filesystem::path> &object_xml_paths = find_object_xml_paths(resources, object_name);
+		if (!object_xml_paths.empty())
 		{
-			const std::vector<boost::filesystem::path> &object_xml_paths = find_object_xml_paths(resources, object_name);
-			if (!object_xml_paths.empty())
-			{
-				const boost::filesystem::path object_xml_path = object_xml_paths[0];
-				printf("Found XML file of [%s] at: %s.\n", object_name.c_str(), object_xml_path.string().c_str());
+			const boost::filesystem::path object_xml_path = object_xml_paths[0];
+			printf("Found XML file of [%s] at [%s].\n", object_name.c_str(), object_xml_path.string().c_str());
+			printf("Spawn object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 
-				boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
-				{
+			boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
+			{
 #ifdef _WIN32
-						boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_options::overwrite_existing);
+				boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_options::overwrite_existing);
 #else
-						boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_option::overwrite_if_exists);
+				boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_option::overwrite_if_exists);
 #endif
-					tinyxml2::XMLDocument doc;
-					if (doc.LoadFile(new_object_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
+				tinyxml2::XMLDocument doc;
+				if (doc.LoadFile(new_object_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
+				{
+					tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
+					for (const std::string &asset_type : {"mesh", "texture"})
 					{
-						tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
-						for (const std::string &asset_type : {"mesh", "texture"})
+						boost::filesystem::path asset_dir_path = object_xml_path;
+						const char *asset_type_dir = (asset_type + "dir").c_str();
+						for (tinyxml2::XMLElement *compiler_element = mujoco_element->FirstChildElement("compiler");
+							 compiler_element != nullptr; compiler_element = compiler_element->NextSiblingElement("compiler"))
 						{
-							boost::filesystem::path asset_dir_path = object_xml_path;
-							const char *asset_type_dir = (asset_type + "dir").c_str();
-							for (tinyxml2::XMLElement *compiler_element = mujoco_element->FirstChildElement("compiler");
-								 compiler_element != nullptr; compiler_element = compiler_element->NextSiblingElement())
+							if (compiler_element->Attribute(asset_type_dir) == nullptr)
 							{
-								if (compiler_element->Attribute(asset_type_dir) == nullptr)
+								continue;
+							}
+							asset_dir_path = compiler_element->Attribute(asset_type_dir);
+							if (asset_dir_path.is_relative())
+							{
+								asset_dir_path = object_xml_path.parent_path() / asset_dir_path;
+							}
+							compiler_element->DeleteAttribute(asset_type_dir);
+						}
+						for (tinyxml2::XMLElement *asset_element = mujoco_element->FirstChildElement("asset");
+							 asset_element != nullptr; asset_element = asset_element->NextSiblingElement("asset"))
+						{
+							for (tinyxml2::XMLElement *asset_type_element = asset_element->FirstChildElement(asset_type.c_str());
+								 asset_type_element != nullptr; asset_type_element = asset_type_element->NextSiblingElement(asset_type.c_str()))
+							{
+								if (asset_type_element->Attribute("file") == nullptr)
 								{
 									continue;
 								}
-								asset_dir_path = compiler_element->Attribute(asset_type_dir);
-								if (asset_dir_path.is_relative())
+								boost::filesystem::path asset_file_path = asset_type_element->Attribute("file");
+								if (!asset_file_path.empty() && asset_file_path.is_relative())
 								{
-									asset_dir_path = object_xml_path.parent_path() / asset_dir_path;
-								}
-								compiler_element->DeleteAttribute(asset_type_dir);
-							}
-							for (tinyxml2::XMLElement *asset_element = mujoco_element->FirstChildElement("asset");
-								 asset_element != nullptr; asset_element = asset_element->NextSiblingElement())
-							{
-								for (tinyxml2::XMLElement *asset_type_element = asset_element->FirstChildElement(asset_type.c_str());
-									 asset_type_element != nullptr; asset_type_element = asset_type_element->NextSiblingElement())
-								{
-									if (asset_type_element->Attribute("file") == nullptr)
-									{
-										continue;
-									}
-									boost::filesystem::path asset_file_path = asset_type_element->Attribute("file");
-									if (!asset_file_path.empty() && asset_file_path.is_relative())
-									{
-										asset_file_path = asset_dir_path / asset_file_path;
-										asset_type_element->SetAttribute("file", asset_file_path.c_str());
-									}
+									asset_file_path = asset_dir_path / asset_file_path;
+									asset_type_element->SetAttribute("file", asset_file_path.c_str());
 								}
 							}
 						}
 
-						for (tinyxml2::XMLElement *default_element = mujoco_element->FirstChildElement("default");
-							 default_element != nullptr; default_element = default_element->NextSiblingElement())
+						std::string object_pos = "";
+						if (!response_meta_data_json["send"][object_name]["position"].empty())
 						{
-							std::vector<tinyxml2::XMLElement *> children_to_remove;
-							for (tinyxml2::XMLElement *default_child_element = default_element->FirstChildElement("default");
-								 default_child_element != nullptr; default_child_element = default_child_element->NextSiblingElement())
+							for (const Json::Value &pos : response_meta_data_json["send"][object_name]["position"])
 							{
-								if (default_child_element->Attribute("class") != nullptr && (strcmp(default_child_element->Attribute("class"), "visual") == 0 || strcmp(default_child_element->Attribute("class"), "collision") == 0))
+								object_pos += pos.asString() + " ";
+							}
+							object_pos.pop_back();
+						}
+						else if (!response_meta_data_json["receive"][object_name]["position"].empty())
+						{
+							for (const Json::Value &pos : response_meta_data_json["receive"][object_name]["position"])
+							{
+								object_pos += pos.asString() + " ";
+							}
+							object_pos.pop_back();
+						}
+						else
+						{
+							object_pos = "0 0 0";
+						}
+
+						std::string object_quat = "";
+						if (!response_meta_data_json["send"][object_name]["quaternion"].empty())
+						{
+							for (const Json::Value &quat : response_meta_data_json["send"][object_name]["quaternion"])
+							{
+								object_quat += quat.asString() + " ";
+							}
+							object_quat.pop_back();
+						}
+						else if (!response_meta_data_json["receive"][object_name]["quaternion"].empty())
+						{
+							for (const Json::Value &quat : response_meta_data_json["receive"][object_name]["quaternion"])
+							{
+								object_quat += quat.asString() + " ";
+							}
+							object_quat.pop_back();
+						}
+						else
+						{
+							object_quat = "1 0 0 0";
+						}
+
+						for (tinyxml2::XMLElement *worldbody_element = mujoco_element->FirstChildElement("worldbody");
+							 worldbody_element != nullptr; worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
+						{
+							for (tinyxml2::XMLElement *body_element = worldbody_element->FirstChildElement("body");
+								 body_element != nullptr; body_element = body_element->NextSiblingElement("body"))
+							{
+								if (strcmp(body_element->Attribute("name"), object_name.c_str()) == 0)
 								{
-									children_to_remove.push_back(default_child_element);
+									body_element->SetAttribute("pos", object_pos.c_str());
+									body_element->SetAttribute("quat", object_quat.c_str());
+									break;
 								}
 							}
-							for (tinyxml2::XMLElement *child_to_remove : children_to_remove)
-							{
-								default_element->DeleteChild(child_to_remove);
-							}
 						}
-						doc.SaveFile(new_object_xml_path.string().c_str());
-					}
-					else
-					{
-						printf("Could not load file: %s\n", new_object_xml_path.string().c_str());
-					}
-				}
 
-				tinyxml2::XMLDocument doc;
-				if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
-				{
-					tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
-					tinyxml2::XMLElement *include_element = doc.NewElement("include");
-					mujoco_element->InsertEndChild(include_element);
+						for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
+							 keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
+						{
+							keyframe_element->DeleteChildren();
+						}
+					}
 
-					include_element->SetAttribute("file", object_xml_path.filename().c_str());
-					doc.SaveFile(scene_xml_path.string().c_str());
+					doc.SaveFile(new_object_xml_path.string().c_str());
 				}
 				else
 				{
-					printf("Could not load file: %s\n", scene_xml_path.string().c_str());
+					printf("Could not load file: %s\n", new_object_xml_path.string().c_str());
+					return false;
 				}
-				break;
+			}
+
+			tinyxml2::XMLDocument doc;
+			if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
+			{
+				tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
+				tinyxml2::XMLElement *include_element = doc.NewElement("include");
+				mujoco_element->InsertEndChild(include_element);
+
+				include_element->SetAttribute("file", object_xml_path.filename().c_str());
+				doc.SaveFile(scene_xml_path.string().c_str());
 			}
 			else
 			{
-				printf("No XML files found with the tag <mujoco model=\"%s\">\n", object_name.c_str());
+				printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 				return false;
 			}
 		}
-		mtx.lock();
-		MjSimulate::reset();
-		mtx.unlock();
-		object_names.clear();
-		return true;
+		else
+		{
+			printf("No XML files found with the tag <mujoco model=\"%s\">\n", object_name.c_str());
+			return false;
+		}
 	}
-}
-
-bool MjMultiverseClient::destroy_objects(const std::set<std::string> objects)
-{
-	if (objects.size() == 0)
-	{
-		return true;
-	}
-
+	object_names.clear();
 	return true;
 }
 
-bool MjMultiverseClient::init_objects(bool from_server)
+bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 {
-	if (from_server && reader.parse(request_meta_data_str, request_meta_data_json))
+	tinyxml2::XMLDocument doc;
+	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
-		receive_objects_json = request_meta_data_json["receive"];
-		send_objects_json = request_meta_data_json["send"];
+		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
+		for (const std::string &object_name : std::set<std::string>(object_names))
+		{
+			printf("Trying to remove object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
+			for (tinyxml2::XMLElement *include_element = mujoco_element->FirstChildElement("include");
+				 include_element != nullptr; include_element = include_element->NextSiblingElement("include"))
+			{
+				boost::filesystem::path include_file_path = include_element->Attribute("file");
+				if (include_file_path.is_relative())
+				{
+					include_file_path = scene_xml_path.parent_path() / include_file_path;
+				}
+
+				if (contains_tag(include_file_path, object_name))
+				{
+					mujoco_element->DeleteChild(include_element);
+					printf("Removed object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
+					mjModel *m_include = mj_loadXML(include_file_path.string().c_str(), nullptr, nullptr, 0);
+					for (int body_id = 1; body_id < m_include->nbody; body_id++)
+					{
+						const std::string body_name = mj_id2name(m_include, mjtObj::mjOBJ_BODY, body_id);
+						if (send_objects_json.isMember(body_name))
+						{
+							send_objects_json.removeMember(body_name);
+							printf("Removed object [%s] from the request meta data.\n", body_name.c_str());
+						}
+					}
+					for (int joint_id = 0; joint_id < m_include->njnt; joint_id++)
+					{
+						if (mj_id2name(m_include, mjtObj::mjOBJ_JOINT, joint_id))
+						{
+							const std::string joint_name = mj_id2name(m_include, mjtObj::mjOBJ_JOINT, joint_id);
+							if (send_objects_json.isMember(joint_name))
+							{
+								send_objects_json.removeMember(joint_name);
+								printf("Removed object [%s] from the request meta data.\n", joint_name.c_str());
+							}
+						}
+					}
+					break;
+				}
+			}
+		}
+		doc.SaveFile(scene_xml_path.string().c_str());
+	}
+	else
+	{
+		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
+		return false;
+	}
+
+	object_names.clear();
+	return true;
+}
+
+bool MjMultiverseClient::init_objects(bool from_request_meta_data)
+{
+	if (from_request_meta_data)
+	{
+		for (const std::string &object_name : request_meta_data_json["receive"].getMemberNames())
+		{
+			receive_objects_json[object_name] = request_meta_data_json["receive"][object_name];
+		}
+		for (const std::string &object_name : request_meta_data_json["send"].getMemberNames())
+		{
+			send_objects_json[object_name] = request_meta_data_json["send"][object_name];
+		}
 	}
 
 	std::set<std::string> objects_to_spawn;
+	std::set<std::string> objects_to_destroy;
 	for (const std::string &object_name : send_objects_json.getMemberNames())
 	{
 		if (strcmp(object_name.c_str(), "body") == 0 || strcmp(object_name.c_str(), "joint") == 0)
@@ -262,9 +359,16 @@ bool MjMultiverseClient::init_objects(bool from_server)
 
 		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
 			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
-			mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, object_name.c_str()) == -1)
+			!(receive_objects_json.isMember(object_name) &&
+			  receive_objects_json[object_name].empty()))
 		{
 			objects_to_spawn.insert(object_name);
+		}
+		else if (send_objects_json[object_name].empty() &&
+				 receive_objects_json.isMember(object_name) &&
+				 receive_objects_json[object_name].empty())
+		{
+			objects_to_destroy.insert(object_name);
 		}
 	}
 	for (const std::string &object_name : receive_objects_json.getMemberNames())
@@ -276,20 +380,62 @@ bool MjMultiverseClient::init_objects(bool from_server)
 
 		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
 			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
-			mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, object_name.c_str()) == -1)
+			mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, object_name.c_str()) == -1 &&
+			!(send_objects_json.isMember(object_name) &&
+			  send_objects_json[object_name].empty()))
 		{
 			objects_to_spawn.insert(object_name);
 		}
 	}
-	if (!spawn_objects(objects_to_spawn))
+	for (const std::string &object_name : objects_to_destroy)
 	{
-		return false;
+		receive_objects_json.removeMember(object_name);
+		send_objects_json.removeMember(object_name);
+	}
+
+	if (objects_to_spawn.size() > 0 || objects_to_destroy.size() > 0)
+	{
+		tinyxml2::XMLDocument doc;
+		if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
+		{
+			tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
+			for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
+				 keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
+			{
+				for (tinyxml2::XMLElement *key_element = keyframe_element->FirstChildElement("key");
+					 key_element != nullptr; key_element = key_element->NextSiblingElement("key"))
+				{
+					key_element->DeleteAttribute("qpos");
+					key_element->DeleteAttribute("qvel");
+					key_element->DeleteAttribute("act");
+					key_element->DeleteAttribute("ctrl");
+					key_element->DeleteAttribute("mpos");
+					key_element->DeleteAttribute("mquat");
+				}
+			}
+			doc.SaveFile(scene_xml_path.string().c_str());
+		}
+		else
+		{
+			printf("Could not load file: %s\n", scene_xml_path.string().c_str());
+			return false;
+		}
+
+		if (!spawn_objects(objects_to_spawn) || !destroy_objects(objects_to_destroy))
+		{
+			return false;
+		}
+
+		mtx.lock();
+		MjSimulate::load_new_model_and_keep_old_data();
+		mtx.unlock();
 	}
 
 	std::set<std::string> body_attributes = {"position", "quaternion", "odometric_velocity", "relative_velocity", "force", "torque"};
 	std::set<std::string> receive_hinge_joint_attributes = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
 	std::set<std::string> receive_slide_joint_attributes = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
 
+	receive_objects.clear();
 	for (const std::string &object_name : receive_objects_json.getMemberNames())
 	{
 		receive_objects[object_name] = {};
@@ -316,6 +462,8 @@ bool MjMultiverseClient::init_objects(bool from_server)
 
 	std::set<std::string> send_hinge_joint_attributes = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
 	std::set<std::string> send_slide_joint_attributes = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
+
+	send_objects.clear();
 	for (const std::string &object_name : send_objects_json.getMemberNames())
 	{
 		for (const Json::Value &attribute_json : send_objects_json[object_name])
@@ -325,14 +473,27 @@ bool MjMultiverseClient::init_objects(bool from_server)
 			{
 				if (body_attributes.count(attribute_name) != 0)
 				{
-					for (int body_id = 0; body_id < m->nbody; body_id++)
+					for (int body_id = 1; body_id < m->nbody; body_id++)
 					{
 						const std::string body_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_id);
 						if ((receive_objects.find(body_name) != receive_objects.end()) && (receive_objects[body_name].find(attribute_name) != receive_objects[body_name].end()))
 						{
 							continue;
 						}
-						send_objects[body_name].insert(attribute_name);
+						if (strcmp(attribute_name.c_str(), "relative_velocity") == 0)
+						{
+							if ((m->body_dofnum[body_id] == 6 &&
+								 m->body_jntadr[body_id] != -1 &&
+								 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
+							{
+								send_objects[body_name].insert(attribute_name);
+							}
+						}
+						else if (strcmp(attribute_name.c_str(), "position") == 0 ||
+								 strcmp(attribute_name.c_str(), "quaternion") == 0)
+						{
+							send_objects[body_name].insert(attribute_name);
+						}
 					}
 				}
 			}
@@ -379,9 +540,17 @@ bool MjMultiverseClient::init_objects(bool from_server)
 				const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str());
 				if (body_attributes.count(attribute_name) != 0 && body_id != -1)
 				{
-					send_objects[object_name].insert(attribute_name);
+					if ((m->body_dofnum[body_id] == 6 &&
+						 m->body_jntadr[body_id] != -1 &&
+						 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE) ||
+						strcmp(attribute_name.c_str(), "relative_velocity") != 0)
+					{
+						send_objects[object_name].insert(attribute_name);
+					}
 				}
-				else if (joint_id != -1 && ((send_hinge_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (send_slide_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)))
+				else if (joint_id != -1 &&
+						 ((send_hinge_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
+						  (send_slide_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)))
 				{
 					send_objects[object_name].insert(attribute_name);
 				}
@@ -507,7 +676,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, send_object.first.c_str());
 		const int joint_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, send_object.first.c_str());
 		const int mocap_id = m->body_mocapid[body_id];
-		const int actuator_id = mj_name2id(m, mjtObj::mjOBJ_JOINT, send_object.first.c_str());
+		const int actuator_id = mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, send_object.first.c_str());
 		if (body_id != -1)
 		{
 			if (mocap_id != -1)
@@ -542,7 +711,9 @@ void MjMultiverseClient::bind_response_meta_data()
 					}
 				}
 			}
-			else if (m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
+			else if (m->body_dofnum[body_id] == 6 &&
+					 m->body_jntadr[body_id] != -1 &&
+					 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 			{
 				mjtNum *xpos_desired = d->xpos + 3 * body_id;
 				mjtNum *xquat_desired = d->xquat + 4 * body_id;
@@ -575,16 +746,35 @@ void MjMultiverseClient::bind_response_meta_data()
 							xquat_desired[3] = z_json.asDouble();
 						}
 					}
+					else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0)
+					{
+						const Json::Value qvel_lin_x = response_meta_data_json["send"][send_object.first][attribute_name][0];
+						const Json::Value qvel_lin_y = response_meta_data_json["send"][send_object.first][attribute_name][1];
+						const Json::Value qvel_lin_z = response_meta_data_json["send"][send_object.first][attribute_name][2];
+						const Json::Value qvel_ang_x = response_meta_data_json["send"][send_object.first][attribute_name][3];
+						const Json::Value qvel_ang_y = response_meta_data_json["send"][send_object.first][attribute_name][4];
+						const Json::Value qvel_ang_z = response_meta_data_json["send"][send_object.first][attribute_name][5];
+						if (!qvel_lin_x.isNull() && !qvel_lin_y.isNull() && !qvel_lin_z.isNull() && !qvel_ang_x.isNull() && !qvel_ang_y.isNull() && !qvel_ang_z.isNull())
+						{
+							const int qvel_adr = m->body_dofadr[body_id];
+							d->qvel[qvel_adr] = qvel_lin_x.asDouble();
+							d->qvel[qvel_adr + 1] = qvel_lin_y.asDouble();
+							d->qvel[qvel_adr + 2] = qvel_lin_z.asDouble();
+							d->qvel[qvel_adr + 3] = qvel_ang_x.asDouble();
+							d->qvel[qvel_adr + 4] = qvel_ang_y.asDouble();
+							d->qvel[qvel_adr + 5] = qvel_ang_z.asDouble();
+						}
+					}
 				}
 
-				const int qpos_id = m->jnt_qposadr[m->body_jntadr[body_id]];
-				d->qpos[qpos_id] = xpos_desired[0];
-				d->qpos[qpos_id + 1] = xpos_desired[1];
-				d->qpos[qpos_id + 2] = xpos_desired[2];
-				d->qpos[qpos_id + 3] = xquat_desired[0];
-				d->qpos[qpos_id + 4] = xquat_desired[1];
-				d->qpos[qpos_id + 5] = xquat_desired[2];
-				d->qpos[qpos_id + 6] = xquat_desired[3];
+				const int qpos_adr = m->jnt_qposadr[m->body_jntadr[body_id]];
+				d->qpos[qpos_adr] = xpos_desired[0];
+				d->qpos[qpos_adr + 1] = xpos_desired[1];
+				d->qpos[qpos_adr + 2] = xpos_desired[2];
+				d->qpos[qpos_adr + 3] = xquat_desired[0];
+				d->qpos[qpos_adr + 4] = xquat_desired[1];
+				d->qpos[qpos_adr + 5] = xquat_desired[2];
+				d->qpos[qpos_adr + 6] = xquat_desired[3];
 			}
 			else if (m->body_dofnum[body_id] == 3 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_BALL)
 			{
@@ -643,11 +833,11 @@ void MjMultiverseClient::bind_response_meta_data()
 
 					if (!w_json.isNull() && !x_json.isNull() && !y_json.isNull() && !z_json.isNull())
 					{
-						const int qpos_id = m->jnt_qposadr[joint_id];
-						d->qpos[qpos_id] = w_json.asDouble();
-						d->qpos[qpos_id + 1] = x_json.asDouble();
-						d->qpos[qpos_id + 2] = y_json.asDouble();
-						d->qpos[qpos_id + 3] = z_json.asDouble();
+						const int qpos_adr = m->jnt_qposadr[joint_id];
+						d->qpos[qpos_adr] = w_json.asDouble();
+						d->qpos[qpos_adr + 1] = x_json.asDouble();
+						d->qpos[qpos_adr + 2] = y_json.asDouble();
+						d->qpos[qpos_adr + 3] = z_json.asDouble();
 					}
 				}
 			}
@@ -669,6 +859,102 @@ void MjMultiverseClient::bind_response_meta_data()
 		}
 	}
 	mtx.unlock();
+
+	tinyxml2::XMLDocument doc;
+	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
+	{
+		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
+		tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
+		if (keyframe_element == nullptr)
+		{
+			return;
+		}
+		tinyxml2::XMLElement *key_element = keyframe_element->FirstChildElement("key");
+
+		key_element->SetAttribute("time", d->time);
+		std::string qpos_str;
+		for (int qpos_id = 0; qpos_id < m->nq; qpos_id++)
+		{
+			qpos_str += std::to_string(d->qpos[qpos_id]) + " ";
+		}
+		if (qpos_str.size() > 0)
+		{
+			qpos_str.pop_back();
+			key_element->SetAttribute("qpos", qpos_str.c_str());
+		}
+
+		std::string qvel_str;
+		for (int dof_id = 0; dof_id < m->nv; dof_id++)
+		{
+			qvel_str += std::to_string(d->qvel[dof_id]) + " ";
+		}
+		if (qvel_str.size() > 0)
+		{
+			qvel_str.pop_back();
+			key_element->SetAttribute("qvel", qvel_str.c_str());
+		}
+
+		std::string act_str;
+		for (int act_id = 0; act_id < m->na; act_id++)
+		{
+			act_str += std::to_string(d->act[act_id]) + " ";
+		}
+		if (act_str.size() > 0)
+		{
+			act_str.pop_back();
+			key_element->SetAttribute("act", act_str.c_str());
+		}
+
+		std::string ctrl_str;
+		for (int ctrl_id = 0; ctrl_id < m->nu; ctrl_id++)
+		{
+			ctrl_str += std::to_string(d->ctrl[ctrl_id]) + " ";
+		}
+		if (ctrl_str.size() > 0)
+		{
+			ctrl_str.pop_back();
+			key_element->SetAttribute("ctrl", ctrl_str.c_str());
+		}
+
+		std::string mocap_pos_str;
+		std::string mocap_quat_str;
+		for (int mocap_pos_id = 0; mocap_pos_id < m->nmocap; mocap_pos_id++)
+		{
+			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id]) + " ";
+			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id + 1]) + " ";
+			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id + 2]) + " ";
+
+			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id]) + " ";
+			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 1]) + " ";
+			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 2]) + " ";
+			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 3]) + " ";
+		}
+		if (mocap_pos_str.size() > 0)
+		{
+			mocap_pos_str = mocap_pos_str.substr(0, mocap_pos_str.size() - 1);
+			key_element->SetAttribute("mpos", mocap_pos_str.c_str());
+		}
+		if (mocap_quat_str.size() > 0)
+		{
+			mocap_quat_str = mocap_quat_str.substr(0, mocap_quat_str.size() - 1);
+			key_element->SetAttribute("mquat", mocap_quat_str.c_str());
+		}
+
+		doc.SaveFile(scene_xml_path.string().c_str());
+
+		// load and compile model
+		char error[1000] = "Could not load binary model";
+
+		m = mj_loadXML(scene_xml_path.string().c_str(), 0, error, 1000);
+		if (!m)
+		{
+			mju_error("Load model error: %s", error);
+		}
+	}
+	else
+	{
+		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
+	}
 }
 
 void MjMultiverseClient::init_send_and_receive_data()
@@ -724,7 +1010,10 @@ void MjMultiverseClient::init_send_and_receive_data()
 						send_data_vec.emplace_back(&d->xquat[4 * body_id + 2]);
 						send_data_vec.emplace_back(&d->xquat[4 * body_id + 3]);
 					}
-					else if (strcmp(attribute_name.c_str(), "force") == 0 && m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
+					else if (strcmp(attribute_name.c_str(), "force") == 0 &&
+							 m->body_dofnum[body_id] == 6 &&
+							 m->body_jntadr[body_id] != -1 &&
+							 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 					{
 						if (contact_efforts.count(body_id) == 0)
 						{
@@ -735,7 +1024,10 @@ void MjMultiverseClient::init_send_and_receive_data()
 						send_data_vec.emplace_back(&contact_efforts[body_id][1]);
 						send_data_vec.emplace_back(&contact_efforts[body_id][2]);
 					}
-					else if (strcmp(attribute_name.c_str(), "torque") == 0 && m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
+					else if (strcmp(attribute_name.c_str(), "torque") == 0 &&
+							 m->body_dofnum[body_id] == 6 &&
+							 m->body_jntadr[body_id] != -1 &&
+							 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 					{
 						if (contact_efforts.count(body_id) == 0)
 						{
@@ -746,7 +1038,10 @@ void MjMultiverseClient::init_send_and_receive_data()
 						send_data_vec.emplace_back(&contact_efforts[body_id][4]);
 						send_data_vec.emplace_back(&contact_efforts[body_id][5]);
 					}
-					else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0 && m->body_dofnum[body_id] == 6 && m->body_jntadr[body_id] != -1 && m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
+					else if (strcmp(attribute_name.c_str(), "relative_velocity") == 0 &&
+							 m->body_dofnum[body_id] == 6 &&
+							 m->body_jntadr[body_id] != -1 &&
+							 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE)
 					{
 						send_data_vec.emplace_back(&d->qvel[dof_id]);
 						send_data_vec.emplace_back(&d->qvel[dof_id + 1]);
@@ -781,15 +1076,24 @@ void MjMultiverseClient::init_send_and_receive_data()
 			const int dof_id = m->jnt_dofadr[joint_id];
 			for (const std::string &attribute_name : send_object.second)
 			{
-				if ((strcmp(attribute_name.c_str(), "joint_rvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (strcmp(attribute_name.c_str(), "joint_tvalue") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
+				if ((strcmp(attribute_name.c_str(), "joint_rvalue") == 0 &&
+					 m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
+					(strcmp(attribute_name.c_str(), "joint_tvalue") == 0 &&
+					 m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
 				{
 					send_data_vec.emplace_back(&d->qpos[qpos_id]);
 				}
-				else if ((strcmp(attribute_name.c_str(), "joint_angular_velocity") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (strcmp(attribute_name.c_str(), "joint_linear_velocity") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
+				else if ((strcmp(attribute_name.c_str(), "joint_angular_velocity") == 0 &&
+						  m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
+						 (strcmp(attribute_name.c_str(), "joint_linear_velocity") == 0 &&
+						  m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
 				{
 					send_data_vec.emplace_back(&d->qvel[dof_id]);
 				}
-				else if ((strcmp(attribute_name.c_str(), "joint_torque") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) || (strcmp(attribute_name.c_str(), "joint_force") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
+				else if ((strcmp(attribute_name.c_str(), "joint_torque") == 0 &&
+						  m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE) ||
+						 (strcmp(attribute_name.c_str(), "joint_force") == 0 &&
+						  m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE))
 				{
 					send_data_vec.emplace_back(&d->qfrc_inverse[dof_id]);
 				}
@@ -797,7 +1101,8 @@ void MjMultiverseClient::init_send_and_receive_data()
 				{
 					printf("Send %s for %s not supported yet", attribute_name.c_str(), joint_name.c_str());
 				}
-				else if (strcmp(attribute_name.c_str(), "joint_quaternion") == 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL)
+				else if (strcmp(attribute_name.c_str(), "joint_quaternion") == 0 &&
+						 m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL)
 				{
 					send_data_vec.emplace_back(&d->qpos[qpos_id]);
 					send_data_vec.emplace_back(&d->qpos[qpos_id + 1]);
@@ -979,7 +1284,7 @@ void MjMultiverseClient::bind_send_data()
 	mtx.lock();
 	for (std::pair<const int, mjtNum *> &contact_effort : contact_efforts)
 	{
-		mjtNum* jac = mj_stackAllocNum(d, 6 * m->nv);
+		mjtNum *jac = mj_stackAllocNum(d, 6 * m->nv);
 		mj_jacBodyCom(m, d, jac, jac + 3 * m->nv, contact_effort.first);
 		mju_mulMatVec(contact_effort.second, jac, d->qfrc_constraint, 6, m->nv);
 	}
@@ -1140,10 +1445,9 @@ void MjMultiverseClient::clean_up()
 void MjMultiverseClient::reset()
 {
 	mtx.lock();
-	d->time = 0.0;
 	start_time += real_time;
-	mj_resetData(m, d);
-	mj_forward(m, d);
+	mj_resetDataKeyframe(m, d, 0);
+	d->time = 0.0;
 	mtx.unlock();
 }
 

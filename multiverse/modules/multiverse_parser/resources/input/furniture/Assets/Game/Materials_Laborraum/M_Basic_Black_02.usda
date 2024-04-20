@@ -1,0 +1,43 @@
+#usda 1.0
+(
+    defaultPrim = "M_Basic_Black_02"
+    upAxis = "Z"
+)
+
+def Material "M_Basic_Black_02" (
+    assetInfo = {
+        asset identifier = @../../../../../../UnrealProjects/USD/Assets/Game/Materials_Laborraum/M_Basic_Black_02.usda@
+        string name = "M_Basic_Black_02"
+        dictionary unreal = {
+            string assetType = "Material"
+            string contentPath = "/Game/Materials_Laborraum/M_Basic_Black_02.M_Basic_Black_02"
+            string engineVersion = "5.3.2-29314046+++UE5+Release-5.3"
+            string exportTime = "2024.04.04-13.42.58"
+        }
+        string version = "13E8B3D06F07C2E2CB64A1C050841CFCCC8356CA"
+    }
+)
+{
+    token outputs:surface.connect = </M_Basic_Black_02/SurfaceShader.outputs:surface>
+    token outputs:unreal:surface.connect = </M_Basic_Black_02/UnrealShader.outputs:out>
+
+    def Shader "UnrealShader"
+    {
+        uniform token info:implementationSource = "sourceAsset"
+        uniform asset info:unreal:sourceAsset = @/Game/Materials_Laborraum/M_Basic_Black_02.M_Basic_Black_02@
+        token outputs:out
+    }
+
+    def Shader "SurfaceShader"
+    {
+        uniform token info:id = "UsdPreviewSurface"
+        float inputs:anisotropy = 0
+        color3f inputs:diffuseColor = (0.0047769533, 0.0047769533, 0.0047769533)
+        float inputs:metallic = 0
+        float inputs:occlusion = 1
+        float inputs:roughness = 0.6
+        float inputs:specular = 0.29803923
+        token outputs:surface
+    }
+}
+

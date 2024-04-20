@@ -18,7 +18,7 @@ def create_path(name: str, is_ns: bool, prefix="/_class_") -> str:
     usd_path = usd_path.replace("www", "")
     usd_path = usd_path.replace(".owl/", ".owl#")
     usd_path = usd_path.replace(".owl", "")
-    usd_path = re.sub(r"[^a-zA-Z/]+", "", usd_path)
+    usd_path = re.sub(r"[^a-zA-Z/_]+", "", usd_path)
     words = usd_path.split("/")[-N:]
     if is_ns:
         usd_path = prefix + "/".join(words) + "_namespace"
@@ -43,8 +43,13 @@ def owl_to_usd_impl(stage: Usd.Stage, concepts: list) -> None:
         prim_child = stage.CreateClassPrim(create_path(iri_prefix, False, "/") + create_path(iri_name, False))
         prim_child.GetInherits().AddInherit(S.get(iri_prefix).GetPrimPath())
 
+        definition = concept.comment.first()
+
         rdfAPI = UsdOntology.RdfAPI.Apply(prim_child)
         rdfAPI.CreateRdfConceptNameAttr().Set(iri_name)
+        if definition is not None:
+            rdfAPI.CreateRdfDefinitionAttr().Set(definition)
+            
     return None
 
 

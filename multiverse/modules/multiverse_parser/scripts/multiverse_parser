@@ -23,6 +23,12 @@ def main():
         help="Export scene description as (URDF, MJCF, WORLD or USD)",
     )
     parser.add_argument(
+        "--fixed_base",
+        action='store_true',
+        help="Whether to fix the base link or not",
+    )
+    parser.set_defaults(fixed_base=True)
+    parser.add_argument(
         "--relative_to_ros_package",
         type=str,
         required=False,
@@ -31,25 +37,28 @@ def main():
     parser.set_defaults(relative_to_ros_package=None)
     parser.add_argument(
         "--no-physics",
-        action='store_true',
+        dest="physics",
+        action='store_false',
         help="Whether to include physics properties or not",
     )
-    parser.set_defaults(nophysics=False)
+    parser.set_defaults(physics=True)
     parser.add_argument(
         "--no-visual",
-        action='store_true',
+        dest="visual",
+        action='store_false',
         help="Whether to include visual meshes or not",
     )
-    parser.set_defaults(novisual=False)
+    parser.set_defaults(visual=True)
     parser.add_argument(
         "--no-collision",
-        action='store_true',
+        dest="collision",
+        action='store_false',
         help="Whether to include collision meshes or not",
     )
-    parser.set_defaults(nocollision=False)
+    parser.set_defaults(collision=True)
     parser.add_argument(
         "--keepusd",
-        action='store_true',
+        action='store_false',
         help="Whether to keep the USD file or not",
     )
     parser.set_defaults(keepusd=False)
@@ -66,13 +75,14 @@ def main():
         type=float,
         help="The default color of the meshes",
     )
-    parser.set_defaults(defaultrgba=numpy.array([1.0, 0.0, 0.0, 0.1]))
+    parser.set_defaults(defaultrgba=numpy.array([0.9, 0.9, 0.9, 1.0]))
 
     args = parser.parse_args()
 
-    with_physics = not args.nophysics
-    with_visual = not args.novisual
-    with_collision = not args.nocollision
+    fixed_base = args.fixed_base
+    with_physics = args.physics
+    with_visual = args.visual
+    with_collision = args.collision
     keep_usd = args.keepusd
 
     in_extension = os.path.splitext(args.input)[1]
@@ -89,14 +99,15 @@ def main():
 
     if in_extension in [".usd", ".usda", ".usdc"]:
         factory = UsdImporter(file_path=args.input,
+                              fixed_base=fixed_base,
                               with_physics=with_physics,
                               with_visual=with_visual,
                               with_collision=with_collision,
                               inertia_source=inertia_source,
-                              default_rgba=args.defaultrgba,
-                              add_xform_for_each_geom=False)
+                              default_rgba=args.defaultrgba)
     elif in_extension == ".urdf":
         factory = UrdfImporter(file_path=args.input,
+                               fixed_base=fixed_base,
                                with_physics=with_physics,
                                with_visual=with_visual,
                                with_collision=with_collision,
@@ -104,6 +115,7 @@ def main():
                                default_rgba=args.defaultrgba)
     elif in_extension == ".xml":
         factory = MjcfImporter(file_path=args.input,
+                               fixed_base=fixed_base,
                                with_physics=with_physics,
                                with_visual=with_visual,
                                with_collision=with_collision,

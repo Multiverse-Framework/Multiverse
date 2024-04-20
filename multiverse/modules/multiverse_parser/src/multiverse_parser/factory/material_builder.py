@@ -45,18 +45,24 @@ class MaterialProperty:
     opacity: Optional[float]
     emissive_color: Optional[numpy.ndarray]
     specular_color: Optional[numpy.ndarray]
+    wrap_s: str
+    wrap_t: str
 
     def __init__(self,
                  diffuse_color: Any = None,
                  opacity: Any = None,
                  emissive_color: Any = None,
-                 specular_color: Any = None) -> None:
+                 specular_color: Any = None,
+                 wrap_s: str = "repeat",
+                 wrap_t: str = "repeat") -> None:
         self._diffuse_color = diffuse_color if isinstance(diffuse_color, str) \
             else numpy.array(diffuse_color) if diffuse_color is not None \
             else None
         self._opacity = opacity if isinstance(opacity, float) else 1.0
         self._emissive_color = numpy.array(emissive_color) if emissive_color is not None else None
         self._specular_color = numpy.array(specular_color) if specular_color is not None else None
+        self._wrap_s = wrap_s
+        self._wrap_t = wrap_t
 
     @classmethod
     def from_material_file_path(cls, material_file_path: str, material_path: Sdf.Path) -> "MaterialProperty":
@@ -77,6 +83,10 @@ class MaterialProperty:
 
     @classmethod
     def from_pbr_shader(cls, pbr_shader: UsdShade.Shader) -> "MaterialProperty":
+        wrap_s = "repeat"
+        wrap_t = "repeat"
+        # TODO: Implement wrap_s and wrap_t
+
         diffuse_color = get_input(shader=pbr_shader, shader_input="diffuseColor")
         if isinstance(diffuse_color, Gf.Vec3f):
             diffuse_color = numpy.array(diffuse_color)
@@ -100,7 +110,9 @@ class MaterialProperty:
         return cls(diffuse_color=diffuse_color,
                    opacity=opacity,
                    emissive_color=emissive_color,
-                   specular_color=specular_color)
+                   specular_color=specular_color,
+                   wrap_s=wrap_s,
+                   wrap_t=wrap_t)
 
     @property
     def diffuse_color(self):
@@ -117,6 +129,14 @@ class MaterialProperty:
     @property
     def specular_color(self):
         return self._specular_color
+
+    @property
+    def wrap_s(self):
+        return self._wrap_s
+
+    @property
+    def wrap_t(self):
+        return self._wrap_t
 
 
 class MaterialBuilder:
@@ -151,7 +171,7 @@ class MaterialBuilder:
                                                      "..",
                                                      "textures",
                                                      f"{texture_name}.png")
-                self.add_texture(file_path=new_texture_file_path, rgb=rgb)
+                self.add_texture(file_path=new_texture_file_path, rgb=rgb, wrap_s=self.wrap_s, wrap_t=self.wrap_t)
             else:
                 raise ValueError(f"Unsupported diffuse color type: {type(diffuse_color)}")
 
@@ -175,7 +195,7 @@ class MaterialBuilder:
 
         return material
 
-    def add_texture(self, file_path: str, rgb: numpy.ndarray) -> TextureBuilder:
+    def add_texture(self, file_path: str, rgb: numpy.ndarray, wrap_s: str = "repeat", wrap_t: str = "repeat") -> TextureBuilder:
         if not os.path.isabs(file_path):
             file_abspath = os.path.join(os.path.dirname(self.stage.GetRootLayer().realPath), file_path)
         else:
@@ -199,6 +219,10 @@ class MaterialBuilder:
         diffuse_texture_file_input.Set(file_relpath)
         diffuse_texture_st_input = diffuse_texture.CreateInput("st", Sdf.ValueTypeNames.Float2)
         diffuse_texture_st_input.ConnectToSource(prim_var_reader.ConnectableAPI(), 'result')
+        diffuse_texture_wrap_s_input = diffuse_texture.CreateInput("wrapS", Sdf.ValueTypeNames.Token)
+        diffuse_texture_wrap_s_input.Set(wrap_s)
+        diffuse_texture_wrap_t_input = diffuse_texture.CreateInput("wrapT", Sdf.ValueTypeNames.Token)
+        diffuse_texture_wrap_t_input.Set(wrap_t)
         diffuse_texture.CreateOutput('rgb', Sdf.ValueTypeNames.Float3)
 
         pbr_shader = UsdShade.Shader(self.stage.GetPrimAtPath(material_path.AppendChild("PBRShader")))
@@ -238,3 +262,11 @@ class MaterialBuilder:
     @property
     def specular_color(self):
         return self._material_property.specular_color
+
+    @property
+    def wrap_s(self):
+        return self._material_property.wrap_s
+
+    @property
+    def wrap_t(self):
+        return self._material_property.wrap_t

@@ -44,7 +44,7 @@ void MjSimulate::init()
 	mj_resetDataKeyframe(m, d, 0);
 }
 
-void MjSimulate::reset()
+void MjSimulate::load_new_model_and_keep_old_data()
 {
     // load and compile model
     char error[1000] = "Could not load binary model";
@@ -59,9 +59,9 @@ void MjSimulate::reset()
     // make data
     mjData *d_new = mj_makeData(m_new);
 
-	mj_resetDataKeyframe(m_new, d_new, 0);
+	// mj_resetDataKeyframe(m_new, d_new, 0);
 
-    d_new->time = d->time;
+	d_new->time = d->time;
 
 	int body_id = 0;
 	while (true)

@@ -24,11 +24,12 @@ class Configuration:
     Configuration class for the Multiverse Parser.
     """
     model_name: str = ""
+    fixed_base: bool = True
     with_physics: bool = True
     with_visual: bool = True
     with_collision: bool = True
     inertia_source: InertiaSource = InertiaSource.FROM_SRC
-    default_rgba: numpy.ndarray = numpy.array([0.5, 0.5, 0.5, 1.0])
+    default_rgba: numpy.ndarray = numpy.array([0.9, 0.9, 0.9, 1.0])
 
 
 def merge_folders(source_folder: str,

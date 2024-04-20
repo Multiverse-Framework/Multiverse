@@ -77,7 +77,13 @@ class BodyBuilder:
         return joint_builder
 
     def enable_rigid_body(self) -> None:
-        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self._xform)
+        parent_prim = self._xform.GetPrim().GetParent()
+        while parent_prim.GetPath() != Sdf.Path("/"):
+            if parent_prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                return
+            parent_prim = parent_prim.GetParent()
+
+        physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self._xform.GetPrim())
         physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)
         physics_rigid_body_api.Apply(self._xform.GetPrim())
 
@@ -113,6 +119,8 @@ class BodyBuilder:
                      center_of_mass: numpy.ndarray,
                      diagonal_inertia: numpy.ndarray,
                      principal_axes: numpy.ndarray = numpy.array([0.0, 0.0, 0.0, 1.0])) -> UsdPhysics.MassAPI:
+        self.enable_rigid_body()
+
         physics_mass_api = UsdPhysics.MassAPI(self.xform)
         physics_mass_api.CreateMassAttr(mass)
         physics_mass_api.CreateCenterOfMassAttr(Gf.Vec3f(*center_of_mass))
@@ -146,22 +154,13 @@ class BodyBuilder:
         if body_inertial.mass > 0.0:
             body_inertial.center_of_mass /= body_inertial.mass
 
-        xform_transform = self.xform.GetLocalTransformation()
-        xform_pos = xform_transform.ExtractTranslation()
-        xform_pos = numpy.array(xform_pos)
-        xform_quat = xform_transform.ExtractRotationQuat()
-        xform_quat = numpy.array([*xform_quat.GetImaginary(), xform_quat.GetReal()])
-
-        body_center_of_mass = shift_center_of_mass(center_of_mass=body_inertial.center_of_mass,
-                                                   pos=xform_pos,
-                                                   quat=xform_quat)
         body_inertia_tensor = shift_inertia_tensor(mass=body_inertial.mass,
                                                    inertia_tensor=body_inertial.inertia_tensor)
 
         diagonal_inertia, principal_axes = diagonalize_inertia(inertia_tensor=body_inertia_tensor)
 
         return body_inertial, self.set_inertial(mass=body_inertial.mass,
-                                                center_of_mass=body_center_of_mass[0],
+                                                center_of_mass=body_inertial.center_of_mass[0],
                                                 diagonal_inertia=diagonal_inertia,
                                                 principal_axes=principal_axes)
 

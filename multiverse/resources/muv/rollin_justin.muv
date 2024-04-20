@@ -59,26 +59,3 @@ multiverse_clients:
       services:
         socket:
           - port: 7400
-
-#   ros2:
-#     ros_nodes:
-#       publishers:
-#         tf:
-#           - meta_data:
-#               world_name: world
-#               length_unit: m
-#               angle_unit: rad
-#               mass_unit: kg
-#               time_unit: s
-#               handedness: rhs
-#             port: 7301
-#             topic: /tf
-#             rate: 60
-#             root_frame_id: map
-
-#     ros_run:
-#       rviz:
-#         config: ur5e_ref_with_cubes/rviz.rviz2
-#         robot_descriptions:
-#           ur5e_description: ur5e/urdf/ur5e.urdf
-#           gripper-2F-85_description: gripper-2F-85/urdf/gripper-2F-85.urdf

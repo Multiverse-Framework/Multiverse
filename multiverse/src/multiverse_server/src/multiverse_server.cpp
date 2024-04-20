@@ -143,10 +143,10 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
 
 enum class EMetaDataState : unsigned char
 {
-    None,
+    Normal,
     Reset,
-    WaitAfterOtherSendReceiveData,
-    WaitAfterOtherSendSendData,
+    WaitAfterSendReceiveData,
+    WaitAfterOtherBindSendData,
     WaitAfterOtherSendRequestMetaData
 };
 
@@ -166,7 +166,7 @@ struct Object
 
 struct Simulation
 {
-    std::map<std::string, Object*> objects;
+    std::map<std::string, Object *> objects;
     Json::Value request_meta_data_json;
     EMetaDataState meta_data_state;
 };
@@ -226,8 +226,8 @@ void MultiverseServer::start()
                 if (message_str[1] == '}' && message_str.size() == 2)
                 {
                     printf("[Server] Received close signal %s from socket %s.\n", message_str.c_str(), socket_addr.c_str());
-                    send_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
-                    receive_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
+                    send_data_vec = {{&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]}};
+                    receive_data_vec = {{&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]}};
                     flag = EMultiverseServerState::SendResponseMetaData;
                 }
                 else if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
@@ -250,7 +250,7 @@ void MultiverseServer::start()
             {
                 flag = EMultiverseServerState::BindSendData;
             }
-            
+
             break;
         }
 
@@ -278,29 +278,20 @@ void MultiverseServer::start()
             send_response_meta_data();
             // printf("[Server] Sent meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
 
-            if (send_buffer_size == 1 && receive_buffer_size == 1)
-            {
-                flag = EMultiverseServerState::ReceiveRequestMetaData;
-            }
-            else
-            {
-                flag = EMultiverseServerState::ReceiveSendData;
-                sockets_need_clean_up[socket_addr] = true;
-            }
+            flag = EMultiverseServerState::ReceiveSendData;
             break;
         }
 
         case EMultiverseServerState::ReceiveSendData:
         {
             receive_send_data();
+
             if (message.to_string()[0] == '{')
             {
                 const std::string &message_str = message.to_string();
                 if (message_str[1] == '}' && message_str.size() == 2)
                 {
                     printf("[Server] Received close signal %s from socket %s.\n", message_str.c_str(), socket_addr.c_str());
-                    send_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
-                    receive_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
                     flag = EMultiverseServerState::SendResponseMetaData;
                 }
                 else if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
@@ -330,35 +321,49 @@ void MultiverseServer::start()
         case EMultiverseServerState::BindSendData:
         {
             mtx.lock();
-            if (!std::isnan(send_buffer[0]) && send_buffer[0] >= 0.0)
+            if (send_buffer[0] >= 0.0)
             {
                 *send_data_vec[0].first = send_buffer[0] * send_data_vec[0].second;
             }
-            for (size_t i = 1; i < send_buffer_size; i++)
-            {
-                *send_data_vec[i].first = send_buffer[i] * send_data_vec[i].second;
-            }
             mtx.unlock();
+
+            if (worlds[world_name].time == 0.0)
+            {
+                // printf("[Server] Reset all simulations in world %s.\n", world_name.c_str());
+                for (std::pair<const std::string, Simulation> &simulation : worlds[world_name].simulations)
+                {
+                    // printf("[Server] Reset simulation %s.\n", simulation.first.c_str());
+                    simulation.second.meta_data_state = EMetaDataState::Reset;
+                }
+            }
+
             if ((strcmp(request_world_name.c_str(), world_name.c_str()) != 0 || strcmp(request_simulation_name.c_str(), simulation_name.c_str()) != 0) && worlds[request_world_name].simulations.count(request_simulation_name) > 0)
             {
                 double start = get_time_now();
                 double now = get_time_now();
-                EMetaDataState &meta_data_state = worlds[request_world_name].simulations[request_simulation_name].meta_data_state;
+                EMetaDataState &request_meta_data_state = worlds[request_world_name].simulations[request_simulation_name].meta_data_state;
                 while (!should_shut_down)
                 {
-                    if (meta_data_state == EMetaDataState::WaitAfterOtherSendSendData || meta_data_state == EMetaDataState::None)
+                    if (request_meta_data_state == EMetaDataState::WaitAfterOtherBindSendData || request_meta_data_state == EMetaDataState::Normal)
                     {
                         break;
                     }
                     now = get_time_now();
                     if (now - start > 1)
                     {
-                        printf("[Server] Socket %s is waiting for %s to be ready.\n", socket_addr.c_str(), request_simulation_name.c_str());
+                        printf("[Server] Socket %s is waiting for %s to send data.\n", socket_addr.c_str(), request_simulation_name.c_str());
                         start = now;
                     }
                 }
-                meta_data_state = EMetaDataState::WaitAfterOtherSendRequestMetaData;
+                request_meta_data_state = EMetaDataState::WaitAfterOtherSendRequestMetaData;
             }
+
+            mtx.lock();
+            for (size_t i = 1; i < send_buffer_size; i++)
+            {
+                *send_data_vec[i].first = send_buffer[i] * send_data_vec[i].second;
+            }
+            mtx.unlock();
 
             flag = EMultiverseServerState::BindReceiveData;
             break;
@@ -384,11 +389,11 @@ void MultiverseServer::start()
         {
             send_receive_data();
             Simulation &simulation = worlds[world_name].simulations[simulation_name];
-            if (simulation.meta_data_state == EMetaDataState::WaitAfterOtherSendReceiveData)
+            if (simulation.meta_data_state == EMetaDataState::WaitAfterSendReceiveData)
             {
                 printf("[Server] Socket %s has received new request meta data.\n", socket_addr.c_str());
 
-                simulation.meta_data_state = EMetaDataState::WaitAfterOtherSendSendData;
+                simulation.meta_data_state = EMetaDataState::WaitAfterOtherBindSendData;
 
                 double start = get_time_now();
                 double now = get_time_now();
@@ -407,23 +412,19 @@ void MultiverseServer::start()
                     }
                 }
 
-                receive_request_meta_data();
+                zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none); // TODO: Make use of the message
                 request_meta_data_json = simulation.request_meta_data_json;
-                const std::string message_str = request_meta_data_json.toStyledString();
-                zmq::message_t request_message(message_str.size());
-                memcpy(request_message.data(), message_str.data(), message_str.size());
+                simulation.meta_data_state = EMetaDataState::Normal;
 
-                socket.send(request_message, zmq::send_flags::none);
-                simulation.meta_data_state = EMetaDataState::None;
-
-                send_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
-                receive_data_vec = {{ &worlds[world_name].time, conversion_map[attribute_map["time"].first][0] }};
-                flag = EMultiverseServerState::ReceiveRequestMetaData;
+                send_data_vec.clear();
+                receive_data_vec.clear();
+                flag = EMultiverseServerState::BindObjects;
             }
             else
             {
                 flag = EMultiverseServerState::ReceiveSendData;
             }
+
             break;
         }
 
@@ -499,11 +500,13 @@ void MultiverseServer::bind_meta_data()
 
     if (!simulation_name.empty() && worlds[request_world_name].simulations.count(request_simulation_name) == 0)
     {
-        printf("[Server] Socket %s requests a non-existing simulation %s.\n", socket_addr.c_str(), request_simulation_name.c_str());
+        printf("[Server] Socket %s requests a non-existing simulation (%s).\n", socket_addr.c_str(), request_simulation_name.c_str());
     }
+
     if (request_simulation_name != simulation_name && !simulation_name.empty() && worlds[request_world_name].simulations.count(request_simulation_name) > 0)
     {
-        Simulation &simulation = worlds[request_world_name].simulations[request_simulation_name];
+        printf("[Server] Socket %s (%s) requests a different simulation (%s).\n", socket_addr.c_str(), simulation_name.c_str(), request_simulation_name.c_str());
+        Simulation &request_simulation = worlds[request_world_name].simulations[request_simulation_name];
         for (const std::string &type_str : {"send", "receive"})
         {
             for (const std::string &object_name : request_meta_data_json[type_str].getMemberNames())
@@ -513,14 +516,16 @@ void MultiverseServer::bind_meta_data()
                     break;
                 }
 
+                Json::Value &attributes = request_simulation.request_meta_data_json[type_str][object_name];
+
+                if (request_meta_data_json[type_str][object_name].empty())
+                {
+                    attributes = Json::Value(Json::arrayValue);
+                    continue;
+                }
+
                 for (const Json::Value &attribute : request_meta_data_json[type_str][object_name])
                 {
-                    if (attribute.asString().empty())
-                    {
-                        break;
-                    }
-
-                    Json::Value &attributes = simulation.request_meta_data_json[type_str][object_name];
                     if (std::find(attributes.begin(), attributes.end(), attribute) == attributes.end())
                     {
                         attributes.append(attribute);
@@ -529,15 +534,8 @@ void MultiverseServer::bind_meta_data()
             }
         }
 
-        if (!request_meta_data_json["send"].empty() || !request_meta_data_json["receive"].empty())
-        {
-            simulation.meta_data_state = EMetaDataState::WaitAfterOtherSendReceiveData;
-            world_name = request_world_name;
-        }
-        else
-        {
-            simulation.meta_data_state = EMetaDataState::Reset;
-        }
+        request_simulation.meta_data_state = EMetaDataState::WaitAfterSendReceiveData;
+        world_name = request_world_name;
     }
     else
     {
@@ -546,7 +544,7 @@ void MultiverseServer::bind_meta_data()
     }
 
     worlds[world_name].simulations[simulation_name].request_meta_data_json = request_meta_data_json;
-    worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::None;
+    worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::Normal;
 
     const std::string length_unit = meta_data.isMember("length_unit") ? meta_data["length_unit"].asString() : "m";
     const std::string angle_unit = meta_data.isMember("angle_unit") ? meta_data["angle_unit"].asString() : "rad";
@@ -658,6 +656,7 @@ void MultiverseServer::bind_send_objects()
 
     for (const std::string &object_name : send_objects_json.getMemberNames())
     {
+        response_meta_data_json["send"][object_name] = Json::objectValue;
         Object &object = objects[object_name];
         simulation.objects[object_name] = &object;
         for (const Json::Value &attribute_json : send_objects_json[object_name])
@@ -716,7 +715,7 @@ void MultiverseServer::validate_meta_data()
     if (receive_objects_json.isMember("") &&
         std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
     {
-        receive_objects_json = {};
+        receive_objects_json = Json::objectValue;
         for (const std::pair<std::string, Object> &object : worlds[world_name].objects)
         {
             for (const std::pair<std::string, Attribute> &attribute_pair : object.second.attributes)
@@ -739,7 +738,7 @@ void MultiverseServer::validate_meta_data()
                     continue;
                 }
 
-                receive_objects_json[object_name] = {};
+                receive_objects_json[object_name] = Json::arrayValue;
                 for (const std::pair<std::string, Attribute> &attribute_pair : worlds[world_name].objects[object_name].attributes)
                 {
                     receive_objects_json[object_name].append(attribute_pair.first);
@@ -802,6 +801,7 @@ void MultiverseServer::bind_receive_objects()
     receive_data_vec.emplace_back(&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]);
     for (const std::string &object_name : receive_objects_json.getMemberNames())
     {
+        response_meta_data_json["receive"][object_name] = Json::objectValue;
         for (const Json::Value &attribute_json : receive_objects_json[object_name])
         {
             const std::string attribute_name = attribute_json.asString();
@@ -860,7 +860,7 @@ void MultiverseServer::receive_send_data()
         sockets_need_clean_up[socket_addr] = false;
         zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
         sockets_need_clean_up[socket_addr] = true;
-        if (message.to_string()[0] != '{' && message.to_string()[1] != '}')
+        if (message.to_string()[0] != '{' || message.to_string()[1] != '}')
         {
             memcpy(send_buffer, message.data(), send_buffer_size * sizeof(double));
         }
@@ -928,14 +928,14 @@ void MultiverseServer::compute_cumulative_data()
                     {
                         continue;
                     }
-                    
+
                     const std::string &simulation_name = simulation_pair.first;
-                    const std::vector<double> &simulation_data = (*simulation_pair.second.objects[object_name]).attributes[attribute_name].simulation_data[simulation_name];                  
+                    const std::vector<double> &simulation_data = (*simulation_pair.second.objects[object_name]).attributes[attribute_name].simulation_data[simulation_name];
                     if (simulation_data.size() != data.size())
                     {
                         continue;
                     }
-                    
+
                     data[i] += simulation_data[i];
                 }
             }
@@ -950,14 +950,14 @@ void MultiverseServer::send_receive_data()
     {
         receive_buffer[0] = -1.0;
     }
-    else if (worlds[world_name].simulations[simulation_name].meta_data_state == EMetaDataState::WaitAfterOtherSendReceiveData)
+    else if (worlds[world_name].simulations[simulation_name].meta_data_state == EMetaDataState::WaitAfterSendReceiveData)
     {
         receive_buffer[0] = -2.0;
     }
     else if (worlds[world_name].simulations[simulation_name].meta_data_state == EMetaDataState::Reset)
     {
-        receive_buffer[0] = -3.0;
-        worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::None;
+        receive_buffer[0] = 0.0;
+        worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::Normal;
     }
 
     zmq::message_t reply_data(receive_buffer_size * sizeof(double));

@@ -274,7 +274,7 @@
             <geom contype="0" conaffinity="0" />
         </default>
         <default class="cup_collision">
-            <geom rgba="1.0 0.0 0.0 0.5" />
+            <geom rgba="0.9 0.9 0.9 0.0" />
         </default>
     </default>
     <worldbody>

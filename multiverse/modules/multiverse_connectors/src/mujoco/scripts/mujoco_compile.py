@@ -201,11 +201,18 @@ def exclude_collision(
 
 def add_prefix_and_suffix(root: ET.Element, prefix, suffix):
     for element_type in ["body", "joint", "geom"]:
-        elements = [
-            element
-            for worldbody in root.findall(".//worldbody")
-            for element in worldbody.findall(f".//{element_type}")
-        ]
+        if element_type == "geom":
+            elements = [
+                element
+                for worldbody in root.findall(".//worldbody")
+                for element in worldbody.findall(f".//body/{element_type}")
+            ]
+        else:
+            elements = [
+                element
+                for worldbody in root.findall(".//worldbody")
+                for element in worldbody.findall(f".//{element_type}")
+            ]
         element_prefix = prefix.get(element_type, "")
         element_suffix = suffix.get(element_type, "")
         update_element_name(elements, element_type, element_prefix, element_suffix)
@@ -497,10 +504,12 @@ class MujocoCompiler:
     robots: List[Robot]
     objects: List[Object]
     default_dict: Dict[str, List[ET.Element]]
+    should_add_key_frame: bool
 
     def __init__(self, args):
         self.world_xml_path = args.world
         print(f"World: {self.world_xml_path}")
+        self.should_add_key_frame = args.should_add_key_frame
         self.scene_name = args.name
         self.save_dir_path = os.path.join(args.save_dir, self.scene_name)
         self.save_xml_dir = args.save_dir
@@ -532,6 +541,7 @@ class MujocoCompiler:
                 entity_root = entity_tree.getroot()
                 for body_element in entity_root.findall(".//body"):
                     body_name = body_element.get("name")
+                    body_name = f"{entity.prefix.get('body', '')}{body_name}{entity.suffix.get('body', '')}"
                     not_exclude_collision_bodies.append(body_name)
             self.modify_entity(entity)
             include_element = ET.Element("include", {"file": os.path.basename(entity.saved_path)})
@@ -548,9 +558,10 @@ class MujocoCompiler:
 
         exclude_collision(root, self.save_xml_path, not_exclude_collision_bodies)
         tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
-
-        add_key_frame_element(root, self.keyframe_dict)
-        tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
+        
+        if self.should_add_key_frame:
+            add_key_frame_element(root, self.keyframe_dict)
+            tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         self.add_visual_and_cursor_element(root)
         indent(tree.getroot(), space="\t", level=0)
@@ -584,7 +595,8 @@ class MujocoCompiler:
 
         self.append_asset_and_remove_from_root(root, meshdir, texturedir)
 
-        self.append_key_frame_and_remove_from_root(root, entity.path, entity.joint_state)
+        if self.should_add_key_frame:
+            self.append_key_frame_and_remove_from_root(root, entity.path, entity.joint_state)
 
         self.apply_properties(root, entity.path, entity.apply)
 
@@ -661,7 +673,7 @@ class MujocoCompiler:
                                               entity_path: str,
                                               joint_state: Dict[str, float] = None) -> None:
         m = mujoco.MjModel.from_xml_path(entity_path)
-
+        
         qpos_list, ctrl_list = get_qpos_and_ctrl(m, joint_state)
 
         self.append_local_key_frame(root, qpos_list, ctrl_list)
@@ -691,7 +703,8 @@ class MujocoCompiler:
                     for element in list(root.iter(element_type)):
                         element.set(attribute_name, f"{attribute_props}")
 
-        self.apply_key_frame(entity_xml_path, apply)
+        if self.should_add_key_frame:
+            self.apply_key_frame(entity_xml_path, apply)
 
     def apply_key_frame(self, entity_xml_path: str, apply: Dict[str, Dict[str, Any]]) -> None:
         m = mujoco.MjModel.from_xml_path(entity_xml_path)
@@ -757,6 +770,7 @@ class MujocoCompiler:
                     "key",
                     {
                         "name": "home",
+                        "time": "0",
                         "qpos": " ".join(map(str, qpos_tuple)),
                         "ctrl": " ".join(map(str, ctrl_tuple)),
                     },
@@ -842,6 +856,7 @@ def main():
     parser.add_argument("--robots", help="JSON string with robots' data", required=False)
     parser.add_argument("--objects", help="JSON string with objects' data", required=False)
     parser.add_argument("--references", help="JSON string with references' data", required=False)
+    parser.add_argument("--should_add_key_frame", help="Add key frame to the model", action="store_true")
     if os.path.basename(__file__) == "mujoco_compile":
         save_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "..", "saved"

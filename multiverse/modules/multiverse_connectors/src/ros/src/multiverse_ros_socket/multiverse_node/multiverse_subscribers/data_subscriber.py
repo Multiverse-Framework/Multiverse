@@ -36,10 +36,12 @@ class DataSubscriber(MultiverseSubscriber):
     def _init_send_data(self) -> None:
         if self._msg_type == Float64:
             self.send_data = [0.0] * 2
+            self.send_data[0] = self.world_time + self.sim_time
         else:
             raise NotImplementedError(f"msg_type {self._msg_type} not implemented.")
 
     def _bind_send_data(self, data_msg: Any) -> Any:
+        self.send_data[0] = self.world_time + self.sim_time
         if self._msg_type == Float64:
             self.send_data[1:] = [data_msg.data]
         else:

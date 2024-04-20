@@ -45,12 +45,42 @@ std::map<std::string, size_t> attribute_map = {
     {"force", 3},
     {"torque", 3}};
 
-bool MultiverseClientJson::compute_response_meta_data()
+bool MultiverseClientJson::compute_request_and_response_meta_data()
 {
-    return !response_meta_data_str.empty() &&
-           reader.parse(response_meta_data_str, response_meta_data_json) &&
-           response_meta_data_json.isMember("time") &&
-           response_meta_data_json["time"].asDouble() >= 0;
+    if (!response_meta_data_str.empty() &&
+        reader.parse(response_meta_data_str, response_meta_data_json) &&
+        response_meta_data_json.isMember("time") &&
+        response_meta_data_json["time"].asDouble() >= 0)
+    {
+        request_meta_data_json["meta_data"] = response_meta_data_json["meta_data"];
+        request_meta_data_json["send"].clear();
+        request_meta_data_json["receive"].clear();
+        
+        if (response_meta_data_json.isMember("send"))
+        {
+            for (const std::string &object_name : response_meta_data_json["send"].getMemberNames())
+            {
+                request_meta_data_json["send"][object_name] = Json::arrayValue;
+                for (const std::string &attribute_name : response_meta_data_json["send"][object_name].getMemberNames())
+                {
+                    request_meta_data_json["send"][object_name].append(attribute_name);
+                }
+            }
+        }
+        if (response_meta_data_json.isMember("receive"))
+        {
+            for (const std::string &object_name : response_meta_data_json["receive"].getMemberNames())
+            {
+                request_meta_data_json["receive"][object_name] = Json::arrayValue;
+                for (const std::string &attribute_name : response_meta_data_json["receive"][object_name].getMemberNames())
+                {
+                    request_meta_data_json["receive"][object_name].append(attribute_name);
+                }
+            }
+        }
+        return true;
+    }
+    return false;
 }
 
 void MultiverseClientJson::compute_request_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const

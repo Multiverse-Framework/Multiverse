@@ -1,0 +1,52 @@
+#usda 1.0
+(
+    defaultPrim = "milk_box"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "milk_box" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    point3f physics:centerOfMass = (0, 0, 0)
+    float3 physics:diagonalInertia = (0.0001, 0.0001, 0.0001)
+    float physics:mass = 0.1
+    quatf physics:principalAxes = (1, 0, 0, 0)
+    bool physics:rigidBodyEnabled = 1
+
+    def Mesh "milk_box_geom_visual_0_SM_MilkBox" (
+        prepend apiSchemas = ["MaterialBindingAPI"]
+        prepend references = @./../meshes/usd/milk_box.usda@</SM_MilkBox>
+    )
+    {
+        rel material:binding = </milk_box/milk_box_geom_visual_0_SM_MilkBox/Materials/M_MilkBox>
+        color3f[] primvars:displayColor = [(1, 0, 0)]
+        float[] primvars:displayOpacity = [0]
+        matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Scope "Materials"
+        {
+            def Material "M_MilkBox" (
+                prepend references = @./../meshes/usd/milk_box.usda@</_materials/M_MilkBox>
+            )
+            {
+            }
+        }
+    }
+
+    def Cube "milk_box_geom_collision_0" (
+        prepend apiSchemas = ["PhysicsCollisionAPI"]
+    )
+    {
+        float3[] extent = [(-1, -1, -1), (1, 1, 1)]
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(1, 0, 0)]
+        float[] primvars:displayOpacity = [1]
+        token visibility = "invisible"
+        matrix4d xformOp:transform = ( (0.03, 0, 0, 0), (0, 0.0475, 0, 0), (0, 0, 0.1, 0), (0, 0, 0, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+}
+

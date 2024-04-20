@@ -112,10 +112,10 @@ protected:
     virtual void wait_for_meta_data_thread_finish() = 0;
 
     /**
-     * @brief Initalize the objects from configuration
+     * @brief Initalize the objects from request_meta_data
      *
      */
-    virtual bool init_objects(bool from_server = false) = 0;
+    virtual bool init_objects(bool from_request_meta_data = false) = 0;
 
     /**
      * @brief Bind the meta data from the objects
@@ -124,12 +124,12 @@ protected:
     virtual void bind_request_meta_data() = 0;
 
     /**
-     * @brief Compute receive_response_meta_data from response_meta_data_str
+     * @brief Compute request_meta_data and response_meta_data from response_meta_data_str
      *
      * @return true
      * @return false
      */
-    virtual bool compute_response_meta_data() = 0;
+    virtual bool compute_request_and_response_meta_data() = 0;
 
     /**
      * @brief Compute request buffer sizes
@@ -189,6 +189,8 @@ private:
     void send_request_meta_data();
 
     void receive_response_meta_data();
+
+    void check_response_meta_data();
 
     bool check_buffer_size();
 

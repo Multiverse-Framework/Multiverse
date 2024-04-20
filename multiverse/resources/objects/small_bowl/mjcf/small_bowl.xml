@@ -230,19 +230,20 @@
 		<mesh name="UCX_SmallBowl_223" file="stl/UCX_SmallBowl_223.stl" />
 		<mesh name="UCX_SmallBowl_224" file="stl/UCX_SmallBowl_224.stl" />
 		<mesh name="UCX_SmallBowl_225" file="stl/UCX_SmallBowl_225.stl" />
+        <mesh name="UCX_SmallBowl_226" file="stl/UCX_SmallBowl_226.stl" />
     </asset>
     <default>
         <default class="small_bowl_visual">
             <geom contype="0" conaffinity="0" />
         </default>
         <default class="small_bowl_collision">
-            <geom rgba="1.0 0.0 0.0 0.5" />
+            <geom rgba="0.9 0.9 0.9 0.0" />
         </default>
     </default>
     <worldbody>
         <body name="small_bowl">
             <freejoint />
-            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <inertial mass="0.05838299170136452" pos="1.5258869723311363e-08 -2.7080032438675516e-08 -0.006071913987398148" quat="0.9949871301651001 -6.369656944116286e-07 -1.2577189067997097e-07 -0.1000032126903534" diaginertia="0.00010565296543063596 0.00010565326374489814 0.0001514565374236554"/>
             <geom name="small_bowl_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="small_bowl_visual" class="small_bowl_visual" />
             <geom name="UCX_SmallBowl_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_001" class="small_bowl_collision"/>
             <geom name="UCX_SmallBowl_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_002" class="small_bowl_collision"/>
@@ -471,6 +472,7 @@
             <geom name="UCX_SmallBowl_223" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_223" class="small_bowl_collision"/>
             <geom name="UCX_SmallBowl_224" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_224" class="small_bowl_collision"/>
             <geom name="UCX_SmallBowl_225" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_225" class="small_bowl_collision"/>
+            <geom name="UCX_SmallBowl_226" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_226" class="small_bowl_collision"/>
         </body>
     </worldbody>
     <equality />

@@ -87,7 +87,7 @@ def get_mujoco_joint_api(joint_builder: JointBuilder) -> UsdMujoco.MujocoJointAP
             raise NotImplementedError(f"Joint type {joint_builder.type} not supported.")
 
         mj_joint_pos = joint_builder.pos
-        mj_joint_axis = joint_builder.axis.to_array()
+        mj_joint_axis = joint_builder.quat.Transform(Gf.Vec3d([0.0, 0.0, 1.0]))
 
         mujoco_joint_api = UsdMujoco.MujocoJointAPI.Apply(joint_prim)
         mujoco_joint_api.CreateTypeAttr(mj_joint_type)
@@ -120,7 +120,9 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
                 geom_size = urdf_geometry_box_api.GetSizeAttr().Get()
                 geom_size = numpy.array([*geom_size]) / 2.0
             else:
-                raise NotImplementedError(f"Geom type {geom_builder.type} not implemented.")
+                xform = UsdGeom.Xform(gprim_prim)
+                transformation = xform.GetLocalTransformation()
+                geom_size = numpy.array([round(transformation.GetRow(i).GetLength(), 3) for i in range(3)])
             geom_type = "box"
         elif geom_builder.type == GeomType.SPHERE:
             geom_size = numpy.array([gprim.GetRadiusAttr().Get(), 0.0, 0.0])
@@ -172,7 +174,7 @@ def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
             if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
                 material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
                 material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
-                material_name = stage.GetPrimAtPath(material_path).GetName()
+                material_name = material_path.name
                 mujoco_material_path = mujoco_asset_prim.GetPath().AppendChild("materials").AppendChild(
                     material_name)
                 if not stage.GetPrimAtPath(mujoco_material_path).IsA(UsdMujoco.MujocoMaterial):
@@ -412,9 +414,10 @@ class MjcfExporter:
                     self.factory.export_mesh(in_mesh_file_path=mesh_file_path,
                                              out_mesh_file_path=tmp_mesh_file_path)
 
-                mesh_file_name = add_scale_to_mesh_name(mesh_name=mesh_file_name,
-                                                   mesh_scale=numpy.array(mesh_file_property.scale))
-                mujoco_mesh_path = self.mujoco_meshes_prim.GetPath().AppendChild(mesh_file_name)
+                mesh_file_name_scaled = add_scale_to_mesh_name(mesh_name=mesh_file_name,
+                                                               mesh_scale=numpy.array(mesh_file_property.scale))
+
+                mujoco_mesh_path = self.mujoco_meshes_prim.GetPath().AppendChild(mesh_file_name_scaled)
                 if stage.GetPrimAtPath(mujoco_mesh_path).IsValid():
                     continue
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(stage, mujoco_mesh_path)

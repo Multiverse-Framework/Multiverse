@@ -59,6 +59,7 @@ class MjcfImporter(Factory):
     def __init__(
             self,
             file_path: str,
+            fixed_base: bool,
             with_physics: bool,
             with_visual: bool,
             with_collision: bool,
@@ -77,10 +78,11 @@ class MjcfImporter(Factory):
         model_name = get_model_name(xml_file_path=file_path)
         super().__init__(file_path=file_path, config=Configuration(
             model_name=model_name,
+            fixed_base=fixed_base,
             with_physics=with_physics,
             with_visual=with_visual,
             with_collision=with_collision,
-            default_rgba=default_rgba if default_rgba is not None else numpy.array([1.0, 0.0, 0.0, 0.0]),
+            default_rgba=default_rgba if default_rgba is not None else numpy.array([0.9, 0.9, 0.9, 1.0]),
             inertia_source=inertia_source
         ))
 
@@ -93,18 +95,14 @@ class MjcfImporter(Factory):
 
         for body_id in range(1, self.mj_model.nbody):
             mj_body = self.mj_model.body(body_id)
-            body_builder = self.import_body(mj_body=mj_body)
+            body_builder = self._import_body(mj_body=mj_body)
 
-            self.import_geoms(mj_body=mj_body, body_builder=body_builder)
+            self._import_geoms(mj_body=mj_body, body_builder=body_builder)
 
             if self._config.with_physics:
-                self.import_joints(mj_body=mj_body, body_builder=body_builder)
+                self._import_joints(mj_body=mj_body, body_builder=body_builder)
 
-        if self._config.with_physics and self._config.inertia_source in [InertiaSource.FROM_VISUAL_MESH,
-                                                                         InertiaSource.FROM_COLLISION_MESH]:
-            body_name = self.mj_model.body(1).name
-            body_builder = self.world_builder.get_body_builder(body_name=body_name)
-            body_builder.compute_and_set_inertial(self._config.inertia_source)
+            self._import_inertial(mj_body=mj_body, body_builder=body_builder)
 
         self._import_equality()
 
@@ -124,7 +122,7 @@ class MjcfImporter(Factory):
         UsdMujoco.MujocoMaterial.Define(self.world_builder.stage, "/mujoco/asset/materials")
         UsdMujoco.MujocoTexture.Define(self.world_builder.stage, "/mujoco/asset/textures")
 
-    def import_body(self, mj_body) -> BodyBuilder:
+    def _import_body(self, mj_body) -> BodyBuilder:
         body_name = mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
 
         if mj_body.id == 1:
@@ -138,7 +136,6 @@ class MjcfImporter(Factory):
                 body_builder = self.world_builder.add_body(body_name=body_name,
                                                            parent_body_name=self._config.model_name,
                                                            body_id=mj_body.id)
-                body_builder.enable_rigid_body()
             else:
                 body_builder = self.world_builder.add_body(body_name=body_name,
                                                            parent_body_name=parent_body_name,
@@ -157,26 +154,13 @@ class MjcfImporter(Factory):
                 relative_to_xform=relative_to_xform,
             )
 
-            if self._config.with_physics and self._config.inertia_source == InertiaSource.FROM_SRC:
-                body_mass = mj_body.mass[0]
-                body_center_of_mass = mj_body.ipos
-                body_diagonal_inertia = mj_body.inertia
-                body_principal_axes = numpy.array([mj_body.iquat[1],
-                                                   mj_body.iquat[2],
-                                                   mj_body.iquat[3],
-                                                   mj_body.iquat[0]])
-                body_builder.set_inertial(mass=body_mass,
-                                          center_of_mass=body_center_of_mass,
-                                          diagonal_inertia=body_diagonal_inertia,
-                                          principal_axes=body_principal_axes)
-
             mujoco_body_api = UsdMujoco.MujocoBodyAPI.Apply(body_builder.xform.GetPrim())
             mujoco_body_api.CreatePosAttr(Gf.Vec3f(*body_pos))
             mujoco_body_api.CreateQuatAttr(Gf.Quatf(body_quat[3], *body_quat[:3]))
 
         return body_builder
 
-    def import_joints(self, mj_body, body_builder: BodyBuilder):
+    def _import_joints(self, mj_body, body_builder: BodyBuilder):
         for joint_id in range(mj_body.jntadr[0], mj_body.jntadr[0] + mj_body.jntnum[0]):
             joint_builder = self._import_joint(mj_body, body_builder, joint_id)
             if joint_builder is not None:
@@ -227,13 +211,31 @@ class MjcfImporter(Factory):
 
         return joint_builder
 
-    def import_geoms(self, mj_body, body_builder: BodyBuilder) -> List[GeomBuilder]:
+    def _import_geoms(self, mj_body, body_builder: BodyBuilder) -> List[GeomBuilder]:
         geom_builders = []
         for geom_id in range(mj_body.geomadr[0], mj_body.geomadr[0] + mj_body.geomnum[0]):
             geom_builder = self._import_geom(body_builder, geom_id)
             if geom_builder is not None:
                 geom_builders.append(geom_builder)
         return geom_builders
+
+    def _import_inertial(self, mj_body, body_builder):
+        if self._config.with_physics and not (
+                self._config.fixed_base and mj_body.id == 1):
+            if self._config.inertia_source == InertiaSource.FROM_SRC:
+                body_mass = mj_body.mass[0]
+                body_center_of_mass = mj_body.ipos
+                body_diagonal_inertia = mj_body.inertia
+                body_principal_axes = numpy.array([mj_body.iquat[1],
+                                                   mj_body.iquat[2],
+                                                   mj_body.iquat[3],
+                                                   mj_body.iquat[0]])
+                body_builder.set_inertial(mass=body_mass,
+                                          center_of_mass=body_center_of_mass,
+                                          diagonal_inertia=body_diagonal_inertia,
+                                          principal_axes=body_principal_axes)
+            else:
+                _, physics_mass_api = body_builder.compute_and_set_inertial(inertia_source=self._config.inertia_source)
 
     def _import_geom(self, body_builder: BodyBuilder, geom_id: int) -> Optional[GeomBuilder]:
         mj_geom = self.mj_model.geom(geom_id)
@@ -337,7 +339,8 @@ class MjcfImporter(Factory):
                                              normals=normals,
                                              face_vertex_counts=face_vertex_counts,
                                              face_vertex_indices=face_vertex_indices,
-                                             texture_coordinates=texture_coordinates)
+                                             texture_coordinates=texture_coordinates,
+                                             mesh_file_name=mesh_name)
                 mesh_builder = geom_builder.add_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
                 mesh_name = mesh_builder.mesh.GetPrim().GetPath().name
 
@@ -450,7 +453,7 @@ class MjcfImporter(Factory):
         equality_prim = UsdMujoco.MujocoEquality.Define(self.world_builder.stage, "/mujoco/equality")
         for equality_id in range(self.mj_model.neq):
             equality = self.mj_model.equality(equality_id)
-            if equality.type == mujoco.mjtEq.mjEQ_JOINT:
+            if equality.type == mujoco.mjtEq.mjEQ_JOINT and self.config.with_physics:
                 equality_name = equality.name
                 if equality_name == "":
                     equality_name = "Equality_" + str(equality_id)

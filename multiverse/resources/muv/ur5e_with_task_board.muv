@@ -33,7 +33,7 @@ simulations:
               quat: [-1.0, 1.0, 0.0, 0.0]
         disable_self_collision: auto
         joint_state:
-          shoulder_pan_joint: -1.5708
+          shoulder_pan_joint: 3.1415
           shoulder_lift_joint: -1.5708
           elbow_joint: 1.5708
           wrist_1_joint: -1.5708
@@ -45,7 +45,8 @@ simulations:
         apply:
           body:
             task_board:
-              pos: [0.7, 0.0, 1.05]
+              pos: [0.0, -0.7, 1.05]
+              quat: [-0.7071, 0.0, 0.0, 0.7071]
         prefix:
           geom: task_board_
       task_board_tool:
@@ -53,8 +54,8 @@ simulations:
         apply:
           body:
             task_board_tool:
-              pos: [0.686, -0.102, 1.146]
-              quat: [0.7071, 0.0, 0.0, 0.7071]
+              pos: [-0.102, -0.686, 1.146]
+              quat: [1.0, 0.0, 0.0, 0.0]
         prefix:
           geom: task_board_tool_
 
@@ -98,6 +99,10 @@ multiverse_clients:
               fingers_actuator: ["cmd_joint_tvalue"]
             topic: /gripper_command
 
+      services:
+        socket:
+          - port: 7400
+
     ros_control:
       - meta_data:
           world_name: world
@@ -123,10 +128,6 @@ multiverse_clients:
             spawn:
               - joint_state_controller
                 joint_trajectory_controller
-
-    services:
-      socket:
-        - port: 7400
 
   ros2:
     ros_nodes:

@@ -45,7 +45,7 @@ public:
 private:
     bool spawn_objects(std::set<std::string> &objects);
 
-    bool destroy_objects(const std::set<std::string> objects);
+    bool destroy_objects(std::set<std::string> &objects);
 
 public:
     void communicate(const bool resend_meta_data = false) override;
@@ -91,7 +91,7 @@ private:
 
     void wait_for_meta_data_thread_finish() override;
 
-    bool init_objects(bool from_server = false) override;
+    bool init_objects(bool from_request_meta_data = false) override;
 
     void bind_request_meta_data() override;
 

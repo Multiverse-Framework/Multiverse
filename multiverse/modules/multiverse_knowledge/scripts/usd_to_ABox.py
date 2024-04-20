@@ -152,7 +152,7 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
 
             if prim.HasAPI(UsdOntology.SemanticTagAPI):
                 semanticTagAPI = UsdOntology.SemanticTagAPI.Apply(prim)
-                for prim_path in semanticTagAPI.GetSemanticLabelRel().GetTargets():
+                for prim_path in semanticTagAPI.GetSemanticLabelsRel().GetTargets():
                     label_prim = stage.GetPrimAtPath(prim_path)
                     if label_prim.IsValid():
                         rdfAPI = UsdOntology.RdfAPI.Apply(label_prim)
