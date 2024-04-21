@@ -2,7 +2,7 @@
 
 CURRENT_DIR=$PWD
 
-# git submodule update --init
+git submodule update --init
 
 cd $(dirname $0)
 
