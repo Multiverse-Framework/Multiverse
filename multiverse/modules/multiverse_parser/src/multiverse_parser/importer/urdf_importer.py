@@ -4,6 +4,7 @@ import os
 from math import degrees
 from typing import Optional, Union, Dict
 
+import xml.etree.ElementTree as ET
 import numpy
 from scipy.spatial.transform import Rotation
 from urdf_parser_py import urdf
@@ -19,6 +20,16 @@ from ..utils import xform_cache, shift_inertia_tensor, diagonalize_inertia
 
 from pxr import UsdUrdf, Gf, UsdPhysics, Usd, UsdGeom, UsdShade
 
+
+def remove_transmissions_from_urdf_string(urdf_string: str) -> str:
+    tree = ET.ElementTree(ET.fromstring(urdf_string))
+    root = tree.getroot()
+
+    transmission_tags = root.findall(".//transmission")
+    for tag in transmission_tags:
+        root.remove(tag)
+
+    return ET.tostring(root, encoding="unicode")
 
 def build_urdf_inertial_api(physics_mass_api: UsdPhysics.MassAPI) -> UsdUrdf.UrdfLinkInertialAPI:
     mass = physics_mass_api.GetMassAttr().Get()
@@ -90,6 +101,8 @@ class UrdfImporter(Factory):
     ) -> None:
         with open(file_path) as file:
             urdf_string = file.read()
+        
+        urdf_string = remove_transmissions_from_urdf_string(urdf_string)
         self._urdf_model = urdf.URDF.from_xml_string(urdf_string)
 
         model_name = self.urdf_model.name

@@ -49,6 +49,16 @@ class MultiverseView:
             raise NotImplementedError(f"Cannot view {file_extension} files yet")
 
     def view_urdf(self):
+        import xml.etree.ElementTree as ET
+        tree = ET.ElementTree(ET.fromstring(self.data))
+        root = tree.getroot()
+
+        transmission_tags = root.findall(".//transmission")
+        for tag in transmission_tags:
+            root.remove(tag)
+
+        self._data = ET.tostring(root, encoding="unicode")
+
         from urdf_parser_py import urdf
         fix_frame = urdf.URDF.from_xml_string(self.data).get_root()
         if INTERFACE == Interface.ROS1:

@@ -167,15 +167,10 @@ class UsdToUsdTestCase(MultiverseImporterTestCase):
 
     def test_usd_to_usd_furniture(self):
         input_usd_path = os.path.join(self.resource_path, "input", "furniture", "furniture.usda")
-        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=True)
-        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False)
-
-    # def test_usd_to_usd_ur5e(self):
-    #     input_usd_path = os.path.join(self.resource_path, "input", "ur5e_usd", "test_mjcf_to_usd", "ur5e.usda")
-    #     self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=True,
-    #                                    add_xform_for_each_geom=False)
-    #     self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False,
-    #                                    add_xform_for_each_geom=True)
+        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=True,
+                                       add_xform_for_each_geom=True)
+        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False,
+                                       add_xform_for_each_geom=True)
 
 
 class MjcfToUsdTestCase(MultiverseImporterTestCase):
