@@ -70,7 +70,7 @@ sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100
 
 # Install additional packages for blender
 sudo apt-get install -y build-essential git subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
-sudo apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
+sudo apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev libepoxy-dev
 
 # Install pybind11
 sudo apt-get install -y pybind11-dev
