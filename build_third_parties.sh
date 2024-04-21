@@ -2,7 +2,7 @@
 
 CURRENT_DIR=$PWD
 
-git submodule update --init
+# git submodule update --init
 
 cd $(dirname $0)
 
@@ -34,27 +34,81 @@ else
     echo "Folder already exists: $BLENDER_BUILD_DIR"
 fi
 
-if [ ! -d "$BLENDER_EXT_DIR/lib" ]; then
-    (cd $BLENDER_EXT_DIR; mkdir lib; cd lib; svn checkout https://svn.blender.org/svnroot/bf-blender/trunk/lib/linux_x86_64_glibc_228)
-    FILE=$BLENDER_EXT_DIR/blender/source/blender/blenlib/intern/index_mask.cc
-    if [ -f "$FILE" ]; then
-        sed -i \
-            -e 's/const int16_t gap_first = indices\[size_before_gap - 1] + 1;/const int16_t gap_first = (int16_t)(indices[size_before_gap - 1] + 1);/' \
-            -e 's/const int16_t next = indices\[size_before_gap];/const int16_t next = (int16_t)indices[size_before_gap];/' \
-            -e 's/const int16_t gap_size = next - gap_first;/const int16_t gap_size = (int16_t)(next - gap_first);/' \
-            "$FILE"
-    else
-        echo "Error: File does not exist: $FILE"
-    fi
-    (cd $BLENDER_EXT_DIR/blender; make update)
+$BLENDER_EXT_DIR/blender/build_files/utils/make_update.py --use-linux-libraries
+
+FILE1=$BLENDER_EXT_DIR/blender/source/blender/blenlib/intern/index_mask.cc
+if [ -f "$FILE1" ]; then
+    sed -i \
+        -e 's/const int16_t gap_first = indices\[size_before_gap - 1\] + 1;/const int16_t gap_first = (int16_t)(indices[size_before_gap - 1] + 1);/' \
+        -e 's/const int16_t next = indices\[size_before_gap\];/const int16_t next = (int16_t)indices[size_before_gap];/' \
+        -e 's/const int16_t gap_size = next - gap_first;/const int16_t gap_size = (int16_t)(next - gap_first);/' \
+        "$FILE1"
+else
+    echo "Error: File does not exist: $FILE1"
+fi
+
+FILE2=$BLENDER_EXT_DIR/blender/source/blender/blenfont/intern/blf_glyph.cc
+if [ -f "$FILE2" ]; then
+    sed -i \
+        -e 's/g->bitmap\[i\] = blf_glyph_gamma(glyph->bitmap.buffer\[i\] \* scale);/g->bitmap[i] = blf_glyph_gamma(char(glyph->bitmap.buffer[i] * scale));/' \
+        "$FILE2"
+else
+    echo "Error: File does not exist: $FILE2"
+fi
+
+FILE3=$BLENDER_EXT_DIR/blender/source/blender/blenfont/intern/blf_font.cc
+if [ -f "$FILE3" ]; then
+    sed -i \
+        -e 's/metrics->descender = metrics->ascender - metrics->units_per_EM;/metrics->descender = short(metrics->ascender - metrics->units_per_EM);/' \
+        "$FILE3"
+else
+    echo "Error: File does not exist: $FILE3"
+fi
+
+FILE4=$BLENDER_EXT_DIR/blender/source/blender/editors/space_view3d/view3d_navigate_walk.cc
+if [ -f "$FILE4" ]; then
+    sed -i \
+        -e 's/direction += 1;/direction = short(direction + 1);/' \
+        -e 's/direction -= 1;/direction = short(direction - 1);/' \
+        "$FILE4"
+else
+    echo "Error: File does not exist: $FILE4"
+fi
+
+FILE5=$BLENDER_EXT_DIR/blender/source/blender/blenkernel/intern/bvhutils.cc
+if [ -f "$FILE5" ]; then
+    sed -i \
+        -e 's/ = const_cast<const BMLoop \*(\*)\[3\]>(em->looptris);/;memcpy(corner_tris, em->looptris, sizeof(*em->looptris));/' \
+        "$FILE5"
+else
+    echo "Error: File does not exist: $FILE5"
+fi
+
+FILE6=$BLENDER_EXT_DIR/blender/source/blender/blenkernel/intern/editmesh_tangent.cc
+if [ -f "$FILE6" ]; then
+    sed -i \
+        -e 's/mesh2tangent->looptris = const_cast<const BMLoop \*(\*)\[3\]>(em->looptris);/memcpy(mesh2tangent->looptris, em->looptris, sizeof(*em->looptris));/' \
+        "$FILE6"
+else
+    echo "Error: File does not exist: $FILE6"
+fi
+
+FILE7=$BLENDER_EXT_DIR/blender/source/blender/blenkernel/intern/editmesh_bvh.cc
+if [ -f "$FILE7" ]; then
+    sed -i \
+        -e 's/bmcb_data.looptris = const_cast<const BMLoop \*(\*)\[3\]>(bmtree->looptris);/const BMLoop *tmp_looptris[3] = {nullptr, nullptr, nullptr}; bmcb_data.looptris = \&tmp_looptris; memcpy(bmcb_data.looptris, bmtree->looptris, sizeof(*bmtree->looptris));/' \
+        -e 's/bmcb_data->looptris = const_cast<const BMLoop \*(\*)\[3\]>(bmtree->looptris);/const BMLoop *tmp_looptris[3] = {nullptr, nullptr, nullptr}; bmcb_data->looptris = \&tmp_looptris; memcpy(bmcb_data->looptris, bmtree->looptris, sizeof(*bmtree->looptris));/' \
+        "$FILE7"
+else
+    echo "Error: File does not exist: $FILE7"
 fi
 
 (cd $BLENDER_BUILD_DIR && cmake -S ../../external/blender-git/blender -B . -Wno-deprecated -Wno-dev && make -j$(nproc) && make install)
-(cd $BLENDER_BUILD_DIR/bin/4.0/python/bin;
-    ./python3.10 -m pip install --upgrade pip build --no-warn-script-location;
-./python3.10 -m pip install bpy Pillow --no-warn-script-location) # For blender
+(cd $BLENDER_BUILD_DIR/bin/4.1/python/bin;
+    ./python3.11 -m pip install --upgrade pip build --no-warn-script-location;
+    ./python3.11 -m pip install bpy Pillow --no-warn-script-location) # For blender
 ln -sf $BLENDER_BUILD_DIR/bin/blender $BIN_DIR
-ln -sf $BLENDER_BUILD_DIR/bin/4.0/python/bin/python3.10 $BIN_DIR
+ln -sf $BLENDER_BUILD_DIR/bin/4.1/python/bin/python3.11 $BIN_DIR
 
 # Build USD
 

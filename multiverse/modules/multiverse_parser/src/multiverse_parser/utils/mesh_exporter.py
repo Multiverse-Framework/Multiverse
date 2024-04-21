@@ -42,7 +42,7 @@ if {merge_mesh}:
     if len(bpy.context.selected_objects) > 1:
         bpy.context.view_layer.objects.active = bpy.context.selected_objects[0]
         bpy.ops.object.join()
-bpy.ops.wm.usd_export(filepath='{out_usd}', selected_objects_only=True, overwrite_textures=True)
+bpy.ops.wm.usd_export(filepath='{out_usd}', selected_objects_only=True, overwrite_textures=True, root_prim_path='')
 """
 
 
