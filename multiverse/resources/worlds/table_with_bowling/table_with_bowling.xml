@@ -1,6 +1,6 @@
 <mujoco>
     <option timestep="0.001" integrator="RK4" gravity="0 0 -9.81">
-        <flag sensornoise="disable" energy="enable" contact="enable" />
+        <flag energy="enable" contact="enable" />
     </option>
     <compiler angle="radian" />
     <size memory="1G" />

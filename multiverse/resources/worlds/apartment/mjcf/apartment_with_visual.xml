@@ -3,7 +3,7 @@
 	<compiler meshdir="../meshes/" texturedir="../meshes/obj/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<statistic meansize="0.710501" extent="26.9016" center="9.80221 2.51942 1.43483"/>
     <option timestep="0.001" integrator="Euler" gravity="0 0 -9.81" noslip_iterations="2" noslip_tolerance="1e-9">
-        <flag sensornoise="disable" energy="enable" contact="enable" />
+        <flag energy="enable" contact="enable" />
     </option>
 
     <default>

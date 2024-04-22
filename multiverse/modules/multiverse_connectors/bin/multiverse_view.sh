@@ -43,8 +43,16 @@ if [ ! -f "$SCENE_FILE" ]; then
     exit 1
 fi
 
-(source /opt/ros/noetic/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash && python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/view_multiverse.py --scene_file=$SCENE_FILE)
-# (source /opt/ros/foxy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/local_setup.bash && python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/view_multiverse.py --scene_file=$SCENE_FILE)
+# Check if ROS2 or ROS1 exists
+if [ -f "/opt/ros/foxy/setup.bash" ]; then
+    source /opt/ros/foxy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/local_setup.bash
+elif [ -f "/opt/ros/noetic/setup.bash" ]; then
+    source /opt/ros/noetic/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash
+else
+    echo "Warning: ROS not found."
+fi
+
+python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/view_multiverse.py --scene_file=$SCENE_FILE
 
 # Your script's main logic here
 echo "[multiverse_view] Running... Press Ctrl+C to exit"

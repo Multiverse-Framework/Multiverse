@@ -82,6 +82,10 @@ class BodyBuilder:
             if parent_prim.HasAPI(UsdPhysics.RigidBodyAPI):
                 return
             parent_prim = parent_prim.GetParent()
+        for child_prim in self._xform.GetPrim().GetChildren():
+            if child_prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                child_prim.RemoveAPI(UsdPhysics.RigidBodyAPI)
+                child_prim.RemoveProperty("physics:rigidBodyEnabled")
 
         physics_rigid_body_api = UsdPhysics.RigidBodyAPI(self._xform.GetPrim())
         physics_rigid_body_api.CreateRigidBodyEnabledAttr(True)

@@ -25,9 +25,9 @@ def main():
     parser.add_argument(
         "--fixed_base",
         action='store_true',
-        help="Whether to fix the base link or not",
+        help="Set the base link as fixed",
     )
-    parser.set_defaults(fixed_base=True)
+    parser.set_defaults(fixed_base=False)
     parser.add_argument(
         "--relative_to_ros_package",
         type=str,
@@ -39,27 +39,27 @@ def main():
         "--no-physics",
         dest="physics",
         action='store_false',
-        help="Whether to include physics properties or not",
+        help="Exclude the physics properties",
     )
     parser.set_defaults(physics=True)
     parser.add_argument(
         "--no-visual",
         dest="visual",
         action='store_false',
-        help="Whether to include visual meshes or not",
+        help="Exclude the visual meshes",
     )
     parser.set_defaults(visual=True)
     parser.add_argument(
         "--no-collision",
         dest="collision",
         action='store_false',
-        help="Whether to include collision meshes or not",
+        help="Exclude the collision meshes",
     )
     parser.set_defaults(collision=True)
     parser.add_argument(
         "--keepusd",
         action='store_false',
-        help="Whether to keep the USD file or not",
+        help="Keep the temporary USD file after exporting",
     )
     parser.set_defaults(keepusd=False)
     parser.add_argument(
