@@ -36,6 +36,8 @@ fi
 
 $BLENDER_EXT_DIR/blender/build_files/utils/make_update.py --use-linux-libraries
 
+(cd $BLENDER_EXT_DIR && make update)
+
 FILE2=$BLENDER_EXT_DIR/blender/source/blender/blenfont/intern/blf_glyph.cc
 if [ -f "$FILE2" ]; then
     sed -i \
