@@ -36,17 +36,6 @@ fi
 
 $BLENDER_EXT_DIR/blender/build_files/utils/make_update.py --use-linux-libraries
 
-FILE1=$BLENDER_EXT_DIR/blender/source/blender/blenlib/intern/index_mask.cc
-if [ -f "$FILE1" ]; then
-    sed -i \
-        -e 's/const int16_t gap_first = indices\[size_before_gap - 1\] + 1;/const int16_t gap_first = (int16_t)(indices[size_before_gap - 1] + 1);/' \
-        -e 's/const int16_t next = indices\[size_before_gap\];/const int16_t next = (int16_t)indices[size_before_gap];/' \
-        -e 's/const int16_t gap_size = next - gap_first;/const int16_t gap_size = (int16_t)(next - gap_first);/' \
-        "$FILE1"
-else
-    echo "Error: File does not exist: $FILE1"
-fi
-
 FILE2=$BLENDER_EXT_DIR/blender/source/blender/blenfont/intern/blf_glyph.cc
 if [ -f "$FILE2" ]; then
     sed -i \
@@ -78,7 +67,7 @@ fi
 FILE5=$BLENDER_EXT_DIR/blender/source/blender/blenkernel/intern/bvhutils.cc
 if [ -f "$FILE5" ]; then
     sed -i \
-        -e 's/ = const_cast<const BMLoop \*(\*)\[3\]>(em->looptris);/;memcpy(corner_tris, em->looptris, sizeof(*em->looptris));/' \
+        -e 's/ = const_cast<const BMLoop \*(\*)\[3\]>(em->looptris);/; memcpy(corner_tris, em->looptris, sizeof(*em->looptris));/' \
         "$FILE5"
 else
     echo "Error: File does not exist: $FILE5"

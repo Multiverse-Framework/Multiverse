@@ -30,6 +30,7 @@ sudo apt-get install -y python3-catkin-tools
 
 # Install ROS2
 sudo apt-get install -y ros-foxy-desktop
+sudo apt-get install -y ros-foxy-joint-state-publisher-gui
 sudo apt-get install -y ros-dev-tools
 
 # Install python3-pip

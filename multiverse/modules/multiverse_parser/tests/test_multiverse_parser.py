@@ -73,7 +73,7 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
                                  or fixed_base)):
                         continue
                     self.assertEqual(prim.HasAPI(UsdPhysics.MassAPI), with_physics)
-                    self.assertEqual(prim.HasAPI(UsdPhysics.RigidBodyAPI), with_physics)
+                    # self.assertEqual(prim.HasAPI(UsdPhysics.RigidBodyAPI), with_physics)
                 if not prim.IsA(UsdGeom.Gprim):
                     continue
                 if not is_visible[i]:

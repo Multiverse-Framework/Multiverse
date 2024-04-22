@@ -49,8 +49,7 @@ def run_rviz2(rviz2_dict, resources_paths) -> subprocess.Popen:
         rviz2_config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config", "rviz2.rviz")
         with open(rviz2_config_path) as file:
             rviz2_config = yaml.safe_load(file)
-        root_frame = urdf.URDF.from_xml_string(urdf_str).get_root()
-        rviz2_config["Visualization Manager"]["Global Options"]["Fixed Frame"] = root_frame
+        rviz2_config["Visualization Manager"]["Global Options"]["Fixed Frame"] = rviz2_dict["fix_frame"]
         for display in rviz2_config["Visualization Manager"]["Displays"]:
             if display["Class"] == "rviz_default_plugins/RobotModel":
                 display["Description File"] = tmp_urdf_path
@@ -65,4 +64,5 @@ def run_rviz2(rviz2_dict, resources_paths) -> subprocess.Popen:
         "--display-config",
         f"{rviz2_config_path}"
     ]
+    
     return run_subprocess(cmd)

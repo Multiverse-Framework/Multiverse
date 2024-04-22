@@ -72,8 +72,8 @@ class UsdImporter(Factory):
         self._add_xform_for_each_geom = add_xform_for_each_geom
         if self._add_xform_for_each_geom is None:
             self._add_xform_for_each_geom = len([prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Xform)]) == 1
-            for prim in [prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Xform)]:
-                if prim.IsA(UsdGeom.Gprim) and any([child_prim.IsA(UsdGeom.Gprim) for child_prim in prim.GetChildren()]):
+            for prim in [prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Gprim)]:
+                if any([child_prim.IsA(UsdGeom.Gprim) for child_prim in prim.GetChildren()]):
                     self._add_xform_for_each_geom = True
                     break
             else:
@@ -135,14 +135,11 @@ class UsdImporter(Factory):
                               body_builder=body_builder,
                               zero_origin=self.add_xform_for_each_geom)
 
-        self.world_builder.stage.GetRootLayer().Save()
-        self._import_inertial(body_prim=body_prim, body_builder=body_builder)
-        self.world_builder.stage.GetRootLayer().Save()
-
         for child_body_prim in [child_body_prim for child_body_prim in body_prim.GetChildren()
-                                if (not child_body_prim.IsA(UsdGeom.Gprim) and
-                                    (child_body_prim.IsA(UsdGeom.Xform) or child_body_prim.GetTypeName() == ""))]:
+                                if child_body_prim.IsA(UsdGeom.Xform)]:
             self._import_body(body_prim=child_body_prim)
+
+        self._import_inertial(body_prim=body_prim, body_builder=body_builder)
 
     def _import_geom(self, gprim_prim: Usd.Prim, body_builder: BodyBuilder, zero_origin: bool = False) -> None:
         gprim = UsdGeom.Gprim(gprim_prim)
@@ -270,9 +267,7 @@ class UsdImporter(Factory):
                                                   subset=UsdGeom.Subset(subset_prim))
 
     def _import_inertial(self, body_prim: Usd.Prim, body_builder: BodyBuilder) -> None:
-        if (self._config.with_physics
-                and not (self._config.fixed_base and body_prim == self.stage.GetDefaultPrim())
-                and len(body_builder.child_body_builders) == 0):
+        if self._config.with_physics and not (self._config.fixed_base and body_prim == self.stage.GetDefaultPrim()):
             if self._config.inertia_source == InertiaSource.FROM_SRC:
                 body_prim_api = UsdPhysics.MassAPI(body_prim)
                 body_mass = body_prim_api.GetMassAttr().Get()
