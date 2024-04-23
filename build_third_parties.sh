@@ -34,9 +34,9 @@ else
     echo "Folder already exists: $BLENDER_BUILD_DIR"
 fi
 
-$BLENDER_EXT_DIR/blender/build_files/utils/make_update.py --use-linux-libraries
-
 (cd $BLENDER_EXT_DIR && make update)
+
+$BLENDER_EXT_DIR/blender/build_files/utils/make_update.py --use-linux-libraries
 
 FILE2=$BLENDER_EXT_DIR/blender/source/blender/blenfont/intern/blf_glyph.cc
 if [ -f "$FILE2" ]; then
