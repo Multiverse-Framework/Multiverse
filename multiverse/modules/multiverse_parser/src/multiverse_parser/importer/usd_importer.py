@@ -71,7 +71,8 @@ class UsdImporter(Factory):
 
         self._add_xform_for_each_geom = add_xform_for_each_geom
         if self._add_xform_for_each_geom is None:
-            self._add_xform_for_each_geom = len([prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Xform)]) == 1
+            self._add_xform_for_each_geom = len(
+                [prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Xform)]) == 1
             for prim in [prim for prim in self.stage.Traverse() if prim.IsA(UsdGeom.Gprim)]:
                 if any([child_prim.IsA(UsdGeom.Gprim) for child_prim in prim.GetChildren()]):
                     self._add_xform_for_each_geom = True
@@ -106,19 +107,17 @@ class UsdImporter(Factory):
     def _import_body(self, body_prim: Usd.Prim) -> None:
         if self.parent_map.get(body_prim) is not None:
             parent_xform_prim = self.parent_map[body_prim]
-        elif self.config.with_physics:
-            parent_xform_prim = self.stage.GetDefaultPrim()
         else:
             parent_xform_prim = body_prim.GetParent()
 
         parent_xform_name = parent_xform_prim.GetName()
         body_builder = self.world_builder.add_body(body_name=body_prim.GetName(),
                                                    parent_body_name=parent_xform_name)
-        if body_prim.IsA(UsdGeom.Gprim) and body_prim != self.stage.GetDefaultPrim():
-            xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(body_prim,
-                                                                                 parent_xform_prim)
-            body_builder.xform.ClearXformOpOrder()
-            body_builder.xform.AddTransformOp().Set(xform_local_transformation)
+
+        xform_local_transformation, _ = xform_cache.ComputeRelativeTransform(body_prim,
+                                                                             parent_xform_prim)
+        body_builder.xform.ClearXformOpOrder()
+        body_builder.xform.AddTransformOp().Set(xform_local_transformation)
 
         for gprim_prim in [gprim_prim for gprim_prim in body_prim.GetChildren()
                            if gprim_prim.IsA(UsdGeom.Gprim)]:
@@ -302,9 +301,12 @@ class UsdImporter(Factory):
             if joint_prim.IsA(UsdPhysics.FixedJoint):
                 joint_type = JointType.FIXED
             elif joint_prim.IsA(UsdPhysics.RevoluteJoint):
-                joint_type = JointType.REVOLUTE
                 joint = UsdPhysics.RevoluteJoint(joint)
                 joint_axis = joint.GetAxisAttr().Get()
+                if numpy.isfinite(joint.GetLowerLimitAttr().Get()) and numpy.isfinite(joint.GetUpperLimitAttr().Get()):
+                    joint_type = JointType.REVOLUTE
+                else:
+                    joint_type = JointType.CONTINUOUS
             elif joint_prim.IsA(UsdPhysics.PrismaticJoint):
                 joint_type = JointType.PRISMATIC
                 joint = UsdPhysics.PrismaticJoint(joint)

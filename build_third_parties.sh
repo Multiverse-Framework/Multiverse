@@ -34,7 +34,7 @@ else
     echo "Folder already exists: $BLENDER_BUILD_DIR"
 fi
 
-(cd $BLENDER_EXT_DIR && make update)
+(cd $BLENDER_EXT_DIR/blender && make update)
 
 $BLENDER_EXT_DIR/blender/build_files/utils/make_update.py --use-linux-libraries
 

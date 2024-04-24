@@ -32,27 +32,34 @@ done
 
 MULTIVERSE_PATH=$(dirname $(dirname "$0"))
 
-SCENE_FILE=$1
-if [[ "$SCENE_FILE" != /* ]]; then
-    SCENE_FILE="$(pwd)/$SCENE_FILE"
-fi
+# Split the input string into an array of variables
+read -ra vars <<< "$@"
 
-# Check if the file exists
-if [ ! -f "$SCENE_FILE" ]; then
-    echo "Error: File $SCENE_FILE not found."
-    exit 1
-fi
+# Print each variable
+for var in "${vars[@]}"; do
+    echo "$var"
+    SCENE_FILE=$var
+    if [[ "$SCENE_FILE" != /* ]]; then
+        SCENE_FILE="$(pwd)/$SCENE_FILE"
+    fi
 
-# Check if ROS2 or ROS1 exists
-if [ -f "/opt/ros/foxy/setup.bash" ]; then
-    source /opt/ros/foxy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/local_setup.bash
-elif [ -f "/opt/ros/noetic/setup.bash" ]; then
-    source /opt/ros/noetic/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash
-else
-    echo "Warning: ROS not found."
-fi
+    # Check if the file exists
+    if [ ! -f "$SCENE_FILE" ]; then
+        echo "Error: File $SCENE_FILE not found."
+        exit 1
+    fi
 
-python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/view_multiverse.py --scene_file=$SCENE_FILE
+    # Check if ROS2 or ROS1 exists
+    if [ -f "/opt/ros/foxy/setup.bash" ]; then
+        source /opt/ros/foxy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/local_setup.bash
+    elif [ -f "/opt/ros/noetic/setup.bash" ]; then
+        source /opt/ros/noetic/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash
+    else
+        echo "Warning: ROS not found."
+    fi
+
+    python3 $MULTIVERSE_PATH/modules/multiverse_connectors/scripts/view_multiverse.py --scene_file=$SCENE_FILE
+done
 
 # Your script's main logic here
 echo "[multiverse_view] Running... Press Ctrl+C to exit"

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
 import os
 import numpy
 
@@ -72,7 +73,7 @@ def main():
     parser.add_argument(
         "--defaultrgba",
         nargs="+",
-        type=float,
+        type=json.loads,
         help="The default color of the meshes",
     )
     parser.set_defaults(defaultrgba=numpy.array([0.9, 0.9, 0.9, 1.0]))
@@ -84,6 +85,7 @@ def main():
     with_visual = args.visual
     with_collision = args.collision
     keep_usd = args.keepusd
+    default_rgba = numpy.array(args.defaultrgba[0]) if len(args.defaultrgba) == 1 else numpy.array(args.defaultrgba)
 
     in_extension = os.path.splitext(args.input)[1]
     out_extension = os.path.splitext(args.output)[1]
@@ -104,7 +106,7 @@ def main():
                               with_visual=with_visual,
                               with_collision=with_collision,
                               inertia_source=inertia_source,
-                              default_rgba=args.defaultrgba)
+                              default_rgba=default_rgba)
     elif in_extension == ".urdf":
         factory = UrdfImporter(file_path=args.input,
                                fixed_base=fixed_base,
@@ -112,7 +114,7 @@ def main():
                                with_visual=with_visual,
                                with_collision=with_collision,
                                inertia_source=inertia_source,
-                               default_rgba=args.defaultrgba)
+                               default_rgba=default_rgba)
     elif in_extension == ".xml":
         factory = MjcfImporter(file_path=args.input,
                                fixed_base=fixed_base,
@@ -120,7 +122,7 @@ def main():
                                with_visual=with_visual,
                                with_collision=with_collision,
                                inertia_source=inertia_source,
-                               default_rgba=args.defaultrgba)
+                               default_rgba=default_rgba)
     else:
         raise NotImplementedError(f"Importing from {in_extension} is not supported yet.")
 

@@ -37,25 +37,26 @@ def get_urdf_joint_api(joint_builder: JointBuilder) -> UsdUrdf.UrdfJointAPI:
         urdf_joint_api.CreateTypeAttr(joint_builder.type.to_urdf())
         urdf_joint_api.CreateParentRel().AddTarget(joint_builder.parent_prim.GetPath())
         urdf_joint_api.CreateChildRel().AddTarget(joint_builder.child_prim.GetPath())
-        if joint_builder.type in [JointType.REVOLUTE, JointType.PRISMATIC]:
+        if joint_builder.type in [JointType.REVOLUTE, JointType.CONTINUOUS, JointType.PRISMATIC]:
             joint_axis = joint_builder.quat.Transform(Gf.Vec3d([0.0, 0.0, 1.0]))
             urdf_joint_api.CreateAxisAttr(Gf.Vec3f(*joint_axis))
-            effort = 1000  # TODO: Find a way to get this value
-            velocity = 1000  # TODO: Find a way to get this value
-            if joint_builder.type == JointType.REVOLUTE:
-                usd_joint = UsdPhysics.RevoluteJoint(joint_prim)
-                upper_limit = numpy.deg2rad(usd_joint.GetUpperLimitAttr().Get())
-                lower_limit = numpy.deg2rad(usd_joint.GetLowerLimitAttr().Get())
-            elif joint_builder.type == JointType.PRISMATIC:
-                usd_joint = UsdPhysics.PrismaticJoint(joint_prim)
-                upper_limit = usd_joint.GetUpperLimitAttr().Get()
-                lower_limit = usd_joint.GetLowerLimitAttr().Get()
-            else:
-                raise ValueError(f"Joint type {joint_builder.type} not supported.")
-            urdf_joint_api.CreateUpperAttr(upper_limit)
-            urdf_joint_api.CreateLowerAttr(lower_limit)
-            urdf_joint_api.CreateEffortAttr(effort)
-            urdf_joint_api.CreateVelocityAttr(velocity)
+            if joint_builder.type in [JointType.REVOLUTE, JointType.PRISMATIC]:
+                effort = 1000  # TODO: Find a way to get this value
+                velocity = 1000  # TODO: Find a way to get this value
+                if joint_builder.type == JointType.REVOLUTE:
+                    usd_joint = UsdPhysics.RevoluteJoint(joint_prim)
+                    upper_limit = usd_joint.GetUpperLimitAttr().Get()
+                    lower_limit = usd_joint.GetLowerLimitAttr().Get()
+                    upper_limit = numpy.deg2rad(upper_limit)
+                    lower_limit = numpy.deg2rad(lower_limit)
+                else:
+                    usd_joint = UsdPhysics.PrismaticJoint(joint_prim)
+                    upper_limit = usd_joint.GetUpperLimitAttr().Get()
+                    lower_limit = usd_joint.GetLowerLimitAttr().Get()
+                urdf_joint_api.CreateUpperAttr(upper_limit)
+                urdf_joint_api.CreateLowerAttr(lower_limit)
+                urdf_joint_api.CreateEffortAttr(effort)
+                urdf_joint_api.CreateVelocityAttr(velocity)
 
         parent_transform = xform_cache.GetLocalToWorldTransform(joint_builder.parent_prim)
         child_transform = xform_cache.GetLocalToWorldTransform(joint_builder.child_prim)
