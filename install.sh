@@ -69,6 +69,11 @@ sudo apt-get install -y gcc-11
 sudo update-alternatives --remove-all gcc
 sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100
 
+# Install and link gcc+11
+sudo apt-get install -y g++-11
+sudo update-alternatives --remove-all g++
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 100
+
 # Install additional packages for blender
 sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
 sudo apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev

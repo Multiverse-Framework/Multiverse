@@ -35,63 +35,6 @@ else
 fi
 
 (cd $BLENDER_EXT_DIR/blender && make update && ./build_files/utils/make_update.py --use-linux-libraries)
-
-FILE2=$BLENDER_EXT_DIR/blender/source/blender/blenfont/intern/blf_glyph.cc
-if [ -f "$FILE2" ]; then
-    sed -i \
-        -e 's/g->bitmap\[i\] = blf_glyph_gamma(glyph->bitmap.buffer\[i\] \* scale);/g->bitmap[i] = blf_glyph_gamma(char(glyph->bitmap.buffer[i] * scale));/' \
-        "$FILE2"
-else
-    echo "Error: File does not exist: $FILE2"
-fi
-
-FILE3=$BLENDER_EXT_DIR/blender/source/blender/blenfont/intern/blf_font.cc
-if [ -f "$FILE3" ]; then
-    sed -i \
-        -e 's/metrics->descender = metrics->ascender - metrics->units_per_EM;/metrics->descender = short(metrics->ascender - metrics->units_per_EM);/' \
-        "$FILE3"
-else
-    echo "Error: File does not exist: $FILE3"
-fi
-
-FILE4=$BLENDER_EXT_DIR/blender/source/blender/editors/space_view3d/view3d_navigate_walk.cc
-if [ -f "$FILE4" ]; then
-    sed -i \
-        -e 's/direction += 1;/direction = short(direction + 1);/' \
-        -e 's/direction -= 1;/direction = short(direction - 1);/' \
-        "$FILE4"
-else
-    echo "Error: File does not exist: $FILE4"
-fi
-
-FILE5=$BLENDER_EXT_DIR/blender/source/blender/blenkernel/intern/bvhutils.cc
-if [ -f "$FILE5" ]; then
-    sed -i \
-        -e 's/ = const_cast<const BMLoop \*(\*)\[3\]>(em->looptris);/; memcpy(corner_tris, em->looptris, sizeof(*em->looptris));/' \
-        "$FILE5"
-else
-    echo "Error: File does not exist: $FILE5"
-fi
-
-FILE6=$BLENDER_EXT_DIR/blender/source/blender/blenkernel/intern/editmesh_tangent.cc
-if [ -f "$FILE6" ]; then
-    sed -i \
-        -e 's/mesh2tangent->looptris = const_cast<const BMLoop \*(\*)\[3\]>(em->looptris);/memcpy(mesh2tangent->looptris, em->looptris, sizeof(*em->looptris));/' \
-        "$FILE6"
-else
-    echo "Error: File does not exist: $FILE6"
-fi
-
-FILE7=$BLENDER_EXT_DIR/blender/source/blender/blenkernel/intern/editmesh_bvh.cc
-if [ -f "$FILE7" ]; then
-    sed -i \
-        -e 's/bmcb_data.looptris = const_cast<const BMLoop \*(\*)\[3\]>(bmtree->looptris);/const BMLoop *tmp_looptris[3] = {nullptr, nullptr, nullptr}; bmcb_data.looptris = \&tmp_looptris; memcpy(bmcb_data.looptris, bmtree->looptris, sizeof(*bmtree->looptris));/' \
-        -e 's/bmcb_data->looptris = const_cast<const BMLoop \*(\*)\[3\]>(bmtree->looptris);/const BMLoop *tmp_looptris[3] = {nullptr, nullptr, nullptr}; bmcb_data->looptris = \&tmp_looptris; memcpy(bmcb_data->looptris, bmtree->looptris, sizeof(*bmtree->looptris));/' \
-        "$FILE7"
-else
-    echo "Error: File does not exist: $FILE7"
-fi
-
 (cd $BLENDER_BUILD_DIR && cmake -S ../../external/blender-git/blender -B . -Wno-deprecated -Wno-dev && make -j$(nproc) && make install)
 (cd $BLENDER_BUILD_DIR/bin/4.1/python/bin;
     ./python3.11 -m pip install --upgrade pip build --no-warn-script-location;
