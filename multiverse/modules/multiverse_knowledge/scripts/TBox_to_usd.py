@@ -11,13 +11,20 @@ onto_set = set()
 
 N = 1
 
-
+# Create USD path from OWL IRI
+# e.g. "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#", true, "/_class_" -> "/_class_DUL_namespace"
+# e.g. "http://www.ease-crc.org/ont/SOMA.owl", false, "/" -> "/SOMA"
+# e.g. "http://www.ease-crc.org/ont/SOMA.owl#", false, "/" -> "/SOMA"
+# e.g. "http://purl.org/dc/terms/", false, "/" -> "/terms
+# e.g. "Design", false, "/_class_" -> "/_class_Design"
 def create_path(name: str, is_ns: bool, prefix="/_class_") -> str:
     usd_path = name.replace("https://", "")
     usd_path = usd_path.replace("http://", "")
     usd_path = usd_path.replace("www", "")
     usd_path = usd_path.replace(".owl/", ".owl#")
     usd_path = usd_path.replace(".owl", "")
+    if usd_path[-1] == "/":
+        usd_path = usd_path[:-1]
     usd_path = re.sub(r"[^a-zA-Z/_]+", "", usd_path)
     words = usd_path.split("/")[-N:]
     if is_ns:

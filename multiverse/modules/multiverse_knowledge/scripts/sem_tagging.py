@@ -85,6 +85,8 @@ sem_labels = {
     "SM_Kitchen_11_Base_Drawer_01": ["_class_Drawer"],
     "SM_Kitchen_11_Base_Drawer_02": ["_class_Drawer"],
     "SM_Kitchen_11_Base_Drawer_03": ["_class_Drawer"],
+
+    "CT4_Fittings": ["_class_valve"]
 }
 
 sem_TBox = {}
