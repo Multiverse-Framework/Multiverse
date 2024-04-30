@@ -64,12 +64,12 @@ class MeshProperty:
                 mesh_prim = mesh_stage.GetPrimAtPath(mesh_path)
             else:
                 print(f"Prim {mesh_prim} from {mesh_file_path} is not a mesh, try to get its child.")
-                mesh_prims = mesh_prim.GetChildren()
-                if len(mesh_prims) == 0:
-                    raise ValueError(f"{mesh_prim} has no child.")
-                mesh_prim = mesh_prims[0]
-                if not mesh_prim.IsA(UsdGeom.Mesh):
-                    raise TypeError(f"Prim {mesh_prim} is not a mesh")
+                mesh_prims = [prim for prim in Usd.PrimRange(mesh_stage.GetDefaultPrim()) if prim.IsA(UsdGeom.Mesh)]
+                for mesh_prim in mesh_prims:
+                    if mesh_prim.GetName() == mesh_prim.GetName():
+                        break
+                else:
+                    raise ValueError(f"Mesh prim {mesh_prim.GetName()} is not found in {mesh_file_path}.")
 
         mesh_file_name = os.path.splitext(os.path.basename(mesh_file_path))[0]
         return cls.from_prim(mesh_prim, mesh_file_name)
