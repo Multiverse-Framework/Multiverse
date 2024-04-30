@@ -30,6 +30,12 @@ def main():
     )
     parser.set_defaults(fixed_base=False)
     parser.add_argument(
+        "--add_xform_for_each_geom",
+        action='store_true',
+        help="Add additional parent xform for each geom (only for input USD)",
+    )
+    parser.set_defaults(add_xform_for_each_geom=None)
+    parser.add_argument(
         "--relative_to_ros_package",
         type=str,
         required=False,
@@ -59,7 +65,7 @@ def main():
     parser.set_defaults(collision=True)
     parser.add_argument(
         "--keepusd",
-        action='store_false',
+        action='store_true',
         help="Keep the temporary USD file after exporting",
     )
     parser.set_defaults(keepusd=False)
@@ -106,7 +112,8 @@ def main():
                               with_visual=with_visual,
                               with_collision=with_collision,
                               inertia_source=inertia_source,
-                              default_rgba=default_rgba)
+                              default_rgba=default_rgba,
+                              add_xform_for_each_geom=args.add_xform_for_each_geom)
     elif in_extension == ".urdf":
         factory = UrdfImporter(file_path=args.input,
                                fixed_base=fixed_base,
