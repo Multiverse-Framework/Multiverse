@@ -5,7 +5,6 @@ import os
 from pxr import Usd, UsdOntology, UsdGeom, UsdPhysics, UsdShade, Gf, Vt
 from owlready2 import onto_path, get_ontology, declare_datatype
 from numpy import float32, float64
-import rospkg
 from quantify import ontology_stats
 
 onto_map = dict()
@@ -102,6 +101,7 @@ declare_datatype(Gf.Quatf, "https://ease-crc.org/ont/USD.owl#quatf", quatf_parse
 def import_ontos(onto) -> None:
     for imported_onto in onto.imported_ontologies:
         imported_onto.load()
+
         onto_map[imported_onto.base_iri] = imported_onto
         import_ontos(imported_onto)
 
@@ -109,8 +109,6 @@ def import_ontos(onto) -> None:
 
 
 def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
-    rospack = rospkg.RosPack()
-
     onto_path.append(os.path.dirname(in_onto_file))
 
     save_path = out_onto_file
