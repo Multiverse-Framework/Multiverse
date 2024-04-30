@@ -77,8 +77,6 @@ class UsdImporter(Factory):
                 if any([child_prim.IsA(UsdGeom.Gprim) for child_prim in prim.GetChildren()]):
                     self._add_xform_for_each_geom = True
                     break
-            else:
-                self._add_xform_for_each_geom = False
 
         self.parent_map = {}
         self.usd_mesh_path_dict = {}
