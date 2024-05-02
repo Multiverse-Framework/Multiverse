@@ -24,6 +24,50 @@ INSTALL(CODE "execute_process( \
     )"
 )
 
+execute_process(
+    COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/TBox_to_usd.py ${BIN_DIR}/TBox_to_usd
+    RESULT_VARIABLE result
+)
+
+if(result EQUAL 0)
+    message(STATUS "Symbolic link for TBox_to_usd created successfully.")
+else()
+    message(WARNING "Failed to create symbolic link with error code: ${result}")
+endif()
+
+execute_process(
+    COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/semantic_tagging.py ${BIN_DIR}/semantic_tagging
+    RESULT_VARIABLE result
+)
+
+if(result EQUAL 0)
+    message(STATUS "Symbolic link for semantic_tagging created successfully.")
+else()
+    message(WARNING "Failed to create symbolic link with error code: ${result}")
+endif()
+
+execute_process(
+    COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/semantic_reporting.py ${BIN_DIR}/semantic_reporting
+    RESULT_VARIABLE result
+)
+
+if(result EQUAL 0)
+    message(STATUS "Symbolic link for semantic_reporting created successfully.")
+else()
+    message(WARNING "Failed to create symbolic link with error code: ${result}")
+endif()
+
+execute_process(
+    COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/usd_to_ABox.py ${BIN_DIR}/usd_to_ABox
+    RESULT_VARIABLE result
+)
+
+if(result EQUAL 0)
+    message(STATUS "Symbolic link for usd_to_ABox created successfully.")
+else()
+    message(WARNING "Failed to create symbolic link with error code: ${result}")
+endif()
+
 enable_testing()
 
 add_test(
@@ -43,7 +87,7 @@ add_test(
 
 add_test(
   NAME auto_sem_tag_box
-  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/auto_sem_tag.py
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/semantic_tagging
           --in_usd=${TEST_DIR}/multiverse_knowledge/input/box/usd/box.usda
           --in_TBox_usd=${TEST_DIR}/multiverse_knowledge/output/box/usd/box_TBox.usda
           --out_ABox_usd=${TEST_DIR}/multiverse_knowledge/output/box/usd/box_ABox.usda
@@ -72,7 +116,7 @@ add_test(
 
 add_test(
   NAME auto_sem_tag_apartment
-  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/auto_sem_tag.py
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/semantic_tagging
           --in_usd=${TEST_DIR}/multiverse_knowledge/input/apartment/usd/apartment.usda
           --in_TBox_usd=${TEST_DIR}/multiverse_knowledge/output/apartment/usd/apartment_TBox.usda
           --out_ABox_usd=${TEST_DIR}/multiverse_knowledge/output/apartment/usd/apartment_ABox.usda

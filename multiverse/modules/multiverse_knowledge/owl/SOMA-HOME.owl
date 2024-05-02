@@ -10,7 +10,6 @@
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
     <owl:Ontology rdf:about="http://www.ease-crc.org/ont/SOMA-HOME.owl">
         <owl:imports rdf:resource="http://www.ease-crc.org/ont/SOMA-ALL.owl"/>
-        <owl:imports rdf:resource="https://ease-crc.org/ont/USD.owl"/>
         <rdfs:comment>SOMA-HOME defines the concepts that are specific to home, e.g. kitchen environment, household items.</rdfs:comment>
     </owl:Ontology>
     
