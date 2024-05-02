@@ -6,6 +6,7 @@ from pxr import Usd, UsdOntology, UsdGeom, UsdPhysics, UsdShade, Gf, Vt
 from owlready2 import onto_path, get_ontology, declare_datatype
 from numpy import float32, float64
 from quantify import ontology_stats
+from lxml import etree
 
 onto_map = dict()
 
@@ -108,6 +109,14 @@ def import_ontos(onto) -> None:
     return None
 
 
+def get_namespaces(xml_file):
+    tree = etree.parse(xml_file)
+    namespaces = tree.xpath('//namespace::*')
+    for ns in namespaces:
+        ontology = get_ontology(ns[1])
+        onto_map[ontology.base_iri] = ontology
+
+
 def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
     onto_path.append(os.path.dirname(in_onto_file))
 
@@ -115,7 +124,6 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
     ABox_onto = get_ontology("file://" + save_path)
 
     dul_onto = get_ontology("http://www.ontologydesignpatterns.org/ont/dul/DUL.owl")
-    dul_onto.load()
     onto_map[dul_onto.base_iri] = dul_onto
 
     usd_onto = get_ontology("https://ease-crc.org/ont/USD.owl")
@@ -123,8 +131,7 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
 
     TBox_onto = get_ontology("file://" + in_onto_file)
     TBox_onto.load()
-    onto_map[TBox_onto.base_iri] = TBox_onto
-
+    get_namespaces(in_onto_file)
     import_ontos(TBox_onto)
 
     ABox_onto.imported_ontologies.append(TBox_onto)
