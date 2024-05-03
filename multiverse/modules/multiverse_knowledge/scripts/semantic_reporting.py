@@ -122,7 +122,7 @@ def semantic_reporting(semrep, in_ABox_usd_file: str, in_TBox_Usd_file: str, out
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Auto semantic tagging based on object names")
+    parser = argparse.ArgumentParser(description="Auto semantic reporting based on object names")
     parser.add_argument("--in_usd", type=str, required=True, help="Input USD")
     parser.add_argument("--in_TBox_usd", type=str, required=True, help="Input TBox USD")
     parser.add_argument("--out_ABox_usd", type=str, required=True, help="Output ABox USD")
