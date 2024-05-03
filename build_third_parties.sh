@@ -64,7 +64,7 @@ if [ $BUILD_BLENDER = true ]; then
     BLENDER_BUILD_DIR=$BUILD_DIR/blender
     BLENDER_EXT_DIR=$EXT_DIR/blender-git
 
-    git submodule update $BLENDER_EXT_DIR/blender
+    git submodule update $BLENDER_EXT_DIR/blender --init
 
     if [ ! -d "$BLENDER_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
@@ -91,7 +91,7 @@ if [ $BUILD_USD = true ]; then
     USD_BUILD_DIR=$BUILD_DIR/USD
     USD_EXT_DIR=$EXT_DIR/USD
 
-    git submodule update $USD_EXT_DIR
+    git submodule update $USD_EXT_DIR --init
 
     if [ ! -d "$USD_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
@@ -115,7 +115,7 @@ if [ $BUILD_MUJOCO = true ]; then
     MUJOCO_BUILD_DIR=$BUILD_DIR/mujoco
     MUJOCO_EXT_DIR=$EXT_DIR/mujoco
 
-    git submodule update $MUJOCO_EXT_DIR
+    git submodule update $MUJOCO_EXT_DIR --init
 
     if [ ! -d "$MUJOCO_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist

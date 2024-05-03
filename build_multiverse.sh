@@ -115,7 +115,7 @@ done
 
 if [ $DBUILD_KNOWLEDGE = ON ]; then
     echo "Updating multiverse_knowledge..."
-    git submodule update $PWD/multiverse/modules/multiverse_knowledge
+    git submodule update $PWD/multiverse/modules/multiverse_knowledge --init
 fi
 
 # Build multiverse
