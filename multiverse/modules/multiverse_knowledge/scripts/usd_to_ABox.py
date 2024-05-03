@@ -123,10 +123,12 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
     save_path = out_onto_file
     ABox_onto = get_ontology("file://" + save_path)
 
-    dul_onto = get_ontology("http://www.ontologydesignpatterns.org/ont/dul/DUL.owl")
+    dul_onto = get_ontology("https://raw.githubusercontent.com/Multiverse-Framework/Multiverse/main/multiverse/modules/multiverse_knowledge/owl/DUL.owl")
+    dul_onto.load()
     onto_map[dul_onto.base_iri] = dul_onto
 
-    usd_onto = get_ontology("https://ease-crc.org/ont/USD.owl")
+    usd_onto = get_ontology("https://raw.githubusercontent.com/Multiverse-Framework/Multiverse/main/multiverse/modules/multiverse_knowledge/owl/USD.owl")
+    usd_onto.load()
     onto_map[usd_onto.base_iri] = usd_onto
 
     TBox_onto = get_ontology("file://" + in_onto_file)

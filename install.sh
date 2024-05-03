@@ -88,7 +88,7 @@ sudo apt-get install -y jupyter-notebook
 pip install --upgrade pip build
 
 # Install additional packages for USD and multiverse_knowledge
-pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11
+pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
 
 # Install additional packages for multiverse_parser
 pip install urdf_parser_py

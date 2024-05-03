@@ -25,6 +25,11 @@ INSTALL(CODE "execute_process( \
 )
 
 execute_process(
+    COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/Konclude/bin/Konclude ${BIN_DIR}/Konclude
+    RESULT_VARIABLE result
+)
+
+execute_process(
     COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/TBox_to_usd.py ${BIN_DIR}/TBox_to_usd
     RESULT_VARIABLE result
 )

@@ -10,3 +10,6 @@
 [submodule "multiverse_assets"]
 	path = multiverse_assets
 	url = https://github.com/Multiverse-Framework/Multiverse-Assets.git
+[submodule "multiverse/modules/multiverse_knowledge/ease_lexical_resources"]
+	path = multiverse/modules/multiverse_knowledge/ease_lexical_resources
+	url = https://github.com/ease-crc/ease_lexical_resources.git
