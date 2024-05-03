@@ -18,11 +18,7 @@ if(UNIX)
     endif()
 
     set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
-    if (STDLIB STREQUAL "libc++")
-        set(CMAKE_CXX_STANDARD 17)
-    elseif (STDLIB STREQUAL "libstdc++")
-        set(CMAKE_CXX_STANDARD 13)
-    endif()
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_FLAGS "-fPIC")
 endif()
 
