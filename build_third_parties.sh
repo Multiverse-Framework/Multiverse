@@ -2,8 +2,6 @@
 
 CURRENT_DIR=$PWD
 
-git submodule update --init
-
 cd $(dirname $0)
 
 MULTIVERSE_DIR=$PWD/multiverse
@@ -65,6 +63,9 @@ if [ $BUILD_BLENDER = true ]; then
 
     BLENDER_BUILD_DIR=$BUILD_DIR/blender
     BLENDER_EXT_DIR=$EXT_DIR/blender-git
+
+    git submodule update $BLENDER_EXT_DIR/blender
+
     if [ ! -d "$BLENDER_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
         mkdir -p "$BLENDER_BUILD_DIR"
@@ -89,6 +90,9 @@ if [ $BUILD_USD = true ]; then
 
     USD_BUILD_DIR=$BUILD_DIR/USD
     USD_EXT_DIR=$EXT_DIR/USD
+
+    git submodule update $USD_EXT_DIR
+
     if [ ! -d "$USD_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
         mkdir -p "$USD_BUILD_DIR"
@@ -110,6 +114,9 @@ if [ $BUILD_MUJOCO = true ]; then
 
     MUJOCO_BUILD_DIR=$BUILD_DIR/mujoco
     MUJOCO_EXT_DIR=$EXT_DIR/mujoco
+
+    git submodule update $MUJOCO_EXT_DIR
+
     if [ ! -d "$MUJOCO_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
         mkdir -p "$MUJOCO_BUILD_DIR"
