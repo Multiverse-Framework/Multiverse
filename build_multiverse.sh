@@ -43,9 +43,91 @@ if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/libstdc++/python"; then
     RELOAD=true
 fi
 
+DBUILD_SRC=ON
+DBUILD_MODULES=ON
+DBUILD_CONNECTORS=ON
+DBUILD_KNOWLEDGE=ON
+DBUILD_PARSER=ON
+
+while [ -n "$1" ]; do
+    case "$1" in
+        --only-src) echo "--only-src option passed"
+            shift 1
+            DBUILD_MODULES=OFF
+            break
+        ;;
+        --only-modules) echo -n "--only-modules option passed, with value:"
+            shift 1
+            if [ "$#" -eq 0 ]; then
+                echo ""
+            else
+                echo -n ", with value:"
+                DBUILD_SRC=OFF
+                for module in "$@"; do
+                    echo -n " $module"
+                    shift 1
+                    if [ "$module" = "connectors" ]; then
+                        DBUILD_SRC=ON
+                        DBUILD_KNOWLEDGE=OFF
+                        DBUILD_PARSER=OFF
+                    elif [ "$module" = "knowledge" ]; then
+                        DBUILD_CONNECTORS=OFF
+                        DBUILD_PARSER=OFF
+                    elif [ "$module" = "parser" ]; then
+                        DBUILD_KNOWLEDGE=OFF
+                        DBUILD_PARSER=OFF
+                    fi
+                done
+                echo ""
+            fi
+            break
+        ;;
+        --no-src) echo "--no-src option passed"
+            shift 1
+            DBUILD_SRC=OFF
+        ;;
+        --no-modules) echo -n "--no-modules option passed"
+            shift 1
+            if [ "$#" -eq 0 ]; then
+                echo ""
+                DBUILD_MODULES=OFF
+            else
+                echo -n ", with value:"
+                for module in "$@"; do
+                    echo -n " $module"
+                    shift 1
+                    if [ "$module" = "connectors" ]; then
+                        DBUILD_CONNECTORS=OFF
+                    elif [ "$module" = "knowledge" ]; then
+                        DBUILD_KNOWLEDGE=OFF
+                    elif [ "$module" = "parser" ]; then
+                        DBUILD_PARSER=OFF
+                    fi
+                done
+                echo ""
+            fi
+        ;;
+        *) echo "Option $1 not recognized"
+            shift 1
+        ;;
+    esac
+done
+
 # Build multiverse
-# cmake -S $PWD/multiverse -B $BUILD_DIR -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=SHARED -DSTDLIB=libc++
-cmake -S $PWD/multiverse -B $BUILD_DIR -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++
+# cmake -S $PWD/multiverse -B $BUILD_DIR \
+#     -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=SHARED -DSTDLIB=libc++ \
+#     -DBUILD_SRC=$DBUILD_SRC \
+#     -DBUILD_MODULES=$DBUILD_MODULES \
+#     -DBUILD_CONNECTORS=$DBUILD_CONNECTORS \
+#     -DBUILD_KNOWLEDGE=$DBUILD_KNOWLEDGE \
+#     -DBUILD_PARSER=$DBUILD_PARSER
+cmake -S $PWD/multiverse -B $BUILD_DIR \
+    -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
+    -DBUILD_SRC=$DBUILD_SRC \
+    -DBUILD_MODULES=$DBUILD_MODULES \
+    -DBUILD_CONNECTORS=$DBUILD_CONNECTORS \
+    -DBUILD_KNOWLEDGE=$DBUILD_KNOWLEDGE \
+    -DBUILD_PARSER=$DBUILD_PARSER
 make -C $BUILD_DIR
 cmake --install $BUILD_DIR
 

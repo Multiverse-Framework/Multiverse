@@ -1,9 +1,19 @@
 project(multiverse_modules)
 
-add_subdirectory(multiverse_connectors)
+option(BUILD_CONNECTORS "Build the multiverse connectors" ON)
+option(BUILD_KNOWLEDGE "Build the multiverse knowledge" ON)
+option(BUILD_PARSER "Build the multiverse parser" ON)
 
-if (UNIX)
-    add_subdirectory(multiverse_knowledge)
+if(BUILD_CONNECTORS)
+    add_subdirectory(multiverse_connectors)
+endif()
 
-    add_subdirectory(multiverse_parser)
+if(UNIX)
+    if(BUILD_KNOWLEDGE)
+        add_subdirectory(multiverse_knowledge)
+    endif()
+
+    if(BUILD_PARSER)
+        add_subdirectory(multiverse_parser)
+    endif()
 endif()

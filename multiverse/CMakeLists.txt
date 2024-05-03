@@ -22,6 +22,13 @@ if(WIN32)
     include_directories(${BUILD_DIR}/vcpkg_installed/x64-windows/include)
 endif()
 
-add_subdirectory(src)
+option(BUILD_SRC "Build the src" ON)
+option(BUILD_MODULES "Build the modules" ON)
 
-add_subdirectory(modules)
+if(BUILD_SRC)
+    add_subdirectory(src)
+endif(BUILD_SRC)
+
+if(BUILD_MODULES)
+    add_subdirectory(modules)
+endif(BUILD_MODULES)
