@@ -125,7 +125,7 @@ def main():
     parser = argparse.ArgumentParser(description="Auto semantic reporting based on object names")
     parser.add_argument("--in_usd", type=str, required=True, help="Input USD")
     parser.add_argument("--in_TBox_usd", type=str, required=True, help="Input TBox USD")
-    parser.add_argument("--out_ABox_usd", type=str, required=True, help="Output ABox USD")
+    parser.add_argument("--out_usd", type=str, required=True, help="Output USD")
     args = parser.parse_args()
 
     import dfl.semrep as semrep
@@ -137,7 +137,7 @@ def main():
     semrep.setFREDKey(keyFRED)
     semrep.setWikiDataKey(keyWikiData)
 
-    semantic_reporting(semrep, args.in_usd, args.in_TBox_usd, args.out_ABox_usd)
+    semantic_reporting(semrep, args.in_usd, args.in_TBox_usd, args.out_usd)
 
 
 if __name__ == "__main__":
