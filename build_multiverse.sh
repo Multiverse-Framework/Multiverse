@@ -113,6 +113,11 @@ while [ -n "$1" ]; do
     esac
 done
 
+if [ $DBUILD_KNOWLEDGE = ON ]; then
+    echo "Updating multiverse_knowledge..."
+    git submodule update $PWD/multiverse/modules/multiverse_knowledge
+fi
+
 # Build multiverse
 # cmake -S $PWD/multiverse -B $BUILD_DIR \
 #     -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=SHARED -DSTDLIB=libc++ \
