@@ -3,7 +3,7 @@
     defaultPrim = "apartment_root"
     metersPerUnit = 1
     subLayers = [
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/output/apartment/usd/apartment_TBox.usda@
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/output/apartment/usd/apartment_TBox.usda@
     ]
     upAxis = "Z"
 )
@@ -21,7 +21,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "wall1_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_01.usda@</SM_Wall_01>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_01.usda@</SM_Wall_01>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -86,7 +86,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "wall2_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_02.usda@</SM_Wall_02>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_02.usda@</SM_Wall_02>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -144,7 +144,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "wall3_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_03.usda@</SM_Wall_03>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_03.usda@</SM_Wall_03>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -225,7 +225,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "wall4_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_04.usda@</SM_Wall_04>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_04.usda@</SM_Wall_04>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -283,7 +283,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "windows_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/windows_without_4.usda@</windows_without_4>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/windows_without_4.usda@</windows_without_4>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -332,7 +332,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "window4_frame_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Frame.usda@</SM_Window_Frame>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Frame.usda@</SM_Window_Frame>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -523,7 +523,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "window4_right_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Right.usda@</SM_Window_Right>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Right.usda@</SM_Window_Right>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -589,7 +589,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "window4_right_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Handle.usda@</SM_Window_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Handle.usda@</SM_Window_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -689,7 +689,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "window4_left_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Left.usda@</SM_Window_Left>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Left.usda@</SM_Window_Left>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -755,7 +755,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "window4_left_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Handle.usda@</SM_Window_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Handle.usda@</SM_Window_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -857,7 +857,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "wardrobe_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe.usda@</wardrobe>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe.usda@</wardrobe>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1267,7 +1267,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "armchair_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/armchair.usda@</armchair>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/armchair.usda@</armchair>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1283,7 +1283,7 @@ def Xform "apartment_root"
 
             def Xform "armchair_collision_0" (
                 prepend apiSchemas = ["PhysicsMassAPI"]
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/collision/armchair.usda@</armchair>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/collision/armchair.usda@</armchair>
             )
             {
                 point3f physics:centerOfMass = (0, 0, 0)
@@ -1312,7 +1312,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "sofa_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/sofa.usda@</sofa>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/sofa.usda@</sofa>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1342,7 +1342,7 @@ def Xform "apartment_root"
 
             def Xform "sofa_collision_0" (
                 prepend apiSchemas = ["PhysicsMassAPI"]
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/collision/sofa.usda@</sofa>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/collision/sofa.usda@</sofa>
             )
             {
                 point3f physics:centerOfMass = (0, 0, 0)
@@ -1371,7 +1371,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "coffee_table_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/coffee_table.usda@</coffee_table>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/coffee_table.usda@</coffee_table>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1544,7 +1544,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "bedside_table_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/bedside_table.usda@</bedside_table>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/bedside_table.usda@</bedside_table>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1592,7 +1592,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "wardrobe_door_left_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_left.usda@</wardrobe_door_left>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_left.usda@</wardrobe_door_left>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1649,7 +1649,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "wardrobe_door_left_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_handle.usda@</wardrobe_door_handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_handle.usda@</wardrobe_door_handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1743,7 +1743,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "wardrobe_door_right_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_right.usda@</wardrobe_door_right>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_right.usda@</wardrobe_door_right>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1800,7 +1800,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "wardrobe_door_right_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_handle.usda@</wardrobe_door_handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_handle.usda@</wardrobe_door_handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -1894,7 +1894,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "coffee_table_drawer_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/coffee_table_drawer.usda@</coffee_table_drawer>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/coffee_table_drawer.usda@</coffee_table_drawer>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -2038,12 +2038,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.28463219, 1.46675873, 1.11440605, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet1_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Base.usda@</SM_Kitchen_01_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Base.usda@</SM_Kitchen_01_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -2367,7 +2367,7 @@ def Xform "apartment_root"
                     uniform token[] xformOpOrder = ["xformOp:transform"]
 
                     def Xform "oven_visual_0" (
-                        prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Oven.usda@</SM_Oven>
+                        prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Oven.usda@</SM_Oven>
                     )
                     {
                         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -2579,12 +2579,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.27990936, 1.97705429, 1.16238914, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet2_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Base.usda@</SM_Kitchen_02_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Base.usda@</SM_Kitchen_02_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -2800,7 +2800,7 @@ def Xform "apartment_root"
                     uniform token[] xformOpOrder = ["xformOp:transform"]
 
                     def Xform "cabinet2_shelf_visual_0" (
-                        prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Shelf.usda@</SM_Kitchen_02_Shelf>
+                        prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Shelf.usda@</SM_Kitchen_02_Shelf>
                     )
                     {
                         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -2941,12 +2941,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_Refrigerator>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_Refrigerator>
                 matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.27498539, 2.47989822, 1.16287888, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet3_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_03_Fridge.usda@</SM_Kitchen_03_Fridge>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_03_Fridge.usda@</SM_Kitchen_03_Fridge>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -3647,7 +3647,7 @@ def Xform "apartment_root"
                         uniform token[] xformOpOrder = ["xformOp:transform"]
 
                         def Xform "fridge_shelf1_visual_0" (
-                            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Shelf.usda@</SM_Fridge_Shelf>
+                            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Shelf.usda@</SM_Fridge_Shelf>
                         )
                         {
                             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -3712,7 +3712,7 @@ def Xform "apartment_root"
                         uniform token[] xformOpOrder = ["xformOp:transform"]
 
                         def Xform "fridge_shelf2_visual_0" (
-                            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Shelf.usda@</SM_Fridge_Shelf>
+                            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Shelf.usda@</SM_Fridge_Shelf>
                         )
                         {
                             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -3847,12 +3847,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.18224365, 3.29388123, 1.82711395, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet4_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Base.usda@</SM_Kitchen_04_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Base.usda@</SM_Kitchen_04_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4038,7 +4038,7 @@ def Xform "apartment_root"
                     uniform token[] xformOpOrder = ["xformOp:transform"]
 
                     def Xform "cabinet4_door1_visual_0" (
-                        prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Door_01.usda@</SM_Kitchen_04_Door_01>
+                        prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Door_01.usda@</SM_Kitchen_04_Door_01>
                     )
                     {
                         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4096,7 +4096,7 @@ def Xform "apartment_root"
                     uniform token[] xformOpOrder = ["xformOp:transform"]
 
                     def Xform "cabinet4_door2_visual_0" (
-                        prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Door_02.usda@</SM_Kitchen_04_Door_02>
+                        prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Door_02.usda@</SM_Kitchen_04_Door_02>
                     )
                     {
                         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4153,7 +4153,7 @@ def Xform "apartment_root"
                         uniform token[] xformOpOrder = ["xformOp:transform"]
 
                         def Xform "cabinet4_door2_handle_visual_0" (
-                            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
                         )
                         {
                             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4244,7 +4244,7 @@ def Xform "apartment_root"
                     uniform token[] xformOpOrder = ["xformOp:transform"]
 
                     def Xform "cabinet4_shelf1_visual_0" (
-                        prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Shelf.usda@</SM_Kitchen_04_Shelf>
+                        prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Shelf.usda@</SM_Kitchen_04_Shelf>
                     )
                     {
                         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4302,7 +4302,7 @@ def Xform "apartment_root"
                     uniform token[] xformOpOrder = ["xformOp:transform"]
 
                     def Xform "cabinet4_shelf2_visual_0" (
-                        prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Shelf.usda@</SM_Kitchen_04_Shelf>
+                        prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Shelf.usda@</SM_Kitchen_04_Shelf>
                     )
                     {
                         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4361,7 +4361,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "counter_wall_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Wall.usda@</SM_Counter_Wall>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Wall.usda@</SM_Counter_Wall>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4403,12 +4403,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.27476608, 3.08411682, 0.49420666, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet5_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Base.usda@</SM_Kitchen_05_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Base.usda@</SM_Kitchen_05_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4598,12 +4598,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.27476608, 3.5838385, 0.49420666, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet6_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Base.usda@</SM_Kitchen_06_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Base.usda@</SM_Kitchen_06_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4795,7 +4795,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "island_cover4_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_04.usda@</SM_Kitchen_Island_Cover_04>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_04.usda@</SM_Kitchen_Island_Cover_04>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4839,7 +4839,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "kitchen1_base_board_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Base_Board_01.usda@</SM_Kitchen_Base_Board_01>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Base_Board_01.usda@</SM_Kitchen_Base_Board_01>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -4889,7 +4889,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "counter_sink_stove_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink_Stove.usda@</SM_Counter_Sink_Stove>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink_Stove.usda@</SM_Counter_Sink_Stove>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -5024,7 +5024,7 @@ def Xform "apartment_root"
                     uniform token[] xformOpOrder = ["xformOp:transform"]
 
                     def Xform "stove_visual_0" (
-                        prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Stove.usda@</SM_Stove>
+                        prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Stove.usda@</SM_Stove>
                     )
                     {
                         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -5089,7 +5089,7 @@ def Xform "apartment_root"
                     uniform token[] xformOpOrder = ["xformOp:transform"]
 
                     def Xform "counter_sink_visual_0" (
-                        prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink.usda@</SM_Counter_Sink>
+                        prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink.usda@</SM_Counter_Sink>
                     )
                     {
                         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -5224,7 +5224,7 @@ def Xform "apartment_root"
                         uniform token[] xformOpOrder = ["xformOp:transform"]
 
                         def Xform "counter_watertab_visual_0" (
-                            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Watertab.usda@</SM_Counter_Watertab>
+                            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Watertab.usda@</SM_Counter_Watertab>
                         )
                         {
                             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -5410,7 +5410,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "dishwasher_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Dishwasher_Base.usda@</SM_Dishwasher_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Dishwasher_Base.usda@</SM_Dishwasher_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -5618,12 +5618,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.49268082, 3.37232117, 0.49448143, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet8_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_08_Sink_Base.usda@</SM_Kitchen_08_Sink_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_08_Sink_Base.usda@</SM_Kitchen_08_Sink_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -5785,12 +5785,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.49288239, 2.77268799, 0.49406776, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet9_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Base.usda@</SM_Kitchen_09_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Base.usda@</SM_Kitchen_09_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -5980,12 +5980,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.49299103, 2.2719194, 0.5011195, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet10_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Base.usda@</SM_Kitchen_10_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Base.usda@</SM_Kitchen_10_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6175,12 +6175,12 @@ def Xform "apartment_root"
                 prepend apiSchemas = ["SemanticTagAPI"]
             )
             {
-                prepend rel semanticTag:semanticLabel = </SOMA/_class_KitchenCabinet>
+                prepend rel semanticTag:semanticLabels = </SOMA/_class_KitchenCabinet>
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.49293671, 1.62155807, 0.50984447, 1) )
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "cabinet11_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Base.usda@</SM_Kitchen_11_Base>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Base.usda@</SM_Kitchen_11_Base>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6372,7 +6372,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "kitchen2_base_board_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Base_Board_02.usda@</SM_Kitchen_Base_Board_02>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Base_Board_02.usda@</SM_Kitchen_Base_Board_02>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6416,7 +6416,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "island_cover1_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_01.usda@</SM_Kitchen_Island_Cover_01>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_01.usda@</SM_Kitchen_Island_Cover_01>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6460,7 +6460,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "island_cover3_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_03.usda@</SM_Kitchen_Island_Cover_03>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_03.usda@</SM_Kitchen_Island_Cover_03>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6504,7 +6504,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "island_cover5_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_03.usda@</SM_Kitchen_Island_Cover_03>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_03.usda@</SM_Kitchen_Island_Cover_03>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6553,7 +6553,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet1_door_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Door_01.usda@</SM_Kitchen_01_Door_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Door_01.usda@</SM_Kitchen_01_Door_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6617,7 +6617,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet1_door_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6707,12 +6707,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.33142237, 1.47797888, 0.6278209699999999, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet1_drawer1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Drawer_01.usda@</SM_Kitchen_01_Drawer_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Drawer_01.usda@</SM_Kitchen_01_Drawer_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -6921,7 +6921,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet1_drawer1_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -7011,12 +7011,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.33063219, 1.47775873, 0.29840605, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet1_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Drawer_02.usda@</SM_Kitchen_01_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Drawer_02.usda@</SM_Kitchen_01_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -7225,7 +7225,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet1_drawer2_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -7319,7 +7319,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "oven_door_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Oven_Door.usda@</SM_Oven_Door>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Oven_Door.usda@</SM_Oven_Door>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -7394,7 +7394,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet2_door_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Door.usda@</SM_Kitchen_02_Door>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Door.usda@</SM_Kitchen_02_Door>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -7451,7 +7451,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet2_door_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -7541,12 +7541,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.28455711, 1.97570891, 1.74285125, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet2_drawer1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_01.usda@</SM_Kitchen_02_Drawer_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_01.usda@</SM_Kitchen_02_Drawer_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -7702,12 +7702,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.28455711, 1.9783996700000002, 1.58513854, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet2_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -7978,12 +7978,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.28455711, 1.9783996700000002, 1.30528564, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet2_drawer3_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -8254,12 +8254,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.28455711, 1.97570891, 0.9199520099999999, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet2_drawer4_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -8530,12 +8530,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.28455711, 1.97570891, 0.64429321, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet2_drawer5_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -8806,12 +8806,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.28455711, 1.97570891, 0.20719710999999996, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet2_drawer6_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</SM_Kitchen_02_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9086,7 +9086,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "fridge_door1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_01.usda@</SM_Fridge_Door_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_01.usda@</SM_Fridge_Door_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9187,7 +9187,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "fridge_door1_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9277,7 +9277,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "fridge_door_tray1_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_Tray_01.usda@</SM_Fridge_Door_Tray_01>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_Tray_01.usda@</SM_Fridge_Door_Tray_01>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9434,7 +9434,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "fridge_door_tray2_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_Tray_02.usda@</SM_Fridge_Door_Tray_02>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_Tray_02.usda@</SM_Fridge_Door_Tray_02>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9583,7 +9583,7 @@ def Xform "apartment_root"
                 uniform token[] xformOpOrder = ["xformOp:transform"]
 
                 def Xform "fridge_egg_tray_visual_0" (
-                    prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Egg_Tray.usda@</SM_Fridge_Egg_Tray>
+                    prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Egg_Tray.usda@</SM_Fridge_Egg_Tray>
                 )
                 {
                     matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9609,7 +9609,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "fridge_door2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_02.usda@</SM_Fridge_Door_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_02.usda@</SM_Fridge_Door_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9703,7 +9703,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "fridge_door2_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9797,7 +9797,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "fridge_drawer1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_01.usda@</SM_Fridge_Drawer_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_01.usda@</SM_Fridge_Drawer_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -9980,7 +9980,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "fridge_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_02.usda@</SM_Fridge_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_02.usda@</SM_Fridge_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -10163,7 +10163,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "fridge_drawer3_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_03.usda@</SM_Fridge_Drawer_03>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_03.usda@</SM_Fridge_Drawer_03>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -10346,7 +10346,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "fridge_drawer4_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_04.usda@</SM_Fridge_Drawer_04>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_04.usda@</SM_Fridge_Drawer_04>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -10529,7 +10529,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "fridge_drawer5_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_05.usda@</SM_Fridge_Drawer_05>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_05.usda@</SM_Fridge_Drawer_05>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -10708,12 +10708,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.32739307, 3.0851170800000003, 0.82598503, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet5_drawer1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_01.usda@</SM_Kitchen_05_Drawer_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_01.usda@</SM_Kitchen_05_Drawer_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -10876,7 +10876,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet5_drawer1_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -10966,12 +10966,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.32780372, 3.08490834, 0.62793125, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet5_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_02.usda@</SM_Kitchen_05_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_02.usda@</SM_Kitchen_05_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -11180,7 +11180,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet5_drawer2_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -11270,12 +11270,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.32821696, 3.08487233, 0.29853976000000004, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet5_drawer3_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_03.usda@</SM_Kitchen_05_Drawer_03>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_03.usda@</SM_Kitchen_05_Drawer_03>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -11484,7 +11484,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet5_drawer3_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -11574,12 +11574,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.32806206000000004, 3.58416499, 0.82598503, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet6_drawer1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_01.usda@</SM_Kitchen_06_Drawer_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_01.usda@</SM_Kitchen_06_Drawer_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -11742,7 +11742,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet6_drawer1_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -11832,12 +11832,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.32782295, 3.58458247, 0.62717545, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet6_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_02.usda@</SM_Kitchen_06_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_02.usda@</SM_Kitchen_06_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -12046,7 +12046,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet6_drawer2_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -12136,12 +12136,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (-1, 1.2246467991473532e-16, 0, 0), (-1.2246467991473532e-16, -1, 0, 0), (0, 0, 1, 0), (0.3275637, 3.5845330300000002, 0.297298, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet6_drawer3_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_03.usda@</SM_Kitchen_06_Drawer_03>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_03.usda@</SM_Kitchen_06_Drawer_03>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -12350,7 +12350,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet6_drawer3_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -12490,7 +12490,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "counter_sink_tap_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink_Tap.usda@</SM_Counter_Sink_Tap>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink_Tap.usda@</SM_Counter_Sink_Tap>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -12592,7 +12592,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "dishwasher_front_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Dishwasher_Front.usda@</SM_Dishwasher_Front>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Dishwasher_Front.usda@</SM_Dishwasher_Front>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -12700,7 +12700,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "dishwasher_front_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -13887,7 +13887,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "sink_drawer1_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -13981,7 +13981,7 @@ def Xform "apartment_root"
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "sink_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_08_Sink_Drawer_02.usda@</SM_Kitchen_08_Sink_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_08_Sink_Drawer_02.usda@</SM_Kitchen_08_Sink_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -14176,12 +14176,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.5420865000000004, 2.77093435, 0.82615219, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet9_drawer1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_01.usda@</SM_Kitchen_09_Drawer_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_01.usda@</SM_Kitchen_09_Drawer_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -14344,7 +14344,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet9_drawer1_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -14434,12 +14434,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.54212937, 2.77203603, 0.6290124100000001, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet9_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_02.usda@</SM_Kitchen_09_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_02.usda@</SM_Kitchen_09_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -14648,7 +14648,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet9_drawer2_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -14738,12 +14738,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.54243013, 2.77101736, 0.29795444000000004, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet9_drawer3_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_03.usda@</SM_Kitchen_09_Drawer_03>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_03.usda@</SM_Kitchen_09_Drawer_03>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -14952,7 +14952,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet9_drawer3_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -15042,12 +15042,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.54203385, 2.27254399, 0.82677193, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet10_drawer1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_01.usda@</SM_Kitchen_10_Drawer_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_01.usda@</SM_Kitchen_10_Drawer_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -15210,7 +15210,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet10_drawer1_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -15300,12 +15300,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.5422772300000003, 2.27185079, 0.6291715200000001, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet10_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_02.usda@</SM_Kitchen_10_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_02.usda@</SM_Kitchen_10_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -15514,7 +15514,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet10_drawer2_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -15604,12 +15604,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.5425879000000005, 2.2715501899999997, 0.29715225000000006, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet10_drawer3_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_03.usda@</SM_Kitchen_10_Drawer_03>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_03.usda@</SM_Kitchen_10_Drawer_03>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -15818,7 +15818,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet10_drawer3_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -15908,12 +15908,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.54211427, 1.62219746, 0.82801322, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet11_drawer1_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_01.usda@</SM_Kitchen_11_Drawer_01>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_01.usda@</SM_Kitchen_11_Drawer_01>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -16076,7 +16076,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet11_drawer1_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -16166,12 +16166,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.54262788, 1.62201787, 0.6290229, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet11_drawer2_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_02.usda@</SM_Kitchen_11_Drawer_02>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_02.usda@</SM_Kitchen_11_Drawer_02>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -16380,7 +16380,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet11_drawer2_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -16470,12 +16470,12 @@ def Xform "apartment_root"
     )
     {
         bool physics:rigidBodyEnabled = 1
-        prepend rel semanticTag:semanticLabel = </SOMA/_class_Drawer>
+        prepend rel semanticTag:semanticLabels = </SOMA/_class_Drawer>
         matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (2.54216156, 1.62302159, 0.29653661, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Xform "cabinet11_drawer3_visual_0" (
-            prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_03.usda@</SM_Kitchen_11_Drawer_03>
+            prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_03.usda@</SM_Kitchen_11_Drawer_03>
         )
         {
             matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -16684,7 +16684,7 @@ def Xform "apartment_root"
             uniform token[] xformOpOrder = ["xformOp:transform"]
 
             def Xform "cabinet11_drawer3_handle_visual_0" (
-                prepend references = @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
+                prepend references = @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</SM_Kitchen_Handle>
             )
             {
                 matrix4d xformOp:transform = ( (1, 0, 0, 0), (0, 1, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1) )
@@ -16772,87 +16772,87 @@ def Xform "apartment_root"
 
 def "_materials" (
     prepend references = [
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_03.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_04.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/windows_without_4.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Frame.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Right.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Left.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Handle.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_left.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_right.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_handle.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/armchair.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/sofa.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/coffee_table.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/coffee_table_drawer.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/bedside_table.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Door_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Drawer_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Oven.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Oven_Door.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Door.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Shelf.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_03_Fridge.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_Tray_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_Tray_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Egg_Tray.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Shelf.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_03.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_04.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_05.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Door_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Door_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Shelf.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Wall.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_03.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_03.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_04.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Base_Board_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink_Stove.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Stove.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Watertab.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink_Tap.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Dishwasher_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Dishwasher_Front.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_08_Sink_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_08_Sink_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_03.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_03.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Base.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_03.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Base_Board_02.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_01.usda@</_materials>,
-        @/media/giang/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_03.usda@</_materials>
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_03.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Wall_04.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/windows_without_4.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Frame.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Right.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Left.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Window_Handle.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_left.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_right.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/wardrobe_door_handle.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/armchair.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/sofa.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/coffee_table.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/coffee_table_drawer.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/bedside_table.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Door_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Drawer_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_01_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Oven.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Oven_Door.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Door.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Shelf.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_02_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_03_Fridge.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_Tray_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_Tray_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Egg_Tray.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Door_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Shelf.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_03.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_04.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Fridge_Drawer_05.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Door_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Door_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_04_Shelf.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Wall.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_05_Drawer_03.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_06_Drawer_03.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_04.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Base_Board_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink_Stove.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Stove.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Watertab.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Counter_Sink_Tap.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Dishwasher_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Dishwasher_Front.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_08_Sink_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_08_Sink_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_09_Drawer_03.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_10_Drawer_03.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Base.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_11_Drawer_03.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Handle.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Base_Board_02.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_01.usda@</_materials>,
+        @/media/giangnguyen/Storage/Multiverse/multiverse/tests/multiverse_knowledge/input/apartment/usd/meshes/visual/SM_Kitchen_Island_Cover_03.usda@</_materials>
     ]
 )
 {

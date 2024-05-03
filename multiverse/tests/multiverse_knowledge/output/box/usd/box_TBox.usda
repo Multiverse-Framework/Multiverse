@@ -1,669 +1,17 @@
 #usda 1.0
 
-class "_class_owl_namespace" (
-    prepend apiSchemas = ["RdfAPI"]
-)
-{
-    string rdf:namespace = "http://www.w3.org/2002/07/owl#"
-}
-
-def "owl"
-{
-    class "_class_Thing" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_owl_namespace>
-    )
-    {
-        string rdf:conceptName = "Thing"
-    }
-}
-
-class "_class_DUL_namespace" (
-    prepend apiSchemas = ["RdfAPI"]
-)
-{
-    string rdf:namespace = "http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#"
-}
-
-def "DUL"
-{
-    class "_class_DesignedArtifact" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "DesignedArtifact"
-    }
-
-    class "_class_Quality" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Quality"
-    }
-
-    class "_class_Object" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Object"
-    }
-
-    class "_class_Entity" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Entity"
-    }
-
-    class "_class_PhysicalObject" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicalObject"
-    }
-
-    class "_class_PhysicalArtifact" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicalArtifact"
-    }
-
-    class "_class_Description" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Description"
-    }
-
-    class "_class_Collection" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Collection"
-    }
-
-    class "_class_Agent" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Agent"
-    }
-
-    class "_class_SocialAgent" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "SocialAgent"
-    }
-
-    class "_class_Concept" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Concept"
-    }
-
-    class "_class_SocialObject" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "SocialObject"
-    }
-
-    class "_class_InformationRealization" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "InformationRealization"
-    }
-
-    class "_class_Role" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Role"
-    }
-
-    class "_class_Task" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Task"
-    }
-
-    class "_class_Action" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Action"
-    }
-
-    class "_class_InformationObject" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "InformationObject"
-    }
-
-    class "_class_Parameter" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Parameter"
-    }
-
-    class "_class_Event" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Event"
-    }
-
-    class "_class_Situation" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Situation"
-    }
-
-    class "_class_Region" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Region"
-    }
-
-    class "_class_TimeInterval" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "TimeInterval"
-    }
-
-    class "_class_Abstract" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Abstract"
-    }
-
-    class "_class_Amount" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Amount"
-    }
-
-    class "_class_PhysicalAttribute" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicalAttribute"
-    }
-
-    class "_class_SpaceRegion" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "SpaceRegion"
-    }
-
-    class "_class_BiologicalObject" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "BiologicalObject"
-    }
-
-    class "_class_PhysicalBody" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicalBody"
-    }
-
-    class "_class_ChemicalObject" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "ChemicalObject"
-    }
-
-    class "_class_Classification" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Classification"
-    }
-
-    class "_class_TimeIndexedRelation" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "TimeIndexedRelation"
-    }
-
-    class "_class_Collective" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Collective"
-    }
-
-    class "_class_CollectiveAgent" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "CollectiveAgent"
-    }
-
-    class "_class_Community" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Community"
-    }
-
-    class "_class_Configuration" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Configuration"
-    }
-
-    class "_class_Contract" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Contract"
-    }
-
-    class "_class_Design" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Design"
-    }
-
-    class "_class_DesignedSubstance" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "DesignedSubstance"
-    }
-
-    class "_class_FunctionalSubstance" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "FunctionalSubstance"
-    }
-
-    class "_class_Diagnosis" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Diagnosis"
-    }
-
-    class "_class_EventType" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "EventType"
-    }
-
-    class "_class_FormalEntity" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "FormalEntity"
-    }
-
-    class "_class_Substance" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Substance"
-    }
-
-    class "_class_Goal" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Goal"
-    }
-
-    class "_class_Group" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Group"
-    }
-
-    class "_class_Plan" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Plan"
-    }
-
-    class "_class_InformationEntity" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "InformationEntity"
-    }
-
-    class "_class_LocalConcept" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "LocalConcept"
-    }
-
-    class "_class_Method" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Method"
-    }
-
-    class "_class_Narrative" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Narrative"
-    }
-
-    class "_class_NaturalPerson" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "NaturalPerson"
-    }
-
-    class "_class_Person" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Person"
-    }
-
-    class "_class_PhysicalAgent" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicalAgent"
-    }
-
-    class "_class_Norm" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Norm"
-    }
-
-    class "_class_ObjectAggregate" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "ObjectAggregate"
-    }
-
-    class "_class_Organism" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Organism"
-    }
-
-    class "_class_Organization" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Organization"
-    }
-
-    class "_class_Parthood" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Parthood"
-    }
-
-    class "_class_Pattern" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Pattern"
-    }
-
-    class "_class_Relation" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Relation"
-    }
-
-    class "_class_Personification" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Personification"
-    }
-
-    class "_class_PhysicalPlace" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "PhysicalPlace"
-    }
-
-    class "_class_Place" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Place"
-    }
-
-    class "_class_PlanExecution" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "PlanExecution"
-    }
-
-    class "_class_Process" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Process"
-    }
-
-    class "_class_Project" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Project"
-    }
-
-    class "_class_Right" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Right"
-    }
-
-    class "_class_Set" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Set"
-    }
-
-    class "_class_SocialObjectAttribute" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "SocialObjectAttribute"
-    }
-
-    class "_class_SocialPerson" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "SocialPerson"
-    }
-
-    class "_class_SocialRelation" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "SocialRelation"
-    }
-
-    class "_class_SpatioTemporalRegion" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "SpatioTemporalRegion"
-    }
-
-    class "_class_Theory" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Theory"
-    }
-
-    class "_class_Transition" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Transition"
-    }
-
-    class "_class_TypeCollection" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "TypeCollection"
-    }
-
-    class "_class_UnitOfMeasure" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "UnitOfMeasure"
-    }
-
-    class "_class_Workflow" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "Workflow"
-    }
-
-    class "_class_WorkflowExecution" (
-        prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_DUL_namespace>
-    )
-    {
-        string rdf:conceptName = "WorkflowExecution"
-    }
-}
-
-class "_class_boxTBox_namespace" (
+class "_class_box_TBox_namespace" (
     prepend apiSchemas = ["RdfAPI"]
 )
 {
     string rdf:namespace = "https://ease-crc.org/ont/usd/box_TBox.owl#"
 }
 
-def "boxTBox"
+def "box_TBox"
 {
     class "_class_Box" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "Box"
@@ -671,7 +19,7 @@ def "boxTBox"
 
     class "_class_Openability" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "Openability"
@@ -679,7 +27,7 @@ def "boxTBox"
 
     class "_class_Closed" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "Closed"
@@ -687,7 +35,7 @@ def "boxTBox"
 
     class "_class_Opened" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "Opened"
@@ -695,7 +43,7 @@ def "boxTBox"
 
     class "_class_ClosedBox" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "ClosedBox"
@@ -703,7 +51,7 @@ def "boxTBox"
 
     class "_class_Corpus" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "Corpus"
@@ -711,7 +59,7 @@ def "boxTBox"
 
     class "_class_Flap" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "Flap"
@@ -719,7 +67,7 @@ def "boxTBox"
 
     class "_class_OpenedBox" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "OpenedBox"
@@ -727,7 +75,7 @@ def "boxTBox"
 
     class "_class_Table" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "Table"
@@ -735,7 +83,7 @@ def "boxTBox"
 
     class "_class_Cat" (
         prepend apiSchemas = ["RdfAPI"]
-        prepend inherits = </_class_boxTBox_namespace>
+        prepend inherits = </_class_box_TBox_namespace>
     )
     {
         string rdf:conceptName = "Cat"

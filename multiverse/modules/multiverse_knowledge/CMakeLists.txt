@@ -91,8 +91,8 @@ add_test(
 )
 
 add_test(
-  NAME auto_sem_tag_box
-  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/semantic_tagging
+  NAME semantic_tagging_box
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/semantic_tagging.py
           --in_usd=${TEST_DIR}/multiverse_knowledge/input/box/usd/box.usda
           --in_TBox_usd=${TEST_DIR}/multiverse_knowledge/output/box/usd/box_TBox.usda
           --out_ABox_usd=${TEST_DIR}/multiverse_knowledge/output/box/usd/box_ABox.usda
@@ -120,8 +120,8 @@ add_test(
 )
 
 add_test(
-  NAME auto_sem_tag_apartment
-  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/semantic_tagging
+  NAME semantic_tagging_apartment
+  COMMAND python3 ${CMAKE_CURRENT_SOURCE_DIR}/scripts/semantic_tagging.py
           --in_usd=${TEST_DIR}/multiverse_knowledge/input/apartment/usd/apartment.usda
           --in_TBox_usd=${TEST_DIR}/multiverse_knowledge/output/apartment/usd/apartment_TBox.usda
           --out_ABox_usd=${TEST_DIR}/multiverse_knowledge/output/apartment/usd/apartment_ABox.usda

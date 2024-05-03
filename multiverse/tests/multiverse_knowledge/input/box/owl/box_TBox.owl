@@ -10,7 +10,6 @@
      xmlns:swrl="http://www.w3.org/2003/11/swrl#"
      xmlns:swrlb="http://www.w3.org/2003/11/swrlb#">
     <owl:Ontology rdf:about="https://ease-crc.org/ont/usd/box_TBox.owl">
-        <owl:imports rdf:resource="https://ease-crc.org/ont/USD.owl"/>
     </owl:Ontology>
     
 
