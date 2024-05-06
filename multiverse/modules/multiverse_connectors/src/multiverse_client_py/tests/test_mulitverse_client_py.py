@@ -1,5 +1,6 @@
 import signal
 import subprocess
+import threading
 import unittest
 from time import sleep, time
 
@@ -16,8 +17,8 @@ def kill_multiverse_server(process: subprocess.Popen):
 
 
 class MultiverseClientTest(MultiverseClient):
-    def __init__(self, 
-                 client_addr: SocketAddress, 
+    def __init__(self,
+                 client_addr: SocketAddress,
                  multiverse_meta_data: MultiverseMetaData) -> None:
         super().__init__(client_addr, multiverse_meta_data)
 
@@ -47,19 +48,19 @@ class MultiverseClientTestCase(unittest.TestCase):
         handedness="rhs",
     )
     time_start = 0.0
-    _server_port = "6500"
+    _server_port = "7000"
     _process = None
 
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.time_start = time()
-
-        MultiverseClientTest._server_addr.port = cls._server_port
-        cls._process = start_multiverse_server(cls._server_port)
-
-    @classmethod
-    def tearDownClass(cls) -> None:
-        kill_multiverse_server(cls._process)
+    # @classmethod
+    # def setUpClass(cls) -> None:
+    #     cls.time_start = time()
+    #
+    #     MultiverseClientTest._server_addr.port = cls._server_port
+    #     cls._process = start_multiverse_server(cls._server_port)
+    #
+    # @classmethod
+    # def tearDownClass(cls) -> None:
+    #     kill_multiverse_server(cls._process)
 
     def create_multiverse_client_send(self, port, object_name, attribute_names):
         meta_data = self.meta_data
@@ -112,14 +113,15 @@ class MultiverseClientTestCase(unittest.TestCase):
             'time': time_send})
         multiverse_client_test_send.stop()
 
-    def test_multiverse_client_send_data(self):
+    def test_multiverse_client_send_data(self, stop=True):
         multiverse_client_test_send = self.create_multiverse_client_send("1234", "object_1", ["position", "quaternion"])
 
         time_now = time() - self.time_start
         self.multiverse_client_send_data(multiverse_client_test_send, [time_now, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0])
 
         self.assertEqual(multiverse_client_test_send.receive_data, [time_now])
-        multiverse_client_test_send.stop()
+        if stop:
+            multiverse_client_test_send.stop()
 
         return multiverse_client_test_send, time_now
 
@@ -168,6 +170,32 @@ class MultiverseClientTestCase(unittest.TestCase):
 
         multiverse_client_test_spawn.stop()
 
+    def test_multiverse_client_callapi_creation(self):
+        multiverse_client_test_send, time_send = self.test_multiverse_client_send_data(False)
+
+        send_and_receive_data_thread = threading.Thread(target=self.create_multiverse_client_callapi,
+                                                        args=(
+                                                            "1235",
+                                                            {
+                                                                "sim_test_send": [
+                                                                    {"attach": [
+                                                                        "obj1",
+                                                                        "obj2"]},
+                                                                    {"is_mujoco": []}
+                                                                ]
+                                                            }
+                                                        ))
+        send_and_receive_data_thread.start()
+        print("HERE")
+        multiverse_client_test_send.send_data = [time() - self.time_start, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+        multiverse_client_test_send.send_and_receive_data()
+        print(multiverse_client_test_send.response_meta_data)
+        # print(multiverse_client_test_send.receive_data)
+        # multiverse_client_test_send.send_data = [time() - self.time_start, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+        # multiverse_client_test_send.send_and_receive_data()
+        # print(multiverse_client_test_send.receive_data)
+        multiverse_client_test_send.stop()
+
 
 class MultiverseClientSpawnTestCase(unittest.TestCase):
     meta_data = MultiverseMetaData(
@@ -196,6 +224,16 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         meta_data.simulation_name = "sim_test_spawn"
         multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
                                                  multiverse_meta_data=meta_data)
+        multiverse_client.run()
+        return multiverse_client
+
+    def create_multiverse_client_callapi(self, port, world_name, api_callbacks):
+        meta_data = self.meta_data
+        meta_data.world_name = world_name
+        meta_data.simulation_name = "sim_test_callapi"
+        multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
+                                                 multiverse_meta_data=meta_data)
+        multiverse_client.request_meta_data["api_callbacks"] = api_callbacks
         multiverse_client.run()
         return multiverse_client
 
@@ -240,6 +278,21 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client_test_spawn.send_and_receive_data()
 
         multiverse_client_test_spawn.stop()
+
+    def test_multiverse_client_callapi(self):
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1338", "world",
+                                                                               {
+                                                                                   "empty_simulation": [
+                                                                                       {"attach": [
+                                                                                           "obj1",
+                                                                                           "obj2"]},
+                                                                                       {"is_mujoco": []}
+                                                                                   ]
+                                                                               })
+        print(multiverse_client_test_callapi.response_meta_data)
+        sleep(5)
+        multiverse_client_test_callapi.send_and_receive_data()
+        multiverse_client_test_callapi.stop()
 
     def test_multiverse_client_move(self):
         multiverse_client_test_move = self.create_multiverse_client_spawn("1337", "world")

@@ -590,8 +590,13 @@ void MjMultiverseClient::wait_for_meta_data_thread_finish()
 void MjMultiverseClient::bind_request_meta_data()
 {
 	mtx.lock();
+	const Json::Value api_callbacks_response = request_meta_data_json["api_callbacks_response"];
 	// Create JSON object and populate it
 	request_meta_data_json.clear();
+	if (!api_callbacks_response.isNull())
+	{
+		request_meta_data_json["api_callbacks_response"] = api_callbacks_response;
+	}
 	request_meta_data_json["meta_data"]["world_name"] = world_name;
 	request_meta_data_json["meta_data"]["simulation_name"] = simulation_name;
 	request_meta_data_json["meta_data"]["length_unit"] = "m";
@@ -955,6 +960,42 @@ void MjMultiverseClient::bind_response_meta_data()
 	{
 		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 	}
+}
+
+void MjMultiverseClient::bind_api_callbacks()
+{
+	printf("Bind API callbacks\n");
+	const Json::Value &api_callbacks_json = response_meta_data_json["api_callbacks"];
+	printf("%s\n", api_callbacks_json.toStyledString().c_str());
+}
+
+void MjMultiverseClient::bind_api_callbacks_response()
+{
+	printf("Bind API callbacks response\n");
+	const Json::Value &api_callbacks_json = response_meta_data_json["api_callbacks"];
+	request_meta_data_json["api_callbacks_response"] = Json::arrayValue;
+	for (const Json::Value &api_callback_json : api_callbacks_json)
+	{
+		for (const std::string &api_callback_name : api_callback_json.getMemberNames())
+		{
+			Json::Value api_callback_response;
+			api_callback_response[api_callback_name] = Json::arrayValue;
+			if (strcmp(api_callback_name.c_str(), "is_mujoco") == 0)
+			{
+				api_callback_response[api_callback_name].append(true);
+			}
+			else if (strcmp(api_callback_name.c_str(), "attach") == 0)
+			{
+				api_callback_response[api_callback_name].append("will be implemented");
+			}
+			else
+			{
+				api_callback_response[api_callback_name].append("not implemented");
+			}
+			request_meta_data_json["api_callbacks_response"].append(api_callback_response);
+		}
+	}
+	printf("%s\n", request_meta_data_json.toStyledString().c_str());
 }
 
 void MjMultiverseClient::init_send_and_receive_data()

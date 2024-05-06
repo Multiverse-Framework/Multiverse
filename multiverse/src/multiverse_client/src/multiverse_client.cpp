@@ -230,7 +230,11 @@ void MultiverseClient::run()
 
                     check_response_meta_data();
 
+                    bind_api_callbacks();
+
                     init_objects(true);
+
+                    bind_api_callbacks_response();
 
                     flag = EMultiverseClientState::BindRequestMetaData;
 

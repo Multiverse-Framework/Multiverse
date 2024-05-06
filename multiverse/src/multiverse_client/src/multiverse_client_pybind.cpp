@@ -240,12 +240,68 @@ private:
 
     void bind_request_meta_data() override
     {
+        if (request_meta_data_dict.contains("api_callbacks"))
+        {
+            printf("[Client %s] Send API callbacks.\n", port.c_str());
+        }
         request_meta_data_str = pybind11::str(request_meta_data_dict).cast<std::string>();
         std::replace(request_meta_data_str.begin(), request_meta_data_str.end(), '\'', '"');
     }
 
     void bind_response_meta_data() override
     {
+        if (response_meta_data_dict.contains("api_callbacks"))
+        {
+            printf("[Client %s] Receive API callbacks.\n", port.c_str());
+            bind_api_callbacks();
+        }
+        if (response_meta_data_dict.contains("api_callbacks_response"))
+        {
+            printf("[Client %s] Receive API callbacks response.\n", port.c_str());
+            bind_api_callbacks_response();
+        }
+    }
+
+    void bind_api_callbacks() override
+    {
+        // for (const std::map<std::string, std::vector<std::string>> &api_callback : request_meta_data_dict["api_callbacks"].cast<std::vector<std::map<std::string, std::vector<std::string>>>>())
+        // {
+        //     for (const std::pair<std::string, std::vector<std::string>> &api_callback_pair : api_callback)
+        //     {
+        //         printf("[Client %s] %s - [", port.c_str(), api_callback_pair.first.c_str());
+        //         std::string api_args = "";
+        //         for (const std::string &api_callback_value : api_callback_pair.second)
+        //         {
+        //             api_args += api_callback_value + ", ";
+        //         }
+        //         if (!api_args.empty())
+        //         {
+        //             api_args = api_args.substr(0, api_args.size() - 2);
+        //         }
+        //         printf("%s]\n", api_args.c_str());
+        //     }
+        // }
+    }
+
+    void bind_api_callbacks_response() override
+    {
+        // for (const std::map<std::string, std::vector<std::string>> &api_callback : request_meta_data_dict["api_callbacks"].cast<std::vector<std::map<std::string, std::vector<std::string>>>>())
+        // {
+        //     for (const std::pair<std::string, std::vector<std::string>> &api_callback_pair : api_callback)
+        //     {
+        //         printf("[Client %s] %s - [", port.c_str(), api_callback_pair.first.c_str());
+        //         std::string api_args = "";
+        //         for (const std::string &api_callback_value : api_callback_pair.second)
+        //         {
+        //             api_args += api_callback_value + ", ";
+        //         }
+        //         if (!api_args.empty())
+        //         {
+        //             api_args = api_args.substr(0, api_args.size() - 2);
+        //         }
+        //         printf("%s]\n", api_args.c_str());
+        //     }
+        // }
     }
 
     void clean_up() override

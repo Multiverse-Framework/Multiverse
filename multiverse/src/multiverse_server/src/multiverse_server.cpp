@@ -169,6 +169,8 @@ struct Simulation
     std::map<std::string, Object *> objects;
     Json::Value request_meta_data_json;
     EMetaDataState meta_data_state;
+    std::vector<std::map<std::string, std::vector<std::string>>> api_callbacks;
+    std::vector<std::map<std::string, std::vector<std::string>>> api_callbacks_response;
 };
 
 struct World
@@ -256,7 +258,7 @@ void MultiverseServer::start()
 
         case EMultiverseServerState::BindObjects:
         {
-            // printf("[Server] Received meta data from socket %s %s:\n%s", simulation_name.c_str(), socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
+            printf("[Server] Received meta data from socket %s %s:\n%s", simulation_name.c_str(), socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
             bind_meta_data();
 
             mtx.lock();
@@ -269,6 +271,79 @@ void MultiverseServer::start()
             mtx.lock();
             bind_receive_objects();
             mtx.unlock();
+
+            if (request_meta_data_json.isMember("api_callbacks") && !request_meta_data_json["api_callbacks"].empty())
+            {
+                const Json::Value api_callbacks = request_meta_data_json["api_callbacks"];
+
+                for (const std::string &simulation_name : api_callbacks.getMemberNames())
+                {
+                    response_meta_data_json["api_callbacks_response"][simulation_name] = Json::arrayValue;
+                    Simulation &simulation = worlds[world_name].simulations[simulation_name];
+                    simulation.meta_data_state = EMetaDataState::WaitAfterSendReceiveData;
+                    simulation.request_meta_data_json["api_callbacks"] = api_callbacks[simulation_name];
+                    simulation.api_callbacks.clear();
+                    for (const Json::Value &api_callback : api_callbacks[simulation_name])
+                    {
+                        for (const std::string &callback_key : api_callback.getMemberNames())
+                        {
+                            std::map<std::string, std::vector<std::string>> api_callback_map;
+                            api_callback_map[callback_key] = std::vector<std::string>{};
+                            for (const Json::Value &param : api_callback[callback_key])
+                            {
+                                api_callback_map[callback_key].push_back(param.asString());
+                            }
+                            simulation.api_callbacks.push_back(api_callback_map);
+                        }
+                    }
+                }
+
+                double start = get_time_now();
+                double now = get_time_now();
+                bool stop = true;
+                while (!should_shut_down)
+                {
+                    for (const std::string &simulation_name : api_callbacks.getMemberNames())
+                    {
+                        Simulation &simulation = worlds[world_name].simulations[simulation_name];
+                        if (simulation.api_callbacks.size() == simulation.api_callbacks_response.size())
+                        {
+                            stop = true;
+                            continue;
+                        }
+                        stop = false;
+                        now = get_time_now();
+                        if (now - start > 1)
+                        {
+                            printf("[Server] Socket %s is waiting for %s to send API callbacks response data.\n", socket_addr.c_str(), simulation_name.c_str());
+                            start = now;
+                        }
+                    }
+                    if (stop)
+                    {
+                        break;
+                    }
+                }
+
+                for (const std::string &simulation_name : api_callbacks.getMemberNames())
+                {
+                    Simulation &simulation = worlds[world_name].simulations[simulation_name];
+                    response_meta_data_json["api_callbacks_response"][simulation_name] = Json::arrayValue;
+                    for (const std::map<std::string, std::vector<std::string>> &api_callbacks_response : simulation.api_callbacks_response)
+                    {
+                        for (const std::pair<std::string, std::vector<std::string>> &api_callback_response : api_callbacks_response)
+                        {
+                            Json::Value api_callback_response_json;
+                            api_callback_response_json[api_callback_response.first] = Json::arrayValue;
+                            for (const std::string &param : api_callback_response.second)
+                            {
+                                api_callback_response_json[api_callback_response.first].append(param);
+                            }
+                            response_meta_data_json["api_callbacks_response"][simulation_name].append(api_callback_response_json);
+                        }
+                    }
+                }
+            }
 
             flag = EMultiverseServerState::SendResponseMetaData;
         }
@@ -402,6 +477,45 @@ void MultiverseServer::start()
                     if (simulation.meta_data_state == EMetaDataState::WaitAfterOtherSendRequestMetaData)
                     {
                         break;
+                    }
+
+                    if (simulation.api_callbacks.size() != simulation.api_callbacks_response.size())
+                    {
+                        zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none); // TODO: Make use of the message
+                        response_meta_data_json["api_callbacks"] = simulation.request_meta_data_json["api_callbacks"];
+                        send_response_meta_data();
+                        receive_request_meta_data();
+                        const std::string &message_str = message.to_string();
+                        if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
+                        {
+                            const Json::Value api_callbacks_response = request_meta_data_json["api_callbacks_response"];
+                            for (const Json::Value &api_callback_response : api_callbacks_response)
+                            {
+                                for (const std::string &callback_key : api_callback_response.getMemberNames())
+                                {
+                                    std::map<std::string, std::vector<std::string>> api_callback_map;
+                                    api_callback_map[callback_key] = std::vector<std::string>{};
+                                    for (const Json::Value &param : api_callback_response[callback_key])
+                                    {
+                                        api_callback_map[callback_key].push_back(param.asString());
+                                    }
+                                    simulation.api_callbacks_response.push_back(api_callback_map);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            std::string error_message = "[Server] Invalid request meta data: [" + message_str + "].";
+                            throw std::invalid_argument(error_message.c_str());
+                        }
+
+                        response_meta_data_json.removeMember("api_callbacks");
+                        send_response_meta_data();
+                        receive_send_data();
+
+                        simulation.meta_data_state = EMetaDataState::WaitAfterSendReceiveData;
+                        send_receive_data();
+                        simulation.meta_data_state = EMetaDataState::WaitAfterOtherBindSendData;
                     }
 
                     now = get_time_now();
