@@ -154,6 +154,14 @@ protected:
     virtual void bind_response_meta_data() = 0;
 
     /**
+     * @brief Whether the API callbacks are called
+     * 
+     * @return true 
+     * @return false 
+     */
+    virtual bool has_api_callbacks() const = 0;
+
+    /**
      * @brief Bind the API callbacks
      * 
      * @param api_callbacks 

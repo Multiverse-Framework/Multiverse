@@ -74,7 +74,7 @@ public:
     {
         if (in_send_data.size() != send_buffer_size)
         {
-            printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).", port.c_str(), in_send_data.size(), send_buffer_size);
+            printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).\n", port.c_str(), in_send_data.size(), send_buffer_size);
         }
         else
         {
@@ -262,46 +262,19 @@ private:
         }
     }
 
+    bool has_api_callbacks() const override
+    {
+        return response_meta_data_dict.contains("api_callbacks");
+    }
+
     void bind_api_callbacks() override
     {
-        // for (const std::map<std::string, std::vector<std::string>> &api_callback : request_meta_data_dict["api_callbacks"].cast<std::vector<std::map<std::string, std::vector<std::string>>>>())
-        // {
-        //     for (const std::pair<std::string, std::vector<std::string>> &api_callback_pair : api_callback)
-        //     {
-        //         printf("[Client %s] %s - [", port.c_str(), api_callback_pair.first.c_str());
-        //         std::string api_args = "";
-        //         for (const std::string &api_callback_value : api_callback_pair.second)
-        //         {
-        //             api_args += api_callback_value + ", ";
-        //         }
-        //         if (!api_args.empty())
-        //         {
-        //             api_args = api_args.substr(0, api_args.size() - 2);
-        //         }
-        //         printf("%s]\n", api_args.c_str());
-        //     }
-        // }
+        
     }
 
     void bind_api_callbacks_response() override
     {
-        // for (const std::map<std::string, std::vector<std::string>> &api_callback : request_meta_data_dict["api_callbacks"].cast<std::vector<std::map<std::string, std::vector<std::string>>>>())
-        // {
-        //     for (const std::pair<std::string, std::vector<std::string>> &api_callback_pair : api_callback)
-        //     {
-        //         printf("[Client %s] %s - [", port.c_str(), api_callback_pair.first.c_str());
-        //         std::string api_args = "";
-        //         for (const std::string &api_callback_value : api_callback_pair.second)
-        //         {
-        //             api_args += api_callback_value + ", ";
-        //         }
-        //         if (!api_args.empty())
-        //         {
-        //             api_args = api_args.substr(0, api_args.size() - 2);
-        //         }
-        //         printf("%s]\n", api_args.c_str());
-        //     }
-        // }
+        
     }
 
     void clean_up() override
@@ -332,7 +305,7 @@ private:
     {
         if (send_buffer_size != send_data.size())
         {
-            printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).", port.c_str(), send_data.size(), send_buffer_size);
+            printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).\n", port.c_str(), send_data.size(), send_buffer_size);
             return;
         }
         

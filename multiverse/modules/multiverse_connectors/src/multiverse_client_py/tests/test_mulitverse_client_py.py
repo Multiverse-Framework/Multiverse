@@ -237,6 +237,15 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client.run()
         return multiverse_client
 
+    def create_multiverse_client_spawn_and_callapi(self, port, world_name, api_callbacks):
+        meta_data = self.meta_data
+        meta_data.world_name = world_name
+        meta_data.simulation_name = "sim_test_spawn_and_callapi"
+        multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
+                                                 multiverse_meta_data=meta_data)
+        multiverse_client.request_meta_data["api_callbacks"] = api_callbacks
+        return multiverse_client
+
     def create_multiverse_client_destroy(self, port, world_name):
         meta_data = self.meta_data
         meta_data.world_name = world_name
@@ -280,19 +289,57 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client_test_spawn.stop()
 
     def test_multiverse_client_callapi(self):
-        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1338", "world",
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
                                                                                    "empty_simulation": [
                                                                                        {"attach": [
                                                                                            "obj1",
                                                                                            "obj2"]},
-                                                                                       {"is_mujoco": []}
+                                                                                       {"is_mujoco": []},
+                                                                                       {"something_else": ["param1",
+                                                                                                           "param2"]}
                                                                                    ]
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
-        sleep(5)
+        time_now = time() - self.time_start
+        multiverse_client_test_callapi.send_data = [time_now]
         multiverse_client_test_callapi.send_and_receive_data()
         multiverse_client_test_callapi.stop()
+
+    def test_multiverse_client_spawn_and_callapi(self):
+        multiverse_client_test_spawn_and_callapi = (
+            self.create_multiverse_client_spawn_and_callapi("1340", "world",
+                                                            {
+                                                                "empty_simulation": [
+                                                                    {"attach": [
+                                                                        "obj1",
+                                                                        "obj2"]},
+                                                                    {
+                                                                        "is_mujoco": []},
+                                                                    {
+                                                                        "something_else": [
+                                                                            "param1",
+                                                                            "param2"]}
+                                                                ]
+                                                            }))
+        multiverse_client_test_spawn_and_callapi.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
+        multiverse_client_test_spawn_and_callapi.request_meta_data["send"]["milk_box"] = ["position",
+                                                                                          "quaternion",
+                                                                                          "relative_velocity"]
+        multiverse_client_test_spawn_and_callapi.request_meta_data["send"]["panda"] = ["position",
+                                                                                       "quaternion"]
+        multiverse_client_test_spawn_and_callapi.run()
+        print(multiverse_client_test_spawn_and_callapi.response_meta_data)
+        time_now = time() - self.time_start
+        multiverse_client_test_spawn_and_callapi.send_data = [time_now,
+                                                              0, 0, 5,
+                                                              0.0, 0.0, 0.0, 1.0,
+                                                              0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                              0, 0, 3,
+                                                              0.0, 0.0, 0.0, 1.0]
+        multiverse_client_test_spawn_and_callapi.send_and_receive_data()
+
+        multiverse_client_test_spawn_and_callapi.stop()
 
     def test_multiverse_client_move(self):
         multiverse_client_test_move = self.create_multiverse_client_spawn("1337", "world")

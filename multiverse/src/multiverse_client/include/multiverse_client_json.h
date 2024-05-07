@@ -36,6 +36,8 @@ protected:
 
     void compute_response_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const override final;
 
+    bool has_api_callbacks() const override final;
+
 protected:
     Json::Value request_meta_data_json;
 
