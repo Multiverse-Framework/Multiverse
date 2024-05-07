@@ -962,16 +962,41 @@ void MjMultiverseClient::bind_response_meta_data()
 	}
 }
 
+void MjMultiverseClient::attach(const Json::Value &arguments)
+{
+	if (!arguments.isArray())
+	{
+		printf("Arguments for attach should be an array of strings.\n");
+		return;
+	}
+	if (arguments.size() < 2 || arguments.size() > 3)
+	{
+		printf("Arguments for attach should be an array of strings with 2 or 3 elements.\n");
+		return;
+	}
+	std::string object_1_name = arguments[0].asString();
+	std::string object_2_name = arguments[1].asString();
+	std::vector<mjtNum> relative_position_in_object_2_frame = {0.0, 0.0, 0.0};
+	// TODO: Implement
+}
+
 void MjMultiverseClient::bind_api_callbacks()
 {
-	printf("Bind API callbacks\n");
 	const Json::Value &api_callbacks_json = response_meta_data_json["api_callbacks"];
-	printf("%s\n", api_callbacks_json.toStyledString().c_str());
+	for (const Json::Value &api_callback_json : api_callbacks_json)
+	{
+		for (const std::string &api_callback_name : api_callback_json.getMemberNames())
+		{
+			if (strcmp(api_callback_name.c_str(), "attach") == 0)
+			{
+				attach(api_callback_json[api_callback_name]);
+			}
+		}
+	}
 }
 
 void MjMultiverseClient::bind_api_callbacks_response()
 {
-	printf("Bind API callbacks response\n");
 	const Json::Value &api_callbacks_json = response_meta_data_json["api_callbacks"];
 	request_meta_data_json["api_callbacks_response"] = Json::arrayValue;
 	for (const Json::Value &api_callback_json : api_callbacks_json)
@@ -995,7 +1020,6 @@ void MjMultiverseClient::bind_api_callbacks_response()
 			request_meta_data_json["api_callbacks_response"].append(api_callback_response);
 		}
 	}
-	printf("%s\n", request_meta_data_json.toStyledString().c_str());
 }
 
 void MjMultiverseClient::init_send_and_receive_data()

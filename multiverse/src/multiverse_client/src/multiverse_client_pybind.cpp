@@ -262,11 +262,6 @@ private:
         }
     }
 
-    bool has_api_callbacks() const override
-    {
-        return response_meta_data_dict.contains("api_callbacks");
-    }
-
     void bind_api_callbacks() override
     {
         

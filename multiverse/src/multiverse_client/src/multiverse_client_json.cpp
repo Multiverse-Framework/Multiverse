@@ -128,8 +128,3 @@ void MultiverseClientJson::compute_response_buffer_sizes(size_t &send_buffer_siz
     send_buffer_size = response_buffer_sizes["send"];
     receive_buffer_size = response_buffer_sizes["receive"];
 }
-
-bool MultiverseClientJson::has_api_callbacks() const
-{
-    return response_meta_data_json.isMember("api_callbacks");
-}

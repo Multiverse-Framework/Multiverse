@@ -47,6 +47,8 @@ private:
 
     bool destroy_objects(std::set<std::string> &objects);
 
+    void attach(const Json::Value &arguments);
+
 public:
     void communicate(const bool resend_meta_data = false) override;
 

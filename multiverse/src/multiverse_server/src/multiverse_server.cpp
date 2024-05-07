@@ -186,13 +186,6 @@ static double get_time_now()
 {
     return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
 }
-
-std::map<EMetaDataState, std::string> meta_data_map = {
-    {EMetaDataState::Normal, "Normal"},
-    {EMetaDataState::Reset, "Reset"},
-    {EMetaDataState::WaitAfterSendReceiveData, "WaitAfterSendReceiveData"},
-    {EMetaDataState::WaitAfterOtherBindSendData, "WaitAfterOtherBindSendData"},
-    {EMetaDataState::WaitAfterOtherSendRequestMetaData, "WaitAfterOtherSendRequestMetaData"}};
                     
 MultiverseServer::MultiverseServer(const std::string &in_socket_addr)
 {
@@ -265,7 +258,7 @@ void MultiverseServer::start()
 
         case EMultiverseServerState::BindObjects:
         {
-            printf("[Server] Received meta data from socket %s %s:\n%s", simulation_name.c_str(), socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
+            // printf("[Server] Received meta data from socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());            
             bind_meta_data();
 
             mtx.lock();
@@ -361,7 +354,7 @@ void MultiverseServer::start()
         case EMultiverseServerState::SendResponseMetaData:
         {
             send_response_meta_data();
-            printf("[Server] Sent meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
+            // printf("[Server] Sent meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
 
             flag = EMultiverseServerState::ReceiveSendData;
             break;
@@ -436,41 +429,11 @@ void MultiverseServer::start()
                     now = get_time_now();
                     if (now - start > 1)
                     {
-                        printf("[Server] Socket %s is waiting for %s to send data 0000. %s\n", socket_addr.c_str(), request_simulation_name.c_str(), meta_data_map[request_meta_data_state].c_str());
+                        printf("[Server] Socket %s is waiting for %s to send data.\n", socket_addr.c_str(), request_simulation_name.c_str());
                         start = now;
                     }
                 }
                 request_meta_data_state = EMetaDataState::WaitAfterOtherSendRequestMetaData;
-            }
-
-            if (request_meta_data_json.isMember("api_callbacks") && !request_meta_data_json["api_callbacks"].empty())
-            {
-                const Json::Value api_callbacks = request_meta_data_json["api_callbacks"];
-                double start = get_time_now();
-                double now = get_time_now();
-                bool stop = true;
-                do
-                {
-                    now = get_time_now();
-                    stop = true;
-                    for (const std::string &callback_simulation_name : api_callbacks.getMemberNames())
-                    {
-                        EMetaDataState &request_meta_data_state = worlds[request_world_name].simulations[callback_simulation_name].meta_data_state;
-                        if (request_meta_data_state != EMetaDataState::WaitAfterOtherBindSendData && request_meta_data_state != EMetaDataState::Normal)
-                        {
-                            stop = false;
-                        }
-                        else
-                        {
-                            request_meta_data_state = EMetaDataState::WaitAfterOtherSendRequestMetaData;
-                        }
-                        if (now - start > 1)
-                        {
-                            printf("[Server] Socket %s is waiting for %s to send data 1111. %s\n", socket_addr.c_str(), callback_simulation_name.c_str(), meta_data_map[request_meta_data_state].c_str());
-                            start = now;
-                        }
-                    }
-                } while (!stop && !should_shut_down);
             }
 
             mtx.lock();
@@ -508,10 +471,7 @@ void MultiverseServer::start()
             {
                 printf("[Server] Socket %s has received new request meta data.\n", socket_addr.c_str());
 
-                if (simulation.api_callbacks.size() == simulation.api_callbacks_response.size())
-                {
-                    simulation.meta_data_state = EMetaDataState::WaitAfterOtherBindSendData;
-                }
+                simulation.meta_data_state = EMetaDataState::WaitAfterOtherBindSendData;
 
                 double start = get_time_now();
                 double now = get_time_now();
@@ -585,23 +545,24 @@ void MultiverseServer::start()
                         }
 
                         simulation.request_meta_data_json.removeMember("api_callbacks");
-                        send_response_meta_data();
-                        receive_send_data();
-
-                        simulation.meta_data_state = EMetaDataState::WaitAfterSendReceiveData;
-                        send_receive_data();
-                        simulation.meta_data_state = EMetaDataState::WaitAfterOtherBindSendData;
+                        simulation.meta_data_state = EMetaDataState::Normal;
+                        flag = EMultiverseServerState::BindObjects;
+                        break;
                     }
 
                     now = get_time_now();
                     if (now - start > 1)
                     {
-                        printf("[Server] Socket %s is waiting for send data to be sent %s.\n", socket_addr.c_str(), meta_data_map[simulation.meta_data_state].c_str());
+                        printf("[Server] Socket %s is waiting for send data to be sent.\n", socket_addr.c_str());
                         start = now;
                     }
                 }
                 
-                zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none); // TODO: Make use of the message
+                if (flag != EMultiverseServerState::BindObjects)
+                {
+                    zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none); // TODO: Make use of the message
+                }
+                
                 request_meta_data_json = simulation.request_meta_data_json;
                 simulation.meta_data_state = EMetaDataState::Normal;
 
@@ -686,6 +647,11 @@ void MultiverseServer::bind_meta_data()
         throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " doesn't have a simulation name.");
     }
     request_simulation_name = meta_data["simulation_name"].asString();
+
+    if(simulation_name.empty() && worlds[request_world_name].simulations.count(request_simulation_name) > 0)
+    {
+        throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " requires an existing simulation name (" + request_simulation_name + ").");
+    }
 
     if (!simulation_name.empty() && worlds[request_world_name].simulations.count(request_simulation_name) == 0)
     {

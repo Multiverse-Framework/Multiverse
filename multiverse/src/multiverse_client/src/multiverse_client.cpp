@@ -226,28 +226,17 @@ void MultiverseClient::run()
                     printf("[Client %s] The socket %s from the server has received new meta data.\n", port.c_str(), socket_addr.c_str());
                     send_request_meta_data(); // TODO: Make use of the old meta data
 
-                    receive_response_meta_data();
+                    receive_response_meta_data();                    
 
-                    if (has_api_callbacks())
-                    {
-                        bind_api_callbacks();
+                    check_response_meta_data();
 
-                        check_response_meta_data();
+                    bind_api_callbacks();
 
-                        init_objects(true);
+                    init_objects(true);
 
-                        bind_api_callbacks_response();
+                    bind_api_callbacks_response();
 
-                        flag = EMultiverseClientState::BindRequestMetaData;
-                    }
-                    else
-                    {
-                        check_response_meta_data();
-
-                        init_objects(true);
-
-                        flag = EMultiverseClientState::BindRequestMetaData;
-                    }
+                    flag = EMultiverseClientState::BindRequestMetaData;
 
                     break;
                 }
@@ -372,20 +361,6 @@ void MultiverseClient::communicate(const bool resend_request_meta_data)
     {
         return;
     }
-
-    // std::map<EMultiverseClientState, std::string> flag_map = {
-    //     {EMultiverseClientState::StartConnection, "StartConnection"},
-    //     {EMultiverseClientState::BindRequestMetaData, "BindRequestMetaData"},
-    //     {EMultiverseClientState::SendRequestMetaData, "SendRequestMetaData"},
-    //     {EMultiverseClientState::ReceiveResponseMetaData, "ReceiveResponseMetaData"},
-    //     {EMultiverseClientState::BindResponseMetaData, "BindResponseMetaData"},
-    //     {EMultiverseClientState::InitSendAndReceiveData, "InitSendAndReceiveData"},
-    //     {EMultiverseClientState::BindSendData, "BindSendData"},
-    //     {EMultiverseClientState::SendData, "SendData"},
-    //     {EMultiverseClientState::ReceiveData, "ReceiveData"},
-    //     {EMultiverseClientState::BindReceiveData, "BindReceiveData"}};
-
-    // printf("[Client] Communicating with the server (flag = %s).\n", flag_map[flag].c_str());
 
     if (flag == EMultiverseClientState::StartConnection)
     {
