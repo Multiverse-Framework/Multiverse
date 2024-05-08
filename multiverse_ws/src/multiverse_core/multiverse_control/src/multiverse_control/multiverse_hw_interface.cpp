@@ -177,6 +177,14 @@ void MultiverseHWInterface::bind_response_meta_data()
 {
 }
 
+void MultiverseHWInterface::bind_api_callbacks()
+{
+}
+
+void MultiverseHWInterface::bind_api_callbacks_response()
+{
+}
+
 void MultiverseHWInterface::init_send_and_receive_data()
 {
     send_data_vec.emplace_back(nullptr);

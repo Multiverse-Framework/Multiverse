@@ -72,6 +72,10 @@ private:
 
     void bind_response_meta_data() override;
 
+    void bind_api_callbacks() override;
+
+    void bind_api_callbacks_response() override;
+
     void init_send_and_receive_data() override;
 
     void bind_send_data() override;
