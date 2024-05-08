@@ -49,6 +49,12 @@ private:
 
     void attach(const Json::Value &arguments);
 
+    std::string get_attach_response(const Json::Value &arguments) const;
+
+    void detach(const Json::Value &arguments);
+
+    std::string get_detach_response(const Json::Value &arguments) const;
+
 public:
     void communicate(const bool resend_meta_data = false) override;
 
