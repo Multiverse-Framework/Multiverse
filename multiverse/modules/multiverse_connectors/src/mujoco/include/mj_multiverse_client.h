@@ -47,6 +47,14 @@ private:
 
     bool destroy_objects(std::set<std::string> &objects);
 
+    void attach(const Json::Value &arguments);
+
+    std::string get_attach_response(const Json::Value &arguments) const;
+
+    void detach(const Json::Value &arguments);
+
+    std::string get_detach_response(const Json::Value &arguments) const;
+
 public:
     void communicate(const bool resend_meta_data = false) override;
 
@@ -96,6 +104,10 @@ private:
     void bind_request_meta_data() override;
 
     void bind_response_meta_data() override;    
+
+    void bind_api_callbacks() override;
+
+    void bind_api_callbacks_response() override;
 
     void init_send_and_receive_data() override;
 

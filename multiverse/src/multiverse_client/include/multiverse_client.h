@@ -154,6 +154,19 @@ protected:
     virtual void bind_response_meta_data() = 0;
 
     /**
+     * @brief Bind the API callbacks
+     * 
+     * @param api_callbacks 
+     */
+    virtual void bind_api_callbacks() = 0;
+
+    /**
+     * @brief Bind the API callbacks response
+     * 
+     */
+    virtual void bind_api_callbacks_response() = 0;
+
+    /**
      * @brief Initialize the send and receive data
      *
      */
