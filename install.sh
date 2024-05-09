@@ -50,7 +50,13 @@ sudo apt-get install -y libglfw3-dev
 sudo apt-get install -y libjsoncpp-dev
 
 # Install zmqpp
-sudo apt-get install -y libzmqpp-dev
+sudo apt-get install -y libzmq3-dev
+
+# Install boost
+sudo apt-get install -y libboost-dev libboost-filesystem-dev
+
+# Install tinyxml2
+sudo apt-get install -y libtinyxml2-dev
 
 # Install additional packages for USD
 sudo apt-get install -y libxcb-cursor0
@@ -58,11 +64,11 @@ sudo apt-get install -y libxcb-cursor0
 # Install additional packages for MuJoCo
 sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
 
-# Install and link clang-11 for creating shared library
-sudo apt-get install -y clang-11 libc++-11-dev libstdc++-11-dev libc++abi-11-dev llvm-11-dev
+# Install and link clang-17 for creating shared library
+sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
 sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
 sudo update-alternatives --remove-all clang++
-sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
+sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-17 100
 
 # Install and link gcc-11
 sudo apt-get install -y gcc-11
@@ -94,7 +100,7 @@ pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pyb
 pip install urdf_parser_py
 
 # Install MuJoCo
-pip install mujoco==3.1.4
+pip install mujoco==3.1.5
 
 # Install additional packages for Jupyter Notebook
 pip install panel jupyter-server bash_kernel
