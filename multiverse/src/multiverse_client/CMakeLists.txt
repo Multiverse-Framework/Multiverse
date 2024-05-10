@@ -21,9 +21,17 @@ if(UNIX)
     if (STDLIB STREQUAL "libc++")
         set(CMAKE_CXX_STANDARD 17)
     elseif (STDLIB STREQUAL "libstdc++")
-        set(CMAKE_CXX_STANDARD 14)
+        execute_process(
+            COMMAND lsb_release -rs
+            OUTPUT_VARIABLE UBUNTU_VERSION
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+        if (UBUNTU_VERSION STREQUAL "20.04")
+            set(CMAKE_CXX_STANDARD 11)
+        elseif (UBUNTU_VERSION STREQUAL "24.04")
+            set(CMAKE_CXX_STANDARD 14)
+        endif()
     endif()
-    set(CMAKE_CXX_FLAGS "-fPIC")
 endif()
 
 function(build_multiverse_client)
