@@ -9,6 +9,8 @@ sudo apt-get install -y software-properties-common curl python-is-python3
 # Install python3-pip
 sudo apt-get install -y python3-pip
 
+UBUNTU_VERSION=$(lsb_release -rs)
+
 if [ $UBUNTU_VERSION = "20.04" ]; then
     # Setup your sources.list
     sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
