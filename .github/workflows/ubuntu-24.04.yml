@@ -1,0 +1,33 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Free Disk Space (Ubuntu)
+      uses: jlumbroso/free-disk-space@v1.3.0
+
+    - name: Run install.sh
+      run: |
+          chmod +x install.sh
+          sudo ./install.sh
+
+    - name: Run build_third_parties.sh
+      run: |
+          chmod +x build_third_parties.sh
+          ./build_third_parties.sh
+
+    - name: Run build_multiverse.sh
+      run: |
+          chmod +x build_multiverse.sh
+          ./build_multiverse.sh
