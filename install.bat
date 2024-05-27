@@ -22,7 +22,7 @@ python -m pip install --upgrade pip build
 python -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11
 
 @REM Install mujoco
-python -m pip install mujoco==3.1.2
+python -m pip install mujoco==3.1.5
 
 @REM Install pyyaml
 python -m pip install pyyaml
