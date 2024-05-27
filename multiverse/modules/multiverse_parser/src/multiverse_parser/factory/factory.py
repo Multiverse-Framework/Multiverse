@@ -2,7 +2,7 @@
 
 import atexit
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import random
 import shutil
 import string
@@ -29,7 +29,7 @@ class Configuration:
     with_visual: bool = True
     with_collision: bool = True
     inertia_source: InertiaSource = InertiaSource.FROM_SRC
-    default_rgba: numpy.ndarray = numpy.array([0.9, 0.9, 0.9, 1.0])
+    default_rgba: numpy.ndarray = field(default_factory=lambda: numpy.array([0.9, 0.9, 0.9, 1.0]))
 
 
 def merge_folders(source_folder: str,

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 from enum import Enum
 
@@ -26,8 +26,8 @@ class GeomType(Enum):
 @dataclass
 class GeomInertial:
     mass: float = 0.0
-    inertia_tensor: numpy.ndarray = numpy.zeros((3, 3))
-    center_of_mass: numpy.ndarray = numpy.zeros((1, 3))
+    inertia_tensor: numpy.ndarray = field(default_factory=lambda: numpy.zeros((3, 3)))
+    center_of_mass: numpy.ndarray = field(default_factory=lambda: numpy.zeros((1, 3)))
 
 
 @dataclass(init=False)
