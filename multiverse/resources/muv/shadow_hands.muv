@@ -1,0 +1,73 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  shadow_hands:
+    simulator: mujoco
+    world:
+      name: world
+      path: floor.xml
+    objects:
+      left_hand:
+        path: left_hand.xml
+        apply:
+          body:
+            left_shadow_hand:
+              pos: [0.0, 0.25, 1.05]
+        prefix:
+          geom: left_
+      right_hand:
+        path: right_hand.xml
+        apply:
+          body:
+            right_shadow_hand:
+              pos: [0.0, -0.25, 1.05]
+        prefix:
+          geom: right_
+    references:
+      lh_wrist:
+        body1: LeftHand_WristRoot
+        body2: lh_wrist
+      # lh_ffdistal:
+      #   body1: lh_ffdistal_ref
+      #   body2: lh_ffdistal
+      # lh_mfdistal:
+      #   body1: lh_mfdistal_ref
+      #   body2: lh_mfdistal
+      # lh_rfdistal:
+      #   body1: lh_rfdistal_ref
+      #   body2: lh_rfdistal
+      # lh_lfdistal:
+      #   body1: lh_lfdistal_ref
+      #   body2: lh_lfdistal
+      # lh_thdistal:
+      #   body1: lh_thdistal_ref
+      #   body2: lh_thdistal
+      rh_wrist:
+        body1: RightHand_WristRoot
+        body2: rh_wrist
+
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  shadow_hands:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+    receive:
+      LeftHand_WristRoot: ["position", "quaternion"]
+      RightHand_WristRoot: ["position", "quaternion"]
