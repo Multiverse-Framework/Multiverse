@@ -9,18 +9,21 @@ worlds:
     rtf_desired: 1
 
 simulations:
-  shadow_hands:
+  apartment_full:
     simulator: mujoco
     world:
       name: world
-      path: floor.xml
+      path: apartment_full/mjcf/Apartment.xml
+      apply:
+        body:
+          gravcomp: 1
     objects:
       left_hand:
         path: left_hand.xml
         apply:
           body:
             left_shadow_hand:
-              pos: [0.0, 0.25, 1.05]
+              pos: [7.0, -5.25, 1.05]
         prefix:
           geom: left_
       right_hand:
@@ -28,7 +31,7 @@ simulations:
         apply:
           body:
             right_shadow_hand:
-              pos: [0.0, -0.25, 1.05]
+              pos: [7.0, -4.75, 1.05]
         prefix:
           geom: right_
     references:
@@ -79,7 +82,6 @@ simulations:
         body1: RightHand_PinkyTip
         body2: rh_lfdistal
         torquescale: 0.1
-
     config:
       max_time_step: 0.002
       min_time_step: 0.001
@@ -89,11 +91,11 @@ multiverse_server:
   port: 7000
 
 multiverse_clients:
-  shadow_hands:
+  apartment_full:
     port: 7500
     send:
       body: ["position", "quaternion"]
-      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
     receive:
       LeftHand_WristRoot: ["position", "quaternion"]
       LeftHand_ThumbTip: ["position", "quaternion"]
