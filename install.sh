@@ -87,7 +87,7 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Install and link clang-17 for creating shared library
     sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
-    sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
+    # sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
     # sudo update-alternatives --remove-all clang++
     # sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-17 100
 fi
