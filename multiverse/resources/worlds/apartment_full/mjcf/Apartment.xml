@@ -7,10 +7,10 @@
 			<geom contype="0" conaffinity="0"/>
 		</default>
 		<default class="apartment_collision">
-			<geom rgba="1.0 0.0 0.0 1.0" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
+			<geom rgba="0.0 0.0 0.0 0.0" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
 		</default>
 		<default class="apartment_reference">
-			<geom contype="0" conaffinity="0" rgba="0.0 1.0 0.0 1.0"/>
+			<geom contype="0" conaffinity="0" rgba="0.0 0.0 0.0 0.0"/>
 		</default>
 	</default>
 	<asset>

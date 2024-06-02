@@ -18,8 +18,10 @@ class MultiverseNode(MultiverseClient, Node):
     def __init__(self,
                  client_addr: SocketAddress,
                  multiverse_meta_data: MultiverseMetaData = MultiverseMetaData()) -> None:
-        multiverse_meta_data.simulation_name = "ros"
-        if INTERFACE == Interface.ROS2:
+        if INTERFACE == Interface.ROS1:
+            multiverse_meta_data.simulation_name = f"ros_{client_addr.port}"
+        elif INTERFACE == Interface.ROS2:
+            multiverse_meta_data.simulation_name = f"ros2_{client_addr.port}"
             Node.__init__(self, node_name=f"{self.__class__.__name__}{client_addr.port}")
         super().__init__(client_addr, multiverse_meta_data)
 

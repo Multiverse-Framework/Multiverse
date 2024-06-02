@@ -13,7 +13,7 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: isr_testbed/isr_testbed.xml
+      path: isr_testbed/mjcf/isr_testbed.xml
     robots:
       tiago_dual:
         path: tiago_dual.xml
