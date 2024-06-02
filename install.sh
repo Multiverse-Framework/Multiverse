@@ -114,7 +114,7 @@ pip install --break-system-packages --user urdf_parser_py
 # Install MuJoCo
 pip install --break-system-packages --user mujoco==3.1.5
 
-if [ $UBUNTU_VERSION = "24.04" ]; then
+if [ $UBUNTU_VERSION = "20.04" ]; then
     # Install additional packages for Jupyter Notebook
     pip install --break-system-packages --user panel jupyter-server bash_kernel
     python3 -m bash_kernel.install
