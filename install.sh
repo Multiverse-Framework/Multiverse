@@ -1,13 +1,13 @@
 #!/usr/bin/env sh
 
 # Update package lists
-sudo apt-get update && sudo apt-get upgrade -y
+# sudo apt-get update && sudo apt-get upgrade -y
 
 # Install presiqisite for ubuntu
 sudo apt-get install -y software-properties-common curl python-is-python3
 
 # Install python3-pip
-sudo apt-get install -y python3-pip
+# sudo apt-get install -y python3-pip
 
 # UBUNTU_VERSION=$(lsb_release -rs)
 
