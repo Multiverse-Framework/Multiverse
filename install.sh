@@ -102,20 +102,20 @@ sudo apt-get install -y pybind11-dev
 # Install jupyter-notebook
 sudo apt-get install -y jupyter-notebook
 
-# Upgrade pip
-pip install --break-system-packages --user --upgrade pip build
-
-# Install additional packages for USD and multiverse_knowledge
-pip install --break-system-packages --user pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
-
-# Install additional packages for multiverse_parser
-pip install --break-system-packages --user urdf_parser_py
-
-# Install MuJoCo
-pip install --break-system-packages --user mujoco==3.1.5
-
 if [ $UBUNTU_VERSION = "20.04" ]; then
+    # Upgrade pip
+    pip install --upgrade pip build
+
+    # Install additional packages for USD and multiverse_knowledge
+    pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
+
+    # Install additional packages for multiverse_parser
+    pip install urdf_parser_py
+
+    # Install MuJoCo
+    pip install mujoco==3.1.5
+
     # Install additional packages for Jupyter Notebook
-    pip install --break-system-packages --user panel jupyter-server bash_kernel
+    pip install panel jupyter-server bash_kernel
     python3 -m bash_kernel.install
 fi
