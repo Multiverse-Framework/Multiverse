@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Update package lists
-sudo apt-get update
+# sudo apt-get update && sudo apt-get upgrade -y
 
 # Install presiqisite for ubuntu
 sudo apt-get install -y software-properties-common curl python-is-python3
