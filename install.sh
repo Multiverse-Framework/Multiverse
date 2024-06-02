@@ -103,17 +103,19 @@ sudo apt-get install -y pybind11-dev
 sudo apt-get install -y jupyter-notebook
 
 # Upgrade pip
-pip install --upgrade pip build
+pip install --break-system-packages --user --upgrade pip build
 
 # Install additional packages for USD and multiverse_knowledge
-pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
+pip install --break-system-packages --user pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
 
 # Install additional packages for multiverse_parser
-pip install urdf_parser_py
+pip install --break-system-packages --user urdf_parser_py
 
 # Install MuJoCo
-pip install mujoco==3.1.5
+pip install --break-system-packages --user mujoco==3.1.5
 
-# Install additional packages for Jupyter Notebook
-pip install panel jupyter-server bash_kernel
-python3 -m bash_kernel.install
+if [ $UBUNTU_VERSION = "24.04" ]; then
+    # Install additional packages for Jupyter Notebook
+    pip install --break-system-packages --user panel jupyter-server bash_kernel
+    python3 -m bash_kernel.install
+fi
