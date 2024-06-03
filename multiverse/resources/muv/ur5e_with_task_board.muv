@@ -84,6 +84,20 @@ multiverse_clients:
 
   ros:
     ros_nodes:
+      publishers:
+        tf:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7301
+            topic: /tf
+            rate: 60
+            root_frame_id: map
+            
       subscribers:
         data:
           - meta_data:
@@ -129,6 +143,15 @@ multiverse_clients:
               - joint_state_controller
                 joint_trajectory_controller
 
+    ros_run:
+      rviz:
+        config: ur5e_with_task_board/config/rviz.rviz
+        robot_descriptions:
+          ur5e_description: ur5e/urdf/ur5e.urdf
+          gripper_2F_85_description: gripper-2F-85/urdf/gripper-2F-85.urdf
+          task_board_description: task_board/urdf/task_board.urdf
+          task_board_tool_description: task_board/urdf/task_board_tool.urdf
+
   ros2:
     ros_nodes:
       publishers:
@@ -140,7 +163,7 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            port: 7301
+            port: 7801
             topic: /tf
             rate: 60
             root_frame_id: map

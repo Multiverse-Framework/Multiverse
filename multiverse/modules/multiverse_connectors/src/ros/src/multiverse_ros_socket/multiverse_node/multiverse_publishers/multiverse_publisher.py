@@ -14,7 +14,6 @@ else:
 
 from ..multiverse_node import MultiverseNode, SocketAddress, MultiverseMetaData
 
-
 class MultiversePublisher(MultiverseNode):
     _use_meta_data: bool = False
     _publisher: Publisher
@@ -39,6 +38,8 @@ class MultiversePublisher(MultiverseNode):
             duration_in_seconds = 1.0 / rate
             secs = int(duration_in_seconds)
             nsecs = int((duration_in_seconds - secs) * 1e9)
+            r = rospy.Rate(1)
+            r.sleep()
             rospy.Timer(
                 period=rospy.Duration(secs=secs, nsecs=nsecs),
                 callback=self._publisher_callback
