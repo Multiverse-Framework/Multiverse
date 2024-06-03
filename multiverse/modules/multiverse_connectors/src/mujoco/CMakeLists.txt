@@ -9,6 +9,8 @@ elseif (WIN32)
 endif()
 
 set(mujoco_DIR ${BUILD_DIR}/mujoco/lib/cmake/mujoco)
+set(OpenGL_GL_PREFERENCE LEGACY)
+
 find_package(mujoco REQUIRED)
 
 find_package(Threads REQUIRED)
