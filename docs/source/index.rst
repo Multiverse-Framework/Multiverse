@@ -17,6 +17,9 @@ Multiverse Server-Client
 
 A distinctive feature of Multiverse is its capability to integrate various physics and graphics engines and operate them simultaneously. This capability is grounded in a star architecture, with the server at the core, coordinating data sharing among different client simulators. The framework treats each object cluster in a simulator as a Port-Hamiltonian system, facilitating input-output interactions with other simulators as effort/flow pairs. This ensures stability and feasibility through energy conservation. In the very first initial version of Multiverse, each client's data is stored as a map :math:`n \rightarrow v`, where :math:`n` denotes an attribute name in string format, and :math:`v` is the corresponding attribute value stored as an array of floats. 
 
+.. image:: _static/images/MultiverseServerClient.png
+   :width: 1200
+
 In this framework, "simulator" encompasses a broad range of entities, including not only physics engines and graphics engines but also VR headsets that interpret objects geometry, position, and orientation to render them, and controllers that compute forces and torques based on physics data. It can also include Python scripts to manipulate and analyze this data. The possibilities are endless, making it adaptable to many different scenarios. The Multiverse Server-Client is the essential foundation that makes this versatility possible.
 
 Please follow this tutorial to familiarize yourself with the Multiverse Server-Client.
@@ -24,7 +27,7 @@ Please follow this tutorial to familiarize yourself with the Multiverse Server-C
 Multiverse Parser
 ~~~~~~~~~~~~~~~~~
 
-One might ask "Oh but how can different simulators, each using its own scene description format, connect with each other if they aren't compatible?". The answer is...
+One might have concern "Oh but different simulators, each using its own scene description format, can't connect with each other if they aren't compatible, right?". The answer is...
 
 .. raw:: html
 
