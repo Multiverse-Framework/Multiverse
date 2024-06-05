@@ -1,0 +1,702 @@
+<?xml version="1.0" ?>
+<robot name="LiCAS_A1" version="1.0">
+  <link name="LiCAS_A1">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="9.999999974752427e-07"/>
+      <inertia ixx="9.999999974752427e-07" ixy="0.0" ixz="0.0" iyy="9.999999974752427e-07" iyz="0.0" izz="9.999999974752427e-07"/>
+    </inertial>
+  </link>
+  <joint name="multirotor_x4_main_joint" type="fixed">
+    <origin xyz="0.05 0.0 0.125" rpy="0.0 0.0 0.0"/>
+    <parent link="LiCAS_A1"/>
+    <child link="multirotor_x4_main"/>
+  </joint>
+  <link name="multirotor_x4_main">
+    <inertial>
+      <origin xyz="-0.0015080118319019675 -0.0023597136605530977 0.027472060173749924" rpy="0.769464373588562 -1.5679149627685547 0.8992711305618286"/>
+      <mass value="33.64791488647461"/>
+      <inertia ixx="1.381043553352356" ixy="0.0" ixz="0.0" iyy="0.772026538848877" iyz="0.0" izz="0.6649405360221863"/>
+    </inertial>
+    <visual name="multirotor_x4_main_visual">
+      <origin xyz="-0.0022399541921913624 -0.0012277958448976278 0.024340467527508736" rpy="1.0804216861724854 -1.5664982795715332 0.6422919034957886"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/MultirotorX4Main.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="multirotor_x4_main_collision_001">
+      <origin xyz="-1.0725327219939126e-18 0.20000001788139343 0.026500001549720764" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_002">
+      <origin xyz="0.0 -0.20000001788139343 0.026500001549720764" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_003">
+      <origin xyz="-0.002166647696867585 -0.00012244308891240507 0.02482539415359497" rpy="2.356194496154785 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_004">
+      <origin xyz="0.00012244308891240507 -0.002166647696867585 0.02482539415359497" rpy="-2.356194496154785 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_005">
+      <origin xyz="7.450580596923828e-09 -0.006527557969093323 0.04000002145767212" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_006">
+      <origin xyz="0.09000001847743988 -0.08250002562999725 -0.04226012900471687" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_007">
+      <origin xyz="0.09000001847743988 0.08250002562999725 -0.04226012900471687" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_008">
+      <origin xyz="-0.09000001847743988 0.08250002562999725 -0.04226012900471687" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_008.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_009">
+      <origin xyz="-0.09000001847743988 -0.08250002562999725 -0.04226012900471687" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_009.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_010">
+      <origin xyz="-2.60770320892334e-08 -1.0755063328984642e-18 -0.06999999284744263" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_010.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_011">
+      <origin xyz="-0.0001111980527639389 -1.1175870895385742e-08 0.0029999837279319763" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_011.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_012">
+      <origin xyz="1.1030131252809383e-09 0.08259278535842896 -0.07000000029802322" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_012.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_main_collision_013">
+      <origin xyz="6.259683882348099e-10 -0.08259278535842896 -0.07000000029802322" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Main_013.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="multirotor_x4_propeller_001_joint" type="fixed">
+    <origin xyz="0.339089 -0.338345 0.059" rpy="0.0 0.0 0.0"/>
+    <parent link="multirotor_x4_main"/>
+    <child link="multirotor_x4_propeller_001"/>
+  </joint>
+  <link name="multirotor_x4_propeller_001">
+    <inertial>
+      <origin xyz="-0.0002818605280481279 -0.00022932406864129007 -8.544877800886752e-07" rpy="-2.455172538757324 -1.5707963705062866 0.0"/>
+      <mass value="0.4858425259590149"/>
+      <inertia ixx="0.018791334703564644" ixy="0.0" ixz="0.0" iyy="0.009395741857588291" iyz="0.0" izz="0.00939567293971777"/>
+    </inertial>
+    <visual name="multirotor_x4_propeller_001_visual">
+      <origin xyz="-0.0005764152738265693 -0.0004689762427005917 -9.999907888413873e-07" rpy="0.8167169690132141 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/MultirotorX4Propeller.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="multirotor_x4_propeller_001_collision_001">
+      <origin xyz="-1.2793975650987771e-18 -2.5587951301975542e-18 -7.152554530875932e-07" rpy="1.2410866022109985 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Propeller_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="multirotor_x4_propeller_002_joint" type="fixed">
+    <origin xyz="0.339089 0.338345 0.059" rpy="0.0 0.0 0.0"/>
+    <parent link="multirotor_x4_main"/>
+    <child link="multirotor_x4_propeller_002"/>
+  </joint>
+  <link name="multirotor_x4_propeller_002">
+    <inertial>
+      <origin xyz="-0.0002818605280481279 -0.00022932406864129007 -8.544877800886752e-07" rpy="-2.455172538757324 -1.5707963705062866 0.0"/>
+      <mass value="0.4858425259590149"/>
+      <inertia ixx="0.018791334703564644" ixy="0.0" ixz="0.0" iyy="0.009395741857588291" iyz="0.0" izz="0.00939567293971777"/>
+    </inertial>
+    <visual name="multirotor_x4_propeller_002_visual">
+      <origin xyz="-0.0005764152738265693 -0.0004689762427005917 -9.999907888413873e-07" rpy="0.8167169690132141 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/MultirotorX4Propeller.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="multirotor_x4_propeller_002_collision_001">
+      <origin xyz="-1.2793975650987771e-18 -2.5587951301975542e-18 -7.152554530875932e-07" rpy="1.2410866022109985 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Propeller_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="multirotor_x4_propeller_003_joint" type="fixed">
+    <origin xyz="-0.339089 -0.338345 0.059" rpy="0.0 0.0 0.0"/>
+    <parent link="multirotor_x4_main"/>
+    <child link="multirotor_x4_propeller_003"/>
+  </joint>
+  <link name="multirotor_x4_propeller_003">
+    <inertial>
+      <origin xyz="-0.0002818605280481279 -0.00022932406864129007 -8.544877800886752e-07" rpy="-2.455172538757324 -1.5707963705062866 0.0"/>
+      <mass value="0.4858425259590149"/>
+      <inertia ixx="0.018791334703564644" ixy="0.0" ixz="0.0" iyy="0.009395741857588291" iyz="0.0" izz="0.00939567293971777"/>
+    </inertial>
+    <visual name="multirotor_x4_propeller_003_visual">
+      <origin xyz="-0.0005764152738265693 -0.0004689762427005917 -9.999907888413873e-07" rpy="0.8167169690132141 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/MultirotorX4Propeller.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="multirotor_x4_propeller_003_collision_001">
+      <origin xyz="-1.2793975650987771e-18 -2.5587951301975542e-18 -7.152554530875932e-07" rpy="1.2410866022109985 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Propeller_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="multirotor_x4_propeller_004_joint" type="fixed">
+    <origin xyz="-0.339089 0.338345 0.059" rpy="0.0 0.0 0.0"/>
+    <parent link="multirotor_x4_main"/>
+    <child link="multirotor_x4_propeller_004"/>
+  </joint>
+  <link name="multirotor_x4_propeller_004">
+    <inertial>
+      <origin xyz="-0.0002818605280481279 -0.00022932406864129007 -8.544877800886752e-07" rpy="-2.455172538757324 -1.5707963705062866 0.0"/>
+      <mass value="0.4858425259590149"/>
+      <inertia ixx="0.018791334703564644" ixy="0.0" ixz="0.0" iyy="0.009395741857588291" iyz="0.0" izz="0.00939567293971777"/>
+    </inertial>
+    <visual name="multirotor_x4_propeller_004_visual">
+      <origin xyz="-0.0005764152738265693 -0.0004689762427005917 -9.999907888413873e-07" rpy="0.8167169690132141 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/MultirotorX4Propeller.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="multirotor_x4_propeller_004_collision_001">
+      <origin xyz="-1.2793975650987771e-18 -2.5587951301975542e-18 -7.152554530875932e-07" rpy="1.2410866022109985 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Propeller_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="multirotor_x4_leg_001_joint" type="revolute">
+    <origin xyz="0.0 -0.12999999523162842 -0.019999999552965164" rpy="0.0 0.0 0.0"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="multirotor_x4_main"/>
+    <child link="multirotor_x4_leg_001"/>
+    <limit effort="1000.0" lower="0.0" upper="1.399999976158142" velocity="1000.0"/>
+  </joint>
+  <link name="multirotor_x4_leg_001">
+    <inertial>
+      <origin xyz="-1.0241989656378792e-07 2.47669595410116e-05 -0.44054487347602844" rpy="-8.784226818159269e-11 -5.814431278849952e-05 1.5707978010177612"/>
+      <mass value="2.2169151306152344"/>
+      <inertia ixx="0.07635834068059921" ixy="0.0" ixz="0.0" iyy="0.05624014511704445" iyz="0.0" izz="0.020257052034139633"/>
+    </inertial>
+    <visual name="multirotor_x4_leg_001_visual">
+      <origin xyz="-1.4283814664395322e-07 3.4816741390386596e-05 -0.4489619731903076" rpy="-1.638933988523661e-10 -7.774146797601134e-05 1.570798397064209"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/MultirotorX4Leg.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="multirotor_x4_leg_001_collision_001">
+      <origin xyz="2.887797119853783e-19 -1.4438985599268914e-19 -0.27432623505592346" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Leg_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_leg_001_collision_002">
+      <origin xyz="-5.261280744406349e-09 -1.0191649607582676e-11 -0.5465134382247925" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Leg_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="multirotor_x4_leg_002_joint" type="revolute">
+    <origin xyz="0.0 0.12999999523162842 -0.019999999552965164" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="multirotor_x4_main"/>
+    <child link="multirotor_x4_leg_002"/>
+    <limit effort="1000.0" lower="0.0" upper="1.399999976158142" velocity="1000.0"/>
+  </joint>
+  <link name="multirotor_x4_leg_002">
+    <inertial>
+      <origin xyz="-1.0241989656378792e-07 2.47669595410116e-05 -0.44054487347602844" rpy="-8.784226818159269e-11 -5.814431278849952e-05 1.5707978010177612"/>
+      <mass value="2.2169151306152344"/>
+      <inertia ixx="0.07635834068059921" ixy="0.0" ixz="0.0" iyy="0.05624014511704445" iyz="0.0" izz="0.020257052034139633"/>
+    </inertial>
+    <visual name="multirotor_x4_leg_002_visual">
+      <origin xyz="-1.4283814664395322e-07 3.4816741390386596e-05 -0.4489619731903076" rpy="-1.638933988523661e-10 -7.774146797601134e-05 1.570798397064209"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/MultirotorX4Leg.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="multirotor_x4_leg_002_collision_001">
+      <origin xyz="2.887797119853783e-19 -1.4438985599268914e-19 -0.27432623505592346" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Leg_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="multirotor_x4_leg_002_collision_002">
+      <origin xyz="-5.261280744406349e-09 -1.0191649607582676e-11 -0.5465134382247925" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_MultirotorX4Leg_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_pitch_structure_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="LiCAS_A1"/>
+    <child link="shoulder_pitch_structure"/>
+  </joint>
+  <link name="shoulder_pitch_structure">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.012000000104308128" rpy="0.0 0.0 0.0"/>
+      <mass value="0.6389999985694885"/>
+      <inertia ixx="0.003019999945536256" ixy="0.0" ixz="0.0" iyy="0.0008640000014565885" iyz="0.0" izz="0.003389999968931079"/>
+    </inertial>
+    <visual name="shoulder_pitch_structure_visual">
+      <origin xyz="6.839865895891251e-10 -3.744568743968557e-08 -0.0017930493922904134" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ShoulderPitchStructure.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="shoulder_pitch_structure_collision_001">
+      <origin xyz="0.0 2.2351741790771484e-08 1.4901161193847656e-08" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderPitchStructure_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_pitch_structure_collision_002">
+      <origin xyz="5.490054591494875e-11 -7.705514144618064e-05 -7.533917489865871e-09" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderPitchStructure_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_pitch_structure_collision_003">
+      <origin xyz="7.60684137901535e-09 -1.9948097340627413e-10 -1.1178742376216633e-08" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderPitchStructure_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_roll_structure_right_joint" type="revolute">
+    <origin xyz="0.0 -0.18000000715255737 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="shoulder_pitch_structure"/>
+    <child link="shoulder_roll_structure_right"/>
+    <limit effort="1000.0" lower="-3.140000104904175" upper="3.140000104904175" velocity="1000.0"/>
+  </joint>
+  <link name="shoulder_roll_structure_right">
+    <inertial>
+      <origin xyz="0.0 0.023600000888109207 0.009460000321269035" rpy="0.0 0.0 0.0"/>
+      <mass value="0.2329999953508377"/>
+      <inertia ixx="0.00036800000816583633" ixy="0.0" ixz="0.0" iyy="0.00011600000289035961" iyz="0.0" izz="0.0003760000108741224"/>
+    </inertial>
+    <visual name="shoulder_roll_structure_right_visual">
+      <origin xyz="-0.0003819356788881123 0.0050688753835856915 -0.013272274285554886" rpy="2.2300775051116943 0.009926758706569672 0.09212367981672287"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ShoulderRollStructureRight.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="shoulder_roll_structure_right_collision_001">
+      <origin xyz="-3.725290298461914e-09 4.6566128730773926e-09 -0.015500004403293133" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderRollStructureRight_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_roll_structure_right_collision_002">
+      <origin xyz="-0.0058258939534425735 0.02825000137090683 -1.1175870895385742e-08" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderRollStructureRight_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_yaw_structure_right_joint" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="shoulder_roll_structure_right"/>
+    <child link="shoulder_yaw_structure_right"/>
+    <limit effort="1000.0" lower="-0.699999988079071" upper="0.699999988079071" velocity="1000.0"/>
+  </joint>
+  <link name="shoulder_yaw_structure_right">
+    <inertial>
+      <origin xyz="-0.014999999664723873 0.0 -0.10000000149011612" rpy="0.0 0.0 0.0"/>
+      <mass value="0.2460000067949295"/>
+      <inertia ixx="0.0003490000090096146" ixy="0.0" ixz="0.0" iyy="0.0004459999909158796" iyz="0.0" izz="0.00014899999951012433"/>
+    </inertial>
+    <visual name="shoulder_yaw_structure_right_visual">
+      <origin xyz="-0.004100545775145292 1.8093748721526026e-11 -0.09907738864421844" rpy="-0.00973622314631939 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ShoulderYawStructure.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="shoulder_yaw_structure_right_collision_001">
+      <origin xyz="-4.2335595935583115e-05 -1.210719347000122e-08 -0.0729999989271164" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_right_collision_002">
+      <origin xyz="-0.015499994158744812 1.4901161193847656e-08 -0.09400000423192978" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_right_collision_003">
+      <origin xyz="-0.015000000596046448 -4.109727694875248e-13 -4.17619896997401e-11" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_right_collision_004">
+      <origin xyz="1.3611490916577058e-19 -1.020861851055022e-19 -0.1380000114440918" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_right_collision_005">
+      <origin xyz="-0.023000000044703484 -4.6257095931423464e-09 -0.034530650824308395" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_right_collision_006">
+      <origin xyz="0.022915327921509743 -4.6257095931423464e-09 -0.034530650824308395" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="elbow_pitch_structure_right_joint" type="revolute">
+    <origin xyz="0.0 0.0 -0.2750000059604645" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="shoulder_yaw_structure_right"/>
+    <child link="elbow_pitch_structure_right"/>
+    <limit effort="1000.0" lower="-1.5700000524520874" upper="1.5700000524520874" velocity="1000.0"/>
+  </joint>
+  <link name="elbow_pitch_structure_right">
+    <inertial>
+      <origin xyz="0.0 0.0 0.039000000804662704" rpy="0.0 0.0 0.0"/>
+      <mass value="0.21400000154972076"/>
+      <inertia ixx="0.00042100000428035855" ixy="0.0" ixz="0.0" iyy="0.00042600001324899495" iyz="0.0" izz="5.0099999498343095e-05"/>
+    </inertial>
+    <visual name="elbow_pitch_structure_right_visual">
+      <origin xyz="6.61791466072259e-09 0.00015075813280418515 0.026979949325323105" rpy="0.004605627618730068 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ElbowPitchStructureRight.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="elbow_pitch_structure_right_collision_001">
+      <origin xyz="0.0 -3.725290298461914e-09 0.01549998577684164" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="elbow_pitch_structure_right_collision_002">
+      <origin xyz="-1.4613922666596516e-19 -9.133701666622822e-21 0.08075001090765" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="elbow_pitch_structure_right_collision_003">
+      <origin xyz="-7.763656796776734e-20 -7.763656796776734e-20 0.10700001567602158" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="elbow_pitch_structure_right_collision_004">
+      <origin xyz="-1.8820960030866947e-20 -2.8231438430713286e-20 0.12575000524520874" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="elbow_pitch_structure_right_collision_005">
+      <origin xyz="0.0 8.895839580693377e-20 0.05149999260902405" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="forearm_link_right_joint" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="elbow_pitch_structure_right"/>
+    <child link="forearm_link_right"/>
+    <limit effort="1000.0" lower="-1.5700000524520874" upper="1.5700000524520874" velocity="1000.0"/>
+  </joint>
+  <link name="forearm_link_right">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.09200000017881393" rpy="0.0 0.0 0.0"/>
+      <mass value="0.10599999874830246"/>
+      <inertia ixx="0.00039400000241585076" ixy="0.0" ixz="0.0" iyy="0.000375000003259629" iyz="0.0" izz="3.0499999411404133e-05"/>
+    </inertial>
+    <visual name="forearm_link_right_visual">
+      <origin xyz="5.975738126551278e-09 5.962854032759424e-08 -0.13544601202011108" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ForearmLink.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="forearm_link_right_collision_001">
+      <origin xyz="-3.6200602515634728e-09 -0.020999955013394356 -0.03302816301584244" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_right_collision_002">
+      <origin xyz="-3.602818487991044e-09 0.020999955013394356 -0.03302816301584244" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_right_collision_003">
+      <origin xyz="-7.450580596923828e-09 1.4901161193847656e-08 -0.07099999487400055" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_right_collision_004">
+      <origin xyz="-3.506081023524786e-19 -2.6295607999553323e-20 -0.07699999958276749" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_right_collision_005">
+      <origin xyz="-1.5002026762718447e-19 -2.885005320662931e-20 -0.16950002312660217" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_right_collision_006">
+      <origin xyz="-6.847826333247604e-20 5.478260808104141e-20 -0.26200002431869507" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_right_collision_007">
+      <origin xyz="-1.0061083739717999e-19 -1.4085517106358227e-19 -0.2720000147819519" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_roll_structure_left_joint" type="revolute">
+    <origin xyz="0.0 0.18000000715255737 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="shoulder_pitch_structure"/>
+    <child link="shoulder_roll_structure_left"/>
+    <limit effort="1000.0" lower="-3.140000104904175" upper="3.140000104904175" velocity="1000.0"/>
+  </joint>
+  <link name="shoulder_roll_structure_left">
+    <inertial>
+      <origin xyz="0.0 0.023600000888109207 0.009460000321269035" rpy="0.0 0.0 0.0"/>
+      <mass value="0.2329999953508377"/>
+      <inertia ixx="0.00036800000816583633" ixy="0.0" ixz="0.0" iyy="0.00011600000289035961" iyz="0.0" izz="0.0003760000108741224"/>
+    </inertial>
+    <visual name="shoulder_roll_structure_left_visual">
+      <origin xyz="-0.00038178570684976876 -0.00506990309804678 -0.013272060081362724" rpy="0.9114407896995544 0.009931533597409725 -0.09214915335178375"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ShoulderRollStructureLeft.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="shoulder_roll_structure_left_collision_001">
+      <origin xyz="-3.725290298461914e-09 -4.6566128730773926e-09 -0.015500004403293133" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderRollStructureLeft_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_roll_structure_left_collision_002">
+      <origin xyz="-0.0058258939534425735 -0.02825000137090683 -1.1175870895385742e-08" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderRollStructureLeft_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="shoulder_yaw_structure_left_joint" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="shoulder_roll_structure_left"/>
+    <child link="shoulder_yaw_structure_left"/>
+    <limit effort="1000.0" lower="-0.699999988079071" upper="0.699999988079071" velocity="1000.0"/>
+  </joint>
+  <link name="shoulder_yaw_structure_left">
+    <inertial>
+      <origin xyz="-0.014999999664723873 0.0 -0.10000000149011612" rpy="0.0 0.0 0.0"/>
+      <mass value="0.2460000067949295"/>
+      <inertia ixx="0.0003490000090096146" ixy="0.0" ixz="0.0" iyy="0.0004459999909158796" iyz="0.0" izz="0.00014899999951012433"/>
+    </inertial>
+    <visual name="shoulder_yaw_structure_left_visual">
+      <origin xyz="-0.004100545775145292 1.8093748721526026e-11 -0.09907738864421844" rpy="-0.00973622314631939 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ShoulderYawStructure.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="shoulder_yaw_structure_left_collision_001">
+      <origin xyz="-4.2335595935583115e-05 -1.210719347000122e-08 -0.0729999989271164" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_left_collision_002">
+      <origin xyz="-0.015499994158744812 1.4901161193847656e-08 -0.09400000423192978" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_left_collision_003">
+      <origin xyz="-0.015000000596046448 -4.109727694875248e-13 -4.17619896997401e-11" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_left_collision_004">
+      <origin xyz="1.3611490916577058e-19 -1.020861851055022e-19 -0.1380000114440918" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_left_collision_005">
+      <origin xyz="-0.023000000044703484 -4.6257095931423464e-09 -0.034530650824308395" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="shoulder_yaw_structure_left_collision_006">
+      <origin xyz="0.022915327921509743 -4.6257095931423464e-09 -0.034530650824308395" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ShoulderYawStructure_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="elbow_pitch_structure_left_joint" type="revolute">
+    <origin xyz="0.0 0.0 -0.2750000059604645" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="shoulder_yaw_structure_left"/>
+    <child link="elbow_pitch_structure_left"/>
+    <limit effort="1000.0" lower="-1.5700000524520874" upper="1.5700000524520874" velocity="1000.0"/>
+  </joint>
+  <link name="elbow_pitch_structure_left">
+    <inertial>
+      <origin xyz="0.0 0.0 0.039000000804662704" rpy="0.0 0.0 0.0"/>
+      <mass value="0.21400000154972076"/>
+      <inertia ixx="0.00042100000428035855" ixy="0.0" ixz="0.0" iyy="0.00042600001324899495" iyz="0.0" izz="5.0099999498343095e-05"/>
+    </inertial>
+    <visual name="elbow_pitch_structure_left_visual">
+      <origin xyz="6.61791466072259e-09 0.00015075813280418515 0.026979949325323105" rpy="0.004605627618730068 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ElbowPitchStructureRight.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="elbow_pitch_structure_left_collision_001">
+      <origin xyz="0.0 -3.725290298461914e-09 0.01549998577684164" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="elbow_pitch_structure_left_collision_002">
+      <origin xyz="-1.4613922666596516e-19 -9.133701666622822e-21 0.08075001090765" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="elbow_pitch_structure_left_collision_003">
+      <origin xyz="-7.763656796776734e-20 -7.763656796776734e-20 0.10700001567602158" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="elbow_pitch_structure_left_collision_004">
+      <origin xyz="-1.8820960030866947e-20 -2.8231438430713286e-20 0.12575000524520874" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="elbow_pitch_structure_left_collision_005">
+      <origin xyz="0.0 8.895839580693377e-20 0.05149999260902405" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ElbowPitchStructureRight_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="forearm_link_left_joint" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="elbow_pitch_structure_left"/>
+    <child link="forearm_link_left"/>
+    <limit effort="1000.0" lower="-1.5700000524520874" upper="1.5700000524520874" velocity="1000.0"/>
+  </joint>
+  <link name="forearm_link_left">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.09200000017881393" rpy="0.0 0.0 0.0"/>
+      <mass value="0.10599999874830246"/>
+      <inertia ixx="0.00039400000241585076" ixy="0.0" ixz="0.0" iyy="0.000375000003259629" iyz="0.0" izz="3.0499999411404133e-05"/>
+    </inertial>
+    <visual name="forearm_link_left_visual">
+      <origin xyz="5.975738126551278e-09 5.962854032759424e-08 -0.13544601202011108" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/ForearmLink.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="forearm_link_left_collision_001">
+      <origin xyz="-3.6200602515634728e-09 -0.020999955013394356 -0.03302816301584244" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_left_collision_002">
+      <origin xyz="-3.602818487991044e-09 0.020999955013394356 -0.03302816301584244" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_left_collision_003">
+      <origin xyz="-7.450580596923828e-09 1.4901161193847656e-08 -0.07099999487400055" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_left_collision_004">
+      <origin xyz="-3.506081023524786e-19 -2.6295607999553323e-20 -0.07699999958276749" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_left_collision_005">
+      <origin xyz="-1.5002026762718447e-19 -2.885005320662931e-20 -0.16950002312660217" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_left_collision_006">
+      <origin xyz="-6.847826333247604e-20 5.478260808104141e-20 -0.26200002431869507" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="forearm_link_left_collision_007">
+      <origin xyz="-1.0061083739717999e-19 -1.4085517106358227e-19 -0.2720000147819519" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://../meshes/stl/urdf/UCX_ForearmLink_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
