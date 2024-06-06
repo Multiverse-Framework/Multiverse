@@ -47,6 +47,14 @@ private:
 
     bool destroy_objects(std::set<std::string> &objects);
 
+    void weld(const Json::Value &arguments);
+
+    std::string get_weld_response(const Json::Value &arguments) const;
+
+    void unweld(const Json::Value &arguments);
+
+    std::string get_unweld_response(const Json::Value &arguments) const;
+
     void attach(const Json::Value &arguments);
 
     std::string get_attach_response(const Json::Value &arguments) const;
