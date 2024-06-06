@@ -296,6 +296,26 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 				if (contains_tag(include_file_path, object_name))
 				{
 					mujoco_element->DeleteChild(include_element);
+
+					for (tinyxml2::XMLElement *equality_element = mujoco_element->FirstChildElement("equality");
+						 equality_element != nullptr; equality_element = equality_element->NextSiblingElement("equality"))
+					{
+						std::vector<tinyxml2::XMLElement *> weld_elements_to_delete;
+						for (tinyxml2::XMLElement *weld_element = equality_element->FirstChildElement("weld");
+							 weld_element != nullptr; weld_element = weld_element->NextSiblingElement("weld"))
+						{
+							if (strcmp(weld_element->Attribute("body1"), object_name.c_str()) == 0 ||
+								strcmp(weld_element->Attribute("body2"), object_name.c_str()) == 0)
+							{
+								weld_elements_to_delete.push_back(weld_element);
+							}
+						}
+						for (tinyxml2::XMLElement *weld_element : weld_elements_to_delete)
+						{
+							equality_element->DeleteChild(weld_element);
+						}
+					}
+
 					printf("Removed object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 					mjModel *m_include = mj_loadXML(include_file_path.string().c_str(), nullptr, nullptr, 0);
 					for (int body_id = 1; body_id < m_include->nbody; body_id++)
@@ -951,7 +971,10 @@ void MjMultiverseClient::bind_response_meta_data()
 		// load and compile model
 		char error[1000] = "Could not load binary model";
 
+		mtx.lock();
 		m = mj_loadXML(scene_xml_path.string().c_str(), 0, error, 1000);
+		mtx.unlock();
+
 		if (!m)
 		{
 			mju_error("Load model error: %s", error);

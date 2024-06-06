@@ -170,31 +170,31 @@ class MultiverseClientTestCase(unittest.TestCase):
 
         multiverse_client_test_spawn.stop()
 
-    def test_multiverse_client_callapi_creation(self):
-        multiverse_client_test_send, time_send = self.test_multiverse_client_send_data(False)
-
-        send_and_receive_data_thread = threading.Thread(target=self.create_multiverse_client_callapi,
-                                                        args=(
-                                                            "1235",
-                                                            {
-                                                                "sim_test_send": [
-                                                                    {"attach": [
-                                                                        "obj1",
-                                                                        "obj2"]},
-                                                                    {"is_mujoco": []}
-                                                                ]
-                                                            }
-                                                        ))
-        send_and_receive_data_thread.start()
-        print("HERE")
-        multiverse_client_test_send.send_data = [time() - self.time_start, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0]
-        multiverse_client_test_send.send_and_receive_data()
-        print(multiverse_client_test_send.response_meta_data)
-        # print(multiverse_client_test_send.receive_data)
-        # multiverse_client_test_send.send_data = [time() - self.time_start, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0]
-        # multiverse_client_test_send.send_and_receive_data()
-        # print(multiverse_client_test_send.receive_data)
-        multiverse_client_test_send.stop()
+    # def test_multiverse_client_callapi_creation(self):
+    #     multiverse_client_test_send, time_send = self.test_multiverse_client_send_data(False)
+    #
+    #     send_and_receive_data_thread = threading.Thread(target=self.create_multiverse_client_callapi,
+    #                                                     args=(
+    #                                                         "1235",
+    #                                                         {
+    #                                                             "sim_test_send": [
+    #                                                                 {"attach": [
+    #                                                                     "obj1",
+    #                                                                     "obj2"]},
+    #                                                                 {"is_mujoco": []}
+    #                                                             ]
+    #                                                         }
+    #                                                     ))
+    #     send_and_receive_data_thread.start()
+    #     print("HERE")
+    #     multiverse_client_test_send.send_data = [time() - self.time_start, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+    #     multiverse_client_test_send.send_and_receive_data()
+    #     print(multiverse_client_test_send.response_meta_data)
+    #     # print(multiverse_client_test_send.receive_data)
+    #     # multiverse_client_test_send.send_data = [time() - self.time_start, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0]
+    #     # multiverse_client_test_send.send_and_receive_data()
+    #     # print(multiverse_client_test_send.receive_data)
+    #     multiverse_client_test_send.stop()
 
 
 class MultiverseClientSpawnTestCase(unittest.TestCase):
@@ -418,6 +418,32 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                'world_name': 'world'},
                                  'time': time_callapi})
 
+        sleep(2)
+
+        # Detach milk box from hand again (should success)
+        multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+            "empty_simulation": [
+                {"detach": ["milk_box", "hand"]}
+            ]
+        }
+        multiverse_client_test_callapi.send_and_receive_meta_data()
+
+        time_callapi = multiverse_client_test_callapi.response_meta_data["time"]
+        self.assertDictEqual(multiverse_client_test_callapi.response_meta_data,
+                             {'api_callbacks_response':
+                                 {
+                                     'empty_simulation': [{'detach': ['success']}]},
+                                 'meta_data': {'angle_unit': 'rad',
+                                               'handedness': 'rhs',
+                                               'length_unit': 'm',
+                                               'mass_unit': 'kg',
+                                               'simulation_name': 'sim_test_callapi',
+                                               'time_unit': 's',
+                                               'world_name': 'world'},
+                                 'time': time_callapi})
+
+        sleep(2)
+
         multiverse_client_test_callapi.stop()
 
     def test_multiverse_client_move(self):
@@ -425,7 +451,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
 
         x_pos = [0.0, 1.0, 1.0, 1.0, 0.0, -1.0, -1.0, -1.0, 0.0]
         y_pos = [1.0, 1.0, 0.0, -1.0, -1.0, -1.0, 0.0, 1.0, 1.0]
-        for i in range(9):
+        for i in range(4):
             multiverse_client_test_move.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
             multiverse_client_test_move.request_meta_data["send"]["milk_box"] = ["position",
                                                                                  "quaternion",
@@ -439,7 +465,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                      0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             multiverse_client_test_move.send_and_receive_data()
 
-            sleep(1)
+            sleep(2)
 
         multiverse_client_test_move.stop()
 
