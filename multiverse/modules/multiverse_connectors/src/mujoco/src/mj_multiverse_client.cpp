@@ -281,6 +281,18 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
+		for (tinyxml2::XMLElement *worldbody_element = mujoco_element->FirstChildElement("worldbody");
+			 worldbody_element != nullptr; worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
+		{
+			for (tinyxml2::XMLElement *body_element = worldbody_element->FirstChildElement("body");
+				 body_element != nullptr; body_element = body_element->NextSiblingElement("body"))
+			{
+				if (std::find(object_names.begin(), object_names.end(), body_element->Attribute("name")) != object_names.end())
+				{
+					worldbody_element->DeleteChild(body_element);
+				}
+			}
+		}
 		for (const std::string &object_name : std::set<std::string>(object_names))
 		{
 			printf("Trying to remove object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
@@ -339,7 +351,24 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 							}
 						}
 					}
-					break;
+				}
+				else
+				{
+					tinyxml2::XMLDocument include_doc;
+					include_doc.LoadFile(include_file_path.string().c_str());
+					tinyxml2::XMLElement *include_mujoco_element = include_doc.FirstChildElement("mujoco");
+					for (tinyxml2::XMLElement *worldbody_element = include_mujoco_element->FirstChildElement("worldbody");
+						worldbody_element != nullptr; worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
+					{
+						for (tinyxml2::XMLElement *body_element = worldbody_element->FirstChildElement("body");
+							body_element != nullptr; body_element = body_element->NextSiblingElement("body"))
+						{
+							if (std::find(object_names.begin(), object_names.end(), body_element->Attribute("name")) != object_names.end())
+							{
+								worldbody_element->DeleteChild(body_element);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1337,12 +1366,6 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 	tinyxml2::XMLElement *body_2_element = nullptr;
 	get_body_element(doc_2, doc_file_path_2, body_2_element, object_2_name);
 
-	if (body_1_element == nullptr || body_2_element == nullptr)
-	{
-		printf("Could not find bodies %s or %s\n", object_1_name.c_str(), object_2_name.c_str());
-		return;
-	}
-
 	body_1_element->SetAttribute("pos", relative_pos.c_str());
 	body_1_element->SetAttribute("quat", relative_quat.c_str());
 	if (strcmp(attach_response.c_str(), "failed (attachment not found)") == 0)
@@ -1368,6 +1391,9 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 		body_2_element->InsertEndChild(body_1_element_copy);
 		tinyxml2::XMLElement *parent_body_1_element = body_1_element->Parent()->ToElement();
 		parent_body_1_element->DeleteChild(body_1_element);
+
+		doc_1.SaveFile(doc_file_path_1.c_str());
+		doc_2.SaveFile(doc_file_path_2.c_str());
 		
 		const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
 		const int body_1_dof_num = m->body_dofnum[body_1_id];
@@ -1377,10 +1403,10 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 			doc.LoadFile(scene_xml_path.string().c_str());
 			tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 			for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
-				keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
+				 keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
 			{
 				for (tinyxml2::XMLElement *key_element = keyframe_element->FirstChildElement("key");
-					key_element != nullptr; key_element = key_element->NextSiblingElement("key"))
+					 key_element != nullptr; key_element = key_element->NextSiblingElement("key"))
 				{
 					if (key_element->Attribute("qpos") != nullptr)
 					{
@@ -1405,6 +1431,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 						}
 						qpos_str.pop_back();
 						key_element->SetAttribute("qpos", qpos_str.c_str());
+						printf("%s\n", qpos_str.c_str());
 					}
 					if (key_element->Attribute("qvel") != nullptr)
 					{
@@ -1434,8 +1461,6 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 			}
 			doc.SaveFile(scene_xml_path.string().c_str());
 		}
-		doc_1.SaveFile(doc_file_path_1.c_str());
-		doc_2.SaveFile(doc_file_path_2.c_str());
 	}
 	else
 	{
@@ -1505,109 +1530,145 @@ std::string MjMultiverseClient::get_attach_response(const Json::Value &arguments
 
 void MjMultiverseClient::detach(const Json::Value &arguments)
 {
-	// const std::string unweld_response = get_unweld_response(arguments);
-	// if (strcmp(unweld_response.c_str(), "success") == 0)
-	// {
-	// 	printf("Attachment not found, already unwelded.\n");
-	// 	return;
-	// }
-	// if (strcmp(unweld_response.c_str(), "failed (equality found)") != 0)
-	// {
-	// 	printf("%s\n", unweld_response.c_str());
-	// 	return;
-	// }
+	const std::string detach_response = get_detach_response(arguments);
+	if (strcmp(detach_response.c_str(), "success") == 0)
+	{
+		printf("Attachment not found, already detached.\n");
+		return;
+	}
+	if (strcmp(detach_response.c_str(), "failed (attachment found)") != 0)
+	{
+		printf("%s\n", detach_response.c_str());
+		return;
+	}
 
-	// const std::string object_1_name = arguments[0].asString();
-	// const std::string object_2_name = arguments[1].asString();
+	const std::string object_1_name = arguments[0].asString();
+	const std::string object_2_name = arguments[1].asString();
 
-	// tinyxml2::XMLDocument doc;
-	// if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
-	// {
-	// 	tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
+	tinyxml2::XMLDocument doc;
+	std::string doc_file_path;
+	doc.LoadFile(scene_xml_path.string().c_str());
+	tinyxml2::XMLElement *body_1_element = nullptr;
+	get_body_element(doc, doc_file_path, body_1_element, object_1_name);
 
-	// 	tinyxml2::XMLElement *found_weld_element = nullptr;
-	// 	for (tinyxml2::XMLElement *equality_element = mujoco_element->FirstChildElement("equality");
-	// 		 equality_element != nullptr;
-	// 		 equality_element = equality_element->NextSiblingElement("equality"))
-	// 	{
-	// 		for (tinyxml2::XMLElement *weld_element = equality_element->FirstChildElement("weld");
-	// 			 weld_element != nullptr;
-	// 			 weld_element = weld_element->NextSiblingElement("weld"))
-	// 		{
-	// 			if (strcmp(weld_element->Attribute("body1"), object_2_name.c_str()) == 0 &&
-	// 				strcmp(weld_element->Attribute("body2"), object_1_name.c_str()) == 0)
-	// 			{
-	// 				found_weld_element = weld_element;
-	// 				break;
-	// 			}
-	// 		}
-	// 		if (found_weld_element != nullptr)
-	// 		{
-	// 			equality_element->DeleteChild(found_weld_element);
-	// 			break;
-	// 		}
-	// 	}
+	tinyxml2::XMLDocument scene_doc;
+	tinyxml2::XMLElement *mujoco_element;
+	tinyxml2::XMLElement *worldbody_element;
+	tinyxml2::XMLElement *freejoint_element;
+	tinyxml2::XMLElement *body_1_element_copy;
+	if (strcmp(scene_xml_path.c_str(), doc_file_path.c_str()) != 0)
+	{
+		scene_doc.LoadFile(scene_xml_path.string().c_str());
+		mujoco_element = scene_doc.FirstChildElement("mujoco");
+		worldbody_element = scene_doc.NewElement("worldbody");
+		freejoint_element = scene_doc.NewElement("freejoint");
+		body_1_element_copy = body_1_element->DeepClone(&scene_doc)->ToElement();
+	}
+	else
+	{
+		mujoco_element = doc.FirstChildElement("mujoco");
+		worldbody_element = doc.NewElement("worldbody");
+		freejoint_element = doc.NewElement("freejoint");
+		body_1_element_copy = body_1_element->DeepClone(&doc)->ToElement();
+	}
 
-	// 	doc.SaveFile(scene_xml_path.string().c_str());
-	// }
-	// else
-	// {
-	// 	printf("Could not load file: %s\n", scene_xml_path.string().c_str());
-	// 	return;
-	// }
+	mujoco_element->InsertEndChild(worldbody_element);
+	body_1_element_copy->InsertFirstChild(freejoint_element);
 
-	// printf("Detach %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
-	// mtx.lock();
-	// MjSimulate::load_new_model_and_keep_old_data();
-	// mtx.unlock();
+	worldbody_element->InsertEndChild(body_1_element_copy);
+
+	tinyxml2::XMLElement *parent_body_1_element = body_1_element->Parent()->ToElement();
+	parent_body_1_element->DeleteChild(body_1_element);
+
+	const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
+	const int body_1_dof_num = m->body_dofnum[body_1_id];
+
+	for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
+		 keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
+	{
+		for (tinyxml2::XMLElement *key_element = keyframe_element->FirstChildElement("key");
+			 key_element != nullptr; key_element = key_element->NextSiblingElement("key"))
+		{
+			if (key_element->Attribute("qpos") != nullptr)
+			{
+				std::istringstream iss(key_element->Attribute("qpos"));
+				std::vector<mjtNum> qpos = std::vector<mjtNum>(std::istream_iterator<mjtNum>(iss), std::istream_iterator<mjtNum>());
+				const int qpos_adr = m->jnt_qposadr[m->body_jntadr[body_1_id]];
+				for (int i = 2; i >= 0; i--)
+				{
+					qpos.insert(qpos.begin() + qpos_adr, d->xpos[3 * body_1_id + i]);
+				}
+				for (int i = 3; i >= 0; i--)
+				{
+					qpos.insert(qpos.begin() + qpos_adr + 3, d->xquat[4 * body_1_id + i]);
+				}
+				std::string qpos_str;
+				for (mjtNum qpos_val : qpos)
+				{
+					qpos_str += std::to_string(qpos_val) + " ";
+				}
+				qpos_str.pop_back();
+				key_element->SetAttribute("qpos", qpos_str.c_str());
+			}
+			if (key_element->Attribute("qvel") != nullptr)
+			{
+				std::istringstream iss(key_element->Attribute("qvel"));
+				std::vector<mjtNum> qvel = std::vector<mjtNum>(std::istream_iterator<mjtNum>(iss), std::istream_iterator<mjtNum>());
+				const int qvel_adr = m->jnt_dofadr[m->body_jntadr[body_1_id]];
+				for (int i = 0; i < 6; i++)
+				{
+					qvel.insert(qvel.begin() + qvel_adr, 0.0);
+				}
+				std::string qvel_str;
+				for (mjtNum qvel_val : qvel)
+				{
+					qvel_str += std::to_string(qvel_val) + " ";
+				}
+				qvel_str.pop_back();
+				key_element->SetAttribute("qvel", qvel_str.c_str());
+			}
+		}
+	}
+	scene_doc.SaveFile(scene_xml_path.string().c_str());
+
+	if (strcmp(doc_file_path.c_str(), scene_xml_path.c_str()) != 0)
+	{
+		doc.SaveFile(doc_file_path.c_str());
+	}
+
+	printf("Detach %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
+	mtx.lock();
+	MjSimulate::load_new_model_and_keep_old_data();
+	mtx.unlock();
 }
 
 std::string MjMultiverseClient::get_detach_response(const Json::Value &arguments) const
 {
-	return "not implemented";
-	// if (!arguments.isArray())
-	// {
-	// 	return "failed (Arguments for weld should be an array of strings.)";
-	// }
-	// if (arguments.size() != 2)
-	// {
-	// 	return "failed (Arguments for weld should be an array of strings with 2 elements.)";
-	// }
+	if (!arguments.isArray())
+	{
+		return "failed (Arguments for detach should be an array of strings.)";
+	}
+	if (arguments.size() != 2)
+	{
+		return "failed (Arguments for detach should be an array of strings with 2 elements.)";
+	}
 
-	// const std::string object_1_name = arguments[0].asString();
-	// const std::string object_2_name = arguments[1].asString();
+	const std::string object_1_name = arguments[0].asString();
+	const std::string object_2_name = arguments[1].asString();
 
-	// if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str()) == -1)
-	// {
-	// 	return "failed (Object " + object_1_name + " does not exist.)";
-	// }
-	// if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_2_name.c_str()) == -1)
-	// {
-	// 	return "failed (Object " + object_2_name + " does not exist.)";
-	// }
+	const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
+	if (body_1_id == -1)
+	{
+		return "failed (Object " + object_1_name + " does not exist.)";
+	}
 
-	// for (int equality_id = 0; equality_id < m->neq; equality_id++)
-	// {
-	// 	if (m->eq_type[equality_id] == mjtEq::mjEQ_WELD)
-	// 	{
-	// 		const int body1_id = m->eq_obj1id[equality_id];
-	// 		const std::string body_1_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body1_id);
-	// 		if (strcmp(body_1_name.c_str(), object_2_name.c_str()) != 0)
-	// 		{
-	// 			continue;
-	// 		}
+	const int body_2_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_2_name.c_str());
+	if (body_2_id == -1)
+	{
+		return "failed (Object " + object_2_name + " does not exist.)";
+	}
 
-	// 		const int body2_id = m->eq_obj2id[equality_id];
-	// 		const std::string body_2_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body2_id);
-	// 		if (strcmp(body_2_name.c_str(), object_1_name.c_str()) != 0)
-	// 		{
-	// 			continue;
-	// 		}
-
-	// 		return "failed (equality found)";
-	// 	}
-	// }
-	// return "success";
+	return m->body_parentid[body_1_id] == body_2_id ? "failed (attachment found)" : "success";
 }
 
 void MjMultiverseClient::bind_api_callbacks()
