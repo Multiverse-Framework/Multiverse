@@ -358,10 +358,10 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 					include_doc.LoadFile(include_file_path.string().c_str());
 					tinyxml2::XMLElement *include_mujoco_element = include_doc.FirstChildElement("mujoco");
 					for (tinyxml2::XMLElement *worldbody_element = include_mujoco_element->FirstChildElement("worldbody");
-						worldbody_element != nullptr; worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
+						 worldbody_element != nullptr; worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
 					{
 						for (tinyxml2::XMLElement *body_element = worldbody_element->FirstChildElement("body");
-							body_element != nullptr; body_element = body_element->NextSiblingElement("body"))
+							 body_element != nullptr; body_element = body_element->NextSiblingElement("body"))
 						{
 							if (std::find(object_names.begin(), object_names.end(), body_element->Attribute("name")) != object_names.end())
 							{
@@ -1394,7 +1394,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 
 		doc_1.SaveFile(doc_file_path_1.c_str());
 		doc_2.SaveFile(doc_file_path_2.c_str());
-		
+
 		const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
 		const int body_1_dof_num = m->body_dofnum[body_1_id];
 		if (body_1_dof_num != 0)
