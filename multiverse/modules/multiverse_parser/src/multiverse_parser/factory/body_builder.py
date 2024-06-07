@@ -9,8 +9,7 @@ import numpy
 
 from .geom_builder import GeomBuilder, GeomProperty, GeomInertial
 from .joint_builder import JointBuilder, JointProperty
-from ..utils import get_transform, xform_cache, modify_name, diagonalize_inertia, shift_center_of_mass, \
-    shift_inertia_tensor
+from ..utils import get_transform, xform_cache, modify_name, diagonalize_inertia, shift_inertia_tensor
 
 from pxr import Usd, UsdGeom, Sdf, Gf, UsdPhysics
 

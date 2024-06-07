@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 import numpy
+from scipy.spatial.transform import Rotation
 from mujoco import mjtJoint
 
 from ..utils import modify_name, xform_cache
@@ -190,6 +191,18 @@ class JointAxis(Enum):
             return numpy.array([0.0, 1.0, 0.0, 0.0])
         else:
             raise ValueError(f"Joint axis {self} not supported.")
+
+
+def get_joint_axis_and_quat(joint_axis) -> [JointAxis, Optional[numpy.ndarray]]:
+    joint_axis_tmp = JointAxis.from_array(joint_axis)
+    if joint_axis_tmp is not None:
+        return joint_axis_tmp, None
+    else:
+        v1 = numpy.array(joint_axis)
+        v2 = numpy.array([0, 0, 1])
+        rotation_matrix = numpy.dot(v2[:, numpy.newaxis], v1[numpy.newaxis, :])
+        joint_quat = Rotation.from_matrix(rotation_matrix).as_quat()
+        return JointAxis.Z, joint_quat
 
 
 @dataclass(init=False)

@@ -6,12 +6,11 @@ from typing import Optional, List, Tuple, Dict
 
 import numpy
 import mujoco
-from scipy.spatial.transform import Rotation
 
 from ..utils import modify_name
 from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
-                       JointBuilder, JointAxis, JointType, JointProperty,
+                       JointBuilder, JointType, JointProperty, get_joint_axis_and_quat,
                        GeomBuilder, GeomType, GeomProperty,
                        MeshProperty,
                        MaterialProperty,
@@ -30,18 +29,6 @@ def get_model_name(xml_file_path: str) -> str:
 
 def get_body_name(mj_body) -> str:
     return mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
-
-
-def get_joint_axis_and_quat(mj_joint) -> [JointAxis, Optional[numpy.ndarray]]:
-    joint_axis = JointAxis.from_array(mj_joint.axis)
-    if joint_axis is not None:
-        return joint_axis, None
-    else:
-        v1 = mj_joint.axis
-        v2 = numpy.array([0, 0, 1])
-        rotation_matrix = numpy.dot(v2[:, numpy.newaxis], v1[numpy.newaxis, :])
-        joint_quat = Rotation.from_matrix(rotation_matrix).as_quat()
-        return JointAxis.Z, joint_quat
 
 
 class MjcfImporter(Factory):
@@ -177,7 +164,7 @@ class MjcfImporter(Factory):
         parent_body_id = mj_body.parentid
         parent_body_name = get_body_name(self.mj_model.body(parent_body_id))
         parent_body_builder = self.world_builder.get_body_builder(body_name=parent_body_name)
-        joint_axis, joint_quat = get_joint_axis_and_quat(mj_joint=mj_joint)
+        joint_axis, joint_quat = get_joint_axis_and_quat(joint_axis=mj_joint.axis)
         joint_property = JointProperty(
             joint_parent_prim=parent_body_builder.xform.GetPrim(),
             joint_child_prim=body_builder.xform.GetPrim(),

@@ -12,7 +12,7 @@ from urdf_parser_py import urdf
 from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder,
                        BodyBuilder,
-                       JointBuilder, JointAxis, JointType, JointProperty,
+                       JointBuilder, JointType, JointProperty, get_joint_axis_and_quat,
                        GeomType, GeomProperty,
                        MeshProperty,
                        MaterialProperty)
@@ -30,6 +30,7 @@ def remove_transmissions_from_urdf_string(urdf_string: str) -> str:
         root.remove(tag)
 
     return ET.tostring(root, encoding="unicode")
+
 
 def build_urdf_inertial_api(physics_mass_api: UsdPhysics.MassAPI) -> UsdUrdf.UrdfLinkInertialAPI:
     mass = physics_mass_api.GetMassAttr().Get()
@@ -101,7 +102,7 @@ class UrdfImporter(Factory):
     ) -> None:
         with open(file_path) as file:
             urdf_string = file.read()
-        
+
         urdf_string = remove_transmissions_from_urdf_string(urdf_string)
         self._urdf_model = urdf.URDF.from_xml_string(urdf_string)
 
@@ -414,11 +415,13 @@ class UrdfImporter(Factory):
             joint_pos = Gf.Vec3d(*joint_pos)
             joint_pos = body1_rot.GetInverse().Transform(joint_pos - body1_to_body2_pos)
 
+            joint_axis, joint_quat = get_joint_axis_and_quat(joint_axis=joint.axis)
             joint_property = JointProperty(
                 joint_parent_prim=parent_body_builder.xform.GetPrim(),
                 joint_child_prim=child_body_builder.xform.GetPrim(),
                 joint_pos=joint_pos,
-                joint_axis=JointAxis.from_array(joint.axis),
+                joint_quat=joint_quat,
+                joint_axis=joint_axis,
                 joint_type=joint_type,
             )
             joint_builder = child_body_builder.add_joint(joint_name=joint.name, joint_property=joint_property)
