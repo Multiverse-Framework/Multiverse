@@ -110,7 +110,7 @@ void MjSimulate::load_new_model_and_keep_old_data()
 		}
 		else
 		{
-			printf("Old [%s] has %d joints != new [%s] has %d joints", name, jnt_num, name, jnt_num_new);
+			printf("Old [%s] has %d joints != new [%s] has %d joints\n", name, jnt_num, name, jnt_num_new);
 		}
 
 		// Copy dof states
@@ -130,7 +130,7 @@ void MjSimulate::load_new_model_and_keep_old_data()
 		}
 		else
 		{
-			printf("Old [%s] has %d dofs != new [%s] has %d dofs", name, dof_num, name, dof_num_new);
+			printf("Old [%s] has %d dofs != new [%s] has %d dofs\n", name, dof_num, name, dof_num_new);
 		}
 	}
 

@@ -1237,7 +1237,7 @@ std::string MjMultiverseClient::get_unweld_response(const Json::Value &arguments
 	return "success";
 }
 
-tinyxml2::XMLElement *get_body_element(tinyxml2::XMLElement *parent_body_element, const std::string &body_name)
+void get_body_element(tinyxml2::XMLElement *parent_body_element, tinyxml2::XMLElement *&found_body_element, const std::string &body_name)
 {
 	for (tinyxml2::XMLElement *body_element = parent_body_element->FirstChildElement("body");
 		 body_element != nullptr;
@@ -1245,79 +1245,56 @@ tinyxml2::XMLElement *get_body_element(tinyxml2::XMLElement *parent_body_element
 	{
 		if (strcmp(body_element->Attribute("name"), body_name.c_str()) == 0)
 		{
-			printf("000 Found body %s\n", body_name.c_str());
-			return body_element;
+			found_body_element = body_element;
+			if (found_body_element != nullptr)
+			{
+				return;
+			}
 		}
-		tinyxml2::XMLElement *child_body_element = get_body_element(body_element, body_name);
-		if (strcmp(child_body_element->Attribute("name"), body_name.c_str()) == 0)
-		{
-			return child_body_element;
-		}
+		get_body_element(body_element, found_body_element, body_name);
 	}
-	return nullptr;
 }
 
-void get_bodies_element(tinyxml2::XMLElement *mujoco_element, tinyxml2::XMLDocument *doc_1, tinyxml2::XMLElement *body_1_element, const std::string &body_1_name, tinyxml2::XMLDocument *doc_2, tinyxml2::XMLElement *body_2_element, const std::string &body_2_name)
+void get_body_element(tinyxml2::XMLDocument &doc, std::string &doc_file_path, tinyxml2::XMLElement *&found_body_element, const std::string &body_name)
 {
+	tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 	for (tinyxml2::XMLElement *worldbody_element = mujoco_element->FirstChildElement("worldbody");
 		 worldbody_element != nullptr;
 		 worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
 	{
-		tinyxml2::XMLElement *body_1_element_tmp = get_body_element(worldbody_element, body_1_name);
-		tinyxml2::XMLElement *body_2_element_tmp = get_body_element(worldbody_element, body_2_name);
-		printf("HEREEEEEEEEEE\n");
-		if (body_1_element_tmp != nullptr)
+		get_body_element(worldbody_element, found_body_element, body_name);
+		if (found_body_element != nullptr)
 		{
-			body_1_element = body_1_element_tmp;
-		}
-		if (body_2_element_tmp != nullptr)
-		{
-			body_2_element = body_2_element_tmp;
-		}
-		if (body_1_element != nullptr && body_2_element != nullptr)
-		{
+			doc_file_path = scene_xml_path.string();
 			return;
 		}
 	}
 
 	const boost::filesystem::path scene_dir = scene_xml_path.parent_path();
-	tinyxml2::XMLElement *include_element;
-	for (include_element = mujoco_element->FirstChildElement("include");
+	std::vector<std::string> file_paths;
+	for (tinyxml2::XMLElement *include_element = mujoco_element->FirstChildElement("include");
 		 include_element != nullptr;
 		 include_element = include_element->NextSiblingElement("include"))
 	{
 		const std::string file_name = include_element->Attribute("file");
-		tinyxml2::XMLDocument doc;
-		if (doc.LoadFile((scene_dir / file_name).string().c_str()) == tinyxml2::XML_SUCCESS)
+		file_paths.push_back((scene_dir / file_name).string());
+	}
+	for (const std::string &file_path : file_paths)
+	{
+		if (doc.LoadFile(file_path.c_str()) == tinyxml2::XML_SUCCESS)
 		{
-			mujoco_element = doc.FirstChildElement("mujoco");
-			get_bodies_element(mujoco_element, doc_1, body_1_element, body_1_name, doc_2, body_2_element, body_2_name);
-			if (body_1_element != nullptr)
+			get_body_element(doc, doc_file_path, found_body_element, body_name);
+			if (found_body_element != nullptr)
 			{
-				doc_1 = &doc;
-			}
-			if (body_2_element != nullptr)
-			{
-				doc_2 = &doc;
+				doc_file_path = file_path;
+				return;
 			}
 		}
 		else
 		{
-			printf("Could not load file: %s\n", (scene_dir / file_name).string().c_str());
+			printf("Could not load file: %s\n", file_path.c_str());
 			return;
 		}
-	}
-	if (body_1_element != nullptr)
-	{
-		printf("Found body_1 %s\n", body_1_element->Attribute("name"));
-	}
-	if (body_2_element != nullptr)
-	{
-		printf("Found body_2 %s\n", body_2_element->Attribute("name"));
-	}
-	if (body_1_element != nullptr && body_2_element != nullptr)
-	{
-		printf("Found both bodies %s and %s\n", body_1_element->Attribute("name"), body_2_element->Attribute("name"));
 	}
 }
 
@@ -1329,7 +1306,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 		printf("Attachment already exists.\n");
 		return;
 	}
-	if (strcmp(attach_response.c_str(), "failed (equality not found)") != 0 &&
+	if (strcmp(attach_response.c_str(), "failed (relative pose are different)") != 0 &&
 		strcmp(attach_response.c_str(), "failed (attachment not found)") != 0)
 	{
 		printf("%s\n", attach_response.c_str());
@@ -1348,46 +1325,119 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 	const std::string relative_pos = std::to_string(relative_pose[0]) + " " + std::to_string(relative_pose[1]) + " " + std::to_string(relative_pose[2]);
 	const std::string relative_quat = std::to_string(relative_pose[3]) + " " + std::to_string(relative_pose[4]) + " " + std::to_string(relative_pose[5]) + " " + std::to_string(relative_pose[6]);
 
-	tinyxml2::XMLDocument doc;
-	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
-	{
-		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
-		tinyxml2::XMLDocument doc_1;
-		tinyxml2::XMLDocument doc_2;
-		tinyxml2::XMLElement *body_1_element;
-		tinyxml2::XMLElement *body_2_element;
-		get_bodies_element(mujoco_element, &doc_1, body_1_element, object_1_name, &doc_2, body_2_element, object_2_name);
-		if (body_1_element == nullptr || body_2_element == nullptr)
-		{
-			printf("Could not find bodies %s or %s\n", object_1_name.c_str(), object_2_name.c_str());
-			return;
-		}
-		printf("%s\n", attach_response.c_str());
-		if (strcmp(attach_response.c_str(), "failed (relative pose are different)") == 0)
-		{
-			body_2_element->SetAttribute("pos", relative_pos.c_str());
-			body_2_element->SetAttribute("quat", relative_quat.c_str());
-		}
-		else
-		{
-			printf("FFFFFFFFFFFFFFF\n");
-			tinyxml2::XMLElement *body_2_element_copy = body_2_element->DeepClone(&doc_1)->ToElement();
-			printf("GGGGGGGGGGGGGG\n");
-			body_1_element->InsertEndChild(body_2_element_copy);
-			printf("HHHHHHHHHHHHHH\n");
-			tinyxml2::XMLElement *parent_body_2_element = body_2_element->Parent()->ToElement();
-			printf("IIIIIIIIIIIIII\n");
-			parent_body_2_element->DeleteChild(body_2_element);
-		}
-		printf("DDDDDDDDDDDDDD\n");
+	tinyxml2::XMLDocument doc_1;
+	std::string doc_file_path_1;
+	doc_1.LoadFile(scene_xml_path.string().c_str());
+	tinyxml2::XMLElement *body_1_element = nullptr;
+	get_body_element(doc_1, doc_file_path_1, body_1_element, object_1_name);
 
-		doc.SaveFile(scene_xml_path.string().c_str());
-	}
-	else
+	tinyxml2::XMLDocument doc_2;
+	std::string doc_file_path_2;
+	doc_2.LoadFile(scene_xml_path.string().c_str());
+	tinyxml2::XMLElement *body_2_element = nullptr;
+	get_body_element(doc_2, doc_file_path_2, body_2_element, object_2_name);
+
+	if (body_1_element == nullptr || body_2_element == nullptr)
 	{
-		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
+		printf("Could not find bodies %s or %s\n", object_1_name.c_str(), object_2_name.c_str());
 		return;
 	}
+
+	body_1_element->SetAttribute("pos", relative_pos.c_str());
+	body_1_element->SetAttribute("quat", relative_quat.c_str());
+	if (strcmp(attach_response.c_str(), "failed (attachment not found)") == 0)
+	{
+		tinyxml2::XMLElement *body_1_element_copy = body_1_element->DeepClone(&doc_2)->ToElement();
+		std::vector<tinyxml2::XMLElement *> body_1_joint_elements;
+		for (tinyxml2::XMLElement *joint_element = body_1_element_copy->FirstChildElement("joint");
+			 joint_element != nullptr;
+			 joint_element = joint_element->NextSiblingElement("joint"))
+		{
+			body_1_joint_elements.push_back(joint_element);
+		}
+		for (tinyxml2::XMLElement *joint_element = body_1_element_copy->FirstChildElement("freejoint");
+			 joint_element != nullptr;
+			 joint_element = joint_element->NextSiblingElement("freejoint"))
+		{
+			body_1_joint_elements.push_back(joint_element);
+		}
+		for (tinyxml2::XMLElement *joint_element : body_1_joint_elements)
+		{
+			body_1_element_copy->DeleteChild(joint_element);
+		}
+		body_2_element->InsertEndChild(body_1_element_copy);
+		tinyxml2::XMLElement *parent_body_1_element = body_1_element->Parent()->ToElement();
+		parent_body_1_element->DeleteChild(body_1_element);
+		
+		const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
+		const int body_1_dof_num = m->body_dofnum[body_1_id];
+		if (body_1_dof_num != 0)
+		{
+			tinyxml2::XMLDocument doc;
+			doc.LoadFile(scene_xml_path.string().c_str());
+			tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
+			for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
+				keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
+			{
+				for (tinyxml2::XMLElement *key_element = keyframe_element->FirstChildElement("key");
+					key_element != nullptr; key_element = key_element->NextSiblingElement("key"))
+				{
+					if (key_element->Attribute("qpos") != nullptr)
+					{
+						std::istringstream iss(key_element->Attribute("qpos"));
+						std::vector<mjtNum> qpos = std::vector<mjtNum>(std::istream_iterator<mjtNum>(iss), std::istream_iterator<mjtNum>());
+						const int qpos_adr = m->jnt_qposadr[m->body_jntadr[body_1_id]];
+						if (body_1_dof_num == 6)
+						{
+							for (int i = 0; i < 7; i++)
+							{
+								qpos.erase(qpos.begin() + qpos_adr);
+							}
+						}
+						else
+						{
+							mju_error("Unsupported body dof num: %d", body_1_dof_num);
+						}
+						std::string qpos_str;
+						for (mjtNum qpos_val : qpos)
+						{
+							qpos_str += std::to_string(qpos_val) + " ";
+						}
+						qpos_str.pop_back();
+						key_element->SetAttribute("qpos", qpos_str.c_str());
+					}
+					if (key_element->Attribute("qvel") != nullptr)
+					{
+						std::istringstream iss(key_element->Attribute("qvel"));
+						std::vector<mjtNum> qvel = std::vector<mjtNum>(std::istream_iterator<mjtNum>(iss), std::istream_iterator<mjtNum>());
+						const int qvel_adr = m->jnt_dofadr[m->body_jntadr[body_1_id]];
+						if (body_1_dof_num == 6)
+						{
+							for (int i = 0; i < 6; i++)
+							{
+								qvel.erase(qvel.begin() + qvel_adr);
+							}
+						}
+						else
+						{
+							mju_error("Unsupported body dof num: %d", body_1_dof_num);
+						}
+						std::string qvel_str;
+						for (mjtNum qvel_val : qvel)
+						{
+							qvel_str += std::to_string(qvel_val) + " ";
+						}
+						qvel_str.pop_back();
+						key_element->SetAttribute("qvel", qvel_str.c_str());
+					}
+				}
+			}
+			doc.SaveFile(scene_xml_path.string().c_str());
+		}
+	}	
+
+	doc_1.SaveFile(doc_file_path_1.c_str());
+	doc_2.SaveFile(doc_file_path_2.c_str());
 
 	printf("Attach %s to %s at %s %s\n", object_1_name.c_str(), object_2_name.c_str(), relative_pos.c_str(), relative_quat.c_str());
 	mtx.lock();
@@ -1587,6 +1637,7 @@ void MjMultiverseClient::bind_api_callbacks()
 			}
 		}
 	}
+	printf("Time A : %f\n", d->time);
 }
 
 void MjMultiverseClient::bind_api_callbacks_response()
@@ -1630,6 +1681,7 @@ void MjMultiverseClient::bind_api_callbacks_response()
 			request_meta_data_json["api_callbacks_response"].append(api_callback_response);
 		}
 	}
+	printf("Time B : %f\n", d->time);
 }
 
 void MjMultiverseClient::init_send_and_receive_data()
