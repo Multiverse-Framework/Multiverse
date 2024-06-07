@@ -563,7 +563,11 @@ void MultiverseServer::start()
                     zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none); // TODO: Make use of the message
                 }
                 
-                request_meta_data_json = simulation.request_meta_data_json;
+                if (strcmp(request_meta_data_json["meta_data"]["simulation_name"].asString().c_str(), simulation_name.c_str()) != 0)
+                {
+                    request_meta_data_json = simulation.request_meta_data_json;
+                }
+                
                 simulation.meta_data_state = EMetaDataState::Normal;
 
                 send_data_vec.clear();

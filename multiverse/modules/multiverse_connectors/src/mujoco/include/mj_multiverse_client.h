@@ -92,6 +92,8 @@ private:
 
     std::vector<mjtNum *> receive_data_vec;
 
+    std::map<int, mjtNum *> relative_velocities;
+
     std::map<int, mjtNum *> odom_velocities;
 
     std::map<int, mjtNum *> contact_efforts;

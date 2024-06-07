@@ -1434,10 +1434,13 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 			}
 			doc.SaveFile(scene_xml_path.string().c_str());
 		}
-	}	
-
-	doc_1.SaveFile(doc_file_path_1.c_str());
-	doc_2.SaveFile(doc_file_path_2.c_str());
+		doc_1.SaveFile(doc_file_path_1.c_str());
+		doc_2.SaveFile(doc_file_path_2.c_str());
+	}
+	else
+	{
+		doc_1.SaveFile(doc_file_path_1.c_str());
+	}
 
 	printf("Attach %s to %s at %s %s\n", object_1_name.c_str(), object_2_name.c_str(), relative_pos.c_str(), relative_quat.c_str());
 	mtx.lock();
@@ -1471,26 +1474,21 @@ std::string MjMultiverseClient::get_attach_response(const Json::Value &arguments
 		return "failed (Object " + object_2_name + " does not exist.)";
 	}
 
-	if (m->body_parentid[body_1_id] != 0)
-	{
-		return "failed (parent of " + object_1_name + " is not root)";
-	}
-
 	std::vector<mjtNum> relative_pose = {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
 	if (arguments.size() == 3)
 	{
 		std::istringstream iss(arguments[2].asString());
 		relative_pose = std::vector<mjtNum>(std::istream_iterator<mjtNum>(iss), std::istream_iterator<mjtNum>());
 	}
-	if (m->body_parentid[body_2_id] == body_1_id)
+	if (m->body_parentid[body_1_id] == body_2_id)
 	{
-		if (m->body_pos[3 * body_2_id] == relative_pose[0] &&
-			m->body_pos[3 * body_2_id + 1] == relative_pose[1] &&
-			m->body_pos[3 * body_2_id + 2] == relative_pose[2] &&
-			m->body_quat[4 * body_2_id] == relative_pose[3] &&
-			m->body_quat[4 * body_2_id + 1] == relative_pose[4] &&
-			m->body_quat[4 * body_2_id + 2] == relative_pose[5] &&
-			m->body_quat[4 * body_2_id + 3] == relative_pose[6])
+		if (m->body_pos[3 * body_1_id] == relative_pose[0] &&
+			m->body_pos[3 * body_1_id + 1] == relative_pose[1] &&
+			m->body_pos[3 * body_1_id + 2] == relative_pose[2] &&
+			m->body_quat[4 * body_1_id] == relative_pose[3] &&
+			m->body_quat[4 * body_1_id + 1] == relative_pose[4] &&
+			m->body_quat[4 * body_1_id + 2] == relative_pose[5] &&
+			m->body_quat[4 * body_1_id + 3] == relative_pose[6])
 		{
 			return "success";
 		}
@@ -1637,7 +1635,6 @@ void MjMultiverseClient::bind_api_callbacks()
 			}
 		}
 	}
-	printf("Time A : %f\n", d->time);
 }
 
 void MjMultiverseClient::bind_api_callbacks_response()
@@ -1681,7 +1678,6 @@ void MjMultiverseClient::bind_api_callbacks_response()
 			request_meta_data_json["api_callbacks_response"].append(api_callback_response);
 		}
 	}
-	printf("Time B : %f\n", d->time);
 }
 
 void MjMultiverseClient::init_send_and_receive_data()

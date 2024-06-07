@@ -236,8 +236,6 @@ void MultiverseClient::run()
 
                     bind_api_callbacks_response();
 
-                    printf("Time C: %f\n", *receive_buffer);
-
                     flag = EMultiverseClientState::BindRequestMetaData;
 
                     break;

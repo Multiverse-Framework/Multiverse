@@ -464,22 +464,46 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                                                                            "param2"]}
                                                                                    ]
                                                                                })
-        print(multiverse_client_test_callapi.response_meta_data)
-        # time_callapi = multiverse_client_test_callapi.response_meta_data["time"]
-        # self.assertDictEqual(multiverse_client_test_callapi.response_meta_data,
-        #                      {'api_callbacks_response':
-        #                          {
-        #                              'empty_simulation': [{'weld': ['success']},
-        #                                                   {'is_mujoco': ['true']},
-        #                                                   {'something_else': ['not implemented']}]},
-        #                          'meta_data': {'angle_unit': 'rad',
-        #                                        'handedness': 'rhs',
-        #                                        'length_unit': 'm',
-        #                                        'mass_unit': 'kg',
-        #                                        'simulation_name': 'sim_test_callapi',
-        #                                        'time_unit': 's',
-        #                                        'world_name': 'world'},
-        #                          'time': time_callapi})
+
+        time_callapi = multiverse_client_test_callapi.response_meta_data["time"]
+        self.assertDictEqual(multiverse_client_test_callapi.response_meta_data,
+                             {'api_callbacks_response':
+                                 {
+                                     'empty_simulation': [{'attach': ['success']},
+                                                          {'is_mujoco': ['true']},
+                                                          {'something_else': ['not implemented']}]},
+                                 'meta_data': {'angle_unit': 'rad',
+                                               'handedness': 'rhs',
+                                               'length_unit': 'm',
+                                               'mass_unit': 'kg',
+                                               'simulation_name': 'sim_test_callapi',
+                                               'time_unit': 's',
+                                               'world_name': 'world'},
+                                 'time': time_callapi})
+
+        sleep(2)
+
+        # Re-attach milk box to hand at (0 0 0.5) (1 0 0 0)
+        multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+            "empty_simulation": [
+                {"attach": ["milk_box", "hand", "0.0 0.0 0.5 1.0 0.0 0.0 0.0"]}
+            ]
+        }
+        multiverse_client_test_callapi.send_and_receive_meta_data()
+
+        time_callapi = multiverse_client_test_callapi.response_meta_data["time"]
+        self.assertDictEqual(multiverse_client_test_callapi.response_meta_data,
+                             {'api_callbacks_response':
+                                 {
+                                     'empty_simulation': [{'attach': ['success']}]},
+                                 'meta_data': {'angle_unit': 'rad',
+                                               'handedness': 'rhs',
+                                               'length_unit': 'm',
+                                               'mass_unit': 'kg',
+                                               'simulation_name': 'sim_test_callapi',
+                                               'time_unit': 's',
+                                               'world_name': 'world'},
+                                 'time': time_callapi})
 
     def test_multiverse_client_move(self):
         multiverse_client_test_move = self.create_multiverse_client_spawn("1337", "world")
