@@ -598,5 +598,18 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client_test_destroy.stop()
 
 
+class MultiverseClientUnrealTestCase(MultiverseClientSpawnTestCase):
+    def test_multiverse_client_callapi_unreal(self):
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
+                                                                               {
+                                                                                   "unreal": [
+                                                                                       {"is_unreal": []},
+                                                                                       {"something_else": ["param1",
+                                                                                                           "param2"]}
+                                                                                   ]
+                                                                               })
+        print(multiverse_client_test_callapi.response_meta_data)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -640,13 +640,20 @@ void MjMultiverseClient::wait_for_meta_data_thread_finish()
 void MjMultiverseClient::bind_request_meta_data()
 {
 	mtx.lock();
+	const Json::Value api_callbacks = request_meta_data_json["api_callbacks"];
 	const Json::Value api_callbacks_response = request_meta_data_json["api_callbacks_response"];
-	// Create JSON object and populate it
+	
 	request_meta_data_json.clear();
+
+	if (!api_callbacks.isNull())
+	{
+		request_meta_data_json["api_callbacks"] = api_callbacks;
+	}
 	if (!api_callbacks_response.isNull())
 	{
 		request_meta_data_json["api_callbacks_response"] = api_callbacks_response;
 	}
+
 	request_meta_data_json["meta_data"]["world_name"] = world_name;
 	request_meta_data_json["meta_data"]["simulation_name"] = simulation_name;
 	request_meta_data_json["meta_data"]["length_unit"] = "m";
