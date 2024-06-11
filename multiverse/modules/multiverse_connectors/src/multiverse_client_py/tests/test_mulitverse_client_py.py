@@ -555,6 +555,24 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
 
         multiverse_client_test_move.stop()
 
+    def test_multiverse_client_callapi_get_contact(self):
+        # Spawn panda and milk box
+        self.test_multiverse_client_spawn()
+
+        sleep(1)
+
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
+                                                                               {
+                                                                                   "empty_simulation": [
+                                                                                       {"get_contact": ["milk_box"]},
+                                                                                       {"get_contact": ["link1"]},
+                                                                                       {"is_mujoco": []},
+                                                                                       {"something_else": ["param1",
+                                                                                                           "param2"]}
+                                                                                   ]
+                                                                               })
+        print(multiverse_client_test_callapi.response_meta_data)
+
     def test_multiverse_client_destroy(self):
         multiverse_client_test_destroy = self.create_multiverse_client_destroy("1338", "world")
 

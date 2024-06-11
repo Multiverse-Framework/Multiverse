@@ -1482,11 +1482,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 
 std::string MjMultiverseClient::get_attach_response(const Json::Value &arguments) const
 {
-	if (!arguments.isArray())
-	{
-		return "failed (Arguments for weld should be an array of strings.)";
-	}
-	if (arguments.size() < 2 || arguments.size() > 3)
+	if (!arguments.isArray() || arguments.size() < 2 || arguments.size() > 3)
 	{
 		return "failed (Arguments for weld should be an array of strings with 2 or 3 elements.)";
 	}
@@ -1651,11 +1647,7 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 
 std::string MjMultiverseClient::get_detach_response(const Json::Value &arguments) const
 {
-	if (!arguments.isArray())
-	{
-		return "failed (Arguments for detach should be an array of strings.)";
-	}
-	if (arguments.size() != 2)
+	if (!arguments.isArray() || arguments.size() != 2)
 	{
 		return "failed (Arguments for detach should be an array of strings with 2 elements.)";
 	}
@@ -1676,6 +1668,57 @@ std::string MjMultiverseClient::get_detach_response(const Json::Value &arguments
 	}
 
 	return m->body_parentid[body_1_id] == body_2_id ? "failed (attachment found)" : "success";
+}
+
+std::string MjMultiverseClient::get_get_contact_response(const Json::Value &arguments) const
+{
+	if (!arguments.isArray() || arguments.size() != 1)
+	{
+		return "failed (Arguments for get_contact should be an array of one string.)";
+	}
+
+	const std::string object_name = arguments[0].asString();
+	const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
+	if (body_id == -1)
+	{
+		return "failed (Object " + object_name + " does not exist.)";
+	}
+
+	std::set<std::string> contact_results;
+	for (int contact_id = 0; contact_id < d->ncon; contact_id++)
+	{
+		const mjContact contact = d->contact[contact_id];
+		if (contact.exclude != 0 && contact.exclude != 1)
+		{
+			continue;
+		}
+		const int geom_1_id = contact.geom[0];
+		const int geom_2_id = contact.geom[1];
+		const int body_1_id = m->geom_bodyid[geom_1_id];
+		const int body_2_id = m->geom_bodyid[geom_2_id];
+		const std::string body_1_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_1_id);
+		const std::string body_2_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_2_id);
+
+		if (strcmp(object_name.c_str(), body_1_name.c_str()) == 0)
+		{
+			contact_results.insert(body_2_name);
+		}
+		else if (strcmp(object_name.c_str(), body_2_name.c_str()) == 0)
+		{
+			contact_results.insert(body_1_name);
+		}
+	}
+
+	std::string contact_results_str;
+	for (const std::string &contact_result : contact_results)
+	{
+		contact_results_str += contact_result + " ";
+	}
+	if (!contact_results_str.empty())
+	{
+		contact_results_str.pop_back();
+	}
+	return contact_results_str;
 }
 
 void MjMultiverseClient::bind_api_callbacks()
@@ -1738,6 +1781,11 @@ void MjMultiverseClient::bind_api_callbacks_response()
 			{
 				const std::string detach_response = get_detach_response(api_callback_json[api_callback_name]);
 				api_callback_response[api_callback_name].append(detach_response);
+			}
+			else if (strcmp(api_callback_name.c_str(), "get_contact") == 0)
+			{
+				const std::string get_contact_response = get_get_contact_response(api_callback_json[api_callback_name]);
+				api_callback_response[api_callback_name].append(get_contact_response);
 			}
 			else
 			{
