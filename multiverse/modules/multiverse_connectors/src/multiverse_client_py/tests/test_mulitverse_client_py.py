@@ -2,6 +2,7 @@ import signal
 import subprocess
 import threading
 import unittest
+from typing import List
 from time import sleep, time
 
 from multiverse_client_py import MultiverseClient, MultiverseMetaData, SocketAddress
@@ -199,6 +200,26 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         meta_data.simulation_name = "sim_test_spawn"
         multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
                                                  multiverse_meta_data=meta_data)
+        multiverse_client.run()
+        return multiverse_client
+
+    def create_multiverse_client_listenapi(self, port, world_name):
+        meta_data = self.meta_data
+        meta_data.world_name = world_name
+        meta_data.simulation_name = "sim_test_listenapi"
+        multiverse_client = MultiverseClientTest(client_addr=SocketAddress(port=port),
+                                                 multiverse_meta_data=meta_data)
+
+        def func_1(args: List[str]) -> List[str]:
+            return args
+
+        def func_2(args: List[str]) -> List[str]:
+            return [" ".join(args)]
+
+        multiverse_client.api_callbacks = {
+            "func_1": func_1,
+            "func_2": func_2
+        }
         multiverse_client.run()
         return multiverse_client
 
@@ -627,6 +648,40 @@ class MultiverseClientUnrealTestCase(MultiverseClientSpawnTestCase):
                                                                                    ]
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
+
+
+class MultiverseClientCallapiPythonTestCase(MultiverseClientSpawnTestCase):
+    def test_multiverse_client_listenapi(self):
+        multiverse_client_test_listenapi = self.create_multiverse_client_listenapi("1358", "world")
+        for _ in range(10):
+            multiverse_client_test_listenapi.send_data = [time() - self.time_start]
+            multiverse_client_test_listenapi.send_and_receive_data()
+            sleep(0.5)
+
+    def test_multiverse_client_callapi(self):
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
+                                                                               {
+                                                                                   "sim_test_listenapi": [
+                                                                                       {"func_1": ["param1",
+                                                                                                   "param2"]},
+                                                                                       {"func_2": ["param3",
+                                                                                                   "param4",
+                                                                                                   "param5"]},
+                                                                                       {"func_3": ["param2",
+                                                                                                   "param4",
+                                                                                                   "param5"]}
+                                                                                   ]
+                                                                               })
+        print(multiverse_client_test_callapi.response_meta_data)
+
+    def test_multiverse_client_call_and_listen_api(self):
+        listen_thread = threading.Thread(target=self.test_multiverse_client_listenapi)
+        listen_thread.start()
+        sleep(2)
+        call_thread = threading.Thread(target=self.test_multiverse_client_callapi)
+        call_thread.start()
+        listen_thread.join()
+        call_thread.join()
 
 
 if __name__ == "__main__":

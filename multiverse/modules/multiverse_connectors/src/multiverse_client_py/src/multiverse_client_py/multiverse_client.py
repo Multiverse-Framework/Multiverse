@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import dataclasses
-from typing import List, Dict, TypeVar
+from typing import List, Dict, Callable, TypeVar
 
 from multiverse_client_pybind import MultiverseClientPybind  # noqa
 
@@ -33,6 +33,7 @@ class MultiverseClient:
     _meta_data: MultiverseMetaData
     _multiverse_socket: MultiverseClientPybind
     _start_time: float
+    _api_callbacks: Dict[str, Callable[[List[str]], List[str]]]
 
     def __init__(
             self,
@@ -109,6 +110,15 @@ class MultiverseClient:
             self.logwarn(message)
         return receive_data
 
+    @property
+    def api_callbacks(self) -> Dict[str, Callable[[List[str]], List[str]]]:
+        return self._api_callbacks
+
+    @api_callbacks.setter
+    def api_callbacks(self, api_callbacks: Dict[str, Callable[[List[str]], List[str]]]) -> None:
+        self._multiverse_socket.set_api_callbacks(api_callbacks)
+        self._api_callbacks = api_callbacks
+
     def _bind_request_meta_data(self, request_meta_data: T) -> T:
         pass
 
@@ -139,7 +149,7 @@ class MultiverseClient:
     @property
     def world_time(self) -> float:
         return self.response_meta_data["time"]
-    
+
     @property
     def sim_time(self) -> float:
         return self._multiverse_socket.get_time_now() - self._start_time
