@@ -642,7 +642,7 @@ void MjMultiverseClient::bind_request_meta_data()
 	mtx.lock();
 	const Json::Value api_callbacks = request_meta_data_json["api_callbacks"];
 	const Json::Value api_callbacks_response = request_meta_data_json["api_callbacks_response"];
-	
+
 	request_meta_data_json.clear();
 
 	if (!api_callbacks.isNull())
@@ -1670,21 +1670,21 @@ std::string MjMultiverseClient::get_detach_response(const Json::Value &arguments
 	return m->body_parentid[body_1_id] == body_2_id ? "failed (attachment found)" : "success";
 }
 
-std::string MjMultiverseClient::get_get_contact_response(const Json::Value &arguments) const
+std::set<std::string> MjMultiverseClient::get_get_contact_bodies_response(const Json::Value &arguments) const
 {
 	if (!arguments.isArray() || arguments.size() != 1)
 	{
-		return "failed (Arguments for get_contact should be an array of one string.)";
+		return {"failed (Arguments for get_contact_bodies should be an array of one string.)"};
 	}
 
 	const std::string object_name = arguments[0].asString();
 	const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
 	if (body_id == -1)
 	{
-		return "failed (Object " + object_name + " does not exist.)";
+		return {"failed (Object " + object_name + " does not exist.)"};
 	}
 
-	std::set<std::string> contact_results;
+	std::set<int> contact_body_ids;
 	for (int contact_id = 0; contact_id < d->ncon; contact_id++)
 	{
 		const mjContact contact = d->contact[contact_id];
@@ -1696,29 +1696,134 @@ std::string MjMultiverseClient::get_get_contact_response(const Json::Value &argu
 		const int geom_2_id = contact.geom[1];
 		const int body_1_id = m->geom_bodyid[geom_1_id];
 		const int body_2_id = m->geom_bodyid[geom_2_id];
-		const std::string body_1_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_1_id);
-		const std::string body_2_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_2_id);
 
-		if (strcmp(object_name.c_str(), body_1_name.c_str()) == 0)
+		if (body_1_id == body_id)
 		{
-			contact_results.insert(body_2_name);
+			contact_body_ids.insert(body_2_id);
 		}
-		else if (strcmp(object_name.c_str(), body_2_name.c_str()) == 0)
+		else if (body_2_id == body_id)
 		{
-			contact_results.insert(body_1_name);
+			contact_body_ids.insert(body_1_id);
 		}
 	}
 
-	std::string contact_results_str;
-	for (const std::string &contact_result : contact_results)
+	std::set<std::string> contact_results;
+	for (const int &contact_body_id : contact_body_ids)
 	{
-		contact_results_str += contact_result + " ";
+		contact_results.insert(mj_id2name(m, mjtObj::mjOBJ_BODY, contact_body_id));
 	}
-	if (!contact_results_str.empty())
+	return contact_results;
+}
+
+std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const Json::Value &arguments) const
+{
+	if (!arguments.isArray() || (arguments.size() != 1 && arguments.size() != 2))
 	{
-		contact_results_str.pop_back();
+		return {"failed (Arguments for get_contact_islands should be an array of strings with 1 or 2 elements.)"};
 	}
-	return contact_results_str;
+
+	const std::string object_name = arguments[0].asString();
+	const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
+	if (body_id == -1)
+	{
+		return {"failed (Object " + object_name + " does not exist.)"};
+	}
+
+	std::set<int> body_ids = {body_id};
+	bool with_children = false;
+	if (arguments.size() == 2)
+	{
+		if (arguments[1].asString() != "with_children")
+		{
+			return {"failed (Second argument for get_contact_islands should be \"with_children\".)"};
+		}
+		with_children = true;
+	}
+
+	if (with_children)
+	{
+		for (int child_body_id = body_id + 1; child_body_id < m->nbody; child_body_id++)
+		{
+			if (m->body_parentid[child_body_id] == body_id)
+			{
+				body_ids.insert(child_body_id);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	mtx.lock();
+	mj_island(m, d);
+	mtx.unlock();
+
+	std::set<int> contact_body_ids;
+	for (int contact_id = 0; contact_id < d->ncon; contact_id++)
+	{
+		const mjContact contact = d->contact[contact_id];
+		if (contact.exclude != 0 && contact.exclude != 1)
+		{
+			continue;
+		}
+		const int geom_1_id = contact.geom[0];
+		const int geom_2_id = contact.geom[1];
+		const int body_1_id = m->geom_bodyid[geom_1_id];
+		const int body_2_id = m->geom_bodyid[geom_2_id];
+
+		if (body_ids.find(body_1_id) != body_ids.end() && body_ids.find(body_2_id) == body_ids.end())
+		{
+			contact_body_ids.insert(body_2_id);
+		}
+		else if (body_ids.find(body_2_id) != body_ids.end() && body_ids.find(body_1_id) == body_ids.end())
+		{
+			contact_body_ids.insert(body_1_id);
+		}
+	}
+
+	std::set<std::string> contact_island_results;
+	std::map<int, std::set<int>> islands;
+	for (const int contact_body_id : contact_body_ids)
+	{
+		const int dof_adr = m->body_dofadr[contact_body_id];
+		const int dof_num = m->body_dofnum[contact_body_id];
+		if (dof_num == 0)
+		{
+			contact_island_results.insert(mj_id2name(m, mjtObj::mjOBJ_BODY, contact_body_id));
+		}
+		for (int dof_id = dof_adr; dof_id < dof_adr + dof_num; dof_id++)
+		{
+			const int island_id = d->dof_island[dof_id];
+			if (island_id == -1 || islands.count(island_id) > 0)
+			{
+				continue;
+			}
+
+			islands[island_id] = {};
+			const int island_dofadr = d->island_dofadr[island_id];
+			const int island_dofnum = d->island_dofnum[island_id];
+			for (int island_dof_id = island_dofadr; island_dof_id < island_dofadr + island_dofnum; island_dof_id++)
+			{
+				islands[island_id].insert(m->dof_bodyid[island_dof_id]);
+			}
+		}
+	}
+
+	for (const std::pair<const int, std::set<int>> &island : islands)
+	{
+		std::string contact_island_result = "";
+		for (const int &contact_body_id : island.second)
+		{
+			contact_island_result += std::string(mj_id2name(m, mjtObj::mjOBJ_BODY, contact_body_id)) + " ";
+		}
+		if (!contact_island_result.empty())
+		{
+			contact_island_result.pop_back();
+			contact_island_results.insert(contact_island_result);
+		}
+	}
+	return contact_island_results;
 }
 
 void MjMultiverseClient::bind_api_callbacks()
@@ -1782,10 +1887,19 @@ void MjMultiverseClient::bind_api_callbacks_response()
 				const std::string detach_response = get_detach_response(api_callback_json[api_callback_name]);
 				api_callback_response[api_callback_name].append(detach_response);
 			}
-			else if (strcmp(api_callback_name.c_str(), "get_contact") == 0)
+			else if (strcmp(api_callback_name.c_str(), "get_contact_bodies") == 0)
 			{
-				const std::string get_contact_response = get_get_contact_response(api_callback_json[api_callback_name]);
-				api_callback_response[api_callback_name].append(get_contact_response);
+				for (const std::string &get_contact_body_response : get_get_contact_bodies_response(api_callback_json[api_callback_name]))
+				{
+					api_callback_response[api_callback_name].append(get_contact_body_response);
+				}
+			}
+			else if (strcmp(api_callback_name.c_str(), "get_contact_islands") == 0)
+			{
+				for (const std::string &get_contact_islands_response : get_get_contact_islands_response(api_callback_json[api_callback_name]))
+				{
+					api_callback_response[api_callback_name].append(get_contact_islands_response);
+				}
 			}
 			else
 			{

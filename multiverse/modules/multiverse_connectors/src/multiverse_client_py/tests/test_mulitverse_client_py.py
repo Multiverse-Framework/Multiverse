@@ -666,13 +666,24 @@ class MultiverseClientCallapiPythonTestCase(MultiverseClientSpawnTestCase):
                                                                                                    "param2"]},
                                                                                        {"func_2": ["param3",
                                                                                                    "param4",
-                                                                                                   "param5"]},
-                                                                                       {"func_3": ["param2",
-                                                                                                   "param4",
                                                                                                    "param5"]}
                                                                                    ]
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
+
+    def test_multiverse_client_callapi_unreal(self):
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1587", "world",
+                                                                               {
+                                                                                   "preparing_soup": [
+                                                                                       {"get_contact_islands": ["cooking_pot_soup", "with_children"]}
+                                                                                   ]
+                                                                               })
+
+        print(multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["preparing_soup"][0]["get_contact_islands"])
+
+
+
+
 
     def test_multiverse_client_call_and_listen_api(self):
         listen_thread = threading.Thread(target=self.test_multiverse_client_listenapi)

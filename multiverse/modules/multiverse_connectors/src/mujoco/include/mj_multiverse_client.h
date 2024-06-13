@@ -63,7 +63,9 @@ private:
 
     std::string get_detach_response(const Json::Value &arguments) const;
 
-    std::string get_get_contact_response(const Json::Value &arguments) const;
+    std::set<std::string> get_get_contact_bodies_response(const Json::Value &arguments) const;
+
+    std::set<std::string> get_get_contact_islands_response(const Json::Value &arguments) const;
 
 public:
     void communicate(const bool resend_meta_data = false) override;

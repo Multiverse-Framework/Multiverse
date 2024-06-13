@@ -849,7 +849,7 @@ void MultiverseServer::bind_send_objects()
             }
             else
             {
-                printf("[Server] Continue state [%s - %s] on socket %s\n", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
+                // printf("[Server] Continue state [%s - %s] on socket %s\n", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
                 continue_state = true;
                 attribute.is_sent = true;
 
