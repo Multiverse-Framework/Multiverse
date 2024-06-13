@@ -258,7 +258,7 @@ void MultiverseServer::start()
 
         case EMultiverseServerState::BindObjects:
         {
-            // printf("[Server] Received meta data from socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());            
+            // printf("[Server] Received meta data from socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
             bind_meta_data();
 
             mtx.lock();
@@ -620,9 +620,7 @@ void MultiverseServer::receive_request_meta_data()
     try
     {
         sockets_need_clean_up[socket_addr] = false;
-        printf("[Server] Socket %s is waiting for meta data.\n", socket_addr.c_str());
         zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
-        printf("[Server] Socket %s received meta data.\n", socket_addr.c_str());
         sockets_need_clean_up[socket_addr] = true;
     }
     catch (const zmq::error_t &e)
@@ -957,9 +955,14 @@ void MultiverseServer::wait_for_objects()
 
 void MultiverseServer::bind_receive_objects()
 {
+    std::map<std::string, Object> &objects = worlds[world_name].objects;
+    Simulation &simulation = worlds[world_name].simulations[simulation_name];
     receive_data_vec.emplace_back(&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]);
+
     for (const std::string &object_name : receive_objects_json.getMemberNames())
     {
+        Object &object = objects[object_name];
+        simulation.objects[object_name] = &object;
         response_meta_data_json["receive"][object_name] = Json::objectValue;
         for (const Json::Value &attribute_json : receive_objects_json[object_name])
         {
