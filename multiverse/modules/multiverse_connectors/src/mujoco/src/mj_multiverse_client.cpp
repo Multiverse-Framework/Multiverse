@@ -1672,9 +1672,9 @@ std::string MjMultiverseClient::get_detach_response(const Json::Value &arguments
 
 std::set<std::string> MjMultiverseClient::get_get_contact_bodies_response(const Json::Value &arguments) const
 {
-	if (!arguments.isArray() || arguments.size() != 1)
+	if (!arguments.isArray() || (arguments.size() != 1 && arguments.size() != 2))
 	{
-		return {"failed (Arguments for get_contact_bodies should be an array of one string.)"};
+		return {"failed (Arguments for get_contact_bodies should be an array of strings with 1 or 2 elements.)"};
 	}
 
 	const std::string object_name = arguments[0].asString();
@@ -1682,6 +1682,32 @@ std::set<std::string> MjMultiverseClient::get_get_contact_bodies_response(const 
 	if (body_id == -1)
 	{
 		return {"failed (Object " + object_name + " does not exist.)"};
+	}
+
+	std::set<int> body_ids = {body_id};
+	bool with_children = false;
+	if (arguments.size() == 2)
+	{
+		if (arguments[1].asString() != "with_children")
+		{
+			return {"failed (Second argument for get_contact_bodies should be \"with_children\".)"};
+		}
+		with_children = true;
+	}
+
+	if (with_children)
+	{
+		for (int child_body_id = body_id + 1; child_body_id < m->nbody; child_body_id++)
+		{
+			if (m->body_parentid[child_body_id] == body_id)
+			{
+				body_ids.insert(child_body_id);
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
 
 	std::set<int> contact_body_ids;
@@ -1697,11 +1723,11 @@ std::set<std::string> MjMultiverseClient::get_get_contact_bodies_response(const 
 		const int body_1_id = m->geom_bodyid[geom_1_id];
 		const int body_2_id = m->geom_bodyid[geom_2_id];
 
-		if (body_1_id == body_id)
+		if (body_ids.find(body_1_id) != body_ids.end() && body_ids.find(body_2_id) == body_ids.end())
 		{
 			contact_body_ids.insert(body_2_id);
 		}
-		else if (body_2_id == body_id)
+		else if (body_ids.find(body_2_id) != body_ids.end() && body_ids.find(body_1_id) == body_ids.end())
 		{
 			contact_body_ids.insert(body_1_id);
 		}

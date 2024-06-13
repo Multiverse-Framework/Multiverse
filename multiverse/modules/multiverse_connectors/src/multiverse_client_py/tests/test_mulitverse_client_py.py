@@ -585,8 +585,8 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
                                                                                    "empty_simulation": [
-                                                                                       {"get_contact": ["milk_box"]},
-                                                                                       {"get_contact": ["link1"]},
+                                                                                       {"get_contact_bodies": ["milk_box"]},
+                                                                                       {"get_contact_bodies": ["link1"]},
                                                                                        {"is_mujoco": []},
                                                                                        {"something_else": ["param1",
                                                                                                            "param2"]}
@@ -671,19 +671,40 @@ class MultiverseClientCallapiPythonTestCase(MultiverseClientSpawnTestCase):
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
 
-    def test_multiverse_client_callapi_unreal(self):
-        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1587", "world",
+    def test_multiverse_client_callapi_preparing_soup(self):
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1587",
+                                                                               "world",
                                                                                {
-                                                                                   "preparing_soup": [
-                                                                                       {"get_contact_islands": ["cooking_pot_soup", "with_children"]}
-                                                                                   ]
+                                                                                   "preparing_soup":
+                                                                                       [
+                                                                                           {
+                                                                                               "get_contact_islands":
+                                                                                                   [
+                                                                                                       "cooking_pot_body"
+                                                                                                   ]
+                                                                                           }
+                                                                                       ]
                                                                                })
 
-        print(multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["preparing_soup"][0]["get_contact_islands"])
-
-
-
-
+        print(multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["preparing_soup"][0])
+        sleep(1)
+        for i in range(10):
+            time_start = time()
+            multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+                "preparing_soup": [
+                    {"get_contact_bodies": ["cooking_pot_body", "with_children"]}
+                ]
+            }
+            multiverse_client_test_callapi.send_and_receive_meta_data()
+            print(f"{2 * i + 1} takes {time() - time_start}s")
+            time_start = time()
+            multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+                "preparing_soup": [
+                    {"get_contact_islands": ["cooking_pot_body", "with_children"]}
+                ]
+            }
+            multiverse_client_test_callapi.send_and_receive_meta_data()
+            print(f"{2 * i + 2} takes {time() - time_start}s")
 
     def test_multiverse_client_call_and_listen_api(self):
         listen_thread = threading.Thread(target=self.test_multiverse_client_listenapi)
