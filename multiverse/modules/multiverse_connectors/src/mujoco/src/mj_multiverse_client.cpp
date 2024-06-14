@@ -1812,6 +1812,11 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 			const int island_dofnum = d->island_dofnum[island_id];
 			for (int island_dof_id = island_dofadr; island_dof_id < island_dofadr + island_dofnum; island_dof_id++)
 			{
+				const int island_body_id = m->dof_bodyid[island_dof_id];
+				if (m->body_parentid[island_body_id] == body_id)
+				{
+					continue;
+				}
 				islands[island_id].insert(m->dof_bodyid[island_dof_id]);
 			}
 		}

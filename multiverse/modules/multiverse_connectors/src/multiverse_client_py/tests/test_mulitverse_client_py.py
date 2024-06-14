@@ -686,9 +686,9 @@ class MultiverseClientCallapiPythonTestCase(MultiverseClientSpawnTestCase):
                                                                                        ]
                                                                                })
 
-        print(multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["preparing_soup"][0])
+        # print(multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["preparing_soup"][0])
         sleep(1)
-        for i in range(100):
+        for i in range(10):
             time_start = time()
             multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
                 "preparing_soup": [
@@ -696,6 +696,7 @@ class MultiverseClientCallapiPythonTestCase(MultiverseClientSpawnTestCase):
                 ]
             }
             multiverse_client_test_callapi.send_and_receive_meta_data()
+            print(multiverse_client_test_callapi.response_meta_data)
             print(f"{2 * i + 1} takes {time() - time_start}s")
             time_start = time()
             multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
@@ -704,6 +705,7 @@ class MultiverseClientCallapiPythonTestCase(MultiverseClientSpawnTestCase):
                 ]
             }
             multiverse_client_test_callapi.send_and_receive_meta_data()
+            print(multiverse_client_test_callapi.response_meta_data)
             print(f"{2 * i + 2} takes {time() - time_start}s")
 
     def test_multiverse_client_call_and_listen_api(self):
