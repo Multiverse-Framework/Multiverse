@@ -476,9 +476,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 			return false;
 		}
 
-		// mtx.lock();
 		MjSimulate::load_new_model_and_keep_old_data();
-		// mtx.unlock();
 	}
 
 	std::set<std::string> body_attributes = {"position", "quaternion", "odometric_velocity", "relative_velocity", "force", "torque"};
@@ -639,7 +637,6 @@ void MjMultiverseClient::wait_for_meta_data_thread_finish()
 
 void MjMultiverseClient::bind_request_meta_data()
 {
-	// mtx.lock();
 	const Json::Value api_callbacks = request_meta_data_json["api_callbacks"];
 	const Json::Value api_callbacks_response = request_meta_data_json["api_callbacks_response"];
 
@@ -725,14 +722,11 @@ void MjMultiverseClient::bind_request_meta_data()
 		}
 	}
 
-	// mtx.unlock();
-
 	request_meta_data_str = request_meta_data_json.toStyledString();
 }
 
 void MjMultiverseClient::bind_response_meta_data()
 {
-	// mtx.lock();
 	for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, send_object.first.c_str());
@@ -920,7 +914,6 @@ void MjMultiverseClient::bind_response_meta_data()
 			}
 		}
 	}
-	// mtx.unlock();
 
 	tinyxml2::XMLDocument doc;
 	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
@@ -1007,9 +1000,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		// load and compile model
 		char error[1000] = "Could not load binary model";
 
-		// mtx.lock();
 		m = mj_loadXML(scene_xml_path.string().c_str(), 0, error, 1000);
-		// mtx.unlock();
 
 		if (!m)
 		{
@@ -1099,9 +1090,7 @@ void MjMultiverseClient::weld(const Json::Value &arguments)
 	}
 
 	printf("Attach %s to %s at %s\n", object_1_name.c_str(), object_2_name.c_str(), relative_pose.c_str());
-	// mtx.lock();
 	MjSimulate::load_new_model_and_keep_old_data();
-	// mtx.unlock();
 }
 
 std::string MjMultiverseClient::get_weld_response(const Json::Value &arguments) const
@@ -1221,9 +1210,7 @@ void MjMultiverseClient::unweld(const Json::Value &arguments)
 	}
 
 	printf("Detach %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
-	// mtx.lock();
 	MjSimulate::load_new_model_and_keep_old_data();
-	// mtx.unlock();
 }
 
 std::string MjMultiverseClient::get_unweld_response(const Json::Value &arguments) const
@@ -1475,9 +1462,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 	}
 
 	printf("Attach %s to %s at %s %s\n", object_1_name.c_str(), object_2_name.c_str(), relative_pos.c_str(), relative_quat.c_str());
-	// mtx.lock();
 	MjSimulate::load_new_model_and_keep_old_data();
-	// mtx.unlock();
 }
 
 std::string MjMultiverseClient::get_attach_response(const Json::Value &arguments) const
@@ -1640,9 +1625,7 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 	}
 
 	printf("Detach %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
-	// mtx.lock();
 	MjSimulate::load_new_model_and_keep_old_data();
-	// mtx.unlock();
 }
 
 std::string MjMultiverseClient::get_detach_response(const Json::Value &arguments) const
@@ -1781,9 +1764,7 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 		}
 	}
 
-	// mtx.lock();
 	mj_island(m, d);
-	// mtx.unlock();
 
 	std::set<int> contact_body_ids;
 	for (int contact_id = 0; contact_id < d->ncon; contact_id++)
@@ -1938,7 +1919,6 @@ void MjMultiverseClient::bind_api_callbacks_response()
 
 void MjMultiverseClient::init_send_and_receive_data()
 {
-	// mtx.lock();
 	send_data_vec.emplace_back(&d->time);
 	for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
 	{
@@ -2249,7 +2229,6 @@ void MjMultiverseClient::init_send_and_receive_data()
 			}
 		}
 	}
-	// mtx.unlock();
 }
 
 void MjMultiverseClient::bind_send_data()
@@ -2260,7 +2239,6 @@ void MjMultiverseClient::bind_send_data()
 		return;
 	}
 
-	// mtx.lock();
 	for (std::pair<const int, mjtNum *> &contact_effort : contact_efforts)
 	{
 		mjtNum *jac = mj_stackAllocNum(d, 6 * m->nv);
@@ -2272,7 +2250,6 @@ void MjMultiverseClient::bind_send_data()
 	{
 		send_buffer[i] = *send_data_vec[i];
 	}
-	// mtx.unlock();
 }
 
 void MjMultiverseClient::bind_receive_data()
@@ -2283,7 +2260,6 @@ void MjMultiverseClient::bind_receive_data()
 		return;
 	}
 
-	// mtx.lock();
 	for (std::pair<const int, mjtNum *> &odom_velocity : odom_velocities)
 	{
 		const int body_id = odom_velocity.first;
@@ -2399,8 +2375,6 @@ void MjMultiverseClient::bind_receive_data()
 	{
 		*receive_data_vec[i] = receive_buffer[i];
 	}
-
-	// mtx.unlock();
 }
 
 void MjMultiverseClient::clean_up()
@@ -2423,11 +2397,9 @@ void MjMultiverseClient::clean_up()
 
 void MjMultiverseClient::reset()
 {
-	// mtx.lock();
 	start_time += real_time;
 	mj_resetDataKeyframe(m, d, 0);
 	d->time = 0.0;
-	// mtx.unlock();
 }
 
 void MjMultiverseClient::communicate(const bool resend_meta_data)
