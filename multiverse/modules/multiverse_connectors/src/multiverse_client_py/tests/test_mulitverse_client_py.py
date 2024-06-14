@@ -572,7 +572,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                      0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
             multiverse_client_test_move.send_and_receive_data()
 
-            sleep(2)
+            sleep(0.1)
 
         multiverse_client_test_move.stop()
 
@@ -688,7 +688,7 @@ class MultiverseClientCallapiPythonTestCase(MultiverseClientSpawnTestCase):
 
         print(multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["preparing_soup"][0])
         sleep(1)
-        for i in range(10):
+        for i in range(100):
             time_start = time()
             multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
                 "preparing_soup": [
