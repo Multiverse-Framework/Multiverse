@@ -1732,13 +1732,13 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 	}
 
 	const std::string object_name = arguments[0].asString();
-	const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
-	if (body_id == -1)
+	const int object_body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
+	if (object_body_id == -1)
 	{
 		return {"failed (Object " + object_name + " does not exist.)"};
 	}
 
-	std::set<int> body_ids = {body_id};
+	std::set<int> body_ids = {object_body_id};
 	bool with_children = false;
 	if (arguments.size() == 2)
 	{
@@ -1751,9 +1751,9 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 
 	if (with_children)
 	{
-		for (int child_body_id = body_id + 1; child_body_id < m->nbody; child_body_id++)
+		for (int child_body_id = object_body_id + 1; child_body_id < m->nbody; child_body_id++)
 		{
-			if (m->body_parentid[child_body_id] == body_id)
+			if (m->body_parentid[child_body_id] == object_body_id)
 			{
 				body_ids.insert(child_body_id);
 			}
@@ -1766,42 +1766,16 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 
 	mj_island(m, d);
 
-	std::set<int> contact_body_ids;
-	for (int contact_id = 0; contact_id < d->ncon; contact_id++)
-	{
-		const mjContact contact = d->contact[contact_id];
-		if (contact.exclude != 0 && contact.exclude != 1)
-		{
-			continue;
-		}
-		const int geom_1_id = contact.geom[0];
-		const int geom_2_id = contact.geom[1];
-		const int body_1_id = m->geom_bodyid[geom_1_id];
-		const int body_2_id = m->geom_bodyid[geom_2_id];
-
-		if (body_ids.find(body_1_id) != body_ids.end() && body_ids.find(body_2_id) == body_ids.end())
-		{
-			contact_body_ids.insert(body_2_id);
-		}
-		else if (body_ids.find(body_2_id) != body_ids.end() && body_ids.find(body_1_id) == body_ids.end())
-		{
-			contact_body_ids.insert(body_1_id);
-		}
-	}
-
 	std::set<std::string> contact_island_results;
 	std::map<int, std::set<int>> islands;
-	for (const int contact_body_id : contact_body_ids)
+	for (const int body_id : body_ids)
 	{
-		const int dof_adr = m->body_dofadr[contact_body_id];
-		const int dof_num = m->body_dofnum[contact_body_id];
-		if (dof_num == 0)
-		{
-			contact_island_results.insert(mj_id2name(m, mjtObj::mjOBJ_BODY, contact_body_id));
-		}
+		const int dof_adr = m->body_dofadr[body_id];
+		const int dof_num = m->body_dofnum[body_id];
 		for (int dof_id = dof_adr; dof_id < dof_adr + dof_num; dof_id++)
 		{
 			const int island_id = d->dof_island[dof_id];
+
 			if (island_id == -1 || islands.count(island_id) > 0)
 			{
 				continue;
@@ -1812,12 +1786,11 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 			const int island_dofnum = d->island_dofnum[island_id];
 			for (int island_dof_id = island_dofadr; island_dof_id < island_dofadr + island_dofnum; island_dof_id++)
 			{
-				const int island_body_id = m->dof_bodyid[island_dof_id];
-				if (m->body_parentid[island_body_id] == body_id)
+				const int island_body_id = m->dof_bodyid[d->island_dofind[island_dof_id]];
+				if (body_ids.find(island_body_id) == body_ids.end())
 				{
-					continue;
+					islands[island_id].insert(island_body_id);
 				}
-				islands[island_id].insert(m->dof_bodyid[island_dof_id]);
 			}
 		}
 	}
