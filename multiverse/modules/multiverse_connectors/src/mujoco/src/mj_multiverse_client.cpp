@@ -1766,7 +1766,6 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 
 	mj_island(m, d);
 
-	std::set<std::string> contact_island_results;
 	std::map<int, std::set<int>> islands;
 	for (const int body_id : body_ids)
 	{
@@ -1795,6 +1794,7 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 		}
 	}
 
+	std::set<std::string> contact_island_results;
 	for (const std::pair<const int, std::set<int>> &island : islands)
 	{
 		std::string contact_island_result = "";

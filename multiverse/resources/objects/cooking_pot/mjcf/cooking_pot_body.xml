@@ -176,6 +176,7 @@
     </asset>
     <worldbody>            
         <body name="cooking_pot_body" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" >
+            <joint name="cooking_pot_body_joint" type="hinge" axis="0 0 1"/>
             <geom name="CookingPotBody" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody" class="cooking_body_visual"/>
             <geom name="CookingPotBody_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_001" class="cooking_body_collision"/>
             <geom name="CookingPotBody_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_002" class="cooking_body_collision"/>
