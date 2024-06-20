@@ -52,6 +52,7 @@
 	</asset>
 	<worldbody>
 		<body name="iCub" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<freejoint/>
 			<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0"/>
 			<body name="root_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<inertial mass="5.127389907836914" pos="0.02561270073056221 0.00017707300139591098 -0.044533900916576385" quat="0.4061185419559479 0.5818752646446228 -0.40049850940704346 -0.5797325372695923" diaginertia="0.014542383141815662 0.01996362954378128 0.025951389223337173"/>
@@ -650,16 +651,10 @@
         <exclude name="r_hip_1_r_forearm" body1="r_hip_1" body2="r_forearm"/>
         <exclude name="r_hip_1_r_wrist_1" body1="r_hip_1" body2="r_wrist_1"/>
         <exclude name="r_hip_2_r_forearm" body1="r_hip_2" body2="r_forearm"/>
-        <exclude name="r_hip_2_r_hand" body1="r_hip_2" body2="r_hand"/>
-        <exclude name="r_hip_3_r_hand" body1="r_hip_3" body2="r_hand"/>
-        <exclude name="r_upper_leg_r_hand" body1="r_upper_leg" body2="r_hand"/>
         <exclude name="r_lower_leg_r_ankle_2" body1="r_lower_leg" body2="r_ankle_2"/>
         <exclude name="l_hip_1_l_forearm" body1="l_hip_1" body2="l_forearm"/>
         <exclude name="l_hip_1_l_wrist_1" body1="l_hip_1" body2="l_wrist_1"/>
         <exclude name="l_hip_2_l_forearm" body1="l_hip_2" body2="l_forearm"/>
-        <exclude name="l_hip_2_l_hand" body1="l_hip_2" body2="l_hand"/>
-        <exclude name="l_hip_3_l_hand" body1="l_hip_3" body2="l_hand"/>
-        <exclude name="l_upper_leg_l_hand" body1="l_upper_leg" body2="l_hand"/>
         <exclude name="l_lower_leg_l_ankle_2" body1="l_lower_leg" body2="l_ankle_2"/>
         <exclude name="torso_1_chest" body1="torso_1" body2="chest"/>
         <exclude name="chest_r_shoulder_2" body1="chest" body2="r_shoulder_2"/>

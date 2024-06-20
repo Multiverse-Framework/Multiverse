@@ -1,0 +1,56 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  iCub_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: floor.xml
+    robots:
+      iCub:
+        path: iCubV2_5/iCub.xml
+        apply:
+          body:
+            iCub:
+              pos: [0.0, 0.0, 0.7]
+              quat: [1.0, 0.0, 0.0, 0.0]
+        disable_self_collision: "off"
+    references:
+      l_hand_dh_frame:
+        body1: l_hand_dh_frame_ref
+        body2: l_hand_dh_frame
+
+      r_hand_dh_frame:
+        body1: r_hand_dh_frame_ref
+        body2: r_hand_dh_frame
+
+      head:
+        body1: head_ref
+        body2: head
+
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  iCub_simulation:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+    receive:
+      head_ref: ["position", "quaternion"]
+      l_hand_dh_frame_ref: ["position", "quaternion"]
+      r_hand_dh_frame_ref: ["position", "quaternion"]
