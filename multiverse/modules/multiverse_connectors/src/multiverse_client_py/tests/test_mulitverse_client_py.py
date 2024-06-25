@@ -614,13 +614,30 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
 
-        sleep(1)
+        sleep(10) # Wait for the milk box to fall and stabilize
 
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
                                                                                    "empty_simulation": [
                                                                                        {"get_contact_bodies": ["milk_box"]},
                                                                                        {"get_constraint_effort": ["milk_box"]},
+                                                                                       {"is_mujoco": []},
+                                                                                       {"something_else": ["param1",
+                                                                                                           "param2"]}
+                                                                                   ]
+                                                                               })
+        print(multiverse_client_test_callapi.response_meta_data)
+
+    def test_multiverse_client_callapi_get_rays(self):
+        # Spawn panda and milk box
+        self.test_multiverse_client_spawn()
+
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
+                                                                               {
+                                                                                   "empty_simulation": [
+                                                                                       {"get_rays": ["1 0 3", "0 0 3"]},
+                                                                                       {"get_rays": ["0 0 1 0 0 1 0 0 2",
+                                                                                                          "0 0 3 0 0 -1 0 0 2.5"]},
                                                                                        {"is_mujoco": []},
                                                                                        {"something_else": ["param1",
                                                                                                            "param2"]}
