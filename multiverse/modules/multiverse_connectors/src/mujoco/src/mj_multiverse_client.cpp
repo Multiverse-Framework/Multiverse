@@ -1811,6 +1811,35 @@ std::set<std::string> MjMultiverseClient::get_get_contact_islands_response(const
 	return contact_island_results;
 }
 
+std::string MjMultiverseClient::get_get_constraint_effort_response(const Json::Value &arguments) const
+{
+	if (!arguments.isArray() || arguments.size() != 1)
+	{
+		return {"failed (Arguments for get_constraint_effort should be an array of strings with 1 element.)"};
+	}
+
+	const std::string object_name = arguments[0].asString();
+	const int object_body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
+	if (object_body_id == -1)
+	{
+		return {"failed (Object " + object_name + " does not exist.)"};
+	}
+
+	mjtNum *contact_effort = (mjtNum *)calloc(6, sizeof(mjtNum));
+	mjtNum *jac = mj_stackAllocNum(d, 6 * m->nv);
+	mj_jacBodyCom(m, d, jac, jac + 3 * m->nv, object_body_id);
+	mju_mulMatVec(contact_effort, jac, d->qfrc_constraint, 6, m->nv);
+
+	std::string contact_effort_result = "";
+	for (int i = 0; i < 6; i++)
+	{
+		contact_effort_result += std::to_string(contact_effort[i]) + " ";
+	}
+	contact_effort_result.pop_back();
+
+	return contact_effort_result;
+}
+
 void MjMultiverseClient::bind_api_callbacks()
 {
 	const Json::Value &api_callbacks_json = response_meta_data_json["api_callbacks"];
@@ -1885,6 +1914,11 @@ void MjMultiverseClient::bind_api_callbacks_response()
 				{
 					api_callback_response[api_callback_name].append(get_contact_islands_response);
 				}
+			}
+			else if (strcmp(api_callback_name.c_str(), "get_constraint_effort") == 0)
+			{
+				const std::string contact_effort_response = get_get_constraint_effort_response(api_callback_json[api_callback_name]);
+				api_callback_response[api_callback_name].append(contact_effort_response);
 			}
 			else
 			{

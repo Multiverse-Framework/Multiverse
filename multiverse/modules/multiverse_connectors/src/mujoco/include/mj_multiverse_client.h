@@ -67,6 +67,8 @@ private:
 
     std::set<std::string> get_get_contact_islands_response(const Json::Value &arguments) const;
 
+    std::string get_get_constraint_effort_response(const Json::Value &arguments) const;
+
 public:
     void communicate(const bool resend_meta_data = false) override;
 
