@@ -231,6 +231,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                  multiverse_meta_data=meta_data)
         multiverse_client.request_meta_data["api_callbacks"] = api_callbacks
         multiverse_client.run()
+        multiverse_client.send_and_receive_meta_data()
         return multiverse_client
 
     def create_multiverse_client_spawn_and_callapi(self, port, world_name, api_callbacks):
@@ -281,6 +282,14 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                   0, 0, 3,
                                                   0.0, 0.0, 0.0, 1.0]
         multiverse_client_test_spawn.send_and_receive_data()
+
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
+                                                                               {
+                                                                                   "empty_simulation": [
+                                                                                       {"exist": ["milk_box", "panda", "bowl"]},
+                                                                                   ]
+                                                                               })
+        print(multiverse_client_test_callapi.response_meta_data)
 
         multiverse_client_test_spawn.stop()
 

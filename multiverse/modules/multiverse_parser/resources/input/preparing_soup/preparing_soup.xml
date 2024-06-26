@@ -1,0 +1,611 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco>
+	<asset>
+		<texture name="grid" type="2d" builtin="checker" width="512" height="512" rgb1=".1 .2 .3" rgb2=".2 .3 .4" />
+	</asset>
+	<worldbody>
+		<geom name="floor" size="0 0 .05" type="plane" material="grid" condim="4" friction="2 0.05 0.01" />
+		<light diffuse=".5 .5 .5" pos="0 -1 5" dir="0 0 -1" />
+		<light diffuse=".5 .5 .5" pos="0 1 5" dir="0 0 -1" />
+	</worldbody>
+	<worldbody>
+		<body name="table" pos="0 0 1" quat="0.707 0.0 0.0 0.707">
+			<geom type="box" size="1 .5 .05" rgba="0.9 0.9 .9 1" mass="6" condim="4" friction="2 0.05 0.01" />
+			<geom type="box" pos=".95 .45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
+			<geom type="box" pos="-.95 .45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
+			<geom type="box" pos=".95 -.45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
+			<geom type="box" pos="-.95 -.45 -.5" size=".05 .05 .5" rgba="0.9 0.9 .9 1" mass="1" />
+		</body>
+	</worldbody>
+	<include file="cooking_pot_body.xml" />
+	<include file="cooking_pot_soup.xml" />
+	<include file="indian_gas_stove.xml" />
+	<include file="soup_spoon.xml" />
+	<include file="small_bowl_1.xml" />
+	<include file="small_bowl_2.xml" />
+	<include file="small_bowl_3.xml" />
+	<default>
+		<default class="cooking_body_visual">
+			<geom contype="0" conaffinity="0" />
+		</default>
+		<default class="cooking_body_collision">
+			<geom rgba="0.9 0.9 0.9 1.0" />
+		</default>
+		<default class="indian_gas_stove_visual">
+			<geom contype="0" conaffinity="0" />
+		</default>
+		<default class="indian_gas_stove_collision">
+			<geom rgba="0.9 0.9 0.9 0.0" />
+		</default>
+		<default class="soup_spoon_visual">
+			<geom contype="0" conaffinity="0" />
+		</default>
+		<default class="soup_spoon_collision">
+			<geom rgba="0.9 0.9 0.9 0.0" />
+		</default>
+		<default class="small_bowl_visual">
+			<geom contype="0" conaffinity="0" />
+		</default>
+		<default class="small_bowl_collision">
+			<geom rgba="0.9 0.9 0.9 0.0" />
+		</default>
+	</default>
+	<asset>
+		<mesh name="CookingPotBody" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/obj/CookingPotBody.obj" />
+		<mesh name="CookingPotBody_001" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_001.stl" />
+		<mesh name="CookingPotBody_002" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_002.stl" />
+		<mesh name="CookingPotBody_003" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_003.stl" />
+		<mesh name="CookingPotBody_004" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_004.stl" />
+		<mesh name="CookingPotBody_005" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_005.stl" />
+		<mesh name="CookingPotBody_006" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_006.stl" />
+		<mesh name="CookingPotBody_007" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_007.stl" />
+		<mesh name="CookingPotBody_008" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_008.stl" />
+		<mesh name="CookingPotBody_009" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_009.stl" />
+		<mesh name="CookingPotBody_010" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_010.stl" />
+		<mesh name="CookingPotBody_011" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_011.stl" />
+		<mesh name="CookingPotBody_012" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_012.stl" />
+		<mesh name="CookingPotBody_013" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_013.stl" />
+		<mesh name="CookingPotBody_014" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_014.stl" />
+		<mesh name="CookingPotBody_015" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_015.stl" />
+		<mesh name="CookingPotBody_016" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_016.stl" />
+		<mesh name="CookingPotBody_017" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_017.stl" />
+		<mesh name="CookingPotBody_018" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_018.stl" />
+		<mesh name="CookingPotBody_019" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_019.stl" />
+		<mesh name="CookingPotBody_020" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_020.stl" />
+		<mesh name="CookingPotBody_021" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_021.stl" />
+		<mesh name="CookingPotBody_022" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_022.stl" />
+		<mesh name="CookingPotBody_023" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_023.stl" />
+		<mesh name="CookingPotBody_024" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_024.stl" />
+		<mesh name="CookingPotBody_025" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_025.stl" />
+		<mesh name="CookingPotBody_026" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_026.stl" />
+		<mesh name="CookingPotBody_027" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_027.stl" />
+		<mesh name="CookingPotBody_028" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_028.stl" />
+		<mesh name="CookingPotBody_029" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_029.stl" />
+		<mesh name="CookingPotBody_030" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_030.stl" />
+		<mesh name="CookingPotBody_031" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_031.stl" />
+		<mesh name="CookingPotBody_032" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_032.stl" />
+		<mesh name="CookingPotBody_033" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_033.stl" />
+		<mesh name="CookingPotBody_034" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_034.stl" />
+		<mesh name="CookingPotBody_035" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_035.stl" />
+		<mesh name="CookingPotBody_036" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_036.stl" />
+		<mesh name="CookingPotBody_037" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_037.stl" />
+		<mesh name="CookingPotBody_038" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_038.stl" />
+		<mesh name="CookingPotBody_039" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_039.stl" />
+		<mesh name="CookingPotBody_040" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_040.stl" />
+		<mesh name="CookingPotBody_041" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_041.stl" />
+		<mesh name="CookingPotBody_042" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_042.stl" />
+		<mesh name="CookingPotBody_043" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_043.stl" />
+		<mesh name="CookingPotBody_044" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_044.stl" />
+		<mesh name="CookingPotBody_045" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_045.stl" />
+		<mesh name="CookingPotBody_046" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_046.stl" />
+		<mesh name="CookingPotBody_047" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_047.stl" />
+		<mesh name="CookingPotBody_048" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_048.stl" />
+		<mesh name="CookingPotBody_049" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_049.stl" />
+		<mesh name="CookingPotBody_050" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_050.stl" />
+		<mesh name="CookingPotBody_051" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_051.stl" />
+		<mesh name="CookingPotBody_052" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_052.stl" />
+		<mesh name="CookingPotBody_053" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_053.stl" />
+		<mesh name="CookingPotBody_054" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_054.stl" />
+		<mesh name="CookingPotBody_055" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_055.stl" />
+		<mesh name="CookingPotBody_056" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_056.stl" />
+		<mesh name="CookingPotBody_057" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_057.stl" />
+		<mesh name="CookingPotBody_058" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_058.stl" />
+		<mesh name="CookingPotBody_059" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_059.stl" />
+		<mesh name="CookingPotBody_060" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_060.stl" />
+		<mesh name="CookingPotBody_061" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_061.stl" />
+		<mesh name="CookingPotBody_062" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_062.stl" />
+		<mesh name="CookingPotBody_063" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_063.stl" />
+		<mesh name="CookingPotBody_064" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_064.stl" />
+		<mesh name="CookingPotBody_065" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_065.stl" />
+		<mesh name="CookingPotBody_066" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_066.stl" />
+		<mesh name="CookingPotBody_067" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_067.stl" />
+		<mesh name="CookingPotBody_068" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_068.stl" />
+		<mesh name="CookingPotBody_069" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_069.stl" />
+		<mesh name="CookingPotBody_070" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_070.stl" />
+		<mesh name="CookingPotBody_071" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_071.stl" />
+		<mesh name="CookingPotBody_072" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_072.stl" />
+		<mesh name="CookingPotBody_073" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_073.stl" />
+		<mesh name="CookingPotBody_074" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_074.stl" />
+		<mesh name="CookingPotBody_075" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_075.stl" />
+		<mesh name="CookingPotBody_076" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_076.stl" />
+		<mesh name="CookingPotBody_077" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_077.stl" />
+		<mesh name="CookingPotBody_078" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_078.stl" />
+		<mesh name="CookingPotBody_079" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_079.stl" />
+		<mesh name="CookingPotBody_080" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_080.stl" />
+		<mesh name="CookingPotBody_081" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_081.stl" />
+		<mesh name="CookingPotBody_082" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_082.stl" />
+		<mesh name="CookingPotBody_083" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_083.stl" />
+		<mesh name="CookingPotBody_084" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_084.stl" />
+		<mesh name="CookingPotBody_085" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_085.stl" />
+		<mesh name="CookingPotBody_086" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_086.stl" />
+		<mesh name="CookingPotBody_087" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_087.stl" />
+		<mesh name="CookingPotBody_088" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_088.stl" />
+		<mesh name="CookingPotBody_089" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_089.stl" />
+		<mesh name="CookingPotBody_090" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_090.stl" />
+		<mesh name="CookingPotBody_091" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_091.stl" />
+		<mesh name="CookingPotBody_092" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_092.stl" />
+		<mesh name="CookingPotBody_093" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_093.stl" />
+		<mesh name="CookingPotBody_094" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_094.stl" />
+		<mesh name="CookingPotBody_095" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_095.stl" />
+		<mesh name="CookingPotBody_096" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_096.stl" />
+		<mesh name="CookingPotBody_097" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_097.stl" />
+		<mesh name="CookingPotBody_098" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_098.stl" />
+		<mesh name="CookingPotBody_099" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_099.stl" />
+		<mesh name="CookingPotBody_100" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_100.stl" />
+		<mesh name="CookingPotBody_101" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_101.stl" />
+		<mesh name="CookingPotBody_102" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_102.stl" />
+		<mesh name="CookingPotBody_103" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_103.stl" />
+		<mesh name="CookingPotBody_104" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_104.stl" />
+		<mesh name="CookingPotBody_105" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_105.stl" />
+		<mesh name="CookingPotBody_106" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_106.stl" />
+		<mesh name="CookingPotBody_107" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_107.stl" />
+		<mesh name="CookingPotBody_108" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_108.stl" />
+		<mesh name="CookingPotBody_109" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_109.stl" />
+		<mesh name="CookingPotBody_110" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_110.stl" />
+		<mesh name="CookingPotBody_111" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_111.stl" />
+		<mesh name="CookingPotBody_112" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_112.stl" />
+		<mesh name="CookingPotBody_113" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_113.stl" />
+		<mesh name="CookingPotBody_114" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_114.stl" />
+		<mesh name="CookingPotBody_115" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_115.stl" />
+		<mesh name="CookingPotBody_116" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_116.stl" />
+		<mesh name="CookingPotBody_117" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_117.stl" />
+		<mesh name="CookingPotBody_118" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_118.stl" />
+		<mesh name="CookingPotBody_119" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_119.stl" />
+		<mesh name="CookingPotBody_120" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_120.stl" />
+		<mesh name="CookingPotBody_121" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_121.stl" />
+		<mesh name="CookingPotBody_122" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_122.stl" />
+		<mesh name="CookingPotBody_123" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_123.stl" />
+		<mesh name="CookingPotBody_124" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_124.stl" />
+		<mesh name="CookingPotBody_125" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_125.stl" />
+		<mesh name="CookingPotBody_126" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_126.stl" />
+		<mesh name="CookingPotBody_127" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_127.stl" />
+		<mesh name="CookingPotBody_128" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_128.stl" />
+		<mesh name="CookingPotBody_129" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_129.stl" />
+		<mesh name="CookingPotBody_130" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_130.stl" />
+		<mesh name="CookingPotBody_131" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_131.stl" />
+		<mesh name="CookingPotBody_132" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_132.stl" />
+		<mesh name="CookingPotBody_133" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_133.stl" />
+		<mesh name="CookingPotBody_134" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_134.stl" />
+		<mesh name="CookingPotBody_135" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_135.stl" />
+		<mesh name="CookingPotBody_136" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_136.stl" />
+		<mesh name="CookingPotBody_137" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_137.stl" />
+		<mesh name="CookingPotBody_138" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_138.stl" />
+		<mesh name="CookingPotBody_139" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_139.stl" />
+		<mesh name="CookingPotBody_140" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_140.stl" />
+		<mesh name="CookingPotBody_141" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_141.stl" />
+		<mesh name="CookingPotBody_142" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_142.stl" />
+		<mesh name="CookingPotBody_143" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_143.stl" />
+		<mesh name="CookingPotBody_144" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_144.stl" />
+		<mesh name="CookingPotBody_145" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_145.stl" />
+		<mesh name="CookingPotBody_146" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_146.stl" />
+		<mesh name="CookingPotBody_147" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_147.stl" />
+		<mesh name="CookingPotBody_148" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_148.stl" />
+		<mesh name="CookingPotBody_149" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_149.stl" />
+		<mesh name="CookingPotBody_150" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_150.stl" />
+		<mesh name="CookingPotBody_151" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_151.stl" />
+		<mesh name="CookingPotBody_152" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_152.stl" />
+		<mesh name="CookingPotBody_153" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_153.stl" />
+		<mesh name="CookingPotBody_154" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_154.stl" />
+		<mesh name="CookingPotBody_155" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_155.stl" />
+		<mesh name="CookingPotBody_156" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_156.stl" />
+		<mesh name="CookingPotBody_157" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_157.stl" />
+		<mesh name="CookingPotBody_158" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_158.stl" />
+		<mesh name="CookingPotBody_159" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_159.stl" />
+		<mesh name="CookingPotBody_160" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_160.stl" />
+		<mesh name="CookingPotBody_161" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/cooking_pot/mjcf/../cooking_pot/meshes/stl/CookingPotBody_161.stl" />
+		<mesh name="IndianGasStove" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/indian_gas_stove/mjcf/../indian_gas_stove/meshes/obj/IndianGasStove.obj" />
+		<mesh name="IndianGasStove_001" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/indian_gas_stove/mjcf/../indian_gas_stove/meshes/stl/IndianGasStove_001.stl" />
+		<mesh name="IndianGasStove_002" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/indian_gas_stove/mjcf/../indian_gas_stove/meshes/stl/IndianGasStove_002.stl" />
+		<mesh name="IndianGasStove_003" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/indian_gas_stove/mjcf/../indian_gas_stove/meshes/stl/IndianGasStove_003.stl" />
+		<mesh name="SoupSpoon" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/obj/SoupSpoon.obj" />
+		<mesh name="SoupSpoon_001" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_001.stl" />
+		<mesh name="SoupSpoon_002" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_002.stl" />
+		<mesh name="SoupSpoon_003" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_003.stl" />
+		<mesh name="SoupSpoon_004" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_004.stl" />
+		<mesh name="SoupSpoon_005" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_005.stl" />
+		<mesh name="SoupSpoon_006" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_006.stl" />
+		<mesh name="SoupSpoon_007" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_007.stl" />
+		<mesh name="SoupSpoon_008" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_008.stl" />
+		<mesh name="SoupSpoon_009" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_009.stl" />
+		<mesh name="SoupSpoon_010" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_010.stl" />
+		<mesh name="SoupSpoon_011" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_011.stl" />
+		<mesh name="SoupSpoon_012" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_012.stl" />
+		<mesh name="SoupSpoon_013" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_013.stl" />
+		<mesh name="SoupSpoon_014" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_014.stl" />
+		<mesh name="SoupSpoon_015" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_015.stl" />
+		<mesh name="SoupSpoon_016" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_016.stl" />
+		<mesh name="SoupSpoon_017" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_017.stl" />
+		<mesh name="SoupSpoon_018" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_018.stl" />
+		<mesh name="SoupSpoon_019" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_019.stl" />
+		<mesh name="SoupSpoon_020" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_020.stl" />
+		<mesh name="SoupSpoon_021" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_021.stl" />
+		<mesh name="SoupSpoon_022" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_022.stl" />
+		<mesh name="SoupSpoon_023" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_023.stl" />
+		<mesh name="SoupSpoon_024" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_024.stl" />
+		<mesh name="SoupSpoon_025" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_025.stl" />
+		<mesh name="SoupSpoon_026" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_026.stl" />
+		<mesh name="SoupSpoon_027" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_027.stl" />
+		<mesh name="SoupSpoon_028" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_028.stl" />
+		<mesh name="SoupSpoon_029" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_029.stl" />
+		<mesh name="SoupSpoon_030" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_030.stl" />
+		<mesh name="SoupSpoon_031" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_031.stl" />
+		<mesh name="SoupSpoon_032" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_032.stl" />
+		<mesh name="SoupSpoon_033" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_033.stl" />
+		<mesh name="SoupSpoon_034" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_034.stl" />
+		<mesh name="SoupSpoon_035" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_035.stl" />
+		<mesh name="SoupSpoon_036" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_036.stl" />
+		<mesh name="SoupSpoon_037" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_037.stl" />
+		<mesh name="SoupSpoon_038" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_038.stl" />
+		<mesh name="SoupSpoon_039" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_039.stl" />
+		<mesh name="SoupSpoon_040" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_040.stl" />
+		<mesh name="SoupSpoon_041" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_041.stl" />
+		<mesh name="SoupSpoon_042" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_042.stl" />
+		<mesh name="SoupSpoon_043" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_043.stl" />
+		<mesh name="SoupSpoon_044" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_044.stl" />
+		<mesh name="SoupSpoon_045" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_045.stl" />
+		<mesh name="SoupSpoon_046" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_046.stl" />
+		<mesh name="SoupSpoon_047" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_047.stl" />
+		<mesh name="SoupSpoon_048" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_048.stl" />
+		<mesh name="SoupSpoon_049" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_049.stl" />
+		<mesh name="SoupSpoon_050" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_050.stl" />
+		<mesh name="SoupSpoon_051" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_051.stl" />
+		<mesh name="SoupSpoon_052" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_052.stl" />
+		<mesh name="SoupSpoon_053" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_053.stl" />
+		<mesh name="SoupSpoon_054" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_054.stl" />
+		<mesh name="SoupSpoon_055" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_055.stl" />
+		<mesh name="SoupSpoon_056" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_056.stl" />
+		<mesh name="SoupSpoon_057" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_057.stl" />
+		<mesh name="SoupSpoon_058" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_058.stl" />
+		<mesh name="SoupSpoon_059" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_059.stl" />
+		<mesh name="SoupSpoon_060" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_060.stl" />
+		<mesh name="SoupSpoon_061" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_061.stl" />
+		<mesh name="SoupSpoon_062" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_062.stl" />
+		<mesh name="SoupSpoon_063" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_063.stl" />
+		<mesh name="SoupSpoon_064" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_064.stl" />
+		<mesh name="SoupSpoon_065" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_065.stl" />
+		<mesh name="SoupSpoon_066" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_066.stl" />
+		<mesh name="SoupSpoon_067" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_067.stl" />
+		<mesh name="SoupSpoon_068" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_068.stl" />
+		<mesh name="SoupSpoon_069" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_069.stl" />
+		<mesh name="SoupSpoon_070" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_070.stl" />
+		<mesh name="SoupSpoon_071" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_071.stl" />
+		<mesh name="SoupSpoon_072" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_072.stl" />
+		<mesh name="SoupSpoon_073" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_073.stl" />
+		<mesh name="SoupSpoon_074" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_074.stl" />
+		<mesh name="SoupSpoon_075" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_075.stl" />
+		<mesh name="SoupSpoon_076" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_076.stl" />
+		<mesh name="SoupSpoon_077" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_077.stl" />
+		<mesh name="SoupSpoon_078" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_078.stl" />
+		<mesh name="SoupSpoon_079" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_079.stl" />
+		<mesh name="SoupSpoon_080" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_080.stl" />
+		<mesh name="SoupSpoon_081" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_081.stl" />
+		<mesh name="SoupSpoon_082" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_082.stl" />
+		<mesh name="SoupSpoon_083" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_083.stl" />
+		<mesh name="SoupSpoon_084" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_084.stl" />
+		<mesh name="SoupSpoon_085" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_085.stl" />
+		<mesh name="SoupSpoon_086" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_086.stl" />
+		<mesh name="SoupSpoon_087" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_087.stl" />
+		<mesh name="SoupSpoon_088" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_088.stl" />
+		<mesh name="SoupSpoon_089" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_089.stl" />
+		<mesh name="SoupSpoon_090" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_090.stl" />
+		<mesh name="SoupSpoon_091" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_091.stl" />
+		<mesh name="SoupSpoon_092" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_092.stl" />
+		<mesh name="SoupSpoon_093" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_093.stl" />
+		<mesh name="SoupSpoon_094" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_094.stl" />
+		<mesh name="SoupSpoon_095" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_095.stl" />
+		<mesh name="SoupSpoon_096" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_096.stl" />
+		<mesh name="SoupSpoon_097" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_097.stl" />
+		<mesh name="SoupSpoon_098" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_098.stl" />
+		<mesh name="SoupSpoon_099" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_099.stl" />
+		<mesh name="SoupSpoon_100" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_100.stl" />
+		<mesh name="SoupSpoon_101" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_101.stl" />
+		<mesh name="SoupSpoon_102" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_102.stl" />
+		<mesh name="SoupSpoon_103" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_103.stl" />
+		<mesh name="SoupSpoon_104" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_104.stl" />
+		<mesh name="SoupSpoon_105" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_105.stl" />
+		<mesh name="SoupSpoon_106" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_106.stl" />
+		<mesh name="SoupSpoon_107" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_107.stl" />
+		<mesh name="SoupSpoon_108" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_108.stl" />
+		<mesh name="SoupSpoon_109" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_109.stl" />
+		<mesh name="SoupSpoon_110" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_110.stl" />
+		<mesh name="SoupSpoon_111" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_111.stl" />
+		<mesh name="SoupSpoon_112" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_112.stl" />
+		<mesh name="SoupSpoon_113" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_113.stl" />
+		<mesh name="SoupSpoon_114" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_114.stl" />
+		<mesh name="SoupSpoon_115" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_115.stl" />
+		<mesh name="SoupSpoon_116" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_116.stl" />
+		<mesh name="SoupSpoon_117" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_117.stl" />
+		<mesh name="SoupSpoon_118" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_118.stl" />
+		<mesh name="SoupSpoon_119" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_119.stl" />
+		<mesh name="SoupSpoon_120" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_120.stl" />
+		<mesh name="SoupSpoon_121" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_121.stl" />
+		<mesh name="SoupSpoon_122" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_122.stl" />
+		<mesh name="SoupSpoon_123" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_123.stl" />
+		<mesh name="SoupSpoon_124" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_124.stl" />
+		<mesh name="SoupSpoon_125" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_125.stl" />
+		<mesh name="SoupSpoon_126" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_126.stl" />
+		<mesh name="SoupSpoon_127" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_127.stl" />
+		<mesh name="SoupSpoon_128" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_128.stl" />
+		<mesh name="SoupSpoon_129" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_129.stl" />
+		<mesh name="SoupSpoon_130" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/soup_spoon/mjcf/../soup_spoon/meshes/stl/SoupSpoon_130.stl" />
+		<mesh name="small_bowl_visual" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/obj/SmallBowl.obj" />
+		<mesh name="UCX_SmallBowl_001" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_001.stl" />
+		<mesh name="UCX_SmallBowl_002" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_002.stl" />
+		<mesh name="UCX_SmallBowl_003" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_003.stl" />
+		<mesh name="UCX_SmallBowl_004" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_004.stl" />
+		<mesh name="UCX_SmallBowl_005" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_005.stl" />
+		<mesh name="UCX_SmallBowl_006" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_006.stl" />
+		<mesh name="UCX_SmallBowl_007" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_007.stl" />
+		<mesh name="UCX_SmallBowl_008" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_008.stl" />
+		<mesh name="UCX_SmallBowl_009" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_009.stl" />
+		<mesh name="UCX_SmallBowl_010" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_010.stl" />
+		<mesh name="UCX_SmallBowl_011" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_011.stl" />
+		<mesh name="UCX_SmallBowl_012" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_012.stl" />
+		<mesh name="UCX_SmallBowl_013" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_013.stl" />
+		<mesh name="UCX_SmallBowl_014" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_014.stl" />
+		<mesh name="UCX_SmallBowl_015" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_015.stl" />
+		<mesh name="UCX_SmallBowl_016" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_016.stl" />
+		<mesh name="UCX_SmallBowl_017" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_017.stl" />
+		<mesh name="UCX_SmallBowl_018" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_018.stl" />
+		<mesh name="UCX_SmallBowl_019" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_019.stl" />
+		<mesh name="UCX_SmallBowl_020" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_020.stl" />
+		<mesh name="UCX_SmallBowl_021" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_021.stl" />
+		<mesh name="UCX_SmallBowl_022" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_022.stl" />
+		<mesh name="UCX_SmallBowl_023" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_023.stl" />
+		<mesh name="UCX_SmallBowl_024" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_024.stl" />
+		<mesh name="UCX_SmallBowl_025" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_025.stl" />
+		<mesh name="UCX_SmallBowl_026" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_026.stl" />
+		<mesh name="UCX_SmallBowl_027" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_027.stl" />
+		<mesh name="UCX_SmallBowl_028" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_028.stl" />
+		<mesh name="UCX_SmallBowl_029" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_029.stl" />
+		<mesh name="UCX_SmallBowl_030" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_030.stl" />
+		<mesh name="UCX_SmallBowl_031" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_031.stl" />
+		<mesh name="UCX_SmallBowl_032" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_032.stl" />
+		<mesh name="UCX_SmallBowl_033" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_033.stl" />
+		<mesh name="UCX_SmallBowl_034" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_034.stl" />
+		<mesh name="UCX_SmallBowl_035" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_035.stl" />
+		<mesh name="UCX_SmallBowl_036" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_036.stl" />
+		<mesh name="UCX_SmallBowl_037" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_037.stl" />
+		<mesh name="UCX_SmallBowl_038" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_038.stl" />
+		<mesh name="UCX_SmallBowl_039" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_039.stl" />
+		<mesh name="UCX_SmallBowl_040" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_040.stl" />
+		<mesh name="UCX_SmallBowl_041" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_041.stl" />
+		<mesh name="UCX_SmallBowl_042" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_042.stl" />
+		<mesh name="UCX_SmallBowl_043" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_043.stl" />
+		<mesh name="UCX_SmallBowl_044" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_044.stl" />
+		<mesh name="UCX_SmallBowl_045" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_045.stl" />
+		<mesh name="UCX_SmallBowl_046" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_046.stl" />
+		<mesh name="UCX_SmallBowl_047" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_047.stl" />
+		<mesh name="UCX_SmallBowl_048" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_048.stl" />
+		<mesh name="UCX_SmallBowl_049" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_049.stl" />
+		<mesh name="UCX_SmallBowl_050" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_050.stl" />
+		<mesh name="UCX_SmallBowl_051" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_051.stl" />
+		<mesh name="UCX_SmallBowl_052" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_052.stl" />
+		<mesh name="UCX_SmallBowl_053" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_053.stl" />
+		<mesh name="UCX_SmallBowl_054" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_054.stl" />
+		<mesh name="UCX_SmallBowl_055" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_055.stl" />
+		<mesh name="UCX_SmallBowl_056" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_056.stl" />
+		<mesh name="UCX_SmallBowl_057" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_057.stl" />
+		<mesh name="UCX_SmallBowl_058" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_058.stl" />
+		<mesh name="UCX_SmallBowl_059" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_059.stl" />
+		<mesh name="UCX_SmallBowl_060" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_060.stl" />
+		<mesh name="UCX_SmallBowl_061" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_061.stl" />
+		<mesh name="UCX_SmallBowl_062" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_062.stl" />
+		<mesh name="UCX_SmallBowl_063" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_063.stl" />
+		<mesh name="UCX_SmallBowl_064" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_064.stl" />
+		<mesh name="UCX_SmallBowl_065" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_065.stl" />
+		<mesh name="UCX_SmallBowl_066" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_066.stl" />
+		<mesh name="UCX_SmallBowl_067" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_067.stl" />
+		<mesh name="UCX_SmallBowl_068" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_068.stl" />
+		<mesh name="UCX_SmallBowl_069" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_069.stl" />
+		<mesh name="UCX_SmallBowl_070" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_070.stl" />
+		<mesh name="UCX_SmallBowl_071" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_071.stl" />
+		<mesh name="UCX_SmallBowl_072" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_072.stl" />
+		<mesh name="UCX_SmallBowl_073" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_073.stl" />
+		<mesh name="UCX_SmallBowl_074" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_074.stl" />
+		<mesh name="UCX_SmallBowl_075" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_075.stl" />
+		<mesh name="UCX_SmallBowl_076" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_076.stl" />
+		<mesh name="UCX_SmallBowl_077" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_077.stl" />
+		<mesh name="UCX_SmallBowl_078" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_078.stl" />
+		<mesh name="UCX_SmallBowl_079" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_079.stl" />
+		<mesh name="UCX_SmallBowl_080" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_080.stl" />
+		<mesh name="UCX_SmallBowl_081" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_081.stl" />
+		<mesh name="UCX_SmallBowl_082" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_082.stl" />
+		<mesh name="UCX_SmallBowl_083" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_083.stl" />
+		<mesh name="UCX_SmallBowl_084" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_084.stl" />
+		<mesh name="UCX_SmallBowl_085" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_085.stl" />
+		<mesh name="UCX_SmallBowl_086" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_086.stl" />
+		<mesh name="UCX_SmallBowl_087" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_087.stl" />
+		<mesh name="UCX_SmallBowl_088" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_088.stl" />
+		<mesh name="UCX_SmallBowl_089" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_089.stl" />
+		<mesh name="UCX_SmallBowl_090" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_090.stl" />
+		<mesh name="UCX_SmallBowl_091" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_091.stl" />
+		<mesh name="UCX_SmallBowl_092" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_092.stl" />
+		<mesh name="UCX_SmallBowl_093" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_093.stl" />
+		<mesh name="UCX_SmallBowl_094" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_094.stl" />
+		<mesh name="UCX_SmallBowl_095" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_095.stl" />
+		<mesh name="UCX_SmallBowl_096" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_096.stl" />
+		<mesh name="UCX_SmallBowl_097" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_097.stl" />
+		<mesh name="UCX_SmallBowl_098" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_098.stl" />
+		<mesh name="UCX_SmallBowl_099" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_099.stl" />
+		<mesh name="UCX_SmallBowl_100" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_100.stl" />
+		<mesh name="UCX_SmallBowl_101" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_101.stl" />
+		<mesh name="UCX_SmallBowl_102" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_102.stl" />
+		<mesh name="UCX_SmallBowl_103" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_103.stl" />
+		<mesh name="UCX_SmallBowl_104" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_104.stl" />
+		<mesh name="UCX_SmallBowl_105" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_105.stl" />
+		<mesh name="UCX_SmallBowl_106" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_106.stl" />
+		<mesh name="UCX_SmallBowl_107" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_107.stl" />
+		<mesh name="UCX_SmallBowl_108" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_108.stl" />
+		<mesh name="UCX_SmallBowl_109" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_109.stl" />
+		<mesh name="UCX_SmallBowl_110" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_110.stl" />
+		<mesh name="UCX_SmallBowl_111" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_111.stl" />
+		<mesh name="UCX_SmallBowl_112" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_112.stl" />
+		<mesh name="UCX_SmallBowl_113" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_113.stl" />
+		<mesh name="UCX_SmallBowl_114" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_114.stl" />
+		<mesh name="UCX_SmallBowl_115" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_115.stl" />
+		<mesh name="UCX_SmallBowl_116" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_116.stl" />
+		<mesh name="UCX_SmallBowl_117" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_117.stl" />
+		<mesh name="UCX_SmallBowl_118" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_118.stl" />
+		<mesh name="UCX_SmallBowl_119" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_119.stl" />
+		<mesh name="UCX_SmallBowl_120" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_120.stl" />
+		<mesh name="UCX_SmallBowl_121" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_121.stl" />
+		<mesh name="UCX_SmallBowl_122" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_122.stl" />
+		<mesh name="UCX_SmallBowl_123" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_123.stl" />
+		<mesh name="UCX_SmallBowl_124" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_124.stl" />
+		<mesh name="UCX_SmallBowl_125" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_125.stl" />
+		<mesh name="UCX_SmallBowl_126" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_126.stl" />
+		<mesh name="UCX_SmallBowl_127" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_127.stl" />
+		<mesh name="UCX_SmallBowl_128" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_128.stl" />
+		<mesh name="UCX_SmallBowl_129" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_129.stl" />
+		<mesh name="UCX_SmallBowl_130" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_130.stl" />
+		<mesh name="UCX_SmallBowl_131" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_131.stl" />
+		<mesh name="UCX_SmallBowl_132" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_132.stl" />
+		<mesh name="UCX_SmallBowl_133" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_133.stl" />
+		<mesh name="UCX_SmallBowl_134" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_134.stl" />
+		<mesh name="UCX_SmallBowl_135" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_135.stl" />
+		<mesh name="UCX_SmallBowl_136" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_136.stl" />
+		<mesh name="UCX_SmallBowl_137" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_137.stl" />
+		<mesh name="UCX_SmallBowl_138" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_138.stl" />
+		<mesh name="UCX_SmallBowl_139" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_139.stl" />
+		<mesh name="UCX_SmallBowl_140" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_140.stl" />
+		<mesh name="UCX_SmallBowl_141" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_141.stl" />
+		<mesh name="UCX_SmallBowl_142" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_142.stl" />
+		<mesh name="UCX_SmallBowl_143" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_143.stl" />
+		<mesh name="UCX_SmallBowl_144" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_144.stl" />
+		<mesh name="UCX_SmallBowl_145" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_145.stl" />
+		<mesh name="UCX_SmallBowl_146" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_146.stl" />
+		<mesh name="UCX_SmallBowl_147" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_147.stl" />
+		<mesh name="UCX_SmallBowl_148" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_148.stl" />
+		<mesh name="UCX_SmallBowl_149" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_149.stl" />
+		<mesh name="UCX_SmallBowl_150" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_150.stl" />
+		<mesh name="UCX_SmallBowl_151" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_151.stl" />
+		<mesh name="UCX_SmallBowl_152" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_152.stl" />
+		<mesh name="UCX_SmallBowl_153" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_153.stl" />
+		<mesh name="UCX_SmallBowl_154" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_154.stl" />
+		<mesh name="UCX_SmallBowl_155" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_155.stl" />
+		<mesh name="UCX_SmallBowl_156" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_156.stl" />
+		<mesh name="UCX_SmallBowl_157" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_157.stl" />
+		<mesh name="UCX_SmallBowl_158" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_158.stl" />
+		<mesh name="UCX_SmallBowl_159" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_159.stl" />
+		<mesh name="UCX_SmallBowl_160" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_160.stl" />
+		<mesh name="UCX_SmallBowl_161" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_161.stl" />
+		<mesh name="UCX_SmallBowl_162" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_162.stl" />
+		<mesh name="UCX_SmallBowl_163" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_163.stl" />
+		<mesh name="UCX_SmallBowl_164" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_164.stl" />
+		<mesh name="UCX_SmallBowl_165" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_165.stl" />
+		<mesh name="UCX_SmallBowl_166" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_166.stl" />
+		<mesh name="UCX_SmallBowl_167" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_167.stl" />
+		<mesh name="UCX_SmallBowl_168" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_168.stl" />
+		<mesh name="UCX_SmallBowl_169" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_169.stl" />
+		<mesh name="UCX_SmallBowl_170" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_170.stl" />
+		<mesh name="UCX_SmallBowl_171" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_171.stl" />
+		<mesh name="UCX_SmallBowl_172" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_172.stl" />
+		<mesh name="UCX_SmallBowl_173" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_173.stl" />
+		<mesh name="UCX_SmallBowl_174" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_174.stl" />
+		<mesh name="UCX_SmallBowl_175" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_175.stl" />
+		<mesh name="UCX_SmallBowl_176" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_176.stl" />
+		<mesh name="UCX_SmallBowl_177" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_177.stl" />
+		<mesh name="UCX_SmallBowl_178" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_178.stl" />
+		<mesh name="UCX_SmallBowl_179" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_179.stl" />
+		<mesh name="UCX_SmallBowl_180" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_180.stl" />
+		<mesh name="UCX_SmallBowl_181" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_181.stl" />
+		<mesh name="UCX_SmallBowl_182" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_182.stl" />
+		<mesh name="UCX_SmallBowl_183" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_183.stl" />
+		<mesh name="UCX_SmallBowl_184" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_184.stl" />
+		<mesh name="UCX_SmallBowl_185" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_185.stl" />
+		<mesh name="UCX_SmallBowl_186" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_186.stl" />
+		<mesh name="UCX_SmallBowl_187" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_187.stl" />
+		<mesh name="UCX_SmallBowl_188" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_188.stl" />
+		<mesh name="UCX_SmallBowl_189" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_189.stl" />
+		<mesh name="UCX_SmallBowl_190" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_190.stl" />
+		<mesh name="UCX_SmallBowl_191" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_191.stl" />
+		<mesh name="UCX_SmallBowl_192" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_192.stl" />
+		<mesh name="UCX_SmallBowl_193" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_193.stl" />
+		<mesh name="UCX_SmallBowl_194" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_194.stl" />
+		<mesh name="UCX_SmallBowl_195" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_195.stl" />
+		<mesh name="UCX_SmallBowl_196" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_196.stl" />
+		<mesh name="UCX_SmallBowl_197" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_197.stl" />
+		<mesh name="UCX_SmallBowl_198" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_198.stl" />
+		<mesh name="UCX_SmallBowl_199" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_199.stl" />
+		<mesh name="UCX_SmallBowl_200" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_200.stl" />
+		<mesh name="UCX_SmallBowl_201" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_201.stl" />
+		<mesh name="UCX_SmallBowl_202" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_202.stl" />
+		<mesh name="UCX_SmallBowl_203" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_203.stl" />
+		<mesh name="UCX_SmallBowl_204" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_204.stl" />
+		<mesh name="UCX_SmallBowl_205" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_205.stl" />
+		<mesh name="UCX_SmallBowl_206" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_206.stl" />
+		<mesh name="UCX_SmallBowl_207" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_207.stl" />
+		<mesh name="UCX_SmallBowl_208" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_208.stl" />
+		<mesh name="UCX_SmallBowl_209" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_209.stl" />
+		<mesh name="UCX_SmallBowl_210" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_210.stl" />
+		<mesh name="UCX_SmallBowl_211" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_211.stl" />
+		<mesh name="UCX_SmallBowl_212" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_212.stl" />
+		<mesh name="UCX_SmallBowl_213" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_213.stl" />
+		<mesh name="UCX_SmallBowl_214" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_214.stl" />
+		<mesh name="UCX_SmallBowl_215" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_215.stl" />
+		<mesh name="UCX_SmallBowl_216" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_216.stl" />
+		<mesh name="UCX_SmallBowl_217" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_217.stl" />
+		<mesh name="UCX_SmallBowl_218" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_218.stl" />
+		<mesh name="UCX_SmallBowl_219" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_219.stl" />
+		<mesh name="UCX_SmallBowl_220" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_220.stl" />
+		<mesh name="UCX_SmallBowl_221" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_221.stl" />
+		<mesh name="UCX_SmallBowl_222" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_222.stl" />
+		<mesh name="UCX_SmallBowl_223" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_223.stl" />
+		<mesh name="UCX_SmallBowl_224" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_224.stl" />
+		<mesh name="UCX_SmallBowl_225" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_225.stl" />
+		<mesh name="UCX_SmallBowl_226" file="/media/giangnguyen/Storage/Multiverse/multiverse/resources/objects/small_bowl/mjcf/../meshes/stl/UCX_SmallBowl_226.stl" />
+		<material name="grid" texture="grid" texrepeat="1 1" texuniform="true" reflectance=".2" />
+	</asset>
+	<contact />
+	<visual>
+		<global fovy="45" azimuth="225" elevation="-30" />
+	</visual>
+	<worldbody>
+		<body name="cursor" mocap="true" pos="0 0 0" euler="0 0 0">
+			<site name="cursor_x" pos="0.1 0.0 0.0" size="0.01 0.1" euler="0.0 1.5708 0.0" type="cylinder" rgba="1 0 0 0.5" />
+			<site name="cursor_y" pos="0.0 0.1 0.0" size="0.01 0.1" euler="1.5708 0.0 0.0" type="cylinder" rgba="0 1 0 0.5" />
+			<site name="cursor_z" pos="0.0 0.0 0.1" size="0.01 0.1" euler="0.0 0.0 0.0" type="cylinder" rgba="0 0 1 0.5" />
+		</body>
+	</worldbody>
+	<equality>
+		<weld name="soup_spoon" body1="soup_spoon_ref" body2="soup_spoon" />
+		<weld name="small_bowl_1" body1="small_bowl_1_ref" body2="small_bowl_1" />
+		<weld name="small_bowl_2" body1="small_bowl_2_ref" body2="small_bowl_2" />
+		<weld name="small_bowl_3" body1="small_bowl_3_ref" body2="small_bowl_3" />
+	</equality>
+	<worldbody>
+		<body name="soup_spoon_ref" mocap="true" pos="-0.3 -0.6 1.105" quat="0.7071067811865476 0.0 0.0 -0.7071067811865476">
+			<geom name="SoupSpoon_ref" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" rgba="1.0 1.0 0.0 0.7" contype="0" conaffinity="0" type="mesh" mesh="SoupSpoon" />
+		</body>
+		<body name="small_bowl_1_ref" mocap="true" pos="0.3 0.2 1.085" quat="1.0 0.0 0.0 0.0">
+			<geom name="small_bowl_visual_1_ref" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" rgba="1.0 1.0 0.0 0.7" contype="0" conaffinity="0" type="mesh" mesh="small_bowl_visual" />
+		</body>
+		<body name="small_bowl_2_ref" mocap="true" pos="0.3 0.0 1.085" quat="1.0 0.0 0.0 0.0">
+			<geom name="small_bowl_visual_2_ref" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" rgba="1.0 1.0 0.0 0.7" contype="0" conaffinity="0" type="mesh" mesh="small_bowl_visual" />
+		</body>
+		<body name="small_bowl_3_ref" mocap="true" pos="0.3 -0.2 1.085" quat="1.0 0.0 0.0 0.0">
+			<geom name="small_bowl_visual_3_ref" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" rgba="1.0 1.0 0.0 0.7" contype="0" conaffinity="0" type="mesh" mesh="small_bowl_visual" />
+		</body>
+	</worldbody>
+</mujoco>

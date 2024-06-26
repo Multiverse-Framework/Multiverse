@@ -1829,8 +1829,6 @@ std::string MjMultiverseClient::get_get_constraint_effort_response(const Json::V
 	mjtNum *jac = mj_stackAllocNum(d, 6 * m->nv);
 	mj_jacBodyCom(m, d, jac, jac + 3 * m->nv, object_body_id);
 	mju_mulMatVec(contact_effort, jac, d->qfrc_constraint, 6, m->nv);
-	// mju_rotVecMatT(contact_effort, contact_effort, d->xmat + 9 * object_body_id);
-	// mju_rotVecMatT(contact_effort + 3, contact_effort + 3, d->xmat + 9 * object_body_id);
 
 	std::string contact_effort_result = "";
 	for (int i = 0; i < 6; i++)
@@ -1896,6 +1894,24 @@ std::vector<std::string> MjMultiverseClient::get_get_rays_response(const Json::V
 	}
 
 	return multi_ray_results;
+}
+
+std::vector<std::string> MjMultiverseClient::get_exist_response(const Json::Value &arguments) const
+{
+	if (!arguments.isArray())
+	{
+		return {"failed (Arguments for exist should be an array of strings.)"};
+	}
+
+	std::vector<std::string> exist_results;
+	for (const Json::Value &argument : arguments)
+	{
+		const std::string object_name = argument.asString();
+		const int object_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
+		exist_results.push_back(object_id != -1 ? "yes" : "no");
+	}
+
+	return exist_results;
 }
 
 void MjMultiverseClient::bind_api_callbacks()
@@ -1983,6 +1999,13 @@ void MjMultiverseClient::bind_api_callbacks_response()
 				for (const std::string &get_rays_response : get_get_rays_response(api_callback_json[api_callback_name]))
 				{
 					api_callback_response[api_callback_name].append(get_rays_response);
+				}
+			}
+			else if (strcmp(api_callback_name.c_str(), "exist") == 0)
+			{
+				for (const std::string &exist_response : get_exist_response(api_callback_json[api_callback_name]))
+				{
+					api_callback_response[api_callback_name].append(exist_response);
 				}
 			}
 			else

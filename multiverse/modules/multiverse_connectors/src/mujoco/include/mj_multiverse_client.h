@@ -71,6 +71,8 @@ private:
 
     std::vector<std::string> get_get_rays_response(const Json::Value &arguments) const;
 
+    std::vector<std::string> get_exist_response(const Json::Value &arguments) const;
+
 public:
     void communicate(const bool resend_meta_data = false) override;
 
