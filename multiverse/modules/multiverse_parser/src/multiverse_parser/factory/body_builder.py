@@ -8,6 +8,7 @@ from typing import Optional, Dict, List
 import numpy
 
 from .geom_builder import GeomBuilder, GeomProperty, GeomInertial
+from .point_builder import PointBuilder, PointProperty
 from .joint_builder import JointBuilder, JointProperty
 from ..utils import get_transform, xform_cache, modify_name, diagonalize_inertia, shift_inertia_tensor
 
@@ -104,6 +105,16 @@ class BodyBuilder:
             self._geom_builders[geom_name] = geom_builder
 
         return geom_builder
+
+    def add_point(self, point_property: PointProperty) -> PointBuilder:
+        points_path = self.xform.GetPrim().GetPath().AppendChild(f"{self.xform.GetPrim().GetName()}_points")
+        point_builder = PointBuilder(
+            stage=self.stage,
+            points_path=points_path,
+            point_property=point_property
+        )
+        point_builder.build()
+        return point_builder
 
     def get_joint_builder(self, joint_name: str) -> JointBuilder:
         joint_name = modify_name(in_name=joint_name)
