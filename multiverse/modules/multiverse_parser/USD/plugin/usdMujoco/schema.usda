@@ -154,7 +154,7 @@ class MujocoTexture "MujocoTexture"
     inherits = </Typed>
 )
 {
-    string mujoco:texture:type = "2d" (
+    uniform token mujoco:texture:type = "2d" (
         customData = {
             string apiName = "type"
         }
@@ -288,6 +288,58 @@ class "MujocoBodyAPI" (
         }
         displayName = "Body Quaternion"
         doc = "The quaternion (w, x, y, z) of the body frame, in the parent coordinate frame."
+    )
+}
+
+class "MujocoCompositeAPI" (
+    customData = {
+        string className = "MujocoCompositeAPI"
+    }
+
+    doc = """This element creates a composite."""
+
+    inherits = </APISchemaBase>
+)
+{
+    uniform token mujoco:composite:type (
+        customData = {
+            string apiName = "type"
+        }
+        allowedTokens = ["particle", "grid", "cable", "rope", "loop", "cloth", "box", "cylinder", "ellipsoid"]
+        displayName = "Type"
+        doc = "Type of the composite object."
+    )
+
+    float mujoco:composite:spacing (
+        customData = {
+            string apiName = "spacing"
+        }
+        displayName = "Spacing"
+        doc = "The spacing between the centers of the grid elements. This spacing is the same in all dimensions. It should normally be set to a value larger than the geom size, otherwise there will be a lot of contacts in the reference model configuration (which is allowed but rarely desirable)."
+    )
+
+    vector3f mujoco:composite:count (
+        customData = {
+            string apiName = "count"
+        }
+        displayName = "Count"
+        doc = "The element count in each dimension of the grid. This has 3 numbers, specifying the element count along the X, Y and Z axis of the parent body frame within."
+    )
+
+    vector3f mujoco:composite:offset3D (
+        customData = {
+            string apiName = "offset"
+        }
+        displayName = "Offset"
+        doc = "The offset is expressed in the local coordinate frame of the parent body."
+    )
+
+    string mujoco:composite:prefix (
+        customData = {
+            string apiName = "prefix"
+        }
+        displayName = "Prefix"
+        doc = "The prefix is needed when multiple composite objects are used in the same model, to avoid name conflicts."
     )
 }
 
