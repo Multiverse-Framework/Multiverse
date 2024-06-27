@@ -74,7 +74,7 @@ private:
     std::vector<std::string> get_exist_response(const Json::Value &arguments) const;
 
 public:
-    void communicate(const bool resend_meta_data = false) override;
+    bool communicate(const bool resend_meta_data = false) override;
 
 public:
     std::map<std::string, std::set<std::string>> send_objects;

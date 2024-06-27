@@ -355,18 +355,20 @@ void MultiverseClient::init_buffer()
     receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
 }
 
-void MultiverseClient::communicate(const bool resend_request_meta_data)
+bool MultiverseClient::communicate(const bool resend_request_meta_data)
 {
     if (should_shut_down || flag == EMultiverseClientState::None)
     {
-        return;
+        return false;
     }
 
     if (flag == EMultiverseClientState::StartConnection)
     {
         run();
+        return true;
     }
-    else if (resend_request_meta_data)
+
+    if (resend_request_meta_data)
     {
         wait_for_meta_data_thread_finish();
         if (flag == EMultiverseClientState::BindSendData)
@@ -378,11 +380,16 @@ void MultiverseClient::communicate(const bool resend_request_meta_data)
         flag = EMultiverseClientState::BindRequestMetaData;
 
         run();
+        return true;
     }
-    else if (flag == EMultiverseClientState::BindSendData || flag == EMultiverseClientState::InitSendAndReceiveData)
+
+    if (flag == EMultiverseClientState::BindSendData || flag == EMultiverseClientState::InitSendAndReceiveData)
     {
         run();
+        return true;
     }
+
+    return false;
 }
 
 void MultiverseClient::disconnect()
