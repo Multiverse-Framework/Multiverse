@@ -13,7 +13,7 @@ from ..factory import Factory, Configuration, InertiaSource
 from ..factory import (WorldBuilder, BodyBuilder,
                        JointBuilder, JointType, JointProperty, get_joint_axis_and_quat,
                        GeomBuilder, GeomType, GeomProperty,
-                       PointBuilder, PointProperty,
+                       PointsBuilder, PointProperty,
                        MeshProperty,
                        MaterialProperty,
                        TextureBuilder)
@@ -33,21 +33,24 @@ def get_body_name(mj_body) -> str:
     return mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
 
 
-def get_bodies_with_composite(xml_file_path: str) -> List[str]:
-    bodies_with_composite = []
+def get_bodies_with_composite(xml_file_path: str) -> Dict[str, List[ET.Element]]:
+    bodies_with_composite = {}
     tree = ET.parse(xml_file_path)
     root = tree.getroot()
     for include in root.iter("include"):
         include_file_path = include.attrib["file"]
         if os.path.relpath(include_file_path):
             include_file_path = os.path.join(os.path.dirname(xml_file_path), include_file_path)
-        bodies_with_composite.extend(get_bodies_with_composite(include_file_path))
+        bodies_with_composite.update(get_bodies_with_composite(include_file_path))
 
     for body in root.iter("body"):
+        body_name = body.attrib["name"]
         for child in body:
             if child.tag == "composite":
-                bodies_with_composite.append(body.attrib["name"])
-                break
+                if body_name in bodies_with_composite:
+                    bodies_with_composite[body_name].append(child)
+                else:
+                    bodies_with_composite[body_name] = [child]
 
     return bodies_with_composite
 
@@ -93,6 +96,7 @@ class MjcfImporter(Factory):
             default_rgba=default_rgba if default_rgba is not None else numpy.array([0.9, 0.9, 0.9, 1.0]),
             inertia_source=inertia_source
         ))
+        self._bodies_with_composite = get_bodies_with_composite(self.source_file_path)
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         self._world_builder = WorldBuilder(self.tmp_usd_file_path)
@@ -101,15 +105,13 @@ class MjcfImporter(Factory):
 
         self.world_builder.add_body(body_name=self._config.model_name)
 
-        bodies_with_composite = get_bodies_with_composite(self.source_file_path)
-
         for body_id in range(1, self.mj_model.nbody):
             mj_body = self.mj_model.body(body_id)
 
             parent_body_id = mj_body.parentid[0]
             parent_body = self.mj_model.body(parent_body_id)
             parent_body_name = get_body_name(parent_body)
-            if parent_body_name in bodies_with_composite:
+            if parent_body_name in self.bodies_with_composite:
                 self._import_point(parent_body_name=parent_body_name, mj_body=mj_body)
             else:
                 body_builder = self._import_body(mj_body=mj_body)
@@ -118,6 +120,9 @@ class MjcfImporter(Factory):
                     self._import_joints(mj_body=mj_body, body_builder=body_builder)
 
                 self._import_inertial(mj_body=mj_body, body_builder=body_builder)
+
+        for body_builder in self.world_builder.body_builders:
+            self._import_points(body_builder=body_builder)
 
         self._import_equality()
 
@@ -176,18 +181,48 @@ class MjcfImporter(Factory):
         return body_builder
 
     def _import_point(self, parent_body_name, mj_body):
+        parent_body_id = mj_body.parentid
         parent_body_builder = self.world_builder.get_body_builder(body_name=parent_body_name)
         point_id = mj_body.id
         geom_id = mj_body.geomadr[0]
         geom = self.mj_model.geom(geom_id)
-        point_size = 2 * geom.size[0]
-        point_rgba = geom.rgba
+        point_width = 2 * geom.size[0]
+        points_rgba = geom.rgba
         point_pos = mj_body.pos
         point_property = PointProperty(point_id=point_id,
                                        point_pos=point_pos,
-                                       point_size=point_size,
-                                       point_rgba=point_rgba)
-        parent_body_builder.add_point(point_property)
+                                       point_width=point_width)
+        point_adr = parent_body_id
+        for points_element in self.bodies_with_composite[parent_body_name]:
+            points_count = [int(x) for x in points_element.attrib["count"].split(" ") if x != ""]
+            points_num = numpy.prod(points_count)
+            if point_adr < point_id <= point_adr + points_num:
+                points_prefix = points_element.attrib["prefix"] if "prefix" in points_element.attrib else ""
+                points_type = points_element.attrib["type"]
+                points_name = f"{parent_body_name}_{points_prefix}_{points_type}s"
+                parent_body_builder.add_point(points_name=points_name,
+                                              point_property=point_property,
+                                              points_rgba=points_rgba)
+            point_adr += points_num
+
+    def _import_points(self, body_builder: BodyBuilder):
+        parent_body_name = body_builder.xform.GetPrim().GetName()
+        if parent_body_name in self.bodies_with_composite:
+            for points_builder, points_element in zip(body_builder.points_builders, self.bodies_with_composite[parent_body_name]):
+                points_builder.build()
+
+                points_type = points_element.attrib["type"]
+                points_count = [int(x) for x in points_element.attrib["count"].split(" ") if x != ""]
+                points_spacing = float(points_element.attrib["spacing"])
+                points_offset = [float(x) for x in points_element.attrib["offset"].split(" ") if x != ""]
+                points_prefix = points_element.attrib["prefix"] if "prefix" in points_element.attrib else ""
+
+                mujoco_composite_api = UsdMujoco.MujocoCompositeAPI.Apply(points_builder.points.GetPrim())
+                mujoco_composite_api.CreateTypeAttr(points_type)
+                mujoco_composite_api.CreateCountAttr(Gf.Vec3i(*points_count))
+                mujoco_composite_api.CreateSpacingAttr(points_spacing)
+                mujoco_composite_api.CreateOffsetAttr(Gf.Vec3f(*points_offset))
+                mujoco_composite_api.CreatePrefixAttr(points_prefix)
 
     def _import_joints(self, mj_body, body_builder: BodyBuilder):
         for joint_id in range(mj_body.jntadr[0], mj_body.jntadr[0] + mj_body.jntnum[0]):
@@ -524,3 +559,7 @@ class MjcfImporter(Factory):
     @property
     def mujoco_textures_prim(self) -> Usd.Prim:
         return self.mujoco_asset_prim.GetChild("textures")
+
+    @property
+    def bodies_with_composite(self) -> Dict[str, List[ET.Element]]:
+        return self._bodies_with_composite

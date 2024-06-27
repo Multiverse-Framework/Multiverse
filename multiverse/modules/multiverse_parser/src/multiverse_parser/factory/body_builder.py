@@ -8,7 +8,7 @@ from typing import Optional, Dict, List
 import numpy
 
 from .geom_builder import GeomBuilder, GeomProperty, GeomInertial
-from .point_builder import PointBuilder, PointProperty
+from .points_builder import PointsBuilder, PointProperty
 from .joint_builder import JointBuilder, JointProperty
 from ..utils import get_transform, xform_cache, modify_name, diagonalize_inertia, shift_inertia_tensor
 
@@ -26,6 +26,7 @@ class BodyBuilder:
     xform: UsdGeom.Xform
     joint_builders: List[JointBuilder]
     geom_builders: List[GeomBuilder]
+    point_builders: List[PointsBuilder]
     child_body_builders: List[BodyBuilder]
 
     def __init__(self,
@@ -35,6 +36,7 @@ class BodyBuilder:
         self._xform = UsdGeom.Xform.Define(stage, path)
         self._joint_builders: Dict[str, JointBuilder] = {}
         self._geom_builders: Dict[str, GeomBuilder] = {}
+        self._point_builders: Dict[str, PointsBuilder] = {}
         self._child_body_builders: Dict[str, BodyBuilder] = {}
 
     def set_transform(
@@ -106,14 +108,22 @@ class BodyBuilder:
 
         return geom_builder
 
-    def add_point(self, point_property: PointProperty) -> PointBuilder:
-        points_path = self.xform.GetPrim().GetPath().AppendChild(f"{self.xform.GetPrim().GetName()}_points")
-        point_builder = PointBuilder(
-            stage=self.stage,
-            points_path=points_path,
-            point_property=point_property
-        )
-        point_builder.build()
+    def add_point(self,
+                  points_name: str,
+                  point_property: PointProperty,
+                  points_rgba: Optional[numpy.ndarray] = None) -> PointsBuilder:
+        if points_name in self._point_builders:
+            point_builder = self._point_builders[points_name]
+            point_builder.add_point(point_property=point_property)
+        else:
+            points_path = self.xform.GetPrim().GetPath().AppendChild(f"{self.xform.GetPrim().GetName()}_{points_name}")
+            point_builder = PointsBuilder(
+                stage=self.stage,
+                points_path=points_path,
+                points_property=[point_property],
+                points_rgba=points_rgba
+            )
+            self._point_builders[points_name] = point_builder
         return point_builder
 
     def get_joint_builder(self, joint_name: str) -> JointBuilder:
@@ -200,6 +210,10 @@ class BodyBuilder:
     @property
     def geom_builders(self) -> List[GeomBuilder]:
         return list(self._geom_builders.values())
+
+    @property
+    def points_builders(self) -> List[PointsBuilder]:
+        return list(self._point_builders.values())
 
     @property
     def child_body_builders(self) -> List[BodyBuilder]:

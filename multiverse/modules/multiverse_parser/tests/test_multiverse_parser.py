@@ -191,6 +191,12 @@ class MjcfToUsdTestCase(MultiverseImporterTestCase):
         self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=True)
         self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=False)
 
+    @unittest.skip("This test is skipped.")
+    def test_mjcf_to_usd_preparing_soup(self):
+        input_mjcf_path = os.path.join(self.resource_path, "input", "preparing_soup", "preparing_soup.xml")
+        self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=True)
+        self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=False)
+
 
 class UrdfToUsdTestCase(MultiverseImporterTestCase):
     output_dir = "test_urdf_to_usd"
@@ -248,6 +254,14 @@ class MjcfToMjcfTestCase(MjcfExporterTestCase):
 
     def test_mjcf_to_mjcf_anymal_c(self):
         input_mjcf_path = os.path.join(self.resource_path, "input", "anymal_c", "anymal_c.xml")
+        self.validate_visual_collision(MjcfImporter, MjcfExporter, input_mjcf_path,
+                                       fixed_base=False, with_physics=True)
+        self.validate_visual_collision(MjcfImporter, MjcfExporter, input_mjcf_path,
+                                       fixed_base=False, with_physics=False)
+
+    @unittest.skip("This test is skipped.")
+    def test_mjcf_to_mjcf_preparing_soup(self):
+        input_mjcf_path = os.path.join(self.resource_path, "input", "preparing_soup", "preparing_soup.xml")
         self.validate_visual_collision(MjcfImporter, MjcfExporter, input_mjcf_path,
                                        fixed_base=False, with_physics=True)
         self.validate_visual_collision(MjcfImporter, MjcfExporter, input_mjcf_path,

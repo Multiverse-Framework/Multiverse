@@ -12,6 +12,7 @@ from numpy import radians
 from ..factory import Factory
 from ..factory import (JointBuilder, JointType,
                        GeomBuilder, GeomType,
+                       PointsBuilder, PointProperty,
                        MaterialProperty)
 from ..utils import xform_cache, modify_name
 
@@ -71,6 +72,16 @@ def get_mujoco_body_api(xform_prim: Usd.Prim,
     mujoco_body_api.CreateQuatAttr(Gf.Quatf(body_relative_quat))
 
     return mujoco_body_api
+
+
+def get_mujoco_composite_api(points_builder: PointsBuilder) -> UsdMujoco.MujocoCompositeAPI:
+    points = points_builder.points
+    points_prim = points.GetPrim()
+    if points_prim.HasAPI(UsdMujoco.MujocoCompositeAPI):
+        return UsdMujoco.MujocoCompositeAPI(points_prim)
+    else:
+        print(f"Composite {points_prim.GetName()} does not have MujocoCompositeAPI.")
+        return None
 
 
 def get_mujoco_joint_api(joint_builder: JointBuilder) -> UsdMujoco.MujocoJointAPI:
@@ -500,6 +511,9 @@ class MjcfExporter:
         for geom_builder in body_builder.geom_builders:
             self._build_geom(geom_builder=geom_builder, body=body)
 
+        for points_builder in body_builder.points_builders:
+            self._build_composite(points_builder=points_builder, body=body)
+
     def _build_geom(self, geom_builder: GeomBuilder, body: ET.Element) -> None:
         mujoco_geom_api = get_mujoco_geom_api(geom_builder=geom_builder)
 
@@ -535,6 +549,45 @@ class MjcfExporter:
             geom.set("class", "collision")
         else:
             geom.set("class", "visual")
+
+    def _build_composite(self, points_builder: PointsBuilder, body: ET.Element) -> None:
+        mujoco_composite_api = get_mujoco_composite_api(points_builder=points_builder)
+        if mujoco_composite_api is None:
+            return
+
+        composite = ET.SubElement(body, "composite")
+        composite_type = mujoco_composite_api.GetTypeAttr().Get()
+        composite.set("type", composite_type)
+        composite_count = mujoco_composite_api.GetCountAttr().Get()
+        composite_count = [int(count) for count in composite_count]
+        composite.set("count", " ".join(map(str, composite_count)))
+        composite_spacing = mujoco_composite_api.GetSpacingAttr().Get()
+        composite.set("spacing", str(composite_spacing))
+        composite_offset = mujoco_composite_api.GetOffsetAttr().Get()
+        composite.set("offset", " ".join(map(str, composite_offset)))
+        composite_prefix = mujoco_composite_api.GetPrefixAttr().Get()
+        composite.set("prefix", composite_prefix)
+
+        points = points_builder.points
+
+        widths_attr = points.GetWidthsAttr()
+        geom_width = None
+        if widths_attr is not None:
+            for width in widths_attr.Get():
+                if geom_width is None:
+                    geom_width = width
+                elif geom_width != width:
+                    raise ValueError("Composite widths are not the same.")
+
+            geom = ET.SubElement(composite, "geom")
+            geom.set("size", f"{geom_width/2}")
+
+            points_display_color_attr = points.GetDisplayColorAttr()
+            points_display_opacity_attr = points.GetDisplayOpacityAttr()
+            if points_display_color_attr is not None and points_display_opacity_attr is not None:
+                points_display_color = points_display_color_attr.Get()[0]
+                points_display_opacity = points_display_opacity_attr.Get()[0]
+                geom.set("rgba", " ".join(map(str, points_display_color)) + f" {points_display_opacity}")
 
     def _build_joint(self, joint_builder: JointBuilder, body_name: str) -> None:
         mujoco_joint_api = get_mujoco_joint_api(joint_builder=joint_builder)
