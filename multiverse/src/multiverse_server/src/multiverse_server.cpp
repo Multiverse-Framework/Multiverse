@@ -186,7 +186,7 @@ static double get_time_now()
 {
     return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
 }
-                    
+
 MultiverseServer::MultiverseServer(const std::string &in_socket_addr)
 {
     socket = zmq::socket_t(server_context, zmq::socket_type::rep);
@@ -554,12 +554,12 @@ void MultiverseServer::start()
                         start = now;
                     }
                 }
-                
+
                 if (flag != EMultiverseServerState::BindObjects)
                 {
                     zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none); // TODO: Make use of the message
                 }
-                
+
                 if (strcmp(request_meta_data_json["meta_data"]["simulation_name"].asString().c_str(), simulation_name.c_str()) != 0)
                 {
                     request_meta_data_json = simulation.request_meta_data_json;
@@ -645,7 +645,7 @@ void MultiverseServer::bind_meta_data()
     }
     request_simulation_name = meta_data["simulation_name"].asString();
 
-    if(simulation_name.empty() && worlds[request_world_name].simulations.count(request_simulation_name) > 0)
+    if (simulation_name.empty() && worlds[request_world_name].simulations.count(request_simulation_name) > 0)
     {
         throw std::invalid_argument("[Server] Request meta data from socket " + socket_addr + " requires an existing simulation name (" + request_simulation_name + ").");
     }
@@ -686,6 +686,28 @@ void MultiverseServer::bind_meta_data()
             }
         }
 
+        switch (worlds[world_name].simulations["empty_simulation"].meta_data_state)
+        {
+        case EMetaDataState::Normal:
+            printf("[Server] AAA Socket %s is in normal state.\n", socket_addr.c_str());
+            break;
+
+        case EMetaDataState::Reset:
+            printf("[Server] AAA Socket %s is in reset state.\n", socket_addr.c_str());
+            break;
+
+        case EMetaDataState::WaitAfterSendReceiveData:
+            printf("[Server] AAA Socket %s is waiting after send receive data.\n", socket_addr.c_str());
+            break;
+
+        case EMetaDataState::WaitAfterOtherBindSendData:
+            printf("[Server] AAA Socket %s is waiting after other bind send data.\n", socket_addr.c_str());
+            break;
+
+        case EMetaDataState::WaitAfterOtherSendRequestMetaData:
+            printf("[Server] AAA Socket %s is waiting after other send request meta data.\n", socket_addr.c_str());
+            break;
+        }
         request_simulation.meta_data_state = EMetaDataState::WaitAfterSendReceiveData;
         world_name = request_world_name;
     }
@@ -707,6 +729,28 @@ void MultiverseServer::bind_meta_data()
     }
 
     worlds[world_name].simulations[simulation_name].request_meta_data_json = request_meta_data_json;
+    switch (worlds[world_name].simulations["empty_simulation"].meta_data_state)
+    {
+    case EMetaDataState::Normal:
+        printf("[Server] BBB Socket %s is in normal state.\n", socket_addr.c_str());
+        break;
+
+    case EMetaDataState::Reset:
+        printf("[Server] BBB Socket %s is in reset state.\n", socket_addr.c_str());
+        break;
+
+    case EMetaDataState::WaitAfterSendReceiveData:
+        printf("[Server] BBB Socket %s is waiting after send receive data.\n", socket_addr.c_str());
+        break;
+
+    case EMetaDataState::WaitAfterOtherBindSendData:
+        printf("[Server] BBB Socket %s is waiting after other bind send data.\n", socket_addr.c_str());
+        break;
+
+    case EMetaDataState::WaitAfterOtherSendRequestMetaData:
+        printf("[Server] BBB Socket %s is waiting after other send request meta data.\n", socket_addr.c_str());
+        break;
+    }
     worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::Normal;
 
     const std::string length_unit = meta_data.isMember("length_unit") ? meta_data["length_unit"].asString() : "m";

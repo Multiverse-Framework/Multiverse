@@ -33,7 +33,7 @@ class MultiverseClientTest(MultiverseClient):
         self._connect_and_start()
 
     def send_and_receive_meta_data(self):
-        self._communicate(True)
+        print(self._communicate(True))
 
     def send_and_receive_data(self):
         self._communicate(False)
@@ -307,6 +307,8 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         #
         # sleep(1)
 
+        print("STARTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
+
         multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
         multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = ["position",
                                                                               "quaternion",
@@ -320,6 +322,8 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         multiverse_client_test_spawn.send_and_receive_data()
 
+        # sleep(1)
+  
         multiverse_client_test_spawn.request_meta_data["send"] = {}
         multiverse_client_test_spawn.request_meta_data["send"]["panda"] = ["position",
                                                                            "quaternion"]

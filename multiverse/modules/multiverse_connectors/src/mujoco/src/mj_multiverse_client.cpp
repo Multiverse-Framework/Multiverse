@@ -2504,29 +2504,8 @@ void MjMultiverseClient::reset()
 
 bool MjMultiverseClient::communicate(const bool resend_meta_data)
 {
-	bool success = true;
-
 	MjMultiverseClient::mutex.lock();
-	if (resend_meta_data)
-	{
-		const double time_start = get_time_now();
-		double time_taken = 0.0;
-		while (!MultiverseClient::communicate(true))
-		{
-			time_taken = get_time_now() - time_start;
-			if (time_taken > 1.0)
-			{
-				printf("[Client %s] Communication timeout (%fs > 1s)\n", port.c_str(), time_taken);
-				success = false;
-				break;
-			}
-		}
-	}
-	else
-	{
-		MultiverseClient::communicate(false);
-	}
+	const bool success = MultiverseClient::communicate(resend_meta_data);
 	MjMultiverseClient::mutex.unlock();
-
 	return success;
 }
