@@ -139,8 +139,8 @@ class MultiverseClient:
     def _disconnect(self) -> None:
         self._multiverse_socket.disconnect()
 
-    def _communicate(self, resend_request_meta_data: bool = False) -> None:
-        self._multiverse_socket.communicate(resend_request_meta_data)
+    def _communicate(self, resend_request_meta_data: bool = False) -> bool:
+        return self._multiverse_socket.communicate(resend_request_meta_data)
 
     def _restart(self) -> None:
         self._disconnect()

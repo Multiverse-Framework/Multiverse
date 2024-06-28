@@ -50,9 +50,12 @@ public:
 
     /**
      * @brief Communicate with the server
-     *
+     * 
+     * @param resend_request_meta_data 
+     * @return true if the communication is successful
+     * @return false if the communication is not successful
      */
-    virtual void communicate(const bool resend_request_meta_data = false);
+    virtual bool communicate(const bool resend_request_meta_data = false);
 
     /**
      * @brief Send close signal to the server

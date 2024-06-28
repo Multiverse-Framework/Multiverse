@@ -179,21 +179,27 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 						{
 							for (const Json::Value &pos : response_meta_data_json["send"][object_name]["position"])
 							{
-								object_pos += pos.asString() + " ";
+								object_pos += (pos.isNumeric() ? pos.asString() + " " : "");
 							}
-							object_pos.pop_back();
+							if (!object_pos.empty())
+							{
+								object_pos.pop_back();
+							}
 						}
 						else if (!response_meta_data_json["receive"][object_name]["position"].empty())
 						{
 							for (const Json::Value &pos : response_meta_data_json["receive"][object_name]["position"])
 							{
-								object_pos += pos.asString() + " ";
+								object_pos += (pos.isNumeric() ? pos.asString() + " " : "");
 							}
-							object_pos.pop_back();
+							if (!object_pos.empty())
+							{
+								object_pos.pop_back();
+							}
 						}
-						else
+						if (object_pos.empty())
 						{
-							object_pos = "0 0 0";
+							object_pos = "0.0 0.0 0.0";
 						}
 
 						std::string object_quat = "";
@@ -201,21 +207,27 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 						{
 							for (const Json::Value &quat : response_meta_data_json["send"][object_name]["quaternion"])
 							{
-								object_quat += quat.asString() + " ";
+								object_quat += (quat.isNumeric() ? quat.asString() + " " : "");
 							}
-							object_quat.pop_back();
+							if (!object_quat.empty())
+							{
+								object_quat.pop_back();
+							}
 						}
 						else if (!response_meta_data_json["receive"][object_name]["quaternion"].empty())
 						{
 							for (const Json::Value &quat : response_meta_data_json["receive"][object_name]["quaternion"])
 							{
-								object_quat += quat.asString() + " ";
+								object_quat += (quat.isNumeric() ? quat.asString() + " " : "");
 							}
-							object_quat.pop_back();
+							if (!object_quat.empty())
+							{
+								object_quat.pop_back();
+							}
 						}
-						else
+						if (object_quat.empty())
 						{
-							object_quat = "1 0 0 0";
+							object_quat = "1.0 0.0 0.0 0.0";
 						}
 
 						for (tinyxml2::XMLElement *worldbody_element = mujoco_element->FirstChildElement("worldbody");
@@ -524,6 +536,10 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 					for (int body_id = 1; body_id < m->nbody; body_id++)
 					{
 						const std::string body_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_id);
+						if (send_objects.find(body_name) != send_objects.end())
+						{
+							continue;
+						}
 						if ((receive_objects.find(body_name) != receive_objects.end()) && (receive_objects[body_name].find(attribute_name) != receive_objects[body_name].end()))
 						{
 							continue;
@@ -1089,7 +1105,7 @@ void MjMultiverseClient::weld(const Json::Value &arguments)
 		return;
 	}
 
-	printf("Attach %s to %s at %s\n", object_1_name.c_str(), object_2_name.c_str(), relative_pose.c_str());
+	printf("Weld %s to %s at %s\n", object_1_name.c_str(), object_2_name.c_str(), relative_pose.c_str());
 	MjSimulate::load_new_model_and_keep_old_data();
 }
 
@@ -1209,7 +1225,7 @@ void MjMultiverseClient::unweld(const Json::Value &arguments)
 		return;
 	}
 
-	printf("Detach %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
+	printf("Unweld %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
 	MjSimulate::load_new_model_and_keep_old_data();
 }
 
@@ -1425,7 +1441,6 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 						}
 						qpos_str.pop_back();
 						key_element->SetAttribute("qpos", qpos_str.c_str());
-						printf("%s\n", qpos_str.c_str());
 					}
 					if (key_element->Attribute("qvel") != nullptr)
 					{
@@ -2502,9 +2517,10 @@ void MjMultiverseClient::reset()
 	d->time = 0.0;
 }
 
-void MjMultiverseClient::communicate(const bool resend_meta_data)
+bool MjMultiverseClient::communicate(const bool resend_meta_data)
 {
 	MjMultiverseClient::mutex.lock();
-	MultiverseClient::communicate(resend_meta_data);
+	const bool success = MultiverseClient::communicate(resend_meta_data);
 	MjMultiverseClient::mutex.unlock();
+	return success;
 }
