@@ -179,21 +179,27 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 						{
 							for (const Json::Value &pos : response_meta_data_json["send"][object_name]["position"])
 							{
-								object_pos += pos.asString() + " ";
+								object_pos += (pos.isNumeric() ? pos.asString() + " " : "");
 							}
-							object_pos.pop_back();
+							if (!object_pos.empty())
+							{
+								object_pos.pop_back();
+							}
 						}
 						else if (!response_meta_data_json["receive"][object_name]["position"].empty())
 						{
 							for (const Json::Value &pos : response_meta_data_json["receive"][object_name]["position"])
 							{
-								object_pos += pos.asString() + " ";
+								object_pos += (pos.isNumeric() ? pos.asString() + " " : "");
 							}
-							object_pos.pop_back();
+							if (!object_pos.empty())
+							{
+								object_pos.pop_back();
+							}
 						}
-						else
+						if (object_pos.empty())
 						{
-							object_pos = "0 0 0";
+							object_pos = "0.0 0.0 0.0";
 						}
 
 						std::string object_quat = "";
@@ -201,21 +207,27 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 						{
 							for (const Json::Value &quat : response_meta_data_json["send"][object_name]["quaternion"])
 							{
-								object_quat += quat.asString() + " ";
+								object_quat += (quat.isNumeric() ? quat.asString() + " " : "");
 							}
-							object_quat.pop_back();
+							if (!object_quat.empty())
+							{
+								object_quat.pop_back();
+							}
 						}
 						else if (!response_meta_data_json["receive"][object_name]["quaternion"].empty())
 						{
 							for (const Json::Value &quat : response_meta_data_json["receive"][object_name]["quaternion"])
 							{
-								object_quat += quat.asString() + " ";
+								object_quat += (quat.isNumeric() ? quat.asString() + " " : "");
 							}
-							object_quat.pop_back();
+							if (!object_quat.empty())
+							{
+								object_quat.pop_back();
+							}
 						}
-						else
+						if (object_quat.empty())
 						{
-							object_quat = "1 0 0 0";
+							object_quat = "1.0 0.0 0.0 0.0";
 						}
 
 						for (tinyxml2::XMLElement *worldbody_element = mujoco_element->FirstChildElement("worldbody");

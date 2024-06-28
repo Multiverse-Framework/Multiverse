@@ -147,7 +147,8 @@ enum class EMetaDataState : unsigned char
     Reset,
     WaitAfterSendReceiveData,
     WaitAfterOtherBindSendData,
-    WaitAfterOtherSendRequestMetaData
+    WaitAfterOtherSendRequestMetaData,
+    WaitAfterOtherNormal
 };
 
 std::mutex mtx;
@@ -461,16 +462,28 @@ void MultiverseServer::start()
 
         case EMultiverseServerState::SendReceiveData:
         {
-            send_receive_data();
             Simulation &simulation = worlds[world_name].simulations[simulation_name];
+            double start = get_time_now();
+            double now = get_time_now();
+            while (!should_shut_down)
+            {
+                if (simulation.meta_data_state == EMetaDataState::WaitAfterSendReceiveData || simulation.meta_data_state == EMetaDataState::Normal)
+                {
+                    break;
+                }
+                now = get_time_now();
+                if (now - start > 1)
+                {
+                    printf("[Server] Socket %s is waiting for %s to be normal.\n", socket_addr.c_str(), request_simulation_name.c_str());
+                    start = now;
+                }
+            }
+            send_receive_data();
             if (simulation.meta_data_state == EMetaDataState::WaitAfterSendReceiveData)
             {
                 printf("[Server] Socket %s has received new request meta data.\n", socket_addr.c_str());
 
                 simulation.meta_data_state = EMetaDataState::WaitAfterOtherBindSendData;
-
-                double start = get_time_now();
-                double now = get_time_now();
                 while (!should_shut_down)
                 {
                     if (simulation.meta_data_state == EMetaDataState::WaitAfterOtherSendRequestMetaData)
@@ -563,6 +576,7 @@ void MultiverseServer::start()
                 if (strcmp(request_meta_data_json["meta_data"]["simulation_name"].asString().c_str(), simulation_name.c_str()) != 0)
                 {
                     request_meta_data_json = simulation.request_meta_data_json;
+                    printf("[Server] OOOOOOOOOOOO Socket %s has received new request meta data %s.\n", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
                 }
 
                 send_data_vec.clear();
@@ -659,6 +673,19 @@ void MultiverseServer::bind_meta_data()
     {
         printf("[Server] Socket %s (%s) requests a different simulation (%s).\n", socket_addr.c_str(), simulation_name.c_str(), request_simulation_name.c_str());
         Simulation &request_simulation = worlds[request_world_name].simulations[request_simulation_name];
+
+        double start = get_time_now();
+        double now = start;
+        while (!should_shut_down && request_simulation.meta_data_state != EMetaDataState::Normal)
+        {
+            now = get_time_now();
+            if (now - start > 1)
+            {
+                printf("[Server] Socket %s is waiting for %s to be in the normal state.\n", socket_addr.c_str(), request_simulation_name.c_str());
+                start = now;
+            }
+        }
+
         for (const std::string &type_str : {"send", "receive"})
         {
             for (const std::string &object_name : request_meta_data_json[type_str].getMemberNames())
@@ -707,6 +734,10 @@ void MultiverseServer::bind_meta_data()
         case EMetaDataState::WaitAfterOtherSendRequestMetaData:
             printf("[Server] AAA Socket %s is waiting after other send request meta data.\n", socket_addr.c_str());
             break;
+
+        case EMetaDataState::WaitAfterOtherNormal:
+            printf("[Server] AAA Socket %s is waiting after other normal.\n", socket_addr.c_str());
+            break;
         }
         request_simulation.meta_data_state = EMetaDataState::WaitAfterSendReceiveData;
         world_name = request_world_name;
@@ -750,8 +781,21 @@ void MultiverseServer::bind_meta_data()
     case EMetaDataState::WaitAfterOtherSendRequestMetaData:
         printf("[Server] BBB Socket %s is waiting after other send request meta data.\n", socket_addr.c_str());
         break;
+
+    case EMetaDataState::WaitAfterOtherNormal:
+        printf("[Server] BBB Socket %s is waiting after other normal.\n", socket_addr.c_str());
+        break;
     }
-    worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::Normal;
+
+    EMetaDataState &meta_data_state = worlds[world_name].simulations[simulation_name].meta_data_state;
+    if (request_simulation_name == simulation_name && meta_data_state == EMetaDataState::WaitAfterOtherSendRequestMetaData)
+    {
+        meta_data_state = EMetaDataState::WaitAfterOtherNormal;
+    }
+    else
+    {
+        meta_data_state = EMetaDataState::Normal;
+    }
 
     const std::string length_unit = meta_data.isMember("length_unit") ? meta_data["length_unit"].asString() : "m";
     const std::string angle_unit = meta_data.isMember("angle_unit") ? meta_data["angle_unit"].asString() : "rad";
