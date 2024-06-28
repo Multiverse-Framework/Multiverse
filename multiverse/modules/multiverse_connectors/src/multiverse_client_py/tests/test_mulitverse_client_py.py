@@ -33,7 +33,7 @@ class MultiverseClientTest(MultiverseClient):
         self._connect_and_start()
 
     def send_and_receive_meta_data(self):
-        print(self._communicate(True))
+        self._communicate(True)
 
     def send_and_receive_data(self):
         self._communicate(False)
@@ -231,7 +231,6 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                  multiverse_meta_data=meta_data)
         multiverse_client.request_meta_data["api_callbacks"] = api_callbacks
         multiverse_client.run()
-        multiverse_client.send_and_receive_meta_data()
         return multiverse_client
 
     def create_multiverse_client_spawn_and_callapi(self, port, world_name, api_callbacks):
@@ -268,8 +267,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
 
         multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
         multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = ["position",
-                                                                              "quaternion",
-                                                                              "relative_velocity"]
+                                                                              "quaternion"]
         multiverse_client_test_spawn.request_meta_data["send"]["panda"] = ["position",
                                                                            "quaternion"]
         multiverse_client_test_spawn.send_and_receive_meta_data()
@@ -278,65 +276,61 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client_test_spawn.send_data = [time_now,
                                                   0, 0, 5,
                                                   0.0, 0.0, 0.0, 1.0,
-                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                                                   0, 0, 3,
                                                   0.0, 0.0, 0.0, 1.0]
         multiverse_client_test_spawn.send_and_receive_data()
-
-        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
-                                                                               {
-                                                                                   "empty_simulation": [
-                                                                                       {"exist": ["milk_box", "panda", "bowl"]},
-                                                                                   ]
-                                                                               })
-        print(multiverse_client_test_callapi.response_meta_data)
-
         multiverse_client_test_spawn.stop()
 
     def test_multiverse_client_spawns(self):
         multiverse_client_test_spawn = self.create_multiverse_client_spawn("1337", "world")
-
-        # multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
-        # multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = []
-        # multiverse_client_test_spawn.request_meta_data["receive"]["milk_box"] = []
-        # multiverse_client_test_spawn.send_and_receive_meta_data()
-        #
-        # time_now = time() - self.time_start
-        # multiverse_client_test_spawn.send_data = [time_now]
-        # multiverse_client_test_spawn.send_and_receive_data()
-        #
-        # sleep(1)
-
-        print("STARTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT")
-
         multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
-        multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = ["position",
-                                                                              "quaternion",
-                                                                              "relative_velocity"]
-        multiverse_client_test_spawn.send_and_receive_meta_data()
 
-        time_now = time() - self.time_start
-        multiverse_client_test_spawn.send_data = [time_now,
-                                                  0, 0, 5,
-                                                  0.0, 0.0, 0.0, 1.0,
-                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-        multiverse_client_test_spawn.send_and_receive_data()
+        for _ in range(10):
+            # Destroy milk box
+            multiverse_client_test_spawn.request_meta_data["send"] = {}
+            multiverse_client_test_spawn.request_meta_data["receive"] = {}
+            multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = []
+            multiverse_client_test_spawn.request_meta_data["receive"]["milk_box"] = []
+            multiverse_client_test_spawn.send_and_receive_meta_data()
+            time_now = time() - self.time_start
+            multiverse_client_test_spawn.send_data = [time_now]
+            multiverse_client_test_spawn.send_and_receive_data()
 
-        # sleep(1)
-  
-        multiverse_client_test_spawn.request_meta_data["send"] = {}
-        multiverse_client_test_spawn.request_meta_data["send"]["panda"] = ["position",
-                                                                           "quaternion"]
+            # Destroy panda
+            multiverse_client_test_spawn.request_meta_data["send"] = {}
+            multiverse_client_test_spawn.request_meta_data["receive"] = {}
+            multiverse_client_test_spawn.request_meta_data["send"]["panda"] = []
+            multiverse_client_test_spawn.request_meta_data["receive"]["panda"] = []
+            multiverse_client_test_spawn.send_and_receive_meta_data()
+            time_now = time() - self.time_start
+            multiverse_client_test_spawn.send_data = [time_now]
+            multiverse_client_test_spawn.send_and_receive_data()
 
-        multiverse_client_test_spawn.send_and_receive_meta_data()
-        time_now = time() - self.time_start
-        multiverse_client_test_spawn.send_data = [time_now,
-                                                  0, 0, 3,
-                                                  0.0, 0.0, 0.0, 1.0]
-        multiverse_client_test_spawn.send_and_receive_data()
+            # Spawn milk box
+            multiverse_client_test_spawn.request_meta_data["send"] = {}
+            multiverse_client_test_spawn.request_meta_data["receive"] = {}
+            multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = ["position",
+                                                                                  "quaternion",
+                                                                                  "relative_velocity"]
+            multiverse_client_test_spawn.send_and_receive_meta_data()
+            time_now = time() - self.time_start
+            multiverse_client_test_spawn.send_data = [time_now,
+                                                      0, 0, 5,
+                                                      0.0, 0.0, 0.0, 1.0,
+                                                      0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+            multiverse_client_test_spawn.send_and_receive_data()
 
-        print(multiverse_client_test_spawn.response_meta_data)
-        print(multiverse_client_test_spawn.receive_data)
+            # Spawn panda
+            multiverse_client_test_spawn.request_meta_data["send"] = {}
+            multiverse_client_test_spawn.request_meta_data["receive"] = {}
+            multiverse_client_test_spawn.request_meta_data["send"]["panda"] = ["position",
+                                                                               "quaternion"]
+            multiverse_client_test_spawn.send_and_receive_meta_data()
+            time_now = time() - self.time_start
+            multiverse_client_test_spawn.send_data = [time_now,
+                                                      0, 0, 3,
+                                                      0.0, 0.0, 0.0, 1.0]
+            multiverse_client_test_spawn.send_and_receive_data()
 
         multiverse_client_test_spawn.stop()
 
@@ -502,8 +496,6 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         # Spawn panda and milk box
         self.test_multiverse_client_spawn()
 
-        sleep(2)
-
         # Attach milk box to hand at (0 0 0) (1 0 0 0)
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
@@ -516,7 +508,6 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                                                                            "param2"]}
                                                                                    ]
                                                                                })
-
         time_callapi = multiverse_client_test_callapi.response_meta_data["time"]
         self.assertDictEqual(multiverse_client_test_callapi.response_meta_data,
                              {'api_callbacks_response':
@@ -532,8 +523,6 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                'time_unit': 's',
                                                'world_name': 'world'},
                                  'time': time_callapi})
-
-        sleep(2)
 
         # Re-attach milk box to hand at (0 0 0.5) (1 0 0 0)
         multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
@@ -557,8 +546,6 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                'world_name': 'world'},
                                  'time': time_callapi})
 
-        sleep(2)
-
         # Detach milk box from hand
         multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
             "empty_simulation": [
@@ -580,8 +567,6 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                'time_unit': 's',
                                                'world_name': 'world'},
                                  'time': time_callapi})
-
-        sleep(2)
 
         # Detach milk box from hand again (should success)
         multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
@@ -605,8 +590,6 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                'world_name': 'world'},
                                  'time': time_callapi})
 
-        sleep(2)
-
         multiverse_client_test_callapi.stop()
 
     def test_multiverse_client_move(self):
@@ -614,7 +597,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
 
         x_pos = [0.0, 1.0, 1.0, 1.0, 0.0, -1.0, -1.0, -1.0, 0.0]
         y_pos = [1.0, 1.0, 0.0, -1.0, -1.0, -1.0, 0.0, 1.0, 1.0]
-        for i in range(4):
+        for i in range(9):
             multiverse_client_test_move.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
             multiverse_client_test_move.request_meta_data["send"]["milk_box"] = ["position",
                                                                                  "quaternion",
@@ -641,8 +624,10 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
                                                                                    "empty_simulation": [
-                                                                                       {"get_contact_bodies": ["milk_box"]},
-                                                                                       {"get_contact_bodies": ["link1"]},
+                                                                                       {"get_contact_bodies": [
+                                                                                           "milk_box"]},
+                                                                                       {"get_contact_bodies": [
+                                                                                           "link1"]},
                                                                                        {"is_mujoco": []},
                                                                                        {"something_else": ["param1",
                                                                                                            "param2"]}
@@ -670,13 +655,15 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
 
-        sleep(10) # Wait for the milk box to fall and stabilize
+        sleep(10)  # Wait for the milk box to fall and stabilize
 
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
                                                                                    "empty_simulation": [
-                                                                                       {"get_contact_bodies": ["milk_box"]},
-                                                                                       {"get_constraint_effort": ["milk_box"]},
+                                                                                       {"get_contact_bodies": [
+                                                                                           "milk_box"]},
+                                                                                       {"get_constraint_effort": [
+                                                                                           "milk_box"]},
                                                                                        {"is_mujoco": []},
                                                                                        {"something_else": ["param1",
                                                                                                            "param2"]}
@@ -692,8 +679,9 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                                                {
                                                                                    "empty_simulation": [
                                                                                        {"get_rays": ["1 0 3", "0 0 3"]},
-                                                                                       {"get_rays": ["0 0 1 0 0 1 0 0 2",
-                                                                                                          "0 0 3 0 0 -1 0 0 2.5"]},
+                                                                                       {"get_rays": [
+                                                                                           "0 0 1 0 0 1 0 0 2",
+                                                                                           "0 0 3 0 0 -1 0 0 2.5"]},
                                                                                        {"is_mujoco": []},
                                                                                        {"something_else": ["param1",
                                                                                                            "param2"]}

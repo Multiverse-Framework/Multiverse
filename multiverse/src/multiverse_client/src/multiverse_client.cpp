@@ -226,7 +226,7 @@ void MultiverseClient::run()
                     printf("[Client %s] The socket %s from the server has received new meta data.\n", port.c_str(), socket_addr.c_str());
                     send_request_meta_data(); // TODO: Make use of the old meta data
 
-                    receive_response_meta_data();                    
+                    receive_response_meta_data();
 
                     check_response_meta_data();
 

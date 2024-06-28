@@ -536,6 +536,10 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 					for (int body_id = 1; body_id < m->nbody; body_id++)
 					{
 						const std::string body_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_id);
+						if (send_objects.find(body_name) != send_objects.end())
+						{
+							continue;
+						}
 						if ((receive_objects.find(body_name) != receive_objects.end()) && (receive_objects[body_name].find(attribute_name) != receive_objects[body_name].end()))
 						{
 							continue;
@@ -1101,7 +1105,7 @@ void MjMultiverseClient::weld(const Json::Value &arguments)
 		return;
 	}
 
-	printf("Attach %s to %s at %s\n", object_1_name.c_str(), object_2_name.c_str(), relative_pose.c_str());
+	printf("Weld %s to %s at %s\n", object_1_name.c_str(), object_2_name.c_str(), relative_pose.c_str());
 	MjSimulate::load_new_model_and_keep_old_data();
 }
 
@@ -1221,7 +1225,7 @@ void MjMultiverseClient::unweld(const Json::Value &arguments)
 		return;
 	}
 
-	printf("Detach %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
+	printf("Unweld %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
 	MjSimulate::load_new_model_and_keep_old_data();
 }
 
@@ -1437,7 +1441,6 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 						}
 						qpos_str.pop_back();
 						key_element->SetAttribute("qpos", qpos_str.c_str());
-						printf("%s\n", qpos_str.c_str());
 					}
 					if (key_element->Attribute("qvel") != nullptr)
 					{
