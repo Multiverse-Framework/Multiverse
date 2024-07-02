@@ -11,10 +11,10 @@
      xmlns:xformOp="https://ease-crc.org/ont/USD#xformOp:">
     <owl:Ontology rdf:about="https://ease-crc.org/ont/USD.owl">
         <owl:imports rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl"/>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The purpose of the USD ontology is to establish a graph model of the USD language, and to support translation from USD to a KG representation of scene graphs. To this end, the core vocabulary of USD is defined in terms of an upper-level ontology. In addition, a set of re-usable built-in schemata that are used in the USD language to describe prims are defined. In order to fasciliate translation, the ontological model attempts to replicate the structure of USD as closely as possible while in addition entailing semantics of USD entities.</rdfs:comment>
+        <rdfs:comment>The purpose of the USD ontology is to establish a graph model of the USD language, and to support translation from USD to a KG representation of scene graphs. To this end, the core vocabulary of USD is defined in terms of an upper-level ontology. In addition, a set of re-usable built-in schemata that are used in the USD language to describe prims are defined. In order to fasciliate translation, the ontological model attempts to replicate the structure of USD as closely as possible while in addition entailing semantics of USD entities.</rdfs:comment>
         <rdfs:label>USD Ontology</rdfs:label>
-        <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.1</owl:versionInfo>
-        <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">0.1 created by Daniel Beßler. The scope of the ontology is limited to syntactic features of the USD language needed for a usecase scenario (box opening) investigated in the scope of a scientific article.</owl:versionInfo>
+        <owl:versionInfo>0.1</owl:versionInfo>
+        <owl:versionInfo>0.1 created by Daniel Beßler and Giang Nguyen. The scope of the ontology is limited to syntactic features of the USD language needed for a usecase scenario (box opening) investigated in the scope of a scientific article.</owl:versionInfo>
     </owl:Ontology>
     
 
@@ -201,6 +201,17 @@
     
 
 
+    <!-- https://ease-crc.org/ont/USD.owl#hasPointIds -->
+
+    <owl:ObjectProperty rdf:about="https://ease-crc.org/ont/USD.owl#hasPointIds">
+        <rdfs:subPropertyOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality"/>
+        <owl:inverseOf rdf:resource="https://ease-crc.org/ont/USD.owl#isPointIdsOf"/>
+        <rdfs:domain rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+        <rdfs:range rdf:resource="https://ease-crc.org/ont/USD.owl#PointsIds"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- https://ease-crc.org/ont/USD.owl#hasSchema -->
 
     <owl:ObjectProperty rdf:about="https://ease-crc.org/ont/USD.owl#hasSchema">
@@ -280,6 +291,16 @@
         <rdfs:subPropertyOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf"/>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
         <rdfs:domain rdf:resource="https://ease-crc.org/ont/USD.owl#Physics"/>
+        <rdfs:range rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://ease-crc.org/ont/USD.owl#isPointIdsOf -->
+
+    <owl:ObjectProperty rdf:about="https://ease-crc.org/ont/USD.owl#isPointIdsOf">
+        <rdfs:subPropertyOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf"/>
+        <rdfs:domain rdf:resource="https://ease-crc.org/ont/USD.owl#PointsIds"/>
         <rdfs:range rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Entity"/>
     </owl:ObjectProperty>
     
@@ -374,17 +395,6 @@
         <rdfs:subPropertyOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
         <rdfs:domain rdf:resource="https://ease-crc.org/ont/USD.owl#Color"/>
         <rdfs:comment>A data value of a color quality.</rdfs:comment>
-    </owl:DatatypeProperty>
-    
-
-
-    <!-- https://ease-crc.org/ont/USD.owl#hasJointValue -->
-
-    <owl:DatatypeProperty rdf:about="https://ease-crc.org/ont/USD.owl#hasJointValue">
-        <rdfs:subPropertyOf rdf:resource="https://ease-crc.org/ont/USD.owl#simulatorDataValue"/>
-        <rdfs:domain rdf:resource="https://ease-crc.org/ont/USD.owl#JointState"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
-        <rdfs:comment>The value of a joint.</rdfs:comment>
     </owl:DatatypeProperty>
     
 
@@ -651,15 +661,6 @@
     
 
 
-    <!-- https://ease-crc.org/ont/USD.owl#simulatorDataValue -->
-
-    <owl:DatatypeProperty rdf:about="https://ease-crc.org/ont/USD.owl#simulatorDataValue">
-        <rdfs:subPropertyOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasDataValue"/>
-        <rdfs:comment>A data value computed by a simulator.</rdfs:comment>
-    </owl:DatatypeProperty>
-    
-
-
     <!-- https://ease-crc.org/ont/USD.owl#size -->
 
     <owl:DatatypeProperty rdf:about="https://ease-crc.org/ont/USD.owl#size">
@@ -919,29 +920,7 @@
 
     <owl:Class rdf:about="https://ease-crc.org/ont/USD.owl#Joint">
         <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#PhysicalObject"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#hasQuality"/>
-                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass rdf:resource="https://ease-crc.org/ont/USD.owl#JointState"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
         <rdfs:comment>A joint constrains the motion of objects relative to each other.</rdfs:comment>
-    </owl:Class>
-    
-
-
-    <!-- https://ease-crc.org/ont/USD.owl#JointState -->
-
-    <owl:Class rdf:about="https://ease-crc.org/ont/USD.owl#JointState">
-        <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#isQualityOf"/>
-                <owl:allValuesFrom rdf:resource="https://ease-crc.org/ont/USD.owl#Joint"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:comment>The state of a joint.</rdfs:comment>
     </owl:Class>
     
 
@@ -1148,6 +1127,44 @@
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:comment>A schema that models general properties used for simulation.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://ease-crc.org/ont/USD.owl#PointBasedSchema -->
+
+    <owl:Class rdf:about="https://ease-crc.org/ont/USD.owl#PointBasedSchema">
+        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/USD.owl#GprimSchema"/>
+        <rdfs:comment>A schema that serves as a base class for all prims that possess points, providing common attributes such as normals and velocities.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://ease-crc.org/ont/USD.owl#PointsIds -->
+
+    <owl:Class rdf:about="https://ease-crc.org/ont/USD.owl#PointsIds">
+        <rdfs:subClassOf rdf:resource="http://www.ontologydesignpatterns.org/ont/dul/DUL.owl#Quality"/>
+        <rdfs:comment>The quality of having points ids.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- https://ease-crc.org/ont/USD.owl#PointsSchema -->
+
+    <owl:Class rdf:about="https://ease-crc.org/ont/USD.owl#PointsSchema">
+        <rdfs:subClassOf rdf:resource="https://ease-crc.org/ont/USD.owl#PointBasedSchema"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://ease-crc.org/ont/USD.owl#isSchemaOf"/>
+                <owl:allValuesFrom>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://ease-crc.org/ont/USD.owl#hasPointIds"/>
+                        <owl:someValuesFrom rdf:resource="https://ease-crc.org/ont/USD.owl#PointsIds"/>
+                    </owl:Restriction>
+                </owl:allValuesFrom>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:comment>A schema that represents points, which can be an efficient means of storing and rendering particle effects comprised of thousands or millions of small particles.</rdfs:comment>
     </owl:Class>
     
 
@@ -1565,5 +1582,4 @@
 
 
 
-<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
-
+<!-- Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi -->

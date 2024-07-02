@@ -143,16 +143,17 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
     other_nums = 0
 
     stage = Usd.Stage.Open(in_usd_file)
+        
     with ABox_onto:
         for prim in stage.Traverse():
             if not prim.IsA(Usd.SchemaBase) or prim.IsA(UsdShade.Material) or prim.IsA(UsdShade.Shader) or prim.IsA(UsdGeom.Subset):
+                print(prim, prim.IsA(Usd.SchemaBase))
                 other_nums += 1
                 continue
 
-            if prim.IsA(UsdGeom.Gprim):
-                prim_name = prim.GetParent().GetName() + "_" + prim.GetName()
-            else:
-                prim_name = prim.GetName()
+            print("Prim", prim)
+
+            prim_name = prim.GetName()
 
             prim_inst = usd_onto.Prim(prim_name, namespace=usd_onto)
             prim_dict[prim] = prim_inst
@@ -206,88 +207,96 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
             if prim.IsA(UsdGeom.Xformable):
                 xformable = UsdGeom.Xformable(prim)
                 xformOpOrderAttr = xformable.GetXformOpOrderAttr().Get()
-                if xformOpOrderAttr is None:
-                    continue
+                if xformOpOrderAttr is not None:
+                    xformOpOrder_inst = dul_onto.Quality(prim.GetName() + "_xformOpOrder", namespace=dul_onto)
+                    prim_inst.hasQuality.append(xformOpOrder_inst)
 
-                xformOpOrder_inst = dul_onto.Quality(prim.GetName() + "_xformOpOrder", namespace=dul_onto)
-                prim_inst.hasQuality.append(xformOpOrder_inst)
+                    xformOpOrder_inst.xformOpOrder = [xformOpOrderAttr]
 
-                xformOpOrder_inst.xformOpOrder = [xformOpOrderAttr]
+                    for xformOp in xformOpOrderAttr:
+                        if not prim.HasAttribute(xformOp):
+                            continue
+                        if xformOp == "xformOp:translate":
+                            xformOpTranslate_inst = dul_onto.Quality(prim.GetName() + "_xformOp_translate", namespace=dul_onto)
+                            prim_inst.hasQuality.append(xformOpTranslate_inst)
 
-                for xformOp in xformOpOrderAttr:
-                    if not prim.HasAttribute(xformOp):
-                        continue
-                    if xformOp == "xformOp:translate":
-                        xformOpTranslate_inst = dul_onto.Quality(prim.GetName() + "_xformOp_translate", namespace=dul_onto)
-                        prim_inst.hasQuality.append(xformOpTranslate_inst)
+                            xformOpTransform_inst.xformOp_translate = [prim.GetAttribute(xformOp).Get()]
 
-                        xformOpTransform_inst.xformOp_translate = [prim.GetAttribute(xformOp).Get()]
+                        if xformOp == "xformOp:rotate":
+                            xformOpRotate_inst = dul_onto.Quality(prim.GetName() + "_xformOp_rotate", namespace=dul_onto)
+                            prim_inst.hasQuality.append(xformOpRotate_inst)
 
-                    if xformOp == "xformOp:rotate":
-                        xformOpRotate_inst = dul_onto.Quality(prim.GetName() + "_xformOp_rotate", namespace=dul_onto)
-                        prim_inst.hasQuality.append(xformOpRotate_inst)
+                            xformOpRotate_inst.xformOp_rotate = [prim.GetAttribute(xformOp).Get()]
 
-                        xformOpRotate_inst.xformOp_rotate = [prim.GetAttribute(xformOp).Get()]
+                        if xformOp == "xformOp:transform":
+                            xformOpTransform_inst = dul_onto.Quality(prim.GetName() + "_xformOp_transform", namespace=dul_onto)
+                            prim_inst.hasQuality.append(xformOpTransform_inst)
 
-                    if xformOp == "xformOp:transform":
-                        xformOpTransform_inst = dul_onto.Quality(prim.GetName() + "_xformOp_transform", namespace=dul_onto)
-                        prim_inst.hasQuality.append(xformOpTransform_inst)
+                            xformOpTransform_inst.xformOp_transform = [prim.GetAttribute(xformOp).Get()]
 
-                        xformOpTransform_inst.xformOp_transform = [prim.GetAttribute(xformOp).Get()]
+                        if xformOp == "xformOp:transform":
+                            xformOpTransform_inst = dul_onto.Quality(prim.GetName() + "_xformOp_transform", namespace=dul_onto)
+                            prim_inst.hasQuality.append(xformOpTransform_inst)
 
-                    if xformOp == "xformOp:transform":
-                        xformOpTransform_inst = dul_onto.Quality(prim.GetName() + "_xformOp_transform", namespace=dul_onto)
-                        prim_inst.hasQuality.append(xformOpTransform_inst)
+                            xformOpTransform_inst.xformOp_transform = [prim.GetAttribute(xformOp).Get()]
 
-                        xformOpTransform_inst.xformOp_transform = [prim.GetAttribute(xformOp).Get()]
+                if prim.IsA(UsdGeom.Xform):
+                    hasXformSchema_prop = usd_onto.hasTypedSchema
+                    prim_inst.is_a.append(hasXformSchema_prop.some(usd_onto.XformSchema))
 
-            if prim.IsA(UsdGeom.Gprim):
-                gprim = UsdGeom.Gprim(prim)
-                if gprim.GetDisplayColorPrimvar().Get() is not None and gprim.GetDisplayOpacityPrimvar().Get() is not None:
-                    displayColor_inst = dul_onto.Quality(prim.GetName() + "_dislayColor", namespace=dul_onto)
-                    prim_inst.hasQuality.append(displayColor_inst)
-                    displayOpacity_inst = dul_onto.Quality(prim.GetName() + "_dislayOpacity", namespace=dul_onto)
-                    prim_inst.hasQuality.append(displayOpacity_inst)
+                elif prim.IsA(UsdGeom.Boundable):
+                    if prim.IsA(UsdGeom.Gprim):
+                        gprim = UsdGeom.Gprim(prim)
+                        if gprim.GetDisplayColorPrimvar().Get() is not None and gprim.GetDisplayOpacityPrimvar().Get() is not None:
+                            displayColor_inst = dul_onto.Quality(prim.GetName() + "_dislayColor", namespace=dul_onto)
+                            prim_inst.hasQuality.append(displayColor_inst)
+                            displayOpacity_inst = dul_onto.Quality(prim.GetName() + "_dislayOpacity", namespace=dul_onto)
+                            prim_inst.hasQuality.append(displayOpacity_inst)
 
-                    displayColor_inst.primvars_displayColor = [gprim.GetDisplayColorPrimvar().Get()]
-                    displayOpacity_inst.primvars_displayOpacity = [gprim.GetDisplayOpacityPrimvar().Get()]
+                            displayColor_inst.primvars_displayColor = [gprim.GetDisplayColorPrimvar().Get()]
+                            displayOpacity_inst.primvars_displayOpacity = [gprim.GetDisplayOpacityPrimvar().Get()]
 
-            if prim.IsA(UsdGeom.Xform):
-                hasXformSchema_prop = usd_onto.hasTypedSchema
-                prim_inst.is_a.append(hasXformSchema_prop.some(usd_onto.XformSchema))
+                        if prim.IsA(UsdGeom.Cube):
+                            hasCubeSchema_prop = usd_onto.hasTypedSchema
+                            prim_inst.is_a.append(hasCubeSchema_prop.some(usd_onto.CubeSchema))
 
-            elif prim.IsA(UsdGeom.Cube):
-                hasCubeSchema_prop = usd_onto.hasTypedSchema
-                prim_inst.is_a.append(hasCubeSchema_prop.some(usd_onto.CubeSchema))
+                            size_inst = dul_onto.Quality(prim.GetName() + "_size", namespace=dul_onto)
+                            prim_inst.hasQuality.append(size_inst)
 
-                size_inst = dul_onto.Quality(prim.GetName() + "_size", namespace=dul_onto)
-                prim_inst.hasQuality.append(size_inst)
+                            cube = UsdGeom.Cube(prim)
+                            size_inst.size = [float64(cube.GetSizeAttr().Get())]
 
-                cube = UsdGeom.Cube(prim)
-                size_inst.size = [float64(cube.GetSizeAttr().Get())]
+                        elif prim.IsA(UsdGeom.Sphere):
+                            hasSphereSchema_prop = usd_onto.hasTypedSchema
+                            prim_inst.is_a.append(hasSphereSchema_prop.some(usd_onto.SphereSchema))
 
-            elif prim.IsA(UsdGeom.Sphere):
-                hasSphereSchema_prop = usd_onto.hasTypedSchema
-                prim_inst.is_a.append(hasSphereSchema_prop.some(usd_onto.SphereSchema))
+                            radius_inst = dul_onto.Quality(prim.GetName() + "_radius", namespace=dul_onto)
+                            prim_inst.hasQuality.append(radius_inst)
 
-                radius_inst = dul_onto.Quality(prim.GetName() + "_radius", namespace=dul_onto)
-                prim_inst.hasQuality.append(radius_inst)
+                            sphere = UsdGeom.Sphere(prim)
+                            radius_inst.radius = [float64(sphere.GetRadiusAttr().Get())]
 
-                sphere = UsdGeom.Sphere(prim)
-                radius_inst.radius = [float64(sphere.GetRadiusAttr().Get())]
+                        elif prim.IsA(UsdGeom.Cylinder):
+                            hasCylinderSchema_prop = usd_onto.hasTypedSchema
+                            prim_inst.is_a.append(hasCylinderSchema_prop.some(usd_onto.CylinderSchema))
 
-            elif prim.IsA(UsdGeom.Cylinder):
-                hasCylinderSchema_prop = usd_onto.hasTypedSchema
-                prim_inst.is_a.append(hasCylinderSchema_prop.some(usd_onto.CylinderSchema))
+                            radius_inst = dul_onto.Quality(prim.GetName() + "_radius", namespace=dul_onto)
+                            prim_inst.hasQuality.append(radius_inst)
+                            height_inst = dul_onto.Quality(prim.GetName() + "_height", namespace=dul_onto)
+                            prim_inst.hasQuality.append(height_inst)
 
-                radius_inst = dul_onto.Quality(prim.GetName() + "_radius", namespace=dul_onto)
-                prim_inst.hasQuality.append(radius_inst)
-                height_inst = dul_onto.Quality(prim.GetName() + "_height", namespace=dul_onto)
-                prim_inst.hasQuality.append(height_inst)
+                            cylinder = UsdGeom.Cylinder(prim)
+                            radius_inst.radius = [float64(cylinder.GetRadiusAttr().Get())]
+                            height_inst.height = [float64(cylinder.GetHeightAttr().Get())]
 
-                cylinder = UsdGeom.Cylinder(prim)
-                radius_inst.radius = [float64(cylinder.GetRadiusAttr().Get())]
-                height_inst.height = [float64(cylinder.GetHeightAttr().Get())]
+                        elif prim.IsA(UsdGeom.PointBased):
+                            if prim.IsA(UsdGeom.Points):
+                                hasPointsSchema_prop = usd_onto.hasTypedSchema
+                                prim_inst.is_a.append(hasPointsSchema_prop.some(usd_onto.PointsSchema))
+
+                                points_ids_inst = dul_onto.Quality(prim.GetName() + "_pointsIds", namespace=dul_onto)
+                                prim_inst.hasQuality.append(points_ids_inst)
+
 
         for prim in stage.Traverse():
             prim_inst = prim_dict.get(prim)
