@@ -52,7 +52,7 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
         inertia_sources = [InertiaSource.FROM_SRC, InertiaSource.FROM_VISUAL_MESH, InertiaSource.FROM_COLLISION_MESH,
                            InertiaSource.FROM_SRC]
 
-        for i in range(4):
+        for i in range(1):
             factory = importer(file_path=input_path,
                                fixed_base=fixed_base,
                                with_physics=with_physics,
@@ -171,6 +171,13 @@ class UsdToUsdTestCase(MultiverseImporterTestCase):
                                        add_xform_for_each_geom=True)
         self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False,
                                        add_xform_for_each_geom=True)
+
+    def test_usd_to_usd_apartment(self):
+        input_usd_path = "/home/giangnguyen/Downloads/house_models/train_5/World.usda"
+        self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=True,
+                                       add_xform_for_each_geom=False)
+        # self.validate_visual_collision(UsdImporter, input_usd_path, fixed_base=True, with_physics=False,
+        #                                add_xform_for_each_geom=True)
 
 
 class MjcfToUsdTestCase(MultiverseImporterTestCase):

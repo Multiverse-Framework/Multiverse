@@ -58,6 +58,16 @@ class MeshProperty:
             mesh_stage = Usd.Stage.Open(mesh_file_path)
             cache_mesh_stages[mesh_file_path] = mesh_stage
         mesh_prim = mesh_stage.GetPrimAtPath(mesh_path) if not mesh_path.isEmpty else mesh_stage.GetDefaultPrim()
+        if not mesh_prim.IsValid() and not mesh_path.isEmpty:
+            print(f"Prim {mesh_prim} from {mesh_file_path} is not valid.")
+            if not mesh_stage.GetPrimAtPath(mesh_path.GetParentPath()).IsValid():
+                raise ValueError(f"Parent prim {mesh_path.GetParentPath()} is not valid.")
+            mesh_prims = [prim for prim in mesh_stage.GetPrimAtPath(mesh_path.GetParentPath()).GetChildren()]
+            for mesh_prim in mesh_prims:
+                if mesh_path.name in mesh_prim.GetName():
+                    break
+            else:
+                raise ValueError(f"Mesh prim {mesh_prim.GetName()} is not found in {mesh_file_path}.")
         if not mesh_prim.IsA(UsdGeom.Mesh):
             mesh_path = mesh_prim.GetPath().AppendChild(mesh_prim.GetName())
             if mesh_stage.GetPrimAtPath(mesh_path).IsValid():
@@ -66,7 +76,7 @@ class MeshProperty:
                 print(f"Prim {mesh_prim} from {mesh_file_path} is not a mesh, try to get its child.")
                 mesh_prims = [prim for prim in Usd.PrimRange(mesh_stage.GetDefaultPrim()) if prim.IsA(UsdGeom.Mesh)]
                 for mesh_prim in mesh_prims:
-                    if mesh_prim.GetName() == mesh_prim.GetName():
+                    if mesh_path.name in mesh_prim.GetName():
                         break
                 else:
                     raise ValueError(f"Mesh prim {mesh_prim.GetName()} is not found in {mesh_file_path}.")

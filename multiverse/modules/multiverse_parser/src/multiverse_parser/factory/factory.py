@@ -77,9 +77,15 @@ def fix_texture_path(usd_mesh_file_path: str):
             if diffuse_color_input.HasConnectedSource():
                 source = diffuse_color_input.GetConnectedSource()[0]
                 if len(source.GetOutputs()) != 1:
-                    raise NotImplementedError("Multiple outputs are not supported yet.")
-                output = source.GetOutputs()[0]
-                output_prim = output.GetPrim()
+                    for output in source.GetOutputs():
+                        if output.GetBaseName() == "rgb":
+                            output_prim = output.GetPrim()
+                            break
+                    else:
+                        raise NotImplementedError("Multiple outputs are not supported yet.")
+                else:
+                    output = source.GetOutputs()[0]
+                    output_prim = output.GetPrim()
                 if not output_prim.IsA(UsdShade.Shader):
                     raise NotImplementedError("Only shader output is supported.")
                 output_shader = UsdShade.Shader(output_prim)
