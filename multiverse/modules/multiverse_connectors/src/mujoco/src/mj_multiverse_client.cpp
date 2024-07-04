@@ -529,70 +529,9 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 		for (const Json::Value &attribute_json : send_objects_json[object_name])
 		{
 			const std::string attribute_name = attribute_json.asString();
-			if (strcmp(object_name.c_str(), "body") == 0)
+			if (strcmp(object_name.c_str(), "body") == 0 || strcmp(object_name.c_str(), "joint") == 0)
 			{
-				if (body_attributes.count(attribute_name) != 0)
-				{
-					for (int body_id = 1; body_id < m->nbody; body_id++)
-					{
-						const std::string body_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_id);
-						if ((send_objects.find(body_name) != send_objects.end()) && (send_objects[body_name].find(attribute_name) != send_objects[body_name].end()))
-						{
-							continue;
-						}
-						if ((receive_objects.find(body_name) != receive_objects.end()) && (receive_objects[body_name].find(attribute_name) != receive_objects[body_name].end()))
-						{
-							continue;
-						}
-						if (strcmp(attribute_name.c_str(), "relative_velocity") == 0)
-						{
-							if ((m->body_dofnum[body_id] == 6 &&
-								 m->body_jntadr[body_id] != -1 &&
-								 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
-							{
-								send_objects[body_name].insert(attribute_name);
-							}
-						}
-						else if (strcmp(attribute_name.c_str(), "position") == 0 ||
-								 strcmp(attribute_name.c_str(), "quaternion") == 0)
-						{
-							send_objects[body_name].insert(attribute_name);
-						}
-					}
-				}
-			}
-			else if (strcmp(object_name.c_str(), "joint") == 0)
-			{
-				if (send_hinge_joint_attributes.count(attribute_name) != 0)
-				{
-					for (int joint_id = 0; joint_id < m->njnt; joint_id++)
-					{
-						if (m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE)
-						{
-							const std::string joint_name = mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id);
-							if ((receive_objects.find(joint_name) != receive_objects.end()) && (receive_objects[joint_name].find(attribute_name) != receive_objects[joint_name].end()))
-							{
-								continue;
-							}
-							send_objects[joint_name].insert(attribute_name);
-						}
-					}
-				}
-				else if (send_slide_joint_attributes.count(attribute_name) != 0)
-				{
-					for (int joint_id = 0; joint_id < m->njnt; joint_id++)
-					{
-						if (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)
-						{
-							const std::string joint_name = mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id);
-							if ((receive_objects.find(joint_name) != receive_objects.end()) && (receive_objects[joint_name].find(attribute_name) != receive_objects[joint_name].end()))
-							{
-								continue;
-							}
-							send_objects[joint_name].insert(attribute_name);
-						}
-					}
-				}
+				continue;
 			}
 			else
 			{
@@ -617,6 +556,95 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 						  (send_slide_joint_attributes.count(attribute_name) != 0 && m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)))
 				{
 					send_objects[object_name].insert(attribute_name);
+				}
+			}
+		}
+	}
+
+	for (const std::string &object_name : send_objects_json.getMemberNames())
+	{
+		if (strcmp(object_name.c_str(), "body") == 0)
+		{
+			for (int body_id = 1; body_id < m->nbody; body_id++)
+			{
+				if (mj_id2name(m, mjtObj::mjOBJ_BODY, body_id) == nullptr )
+				{
+					continue;
+				}
+				const std::string body_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_id);
+				if (send_objects.find(body_name) != send_objects.end())
+				{
+					continue;
+				}
+				for (const Json::Value &attribute_json : send_objects_json[object_name])
+				{
+					const std::string attribute_name = attribute_json.asString();
+					if (body_attributes.count(attribute_name) != 0)
+					{
+						if ((receive_objects.find(body_name) != receive_objects.end()) && (receive_objects[body_name].find(attribute_name) != receive_objects[body_name].end()))
+						{
+							continue;
+						}
+						if (strcmp(attribute_name.c_str(), "relative_velocity") == 0)
+						{
+							if ((m->body_dofnum[body_id] == 6 &&
+								 m->body_jntadr[body_id] != -1 &&
+								 m->jnt_type[m->body_jntadr[body_id]] == mjtJoint::mjJNT_FREE))
+							{
+								send_objects[body_name].insert(attribute_name);
+							}
+						}
+						else if (strcmp(attribute_name.c_str(), "position") == 0 ||
+								 strcmp(attribute_name.c_str(), "quaternion") == 0)
+						{
+							send_objects[body_name].insert(attribute_name);
+						}
+					}
+				}
+			}
+		}
+		else if (strcmp(object_name.c_str(), "joint") == 0)
+		{
+			for (int joint_id = 0; joint_id < m->njnt; joint_id++)
+			{
+				if (mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id) == nullptr )
+				{
+					continue;
+				}
+				const std::string joint_name = mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id);
+				if (send_objects.find(joint_name) != send_objects.end())
+				{
+					continue;
+				}
+				for (const Json::Value &attribute_json : send_objects_json[object_name])
+				{
+					const std::string attribute_name = attribute_json.asString();
+					if (send_hinge_joint_attributes.count(attribute_name) != 0)
+					{
+						if (m->jnt_type[joint_id] == mjtJoint::mjJNT_HINGE)
+						{
+							if ((receive_objects.find(joint_name) != receive_objects.end()) && (receive_objects[joint_name].find(attribute_name) != receive_objects[joint_name].end()))
+							{
+								continue;
+							}
+							send_objects[joint_name].insert(attribute_name);
+						}
+					}
+					else if (send_slide_joint_attributes.count(attribute_name) != 0)
+					{
+						for (int joint_id = 0; joint_id < m->njnt; joint_id++)
+						{
+							if (m->jnt_type[joint_id] == mjtJoint::mjJNT_SLIDE)
+							{
+								const std::string joint_name = mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id);
+								if ((receive_objects.find(joint_name) != receive_objects.end()) && (receive_objects[joint_name].find(attribute_name) != receive_objects[joint_name].end()))
+								{
+									continue;
+								}
+								send_objects[joint_name].insert(attribute_name);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1868,7 +1896,7 @@ std::vector<std::string> MjMultiverseClient::get_get_rays_response(const Json::V
 	{
 		return {"failed (Starting points should have a multiple of 3 float elements.)"};
 	}
-	
+
 	std::istringstream ending_points_iss(arguments[1].asString());
 	std::vector<mjtNum> ending_points = std::vector<mjtNum>(std::istream_iterator<mjtNum>(ending_points_iss), std::istream_iterator<mjtNum>());
 	if (ending_points.size() % 3 != 0)
