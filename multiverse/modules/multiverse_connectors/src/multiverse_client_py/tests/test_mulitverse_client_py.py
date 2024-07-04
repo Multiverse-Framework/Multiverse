@@ -281,6 +281,36 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client_test_spawn.send_and_receive_data()
         multiverse_client_test_spawn.stop()
 
+    def test_multiverse_client_spawn_and_get_data(self):
+        multiverse_client_test_spawn = self.create_multiverse_client_spawn("1337", "world")
+
+        multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
+        multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = ["position",
+                                                                              "quaternion"]
+        multiverse_client_test_spawn.request_meta_data["send"]["panda"] = ["position",
+                                                                           "quaternion"]
+        multiverse_client_test_spawn.send_and_receive_meta_data()
+
+        time_now = time() - self.time_start
+        multiverse_client_test_spawn.send_data = [time_now,
+                                                  0, 0, 5,
+                                                  0.0, 0.0, 0.0, 1.0,
+                                                  0, 0, 3,
+                                                  0.0, 0.0, 0.0, 1.0]
+        multiverse_client_test_spawn.send_and_receive_data()
+
+        while True:
+            multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "sim_test_spawn"
+            multiverse_client_test_spawn.request_meta_data["send"] = {}
+            multiverse_client_test_spawn.request_meta_data["receive"][""] = [""]
+            multiverse_client_test_spawn.send_and_receive_meta_data()
+            if multiverse_client_test_spawn.response_meta_data["receive"].get("link0") is not None and \
+                    multiverse_client_test_spawn.response_meta_data["receive"]["link0"]["position"][0] is not None:
+                break
+
+        print(multiverse_client_test_spawn.response_meta_data["receive"]["link0"])
+        multiverse_client_test_spawn.stop()
+
     def test_multiverse_client_spawns(self):
         multiverse_client_test_spawn = self.create_multiverse_client_spawn("1337", "world")
         multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
