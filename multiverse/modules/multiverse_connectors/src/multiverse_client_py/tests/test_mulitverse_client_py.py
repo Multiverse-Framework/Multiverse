@@ -304,8 +304,11 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
             multiverse_client_test_spawn.request_meta_data["send"] = {}
             multiverse_client_test_spawn.request_meta_data["receive"][""] = [""]
             multiverse_client_test_spawn.send_and_receive_meta_data()
-            if multiverse_client_test_spawn.response_meta_data["receive"].get("link0") is not None and \
-                    multiverse_client_test_spawn.response_meta_data["receive"]["link0"]["position"][0] is not None:
+            if "link0" in multiverse_client_test_spawn.response_meta_data["receive"] and \
+                    "position" in multiverse_client_test_spawn.response_meta_data["receive"]["link0"] and \
+                    multiverse_client_test_spawn.response_meta_data["receive"]["link0"]["position"][0] is not None and \
+                    "quaternion" in multiverse_client_test_spawn.response_meta_data["receive"]["link0"] and \
+                    multiverse_client_test_spawn.response_meta_data["receive"]["link0"]["quaternion"][0] is not None:
                 break
 
         print(multiverse_client_test_spawn.response_meta_data["receive"]["link0"])
