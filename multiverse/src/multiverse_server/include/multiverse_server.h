@@ -56,7 +56,7 @@ enum class EAttribute : unsigned char
     JointQuaternion,
     Force,
     Torque,
-    RGB_1024_1024
+    RGB_3840_2160
 };
 
 enum class EMultiverseServerState : unsigned char

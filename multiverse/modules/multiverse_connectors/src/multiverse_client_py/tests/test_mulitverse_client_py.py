@@ -141,9 +141,9 @@ class MultiverseClientTestCase(unittest.TestCase):
         multiverse_client_test_receive.stop()
 
     def test_multiverse_client_send_data_2(self, stop=True):
-        multiverse_client_test_send = self.create_multiverse_client_send("1234", "object_1", ["rgb_1024_1024"])
+        multiverse_client_test_send = self.create_multiverse_client_send("1234", "object_1", ["rgb_3840_2160"])
         time_now = time() - self.time_start
-        send_data = [float(i % 255) for i in range(1024 * 1024 * 3)]
+        send_data = [float(i % 255) for i in range(3840 * 2160)]
         send_data = [time_now] + send_data
         self.multiverse_client_send_data(multiverse_client_test_send, send_data)
 
@@ -171,7 +171,7 @@ class MultiverseClientTestCase(unittest.TestCase):
         self.assertDictEqual(multiverse_client_test_receive.response_meta_data, {
             'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg',
                           'simulation_name': 'sim_test_receive', 'time_unit': 's', 'world_name': 'world'},
-            'receive': {'object_1': {'rgb_1024_1024': [float(i % 255) for i in range(1024 * 1024 * 3)]}},
+            'receive': {'object_1': {'rgb_1024_1024': [float(i % 255) for i in range(3840 * 2160 * 3)]}},
             'time': time_receive})
 
         multiverse_client_test_receive.stop()
