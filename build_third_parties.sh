@@ -23,6 +23,7 @@ INCLUDE_DIR=$MULTIVERSE_DIR/include
 BUILD_BLENDER=true
 BUILD_USD=true
 BUILD_MUJOCO=true
+BUILD_PYBIND11=true
 
 while [ -n "$1" ]; do
     case "$1" in
@@ -33,6 +34,7 @@ while [ -n "$1" ]; do
                 BUILD_BLENDER=false
                 BUILD_USD=false
                 BUILD_MUJOCO=false
+                BUILD_PYBIND11=false
             else
                 echo -n ", with value:"
                 for module in "$@"; do
@@ -45,6 +47,8 @@ while [ -n "$1" ]; do
                         BUILD_USD=OFF
                     elif [ "$module" = "mujoco" ]; then
                         BUILD_MUJOCO=OFF
+                    elif [ "$module" = "pybind11" ]; then
+                        BUILD_PYBIND11=OFF
                     fi
                 done
                 echo ""
@@ -127,6 +131,27 @@ if [ $BUILD_MUJOCO = true ]; then
 
     (cd $MUJOCO_BUILD_DIR && cmake $MUJOCO_EXT_DIR -DCMAKE_INSTALL_PREFIX=$MUJOCO_BUILD_DIR -Wno-deprecated -Wno-dev && cmake --build . && cmake --install .)
     ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
+fi
+
+if [ $BUILD_PYBIND11 = true ]; then
+    echo "Building pybind11..."
+
+    # Build pybind11
+
+    PYBIND11_BUILD_DIR=$BUILD_DIR/pybind11
+    PYBIND11_EXT_DIR=$EXT_DIR/pybind11
+
+    git submodule update --init $PYBIND11_EXT_DIR
+
+    if [ ! -d "$PYBIND11_BUILD_DIR" ]; then
+        # Create the folder if it doesn't exist
+        mkdir -p "$PYBIND11_BUILD_DIR"
+        echo "Folder created: $PYBIND11_BUILD_DIR"
+    else
+        echo "Folder already exists: $PYBIND11_BUILD_DIR"
+    fi
+
+    (cd $PYBIND11_BUILD_DIR && cmake $PYBIND11_EXT_DIR -DCMAKE_INSTALL_PREFIX=$PYBIND11_BUILD_DIR -Wno-deprecated -Wno-dev && cmake --build . && sudo cmake --install .)
 fi
 
 RELOAD=false
