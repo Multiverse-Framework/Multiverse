@@ -10,3 +10,6 @@
 [submodule "multiverse/modules/multiverse_knowledge/ease_lexical_resources"]
 	path = multiverse/modules/multiverse_knowledge/ease_lexical_resources
 	url = https://github.com/ease-crc/ease_lexical_resources.git
+[submodule "multiverse/external/pybind11"]
+	path = multiverse/external/pybind11
+	url = https://github.com/pybind/pybind11
