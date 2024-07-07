@@ -40,7 +40,7 @@ public:
     ros::Time get_world_time(const double offset = 0.0) const;
 
 public:
-    void communicate(const bool resend_meta_data = false) override;
+    bool communicate(const bool resend_meta_data = false) override;
 
 private:
     double world_time = 0.0;

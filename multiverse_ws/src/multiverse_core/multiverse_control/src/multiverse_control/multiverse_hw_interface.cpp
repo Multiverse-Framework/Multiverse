@@ -252,9 +252,9 @@ void MultiverseHWInterface::clean_up()
     receive_data_vec.clear();
 }
 
-void MultiverseHWInterface::communicate(const bool resend_meta_data)
+bool MultiverseHWInterface::communicate(const bool resend_meta_data)
 {
-    MultiverseClient::communicate(resend_meta_data);
+    return MultiverseClient::communicate(resend_meta_data);
 }
 
 void MultiverseHWInterface::reset()
