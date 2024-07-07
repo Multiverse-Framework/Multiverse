@@ -140,6 +140,42 @@ class MultiverseClientTestCase(unittest.TestCase):
 
         multiverse_client_test_receive.stop()
 
+    def test_multiverse_client_send_data_2(self, stop=True):
+        multiverse_client_test_send = self.create_multiverse_client_send("1234", "object_1", ["rgb_1024_1024"])
+        time_now = time() - self.time_start
+        send_data = [float(i % 255) for i in range(1024 * 1024 * 3)]
+        send_data = [time_now] + send_data
+        self.multiverse_client_send_data(multiverse_client_test_send, send_data)
+
+        self.assertEqual(multiverse_client_test_send.receive_data, [time_now])
+
+        for _ in range(10):
+            time_now = time() - self.time_start
+            multiverse_client_test_send.send_and_receive_data()
+            print("Take time: ", time() - time_now)
+
+        if stop:
+            multiverse_client_test_send.stop()
+
+        return multiverse_client_test_send, time_now
+
+    def test_multiverse_client_receive_2(self):
+        _, time_send = self.test_multiverse_client_send_data_2()
+
+        multiverse_client_test_receive = self.create_multiverse_client_receive("1235", "object_1",
+                                                                               ["rgb_1024_1024"])
+
+        multiverse_client_test_receive.send_and_receive_meta_data()
+
+        time_receive = multiverse_client_test_receive.response_meta_data["time"]
+        self.assertDictEqual(multiverse_client_test_receive.response_meta_data, {
+            'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg',
+                          'simulation_name': 'sim_test_receive', 'time_unit': 's', 'world_name': 'world'},
+            'receive': {'object_1': {'rgb_1024_1024': [float(i % 255) for i in range(1024 * 1024 * 3)]}},
+            'time': time_receive})
+
+        multiverse_client_test_receive.stop()
+
     def test_multiverse_client_reset_creation(self):
         multiverse_client_test_reset = self.create_multiverse_client_reset("1236")
         self.assertIn("time", multiverse_client_test_reset.response_meta_data)

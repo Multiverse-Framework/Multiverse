@@ -46,7 +46,8 @@ std::map<std::string, size_t> attribute_map = {
     {"joint_position", 3},
     {"joint_quaternion", 4},
     {"force", 3},
-    {"torque", 3}};
+    {"torque", 3},
+    {"rgb_1024_1024", 1024 * 1024 * 3}};
 
 class MultiverseClientPybind final : public MultiverseClient
 {
@@ -79,13 +80,13 @@ public:
         }
         else
         {
-            send_data = in_send_data;
+            send_data = in_send_data.cast<std::vector<double>>();
         }
     }
 
     inline pybind11::list get_receive_data() const
     {
-        return receive_data;
+        return pybind11::cast(receive_data);
     }
 
     inline void set_api_callbacks(const std::map<std::string, std::function<pybind11::list(pybind11::list)>> &in_api_callbacks)
@@ -98,9 +99,9 @@ private:
 
     pybind11::dict response_meta_data_dict;
 
-    pybind11::list send_data;
+    std::vector<double> send_data;
 
-    pybind11::list receive_data;
+    std::vector<double> receive_data;
 
     std::map<std::string, std::function<pybind11::list(pybind11::list)>> api_callbacks;
 
@@ -307,9 +308,11 @@ private:
 
     void clean_up() override
     {
-        // send_data = pybind11::list();
+        // TODO: Find a clean way to clear the data because it's unsure if the data is still in use.
 
-        // receive_data = pybind11::list();
+        // send_data.clear();
+
+        // receive_data.clear();
     }
 
     void reset() override
@@ -321,11 +324,11 @@ private:
     {
         if (send_buffer_size != send_data.size())
         {
-            send_data = pybind11::cast(std::vector<double>(send_buffer_size, 0.0));
+            send_data = std::vector<double>(send_buffer_size, 0.0);
         }
         if (receive_buffer_size != receive_data.size())
         {
-            receive_data = pybind11::cast(std::vector<double>(receive_buffer_size, 0.0));
+            receive_data = std::vector<double>(receive_buffer_size, 0.0);
         }
     }
 
@@ -337,18 +340,12 @@ private:
             return;
         }
 
-        for (size_t i = 0; i < send_buffer_size; i++)
-        {
-            send_buffer[i] = send_data[i].cast<double>();
-        }
+        std::copy(send_data.begin(), send_data.end(), send_buffer);
     }
 
     void bind_receive_data() override
     {
-        for (size_t i = 0; i < receive_buffer_size; i++)
-        {
-            receive_data[i] = receive_buffer[i];
-        }
+        receive_data = std::vector<double>(receive_buffer, receive_buffer + receive_buffer_size);
     }
 };
 

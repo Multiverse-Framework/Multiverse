@@ -41,10 +41,10 @@ std::set<std::string> cumulative_attribute_names = {"force", "torque"};
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map =
     {
         {"time", {EAttribute::Time, {0.0}}},
-        {"position", {EAttribute::Position, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
-        {"quaternion", {EAttribute::Quaternion, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
-        {"relative_velocity", {EAttribute::RelativeVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
-        {"odometric_velocity", {EAttribute::OdometricVelocity, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}},
+        {"position", {EAttribute::Position, std::vector<double>(3, std::numeric_limits<double>::quiet_NaN())}},
+        {"quaternion", {EAttribute::Quaternion, std::vector<double>(4, std::numeric_limits<double>::quiet_NaN())}},
+        {"relative_velocity", {EAttribute::RelativeVelocity, std::vector<double>(6, 0.0)}},
+        {"odometric_velocity", {EAttribute::OdometricVelocity, std::vector<double>(6, 0.0)}},
         {"joint_rvalue", {EAttribute::JointRvalue, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_tvalue", {EAttribute::JointTvalue, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_linear_velocity", {EAttribute::JointLinearVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
@@ -57,10 +57,11 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
         {"cmd_joint_angular_velocity", {EAttribute::CmdJointAngularVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
         {"cmd_joint_force", {EAttribute::CmdJointForce, {std::numeric_limits<double>::quiet_NaN()}}},
         {"cmd_joint_torque", {EAttribute::CmdJointTorque, {std::numeric_limits<double>::quiet_NaN()}}},
-        {"joint_position", {EAttribute::JointPosition, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
-        {"joint_quaternion", {EAttribute::JointQuaternion, {std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN(), std::numeric_limits<double>::quiet_NaN()}}},
-        {"force", {EAttribute::Force, {0.0, 0.0, 0.0}}},
-        {"torque", {EAttribute::Torque, {0.0, 0.0, 0.0}}}};
+        {"joint_position", {EAttribute::JointPosition, std::vector<double>(3, std::numeric_limits<double>::quiet_NaN())}},
+        {"joint_quaternion", {EAttribute::JointQuaternion, std::vector<double>(4, std::numeric_limits<double>::quiet_NaN())}},
+        {"force", {EAttribute::Force, std::vector<double>(3, 0.0)}},
+        {"torque", {EAttribute::Torque, std::vector<double>(3, 0.0)}},
+        {"rgb_1024_1024", {EAttribute::RGB_1024_1024, std::vector<double>(1024 * 1024 * 3, std::numeric_limits<double>::quiet_NaN())}}};
 
 std::map<std::string, double> unit_scale =
     {
@@ -139,7 +140,10 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
           {"lhs", {1.0, -1.0, 1.0}}}},
         {EAttribute::Torque,
          {{"rhs", {1.0, 1.0, 1.0}},
-          {"lhs", {1.0, -1.0, 1.0}}}}};
+          {"lhs", {1.0, -1.0, 1.0}}}},
+        {EAttribute::RGB_1024_1024,
+         {{"rhs", std::vector<double>(1024 * 1024 * 3, 1.0)},
+          {"lhs", std::vector<double>(1024 * 1024 * 3, 1.0)}}}};
 
 enum class EMetaDataState : unsigned char
 {
@@ -827,6 +831,10 @@ void MultiverseServer::bind_meta_data()
                   [mass_unit, length_unit, time_unit](double &torque)
                   { torque = unit_scale[mass_unit] * unit_scale[length_unit] * unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
 
+    std::for_each(conversion_map[EAttribute::RGB_1024_1024].begin(), conversion_map[EAttribute::RGB_1024_1024].end(),
+                  [](double &rgb_1024_1024)
+                  { rgb_1024_1024 = 1.0; });
+    
     for (size_t i = 0; i < 3; i++)
     {
         conversion_map[EAttribute::RelativeVelocity][i] = unit_scale[length_unit] / unit_scale[time_unit];
@@ -889,7 +897,7 @@ void MultiverseServer::bind_send_objects()
                     double *data = &attribute.data[i];
                     const double conversion = conversion_map[attribute_map[attribute_name].first][i];
                     send_data_vec.emplace_back(data, conversion);
-                    response_meta_data_json["send"][object_name][attribute_name].append(attribute_map[attribute_name].second[i]);
+                    response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
                 }
             }
             else if (cumulative_attribute_names.count(attribute_name) > 0)
