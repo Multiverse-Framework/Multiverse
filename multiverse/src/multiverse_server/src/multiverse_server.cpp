@@ -61,7 +61,10 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map 
         {"joint_quaternion", {EAttribute::JointQuaternion, std::vector<double>(4, std::numeric_limits<double>::quiet_NaN())}},
         {"force", {EAttribute::Force, std::vector<double>(3, 0.0)}},
         {"torque", {EAttribute::Torque, std::vector<double>(3, 0.0)}},
-        {"rgb_3840_2160", {EAttribute::RGB_3840_2160, std::vector<double>(3840 * 2160, std::numeric_limits<double>::quiet_NaN())}}};
+        {"rgb_3840_2160", {EAttribute::RGB_3840_2160, std::vector<double>(3840 * 2160, 0.0)}},
+        {"rgb_1280_1024", {EAttribute::RGB_1280_1024, std::vector<double>(1280 * 1024, 0.0)}},
+        {"rgb_640_480", {EAttribute::RGB_640_480, std::vector<double>(640 * 480, 0.0)}},
+        {"rgb_128_128", {EAttribute::RGB_128_128, std::vector<double>(128 * 128, 0.0)}}};
 
 std::map<std::string, double> unit_scale =
     {
@@ -143,7 +146,16 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
           {"lhs", {1.0, -1.0, 1.0}}}},
         {EAttribute::RGB_3840_2160,
          {{"rhs", std::vector<double>(3840 * 2160, 1.0)},
-          {"lhs", std::vector<double>(3840 * 2160, 1.0)}}}};
+          {"lhs", std::vector<double>(3840 * 2160, 1.0)}}},
+        {EAttribute::RGB_1280_1024,
+         {{"rhs", std::vector<double>(1280 * 1024, 1.0)},
+          {"lhs", std::vector<double>(1280 * 1024, 1.0)}}},
+        {EAttribute::RGB_640_480,
+         {{"rhs", std::vector<double>(640 * 480, 1.0)},
+          {"lhs", std::vector<double>(640 * 480, 1.0)}}},
+        {EAttribute::RGB_128_128,
+         {{"rhs", std::vector<double>(128 * 128, 1.0)},
+          {"lhs", std::vector<double>(128 * 128, 1.0)}}}};
 
 enum class EMetaDataState : unsigned char
 {
@@ -834,6 +846,18 @@ void MultiverseServer::bind_meta_data()
     std::for_each(conversion_map[EAttribute::RGB_3840_2160].begin(), conversion_map[EAttribute::RGB_3840_2160].end(),
                   [](double &rgb_3840_2160)
                   { rgb_3840_2160 = 1.0; });
+
+    std::for_each(conversion_map[EAttribute::RGB_1280_1024].begin(), conversion_map[EAttribute::RGB_1280_1024].end(),
+                  [](double &rgb_1280_1024)
+                  { rgb_1280_1024 = 1.0; });
+
+    std::for_each(conversion_map[EAttribute::RGB_640_480].begin(), conversion_map[EAttribute::RGB_640_480].end(),
+                  [](double &rgb_640_480)
+                  { rgb_640_480 = 1.0; });
+
+    std::for_each(conversion_map[EAttribute::RGB_128_128].begin(), conversion_map[EAttribute::RGB_128_128].end(),
+                  [](double &rgb_128_128)
+                  { rgb_128_128 = 1.0; });
     
     for (size_t i = 0; i < 3; i++)
     {
