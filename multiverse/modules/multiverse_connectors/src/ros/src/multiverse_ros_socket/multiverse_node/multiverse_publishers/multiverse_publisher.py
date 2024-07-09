@@ -34,7 +34,7 @@ class MultiversePublisher(MultiverseNode):
         )
         if INTERFACE == Interface.ROS1:
             self._msg = self._msg_type()
-            self._publisher = Publisher(topic_name, self._msg_type, 100)
+            self._publisher = Publisher(topic_name, self._msg_type, queue_size=100)
             duration_in_seconds = 1.0 / rate
             secs = int(duration_in_seconds)
             nsecs = int((duration_in_seconds - secs) * 1e9)

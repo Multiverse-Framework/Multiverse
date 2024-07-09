@@ -47,7 +47,10 @@ std::map<std::string, size_t> attribute_map = {
     {"joint_quaternion", 4},
     {"force", 3},
     {"torque", 3},
-    {"rgb_3840_2160", 3840 * 2160}};
+    {"rgb_3840_2160", 3840 * 2160},
+    {"rgb_1280_1024", 1280 * 1024},
+    {"rgb_640_480", 640 * 480},
+    {"rgb_128_128", 128 * 128}};
 
 class MultiverseClientPybind final : public MultiverseClient
 {
