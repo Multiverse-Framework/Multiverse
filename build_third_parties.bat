@@ -35,7 +35,7 @@ if not exist "%BLENDER_BUILD_DIR%" (
 )
 
 @REM cd "%BLENDER_EXT_DIR%\blender" && make update
-cd "%BLENDER_EXT_DIR%\blender" && cmake -S . -B "..\..\..\build\blender" && cmake --build "..\..\..\build\blender" --target INSTALL --config Release
+@REM cd "%BLENDER_EXT_DIR%\blender" && cmake -S . -B "..\..\..\build\blender" && cmake --build "..\..\..\build\blender" --target INSTALL --config Release
 @REM cd "%BLENDER_EXT_DIR%\lib\win64_vc15\python\310\bin" && python.exe -m pip install --upgrade pip build --no-warn-script-location && python.exe -m pip install bpy --no-warn-script-location
 
 @REM @REM Build USD
