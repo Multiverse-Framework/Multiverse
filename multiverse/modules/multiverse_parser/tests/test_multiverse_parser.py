@@ -342,6 +342,13 @@ class MjcfToUrdfTestCase(UrdfExporterTestCase):
         self.validate_visual_collision(MjcfImporter, UrdfExporter, input_mjcf_path,
                                        fixed_base=False, with_physics=False)
 
+    def test_mjcf_to_urdf_anymal_c2(self):
+        input_mjcf_path = "/home/giangnguyen/Downloads/crane/crane.xml"
+        self.validate_visual_collision(MjcfImporter, UrdfExporter, input_mjcf_path,
+                                       fixed_base=False, with_physics=True)
+        # self.validate_visual_collision(MjcfImporter, UrdfExporter, input_mjcf_path,
+        #                                fixed_base=False, with_physics=False)
+
 
 class UrdfToUrdfTestCase(UrdfExporterTestCase):
     output_dir = "test_urdf_to_urdf"
