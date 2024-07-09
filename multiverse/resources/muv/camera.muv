@@ -1,0 +1,31 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+
+worlds:
+  world:
+    rtf_desired: 1
+
+multiverse_server:
+  host: "tcp://192.168.178.171"
+  port: 7000
+
+multiverse_clients:
+  ros:
+    ros_nodes:
+      publishers:
+        camera:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7300
+            topic: /camera
+            rate: 60
+            frame_id: map
+            camera: camera
+            image_res: "640_480"
