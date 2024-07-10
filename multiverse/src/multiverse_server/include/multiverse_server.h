@@ -73,6 +73,20 @@ enum class EMultiverseServerState : unsigned char
     SendReceiveData,
 };
 
+template<class T>
+struct TypedBuffer
+{
+    T *data;
+    size_t size;
+    std::vector<std::pair<T *, double>> data_vec;
+};
+
+struct Buffer
+{
+    TypedBuffer<double> buffer_double;
+    TypedBuffer<uint8_t> buffer_uint8_t;
+};
+
 class MultiverseServer
 {
 public:
@@ -123,17 +137,9 @@ private:
 
     Json::Value receive_objects_json;
 
-    size_t send_buffer_size = 1;
+    Buffer send_buffer;
 
-    size_t receive_buffer_size = 1;
-
-    double *send_buffer;
-
-    double *receive_buffer;
-
-    std::vector<std::pair<double *, double>> send_data_vec;
-
-    std::vector<std::pair<double *, double>> receive_data_vec;
+    Buffer receive_buffer;
 
     std::map<EAttribute, std::vector<double>> conversion_map;
 

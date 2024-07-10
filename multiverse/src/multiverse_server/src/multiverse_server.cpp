@@ -25,6 +25,7 @@
 #include <iostream>
 #include <mutex>
 #include <thread>
+#include <zmq_addon.hpp>
 
 #include "multiverse_server.h"
 
@@ -169,11 +170,18 @@ enum class EMetaDataState : unsigned char
 
 std::mutex mtx;
 
+template<class T>
+struct TypedAttribute
+{
+    std::vector<T> data;
+    std::map<std::string, std::vector<T>> simulation_data;
+    bool is_sent = false;
+};
+
 struct Attribute
 {
-    std::vector<double> data;
-    std::map<std::string, std::vector<double>> simulation_data;
-    bool is_sent = false;
+    TypedAttribute<double> double_attribute;
+    TypedAttribute<uint8_t> uint8_t_attribute;
 };
 
 struct Object
@@ -217,15 +225,10 @@ MultiverseServer::~MultiverseServer()
 {
     printf("[Server] Close socket %s.\n", socket_addr.c_str());
 
-    if (send_buffer != nullptr)
-    {
-        free(send_buffer);
-    }
-
-    if (receive_buffer != nullptr)
-    {
-        free(receive_buffer);
-    }
+    free(send_buffer.buffer_double.data);
+    free(send_buffer.buffer_uint8_t.data);
+    free(receive_buffer.buffer_double.data);
+    free(receive_buffer.buffer_uint8_t.data);
 
     sockets_need_clean_up[socket_addr] = false;
 }
@@ -239,37 +242,6 @@ void MultiverseServer::start()
         case EMultiverseServerState::ReceiveRequestMetaData:
         {
             receive_request_meta_data();
-            if (message.to_string()[0] == '{')
-            {
-                const std::string &message_str = message.to_string();
-                if (message_str[1] == '}' && message_str.size() == 2)
-                {
-                    printf("[Server] Received close signal %s at socket %s.\n", message_str.c_str(), socket_addr.c_str());
-                    send_data_vec = {{&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]}};
-                    receive_data_vec = {{&worlds[world_name].time, conversion_map[attribute_map["time"].first][0]}};
-                    flag = EMultiverseServerState::SendResponseMetaData;
-                }
-                else if (reader.parse(message_str, request_meta_data_json) && !request_meta_data_json.empty())
-                {
-                    send_data_vec.clear();
-                    receive_data_vec.clear();
-                    flag = EMultiverseServerState::BindObjects;
-                }
-                else if (std::isnan(send_buffer[0]))
-                {
-                    printf("[Server] Received [%s] at socket %s.\n", message_str.c_str(), socket_addr.c_str());
-                    flag = EMultiverseServerState::BindReceiveData;
-                }
-                else
-                {
-                    flag = EMultiverseServerState::BindSendData;
-                }
-            }
-            else
-            {
-                flag = EMultiverseServerState::BindSendData;
-            }
-
             break;
         }
 
@@ -625,20 +597,55 @@ void MultiverseServer::start()
 
 void MultiverseServer::receive_request_meta_data()
 {
-    send_buffer_size = 1;
-    receive_buffer_size = 1;
+    send_buffer.buffer_double.size = 0;
+    send_buffer.buffer_uint8_t.size = 0;
+    receive_buffer.buffer_double.size = 0;
+    receive_buffer.buffer_uint8_t.size = 0;
 
-    send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
-    receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
+    free(send_buffer.buffer_double.data);
+    free(send_buffer.buffer_uint8_t.data);
+    free(receive_buffer.buffer_double.data);
+    free(receive_buffer.buffer_uint8_t.data);
 
     is_receive_data_sent = false;
 
     // Receive JSON string over ZMQ
     try
     {
+        std::vector<zmq::message_t> request_array;
         sockets_need_clean_up[socket_addr] = false;
-        zmq::recv_result_t recv_result_t = socket.recv(message, zmq::recv_flags::none);
+        zmq::recv_result_t recv_result_t = zmq::recv_multipart(socket, std::back_inserter(request_array), zmq::recv_flags::none);
         sockets_need_clean_up[socket_addr] = true;
+
+        const int request_array_size = request_array.size();
+        if (request_array_size == 0)
+        {
+            throw std::invalid_argument("[Server] Received empty message at socket " + socket_addr + ".");
+        }
+        else
+        {
+            const int data_num = *(int *)request_array[0].data();
+            if (data_num == 0 && request_array_size == 1)
+            {
+                printf("[Server] Received close signal at socket %s.\n", socket_addr.c_str());
+                flag = EMultiverseServerState::SendResponseMetaData;
+            }
+            else if (data_num == 1 && request_array_size == 2)
+            {
+                message = std::move(request_array[1]);
+                flag = EMultiverseServerState::BindObjects;
+            }
+            else if (data_num == 2 && request_array_size == 3)
+            {
+                message = std::move(request_array[2]);
+                printf("[Server] Received [%s] at socket %s.\n", message.to_string().c_str(), socket_addr.c_str());
+                flag = EMultiverseServerState::BindSendData;
+            }
+            else
+            {
+                throw std::invalid_argument("[Server] Received invalid message [data_num = " + std::to_string(data_num) + ", request_array_size = " +  std::to_string(request_array_size)+ "] at socket " + socket_addr + ".");
+            }
+        }
     }
     catch (const zmq::error_t &e)
     {
