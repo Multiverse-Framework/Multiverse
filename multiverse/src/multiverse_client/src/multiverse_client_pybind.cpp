@@ -49,10 +49,10 @@ std::map<std::string, size_t> attribute_map_double = {
     {"torque", 3}};
 
 std::map<std::string, size_t> attribute_map_uint8_t = {
-    {"rgb_3840_2160", 3840 * 2160},
-    {"rgb_1280_1024", 1280 * 1024},
-    {"rgb_640_480", 640 * 480},
-    {"rgb_128_128", 128 * 128}};
+    {"rgb_3840_2160", 3840 * 2160 * 3},
+    {"rgb_1280_1024", 1280 * 1024 * 3},
+    {"rgb_640_480", 640 * 480 * 3},
+    {"rgb_128_128", 128 * 128 * 3}};
 
 class MultiverseClientPybind final : public MultiverseClient
 {
@@ -95,13 +95,23 @@ public:
             send_data_double.resize(send_buffer.buffer_double.size);
             send_data_uint8_t.resize(send_buffer.buffer_uint8_t.size);
 
-            world_time = in_send_data[0].cast<double>();
+            try
+            {
+                world_time = in_send_data[0].cast<double>();
 
-            std::transform(in_send_data.begin() + 1, in_send_data.begin() + 1 + send_buffer.buffer_double.size, send_data_double.begin(),
-                   [](const pybind11::handle &item) { return item.cast<double>(); });
+                std::transform(in_send_data.begin() + 1, in_send_data.begin() + 1 + send_buffer.buffer_double.size, send_data_double.begin(),
+                               [](const pybind11::handle &item)
+                               { return item.cast<double>(); });
 
-            std::transform(in_send_data.begin() + 1 + send_buffer.buffer_double.size, in_send_data.end(), send_data_uint8_t.begin(),
-                   [](const pybind11::handle &item) { return item.cast<uint8_t>(); });
+                std::transform(in_send_data.begin() + 1 + send_buffer.buffer_double.size, in_send_data.end(), send_data_uint8_t.begin(),
+                               [](const pybind11::handle &item)
+                               { return item.cast<uint8_t>(); });
+            }
+            catch (const std::exception &e)
+            {
+                printf("[Client %s] Error in set_send_data: %s\n", port.c_str(), e.what());
+                throw std::runtime_error(e.what());
+            }
         }
     }
 

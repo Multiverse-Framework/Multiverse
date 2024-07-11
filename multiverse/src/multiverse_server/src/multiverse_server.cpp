@@ -65,10 +65,10 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map_
 
 std::map<std::string, std::pair<EAttribute, std::vector<uint8_t>>> attribute_map_uint8_t =
     {
-        {"rgb_3840_2160", {EAttribute::RGB_3840_2160, std::vector<uint8_t>(3840 * 2160, 0)}},
-        {"rgb_1280_1024", {EAttribute::RGB_1280_1024, std::vector<uint8_t>(1280 * 1024, 0)}},
-        {"rgb_640_480", {EAttribute::RGB_640_480, std::vector<uint8_t>(640 * 480, 0)}},
-        {"rgb_128_128", {EAttribute::RGB_128_128, std::vector<uint8_t>(128 * 128, 0)}}};
+        {"rgb_3840_2160", {EAttribute::RGB_3840_2160, std::vector<uint8_t>(3840 * 2160 * 3, std::numeric_limits<uint8_t>::quiet_NaN())}},
+        {"rgb_1280_1024", {EAttribute::RGB_1280_1024, std::vector<uint8_t>(1280 * 1024 * 3, std::numeric_limits<uint8_t>::quiet_NaN())}},
+        {"rgb_640_480", {EAttribute::RGB_640_480, std::vector<uint8_t>(640 * 480 * 3, std::numeric_limits<uint8_t>::quiet_NaN())}},
+        {"rgb_128_128", {EAttribute::RGB_128_128, std::vector<uint8_t>(128 * 128 * 3, std::numeric_limits<uint8_t>::quiet_NaN())}}};
 
 std::map<std::string, double> unit_scale =
     {
@@ -250,7 +250,7 @@ void MultiverseServer::start()
 
         case EMultiverseServerState::BindObjects:
         {
-            // printf("[Server] Received meta data at socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
+            printf("[Server] Received meta data at socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
             bind_meta_data();
 
             mtx.lock();
@@ -397,7 +397,7 @@ void MultiverseServer::start()
             }
             for (size_t i = 0; i < send_buffer.buffer_uint8_t.size; i++)
             {
-                *send_buffer.buffer_uint8_t.data_vec[i].first = send_buffer.buffer_uint8_t.data[i] * send_buffer.buffer_uint8_t.data_vec[i].second;
+                *send_buffer.buffer_uint8_t.data_vec[i].first = send_buffer.buffer_uint8_t.data[i] >> send_buffer.buffer_uint8_t.data_vec[i].second;
             }
             mtx.unlock();
 
@@ -419,7 +419,7 @@ void MultiverseServer::start()
             }
             for (size_t i = 0; i < receive_buffer.buffer_uint8_t.size; i++)
             {
-                receive_buffer.buffer_uint8_t.data[i] = *receive_buffer.buffer_uint8_t.data_vec[i].first * receive_buffer.buffer_uint8_t.data_vec[i].second;
+                receive_buffer.buffer_uint8_t.data[i] = *receive_buffer.buffer_uint8_t.data_vec[i].first >> receive_buffer.buffer_uint8_t.data_vec[i].second;
             }
 
             flag = EMultiverseServerState::SendReceiveData;
@@ -488,8 +488,8 @@ void MultiverseServer::start()
                                 for (size_t i = 0; i < attribute.attribute_uint8_t.data.size(); i++)
                                 {
                                     const uint8_t *data = &attribute.attribute_uint8_t.data[i];
-                                    const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i]; // TODO: Change this
-                                    response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                                    const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
+                                    response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
                                 }
                             }
                         }
@@ -510,7 +510,7 @@ void MultiverseServer::start()
                                 {
                                     const uint8_t *data = &attribute.attribute_uint8_t.data[i];
                                     const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i]; // TODO: Change this
-                                    response_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
+                                    response_meta_data_json["receive"][object_name][attribute_name].append(*data >> conversion);
                                 }
                             }
                         }
@@ -961,9 +961,9 @@ void MultiverseServer::bind_send_objects()
                     for (size_t i = 0; i < attribute.attribute_uint8_t.data.size(); i++)
                     {
                         uint8_t *data = &attribute.attribute_uint8_t.data[i];
-                        const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i]; // TODO: Change this
+                        const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                         send_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
-                        response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                        response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
                     }
                 }
                 else
@@ -975,9 +975,9 @@ void MultiverseServer::bind_send_objects()
                     for (size_t i = 0; i < attribute.attribute_uint8_t.data.size(); i++)
                     {
                         uint8_t *data = &attribute.attribute_uint8_t.data[i];
-                        const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_double[attribute_name].first][i]; // TODO: Change this
+                        const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                         send_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
-                        response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                        response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
                     }
                 }
             }
@@ -1006,9 +1006,9 @@ void MultiverseServer::bind_send_objects()
                 for (size_t i = 0; i < simulation_data_uint8_t.size(); i++)
                 {
                     uint8_t *data = &simulation_data_uint8_t[i];
-                    const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i]; // TODO: Change this
+                    const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                     send_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
-                    response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                    response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
                 }
             }
         }
@@ -1142,9 +1142,9 @@ void MultiverseServer::bind_receive_objects()
             for (size_t i = 0; i < attribute.attribute_uint8_t.data.size(); i++)
             {
                 uint8_t *data = &attribute.attribute_uint8_t.data[i];
-                const uint8_t conversion = 1 / conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i]; // TODO: Change this
+                const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                 receive_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
-                response_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
+                response_meta_data_json["receive"][object_name][attribute_name].append(*data >> conversion);
             }
         }
     }
