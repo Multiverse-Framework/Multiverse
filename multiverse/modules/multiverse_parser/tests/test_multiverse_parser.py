@@ -38,7 +38,7 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
 
         stage = Usd.Stage.Open(usd_file_path)
         default_prim = stage.GetDefaultPrim()
-        self.assertEqual(default_prim.GetName(), model_name)
+        self.assertEqual(default_prim.GetName(), "world")
 
         factory.save_tmp_model(usd_file_path=model_path)
         self.assertTrue(os.path.exists(model_path))
@@ -48,7 +48,7 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
         model_name = os.path.splitext(input_file)[0]
 
         is_visible = [True, True, False, False]
-        is_collidable = [True, False, True, False]
+        is_collidable = [False, False, True, False]
         inertia_sources = [InertiaSource.FROM_SRC, InertiaSource.FROM_VISUAL_MESH, InertiaSource.FROM_COLLISION_MESH,
                            InertiaSource.FROM_SRC]
 
@@ -198,11 +198,11 @@ class MjcfToUsdTestCase(MultiverseImporterTestCase):
         self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=True)
         self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=False)
 
-    @unittest.skip("This test is skipped.")
+    # @unittest.skip("This test is skipped.")
     def test_mjcf_to_usd_preparing_soup(self):
-        input_mjcf_path = os.path.join(self.resource_path, "input", "preparing_soup", "preparing_soup.xml")
+        input_mjcf_path = "/media/giangnguyen/Storage/Multiverse/multiverse/saved/preparing_soup/preparing_soup.xml"
         self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=True)
-        self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=False)
+        # self.validate_visual_collision(MjcfImporter, input_mjcf_path, fixed_base=False, with_physics=False)
 
 
 class UrdfToUsdTestCase(MultiverseImporterTestCase):

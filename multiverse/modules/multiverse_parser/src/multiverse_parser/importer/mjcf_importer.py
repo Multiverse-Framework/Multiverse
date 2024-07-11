@@ -103,7 +103,7 @@ class MjcfImporter(Factory):
 
         self._import_config()
 
-        self.world_builder.add_body(body_name=self._config.model_name)
+        self.world_builder.add_body(body_name="world")
 
         for body_id in range(1, self.mj_model.nbody):
             mj_body = self.mj_model.body(body_id)
@@ -147,14 +147,23 @@ class MjcfImporter(Factory):
 
         if mj_body.id == 1:
             body_builder = self.world_builder.add_body(body_name=body_name,
-                                                       parent_body_name=self._config.model_name,
+                                                       parent_body_name="world",
                                                        body_id=mj_body.id)
+            body_pos = mj_body.pos
+            body_quat = numpy.array([mj_body.quat[1],
+                                     mj_body.quat[2],
+                                     mj_body.quat[3],
+                                     mj_body.quat[0]])
+            body_builder.set_transform(
+                pos=body_pos,
+                quat=body_quat
+            )
         else:
             parent_mj_body = self.mj_model.body(mj_body.parentid)
             parent_body_name = get_body_name(parent_mj_body)
             if self._config.with_physics and mj_body.jntnum[0] > 0:
                 body_builder = self.world_builder.add_body(body_name=body_name,
-                                                           parent_body_name=self._config.model_name,
+                                                           parent_body_name="world",
                                                            body_id=mj_body.id)
             else:
                 body_builder = self.world_builder.add_body(body_name=body_name,
