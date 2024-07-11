@@ -118,6 +118,8 @@ private:
 
     void send_response_meta_data();
 
+    void init_send_and_receive_data();
+
     void wait_for_receive_data();
 
     void compute_cumulative_data();

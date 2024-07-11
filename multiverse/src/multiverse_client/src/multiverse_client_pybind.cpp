@@ -97,12 +97,10 @@ public:
 
             try
             {
-                world_time = in_send_data[0].cast<double>();
-
+                world_time = new double(in_send_data[0].cast<double>());
                 std::transform(in_send_data.begin() + 1, in_send_data.begin() + 1 + send_buffer.buffer_double.size, send_data_double.begin(),
                                [](const pybind11::handle &item)
                                { return item.cast<double>(); });
-
                 std::transform(in_send_data.begin() + 1 + send_buffer.buffer_double.size, in_send_data.end(), send_data_uint8_t.begin(),
                                [](const pybind11::handle &item)
                                { return item.cast<uint8_t>(); });
@@ -117,7 +115,7 @@ public:
 
     inline pybind11::list get_receive_data() const
     {
-        return pybind11::cast(std::vector<double>({world_time})) + pybind11::cast(receive_data_double) + pybind11::cast(receive_data_uint8_t);
+        return pybind11::cast(std::vector<double>({*world_time})) + pybind11::cast(receive_data_double) + pybind11::cast(receive_data_uint8_t);
     }
 
     inline void set_api_callbacks(const std::map<std::string, std::function<pybind11::list(pybind11::list)>> &in_api_callbacks)

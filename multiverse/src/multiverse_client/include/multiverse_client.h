@@ -241,7 +241,7 @@ protected:
 
     std::atomic<EMultiverseClientState> flag;
 
-    double world_time;
+    double *world_time;
 
 private:
     std::string socket_addr;

@@ -9,6 +9,7 @@ src/multiverse_ros_socket/multiverse_node/__init__.py
 src/multiverse_ros_socket/multiverse_node/multiverse_node.py
 src/multiverse_ros_socket/multiverse_node/multiverse_node_properties.py
 src/multiverse_ros_socket/multiverse_node/multiverse_publishers/__init__.py
+src/multiverse_ros_socket/multiverse_node/multiverse_publishers/camera_publisher.py
 src/multiverse_ros_socket/multiverse_node/multiverse_publishers/multiverse_publisher.py
 src/multiverse_ros_socket/multiverse_node/multiverse_publishers/odom_publisher.py
 src/multiverse_ros_socket/multiverse_node/multiverse_publishers/tf_publisher.py

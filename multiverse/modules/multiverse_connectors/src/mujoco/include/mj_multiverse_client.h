@@ -88,8 +88,6 @@ private:
 
     std::string simulation_name;
 
-    double world_time;
-
     Json::Value send_objects_json;
 
     Json::Value receive_objects_json;

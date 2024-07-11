@@ -52,12 +52,9 @@ class MultiverseClientTestCase(unittest.TestCase):
     _server_port = "7000"
     _process = None
 
-    # @classmethod
-    # def setUpClass(cls) -> None:
-    #     cls.time_start = time()
-    #
-    #     MultiverseClientTest._server_addr.port = cls._server_port
-    #     cls._process = start_multiverse_server(cls._server_port)
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.time_start = time()
     #
     # @classmethod
     # def tearDownClass(cls) -> None:
@@ -149,7 +146,7 @@ class MultiverseClientTestCase(unittest.TestCase):
         self.assertEqual(multiverse_client_test_send.receive_data, [time_now])
 
         for _ in range(10):
-            time_now = time() - self.time_start
+            time_now = time()
             multiverse_client_test_send.send_and_receive_data()
             print("Take time: ", time() - time_now)
 
@@ -309,6 +306,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                   0, 0, 3,
                                                   0.0, 0.0, 0.0, 1.0]
         multiverse_client_test_spawn.send_and_receive_data()
+        print(multiverse_client_test_spawn.receive_data)
         multiverse_client_test_spawn.stop()
 
     def test_multiverse_client_spawn_and_get_data(self):

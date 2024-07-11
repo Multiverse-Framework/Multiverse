@@ -279,12 +279,12 @@ void MultiverseClient::send_request_meta_data()
     if (should_shut_down)
     {
         const int message_int = 0;
-        zmq_send(client_socket, &message_int, sizeof(message_int), 0);
+        zmq_send(client_socket, &message_int, sizeof(int), 0);
     }
     else
     {
         const int message_int = 1;
-        zmq_send(client_socket, &message_int, sizeof(message_int), 2);
+        zmq_send(client_socket, &message_int, sizeof(int), 2);
         zmq_send(client_socket, request_meta_data_str.c_str(), request_meta_data_str.size(), 0);
     }
 }
@@ -292,15 +292,15 @@ void MultiverseClient::send_request_meta_data()
 void MultiverseClient::send_send_data()
 {
     const int message_int = 2 + (send_buffer.buffer_double.size > 0) + (send_buffer.buffer_uint8_t.size > 0);
-    zmq_send(client_socket, &message_int, sizeof(message_int), 2);
+    zmq_send(client_socket, &message_int, sizeof(int), 2);
 
     if (message_int == 2)
     {
-        zmq_send(client_socket, &world_time, sizeof(world_time), 0);
+        zmq_send(client_socket, world_time, sizeof(double), 0);
     }
     else
     {
-        zmq_send(client_socket, &world_time, sizeof(world_time), 2);
+        zmq_send(client_socket, world_time, sizeof(double), 2);
         if (send_buffer.buffer_double.size > 0)
         {
             if (send_buffer.buffer_uint8_t.size == 0)
@@ -356,7 +356,7 @@ void MultiverseClient::receive_data()
     }
     else if (message_int >= 2)
     {
-        zmq_recv(client_socket, &world_time, sizeof(world_time), 0);
+        zmq_recv(client_socket, world_time, sizeof(*world_time), 0);
         if (message_int == 3)
         {
             if (receive_buffer.buffer_double.size > 0 && receive_buffer.buffer_uint8_t.size == 0)
@@ -374,7 +374,7 @@ void MultiverseClient::receive_data()
         }
         else if (message_int == 4)
         {
-            zmq_recv(client_socket, &world_time, sizeof(world_time), 0);
+            zmq_recv(client_socket, world_time, sizeof(double), 0);
             zmq_recv(client_socket, receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double), 0);
             zmq_recv(client_socket, receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
         }
@@ -388,7 +388,7 @@ void MultiverseClient::receive_data()
         throw std::runtime_error("The message type [" + std::to_string(message_int) + "] is not recognized.");
     }
 
-    if (world_time == 0.0)
+    if (*world_time == 0.0)
     {
         printf("[Client %s] The socket %s from the server has received reset command.\n", port.c_str(), socket_addr.c_str());
         reset();
