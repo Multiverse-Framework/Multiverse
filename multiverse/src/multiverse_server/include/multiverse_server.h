@@ -77,14 +77,20 @@ template<class T>
 struct TypedBuffer
 {
     T *data;
-    size_t size;
-    std::vector<std::pair<T *, double>> data_vec;
+    size_t size = 0;
+    std::vector<std::pair<T *, T>> data_vec;
 };
 
 struct Buffer
 {
     TypedBuffer<double> buffer_double;
     TypedBuffer<uint8_t> buffer_uint8_t;
+};
+
+struct ConversionMap
+{
+    std::map<EAttribute, std::vector<double>> conversion_map_double;
+    std::map<EAttribute, std::vector<uint8_t>> conversion_map_uint8_t;
 };
 
 class MultiverseServer
@@ -98,7 +104,7 @@ public:
     void start();
 
 private:
-    void receive_request_meta_data();
+    void receive_data();
 
     void bind_send_objects();
 
@@ -112,8 +118,6 @@ private:
 
     void send_response_meta_data();
 
-    void receive_send_data();
-
     void wait_for_receive_data();
 
     void compute_cumulative_data();
@@ -122,8 +126,6 @@ private:
 
 private:
     EMultiverseServerState flag = EMultiverseServerState::ReceiveRequestMetaData;
-
-    zmq::message_t message;
 
     std::string socket_addr;
 
@@ -141,7 +143,7 @@ private:
 
     Buffer receive_buffer;
 
-    std::map<EAttribute, std::vector<double>> conversion_map;
+    ConversionMap conversion_map;
 
     std::string world_name;
 

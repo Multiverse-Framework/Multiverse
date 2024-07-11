@@ -20,8 +20,22 @@
 
 #pragma once
 
+#include <map>
 #include <string>
 #include <atomic>
+
+template<class T>
+struct TypedBuffer
+{
+    T *data;
+    size_t size = 0;
+};
+
+struct Buffer
+{
+    TypedBuffer<double> buffer_double;
+    TypedBuffer<uint8_t> buffer_uint8_t;
+};
 
 enum class EMultiverseClientState : unsigned char;
 class MultiverseClient
@@ -140,7 +154,7 @@ protected:
      * @param send_buffer_size
      * @param receive_buffer_size
      */
-    virtual void compute_request_buffer_sizes(size_t &req_send_buffer_size, size_t &req_receive_buffer_size) const = 0;
+    virtual void compute_request_buffer_sizes(std::map<std::string, size_t> &req_send_buffer_size, std::map<std::string, size_t> &req_receive_buffer_size) const = 0;
 
     /**
      * @brief Compute response buffer sizes
@@ -148,7 +162,7 @@ protected:
      * @param send_buffer_size
      * @param receive_buffer_size
      */
-    virtual void compute_response_buffer_sizes(size_t &res_send_buffer_size, size_t &res_receive_buffer_size) const = 0;
+    virtual void compute_response_buffer_sizes(std::map<std::string, size_t> &res_send_buffer_size, std::map<std::string, size_t> &res_receive_buffer_size) const = 0;
 
     /**
      * @brief Bind the objects from the receive meta data
@@ -204,7 +218,9 @@ private:
 
     void send_request_meta_data();
 
-    void receive_response_meta_data();
+    void send_send_data();
+
+    void receive_data();
 
     void check_response_meta_data();
 
@@ -215,19 +231,17 @@ private:
 protected:
     std::string server_socket_addr = "tcp://127.0.0.1:7000";
 
-    size_t send_buffer_size = 1;
+    Buffer send_buffer;
 
-    size_t receive_buffer_size = 1;
-
-    double *send_buffer;
-
-    double *receive_buffer;
+    Buffer receive_buffer;
 
     std::string request_meta_data_str;
 
     std::string response_meta_data_str;
 
     std::atomic<EMultiverseClientState> flag;
+
+    double world_time;
 
 private:
     std::string socket_addr;

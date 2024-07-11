@@ -21,7 +21,7 @@
 #include "multiverse_client_json.h"
 #include <algorithm>
 
-std::map<std::string, size_t> attribute_map = {
+std::map<std::string, size_t> attribute_map_double = {
     {"", 0},
     {"time", 1},
     {"position", 3},
@@ -55,7 +55,7 @@ bool MultiverseClientJson::compute_request_and_response_meta_data()
         request_meta_data_json["meta_data"] = response_meta_data_json["meta_data"];
         request_meta_data_json["send"].clear();
         request_meta_data_json["receive"].clear();
-        
+
         if (response_meta_data_json.isMember("send"))
         {
             for (const std::string &object_name : response_meta_data_json["send"].getMemberNames())
@@ -83,26 +83,32 @@ bool MultiverseClientJson::compute_request_and_response_meta_data()
     return false;
 }
 
-void MultiverseClientJson::compute_request_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const
+void MultiverseClientJson::compute_request_buffer_sizes(std::map<std::string, size_t> &send_buffer_size, std::map<std::string, size_t> &receive_buffer_size) const
 {
-    std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
-    for (std::pair<const std::string, size_t> &request_buffer_size : request_buffer_sizes)
+    std::map<std::string, std::map<std::string, size_t>> request_buffer_sizes =
+        {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+    for (std::pair<const std::string, std::map<std::string, size_t>> &request_buffer_size : request_buffer_sizes)
     {
         for (const std::string &object_name : request_meta_data_json[request_buffer_size.first].getMemberNames())
         {
-            if (object_name.compare("") == 0 || request_buffer_size.second == -1)
+            if (object_name.compare("") == 0 || request_buffer_size.second["double"] == -1 || request_buffer_size.second["uint8"] == -1)
             {
-                request_buffer_size.second = -1;
+                request_buffer_size.second["double"] = -1;
+                request_buffer_size.second["uint8"] = -1;
                 break;
             }
             for (const Json::Value &attribute : request_meta_data_json[request_buffer_size.first][object_name])
             {
                 if (attribute.asString().compare("") == 0)
                 {
-                    request_buffer_size.second = -1;
+                    request_buffer_size.second["double"] = -1;
+                    request_buffer_size.second["uint8"] = -1;
                     break;
                 }
-                request_buffer_size.second += attribute_map[attribute.asString()];
+                if (attribute_map_double.find(attribute.asString()) != attribute_map_double.end())
+                {
+                    request_buffer_size.second["double"] += attribute_map_double[attribute.asString()];
+                }
             }
         }
     }
@@ -111,16 +117,20 @@ void MultiverseClientJson::compute_request_buffer_sizes(size_t &send_buffer_size
     receive_buffer_size = request_buffer_sizes["receive"];
 }
 
-void MultiverseClientJson::compute_response_buffer_sizes(size_t &send_buffer_size, size_t &receive_buffer_size) const
+void MultiverseClientJson::compute_response_buffer_sizes(std::map<std::string, size_t> &send_buffer_size, std::map<std::string, size_t> &receive_buffer_size) const
 {
-    std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
-    for (std::pair<const std::string, size_t> &response_buffer_size : response_buffer_sizes)
+    std::map<std::string, std::map<std::string, size_t>> response_buffer_sizes =
+        {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+    for (std::pair<const std::string, std::map<std::string, size_t>> &response_buffer_size : response_buffer_sizes)
     {
         for (const std::string &object_name : response_meta_data_json[response_buffer_size.first].getMemberNames())
         {
             for (const std::string &attribute_name : response_meta_data_json[response_buffer_size.first][object_name].getMemberNames())
             {
-                response_buffer_size.second += response_meta_data_json[response_buffer_size.first][object_name][attribute_name].size();
+                if (attribute_map_double.find(attribute_name) != attribute_map_double.end())
+                {
+                    response_buffer_size.second["double"] += response_meta_data_json[response_buffer_size.first][object_name][attribute_name].size();
+                }
             }
         }
     }

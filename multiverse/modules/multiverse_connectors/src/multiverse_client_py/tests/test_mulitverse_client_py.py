@@ -119,7 +119,6 @@ class MultiverseClientTestCase(unittest.TestCase):
 
         time_now = time() - self.time_start
         self.multiverse_client_send_data(multiverse_client_test_send, [time_now, 3.0, 2.0, 1.0, 1.0, 0.0, 0.0, 0.0])
-
         self.assertEqual(multiverse_client_test_send.receive_data, [time_now])
         if stop:
             multiverse_client_test_send.stop()
