@@ -108,6 +108,8 @@ private:
 
     std::set<std::string> resources;
 
+    std::map<std::string, std::set<std::string>> cached_objects;
+
 private:
     void start_connect_to_server_thread() override;
 

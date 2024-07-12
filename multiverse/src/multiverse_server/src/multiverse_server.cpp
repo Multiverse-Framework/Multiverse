@@ -216,10 +216,22 @@ MultiverseServer::~MultiverseServer()
 {
     printf("[Server] Close socket %s.\n", socket_addr.c_str());
 
-    free(send_buffer.buffer_double.data);
-    free(send_buffer.buffer_uint8_t.data);
-    free(receive_buffer.buffer_double.data);
-    free(receive_buffer.buffer_uint8_t.data);
+    if (send_buffer.buffer_double.data != nullptr)
+    {
+        free(send_buffer.buffer_double.data);
+    }
+    if (send_buffer.buffer_uint8_t.data != nullptr)
+    {
+        free(send_buffer.buffer_uint8_t.data);
+    }
+    if (receive_buffer.buffer_double.data != nullptr)
+    {
+        free(receive_buffer.buffer_double.data);
+    }
+    if (receive_buffer.buffer_uint8_t.data != nullptr)
+    {
+        free(receive_buffer.buffer_uint8_t.data);
+    }
 
     sockets_need_clean_up[socket_addr] = false;
 }

@@ -145,6 +145,8 @@ void MjVisual::mouse_move(GLFWwindow *window, double xpos, double ypos)
 
 void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int mods)
 {
+    const mjtNum lookat[3] = {cam.lookat[0], cam.lookat[1], cam.lookat[2]};
+
     // backspace: reset simulation
     if (act == GLFW_PRESS && key == GLFW_KEY_BACKSPACE)
     {
@@ -153,9 +155,12 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
         start_time += real_time;
         mj_resetDataKeyframe(m, d, 0);
         d->time = 0.0;
-        cam.distance = cam_distance_0;
-        cam.elevation = m->vis.global.elevation;
-        cam.azimuth = m->vis.global.azimuth;
+        if (cursor_id != -1)
+        {
+            d->mocap_pos[3 * cursor_id] = lookat[0];
+            d->mocap_pos[3 * cursor_id + 1] = lookat[1];
+            d->mocap_pos[3 * cursor_id + 2] = lookat[2];
+        }
         mtx.unlock();
     }
 
@@ -167,9 +172,12 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
         start_time += real_time;
         mj_resetDataKeyframe(m, d, 0);
         d->time = 0.0;
-        cam.distance = cam_distance_0;
-        cam.elevation = m->vis.global.elevation;
-        cam.azimuth = m->vis.global.azimuth;
+        if (cursor_id != -1)
+        {
+            d->mocap_pos[3 * cursor_id] = lookat[0];
+            d->mocap_pos[3 * cursor_id + 1] = lookat[1];
+            d->mocap_pos[3 * cursor_id + 2] = lookat[2];
+        }
         mtx.unlock();
     }
 
@@ -181,9 +189,12 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
         start_time += real_time;
         mj_resetDataKeyframe(m, d, 0);
         d->time = 0.0;
-        cam.distance = cam_distance_0;
-        cam.elevation = m->vis.global.elevation;
-        cam.azimuth = m->vis.global.azimuth;
+        if (cursor_id != -1)
+        {
+            d->mocap_pos[3 * cursor_id] = lookat[0];
+            d->mocap_pos[3 * cursor_id + 1] = lookat[1];
+            d->mocap_pos[3 * cursor_id + 2] = lookat[2];
+        }
         mtx.unlock();
     }
 
