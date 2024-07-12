@@ -111,6 +111,8 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 	host = multiverse_params["server_host"];
 	port = multiverse_params["client_port"];
 
+	*world_time = d->time;
+
 	connect();
 }
 

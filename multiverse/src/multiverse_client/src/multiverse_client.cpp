@@ -216,15 +216,6 @@ void MultiverseClient::run()
 
         case EMultiverseClientState::ReceiveData:
             receive_data();
-
-            if (should_shut_down)
-            {
-                printf("[Client %s] The socket %s from the server has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
-
-                wait_for_connect_to_server_thread_finish();
-                start_connect_to_server_thread();
-                return;
-            }
             break;
 
         case EMultiverseClientState::BindReceiveData:
@@ -320,11 +311,16 @@ void MultiverseClient::send_send_data()
 void MultiverseClient::receive_data()
 {
     int message_spec_int;
-    zmq_recv(client_socket, &message_spec_int, sizeof(int), 0);
+    if (zmq_recv(client_socket, &message_spec_int, sizeof(int), 0) == -1)
+    {
+        should_shut_down = true;
+        return;
+    }
 
     if (message_spec_int == 0)
     {
         should_shut_down = true;
+        return;
     }
     else if (message_spec_int == 1)
     {
@@ -387,7 +383,7 @@ void MultiverseClient::receive_data()
         throw std::runtime_error("The message type [" + std::to_string(message_spec_int) + "] is not recognized.");
     }
 
-    if (*world_time == 0.0)
+    if (!should_shut_down && *world_time == 0.0)
     {
         printf("[Client %s] The socket %s from the server has received reset command.\n", port.c_str(), socket_addr.c_str());
         reset();
@@ -409,8 +405,7 @@ void MultiverseClient::check_response_meta_data()
     }
     else
     {
-        printf("[Client %s] The socket %s from the server has been terminated, resending the meta data.\n", port.c_str(), socket_addr.c_str());
-        connect_to_server();
+        throw std::runtime_error("[Client " + port + "] The client failed to check the response meta data.");
     }
 }
 
@@ -453,7 +448,6 @@ bool MultiverseClient::check_buffer_size()
 
 void MultiverseClient::init_buffer()
 {
-    world_time = (double *)calloc(0.0, sizeof(double));
     send_buffer.buffer_double.data = (double *)calloc(send_buffer.buffer_double.size, sizeof(double));
     send_buffer.buffer_uint8_t.data = (uint8_t *)calloc(send_buffer.buffer_uint8_t.size, sizeof(uint8_t));
     receive_buffer.buffer_double.data = (double *)calloc(receive_buffer.buffer_double.size, sizeof(double));

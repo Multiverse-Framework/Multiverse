@@ -267,6 +267,11 @@ void MultiverseServer::start()
 
             wait_for_objects();
 
+            if (should_shut_down)
+            {
+                break;
+            }
+
             mtx.lock();
             bind_receive_objects();
             mtx.unlock();
@@ -366,9 +371,22 @@ void MultiverseServer::start()
 
     if (sockets_need_clean_up[socket_addr])
     {
-        if (flag != EMultiverseServerState::ReceiveSendData && flag != EMultiverseServerState::ReceiveRequestMetaData)
+        if (flag == EMultiverseServerState::BindSendData)
         {
-            send_receive_data();
+            receive_data();
+        }
+        if (flag != EMultiverseServerState::ReceiveSendData && 
+            flag != EMultiverseServerState::ReceiveRequestMetaData)
+        {
+            try
+            {
+                send_receive_data();
+            }
+            catch (const zmq::error_t &e)
+            {
+                printf("[Server] %s, socket %s is terminated.\n", e.what(), socket_addr.c_str());
+                return;
+            }
         }
 
         printf("[Server] Unbind socket %s.\n", socket_addr.c_str());

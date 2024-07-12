@@ -34,8 +34,8 @@ int main(int argc, char **argv)
     signal(SIGINT, [](int signum)
            {
         printf("[Server] Caught SIGINT (Ctrl+C), wait for 1s then shutdown.\n");
-        zmq_sleep(1);
         should_shut_down = true; 
+        zmq_sleep(1);
         server_context.shutdown(); });
 
     std::string server_socket_addr;
@@ -69,8 +69,6 @@ int main(int argc, char **argv)
     } while (!can_shut_down);
 
     zmq_sleep(1);
-
-    server_context.shutdown();
 
     server_context.close();
 
