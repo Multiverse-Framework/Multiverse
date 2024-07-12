@@ -453,6 +453,7 @@ bool MultiverseClient::check_buffer_size()
 
 void MultiverseClient::init_buffer()
 {
+    world_time = (double *)calloc(0.0, sizeof(double));
     send_buffer.buffer_double.data = (double *)calloc(send_buffer.buffer_double.size, sizeof(double));
     send_buffer.buffer_uint8_t.data = (uint8_t *)calloc(send_buffer.buffer_uint8_t.size, sizeof(uint8_t));
     receive_buffer.buffer_double.data = (double *)calloc(receive_buffer.buffer_double.size, sizeof(double));

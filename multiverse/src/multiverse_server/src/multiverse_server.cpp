@@ -467,8 +467,8 @@ EMultiverseServerState MultiverseServer::receive_data()
     {
         should_shut_down = true;
         printf("[Server] %s, socket %s prepares to close.\n", e.what(), socket_addr.c_str());
+        return EMultiverseServerState::ReceiveRequestMetaData;
     }
-    throw std::runtime_error("[Server] Socket " + socket_addr + " is closed.");
 }
 
 void MultiverseServer::bind_meta_data()

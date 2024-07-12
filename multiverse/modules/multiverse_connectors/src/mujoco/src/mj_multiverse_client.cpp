@@ -2076,7 +2076,6 @@ void MjMultiverseClient::bind_api_callbacks_response()
 
 void MjMultiverseClient::init_send_and_receive_data()
 {
-	world_time = &d->time;
 	for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, send_object.first.c_str());
@@ -2402,6 +2401,7 @@ void MjMultiverseClient::bind_send_data()
 		mju_mulMatVec(contact_effort.second, jac, d->qfrc_constraint, 6, m->nv);
 	}
 
+	*world_time = d->time;
 	for (size_t i = 0; i < send_buffer.buffer_double.size; i++)
 	{
 		send_buffer.buffer_double.data[i] = *send_data_vec[i];
