@@ -276,6 +276,8 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 				printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 				return false;
 			}
+
+			printf("Spawned object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 		}
 		else
 		{

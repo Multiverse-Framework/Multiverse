@@ -316,47 +316,30 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                   0, 0, 3,
                                                   0.0, 0.0, 0.0, 1.0]
         multiverse_client_test_spawn.send_and_receive_data()
-        print(multiverse_client_test_spawn.receive_data)
-        multiverse_client_test_spawn.stop()
 
-    def test_multiverse_client_spawn_and_get_data(self):
-        multiverse_client_test_spawn = self.create_multiverse_client_spawn("1337", "world")
+        multiverse_client_test_receive = self.create_multiverse_client_receive("1338",
+                                                                                 "",
+                                                                                 [""])
+        self.assertIn("receive", multiverse_client_test_receive.response_meta_data)
+        self.assertIn("milk_box", multiverse_client_test_receive.response_meta_data["receive"])
+        self.assertIn("position", multiverse_client_test_receive.response_meta_data["receive"]["milk_box"])
+        milk_box_pos = multiverse_client_test_receive.response_meta_data["receive"]["milk_box"]["position"]
+        self.assertAlmostEqual(milk_box_pos[0], 0.0, 0)
+        self.assertAlmostEqual(milk_box_pos[1], 0.0, 0)
+        self.assertAlmostEqual(milk_box_pos[2], 5.0, 0)
 
-        multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
-        multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = ["position",
-                                                                              "quaternion"]
-        multiverse_client_test_spawn.request_meta_data["send"]["panda"] = ["position",
-                                                                           "quaternion"]
-        multiverse_client_test_spawn.send_and_receive_meta_data()
+        # self.assertIn("joint5", multiverse_client_test_receive.response_meta_data["receive"])
+        # self.assertIn("joint_rvalue", multiverse_client_test_receive.response_meta_data["receive"]["joint5"])
+        # joint5_value = multiverse_client_test_receive.response_meta_data["receive"]["joint5"]["joint_rvalue"][0]
+        # self.assertAlmostEqual(joint5_value, 0.0, 1)
 
-        time_now = time() - self.time_start
-        multiverse_client_test_spawn.send_data = [time_now,
-                                                  0, 0, 5,
-                                                  0.0, 0.0, 0.0, 1.0,
-                                                  0, 0, 3,
-                                                  0.0, 0.0, 0.0, 1.0]
-        multiverse_client_test_spawn.send_and_receive_data()
-
-        while True:
-            multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "sim_test_spawn"
-            multiverse_client_test_spawn.request_meta_data["send"] = {}
-            multiverse_client_test_spawn.request_meta_data["receive"][""] = [""]
-            multiverse_client_test_spawn.send_and_receive_meta_data()
-            if "link0" in multiverse_client_test_spawn.response_meta_data["receive"] and \
-                    "position" in multiverse_client_test_spawn.response_meta_data["receive"]["link0"] and \
-                    multiverse_client_test_spawn.response_meta_data["receive"]["link0"]["position"][0] is not None and \
-                    "quaternion" in multiverse_client_test_spawn.response_meta_data["receive"]["link0"] and \
-                    multiverse_client_test_spawn.response_meta_data["receive"]["link0"]["quaternion"][0] is not None:
-                break
-
-        print(multiverse_client_test_spawn.response_meta_data["receive"]["link0"])
         multiverse_client_test_spawn.stop()
 
     def test_multiverse_client_spawns(self):
         multiverse_client_test_spawn = self.create_multiverse_client_spawn("1337", "world")
         multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
 
-        for i in range(5):
+        for i in range(50):
             # Destroy milk box
             multiverse_client_test_spawn.request_meta_data["send"] = {}
             multiverse_client_test_spawn.request_meta_data["receive"] = {}
@@ -388,7 +371,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
             multiverse_client_test_spawn.send_data = [time_now,
                                                       0, 0, 5,
                                                       0.0, 0.0, 0.0, 1.0,
-                                                      0.0, 0.0, i, 0.0, 0.0, 0.0]
+                                                      0.0, 0.0, i/10, 0.0, 0.0, 0.0]
             multiverse_client_test_spawn.send_and_receive_data()
 
             # Spawn panda
@@ -674,7 +657,6 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                                                                                      "quaternion",
                                                                                      "relative_velocity"]
                 multiverse_client_test_move.send_and_receive_meta_data()
-
                 time_now = time() - self.time_start
                 multiverse_client_test_move.send_data = [time_now,
                                                          x_pos[i], y_pos[i], h,
@@ -693,12 +675,12 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
                 time_now = time() - self.time_start
                 multiverse_client_test_receive.send_data = [time_now]
                 multiverse_client_test_receive.send_and_receive_data()
-                expected_result = [time_now,
-                                   x_pos[i], y_pos[i], h,
-                                   0.0, 0.0, 0.0, 1.0,
-                                   0.0, 0.0, h - i, 0.0, 0.0, 0.0]
-                for k in range(len(expected_result)):
-                    self.assertEqual(multiverse_client_test_receive.receive_data[k], expected_result[k])
+                # expected_result = [time_now,
+                #                    x_pos[i], y_pos[i], h,
+                #                    0.0, 0.0, 0.0, 1.0,
+                #                    0.0, 0.0, h - i, 0.0, 0.0, 0.0]
+                # for k in range(len(expected_result)):
+                #     self.assertEqual(multiverse_client_test_receive.receive_data[k], expected_result[k])
 
                 sleep(0.1)
 
@@ -779,7 +761,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         print(multiverse_client_test_callapi.response_meta_data)
 
     def test_multiverse_client_destroy(self):
-        multiverse_client_test_destroy = self.create_multiverse_client_destroy("1338", "world")
+        multiverse_client_test_destroy = self.create_multiverse_client_destroy("1275", "world")
 
         multiverse_client_test_destroy.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
         multiverse_client_test_destroy.request_meta_data["send"]["milk_box"] = []

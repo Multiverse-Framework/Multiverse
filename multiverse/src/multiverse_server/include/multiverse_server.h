@@ -104,7 +104,7 @@ public:
     void start();
 
 private:
-    void receive_data();
+    EMultiverseServerState receive_data();
 
     void bind_send_objects();
 
@@ -116,13 +116,23 @@ private:
 
     void bind_receive_objects();
 
+    void wait_for_api_callbacks_response();
+
     void send_response_meta_data();
 
     void init_send_and_receive_data();
 
+    void wait_for_other_send_data();
+
+    void bind_send_data();
+
     void wait_for_receive_data();
 
     void compute_cumulative_data();
+
+    void bind_receive_data();
+
+    void receive_new_request_meta_data();
 
     void send_receive_data();
 
