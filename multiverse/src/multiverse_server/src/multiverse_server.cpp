@@ -1295,16 +1295,18 @@ void MultiverseServer::send_receive_data()
     if (receive_buffer.buffer_double.size > 0 || receive_buffer.buffer_uint8_t.size > 0)
     {
         socket.send(message_time, zmq::send_flags::sndmore);
-
-        zmq::message_t message_double(receive_buffer.buffer_double.size * sizeof(double));
-        memcpy(message_double.data(), receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double));
-        if (receive_buffer.buffer_uint8_t.size > 0)
+        if (receive_buffer.buffer_double.size > 0)
         {
-            socket.send(message_double, zmq::send_flags::sndmore);
-        }
-        else
-        {
-            socket.send(message_double, zmq::send_flags::none);
+            zmq::message_t message_double(receive_buffer.buffer_double.size * sizeof(double));
+            memcpy(message_double.data(), receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double));
+            if (receive_buffer.buffer_uint8_t.size > 0)
+            {
+                socket.send(message_double, zmq::send_flags::sndmore);
+            }
+            else
+            {
+                socket.send(message_double, zmq::send_flags::none);
+            }
         }
 
         if (receive_buffer.buffer_uint8_t.size > 0)
