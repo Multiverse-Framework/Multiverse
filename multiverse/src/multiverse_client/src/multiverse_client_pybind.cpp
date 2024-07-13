@@ -410,8 +410,17 @@ private:
 
     void bind_receive_data() override
     {
-        receive_data_double.resize(receive_buffer.buffer_double.size);
-        receive_data_uint8_t.resize(receive_buffer.buffer_uint8_t.size);
+        if (receive_data_double.size() != receive_buffer.buffer_double.size || receive_data_uint8_t.size() != receive_buffer.buffer_uint8_t.size)
+        {
+            printf("[Client %s] The size of receive_data [%ld - %ld] does not match with receive_buffer_size [%ld - %ld].\n",
+                   port.c_str(),
+                   receive_data_double.size(),
+                   receive_data_uint8_t.size(),
+                   receive_buffer.buffer_double.size,
+                   receive_buffer.buffer_uint8_t.size);
+            return;
+        }
+
         std::copy(receive_buffer.buffer_double.data, receive_buffer.buffer_double.data + receive_buffer.buffer_double.size, receive_data_double.begin());
         std::copy(receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.data + receive_buffer.buffer_uint8_t.size, receive_data_uint8_t.begin());
     }

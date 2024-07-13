@@ -201,7 +201,7 @@ class MultiverseClientTestCase(unittest.TestCase):
         multiverse_client_test_spawn.stop()
 
 
-class MultiverseClientSpawnTestCase(unittest.TestCase):
+class MultiverseClientComplexTestCase(unittest.TestCase):
     meta_data = MultiverseMetaData(
         length_unit="m",
         angle_unit="rad",
@@ -803,7 +803,7 @@ class MultiverseClientSpawnTestCase(unittest.TestCase):
         multiverse_client_test_destroy.stop()
 
 
-class MultiverseClientUnrealTestCase(MultiverseClientSpawnTestCase):
+class MultiverseClientUnrealTestCase(MultiverseClientComplexTestCase):
     def test_multiverse_client_callapi_unreal(self):
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
@@ -816,7 +816,9 @@ class MultiverseClientUnrealTestCase(MultiverseClientSpawnTestCase):
         print(multiverse_client_test_callapi.response_meta_data)
 
 
-class MultiverseClientCallapiPythonTestCase(MultiverseClientSpawnTestCase):
+
+
+class MultiverseClientCallapiPythonTestCase(MultiverseClientComplexTestCase):
     def test_multiverse_client_listenapi(self):
         multiverse_client_test_listenapi = self.create_multiverse_client_listenapi("1358", "world")
         for _ in range(10):

@@ -28,4 +28,4 @@ multiverse_clients:
             rate: 60
             frame_id: map
             camera: camera
-            image_res: "640_480"
+            image_res: "128_128"
