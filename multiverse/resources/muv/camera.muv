@@ -12,7 +12,7 @@ multiverse_server:
   port: 7000
 
 multiverse_clients:
-  ros:
+  ros2:
     ros_nodes:
       publishers:
         camera:
@@ -25,7 +25,7 @@ multiverse_clients:
               handedness: rhs
             port: 7300
             topic: /camera
-            rate: 60
+            rate: 10
             frame_id: map
             camera: camera
             image_res: "128_128"

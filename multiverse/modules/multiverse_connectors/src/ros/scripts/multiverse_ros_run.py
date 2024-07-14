@@ -106,8 +106,13 @@ class MultiverseRosSocket:
                 service.stop()
 
 
-def parse_ros_node_from_str(ros_node_str: str) -> dict:
-    return json.loads(ros_node_str.replace("'", '"')) if isinstance(ros_node_str, str) else {}
+def parse_ros_node(ros_node) -> dict:
+    if isinstance(ros_node, str):
+        return json.loads(ros_node.replace("'", '"'))
+    elif isinstance(ros_node, dict):
+        return ros_node
+    else:
+        return {}
 
 
 def main():
@@ -143,9 +148,9 @@ def main():
         if isinstance(args.multiverse_server, str)
         else {"host": "tcp://127.0.0.1", "port": 7000}
     )
-    publishers = parse_ros_node_from_str(args.publishers)
-    subscribers = parse_ros_node_from_str(args.subscribers)
-    services = parse_ros_node_from_str(args.services)
+    publishers = parse_ros_node(args.publishers)
+    subscribers = parse_ros_node(args.subscribers)
+    services = parse_ros_node(args.services)
 
     SocketAddress.host = multiverse_server["host"]
     socket_addr = SocketAddress(port=str(multiverse_server["port"]))

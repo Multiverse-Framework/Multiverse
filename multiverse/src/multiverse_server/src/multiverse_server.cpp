@@ -410,7 +410,7 @@ EMultiverseServerState MultiverseServer::receive_data()
         zmq::recv_result_t recv_result_t = zmq::recv_multipart(socket, std::back_inserter(request_array), zmq::recv_flags::none);
         sockets_need_clean_up[socket_addr] = true;
 
-        const int request_array_size = request_array.size();
+        const size_t request_array_size = request_array.size();
         if (request_array_size == 0)
         {
             throw std::invalid_argument("[Server] Received empty message at socket " + socket_addr + ".");

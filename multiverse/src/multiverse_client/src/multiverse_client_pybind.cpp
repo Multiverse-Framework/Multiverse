@@ -20,6 +20,7 @@
 
 #include "multiverse_client.h"
 
+#include <algorithm>
 #include <pybind11/chrono.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -88,7 +89,7 @@ public:
     {
         if (in_send_data.size() != 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size)
         {
-            printf("[Client %s] The size of in_send_data (%ld) does not match with send_buffer_size (%ld).\n", port.c_str(), in_send_data.size(), 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size);
+            printf("[Client %s] The size of in_send_data (%zu) does not match with send_buffer_size (%zu).\n", port.c_str(), in_send_data.size(), 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size);
         }
         else
         {
@@ -395,7 +396,7 @@ private:
     {
         if (send_data_double.size() != send_buffer.buffer_double.size || send_data_uint8_t.size() != send_buffer.buffer_uint8_t.size)
         {
-            printf("[Client %s] The size of in_send_data [%ld - %ld] does not match with send_buffer_size [%ld - %ld].\n",
+            printf("[Client %s] The size of in_send_data [%zu - %zu] does not match with send_buffer_size [%zu - %zu].\n",
                    port.c_str(),
                    send_data_double.size(),
                    send_data_uint8_t.size(),
@@ -412,7 +413,7 @@ private:
     {
         if (receive_data_double.size() != receive_buffer.buffer_double.size || receive_data_uint8_t.size() != receive_buffer.buffer_uint8_t.size)
         {
-            printf("[Client %s] The size of receive_data [%ld - %ld] does not match with receive_buffer_size [%ld - %ld].\n",
+            printf("[Client %s] The size of receive_data [%zu - %zu] does not match with receive_buffer_size [%zu - %zu].\n",
                    port.c_str(),
                    receive_data_double.size(),
                    receive_data_uint8_t.size(),
