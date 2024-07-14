@@ -8,7 +8,15 @@ handle_sigint() {
 
 trap handle_sigint SIGINT
 
+NO_MULTIVERSE_SERVER=false
 COMMAND_PATTERNS=("multiverse_socket_node" "rviz" "multiverse_control_node" "mujoco" "multiverse_server")
+
+for arg in "$@"; do
+    if [ "$arg" == "--no-multiverse-server" ]; then
+        NO_MULTIVERSE_SERVER=true
+        COMMAND_PATTERNS=("multiverse_socket_node" "rviz" "multiverse_control_node" "mujoco")
+    fi
+done
 
 for COMMAND_PATTERN in "${COMMAND_PATTERNS[@]}"; do
     # Get the PIDs of all matching processes
@@ -50,7 +58,12 @@ if [ ! -f "$MUV_FILE" ]; then
     exit 1
 fi
 
-(python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_multiverse_server.py --muv_file="$MUV_FILE")
+if [ "$NO_MULTIVERSE_SERVER" = true ]; then
+    echo "Skipping the Multiverse server..."
+else
+    echo "Launching the Multiverse server..."
+    (python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_multiverse_server.py --muv_file="$MUV_FILE")
+fi
 (python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_simulators.py --muv_file="$MUV_FILE")
 (source "$MULTIVERSE_PATH"/../multiverse_ws/devel/setup.bash && python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
 (source /opt/ros/foxy/setup.bash && source "$MULTIVERSE_PATH"/../multiverse_ws2/install/local_setup.bash && python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
