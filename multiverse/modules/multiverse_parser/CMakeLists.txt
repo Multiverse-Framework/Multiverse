@@ -26,7 +26,7 @@ add_custom_target(multiverse_parser_build ALL
 
 add_custom_target(multiverse_parser_install ALL
     DEPENDS multiverse_parser_build
-    COMMAND python3 -m pip install ${CMAKE_CURRENT_BINARY_DIR}/multiverse_parser-0.0.1.tar.gz
+    COMMAND python3 -m pip install -U ${CMAKE_CURRENT_BINARY_DIR}/multiverse_parser-0.0.1.tar.gz -t ${LIB_DIR}/dist-packages
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     COMMENT "Installing multiverse_parser package"
     VERBATIM

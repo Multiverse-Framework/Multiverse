@@ -35,8 +35,8 @@ if ! echo "$PYTHONPATH" | grep -q "$USD_BUILD_DIR/lib/python"; then
     RELOAD=true
 fi
 
-if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/libstdc++/python"; then
-    PYTHONPATH=$PYTHONPATH:$LIB_DIR/libstdc++/python
+if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/dist-packages"; then
+    PYTHONPATH=$PYTHONPATH:$LIB_DIR/dist-packages
     PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH"
     echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
     echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
