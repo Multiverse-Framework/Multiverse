@@ -146,7 +146,7 @@ class MultiverseClient:
 
     @property
     def world_time(self) -> float:
-        return self.response_meta_data["time"]
+        return self._multiverse_socket.get_world_time()
 
     @property
     def sim_time(self) -> float:

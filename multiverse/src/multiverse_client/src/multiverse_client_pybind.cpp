@@ -67,6 +67,11 @@ public:
     {
     }
 
+    inline double get_world_time() const
+    {
+        return *world_time;
+    }
+
     inline void set_request_meta_data(const pybind11::dict &in_request_meta_data_dict)
     {
         request_meta_data_dict = in_request_meta_data_dict;
@@ -440,6 +445,7 @@ PYBIND11_MODULE(multiverse_client_pybind, handle)
 
     pybind11::class_<MultiverseClientPybind, MultiverseClient>(handle, "MultiverseClientPybind")
         .def(pybind11::init<const std::string &>())
+        .def("get_world_time", &MultiverseClientPybind::get_world_time)
         .def("set_request_meta_data", &MultiverseClientPybind::set_request_meta_data)
         .def("get_response_meta_data", &MultiverseClientPybind::get_response_meta_data)
         .def("set_send_data", &MultiverseClientPybind::set_send_data)
