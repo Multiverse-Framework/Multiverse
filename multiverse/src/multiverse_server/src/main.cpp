@@ -26,6 +26,14 @@
 
 #include "multiverse_server.h"
 
+/**
+ * @brief multiverse_server takes one argument as the server socket address, default is "tcp://*:7000", 
+ * meaning the server will listen on all interfaces on port 7000.
+ * 
+ * @param argc Number of arguments
+ * @param argv The arguments, the second argument is the server socket address
+ * @return int Return 0 if successful
+ */
 int main(int argc, char **argv)
 {
     printf("Start Multiverse Server...\n");

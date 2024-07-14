@@ -129,7 +129,8 @@ protected:
     virtual void wait_for_meta_data_thread_finish() = 0;
 
     /**
-     * @brief Initalize the objects from request_meta_data
+     * @brief Initalize the objects, either from initialization or from
+     * request_meta_data_str
      *
      */
     virtual bool init_objects(bool from_request_meta_data = false) = 0;
@@ -154,7 +155,7 @@ protected:
      * @param send_buffer_size
      * @param receive_buffer_size
      */
-    virtual void compute_request_buffer_sizes(std::map<std::string, size_t> &req_send_buffer_size, std::map<std::string, size_t> &req_receive_buffer_size) const = 0;
+    virtual void compute_request_buffer_sizes(std::map<std::string, size_t> &send_buffer_size, std::map<std::string, size_t> &receive_buffer_size) const = 0;
 
     /**
      * @brief Compute response buffer sizes
@@ -162,7 +163,7 @@ protected:
      * @param send_buffer_size
      * @param receive_buffer_size
      */
-    virtual void compute_response_buffer_sizes(std::map<std::string, size_t> &res_send_buffer_size, std::map<std::string, size_t> &res_receive_buffer_size) const = 0;
+    virtual void compute_response_buffer_sizes(std::map<std::string, size_t> &send_buffer_size, std::map<std::string, size_t> &receive_buffer_size) const = 0;
 
     /**
      * @brief Bind the objects from the receive meta data
