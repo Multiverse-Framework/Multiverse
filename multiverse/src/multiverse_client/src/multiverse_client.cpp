@@ -51,7 +51,8 @@ void MultiverseClient::connect_to_server()
         return;
     }
 
-    if (flag == EMultiverseClientState::ReceiveData || flag == EMultiverseClientState::ReceiveResponseMetaData)
+    const EMultiverseClientState current_flag = flag.load();
+    if (current_flag == EMultiverseClientState::ReceiveData || current_flag == EMultiverseClientState::ReceiveResponseMetaData)
     {
         zmq_sleep(1); // sleep for 1 second to finish the previous communication
     }
@@ -88,13 +89,13 @@ void MultiverseClient::connect_to_server()
     {
         flag = EMultiverseClientState::None;
     }
-    else if (flag == EMultiverseClientState::None || flag == EMultiverseClientState::ReceiveData)
+    else if (current_flag == EMultiverseClientState::None || current_flag == EMultiverseClientState::ReceiveData)
     {
         flag = EMultiverseClientState::StartConnection;
 
         printf("[Client %s] Opened the socket %s.\n", port.c_str(), socket_addr.c_str());
     }
-    else if (flag == EMultiverseClientState::ReceiveResponseMetaData)
+    else if (current_flag == EMultiverseClientState::ReceiveResponseMetaData)
     {
         zmq_connect(client_socket, socket_addr.c_str());
 
@@ -113,7 +114,8 @@ void MultiverseClient::connect(const std::string &in_host, const std::string &in
 
 void MultiverseClient::start()
 {
-    if (flag == EMultiverseClientState::StartConnection)
+    const EMultiverseClientState current_flag = flag.load();
+    if (current_flag == EMultiverseClientState::StartConnection)
     {
         printf("[Client %s] Start.\n", port.c_str());
         run();
@@ -164,7 +166,6 @@ void MultiverseClient::run()
 
             wait_for_meta_data_thread_finish();
             start_meta_data_thread();
-            flag = EMultiverseClientState::InitSendAndReceiveData;
             return;
 
         case EMultiverseClientState::SendRequestMetaData:
@@ -174,7 +175,7 @@ void MultiverseClient::run()
             break;
 
         case EMultiverseClientState::ReceiveResponseMetaData:
-            receive_response_meta_data();
+            receive_data();
 
             check_response_meta_data();
             break;
@@ -191,7 +192,12 @@ void MultiverseClient::run()
             clean_up();
             init_send_and_receive_data();
 
-            printf("[Client %s] Starting the communication (send: %zu, receive: %zu).\n", port.c_str(), send_buffer_size, receive_buffer_size);
+            printf("[Client %s] Starting the communication (send: [%zu - %zu], receive: [%zu - %zu]).\n",
+                   port.c_str(),
+                   send_buffer.buffer_double.size,
+                   send_buffer.buffer_uint8_t.size,
+                   receive_buffer.buffer_double.size,
+                   receive_buffer.buffer_uint8_t.size);
 
             flag = EMultiverseClientState::BindSendData;
             break;
@@ -203,50 +209,13 @@ void MultiverseClient::run()
             break;
 
         case EMultiverseClientState::SendData:
-            zmq_send(client_socket, send_buffer, send_buffer_size * sizeof(double), 0);
+            send_send_data();
 
             flag = EMultiverseClientState::ReceiveData;
             break;
 
         case EMultiverseClientState::ReceiveData:
-            zmq_recv(client_socket, receive_buffer, receive_buffer_size * sizeof(double), 0);
-
-            if (!should_shut_down)
-            {
-                if (std::isnan(*receive_buffer) || *receive_buffer == -1.0)
-                {
-                    printf("[Client %s] The socket %s from the server has been terminated, returning to resend the meta data.\n", port.c_str(), socket_addr.c_str());
-
-                    wait_for_connect_to_server_thread_finish();
-                    start_connect_to_server_thread();
-                    return;
-                }
-                else if (*receive_buffer == -2.0)
-                {
-                    printf("[Client %s] The socket %s from the server has received new meta data.\n", port.c_str(), socket_addr.c_str());
-                    send_request_meta_data(); // TODO: Make use of the old meta data
-
-                    receive_response_meta_data();
-
-                    check_response_meta_data();
-
-                    bind_api_callbacks();
-
-                    init_objects(true);
-
-                    bind_api_callbacks_response();
-
-                    flag = EMultiverseClientState::BindRequestMetaData;
-
-                    break;
-                }
-                else if (*receive_buffer == 0.0)
-                {
-                    printf("[Client %s] The socket %s from the server has received reset command.\n", port.c_str(), socket_addr.c_str());
-                    reset();
-                }
-            }
-            flag = EMultiverseClientState::BindReceiveData;
+            receive_data();
             break;
 
         case EMultiverseClientState::BindReceiveData:
@@ -260,22 +229,25 @@ void MultiverseClient::run()
         }
     }
 
-    if (flag != EMultiverseClientState::ReceiveResponseMetaData && flag != EMultiverseClientState::ReceiveData)
+    const EMultiverseClientState current_flag = flag.load();
+    if (current_flag != EMultiverseClientState::ReceiveResponseMetaData && current_flag != EMultiverseClientState::ReceiveData)
     {
         printf("[Client %s] Closing the socket %s.\n", port.c_str(), socket_addr.c_str());
 
-        if (flag == EMultiverseClientState::BindRequestMetaData ||
-            flag == EMultiverseClientState::SendRequestMetaData ||
-            flag == EMultiverseClientState::BindResponseMetaData ||
-            flag == EMultiverseClientState::InitSendAndReceiveData ||
-            flag == EMultiverseClientState::BindSendData ||
-            flag == EMultiverseClientState::SendData ||
-            flag == EMultiverseClientState::BindReceiveData)
+        if (current_flag == EMultiverseClientState::BindRequestMetaData ||
+            current_flag == EMultiverseClientState::SendRequestMetaData ||
+            current_flag == EMultiverseClientState::BindResponseMetaData ||
+            current_flag == EMultiverseClientState::InitSendAndReceiveData ||
+            current_flag == EMultiverseClientState::BindSendData ||
+            current_flag == EMultiverseClientState::SendData ||
+            current_flag == EMultiverseClientState::BindReceiveData)
         {
-            const std::string close_data = "{}";
-            zmq_send(client_socket, close_data.c_str(), close_data.size(), 0);
-            free(send_buffer);
-            free(receive_buffer);
+            const int message_int = 0;
+            zmq_send(client_socket, &message_int, sizeof(message_int), 0);
+            free(send_buffer.buffer_double.data);
+            free(send_buffer.buffer_uint8_t.data);
+            free(receive_buffer.buffer_double.data);
+            free(receive_buffer.buffer_uint8_t.data);
         }
 
         clean_up();
@@ -293,16 +265,131 @@ void MultiverseClient::send_and_receive_meta_data()
 
 void MultiverseClient::send_request_meta_data()
 {
-    zmq_send(client_socket, request_meta_data_str.c_str(), request_meta_data_str.size(), 0);
+    if (should_shut_down)
+    {
+        const int message_spec_int = 0;
+        zmq_send(client_socket, &message_spec_int, sizeof(int), 0);
+    }
+    else
+    {
+        const int message_spec_int = 1;
+        zmq_send(client_socket, &message_spec_int, sizeof(int), 2);
+        zmq_send(client_socket, request_meta_data_str.c_str(), request_meta_data_str.size(), 0);
+    }
 }
 
-void MultiverseClient::receive_response_meta_data()
+void MultiverseClient::send_send_data()
 {
-    zmq_msg_t message;
-    zmq_msg_init(&message);
-    zmq_msg_recv(&message, client_socket, 0);
-    response_meta_data_str = std::string(static_cast<char *>(zmq_msg_data(&message)), zmq_msg_size(&message));
-    zmq_msg_close(&message);
+    const int message_spec_int = 2 + (send_buffer.buffer_double.size > 0) + (send_buffer.buffer_uint8_t.size > 0);
+    zmq_send(client_socket, &message_spec_int, sizeof(int), 2);
+
+    if (message_spec_int == 2)
+    {
+        zmq_send(client_socket, world_time, sizeof(double), 0);
+    }
+    else
+    {
+        zmq_send(client_socket, world_time, sizeof(double), 2);
+        if (send_buffer.buffer_double.size > 0)
+        {
+            if (send_buffer.buffer_uint8_t.size == 0)
+            {
+                zmq_send(client_socket, send_buffer.buffer_double.data, send_buffer.buffer_double.size * sizeof(double), 0);
+            }
+            else
+            {
+                zmq_send(client_socket, send_buffer.buffer_double.data, send_buffer.buffer_double.size * sizeof(double), 2);
+            }
+        }
+        if (send_buffer.buffer_uint8_t.size > 0)
+        {
+            zmq_send(client_socket, send_buffer.buffer_uint8_t.data, send_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+        }
+    }
+}
+
+void MultiverseClient::receive_data()
+{
+    int message_spec_int;
+    if (zmq_recv(client_socket, &message_spec_int, sizeof(int), 0) == -1)
+    {
+        should_shut_down = true;
+        return;
+    }
+
+    if (message_spec_int == 0)
+    {
+        should_shut_down = true;
+        return;
+    }
+    else if (message_spec_int == 1)
+    {
+        zmq_msg_t message;
+        zmq_msg_init(&message);
+        zmq_msg_recv(&message, client_socket, 0);
+        response_meta_data_str = std::string(static_cast<char *>(zmq_msg_data(&message)), zmq_msg_size(&message));
+        zmq_msg_close(&message);
+        const EMultiverseClientState current_flag = flag.load();
+        if (current_flag == EMultiverseClientState::ReceiveResponseMetaData)
+        {
+            flag = EMultiverseClientState::BindResponseMetaData;
+        }
+        else if (current_flag == EMultiverseClientState::ReceiveData)
+        {
+            printf("[Client %s] The socket %s from the server has received new meta data.\n", port.c_str(), socket_addr.c_str());
+            check_response_meta_data();
+            bind_api_callbacks();
+            init_objects(true);
+            bind_api_callbacks_response();
+            flag = EMultiverseClientState::BindRequestMetaData;
+        }
+        else
+        {
+            throw std::runtime_error("[Client " + port + "] The client is in the wrong state.");
+        }
+        return;
+    }
+    else if (message_spec_int >= 2)
+    {
+        zmq_recv(client_socket, world_time, sizeof(*world_time), 0);
+        if (message_spec_int == 3)
+        {
+            if (receive_buffer.buffer_double.size > 0 && receive_buffer.buffer_uint8_t.size == 0)
+            {
+                zmq_recv(client_socket, receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double), 0);
+            }
+            else if (receive_buffer.buffer_uint8_t.size > 0 && receive_buffer.buffer_double.size == 0)
+            {
+                zmq_recv(client_socket, receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+            }
+            else
+            {
+                throw std::runtime_error("The receive buffer is not initialized correctly.");
+            }
+        }
+        else if (message_spec_int == 4)
+        {
+            zmq_recv(client_socket, world_time, sizeof(double), 0);
+            zmq_recv(client_socket, receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double), 0);
+            zmq_recv(client_socket, receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+        }
+        else if (message_spec_int != 2)
+        {
+            throw std::runtime_error("The message type [" + std::to_string(message_spec_int) + "] is not recognized.");
+        }
+    }
+    else
+    {
+        throw std::runtime_error("The message type [" + std::to_string(message_spec_int) + "] is not recognized.");
+    }
+
+    if (!should_shut_down && *world_time == 0.0)
+    {
+        printf("[Client %s] The socket %s from the server has received reset command.\n", port.c_str(), socket_addr.c_str());
+        reset();
+    }
+
+    flag = EMultiverseClientState::BindReceiveData;
 }
 
 void MultiverseClient::check_response_meta_data()
@@ -318,51 +405,64 @@ void MultiverseClient::check_response_meta_data()
     }
     else
     {
-        printf("[Client %s] The socket %s from the server has been terminated, resending the meta data.\n", port.c_str(), socket_addr.c_str());
-        connect_to_server();
+        throw std::runtime_error("[Client " + port + "] The client failed to check the response meta data.");
     }
 }
 
 bool MultiverseClient::check_buffer_size()
 {
-    std::map<std::string, size_t> request_buffer_sizes = {{"send", 1}, {"receive", 1}};
+    std::map<std::string, std::map<std::string, size_t>> request_buffer_sizes =
+        {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
     compute_request_buffer_sizes(request_buffer_sizes["send"], request_buffer_sizes["receive"]);
 
-    std::map<std::string, size_t> response_buffer_sizes = {{"send", 1}, {"receive", 1}};
+    std::map<std::string, std::map<std::string, size_t>> response_buffer_sizes =
+        {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
     compute_response_buffer_sizes(response_buffer_sizes["send"], response_buffer_sizes["receive"]);
 
-    if (request_buffer_sizes["receive"] != -1 &&
-        (response_buffer_sizes["send"] != request_buffer_sizes["send"] || response_buffer_sizes["receive"] != request_buffer_sizes["receive"]))
+    if (request_buffer_sizes["receive"]["double"] != -1 && request_buffer_sizes["receive"]["uint8"] != -1 &&
+        (request_buffer_sizes["send"]["double"] != response_buffer_sizes["send"]["double"] ||
+         request_buffer_sizes["send"]["uint8"] != response_buffer_sizes["send"]["uint8"] ||
+         request_buffer_sizes["receive"]["double"] != response_buffer_sizes["receive"]["double"] ||
+         request_buffer_sizes["receive"]["uint8"] != response_buffer_sizes["receive"]["uint8"]))
     {
-        printf("[Client %s] Failed to initialize the buffers %s: send_buffer_size(server = %zu, client = %zu), receive_buffer_size(server = %zu, client = %zu).\n",
+        printf("[Client %s] Failed to initialize the buffers %s: send_buffer_size(server = [%zu, %zu], client = [%zu, %zu]), receive_buffer_size(server = [%zu, %zu], client = [%zu, %zu]).\n",
                port.c_str(),
                socket_addr.c_str(),
-               response_buffer_sizes["send"],
-               request_buffer_sizes["send"],
-               response_buffer_sizes["receive"],
-               request_buffer_sizes["receive"]);
+               request_buffer_sizes["send"]["double"],
+               request_buffer_sizes["send"]["uint8"],
+               response_buffer_sizes["send"]["double"],
+               response_buffer_sizes["send"]["uint8"],
+               request_buffer_sizes["receive"]["double"],
+               request_buffer_sizes["receive"]["uint8"],
+               response_buffer_sizes["receive"]["double"],
+               response_buffer_sizes["receive"]["uint8"]);
         return false;
     }
 
-    send_buffer_size = response_buffer_sizes["send"];
-    receive_buffer_size = response_buffer_sizes["receive"];
+    send_buffer.buffer_double.size = response_buffer_sizes["send"]["double"];
+    send_buffer.buffer_uint8_t.size = response_buffer_sizes["send"]["uint8"];
+    receive_buffer.buffer_double.size = response_buffer_sizes["receive"]["double"];
+    receive_buffer.buffer_uint8_t.size = response_buffer_sizes["receive"]["uint8"];
     return true;
 }
 
 void MultiverseClient::init_buffer()
 {
-    send_buffer = (double *)calloc(send_buffer_size, sizeof(double));
-    receive_buffer = (double *)calloc(receive_buffer_size, sizeof(double));
+    send_buffer.buffer_double.data = (double *)calloc(send_buffer.buffer_double.size, sizeof(double));
+    send_buffer.buffer_uint8_t.data = (uint8_t *)calloc(send_buffer.buffer_uint8_t.size, sizeof(uint8_t));
+    receive_buffer.buffer_double.data = (double *)calloc(receive_buffer.buffer_double.size, sizeof(double));
+    receive_buffer.buffer_uint8_t.data = (uint8_t *)calloc(receive_buffer.buffer_uint8_t.size, sizeof(uint8_t));
 }
 
 bool MultiverseClient::communicate(const bool resend_request_meta_data)
 {
-    if (should_shut_down || flag == EMultiverseClientState::None)
+    const EMultiverseClientState current_flag = flag.load();
+    if (should_shut_down || current_flag == EMultiverseClientState::None)
     {
         return false;
     }
 
-    if (flag == EMultiverseClientState::StartConnection)
+    if (current_flag == EMultiverseClientState::StartConnection)
     {
         run();
         return true;
@@ -371,7 +471,7 @@ bool MultiverseClient::communicate(const bool resend_request_meta_data)
     if (resend_request_meta_data)
     {
         wait_for_meta_data_thread_finish();
-        if (flag == EMultiverseClientState::BindSendData)
+        if (current_flag == EMultiverseClientState::BindSendData)
         {
             init_objects();
         }
@@ -383,9 +483,10 @@ bool MultiverseClient::communicate(const bool resend_request_meta_data)
         return true;
     }
 
-    if (flag == EMultiverseClientState::BindSendData || flag == EMultiverseClientState::InitSendAndReceiveData)
+    if (current_flag == EMultiverseClientState::BindSendData || current_flag == EMultiverseClientState::InitSendAndReceiveData)
     {
         run();
+
         return true;
     }
 

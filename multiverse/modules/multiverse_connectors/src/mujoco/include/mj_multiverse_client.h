@@ -88,8 +88,6 @@ private:
 
     std::string simulation_name;
 
-    double world_time;
-
     Json::Value send_objects_json;
 
     Json::Value receive_objects_json;
@@ -109,6 +107,8 @@ private:
     std::map<int, mjtNum *> contact_efforts;
 
     std::set<std::string> resources;
+
+    std::map<std::string, std::set<std::string>> cached_objects;
 
 private:
     void start_connect_to_server_thread() override;

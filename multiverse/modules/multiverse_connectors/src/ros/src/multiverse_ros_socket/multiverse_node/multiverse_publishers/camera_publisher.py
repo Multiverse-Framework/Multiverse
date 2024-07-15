@@ -75,7 +75,7 @@ class CameraPublisher(MultiversePublisher):
             return
 
     def _bind_receive_data(self, receive_data: List[float]) -> None:
-        if len(receive_data) != self._msg.height * self._msg.width + 1:
+        if len(receive_data) != self._msg.height * self._msg.width * 3 + 1:
             self.logwarn(
                 f"Invalid data length {len(receive_data)} for camera {self._camera_name}."
             )
@@ -87,9 +87,5 @@ class CameraPublisher(MultiversePublisher):
         elif INTERFACE == Interface.ROS2:
             self._msg.header.stamp = self.get_clock().now().to_msg()
         
-        data_array = numpy.zeros(self._msg.height * self._msg.width * 3, dtype=numpy.uint8)
-        receive_data_array = numpy.array(receive_data[1:])
-        data_array[::3] = receive_data_array // 1000000
-        data_array[1::3] = (receive_data_array % 1000000) // 1000
-        data_array[2::3] = receive_data_array % 1000
+        data_array = numpy.array(receive_data[1:], dtype=numpy.uint8)
         self._msg.data = data_array.tobytes()

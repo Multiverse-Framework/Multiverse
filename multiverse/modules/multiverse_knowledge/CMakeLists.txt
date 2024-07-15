@@ -20,7 +20,7 @@ endif()
 INSTALL(CODE "execute_process( \
     COMMAND ${CMAKE_COMMAND} -E create_symlink \
     ${CMAKE_CURRENT_SOURCE_DIR}/Konclude/src/queries/queries.py \
-    ${LIB_DIR}/${STDLIB}/python/multiverse_knowledge.py   \
+    ${LIB_DIR}/dist-packages/multiverse_knowledge.py   \
     )"
 )
 

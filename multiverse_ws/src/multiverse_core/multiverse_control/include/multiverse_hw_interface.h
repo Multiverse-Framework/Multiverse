@@ -43,8 +43,6 @@ public:
     bool communicate(const bool resend_meta_data = false) override;
 
 private:
-    double world_time = 0.0;
-
     std::map<std::string, std::string> meta_data;
 
     std::map<std::string, std::set<std::string>> send_objects;
@@ -66,7 +64,7 @@ private:
 
     void wait_for_meta_data_thread_finish() override;
 
-    bool init_objects(bool from_server = false) override;
+    bool init_objects(bool from_request_meta_data = false) override;
 
     void bind_request_meta_data() override;
 

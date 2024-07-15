@@ -5,6 +5,7 @@
       "boost-filesystem",
       "tinyxml2",
       "glfw3",
-      "opengl"
+      "opengl",
+      "pybind11"
     ]
   }

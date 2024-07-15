@@ -18,6 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <regex>
+
 #include "mj_simulate.h"
 
 MjSimulate::~MjSimulate()
@@ -32,7 +34,6 @@ void MjSimulate::init()
     char error[1000] = "Could not load binary model";
 
     m = mj_loadXML(scene_xml_path.string().c_str(), 0, error, 1000);
-
     if (!m)
     {
         mju_error("Load model error: %s", error);
@@ -50,9 +51,19 @@ void MjSimulate::load_new_model_and_keep_old_data()
     char error[1000] = "Could not load binary model";
 
     mjModel *m_new = mj_loadXML(scene_xml_path.string().c_str(), 0, error, 1000);
-
     if (!m_new)
     {
+		std::regex pathRegex("resource not found via provider or OS filesystem: '([^']+)'");
+		std::smatch match;
+		std::string error_message = error;
+		if (std::regex_search(error_message, match, pathRegex) && match.size() > 1) 
+		{
+			const boost::filesystem::path missing_file_path = match.str(1);
+			if (boost::filesystem::exists(missing_file_path)) 
+			{
+				printf("This is bull shit! [%s] does exist!!!\n", missing_file_path.string().c_str());
+			}
+		}
         mju_error("Load model error: %s", error);
     }
 

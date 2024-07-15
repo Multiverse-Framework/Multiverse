@@ -111,7 +111,7 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
 
 ros::Time MultiverseHWInterface::get_world_time(const double offset) const
 {
-    return ros::Time(world_time + offset);
+    return ros::Time(*world_time + offset);
 }
 
 MultiverseHWInterface::~MultiverseHWInterface()
@@ -187,8 +187,6 @@ void MultiverseHWInterface::bind_api_callbacks_response()
 
 void MultiverseHWInterface::init_send_and_receive_data()
 {
-    send_data_vec.emplace_back(nullptr);
-
     for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
     {
         for (const std::string &attribute_name : send_object.second)
@@ -208,7 +206,6 @@ void MultiverseHWInterface::init_send_and_receive_data()
         }
     }
 
-    receive_data_vec.emplace_back(&world_time);
     for (const std::pair<std::string, std::set<std::string>> &receive_object : receive_objects)
     {
         for (const std::string &attribute_name : receive_object.second)
@@ -231,18 +228,17 @@ void MultiverseHWInterface::init_send_and_receive_data()
 
 void MultiverseHWInterface::bind_send_data()
 {
-    send_buffer[0] = std::numeric_limits<double>::quiet_NaN();
-    for (size_t i = 1; i < send_buffer_size; i++)
+    for (int i = 0; i < send_buffer.buffer_double.size; i++)
     {
-        send_buffer[i] = *send_data_vec[i];
+        send_buffer.buffer_double.data[i] = *send_data_vec[i];
     }
 }
 
 void MultiverseHWInterface::bind_receive_data()
 {
-    for (size_t i = 0; i < receive_buffer_size; i++)
+    for (int i = 0; i < receive_buffer.buffer_double.size; i++)
     {
-        *receive_data_vec[i] = receive_buffer[i];
+        *receive_data_vec[i] =  send_buffer.buffer_double.data[i];
     }
 }
 

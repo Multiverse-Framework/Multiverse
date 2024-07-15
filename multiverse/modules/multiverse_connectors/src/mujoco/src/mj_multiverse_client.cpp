@@ -111,6 +111,8 @@ void MjMultiverseClient::init(const Json::Value &multiverse_params_json)
 	host = multiverse_params["server_host"];
 	port = multiverse_params["client_port"];
 
+	*world_time = d->time;
+
 	connect();
 }
 
@@ -124,7 +126,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 		{
 			const boost::filesystem::path object_xml_path = object_xml_paths[0];
 			printf("Found XML file of [%s] at [%s].\n", object_name.c_str(), object_xml_path.string().c_str());
-			printf("Spawn object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
+			printf("Trying to spawn object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 
 			boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
 			{
@@ -276,6 +278,8 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 				printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 				return false;
 			}
+
+			printf("Spawned object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 		}
 		else
 		{
@@ -341,26 +345,37 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 					}
 
 					printf("Removed object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
-					mjModel *m_include = mj_loadXML(include_file_path.string().c_str(), nullptr, nullptr, 0);
-					for (int body_id = 1; body_id < m_include->nbody; body_id++)
+
+					if (cached_objects.find(include_file_path.string()) == cached_objects.end())
 					{
-						const std::string body_name = mj_id2name(m_include, mjtObj::mjOBJ_BODY, body_id);
-						if (send_objects_json.isMember(body_name))
+						cached_objects[include_file_path.string()] = {};
+						char error[1000] = "Could not load binary model";
+						mjModel *m_include = mj_loadXML(include_file_path.string().c_str(), nullptr, error, 1000);
+						printf("Trying to load include model [%s].\n", include_file_path.string().c_str());
+						if (!m_include)
 						{
-							send_objects_json.removeMember(body_name);
-							printf("Removed object [%s] from the request meta data.\n", body_name.c_str());
+							mju_error("Load include model error: %s", error);
+						}
+						for (int body_id = 1; body_id < m_include->nbody; body_id++)
+						{
+							const std::string body_name = mj_id2name(m_include, mjtObj::mjOBJ_BODY, body_id);
+							cached_objects[include_file_path.string()].insert(body_name);
+						}
+						for (int joint_id = 0; joint_id < m_include->njnt; joint_id++)
+						{
+							if (mj_id2name(m_include, mjtObj::mjOBJ_JOINT, joint_id))
+							{
+								const std::string joint_name = mj_id2name(m_include, mjtObj::mjOBJ_JOINT, joint_id);
+								cached_objects[include_file_path.string()].insert(joint_name);
+							}
 						}
 					}
-					for (int joint_id = 0; joint_id < m_include->njnt; joint_id++)
+					for (const std::string &object_name : cached_objects[include_file_path.string()])
 					{
-						if (mj_id2name(m_include, mjtObj::mjOBJ_JOINT, joint_id))
+						if (send_objects_json.isMember(object_name))
 						{
-							const std::string joint_name = mj_id2name(m_include, mjtObj::mjOBJ_JOINT, joint_id);
-							if (send_objects_json.isMember(joint_name))
-							{
-								send_objects_json.removeMember(joint_name);
-								printf("Removed object [%s] from the request meta data.\n", joint_name.c_str());
-							}
+							send_objects_json.removeMember(object_name);
+							printf("Removed object [%s] from the request meta data.\n", object_name.c_str());
 						}
 					}
 				}
@@ -567,7 +582,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 		{
 			for (int body_id = 1; body_id < m->nbody; body_id++)
 			{
-				if (mj_id2name(m, mjtObj::mjOBJ_BODY, body_id) == nullptr )
+				if (mj_id2name(m, mjtObj::mjOBJ_BODY, body_id) == nullptr)
 				{
 					continue;
 				}
@@ -607,7 +622,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 		{
 			for (int joint_id = 0; joint_id < m->njnt; joint_id++)
 			{
-				if (mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id) == nullptr )
+				if (mj_id2name(m, mjtObj::mjOBJ_JOINT, joint_id) == nullptr)
 				{
 					continue;
 				}
@@ -975,6 +990,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		for (int qpos_id = 0; qpos_id < m->nq; qpos_id++)
 		{
 			qpos_str += std::to_string(d->qpos[qpos_id]) + " ";
+			m->key_qpos[qpos_id] = d->qpos[qpos_id];
 		}
 		if (qpos_str.size() > 0)
 		{
@@ -986,6 +1002,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		for (int dof_id = 0; dof_id < m->nv; dof_id++)
 		{
 			qvel_str += std::to_string(d->qvel[dof_id]) + " ";
+			m->key_qvel[dof_id] = d->qvel[dof_id];
 		}
 		if (qvel_str.size() > 0)
 		{
@@ -997,6 +1014,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		for (int act_id = 0; act_id < m->na; act_id++)
 		{
 			act_str += std::to_string(d->act[act_id]) + " ";
+			m->key_act[act_id] = d->act[act_id];
 		}
 		if (act_str.size() > 0)
 		{
@@ -1008,6 +1026,7 @@ void MjMultiverseClient::bind_response_meta_data()
 		for (int ctrl_id = 0; ctrl_id < m->nu; ctrl_id++)
 		{
 			ctrl_str += std::to_string(d->ctrl[ctrl_id]) + " ";
+			m->key_ctrl[ctrl_id] = d->ctrl[ctrl_id];
 		}
 		if (ctrl_str.size() > 0)
 		{
@@ -1022,11 +1041,18 @@ void MjMultiverseClient::bind_response_meta_data()
 			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id]) + " ";
 			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id + 1]) + " ";
 			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id + 2]) + " ";
+			m->key_mpos[3 * mocap_pos_id] = d->mocap_pos[3 * mocap_pos_id];
+			m->key_mpos[3 * mocap_pos_id + 1] = d->mocap_pos[3 * mocap_pos_id + 1];
+			m->key_mpos[3 * mocap_pos_id + 2] = d->mocap_pos[3 * mocap_pos_id + 2];
 
 			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id]) + " ";
 			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 1]) + " ";
 			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 2]) + " ";
 			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 3]) + " ";
+			m->key_mquat[4 * mocap_pos_id] = d->mocap_quat[4 * mocap_pos_id];
+			m->key_mquat[4 * mocap_pos_id + 1] = d->mocap_quat[4 * mocap_pos_id + 1];
+			m->key_mquat[4 * mocap_pos_id + 2] = d->mocap_quat[4 * mocap_pos_id + 2];
+			m->key_mquat[4 * mocap_pos_id + 3] = d->mocap_quat[4 * mocap_pos_id + 3];
 		}
 		if (mocap_pos_str.size() > 0)
 		{
@@ -1040,16 +1066,6 @@ void MjMultiverseClient::bind_response_meta_data()
 		}
 
 		doc.SaveFile(scene_xml_path.string().c_str());
-
-		// load and compile model
-		char error[1000] = "Could not load binary model";
-
-		m = mj_loadXML(scene_xml_path.string().c_str(), 0, error, 1000);
-
-		if (!m)
-		{
-			mju_error("Load model error: %s", error);
-		}
 	}
 	else
 	{
@@ -2062,7 +2078,6 @@ void MjMultiverseClient::bind_api_callbacks_response()
 
 void MjMultiverseClient::init_send_and_receive_data()
 {
-	send_data_vec.emplace_back(&d->time);
 	for (const std::pair<std::string, std::set<std::string>> &send_object : send_objects)
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, send_object.first.c_str());
@@ -2219,7 +2234,6 @@ void MjMultiverseClient::init_send_and_receive_data()
 		}
 	}
 
-	receive_data_vec.emplace_back(nullptr);
 	for (const std::pair<std::string, std::set<std::string>> &receive_object : receive_objects)
 	{
 		const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, receive_object.first.c_str());
@@ -2376,9 +2390,9 @@ void MjMultiverseClient::init_send_and_receive_data()
 
 void MjMultiverseClient::bind_send_data()
 {
-	if (send_buffer_size != send_data_vec.size())
+	if (send_data_vec.size() != send_buffer.buffer_double.size)
 	{
-		// printf("The size of send_data_vec (%zd) does not match with send_buffer_size (%zd).\n", send_data_vec.size(), send_buffer_size);
+		printf("The size of send_data_vec (%zd) does not match with send_buffer_size (%zd).\n", send_data_vec.size(), send_buffer.buffer_double.size);
 		return;
 	}
 
@@ -2389,17 +2403,18 @@ void MjMultiverseClient::bind_send_data()
 		mju_mulMatVec(contact_effort.second, jac, d->qfrc_constraint, 6, m->nv);
 	}
 
-	for (size_t i = 0; i < send_buffer_size; i++)
+	*world_time = d->time;
+	for (size_t i = 0; i < send_buffer.buffer_double.size; i++)
 	{
-		send_buffer[i] = *send_data_vec[i];
+		send_buffer.buffer_double.data[i] = *send_data_vec[i];
 	}
 }
 
 void MjMultiverseClient::bind_receive_data()
 {
-	if (receive_buffer_size != receive_data_vec.size())
+	if (receive_data_vec.size() != receive_buffer.buffer_double.size)
 	{
-		printf("[Client %s] The size of receive_data_vec (%zd) does not match with receive_buffer_size (%zd)\n", port.c_str(), receive_data_vec.size(), receive_buffer_size);
+		printf("[Client %s] The size of receive_data_vec (%zd) does not match with receive_buffer_size (%zd)\n", port.c_str(), receive_data_vec.size(), receive_buffer.buffer_double.size);
 		return;
 	}
 
@@ -2514,9 +2529,9 @@ void MjMultiverseClient::bind_receive_data()
 		}
 	}
 
-	for (size_t i = 1; i < receive_buffer_size; i++)
+	for (size_t i = 0; i < receive_buffer.buffer_double.size; i++)
 	{
-		*receive_data_vec[i] = receive_buffer[i];
+		*receive_data_vec[i] = receive_buffer.buffer_double.data[i];
 	}
 }
 
@@ -2541,7 +2556,20 @@ void MjMultiverseClient::clean_up()
 void MjMultiverseClient::reset()
 {
 	start_time += real_time;
-	mj_resetDataKeyframe(m, d, 0);
+	const int cursor_body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, "cursor");
+	const int cursor_id = m->body_mocapid[cursor_body_id];
+	if (cursor_body_id != -1 && cursor_id != -1)
+	{
+		const mjtNum cursor_pos[3] = {d->mocap_pos[3 * cursor_id], d->mocap_pos[3 * cursor_id + 1], d->mocap_pos[3 * cursor_id + 2]};
+		mj_resetDataKeyframe(m, d, 0);
+		d->mocap_pos[3 * cursor_id] = cursor_pos[0];
+		d->mocap_pos[3 * cursor_id + 1] = cursor_pos[1];
+		d->mocap_pos[3 * cursor_id + 2] = cursor_pos[2];
+	}
+	else
+	{
+		mj_resetDataKeyframe(m, d, 0);
+	}
 	d->time = 0.0;
 }
 

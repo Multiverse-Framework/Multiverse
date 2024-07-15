@@ -98,6 +98,7 @@ class MultiverseClient:
 
     @send_data.setter
     def send_data(self, send_data: List[float]) -> None:
+        assert isinstance(send_data, list)
         self._send_data = send_data
         self._multiverse_socket.set_send_data(self._send_data)
 
@@ -105,9 +106,6 @@ class MultiverseClient:
     def receive_data(self) -> List[float]:
         receive_data = self._multiverse_socket.get_receive_data()
         assert isinstance(receive_data, list)
-        if len(receive_data) == 0:
-            message = f"[Client {self._client_addr.port}] Receive empty data."
-            self.logwarn(message)
         return receive_data
 
     @property
@@ -148,7 +146,7 @@ class MultiverseClient:
 
     @property
     def world_time(self) -> float:
-        return self.response_meta_data["time"]
+        return self._multiverse_socket.get_world_time()
 
     @property
     def sim_time(self) -> float:
