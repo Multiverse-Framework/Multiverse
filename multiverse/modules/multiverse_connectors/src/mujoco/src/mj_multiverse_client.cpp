@@ -1603,7 +1603,7 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 	tinyxml2::XMLElement *worldbody_element;
 	tinyxml2::XMLElement *freejoint_element;
 	tinyxml2::XMLElement *body_1_element_copy;
-	if (strcmp(scene_xml_path.c_str(), doc_file_path.c_str()) != 0)
+	if (strcmp(scene_xml_path.string().c_str(), doc_file_path.c_str()) != 0)
 	{
 		scene_doc.LoadFile(scene_xml_path.string().c_str());
 		mujoco_element = scene_doc.FirstChildElement("mujoco");
@@ -1678,7 +1678,7 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 	}
 	scene_doc.SaveFile(scene_xml_path.string().c_str());
 
-	if (strcmp(doc_file_path.c_str(), scene_xml_path.c_str()) != 0)
+	if (strcmp(scene_xml_path.string().c_str(), doc_file_path.c_str()) != 0)
 	{
 		doc.SaveFile(doc_file_path.c_str());
 	}
