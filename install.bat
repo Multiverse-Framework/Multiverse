@@ -101,6 +101,8 @@ if not exist "%ROS_DIR%" (
     mkdir "%ROS_DIR%"
     set "ROS_ZIP=ros2-jazzy-20240705-windows-release-amd64.zip"
     start powershell -NoProfile -Command "curl -o '%ROS_DIR%\%ROS_ZIP%' 'https://github.com/ros2/ros2/releases/download/release-jazzy-20240705/%ROS_ZIP%'; 7z x '%ROS_DIR%\%ROS_ZIP%' -o'%ROS_DIR%';  Remove-Item -Path '%ROS_DIR%\%ROS_ZIP%'; Move-Item -Path '%ROS_DIR%\ros2-windows\*' '%ROS_DIR%'; Remove-Item -Path '%ROS_DIR%\ros2-windows'"
+    workon multiverse
+    %PYTHON_EXECUTABLE% %ROS_DIR%/../fix_shebang.py %ROS_DIR%
 )
 
 @REM Install dependencies for the rest packages
