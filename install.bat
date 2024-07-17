@@ -127,5 +127,8 @@ if not exist "%ROS_DIR%" (
 @REM Install urdf_parser_py
 %PYTHON_EXECUTABLE% -m pip install urdf_parser_py
 
+@REM Install ros_dep_tools
+%PYTHON_EXECUTABLE% -m pip install rosdep
+
 echo Installation completed.
 pause
