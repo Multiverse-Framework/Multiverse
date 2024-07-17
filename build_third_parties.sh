@@ -105,7 +105,7 @@ if [ $BUILD_USD = true ]; then
         echo "Folder already exists: $USD_BUILD_DIR"
     fi
 
-    for virtualenvwrapper in /usr/share/virtualenvwrapper/virtualenvwrapper.sh . /home/$USER/.local/bin/virtualenvwrapper.sh; do
+    for virtualenvwrapper in /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
         if [ -f $virtualenvwrapper ]; then
             . $virtualenvwrapper
             workon multiverse

@@ -7,7 +7,7 @@
 sudo apt-get install -y software-properties-common curl python-is-python3
 
 # Install python3-pip
-sudo apt-get install -y python3-pip python3-virtualenvwrapper
+sudo apt-get install -y python3-pip
 
 UBUNTU_VERSION=$(lsb_release -rs)
 
@@ -101,12 +101,24 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
     sudo apt-get install -y g++-11
     sudo update-alternatives --remove-all g++
     sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 100
+
+    # Upgrade pip
+    pip install -U pip
+
+    # Setup virtual environment
+    python3 -m pip install virtualenvwrapper
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Install and link clang-17 for creating shared library
     sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
     sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
     sudo update-alternatives --remove-all clang++
     sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-17 100
+
+    # Upgrade pip
+    pip install -U pip
+
+    # Setup virtual environment
+    python3 -m pip install virtualenvwrapper --break-system-packages
 fi
 
 # Install additional packages for blender
@@ -120,12 +132,12 @@ sudo apt-get install -y pybind11-dev
 sudo apt-get install -y jupyter-notebook
 
 # Setup virtual environment
-for virtualenvwrapper in /usr/share/virtualenvwrapper/virtualenvwrapper.sh . /home/$USER/.local/bin/virtualenvwrapper.sh; do
+for virtualenvwrapper in /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
         . $virtualenvwrapper
         mkvirtualenv --system-site-packages multiverse
 
-        # Upgrade pip
+        # Instlal build
         pip install -U pip build
 
         # Install additional packages for USD and multiverse_knowledge
