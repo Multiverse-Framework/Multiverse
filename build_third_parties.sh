@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 CURRENT_DIR=$PWD
 
@@ -105,6 +105,8 @@ if [ $BUILD_USD = true ]; then
         echo "Folder already exists: $USD_BUILD_DIR"
     fi
 
+    . /home/$USER/.local/bin/virtualenvwrapper.sh
+    workon multiverse
     python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
     ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
     ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR

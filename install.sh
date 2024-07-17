@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 # Update package lists
 # sudo apt-get update && sudo apt-get upgrade -y
@@ -7,7 +7,7 @@
 sudo apt-get install -y software-properties-common curl python-is-python3
 
 # Install python3-pip
-sudo apt-get install -y python3-pip
+sudo apt-get install -y python3-pip python3-virtualenvwrapper
 
 UBUNTU_VERSION=$(lsb_release -rs)
 
@@ -102,20 +102,22 @@ sudo apt-get install -y pybind11-dev
 # Install jupyter-notebook
 sudo apt-get install -y jupyter-notebook
 
-if [ $UBUNTU_VERSION = "20.04" ]; then
-    # Upgrade pip
-    pip install --upgrade pip build
+# Setup virtual environment
+. /home/$USER/.local/bin/virtualenvwrapper.sh
+mkvirtualenv --system-site-packages multiverse
 
-    # Install additional packages for USD and multiverse_knowledge
-    pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
+# Upgrade pip
+pip install -U pip build
 
-    # Install additional packages for multiverse_parser
-    pip install urdf_parser_py
+# Install additional packages for USD and multiverse_knowledge
+pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
 
-    # Install MuJoCo
-    pip install mujoco==3.1.5
+# Install additional packages for multiverse_parser
+pip install urdf_parser_py
 
-    # Install additional packages for Jupyter Notebook
-    pip install panel jupyter-server bash_kernel
-    python3 -m bash_kernel.install
-fi
+# Install MuJoCo
+pip install mujoco==3.1.5
+
+# Install additional packages for Jupyter Notebook
+pip install panel jupyter-server bash_kernel
+python3 -m bash_kernel.install
