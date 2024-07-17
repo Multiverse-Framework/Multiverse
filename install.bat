@@ -28,44 +28,50 @@ if not exist "C:\ProgramData\chocolatey" (
 @REM Install python 3.8.3, vcredist2013, vcredist140, openssl, curl, cmake, mingw
 set "NEW_PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 set "SET_NEW_PATH=$env:Path = '%NEW_PATH%'; [System.Environment]::SetEnvironmentVariable('Path', $env:Path, [System.EnvironmentVariableTarget]::Process)"
-powershell -NoProfile -Command "%SET_NEW_PATH%; choco install -y vcredist2013 vcredist140; choco install -y python --version 3.8.3; choco install -y openssl --version 1.1.1.2100; choco install -y curl cmake mingw"
+powershell -NoProfile -Command "%SET_NEW_PATH%; choco install -y vcredist2013 vcredist140; choco install -y python --version 3.8.3; choco install -y openssl --version 1.1.1.2100; choco install -y curl cmake mingw 7zip"
 
 @REM Download OpenCV
 set "OPENCV_DIR=%MULTIVERSE_DIR%\external\opencv"
+set "OPENCV_ZIP=opencv-3.4.6-vc16.VS2019.zip"
 if not exist "%OPENCV_DIR%" (
     mkdir "%OPENCV_DIR%"
-    start powershell -NoProfile -Command "curl -o '%OPENCV_DIR%\opencv-3.4.6-vc16.VS2019.zip' 'https://github.com/ros2/ros2/releases/download/opencv-archives/opencv-3.4.6-vc16.VS2019.zip'; Expand-Archive -Path '%OPENCV_DIR%\opencv-3.4.6-vc16.VS2019.zip' -DestinationPath '%OPENCV_DIR%'; setx /m OpenCV_DIR %OPENCV_DIR%"
+    start powershell -NoProfile -Command "curl -o '%OPENCV_DIR%\%OPENCV_ZIP%' 'https://github.com/ros2/ros2/releases/download/opencv-archives/%OPENCV_ZIP%'; Expand-Archive -Path '%OPENCV_DIR%\%OPENCV_ZIP%' -DestinationPath '%OPENCV_DIR%'; setx /m OpenCV_DIR %OPENCV_DIR%"
 )
 
 @REM Install dependencies for ROS
 set "ASIO_DIR=%MULTIVERSE_DIR%\external\asio"
+set "ASIO_NUPKG=asio.1.12.1.nupkg"
 if not exist "%ASIO_DIR%" (
     mkdir "%ASIO_DIR%"
-    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%ASIO_DIR%\asio.1.12.1.nupkg' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/asio.1.12.1.nupkg'; choco install -y -s %ASIO_DIR% asio"
+    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%ASIO_DIR%\%ASIO_NUPKG%' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/%ASIO_NUPKG%'; choco install -y -s %ASIO_DIR% asio"
 )
 
 set "BULLET_DIR=%MULTIVERSE_DIR%\external\bullet"
+set "BULLET_NUPKG=bullet.3.17.nupkg"
 if not exist "%BULLET_DIR%" (
     mkdir "%BULLET_DIR%"
-    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%BULLET_DIR%\bullet.3.17.nupkg' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/bullet.3.17.nupkg'; choco install -y -s %BULLET_DIR% bullet"
+    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%BULLET_DIR%\%BULLET_NUPKG%' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/%BULLET_NUPKG%'; choco install -y -s %BULLET_DIR% bullet"
 )
 
 set "CUNIT_DIR=%MULTIVERSE_DIR%\external\cunit"
+set "CUNIT_NUPKG=cunit.2.1.3.nupkg"
 if not exist "%CUNIT_DIR%" (
     mkdir "%CUNIT_DIR%"
-    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%CUNIT_DIR%\cunit.2.1.3.nupkg' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/cunit.2.1.3.nupkg'; choco install -y -s %CUNIT_DIR% cunit"
+    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%CUNIT_DIR%\%CUNIT_NUPKG%' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/%CUNIT_NUPKG%'; choco install -y -s %CUNIT_DIR% cunit"
 )
 
 set "EIGEN_DIR=%MULTIVERSE_DIR%\external\eigen"
+set "EIGEN_NUPKG=eigen.3.3.4.nupkg"
 if not exist "%EIGEN_DIR%" (
     mkdir "%EIGEN_DIR%"
-    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%EIGEN_DIR%\eigen.3.3.4.nupkg' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/eigen.3.3.4.nupkg'; choco install -y -s %EIGEN_DIR% eigen"
+    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%EIGEN_DIR%\%EIGEN_NUPKG%' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/%EIGEN_NUPKG%'; choco install -y -s %EIGEN_DIR% eigen"
 )
 
-set "TINYXML_DIR=%MULTIVERSE_DIR%\external\tinyxml"
-if not exist "%TINYXML_DIR%" (
-    mkdir "%TINYXML_DIR%"
-    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%TINYXML_DIR%\tinyxml2.6.0.0.nupkg' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/tinyxml2.6.0.0.nupkg'; choco install -y -s %TINYXML_DIR% tinyxml2"
+set "TINYXML2_DIR=%MULTIVERSE_DIR%\external\tinyxml2"
+set "TINYXML2_NUPKG=tinyxml2.6.0.0.nupkg"
+if not exist "%TINYXML2_DIR%" (
+    mkdir "%TINYXML2_DIR%"
+    start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%TINYXML2_DIR%\%TINYXML2_NUPKG%' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/%TINYXML2_NUPKG%'; choco install -y -s %TINYXML2_DIR% tinyxml2"
 )
 
 set "PYTHON_EXECUTABLE=C:\Python38\python.exe"
@@ -81,26 +87,30 @@ if not exist "%PYTHON_EXECUTABLE%" (
 %PYTHON_EXECUTABLE% -m pip install setuptools==59.6.0 catkin_pkg cryptography empy importlib-metadata jsonschema lark==1.1.1 lxml matplotlib netifaces numpy opencv-python PyQt5 pillow psutil pycairo pydot pyparsing==2.4.7 pytest pyyaml
 
 set "XMLLINT_DIR=%MULTIVERSE_DIR%\external\xmllint"
+set "LIBXML2_7Z=libxml2-2.9.3-win32-x86_64.7z"
+set "ICONV_7Z=iconv-1.14-win32-x86_64.7z"
+set "ZLIB_7Z=zlib-1.2.8-win32-x86_64.7z"
 if not exist "%XMLLINT_DIR%" (
     mkdir "%XMLLINT_DIR%"
-    start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\libxml2-2.9.3-win32-x86_64.7z' 'https://www.zlatkovic.com/pub/libxml/64bit/libxml2-2.9.3-win32-x86_64.7z'; 7z x '%XMLLINT_DIR%\libxml2-2.9.3-win32-x86_64.7z' -o'%XMLLINT_DIR%'"
-    start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\iconv-1.14-win32-x86_64.7z' 'https://www.zlatkovic.com/pub/libxml/64bit/iconv-1.14-win32-x86_64.7z'; 7z x '%XMLLINT_DIR%\iconv-1.14-win32-x86_64.7z' -o'%XMLLINT_DIR%'"
-    start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\zlib-1.2.8-win32-x86_64.7z' 'https://www.zlatkovic.com/pub/libxml/64bit/zlib-1.2.8-win32-x86_64.7z'; 7z x '%XMLLINT_DIR%\zlib-1.2.8-win32-x86_64.7z' -o'%XMLLINT_DIR%'"
+    start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\%LIBXML2_7Z%' 'https://www.zlatkovic.com/pub/libxml/64bit/%LIBXML2_7Z%'; 7z x '%XMLLINT_DIR%\%LIBXML2_7Z%' -o'%XMLLINT_DIR%'"
+    start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\%ICONV_7Z%' 'https://www.zlatkovic.com/pub/libxml/64bit/%ICONV_7Z%'; 7z x '%XMLLINT_DIR%\%ICONV_7Z%' -o'%XMLLINT_DIR%'"
+    start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\%ZLIB_7Z%' 'https://www.zlatkovic.com/pub/libxml/64bit/%ZLIB_7Z%'; 7z x '%XMLLINT_DIR%\%ZLIB_7Z%' -o'%XMLLINT_DIR%'"
     powershell -Command "[System.Environment]::SetEnvironmentVariable('Path', $env:Path + ';%XMLLINT_DIR%\bin', [System.EnvironmentVariableTarget]::Machine)"
 )
 
 set "GRAPHVIZ_DIR=%MULTIVERSE_DIR%\external\graphviz"
+set "GRAPHVIZ_ZIP=windows_10_cmake_Release_Graphviz-12.0.0-win64.zip"
 if not exist "%GRAPHVIZ_DIR%" (
     mkdir "%GRAPHVIZ_DIR%"
-    start powershell -NoProfile -Command "curl -o '%GRAPHVIZ_DIR%\windows_10_cmake_Release_Graphviz-12.0.0-win64.zip' 'https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/12.0.0/windows_10_cmake_Release_Graphviz-12.0.0-win64.zip'; Expand-Archive -Path '%GRAPHVIZ_DIR%\windows_10_cmake_Release_Graphviz-12.0.0-win64.zip' -DestinationPath '%GRAPHVIZ_DIR%'"
+    start powershell -NoProfile -Command "curl -o '%GRAPHVIZ_DIR%\%GRAPHVIZ_ZIP%' 'https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/12.0.0/%GRAPHVIZ_ZIP%'; Expand-Archive -Path '%GRAPHVIZ_DIR%\%GRAPHVIZ_ZIP%' -DestinationPath '%GRAPHVIZ_DIR%'"
     powershell -Command "[System.Environment]::SetEnvironmentVariable('Path', $env:Path + ';%GRAPHVIZ_DIR%\Graphviz-12.0.0-win64\bin', [System.EnvironmentVariableTarget]::Machine)"
 )
 
 set "ROS_DIR=%MULTIVERSE_DIR%\external\ros\ros2_jazzy"
+set "ROS_ZIP=ros2-jazzy-20240705-windows-release-amd64.zip"
 if not exist "%ROS_DIR%" (
     mkdir "%ROS_DIR%"
-    set "ROS_ZIP=ros2-jazzy-20240705-windows-release-amd64.zip"
-    start powershell -NoProfile -Command "curl -o '%ROS_DIR%\%ROS_ZIP%' 'https://github.com/ros2/ros2/releases/download/release-jazzy-20240705/%ROS_ZIP%'; 7z x '%ROS_DIR%\%ROS_ZIP%' -o'%ROS_DIR%';  Remove-Item -Path '%ROS_DIR%\%ROS_ZIP%'; Move-Item -Path '%ROS_DIR%\ros2-windows\*' '%ROS_DIR%'; Remove-Item -Path '%ROS_DIR%\ros2-windows'"
+    powershell -NoProfile -Command "curl -o '%ROS_DIR%\%ROS_ZIP%' 'https://github.com/ros2/ros2/releases/download/release-jazzy-20240705/%ROS_ZIP%'; 7z x '%ROS_DIR%\%ROS_ZIP%' -o'%ROS_DIR%';  Remove-Item -Path '%ROS_DIR%\%ROS_ZIP%'; Move-Item -Path '%ROS_DIR%\ros2-windows\*' '%ROS_DIR%'; Remove-Item -Path '%ROS_DIR%\ros2-windows'; pause"
     workon multiverse
     %PYTHON_EXECUTABLE% %ROS_DIR%/../fix_shebang.py %ROS_DIR%
 )
