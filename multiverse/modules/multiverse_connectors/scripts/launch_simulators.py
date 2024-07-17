@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import re
 import subprocess
 from typing import List, Dict, Any
@@ -60,7 +61,7 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
             multiverse_bin_dir = os.path.join(os.path.dirname(current_file), "..", "..", "..", "bin")
             simulator_compile_file = os.path.join(multiverse_bin_dir,
                                                   f"{simulation_data['simulator']}_compile.py".replace("_headless", ""))
-            cmd = ["python", simulator_compile_file, f"--name={simulation_name}"] + cmd
+            cmd = [sys.executable, simulator_compile_file, f"--name={simulation_name}"] + cmd
         elif os.name == "posix":
             cmd = [f"{simulation_data['simulator']}_compile".replace("_headless", ""),
                    f"--name={simulation_name}"] + cmd
