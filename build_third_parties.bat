@@ -50,21 +50,21 @@ if not exist "%BLENDER_BUILD_DIR%" (
 
 set "USD_BUILD_DIR=%BUILD_DIR%\USD"
 set "USD_EXT_DIR=%EXT_DIR%\USD"
-if not exist "%USD_BUILD_DIR%" (
+set "VCVARS64=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+if exist "%USD_BUILD_DIR%" (
     git submodule update --init "%USD_EXT_DIR%"
 
     @REM Create the folder if it doesn't exist
-    mkdir "%USD_BUILD_DIR%"
+    @REM mkdir "%USD_BUILD_DIR%"
     echo "Folder created: %USD_BUILD_DIR%"
 
-    set "VCVARS64=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
     if not exist "%VCVARS64%" (
         echo "Visual Studio 2022 not found: %VCVARS64%"
         exit /b 1
     )
     workon multiverse
     call "%VCVARS64%"
-    %PYTHON_EXECUTABLE% %USD_EXT_DIR%\build_scripts\build_usd.py %USD_BUILD_DIR%
+    powershell -NoProfile -Command "%PYTHON_EXECUTABLE% %USD_EXT_DIR%\build_scripts\build_usd.py %USD_BUILD_DIR%"
     powershell -Command "[System.Environment]::SetEnvironmentVariable('Path', $env:Path + ';%USD_BUILD_DIR%\bin;%USD_BUILD_DIR%\lib', [System.EnvironmentVariableTarget]::Machine)"
     powershell -Command "[System.Environment]::SetEnvironmentVariable('PYTHONPATH', $env:PYTHONPATH + ';%USD_BUILD_DIR%\lib\python', [System.EnvironmentVariableTarget]::Machine)"
 ) else (
