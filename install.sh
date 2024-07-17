@@ -44,6 +44,19 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
     sudo rosdep init
     sudo rosdep fix-permissions
     rosdep update
+elif [ $UBUNTU_VERSION = "24.04" ]; then
+    # Setup your sources.list
+    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+    
+    # Update package lists
+    sudo apt-get update
+    
+    # Install development tools
+    sudo aptget install -y ros-dev-tools
+
+    # Install ROS2
+    sudo apt-get install -y ros-jazzy-desktop
 fi
 
 # Install glfw3
