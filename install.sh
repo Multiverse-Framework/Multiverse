@@ -52,11 +52,15 @@ elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Update package lists
     sudo apt-get update
     
-    # Install development tools
-    sudo aptget install -y ros-dev-tools
-
     # Install ROS2
     sudo apt-get install -y ros-jazzy-desktop
+    sudo apt-get install -y ros-dev-tools
+
+    # Install rosdep
+    sudo apt-get install -y python3-rosdep
+    sudo rosdep init
+    sudo rosdep fix-permissions
+    rosdep update
 fi
 
 # Install glfw3

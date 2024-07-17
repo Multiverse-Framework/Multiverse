@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 CURRENT_DIR=$PWD
 
@@ -116,6 +116,18 @@ done
 if [ $DBUILD_KNOWLEDGE = ON ]; then
     echo "Updating multiverse_knowledge..."
     git submodule update --init $PWD/multiverse/modules/multiverse_knowledge
+fi
+
+for virtualenvwrapper in /usr/share/virtualenvwrapper/virtualenvwrapper.sh . /home/$USER/.local/bin/virtualenvwrapper.sh; do
+    if [ -f $virtualenvwrapper ]; then
+        . $virtualenvwrapper
+        workon multiverse
+        break
+    fi
+done
+if [ ! -f $virtualenvwrapper ]; then
+    echo "virtualenvwrapper.sh not found"
+    exit 1
 fi
 
 # Build multiverse
