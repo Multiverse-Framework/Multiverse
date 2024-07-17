@@ -21,6 +21,12 @@ set(MULTIVERSE_CLIENT_LIBRARY_TYPE "STATIC" CACHE STRING "Type of library to cre
 option(BUILD_SRC "Build the src" ON)
 option(BUILD_MODULES "Build the modules" ON)
 
+if (UNIX)
+    set(PYTHON_EXECUTABLE "python3")
+elseif (WIN32)
+    set(PYTHON_EXECUTABLE "python")
+endif()
+
 if(BUILD_SRC)
     add_subdirectory(src)
 endif(BUILD_SRC)
