@@ -105,12 +105,20 @@ if [ $BUILD_USD = true ]; then
         echo "Folder already exists: $USD_BUILD_DIR"
     fi
 
-    . /home/$USER/.local/bin/virtualenvwrapper.sh
-    workon multiverse
-    python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
-    ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
-    ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
-    ln -sf $USD_BUILD_DIR/bin/usdcat $BIN_DIR
+    for virtualenvwrapper in /usr/share/virtualenvwrapper/virtualenvwrapper.sh . /home/$USER/.local/bin/virtualenvwrapper.sh; do
+        if [ -f $virtualenvwrapper ]; then
+            . $virtualenvwrapper
+            workon multiverse
+            python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
+            ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
+            ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
+            ln -sf $USD_BUILD_DIR/bin/usdcat $BIN_DIR
+            break
+        fi
+    done
+    if [ ! -f $virtualenvwrapper ]; then
+        echo "virtualenvwrapper.sh not found"
+    fi
 fi
 
 if [ $BUILD_MUJOCO = true ]; then

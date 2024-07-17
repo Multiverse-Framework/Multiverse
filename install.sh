@@ -116,21 +116,29 @@ sudo apt-get install -y pybind11-dev
 sudo apt-get install -y jupyter-notebook
 
 # Setup virtual environment
-. /home/$USER/.local/bin/virtualenvwrapper.sh
-mkvirtualenv --system-site-packages multiverse
+for virtualenvwrapper in /usr/share/virtualenvwrapper/virtualenvwrapper.sh . /home/$USER/.local/bin/virtualenvwrapper.sh; do
+    if [ -f $virtualenvwrapper ]; then
+        . $virtualenvwrapper
+        mkvirtualenv --system-site-packages multiverse
 
-# Upgrade pip
-pip install -U pip build
+        # Upgrade pip
+        pip install -U pip build
 
-# Install additional packages for USD and multiverse_knowledge
-pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
+        # Install additional packages for USD and multiverse_knowledge
+        pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
 
-# Install additional packages for multiverse_parser
-pip install urdf_parser_py
+        # Install additional packages for multiverse_parser
+        pip install urdf_parser_py
 
-# Install MuJoCo
-pip install mujoco==3.1.5
+        # Install MuJoCo
+        pip install mujoco==3.1.5
 
-# Install additional packages for Jupyter Notebook
-pip install panel jupyter-server bash_kernel
-python3 -m bash_kernel.install
+        # Install additional packages for Jupyter Notebook
+        pip install panel jupyter-server bash_kernel
+        python3 -m bash_kernel.install
+        break
+    fi
+done
+if [ ! -f $virtualenvwrapper ]; then
+    echo "virtualenvwrapper.sh not found"
+fi
