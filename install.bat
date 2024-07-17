@@ -15,20 +15,15 @@ cd %CURRENT_DIR%
 
 set "MULTIVERSE_DIR=%CURRENT_DIR%multiverse"
 
-@REM Install vckpg
-if not exist "%MULTIVERSE_DIR%\external\vcpkg" (
-    start powershell -NoProfile -Command "git clone https://github.com/Microsoft/vcpkg.git %MULTIVERSE_DIR%\external\vcpkg; cd %MULTIVERSE_DIR%\external\vcpkg; bootstrap-vcpkg.bat; vcpkg integrate install"
-)
-
 @REM Install chocolatey (https://chocolatey.org/install)
 if not exist "C:\ProgramData\chocolatey" (
     powershell -NoProfile -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
 )
 
-@REM Install python 3.8.3, vcredist2013, vcredist140, openssl, curl, cmake, mingw
+@REM Install python 3.8.3, vcredist2013, vcredist140, openssl, curl, cmake 7zip
 set "NEW_PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 set "SET_NEW_PATH=$env:Path = '%NEW_PATH%'; [System.Environment]::SetEnvironmentVariable('Path', $env:Path, [System.EnvironmentVariableTarget]::Process)"
-powershell -NoProfile -Command "%SET_NEW_PATH%; choco install -y vcredist2013 vcredist140; choco install -y python --version 3.8.3; choco install -y openssl --version 1.1.1.2100; choco install -y curl cmake mingw 7zip"
+powershell -NoProfile -Command "%SET_NEW_PATH%; choco install -y vcredist2013 vcredist140; choco install -y python --version 3.8.3; choco install -y openssl --version 1.1.1.2100; choco install -y curl cmake 7zip"
 
 @REM Download OpenCV
 set "OPENCV_DIR=%MULTIVERSE_DIR%\external\opencv"
@@ -95,7 +90,7 @@ if not exist "%XMLLINT_DIR%" (
     start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\%LIBXML2_7Z%' 'https://www.zlatkovic.com/pub/libxml/64bit/%LIBXML2_7Z%'; 7z x '%XMLLINT_DIR%\%LIBXML2_7Z%' -o'%XMLLINT_DIR%'"
     start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\%ICONV_7Z%' 'https://www.zlatkovic.com/pub/libxml/64bit/%ICONV_7Z%'; 7z x '%XMLLINT_DIR%\%ICONV_7Z%' -o'%XMLLINT_DIR%'"
     start powershell -NoProfile -Command "curl -o '%XMLLINT_DIR%\%ZLIB_7Z%' 'https://www.zlatkovic.com/pub/libxml/64bit/%ZLIB_7Z%'; 7z x '%XMLLINT_DIR%\%ZLIB_7Z%' -o'%XMLLINT_DIR%'"
-    powershell -Command "[System.Environment]::SetEnvironmentVariable('Path', $env:Path + ';%XMLLINT_DIR%\bin', [System.EnvironmentVariableTarget]::Machine)"
+    powershell -Command "[Environment]::SetEnvironmentVariable('Path', $env:Path + ';%XMLLINT_DIR%\bin', [EnvironmentVariableTarget]::User)"
 )
 
 set "GRAPHVIZ_DIR=%MULTIVERSE_DIR%\external\graphviz"
@@ -103,7 +98,7 @@ set "GRAPHVIZ_ZIP=windows_10_cmake_Release_Graphviz-12.0.0-win64.zip"
 if not exist "%GRAPHVIZ_DIR%" (
     mkdir "%GRAPHVIZ_DIR%"
     start powershell -NoProfile -Command "curl -o '%GRAPHVIZ_DIR%\%GRAPHVIZ_ZIP%' 'https://gitlab.com/api/v4/projects/4207231/packages/generic/graphviz-releases/12.0.0/%GRAPHVIZ_ZIP%'; Expand-Archive -Path '%GRAPHVIZ_DIR%\%GRAPHVIZ_ZIP%' -DestinationPath '%GRAPHVIZ_DIR%'"
-    powershell -Command "[System.Environment]::SetEnvironmentVariable('Path', $env:Path + ';%GRAPHVIZ_DIR%\Graphviz-12.0.0-win64\bin', [System.EnvironmentVariableTarget]::Machine)"
+    powershell -Command "[Environment]::SetEnvironmentVariable('Path', $env:Path + ';%GRAPHVIZ_DIR%\Graphviz-12.0.0-win64\bin', [EnvironmentVariableTarget]::User)"
 )
 
 set "ROS_DIR=%MULTIVERSE_DIR%\external\ros\ros2_jazzy"
@@ -129,6 +124,13 @@ if not exist "%ROS_DIR%" (
 
 @REM Install ros_dep_tools
 %PYTHON_EXECUTABLE% -m pip install rosdep
+
+@REM Install msys2
+set "MSYS2_DIR=%MULTIVERSE_DIR%\external\msys2"
+if not exist "%MSYS2_DIR%" (
+    mkdir "%MSYS2_DIR%"
+    start powershell -NoProfile -Command "curl -o '%MSYS2_DIR%\msys2-x86_64-20240507.exe' 'https://github.com/msys2/msys2-installer/releases/download/2024-05-07/msys2-x86_64-20240507.exe'; %MSYS2_DIR%\msys2-x86_64-20240507.exe in --confirm-command --accept-messages --root %MSYS2_DIR%; %MSYS2_DIR%\msys2_shell.cmd -defterm -here -no-start -c 'pacman -y -Syu && pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-cmake mingw-w64-x86_64-zeromq mingw-w64-x86_64-cppzmq mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-boost mingw-w64-x86_64-glfw mingw-w64-x86_64-tinyxml2'"
+)
 
 echo Installation completed.
 pause

@@ -41,7 +41,7 @@ if not exist "%BLENDER_BUILD_DIR%" (
     powershell -NoProfile -Command "cd '%BLENDER_EXT_DIR%\blender'; .\make update"
     powershell -NoProfile -Command "cd '%BLENDER_EXT_DIR%\blender'; cmake -S . -B '..\..\..\build\blender'; cmake --build '..\..\..\build\blender' --target INSTALL --config Release"
     powershell -NoProfile -Command "cd '%BLENDER_EXT_DIR%\blender\lib\windows_x64\python\311\bin'; .\python.exe -m pip install --upgrade pip build --no-warn-script-location; .\python.exe -m pip install bpy --no-warn-script-location"
-    powershell -Command "[System.Environment]::SetEnvironmentVariable('Path', $env:Path + ';%BLENDER_BUILD_DIR%\bin\Release', [System.EnvironmentVariableTarget]::Machine)"
+    powershell -Command "[Environment]::SetEnvironmentVariable('Path', $env:Path + ';%BLENDER_BUILD_DIR%\bin\Release', [EnvironmentVariableTarget]::User)"
 ) else (
     echo "Folder already exists: %BLENDER_BUILD_DIR%"
 )
@@ -51,11 +51,11 @@ if not exist "%BLENDER_BUILD_DIR%" (
 set "USD_BUILD_DIR=%BUILD_DIR%\USD"
 set "USD_EXT_DIR=%EXT_DIR%\USD"
 set "VCVARS64=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-if exist "%USD_BUILD_DIR%" (
+if not exist "%USD_BUILD_DIR%" (
     git submodule update --init "%USD_EXT_DIR%"
 
     @REM Create the folder if it doesn't exist
-    @REM mkdir "%USD_BUILD_DIR%"
+    mkdir "%USD_BUILD_DIR%"
     echo "Folder created: %USD_BUILD_DIR%"
 
     if not exist "%VCVARS64%" (
@@ -65,8 +65,8 @@ if exist "%USD_BUILD_DIR%" (
     workon multiverse
     call "%VCVARS64%"
     powershell -NoProfile -Command "%PYTHON_EXECUTABLE% %USD_EXT_DIR%\build_scripts\build_usd.py %USD_BUILD_DIR%"
-    powershell -Command "[System.Environment]::SetEnvironmentVariable('Path', $env:Path + ';%USD_BUILD_DIR%\bin;%USD_BUILD_DIR%\lib', [System.EnvironmentVariableTarget]::Machine)"
-    powershell -Command "[System.Environment]::SetEnvironmentVariable('PYTHONPATH', $env:PYTHONPATH + ';%USD_BUILD_DIR%\lib\python', [System.EnvironmentVariableTarget]::Machine)"
+    powershell -Command "[Environment]::SetEnvironmentVariable('Path', $env:Path + ';%USD_BUILD_DIR%\bin;%USD_BUILD_DIR%\lib', [EnvironmentVariableTarget]::User)"
+    powershell -Command "[Environment]::SetEnvironmentVariable('PYTHONPATH', $env:PYTHONPATH + ';%USD_BUILD_DIR%\lib\python', [EnvironmentVariableTarget]::User)"
 ) else (
     echo "Folder already exists: %USD_BUILD_DIR%"
 )
@@ -83,9 +83,25 @@ if not exist "%MUJOCO_BUILD_DIR%" (
     echo "Folder created: %MUJOCO_BUILD_DIR%"
 
     powershell -NoProfile -Command "cd %MUJOCO_BUILD_DIR%; cmake %MUJOCO_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%MUJOCO_BUILD_DIR% -Wno-deprecated -Wno-dev; cmake --build . --config Release; cmake --install ."
-    powershell -Command "[System.Environment]::SetEnvironmentVariable('Path', $env:Path + ';%MUJOCO_BUILD_DIR%\bin', [System.EnvironmentVariableTarget]::Machine)"
+    powershell -Command "[Environment]::SetEnvironmentVariable('Path', $env:Path + ';%MUJOCO_BUILD_DIR%\bin', [EnvironmentVariableTarget]::User)"
 ) else (
     echo "Folder already exists: %MUJOCO_BUILD_DIR%"
+)
+
+@REM Build pybind11
+
+set "PYBIND11_BUILD_DIR=%BUILD_DIR%\pybind11"
+set "PYBIND11_EXT_DIR=%EXT_DIR%\pybind11"
+if not exist "%PYBIND11_BUILD_DIR%" (
+    git submodule update --init "%PYBIND11_EXT_DIR%"
+
+    @REM Create the folder if it doesn't exist
+    mkdir "%PYBIND11_BUILD_DIR%"
+    echo "Folder created: %PYBIND11_BUILD_DIR%"
+
+    powershell -NoProfile -Command "cd %PYBIND11_BUILD_DIR%; cmake %PYBIND11_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%PYBIND11_BUILD_DIR% -Wno-deprecated -Wno-dev; cmake --build .; cmake --install ."
+) else (
+    echo "Folder already exists: %PYBIND11_BUILD_DIR%"
 )
 
 echo "Third parties built successfully"

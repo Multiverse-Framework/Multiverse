@@ -1,5 +1,5 @@
 if(WIN32)
-    find_package(cppzmq CONFIG REQUIRED)
+    find_package(cppzmq REQUIRED)
     find_package(jsoncpp CONFIG REQUIRED)
 endif()
 
@@ -13,7 +13,7 @@ target_link_directories(multiverse_server_lib PRIVATE ${CMAKE_CURRENT_SOURCE_DIR
 if(UNIX)
     target_link_libraries(multiverse_server multiverse_server_lib zmq jsoncpp pthread)
 elseif(WIN32)
-    target_link_libraries(multiverse_server PRIVATE multiverse_server_lib cppzmq cppzmq-static JsonCpp::JsonCpp)
+    target_link_libraries(multiverse_server PRIVATE multiverse_server_lib zmq JsonCpp::JsonCpp)
 endif()
 
 install(TARGETS multiverse_server DESTINATION ${BIN_DIR})

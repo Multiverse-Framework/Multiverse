@@ -18,10 +18,6 @@ set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)
 
 set(MULTIVERSE_CLIENT_LIBRARY_TYPE "STATIC" CACHE STRING "Type of library to create (SHARED or STATIC)")
 
-if(WIN32)
-    include_directories(${BUILD_DIR}/vcpkg_installed/x64-windows/include)
-endif()
-
 option(BUILD_SRC "Build the src" ON)
 option(BUILD_MODULES "Build the modules" ON)
 

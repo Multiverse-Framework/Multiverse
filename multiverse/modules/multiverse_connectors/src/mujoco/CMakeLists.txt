@@ -12,15 +12,7 @@ set(mujoco_DIR ${BUILD_DIR}/mujoco/lib/cmake/mujoco)
 set(OpenGL_GL_PREFERENCE LEGACY)
 
 find_package(mujoco REQUIRED)
-
 find_package(Threads REQUIRED)
-
-if(WIN32)
-    find_package(Boost REQUIRED COMPONENTS filesystem)
-    find_package(tinyxml2 REQUIRED)
-    find_package(glfw3 REQUIRED)
-    find_package(OpenGL REQUIRED)
-endif()
 
 include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -51,8 +43,9 @@ elseif(WIN32)
         mujoco_headless_lib
         multiverse_client_json
         Threads::Threads
-        Boost::filesystem
-        tinyxml2::tinyxml2
+        jsoncpp
+        tinyxml2
+        boost_filesystem-mt
         mujoco::mujoco
     )
 endif()
@@ -82,10 +75,12 @@ elseif(WIN32)
         mujoco_lib
         mujoco_headless_lib
         multiverse_client_json
-        glfw
-        OpenGL::GL
-        tinyxml2::tinyxml2
-        Boost::filesystem
+        glfw3
+        opengl32
+        Threads::Threads
+        jsoncpp
+        tinyxml2
+        boost_filesystem-mt
         mujoco::mujoco
     )
 endif()

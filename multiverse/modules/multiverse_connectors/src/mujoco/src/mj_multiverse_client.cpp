@@ -29,6 +29,7 @@
 #include <iostream>
 #include <tinyxml2.h>
 #include <sstream>
+#include <algorithm>
 
 std::mutex MjMultiverseClient::mutex;
 
