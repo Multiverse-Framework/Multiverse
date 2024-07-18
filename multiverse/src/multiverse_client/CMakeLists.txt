@@ -1,9 +1,10 @@
 if(WIN32)
-    set(pybind11_DIR ${BUILD_DIR}/pybind11/share/cmake/pybind11)
     find_package(cppzmq REQUIRED)
     find_package(jsoncpp REQUIRED)
-    find_package(pybind11 REQUIRED)
 endif()
+
+set(pybind11_DIR ${BUILD_DIR}/pybind11/share/cmake/pybind11)
+find_package(pybind11 REQUIRED)
 
 set(MULTIVERSE_CLIENT multiverse_client)
 set(MULTIVERSE_CLIENT_JSON multiverse_client_json)
