@@ -108,7 +108,7 @@ if [ $BUILD_USD = true ]; then
     for virtualenvwrapper in /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
         if [ -f $virtualenvwrapper ]; then
             . $virtualenvwrapper
-            workon multiverse
+            mkvirtualenv --system-site-packages multiverse
             python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
             ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
             ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR

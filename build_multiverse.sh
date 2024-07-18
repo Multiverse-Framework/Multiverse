@@ -74,6 +74,7 @@ while [ -n "$1" ]; do
                         DBUILD_CONNECTORS=OFF
                         DBUILD_PARSER=OFF
                     elif [ "$module" = "parser" ]; then
+                        DBUILD_SRC=ON
                         DBUILD_KNOWLEDGE=OFF
                         DBUILD_PARSER=OFF
                     fi
@@ -120,7 +121,7 @@ fi
 for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
         . $virtualenvwrapper
-        workon multiverse
+        mkvirtualenv --system-site-packages multiverse
         break
     fi
 done
