@@ -187,6 +187,8 @@ class MaterialBuilder:
 
         emissive_color = self.emissive_color
         if isinstance(emissive_color, numpy.ndarray):
+            if any([isinstance(x, str) for x in emissive_color]):
+                raise NotImplementedError("Emissive color texture not supported yet.")
             emissive_color_input = Gf.Vec3f(*emissive_color.tolist())
             pbr_shader.CreateInput("emissiveColor", Sdf.ValueTypeNames.Color3f).Set(emissive_color_input)
 

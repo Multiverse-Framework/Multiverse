@@ -201,6 +201,8 @@ class UsdImporter(Factory):
                 mesh_name = gprim_prim.GetName()
                 mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_mesh_file_path,
                                                                  mesh_path=mesh_path)
+                if mesh_property.mesh_file_name == os.path.basename(self.source_file_path).split('.')[0]:
+                    mesh_property.mesh_file_name = mesh_name
                 if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
                     # TODO: Fix empty mesh
                     return
