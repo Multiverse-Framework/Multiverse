@@ -109,6 +109,7 @@ if [ $BUILD_USD = true ]; then
         if [ -f $virtualenvwrapper ]; then
             . $virtualenvwrapper
             mkvirtualenv --system-site-packages multiverse
+            pip install pyside6 pyopengl
             python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
             ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
             ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
