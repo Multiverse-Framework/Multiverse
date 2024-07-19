@@ -61,8 +61,9 @@ class MeshProperty:
         if not mesh_prim.IsValid() and not mesh_path.isEmpty:
             print(f"Prim {mesh_prim} from {mesh_file_path} is not valid.")
             if not mesh_stage.GetPrimAtPath(mesh_path.GetParentPath()).IsValid():
-                raise ValueError(f"Parent prim {mesh_path.GetParentPath()} is not valid.")
-            mesh_prims = [prim for prim in mesh_stage.GetPrimAtPath(mesh_path.GetParentPath()).GetChildren()]
+                mesh_prims = [prim for prim in mesh_stage.Traverse() if prim.IsA(UsdGeom.Mesh)]
+            else:
+                mesh_prims = [prim for prim in mesh_stage.GetPrimAtPath(mesh_path.GetParentPath()).GetChildren()]
             for mesh_prim in mesh_prims:
                 if mesh_path.name in mesh_prim.GetName():
                     break
@@ -148,6 +149,10 @@ class MeshProperty:
     @property
     def mesh_file_name(self):
         return self._mesh_file_name
+
+    @mesh_file_name.setter
+    def mesh_file_name(self, mesh_file_name: str):
+        self._mesh_file_name = mesh_file_name
 
 
 class MeshBuilder:
