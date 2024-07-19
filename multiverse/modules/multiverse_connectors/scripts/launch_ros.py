@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os
+import os, sys
 import subprocess
 from typing import Dict, Any, Optional, List
 
@@ -80,11 +80,29 @@ class MultiverseRosLaunch(MultiverseLaunch):
         if ros_nodes is None or not any(
                 [key in ros_nodes for key in ["services", "publishers", "subscribers"]]):
             return None
-
-        cmd = [
-            "multiverse_ros_run",
-            f'--multiverse_server="{self.multiverse_server}"',
-        ]
+        
+        if os.name == "posix":
+            cmd = [
+                "multiverse_ros_run",
+                f'--multiverse_server="{self.multiverse_server}"',
+            ]
+        elif os.name == "nt":
+            # Find the path to multiverse_ros_run.py from PATH
+            for path in os.environ["PATH"].split(os.pathsep):
+                path = path.strip('"')
+                multiverse_ros_run_path = os.path.join(path, "multiverse_ros_run.py")
+                if os.path.isfile(multiverse_ros_run_path):
+                    break
+            else:
+                raise FileNotFoundError("multiverse_ros_run.py not found in PATH")
+            
+            cmd = [
+                sys.executable,
+                multiverse_ros_run_path,
+                f'--multiverse_server="{self.multiverse_server}"',
+            ]
+        else:
+            raise ValueError(f"Unsupported OS: {os.name}")
         for ros_node_type in ["services", "publishers", "subscribers"]:
             if ros_node_type in ros_nodes:
                 cmd.append(f'--{ros_node_type}="{ros_nodes[ros_node_type]}"')

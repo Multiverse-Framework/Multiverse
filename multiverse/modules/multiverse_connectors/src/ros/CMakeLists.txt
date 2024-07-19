@@ -18,6 +18,11 @@ if (UNIX)
         COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/multiverse_ros_run.py ${BIN_DIR}/multiverse_ros_run
         RESULT_VARIABLE result
     )
+elseif(WIN32)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/scripts/multiverse_ros_run.py ${BIN_DIR}/multiverse_ros_run.py
+        RESULT_VARIABLE result
+    )
 endif()
 
 
