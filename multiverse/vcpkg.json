@@ -1,7 +1,6 @@
 {
     "dependencies": [
         "jsoncpp",
-        "cppzmq",
-        "pybind11"
+        "cppzmq"
     ]
 }
