@@ -20,6 +20,12 @@ if not exist "C:\ProgramData\chocolatey" (
     powershell -NoProfile -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
 )
 
+if not exist "C:\ProgramData\chocolatey" (
+    echo "Chocolatey installation failed."
+    pause
+    exit /b 1
+)
+
 @REM Install python 3.8.3, vcredist2013, vcredist140, openssl, curl, cmake 7zip
 set "NEW_PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 set "SET_NEW_PATH=$env:Path = '%NEW_PATH%'; [System.Environment]::SetEnvironmentVariable('Path', $env:Path, [System.EnvironmentVariableTarget]::Process)"
@@ -70,6 +76,10 @@ if not exist "%TINYXML2_DIR%" (
 )
 
 set "PYTHON_EXECUTABLE=C:\Python38\python.exe"
+if not exist "%PYTHON_EXECUTABLE%" (
+    echo "Python executable not found: %PYTHON_EXECUTABLE%"
+    exit /b 1
+)
 %PYTHON_EXECUTABLE% -m pip install -U pip virtualenvwrapper-win
 set "MKVIRTUALENV_EXECUTABLE=C:\Python38\Scripts\mkvirtualenv.bat"
 set "PYTHON_EXECUTABLE=%USERPROFILE%\Envs\multiverse\Scripts\python.exe"

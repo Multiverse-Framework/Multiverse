@@ -31,7 +31,7 @@ set "INCLUDE_DIR=%MULTIVERSE_DIR%\include"
 set "BLENDER_BUILD_DIR=%BUILD_DIR%\blender"
 set "BLENDER_EXT_DIR=%EXT_DIR%\blender-git"
 
-if exist "%BLENDER_BUILD_DIR%" (
+if not exist "%BLENDER_BUILD_DIR%" (
     git submodule update --init "%BLENDER_EXT_DIR%/blender"
 
     @REM Create the folder if it doesn't exist
@@ -45,6 +45,8 @@ if exist "%BLENDER_BUILD_DIR%" (
 ) else (
     echo "Folder already exists: %BLENDER_BUILD_DIR%"
 )
+
+pause
 
 @REM Build MuJoCo
 
@@ -63,6 +65,8 @@ if not exist "%MUJOCO_BUILD_DIR%" (
     echo "Folder already exists: %MUJOCO_BUILD_DIR%"
 )
 
+pause
+
 @REM Build pybind11
 
 set "PYBIND11_BUILD_DIR=%BUILD_DIR%\pybind11"
@@ -78,6 +82,8 @@ if not exist "%PYBIND11_BUILD_DIR%" (
 ) else (
     echo "Folder already exists: %PYBIND11_BUILD_DIR%"
 )
+
+pause
 
 @REM Build USD
 
