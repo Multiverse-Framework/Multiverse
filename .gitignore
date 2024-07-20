@@ -48,6 +48,7 @@ multiverse/build
 multiverse/external
 **/output
 multiverse/saved
+build
 
 # VSC
 .vscode

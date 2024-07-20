@@ -55,6 +55,12 @@ std::map<std::string, size_t> attribute_map_uint8_t = {
     {"rgb_640_480", 640 * 480 * 3},
     {"rgb_128_128", 128 * 128 * 3}};
 
+std::map<std::string, size_t> attribute_map_uint16_t = {
+    {"depth_3840_2160", 3840 * 2160},
+    {"depth_1280_1024", 1280 * 1024},
+    {"depth_640_480", 640 * 480},
+    {"depth_128_128", 128 * 128}};
+
 class MultiverseClientPybind final : public MultiverseClient
 {
 public:
@@ -76,13 +82,15 @@ public:
     {
         request_meta_data_dict = in_request_meta_data_dict;
         std::map<std::string, std::map<std::string, size_t>> request_buffer_sizes =
-            {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+            {{"send", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}};
         compute_request_buffer_sizes(request_buffer_sizes["send"], request_buffer_sizes["receive"]);
 
         send_buffer.buffer_double.size = request_buffer_sizes["send"]["double"];
         send_buffer.buffer_uint8_t.size = request_buffer_sizes["send"]["uint8"];
+        send_buffer.buffer_uint16_t.size = request_buffer_sizes["send"]["uint16"];
         receive_buffer.buffer_double.size = request_buffer_sizes["receive"]["double"];
         receive_buffer.buffer_uint8_t.size = request_buffer_sizes["receive"]["uint8"];
+        receive_buffer.buffer_uint16_t.size = request_buffer_sizes["receive"]["uint16"];
     }
 
     inline pybind11::dict get_response_meta_data()
@@ -92,14 +100,15 @@ public:
 
     inline void set_send_data(const pybind11::list &in_send_data)
     {
-        if (in_send_data.size() != 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size)
+        if (in_send_data.size() != 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size + send_buffer.buffer_uint16_t.size)
         {
-            printf("[Client %s] The size of in_send_data (%zu) does not match with send_buffer_size (%zu).\n", port.c_str(), in_send_data.size(), 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size);
+            printf("[Client %s] The size of in_send_data (%zu) does not match with send_buffer_size (%zu).\n", port.c_str(), in_send_data.size(), 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size + send_buffer.buffer_uint16_t.size);
         }
         else
         {
             send_data_double.resize(send_buffer.buffer_double.size);
             send_data_uint8_t.resize(send_buffer.buffer_uint8_t.size);
+            send_data_uint16_t.resize(send_buffer.buffer_uint16_t.size);
 
             try
             {
@@ -107,9 +116,12 @@ public:
                 std::transform(in_send_data.begin() + 1, in_send_data.begin() + 1 + send_buffer.buffer_double.size, send_data_double.begin(),
                                [](const pybind11::handle &item)
                                { return item.cast<double>(); });
-                std::transform(in_send_data.begin() + 1 + send_buffer.buffer_double.size, in_send_data.end(), send_data_uint8_t.begin(),
+                std::transform(in_send_data.begin() + 1 + send_buffer.buffer_double.size, in_send_data.begin() + 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size, send_data_uint8_t.begin(),
                                [](const pybind11::handle &item)
                                { return item.cast<uint8_t>(); });
+                std::transform(in_send_data.begin() + 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size, in_send_data.end(), send_data_uint16_t.begin(),
+                               [](const pybind11::handle &item)
+                               { return item.cast<uint16_t>(); });
             }
             catch (const std::exception &e)
             {
@@ -121,7 +133,7 @@ public:
 
     inline pybind11::list get_receive_data() const
     {
-        return pybind11::cast(std::vector<double>({*world_time})) + pybind11::cast(receive_data_double) + pybind11::cast(receive_data_uint8_t);
+        return pybind11::cast(std::vector<double>({*world_time})) + pybind11::cast(receive_data_double) + pybind11::cast(receive_data_uint8_t) + pybind11::cast(receive_data_uint16_t);
     }
 
     inline void set_api_callbacks(const std::map<std::string, std::function<pybind11::list(pybind11::list)>> &in_api_callbacks)
@@ -138,9 +150,13 @@ private:
 
     std::vector<uint8_t> send_data_uint8_t;
 
+    std::vector<uint16_t> send_data_uint16_t;
+
     std::vector<double> receive_data_double;
 
     std::vector<uint8_t> receive_data_uint8_t;
+
+    std::vector<uint16_t> receive_data_uint16_t;
 
     std::map<std::string, std::function<pybind11::list(pybind11::list)>> api_callbacks;
 
@@ -204,7 +220,7 @@ private:
     void compute_request_buffer_sizes(std::map<std::string, size_t> &req_send_buffer_size, std::map<std::string, size_t> &req_receive_buffer_size) const override
     {
         std::map<std::string, std::map<std::string, size_t>> request_buffer_sizes =
-            {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+            {{"send", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}};
 
         for (std::pair<const std::string, std::map<std::string, size_t>> &request_buffer_size : request_buffer_sizes)
         {
@@ -216,10 +232,11 @@ private:
             for (const auto &send_objects : request_meta_data_dict[request_buffer_size.first.c_str()].cast<pybind11::dict>())
             {
                 const std::string object_name = send_objects.first.cast<std::string>();
-                if (object_name.compare("") == 0 || request_buffer_size.second["double"] == -1 || request_buffer_size.second["uint8"] == -1)
+                if (object_name.compare("") == 0 || request_buffer_size.second["double"] == -1 || request_buffer_size.second["uint8"] == -1 || request_buffer_size.second["uint16"] == -1)
                 {
                     request_buffer_size.second["double"] = -1;
                     request_buffer_size.second["uint8"] = -1;
+                    request_buffer_size.second["uint16"] = -1;
                     break;
                 }
 
@@ -230,6 +247,7 @@ private:
                     {
                         request_buffer_size.second["double"] = -1;
                         request_buffer_size.second["uint8"] = -1;
+                        request_buffer_size.second["uint16"] = -1;
                         break;
                     }
                     if (attribute_map_double.find(attributes[i].cast<std::string>()) != attribute_map_double.end())
@@ -239,6 +257,10 @@ private:
                     if (attribute_map_uint8_t.find(attributes[i].cast<std::string>()) != attribute_map_uint8_t.end())
                     {
                         request_buffer_size.second["uint8"] += attribute_map_uint8_t[attributes[i].cast<std::string>()];
+                    }
+                    if (attribute_map_uint16_t.find(attributes[i].cast<std::string>()) != attribute_map_uint16_t.end())
+                    {
+                        request_buffer_size.second["uint16"] += attribute_map_uint16_t[attributes[i].cast<std::string>()];
                     }
                 }
             }
@@ -251,7 +273,7 @@ private:
     void compute_response_buffer_sizes(std::map<std::string, size_t> &res_send_buffer_size, std::map<std::string, size_t> &res_receive_buffer_size) const override
     {
         std::map<std::string, std::map<std::string, size_t>> response_buffer_sizes =
-            {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+            {{"send", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}};
 
         for (std::pair<const std::string, std::map<std::string, size_t>> &response_buffer_size : response_buffer_sizes)
         {
@@ -272,6 +294,10 @@ private:
                     if (attribute_map_uint8_t.find(attribute.first.cast<std::string>()) != attribute_map_uint8_t.end())
                     {
                         response_buffer_size.second["uint8"] += attribute.second.cast<pybind11::list>().size();
+                    }
+                    if (attribute_map_uint16_t.find(attribute.first.cast<std::string>()) != attribute_map_uint16_t.end())
+                    {
+                        response_buffer_size.second["uint16"] += attribute.second.cast<pybind11::list>().size();
                     }
                 }
             }
@@ -387,6 +413,10 @@ private:
         {
             send_data_uint8_t = std::vector<uint8_t>(send_buffer.buffer_uint8_t.size, 0);
         }
+        if (send_buffer.buffer_uint16_t.size != send_data_uint16_t.size())
+        {
+            send_data_uint16_t = std::vector<uint16_t>(send_buffer.buffer_uint16_t.size, 0);
+        }
         if (receive_buffer.buffer_double.size != receive_data_double.size())
         {
             receive_data_double = std::vector<double>(receive_buffer.buffer_double.size, 0.0);
@@ -395,40 +425,52 @@ private:
         {
             receive_data_uint8_t = std::vector<uint8_t>(receive_buffer.buffer_uint8_t.size, 0);
         }
+        if (receive_buffer.buffer_uint16_t.size != receive_data_uint16_t.size())
+        {
+            receive_data_uint16_t = std::vector<uint16_t>(receive_buffer.buffer_uint16_t.size, 0);
+        }
     }
 
     void bind_send_data() override
     {
         if (send_data_double.size() != send_buffer.buffer_double.size || send_data_uint8_t.size() != send_buffer.buffer_uint8_t.size)
         {
-            printf("[Client %s] The size of in_send_data [%zu - %zu] does not match with send_buffer_size [%zu - %zu].\n",
+            printf("[Client %s] The size of in_send_data [%zu - %zu - %zu] does not match with send_buffer_size [%zu - %zu - %zu].\n",
                    port.c_str(),
                    send_data_double.size(),
                    send_data_uint8_t.size(),
+                   send_data_uint16_t.size(),
                    send_buffer.buffer_double.size,
-                   send_buffer.buffer_uint8_t.size);
+                   send_buffer.buffer_uint8_t.size,
+                   send_buffer.buffer_uint16_t.size);
             return;
         }
 
         std::copy(send_data_double.begin(), send_data_double.end(), send_buffer.buffer_double.data);
         std::copy(send_data_uint8_t.begin(), send_data_uint8_t.end(), send_buffer.buffer_uint8_t.data);
+        std::copy(send_data_uint16_t.begin(), send_data_uint16_t.end(), send_buffer.buffer_uint16_t.data);
     }
 
     void bind_receive_data() override
     {
-        if (receive_data_double.size() != receive_buffer.buffer_double.size || receive_data_uint8_t.size() != receive_buffer.buffer_uint8_t.size)
+        if (receive_data_double.size() != receive_buffer.buffer_double.size ||
+            receive_data_uint8_t.size() != receive_buffer.buffer_uint8_t.size ||
+            receive_data_uint16_t.size() != receive_buffer.buffer_uint16_t.size)
         {
-            printf("[Client %s] The size of receive_data [%zu - %zu] does not match with receive_buffer_size [%zu - %zu].\n",
+            printf("[Client %s] The size of receive_data [%zu - %zu - %zu] does not match with receive_buffer_size [%zu - %zu - %zu].\n",
                    port.c_str(),
                    receive_data_double.size(),
                    receive_data_uint8_t.size(),
+                   receive_data_uint16_t.size(),
                    receive_buffer.buffer_double.size,
-                   receive_buffer.buffer_uint8_t.size);
+                   receive_buffer.buffer_uint8_t.size,
+                   receive_buffer.buffer_uint16_t.size);
             return;
         }
 
         std::copy(receive_buffer.buffer_double.data, receive_buffer.buffer_double.data + receive_buffer.buffer_double.size, receive_data_double.begin());
         std::copy(receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.data + receive_buffer.buffer_uint8_t.size, receive_data_uint8_t.begin());
+        std::copy(receive_buffer.buffer_uint16_t.data, receive_buffer.buffer_uint16_t.data + receive_buffer.buffer_uint16_t.size, receive_data_uint16_t.begin());
     }
 };
 

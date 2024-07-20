@@ -65,7 +65,11 @@ enum class EAttribute : unsigned char
     RGB_3840_2160,
     RGB_1280_1024,
     RGB_640_480,
-    RGB_128_128
+    RGB_128_128,
+    Depth_3840_2160,
+    Depth_1280_1024,
+    Depth_640_480,
+    Depth_128_128,
 };
 
 /**
@@ -104,6 +108,7 @@ struct Buffer
 {
     TypedBuffer<double> buffer_double;
     TypedBuffer<uint8_t> buffer_uint8_t;
+    TypedBuffer<uint16_t> buffer_uint16_t;
 };
 
 /**
@@ -114,6 +119,7 @@ struct ConversionMap
 {
     std::map<EAttribute, std::vector<double>> conversion_map_double;
     std::map<EAttribute, std::vector<uint8_t>> conversion_map_uint8_t;
+    std::map<EAttribute, std::vector<uint16_t>> conversion_map_uint16_t;
 };
 
 /**

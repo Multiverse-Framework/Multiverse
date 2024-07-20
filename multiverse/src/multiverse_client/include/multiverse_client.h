@@ -35,6 +35,7 @@ struct Buffer
 {
     TypedBuffer<double> buffer_double;
     TypedBuffer<uint8_t> buffer_uint8_t;
+    TypedBuffer<uint16_t> buffer_uint16_t;
 };
 
 enum class EMultiverseClientState : unsigned char;

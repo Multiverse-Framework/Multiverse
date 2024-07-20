@@ -192,12 +192,14 @@ void MultiverseClient::run()
             clean_up();
             init_send_and_receive_data();
 
-            printf("[Client %s] Starting the communication (send: [%zu - %zu], receive: [%zu - %zu]).\n",
+            printf("[Client %s] Starting the communication (send: [%zu - %zu - %zu], receive: [%zu - %zu - %zu]).\n",
                    port.c_str(),
                    send_buffer.buffer_double.size,
                    send_buffer.buffer_uint8_t.size,
+                   send_buffer.buffer_uint16_t.size,
                    receive_buffer.buffer_double.size,
-                   receive_buffer.buffer_uint8_t.size);
+                   receive_buffer.buffer_uint8_t.size,
+                   receive_buffer.buffer_uint16_t.size);
 
             flag = EMultiverseClientState::BindSendData;
             break;
@@ -246,8 +248,10 @@ void MultiverseClient::run()
             zmq_send(client_socket, &message_int, sizeof(message_int), 0);
             free(send_buffer.buffer_double.data);
             free(send_buffer.buffer_uint8_t.data);
+            free(send_buffer.buffer_uint16_t.data);
             free(receive_buffer.buffer_double.data);
             free(receive_buffer.buffer_uint8_t.data);
+            free(receive_buffer.buffer_uint16_t.data);
         }
 
         clean_up();
@@ -280,7 +284,7 @@ void MultiverseClient::send_request_meta_data()
 
 void MultiverseClient::send_send_data()
 {
-    const int message_spec_int = 2 + (send_buffer.buffer_double.size > 0) + (send_buffer.buffer_uint8_t.size > 0);
+    const int message_spec_int = 2 + (send_buffer.buffer_double.size > 0) + (send_buffer.buffer_uint8_t.size > 0) + (send_buffer.buffer_uint16_t.size > 0);
     zmq_send(client_socket, &message_spec_int, sizeof(int), 2);
 
     if (message_spec_int == 2)
@@ -292,7 +296,7 @@ void MultiverseClient::send_send_data()
         zmq_send(client_socket, world_time, sizeof(double), 2);
         if (send_buffer.buffer_double.size > 0)
         {
-            if (send_buffer.buffer_uint8_t.size == 0)
+            if (send_buffer.buffer_uint8_t.size == 0 && send_buffer.buffer_uint16_t.size == 0)
             {
                 zmq_send(client_socket, send_buffer.buffer_double.data, send_buffer.buffer_double.size * sizeof(double), 0);
             }
@@ -303,7 +307,18 @@ void MultiverseClient::send_send_data()
         }
         if (send_buffer.buffer_uint8_t.size > 0)
         {
-            zmq_send(client_socket, send_buffer.buffer_uint8_t.data, send_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+            if (send_buffer.buffer_uint16_t.size == 0)
+            {
+                zmq_send(client_socket, send_buffer.buffer_uint8_t.data, send_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+            }
+            else
+            {
+                zmq_send(client_socket, send_buffer.buffer_uint8_t.data, send_buffer.buffer_uint8_t.size * sizeof(uint8_t), 2);
+            }
+        }
+        if (send_buffer.buffer_uint16_t.size > 0)
+        {
+            zmq_send(client_socket, send_buffer.buffer_uint16_t.data, send_buffer.buffer_uint16_t.size * sizeof(uint16_t), 0);
         }
     }
 }
@@ -354,13 +369,17 @@ void MultiverseClient::receive_data()
         zmq_recv(client_socket, world_time, sizeof(*world_time), 0);
         if (message_spec_int == 3)
         {
-            if (receive_buffer.buffer_double.size > 0 && receive_buffer.buffer_uint8_t.size == 0)
+            if (receive_buffer.buffer_double.size > 0 && receive_buffer.buffer_uint8_t.size == 0 && receive_buffer.buffer_uint16_t.size == 0)
             {
                 zmq_recv(client_socket, receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double), 0);
             }
-            else if (receive_buffer.buffer_uint8_t.size > 0 && receive_buffer.buffer_double.size == 0)
+            else if (receive_buffer.buffer_double.size == 0 && receive_buffer.buffer_uint8_t.size > 0 && receive_buffer.buffer_uint16_t.size == 0)
             {
                 zmq_recv(client_socket, receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+            }
+            else if (receive_buffer.buffer_double.size == 0 && receive_buffer.buffer_uint8_t.size == 0 && receive_buffer.buffer_uint16_t.size > 0)
+            {
+                zmq_recv(client_socket, receive_buffer.buffer_uint16_t.data, receive_buffer.buffer_uint16_t.size * sizeof(uint16_t), 0);
             }
             else
             {
@@ -370,8 +389,32 @@ void MultiverseClient::receive_data()
         else if (message_spec_int == 4)
         {
             zmq_recv(client_socket, world_time, sizeof(double), 0);
+            if (receive_buffer.buffer_uint16_t.size == 0)
+            {
+                zmq_recv(client_socket, receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double), 0);
+                zmq_recv(client_socket, receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+            }
+            else if (receive_buffer.buffer_double.size == 0)
+            {
+                zmq_recv(client_socket, receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+                zmq_recv(client_socket, receive_buffer.buffer_uint16_t.data, receive_buffer.buffer_uint16_t.size * sizeof(uint16_t), 0);
+            }
+            else if (receive_buffer.buffer_uint8_t.size == 0)
+            {
+                zmq_recv(client_socket, receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double), 0);
+                zmq_recv(client_socket, receive_buffer.buffer_uint16_t.data, receive_buffer.buffer_uint16_t.size * sizeof(uint16_t), 0);
+            }
+            else
+            {
+                throw std::runtime_error("The receive buffer is not initialized correctly.");
+            }
+        }
+        else if (message_spec_int == 5)
+        {
+            zmq_recv(client_socket, world_time, sizeof(double), 0);
             zmq_recv(client_socket, receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double), 0);
             zmq_recv(client_socket, receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.size * sizeof(uint8_t), 0);
+            zmq_recv(client_socket, receive_buffer.buffer_uint16_t.data, receive_buffer.buffer_uint16_t.size * sizeof(uint16_t), 0);
         }
         else if (message_spec_int != 2)
         {
@@ -412,37 +455,45 @@ void MultiverseClient::check_response_meta_data()
 bool MultiverseClient::check_buffer_size()
 {
     std::map<std::string, std::map<std::string, size_t>> request_buffer_sizes =
-        {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+        {{"send", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}};
     compute_request_buffer_sizes(request_buffer_sizes["send"], request_buffer_sizes["receive"]);
 
     std::map<std::string, std::map<std::string, size_t>> response_buffer_sizes =
-        {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+        {{"send", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}};
     compute_response_buffer_sizes(response_buffer_sizes["send"], response_buffer_sizes["receive"]);
 
-    if (request_buffer_sizes["receive"]["double"] != -1 && request_buffer_sizes["receive"]["uint8"] != -1 &&
+    if (request_buffer_sizes["receive"]["double"] != -1 && request_buffer_sizes["receive"]["uint8"] != -1 && request_buffer_sizes["receive"]["uint16"] != -1 &&
         (request_buffer_sizes["send"]["double"] != response_buffer_sizes["send"]["double"] ||
          request_buffer_sizes["send"]["uint8"] != response_buffer_sizes["send"]["uint8"] ||
+         request_buffer_sizes["send"]["uint16"] != response_buffer_sizes["send"]["uint16"] ||
          request_buffer_sizes["receive"]["double"] != response_buffer_sizes["receive"]["double"] ||
-         request_buffer_sizes["receive"]["uint8"] != response_buffer_sizes["receive"]["uint8"]))
+         request_buffer_sizes["receive"]["uint8"] != response_buffer_sizes["receive"]["uint8"] ||
+         request_buffer_sizes["receive"]["uint16"] != response_buffer_sizes["receive"]["uint16"]))
     {
-        printf("[Client %s] Failed to initialize the buffers %s: send_buffer_size(server = [%zu, %zu], client = [%zu, %zu]), receive_buffer_size(server = [%zu, %zu], client = [%zu, %zu]).\n",
+        printf("[Client %s] Failed to initialize the buffers %s: send_buffer_size(server = [%zu - %zu - %zu], client = [%zu - %zu - %zu]), receive_buffer_size(server = [%zu - %zu - %zu], client = [%zu - %zu - %zu]).\n",
                port.c_str(),
                socket_addr.c_str(),
                request_buffer_sizes["send"]["double"],
                request_buffer_sizes["send"]["uint8"],
+               request_buffer_sizes["send"]["uint16"],
                response_buffer_sizes["send"]["double"],
                response_buffer_sizes["send"]["uint8"],
+               response_buffer_sizes["send"]["uint16"],
                request_buffer_sizes["receive"]["double"],
                request_buffer_sizes["receive"]["uint8"],
+               request_buffer_sizes["receive"]["uint16"],
                response_buffer_sizes["receive"]["double"],
-               response_buffer_sizes["receive"]["uint8"]);
+               response_buffer_sizes["receive"]["uint8"],
+               response_buffer_sizes["receive"]["uint16"]);
         return false;
     }
 
     send_buffer.buffer_double.size = response_buffer_sizes["send"]["double"];
     send_buffer.buffer_uint8_t.size = response_buffer_sizes["send"]["uint8"];
+    send_buffer.buffer_uint16_t.size = response_buffer_sizes["send"]["uint16"];
     receive_buffer.buffer_double.size = response_buffer_sizes["receive"]["double"];
     receive_buffer.buffer_uint8_t.size = response_buffer_sizes["receive"]["uint8"];
+    receive_buffer.buffer_uint16_t.size = response_buffer_sizes["receive"]["uint16"];
     return true;
 }
 
@@ -450,8 +501,10 @@ void MultiverseClient::init_buffer()
 {
     send_buffer.buffer_double.data = (double *)calloc(send_buffer.buffer_double.size, sizeof(double));
     send_buffer.buffer_uint8_t.data = (uint8_t *)calloc(send_buffer.buffer_uint8_t.size, sizeof(uint8_t));
+    send_buffer.buffer_uint16_t.data = (uint16_t *)calloc(send_buffer.buffer_uint16_t.size, sizeof(uint16_t));
     receive_buffer.buffer_double.data = (double *)calloc(receive_buffer.buffer_double.size, sizeof(double));
     receive_buffer.buffer_uint8_t.data = (uint8_t *)calloc(receive_buffer.buffer_uint8_t.size, sizeof(uint8_t));
+    receive_buffer.buffer_uint16_t.data = (uint16_t *)calloc(receive_buffer.buffer_uint16_t.size, sizeof(uint16_t));
 }
 
 bool MultiverseClient::communicate(const bool resend_request_meta_data)

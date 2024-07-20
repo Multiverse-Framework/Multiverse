@@ -86,15 +86,16 @@ bool MultiverseClientJson::compute_request_and_response_meta_data()
 void MultiverseClientJson::compute_request_buffer_sizes(std::map<std::string, size_t> &send_buffer_size, std::map<std::string, size_t> &receive_buffer_size) const
 {
     std::map<std::string, std::map<std::string, size_t>> request_buffer_sizes =
-        {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+        {{"send", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}};
     for (std::pair<const std::string, std::map<std::string, size_t>> &request_buffer_size : request_buffer_sizes)
     {
         for (const std::string &object_name : request_meta_data_json[request_buffer_size.first].getMemberNames())
         {
-            if (object_name.compare("") == 0 || request_buffer_size.second["double"] == -1 || request_buffer_size.second["uint8"] == -1)
+            if (object_name.compare("") == 0 || request_buffer_size.second["double"] == -1 || request_buffer_size.second["uint8"] == -1 || request_buffer_size.second["uint16"] == -1)
             {
                 request_buffer_size.second["double"] = -1;
                 request_buffer_size.second["uint8"] = -1;
+                request_buffer_size.second["uint16"] = -1;
                 break;
             }
             for (const Json::Value &attribute : request_meta_data_json[request_buffer_size.first][object_name])
@@ -103,6 +104,7 @@ void MultiverseClientJson::compute_request_buffer_sizes(std::map<std::string, si
                 {
                     request_buffer_size.second["double"] = -1;
                     request_buffer_size.second["uint8"] = -1;
+                    request_buffer_size.second["uint16"] = -1;
                     break;
                 }
                 if (attribute_map_double.find(attribute.asString()) != attribute_map_double.end())
@@ -120,7 +122,7 @@ void MultiverseClientJson::compute_request_buffer_sizes(std::map<std::string, si
 void MultiverseClientJson::compute_response_buffer_sizes(std::map<std::string, size_t> &send_buffer_size, std::map<std::string, size_t> &receive_buffer_size) const
 {
     std::map<std::string, std::map<std::string, size_t>> response_buffer_sizes =
-        {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+        {{"send", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}, {"uint16", 0}}}};
     for (std::pair<const std::string, std::map<std::string, size_t>> &response_buffer_size : response_buffer_sizes)
     {
         for (const std::string &object_name : response_meta_data_json[response_buffer_size.first].getMemberNames())

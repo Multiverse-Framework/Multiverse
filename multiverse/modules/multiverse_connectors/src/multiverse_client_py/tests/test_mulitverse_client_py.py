@@ -162,6 +162,28 @@ class MultiverseClientTestCase(unittest.TestCase):
 
         return multiverse_client_test_send, time_now
 
+    def test_multiverse_client_send_data_3(self, stop=True):
+        time_now = time()
+        multiverse_client_test_send = self.create_multiverse_client_send("1234", "object_1", ["depth_1280_1024"])
+        print("Send request_meta_data takes time: ", time() - time_now)
+
+        time_now = time() - self.time_start
+        send_data = [int(i % 65535) for i in range(1280 * 1024)]
+        send_data = [time_now] + send_data
+        self.multiverse_client_send_data(multiverse_client_test_send, send_data)
+
+        self.assertEqual(multiverse_client_test_send.receive_data, [time_now])
+
+        for _ in range(10):
+            time_now = time()
+            multiverse_client_test_send.send_and_receive_data()
+            print("Send data takes time: ", time() - time_now)
+
+        if stop:
+            multiverse_client_test_send.stop()
+
+        return multiverse_client_test_send, time_now
+
     def test_multiverse_client_receive_2(self):
         _, time_send = self.test_multiverse_client_send_data_2()
 
@@ -173,6 +195,20 @@ class MultiverseClientTestCase(unittest.TestCase):
         print("Receive response_meta_data takes time: ", time() - time_now)
         for i in multiverse_client_test_receive.response_meta_data["receive"]["object_1"]["rgb_1280_1024"]:
             self.assertEqual(i, int(i % 255))
+
+        multiverse_client_test_receive.stop()
+
+    def test_multiverse_client_receive_3(self):
+        _, time_send = self.test_multiverse_client_send_data_3()
+
+        multiverse_client_test_receive = self.create_multiverse_client_receive("1235", "object_1",
+                                                                               ["depth_1280_1024"])
+
+        time_now = time()
+        multiverse_client_test_receive.send_and_receive_meta_data()
+        print("Receive response_meta_data takes time: ", time() - time_now)
+        for i in multiverse_client_test_receive.response_meta_data["receive"]["object_1"]["depth_1280_1024"]:
+            self.assertEqual(i, int(i % 65535))
 
         multiverse_client_test_receive.stop()
 

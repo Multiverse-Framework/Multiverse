@@ -70,6 +70,13 @@ std::map<std::string, std::pair<EAttribute, std::vector<uint8_t>>> attribute_map
         {"rgb_640_480", {EAttribute::RGB_640_480, std::vector<uint8_t>(640 * 480 * 3, std::numeric_limits<uint8_t>::quiet_NaN())}},
         {"rgb_128_128", {EAttribute::RGB_128_128, std::vector<uint8_t>(128 * 128 * 3, std::numeric_limits<uint8_t>::quiet_NaN())}}};
 
+std::map<std::string, std::pair<EAttribute, std::vector<uint16_t>>> attribute_map_uint16_t =
+    {
+        {"depth_3840_2160", {EAttribute::Depth_3840_2160, std::vector<uint16_t>(3840 * 2160, std::numeric_limits<uint16_t>::quiet_NaN())}},
+        {"depth_1280_1024", {EAttribute::Depth_1280_1024, std::vector<uint16_t>(1280 * 1024, std::numeric_limits<uint16_t>::quiet_NaN())}},
+        {"depth_640_480", {EAttribute::Depth_640_480, std::vector<uint16_t>(640 * 480, std::numeric_limits<uint16_t>::quiet_NaN())}},
+        {"depth_128_128", {EAttribute::Depth_128_128, std::vector<uint16_t>(128 * 128, std::numeric_limits<uint16_t>::quiet_NaN())}}};
+
 std::map<std::string, double> unit_scale =
     {
         {"s", 1.0},
@@ -173,6 +180,7 @@ struct Attribute
 {
     TypedAttribute<double> attribute_double;
     TypedAttribute<uint8_t> attribute_uint8_t;
+    TypedAttribute<uint16_t> attribute_uint16_t;
 };
 
 struct Object
@@ -216,22 +224,32 @@ MultiverseServer::~MultiverseServer()
 {
     printf("[Server] Close socket %s.\n", socket_addr.c_str());
 
-    if (send_buffer.buffer_double.data)
+    if (send_buffer.buffer_double.size > 0)
     {
         free(send_buffer.buffer_double.data);
     }
-    if (send_buffer.buffer_uint8_t.data)
+    if (send_buffer.buffer_uint8_t.size > 0)
     {
         free(send_buffer.buffer_uint8_t.data);
     }
-    if (receive_buffer.buffer_double.data)
+    if (send_buffer.buffer_uint16_t.size > 0)
+    {
+        free(send_buffer.buffer_uint16_t.data);
+    }
+    if (receive_buffer.buffer_double.size > 0)
     {
         free(receive_buffer.buffer_double.data);
     }
-    if (receive_buffer.buffer_uint8_t.data)
+    if (receive_buffer.buffer_uint8_t.size > 0)
     {
         free(receive_buffer.buffer_uint8_t.data);
     }
+    if (receive_buffer.buffer_uint16_t.size > 0)
+    {
+        free(receive_buffer.buffer_uint16_t.data);
+    }
+
+    printf("[Server] Clean up socket %s.\n", socket_addr.c_str());
 
     sockets_need_clean_up[socket_addr] = false;
 }
@@ -246,8 +264,10 @@ void MultiverseServer::start()
         {
             send_buffer.buffer_double.size = 0;
             send_buffer.buffer_uint8_t.size = 0;
+            send_buffer.buffer_uint16_t.size = 0;
             receive_buffer.buffer_double.size = 0;
             receive_buffer.buffer_uint8_t.size = 0;
+            receive_buffer.buffer_uint16_t.size = 0;
 
             is_receive_data_sent = false;
 
@@ -432,8 +452,10 @@ EMultiverseServerState MultiverseServer::receive_data()
                 {
                     send_buffer.buffer_double.data_vec.clear();
                     send_buffer.buffer_uint8_t.data_vec.clear();
+                    send_buffer.buffer_uint16_t.data_vec.clear();
                     receive_buffer.buffer_double.data_vec.clear();
                     receive_buffer.buffer_uint8_t.data_vec.clear();
+                    receive_buffer.buffer_uint16_t.data_vec.clear();
                     return EMultiverseServerState::BindObjects;
                 }
                 else
@@ -443,7 +465,8 @@ EMultiverseServerState MultiverseServer::receive_data()
             }
             else if (message_spec_int == 2 && request_array_size == 2 ||
                      message_spec_int == 3 && request_array_size == 3 ||
-                     message_spec_int == 4 && request_array_size == 4)
+                     message_spec_int == 4 && request_array_size == 4 ||
+                     message_spec_int == 5 && request_array_size == 5)
             {
                 mtx.lock();
                 memcpy(&worlds[world_name].time, request_array[1].data(), sizeof(double));
@@ -455,13 +478,17 @@ EMultiverseServerState MultiverseServer::receive_data()
 
                 if (message_spec_int == 3 && request_array_size == 3)
                 {
-                    if (send_buffer.buffer_double.size > 0 && send_buffer.buffer_uint8_t.size == 0)
+                    if (send_buffer.buffer_double.size > 0 && send_buffer.buffer_uint8_t.size == 0 && send_buffer.buffer_uint16_t.size == 0)
                     {
                         memcpy(send_buffer.buffer_double.data, request_array[2].data(), send_buffer.buffer_double.size * sizeof(double));
                     }
-                    else if (send_buffer.buffer_double.size == 0 && send_buffer.buffer_uint8_t.size > 0)
+                    else if (send_buffer.buffer_double.size == 0 && send_buffer.buffer_uint8_t.size > 0 && send_buffer.buffer_uint16_t.size == 0)
                     {
                         memcpy(send_buffer.buffer_uint8_t.data, request_array[2].data(), send_buffer.buffer_uint8_t.size * sizeof(uint8_t));
+                    }
+                    else if (send_buffer.buffer_double.size == 0 && send_buffer.buffer_uint8_t.size == 0 && send_buffer.buffer_uint16_t.size > 0)
+                    {
+                        memcpy(send_buffer.buffer_uint16_t.data, request_array[2].data(), send_buffer.buffer_uint16_t.size * sizeof(uint16_t));
                     }
                     else
                     {
@@ -470,8 +497,38 @@ EMultiverseServerState MultiverseServer::receive_data()
                 }
                 else if (message_spec_int == 4 && request_array_size == 4)
                 {
-                    memcpy(send_buffer.buffer_double.data, request_array[2].data(), send_buffer.buffer_double.size * sizeof(double));
-                    memcpy(send_buffer.buffer_uint8_t.data, request_array[3].data(), send_buffer.buffer_uint8_t.size * sizeof(uint8_t));
+                    if (send_buffer.buffer_double.size > 0 && send_buffer.buffer_uint8_t.size > 0 && send_buffer.buffer_uint16_t.size == 0)
+                    {
+                        memcpy(send_buffer.buffer_double.data, request_array[2].data(), send_buffer.buffer_double.size * sizeof(double));
+                        memcpy(send_buffer.buffer_uint8_t.data, request_array[3].data(), send_buffer.buffer_uint8_t.size * sizeof(uint8_t));
+                    }
+                    else if (send_buffer.buffer_double.size > 0 && send_buffer.buffer_uint8_t.size == 0 && send_buffer.buffer_uint16_t.size > 0)
+                    {
+                        memcpy(send_buffer.buffer_double.data, request_array[2].data(), send_buffer.buffer_double.size * sizeof(double));
+                        memcpy(send_buffer.buffer_uint16_t.data, request_array[3].data(), send_buffer.buffer_uint16_t.size * sizeof(uint16_t));
+                    }
+                    else if (send_buffer.buffer_double.size == 0 && send_buffer.buffer_uint8_t.size > 0 && send_buffer.buffer_uint16_t.size > 0)
+                    {
+                        memcpy(send_buffer.buffer_uint8_t.data, request_array[2].data(), send_buffer.buffer_uint8_t.size * sizeof(uint8_t));
+                        memcpy(send_buffer.buffer_uint16_t.data, request_array[3].data(), send_buffer.buffer_uint16_t.size * sizeof(uint16_t));
+                    }
+                    else
+                    {
+                        throw std::invalid_argument("[Server] Received invalid message [message_spec_int = " + std::to_string(message_spec_int) + ", request_array_size = " + std::to_string(request_array_size) + "] at socket " + socket_addr + ".");
+                    }
+                }
+                else if (message_spec_int == 5 && request_array_size == 5)
+                {
+                    if (send_buffer.buffer_double.size > 0 && send_buffer.buffer_uint8_t.size > 0 && send_buffer.buffer_uint16_t.size > 0)
+                    {
+                        memcpy(send_buffer.buffer_double.data, request_array[2].data(), send_buffer.buffer_double.size * sizeof(double));
+                        memcpy(send_buffer.buffer_uint8_t.data, request_array[3].data(), send_buffer.buffer_uint8_t.size * sizeof(uint8_t));
+                        memcpy(send_buffer.buffer_uint16_t.data, request_array[4].data(), send_buffer.buffer_uint16_t.size * sizeof(uint16_t));
+                    }
+                    else
+                    {
+                        throw std::invalid_argument("[Server] Received invalid message [message_spec_int = " + std::to_string(message_spec_int) + ", request_array_size = " + std::to_string(request_array_size) + "] at socket " + socket_addr + ".");
+                    }
                 }
                 return EMultiverseServerState::BindSendData;
             }
@@ -699,6 +756,12 @@ void MultiverseServer::bind_meta_data()
         conversion_map_uint8_t.emplace(attribute.second);
     }
 
+    std::map<EAttribute, std::vector<uint16_t>> &conversion_map_uint16_t = conversion_map.conversion_map_uint16_t;
+    for (const std::pair<const std::string, std::pair<EAttribute, std::vector<uint16_t>>> &attribute : attribute_map_uint16_t)
+    {
+        conversion_map_uint16_t.emplace(attribute.second);
+    }
+
     response_meta_data_json.clear();
     response_meta_data_json["meta_data"] = meta_data;
     response_meta_data_json["time"] = worlds[world_name].time * unit_scale[time_unit];
@@ -771,6 +834,31 @@ void MultiverseServer::bind_send_objects()
                         response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
                     }
                 }
+                if (attribute.attribute_uint16_t.data.size() == 0)
+                {
+                    attribute.attribute_uint16_t.data = attribute_map_uint16_t[attribute_name].second;
+                    for (size_t i = 0; i < attribute.attribute_uint16_t.data.size(); i++)
+                    {
+                        uint16_t *data = &attribute.attribute_uint16_t.data[i];
+                        const uint16_t conversion = conversion_map.conversion_map_uint16_t[attribute_map_uint16_t[attribute_name].first][i];
+                        send_buffer.buffer_uint16_t.data_vec.emplace_back(data, conversion);
+                        response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
+                    }
+                }
+                else
+                {
+                    // printf("[Server] Continue state [%s - %s] on socket %s\n", object_name.c_str(), attribute_name.c_str(), socket_addr.c_str());
+                    continue_state = true;
+                    attribute.attribute_uint16_t.is_sent = true;
+
+                    for (size_t i = 0; i < attribute.attribute_uint16_t.data.size(); i++)
+                    {
+                        uint16_t *data = &attribute.attribute_uint16_t.data[i];
+                        const uint16_t conversion = conversion_map.conversion_map_uint16_t[attribute_map_uint16_t[attribute_name].first][i];
+                        send_buffer.buffer_uint16_t.data_vec.emplace_back(data, conversion);
+                        response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
+                    }
+                }
             }
             else
             {
@@ -779,7 +867,6 @@ void MultiverseServer::bind_send_objects()
                 {
                     simulation_data_double = attribute_map_double[attribute_name].second;
                 }
-
                 for (size_t i = 0; i < simulation_data_double.size(); i++)
                 {
                     double *data = &simulation_data_double[i];
@@ -793,12 +880,24 @@ void MultiverseServer::bind_send_objects()
                 {
                     simulation_data_uint8_t = attribute_map_uint8_t[attribute_name].second;
                 }
-
                 for (size_t i = 0; i < simulation_data_uint8_t.size(); i++)
                 {
                     uint8_t *data = &simulation_data_uint8_t[i];
                     const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                     send_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
+                    response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
+                }
+
+                std::vector<uint16_t> &simulation_data_uint16_t = attribute.attribute_uint16_t.simulation_data[simulation_name];
+                if (simulation_data_uint16_t.size() == 0)
+                {
+                    simulation_data_uint16_t = attribute_map_uint16_t[attribute_name].second;
+                }
+                for (size_t i = 0; i < simulation_data_uint16_t.size(); i++)
+                {
+                    uint16_t *data = &simulation_data_uint16_t[i];
+                    const uint16_t conversion = conversion_map.conversion_map_uint16_t[attribute_map_uint16_t[attribute_name].first][i];
+                    send_buffer.buffer_uint16_t.data_vec.emplace_back(data, conversion);
                     response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
                 }
             }
@@ -920,6 +1019,11 @@ void MultiverseServer::bind_receive_objects()
                     attribute.attribute_uint8_t.data = attribute_map_uint8_t[attribute_name].second;
                     attribute.attribute_uint8_t.is_sent = true;
                 }
+                if (attribute.attribute_uint16_t.data.size() == 0)
+                {
+                    attribute.attribute_uint16_t.data = attribute_map_uint16_t[attribute_name].second;
+                    attribute.attribute_uint16_t.is_sent = true;
+                }
             }
 
             for (size_t i = 0; i < attribute.attribute_double.data.size(); i++)
@@ -929,12 +1033,18 @@ void MultiverseServer::bind_receive_objects()
                 receive_buffer.buffer_double.data_vec.emplace_back(data, conversion);
                 response_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
             }
-
             for (size_t i = 0; i < attribute.attribute_uint8_t.data.size(); i++)
             {
                 uint8_t *data = &attribute.attribute_uint8_t.data[i];
                 const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                 receive_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
+                response_meta_data_json["receive"][object_name][attribute_name].append(*data >> conversion);
+            }
+            for (size_t i = 0; i < attribute.attribute_uint16_t.data.size(); i++)
+            {
+                uint16_t *data = &attribute.attribute_uint16_t.data[i];
+                const uint16_t conversion = conversion_map.conversion_map_uint16_t[attribute_map_uint16_t[attribute_name].first][i];
+                receive_buffer.buffer_uint16_t.data_vec.emplace_back(data, conversion);
                 response_meta_data_json["receive"][object_name][attribute_name].append(*data >> conversion);
             }
         }
@@ -1055,10 +1165,14 @@ void MultiverseServer::init_send_and_receive_data()
     send_buffer.buffer_double.data = (double *)calloc(send_buffer.buffer_double.size, sizeof(double));
     send_buffer.buffer_uint8_t.size = send_buffer.buffer_uint8_t.data_vec.size();
     send_buffer.buffer_uint8_t.data = (uint8_t *)calloc(send_buffer.buffer_uint8_t.size, sizeof(uint8_t));
+    send_buffer.buffer_uint16_t.size = send_buffer.buffer_uint16_t.data_vec.size();
+    send_buffer.buffer_uint16_t.data = (uint16_t *)calloc(send_buffer.buffer_uint16_t.size, sizeof(uint16_t));
     receive_buffer.buffer_double.size = receive_buffer.buffer_double.data_vec.size();
     receive_buffer.buffer_double.data = (double *)calloc(receive_buffer.buffer_double.size, sizeof(double));
     receive_buffer.buffer_uint8_t.size = receive_buffer.buffer_uint8_t.data_vec.size();
     receive_buffer.buffer_uint8_t.data = (uint8_t *)calloc(receive_buffer.buffer_uint8_t.size, sizeof(uint8_t));
+    receive_buffer.buffer_uint16_t.size = receive_buffer.buffer_uint16_t.data_vec.size();
+    receive_buffer.buffer_uint16_t.data = (uint16_t *)calloc(receive_buffer.buffer_uint16_t.size, sizeof(uint16_t));
 }
 
 void MultiverseServer::wait_for_other_send_data()
@@ -1093,6 +1207,10 @@ void MultiverseServer::bind_send_data()
     {
         *send_buffer.buffer_uint8_t.data_vec[i].first = send_buffer.buffer_uint8_t.data[i] >> send_buffer.buffer_uint8_t.data_vec[i].second;
     }
+    for (size_t i = 0; i < send_buffer.buffer_uint16_t.size; i++)
+    {
+        *send_buffer.buffer_uint16_t.data_vec[i].first = send_buffer.buffer_uint16_t.data[i] >> send_buffer.buffer_uint16_t.data_vec[i].second;
+    }
 }
 
 void MultiverseServer::wait_for_receive_data()
@@ -1104,6 +1222,7 @@ void MultiverseServer::wait_for_receive_data()
             const std::string attribute_name = attribute_json.asString();
             worlds[world_name].objects[object_name].attributes[attribute_name].attribute_double.is_sent = true;
             worlds[world_name].objects[object_name].attributes[attribute_name].attribute_uint8_t.is_sent = true;
+            worlds[world_name].objects[object_name].attributes[attribute_name].attribute_uint16_t.is_sent = true;
         }
     }
 
@@ -1118,7 +1237,8 @@ void MultiverseServer::wait_for_receive_data()
                 while ((worlds[world_name].objects.count(object_name) == 0 ||
                         worlds[world_name].objects[object_name].attributes.count(attribute_name) == 0 ||
                         !worlds[world_name].objects[object_name].attributes[attribute_name].attribute_double.is_sent ||
-                        !worlds[world_name].objects[object_name].attributes[attribute_name].attribute_uint8_t.is_sent) &&
+                        !worlds[world_name].objects[object_name].attributes[attribute_name].attribute_uint8_t.is_sent ||
+                        !worlds[world_name].objects[object_name].attributes[attribute_name].attribute_uint16_t.is_sent) &&
                        !should_shut_down)
                 {
                     const double now = get_time_now();
@@ -1189,6 +1309,28 @@ void MultiverseServer::compute_cumulative_data()
                     uint8_t_data[i] += simulation_data[i];
                 }
             }
+
+            std::vector<uint16_t> &uint16_t_data = worlds[world_name].objects[object_name].attributes[attribute_name].attribute_uint16_t.data;
+            uint16_t_data = attribute_map_uint16_t[attribute_name].second;
+            for (size_t i = 0; i < uint16_t_data.size(); i++)
+            {
+                for (std::pair<const std::string, Simulation> &simulation_pair : worlds[world_name].simulations)
+                {
+                    if (simulation_pair.second.objects.count(object_name) == 0)
+                    {
+                        continue;
+                    }
+
+                    const std::string &simulation_name = simulation_pair.first;
+                    const std::vector<uint16_t> &simulation_data = (*simulation_pair.second.objects[object_name]).attributes[attribute_name].attribute_uint16_t.simulation_data[simulation_name];
+                    if (simulation_data.size() != uint16_t_data.size())
+                    {
+                        continue;
+                    }
+
+                    uint16_t_data[i] += simulation_data[i];
+                }
+            }
         }
     }
 }
@@ -1202,6 +1344,10 @@ void MultiverseServer::bind_receive_data()
     for (size_t i = 0; i < receive_buffer.buffer_uint8_t.size; i++)
     {
         receive_buffer.buffer_uint8_t.data[i] = *receive_buffer.buffer_uint8_t.data_vec[i].first >> receive_buffer.buffer_uint8_t.data_vec[i].second;
+    }
+    for (size_t i = 0; i < receive_buffer.buffer_uint16_t.size; i++)
+    {
+        receive_buffer.buffer_uint16_t.data[i] = *receive_buffer.buffer_uint16_t.data_vec[i].first >> receive_buffer.buffer_uint16_t.data_vec[i].second;
     }
 }
 
@@ -1263,8 +1409,10 @@ void MultiverseServer::receive_new_request_meta_data()
 
     send_buffer.buffer_double.data_vec.clear();
     send_buffer.buffer_uint8_t.data_vec.clear();
+    send_buffer.buffer_uint16_t.data_vec.clear();
     receive_buffer.buffer_double.data_vec.clear();
     receive_buffer.buffer_uint8_t.data_vec.clear();
+    receive_buffer.buffer_uint16_t.data_vec.clear();
 }
 
 void MultiverseServer::send_receive_data()
@@ -1278,7 +1426,7 @@ void MultiverseServer::send_receive_data()
     }
     else
     {
-        const int message_spec_int = 2 + (receive_buffer.buffer_double.size > 0) + (receive_buffer.buffer_uint8_t.size > 0);
+        const int message_spec_int = 2 + (receive_buffer.buffer_double.size > 0) + (receive_buffer.buffer_uint8_t.size > 0) + (receive_buffer.buffer_uint16_t.size > 0);
         zmq::message_t message_spec(sizeof(int));
         memcpy(message_spec.data(), &message_spec_int, sizeof(int));
         socket.send(message_spec, zmq::send_flags::sndmore);
@@ -1292,14 +1440,14 @@ void MultiverseServer::send_receive_data()
     zmq::message_t message_time(sizeof(worlds[world_name].time));
     memcpy(message_time.data(), &worlds[world_name].time, sizeof(worlds[world_name].time));
 
-    if (receive_buffer.buffer_double.size > 0 || receive_buffer.buffer_uint8_t.size > 0)
+    if (receive_buffer.buffer_double.size > 0 || receive_buffer.buffer_uint8_t.size > 0 || receive_buffer.buffer_uint16_t.size > 0)
     {
         socket.send(message_time, zmq::send_flags::sndmore);
         if (receive_buffer.buffer_double.size > 0)
         {
             zmq::message_t message_double(receive_buffer.buffer_double.size * sizeof(double));
             memcpy(message_double.data(), receive_buffer.buffer_double.data, receive_buffer.buffer_double.size * sizeof(double));
-            if (receive_buffer.buffer_uint8_t.size > 0)
+            if (receive_buffer.buffer_uint8_t.size > 0 || receive_buffer.buffer_uint16_t.size > 0)
             {
                 socket.send(message_double, zmq::send_flags::sndmore);
             }
@@ -1313,7 +1461,21 @@ void MultiverseServer::send_receive_data()
         {
             zmq::message_t message_uint8_t(receive_buffer.buffer_uint8_t.size * sizeof(uint8_t));
             memcpy(message_uint8_t.data(), receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.size * sizeof(uint8_t));
-            socket.send(message_uint8_t, zmq::send_flags::none);
+            if (receive_buffer.buffer_uint16_t.size > 0)
+            {
+                socket.send(message_uint8_t, zmq::send_flags::sndmore);
+            }
+            else
+            {
+                socket.send(message_uint8_t, zmq::send_flags::none);
+            }
+        }
+
+        if (receive_buffer.buffer_uint16_t.size > 0)
+        {
+            zmq::message_t message_uint16_t(receive_buffer.buffer_uint16_t.size * sizeof(uint16_t));
+            memcpy(message_uint16_t.data(), receive_buffer.buffer_uint16_t.data, receive_buffer.buffer_uint16_t.size * sizeof(uint16_t));
+            socket.send(message_uint16_t, zmq::send_flags::none);
         }
     }
     else
