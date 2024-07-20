@@ -112,6 +112,26 @@ void MultiverseClient::connect(const std::string &in_host, const std::string &in
     connect();
 }
 
+void MultiverseClient::set_client_type(const std::string &client_type_str)
+{
+    if (client_type_str == "send_and_receive")
+    {
+        client_type = EMultiverseClientType::SendAndReceive;
+    }
+    else if (client_type_str == "publish")
+    {
+        client_type = EMultiverseClientType::Publish;
+    }
+    else if (client_type_str == "subscribe")
+    {
+        client_type = EMultiverseClientType::Subscribe;
+    }
+    else
+    {
+        throw std::runtime_error("The client type [" + client_type_str + "] is not recognized.");
+    }
+}
+
 void MultiverseClient::start()
 {
     const EMultiverseClientState current_flag = flag.load();
@@ -192,27 +212,63 @@ void MultiverseClient::run()
             clean_up();
             init_send_and_receive_data();
 
-            printf("[Client %s] Starting the communication (send: [%zu - %zu], receive: [%zu - %zu]).\n",
-                   port.c_str(),
-                   send_buffer.buffer_double.size,
-                   send_buffer.buffer_uint8_t.size,
-                   receive_buffer.buffer_double.size,
-                   receive_buffer.buffer_uint8_t.size);
+            switch (client_type)
+            {
+            case EMultiverseClientType::SendAndReceive:
+                client_socket = zmq_socket(context, ZMQ_REQ);
+                printf("[Client %s] Starting the communication (send: [%zu - %zu], receive: [%zu - %zu]).\n",
+                       port.c_str(),
+                       send_buffer.buffer_double.size,
+                       send_buffer.buffer_uint8_t.size,
+                       receive_buffer.buffer_double.size,
+                       receive_buffer.buffer_uint8_t.size);
+                flag = EMultiverseClientState::BindSendData;
+                break;
 
-            flag = EMultiverseClientState::BindSendData;
+            case EMultiverseClientType::Publish:
+                client_socket = zmq_socket(context, ZMQ_PUB);
+                printf("[Client %s] Starting the communication (send: [%zu - %zu]).\n",
+                       port.c_str(),
+                       send_buffer.buffer_double.size,
+                       send_buffer.buffer_uint8_t.size);
+                flag = EMultiverseClientState::BindSendData;
+                break;
+
+            case EMultiverseClientType::Subscribe:
+                client_socket = zmq_socket(context, ZMQ_SUB);
+                printf("[Client %s] Starting the communication (receive: [%zu - %zu]).\n",
+                       port.c_str(),
+                       receive_buffer.buffer_double.size,
+                       receive_buffer.buffer_uint8_t.size);
+                flag = EMultiverseClientState::ReceiveData;
+                break;
+            }
+            zmq_connect(client_socket, socket_addr.c_str());
+            
             break;
 
         case EMultiverseClientState::BindSendData:
+            printf("BindSendData\n");
             bind_send_data();
 
             flag = EMultiverseClientState::SendData;
             break;
 
         case EMultiverseClientState::SendData:
+            printf("SendData\n");
             send_send_data();
-
-            flag = EMultiverseClientState::ReceiveData;
-            break;
+            printf("SentData\n");
+            
+            if (client_type == EMultiverseClientType::SendAndReceive)
+            {
+                flag = EMultiverseClientState::ReceiveData;
+                break;
+            }
+            else
+            {
+                flag = EMultiverseClientState::BindSendData;
+                return;
+            }
 
         case EMultiverseClientState::ReceiveData:
             receive_data();
@@ -221,7 +277,7 @@ void MultiverseClient::run()
         case EMultiverseClientState::BindReceiveData:
             bind_receive_data();
 
-            flag = EMultiverseClientState::BindSendData;
+            flag = client_type == EMultiverseClientType::SendAndReceive ? EMultiverseClientState::BindSendData : EMultiverseClientState::ReceiveData;
             return;
 
         default:
@@ -452,6 +508,11 @@ void MultiverseClient::init_buffer()
     send_buffer.buffer_uint8_t.data = (uint8_t *)calloc(send_buffer.buffer_uint8_t.size, sizeof(uint8_t));
     receive_buffer.buffer_double.data = (double *)calloc(receive_buffer.buffer_double.size, sizeof(double));
     receive_buffer.buffer_uint8_t.data = (uint8_t *)calloc(receive_buffer.buffer_uint8_t.size, sizeof(uint8_t));
+}
+
+EMultiverseClientType MultiverseClient::get_client_type() const
+{
+    return client_type;
 }
 
 bool MultiverseClient::communicate(const bool resend_request_meta_data)

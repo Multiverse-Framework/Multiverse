@@ -205,9 +205,7 @@ static double get_time_now()
 
 MultiverseServer::MultiverseServer(const std::string &in_socket_addr)
 {
-    socket = zmq::socket_t(server_context, zmq::socket_type::rep);
     socket_addr = in_socket_addr;
-    socket.bind(socket_addr);
     sockets_need_clean_up[socket_addr] = false;
     printf("[Server] Bind to socket %s.\n", socket_addr.c_str());
 }
@@ -244,6 +242,10 @@ void MultiverseServer::start()
         {
         case EMultiverseServerState::ReceiveRequestMetaData:
         {
+            server_type = EMultiverseServerType::ReceiveAndSend;
+            socket = zmq::socket_t(server_context, zmq::socket_type::rep);
+            socket.bind(socket_addr);
+
             send_buffer.buffer_double.size = 0;
             send_buffer.buffer_uint8_t.size = 0;
             receive_buffer.buffer_double.size = 0;
@@ -257,7 +259,7 @@ void MultiverseServer::start()
 
         case EMultiverseServerState::BindObjects:
         {
-            // printf("[Server] Received meta data at socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
+            printf("[Server] Received meta data at socket %s:\n%s", socket_addr.c_str(), request_meta_data_json.toStyledString().c_str());
             bind_meta_data();
 
             mtx.lock();
@@ -272,9 +274,12 @@ void MultiverseServer::start()
                 break;
             }
 
-            mtx.lock();
-            bind_receive_objects();
-            mtx.unlock();
+            if (server_type == EMultiverseServerType::ReceiveAndSend)
+            {
+                mtx.lock();
+                bind_receive_objects();
+                mtx.unlock();
+            }
 
             if (request_meta_data_json.isMember("api_callbacks") && !request_meta_data_json["api_callbacks"].empty())
             {
@@ -288,9 +293,38 @@ void MultiverseServer::start()
         {
             send_response_meta_data();
             init_send_and_receive_data();
-            // printf("[Server] Sent meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
+            printf("[Server] Sent meta data to socket %s:\n%s", socket_addr.c_str(), response_meta_data_json.toStyledString().c_str());
 
-            flag = EMultiverseServerState::ReceiveSendData;
+            switch (server_type)
+            {
+            case EMultiverseServerType::ReceiveAndSend:
+            {
+                socket = zmq::socket_t(server_context, zmq::socket_type::rep);
+                socket.bind(socket_addr);
+                flag = EMultiverseServerState::ReceiveSendData;
+                break;
+            }
+
+            case EMultiverseServerType::Subscribe:
+            {
+                socket = zmq::socket_t(server_context, zmq::socket_type::sub);
+                socket.bind(socket_addr);
+                flag = EMultiverseServerState::ReceiveSendData;
+                break;
+            }
+
+            case EMultiverseServerType::Publish:
+            {
+                socket = zmq::socket_t(server_context, zmq::socket_type::pub);
+                socket.bind(socket_addr);
+                flag = EMultiverseServerState::BindReceiveData;
+                break;
+            }
+
+            default:
+                break;
+            }
+
             break;
         }
 
@@ -321,7 +355,7 @@ void MultiverseServer::start()
             bind_send_data();
             mtx.unlock();
 
-            flag = EMultiverseServerState::BindReceiveData;
+            flag = server_type == EMultiverseServerType::ReceiveAndSend ? EMultiverseServerState::BindReceiveData : EMultiverseServerState::ReceiveSendData;            
             break;
         }
 
@@ -356,7 +390,7 @@ void MultiverseServer::start()
                 }
                 send_receive_data();
 
-                flag = EMultiverseServerState::ReceiveSendData;
+                flag = server_type == EMultiverseServerType::ReceiveAndSend ? EMultiverseServerState::ReceiveSendData : EMultiverseServerState::BindReceiveData;
 
                 simulation.meta_data_state = EMetaDataState::Normal;
             }
@@ -375,7 +409,7 @@ void MultiverseServer::start()
         {
             receive_data();
         }
-        if (flag != EMultiverseServerState::ReceiveSendData && 
+        if (flag != EMultiverseServerState::ReceiveSendData &&
             flag != EMultiverseServerState::ReceiveRequestMetaData)
         {
             try
@@ -408,6 +442,7 @@ EMultiverseServerState MultiverseServer::receive_data()
         std::vector<zmq::message_t> request_array;
         sockets_need_clean_up[socket_addr] = false;
         zmq::recv_result_t recv_result_t = zmq::recv_multipart(socket, std::back_inserter(request_array), zmq::recv_flags::none);
+        printf("[Server] Received %zu messages at socket %s.\n", request_array.size(), socket_addr.c_str());
         sockets_need_clean_up[socket_addr] = true;
 
         const size_t request_array_size = request_array.size();
@@ -491,6 +526,28 @@ EMultiverseServerState MultiverseServer::receive_data()
 
 void MultiverseServer::bind_meta_data()
 {
+    server_type = EMultiverseServerType::ReceiveAndSend;
+    if (request_meta_data_json.isMember("publish") && request_meta_data_json.isMember("subscribe"))
+    {
+        throw std::invalid_argument("[Server] Request meta data at socket " + socket_addr + " has both publish and subscribe.");
+    }
+    if (request_meta_data_json.isMember("publish"))
+    {
+        if (request_meta_data_json.isMember("send") || request_meta_data_json.isMember("receive"))
+        {
+            throw std::invalid_argument("[Server] Request meta data at socket " + socket_addr + " has publish and send or receive.");
+        }
+        server_type = EMultiverseServerType::Subscribe;
+    }
+    if (request_meta_data_json.isMember("subscribe"))
+    {
+        if (request_meta_data_json.isMember("send") || request_meta_data_json.isMember("receive"))
+        {
+            throw std::invalid_argument("[Server] Request meta data at socket " + socket_addr + " has subscribe and send or receive.");
+        }
+        server_type = EMultiverseServerType::Publish;
+    }
+
     if (!request_meta_data_json.isMember("meta_data") || request_meta_data_json["meta_data"].empty())
     {
         throw std::invalid_argument("[Server] Request meta data at socket " + socket_addr + " doesn't have meta data.");
@@ -501,6 +558,7 @@ void MultiverseServer::bind_meta_data()
     {
         throw std::invalid_argument("[Server] Request meta data at socket " + socket_addr + " doesn't have a world name.");
     }
+
     request_world_name = meta_data["world_name"].asString();
 
     if (!meta_data.isMember("simulation_name") || meta_data["simulation_name"].asString().empty())
@@ -706,13 +764,15 @@ void MultiverseServer::bind_meta_data()
 
 void MultiverseServer::bind_send_objects()
 {
-    send_objects_json = request_meta_data_json["send"];
+    const std::string send_str = server_type == EMultiverseServerType::ReceiveAndSend ? "send" : "publish";
+
+    send_objects_json = request_meta_data_json[send_str];
     std::map<std::string, Object> &objects = worlds[world_name].objects;
     Simulation &simulation = worlds[world_name].simulations[simulation_name];
 
     for (const std::string &object_name : send_objects_json.getMemberNames())
     {
-        response_meta_data_json["send"][object_name] = Json::objectValue;
+        response_meta_data_json[send_str][object_name] = Json::objectValue;
         Object &object = objects[object_name];
         simulation.objects[object_name] = &object;
         for (const Json::Value &attribute_json : send_objects_json[object_name])
@@ -729,7 +789,7 @@ void MultiverseServer::bind_send_objects()
                         double *data = &attribute.attribute_double.data[i];
                         const double conversion = conversion_map.conversion_map_double[attribute_map_double[attribute_name].first][i];
                         send_buffer.buffer_double.data_vec.emplace_back(data, conversion);
-                        response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                        response_meta_data_json[send_str][object_name][attribute_name].append(*data * conversion);
                     }
                 }
                 else
@@ -743,7 +803,7 @@ void MultiverseServer::bind_send_objects()
                         double *data = &attribute.attribute_double.data[i];
                         const double conversion = conversion_map.conversion_map_double[attribute_map_double[attribute_name].first][i];
                         send_buffer.buffer_double.data_vec.emplace_back(data, conversion);
-                        response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                        response_meta_data_json[send_str][object_name][attribute_name].append(*data * conversion);
                     }
                 }
                 if (attribute.attribute_uint8_t.data.size() == 0)
@@ -754,7 +814,7 @@ void MultiverseServer::bind_send_objects()
                         uint8_t *data = &attribute.attribute_uint8_t.data[i];
                         const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                         send_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
-                        response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
+                        response_meta_data_json[send_str][object_name][attribute_name].append(*data >> conversion);
                     }
                 }
                 else
@@ -768,7 +828,7 @@ void MultiverseServer::bind_send_objects()
                         uint8_t *data = &attribute.attribute_uint8_t.data[i];
                         const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                         send_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
-                        response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
+                        response_meta_data_json[send_str][object_name][attribute_name].append(*data >> conversion);
                     }
                 }
             }
@@ -785,7 +845,7 @@ void MultiverseServer::bind_send_objects()
                     double *data = &simulation_data_double[i];
                     const double conversion = conversion_map.conversion_map_double[attribute_map_double[attribute_name].first][i];
                     send_buffer.buffer_double.data_vec.emplace_back(data, conversion);
-                    response_meta_data_json["send"][object_name][attribute_name].append(*data * conversion);
+                    response_meta_data_json[send_str][object_name][attribute_name].append(*data * conversion);
                 }
 
                 std::vector<uint8_t> &simulation_data_uint8_t = attribute.attribute_uint8_t.simulation_data[simulation_name];
@@ -799,7 +859,7 @@ void MultiverseServer::bind_send_objects()
                     uint8_t *data = &simulation_data_uint8_t[i];
                     const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                     send_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
-                    response_meta_data_json["send"][object_name][attribute_name].append(*data >> conversion);
+                    response_meta_data_json[send_str][object_name][attribute_name].append(*data >> conversion);
                 }
             }
         }
@@ -808,7 +868,9 @@ void MultiverseServer::bind_send_objects()
 
 void MultiverseServer::validate_meta_data()
 {
-    receive_objects_json = request_meta_data_json["receive"];
+    const std::string receive_str = server_type == EMultiverseServerType::ReceiveAndSend ? "receive" : "subscribe";
+
+    receive_objects_json = request_meta_data_json[receive_str];
 
     if (receive_objects_json.isMember("") &&
         std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
@@ -824,11 +886,11 @@ void MultiverseServer::validate_meta_data()
         return;
     }
 
-    for (const std::string &object_name : request_meta_data_json["receive"].getMemberNames())
+    for (const std::string &object_name : request_meta_data_json[receive_str].getMemberNames())
     {
         if (!object_name.empty())
         {
-            for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
+            for (const Json::Value &attribute_json : request_meta_data_json[receive_str][object_name])
             {
                 const std::string &attribute_name = attribute_json.asString();
                 if (!attribute_name.empty())
@@ -846,7 +908,7 @@ void MultiverseServer::validate_meta_data()
         }
         else
         {
-            for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
+            for (const Json::Value &attribute_json : request_meta_data_json[receive_str][object_name])
             {
                 const std::string &attribute_name = attribute_json.asString();
                 for (const std::pair<std::string, Object> &object_pair : worlds[world_name].objects)
@@ -899,11 +961,12 @@ void MultiverseServer::bind_receive_objects()
     std::map<std::string, Object> &objects = worlds[world_name].objects;
     Simulation &simulation = worlds[world_name].simulations[simulation_name];
 
+    const std::string receive_str = server_type == EMultiverseServerType::ReceiveAndSend ? "receive" : "subscribe";
     for (const std::string &object_name : receive_objects_json.getMemberNames())
     {
         Object &object = objects[object_name];
         simulation.objects[object_name] = &object;
-        response_meta_data_json["receive"][object_name] = Json::objectValue;
+        response_meta_data_json[receive_str][object_name] = Json::objectValue;
         for (const Json::Value &attribute_json : receive_objects_json[object_name])
         {
             const std::string attribute_name = attribute_json.asString();
@@ -927,7 +990,7 @@ void MultiverseServer::bind_receive_objects()
                 double *data = &attribute.attribute_double.data[i];
                 const double conversion = 1.0 / conversion_map.conversion_map_double[attribute_map_double[attribute_name].first][i];
                 receive_buffer.buffer_double.data_vec.emplace_back(data, conversion);
-                response_meta_data_json["receive"][object_name][attribute_name].append(*data * conversion);
+                response_meta_data_json[receive_str][object_name][attribute_name].append(*data * conversion);
             }
 
             for (size_t i = 0; i < attribute.attribute_uint8_t.data.size(); i++)
@@ -935,7 +998,7 @@ void MultiverseServer::bind_receive_objects()
                 uint8_t *data = &attribute.attribute_uint8_t.data[i];
                 const uint8_t conversion = conversion_map.conversion_map_uint8_t[attribute_map_uint8_t[attribute_name].first][i];
                 receive_buffer.buffer_uint8_t.data_vec.emplace_back(data, conversion);
-                response_meta_data_json["receive"][object_name][attribute_name].append(*data >> conversion);
+                response_meta_data_json[receive_str][object_name][attribute_name].append(*data >> conversion);
             }
         }
     }

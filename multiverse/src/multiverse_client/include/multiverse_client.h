@@ -37,6 +37,13 @@ struct Buffer
     TypedBuffer<uint8_t> buffer_uint8_t;
 };
 
+enum class EMultiverseClientType : unsigned char
+{
+    SendAndReceive,
+    Publish,
+    Subscribe
+};
+
 enum class EMultiverseClientState : unsigned char;
 class MultiverseClient
 {
@@ -76,6 +83,20 @@ public:
      *
      */
     void disconnect();
+
+    /**
+     * @brief Set the client type
+     * 
+     * @param client_type The client type as a string
+     */
+    void set_client_type(const std::string &client_type_str);
+
+    /**
+     * @brief Get the client type
+     * 
+     * @return EMultiverseClientType 
+     */
+    EMultiverseClientType get_client_type() const;
 
 public:
     /**
@@ -252,4 +273,6 @@ private:
     void *client_socket;
 
     bool should_shut_down = false;
+
+    EMultiverseClientType client_type = EMultiverseClientType::SendAndReceive;
 };

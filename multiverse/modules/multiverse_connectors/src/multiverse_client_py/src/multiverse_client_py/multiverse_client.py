@@ -39,6 +39,7 @@ class MultiverseClient:
             self,
             client_addr: SocketAddress,
             multiverse_meta_data: MultiverseMetaData,
+            client_type: str = "send_and_receive",
     ) -> None:
         if not isinstance(client_addr.port, str) or client_addr.port == "":
             raise ValueError(f"Must specify client port for {self.__class__.__name__}.")
@@ -50,6 +51,7 @@ class MultiverseClient:
         self._multiverse_socket = MultiverseClientPybind(
             f"{self._server_addr.host}:{self._server_addr.port}"
         )
+        self._multiverse_socket.set_client_type(client_type)
         self.request_meta_data = {
             "meta_data": self._meta_data.__dict__,
             "send": {},

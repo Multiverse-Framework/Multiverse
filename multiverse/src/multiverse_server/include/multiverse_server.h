@@ -84,6 +84,17 @@ enum class EMultiverseServerState : unsigned char
 };
 
 /**
+ * @brief The type of the server.
+ * 
+ */
+enum class EMultiverseServerType : unsigned char
+{
+    ReceiveAndSend,
+    Subscribe,
+    Publish
+};
+
+/**
  * @brief TypedBuffer is a buffer that contains data of a specific type.
  *
  * @tparam T The type of the data.
@@ -352,6 +363,12 @@ private:
      *
      */
     bool continue_state = false;
+
+    /**
+     * @brief The type of the server.
+     * 
+     */
+    EMultiverseServerType server_type = EMultiverseServerType::ReceiveAndSend;
 };
 
 /**

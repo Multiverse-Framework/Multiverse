@@ -74,15 +74,18 @@ public:
 
     inline void set_request_meta_data(const pybind11::dict &in_request_meta_data_dict)
     {
+        const std::string send_str = get_client_type() == EMultiverseClientType::SendAndReceive ? "send" : "publish";
+        const std::string receive_str = get_client_type() == EMultiverseClientType::SendAndReceive ? "receive" : "subscribe";
+
         request_meta_data_dict = in_request_meta_data_dict;
         std::map<std::string, std::map<std::string, size_t>> request_buffer_sizes =
-            {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
-        compute_request_buffer_sizes(request_buffer_sizes["send"], request_buffer_sizes["receive"]);
+            {{send_str, {{"double", 0}, {"uint8", 0}}}, {receive_str, {{"double", 0}, {"uint8", 0}}}};
+        compute_request_buffer_sizes(request_buffer_sizes[send_str], request_buffer_sizes[receive_str]);
 
-        send_buffer.buffer_double.size = request_buffer_sizes["send"]["double"];
-        send_buffer.buffer_uint8_t.size = request_buffer_sizes["send"]["uint8"];
-        receive_buffer.buffer_double.size = request_buffer_sizes["receive"]["double"];
-        receive_buffer.buffer_uint8_t.size = request_buffer_sizes["receive"]["uint8"];
+        send_buffer.buffer_double.size = request_buffer_sizes[send_str]["double"];
+        send_buffer.buffer_uint8_t.size = request_buffer_sizes[send_str]["uint8"];
+        receive_buffer.buffer_double.size = request_buffer_sizes[receive_str]["double"];
+        receive_buffer.buffer_uint8_t.size = request_buffer_sizes[receive_str]["uint8"];
     }
 
     inline pybind11::dict get_response_meta_data()
@@ -163,34 +166,37 @@ private:
 
         response_meta_data_dict = parsed_dict.cast<pybind11::dict>();
 
+        const std::string send_str = get_client_type() == EMultiverseClientType::SendAndReceive ? "send" : "publish";
+        const std::string receive_str = get_client_type() == EMultiverseClientType::SendAndReceive ? "receive" : "subscribe";
+
         if (response_meta_data_dict.contains("time"))
         {
             request_meta_data_dict["meta_data"] = response_meta_data_dict["meta_data"];
-            request_meta_data_dict["send"] = pybind11::dict();
-            request_meta_data_dict["receive"] = pybind11::dict();
+            request_meta_data_dict[send_str.c_str()] = pybind11::dict();
+            request_meta_data_dict[receive_str.c_str()] = pybind11::dict();
 
-            if (response_meta_data_dict.contains("send"))
+            if (response_meta_data_dict.contains(send_str))
             {
-                for (const auto &send_objects : response_meta_data_dict["send"].cast<pybind11::dict>())
+                for (const auto &send_objects : response_meta_data_dict[send_str.c_str()].cast<pybind11::dict>())
                 {
-                    request_meta_data_dict["send"][send_objects.first] = pybind11::list();
+                    request_meta_data_dict[send_str.c_str()][send_objects.first] = pybind11::list();
                     const pybind11::dict attributes = send_objects.second.cast<pybind11::dict>();
                     for (const auto &attribute : attributes)
                     {
-                        request_meta_data_dict["send"][send_objects.first].cast<pybind11::list>().append(attribute.first.cast<std::string>());
+                        request_meta_data_dict[send_str.c_str()][send_objects.first].cast<pybind11::list>().append(attribute.first.cast<std::string>());
                     }
                 }
             }
 
-            if (response_meta_data_dict.contains("receive"))
+            if (response_meta_data_dict.contains(receive_str.c_str()))
             {
-                for (const auto &receive_objects : response_meta_data_dict["receive"].cast<pybind11::dict>())
+                for (const auto &receive_objects : response_meta_data_dict[receive_str.c_str()].cast<pybind11::dict>())
                 {
-                    request_meta_data_dict["receive"][receive_objects.first] = pybind11::list();
+                    request_meta_data_dict[receive_str.c_str()][receive_objects.first] = pybind11::list();
                     const pybind11::dict attributes = receive_objects.second.cast<pybind11::dict>();
                     for (const auto &attribute : attributes)
                     {
-                        request_meta_data_dict["receive"][receive_objects.first].cast<pybind11::list>().append(attribute.first.cast<std::string>());
+                        request_meta_data_dict[receive_str.c_str()][receive_objects.first].cast<pybind11::list>().append(attribute.first.cast<std::string>());
                     }
                 }
             }
@@ -203,8 +209,11 @@ private:
 
     void compute_request_buffer_sizes(std::map<std::string, size_t> &req_send_buffer_size, std::map<std::string, size_t> &req_receive_buffer_size) const override
     {
+        const std::string send_str = get_client_type() == EMultiverseClientType::SendAndReceive ? "send" : "publish";
+        const std::string receive_str = get_client_type() == EMultiverseClientType::SendAndReceive ? "receive" : "subscribe";
+
         std::map<std::string, std::map<std::string, size_t>> request_buffer_sizes =
-            {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+            {{send_str, {{"double", 0}, {"uint8", 0}}}, {receive_str, {{"double", 0}, {"uint8", 0}}}};
 
         for (std::pair<const std::string, std::map<std::string, size_t>> &request_buffer_size : request_buffer_sizes)
         {
@@ -244,14 +253,17 @@ private:
             }
         }
 
-        req_send_buffer_size = request_buffer_sizes["send"];
-        req_receive_buffer_size = request_buffer_sizes["receive"];
+        req_send_buffer_size = request_buffer_sizes[send_str];
+        req_receive_buffer_size = request_buffer_sizes[receive_str];
     }
 
     void compute_response_buffer_sizes(std::map<std::string, size_t> &res_send_buffer_size, std::map<std::string, size_t> &res_receive_buffer_size) const override
     {
+        const std::string send_str = get_client_type() == EMultiverseClientType::SendAndReceive ? "send" : "publish";
+        const std::string receive_str = get_client_type() == EMultiverseClientType::SendAndReceive ? "receive" : "subscribe";
+
         std::map<std::string, std::map<std::string, size_t>> response_buffer_sizes =
-            {{"send", {{"double", 0}, {"uint8", 0}}}, {"receive", {{"double", 0}, {"uint8", 0}}}};
+            {{send_str, {{"double", 0}, {"uint8", 0}}}, {receive_str, {{"double", 0}, {"uint8", 0}}}};
 
         for (std::pair<const std::string, std::map<std::string, size_t>> &response_buffer_size : response_buffer_sizes)
         {
@@ -277,8 +289,8 @@ private:
             }
         }
 
-        res_send_buffer_size = response_buffer_sizes["send"];
-        res_receive_buffer_size = response_buffer_sizes["receive"];
+        res_send_buffer_size = response_buffer_sizes[send_str];
+        res_receive_buffer_size = response_buffer_sizes[receive_str];
     }
 
     void start_connect_to_server_thread() override
@@ -311,6 +323,7 @@ private:
     void bind_request_meta_data() override
     {
         request_meta_data_str = pybind11::str(request_meta_data_dict).cast<std::string>();
+        printf("[Client %s] Request meta data: %s\n", port.c_str(), request_meta_data_str.c_str());
         std::replace(request_meta_data_str.begin(), request_meta_data_str.end(), '\'', '"');
     }
 
@@ -437,6 +450,7 @@ PYBIND11_MODULE(multiverse_client_pybind, handle)
     handle.doc() = "";
 
     pybind11::class_<MultiverseClient>(handle, "MultiverseClient")
+        .def("set_client_type", static_cast<void (MultiverseClient::*)(const std::string &)>(&MultiverseClient::set_client_type))
         .def("connect", static_cast<void (MultiverseClient::*)(const std::string &, const std::string &)>(&MultiverseClient::connect))
         .def("start", &MultiverseClient::start)
         .def("communicate", &MultiverseClient::communicate)
