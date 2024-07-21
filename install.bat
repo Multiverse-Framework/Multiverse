@@ -133,7 +133,7 @@ if not exist "%ROS_DIR%" (
 %PYTHON_EXECUTABLE% -m pip install urdf_parser_py
 
 @REM Install ros_dep_tools
-%PYTHON_EXECUTABLE% -m pip install rosdep
+%PYTHON_EXECUTABLE% -m pip install rosdep colcon-core
 
 @REM Install msys2
 set "MSYS2_DIR=%MULTIVERSE_DIR%\external\msys2"
