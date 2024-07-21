@@ -23,9 +23,13 @@ https://multiverseframework.readthedocs.io/en/latest
 
 ### Windows 11
 
+Run Windows Powershell as Administrator and execute these scripts, restart the Powershell before running each script to refresh the environment paths
+
 ```bash
-install.bat                     # Install all prerequisites
+install.bat                     # Install all prerequisites (as Administrator)
+build_third_parties.bat         # Build the dependencies
 build_multiverse.bat            # Build the software
+build_multiverse_ws2.bat        # Build the ROS2 workspace
 ```
 
 ## Test
