@@ -29,11 +29,11 @@ class CmdVelSubscriber(MultiverseSubscriber):
         self.request_meta_data["send"][self._body_name] = ["odometric_velocity"]
 
     def _init_send_data(self) -> None:
-        self.send_data = [0.0] * 7
-        self.send_data[0] = self.world_time + self.sim_time
+        self.send_data = [self.world_time + self.sim_time] + [0.0] * 6
 
     def _bind_send_data(self, twist_msg: Twist) -> Twist:
-        self.send_data[1:] = [
+        self.send_data = [
+            self.world_time + self.sim_time,
             twist_msg.linear.x,
             twist_msg.linear.y,
             twist_msg.linear.z,
