@@ -1,7 +1,7 @@
 .. _tutorial_1:
 
-Tutorial 1: Getting Started with Multiverse
-===========================================
+Tutorial 1: Getting Started with Multiverse - Create a MUV file
+===============================================================
 
 Introduction
 ------------
@@ -13,62 +13,67 @@ Getting Started
 
 1. Create a new MUV file `my_project.muv` in `<path/to/Multiverse>/multiverse/resources/muv` and open it in your favorite text editor. This file will contain the configuration for your Multiverse project.
 
+Define Resources, Worlds, and Simulations
+-----------------------------------------
+
 2. Add the following lines to the MUV file to specify the resources for your project:
 
-    ```yaml
+.. code-block:: yaml
+
     resources: 
-    - ../robots # Path to the robots directory, containing robot models in any formats
-    - ../worlds # Path to the worlds directory, containing world models in any formats
-    - ../objects # Path to the objects directory, containing object models in any formats
-    ```
+    - ../robots                     # Path to the robots directory, containing robot models in any formats
+    - ../worlds                     # Path to the worlds directory, containing world models in any formats
+    - ../objects                    # Path to the objects directory, containing object models in any formats
+    
+1. Add the following lines to the MUV file to define the worlds for your project:
 
-3. Add the following lines to the MUV file to define the worlds for your project:
+.. code-block:: yaml
 
-    ```yaml
     worlds:
-        my_world: # Name of the world
-            rtf_desired: 1 # Real-time factor desired for the simulation
-    ```
+        my_world:                   # Name of the world
+            rtf_desired: 1          # Real-time factor desired for the simulation
 
 4. Add the following lines to the MUV file to define the simulation for your project:
 
-    ```yaml
+.. code-block:: yaml
+
     simulations:
-        my_simulation: # Name of the simulation
-            simulator: mujoco # Simulator to use for the simulation
+        my_simulation:              # Name of the simulation
+            simulator: mujoco       # Simulator to use for the simulation
             world:
-                name: my_world # Name of the world to use for the simulation defined in step 3
-                path: floor.xml # Path to the world model file in the worlds directory defined in step 2
-    ```
+                name: my_world      # Name of the world to use for the simulation defined in step 3
+                path: floor.xml     # Path to the world model file in the worlds directory defined in step 2
 
 5. Save the MUV file, and you are ready to launch your first simulation using Multiverse.
 
-    ```yaml
-    resources:
-    - ../robots
-    - ../worlds
-    - ../objects
+.. code-block:: yaml
+
+    resources: 
+    - ../robots                     # Path to the robots directory, containing robot models in any formats
+    - ../worlds                     # Path to the worlds directory, containing world models in any formats
+    - ../objects                    # Path to the objects directory, containing object models in any formats
 
     worlds:
-        my_world:
-            rtf_desired: 1
+        my_world:                   # Name of the world
+            rtf_desired: 1          # Real-time factor desired for the simulation
 
     simulations:
-        my_simulation:
-            simulator: mujoco
+        my_simulation:              # Name of the simulation
+            simulator: mujoco       # Simulator to use for the simulation
             world:
-            name: my_world
-    ```
-    
-    Run the Simulation
+                name: my_world      # Name of the world to use for the simulation defined in step 3
+                path: floor.xml     # Path to the world model file in the worlds directory defined in step 2
 
-    ```bash
-    multiverse_launch  `<path/to/Multiverse>/multiverse/resources/muv/my_project.muv`
-    ```
+Running the Simulation
+----------------------
 
-The result should be a running simulation with the specified world and simulation parameters.
+.. code-block:: bash
 
-.. image:: _static/images/tutorials/tutorial_1_1.png
+    multiverse_launch  <path/to/Multiverse>/multiverse/resources/muv/my_project.muv
+
+The result should be a running simulation with the specified world.
+
+.. image:: ../_static/images/tutorials/tutorial_1_1.png
    :width: 1200
 
 Conclusion

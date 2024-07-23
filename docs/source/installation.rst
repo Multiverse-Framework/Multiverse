@@ -1,13 +1,14 @@
+.. _installation:
+
 Installation
 ============
 
-.. _installation:
-
-Prerequisite:
+Prerequisite
+------------
 To install Multiverse with all connectors, ensure you have at least 50 GB of free space and Git installed.
 
 Linux (Ubuntu >= 20.04)
------
+-----------------------
 
 Open a terminal and run the following commands:
 
