@@ -1,12 +1,12 @@
 .. _tutorial_5:
 
-Write your own connector
-========================
+Tutorial 5: Write your own connector
+====================================
 
 Introduction
 ------------
 
-Welcome to the first tutorial on Multiverse! In this tutorial, we will cover the basics of getting started with Multiverse and creating your first project.
+In this tutorial, we will cover how to write your own connector for Multiverse.
 
 Getting Started
 ---------------
