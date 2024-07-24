@@ -9,7 +9,7 @@ Welcome to the Multiverse Tutorials documentation! This guide will walk you thro
 Prerequisites
 -------------
 
-Before you begin, make sure you finished the installation of Multiverse in :ref:`installation`.
+Before you begin, make sure you finished the :ref:`installation` of Multiverse.
 
 Tutorials
 ---------
@@ -22,3 +22,4 @@ Tutorials
     tutorials/tutorial_3
     tutorials/tutorial_4
     tutorials/tutorial_5
+    tutorials/tutorial_6

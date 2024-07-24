@@ -86,4 +86,4 @@ Congratulations! You have successfully added robots and objects to the simulatio
 Next Steps
 ----------
 
-- Deploy ROS as a client to interact with the simulation.
+- Deploy ROS as Multiverse Clients to interact with the simulation.

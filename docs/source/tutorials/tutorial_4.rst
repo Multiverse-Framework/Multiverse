@@ -23,13 +23,13 @@ In this example, we will use only one robot and one object in the simulation.
 .. code-block:: yaml
 
     resources:
-        - ../robots                     # Path to the robots directory, containing robot models in any formats
-        - ../worlds                     # Path to the worlds directory, containing world models in any formats
-        - ../objects                    # Path to the objects directory, containing object models in any formats
+        - ../robots
+        - ../worlds
+        - ../objects
 
     worlds:
-        my_world:                   # Name of the world
-            rtf_desired: 1          # Real-time factor desired for the simulation
+        my_world:
+            rtf_desired: 1
             
     simulations:
         my_simulation:
@@ -102,11 +102,11 @@ Define ROS Configuration in the MUV file
             ros_nodes:
                 services:
                     socket:
-                    - port: 7400
+                      - port: 7400
 
                 publishers:
                     tf:
-                    - meta_data:
+                      - meta_data:
                             world_name: my_world
                             length_unit: m
                             angle_unit: rad
@@ -118,7 +118,7 @@ Define ROS Configuration in the MUV file
                         rate: 60
                         root_frame_id: map
                     odom:
-                    - meta_data:
+                      - meta_data:
                             world_name: my_world
                             length_unit: m
                             angle_unit: rad
@@ -128,12 +128,12 @@ Define ROS Configuration in the MUV file
                         port: 7302
                         topic: /odom
                         rate: 60
-                        body: tiago_dual
+                        body: tiago_dual # The body to attach the odometry to
                         frame_id: map
 
                 subscribers:
                     cmd_vel:
-                    - meta_data:
+                      - meta_data:
                             world_name: my_world
                             length_unit: m
                             angle_unit: rad
@@ -142,7 +142,7 @@ Define ROS Configuration in the MUV file
                             handedness: rhs
                         port: 7203
                         topic: /cmd_vel
-                        body: tiago_dual
+                        body: tiago_dual # The body to attach the velocity command to
 
             ros_control: # Only available for ROS, not yet for ROS2
             - meta_data:
@@ -364,3 +364,14 @@ Here is the list of topics and services that you can see in ROS2:
     /TfPublisher7301/set_parameters
     /TfPublisher7301/set_parameters_atomically
     /multiverse/socket
+
+Conclusion
+----------
+
+Congratulations! You have successfully connected Multiverse with ROS. 
+Until now, you have learned how to define resources, worlds, simulations, and communication between simulators in a MUV file, launch the simulations using the `multiverse_launch` command, and connect Multiverse with ROS to interact with robots and objects in the simulation.
+
+Next Steps
+----------
+
+- Write your own Multiverse Connectors to interact with the Multiverse Server.

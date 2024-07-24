@@ -31,7 +31,7 @@ Define Resources, Worlds, and Simulations
         my_world:           # Name of the world
             rtf_desired: 1  # Real-time factor desired for the simulation
   
-1. Add the following lines to the MUV file to define the simulations for your project:
+3. Add the following lines to the MUV file to define the simulations for your project:
 
 .. code-block:: yaml
 
@@ -129,7 +129,7 @@ The four simulations will be launched and connected to each other. You can now s
 In this configuration, `table_with_bowling_simulation` simulates the contact between the table, the cubes and the bowling ball by taking the poses and relative velocities of the objects from the other simulations as input and sending the forces and torques to the other simulations as output. 
 The `bowling_simulation`, `table_simulation`, and `cube_simulation` simulate the individual behaviors of the bowling ball, the table, and the cubes, respectively. Each simulation sends the poses and relative velocities of the objects to the `table_with_bowling_simulation` and receives the forces and torques from it.
 
-.. image:: ../_static/images/tutorials/tutorial_1_1.png
+.. image:: ../_static/images/tutorials/tutorial_2_1.png
    :width: 1200
 
 Conclusion
