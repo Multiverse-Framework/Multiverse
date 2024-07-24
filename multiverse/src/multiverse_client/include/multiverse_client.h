@@ -87,8 +87,16 @@ public:
     virtual double get_time_now();
 
 public:
+    /**
+     * @brief The host IP address of the client
+     * 
+     */
     std::string host;
 
+    /**
+     * @brief The port number of the client, each client has a unique port number
+     * 
+     */
     std::string port;
 
 protected:
@@ -216,41 +224,115 @@ protected:
     virtual void reset() = 0;
 
 private:
+    /**
+     * @brief Run the Multiverse Client
+     *
+     */
     void run();
 
+    /**
+     * @brief Send the request meta data to the server
+     *
+     */
     void send_request_meta_data();
 
+    /**
+     * @brief Send the data to the server
+     *
+     */
     void send_send_data();
 
+    /**
+     * @brief Receive the data from the server
+     *
+     */
     void receive_data();
 
+    /**
+     * @brief Check the response meta data, decide whether the request is successful or not
+     *
+     */
     void check_response_meta_data();
 
+    /**
+     * @brief Check the buffer size
+     *
+     * @return true if the buffer size is correct
+     * @return false if the buffer size is not correct
+     */
     bool check_buffer_size();
 
+    /**
+     * @brief Initialize the buffer
+     * 
+     */
     void init_buffer();
 
 protected:
+    /**
+     * @brief The socket address of the server
+     * 
+     */
     std::string server_socket_addr = "tcp://127.0.0.1:7000";
 
+    /**
+     * @brief The buffer for the send data
+     * 
+     */
     Buffer send_buffer;
 
+    /**
+     * @brief The buffer for the receive data
+     * 
+     */
     Buffer receive_buffer;
 
+    /**
+     * @brief The request_meta_data to send to the server as a string
+     * 
+     */
     std::string request_meta_data_str;
 
+    /**
+     * @brief The response_meta_data received from the server as a string
+     * 
+     */
     std::string response_meta_data_str;
 
+    /**
+     * @brief The current state of the client
+     * 
+     */
     std::atomic<EMultiverseClientState> flag;
 
+    /**
+     * @brief The time of the world
+     * 
+     */
     double *world_time = (double *)calloc(1, sizeof(double));
 
 private:
+    /**
+     * @brief The socket address of the client
+     * 
+     */
     std::string socket_addr;
 
+    /**
+     * @brief The context of the client, used for the client socket
+     * 
+     */
     void *context;
 
+    /**
+     * @brief The client socket
+     * 
+     */
     void *client_socket;
 
+    /**
+     * @brief True if the client should be shut down
+     * 
+     */
     bool should_shut_down = false;
 };

@@ -15,8 +15,8 @@ release = '0.1'
 version = '0.0.1'
 
 # -- Doxygen and breath
-subprocess.call('mkdir -p _build/html/; cd ..; doxygen', shell=True)
-breathe_projects = { "MultiverseFramework": "_build/html/doxygen_generated/xml" }
+subprocess.call('mkdir -p build/html/; cd ..; doxygen', shell=True)
+breathe_projects = { "MultiverseFramework": "build/html/doxygen_generated/xml" }
 breathe_default_project = "MultiverseFramework"
 
 # -- General configuration
@@ -45,7 +45,7 @@ templates_path = ['_templates']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build']
+exclude_patterns = ['build']
 
 #highlight_language = 'c++' # default: 'python3'
 
@@ -53,7 +53,7 @@ exclude_patterns = ['_build']
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-html_extra_path = ['_build/html', '../html']
+# html_extra_path = ['build/html', '../html']
 
 source_suffix = {
     '.rst': 'restructuredtext',

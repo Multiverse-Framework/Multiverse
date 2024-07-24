@@ -9,4 +9,8 @@ C++
 
 Python
 ------
-todo
+
+.. toctree::
+   :maxdepth: 1
+
+   multiverse_client_py
