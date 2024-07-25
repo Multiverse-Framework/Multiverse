@@ -3,7 +3,9 @@ if(WIN32)
     find_package(jsoncpp REQUIRED)
 endif()
 
-set(pybind11_DIR ${BUILD_DIR}/pybind11/share/cmake/pybind11)
+if (EXISTS ${BUILD_DIR}/pybind11/share/cmake/pybind11)
+    set(pybind11_DIR ${BUILD_DIR}/pybind11/share/cmake/pybind11)
+endif()
 find_package(pybind11 REQUIRED)
 
 set(MULTIVERSE_CLIENT multiverse_client)

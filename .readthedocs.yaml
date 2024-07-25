@@ -10,10 +10,17 @@ build:
     - pybind11-dev
     - libzmq3-dev
     - libjsoncpp-dev
+    - clang-11
+    - llvm-11-dev
+    - libc++-11-dev
+    - libc++abi-11-dev
+    - libstdc++-11-dev
     - cmake
   jobs:
     pre_build:
       - python -m pip install virtualenvwrapper --break-system-packages
+      - update-alternatives --remove-all clang++
+      - update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
       - ./build_multiverse.sh --only-src
 
 python:

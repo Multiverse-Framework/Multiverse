@@ -150,7 +150,7 @@ cmake --install $BUILD_DIR
 
 cd $CURRENT_DIR
 
-if ! command -v rosdep &> /dev/null && [ "$RELOAD" = true ]; then
+if [ "$RELOAD" = true ]; then
     rosdep update
     exec bash # Reload ~/.bashrc
 fi
