@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<mujoco model="tiago_dual">
+<mujoco model="tiago_dual_no_controller">
 	<compiler meshdir="../assets/meshes" texturedir="../assets/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
 		<default class="visual">

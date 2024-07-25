@@ -434,6 +434,19 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 		{
 			continue;
 		}
+		bool stop = true;
+		for (const Json::Value &attribute_json : send_objects_json[object_name])
+		{
+			const std::string attribute_name = attribute_json.asString();
+			if (strcmp(attribute_name.c_str(), "position") == 0 || strcmp(attribute_name.c_str(), "quaternion") == 0)
+			{
+				stop = false;
+			}
+		}
+		if (stop)
+		{
+			continue;
+		}
 
 		if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
 			mj_name2id(m, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
@@ -452,6 +465,19 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 	for (const std::string &object_name : receive_objects_json.getMemberNames())
 	{
 		if (strcmp(object_name.c_str(), "body") == 0 || strcmp(object_name.c_str(), "joint") == 0)
+		{
+			continue;
+		}
+		bool stop = true;
+		for (const Json::Value &attribute_json : receive_objects_json[object_name])
+		{
+			const std::string attribute_name = attribute_json.asString();
+			if (strcmp(attribute_name.c_str(), "position") == 0 || strcmp(attribute_name.c_str(), "quaternion") == 0)
+			{
+				stop = false;
+			}
+		}
+		if (stop)
 		{
 			continue;
 		}
