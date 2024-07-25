@@ -8,6 +8,7 @@ build:
     - graphviz
     - libboost-dev
     - pybind11-dev
+    - libzmq3-dev
     - cmake
   jobs:
     pre_build:
