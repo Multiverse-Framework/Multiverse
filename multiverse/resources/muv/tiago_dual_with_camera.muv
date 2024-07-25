@@ -43,7 +43,7 @@ simulations:
       min_time_step: 0.001
 
 multiverse_server:
-  host: "tcp://192.168.178.171"
+  host: "tcp://127.0.0.1"
   port: 7000
 
 multiverse_clients:

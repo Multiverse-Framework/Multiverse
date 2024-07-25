@@ -1,8 +1,7 @@
 <mujoco model="cup">
-    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
-        autolimits="true" />
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="true"/>
     <asset>
-        <mesh name="cup_visual" file="obj/Cup.obj" />
+        <mesh name="Cup" file="obj/Cup.obj" />
         <mesh name="UCX_Cup_001" file="stl/UCX_Cup_001.stl" />
 		<mesh name="UCX_Cup_002" file="stl/UCX_Cup_002.stl" />
 		<mesh name="UCX_Cup_003" file="stl/UCX_Cup_003.stl" />
@@ -280,8 +279,7 @@
     <worldbody>
         <body name="cup">
             <freejoint />
-            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
-            <geom name="cup_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="cup_visual" class="cup_visual" />
+            <geom name="Cup" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="Cup" class="cup_visual" />
             <geom name="UCX_Cup_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_001" class="cup_collision"/>
             <geom name="UCX_Cup_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_002" class="cup_collision"/>
             <geom name="UCX_Cup_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_003" class="cup_collision"/>

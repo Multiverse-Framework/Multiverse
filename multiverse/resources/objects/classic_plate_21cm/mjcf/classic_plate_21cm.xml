@@ -1,8 +1,7 @@
 <mujoco model="classic_plate_21cm">
-    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
-        autolimits="true" />
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="false"/>
     <asset>
-        <mesh name="classic_plate_21cm_visual" file="obj/ClassicPlate21cm.obj" />
+        <mesh name="ClassicPlate21cm" file="obj/ClassicPlate21cm.obj" />
         <mesh name="UCX_ClassicPlate21cm_001" file="stl/UCX_ClassicPlate21cm_001.stl" />
 		<mesh name="UCX_ClassicPlate21cm_002" file="stl/UCX_ClassicPlate21cm_002.stl" />
 		<mesh name="UCX_ClassicPlate21cm_003" file="stl/UCX_ClassicPlate21cm_003.stl" />
@@ -145,7 +144,7 @@
         <body name="classic_plate_21cm">
             <freejoint />
             <inertial pos="0.0 0.0 0.0" mass="0.2" diaginertia="0.00128256 0.00128256 0.00256" />
-            <geom name="classic_plate_21cm_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="classic_plate_21cm_visual" class="classic_plate_21cm_visual" />
+            <geom name="ClassicPlate21cm" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="ClassicPlate21cm" class="classic_plate_21cm_visual" />
             <geom name="UCX_ClassicPlate21cm_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate21cm_001" class="classic_plate_21cm_collision"/>
             <geom name="UCX_ClassicPlate21cm_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate21cm_002" class="classic_plate_21cm_collision"/>
             <geom name="UCX_ClassicPlate21cm_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate21cm_003" class="classic_plate_21cm_collision"/>

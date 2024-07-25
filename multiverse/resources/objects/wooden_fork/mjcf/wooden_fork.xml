@@ -1,6 +1,5 @@
 <mujoco model="wooden_fork">
-    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
-        autolimits="true" />
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="false"/>
     <asset>
         <mesh name="wooden_fork_visual" file="obj/WoodenFork.obj" />
         <mesh name="UCX_WoodenFork_001" file="stl/UCX_WoodenFork_001.stl" />

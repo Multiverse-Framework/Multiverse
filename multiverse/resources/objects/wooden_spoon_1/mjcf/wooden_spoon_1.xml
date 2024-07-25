@@ -1,8 +1,7 @@
 <mujoco model="wooden_spoon_1">
-    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
-        autolimits="true" />
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="false"/>
     <asset>
-        <mesh name="wooden_spoon_1_visual" file="obj/WoodenSpoon1.obj" />
+        <mesh name="WoodenSpoon1" file="obj/WoodenSpoon1.obj" />
         <mesh name="UCX_WoodenSpoon1_001" file="stl/UCX_WoodenSpoon1_001.stl" />
 		<mesh name="UCX_WoodenSpoon1_002" file="stl/UCX_WoodenSpoon1_002.stl" />
 		<mesh name="UCX_WoodenSpoon1_003" file="stl/UCX_WoodenSpoon1_003.stl" />
@@ -43,7 +42,7 @@
         <body name="wooden_spoon_1">
             <freejoint />
             <inertial pos="0.0 0.0 0.0" mass="1" diaginertia="0.00056 0.00757 0.00788" />
-            <geom name="wooden_spoon_1_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="wooden_spoon_1_visual" class="wooden_spoon_1_visual" />
+            <geom name="WoodenSpoon1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="WoodenSpoon1" class="wooden_spoon_1_visual" />
             <geom name="UCX_WoodenSpoon1_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon1_001" class="wooden_spoon_1_collision"/>
             <geom name="UCX_WoodenSpoon1_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon1_002" class="wooden_spoon_1_collision"/>
             <geom name="UCX_WoodenSpoon1_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenSpoon1_003" class="wooden_spoon_1_collision"/>

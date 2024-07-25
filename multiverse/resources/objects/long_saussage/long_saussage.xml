@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="long_saussage">
-	<compiler meshdir="long_saussage/meshes" texturedir="long_saussage/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<compiler meshdir="long_saussage/meshes" texturedir="long_saussage/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="false"/>
 	<default>
 		<default class="visual">
 			<geom contype="0" conaffinity="0"/>

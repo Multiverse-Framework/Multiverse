@@ -1,5 +1,5 @@
 <mujoco model="task_board">
-    <compiler angle="radian" meshdir="../meshes/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="false" boundmass="0.000001" boundinertia="0.000001"/>
+    <compiler angle="radian" meshdir="../meshes/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="false" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="true"/>
     <asset>
         <mesh name="task_board_part_1" file="task_board_part_1.stl"/>
         <mesh name="task_board_part_2" file="task_board_part_2.stl"/>

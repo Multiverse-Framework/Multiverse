@@ -1,7 +1,7 @@
 # Blender 3.6.1 MTL File: 'None'
 # www.blender.org
 
-newmtl M_Bread1
+newmtl M_Bread_1
 Ns 462.699982
 Ka 1.000000 1.000000 1.000000
 Ks 0.000000 0.000000 0.000000
@@ -9,4 +9,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd ../../textures/T_Bread1.png
+map_Kd ../../textures/T_Bread_1.png

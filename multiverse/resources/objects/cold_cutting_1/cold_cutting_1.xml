@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="cold_cutting_1">
-	<compiler meshdir="cold_cutting_1/meshes" texturedir="cold_cutting_1/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<compiler meshdir="cold_cutting_1/meshes" texturedir="cold_cutting_1/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="false"/>
 	<default>
 		<default class="cold_cutting_1_visual">
 			<geom contype="0" conaffinity="0"/>

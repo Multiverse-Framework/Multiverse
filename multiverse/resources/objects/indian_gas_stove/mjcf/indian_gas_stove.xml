@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <mujoco model="indian_gas_stove">
-    <compiler meshdir="../indian_gas_stove/meshes" texturedir="indian_gas_stove/textures" angle="radian"
-        autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" />
+    <compiler meshdir="../indian_gas_stove/meshes" texturedir="indian_gas_stove/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="true"/>
     <default>
         <default class="indian_gas_stove_visual">
             <geom contype="0" conaffinity="0" />

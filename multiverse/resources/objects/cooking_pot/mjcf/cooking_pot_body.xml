@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <mujoco model="cooking_pot_body">
-    <compiler meshdir="../cooking_pot/meshes" texturedir="cooking_pot/textures" angle="radian"
-        autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" />
+    <compiler meshdir="../cooking_pot/meshes" texturedir="cooking_pot/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="true"/>
     <default>
         <default class="cooking_body_visual">
             <geom contype="0" conaffinity="0" />

@@ -1,12 +1,12 @@
-<mujoco model="MuJoCo Model">
-  <compiler angle="radian"/>
-  <option timestep="0.001"/>
-  <asset>
-    <texture type="2d" name="texplane" builtin="checker" mark="cross" rgb1="0.2 0.3 0.4" rgb2="0.1 0.15 0.2" markrgb="0.8 0.8 0.8" width="512" height="512"/>
-    <material name="matplane" texture="texplane" texuniform="true" reflectance="0.3"/>
-  </asset>
-  <worldbody>
-    <geom name="ground" size="0 0 1" type="plane" condim="1" material="matplane"/>
-    <light pos="0 0 4" dir="0 0 -1" directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2"/>
-  </worldbody>
+<mujoco model="floor">
+	<compiler angle="radian" />
+	<option timestep="0.001" />
+	<asset>
+		<texture type="2d" name="texplane" builtin="checker" mark="cross" rgb1="0.2 0.3 0.4" rgb2="0.1 0.15 0.2" markrgb="0.8 0.8 0.8" width="512" height="512" />
+		<material name="matplane" texture="texplane" texuniform="true" reflectance="0.3" />
+	</asset>
+	<worldbody>
+		<geom name="ground" size="0 0 1" type="plane" condim="1" material="matplane" />
+		<light pos="0 0 4" dir="0 0 -1" directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2" />
+	</worldbody>
 </mujoco>

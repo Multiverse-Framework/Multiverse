@@ -1,6 +1,5 @@
 <mujoco model="big_bowl">
-    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/"
-        autolimits="true" />
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="false"/>
     <asset>
         <mesh name="big_bowl_visual" file="obj/BigBowl.obj" />
         <mesh name="UCX_BigBowl_001" file="stl/UCX_BigBowl_001.stl" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="yellow_pineapple">
-	<compiler meshdir="yellow_pineapple/meshes" texturedir="yellow_pineapple/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<compiler meshdir="yellow_pineapple/meshes" texturedir="yellow_pineapple/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="true"/>
 	<default>
 		<default class="visual">
 			<geom contype="0" conaffinity="0"/>
@@ -375,14 +375,11 @@
 	<worldbody>
 		<body name="yellow_pineapple" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 			<freejoint />
-			<inertial mass="1.0977749824523926" pos="0.0009946395875886083 0.008379538543522358 -0.05779716745018959" quat="-0.7028354406356812 0.0038453422021120787 0.707362949848175 0.07513457536697388" diaginertia="0.0019680236000567675 0.007302682381123304 0.00732726464048028"/>
 			<body name="pineapple_fruit_peduncle" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-				<inertial mass="0.011526642367243767" pos="0.0007257588440552354 0.00878545269370079 -0.15430569648742676" quat="-0.49253731966018677 0.5050202012062073 0.465048223733902 0.5348754525184631" diaginertia="3.4394149679428665e-06 0.00027718814089894295 0.00027719337958842516"/>
 				<geom name="PineappleFruitPeduncle" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPeduncle" material="M_PineappleFruitPeduncle" class="visual"/>
 				<geom name="PineappleFruitPeduncle_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPeduncle_001" class="collision"/>
 			</body>
 			<body name="pineapple_fruit_leaf" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-				<inertial mass="0.05035542696714401" pos="0.0013215804938226938 0.002843083580955863 0.07261453568935394" quat="0.6123849153518677 -0.31896284222602844 0.6468616724014282 0.3237552046775818" diaginertia="9.483648318564519e-05 0.00035701468004845083 0.0003715577186085284"/>
 				<geom name="PineappleFruitLeaf" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf" material="M_PineappleFruitLeaf" class="visual"/>
 				<geom name="PineappleFruitLeaf_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_001" class="collision"/>
 				<geom name="PineappleFruitLeaf_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_002" class="collision"/>
@@ -580,7 +577,6 @@
 				<geom name="PineappleFruitLeaf_195" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_195" class="collision"/>
 			</body>
 			<body name="pineapple_peel" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-				<inertial mass="0.3418968915939331" pos="0.0009605546947568655 0.008379550650715828 -0.05627276003360748" quat="-0.7018014788627625 -0.014142773114144802 0.7083154320716858 0.07459177076816559" diaginertia="0.001369905541650951 0.0026727456133812666 0.002677279058843851"/>
 				<geom name="PineapplePeel" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel" material="M_PineapplePeel" class="visual"/>
 				<geom name="PineapplePeel_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_001" class="collision"/>
 				<geom name="PineapplePeel_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_002" class="collision"/>
@@ -710,7 +706,6 @@
 				<geom name="PineapplePeel_126" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_126" class="collision"/>
 			</body>
 			<body name="pineapple_fruit_pit_leaf" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
-				<inertial mass="0.0007612069603055716" pos="0.0029757895972579718 0.0060901460237801075 -0.1574786901473999" quat="-0.700156033039093 0.013659593649208546 0.712619960308075 0.04204484447836876" diaginertia="6.620387011935236e-07 1.9203967895009555e-05 1.9286717360955663e-05"/>
 				<geom name="PineappleFruitPitLeaf" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf" material="M_PineappleFruitPitLeaf" class="visual"/>
 				<geom name="PineappleFruitPitLeaf_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_001" class="collision"/>
 				<geom name="PineappleFruitPitLeaf_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_002" class="collision"/>

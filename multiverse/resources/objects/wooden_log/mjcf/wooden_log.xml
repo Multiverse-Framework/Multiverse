@@ -1,10 +1,10 @@
 <mujoco model="wooden_log">
-	<compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" />
+	<compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" inertiafromgeom="true"/>
 	<asset>
-		<!-- <texture name="wooden_log_visual" type="2d" file="WoodenLog_Diffuse_8K.png" />
+		<texture name="wooden_log_visual" type="2d" file="WoodenLog_Diffuse_8K.png" />
 		<material name="wooden_log_visual" texture="wooden_log_visual" />
-		<mesh name="wooden_log_visual" file="obj/WoodenLog.obj" /> -->
-		<mesh name="wooden_log_collision" file="stl/WoodenLog.stl" />
+		<mesh name="WoodenLog" file="obj/WoodenLog.obj" />
+		<mesh name="UCX_WoodenLog_001" file="stl/WoodenLog.stl" />
 	</asset>
 	<default>
 		<default class="visual">
@@ -17,11 +17,8 @@
 	<worldbody>
 		<body name="wooden_log">
 			<freejoint />
-			<geom type="mesh" mesh="wooden_log_collision" mass="1" friction="0.5"
-				solimp="0.95 0.95 0.005" solref="0.03 1" class="collision" condim="6" />
-			<!-- <geom type="mesh" mesh="wooden_log_visual" material="wooden_log_visual"
-				class="visual"/> -->
-			<geom type="mesh" mesh="wooden_log_collision" class="visual"/>
+			<geom type="mesh" mesh="UCX_WoodenLog_001" mass="1" friction="0.5" solimp="0.95 0.95 0.005" solref="0.03 1" class="collision" condim="6" />
+			<geom type="mesh" mesh="WoodenLog" material="wooden_log_visual" class="visual"/>
 		</body>
 	</worldbody>
 </mujoco>

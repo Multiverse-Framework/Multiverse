@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="cutting_board">
-	<compiler meshdir="cutting_board/meshes" texturedir="cutting_board/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<compiler meshdir="cutting_board/meshes" texturedir="cutting_board/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="true"/>
 	<default>
 		<default class="cutting_board_visual">
 			<geom contype="0" conaffinity="0"/>
