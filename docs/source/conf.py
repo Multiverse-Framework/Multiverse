@@ -3,8 +3,8 @@
 import subprocess
 import sys
 
-# sys.path.insert(0, '../../multiverse/modules/multiverse_connectors/src/multiverse_client_py/src')
-subprocess.call('cd ../../; ./install.sh && ./build_multiverse.sh --only-src', shell=True)
+subprocess.call('python3 -m pip install virtualenvwrapper --break-system-packages; source /usr/local/bin/virtualenvwrapper.sh; mkvirtualenv --system-site-packages multiverse', shell=True)
+subprocess.call('cd ../../; ./build_multiverse.sh --only-src', shell=True)
 
 print('****************************************')
 print('conf.py')
