@@ -11,6 +11,7 @@ build:
     - libzmq3-dev
     - libjsoncpp-dev
     - clang-11
+    - libc++abi-11-dev
     - cmake
   jobs:
     pre_build:
