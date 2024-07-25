@@ -10,8 +10,10 @@ build:
     - cmake
   jobs:
     pre_build:
-      - python3 -m pip install virtualenvwrapper --break-system-packages
-      - ./build_third_parties.sh --excludes mujoco usd blender
+      - python -m pip install virtualenvwrapper --break-system-packages
+      - git submodule update --init multiverse/external/pybind11
+      - mkdir -p multiverse/build/pybind11
+      - cd multiverse/build/pybind11 && cmake ../../external/pybind11 -DCMAKE_INSTALL_PREFIX=$pwd -Wno-deprecated -Wno-dev && cmake --build . && cmake --install .
       - ./build_multiverse.sh --only-src
 
 python:
