@@ -4,6 +4,7 @@ import subprocess
 import sys
 
 sys.path.insert(0, '../../multiverse/modules/multiverse_connectors/src/multiverse_client_py/src')
+sys.path.insert(0, '../../multiverse/lib/dist-packages')
 
 print('****************************************')
 print('conf.py')
