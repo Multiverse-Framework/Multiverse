@@ -3,7 +3,8 @@
 import subprocess
 import sys
 
-sys.path.insert(0, '../../multiverse/modules/multiverse_connectors/src/multiverse_client_py/src')
+# sys.path.insert(0, '../../multiverse/modules/multiverse_connectors/src/multiverse_client_py/src')
+subprocess.call('cd ../../; ./build_multiverse.sh --only-src', shell=True)
 
 print('****************************************')
 print('conf.py')
