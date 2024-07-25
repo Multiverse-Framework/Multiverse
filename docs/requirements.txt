@@ -4,3 +4,4 @@ myst-parser
 sphinxcontrib-video
 sphinx_rtd_theme
 cmake
+pybind11
