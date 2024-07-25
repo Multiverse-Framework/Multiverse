@@ -6,7 +6,7 @@ build:
     python: "3.10"
   apt_packages:
     - graphviz
-    - boost
+    - libboost-dev
     - cmake
 
 python:
