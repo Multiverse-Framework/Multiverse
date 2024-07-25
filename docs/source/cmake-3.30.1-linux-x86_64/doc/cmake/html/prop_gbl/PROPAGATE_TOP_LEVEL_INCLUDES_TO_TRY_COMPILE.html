@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>PROPAGATE_TOP_LEVEL_INCLUDES_TO_TRY_COMPILE &mdash; CMake 3.30.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a2c47e09" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=3e562cf9" />
+    
+    <script src="../_static/documentation_options.js?v=79246281"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="REPORT_UNDEFINED_PROPERTIES" href="REPORT_UNDEFINED_PROPERTIES.html" />
+    <link rel="prev" title="PREDEFINED_TARGETS_FOLDER" href="PREDEFINED_TARGETS_FOLDER.html" />
+ 
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="REPORT_UNDEFINED_PROPERTIES.html" title="REPORT_UNDEFINED_PROPERTIES"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="PREDEFINED_TARGETS_FOLDER.html" title="PREDEFINED_TARGETS_FOLDER"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-properties.7.html" accesskey="U">cmake-properties(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PROPAGATE_TOP_LEVEL_INCLUDES_TO_TRY_COMPILE</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="propagate-top-level-includes-to-try-compile">
+<span id="prop_gbl:PROPAGATE_TOP_LEVEL_INCLUDES_TO_TRY_COMPILE"></span><h1>PROPAGATE_TOP_LEVEL_INCLUDES_TO_TRY_COMPILE<a class="headerlink" href="#propagate-top-level-includes-to-try-compile" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.30.</span></p>
+</div>
+<p>When this global property is set to true, the
+<span class="target" id="index-0-variable:CMAKE_PROJECT_TOP_LEVEL_INCLUDES"></span><a class="reference internal" href="../variable/CMAKE_PROJECT_TOP_LEVEL_INCLUDES.html#variable:CMAKE_PROJECT_TOP_LEVEL_INCLUDES" title="CMAKE_PROJECT_TOP_LEVEL_INCLUDES"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_PROJECT_TOP_LEVEL_INCLUDES</span></code></a> variable is propagated into
+<span class="target" id="index-0-command:try_compile"></span><a class="reference internal" href="../command/try_compile.html#command:try_compile" title="try_compile"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">try_compile()</span></code></a> calls that use the
+<a class="reference internal" href="../command/try_compile.html#try-compiling-whole-projects"><span class="std std-ref">whole-project signature</span></a>.
+Calls to the <a class="reference internal" href="../command/try_compile.html#try-compiling-source-files"><span class="std std-ref">source file signature</span></a> are not
+affected by this property.
+<code class="docutils literal notranslate"><span class="pre">PROPAGATE_TOP_LEVEL_INCLUDES_TO_TRY_COMPILE</span></code> is unset by default.</p>
+<p>For <a class="reference internal" href="../guide/using-dependencies/index.html#dependency-providers-overview"><span class="std std-ref">dependency providers</span></a> that want to
+be enabled in whole-project <span class="target" id="index-1-command:try_compile"></span><a class="reference internal" href="../command/try_compile.html#command:try_compile" title="try_compile"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">try_compile()</span></code></a> calls, set this global
+property to true just before or after registering the provider.
+Note that all files listed in <span class="target" id="index-1-variable:CMAKE_PROJECT_TOP_LEVEL_INCLUDES"></span><a class="reference internal" href="../variable/CMAKE_PROJECT_TOP_LEVEL_INCLUDES.html#variable:CMAKE_PROJECT_TOP_LEVEL_INCLUDES" title="CMAKE_PROJECT_TOP_LEVEL_INCLUDES"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_PROJECT_TOP_LEVEL_INCLUDES</span></code></a>
+will need to be able to handle being included in such <span class="target" id="index-2-command:try_compile"></span><a class="reference internal" href="../command/try_compile.html#command:try_compile" title="try_compile"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">try_compile()</span></code></a>
+calls, and it is the user's responsibility to ensure this.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="PREDEFINED_TARGETS_FOLDER.html"
+                          title="previous chapter">PREDEFINED_TARGETS_FOLDER</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="REPORT_UNDEFINED_PROPERTIES.html"
+                          title="next chapter">REPORT_UNDEFINED_PROPERTIES</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/prop_gbl/PROPAGATE_TOP_LEVEL_INCLUDES_TO_TRY_COMPILE.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="REPORT_UNDEFINED_PROPERTIES.html" title="REPORT_UNDEFINED_PROPERTIES"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="PREDEFINED_TARGETS_FOLDER.html" title="PREDEFINED_TARGETS_FOLDER"
+             >previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-properties.7.html" >cmake-properties(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PROPAGATE_TOP_LEVEL_INCLUDES_TO_TRY_COMPILE</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2024 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>VS_USE_DEBUG_LIBRARIES &mdash; CMake 3.30.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a2c47e09" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=3e562cf9" />
+    
+    <script src="../_static/documentation_options.js?v=79246281"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="VS_USER_PROPS" href="VS_USER_PROPS.html" />
+    <link rel="prev" title="VS_SOURCE_SETTINGS_&lt;tool&gt;" href="VS_SOURCE_SETTINGS_tool.html" />
+ 
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="VS_USER_PROPS.html" title="VS_USER_PROPS"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="VS_SOURCE_SETTINGS_tool.html" title="VS_SOURCE_SETTINGS_&lt;tool&gt;"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-properties.7.html" accesskey="U">cmake-properties(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">VS_USE_DEBUG_LIBRARIES</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="vs-use-debug-libraries">
+<span id="prop_tgt:VS_USE_DEBUG_LIBRARIES"></span><h1>VS_USE_DEBUG_LIBRARIES<a class="headerlink" href="#vs-use-debug-libraries" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.30.</span></p>
+</div>
+<p>Indicate to <a class="reference internal" href="../manual/cmake-generators.7.html#visual-studio-generators"><span class="std std-ref">Visual Studio Generators</span></a> what configurations are considered
+debug configurations.  This controls the <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> setting in
+each configuration of a <code class="docutils literal notranslate"><span class="pre">.vcxproj</span></code> file.</p>
+<p>The &quot;Use Debug Libraries&quot; setting in Visual Studio projects, despite its
+specific-sounding name, is a general-purpose indicator of what configurations
+are considered debug configurations.  In standalone projects, this may affect
+MSBuild's default selection of MSVC runtime library, optimization flags,
+runtime checks, and similar settings.  In CMake projects those settings are
+typically generated explicitly based on the project's specification, e.g.,
+the MSVC runtime library is controlled by <span class="target" id="index-1-prop_tgt:MSVC_RUNTIME_LIBRARY"></span><a class="reference internal" href="MSVC_RUNTIME_LIBRARY.html#prop_tgt:MSVC_RUNTIME_LIBRARY" title="MSVC_RUNTIME_LIBRARY"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">MSVC_RUNTIME_LIBRARY</span></code></a>.  However,
+the <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> indicator is useful for reference by both humans
+and tools, and may also affect the behavior of platform-specific SDKs.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">VS_USE_DEBUG_LIBRARIES</span></code> to a true or false value to indicate whether
+each configuration is considered a debug configuration.  The value may also
+be the empty string (<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>) in which case no <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> will be
+added explicitly by CMake, and MSBuild will use its default value, <code class="docutils literal notranslate"><span class="pre">false</span></code>.</p>
+<p>Use <span class="target" id="index-0-manual:cmake-generator-expressions(7)"></span><a class="reference internal" href="../manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)" title="cmake-generator-expressions(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">generator</span> <span class="pre">expressions</span></code></a>
+for per-configuration specification.  For example, the code:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_executable(</span><span class="nb">foo</span><span class="w"> </span><span class="nb">foo.c</span><span class="nf">)</span>
+<span class="nf">set_property(</span><span class="no">TARGET</span><span class="w"> </span><span class="nb">foo</span><span class="w"> </span><span class="no">PROPERTY</span>
+<span class="w">  </span><span class="no">VS_USE_DEBUG_LIBRARIES</span><span class="w"> </span><span class="s">&quot;$&lt;CONFIG:Debug,Custom&gt;&quot;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>indicates that target <code class="docutils literal notranslate"><span class="pre">foo</span></code> considers its &quot;Debug&quot; and &quot;Custom&quot;
+configurations to be debug configurations, and its other configurations
+to be non-debug configurations.</p>
+<p>The property is initialized from the value of the
+<span class="target" id="index-0-variable:CMAKE_VS_USE_DEBUG_LIBRARIES"></span><a class="reference internal" href="../variable/CMAKE_VS_USE_DEBUG_LIBRARIES.html#variable:CMAKE_VS_USE_DEBUG_LIBRARIES" title="CMAKE_VS_USE_DEBUG_LIBRARIES"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_VS_USE_DEBUG_LIBRARIES</span></code></a> variable, if it is set.
+If the property is not set then CMake generates <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> using
+heuristics to determine which configurations are debug configurations.
+See policy <span class="target" id="index-0-policy:CMP0162"></span><a class="reference internal" href="../policy/CMP0162.html#policy:CMP0162" title="CMP0162"><code class="xref cmake cmake-policy docutils literal notranslate"><span class="pre">CMP0162</span></code></a>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="VS_SOURCE_SETTINGS_tool.html"
+                          title="previous chapter">VS_SOURCE_SETTINGS_&lt;tool&gt;</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="VS_USER_PROPS.html"
+                          title="next chapter">VS_USER_PROPS</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/prop_tgt/VS_USE_DEBUG_LIBRARIES.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="VS_USER_PROPS.html" title="VS_USER_PROPS"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="VS_SOURCE_SETTINGS_tool.html" title="VS_SOURCE_SETTINGS_&lt;tool&gt;"
+             >previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-properties.7.html" >cmake-properties(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">VS_USE_DEBUG_LIBRARIES</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2024 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

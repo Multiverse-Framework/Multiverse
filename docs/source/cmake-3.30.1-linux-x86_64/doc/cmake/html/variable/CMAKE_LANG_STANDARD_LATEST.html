@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMAKE_&lt;LANG&gt;_STANDARD_LATEST &mdash; CMake 3.30.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a2c47e09" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=3e562cf9" />
+    
+    <script src="../_static/documentation_options.js?v=79246281"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMAKE_&lt;LANG&gt;_STANDARD_LIBRARIES" href="CMAKE_LANG_STANDARD_LIBRARIES.html" />
+    <link rel="prev" title="CMAKE_&lt;LANG&gt;_STANDARD_INCLUDE_DIRECTORIES" href="CMAKE_LANG_STANDARD_INCLUDE_DIRECTORIES.html" />
+ 
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMAKE_LANG_STANDARD_LIBRARIES.html" title="CMAKE_&lt;LANG&gt;_STANDARD_LIBRARIES"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_LANG_STANDARD_INCLUDE_DIRECTORIES.html" title="CMAKE_&lt;LANG&gt;_STANDARD_INCLUDE_DIRECTORIES"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" accesskey="U">cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_&lt;LANG&gt;_STANDARD_LATEST</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmake-lang-standard-latest">
+<span id="variable:CMAKE_<LANG>_STANDARD_LATEST"></span><h1>CMAKE_&lt;LANG&gt;_STANDARD_LATEST<a class="headerlink" href="#cmake-lang-standard-latest" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.30.</span></p>
+</div>
+<p>This variable represents the minimum between the latest version of the
+standard for language <code class="docutils literal notranslate"><span class="pre">&lt;LANG&gt;</span></code> which is supported by the current compiler
+and the latest version which is supported by CMake. Its value will be set to
+one of the supported values of the corresponding <span class="target" id="index-0-prop_tgt:&lt;LANG&gt;_STANDARD"></span><a class="reference internal" href="../prop_tgt/LANG_STANDARD.html#prop_tgt:&lt;LANG&gt;_STANDARD" title="&lt;LANG&gt;_STANDARD"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">&lt;LANG&gt;_STANDARD</span></code></a>
+target property; see the documentation of that property for a list of
+supported languages.</p>
+<p>See the <span class="target" id="index-0-manual:cmake-compile-features(7)"></span><a class="reference internal" href="../manual/cmake-compile-features.7.html#manual:cmake-compile-features(7)" title="cmake-compile-features(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">cmake-compile-features(7)</span></code></a> manual for information on compile
+features and a list of supported compilers.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_STANDARD_LATEST</span></code> will never be set to a language standard
+which CMake recognizes but provides no support for. Unless explicitly
+stated otherwise, every value which is supported by the corresponding
+<span class="target" id="index-1-prop_tgt:&lt;LANG&gt;_STANDARD"></span><a class="reference internal" href="../prop_tgt/LANG_STANDARD.html#prop_tgt:&lt;LANG&gt;_STANDARD" title="&lt;LANG&gt;_STANDARD"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">&lt;LANG&gt;_STANDARD</span></code></a> target property represents a standard of
+language <code class="docutils literal notranslate"><span class="pre">&lt;LANG&gt;</span></code> which is both recognized and supported by CMake.</p>
+</div>
+<section id="checking-for-language-standard-support">
+<h2>Checking for Language Standard Support<a class="headerlink" href="#checking-for-language-standard-support" title="Link to this heading">¶</a></h2>
+<p>It is possible to use the value of the <code class="docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_STANDARD_LATEST</span></code>
+variable to check for language standard support. This can be used to, e.g.,
+conditionally enable optional features for a distributed library.</p>
+<p>When doing so, one should be careful to <strong>not</strong> rely on integer value
+comparisons between standard levels. This is because some older standards of
+a given language which are supported by CMake (e.g., C++98, represented as
+<code class="docutils literal notranslate"><span class="pre">98</span></code>) will have a higher numerical value than newer standards of that same
+language.</p>
+<p>The following code sample demonstrates how one might correctly check for
+C++17 support:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># Careful! We cannot do direct integer comparisons with</span>
+<span class="c"># CMAKE_CXX_STANDARD_LATEST because some earlier C++ standards (e.g.,</span>
+<span class="c"># C++98) will have a higher numerical value than our requirement (C++17).</span>
+<span class="c">#</span>
+<span class="c"># Instead, we keep a list of unsupported C++ standards and check if</span>
+<span class="c"># CMAKE_CXX_STANDARD_LATEST appears in that list.</span>
+<span class="nf">set(</span><span class="no">UNSUPPORTED_CXX_STANDARDS</span>
+<span class="w">  </span><span class="m">98</span>
+<span class="w">  </span><span class="m">11</span>
+<span class="w">  </span><span class="m">14</span>
+<span class="nf">)</span>
+
+<span class="nf">list(</span><span class="no">FIND</span><span class="w"> </span><span class="no">UNSUPPORTED_CXX_STANDARDS</span><span class="w"> </span><span class="o">${</span><span class="nt">CMAKE_CXX_STANDARD_LATEST</span><span class="o">}</span><span class="w"> </span><span class="no">UNSUPPORTED_CXX_STANDARDS_INDEX</span><span class="nf">)</span>
+
+<span class="nf">if(</span><span class="no">UNSUPPORTED_CXX_STANDARDS_INDEX</span><span class="w"> </span><span class="no">EQUAL</span><span class="w"> </span><span class="p">-</span><span class="m">1</span><span class="nf">)</span>
+<span class="w">  </span><span class="c"># We know that the current compiler supports at least C++17. Enabling</span>
+<span class="w">  </span><span class="c"># some optional feature...</span>
+<span class="nf">else()</span>
+<span class="w">  </span><span class="nf">message(</span><span class="no">STATUS</span>
+<span class="w">    </span><span class="s">&quot;Feature X is disabled because it requires C++17, but the current &quot;</span>
+<span class="w">    </span><span class="s">&quot;compiler only supports C++${CMAKE_CXX_STANDARD_LATEST}.&quot;</span>
+<span class="w">  </span><span class="nf">)</span>
+<span class="nf">endif()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">CMAKE_&lt;LANG&gt;_STANDARD_LATEST</a><ul>
+<li><a class="reference internal" href="#checking-for-language-standard-support">Checking for Language Standard Support</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMAKE_LANG_STANDARD_INCLUDE_DIRECTORIES.html"
+                          title="previous chapter">CMAKE_&lt;LANG&gt;_STANDARD_INCLUDE_DIRECTORIES</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMAKE_LANG_STANDARD_LIBRARIES.html"
+                          title="next chapter">CMAKE_&lt;LANG&gt;_STANDARD_LIBRARIES</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/variable/CMAKE_LANG_STANDARD_LATEST.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMAKE_LANG_STANDARD_LIBRARIES.html" title="CMAKE_&lt;LANG&gt;_STANDARD_LIBRARIES"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_LANG_STANDARD_INCLUDE_DIRECTORIES.html" title="CMAKE_&lt;LANG&gt;_STANDARD_INCLUDE_DIRECTORIES"
+             >previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" >cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_&lt;LANG&gt;_STANDARD_LATEST</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2024 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

@@ -1,9 +1,12 @@
 # Configuration file for the Sphinx documentation builder.
 
 import subprocess
-import sys
+import os
 
-subprocess.call('apt-get install cmake', shell=True)
+# Get current directory
+current_path = os.path.dirname(os.path.realpath(__file__))
+
+subprocess.call(f'export PATH=$PATH:{current_path}/cmake-3.30.1-linux-x86_64/bin', shell=True)
 subprocess.call('python3 -m pip install virtualenvwrapper --break-system-packages', shell=True)
 subprocess.call('cd ../../; ./build_multiverse.sh --only-src', shell=True)
 

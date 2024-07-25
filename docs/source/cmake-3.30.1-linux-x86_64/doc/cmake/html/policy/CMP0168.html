@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMP0168 &mdash; CMake 3.30.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a2c47e09" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=3e562cf9" />
+    
+    <script src="../_static/documentation_options.js?v=79246281"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMP0167" href="CMP0167.html" />
+    <link rel="prev" title="CMP0169" href="CMP0169.html" />
+ 
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMP0167.html" title="CMP0167"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMP0169.html" title="CMP0169"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" accesskey="U">cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0168</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmp0168">
+<span id="policy:CMP0168"></span><h1>CMP0168<a class="headerlink" href="#cmp0168" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.30.</span></p>
+</div>
+<p>The <span class="target" id="index-0-module:FetchContent"></span><a class="reference internal" href="../module/FetchContent.html#module:FetchContent" title="FetchContent"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FetchContent</span></code></a> module implements steps directly instead of through
+a sub-build.</p>
+<p>CMake 3.29 and below implement FetchContent as a separate sub-build.
+This required configuring that separate project and using a build tool.
+This approach can be very slow with some generators and operating systems.
+CMake 3.30 and above prefer to implement the download, update, and patch
+steps directly as part of the main project.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior has the following characteristics:</p>
+<ul class="simple">
+<li><p>No sub-build is used. All operations are implemented directly from the
+main project's CMake configure step. When running in CMake script mode,
+no build tool needs to be available.</p></li>
+<li><p>Generator expressions and GNU Make variables of the form <code class="docutils literal notranslate"><span class="pre">$(SOMEVAR)</span></code> are
+not supported. They should not be used in any argument to
+<span class="target" id="index-0-command:fetchcontent_declare"></span><a class="reference internal" href="../module/FetchContent.html#command:fetchcontent_declare" title="fetchcontent_declare"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">FetchContent_Declare()</span></code></a> or <span class="target" id="index-0-command:fetchcontent_populate"></span><a class="reference internal" href="../module/FetchContent.html#command:fetchcontent_populate" title="fetchcontent_populate"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">FetchContent_Populate()</span></code></a>.</p></li>
+<li><p>All <code class="docutils literal notranslate"><span class="pre">LOG_...</span></code> and <code class="docutils literal notranslate"><span class="pre">USES_TERMINAL_...</span></code> options, the <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> option, and
+the <span class="target" id="index-0-variable:FETCHCONTENT_QUIET"></span><a class="reference internal" href="../module/FetchContent.html#variable:FETCHCONTENT_QUIET" title="FETCHCONTENT_QUIET"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">FETCHCONTENT_QUIET</span></code></a> variable are ignored.
+<span class="target" id="index-1-module:FetchContent"></span><a class="reference internal" href="../module/FetchContent.html#module:FetchContent" title="FetchContent"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FetchContent</span></code></a> output is always part of the main project's configure
+output. This also means it now respects the message logging level (see
+<span class="target" id="index-0-variable:CMAKE_MESSAGE_LOG_LEVEL"></span><a class="reference internal" href="../variable/CMAKE_MESSAGE_LOG_LEVEL.html#variable:CMAKE_MESSAGE_LOG_LEVEL" title="CMAKE_MESSAGE_LOG_LEVEL"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_MESSAGE_LOG_LEVEL</span></code></a> and
+<a class="reference internal" href="../manual/cmake.1.html#cmdoption-cmake-log-level"><code class="xref std std-option docutils literal notranslate"><span class="pre">--log-level</span></code></a>). The default message log level
+should be comparable to using <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> with the <code class="docutils literal notranslate"><span class="pre">OLD</span></code> policy setting,
+except that warnings will now be shown.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">PREFIX</span></code>, <code class="docutils literal notranslate"><span class="pre">TMP_DIR</span></code>, <code class="docutils literal notranslate"><span class="pre">STAMP_DIR</span></code>, <code class="docutils literal notranslate"><span class="pre">LOG_DIR</span></code>, and <code class="docutils literal notranslate"><span class="pre">DOWNLOAD_DIR</span></code>
+options and their associated directory properties are ignored. The
+<span class="target" id="index-2-module:FetchContent"></span><a class="reference internal" href="../module/FetchContent.html#module:FetchContent" title="FetchContent"><code class="xref cmake cmake-module docutils literal notranslate"><span class="pre">FetchContent</span></code></a> module controls those locations internally.</p></li>
+<li><p><a class="reference internal" href="../manual/cmake.1.html#cmdoption-cmake-fresh"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--fresh</span></code></a> will remove the stamp and script files used for
+tracking and populating the dependency. This will force the dependency's
+download, update, and patch steps to be re-executed. The directory used for
+downloads is not affected by <a class="reference internal" href="../manual/cmake.1.html#cmdoption-cmake-fresh"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--fresh</span></code></a>, so any previously
+downloaded files for the <code class="docutils literal notranslate"><span class="pre">URL</span></code> download method can still be re-used.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior has the following characteristics:</p>
+<ul class="simple">
+<li><p>A sub-build is always used to implement the download, update, and patch
+steps. A build tool must be available, even when using
+<span class="target" id="index-1-command:fetchcontent_populate"></span><a class="reference internal" href="../module/FetchContent.html#command:fetchcontent_populate" title="fetchcontent_populate"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">FetchContent_Populate()</span></code></a> in CMake script mode.</p></li>
+<li><p>Generator expressions and GNU Make variables of the form <code class="docutils literal notranslate"><span class="pre">$(SOMEVAR)</span></code> can
+be used, although such use is almost always inappropriate. They are evaluated
+in the sub-build, so they do not see any information from the main build.</p></li>
+<li><p>All logging, terminal control, and directory options related to the download,
+update, or patch steps are supported.</p></li>
+<li><p>If the <code class="docutils literal notranslate"><span class="pre">QUIET</span></code> option is used, or the <span class="target" id="index-1-variable:FETCHCONTENT_QUIET"></span><a class="reference internal" href="../module/FetchContent.html#variable:FETCHCONTENT_QUIET" title="FETCHCONTENT_QUIET"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">FETCHCONTENT_QUIET</span></code></a>
+variable is set to true, warnings will not be shown in the output.</p></li>
+<li><p><a class="reference internal" href="../manual/cmake.1.html#cmdoption-cmake-fresh"><code class="xref std std-option docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--fresh</span></code></a> has no effect on the dependency's stamp or script
+files. Previously executed steps will only re-run if details about the
+dependency have changed.</p></li>
+</ul>
+<p>There's a reasonably good chance that users can set the
+<span class="target" id="index-0-variable:CMAKE_POLICY_DEFAULT_CMP&lt;NNNN&gt;"></span><a class="reference internal" href="../variable/CMAKE_POLICY_DEFAULT_CMPNNNN.html#variable:CMAKE_POLICY_DEFAULT_CMP&lt;NNNN&gt;" title="CMAKE_POLICY_DEFAULT_CMP&lt;NNNN&gt;"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_POLICY_DEFAULT_CMP0168</span></code></a>
+variable to <code class="docutils literal notranslate"><span class="pre">NEW</span></code> to globally switch to the <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior while waiting
+for the project and its dependencies to be updated use the <code class="docutils literal notranslate"><span class="pre">NEW</span></code> policy
+setting by default. Projects don't typically make use of the features that the
+<code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior no longer supports, and even those projects that do will often
+still work fine when those options are ignored. Before setting this behavior
+globally, check whether any <span class="target" id="index-1-command:fetchcontent_declare"></span><a class="reference internal" href="../module/FetchContent.html#command:fetchcontent_declare" title="fetchcontent_declare"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">FetchContent_Declare()</span></code></a> or
+<span class="target" id="index-2-command:fetchcontent_populate"></span><a class="reference internal" href="../module/FetchContent.html#command:fetchcontent_populate" title="fetchcontent_populate"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">FetchContent_Populate()</span></code></a> calls use the ignored options in a way that
+would change observable behavior, other than putting temporary or
+internally-generated files in different locations.</p>
+<p>This policy was introduced in CMake version 3.30.
+It may be set by <span class="target" id="index-0-command:cmake_policy"></span><a class="reference internal" href="../command/cmake_policy.html#command:cmake_policy" title="cmake_policy"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_policy()</span></code></a> or <span class="target" id="index-0-command:cmake_minimum_required"></span><a class="reference internal" href="../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>.
+If it is not set, CMake does <em>not</em> warn, and uses <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior of a policy is
+<span class="target" id="index-0-manual:cmake-policies(7)"></span><a class="reference internal" href="../manual/cmake-policies.7.html#manual:cmake-policies(7)" title="cmake-policies(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">deprecated</span> <span class="pre">by</span> <span class="pre">definition</span></code></a>
+and may be removed in a future version of CMake.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMP0169.html"
+                          title="previous chapter">CMP0169</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMP0167.html"
+                          title="next chapter">CMP0167</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/policy/CMP0168.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMP0167.html" title="CMP0167"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMP0169.html" title="CMP0169"
+             >previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" >cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0168</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2024 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

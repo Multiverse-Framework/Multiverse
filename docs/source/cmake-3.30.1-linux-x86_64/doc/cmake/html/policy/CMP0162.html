@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMP0162 &mdash; CMake 3.30.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a2c47e09" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=3e562cf9" />
+    
+    <script src="../_static/documentation_options.js?v=79246281"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMP0161" href="CMP0161.html" />
+    <link rel="prev" title="CMP0163" href="CMP0163.html" />
+ 
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMP0161.html" title="CMP0161"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMP0163.html" title="CMP0163"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" accesskey="U">cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0162</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmp0162">
+<span id="policy:CMP0162"></span><h1>CMP0162<a class="headerlink" href="#cmp0162" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.30.</span></p>
+</div>
+<p><a class="reference internal" href="../manual/cmake-generators.7.html#visual-studio-generators"><span class="std std-ref">Visual Studio Generators</span></a> add <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> indicators by default.</p>
+<p>The &quot;Use Debug Libraries&quot; setting in Visual Studio projects indicates what
+configurations are considered debug configurations.  In standalone projects,
+this may affect MSBuild's default selection of MSVC runtime library,
+optimization flags, runtime checks, and similar settings.  CMake typically
+generates all those settings explicitly based on the project's specification,
+so CMake 3.29 and below do not write any <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> indicators to
+<code class="docutils literal notranslate"><span class="pre">.vcxproj</span></code> files.</p>
+<p>CMake 3.30 and above prefer to write <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> indicators because
+they are useful for reference by both humans and tools, and may also affect
+the behavior of platform-specific SDKs.  The indicator for each configuration
+of a target is determined as follows:</p>
+<ul class="simple">
+<li><p>If the target compiles sources for a known MSVC runtime library
+(such as that specified by <span class="target" id="index-0-prop_tgt:MSVC_RUNTIME_LIBRARY"></span><a class="reference internal" href="../prop_tgt/MSVC_RUNTIME_LIBRARY.html#prop_tgt:MSVC_RUNTIME_LIBRARY" title="MSVC_RUNTIME_LIBRARY"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">MSVC_RUNTIME_LIBRARY</span></code></a>),
+then <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code> for configurations that
+compile for a &quot;Debug&quot; runtime library, and <code class="docutils literal notranslate"><span class="pre">false</span></code> for others.</p></li>
+<li><p>Otherwise, such as in targets created by <span class="target" id="index-0-command:add_custom_target"></span><a class="reference internal" href="../command/add_custom_target.html#command:add_custom_target" title="add_custom_target"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">add_custom_target()</span></code></a>,
+<code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> is <code class="docutils literal notranslate"><span class="pre">true</span></code> for the <code class="docutils literal notranslate"><span class="pre">Debug</span></code> configuration,
+and <code class="docutils literal notranslate"><span class="pre">false</span></code> for others.</p></li>
+</ul>
+<p>This policy provides compatibility for projects that have not been updated to
+expect the indicators.  The policy setting is recorded by each target as it is
+created and used to determine the default behavior for that target's
+<code class="docutils literal notranslate"><span class="pre">.vcxproj</span></code> file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior for this policy is to not generate <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code>
+indicators by default.  The <code class="docutils literal notranslate"><span class="pre">NEW</span></code> behavior for this policy is to generate
+<code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> indicators by default.</p>
+<p>If the <span class="target" id="index-0-variable:CMAKE_VS_USE_DEBUG_LIBRARIES"></span><a class="reference internal" href="../variable/CMAKE_VS_USE_DEBUG_LIBRARIES.html#variable:CMAKE_VS_USE_DEBUG_LIBRARIES" title="CMAKE_VS_USE_DEBUG_LIBRARIES"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_VS_USE_DEBUG_LIBRARIES</span></code></a> variable and/or
+<span class="target" id="index-0-prop_tgt:VS_USE_DEBUG_LIBRARIES"></span><a class="reference internal" href="../prop_tgt/VS_USE_DEBUG_LIBRARIES.html#prop_tgt:VS_USE_DEBUG_LIBRARIES" title="VS_USE_DEBUG_LIBRARIES"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">VS_USE_DEBUG_LIBRARIES</span></code></a> target property is set, it explicitly
+controls <code class="docutils literal notranslate"><span class="pre">UseDebugLibraries</span></code> generation regardless of this policy.</p>
+<p>This policy was introduced in CMake version 3.30.
+It may be set by <span class="target" id="index-0-command:cmake_policy"></span><a class="reference internal" href="../command/cmake_policy.html#command:cmake_policy" title="cmake_policy"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_policy()</span></code></a> or <span class="target" id="index-0-command:cmake_minimum_required"></span><a class="reference internal" href="../command/cmake_minimum_required.html#command:cmake_minimum_required" title="cmake_minimum_required"><code class="xref cmake cmake-command docutils literal notranslate"><span class="pre">cmake_minimum_required()</span></code></a>.
+If it is not set, CMake does <em>not</em> warn, and uses <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OLD</span></code> behavior of a policy is
+<span class="target" id="index-0-manual:cmake-policies(7)"></span><a class="reference internal" href="../manual/cmake-policies.7.html#manual:cmake-policies(7)" title="cmake-policies(7)"><code class="xref cmake cmake-manual docutils literal notranslate"><span class="pre">deprecated</span> <span class="pre">by</span> <span class="pre">definition</span></code></a>
+and may be removed in a future version of CMake.</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMP0163.html"
+                          title="previous chapter">CMP0163</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMP0161.html"
+                          title="next chapter">CMP0161</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/policy/CMP0162.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMP0161.html" title="CMP0161"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMP0163.html" title="CMP0163"
+             >previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-policies.7.html" >cmake-policies(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMP0162</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2024 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>

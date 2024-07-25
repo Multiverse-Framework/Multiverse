@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>CMAKE_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES &mdash; CMake 3.30.1 Documentation</title>
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a2c47e09" />
+    <link rel="stylesheet" type="text/css" href="../_static/cmake.css?v=3e562cf9" />
+    
+    <script src="../_static/documentation_options.js?v=79246281"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="../_static/cmake-favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CMAKE_LINK_LIBRARY_FILE_FLAG" href="CMAKE_LINK_LIBRARY_FILE_FLAG.html" />
+    <link rel="prev" title="CMAKE_LINK_INTERFACE_LIBRARIES" href="CMAKE_LINK_INTERFACE_LIBRARIES.html" />
+ 
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="CMAKE_LINK_LIBRARY_FILE_FLAG.html" title="CMAKE_LINK_LIBRARY_FILE_FLAG"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_LINK_INTERFACE_LIBRARIES.html" title="CMAKE_LINK_INTERFACE_LIBRARIES"
+             accesskey="P">previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" accesskey="U">cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="cmake-link-library-feature-attributes">
+<span id="variable:CMAKE_LINK_LIBRARY_<FEATURE>_ATTRIBUTES"></span><h1>CMAKE_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES<a class="headerlink" href="#cmake-link-library-feature-attributes" title="Link to this heading">¶</a></h1>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 3.30.</span></p>
+</div>
+<p>This variable defines the behavior of the specified link library
+<code class="docutils literal notranslate"><span class="pre">&lt;FEATURE&gt;</span></code>. It specifies how the <code class="docutils literal notranslate"><span class="pre">&lt;FEATURE&gt;</span></code> interacts with other
+features, when the <code class="docutils literal notranslate"><span class="pre">&lt;FEATURE&gt;</span></code> should be applied, and aspects of how the
+<code class="docutils literal notranslate"><span class="pre">&lt;FEATURE&gt;</span></code> should be handled when CMake assembles the final linker
+command line (e.g. de-duplication).</p>
+<p>The syntax of the linker flags for the <code class="docutils literal notranslate"><span class="pre">&lt;FEATURE&gt;</span></code> are controlled by the
+<span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_LINK_LIBRARY_USING_&lt;FEATURE&gt;"></span><a class="reference internal" href="CMAKE_LANG_LINK_LIBRARY_USING_FEATURE.html#variable:CMAKE_&lt;LANG&gt;_LINK_LIBRARY_USING_&lt;FEATURE&gt;" title="CMAKE_&lt;LANG&gt;_LINK_LIBRARY_USING_&lt;FEATURE&gt;"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_LINK_LIBRARY_USING_&lt;FEATURE&gt;</span></code></a> and
+<span class="target" id="index-0-variable:CMAKE_LINK_LIBRARY_USING_&lt;FEATURE&gt;"></span><a class="reference internal" href="CMAKE_LINK_LIBRARY_USING_FEATURE.html#variable:CMAKE_LINK_LIBRARY_USING_&lt;FEATURE&gt;" title="CMAKE_LINK_LIBRARY_USING_&lt;FEATURE&gt;"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_LINK_LIBRARY_USING_&lt;FEATURE&gt;</span></code></a> variables.
+The <span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_LINK_LIBRARY_USING_&lt;FEATURE&gt;_SUPPORTED"></span><a class="reference internal" href="CMAKE_LANG_LINK_LIBRARY_USING_FEATURE_SUPPORTED.html#variable:CMAKE_&lt;LANG&gt;_LINK_LIBRARY_USING_&lt;FEATURE&gt;_SUPPORTED" title="CMAKE_&lt;LANG&gt;_LINK_LIBRARY_USING_&lt;FEATURE&gt;_SUPPORTED"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_LINK_LIBRARY_USING_&lt;FEATURE&gt;_SUPPORTED</span></code></a> and
+<span class="target" id="index-0-variable:CMAKE_LINK_LIBRARY_USING_&lt;FEATURE&gt;_SUPPORTED"></span><a class="reference internal" href="CMAKE_LINK_LIBRARY_USING_FEATURE_SUPPORTED.html#variable:CMAKE_LINK_LIBRARY_USING_&lt;FEATURE&gt;_SUPPORTED" title="CMAKE_LINK_LIBRARY_USING_&lt;FEATURE&gt;_SUPPORTED"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_LINK_LIBRARY_USING_&lt;FEATURE&gt;_SUPPORTED</span></code></a> variables
+control whether the <code class="docutils literal notranslate"><span class="pre">&lt;FEATURE&gt;</span></code> is available at all.</p>
+<p>When linking for a particular language <code class="docutils literal notranslate"><span class="pre">&lt;LANG&gt;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">CMAKE_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES</span></code> is ignored if the
+<span class="target" id="index-0-variable:CMAKE_&lt;LANG&gt;_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES"></span><a class="reference internal" href="CMAKE_LANG_LINK_LIBRARY_FEATURE_ATTRIBUTES.html#variable:CMAKE_&lt;LANG&gt;_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES" title="CMAKE_&lt;LANG&gt;_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES</span></code></a> variable is also
+defined for the same <code class="docutils literal notranslate"><span class="pre">&lt;FEATURE&gt;</span></code>.</p>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">CMAKE_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES</span></code> and
+<span class="target" id="index-1-variable:CMAKE_&lt;LANG&gt;_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES"></span><a class="reference internal" href="CMAKE_LANG_LINK_LIBRARY_FEATURE_ATTRIBUTES.html#variable:CMAKE_&lt;LANG&gt;_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES" title="CMAKE_&lt;LANG&gt;_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES"><code class="xref cmake cmake-variable docutils literal notranslate"><span class="pre">CMAKE_&lt;LANG&gt;_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES</span></code></a> at the end of the
+directory scope in which a target is defined is what matters.</p>
+<section id="feature-attributes-definition">
+<h2>Feature Attributes Definition<a class="headerlink" href="#feature-attributes-definition" title="Link to this heading">¶</a></h2>
+<p>A feature attributes definition is a
+<a class="reference internal" href="../manual/cmake-language.7.html#cmake-language-lists"><span class="std std-ref">semicolon-separated list</span></a> of
+<code class="docutils literal notranslate"><span class="pre">attribute=value(s)</span></code> items. If an attribute has multiple values, those values
+must be comma-separated.</p>
+<p>The following attributes are supported:</p>
+<dl>
+<dt><code class="docutils literal notranslate"><span class="pre">LIBRARY_TYPE=&lt;library-type-list&gt;</span></code></dt><dd><p>Specify the library types supported by the feature. Supported values are:
+<code class="docutils literal notranslate"><span class="pre">STATIC</span></code>, <code class="docutils literal notranslate"><span class="pre">SHARED</span></code>, <code class="docutils literal notranslate"><span class="pre">MODULE</span></code>, and <code class="docutils literal notranslate"><span class="pre">EXECUTABLE</span></code>.</p>
+<p>If this attribute is not specified, the default is
+<code class="docutils literal notranslate"><span class="pre">LIBRARY_TYPE=STATIC,SHARED,MODULE,EXECUTABLE</span></code>.</p>
+<p>If the feature is used with an unsupported library type, CMake will emit a
+developer warning and the feature will be ignored.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OVERRIDE=&lt;feature-list&gt;</span></code></dt><dd><p>Specify which features this one replaces in the event of a conflict.
+This override mechanism is superseded by
+<span class="target" id="index-0-prop_tgt:LINK_LIBRARY_OVERRIDE"></span><a class="reference internal" href="../prop_tgt/LINK_LIBRARY_OVERRIDE.html#prop_tgt:LINK_LIBRARY_OVERRIDE" title="LINK_LIBRARY_OVERRIDE"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">LINK_LIBRARY_OVERRIDE</span></code></a> or
+<span class="target" id="index-0-prop_tgt:LINK_LIBRARY_OVERRIDE_&lt;LIBRARY&gt;"></span><a class="reference internal" href="../prop_tgt/LINK_LIBRARY_OVERRIDE_LIBRARY.html#prop_tgt:LINK_LIBRARY_OVERRIDE_&lt;LIBRARY&gt;" title="LINK_LIBRARY_OVERRIDE_&lt;LIBRARY&gt;"><code class="xref cmake cmake-prop_tgt docutils literal notranslate"><span class="pre">LINK_LIBRARY_OVERRIDE_&lt;LIBRARY&gt;</span></code></a> target property definitions,
+if defined.</p>
+<p>If this attribute is not specified, the default is an empty list.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DEDUPLICATION=YES|NO|DEFAULT</span></code></dt><dd><p>Specify the de-duplication strategy for a library using this feature.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">YES</span></code></dt><dd><p>The library is always de-duplicated. The default strategy CMake would
+normally apply is ignored.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">NO</span></code></dt><dd><p>The library is never de-duplicated. The default strategy CMake would
+normally apply is ignored.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code></dt><dd><p>Let CMake determine a de-duplication strategy automatically.</p>
+</dd>
+</dl>
+<p>If this attribute is not specified, <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> will be used.</p>
+</dd>
+</dl>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
+<p>A common need is the loading of a full archive as part of the creation of a
+shared library. The built-in <code class="docutils literal notranslate"><span class="pre">WHOLE_ARCHIVE</span></code> feature can be used for that
+purpose. The implementation of that built-in feature sets the following
+link library feature attributes:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">set(</span><span class="no">CMAKE_LINK_LIBRARY_WHOLE_ARCHIVE_ATTRIBUTES</span>
+<span class="w">  </span><span class="no">LIBRARY_TYPE</span><span class="p">=</span><span class="no">STATIC</span>
+<span class="w">  </span><span class="no">OVERRIDE</span><span class="p">=</span><span class="no">DEFAULT</span>
+<span class="w">  </span><span class="no">DEDUPLICATION</span><span class="p">=</span><span class="no">YES</span>
+<span class="nf">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">LIBRARY_TYPE=STATIC</span></code></dt><dd><p>This feature is only meaningful for static libraries.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">OVERRIDE=DEFAULT</span></code></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> feature will be overridden by the <code class="docutils literal notranslate"><span class="pre">WHOLE_ARCHIVE</span></code> feature
+because they are compatible and enhance the user's experience: standard
+library specification and <code class="docutils literal notranslate"><span class="pre">$&lt;LINK_LIBRARY:WHOLE_ARCHIVE&gt;</span></code> can be used
+freely.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">DEDUPLICATION=YES</span></code></dt><dd><p>When this feature is used, the linker loads all symbols from the static
+library, so there is no need to repeat the library on the linker
+command line.</p>
+</dd>
+</dl>
+<p>The <code class="docutils literal notranslate"><span class="pre">WHOLE_ARCHIVE</span></code> feature can be used like so:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nf">add_library(</span><span class="no">A</span><span class="w"> </span><span class="no">STATIC</span><span class="w"> </span><span class="p">...</span><span class="nf">)</span>
+<span class="nf">add_library(</span><span class="no">B</span><span class="w"> </span><span class="no">STATIC</span><span class="w"> </span><span class="p">...</span><span class="nf">)</span>
+
+<span class="nf">target_link_libraries(</span><span class="no">B</span><span class="w"> </span><span class="no">PUBLIC</span><span class="w"> </span><span class="no">A</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="no">A</span><span class="w"> </span><span class="no">PUBLIC</span><span class="w"> </span><span class="no">B</span><span class="nf">)</span>
+
+<span class="nf">add_library(</span><span class="nb">global</span><span class="w"> </span><span class="no">SHARED</span><span class="w"> </span><span class="p">...</span><span class="nf">)</span>
+<span class="nf">target_link_libraries(</span><span class="nb">global</span><span class="w"> </span><span class="no">PRIVATE</span><span class="w"> </span><span class="o">$&lt;</span><span class="no">LINK_LIBRARY</span><span class="o">:</span><span class="no">WHOLE_ARCHIVE</span><span class="p">,</span><span class="no">A</span><span class="o">&gt;</span><span class="nf">)</span>
+</pre></div>
+</div>
+<p>The resulting link command will only have one instance of the <code class="docutils literal notranslate"><span class="pre">A</span></code> library
+specified, and the linker flags will ensure that all symbols are loaded from
+the <code class="docutils literal notranslate"><span class="pre">A</span></code> library.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">CMAKE_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES</a><ul>
+<li><a class="reference internal" href="#feature-attributes-definition">Feature Attributes Definition</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="CMAKE_LINK_INTERFACE_LIBRARIES.html"
+                          title="previous chapter">CMAKE_LINK_INTERFACE_LIBRARIES</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="CMAKE_LINK_LIBRARY_FILE_FLAG.html"
+                          title="next chapter">CMAKE_LINK_LIBRARY_FILE_FLAG</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/variable/CMAKE_LINK_LIBRARY_FEATURE_ATTRIBUTES.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="CMAKE_LINK_LIBRARY_FILE_FLAG.html" title="CMAKE_LINK_LIBRARY_FILE_FLAG"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="CMAKE_LINK_INTERFACE_LIBRARIES.html" title="CMAKE_LINK_INTERFACE_LIBRARIES"
+             >previous</a> |</li>
+  <li>
+    <img src="../_static/cmake-logo-16.png" alt=""
+         style="vertical-align: middle; margin-top: -2px" />
+  </li>
+  <li>
+    <a href="https://cmake.org/">CMake</a> &#187;
+  </li>
+  <li>
+    <a href="../index.html">3.30.1 Documentation</a> &#187;
+  </li>
+
+          <li class="nav-item nav-item-1"><a href="../manual/cmake-variables.7.html" >cmake-variables(7)</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">CMAKE_LINK_LIBRARY_&lt;FEATURE&gt;_ATTRIBUTES</a></li> 
+      </ul>
+    </div>
+
+    <div class="footer" role="contentinfo">
+    &#169; Copyright 2000-2024 Kitware, Inc. and Contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    </div>
+  </body>
+</html>
