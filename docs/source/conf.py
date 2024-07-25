@@ -3,7 +3,8 @@
 import subprocess
 import sys
 
-subprocess.call('python3 -m pip install virtualenvwrapper --break-system-packages; source /usr/local/bin/virtualenvwrapper.sh; mkvirtualenv --system-site-packages multiverse', shell=True)
+subprocess.call('apt-get install cmake', shell=True)
+subprocess.call('python3 -m pip install virtualenvwrapper --break-system-packages', shell=True)
 subprocess.call('cd ../../; ./build_multiverse.sh --only-src', shell=True)
 
 print('****************************************')
