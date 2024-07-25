@@ -33,7 +33,7 @@ Write the Multiverse Connector
 
     class MyConnector(MultiverseClient):
         def __init__(self, client_addr: SocketAddress, multiverse_meta_data: MultiverseMetaData) -> None:
-        super().__init__(client_addr, multiverse_meta_data)
+            super().__init__(client_addr, multiverse_meta_data)
 
         def loginfo(self, message: str) -> None:
             print(f"INFO: {message}")
@@ -43,7 +43,7 @@ Write the Multiverse Connector
 
         def _run(self) -> None:
             self.loginfo("Start running the client.")
-            self._connect_and_start
+            self._connect_and_start()
 
         def send_and_receive_meta_data(self) -> None:
             self.loginfo("Sending request meta data: " + str(self.request_meta_data))
