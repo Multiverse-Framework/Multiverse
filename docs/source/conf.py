@@ -2,9 +2,6 @@
 
 import subprocess
 
-subprocess.call('python3 -m pip install virtualenvwrapper --break-system-packages', shell=True)
-subprocess.call('cd ../../; ./build_third_parties.sh --excludes mujoco usd blender; ./build_multiverse.sh --only-src', shell=True)
-
 print('****************************************')
 print('conf.py')
 print('****************************************')
