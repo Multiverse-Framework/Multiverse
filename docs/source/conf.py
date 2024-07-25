@@ -1,12 +1,7 @@
 # Configuration file for the Sphinx documentation builder.
 
 import subprocess
-import os
 
-# Get current directory
-current_dir = os.path.dirname(os.path.realpath(__file__))
-
-subprocess.call(f"ln -sf {current_dir}/cmake-3.30.1-linux-x86_64/bin/cmake /home/docs/checkouts/readthedocs.org/user_builds/multiverseframework/envs/latest/bin", shell=True)
 subprocess.call('python3 -m pip install virtualenvwrapper --break-system-packages', shell=True)
 subprocess.call('cd ../../; ./build_multiverse.sh --only-src', shell=True)
 
