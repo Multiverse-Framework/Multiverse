@@ -1,6 +1,9 @@
 # Configuration file for the Sphinx documentation builder.
 
 import subprocess
+import sys
+
+sys.path.insert(0, '../../multiverse/modules/multiverse_connectors/src/multiverse_client_py/src')
 
 print('****************************************')
 print('conf.py')
