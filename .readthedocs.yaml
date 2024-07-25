@@ -9,6 +9,7 @@ build:
     - libboost-dev
     - pybind11-dev
     - libzmq3-dev
+    - libjsoncpp-dev
     - cmake
   jobs:
     pre_build:
