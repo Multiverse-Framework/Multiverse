@@ -15,8 +15,6 @@ build:
   jobs:
     pre_build:
       - python -m pip install virtualenvwrapper --break-system-packages
-      - update-alternatives --remove-all clang++
-      - update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
       - ./build_multiverse.sh --only-src
 
 python:
