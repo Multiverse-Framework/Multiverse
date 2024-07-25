@@ -147,7 +147,7 @@ for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrap
         pip install urdf_parser_py
 
         # Install MuJoCo
-        pip install mujoco==3.1.5
+        pip install mujoco==3.2.0
 
         # Install additional packages for Jupyter Notebook
         pip install panel jupyter-server bash_kernel
