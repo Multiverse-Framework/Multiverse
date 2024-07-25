@@ -14,6 +14,7 @@ build:
     - cmake
   jobs:
     pre_build:
+      - update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
       - python -m pip install virtualenvwrapper --break-system-packages
       - ./build_multiverse.sh --only-src
 
