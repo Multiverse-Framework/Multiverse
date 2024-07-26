@@ -419,9 +419,9 @@ class MjcfImporter(Factory):
 
                     texture_id = self.mj_model.mat_texid[mat_id][0]
                     if texture_id == -1 or texture_file_path is None:
-                        mat_rgba = self.mj_model.mat_rgba[mat_id][0]
-                        mat_emission = self.mj_model.mat_emission[mat_id].tolist()[0]
-                        mat_specular = self.mj_model.mat_specular[mat_id].tolist()[0]
+                        mat_rgba = self.mj_model.mat_rgba[mat_id]
+                        mat_emission = float(self.mj_model.mat_emission[mat_id])
+                        mat_specular = float(self.mj_model.mat_specular[mat_id])
                         (diffuse_color,
                          opacity,
                          emissive_color,
