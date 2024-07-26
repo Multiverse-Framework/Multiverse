@@ -22,7 +22,7 @@ A distinctive feature of Multiverse is its capability to integrate various physi
 
 In this framework, "simulator" encompasses a broad range of entities, including not only physics engines and graphics engines but also VR headsets that interpret objects geometry, position, and orientation to render them, and controllers that compute forces and torques based on physics data. It can also include Python scripts to manipulate and analyze this data. The possibilities are endless, making it adaptable to many different scenarios. The Multiverse Server-Client is the essential foundation that makes this versatility possible.
 
-Please follow this tutorial to familiarize yourself with the Multiverse Server-Client.
+Please follow this `tutorial <https://multiverseframework.readthedocs.io/en/latest/tutorials.html>`_ to familiarize yourself with the Multiverse Server-Client.
 
 Multiverse Parser
 ~~~~~~~~~~~~~~~~~
@@ -39,7 +39,7 @@ Luckily, there's a solution to this problem. If there were a Nobel Peace Prize f
 
 And in the Multiverse Parser component of the Multiverse framework, USD serves as the translation medium, facilitating not only the seamless conversion of different scene descriptions, but also optimizing them by removing redundant data. This includes visual meshes that are irrelevant to physics engines, and collision meshes that are invisible to graphics engines. You have the meshes but you don't have the proper dynamic properties? Not a problem, Multiverse Parser can compute these properties based on the geometry.
 
-So, let yourself be convinced by exploring this tutorial on the Multiverse Parser.
+So, let yourself be convinced by exploring this `tutorial <https://binder.intel4coro.de/v2/gh/Multiverse-Framework/Multiverse-Docker/main>`_ on the Multiverse Parser.
 
 Multiverse Knowledge
 ~~~~~~~~~~~~~~~~~~~~
@@ -50,7 +50,7 @@ The world is changing, moving from 2D to 3D data. While classification and seman
 
 The Multiverse Knowledge addresses this by taking the first step in understanding scene descriptions and translating them into a machine-readable scene graph. By converting different scene descriptions into USD using the Multiverse Parser, the Multiverse Knowledge transforms the USD scene into a semantic one, adapting custom schemas that support semantic labeling of each USD prim with ontological concepts from various ontologies. This process can be done manually or automatically using the Multiverse View. In summary, given a scene description in any format and some ontologies, the Multiverse Knowledge converts it into a knowledge graph that can be queried. Extending the example of imagination, you can now even interact with the 3D environment verbally.
 
-Please try out some examples in this tutorial on the Multiverse Knowledge.
+Please try out some examples in this `tutorial <https://binder.intel4coro.de/v2/gh/Multiverse-Framework/Multiverse-Docker/main>`_ on the Multiverse Knowledge.
 
 Contents
 --------
