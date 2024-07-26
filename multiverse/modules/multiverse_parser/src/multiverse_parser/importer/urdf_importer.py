@@ -262,11 +262,11 @@ class UrdfImporter(Factory):
             get_urdf_link_api(geom=geom, gprim_prim=gprim_prim)
 
             if type(geom.geometry) is urdf.Box:
-                geom_scale = numpy.array([geom.geometry.width[i] / 2.0 for i in range(3)])
+                geom_scale = numpy.array([geom.geometry.size[i] / 2.0 for i in range(3)])
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
 
                 urdf_geometry_box_api = UsdUrdf.UrdfGeometryBoxAPI.Apply(gprim_prim)
-                urdf_geometry_box_api.CreateSizeAttr(Gf.Vec3f(*geom.geometry.width))
+                urdf_geometry_box_api.CreateSizeAttr(Gf.Vec3f(*geom.geometry.size))
             elif type(geom.geometry) is urdf.Sphere:
                 geom_builder.set_transform(pos=geom_pos, quat=geom_quat)
                 geom_builder.set_attribute(radius=geom.geometry.radius)
@@ -293,7 +293,8 @@ class UrdfImporter(Factory):
                     mesh_path = mesh_prim.GetPath()
                     mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_usd_mesh_file_path,
                                                                      mesh_path=mesh_path)
-                    if mesh_property.face_vertex_counts.width == 0 or mesh_property.face_vertex_indices.width == 0:
+
+                    if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
                         # TODO: Fix empty mesh
                         continue
 
