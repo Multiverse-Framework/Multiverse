@@ -366,7 +366,7 @@ class MjcfImporter(Factory):
                                                       "usd",
                                                       f"{mesh_name}.usda")
 
-                mat_id = mj_geom.matid
+                mat_id = mj_geom.matid[0]
                 if (mat_id == -1 or
                         self.mj_model.mat_texid[mat_id][0] == -1 or
                         self.mj_model.mesh_texcoordadr[mesh_id] == -1):
