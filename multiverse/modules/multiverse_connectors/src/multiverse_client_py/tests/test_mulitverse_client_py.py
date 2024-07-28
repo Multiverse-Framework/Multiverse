@@ -409,7 +409,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
 
         # 2) Spawn the robot
 
-        multiverse_client_test_spawn = self.create_multiverse_client_spawn("4845", "world")
+        multiverse_client_test_spawn = self.create_multiverse_client_spawn("1337", "world")
 
         multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
         multiverse_client_test_spawn.request_meta_data["send"]["tiago_dual"] = ["position", "quaternion"]
@@ -459,8 +459,22 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
         multiverse_client_send.send_data = [multiverse_client_send.sim_time, 0.0]
         multiverse_client_send.send_and_receive_data()
 
+        # 5) Remove the robot
+        sleep(2)
+
+        multiverse_client_test_destroy = self.create_multiverse_client_destroy("1275", "world")
+
+        multiverse_client_test_destroy.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
+        multiverse_client_test_destroy.request_meta_data["send"]["tiago_dual"] = []
+        multiverse_client_test_destroy.request_meta_data["receive"]["tiago_dual"] = []
+        multiverse_client_test_destroy.send_and_receive_meta_data()
+
+        multiverse_client_test_destroy.send_data = [multiverse_client_test_destroy.sim_time]
+        multiverse_client_test_destroy.send_and_receive_data()
+
         multiverse_client_test_spawn.stop()
         multiverse_client_send.stop()
+        multiverse_client_test_destroy.stop()
 
     def test_multiverse_client_spawns(self):
         multiverse_client_test_spawn = self.create_multiverse_client_spawn("1337", "world")
@@ -853,7 +867,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
 
-        sleep(10)  # Wait for the milk box to fall and stabilize
+        sleep(5)  # Wait for the milk box to fall and stabilize
 
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
@@ -895,8 +909,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
         multiverse_client_test_destroy.request_meta_data["receive"]["milk_box"] = []
         multiverse_client_test_destroy.send_and_receive_meta_data()
 
-        time_now = time() - self.time_start
-        multiverse_client_test_destroy.send_data = [time_now]
+        multiverse_client_test_destroy.send_data = [multiverse_client_test_destroy.sim_time]
         multiverse_client_test_destroy.send_and_receive_data()
 
         multiverse_client_test_destroy.stop()
@@ -920,7 +933,9 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
 
         multiverse_client_test_destroy.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
         multiverse_client_test_destroy.request_meta_data["send"]["bread_1"] = []
+        multiverse_client_test_destroy.request_meta_data["send"]["panda"] = []
         multiverse_client_test_destroy.request_meta_data["receive"]["bread_1"] = []
+        multiverse_client_test_destroy.request_meta_data["receive"]["panda"] = []
         multiverse_client_test_destroy.send_and_receive_meta_data()
 
         time_now = time() - self.time_start

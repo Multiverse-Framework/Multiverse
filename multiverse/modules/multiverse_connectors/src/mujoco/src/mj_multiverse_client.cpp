@@ -434,7 +434,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 		{
 			continue;
 		}
-		bool stop = true;
+		bool stop = !send_objects_json[object_name].empty();
 		for (const Json::Value &attribute_json : send_objects_json[object_name])
 		{
 			const std::string attribute_name = attribute_json.asString();

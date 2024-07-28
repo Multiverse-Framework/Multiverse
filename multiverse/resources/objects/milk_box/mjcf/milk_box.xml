@@ -1,5 +1,5 @@
 <mujoco model="milk_box">
-    <compiler angle="radian" meshdir="../meshes/obj/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="true"/>
+    <compiler angle="radian" meshdir="../meshes/obj/" texturedir="../meshes/textures/" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" autolimits="true" inertiafromgeom="true"/>
     <asset>
         <texture name="milk_box_visual" type="2d" file="milk_box.png" />
         <material name="milk_box_visual" texture="milk_box_visual" />
