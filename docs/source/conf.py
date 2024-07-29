@@ -34,8 +34,8 @@ extensions = [
     'sphinx.ext.imgmath', 
     'sphinx.ext.todo', 
     'sphinx.ext.graphviz',
+    'sphinx.ext.napoleon',
     'sphinxcontrib.video',
-    'sphinxcontrib.napoleon',
     'breathe', 
     'myst_parser'
 ]
