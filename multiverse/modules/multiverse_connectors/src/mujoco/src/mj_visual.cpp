@@ -22,6 +22,7 @@
 #include <cmath>
 
 #include "mj_visual.h"
+#include "mj_multiverse_client.h"
 
 #include <thread>
 #include <iomanip>
@@ -204,6 +205,12 @@ void MjVisual::keyboard(GLFWwindow *window, int key, int scancode, int act, int 
         printf("Save as %s\n", scene_xml_path.string().c_str());
         char error[1000] = "Could not save XML model";
         mj_saveLastXML(scene_xml_path.string().c_str(), m, error, 1000);
+    }
+
+    // space: pause simulation
+    if (act == GLFW_PRESS && key == GLFW_KEY_SPACE)
+    {
+        MjMultiverseClient::pause = !MjMultiverseClient::pause;
     }
 }
 

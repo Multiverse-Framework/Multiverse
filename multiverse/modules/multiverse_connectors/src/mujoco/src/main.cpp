@@ -52,17 +52,21 @@ void simulate(const double max_time_step, const double min_time_step)
         if (d->time <= m->opt.timestep)
         {
             i = 0;
+            start_time = get_time_now();
         }
         mtx.lock();
         mj_step1(m, d);
         mtx.unlock();
         mj_multiverse_client.communicate();
+        if (MjMultiverseClient::pause)
+        {
+            continue;
+        }
         mtx.lock();
         mj_step2(m, d);
         mtx.unlock();
         if (d->time <= m->opt.timestep)
         {
-            start_time = get_time_now();
             continue;
         }
 

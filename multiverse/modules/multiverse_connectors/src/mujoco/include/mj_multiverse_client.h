@@ -83,6 +83,8 @@ public:
 
     static std::mutex mutex;
 
+    static bool pause;
+
 private:
     std::string world_name;
 

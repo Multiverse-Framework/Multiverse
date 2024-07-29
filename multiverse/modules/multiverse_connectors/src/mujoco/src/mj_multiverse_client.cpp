@@ -33,6 +33,8 @@
 
 std::mutex MjMultiverseClient::mutex;
 
+bool MjMultiverseClient::pause = false;
+
 bool contains_tag(const boost::filesystem::path &file_path, const std::string &model_name)
 {
 	tinyxml2::XMLDocument doc;
@@ -2039,7 +2041,7 @@ void MjMultiverseClient::bind_api_callbacks_response()
 			api_callback_response[api_callback_name] = Json::arrayValue;
 			if (strcmp(api_callback_name.c_str(), "is_mujoco") == 0)
 			{
-				api_callback_response[api_callback_name].append(true);
+				api_callback_response[api_callback_name].append("yes");
 			}
 			else if (strcmp(api_callback_name.c_str(), "weld") == 0)
 			{
@@ -2093,6 +2095,16 @@ void MjMultiverseClient::bind_api_callbacks_response()
 				{
 					api_callback_response[api_callback_name].append(exist_response);
 				}
+			}
+			else if (strcmp(api_callback_name.c_str(), "pause") == 0)
+			{
+				pause = true;
+				api_callback_response[api_callback_name].append("paused");
+			}
+			else if (strcmp(api_callback_name.c_str(), "unpause") == 0)
+			{
+				pause = false;
+				api_callback_response[api_callback_name].append("unpaused");
 			}
 			else
 			{
@@ -2598,6 +2610,7 @@ void MjMultiverseClient::reset()
 		mj_resetDataKeyframe(m, d, 0);
 	}
 	d->time = 0.0;
+	mj_step(m, d);
 }
 
 bool MjMultiverseClient::communicate(const bool resend_meta_data)
