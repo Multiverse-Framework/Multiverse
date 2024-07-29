@@ -59,7 +59,7 @@ exclude_patterns = ['build']
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
-html_extra_path = ['build/html', '../html']
+html_extra_path = ['build/html']
 
 source_suffix = {
     '.rst': 'restructuredtext',

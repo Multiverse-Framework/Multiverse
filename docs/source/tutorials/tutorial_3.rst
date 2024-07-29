@@ -1,12 +1,16 @@
 .. _tutorial_3:
 
-Tutorial 3: Adding robots and objects to the simulation
-=======================================================
+Tutorial 3: Adding robots and objects to the simulation - MuJoCo
+================================================================
 
 Introduction
 ------------
 
-In this tutorial, we will cover how to add robots and objects to the simulation in a world in Multiverse.
+In this tutorial, we will cover how to add robots and objects to the MuJoCo simulation in a world in Multiverse.
+
+.. note::
+
+   At the moment, this API only supports the Mujoco simulator. Support for other simulators will be added in the future.
 
 Getting Started
 ---------------
@@ -16,7 +20,7 @@ Getting Started
 Define Robots and Objects in the MUV file
 -----------------------------------------
 
-1. Modify the MUV file to add robots and objects to the simulation in the world:
+2. Modify the MUV file to add robots and objects to the simulation in the world:
 
 .. code-block:: yaml
 
@@ -62,7 +66,7 @@ Define Robots and Objects in the MUV file
                             pos: [0.0, 0.0, 5.0]
                             quat: [0, 0.707, 0, 0.707]
 
-1. Save the MUV file, and you are ready to launch your simulation with robots and objects in Multiverse.
+3. Save the MUV file, and you are ready to launch your simulation with robots and objects in Multiverse.
 
 Running the Simulation
 ----------------------
@@ -81,9 +85,9 @@ and the object `milk_box` will be placed with the specified quaternion `[0, 0.70
 Conclusion
 ----------
 
-Congratulations! You have successfully added robots and objects to the simulation in Multiverse.
+Congratulations! You have successfully added robots and objects to the MuJoCo simulation in Multiverse.
 
 Next Steps
 ----------
 
-- Deploy ROS as Multiverse Clients to interact with the simulation.
+- Adding robots and objects to the other simulations.

@@ -1,37 +1,67 @@
 .. _tutorial_6:
 
-Tutorial 6: Write your own connector - Part 2
+Tutorial 6: Write your own connector - Part 1
 =============================================
 
 Introduction
 ------------
 
-In this tutorial, we will cover how to extend the Multiverse connector to interact with other Multiverse Clients via the Multiverse Server,
-such as Spawning, Destroying objects, Changing the properties of objects and Calling API.
-As such, we will start with a simple scenario in MuJoCo.
+In this tutorial, we will cover how to write your own Multiverse Connector to interact with the Multverse Server.
+According to the Multiverse architecture, the Multiverse Connector is responsible for handling the communication between the Multiverse Server and the simulators.
+It is implemented as a Python class that inherits from the Python binding of the Multiverse Client, which is written in C++.
+In the following steps, you will write a simple Multiverse Connector in Python.
 
 Getting Started
 ---------------
 
-1. Open a terminal and run the scenario:
+1. Create a new Python file `my_connector.py` anywhere in your system and open it in your favorite text editor. This file will contain the implementation of your Multiverse Connector.
 
-.. code-block:: console
+2. Make sure the path `<path/to/Multiverse>/multiverse/lib/dist-packages` is in your `PYTHONPATH`. This path contains the Python binding of the Multiverse Client.
 
-    multiverse_launch <path/to/Multiverse>/multiverse/resources/muv/empty.muv
+Write the Multiverse Connector
+------------------------------
 
-2. Continue the step 5 from the previous :ref:`tutorial_5` to create a new connector.
+3. Add the following lines to the Python file to import the necessary modules:
 
-Spawn an object
----------------
+.. code-block:: python
 
-3. Add the following lines to the connector to spawn an object:
+    from multiverse_client_py import MultiverseClient, MultiverseMetaData, SocketAddress
+
+4. Add the following lines to the Python file to define the Multiverse Connector class:
+
+.. code-block:: python
+
+    class MyConnector(MultiverseClient):
+        def __init__(self, client_addr: SocketAddress, multiverse_meta_data: MultiverseMetaData) -> None:
+            super().__init__(client_addr, multiverse_meta_data)
+
+        def loginfo(self, message: str) -> None:
+            print(f"INFO: {message}")
+
+        def logwarn(self, message: str) -> None:
+            print(f"WARN: {message}")
+
+        def _run(self) -> None:
+            self.loginfo("Start running the client.")
+            self._connect_and_start()
+
+        def send_and_receive_meta_data(self) -> None:
+            self.loginfo("Sending request meta data: " + str(self.request_meta_data))
+            self._communicate(True)
+            self.loginfo("Received response meta data: " + str(self.response_meta_data))
+
+        def send_and_receive_data(self) -> None:
+            self.loginfo("Sending data: " + str(self.send_data))
+            self._communicate(False)
+            self.loginfo("Received data: " + str(self.receive_data))
+
+5. Create an instance of the Multiverse Connector and run it:
 
 .. code-block:: python
 
     if __name__ == "__main__":
         multiverse_meta_data = MultiverseMetaData(
-            world_name="world",
-            simulation_name="my_simulation",
+            world_name="my_world",
             length_unit="m",
             angle_unit="rad",
             mass_unit="kg",
@@ -40,165 +70,47 @@ Spawn an object
         )
         client_addr = SocketAddress(port="5000")
         my_connector = MyConnector(client_addr=client_addr,
-                                multiverse_meta_data=multiverse_meta_data)
+                                   multiverse_meta_data=multiverse_meta_data)
         my_connector.run()
-
-        # Spawn an object called milk_box in the simulation called empty_simulation
-
-        object_name = "milk_box"
-        object_pos = [0.0, 0.0, 5.0]
-        object_quat = [0.707, 0.0, 0.707, 0.0]
-
-        my_connector.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
-        my_connector.request_meta_data["send"] = {}
-        my_connector.request_meta_data["send"]["milk_box"] = ["position", "quaternion"]
-        my_connector.send_and_receive_meta_data()
-        my_connector.send_data = [my_connector.sim_time] + object_pos + object_quat
-        my_connector.send_and_receive_data()
-
         my_connector.stop()
 
-4. Save the connector and run it:
+6. Save the Python file and you are ready to run your Multiverse Connector.
+
+Running the Multiverse Connector
+--------------------------------
+
+7. Open a terminal and start the Multiverse Server by running the following command:
+
+.. code-block:: console
+
+    multiverse_server
+
+8. Open another terminal and start the Multiverse Connector by running the following command:
 
 .. code-block:: console
 
     python my_connector.py
 
-The object milk_box will be spawned in the MuJoCo simulation empty_simulation. 
-The path of the object is found in the resources defined in the MUV file.
-If the object is not found in the resources, the object will not be spawned.
-After spawning the object, the Multiverse Client running the MuJoCo simulation will send the position and quaternion of the new object `milk_box` to the Multiverse Server,
-as specified in the request_meta_data of the requested connector.
-
-Destroy an object
------------------
-
-5. Add the following lines to the connector to destroy the object after 5 seconds:
-
-.. code-block:: python
-
-    multiverse_meta_data = MultiverseMetaData(
-            world_name="world",
-            simulation_name="my_simulation",
-            length_unit="m",
-            angle_unit="rad",
-            mass_unit="kg",
-            time_unit="s",
-            handedness="rhs",
-        )
-        client_addr = SocketAddress(port="5000")
-        my_connector = MyConnector(client_addr=client_addr,
-                                multiverse_meta_data=multiverse_meta_data)
-        my_connector.run()
-
-        # Spawn an object called milk_box in the simulation called empty_simulation
-
-        object_name = "milk_box"
-        object_pos = [0.0, 0.0, 5.0]
-        object_quat = [0.707, 0.0, 0.707, 0.0]
-
-        my_connector.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
-        my_connector.request_meta_data["send"] = {}
-        my_connector.request_meta_data["send"]["milk_box"] = ["position", "quaternion"]
-        my_connector.send_and_receive_meta_data()
-        my_connector.send_data = [my_connector.sim_time] + object_pos + object_quat
-        my_connector.send_and_receive_data()
-
-        # Destroy the object after 5 seconds
-
-        import time
-        time.sleep(5)
-
-        my_connector.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
-        my_connector.request_meta_data["send"] = {}
-        my_connector.request_meta_data["send"]["milk_box"] = []
-        my_connector.request_meta_data["receive"]["milk_box"] = []
-        my_connector.send_and_receive_meta_data()
-        my_connector.send_data = [my_connector.sim_time]
-        my_connector.send_and_receive_data()
-
-        my_connector.stop()
-
-6. Save the connector and run it:
+9. The Multiverse Connector will connect to the Multiverse Server and terminate. 
+You will see the following output in the terminal:
 
 .. code-block:: console
 
-    python my_connector.py
+    multiverse_server
 
-The object milk_box will be destroyed in the MuJoCo simulation empty_simulation after 5 seconds.
-After destroying the object, the Multiverse Client running the MuJoCo simulation will stop sending the position and quaternion of the object `milk_box` to the Multiverse Server,
-as specified in the request_meta_data of the requested connector.
-
-Change the properties of an object
-----------------------------------
-
-The modification of the properties of an object is similar to the spawning of an object.
-The only difference is that the object already exists in the simulation.
-If the object is not found in the simulation, the object will be spawned.
-You can test it by excuting the step 3 two times, and the object will be updated with the new position and quaternion.
-
-Call API
---------
-
-7. After spawning an object, add the following lines to the connector to call the API:
-
-.. code-block:: python
-
-    if __name__ == "__main__":
-        multiverse_meta_data = MultiverseMetaData(
-            world_name="world",
-            simulation_name="my_simulation",
-            length_unit="m",
-            angle_unit="rad",
-            mass_unit="kg",
-            time_unit="s",
-            handedness="rhs",
-        )
-        client_addr = SocketAddress(port="5000")
-        my_connector = MyConnector(
-            client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
-        )
-        my_connector.run()
-
-        # Spawn an object called milk_box in the simulation called empty_simulation
-
-        object_name = "milk_box"
-        object_pos = [0.0, 0.0, 5.0]
-        object_quat = [0.707, 0.0, 0.707, 0.0]
-
-        my_connector.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
-        my_connector.request_meta_data["send"] = {}
-        my_connector.request_meta_data["send"]["milk_box"] = ["position", "quaternion"]
-        my_connector.send_and_receive_meta_data()
-        my_connector.send_data = [my_connector.sim_time] + object_pos + object_quat
-        my_connector.send_and_receive_data()
-
-        # Call four APIs after spawning the object
-
-        my_connector.request_meta_data["meta_data"]["simulation_name"] = "my_simulation"
-        my_connector.request_meta_data["send"] = {}         # Clear the send data
-        my_connector.request_meta_data["receive"] = {}      # Clear the receive data
-        my_connector.request_meta_data["api_callbacks"] = {
-            "empty_simulation": [
-                {"exist": ["milk_box"]},                    # Check if the object exists
-                {"get_rays": ["0 0 1", "0 0 5"]},           # Get the objects that hit by the ray from [0 0 1] to [0 0 5]
-                {"is_mujoco": []},                          # Check if the simulator is MuJoCo
-                {"something_else": ["param1", "param2"]},   # Call another API
-            ]
-        }
-        my_connector.send_and_receive_meta_data()
-
-        my_connector.stop()
-
-8. Save the connector and run it:
+    Start Multiverse Server...
+    [Server] Create server socket tcp://*:7000
+    [Server] Waiting for request...
+    [Server] Received request to open socket tcp://127.0.0.1:5000.
+    [Server] Sending response to open socket tcp://127.0.0.1:5000.
+    [Server] Sent response to open socket tcp://127.0.0.1:5000.
+    [Server] Waiting for request...
+    [Server] Bind to socket tcp://127.0.0.1:5000.
+    [Server] Received close signal at socket tcp://127.0.0.1:5000.
 
 .. code-block:: console
 
-    python my_connector.py
-
-You will see the results of the four APIs as follows:
-
-.. code-block:: console
+    python my_connector.py 
 
     INFO: [Client 5000] Start MyConnector5000.
     INFO: Start running the client.
@@ -207,25 +119,217 @@ You will see the results of the four APIs as follows:
     [Client 5000] Received response tcp://127.0.0.1:5000 from tcp://127.0.0.1:7000.
     [Client 5000] Opened the socket tcp://127.0.0.1:5000.
     [Client 5000] Start.
-    INFO: Sending request meta data: {'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg', 'simulation_name': 'empty_simulation', 'time_unit': 's', 'world_name': 'world'}, 'send': {'milk_box': ['position', 'quaternion']}, 'receive': {}}
-    INFO: Received response meta data: {'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg', 'simulation_name': 'empty_simulation', 'time_unit': 's', 'world_name': 'world'}, 'send': {'milk_box': {'position': [5.115300022826556e-18, 3.703495798793672e-18, 0.02989224457978379], 'quaternion': [0.7071067811865475, 4.130162651383842e-17, 0.7071067811865475, -2.5531090745860042e-17]}}, 'time': 1538.8849999705408}
-    INFO: Sending data: [0.004271030426025391, 0.0, 0.0, 5.0, 0.707, 0.0, 0.707, 0.0]
-    [Client 5000] Starting the communication (send: [7 - 0 - 0], receive: [0 - 0 - 0]).
-    INFO: Received data: [1538.8999999705406]
-    INFO: Sending request meta data: {'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg', 'simulation_name': 'my_simulation', 'time_unit': 's', 'world_name': 'world'}, 'send': {}, 'receive': {}, 'api_callbacks': {'empty_simulation': [{'exist': ['milk_box']}, {'get_rays': ['0 0 1', '0 0 5']}, {'is_mujoco': []}, {'something_else': ['param1', 'param2']}]}}
-    INFO: Received response meta data: {'api_callbacks_response': {'empty_simulation': [{'exist': ['yes']}, {'get_rays': ['milk_box 3.969843']}, {'is_mujoco': ['true']}, {'something_else': ['not implemented']}]}, 'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg', 'simulation_name': 'my_simulation', 'time_unit': 's', 'world_name': 'world'}, 'time': 1538.9039999705406}
+    [Client 5000] Closing the socket tcp://127.0.0.1:5000.
 
-The connector will call the four APIs after spawning the object `milk_box` in the MuJoCo simulation empty_simulation.
-The Multiverse Client running the MuJoCo simulation will send the results of the APIs to the Multiverse Server,
-as specified in the request_meta_data of your requested connector.
-Then the Multiverse Server will send the results to your requested connector.
-The first API checks if the object `milk_box` exists in the simulation, the answer is `yes`.
-The second API gets the objects that are hit by the ray from [0 0 1] to [0 0 5], the result is `milk_box 3.969843`, indicates that the object `milk_box` is hit by the ray at 3.969843 meters from the origin.
-The third API checks if the simulator is MuJoCo, the answer is `true`.
-The fourth API is not implemented, so the result is `not implemented`.
+Sending Data to the Multiverse Server
+-------------------------------------
+
+To successfully send data to the Multiverse Server, you need to define the `request_meta_data` and send it to the server.
+The server will respond with the `response_meta_data`, indicating that the server understands the request and the connection can be established.
+Once the connection is established, you can send data to the server by populating the `send_data` in the order specified by the `response_meta_data`.
+
+10. Modify the code in the main part to send the request meta data to the server:
+
+.. code-block:: python
+
+    multiverse_meta_data = MultiverseMetaData(
+        world_name="my_world",
+        simulation_name="my_simulation",
+        length_unit="m",
+        angle_unit="rad",
+        mass_unit="kg",
+        time_unit="s",
+        handedness="rhs",
+    )
+    client_addr = SocketAddress(port="5000")
+    my_connector = MyConnector(client_addr=client_addr,
+                               multiverse_meta_data=multiverse_meta_data)
+    my_connector.run()
+
+    my_connector.request_meta_data["send"] = {}
+    my_connector.request_meta_data["send"]["my_object"] = [
+        "position",
+        "quaternion"
+    ]
+    my_connector.send_and_receive_meta_data()
+
+    my_connector.stop()
+
+11. Save the Python file and run the step 8 again. You will see the following output in the terminal:
+
+.. code-block:: console
+
+    python my_connector.py 
+
+    INFO: [Client 5000] Start MyConnector5000.
+    INFO: Start running the client.
+    [Client 5000] Sending request tcp://127.0.0.1:5000 to tcp://127.0.0.1:7000.
+    [Client 5000] Sent request tcp://127.0.0.1:5000 to tcp://127.0.0.1:7000.
+    [Client 5000] Received response tcp://127.0.0.1:5000 from tcp://127.0.0.1:7000.
+    [Client 5000] Opened the socket tcp://127.0.0.1:5000.
+    [Client 5000] Start.
+    INFO: Sending request meta data: {'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg', 'simulation_name': 'my_simulation', 'time_unit': 's', 'world_name': 'my_world'}, 'send': {'my_object': ['position', 'quaternion']}, 'receive': {}}
+    INFO: Received response meta data: {'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg', 'simulation_name': 'my_simulation', 'time_unit': 's', 'world_name': 'my_world'}, 'send': {'my_object': {'position': [None, None, None], 'quaternion': [None, None, None, None]}}, 'time': 0}
+    [Client 5000] Closing the socket tcp://127.0.0.1:5000.
+
+As you can see, the Multiverse Connector successfully sent the request meta data to the server and received the response meta data from the server.
+The `None` values in the response meta data indicate that the data is new and has not been sent yet.
+Now we can send data to the server by populating the `send_data` in the order specified by the `response_meta_data`.
+The `time` field in the response meta data indicates the current time in the simulation.
+When you send data to the server, make sure to set the first value of the `send_data` to the current time (non-zero), if it's zero, all simulations in the same world will be reset.
+
+12. Modify the code in the main part to send data to the server:
+
+.. code-block:: python
+
+    if __name__ == "__main__":
+        multiverse_meta_data = MultiverseMetaData(
+            world_name="my_world",
+            simulation_name="my_simulation",
+            length_unit="m",
+            angle_unit="rad",
+            mass_unit="kg",
+            time_unit="s",
+            handedness="rhs",
+        )
+        client_addr = SocketAddress(port="5000")
+        my_connector = MyConnector(client_addr=client_addr,
+                                multiverse_meta_data=multiverse_meta_data)
+        my_connector.run()
+
+        my_connector.request_meta_data["send"] = {}
+        my_connector.request_meta_data["send"]["my_object"] = [
+            "position",
+            "quaternion"
+        ]
+        my_connector.send_and_receive_meta_data()
+
+        sim_time = my_connector.sim_time # The current simulation time
+        my_object_pos = [1.0, 2.0, 3.0]
+        my_object_quat = [0.0, 0.0, 0.0, 1.0]
+
+        my_connector.send_data = [sim_time] + my_object_pos + my_object_quat # The send_data to the correct order
+        my_connector.send_and_receive_data()
+
+        my_connector.stop()
+
+13. Save the Python file and run the step 8 again. You will see the following output in the terminal:
+
+.. code-block:: console
+
+    python my_connector.py
+
+    INFO: [Client 5000] Start MyConnector5000.
+    INFO: Start running the client.
+    [Client 5000] Sending request tcp://127.0.0.1:5000 to tcp://127.0.0.1:7000.
+    [Client 5000] Sent request tcp://127.0.0.1:5000 to tcp://127.0.0.1:7000.
+    [Client 5000] Received response tcp://127.0.0.1:5000 from tcp://127.0.0.1:7000.
+    [Client 5000] Opened the socket tcp://127.0.0.1:5000.
+    [Client 5000] Start.
+    INFO: Sending request meta data: {'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg', 'simulation_name': 'my_simulation', 'time_unit': 's', 'world_name': 'my_world'}, 'send': {'my_object': ['position', 'quaternion']}, 'receive': {}}
+    INFO: Received response meta data: {'meta_data': {'angle_unit': 'rad', 'handedness': 'rhs', 'length_unit': 'm', 'mass_unit': 'kg', 'simulation_name': 'my_simulation', 'time_unit': 's', 'world_name': 'my_world'}, 'send': {'my_object': {'position': [None, None, None], 'quaternion': [None, None, None, None]}}, 'time': 0}
+    INFO: Sending data: [0.010332822799682617, 1.0, 2.0, 3.0, 0.0, 0.0, 0.0, 1.0]
+    [Client 5000] Starting the communication (send: [7 - 0 - 0], receive: [0 - 0 - 0]).
+    INFO: Received data: [0.010332822799682617]
+    [Client 5000] Closing the socket tcp://127.0.0.1:5000.
+
+As you can see, the Multiverse Connector successfully sent the data to the server and received the data as the current world time from the server.
+The line `[Client 5000] Starting the communication (send: [7 - 0 - 0], receive: [0 - 0 - 0])` indicates that the size of the data from the server and the client is correct (in this case, the client want to send 7 double, 0 uint8 and 0 uint16 and receive 0 double, 0 uint8 and 0 uint16 excluding time).
+
+Receiving Data from the Multiverse Server
+-----------------------------------------
+
+To successfully receive data from the Multiverse Server, same as sending data, you need to define the `receive` field `request_meta_data` and send it to the server.
+If the server understands the request and the data is available, the server will respond with the `response_meta_data`.
+If the data is unavailable, the server will wait for the data to be available and the client will be blocked until the data is sent.
+So to make sure the client is not blocked, you need to send the data to the server first.
+Therefore we will continue from the step 12.
+
+14. Modify the code in the main part to receive data from the server:
+
+.. code-block:: python
+
+    if __name__ == "__main__":
+        multiverse_meta_data = MultiverseMetaData(
+            world_name="my_world",
+            simulation_name="my_simulation",
+            length_unit="m",
+            angle_unit="rad",
+            mass_unit="kg",
+            time_unit="s",
+            handedness="rhs",
+        )
+        client_addr = SocketAddress(port="5000")
+        my_connector = MyConnector(client_addr=client_addr,
+                                multiverse_meta_data=multiverse_meta_data)
+        my_connector.run()
+
+        my_connector.request_meta_data["send"] = {}
+        my_connector.request_meta_data["send"]["my_object"] = [
+            "position",
+            "quaternion"
+        ]
+        my_connector.send_and_receive_meta_data()
+
+        sim_time = my_connector.sim_time # The current simulation time
+        my_object_pos = [1.0, 2.0, 3.0]
+        my_object_quat = [0.0, 0.0, 0.0, 1.0]
+
+        my_connector.send_data = [sim_time] + my_object_pos + my_object_quat # The send_data to the correct order
+        my_connector.send_and_receive_data()
+
+        # Change the request meta data to receive the position and quaternion of my_object
+
+        my_connector.request_meta_data["send"] = {}
+        my_connector.request_meta_data["receive"] = {}
+        my_connector.request_meta_data["receive"]["my_object"] = [
+            "position",
+            "quaternion"
+        ]
+        my_connector.send_and_receive_meta_data()
+
+        sim_time = my_connector.sim_time # The current simulation time
+        my_connector.send_data = [sim_time]
+        my_connector.send_and_receive_data()
+
+        my_connector.stop()
+
+15. Save the Python file and run the step 8 again. You will see the following output in the terminal:
+
+.. code-block:: console
+
+    python my_connector.py
+
+    ...
+    INFO: Sending data: [0.016848087310791016]
+    [Client 5000] Starting the communication (send: [0 - 0 - 0], receive: [7 - 0 - 0]).
+    INFO: Received data: [0.016848087310791016, 1.0, 2.0, 3.0, 0.0, 0.0, 0.0, 1.0]
+    [Client 5000] Closing the socket tcp://127.0.0.1:5000.
+
+As you can see, the Multiverse Connector successfully received the data from the server.
+
+**Tip:** If you don't know about the objects and object attributes in the world, send an empty string in the `receive` field of `request_meta_data` to the server and the server will respond with the available objects and their attributes.
+For example:
+
+.. code-block:: python
+
+    # To get the all available objects and their attributes
+    my_connector.request_meta_data["receive"][""] = [""] 
+
+    # To get the available attributes of the object my_object
+    my_connector.request_meta_data["receive"]["my_object"] = [""]
+
+    # To get the position of all available objects
+    my_connector.request_meta_data["receive"][""] = ["position"]
 
 Conclusion
 ----------
 
-Congratulations! You have successfully extended the Multiverse connector to interact with other Multiverse Clients via the Multiverse Server.
-You have learned how to spawn an object, destroy an object, change the properties of an object, and call the API.
+Congratulations! You have successfully written your own Multiverse Connector in Python. 
+In this tutorial, you learned how to define the Multiverse Connector class, send and receive meta data, and send and receive data to and from the Multiverse Server. 
+You also learned how to run the Multiverse Connector and interact with the Multiverse Server.
+
+Next Steps
+----------
+
+- Extend the Multiverse Connector to interact with other Multiverse Clients through the Multiverse Server.
