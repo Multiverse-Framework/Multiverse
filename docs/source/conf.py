@@ -34,6 +34,7 @@ extensions = [
     'sphinx.ext.todo', 
     'sphinx.ext.graphviz',
     'sphinxcontrib.video',
+    'sphinxcontrib.napoleon',
     'breathe', 
     'myst_parser'
 ]
@@ -66,6 +67,14 @@ source_suffix = {
 
 # -- Options for EPUB output
 epub_show_urls = 'footnote'
+
+autodoc_default_options = {
+    'members': True,
+    'member-order': 'groupwise',
+    'special-members': '__init__',
+    'undoc-members': True,
+    'exclude-members': '__weakref__'
+}
 
 def setup(app):
     app.add_css_file('css/style.css')
