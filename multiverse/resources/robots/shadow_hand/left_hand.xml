@@ -104,6 +104,9 @@
         <geom class="left_plastic_collision" size="0.035 0.035 0.035" pos="0.01 0.0 0.181" quat="0.380188 0.924909 0 0"
           type="box"/>
         <body name="lh_wrist" pos="0.01 0 0.21301" quat="1 0 0 1">
+          <body name="lh_wrist_ref" quat="0 1 0 1" pos="0 0 0.03" >
+            <!-- <geom class="left_plastic_visual" quat="0 -1 0 -1" mesh="left_wrist" material="metallic"/> -->
+          </body>
           <inertial mass="0.1" pos="0 0 0.029" quat="0.5 0.5 0.5 0.5" diaginertia="6.4e-05 4.38e-05 3.5e-05"/>
           <joint class="left_wrist_y" name="lh_WRJ2"/>
           <geom class="left_plastic_visual" mesh="left_wrist" material="metallic"/>
@@ -144,6 +147,9 @@
                   <geom class="left_plastic_visual" mesh="left_f_middle"/>
                   <geom size="0.009 0.0125" pos="0 0 0.0125" type="capsule" class="left_plastic_collision"/>
                   <body name="lh_ffdistal" pos="0 0 0.025">
+                    <body name="lh_ffdistal_ref" quat="0 1 0 1">
+                      <!-- <geom class="left_plastic_visual" quat="0 -1 0 -1" mesh="left_f_distal_pst"/> -->
+                    </body>
                     <inertial mass="0.013" pos="0 0 0.0130769" quat="1 0 0 1"
                       diaginertia="1.28092e-06 1.12092e-06 5.3e-07"/>
                     <joint name="lh_FFJ1" class="left_middle_distal"/>
@@ -169,6 +175,9 @@
                   <geom class="left_plastic_visual" mesh="left_f_middle"/>
                   <geom size="0.009 0.0125" pos="0 0 0.0125" type="capsule" class="left_plastic_collision"/>
                   <body name="lh_mfdistal" pos="0 0 0.025">
+                    <body name="lh_mfdistal_ref" quat="0 1 0 1">
+                      <!-- <geom class="left_plastic_visual" quat="0 -1 0 -1" mesh="left_f_distal_pst"/> -->
+                    </body>
                     <inertial mass="0.013" pos="0 0 0.0130769" quat="1 0 0 1"
                       diaginertia="1.28092e-06 1.12092e-06 5.3e-07"/>
                     <joint name="lh_MFJ1" class="left_middle_distal"/>
@@ -194,6 +203,9 @@
                   <geom class="left_plastic_visual" mesh="left_f_middle"/>
                   <geom size="0.009 0.0125" pos="0 0 0.0125" type="capsule" class="left_plastic_collision"/>
                   <body name="lh_rfdistal" pos="0 0 0.025">
+                    <body name="lh_rfdistal_ref" quat="0 1 0 1">
+                      <!-- <geom class="left_plastic_visual" quat="0 -1 0 -1" mesh="left_f_distal_pst"/> -->
+                    </body>
                     <inertial mass="0.013" pos="0 0 0.0130769" quat="1 0 0 1"
                       diaginertia="1.28092e-06 1.12092e-06 5.3e-07"/>
                     <joint name="lh_RFJ1" class="left_middle_distal"/>
@@ -224,6 +236,9 @@
                     <geom class="left_plastic_visual" mesh="left_f_middle"/>
                     <geom size="0.009 0.0125" pos="0 0 0.0125" type="capsule" class="left_plastic_collision"/>
                     <body name="lh_lfdistal" pos="0 0 0.025">
+                      <body name="lh_lfdistal_ref" quat="0 1 0 1">
+                        <!-- <geom class="left_plastic_visual" quat="0 -1 0 -1" mesh="left_f_distal_pst"/> -->
+                      </body>
                       <inertial mass="0.013" pos="0 0 0.0130769" quat="1 0 0 1"
                         diaginertia="1.28092e-06 1.12092e-06 5.3e-07"/>
                       <joint name="lh_LFJ1" class="left_middle_distal"/>
@@ -254,6 +269,9 @@
                     <geom size="0.009 0.009" pos="0 0 0.012" type="capsule" class="left_plastic_collision"/>
                     <geom size="0.01" pos="0 0 0.03" class="left_plastic_collision"/>
                     <body name="lh_thdistal" pos="0 0 0.032" quat="1 0 0 -1">
+                      <body name="lh_thdistal_ref" quat="0 1 0 1">
+                        <!-- <geom class="left_plastic_visual" quat="0 -1 0 -1" mesh="left_th_distal_pst"/> -->
+                      </body>
                       <inertial mass="0.017" pos="0 0 0.0145588" quat="1 0 0 1"
                         diaginertia="2.37794e-06 2.27794e-06 1e-06"/>
                       <joint name="lh_THJ1" class="left_thdistal"/>

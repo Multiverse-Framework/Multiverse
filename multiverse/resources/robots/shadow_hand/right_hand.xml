@@ -96,15 +96,17 @@
   <worldbody>
     <body name="right_shadow_hand">
       <freejoint/>
-      <body name="rh_forearm" childclass="right_hand" quat="0 1 0 1">
+      <body name="rh_forearm" childclass="right_hand" quat="1 0 0 0">
         <inertial mass="3" pos="0 0 0.09" diaginertia="0.0138 0.0138 0.00744"/>
         <geom class="right_plastic_visual" mesh="right_forearm_0" material="gray"/>
         <geom class="right_plastic_visual" mesh="right_forearm_1"/>
         <geom class="right_plastic_collision" type="mesh" mesh="right_forearm_collision"/>
         <geom class="right_plastic_collision" size="0.035 0.035 0.035" pos="0.01 0.0 0.181" quat="0.380188 0.924909 0 0"
           type="box"/>
-        <body name="rh_wrist_ref" pos="0.01 0 0.21301" quat="1 -1 1 1"/>
         <body name="rh_wrist" pos="0.01 0 0.21301" quat="1 0 0 1">
+          <body name="rh_wrist_ref" pos="0 0 0.03" quat="1 0 1 0">
+            <!-- <geom class="right_plastic_visual" quat="-1 0 1 0" mesh="right_wrist" material="metallic"/> -->
+          </body>
           <inertial mass="0.1" pos="0 0 0.029" quat="0.5 0.5 0.5 0.5" diaginertia="6.4e-05 4.38e-05 3.5e-05"/>
           <joint class="right_wrist_y" name="rh_WRJ2"/>
           <geom class="right_plastic_visual" mesh="right_wrist" material="metallic"/>
@@ -146,6 +148,9 @@
                   <geom class="right_plastic_visual" mesh="right_f_middle"/>
                   <geom size="0.009 0.0125" pos="0 0 0.0125" type="capsule" class="right_plastic_collision"/>
                   <body name="rh_ffdistal" pos="0 0 0.025">
+                    <body name ="rh_ffdistal_ref" pos="0 0 0" quat="1 0 1 0">
+                      <!-- <geom class="right_plastic_visual" quat="-1 0 1 0" mesh="right_f_distal_pst"/> -->
+                    </body>
                     <inertial mass="0.013" pos="0 0 0.0130769" quat="1 0 0 1"
                       diaginertia="1.28092e-06 1.12092e-06 5.3e-07"/>
                     <joint name="rh_FFJ1" class="right_middle_distal"/>
@@ -171,6 +176,9 @@
                   <geom class="right_plastic_visual" mesh="right_f_middle"/>
                   <geom size="0.009 0.0125" pos="0 0 0.0125" type="capsule" class="right_plastic_collision"/>
                   <body name="rh_mfdistal" pos="0 0 0.025">
+                    <body name ="rh_mfdistal_ref" pos="0 0 0" quat="1 0 1 0">
+                      <!-- <geom class="right_plastic_visual" quat="-1 0 1 0" mesh="right_f_distal_pst"/> -->
+                    </body>
                     <inertial mass="0.013" pos="0 0 0.0130769" quat="1 0 0 1"
                       diaginertia="1.28092e-06 1.12092e-06 5.3e-07"/>
                     <joint name="rh_MFJ1" class="right_middle_distal"/>
@@ -196,6 +204,9 @@
                   <geom class="right_plastic_visual" mesh="right_f_middle"/>
                   <geom size="0.009 0.0125" pos="0 0 0.0125" type="capsule" class="right_plastic_collision"/>
                   <body name="rh_rfdistal" pos="0 0 0.025">
+                    <body name ="rh_rfdistal_ref" pos="0 0 0" quat="1 0 1 0">
+                      <!-- <geom class="right_plastic_visual" quat="-1 0 1 0" mesh="right_f_distal_pst"/> -->
+                    </body> 
                     <inertial mass="0.013" pos="0 0 0.0130769" quat="1 0 0 1"
                       diaginertia="1.28092e-06 1.12092e-06 5.3e-07"/>
                     <joint name="rh_RFJ1" class="right_middle_distal"/>
@@ -226,6 +237,9 @@
                     <geom class="right_plastic_visual" mesh="right_f_middle"/>
                     <geom size="0.009 0.0125" pos="0 0 0.0125" type="capsule" class="right_plastic_collision"/>
                     <body name="rh_lfdistal" pos="0 0 0.025">
+                      <body name ="rh_lfdistal_ref" pos="0 0 0" quat="1 0 1 0">
+                        <!-- <geom class="right_plastic_visual" quat="-1 0 1 0" mesh="right_f_distal_pst"/> -->
+                      </body>
                       <inertial mass="0.013" pos="0 0 0.0130769" quat="1 0 0 1"
                         diaginertia="1.28092e-06 1.12092e-06 5.3e-07"/>
                       <joint name="rh_LFJ1" class="right_middle_distal"/>
@@ -256,6 +270,9 @@
                     <geom size="0.009 0.009" pos="0 0 0.012" type="capsule" class="right_plastic_collision"/>
                     <geom size="0.01" pos="0 0 0.03" class="right_plastic_collision"/>
                     <body name="rh_thdistal" pos="0 0 0.032" quat="1 0 0 -1">
+                      <body name ="rh_thdistal_ref" pos="0 0 0" quat="1 0 1 0">
+                        <!-- <geom class="right_plastic_visual" quat="-1 0 1 0" mesh="right_th_distal_pst"/> -->
+                      </body>
                       <inertial mass="0.017" pos="0 0 0.0145588" quat="1 0 0 1"
                         diaginertia="2.37794e-06 2.27794e-06 1e-06"/>
                       <joint name="rh_THJ1" class="right_thdistal"/>
