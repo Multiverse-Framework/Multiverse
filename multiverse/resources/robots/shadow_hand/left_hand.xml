@@ -96,7 +96,7 @@
   <worldbody>
     <body name="left_shadow_hand">
       <freejoint/>
-      <body name="lh_forearm" childclass="left_hand" quat="0 1 0 1">
+      <body name="lh_forearm" childclass="left_hand" quat="1 0 0 0">
         <inertial mass="3" pos="0 0 0.09" diaginertia="0.0138 0.0138 0.00744"/>
         <geom class="left_plastic_visual" mesh="left_forearm_0" material="gray"/>
         <geom class="left_plastic_visual" mesh="left_forearm_1"/>

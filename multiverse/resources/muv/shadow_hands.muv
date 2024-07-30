@@ -15,14 +15,14 @@ simulations:
       name: world
       path: floor.xml
     objects:
-      left_hand:
-        path: left_hand.xml
-        apply:
-          body:
-            left_shadow_hand:
-              pos: [0.0, 0.25, 1.05]
-        prefix:
-          geom: left_
+      # left_hand:
+      #   path: left_hand.xml
+      #   apply:
+      #     body:
+      #       left_shadow_hand:
+      #         pos: [0.0, 0.25, 1.05]
+      #   prefix:
+      #     geom: left_
       right_hand:
         path: right_hand.xml
         apply:
@@ -32,53 +32,53 @@ simulations:
         prefix:
           geom: right_
     references:
-      left_shadow_hand:
-        body1: LeftHand_WristRoot
-        body2: left_shadow_hand
-      lh_thdistal:
-        body1: LeftHand_ThumbTip
-        body2: lh_thdistal
-        torquescale: 0.1
-      lh_ffdistal:
-        body1: LeftHand_IndexTip
-        body2: lh_ffdistal
-        torquescale: 0.1
-      lh_mfdistal:
-        body1: LeftHand_MiddleTip
-        body2: lh_mfdistal
-        torquescale: 0.1
-      lh_rfdistal:
-        body1: LeftHand_RingTip
-        body2: lh_rfdistal
-        torquescale: 0.1
-      lh_lfdistal:
-        body1: LeftHand_PinkyTip
-        body2: lh_lfdistal
-        torquescale: 0.1
+      # left_shadow_hand:
+      #   body1: LeftHand_WristRoot
+      #   body2: left_shadow_hand
+      # lh_thdistal:
+      #   body1: LeftHand_ThumbTip
+      #   body2: lh_thdistal
+      #   torquescale: 0.1
+      # lh_ffdistal:
+      #   body1: LeftHand_IndexTip
+      #   body2: lh_ffdistal
+      #   torquescale: 0.1
+      # lh_mfdistal:
+      #   body1: LeftHand_MiddleTip
+      #   body2: lh_mfdistal
+      #   torquescale: 0.1
+      # lh_rfdistal:
+      #   body1: LeftHand_RingTip
+      #   body2: lh_rfdistal
+      #   torquescale: 0.1
+      # lh_lfdistal:
+      #   body1: LeftHand_PinkyTip
+      #   body2: lh_lfdistal
+      #   torquescale: 0.1
       
       right_shadow_hand:
         body1: RightHand_WristRoot
-        body2: right_shadow_hand
-      rh_thdistal:
-        body1: RightHand_ThumbTip
-        body2: rh_thdistal
-        torquescale: 0.1
-      rh_ffdistal:
-        body1: RightHand_IndexTip
-        body2: rh_ffdistal
-        torquescale: 0.1
-      rh_mfdistal:
-        body1: RightHand_MiddleTip
-        body2: rh_mfdistal
-        torquescale: 0.1
-      rh_rfdistal:
-        body1: RightHand_RingTip
-        body2: rh_rfdistal
-        torquescale: 0.1
-      rh_lfdistal:
-        body1: RightHand_PinkyTip
-        body2: rh_lfdistal
-        torquescale: 0.1
+        body2: rh_wrist_ref
+      # rh_thdistal:
+      #   body1: RightHand_ThumbTip
+      #   body2: rh_thdistal
+      #   torquescale: 0.1
+      # rh_ffdistal:
+      #   body1: RightHand_IndexTip
+      #   body2: rh_ffdistal
+      #   torquescale: 0.1
+      # rh_mfdistal:
+      #   body1: RightHand_MiddleTip
+      #   body2: rh_mfdistal
+      #   torquescale: 0.1
+      # rh_rfdistal:
+      #   body1: RightHand_RingTip
+      #   body2: rh_rfdistal
+      #   torquescale: 0.1
+      # rh_lfdistal:
+      #   body1: RightHand_PinkyTip
+      #   body2: rh_lfdistal
+      #   torquescale: 0.1
 
     config:
       max_time_step: 0.002
@@ -95,15 +95,31 @@ multiverse_clients:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
     receive:
-      LeftHand_WristRoot: ["position", "quaternion"]
-      LeftHand_ThumbTip: ["position", "quaternion"]
-      LeftHand_IndexTip: ["position", "quaternion"]
-      LeftHand_MiddleTip: ["position", "quaternion"]
-      LeftHand_RingTip: ["position", "quaternion"]
-      LeftHand_PinkyTip: ["position", "quaternion"]
+      # LeftHand_WristRoot: ["position", "quaternion"]
+      # LeftHand_ThumbTip: ["position", "quaternion"]
+      # LeftHand_IndexTip: ["position", "quaternion"]
+      # LeftHand_MiddleTip: ["position", "quaternion"]
+      # LeftHand_RingTip: ["position", "quaternion"]
+      # LeftHand_PinkyTip: ["position", "quaternion"]
       RightHand_WristRoot: ["position", "quaternion"]
-      RightHand_ThumbTip: ["position", "quaternion"]
-      RightHand_IndexTip: ["position", "quaternion"]
-      RightHand_MiddleTip: ["position", "quaternion"]
-      RightHand_RingTip: ["position", "quaternion"]
-      RightHand_PinkyTip: ["position", "quaternion"]
+      # RightHand_ThumbTip: ["position", "quaternion"]
+      # RightHand_IndexTip: ["position", "quaternion"]
+      # RightHand_MiddleTip: ["position", "quaternion"]
+      # RightHand_RingTip: ["position", "quaternion"]
+      # RightHand_PinkyTip: ["position", "quaternion"]
+
+  # ros:
+  #   ros_nodes:
+  #     publishers:
+  #       tf:
+  #         - meta_data:
+  #             world_name: world
+  #             length_unit: m
+  #             angle_unit: rad
+  #             mass_unit: kg
+  #             time_unit: s
+  #             handedness: rhs
+  #           port: 7301
+  #           topic: /tf
+  #           rate: 60
+  #           root_frame_id: map
