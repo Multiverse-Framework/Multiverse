@@ -17,7 +17,68 @@ simulations:
       apply:
         body:
           gravcomp: 1
+
     objects:
+      pan:
+        path: pan/pan.xml
+        apply:
+          body:
+            pan:
+              pos: [7.052, -4.76558301, 0.89]
+              quat: [0, 0, 0, 1]
+      cold_cutting_1:
+        path: cold_cutting_1/cold_cutting_1.xml
+        apply:
+          body:
+            cold_cutting_1:
+              pos: [7.12792047, -5.3180443, 0.9]
+      cold_cutting_1:
+        path: cold_cutting_1/cold_cutting_1.xml
+        apply:
+          body:
+            cold_cutting_1:
+              pos: [7.18, -5.34, 0.9096]
+      bread_1:
+        path: bread_1/mjcf/bread_1.xml
+        apply:
+          body:
+            bread_1:
+              pos: [6.91, -5.22, 0.944]
+      cutlery_holder:
+        path: cutlery_holder/mjcf/cutlery_holder.xml
+        apply:
+          body:
+            cutlery_holder:
+              pos: [6.924, -5.01, 0.9204]
+      classic_plate_26cm:
+        path: classic_plate_26cm/mjcf/classic_plate_26cm.xml
+        apply:
+          body:
+            classic_plate_26cm:
+              pos: [7.03, -5.56, .89]
+      classic_plate_21cm_1:
+        path: classic_plate_21cm/mjcf/classic_plate_21cm.xml
+        apply:
+          body:
+            classic_plate_21cm:
+              pos: [6.78, -5.56, .8675]
+        suffix:
+          body: _1
+          geom: _1
+      cutting_board:
+        path: cutting_board/cutting_board.xml
+        apply:
+          body:
+            cutting_board:
+              pos: [7.1718, -5.2711753, .8693183]
+              quat: [0.707, 0.0, 0.0, 0.707]
+      yellow_pineapple:
+        path: yellow_pineapple/yellow_pineapple.xml
+        apply:
+          body:
+            yellow_pineapple:
+              pos: [7.06, -5.93, .91]
+
       left_hand:
         path: left_hand.xml
         apply:
@@ -37,51 +98,41 @@ simulations:
     references:
       left_shadow_hand:
         body1: LeftHand_WristRoot
-        body2: left_shadow_hand
+        body2: lh_wrist_ref
       lh_thdistal:
         body1: LeftHand_ThumbTip
-        body2: lh_thdistal
-        torquescale: 0.1
+        body2: lh_thdistal_ref
       lh_ffdistal:
         body1: LeftHand_IndexTip
-        body2: lh_ffdistal
-        torquescale: 0.1
+        body2: lh_ffdistal_ref
       lh_mfdistal:
         body1: LeftHand_MiddleTip
-        body2: lh_mfdistal
-        torquescale: 0.1
+        body2: lh_mfdistal_ref
       lh_rfdistal:
         body1: LeftHand_RingTip
-        body2: lh_rfdistal
-        torquescale: 0.1
+        body2: lh_rfdistal_ref
       lh_lfdistal:
         body1: LeftHand_PinkyTip
-        body2: lh_lfdistal
-        torquescale: 0.1
+        body2: lh_lfdistal_ref
       
       right_shadow_hand:
         body1: RightHand_WristRoot
-        body2: right_shadow_hand
+        body2: rh_wrist_ref
       rh_thdistal:
         body1: RightHand_ThumbTip
-        body2: rh_thdistal
-        torquescale: 0.1
+        body2: rh_thdistal_ref
       rh_ffdistal:
         body1: RightHand_IndexTip
-        body2: rh_ffdistal
-        torquescale: 0.1
+        body2: rh_ffdistal_ref
       rh_mfdistal:
         body1: RightHand_MiddleTip
-        body2: rh_mfdistal
-        torquescale: 0.1
+        body2: rh_mfdistal_ref
       rh_rfdistal:
         body1: RightHand_RingTip
-        body2: rh_rfdistal
-        torquescale: 0.1
+        body2: rh_rfdistal_ref
       rh_lfdistal:
         body1: RightHand_PinkyTip
-        body2: rh_lfdistal
-        torquescale: 0.1
+        body2: rh_lfdistal_ref
     config:
       max_time_step: 0.002
       min_time_step: 0.001
