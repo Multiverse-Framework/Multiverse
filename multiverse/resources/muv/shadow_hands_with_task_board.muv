@@ -13,8 +13,26 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: floor.xml
+      path: work_table_with_stuffs.xml
     objects:
+      task_board:
+        path: task_board.xml
+        apply:
+          body:
+            task_board:
+              pos: [0.0, 0.0, 1.05]
+              quat: [1.0, 0.0, 0.0, 0.0]
+        prefix:
+          geom: task_board_
+      task_board_tool:
+        path: task_board_tool.xml
+        apply:
+          body:
+            task_board_tool:
+              pos: [-0.014, -0.102, 1.146]
+              quat: [0.707, 0.0, 0.0, 0.707]
+        prefix:
+          geom: task_board_tool_
       left_hand:
         path: left_hand.xml
         apply:
@@ -31,6 +49,7 @@ simulations:
               pos: [0.0, -0.25, 1.05]
         prefix:
           geom: right_
+      
     references:
       left_shadow_hand:
         body1: LeftHand_WristRoot
@@ -97,3 +116,19 @@ multiverse_clients:
       RightHand_MiddleTip: ["position", "quaternion"]
       RightHand_RingTip: ["position", "quaternion"]
       RightHand_PinkyTip: ["position", "quaternion"]
+
+  # ros2:
+  #   ros_nodes:
+  #     publishers:
+  #       tf:
+  #         - meta_data:
+  #             world_name: world
+  #             length_unit: m
+  #             angle_unit: rad
+  #             mass_unit: kg
+  #             time_unit: s
+  #             handedness: rhs
+  #           port: 7301
+  #           topic: /tf
+  #           rate: 60
+  #           root_frame_id: map
