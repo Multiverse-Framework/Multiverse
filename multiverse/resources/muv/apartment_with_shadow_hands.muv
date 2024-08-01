@@ -24,47 +24,27 @@ simulations:
         apply:
           body:
             pan:
-              pos: [7.052, -4.76558301, 0.89]
+              pos: [7.2, -4.76558301, 0.89]
               quat: [0, 0, 0, 1]
-      cold_cutting_1:
-        path: cold_cutting_1/cold_cutting_1.xml
-        apply:
-          body:
-            cold_cutting_1:
-              pos: [7.12792047, -5.3180443, 0.9]
-      cold_cutting_1:
-        path: cold_cutting_1/cold_cutting_1.xml
-        apply:
-          body:
-            cold_cutting_1:
-              pos: [7.18, -5.34, 0.9096]
-      bread_1:
-        path: bread_1/mjcf/bread_1.xml
-        apply:
-          body:
-            bread_1:
-              pos: [6.91, -5.22, 0.944]
       cutlery_holder:
         path: cutlery_holder/mjcf/cutlery_holder.xml
         apply:
           body:
             cutlery_holder:
               pos: [6.924, -5.01, 0.9204]
-      classic_plate_26cm:
-        path: classic_plate_26cm/mjcf/classic_plate_26cm.xml
+      wooden_spoon_1:
+        path: wooden_spoon_1/mjcf/wooden_spoon_1.xml
         apply:
           body:
-            classic_plate_26cm:
-              pos: [7.03, -5.56, .89]
-      classic_plate_21cm_1:
-        path: classic_plate_21cm/mjcf/classic_plate_21cm.xml
+            wooden_spoon_1:
+              pos: [6.945, -5.0, 1.015]
+              quat: [0.707, 0.0, -0.807, 0]
+      small_bowl:
+        path: small_bowl/mjcf/small_bowl.xml
         apply:
           body:
-            classic_plate_21cm:
-              pos: [6.78, -5.56, .8675]
-        suffix:
-          body: _1
-          geom: _1
+            small_bowl:
+              pos: [7.03, -6.51, 1.00]
       cutting_board:
         path: cutting_board/cutting_board.xml
         apply:
@@ -72,19 +52,13 @@ simulations:
             cutting_board:
               pos: [7.1718, -5.2711753, .8693183]
               quat: [0.707, 0.0, 0.0, 0.707]
-      yellow_pineapple:
-        path: yellow_pineapple/yellow_pineapple.xml
-        apply:
-          body:
-            yellow_pineapple:
-              pos: [7.06, -5.93, .91]
 
       left_hand:
         path: left_hand.xml
         apply:
           body:
             left_shadow_hand:
-              pos: [7.0, -5.25, 1.05]
+              pos: [7.52, -5.14, 1.05]
         prefix:
           geom: left_
       right_hand:
@@ -92,7 +66,7 @@ simulations:
         apply:
           body:
             right_shadow_hand:
-              pos: [7.0, -4.75, 1.05]
+              pos: [7.52, -4.04, 1.05]
         prefix:
           geom: right_
     references:
