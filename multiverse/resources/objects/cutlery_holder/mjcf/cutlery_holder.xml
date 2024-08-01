@@ -2,7 +2,12 @@
     <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" inertiafromgeom="true"/>
     <asset>
         <mesh name="CutleryHolder" file="obj/CutleryHolder.obj" />
-        <mesh name="UCX_CutleryHolder_001" file="stl/UCX_CutleryHolder_001.stl" />
+        <mesh name="UCX_CutleryHolder_001" file="stl/UCX_CutleryHolder_1001.stl" />
+		<mesh name="UCX_CutleryHolder_002" file="stl/UCX_CutleryHolder_1002.stl" />
+		<mesh name="UCX_CutleryHolder_003" file="stl/UCX_CutleryHolder_1003.stl" />
+		<mesh name="UCX_CutleryHolder_004" file="stl/UCX_CutleryHolder_1004.stl" />
+
+        <!-- <mesh name="UCX_CutleryHolder_001" file="stl/UCX_CutleryHolder_001.stl" />
 		<mesh name="UCX_CutleryHolder_002" file="stl/UCX_CutleryHolder_002.stl" />
 		<mesh name="UCX_CutleryHolder_003" file="stl/UCX_CutleryHolder_003.stl" />
 		<mesh name="UCX_CutleryHolder_004" file="stl/UCX_CutleryHolder_004.stl" />
@@ -246,14 +251,14 @@
 		<mesh name="UCX_CutleryHolder_240" file="stl/UCX_CutleryHolder_240.stl" />
 		<mesh name="UCX_CutleryHolder_241" file="stl/UCX_CutleryHolder_241.stl" />
 		<mesh name="UCX_CutleryHolder_242" file="stl/UCX_CutleryHolder_242.stl" />
-		<mesh name="UCX_CutleryHolder_243" file="stl/UCX_CutleryHolder_243.stl" />
+		<mesh name="UCX_CutleryHolder_243" file="stl/UCX_CutleryHolder_243.stl" /> -->
     </asset>
     <default>
         <default class="cutlery_holder_visual">
             <geom contype="0" conaffinity="0" solimp="0.95 0.99 0.001" solref="0.004 1"/>
         </default>
         <default class="cutlery_holder_collision">
-            <geom rgba="1.0 0.0 0.0 0.5" />
+            <geom rgba="0.0 0.0 0.0 0.0" />
         </default>
     </default>
     <worldbody>
@@ -263,7 +268,13 @@
             <geom name="UCX_CutleryHolder_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_002" class="cutlery_holder_collision"/>
             <geom name="UCX_CutleryHolder_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_003" class="cutlery_holder_collision"/>
             <geom name="UCX_CutleryHolder_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_004" class="cutlery_holder_collision"/>
-            <geom name="UCX_CutleryHolder_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_005" class="cutlery_holder_collision"/>
+
+            <!-- <geom name="UCX_CutleryHolder_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_001" class="cutlery_holder_collision"/>
+            <geom name="UCX_CutleryHolder_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_002" class="cutlery_holder_collision"/>
+            <geom name="UCX_CutleryHolder_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_003" class="cutlery_holder_collision"/>
+            <geom name="UCX_CutleryHolder_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_004" class="cutlery_holder_collision"/> -->
+
+            <!-- <geom name="UCX_CutleryHolder_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_005" class="cutlery_holder_collision"/>
             <geom name="UCX_CutleryHolder_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_006" class="cutlery_holder_collision"/>
             <geom name="UCX_CutleryHolder_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_007" class="cutlery_holder_collision"/>
             <geom name="UCX_CutleryHolder_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_008" class="cutlery_holder_collision"/>
@@ -503,7 +514,7 @@
             <geom name="UCX_CutleryHolder_240" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_240" class="cutlery_holder_collision"/>
             <geom name="UCX_CutleryHolder_241" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_241" class="cutlery_holder_collision"/>
             <geom name="UCX_CutleryHolder_242" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_242" class="cutlery_holder_collision"/>
-            <geom name="UCX_CutleryHolder_243" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_243" class="cutlery_holder_collision"/>
+            <geom name="UCX_CutleryHolder_243" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_243" class="cutlery_holder_collision"/> -->
         </body>
     </worldbody>
     <equality />
