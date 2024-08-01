@@ -7,6 +7,8 @@ Prerequisite
 ------------
 To install Multiverse with all connectors, ensure you have at least 50 GB of free space and Git installed.
 
+Start by cloning this `repository <https://github.com/Multiverse-Framework/Multiverse>`_ and navigating to the Multiverse folder.
+
 Linux (Ubuntu >= 20.04)
 -----------------------
 
