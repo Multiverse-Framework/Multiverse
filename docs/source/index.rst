@@ -7,6 +7,12 @@ Multiverse is a simulation framework designed to integrate multiple advanced phy
 
    This project is under active development.
 
+.. video:: _static/videos/TwoDemos_1.mp4
+   :width: 1200
+
+.. video:: _static/videos/MultiverseVR.mp4
+   :width: 1200
+
 Introduction
 ------------
 
