@@ -1378,6 +1378,8 @@ void MultiverseServer::receive_new_request_meta_data()
             simulation.api_callbacks.clear();
             simulation.request_meta_data_json.removeMember("api_callbacks");
             simulation.api_callbacks_response.clear();
+            simulation.request_meta_data_json["send"] = request_meta_data_json["send"];
+            simulation.request_meta_data_json["receive"] = request_meta_data_json["receive"];
 
             const Json::Value api_callbacks_response = request_meta_data_json["api_callbacks_response"];
             for (const Json::Value &api_callback_response : api_callbacks_response)
