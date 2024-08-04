@@ -862,15 +862,22 @@ def main():
             os.path.dirname(os.path.abspath(__file__)), "..", "saved"
         )
     elif os.path.basename(__file__) == "mujoco_compile.py":
-        save_dir = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)),
-            "..",
-            "..",
-            "..",
-            "..",
-            "..",
-            "saved",
-        )
+        if os.name == "nt":
+            save_dir = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                "..",
+                "saved",
+            )
+        else:
+            save_dir = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                "..",
+                "..",
+                "..",
+                "..",
+                "..",
+                "saved",
+            )
     else:
         raise RuntimeError(f"Unknown file name {os.path.basename(__file__)}")
 
