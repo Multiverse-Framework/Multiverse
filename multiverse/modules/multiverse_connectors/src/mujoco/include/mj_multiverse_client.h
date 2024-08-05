@@ -73,6 +73,8 @@ private:
 
     std::vector<std::string> get_exist_response(const Json::Value &arguments) const;
 
+    std::string get_set_control_value_response(const Json::Value &arguments) const;
+
 public:
     bool communicate(const bool resend_meta_data = false) override;
 

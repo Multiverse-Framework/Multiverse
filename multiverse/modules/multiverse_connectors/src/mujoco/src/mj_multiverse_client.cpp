@@ -2078,6 +2078,44 @@ std::vector<std::string> MjMultiverseClient::get_exist_response(const Json::Valu
 	return exist_results;
 }
 
+std::string MjMultiverseClient::get_set_control_value_response(const Json::Value &arguments) const
+{
+	if (!arguments.isArray())
+	{
+		return "failed (Arguments for set_control_value should be an array of strings.)";
+	}
+	if (arguments.size() % 2 != 0)
+	{
+		return "failed (Arguments for set_control_value should be an array of strings with an even number of elements.)";
+	}
+
+	for (int i = 0; i < arguments.size(); i += 2)
+	{
+		if (!arguments[i].isString())
+		{
+			return "failed (Control name should be a string.)";
+		}
+		if (!arguments[i + 1].isString())
+		{
+			return "failed (Control value should be a number.)";
+		}
+
+		const std::string control_name = arguments[i].asString();
+		const mjtNum control_value = std::stod(arguments[i + 1].asString());
+
+		const int control_id = mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, control_name.c_str());
+		if (control_id == -1)
+		{
+			return "failed (Control " + control_name + " does not exist.)";
+		}
+
+		d->ctrl[control_id] = control_value;
+		m->key_ctrl[control_id] = control_value;
+	}
+
+	return "success";
+}
+
 void MjMultiverseClient::bind_api_callbacks()
 {
 	const Json::Value &api_callbacks_json = response_meta_data_json["api_callbacks"];
@@ -2171,6 +2209,10 @@ void MjMultiverseClient::bind_api_callbacks_response()
 				{
 					api_callback_response[api_callback_name].append(exist_response);
 				}
+			}
+			else if (strcmp(api_callback_name.c_str(), "set_control_value") == 0)
+			{
+				api_callback_response[api_callback_name].append(get_set_control_value_response(api_callback_json[api_callback_name]));
 			}
 			else if (strcmp(api_callback_name.c_str(), "pause") == 0)
 			{
