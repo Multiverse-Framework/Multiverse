@@ -24,11 +24,11 @@
         </body>
 
         <body name="RightController_palm_r" pos="-0.4 -0.4 1.110" mocap="true">
-            <geom type="box" size=".025 .025 .025" rgba="0.0 0.0 1.0 1" mass="1" />
+            <geom type="sphere" size=".025 .025 .025" rgba="0.0 0.0 1.0 1" mass="1" />
         </body>
 
         <body name="LeftController_palm_l" pos="-0.4 0.4 1.110" mocap="true">
-            <geom type="box" size=".025 .025 .025" rgba="1.0 0.0 0.0 1" mass="1" />
+            <geom type="sphere" size=".025 .025 .025" rgba="1.0 0.0 0.0 1" mass="1" />
         </body>
     </worldbody>
 </mujoco>
