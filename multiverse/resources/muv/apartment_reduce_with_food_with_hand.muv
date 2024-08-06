@@ -1,0 +1,141 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  apartment_reduce_with_food:
+    simulator: mujoco
+    world:
+      name: world
+      path: apartment_full/mjcf/ApartmentReduce.xml
+
+    robots:
+      panda:
+        path: mjcf/panda.xml
+        apply:
+          body:
+            panda:
+              pos: [6.7, -5.2, 0.86]
+            gravcomp: 1
+        disable_self_collision: "off"
+
+    objects:
+      jeroen_cup:
+        path: jeroen_cup/mjcf/jeroen_cup.xml
+        apply:
+          body:
+            jeroen_cup:
+              pos: [7.1, -6.5, 1.02]
+
+      small_bowl:
+        path: small_bowl/mjcf/small_bowl.xml
+        apply:
+          body:
+            small_bowl:
+              pos: [7.1, -5.5, 0.90]
+      garlic:
+        path: garlic/garlic.xml
+        apply:
+          body:
+            garlic:
+              pos: [7.1, -5.2, 0.90]
+      lime:
+        path: lime/lime.xml
+        apply:
+          body:
+            lime:
+              pos: [7.1, -5.1, 0.90]
+      kiwi_1:
+        path: kiwi_1/kiwi_1.xml
+        apply:
+          body:
+            kiwi1:
+              pos: [7.0, -5.2, 0.90]
+
+      left_hand:
+        path: left_hand.xml
+        apply:
+          body:
+            left_shadow_hand:
+              pos: [8.0, -5.2, 1.05]
+        prefix:
+          geom: left_
+      right_hand:
+        path: right_hand.xml
+        apply:
+          body:
+            right_shadow_hand:
+              pos: [8.0, -4.8, 1.05]
+        prefix:
+          geom: right_
+    references:
+      left_shadow_hand:
+        body1: LeftHand_WristRoot
+        body2: lh_wrist_ref
+      lh_thdistal:
+        body1: LeftHand_ThumbTip
+        body2: lh_thdistal_ref
+      lh_ffdistal:
+        body1: LeftHand_IndexTip
+        body2: lh_ffdistal_ref
+      lh_mfdistal:
+        body1: LeftHand_MiddleTip
+        body2: lh_mfdistal_ref
+      lh_rfdistal:
+        body1: LeftHand_RingTip
+        body2: lh_rfdistal_ref
+      lh_lfdistal:
+        body1: LeftHand_PinkyTip
+        body2: lh_lfdistal_ref
+      
+      right_shadow_hand:
+        body1: RightHand_WristRoot
+        body2: rh_wrist_ref
+      rh_thdistal:
+        body1: RightHand_ThumbTip
+        body2: rh_thdistal_ref
+      rh_ffdistal:
+        body1: RightHand_IndexTip
+        body2: rh_ffdistal_ref
+      rh_mfdistal:
+        body1: RightHand_MiddleTip
+        body2: rh_mfdistal_ref
+      rh_rfdistal:
+        body1: RightHand_RingTip
+        body2: rh_rfdistal_ref
+      rh_lfdistal:
+        body1: RightHand_PinkyTip
+        body2: rh_lfdistal_ref
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  apartment_reduce_with_food:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
+    receive:
+      LeftHand_WristRoot: ["position", "quaternion"]
+      LeftHand_ThumbTip: ["position", "quaternion"]
+      LeftHand_IndexTip: ["position", "quaternion"]
+      LeftHand_MiddleTip: ["position", "quaternion"]
+      LeftHand_RingTip: ["position", "quaternion"]
+      LeftHand_PinkyTip: ["position", "quaternion"]
+      RightHand_WristRoot: ["position", "quaternion"]
+      RightHand_ThumbTip: ["position", "quaternion"]
+      RightHand_IndexTip: ["position", "quaternion"]
+      RightHand_MiddleTip: ["position", "quaternion"]
+      RightHand_RingTip: ["position", "quaternion"]
+      RightHand_PinkyTip: ["position", "quaternion"]
