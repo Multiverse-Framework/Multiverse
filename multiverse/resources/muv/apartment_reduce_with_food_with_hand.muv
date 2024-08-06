@@ -31,7 +31,7 @@ simulations:
         apply:
           body:
             jeroen_cup:
-              pos: [7.1, -6.5, 1.02]
+              pos: [7.25, -6.5, 0.97]
 
       small_bowl:
         path: small_bowl/mjcf/small_bowl.xml
