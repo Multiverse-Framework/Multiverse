@@ -591,8 +591,6 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
         # Spawn panda and milk box
         self.test_multiverse_client_spawn()
 
-        sleep(2)
-
         # Weld milk box to hand at (0 0 0) (1 0 0 0)
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
@@ -749,7 +747,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
         # Spawn panda and milk box
         self.test_multiverse_client_spawn()
 
-        # Attach milk box to hand at (0 0 0) (1 0 0 0)
+        # Attach milk box to hand at relative pose
         multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
                                                                                {
                                                                                    "empty_simulation": [

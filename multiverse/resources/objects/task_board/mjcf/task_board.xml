@@ -52,7 +52,6 @@
     </asset>
     <worldbody>
         <body name="task_board">
-            <freejoint/>
             <body name="task_board_main">
                 <geom type="box" pos="0 0 0.0062" size="0.077486 0.128209 0.0062" />
                 <geom type="mesh" mesh="task_board_part_2"/>

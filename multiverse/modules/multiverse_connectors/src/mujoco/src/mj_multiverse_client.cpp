@@ -1065,23 +1065,23 @@ void MjMultiverseClient::bind_response_meta_data()
 
 		std::string mocap_pos_str;
 		std::string mocap_quat_str;
-		for (int mocap_pos_id = 0; mocap_pos_id < m->nmocap; mocap_pos_id++)
+		for (int mocap_id = 0; mocap_id < m->nmocap; mocap_id++)
 		{
-			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id]) + " ";
-			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id + 1]) + " ";
-			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_pos_id + 2]) + " ";
-			m->key_mpos[3 * mocap_pos_id] = d->mocap_pos[3 * mocap_pos_id];
-			m->key_mpos[3 * mocap_pos_id + 1] = d->mocap_pos[3 * mocap_pos_id + 1];
-			m->key_mpos[3 * mocap_pos_id + 2] = d->mocap_pos[3 * mocap_pos_id + 2];
+			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_id]) + " ";
+			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_id + 1]) + " ";
+			mocap_pos_str += std::to_string(d->mocap_pos[3 * mocap_id + 2]) + " ";
+			m->key_mpos[3 * mocap_id] = d->mocap_pos[3 * mocap_id];
+			m->key_mpos[3 * mocap_id + 1] = d->mocap_pos[3 * mocap_id + 1];
+			m->key_mpos[3 * mocap_id + 2] = d->mocap_pos[3 * mocap_id + 2];
 
-			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id]) + " ";
-			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 1]) + " ";
-			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 2]) + " ";
-			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_pos_id + 3]) + " ";
-			m->key_mquat[4 * mocap_pos_id] = d->mocap_quat[4 * mocap_pos_id];
-			m->key_mquat[4 * mocap_pos_id + 1] = d->mocap_quat[4 * mocap_pos_id + 1];
-			m->key_mquat[4 * mocap_pos_id + 2] = d->mocap_quat[4 * mocap_pos_id + 2];
-			m->key_mquat[4 * mocap_pos_id + 3] = d->mocap_quat[4 * mocap_pos_id + 3];
+			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_id]) + " ";
+			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_id + 1]) + " ";
+			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_id + 2]) + " ";
+			mocap_quat_str += std::to_string(d->mocap_quat[4 * mocap_id + 3]) + " ";
+			m->key_mquat[4 * mocap_id] = d->mocap_quat[4 * mocap_id];
+			m->key_mquat[4 * mocap_id + 1] = d->mocap_quat[4 * mocap_id + 1];
+			m->key_mquat[4 * mocap_id + 2] = d->mocap_quat[4 * mocap_id + 2];
+			m->key_mquat[4 * mocap_id + 3] = d->mocap_quat[4 * mocap_id + 3];
 		}
 		if (mocap_pos_str.size() > 0)
 		{
@@ -1120,7 +1120,26 @@ void MjMultiverseClient::weld(const Json::Value &arguments)
 	const std::string object_1_name = arguments[0].asString();
 	const std::string object_2_name = arguments[1].asString();
 
-	std::string relative_pose = "0.0 0.0 0.0 1.0 0.0 0.0 0.0";
+	const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_2_name.c_str());
+	const int body_2_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
+
+	mjtNum *body_1_pos = d->xpos + 3 * body_1_id;
+	mjtNum *body_1_quat = d->xquat + 4 * body_1_id;
+	mjtNum body_1_neg_quat[4];
+	mju_negQuat(body_1_neg_quat, body_1_quat);
+
+	mjtNum *body_2_pos = d->xpos + 3 * body_2_id;
+	mjtNum *body_2_quat = d->xquat + 4 * body_2_id;
+
+	mjtNum body_2_in_1_pos[3];
+	mjtNum body_2_in_1_quat[4];
+
+	mju_sub3(body_2_in_1_pos, body_2_pos, body_1_pos);
+	mju_rotVecQuat(body_2_in_1_pos, body_2_in_1_pos, body_1_neg_quat);
+
+	mju_mulQuat(body_2_in_1_quat, body_1_neg_quat, body_2_quat);
+
+	std::string relative_pose = std::to_string(body_2_in_1_pos[0]) + " " + std::to_string(body_2_in_1_pos[1]) + " " + std::to_string(body_2_in_1_pos[2]) + " " + std::to_string(body_2_in_1_quat[0]) + " " + std::to_string(body_2_in_1_quat[1]) + " " + std::to_string(body_2_in_1_quat[2]) + " " + std::to_string(body_2_in_1_quat[3]);
 	if (arguments.size() == 3)
 	{
 		relative_pose = arguments[2].asString();
@@ -1196,16 +1215,19 @@ std::string MjMultiverseClient::get_weld_response(const Json::Value &arguments) 
 	const std::string object_1_name = arguments[0].asString();
 	const std::string object_2_name = arguments[1].asString();
 
-	if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str()) == -1)
+	const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_2_name.c_str());
+	const int body_2_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
+
+	if (body_2_id == -1)
 	{
 		return "failed (Object " + object_1_name + " does not exist.)";
 	}
-	if (mj_name2id(m, mjtObj::mjOBJ_BODY, object_2_name.c_str()) == -1)
+	if (body_1_id == -1)
 	{
 		return "failed (Object " + object_2_name + " does not exist.)";
 	}
 
-	std::vector<mjtNum> relative_pose = {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
+	std::vector<mjtNum> relative_pose;
 	if (arguments.size() == 3)
 	{
 		std::istringstream iss(arguments[2].asString());
@@ -1230,11 +1252,14 @@ std::string MjMultiverseClient::get_weld_response(const Json::Value &arguments) 
 				continue;
 			}
 
-			for (int i = 0; i < 7; i++)
+			if (arguments.size() == 3)
 			{
-				if (mju_abs(relative_pose[i] - m->eq_data[mjNEQDATA * equality_id + i + 3]) > mjMINVAL)
+				for (int i = 0; i < 7; i++)
 				{
-					return "failed (relative pose are different)";
+					if (mju_abs(relative_pose[i] - m->eq_data[mjNEQDATA * equality_id + i + 3]) > 1e-3)
+					{
+						return "failed (relative pose are different)";
+					}
 				}
 			}
 
@@ -1428,7 +1453,25 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 	const std::string object_1_name = arguments[0].asString();
 	const std::string object_2_name = arguments[1].asString();
 
-	std::vector<mjtNum> relative_pose = {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
+	const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_2_name.c_str());
+	const int body_2_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
+
+	mjtNum *body_1_pos = d->xpos + 3 * body_1_id;
+	mjtNum *body_1_quat = d->xquat + 4 * body_1_id;
+	mjtNum body_1_neg_quat[4];
+	mju_negQuat(body_1_neg_quat, body_1_quat);
+
+	mjtNum *body_2_pos = d->xpos + 3 * body_2_id;
+	mjtNum *body_2_quat = d->xquat + 4 * body_2_id;
+
+	mjtNum body_2_in_1_pos[3];
+	mjtNum body_2_in_1_quat[4];
+
+	mju_sub3(body_2_in_1_pos, body_2_pos, body_1_pos);
+	mju_rotVecQuat(body_2_in_1_pos, body_2_in_1_pos, body_1_neg_quat);
+
+	mju_mulQuat(body_2_in_1_quat, body_1_neg_quat, body_2_quat);
+	std::vector<mjtNum> relative_pose = {body_2_in_1_pos[0], body_2_in_1_pos[1], body_2_in_1_pos[2], body_2_in_1_quat[0], body_2_in_1_quat[1], body_2_in_1_quat[2], body_2_in_1_quat[3]};
 	if (arguments.size() == 3)
 	{
 		std::istringstream iss(arguments[2].asString());
@@ -1575,28 +1618,24 @@ std::string MjMultiverseClient::get_attach_response(const Json::Value &arguments
 		return "failed (Object " + object_2_name + " does not exist.)";
 	}
 
-	std::vector<mjtNum> relative_pose = {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0};
-	if (arguments.size() == 3)
-	{
-		std::istringstream iss(arguments[2].asString());
-		relative_pose = std::vector<mjtNum>(std::istream_iterator<mjtNum>(iss), std::istream_iterator<mjtNum>());
-	}
 	if (m->body_parentid[body_1_id] == body_2_id)
 	{
-		if (m->body_pos[3 * body_1_id] == relative_pose[0] &&
-			m->body_pos[3 * body_1_id + 1] == relative_pose[1] &&
-			m->body_pos[3 * body_1_id + 2] == relative_pose[2] &&
-			m->body_quat[4 * body_1_id] == relative_pose[3] &&
-			m->body_quat[4 * body_1_id + 1] == relative_pose[4] &&
-			m->body_quat[4 * body_1_id + 2] == relative_pose[5] &&
-			m->body_quat[4 * body_1_id + 3] == relative_pose[6])
+		if (arguments.size() == 3)
 		{
-			return "success";
+			std::istringstream iss(arguments[2].asString());
+			std::vector<mjtNum> relative_pose = std::vector<mjtNum>(std::istream_iterator<mjtNum>(iss), std::istream_iterator<mjtNum>());
+			if (m->body_pos[3 * body_1_id] != relative_pose[0] ||
+				m->body_pos[3 * body_1_id + 1] != relative_pose[1] ||
+				m->body_pos[3 * body_1_id + 2] != relative_pose[2] ||
+				m->body_quat[4 * body_1_id] != relative_pose[3] ||
+				m->body_quat[4 * body_1_id + 1] != relative_pose[4] ||
+				m->body_quat[4 * body_1_id + 2] != relative_pose[5] ||
+				m->body_quat[4 * body_1_id + 3] != relative_pose[6])
+			{
+				return "failed (relative pose are different)";
+			}
 		}
-		else
-		{
-			return "failed (relative pose are different)";
-		}
+		return "success";
 	}
 	else
 	{
@@ -2002,6 +2041,44 @@ std::vector<std::string> MjMultiverseClient::get_exist_response(const Json::Valu
 	return exist_results;
 }
 
+std::string MjMultiverseClient::get_set_control_value_response(const Json::Value &arguments) const
+{
+	if (!arguments.isArray())
+	{
+		return "failed (Arguments for set_control_value should be an array of strings.)";
+	}
+	if (arguments.size() % 2 != 0)
+	{
+		return "failed (Arguments for set_control_value should be an array of strings with an even number of elements.)";
+	}
+
+	for (int i = 0; i < arguments.size(); i += 2)
+	{
+		if (!arguments[i].isString())
+		{
+			return "failed (Control name should be a string.)";
+		}
+		if (!arguments[i + 1].isString())
+		{
+			return "failed (Control value should be a number.)";
+		}
+
+		const std::string control_name = arguments[i].asString();
+		const mjtNum control_value = std::stod(arguments[i + 1].asString());
+
+		const int control_id = mj_name2id(m, mjtObj::mjOBJ_ACTUATOR, control_name.c_str());
+		if (control_id == -1)
+		{
+			return "failed (Control " + control_name + " does not exist.)";
+		}
+
+		d->ctrl[control_id] = control_value;
+		m->key_ctrl[control_id] = control_value;
+	}
+
+	return "success";
+}
+
 void MjMultiverseClient::bind_api_callbacks()
 {
 	const Json::Value &api_callbacks_json = response_meta_data_json["api_callbacks"];
@@ -2095,6 +2172,10 @@ void MjMultiverseClient::bind_api_callbacks_response()
 				{
 					api_callback_response[api_callback_name].append(exist_response);
 				}
+			}
+			else if (strcmp(api_callback_name.c_str(), "set_control_value") == 0)
+			{
+				api_callback_response[api_callback_name].append(get_set_control_value_response(api_callback_json[api_callback_name]));
 			}
 			else if (strcmp(api_callback_name.c_str(), "pause") == 0)
 			{

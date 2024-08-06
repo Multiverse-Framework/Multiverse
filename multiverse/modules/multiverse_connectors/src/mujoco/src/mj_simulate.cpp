@@ -91,15 +91,30 @@ void MjSimulate::load_new_model_and_keep_old_data()
 		}
 
 		// Copy body position
-		d_new->xpos[body_id_new] = d->xpos[body_id];
-		d_new->xpos[body_id_new + 1] = d->xpos[body_id + 1];
-		d_new->xpos[body_id_new + 2] = d->xpos[body_id + 2];
+		d_new->xpos[3 * body_id_new] = d->xpos[3 * body_id];
+		d_new->xpos[3 * body_id_new + 1] = d->xpos[3 * body_id + 1];
+		d_new->xpos[3 * body_id_new + 2] = d->xpos[3 * body_id + 2];
 
 		// Copy body rotation
-		d_new->xquat[body_id_new] = d->xquat[body_id];
-		d_new->xquat[body_id_new + 1] = d->xquat[body_id + 1];
-		d_new->xquat[body_id_new + 2] = d->xquat[body_id + 2];
-		d_new->xquat[body_id_new + 3] = d->xquat[body_id + 3];
+		d_new->xquat[4 * body_id_new] = d->xquat[4 * body_id];
+		d_new->xquat[4 * body_id_new + 1] = d->xquat[4 * body_id + 1];
+		d_new->xquat[4 * body_id_new + 2] = d->xquat[4 * body_id + 2];
+		d_new->xquat[4 * body_id_new + 3] = d->xquat[4 * body_id + 3];
+
+		// Copy mocap position
+		const int mocap_id = m->body_mocapid[body_id];
+		const int mocap_id_new = m_new->body_mocapid[body_id_new];
+		if (mocap_id != -1 && mocap_id_new != -1)
+		{
+			d_new->mocap_pos[3 * mocap_id_new] = d->mocap_pos[3 * mocap_id];
+			d_new->mocap_pos[3 * mocap_id_new + 1] = d->mocap_pos[3 * mocap_id + 1];
+			d_new->mocap_pos[3 * mocap_id_new + 2] = d->mocap_pos[3 * mocap_id + 2];
+
+			d_new->mocap_quat[4 * mocap_id_new] = d->mocap_quat[4 * mocap_id];
+			d_new->mocap_quat[4 * mocap_id_new + 1] = d->mocap_quat[4 * mocap_id + 1];
+			d_new->mocap_quat[4 * mocap_id_new + 2] = d->mocap_quat[4 * mocap_id + 2];
+			d_new->mocap_quat[4 * mocap_id_new + 3] = d->mocap_quat[4 * mocap_id + 3];
+		}
 
 		// Copy body states
 		for (int body_nr = 0; body_nr < 6; body_nr++)

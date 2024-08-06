@@ -25,10 +25,16 @@
 
         <body name="RightController_palm_r" pos="-0.4 -0.4 1.110" mocap="true">
             <geom type="sphere" size=".025 .025 .025" rgba="0.0 0.0 1.0 1" mass="1" />
+            <site name="RightController_palm_r_cursor_x" pos="0.1 0.0 0.0" size="0.01 0.1" euler="0.0 1.5708 0.0" type="cylinder" rgba="1 0 0 0.5" />
+			<site name="RightController_palm_r_cursor_y" pos="0.0 0.1 0.0" size="0.01 0.1" euler="1.5708 0.0 0.0" type="cylinder" rgba="0 1 0 0.5" />
+			<site name="RightController_palm_r_cursor_z" pos="0.0 0.0 0.1" size="0.01 0.1" euler="0.0 0.0 0.0" type="cylinder" rgba="0 0 1 0.5" />
         </body>
 
         <body name="LeftController_palm_l" pos="-0.4 0.4 1.110" mocap="true">
             <geom type="sphere" size=".025 .025 .025" rgba="1.0 0.0 0.0 1" mass="1" />
+            <site name="LeftController_palm_l_cursor_x" pos="0.1 0.0 0.0" size="0.01 0.1" euler="0.0 1.5708 0.0" type="cylinder" rgba="1 0 0 0.5" />
+			<site name="LeftController_palm_l_cursor_y" pos="0.0 0.1 0.0" size="0.01 0.1" euler="1.5708 0.0 0.0" type="cylinder" rgba="0 1 0 0.5" />
+			<site name="LeftController_palm_l_cursor_z" pos="0.0 0.0 0.1" size="0.01 0.1" euler="0.0 0.0 0.0" type="cylinder" rgba="0 0 1 0.5" />
         </body>
     </worldbody>
 </mujoco>
