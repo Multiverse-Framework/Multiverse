@@ -1,0 +1,86 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  ur5e_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: work_table.xml
+    robots:
+      ur5e:
+        path: ur5e/mjcf/ur5e.xml
+        apply:
+          body:
+            ur5e:
+              pos: [0.0, 0.0, 1.05]
+        disable_self_collision: auto
+        joint_state:
+          shoulder_pan_joint: 3.1415
+          shoulder_lift_joint: -1.5708
+          elbow_joint: 1.5708
+          wrist_1_joint: -1.5708
+          wrist_2_joint: -1.5708
+          wrist_3_joint: 0.0
+
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  ur5e_simulation:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+    receive:
+      shoulder_pan: ["cmd_joint_rvalue"]
+      shoulder_lift: ["cmd_joint_rvalue"]
+      elbow: ["cmd_joint_rvalue"]
+      wrist_1: ["cmd_joint_rvalue"]
+      wrist_2: ["cmd_joint_rvalue"]
+      wrist_3: ["cmd_joint_rvalue"]
+
+  ros2:
+    ros2_control:
+      - meta_data:
+          world_name: world
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        port: 7601
+        controller_manager:
+          robot: ur5e
+          robot_description: /robot_description
+          urdf: ur5e/urdf/ur5e.urdf
+          config: ur5e/config/ros2_control.yaml
+          actuators:
+            shoulder_pan: shoulder_pan_joint
+            shoulder_lift: shoulder_lift_joint
+            elbow: elbow_joint
+            wrist_1: wrist_1_joint
+            wrist_2: wrist_2_joint
+            wrist_3: wrist_3_joint
+          controllers:
+            spawner:
+              - joint_state_broadcaster
+                joint_trajectory_controller
+
+    ros2_run:
+      rviz2:
+        config: ur5e_simulation/config/rviz.rviz2
+        robot_descriptions:
+          ur5e_description: ur5e/urdf/ur5e.urdf

@@ -26,7 +26,7 @@ catkin_package()
 # ##########
 # # Build ##
 # ##########
-set(MULTIVERSE_DIR ${CATKIN_DEVEL_PREFIX}/../../../../multiverse)
+set(MULTIVERSE_DIR ${CMAKE_SOURCE_DIR}/../../../../multiverse)
 
 # # Specify additional locations of header files
 # # Your package locations should be listed before other locations
