@@ -1,0 +1,79 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+right_arm_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - r_shoulder_pan_actuator
+      - r_shoulder_lift_actuator
+      - r_upper_arm_roll_actuator
+      - r_elbow_flex_actuator
+      - r_forearm_roll_actuator
+      - r_wrist_flex_actuator
+      - r_wrist_roll_actuator
+
+    command_interfaces:
+      - position
+      - velocity
+      # - effort
+
+    state_interfaces:
+      - position
+      - velocity
+
+left_arm_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - l_shoulder_pan_actuator
+      - l_shoulder_lift_actuator
+      - l_upper_arm_roll_actuator
+      - l_elbow_flex_actuator
+      - l_forearm_roll_actuator
+      - l_wrist_flex_actuator
+      - l_wrist_roll_actuator
+
+    command_interfaces:
+      - position
+      - velocity
+      # - effort
+
+    state_interfaces:
+      - position
+      - velocity
+
+torso_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - torso_lift_actuator
+
+    command_interfaces:
+      - position
+      - velocity
+      # - effort
+
+    state_interfaces:
+      - position
+      - velocity
+
+head_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - head_pan_actuator
+      - head_tilt_actuator
+
+    command_interfaces:
+      - position
+      - velocity
+      # - effort
+
+    state_interfaces:
+      - position
+      - velocity
