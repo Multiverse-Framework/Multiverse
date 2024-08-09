@@ -9,13 +9,13 @@ right_arm_trajectory_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - r_shoulder_pan_actuator
-      - r_shoulder_lift_actuator
-      - r_upper_arm_roll_actuator
-      - r_elbow_flex_actuator
-      - r_forearm_roll_actuator
-      - r_wrist_flex_actuator
-      - r_wrist_roll_actuator
+      - r_shoulder_pan_joint
+      - r_shoulder_lift_joint
+      - r_upper_arm_roll_joint
+      - r_elbow_flex_joint
+      - r_forearm_roll_joint
+      - r_wrist_flex_joint
+      - r_wrist_roll_joint
 
     command_interfaces:
       - position
@@ -30,13 +30,13 @@ left_arm_trajectory_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - l_shoulder_pan_actuator
-      - l_shoulder_lift_actuator
-      - l_upper_arm_roll_actuator
-      - l_elbow_flex_actuator
-      - l_forearm_roll_actuator
-      - l_wrist_flex_actuator
-      - l_wrist_roll_actuator
+      - l_shoulder_pan_joint
+      - l_shoulder_lift_joint
+      - l_upper_arm_roll_joint
+      - l_elbow_flex_joint
+      - l_forearm_roll_joint
+      - l_wrist_flex_joint
+      - l_wrist_roll_joint
 
     command_interfaces:
       - position
@@ -51,7 +51,7 @@ torso_trajectory_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - torso_lift_actuator
+      - torso_lift_joint
 
     command_interfaces:
       - position
@@ -66,13 +66,78 @@ head_trajectory_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
-      - head_pan_actuator
-      - head_tilt_actuator
+      - head_pan_joint
+      - head_tilt_joint
 
     command_interfaces:
       - position
       - velocity
       # - effort
+
+    state_interfaces:
+      - position
+      - velocity
+
+right_arm_velocity_controller:
+  ros__parameters:
+    type: velocity_controllers/JointGroupVelocityController
+    joints:
+      - r_shoulder_pan_joint
+      - r_shoulder_lift_joint
+      - r_upper_arm_roll_joint
+      - r_elbow_flex_joint
+      - r_forearm_roll_joint
+      - r_wrist_flex_joint
+      - r_wrist_roll_joint
+
+    command_interfaces:
+      - velocity
+
+    state_interfaces:
+      - position
+      - velocity
+
+left_arm_velocity_controller:
+  ros__parameters:
+    type: velocity_controllers/JointGroupVelocityController
+    joints:
+      - l_shoulder_pan_joint
+      - l_shoulder_lift_joint
+      - l_upper_arm_roll_joint
+      - l_elbow_flex_joint
+      - l_forearm_roll_joint
+      - l_wrist_flex_joint
+      - l_wrist_roll_joint
+
+    command_interfaces:
+      - velocity
+
+    state_interfaces:
+      - position
+      - velocity
+
+torso_velocity_controller:
+  ros__parameters:
+    type: velocity_controllers/JointGroupVelocityController
+    joints:
+      - torso_lift_joint
+
+    command_interfaces:
+      - velocity
+
+    state_interfaces:
+      - position
+      - velocity
+
+head_velocity_controller:
+  ros__parameters:
+    type: velocity_controllers/JointGroupVelocityController
+    joints:
+      - head_pan_joint
+      - head_tilt_joint
+
+    command_interfaces:
+      - velocity
 
     state_interfaces:
       - position
