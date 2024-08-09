@@ -94,17 +94,12 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
             joint_interfaces[state_interface.name].push_back(joint.name);
         }
 
-        std::string actuator_name;
         if (joint.parameters.count("actuator") == 0)
         {
-            actuator_name = joint.name + "_actuator";
-            RCLCPP_WARN(get_logger(), "Acutator not found for joint %s, set default actuator as %s", joint.name.c_str(), actuator_name.c_str());
-        }
-        else
-        {
-            actuator_name = joint.parameters.at("actuator");
+            continue;
         }
 
+        std::string actuator_name = joint.parameters.at("actuator");
         actuators[actuator_name] = joint.name;
         send_objects[actuator_name] = {};
         for (const hardware_interface::InterfaceInfo &command_interface : joint.command_interfaces)

@@ -351,6 +351,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
 
             robot_urdf_str = ET.tostring(robot_element, encoding="unicode")
 
+            tf_topic = controller_manager.get("tf_topic", "/tf")
             cmd = [
                 "ros2",
                 "run",
@@ -359,6 +360,8 @@ class MultiverseRosLaunch(MultiverseLaunch):
                 "--ros-args",
                 "-p",
                 f"robot_description:={robot_urdf_str}",
+                "-r",
+                f"tf:={tf_topic}"
             ]
 
         return run_subprocess(cmd)

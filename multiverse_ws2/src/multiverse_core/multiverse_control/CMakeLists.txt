@@ -87,7 +87,7 @@ install(TARGETS multiverse_control
 )
 
 execute_process(
-  COMMAND cp -f ${MULTIVERSE_DIR}/lib/libstdc++/libmultiverse_client_json.so ${MULTIVERSE_DIR}/../multiverse_ws2/install/multiverse_control/lib/libmultiverse_client_json.so
+  COMMAND cp -rf ${MULTIVERSE_DIR}/lib/libstdc++/libmultiverse_client_json.so ${MULTIVERSE_DIR}/../multiverse_ws2/install/multiverse_control/lib/libmultiverse_client_json.so
 )
 
 # # EXPORTS
