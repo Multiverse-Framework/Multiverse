@@ -114,9 +114,6 @@ elif [ $UBUNTU_VERSION = "24.04" ]; then
     sudo update-alternatives --remove-all clang++
     sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-17 100
 
-    # Upgrade pip
-    pip install -U pip
-
     # Setup virtual environment
     python3 -m pip install virtualenvwrapper --break-system-packages
 fi

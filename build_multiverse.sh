@@ -122,6 +122,7 @@ for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrap
     if [ -f $virtualenvwrapper ]; then
         . $virtualenvwrapper
         mkvirtualenv --system-site-packages multiverse
+        pip install -U pip build # Ensure pip and build are up-to-date
         break
     fi
 done
