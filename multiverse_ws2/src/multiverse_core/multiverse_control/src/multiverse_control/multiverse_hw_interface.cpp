@@ -54,13 +54,13 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
         receive_objects[joint.name] = {};
 
         auto joint_type = urdf_model.getJoint(joint.name)->type;
-        if (joint_type == urdf::Joint::PRISMATIC || joint_type == urdf::Joint::REVOLUTE)
+        if (joint_type == urdf::Joint::PRISMATIC || joint_type == urdf::Joint::REVOLUTE || joint_type == urdf::Joint::CONTINUOUS)
         {
             if (joint_type == urdf::Joint::PRISMATIC)
             {
                 receive_objects[joint.name] = {"joint_tvalue", "joint_linear_velocity"};
             }
-            else if (joint_type == urdf::Joint::REVOLUTE)
+            else if (joint_type == urdf::Joint::REVOLUTE || joint_type == urdf::Joint::CONTINUOUS)
             {
                 receive_objects[joint.name] = {"joint_rvalue", "joint_angular_velocity"};
             }
@@ -73,7 +73,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
         }
         else
         {
-            RCLCPP_WARN(get_logger(), "Joint %s is not prismatic or revolute, will be ignored", joint.name.c_str());
+            RCLCPP_WARN(get_logger(), "Joint %s is not prismatic, revolute or continuous, will be ignored", joint.name.c_str());
         }
 
         for (const hardware_interface::InterfaceInfo &state_interface : joint.state_interfaces)
@@ -129,7 +129,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
                     RCLCPP_WARN(get_logger(), "Command interface %s is not supported for joint %s", command_interface.name.c_str(), joint.name.c_str());
                 }
             }
-            else if (joint_type == urdf::Joint::REVOLUTE)
+            else if (joint_type == urdf::Joint::REVOLUTE || joint_type == urdf::Joint::CONTINUOUS)
             {
                 if (strcmp(command_interface.name.c_str(), "position") == 0)
                 {

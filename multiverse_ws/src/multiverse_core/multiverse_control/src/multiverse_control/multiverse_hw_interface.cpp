@@ -54,14 +54,14 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
         }
         actuators[joint_actuators.at(robot_joint.first)] = robot_joint.first;
 
-        if (robot_joint.second->type == urdf::Joint::PRISMATIC || robot_joint.second->type == urdf::Joint::REVOLUTE)
+        if (robot_joint.second->type == urdf::Joint::PRISMATIC || robot_joint.second->type == urdf::Joint::REVOLUTE || robot_joint.second->type == urdf::Joint::CONTINUOUS)
         {
             if (robot_joint.second->type == urdf::Joint::PRISMATIC)
             {
                 receive_objects[robot_joint.first] = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
                 send_objects[joint_actuators.at(robot_joint.first)] = {"cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"};
             }
-            else if (robot_joint.second->type == urdf::Joint::REVOLUTE)
+            else if (robot_joint.second->type == urdf::Joint::REVOLUTE || robot_joint.second->type == urdf::Joint::CONTINUOUS)
             {
                 receive_objects[robot_joint.first] = {"joint_rvalue", "joint_angular_velocity", "joint_torque"};
                 send_objects[joint_actuators.at(robot_joint.first)] = {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"};
@@ -70,6 +70,10 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
             joint_names.push_back(robot_joint.first);
             joint_states[robot_joint.first] = (double *)calloc(3, sizeof(double));
             joint_commands[robot_joint.first] = (double *)calloc(3, sizeof(double));
+        }
+        else
+        {
+            ROS_WARN("Joint %s is not a prismatic, revolute or continuous joint. Ignoring it.", robot_joint.first.c_str());
         }
     }
 
