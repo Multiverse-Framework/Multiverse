@@ -15,8 +15,8 @@ simulations:
       path: floor.xml
     robots:
       pr2:
-        path: pr2/pr2_with_pos_control.xml
-        # path: pr2/pr2_with_vel_control.xml
+        path: pr2/pr2_with_vel_control.xml
+        # path: pr2/pr2_with_pos_control.xml
         apply:
           body:
             pr2:
@@ -38,41 +38,41 @@ multiverse_clients:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
     receive:
-      r_shoulder_pan_actuator: ["cmd_joint_rvalue"]
-      r_shoulder_lift_actuator: ["cmd_joint_rvalue"]
-      r_upper_arm_roll_actuator: ["cmd_joint_rvalue"]
-      r_elbow_flex_actuator: ["cmd_joint_rvalue"]
-      r_forearm_roll_actuator: ["cmd_joint_rvalue"]
-      r_wrist_flex_actuator: ["cmd_joint_rvalue"]
-      r_wrist_roll_actuator: ["cmd_joint_rvalue"]
-      l_shoulder_pan_actuator: ["cmd_joint_rvalue"]
-      l_shoulder_lift_actuator: ["cmd_joint_rvalue"]
-      l_upper_arm_roll_actuator: ["cmd_joint_rvalue"]
-      l_elbow_flex_actuator: ["cmd_joint_rvalue"]
-      l_forearm_roll_actuator: ["cmd_joint_rvalue"]
-      l_wrist_flex_actuator: ["cmd_joint_rvalue"]
-      l_wrist_roll_actuator: ["cmd_joint_rvalue"]
-      torso_lift_actuator: ["cmd_joint_tvalue"]
-      head_pan_actuator: ["cmd_joint_rvalue"]
-      head_tilt_actuator: ["cmd_joint_rvalue"]
+      r_shoulder_pan_actuator: ["cmd_joint_angular_velocity"]
+      r_shoulder_lift_actuator: ["cmd_joint_angular_velocity"]
+      r_upper_arm_roll_actuator: ["cmd_joint_angular_velocity"]
+      r_elbow_flex_actuator: ["cmd_joint_angular_velocity"]
+      r_forearm_roll_actuator: ["cmd_joint_angular_velocity"]
+      r_wrist_flex_actuator: ["cmd_joint_angular_velocity"]
+      r_wrist_roll_actuator: ["cmd_joint_angular_velocity"]
+      l_shoulder_pan_actuator: ["cmd_joint_angular_velocity"]
+      l_shoulder_lift_actuator: ["cmd_joint_angular_velocity"]
+      l_upper_arm_roll_actuator: ["cmd_joint_angular_velocity"]
+      l_elbow_flex_actuator: ["cmd_joint_angular_velocity"]
+      l_forearm_roll_actuator: ["cmd_joint_angular_velocity"]
+      l_wrist_flex_actuator: ["cmd_joint_angular_velocity"]
+      l_wrist_roll_actuator: ["cmd_joint_angular_velocity"]
+      torso_lift_actuator: ["cmd_joint_linear_velocity"]
+      head_pan_actuator: ["cmd_joint_angular_velocity"]
+      head_tilt_actuator: ["cmd_joint_angular_velocity"]
 
-      # r_shoulder_pan_actuator: ["cmd_joint_angular_velocity"]
-      # r_shoulder_lift_actuator: ["cmd_joint_angular_velocity"]
-      # r_upper_arm_roll_actuator: ["cmd_joint_angular_velocity"]
-      # r_elbow_flex_actuator: ["cmd_joint_angular_velocity"]
-      # r_forearm_roll_actuator: ["cmd_joint_angular_velocity"]
-      # r_wrist_flex_actuator: ["cmd_joint_angular_velocity"]
-      # r_wrist_roll_actuator: ["cmd_joint_angular_velocity"]
-      # l_shoulder_pan_actuator: ["cmd_joint_angular_velocity"]
-      # l_shoulder_lift_actuator: ["cmd_joint_angular_velocity"]
-      # l_upper_arm_roll_actuator: ["cmd_joint_angular_velocity"]
-      # l_elbow_flex_actuator: ["cmd_joint_angular_velocity"]
-      # l_forearm_roll_actuator: ["cmd_joint_angular_velocity"]
-      # l_wrist_flex_actuator: ["cmd_joint_angular_velocity"]
-      # l_wrist_roll_actuator: ["cmd_joint_angular_velocity"]
-      # torso_lift_actuator: ["cmd_joint_linear_velocity"]
-      # head_pan_actuator: ["cmd_joint_angular_velocity"]
-      # head_tilt_actuator: ["cmd_joint_angular_velocity"]
+      # r_shoulder_pan_actuator: ["cmd_joint_rvalue"]
+      # r_shoulder_lift_actuator: ["cmd_joint_rvalue"]
+      # r_upper_arm_roll_actuator: ["cmd_joint_rvalue"]
+      # r_elbow_flex_actuator: ["cmd_joint_rvalue"]
+      # r_forearm_roll_actuator: ["cmd_joint_rvalue"]
+      # r_wrist_flex_actuator: ["cmd_joint_rvalue"]
+      # r_wrist_roll_actuator: ["cmd_joint_rvalue"]
+      # l_shoulder_pan_actuator: ["cmd_joint_rvalue"]
+      # l_shoulder_lift_actuator: ["cmd_joint_rvalue"]
+      # l_upper_arm_roll_actuator: ["cmd_joint_rvalue"]
+      # l_elbow_flex_actuator: ["cmd_joint_rvalue"]
+      # l_forearm_roll_actuator: ["cmd_joint_rvalue"]
+      # l_wrist_flex_actuator: ["cmd_joint_rvalue"]
+      # l_wrist_roll_actuator: ["cmd_joint_rvalue"]
+      # torso_lift_actuator: ["cmd_joint_tvalue"]
+      # head_pan_actuator: ["cmd_joint_rvalue"]
+      # head_tilt_actuator: ["cmd_joint_rvalue"]
 
   ros2:
     ros2_control:
@@ -110,14 +110,14 @@ multiverse_clients:
           controllers:
             spawner:
               - joint_state_broadcaster
-                right_arm_trajectory_controller
-                left_arm_trajectory_controller
-                torso_trajectory_controller
-                head_trajectory_controller
-                # right_arm_velocity_controller
-                # left_arm_velocity_controller
-                # torso_velocity_controller
-                # head_velocity_controller
+                right_arm_velocity_controller
+                left_arm_velocity_controller
+                torso_velocity_controller
+                head_velocity_controller
+                # right_arm_trajectory_controller
+                # left_arm_trajectory_controller
+                # torso_trajectory_controller
+                # head_trajectory_controller
 
     ros2_run:
       rviz2:

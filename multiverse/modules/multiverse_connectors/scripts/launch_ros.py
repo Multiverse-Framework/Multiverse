@@ -260,6 +260,8 @@ class MultiverseRosLaunch(MultiverseLaunch):
                     continue
 
                 joint_element = ET.Element("joint")
+                ros2_control_element.append(joint_element)
+
                 joint_element.set("name", joint.name)
 
                 state_interface = ET.Element("state_interface")
@@ -269,7 +271,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
                 if joint.name in joint_state:
                     initial_value_param.text = str(joint_state[joint.name])
                 else:
-                    initial_value_param.text = 0.0
+                    initial_value_param.text = "0.0"
                 state_interface.append(initial_value_param)
                 joint_element.append(state_interface)
 
@@ -309,7 +311,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
                     if joint.name in joint_state:
                         initial_value_param.text = str(joint_state[joint.name])
                     else:
-                        initial_value_param.text = 0.0
+                        initial_value_param.text = "0.0"
                     state_interface.append(initial_value_param)
                 joint_element.append(state_interface)
 
@@ -340,8 +342,6 @@ class MultiverseRosLaunch(MultiverseLaunch):
                     max_effort_param.text = str(joint.limit.effort)
                     state_interface.append(max_effort_param)
                 joint_element.append(state_interface)
-
-                ros2_control_element.append(joint_element)
 
             robot_element.append(ros2_control_element)
 
