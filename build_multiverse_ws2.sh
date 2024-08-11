@@ -16,4 +16,4 @@ fi
 cd $(dirname $0)/multiverse_ws2
 rosdep install --from-paths src --ignore-src -r -y --rosdistro $ROS2_DISTRO
 . /opt/ros/$ROS2_DISTRO/setup.sh
-colcon build
+colcon build --symlink-install
