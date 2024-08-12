@@ -22,6 +22,24 @@ simulations:
             pr2:
               pos: [0, 1, 0]
             gravcomp: 1
+        joint_state:
+          r_elbow_flex_joint: -0.15
+          r_forearm_roll_joint: 0
+          r_shoulder_lift_joint: 0
+          r_shoulder_pan_joint: 0
+          r_upper_arm_roll_joint: 0
+          r_wrist_flex_joint: -0.10001
+          r_wrist_roll_joint: 0
+          l_elbow_flex_joint: -0.15
+          l_forearm_roll_joint: 0
+          l_shoulder_lift_joint: 0
+          l_shoulder_pan_joint: 0
+          l_upper_arm_roll_joint: 0
+          l_wrist_flex_joint: -0.10001
+          l_wrist_roll_joint: 0
+          torso_lift_joint: 0.2
+          head_pan_joint: 0
+          head_tilt_joint: 0
         disable_self_collision: auto
     config:
       max_time_step: 0.002
@@ -38,23 +56,25 @@ multiverse_clients:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
     receive:
-      r_shoulder_pan_actuator: ["cmd_joint_rvalue"]
-      r_shoulder_lift_actuator: ["cmd_joint_rvalue"]
-      r_upper_arm_roll_actuator: ["cmd_joint_rvalue"]
-      r_elbow_flex_actuator: ["cmd_joint_rvalue"]
-      r_forearm_roll_actuator: ["cmd_joint_rvalue"]
-      r_wrist_flex_actuator: ["cmd_joint_rvalue"]
-      r_wrist_roll_actuator: ["cmd_joint_rvalue"]
-      l_shoulder_pan_actuator: ["cmd_joint_rvalue"]
-      l_shoulder_lift_actuator: ["cmd_joint_rvalue"]
-      l_upper_arm_roll_actuator: ["cmd_joint_rvalue"]
-      l_elbow_flex_actuator: ["cmd_joint_rvalue"]
-      l_forearm_roll_actuator: ["cmd_joint_rvalue"]
-      l_wrist_flex_actuator: ["cmd_joint_rvalue"]
-      l_wrist_roll_actuator: ["cmd_joint_rvalue"]
-      torso_lift_actuator: ["cmd_joint_tvalue"]
-      head_pan_actuator: ["cmd_joint_rvalue"]
-      head_tilt_actuator: ["cmd_joint_rvalue"]
+      pr2: ["odometric_velocity"]
+
+      r_shoulder_pan_actuator: ["cmd_joint_angular_velocity"]
+      r_shoulder_lift_actuator: ["cmd_joint_angular_velocity"]
+      r_upper_arm_roll_actuator: ["cmd_joint_angular_velocity"]
+      r_elbow_flex_actuator: ["cmd_joint_angular_velocity"]
+      r_forearm_roll_actuator: ["cmd_joint_angular_velocity"]
+      r_wrist_flex_actuator: ["cmd_joint_angular_velocity"]
+      r_wrist_roll_actuator: ["cmd_joint_angular_velocity"]
+      l_shoulder_pan_actuator: ["cmd_joint_angular_velocity"]
+      l_shoulder_lift_actuator: ["cmd_joint_angular_velocity"]
+      l_upper_arm_roll_actuator: ["cmd_joint_angular_velocity"]
+      l_elbow_flex_actuator: ["cmd_joint_angular_velocity"]
+      l_forearm_roll_actuator: ["cmd_joint_angular_velocity"]
+      l_wrist_flex_actuator: ["cmd_joint_angular_velocity"]
+      l_wrist_roll_actuator: ["cmd_joint_angular_velocity"]
+      torso_lift_actuator: ["cmd_joint_linear_velocity"]
+      head_pan_actuator: ["cmd_joint_angular_velocity"]
+      head_tilt_actuator: ["cmd_joint_angular_velocity"]
 
       # r_shoulder_pan_actuator: ["cmd_joint_rvalue"]
       # r_shoulder_lift_actuator: ["cmd_joint_rvalue"]
