@@ -31,7 +31,9 @@
 	</asset>
 	<worldbody>
 		<body name="pr2" pos="0 0 0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-			<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
+			<joint name="odom_vel_lin_x_joint" type="slide" axis="1.0 0.0 0.0"/>
+			<joint name="odom_vel_lin_y_joint" type="slide" axis="0.0 1.0 0.0"/>
+			<joint name="odom_vel_ang_z_joint" type="hinge" axis="0.0 0.0 1.0"/>
 			<body name="base_footprint" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
 				<inertial mass="1.0000001111620804e-06" pos="0.0 0.0 0.07100000232458115" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" diaginertia="1.6666670214077195e-13 5.041167927544166e-09 5.041167927544166e-09" />
 				<geom name="SM_base_footprint_collision_0" type="box" pos="0.0 0.0 0.07100000232458115" quat="1.0 0.0 0.0 0.0" size="0.0005000000237487257 0.0005000000237487257 0.0005000000237487257" class="collision" />
