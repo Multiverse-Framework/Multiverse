@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 
 from ... import Interface, INTERFACE
 
@@ -16,14 +16,14 @@ from ..multiverse_node import MultiverseNode, SocketAddress, MultiverseMetaData
 
 class MultiversePublisher(MultiverseNode):
     _use_meta_data: bool = False
-    _msg_types: List[Any] = []
-    _msgs: List[Any] = []
-    __publishers: List[Publisher] = []
+    _msg_types: List[Any] = None
+    _msgs: List[Any] = None
+    __publishers: List[Publisher] = None
 
     def __init__(
             self,
             client_addr: SocketAddress,
-            topic_name: str | List[str],
+            topic_name: Optional[Union[str, List[str]]] = None,
             rate: float = 60.0,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
@@ -33,11 +33,13 @@ class MultiversePublisher(MultiverseNode):
             multiverse_meta_data=multiverse_meta_data
         )
         if isinstance(topic_name, str):
-            self.create_publishers([topic_name], [self._msg_type], rate)
+            self.create_publishers([topic_name], self._msg_types, rate)
         elif isinstance(topic_name, list):
             self.create_publishers(topic_name, self._msg_types, rate)
 
     def create_publishers(self, topic_names: List[str], msg_types: List[Any], rate: float) -> None:
+        self._msgs = []
+        self.__publishers = []
         if INTERFACE == Interface.ROS1:
             for topic_name, msg_type in zip(topic_names, msg_types):
                 self._msgs.append(msg_type())
@@ -67,11 +69,13 @@ class MultiversePublisher(MultiverseNode):
 
     def _publisher_callback(self, _=None) -> None:
         try:
-            self._communicate(self._use_meta_data)
             if self._use_meta_data:
+                self._bind_request_meta_data(_)
+                self._communicate(True)
                 self._bind_response_meta_data(self.response_meta_data)
             else:
-                self.send_data = [self.world_time + self.sim_time]
+                self.send_data = [self.sim_time]
+                self._communicate(False)
                 self._bind_receive_data(self.receive_data)
             self._publish()
         except:

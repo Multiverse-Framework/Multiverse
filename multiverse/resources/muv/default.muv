@@ -137,7 +137,8 @@ multiverse_clients:
               time_unit: s
               handedness: rhs
             port: 7303
-            topic: /odom
+            odom_topic: /odom
+            tf_topic: /tf
             rate: 60
             body: tiago_dual_1
             frame_id: map_1
@@ -220,7 +221,8 @@ multiverse_clients:
               time_unit: s
               handedness: rhs
             port: 7803
-            topic: /odom
+            odom_topic: /odom
+            tf_topic: /tf
             rate: 60
             body: tiago_dual_2
             frame_id: map_2

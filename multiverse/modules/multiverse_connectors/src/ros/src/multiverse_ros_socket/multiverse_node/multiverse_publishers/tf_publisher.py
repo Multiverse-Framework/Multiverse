@@ -37,7 +37,9 @@ class TfPublisher(MultiversePublisher):
             client_addr=client_addr,
             multiverse_meta_data=multiverse_meta_data,
         )
-        self.request_meta_data["receive"][""] = ["position", "quaternion"]
+
+    def _bind_request_meta_data(self, _) -> None:
+        self.request_meta_data["receive"] = {"": ["position", "quaternion"]}
 
     def _bind_response_meta_data(self, response_meta_data: Dict) -> None:
         objects = response_meta_data.get("receive")
@@ -79,4 +81,4 @@ class TfPublisher(MultiversePublisher):
             self._msgs[0].transforms.append(tf_msg)
 
         if INTERFACE == Interface.ROS1:
-            self._msgs[0] += 1
+            self._seq += 1

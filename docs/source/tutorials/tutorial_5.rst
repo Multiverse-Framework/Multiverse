@@ -126,7 +126,8 @@ Define ROS Configuration in the MUV file
                             time_unit: s
                             handedness: rhs
                         port: 7302
-                        topic: /odom
+                        odom_topic: /odom
+                        tf_topic: /tf
                         rate: 60
                         body: tiago_dual # The body to attach the odometry to
                         frame_id: map
