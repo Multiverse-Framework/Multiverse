@@ -97,7 +97,7 @@ multiverse_clients:
   ros2:
     ros_nodes:
       publishers:
-        odom:
+        tf:
           - meta_data:
               world_name: world
               length_unit: m
@@ -106,6 +106,19 @@ multiverse_clients:
               time_unit: s
               handedness: rhs
             port: 7300
+            topic: /tf
+            rate: 60
+            root_frame_id: map
+
+        odom:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7301
             topic: /odom
             rate: 60
             body: pr2
