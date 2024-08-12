@@ -40,7 +40,7 @@ class MultiverseNodeProperties:
         self._ros_node_name = ros_node_name
 
     def create_publisher(self) -> MultiversePublisher:
-        topic_name = self.ros_node_prop.pop("topic")
+        topic_name = self.ros_node_prop.pop("topic") if "topic" in self.ros_node_prop else None
         rate = self.ros_node_prop.pop("rate")
         publisher_name = f"{self.ros_node_name}Publisher"
         for subclass in MultiversePublisher.__subclasses__():

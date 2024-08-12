@@ -97,19 +97,6 @@ multiverse_clients:
   ros2:
     ros_nodes:
       publishers:
-        tf:
-          - meta_data:
-              world_name: world
-              length_unit: m
-              angle_unit: rad
-              mass_unit: kg
-              time_unit: s
-              handedness: rhs
-            port: 7300
-            topic: /tf
-            rate: 60
-            root_frame_id: map
-
         odom:
           - meta_data:
               world_name: world
@@ -118,8 +105,9 @@ multiverse_clients:
               mass_unit: kg
               time_unit: s
               handedness: rhs
-            port: 7301
-            topic: /odom
+            port: 7300
+            odom_topic: /odom
+            tf_topic: /tf
             rate: 60
             body: pr2
             frame_id: map
@@ -151,7 +139,7 @@ multiverse_clients:
           robot_description: /robot_description
           urdf: pr2/pr2.urdf
           config: pr2/config/ros2_control.yaml
-          tf_topic: /pr2/tf
+          tf_topic: /tf
           actuators:
             r_shoulder_pan_actuator: r_shoulder_pan_joint
             r_shoulder_lift_actuator: r_shoulder_lift_joint

@@ -16,7 +16,7 @@ from .multiverse_publisher import MultiversePublisher, SocketAddress, Multiverse
 
 class TfPublisher(MultiversePublisher):
     _use_meta_data = True
-    _msg_type = TFMessage
+    _msg_types = [TFMessage]
     _root_frame_id: str
     _seq: int = 0
 
@@ -28,16 +28,16 @@ class TfPublisher(MultiversePublisher):
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:
+        self._root_frame_id = kwargs.get("root_frame_id", "map")
+        if INTERFACE == Interface.ROS1:
+            self._seq = 0
         super().__init__(
             topic_name=topic_name,
             rate=rate,
             client_addr=client_addr,
             multiverse_meta_data=multiverse_meta_data,
         )
-        self._root_frame_id = kwargs.get("root_frame_id", "map")
         self.request_meta_data["receive"][""] = ["position", "quaternion"]
-        if INTERFACE == Interface.ROS1:
-            self._seq = 0
 
     def _bind_response_meta_data(self, response_meta_data: Dict) -> None:
         objects = response_meta_data.get("receive")
@@ -45,7 +45,7 @@ class TfPublisher(MultiversePublisher):
         if objects is None:
             return
 
-        self._msg.transforms.clear()
+        self._msgs[0].transforms.clear()
 
         for object_name, tf_data in objects.items():
             tf_data = response_meta_data["receive"][object_name]
@@ -76,7 +76,7 @@ class TfPublisher(MultiversePublisher):
             tf_msg.transform.rotation.x = quaternion[1]
             tf_msg.transform.rotation.y = quaternion[2]
             tf_msg.transform.rotation.z = quaternion[3]
-            self._msg.transforms.append(tf_msg)
+            self._msgs[0].transforms.append(tf_msg)
 
         if INTERFACE == Interface.ROS1:
-            self._seq += 1
+            self._msgs[0] += 1

@@ -96,7 +96,7 @@ class MultiverseRosSocket:
                 rospy.signal_shutdown(exit_str)
             elif INTERFACE == Interface.ROS2:
                 print(exit_str)
-                rclpy.shutdown()
+                # rclpy.shutdown()
         finally:
             for subscriber in subscriber_list:
                 subscriber.stop()

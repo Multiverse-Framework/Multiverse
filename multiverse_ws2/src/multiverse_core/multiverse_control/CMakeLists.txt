@@ -86,10 +86,6 @@ install(TARGETS multiverse_control
   RUNTIME DESTINATION bin
 )
 
-execute_process(
-  COMMAND cp -rf ${MULTIVERSE_DIR}/lib/libstdc++/libmultiverse_client_json.so ${MULTIVERSE_DIR}/../multiverse_ws2/install/multiverse_control/lib/libmultiverse_client_json.so
-)
-
 # # EXPORTS
 ament_export_targets(export_multiverse_control HAS_LIBRARY_TARGET)
 ament_export_dependencies(${HW_IF_INCLUDE_DEPENDS})

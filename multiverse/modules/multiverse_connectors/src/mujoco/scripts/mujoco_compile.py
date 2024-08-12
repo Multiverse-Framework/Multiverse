@@ -714,7 +714,7 @@ class MujocoCompiler:
             body_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, body_name)
             dof_adr = m.body_dofadr[body_id]
             dof_num = m.body_dofnum[body_id]
-            if dof_adr == -1 or dof_num not in [3, 6]:
+            if body_id == 1 or dof_adr == -1 or dof_num not in [3, 6]:
                 continue
 
             if isinstance(body_attributes, dict) and body_attributes.get("pos") is not None:
