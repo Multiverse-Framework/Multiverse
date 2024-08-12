@@ -151,7 +151,7 @@ multiverse_clients:
           robot_description: /robot_description
           urdf: pr2/pr2.urdf
           config: pr2/config/ros2_control.yaml
-          tf_topic: /tf
+          tf_topic: /pr2/tf
           actuators:
             r_shoulder_pan_actuator: r_shoulder_pan_joint
             r_shoulder_lift_actuator: r_shoulder_lift_joint
