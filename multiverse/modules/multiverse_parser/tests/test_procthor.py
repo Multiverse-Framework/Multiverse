@@ -3,7 +3,7 @@ import unittest
 import os
 import re
 import json
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import numpy
 from scipy.spatial.transform import Rotation
 from multiverse_parser import Configuration, InertiaSource, Factory
@@ -18,10 +18,13 @@ from multiverse_parser import MjcfExporter, UrdfExporter
 from pxr import Usd, UsdGeom, UsdPhysics
 from mujoco import MjModel, mjMINVAL
 from urdf_parser_py import urdf
+import random
 
-house_name = "house_69"
+house_name = "house_5"
 
 source_dir = "/media/giangnguyen/Storage/dataset/"
+
+ignore_objects = ["Painting"]
 
 
 def snake_to_camel(snake_str):
@@ -32,7 +35,81 @@ def snake_to_camel(snake_str):
     components = [comp for comp in components if comp]
 
     # Capitalize the first letter of each component except those that are purely numeric
-    return ''.join(comp.title() if not comp.isdigit() else comp for comp in components)
+    camel_str = ''.join(comp.title() if not comp.isdigit() else comp for comp in components)
+
+    camel_str = re.sub(r'(\d+)', r'_\1_', camel_str)
+
+    camel_str = camel_str.strip('_').replace('.', '_').replace(' ', '_').replace('__', '_')
+
+    return camel_str
+
+
+def get_asset_paths(asset_name: str) -> List[str]:
+    asset_name = asset_name.replace("Bathroom", "").replace("Photo", "").replace("Painting", "")
+    print("Importing asset:", asset_name)
+    asset_path = os.path.join(source_dir, "grp_objects", asset_name)
+
+    asset_paths = []
+    if os.path.exists(asset_path):
+        asset_path = os.path.join(asset_path, f"{asset_name}.stl")
+        if not os.path.exists(asset_path):
+            raise FileNotFoundError("File not found:", asset_path)
+        asset_paths.append(asset_path)
+        return asset_paths
+    else:
+        for root, dirs, files in os.walk(os.path.join(source_dir, "single_objects")):
+            for file in files:
+                file_name = os.path.splitext(file)[0]
+                if file.endswith('.stl') and asset_name in file_name:
+                    asset_path = os.path.join(root, file)
+                    if os.path.exists(asset_path):
+                        asset_paths.append(asset_path)
+        if len(asset_paths) > 0:
+            return asset_paths
+
+        asset_new_name = re.sub(r'_\d+$', '', asset_name)
+        if asset_new_name[-1] == '_':
+            asset_new_name = asset_new_name[:-1]
+        if asset_new_name != asset_name:
+            print(f"Asset not found: {asset_name}, try to remove the last numbers")
+            return get_asset_paths(asset_new_name)
+
+        for root, dirs, files in os.walk(os.path.join(source_dir, "grp_objects")):
+            for file in files:
+                file_name = os.path.splitext(file)[0]
+                if file.endswith('.stl') and asset_name in file_name:
+                    asset_path = os.path.join(root, file)
+                    if os.path.exists(asset_path):
+                        asset_paths.append(asset_path)
+        if len(asset_paths) > 0:
+            return asset_paths
+
+        for root, dirs, files in os.walk(os.path.join(source_dir, "grp_objects")):
+            for file in files:
+                file_name = os.path.splitext(file)[0]
+                if file.endswith('.stl') and file_name in asset_name:
+                    asset_path = os.path.join(root, file)
+                    if os.path.exists(asset_path):
+                        asset_paths.append(asset_path)
+        if len(asset_paths) > 0:
+            return asset_paths
+
+        for root, dirs, files in os.walk(os.path.join(source_dir, "single_objects")):
+            for file in files:
+                file_name = os.path.splitext(file)[0]
+                if file.endswith('.stl') and file_name in asset_name:
+                    asset_path = os.path.join(root, file)
+                    if os.path.exists(asset_path):
+                        asset_paths.append(asset_path)
+        if len(asset_paths) > 0:
+            return asset_paths
+
+    if asset_name[-1].isupper():
+        print(f"Asset not found: {asset_name}, try to remove the last capital character")
+        asset_new_name = asset_name[:-1]
+        return get_asset_paths(asset_new_name)
+
+    return asset_paths
 
 
 class ProcthorImporter(Factory):
@@ -60,6 +137,10 @@ class ProcthorImporter(Factory):
 
     def import_object(self, parent_body_name: str, obj: Dict[str, Any]) -> None:
         body_name = obj["id"].replace("|", "_")
+
+        if any([ignore_object in body_name for ignore_object in ignore_objects]):
+            return None
+
         body_builder = self._world_builder.add_body(body_name=body_name, parent_body_name=house_name)
 
         position = obj.get("position", {"x": 0, "y": 0, "z": 0})
@@ -151,7 +232,8 @@ class ProcthorImporter(Factory):
                 raise ValueError("Invalid normal")
             points = numpy.array(
                 [[x - dx, y - dy, z - dz], [x - dx, y - dy, z + dz], [x - dx, y + dy, z - dz], [x - dx, y + dy, z + dz],
-                 [x + dx, y - dy, z - dz], [x + dx, y - dy, z + dz], [x + dx, y + dy, z - dz], [x + dx, y + dy, z + dz]])
+                 [x + dx, y - dy, z - dz], [x + dx, y - dy, z + dz], [x + dx, y + dy, z - dz],
+                 [x + dx, y + dy, z + dz]])
 
             mesh_file_name = f"Wall_{wall_id}"
 
@@ -171,11 +253,15 @@ class ProcthorImporter(Factory):
             door = walls_with_door[wall["id"]]
             hole_height = door["holePolygon"][1]["y"]
             if point_1[1] < point_3[1]:
-                y = [(point_1[1] + hole_height) / 2.0, (hole_height + point_3[1]) / 2.0, (point_1[1] + hole_height) / 2.0]
-                dy = [(hole_height - point_1[1]) / 2.0, (point_3[1] - hole_height) / 2.0, (hole_height - point_1[1]) / 2.0]
+                y = [(point_1[1] + hole_height) / 2.0, (hole_height + point_3[1]) / 2.0,
+                     (point_1[1] + hole_height) / 2.0]
+                dy = [(hole_height - point_1[1]) / 2.0, (point_3[1] - hole_height) / 2.0,
+                      (hole_height - point_1[1]) / 2.0]
             else:
-                y = [(point_3[1] + hole_height) / 2.0, (hole_height + point_1[1]) / 2.0, (point_3[1] + hole_height) / 2.0]
-                dy = [(hole_height - point_3[1]) / 2.0, (point_1[1] - hole_height) / 2.0, (hole_height - point_3[1]) / 2.0]
+                y = [(point_3[1] + hole_height) / 2.0, (hole_height + point_1[1]) / 2.0,
+                     (point_3[1] + hole_height) / 2.0]
+                dy = [(hole_height - point_3[1]) / 2.0, (point_1[1] - hole_height) / 2.0,
+                      (hole_height - point_3[1]) / 2.0]
             if normal[0] != 0:
                 z = [(point_1[2] + point_2[2]) / 2.0] * 3
                 dz = [(point_2[2] - point_1[2]) / 2.0] * 3
@@ -213,10 +299,14 @@ class ProcthorImporter(Factory):
 
             for idx in range(3):
                 points = numpy.array(
-                    [[x[idx] - dx[idx], y[idx] - dy[idx], z[idx] - dz[idx]], [x[idx] - dx[idx], y[idx] - dy[idx], z[idx] + dz[idx]],
-                     [x[idx] - dx[idx], y[idx] + dy[idx], z[idx] - dz[idx]], [x[idx] - dx[idx], y[idx] + dy[idx], z[idx] + dz[idx]],
-                     [x[idx] + dx[idx], y[idx] - dy[idx], z[idx] - dz[idx]], [x[idx] + dx[idx], y[idx] - dy[idx], z[idx] + dz[idx]],
-                     [x[idx] + dx[idx], y[idx] + dy[idx], z[idx] - dz[idx]], [x[idx] + dx[idx], y[idx] + dy[idx], z[idx] + dz[idx]]])
+                    [[x[idx] - dx[idx], y[idx] - dy[idx], z[idx] - dz[idx]],
+                     [x[idx] - dx[idx], y[idx] - dy[idx], z[idx] + dz[idx]],
+                     [x[idx] - dx[idx], y[idx] + dy[idx], z[idx] - dz[idx]],
+                     [x[idx] - dx[idx], y[idx] + dy[idx], z[idx] + dz[idx]],
+                     [x[idx] + dx[idx], y[idx] - dy[idx], z[idx] - dz[idx]],
+                     [x[idx] + dx[idx], y[idx] - dy[idx], z[idx] + dz[idx]],
+                     [x[idx] + dx[idx], y[idx] + dy[idx], z[idx] - dz[idx]],
+                     [x[idx] + dx[idx], y[idx] + dy[idx], z[idx] + dz[idx]]])
 
                 mesh_file_name = f"Wall_{wall_id}_{idx}"
 
@@ -232,7 +322,8 @@ class ProcthorImporter(Factory):
                                                      geom_property=geom_property)
                 geom_builder.add_mesh(mesh_name=f"SM_{body_name}_{idx}", mesh_property=mesh_property)
 
-    def import_door(self, door: Dict[str, Any], door_id: int, walls: List[Dict[str, Any]], walls_with_door: Dict) -> None:
+    def import_door(self, door: Dict[str, Any], door_id: int, walls: List[Dict[str, Any]],
+                    walls_with_door: Dict) -> None:
         body_name = f"Door_{door_id}"
         body_builder = self._world_builder.add_body(body_name=body_name, parent_body_name=house_name)
 
@@ -245,14 +336,14 @@ class ProcthorImporter(Factory):
             raise ValueError(f"Door {door_id} does not have wall0")
         if wall1 is None:
             raise ValueError(f"Door {door_id} does not have wall1")
-        
+
         for wall in walls:
             if wall["id"] == wall1:
                 walls_with_door[wall1] = door
                 break
         else:
             raise ValueError(f"Wall {wall1} not found")
-        
+
         for wall in walls:
             if wall["id"] == wall0:
                 walls_with_door[wall0] = door
@@ -263,12 +354,14 @@ class ProcthorImporter(Factory):
         if wall["polygon"][0]["x"] == wall["polygon"][1]["x"]:
             position_vec[0] = position["z"] + wall["polygon"][0]["x"]
             position_vec[1] = -position["x"] - (
-                wall["polygon"][0]["z"] if wall["polygon"][0]["z"] < wall["polygon"][1]["z"] else wall["polygon"][1]["z"])
+                wall["polygon"][0]["z"] if wall["polygon"][0]["z"] < wall["polygon"][1]["z"] else wall["polygon"][1][
+                    "z"])
             body_builder.set_transform(pos=position_vec,
                                        quat=Rotation.from_euler("xyz", [0, 0, 90], degrees=True).as_quat())
         elif wall["polygon"][0]["z"] == wall["polygon"][1]["z"]:
             position_vec[0] = position["x"] + (
-                wall["polygon"][0]["x"] if wall["polygon"][0]["x"] < wall["polygon"][1]["x"] else wall["polygon"][1]["x"])
+                wall["polygon"][0]["x"] if wall["polygon"][0]["x"] < wall["polygon"][1]["x"] else wall["polygon"][1][
+                    "x"])
             position_vec[1] = position["z"] - wall["polygon"][0]["z"]
             body_builder.set_transform(pos=position_vec)
         else:
@@ -279,89 +372,24 @@ class ProcthorImporter(Factory):
 
         asset_id = door["assetId"]
         asset_id = re.sub(r'(\d+)x(\d+)', r'\1_X_\2', asset_id)
-        self.import_asset(body_builder, asset_id)            
-        
+        self.import_asset(body_builder, asset_id)
 
     def import_asset(self, body_builder: BodyBuilder, asset_name: str) -> None:
         asset_name = snake_to_camel(asset_name)
-        print("Importing asset:", asset_name)
-        asset_path = os.path.join(source_dir, "grp_objects", asset_name)
-        if os.path.exists(asset_path):
-            asset_path = os.path.join(asset_path, f"{asset_name}.stl")
-            if not os.path.exists(asset_path):
-                raise FileNotFoundError("File not found:", asset_path)
+
+        asset_paths = get_asset_paths(asset_name)
+        if len(asset_paths) == 0:
+            return None
         else:
-            for root, dirs, files in os.walk(os.path.join(source_dir, "single_objects")):
-                for file in files:
-                    file_name = os.path.splitext(file)[0]
-                    if file.endswith('.stl') and asset_name in file_name:
-                        asset_path = os.path.join(root, file)
-                        break
-            if not os.path.exists(asset_path):
-                print(f"Asset not found: {asset_name}, try to remove the last numbers")
-                asset_name = re.sub(r'_\d+$', '', asset_name)
-                asset_path = os.path.join(source_dir, "grp_objects", asset_name)
-                if os.path.exists(asset_path):
-                    asset_path = os.path.join(asset_path, f"{asset_name}.stl")
-                else:
-                    for root, dirs, files in os.walk(os.path.join(source_dir, "single_objects")):
-                        if os.path.exists(asset_path):
-                            break
-                        for file in files:
-                            file_name = os.path.splitext(file)[0]
-                            if file.endswith('.stl') and asset_name in file_name:
-                                asset_path = os.path.join(root, file)
-                                break
-                    if not os.path.exists(asset_path):
-                        print(f"Asset not found: {asset_name}, try to remove the last numbers")
-                        asset_name = re.sub(r'_\d+$', '', asset_name)
-                        asset_path = os.path.join(source_dir, "grp_objects", asset_name)
-                        if os.path.exists(asset_path):
-                            asset_path = os.path.join(asset_path, f"{asset_name}.stl")
-                        else:
-                            for root, dirs, files in os.walk(os.path.join(source_dir, "single_objects")):
-                                if os.path.exists(asset_path):
-                                    break
-                                for file in files:
-                                    file_name = os.path.splitext(file)[0]
-                                    if file.endswith('.stl') and asset_name in file_name:
-                                        asset_path = os.path.join(root, file)
-                                        break
-                            if not os.path.exists(asset_path):
-                                for root, dirs, files in os.walk(os.path.join(source_dir, "grp_objects")):
-                                    if os.path.exists(asset_path):
-                                        break
-                                    for file in files:
-                                        file_name = os.path.splitext(file)[0]
-                                        if file.endswith('.stl') and asset_name in file_name:
-                                            asset_path = os.path.join(root, file)
-                                            break
-                                if not os.path.exists(asset_path):
-                                    for root, dirs, files in os.walk(os.path.join(source_dir, "grp_objects")):
-                                        if os.path.exists(asset_path):
-                                            break
-                                        for file in files:
-                                            file_name = os.path.splitext(file)[0]
-                                            if file.endswith('.stl') and file_name in asset_name:
-                                                asset_path = os.path.join(root, file)
-                                                break
-                                    if not os.path.exists(asset_path):
-                                        for root, dirs, files in os.walk(os.path.join(source_dir, "single_objects")):
-                                            if os.path.exists(asset_path):
-                                                break
-                                            for file in files:
-                                                file_name = os.path.splitext(file)[0]
-                                                if file.endswith('.stl') and file_name in asset_name:
-                                                    asset_path = os.path.join(root, file)
-                                                    break
-                                        if not os.path.exists(asset_path):
-                                            print(f"Asset not found: {asset_name}")
-                                            return None
+            i = int(random.uniform(0, len(asset_paths)))
+            asset_path = asset_paths[i]
 
         asset_dir = os.path.dirname(asset_path)
         mesh_idx = 0
         body_name = body_builder.xform.GetPrim().GetName()
-        if os.path.basename(os.path.dirname(asset_dir)) == "grp_objects" or "Pen" in asset_name:
+        if (os.path.basename(os.path.dirname(asset_dir)) == "grp_objects"
+                or "Pen" in asset_name
+                or "Keychain" in asset_name):
             tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
                 mesh_file_path=asset_path, merge_mesh=True)
             mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_path)
@@ -377,10 +405,13 @@ class ProcthorImporter(Factory):
                                                      geom_property=geom_property)
                 geom_builder.add_mesh(mesh_name=mesh_name, mesh_property=mesh_property)
         else:
+            if "Chair" in asset_name:
+                print(asset_name)
+            file_text = re.sub(r'[^a-zA-Z]', '', asset_name)
             for root, dirs, files in os.walk(asset_dir):
                 for file in files:
                     file_name = os.path.splitext(file)[0]
-                    if file.endswith('.stl') and asset_name in file_name:
+                    if file.endswith('.stl') and file_text in file_name:
                         asset_path = os.path.join(root, file)
                         tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
                             mesh_file_path=asset_path, merge_mesh=True)
@@ -409,10 +440,10 @@ class TestProcthor(unittest.TestCase):
         factory.save_tmp_model(house_usd_file_path)
 
         # Export to MJCF
-        exporter = UrdfExporter(file_path=house_usd_file_path.replace(".usda", ".urdf"),
-                                factory=factory)
-        exporter.build()
-        exporter.export(keep_usd=False)
+        # exporter = UrdfExporter(file_path=house_usd_file_path.replace(".usda", ".urdf"),
+        #                         factory=factory)
+        # exporter.build()
+        # exporter.export(keep_usd=False)
 
 
 if __name__ == '__main__':
