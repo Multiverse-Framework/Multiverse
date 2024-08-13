@@ -28,6 +28,7 @@
 #include "set"
 #include "thread"
 
+#include "rclcpp/rclcpp.hpp"
 #include "hardware_interface/handle.hpp"
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
