@@ -142,7 +142,7 @@ void MultiverseClient::connect()
     start_connect_to_server_thread();
 }
 
-double MultiverseClient::get_time_now()
+double MultiverseClient::get_time_now() const
 {
     return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
 }

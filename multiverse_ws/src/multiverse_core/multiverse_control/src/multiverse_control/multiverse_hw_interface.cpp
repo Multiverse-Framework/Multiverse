@@ -117,7 +117,7 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
 
 ros::Time MultiverseHWInterface::get_world_time(const double offset) const
 {
-    return ros::Time(float(*world_time + offset));
+    return ros::Time(get_time_now() + offset); // TODO: Fix this with world_time
 }
 
 MultiverseHWInterface::~MultiverseHWInterface()

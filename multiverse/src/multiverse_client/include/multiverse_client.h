@@ -84,7 +84,7 @@ public:
      *
      * @return double current time in time_unit
      */
-    virtual double get_time_now();
+    virtual double get_time_now() const;
 
 public:
     /**
