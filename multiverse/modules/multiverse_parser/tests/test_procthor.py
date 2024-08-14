@@ -3,7 +3,7 @@ import unittest
 import os
 import re
 import json
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 import numpy
 from scipy.spatial.transform import Rotation
 from multiverse_parser import Configuration, InertiaSource, Factory
@@ -15,21 +15,26 @@ from multiverse_parser import (WorldBuilder,
                                MaterialProperty)
 from multiverse_parser import MjcfExporter, UrdfExporter
 
-from pxr import Usd, UsdGeom, UsdPhysics
-from mujoco import MjModel, mjMINVAL
-from urdf_parser_py import urdf
+from pxr import Usd, UsdGeom
 import random
 
-house_name = "house_5"
+house_name = "house_15"
 
 source_dir = "/media/giangnguyen/Storage/dataset/"
 
 ignore_objects = ["Painting"]
 
+ignore_walls = []
+
+include_doors = [
+    "DoorwayDouble",
+    "Doorway"
+]
+
 
 def snake_to_camel(snake_str):
     # Split the string by underscores, but keep numbers separated
-    components = re.split(r'(_\d+_)|(_\d+)|(_\d+)|_', snake_str)
+    components = re.split(r'(_\d+_)|(_\d+)|_', snake_str)
 
     # Filter out None or empty strings that might result from the split
     components = [comp for comp in components if comp]
@@ -133,6 +138,10 @@ class ProcthorImporter(Factory):
             self.import_door(door, door_id, walls, walls_with_door)
 
         for wall_id, wall in enumerate(walls):
+            wall_id_str = ' '.join(wall["id"].split('|')[-4:])
+            if wall_id_str in ignore_walls:
+                continue
+            ignore_walls.append(wall_id_str)
             self.import_wall(wall, wall_id, walls_with_door)
 
     def import_object(self, parent_body_name: str, obj: Dict[str, Any]) -> None:
@@ -264,23 +273,23 @@ class ProcthorImporter(Factory):
                       (hole_height - point_3[1]) / 2.0]
             if normal[0] != 0:
                 z = [(point_1[2] + point_2[2]) / 2.0] * 3
-                dz = [(point_2[2] - point_1[2]) / 2.0] * 3
+                dz = [(point_1[2] - point_2[2]) * normal[0] / 2.0] * 3
 
-                dz[0] = door["holePolygon"][0]["y"] / 2.0
+                dz[0] = door["holePolygon"][0]["x"] / 2
                 if point_1[2] > point_2[2]:
                     z[0] = point_2[2] + dz[0]
-                    dz[2] = (point_1[2] - point_2[2] - door["holePolygon"][1]["y"]) / 2.0
+                    dz[2] = (point_1[2] - point_2[2] - door["holePolygon"][1]["x"]) / 2.0
                     z[2] = point_1[2] - dz[2]
                 else:
                     z[0] = point_1[2] + dz[0]
-                    dz[2] = (point_2[2] - point_1[2] - door["holePolygon"][1]["y"]) / 2.0
+                    dz[2] = (point_2[2] - point_1[2] - door["holePolygon"][1]["x"]) / 2.0
                     z[2] = point_2[2] - dz[2]
 
                 x = [point_1[0]] * 3
-                dx = [-0.05 * normal[0]] * 3
+                dx = [0.05] * 3
             elif normal[2] != 0:
                 x = [(point_2[0] + point_3[0]) / 2.0] * 3
-                dx = [(point_3[0] - point_2[0]) / 2.0] * 3
+                dx = [(point_2[0] - point_3[0]) * normal[2] / 2.0] * 3
 
                 dx[0] = door["holePolygon"][0]["x"] / 2.0
                 if point_2[0] > point_3[0]:
@@ -293,7 +302,7 @@ class ProcthorImporter(Factory):
                     x[2] = point_3[0] - dx[2]
 
                 z = [point_1[2]] * 3
-                dz = [-0.05 * normal[2]] * 3
+                dz = [0.05] * 3
             else:
                 raise ValueError("Invalid normal")
 
@@ -370,9 +379,13 @@ class ProcthorImporter(Factory):
         if "assetId" not in door:
             return None
 
-        asset_id = door["assetId"]
-        asset_id = re.sub(r'(\d+)x(\d+)', r'\1_X_\2', asset_id)
-        self.import_asset(body_builder, asset_id)
+        asset_name = door["assetId"]
+        asset_name = re.sub(r'(\d+)x(\d+)', r'\1_X_\2', asset_name)
+        asset_name = snake_to_camel(asset_name)
+        asset_name = asset_name.replace("Doorframe", "Doorway")
+        if not any([door_name in asset_name for door_name in include_doors]):
+            return None
+        self.import_asset(body_builder, asset_name)
 
     def import_asset(self, body_builder: BodyBuilder, asset_name: str) -> None:
         asset_name = snake_to_camel(asset_name)
@@ -439,11 +452,16 @@ class TestProcthor(unittest.TestCase):
         house_usd_file_path = os.path.join(source_dir, house_name, f"{house_name}.usda")
         factory.save_tmp_model(house_usd_file_path)
 
-        # Export to MJCF
-        # exporter = UrdfExporter(file_path=house_usd_file_path.replace(".usda", ".urdf"),
-        #                         factory=factory)
-        # exporter.build()
-        # exporter.export(keep_usd=False)
+        # Export to URDF and MJCF
+        urdf_exporter = UrdfExporter(file_path=house_usd_file_path.replace(".usda", ".urdf"),
+                                factory=factory)
+        urdf_exporter.build()
+        urdf_exporter.export(keep_usd=False)
+
+        mjcf_exporter = MjcfExporter(file_path=house_usd_file_path.replace(".usda", ".mjcf"),
+                                factory=factory)
+        mjcf_exporter.build()
+        mjcf_exporter.export(keep_usd=False)
 
 
 if __name__ == '__main__':
