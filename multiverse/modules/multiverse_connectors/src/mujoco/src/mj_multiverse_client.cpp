@@ -1660,18 +1660,18 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 	const std::string object_1_name = arguments[0].asString();
 	const std::string object_2_name = arguments[1].asString();
 
-	tinyxml2::XMLDocument doc;
-	std::string doc_file_path;
-	doc.LoadFile(scene_xml_path.string().c_str());
+	tinyxml2::XMLDocument object_doc;
+	std::string object_doc_file_path;
+	object_doc.LoadFile(scene_xml_path.string().c_str());
 	tinyxml2::XMLElement *body_1_element = nullptr;
-	get_body_element(doc, doc_file_path, body_1_element, object_1_name);
+	get_body_element(object_doc, object_doc_file_path, body_1_element, object_1_name);
 
 	tinyxml2::XMLDocument scene_doc;
 	tinyxml2::XMLElement *mujoco_element;
 	tinyxml2::XMLElement *worldbody_element;
 	tinyxml2::XMLElement *freejoint_element;
 	tinyxml2::XMLElement *body_1_element_copy;
-	if (strcmp(scene_xml_path.string().c_str(), doc_file_path.c_str()) != 0)
+	if (strcmp(scene_xml_path.string().c_str(), object_doc_file_path.c_str()) != 0)
 	{
 		scene_doc.LoadFile(scene_xml_path.string().c_str());
 		mujoco_element = scene_doc.FirstChildElement("mujoco");
@@ -1681,16 +1681,15 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 	}
 	else
 	{
-		mujoco_element = doc.FirstChildElement("mujoco");
-		worldbody_element = doc.NewElement("worldbody");
-		freejoint_element = doc.NewElement("freejoint");
-		body_1_element_copy = body_1_element->DeepClone(&doc)->ToElement();
+		mujoco_element = object_doc.FirstChildElement("mujoco");
+		worldbody_element = object_doc.NewElement("worldbody");
+		freejoint_element = object_doc.NewElement("freejoint");
+		body_1_element_copy = body_1_element->DeepClone(&object_doc)->ToElement();
 	}
 
 	mujoco_element->InsertEndChild(worldbody_element);
-	body_1_element_copy->InsertFirstChild(freejoint_element);
-
 	worldbody_element->InsertEndChild(body_1_element_copy);
+	body_1_element_copy->InsertFirstChild(freejoint_element);
 
 	tinyxml2::XMLElement *parent_body_1_element = body_1_element->Parent()->ToElement();
 	parent_body_1_element->DeleteChild(body_1_element);
@@ -1744,11 +1743,15 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 			}
 		}
 	}
-	scene_doc.SaveFile(scene_xml_path.string().c_str());
 
-	if (strcmp(scene_xml_path.string().c_str(), doc_file_path.c_str()) != 0)
+	if (strcmp(scene_xml_path.string().c_str(), object_doc_file_path.c_str()) != 0)
 	{
-		doc.SaveFile(doc_file_path.c_str());
+		scene_doc.SaveFile(scene_xml_path.string().c_str());
+		object_doc.SaveFile(object_doc_file_path.c_str());
+	}
+	else
+	{
+		object_doc.SaveFile(scene_xml_path.string().c_str());
 	}
 
 	printf("Detach %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
