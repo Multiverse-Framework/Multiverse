@@ -132,10 +132,10 @@ selected_object = bpy.context.object
 if len([vertex for obj in bpy.data.objects for vertex in obj.data.vertices]) > 1000:
     selected_object.modifiers.new("Weld", "WELD")
     bpy.ops.object.modifier_apply(modifier="Weld")
-bpy.ops.export_mesh.stl(filepath='{out_stl}', 
-                        use_selection=False, 
-                        axis_forward="Y", 
-                        axis_up="Z")
+bpy.ops.wm.stl_export(filepath='{out_stl}', 
+                      export_selected_objects=False, 
+                      forward_axis="Y", 
+                      up_axis="Z")
 """
 
 

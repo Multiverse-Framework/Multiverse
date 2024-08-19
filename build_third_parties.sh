@@ -42,12 +42,11 @@ while [ -n "$1" ]; do
                     shift 1
                     if [ "$module" = "blender" ]; then
                         BUILD_BLENDER=OFF
-                    elif [ "$module" = "usd" ]; then
-                        BUILD_BLENDER=OFF
+                        elif [ "$module" = "usd" ]; then
                         BUILD_USD=OFF
-                    elif [ "$module" = "mujoco" ]; then
+                        elif [ "$module" = "mujoco" ]; then
                         BUILD_MUJOCO=OFF
-                    elif [ "$module" = "pybind11" ]; then
+                        elif [ "$module" = "pybind11" ]; then
                         BUILD_PYBIND11=OFF
                     fi
                 done
@@ -62,14 +61,10 @@ done
 
 if [ $BUILD_BLENDER = true ]; then
     echo "Building Blender..."
-
-    # Build blender
-
+    
+    FROM_SRC=false
     BLENDER_BUILD_DIR=$BUILD_DIR/blender
-    BLENDER_EXT_DIR=$EXT_DIR/blender-git
-
-    git submodule update --init $BLENDER_EXT_DIR/blender
-
+    
     if [ ! -d "$BLENDER_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
         mkdir -p "$BLENDER_BUILD_DIR"
@@ -77,26 +72,41 @@ if [ $BUILD_BLENDER = true ]; then
     else
         echo "Folder already exists: $BLENDER_BUILD_DIR"
     fi
-
-    (cd $BLENDER_EXT_DIR/blender && make update && ./build_files/utils/make_update.py --use-linux-libraries)
-    (cd $BLENDER_BUILD_DIR && cmake -S ../../external/blender-git/blender -B . -Wno-deprecated -Wno-dev && make -j$(nproc) && make install)
-    (cd $BLENDER_BUILD_DIR/bin/4.1/python/bin;
+    
+    if [ $FROM_SRC = true ]; then
+        # Build blender
+        
+        BLENDER_EXT_DIR=$EXT_DIR/blender-git
+        
+        git submodule update --init $BLENDER_EXT_DIR/blender
+        
+        (cd $BLENDER_EXT_DIR/blender && make update && ./build_files/utils/make_update.py --use-linux-libraries)
+        (cd $BLENDER_BUILD_DIR && cmake -S ../../external/blender-git/blender -B . -Wno-deprecated -Wno-dev && make -j$(nproc) && make install)
+    else
+        # Download blender
+        
+        BLENDER_TAR_FILE=blender-4.2.0-linux-x64.tar.xz
+        curl -o $EXT_DIR/$BLENDER_TAR_FILE https://download.blender.org/release/Blender4.2/$BLENDER_TAR_FILE
+        tar xf $EXT_DIR/$BLENDER_TAR_FILE -C $BLENDER_BUILD_DIR --strip-components=1
+    fi
+    
+    (cd $BLENDER_BUILD_DIR/4.2/python/bin;
         ./python3.11 -m pip install --upgrade pip build --no-warn-script-location;
-        ./python3.11 -m pip install bpy Pillow --no-warn-script-location) # For blender
-    ln -sf $BLENDER_BUILD_DIR/bin/blender $BIN_DIR
-    ln -sf $BLENDER_BUILD_DIR/bin/4.1/python/bin/python3.11 $BIN_DIR
+    ./python3.11 -m pip install bpy Pillow --no-warn-script-location) # For blender
+    ln -sf $BLENDER_BUILD_DIR/blender $BIN_DIR
+    ln -sf $BLENDER_BUILD_DIR/4.2/python/bin/python3.11 $BIN_DIR
 fi
 
 if [ $BUILD_USD = true ]; then
     echo "Building USD..."
-
+    
     # Build USD
-
+    
     USD_BUILD_DIR=$BUILD_DIR/USD
     USD_EXT_DIR=$EXT_DIR/USD
-
+    
     git submodule update --init $USD_EXT_DIR
-
+    
     if [ ! -d "$USD_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
         mkdir -p "$USD_BUILD_DIR"
@@ -104,8 +114,8 @@ if [ $BUILD_USD = true ]; then
     else
         echo "Folder already exists: $USD_BUILD_DIR"
     fi
-
-    for virtualenvwrapper in /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
+    
+    for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
         if [ -f $virtualenvwrapper ]; then
             . $virtualenvwrapper
             mkvirtualenv --system-site-packages multiverse
@@ -124,14 +134,12 @@ fi
 
 if [ $BUILD_MUJOCO = true ]; then
     echo "Building MuJoCo..."
-
+    
     # Build MuJoCo
-
+    
+    FROM_SRC=false
     MUJOCO_BUILD_DIR=$BUILD_DIR/mujoco
-    MUJOCO_EXT_DIR=$EXT_DIR/mujoco
-
-    git submodule update --init $MUJOCO_EXT_DIR
-
+    
     if [ ! -d "$MUJOCO_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
         mkdir -p "$MUJOCO_BUILD_DIR"
@@ -139,21 +147,32 @@ if [ $BUILD_MUJOCO = true ]; then
     else
         echo "Folder already exists: $MUJOCO_BUILD_DIR"
     fi
-
-    (cd $MUJOCO_BUILD_DIR && cmake $MUJOCO_EXT_DIR -DCMAKE_INSTALL_PREFIX=$MUJOCO_BUILD_DIR -Wno-deprecated -Wno-dev && cmake --build . && cmake --install .)
+    
+    if [ $FROM_SRC = true ]; then
+        # Build MuJoCo
+        
+        git submodule update --init $MUJOCO_EXT_DIR
+        (cd $MUJOCO_BUILD_DIR && cmake $MUJOCO_EXT_DIR -DCMAKE_INSTALL_PREFIX=$MUJOCO_BUILD_DIR -Wno-deprecated -Wno-dev && cmake --build . && cmake --install .)
+    else
+        # Download MuJoCo
+        
+        MUJOCO_TAR_FILE=mujoco-3.2.2-linux-x86_64.tar.gz
+        curl -sL https://github.com/google-deepmind/mujoco/releases/download/3.2.2/$MUJOCO_TAR_FILE | tar zx -C $MUJOCO_BUILD_DIR --strip-components=1
+    fi
+    
     ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
 fi
 
 if [ $BUILD_PYBIND11 = true ]; then
     echo "Building pybind11..."
-
+    
     # Build pybind11
-
+    
     PYBIND11_BUILD_DIR=$BUILD_DIR/pybind11
     PYBIND11_EXT_DIR=$EXT_DIR/pybind11
-
+    
     git submodule update --init $PYBIND11_EXT_DIR
-
+    
     if [ ! -d "$PYBIND11_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
         mkdir -p "$PYBIND11_BUILD_DIR"
@@ -161,7 +180,7 @@ if [ $BUILD_PYBIND11 = true ]; then
     else
         echo "Folder already exists: $PYBIND11_BUILD_DIR"
     fi
-
+    
     (cd $PYBIND11_BUILD_DIR && cmake $PYBIND11_EXT_DIR -DCMAKE_INSTALL_PREFIX=$PYBIND11_BUILD_DIR -Wno-deprecated -Wno-dev && cmake --build . && sudo cmake --install .)
 fi
 

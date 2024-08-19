@@ -8,10 +8,9 @@ elseif (WIN32)
     )
 endif()
 
-set(mujoco_DIR ${BUILD_DIR}/mujoco/lib/cmake/mujoco)
+set(MUJOCO_SOURCE_DIR ${BUILD_DIR}/mujoco)
 set(OpenGL_GL_PREFERENCE LEGACY)
 
-find_package(mujoco REQUIRED)
 find_package(Threads REQUIRED)
 
 include_directories(
@@ -35,7 +34,8 @@ if(UNIX)
         Threads::Threads
         jsoncpp
         boost_filesystem
-        mujoco::mujoco
+        ${MUJOCO_SOURCE_DIR}/lib/libmujoco.so
+        tinyxml2
     )
     set_target_properties(mujoco_headless PROPERTIES INSTALL_RPATH "${BUILD_DIR}/mujoco/lib;${LIB_DIR}/libstdc++")
 elseif(WIN32)
@@ -67,7 +67,8 @@ if(UNIX)
         Threads::Threads
         jsoncpp
         boost_filesystem
-        mujoco::mujoco
+        ${MUJOCO_SOURCE_DIR}/lib/libmujoco.so
+        tinyxml2
     )
     set_target_properties(mujoco PROPERTIES INSTALL_RPATH "${BUILD_DIR}/mujoco/lib;${LIB_DIR}/libstdc++")
 elseif(WIN32)
