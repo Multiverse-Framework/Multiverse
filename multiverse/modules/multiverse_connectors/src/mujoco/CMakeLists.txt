@@ -44,9 +44,9 @@ elseif(WIN32)
         multiverse_client_json
         Threads::Threads
         jsoncpp
-        tinyxml2
         boost_filesystem-mt
-        mujoco::mujoco
+        ${MUJOCO_SOURCE_DIR}/lib/mujoco.lib
+        tinyxml2
     )
 endif()
 
@@ -80,9 +80,9 @@ elseif(WIN32)
         opengl32
         Threads::Threads
         jsoncpp
-        tinyxml2
         boost_filesystem-mt
-        mujoco::mujoco
+        ${MUJOCO_SOURCE_DIR}/lib/mujoco.lib
+        tinyxml2
     )
 endif()
 
