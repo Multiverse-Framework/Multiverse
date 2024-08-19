@@ -59,6 +59,41 @@ while [ -n "$1" ]; do
     esac
 done
 
+if [ $BUILD_USD = true ]; then
+    echo "Building USD..."
+    
+    # Build USD
+    
+    USD_BUILD_DIR=$BUILD_DIR/USD
+    USD_EXT_DIR=$EXT_DIR/USD
+    
+    git submodule update --init $USD_EXT_DIR
+    
+    if [ ! -d "$USD_BUILD_DIR" ]; then
+        # Create the folder if it doesn't exist
+        mkdir -p "$USD_BUILD_DIR"
+        echo "Folder created: $USD_BUILD_DIR"
+    else
+        echo "Folder already exists: $USD_BUILD_DIR"
+    fi
+    
+    for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
+        if [ -f $virtualenvwrapper ]; then
+            . $virtualenvwrapper
+            mkvirtualenv --system-site-packages multiverse
+            pip install pyside6 pyopengl
+            python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
+            ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
+            ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
+            ln -sf $USD_BUILD_DIR/bin/usdcat $BIN_DIR
+            break
+        fi
+    done
+    if [ ! -f $virtualenvwrapper ]; then
+        echo "virtualenvwrapper.sh not found"
+    fi
+fi
+
 if [ $BUILD_BLENDER = true ]; then
     echo "Building Blender..."
     
@@ -95,41 +130,6 @@ if [ $BUILD_BLENDER = true ]; then
     ./python3.11 -m pip install bpy Pillow --no-warn-script-location) # For blender
     ln -sf $BLENDER_BUILD_DIR/blender $BIN_DIR
     ln -sf $BLENDER_BUILD_DIR/4.2/python/bin/python3.11 $BIN_DIR
-fi
-
-if [ $BUILD_USD = true ]; then
-    echo "Building USD..."
-    
-    # Build USD
-    
-    USD_BUILD_DIR=$BUILD_DIR/USD
-    USD_EXT_DIR=$EXT_DIR/USD
-    
-    git submodule update --init $USD_EXT_DIR
-    
-    if [ ! -d "$USD_BUILD_DIR" ]; then
-        # Create the folder if it doesn't exist
-        mkdir -p "$USD_BUILD_DIR"
-        echo "Folder created: $USD_BUILD_DIR"
-    else
-        echo "Folder already exists: $USD_BUILD_DIR"
-    fi
-    
-    for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
-        if [ -f $virtualenvwrapper ]; then
-            . $virtualenvwrapper
-            mkvirtualenv --system-site-packages multiverse
-            pip install pyside6 pyopengl
-            python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
-            ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
-            ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
-            ln -sf $USD_BUILD_DIR/bin/usdcat $BIN_DIR
-            break
-        fi
-    done
-    if [ ! -f $virtualenvwrapper ]; then
-        echo "virtualenvwrapper.sh not found"
-    fi
 fi
 
 if [ $BUILD_MUJOCO = true ]; then
