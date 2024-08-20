@@ -139,6 +139,7 @@ if [ $BUILD_MUJOCO = true ]; then
     
     FROM_SRC=false
     MUJOCO_BUILD_DIR=$BUILD_DIR/mujoco
+    MUJOCO_EXT_DIR=$EXT_DIR/mujoco
     
     if [ ! -d "$MUJOCO_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
