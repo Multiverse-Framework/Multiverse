@@ -324,12 +324,14 @@ void MultiverseServer::start()
         {
             if (worlds[world_name].time == 0.0)
             {
+                mtx.lock();
                 printf("[Server] Reset all simulations in world %s.\n", world_name.c_str());
                 for (std::pair<const std::string, Simulation> &simulation : worlds[world_name].simulations)
                 {
                     printf("[Server] Reset simulation %s.\n", simulation.first.c_str());
                     simulation.second.meta_data_state = EMetaDataState::Reset;
                 }
+                mtx.unlock();
             }
 
             if ((strcmp(request_world_name.c_str(), world_name.c_str()) != 0 || strcmp(request_simulation_name.c_str(), simulation_name.c_str()) != 0) && worlds[request_world_name].simulations.count(request_simulation_name) > 0)
@@ -469,7 +471,11 @@ EMultiverseServerState MultiverseServer::receive_data()
                      message_spec_int == 5 && request_array_size == 5)
             {
                 mtx.lock();
-                memcpy(&worlds[world_name].time, request_array[1].data(), sizeof(double));
+                if (worlds[world_name].simulations[simulation_name].meta_data_state != EMetaDataState::Reset)
+                {
+                    memcpy(&worlds[world_name].time, request_array[1].data(), sizeof(double));
+                }
+
                 mtx.unlock();
                 if (worlds[world_name].time < 0.0)
                 {
