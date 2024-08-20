@@ -217,7 +217,7 @@ class Factory:
         process = subprocess.Popen(cmd)
         process.wait()
 
-        if mesh_file_path == self.source_file_path:
+        if mesh_file_path == self.source_file_path and os.path.exists(mesh_file_path_clone):
             os.remove(mesh_file_path_clone)
 
         fix_texture_path(usd_mesh_file_path=tmp_usd_mesh_file_path)

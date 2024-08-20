@@ -288,13 +288,13 @@ class MjcfExporter:
 
         default = ET.SubElement(self.root, "default")
         default_visual = ET.SubElement(default, "default")
-        default_visual.set("class", "visual")
+        default_visual.set("class", f"{self.factory.config.model_name}_visual")
         default_visual_geom = ET.SubElement(default_visual, "geom")
         default_visual_geom.set("contype", "0")
         default_visual_geom.set("conaffinity", "0")
 
         default_collision = ET.SubElement(default, "default")
-        default_collision.set("class", "collision")
+        default_collision.set("class", f"{self.factory.config.model_name}_collision")
         default_collision_geom = ET.SubElement(default_collision, "geom")
         default_collision_geom.set(
             "rgba",
@@ -496,6 +496,8 @@ class MjcfExporter:
         else:
             if parent_body_name == "worldbody":
                 mujoco_body_api = get_mujoco_body_api(xform_prim=xform_prim)
+                if not self.factory.config.fixed_base and self.factory.config.with_physics:
+                    ET.SubElement(body, "freejoint")
             else:
                 parent_body_builder = world_builder.get_body_builder(parent_body_name)
                 parent_xform_prim = parent_body_builder.xform.GetPrim()
@@ -546,9 +548,9 @@ class MjcfExporter:
                 geom.set("rgba", " ".join(map(str, rgba)))
 
         if gprim_prim.GetPrim().HasAPI(UsdPhysics.CollisionAPI):
-            geom.set("class", "collision")
+            geom.set("class", f"{self.factory.config.model_name}_collision")
         else:
-            geom.set("class", "visual")
+            geom.set("class", f"{self.factory.config.model_name}_visual")
 
     def _build_composite(self, points_builder: PointsBuilder, body: ET.Element) -> None:
         mujoco_composite_api = get_mujoco_composite_api(points_builder=points_builder)
