@@ -468,9 +468,8 @@ EMultiverseServerState MultiverseServer::receive_data()
                      message_spec_int == 4 && request_array_size == 4 ||
                      message_spec_int == 5 && request_array_size == 5)
             {
-                mtx.lock();
                 memcpy(&worlds[world_name].time, request_array[1].data(), sizeof(double));
-                mtx.unlock();
+
                 if (worlds[world_name].time < 0.0)
                 {
                     throw std::invalid_argument("[Server] Received invalid message [time = " + std::to_string(worlds[world_name].time) + "] at socket " + socket_addr + ".");
@@ -1434,13 +1433,17 @@ void MultiverseServer::send_receive_data()
         socket.send(message_spec, zmq::send_flags::sndmore);
     }
 
+    zmq::message_t message_time(sizeof(double));
     if (worlds[world_name].simulations[simulation_name].meta_data_state == EMetaDataState::Reset)
     {
         worlds[world_name].simulations[simulation_name].meta_data_state = EMetaDataState::Normal;
+        const double world_time = 0.0;
+        memcpy(message_time.data(), &world_time, sizeof(double));
     }
-
-    zmq::message_t message_time(sizeof(worlds[world_name].time));
-    memcpy(message_time.data(), &worlds[world_name].time, sizeof(worlds[world_name].time));
+    else
+    {
+        memcpy(message_time.data(), &worlds[world_name].time, sizeof(double));
+    }
 
     if (receive_buffer.buffer_double.size > 0 || receive_buffer.buffer_uint8_t.size > 0 || receive_buffer.buffer_uint16_t.size > 0)
     {

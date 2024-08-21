@@ -2535,6 +2535,7 @@ void MjMultiverseClient::bind_send_data()
 
 void MjMultiverseClient::bind_receive_data()
 {
+	*world_time = d->time + m->opt.timestep;
 	if (receive_data_vec.size() != receive_buffer.buffer_double.size)
 	{
 		printf("[Client %s] The size of receive_data_vec (%zd) does not match with receive_buffer_size (%zd)\n", port.c_str(), receive_data_vec.size(), receive_buffer.buffer_double.size);
