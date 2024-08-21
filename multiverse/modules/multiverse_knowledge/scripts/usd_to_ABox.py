@@ -147,11 +147,8 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
     with ABox_onto:
         for prim in stage.Traverse():
             if not prim.IsA(Usd.SchemaBase) or prim.IsA(UsdShade.Material) or prim.IsA(UsdShade.Shader) or prim.IsA(UsdGeom.Subset):
-                print(prim, prim.IsA(Usd.SchemaBase))
                 other_nums += 1
                 continue
-
-            print("Prim", prim)
 
             prim_name = prim.GetName()
 
