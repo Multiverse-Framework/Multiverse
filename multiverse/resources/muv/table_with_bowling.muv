@@ -12,6 +12,15 @@ worlds:
     rtf_desired: 1
 
 simulations:
+  table_with_bowling_simulation:
+    simulator: mujoco
+    world:
+      name: world
+      path: table_with_bowling/table_with_bowling.xml
+    config:
+      max_time_step: 0.01
+      min_time_step: 0.001
+
   bowling_simulation:
     simulator: mujoco
     world:
@@ -35,15 +44,6 @@ simulations:
     world:
       name: world
       path: table_with_bowling/cube.xml
-    config:
-      max_time_step: 0.01
-      min_time_step: 0.001
-
-  table_with_bowling_simulation:
-    simulator: mujoco
-    world:
-      name: world
-      path: table_with_bowling/table_with_bowling.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001
