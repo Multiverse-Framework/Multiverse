@@ -193,7 +193,7 @@ class UrdfImporter(Factory):
             if self._config.inertia_source == InertiaSource.FROM_SRC:
                 if body.inertial is not None:
                     body_mass = body.inertial.mass
-                    body_center_of_mass = body.inertial.origin.xyz
+                    body_center_of_mass = body.inertial.origin.xyz if body.inertial.origin is not None else numpy.array([0.0, 0.0, 0.0])
                     body_inertia = body.inertial.inertia
                     body_inertia_tensor = numpy.array([[body_inertia.ixx, body_inertia.ixy, body_inertia.ixz],
                                                        [body_inertia.ixy, body_inertia.iyy, body_inertia.iyz],
@@ -201,7 +201,7 @@ class UrdfImporter(Factory):
                     body_inertia_tensor = shift_inertia_tensor(mass=body_mass,
                                                                inertia_tensor=body_inertia_tensor,
                                                                quat=Rotation.from_euler('xyz',
-                                                                                        body.inertial.origin.rpy).inv()
+                                                                                        body.inertial.origin.rpy if body.inertial.origin is not None else numpy.array([0.0, 0.0, 0.0])).inv()
                                                                .as_quat())
 
                     body_diagonal_inertia, body_principal_axes = diagonalize_inertia(inertia_tensor=body_inertia_tensor)
