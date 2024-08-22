@@ -2,10 +2,10 @@
 <mujoco model="tiago_dual_no_controller">
 	<compiler meshdir="../assets/meshes" texturedir="../assets/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
 	<default>
-		<default class="visual">
+		<default class="tiago_dual_visual">
 			<geom contype="0" conaffinity="0"/>
 		</default>
-		<default class="collision">
+		<default class="tiago_dual_collision">
 			<geom rgba="1.0 0.0 0.0 0.0"/>
 		</default>
 	</default>
@@ -71,33 +71,33 @@
 			<body name="base_footprint" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 				<body name="base_cover_link" pos="0.0 0.0 0.12999999523162842" quat="1.0 0.0 0.0 0.0">
 					<inertial mass="0.533096194267273" pos="-0.01842234469950199 -1.1418089584935842e-08 0.17250001430511475" quat="0.7070515155792236 0.008976935409009457 0.008978109806776047 0.7070480585098267" diaginertia="0.018984170630574226 0.021554354578256607 0.03799857571721077"/>
-					<geom name="base_cover_link_geom_visual_0_base_ring" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="base_ring" material="M_Orange" class="visual"/>
+					<geom name="base_cover_link_geom_visual_0_base_ring" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="base_ring" material="M_Orange" class="tiago_dual_visual"/>
 				</body>
 				<body name="base_link" pos="0.0 0.0 0.09849999845027924" quat="1.0 0.0 0.0 0.0">
 					<inertial mass="4.583009719848633" pos="0.008795303292572498 4.891760181635618e-05 0.18509966135025024" quat="0.9999969601631165 -0.0009502366883680224 0.0022169812582433224 -0.0005487297312356532" diaginertia="0.19431790709495544 0.21078379452228546 0.24757026135921478"/>
-					<geom name="base_link_geom_visual_0_base" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="base" material="M_White" class="visual"/>
-					<geom name="base_link_geom_collision_0_base_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="base_collision" class="collision"/>
+					<geom name="base_link_geom_visual_0_base" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="base" material="M_White" class="tiago_dual_visual"/>
+					<geom name="base_link_geom_collision_0_base_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="base_collision" class="tiago_dual_collision"/>
 					<body name="base_sonar_03_link" pos="-0.18299999833106995 0.18299999833106995 0.17299999296665192" quat="0.3826834261417389 0.0 0.0 0.9238795042037964">
 						<inertial mass="0.0032655922695994377" pos="-0.17975224554538727 0.1797652393579483 0.1729976385831833" quat="0.7072985172271729 0.002778780646622181 0.0014203093014657497 0.706908106803894" diaginertia="1.5969527566994657e-07 6.359992426041572e-07 6.706197837047512e-07"/>
-						<geom name="base_sonar_03_link_geom_visual_0_srf05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="srf05" material="M_DarkGrey" class="visual"/>
+						<geom name="base_sonar_03_link_geom_visual_0_srf05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="srf05" material="M_DarkGrey" class="tiago_dual_visual"/>
 					</body>
 					<body name="base_sonar_01_link" pos="-0.18299999833106995 -0.18299999833106995 0.17299999296665192" quat="-0.3826834261417389 0.0 0.0 0.9238795042037964">
 						<inertial mass="0.0032655922695994377" pos="-0.1797652393579483 -0.17975224554538727 0.1729976385831833" quat="0.7072985172271729 0.002778780646622181 0.0014203093014657497 0.706908106803894" diaginertia="1.5969527566994657e-07 6.359992426041572e-07 6.706197837047512e-07"/>
-						<geom name="base_sonar_01_link_geom_visual_0_srf05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="srf05" material="M_DarkGrey" class="visual"/>
+						<geom name="base_sonar_01_link_geom_visual_0_srf05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="srf05" material="M_DarkGrey" class="tiago_dual_visual"/>
 					</body>
 					<body name="base_mic_front_right_link" pos="0.2318200021982193 -0.03901999816298485 0.19499999284744263" quat="1.0 0.0 0.0 0.0"/>
 					<body name="base_mic_back_right_link" pos="-0.10819999873638153 -0.13788999617099762 0.19499999284744263" quat="1.0 0.0 0.0 0.0"/>
 					<body name="base_antenna_right_link" pos="-0.20100000500679016 -0.10620000213384628 0.19499999284744263" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="0.028692401945590973" pos="-0.20105348527431488 -0.10619985312223434 0.2664972245693207" quat="-0.0014542610151693225 0.7070494294166565 0.0014557811664417386 0.7071611285209656" diaginertia="4.4050278802387766e-07 0.0002167977945646271 0.00021680167992599308"/>
-						<geom name="base_antenna_right_link_geom_visual_0_antenna" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="antenna" material="M_Black" class="visual"/>
-						<geom name="base_antenna_right_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.08500000089406967" quat="1.0 0.0 0.0 0.0" size="0.004999999888241291 0.08500000089406967 0.0" class="collision"/>
+						<geom name="base_antenna_right_link_geom_visual_0_antenna" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="antenna" material="M_Black" class="tiago_dual_visual"/>
+						<geom name="base_antenna_right_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.08500000089406967" quat="1.0 0.0 0.0 0.0" size="0.004999999888241291 0.08500000089406967 0.0" class="tiago_dual_collision"/>
 					</body>
 					<body name="suspension_right_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 						<joint name="suspension_right_joint" type="slide" pos="0.0 0.0 0.0" range="-0.004999999888241291 0.004999999888241291" axis="0.0 0.0 1.0"/>
 						<body name="wheel_right_link" pos="0.0 -0.2021999955177307 0.0" quat="0.7071067690849304 -0.7071067690849304 0.0 0.0">
 							<inertial mass="4.9378132820129395" pos="-2.407864485576283e-06 -0.20232069492340088 0.0984966903924942" quat="-0.7033625841140747 0.00011322840873617679 0.00013592917821370065 0.7108312845230103" diaginertia="0.01838645152747631 0.018392162397503853 0.02075279876589775"/>
-							<geom name="wheel_right_link_geom_visual_0_wheel" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="wheel" material="M_DarkGrey" class="visual"/>
-							<geom name="wheel_right_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.09849999845027924 0.0 0.0" class="collision"/>
+							<geom name="wheel_right_link_geom_visual_0_wheel" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="wheel" material="M_DarkGrey" class="tiago_dual_visual"/>
+							<geom name="wheel_right_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.09849999845027924 0.0 0.0" class="tiago_dual_collision"/>
 							<joint name="wheel_right_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						</body>
 					</body>
@@ -105,127 +105,127 @@
 						<joint name="suspension_left_joint" type="slide" pos="0.0 0.0 0.0" range="-0.004999999888241291 0.004999999888241291" axis="0.0 0.0 1.0"/>
 						<body name="wheel_left_link" pos="0.0 0.2021999955177307 0.0" quat="0.7071067690849304 -0.7071067690849304 0.0 0.0">
 							<inertial mass="4.9378132820129395" pos="-2.407864485576283e-06 0.20232069492340088 0.09850330650806427" quat="0.7108312845230103 -0.00013592917821370065 -0.00011322840873617679 -0.7033625841140747" diaginertia="0.01838645152747631 0.018392162397503853 0.02075279876589775"/>
-							<geom name="wheel_left_link_geom_visual_0_wheel" type="mesh" pos="0.0 0.0 0.0" quat="-6.123234262925839e-17 1.0 0.0 0.0" mesh="wheel" material="M_DarkGrey" class="visual"/>
-							<geom name="wheel_left_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.09849999845027924 0.0 0.0" class="collision"/>
+							<geom name="wheel_left_link_geom_visual_0_wheel" type="mesh" pos="0.0 0.0 0.0" quat="-6.123234262925839e-17 1.0 0.0 0.0" mesh="wheel" material="M_DarkGrey" class="tiago_dual_visual"/>
+							<geom name="wheel_left_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.09849999845027924 0.0 0.0" class="tiago_dual_collision"/>
 							<joint name="wheel_left_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						</body>
 					</body>
 					<body name="caster_front_right_1_link" pos="0.16949999332427979 -0.10199999809265137 -0.03350000083446503" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="0.012721667066216469" pos="0.1584390103816986 -0.10197509080171585 0.03501972556114197" quat="0.5640944242477417 -5.7430843298789114e-05 0.8257097601890564 0.0009352568886242807" diaginertia="1.7161858067993307e-06 1.6465297449030913e-05 1.6936963220359758e-05"/>
-						<geom name="caster_front_right_1_link_geom_visual_0_caster_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_1" material="M_Grey" class="visual"/>
+						<geom name="caster_front_right_1_link_geom_visual_0_caster_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_1" material="M_Grey" class="tiago_dual_visual"/>
 						<joint name="caster_front_right_1_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						<body name="caster_front_right_2_link" pos="-0.01600000075995922 0.0 -0.03999999910593033" quat="0.7071067690849304 -0.7071067690849304 0.0 0.0">
 							<inertial mass="0.0963592454791069" pos="0.15349917113780975 -0.10200051963329315 0.024999601766467094" quat="-0.5353952646255493 1.7683147234492935e-05 2.6323896236135624e-06 0.8446016311645508" diaginertia="2.267268610012252e-05 2.2677813831251115e-05 2.7069650968769565e-05"/>
-							<geom name="caster_front_right_2_link_geom_visual_0_caster_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_2" material="M_DarkGrey" class="visual"/>
-							<geom name="caster_front_right_2_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02500000037252903 0.0 0.0" class="collision"/>
+							<geom name="caster_front_right_2_link_geom_visual_0_caster_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_2" material="M_DarkGrey" class="tiago_dual_visual"/>
+							<geom name="caster_front_right_2_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02500000037252903 0.0 0.0" class="tiago_dual_collision"/>
 							<joint name="caster_front_right_2_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						</body>
 					</body>
 					<body name="caster_front_left_1_link" pos="0.16949999332427979 0.10199999809265137 -0.03350000083446503" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="0.012721667066216469" pos="0.1584390103816986 0.10202490538358688 0.03501972556114197" quat="0.5640944242477417 -5.7430843298789114e-05 0.8257097601890564 0.0009352568886242807" diaginertia="1.7161858067993307e-06 1.6465297449030913e-05 1.6936963220359758e-05"/>
-						<geom name="caster_front_left_1_link_geom_visual_0_caster_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_1" material="M_Grey" class="visual"/>
+						<geom name="caster_front_left_1_link_geom_visual_0_caster_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_1" material="M_Grey" class="tiago_dual_visual"/>
 						<joint name="caster_front_left_1_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						<body name="caster_front_left_2_link" pos="-0.01600000075995922 0.0 -0.03999999910593033" quat="0.7071067690849304 -0.7071067690849304 0.0 0.0">
 							<inertial mass="0.0963592454791069" pos="0.15349917113780975 0.10199947655200958 0.024999601766467094" quat="-0.5353952646255493 1.7683147234492935e-05 2.6323896236135624e-06 0.8446016311645508" diaginertia="2.267268610012252e-05 2.2677813831251115e-05 2.7069650968769565e-05"/>
-							<geom name="caster_front_left_2_link_geom_visual_0_caster_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_2" material="M_DarkGrey" class="visual"/>
-							<geom name="caster_front_left_2_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02500000037252903 0.0 0.0" class="collision"/>
+							<geom name="caster_front_left_2_link_geom_visual_0_caster_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_2" material="M_DarkGrey" class="tiago_dual_visual"/>
+							<geom name="caster_front_left_2_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02500000037252903 0.0 0.0" class="tiago_dual_collision"/>
 							<joint name="caster_front_left_2_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						</body>
 					</body>
 					<body name="caster_back_right_1_link" pos="-0.17350000143051147 -0.10199999809265137 -0.03350000083446503" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="0.012721667066216469" pos="-0.18456098437309265 -0.10197509080171585 0.03501972556114197" quat="0.5640944242477417 -5.7430843298789114e-05 0.8257097601890564 0.0009352568886242807" diaginertia="1.7161858067993307e-06 1.6465297449030913e-05 1.6936963220359758e-05"/>
-						<geom name="caster_back_right_1_link_geom_visual_0_caster_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_1" material="M_Grey" class="visual"/>
+						<geom name="caster_back_right_1_link_geom_visual_0_caster_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_1" material="M_Grey" class="tiago_dual_visual"/>
 						<joint name="caster_back_right_1_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						<body name="caster_back_right_2_link" pos="-0.01600000075995922 0.0 -0.03999999910593033" quat="0.7071067690849304 -0.7071067690849304 0.0 0.0">
 							<inertial mass="0.0963592454791069" pos="-0.1895008236169815 -0.10200051963329315 0.024999601766467094" quat="-0.5353952646255493 1.7683147234492935e-05 2.6323896236135624e-06 0.8446016311645508" diaginertia="2.267268610012252e-05 2.2677813831251115e-05 2.7069650968769565e-05"/>
-							<geom name="caster_back_right_2_link_geom_visual_0_caster_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_2" material="M_DarkGrey" class="visual"/>
-							<geom name="caster_back_right_2_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02500000037252903 0.0 0.0" class="collision"/>
+							<geom name="caster_back_right_2_link_geom_visual_0_caster_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_2" material="M_DarkGrey" class="tiago_dual_visual"/>
+							<geom name="caster_back_right_2_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02500000037252903 0.0 0.0" class="tiago_dual_collision"/>
 							<joint name="caster_back_right_2_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						</body>
 					</body>
 					<body name="caster_back_left_1_link" pos="-0.17350000143051147 0.10199999809265137 -0.03350000083446503" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="0.012721667066216469" pos="-0.18456098437309265 0.10202490538358688 0.03501972556114197" quat="0.5640944242477417 -5.7430843298789114e-05 0.8257097601890564 0.0009352568886242807" diaginertia="1.7161858067993307e-06 1.6465297449030913e-05 1.6936963220359758e-05"/>
-						<geom name="caster_back_left_1_link_geom_visual_0_caster_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_1" material="M_Grey" class="visual"/>
+						<geom name="caster_back_left_1_link_geom_visual_0_caster_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_1" material="M_Grey" class="tiago_dual_visual"/>
 						<joint name="caster_back_left_1_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						<body name="caster_back_left_2_link" pos="-0.01600000075995922 0.0 -0.03999999910593033" quat="0.7071067690849304 -0.7071067690849304 0.0 0.0">
 							<inertial mass="0.0963592454791069" pos="-0.1895008236169815 0.10199947655200958 0.024999601766467094" quat="-0.5353952646255493 1.7683147234492935e-05 2.6323896236135624e-06 0.8446016311645508" diaginertia="2.267268610012252e-05 2.2677813831251115e-05 2.7069650968769565e-05"/>
-							<geom name="caster_back_left_2_link_geom_visual_0_caster_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_2" material="M_DarkGrey" class="visual"/>
-							<geom name="caster_back_left_2_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02500000037252903 0.0 0.0" class="collision"/>
+							<geom name="caster_back_left_2_link_geom_visual_0_caster_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="caster_2" material="M_DarkGrey" class="tiago_dual_visual"/>
+							<geom name="caster_back_left_2_link_geom_collision_0" type="sphere" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02500000037252903 0.0 0.0" class="tiago_dual_collision"/>
 							<joint name="caster_back_left_2_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0"/>
 						</body>
 					</body>
 					<body name="torso_fixed_link" pos="-0.06199999898672104 0.0 0.19300000369548798" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="16.431100845336914" pos="-0.01745390146970749 1.3471870285997056e-09 0.23027999699115753" quat="0.998907744884491 -4.543129428213888e-09 -0.046725716441869736 2.8892905845623318e-08" diaginertia="0.11975406110286713 0.24629473686218262 0.30280017852783203"/>
-						<geom name="torso_fixed_link_geom_visual_0_torso_fix" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="torso_fix" material="M_LightGrey" class="visual"/>
-						<geom name="torso_fixed_link_geom_collision_0" type="box" pos="0.08500000089406967 0.0 0.019999999552965164" quat="1.0 0.0 0.0 0.0" size="0.20000000298023224 0.125 0.019999999552965164" class="collision"/>
-						<geom name="torso_fixed_link_geom_collision_1" type="box" pos="0.0 0.0 0.05000000074505806" quat="1.0 0.0 0.0 0.0" size="0.125 0.125 0.05000000074505806" class="collision"/>
+						<geom name="torso_fixed_link_geom_visual_0_torso_fix" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="torso_fix" material="M_LightGrey" class="tiago_dual_visual"/>
+						<geom name="torso_fixed_link_geom_collision_0" type="box" pos="0.08500000089406967 0.0 0.019999999552965164" quat="1.0 0.0 0.0 0.0" size="0.20000000298023224 0.125 0.019999999552965164" class="tiago_dual_collision"/>
+						<geom name="torso_fixed_link_geom_collision_1" type="box" pos="0.0 0.0 0.05000000074505806" quat="1.0 0.0 0.0 0.0" size="0.125 0.125 0.05000000074505806" class="tiago_dual_collision"/>
 						<body name="torso_lift_link" pos="0.0 0.0 0.597000002861023" quat="1.0 0.0 0.0 0.0">
 							<inertial mass="80.00180053710938" pos="-0.06386889517307281 3.838672273559496e-05 0.6812766790390015" quat="-0.6953124403953552 0.12151610851287842 0.6976648569107056 0.12263037264347076" diaginertia="1.1445907354354858 5.456185817718506 5.476551532745361"/>
-							<geom name="torso_lift_link_geom_visual_0_torso_lift_dual_arm" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_dual_arm" material="M_White" class="visual"/>
-							<geom name="torso_lift_link_geom_collision_0_torso_lift_collision_shoulder" type="mesh" pos="-0.13099999725818634 0.17000000178813934 -0.02556000091135502" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_collision_shoulder" class="collision"/>
-							<geom name="torso_lift_link_geom_collision_1_torso_lift_collision_shoulder" type="mesh" pos="-0.13099999725818634 -0.1899999976158142 -0.02556000091135502" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_collision_shoulder" class="collision"/>
-							<geom name="torso_lift_link_geom_collision_2_torso_lift_collision_core" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_collision_core" class="collision"/>
-							<geom name="torso_lift_link_geom_collision_3_torso_lift_collision_neck" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_collision_neck" class="collision"/>
+							<geom name="torso_lift_link_geom_visual_0_torso_lift_dual_arm" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_dual_arm" material="M_White" class="tiago_dual_visual"/>
+							<geom name="torso_lift_link_geom_collision_0_torso_lift_collision_shoulder" type="mesh" pos="-0.13099999725818634 0.17000000178813934 -0.02556000091135502" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_collision_shoulder" class="tiago_dual_collision"/>
+							<geom name="torso_lift_link_geom_collision_1_torso_lift_collision_shoulder" type="mesh" pos="-0.13099999725818634 -0.1899999976158142 -0.02556000091135502" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_collision_shoulder" class="tiago_dual_collision"/>
+							<geom name="torso_lift_link_geom_collision_2_torso_lift_collision_core" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_collision_core" class="tiago_dual_collision"/>
+							<geom name="torso_lift_link_geom_collision_3_torso_lift_collision_neck" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="torso_lift_collision_neck" class="tiago_dual_collision"/>
 							<joint name="torso_lift_joint" type="slide" pos="0.0 0.0 0.0" range="0.0 0.800000011920929" axis="0.0 0.0 1.0"/>
 							<body name="arm_left_1_link" pos="0.02556000091135502 0.1899999976158142 -0.17100000381469727" quat="4.329780301713277e-17 0.7071067690849304 0.7071067690849304 4.329780301713277e-17">
 								<inertial mass="2.326556444168091" pos="-0.062415264546871185 0.26109611988067627 0.7068326473236084" quat="0.9397298693656921 -0.2696459889411926 -0.05045083537697792 -0.20409207046031952" diaginertia="0.002655229065567255 0.02464391104876995 0.024779949337244034"/>
-								<geom name="arm_left_1_link_geom_visual_0_arm_1" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 1.0 0.0 0.0" mesh="arm_1" material="M_White" class="visual"/>
-								<geom name="arm_left_1_link_geom_collision_0_arm_1_collision" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 1.0 0.0 0.0" mesh="arm_1_collision" class="collision"/>
+								<geom name="arm_left_1_link_geom_visual_0_arm_1" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 1.0 0.0 0.0" mesh="arm_1" material="M_White" class="tiago_dual_visual"/>
+								<geom name="arm_left_1_link_geom_collision_0_arm_1_collision" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 1.0 0.0 0.0" mesh="arm_1_collision" class="tiago_dual_collision"/>
 								<joint name="arm_left_1_joint" type="hinge" pos="0.0 0.0 0.0" range="-1.1780972480773926 1.5707963705062866" axis="0.0 0.0 1.0"/>
 								<body name="arm_left_2_link" pos="0.125 -0.019500000402331352 0.03099999949336052" quat="0.7071067690849304 0.7071067690849304 -3.189250438235362e-17 3.189250438235362e-17">
 									<inertial mass="1.2833430767059326" pos="-0.06404110789299011 0.3396865129470825 0.6863976120948792" quat="0.004454121924936771 0.9991291165351868 0.0009602801874279976 -0.041475653648376465" diaginertia="0.0018821029225364327 0.003341596806421876 0.0034246365539729595"/>
-									<geom name="arm_left_2_link_geom_visual_0_arm_2" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 0.0 0.0 1.0" mesh="arm_2__1_0__1_0__1_0" material="M_DarkGrey" class="visual"/>
-									<geom name="arm_left_2_link_geom_collision_0_arm_2_collision" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 0.0 0.0 1.0" mesh="arm_2_collision__1_0__1_0__1_0" class="collision"/>
+									<geom name="arm_left_2_link_geom_visual_0_arm_2" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 0.0 0.0 1.0" mesh="arm_2__1_0__1_0__1_0" material="M_DarkGrey" class="tiago_dual_visual"/>
+									<geom name="arm_left_2_link_geom_collision_0_arm_2_collision" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 0.0 0.0 1.0" mesh="arm_2_collision__1_0__1_0__1_0" class="tiago_dual_collision"/>
 									<joint name="arm_left_2_joint" type="hinge" pos="6.938893903907228e-18 -1.5407439555097887e-33 -0.0" range="-1.1780972480773926 1.5707963705062866" axis="0.0 0.0 1.0"/>
 									<body name="arm_left_3_link" pos="0.08950000256299973 0.0 -0.001500000013038516" quat="0.5 0.5 0.5 0.5">
 										<inertial mass="4.2203826904296875" pos="-0.06056949496269226 0.2831023633480072 0.6934170722961426" quat="-0.35075223445892334 -0.5870867371559143 -0.41339531540870667 0.6011708378791809" diaginertia="0.005868874955922365 0.08974360674619675 0.09042287617921829"/>
-										<geom name="arm_left_3_link_geom_visual_0_arm_3" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 0.0 0.0 1.0" mesh="arm_3__1_0__1_0__1_0" material="M_DarkGrey" class="visual"/>
-										<geom name="arm_left_3_link_geom_collision_0_arm_3_collision" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 0.0 0.0 1.0" mesh="arm_3_collision__1_0__1_0__1_0" class="collision"/>
+										<geom name="arm_left_3_link_geom_visual_0_arm_3" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 0.0 0.0 1.0" mesh="arm_3__1_0__1_0__1_0" material="M_DarkGrey" class="tiago_dual_visual"/>
+										<geom name="arm_left_3_link_geom_collision_0_arm_3_collision" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 0.0 0.0 1.0" mesh="arm_3_collision__1_0__1_0__1_0" class="tiago_dual_collision"/>
 										<joint name="arm_left_3_joint" type="hinge" pos="3.0814879110195774e-33 0.0 0.0" range="-0.7853981852531433 3.9269907474517822" axis="0.0 0.0 1.0"/>
 										<body name="arm_left_4_link" pos="-0.019999999552965164 -0.027000000700354576 0.22200000286102295" quat="0.5 0.5 -0.5 0.5">
 											<inertial mass="3.67008900642395" pos="-0.007270804140716791 0.7061768174171448 0.6934573650360107" quat="0.966965913772583 -0.22171927988529205 -0.08499585837125778 -0.09269924461841583" diaginertia="0.005166410934180021 0.04315481707453728 0.04374336823821068"/>
-											<geom name="arm_left_4_link_geom_visual_0_arm_4" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_4__1_0__1_0__1_0" material="M_DarkGrey" class="visual"/>
-											<geom name="arm_left_4_link_geom_collision_0_arm_4_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_4_collision__1_0__1_0__1_0" class="collision"/>
+											<geom name="arm_left_4_link_geom_visual_0_arm_4" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_4__1_0__1_0__1_0" material="M_DarkGrey" class="tiago_dual_visual"/>
+											<geom name="arm_left_4_link_geom_collision_0_arm_4_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_4_collision__1_0__1_0__1_0" class="tiago_dual_collision"/>
 											<joint name="arm_left_4_joint" type="hinge" pos="5.551115123125783e-17 1.8488927466117464e-32 1.8488927466117464e-32" range="-0.39269909262657166 2.356194496154785" axis="0.0 0.0 1.0"/>
 											<body name="arm_left_5_link" pos="0.16200000047683716 -0.019999999552965164 -0.027000000700354576" quat="0.7071067690849304 -3.679904033663643e-18 -0.7071067690849304 5.519856298649649e-17">
 												<inertial mass="3.093937397003174" pos="-0.04984248802065849 0.7072207927703857 0.6863790154457092" quat="0.6893705129623413 -0.0012747449800372124 0.7243995666503906 0.0034514684230089188" diaginertia="0.006034791935235262 0.028495630249381065 0.029476221650838852"/>
-												<geom name="arm_left_5_link_geom_visual_0_arm_5_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_5_wrist_2017__1_0__1_0__1_0" material="M_LightGrey" class="visual"/>
-												<geom name="arm_left_5_link_geom_collision_0_arm_5_collision_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_5_collision_wrist_2017__1_0__1_0__1_0" class="collision"/>
+												<geom name="arm_left_5_link_geom_visual_0_arm_5_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_5_wrist_2017__1_0__1_0__1_0" material="M_LightGrey" class="tiago_dual_visual"/>
+												<geom name="arm_left_5_link_geom_collision_0_arm_5_collision_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_5_collision_wrist_2017__1_0__1_0__1_0" class="tiago_dual_collision"/>
 												<joint name="arm_left_5_joint" type="hinge" pos="1.1102230246251565e-16 3.469446951953614e-18 -3.697785493223493e-32" range="-2.094395160675049 2.094395160675049" axis="0.0 0.0 1.0"/>
 												<body name="arm_left_6_link" pos="0.0 0.0 -0.15000000596046448" quat="-0.5 0.5 0.5 0.5">
 													<inertial mass="0.3939484655857086" pos="-0.054436106234788895 0.9269351959228516 0.6865178942680359" quat="0.9999984502792358 0.000989691005088389 3.2063271646620706e-05 0.0014668669318780303" diaginertia="0.00016052329738158733 0.00039506948087364435 0.00048799763317219913"/>
-													<geom name="arm_left_6_link_geom_visual_0_arm_6_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 1.0 0.0 0.0" mesh="arm_6_wrist_2017__1_0__1_0__1_0" material="M_LightGrey" class="visual"/>
-													<geom name="arm_left_6_link_geom_collision_0_arm_6_collision_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 1.0 0.0 0.0" mesh="arm_6_collision_wrist_2017__1_0__1_0__1_0" class="collision"/>
+													<geom name="arm_left_6_link_geom_visual_0_arm_6_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 1.0 0.0 0.0" mesh="arm_6_wrist_2017__1_0__1_0__1_0" material="M_LightGrey" class="tiago_dual_visual"/>
+													<geom name="arm_left_6_link_geom_collision_0_arm_6_collision_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="6.123234262925839e-17 1.0 0.0 0.0" mesh="arm_6_collision_wrist_2017__1_0__1_0__1_0" class="tiago_dual_collision"/>
 													<joint name="arm_left_6_joint" type="hinge" pos="0.0 0.0 0.0" range="-1.4137166738510132 1.4137166738510132" axis="0.0 0.0 1.0"/>
 													<body name="arm_left_7_link" pos="0.0 0.0 0.0" quat="0.5 0.5 0.5 0.5">
 														<joint name="arm_left_7_joint" type="hinge" pos="0.0 0.0 0.0" range="-2.094395160675049 2.094395160675049" axis="0.0 0.0 1.0"/>
 														<body name="arm_left_tool_link" pos="6.938893903907228e-18 0.0 -0.04600000008940697" quat="-0.5 0.5 -0.5 -0.5">
 															<inertial mass="0.0007853981805965304" pos="2.220446154715841e-19 0.0 -0.04699999839067459" quat="0.0 0.7071067690849304 0.0 0.7071067690849304" diaginertia="7.3303829672966e-09 7.3303829672966e-09 9.817476609441655e-09"/>
-															<geom name="arm_left_tool_link_geom_visual_0" type="cylinder" pos="0.0010000000474974513 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.004999999888241291 0.0024999999441206455 0.0" class="visual"/>
-															<geom name="arm_left_tool_link_geom_collision_0" type="cylinder" pos="0.0010000000474974513 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.004999999888241291 0.0024999999441206455 0.0" class="collision"/>
+															<geom name="arm_left_tool_link_geom_visual_0" type="cylinder" pos="0.0010000000474974513 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.004999999888241291 0.0024999999441206455 0.0" class="tiago_dual_visual"/>
+															<geom name="arm_left_tool_link_geom_collision_0" type="cylinder" pos="0.0010000000474974513 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.004999999888241291 0.0024999999441206455 0.0" class="tiago_dual_collision"/>
 															<body name="wrist_left_ft_link" pos="0.007849999703466892 0.0 0.0" quat="0.5 0.5 0.5 0.5">
 																<inertial mass="0.04993954300880432" pos="0.007849999703466892 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="7.346272923314245e-06 7.346272923314245e-06 1.2640946806641296e-05"/>
-																<geom name="wrist_left_ft_link_geom_visual_0" type="cylinder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02250000089406967 0.007849999703466892 0.0" class="visual"/>
-																<geom name="wrist_left_ft_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02250000089406967 0.007849999703466892 0.0" class="collision"/>
+																<geom name="wrist_left_ft_link_geom_visual_0" type="cylinder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02250000089406967 0.007849999703466892 0.0" class="tiago_dual_visual"/>
+																<geom name="wrist_left_ft_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02250000089406967 0.007849999703466892 0.0" class="tiago_dual_collision"/>
 																<body name="wrist_left_ft_tool_link" pos="0.0 0.0 0.012725000269711018" quat="0.5 -0.5 -0.5 -0.5">
 																	<inertial mass="0.03828816115856171" pos="0.0 0.0 0.012725000269711018" quat="0.6532815098762512 -0.27059805393218994 0.6532815098762512 -0.27059805393218994" diaginertia="6.285838935582433e-06 6.285838935582433e-06 1.1965050362050533e-05"/>
-																	<geom name="wrist_left_ft_tool_link_geom_visual_0" type="cylinder" pos="0.0 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.02500000037252903 0.004875000100582838 0.0" class="visual"/>
-																	<geom name="wrist_left_ft_tool_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.02500000037252903 0.004875000100582838 0.0" class="collision"/>
+																	<geom name="wrist_left_ft_tool_link_geom_visual_0" type="cylinder" pos="0.0 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.02500000037252903 0.004875000100582838 0.0" class="tiago_dual_visual"/>
+																	<geom name="wrist_left_ft_tool_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.02500000037252903 0.004875000100582838 0.0" class="tiago_dual_collision"/>
 																	<body name="gripper_left_link" pos="0.009999999776482582 0.0 0.0" quat="7.028376979084235e-17 0.7071067690849304 1.631183789778442e-17 -0.7071067690849304">
 																		<inertial mass="1.1609281301498413" pos="0.055877234786748886 -6.149214186734753e-06 -6.216389465407701e-06" quat="0.4374878406524658 0.5555110573768616 -0.43751391768455505 0.5555118322372437" diaginertia="0.0014065168797969818 0.004091456066817045 0.004576720762997866"/>
-																		<geom name="gripper_left_link_geom_visual_0_gripper_link" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="gripper_link" material="M_White" class="visual"/>
-																		<geom name="gripper_left_link_geom_collision_0_gripper_link_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="gripper_link_collision" class="collision"/>
+																		<geom name="gripper_left_link_geom_visual_0_gripper_link" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="gripper_link" material="M_White" class="tiago_dual_visual"/>
+																		<geom name="gripper_left_link_geom_collision_0_gripper_link_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="gripper_link_collision" class="tiago_dual_collision"/>
 																		<body name="gripper_left_left_finger_link" pos="0.0 0.0 0.0" quat="1.0 2.7733391199176196e-32 -4.930380657631324e-32 -2.7733391199176196e-32">
 																			<inertial mass="0.10103759169578552" pos="-0.058255475014448166 1.1640191078186035 0.6875566244125366" quat="0.6956858038902283 -0.0912584662437439 0.7077611684799194 0.08226366341114044" diaginertia="2.8091548301745206e-05 0.0024298429489135742 0.0024481271393597126"/>
-																			<geom name="gripper_left_left_finger_link_geom_visual_0_gripper_finger_link" type="mesh" pos="0.0 0.0 0.0" quat="4.6326793381012976e-05 0.0 0.0 1.0" mesh="gripper_finger_link_1_000092625617981_0_9999073147773743_1_0" material="M_Black" class="visual"/>
-																			<geom name="gripper_left_left_finger_link_geom_collision_0" type="box" pos="-0.004999999888241291 0.0 -0.16500000655651093" quat="4.6326793381012976e-05 0.0 0.0 1.0" size="0.004999999888241291 0.02500000037252903 0.054999999701976776" class="collision"/>
+																			<geom name="gripper_left_left_finger_link_geom_visual_0_gripper_finger_link" type="mesh" pos="0.0 0.0 0.0" quat="4.6326793381012976e-05 0.0 0.0 1.0" mesh="gripper_finger_link_1_000092625617981_0_9999073147773743_1_0" material="M_Black" class="tiago_dual_visual"/>
+																			<geom name="gripper_left_left_finger_link_geom_collision_0" type="box" pos="-0.004999999888241291 0.0 -0.16500000655651093" quat="4.6326793381012976e-05 0.0 0.0 1.0" size="0.004999999888241291 0.02500000037252903 0.054999999701976776" class="tiago_dual_collision"/>
 																			<joint name="gripper_left_left_finger_joint" type="slide" pos="-0.0 -0.0 6.162975822039155e-33" range="0.0 0.04500000178813934" axis="-1.0 0.0 0.0"/>
 																		</body>
 																		<body name="gripper_left_grasping_frame" pos="1.1102230246251565e-16 0.0 -0.11999999731779099" quat="0.49999815225601196 -0.5 0.5 0.500001847743988"/>
 																		<body name="gripper_left_right_finger_link" pos="0.0 0.0 0.0" quat="1.0 2.7733391199176196e-32 -4.930380657631324e-32 -2.7733391199176196e-32">
 																			<inertial mass="0.10103759169578552" pos="-0.058255475014448166 1.1640191078186035 0.6821131110191345" quat="-0.05466337502002716 0.6971017718315125 0.06641099601984024 0.7117939591407776" diaginertia="2.747980943240691e-05 0.0024304126854985952 0.0024481690488755703"/>
-																			<geom name="gripper_left_right_finger_link_geom_visual_0_gripper_finger_link" type="mesh" pos="0.0 0.0 0.0" quat="4.6326793381012976e-05 0.0 0.0 1.0" mesh="gripper_finger_link__1_000092625617981__0_9999073147773743_1_0" material="M_Black" class="visual"/>
-																			<geom name="gripper_left_right_finger_link_geom_collision_0" type="box" pos="0.004999999888241291 0.0 -0.16500000655651093" quat="4.6326793381012976e-05 0.0 0.0 1.0" size="0.004999999888241291 0.02500000037252903 0.054999999701976776" class="collision"/>
+																			<geom name="gripper_left_right_finger_link_geom_visual_0_gripper_finger_link" type="mesh" pos="0.0 0.0 0.0" quat="4.6326793381012976e-05 0.0 0.0 1.0" mesh="gripper_finger_link__1_000092625617981__0_9999073147773743_1_0" material="M_Black" class="tiago_dual_visual"/>
+																			<geom name="gripper_left_right_finger_link_geom_collision_0" type="box" pos="0.004999999888241291 0.0 -0.16500000655651093" quat="4.6326793381012976e-05 0.0 0.0 1.0" size="0.004999999888241291 0.02500000037252903 0.054999999701976776" class="tiago_dual_collision"/>
 																			<joint name="gripper_left_right_finger_joint" type="slide" pos="-0.0 -0.0 6.162975822039155e-33" range="0.0 0.04500000178813934" axis="1.0 0.0 0.0"/>
 																		</body>
 																	</body>
@@ -242,63 +242,63 @@
 							</body>
 							<body name="arm_right_1_link" pos="0.02556000091135502 -0.1899999976158142 -0.17100000381469727" quat="0.7071067690849304 0.0 0.0 -0.7071067690849304">
 								<inertial mass="2.326556444168091" pos="-0.010464733466506004 -0.26109611988067627 0.7068326473236084" quat="0.9397298693656921 -0.2696459889411926 0.05045083537697792 0.20409207046031952" diaginertia="0.002655229065567255 0.02464391104876995 0.024779949337244034"/>
-								<geom name="arm_right_1_link_geom_visual_0_arm_1" type="mesh" pos="0.0 0.0 0.0" quat="3.7493993930529855e-33 6.123234262925839e-17 1.0 6.123234262925839e-17" mesh="arm_1__1_0__1_0__1_0" material="M_White" class="visual"/>
-								<geom name="arm_right_1_link_geom_collision_0_arm_1_collision" type="mesh" pos="0.0 0.0 0.0" quat="3.7493993930529855e-33 6.123234262925839e-17 1.0 6.123234262925839e-17" mesh="arm_1_collision__1_0__1_0__1_0" class="collision"/>
+								<geom name="arm_right_1_link_geom_visual_0_arm_1" type="mesh" pos="0.0 0.0 0.0" quat="3.7493993930529855e-33 6.123234262925839e-17 1.0 6.123234262925839e-17" mesh="arm_1__1_0__1_0__1_0" material="M_White" class="tiago_dual_visual"/>
+								<geom name="arm_right_1_link_geom_collision_0_arm_1_collision" type="mesh" pos="0.0 0.0 0.0" quat="3.7493993930529855e-33 6.123234262925839e-17 1.0 6.123234262925839e-17" mesh="arm_1_collision__1_0__1_0__1_0" class="tiago_dual_collision"/>
 								<joint name="arm_right_1_joint" type="hinge" pos="0.0 0.0 0.0" range="-1.1780972480773926 1.5707963705062866" axis="0.0 0.0 1.0"/>
 								<body name="arm_right_2_link" pos="0.125 -0.019500000402331352 -0.03099999949336052" quat="0.7071067690849304 -0.7071067690849304 0.0 0.0">
 									<inertial mass="1.2833430767059326" pos="-0.04783888906240463 -0.3396865129470825 0.6863976120948792" quat="0.004454121924936771 0.9991291165351868 0.0009602801874279976 -0.041475653648376465" diaginertia="0.0018821029225364327 0.003341596806421876 0.0034246365539729595"/>
-									<geom name="arm_right_2_link_geom_visual_0_arm_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_2" material="M_DarkGrey" class="visual"/>
-									<geom name="arm_right_2_link_geom_collision_0_arm_2_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_2_collision" class="collision"/>
+									<geom name="arm_right_2_link_geom_visual_0_arm_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_2" material="M_DarkGrey" class="tiago_dual_visual"/>
+									<geom name="arm_right_2_link_geom_collision_0_arm_2_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_2_collision" class="tiago_dual_collision"/>
 									<joint name="arm_right_2_joint" type="hinge" pos="0.0 0.0 0.0" range="-1.1780972480773926 1.5707963705062866" axis="0.0 0.0 1.0"/>
 									<body name="arm_right_3_link" pos="0.08950000256299973 0.0 -0.001500000013038516" quat="-0.5 0.5 0.5 -0.5">
 										<inertial mass="4.2203826904296875" pos="-0.06356949359178543 -0.5258976221084595 0.6934170722961426" quat="-0.35075223445892334 -0.5870867371559143 -0.41339531540870667 0.6011708378791809" diaginertia="0.005868874955922365 0.08974360674619675 0.09042287617921829"/>
-										<geom name="arm_right_3_link_geom_visual_0_arm_3" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_3" material="M_DarkGrey" class="visual"/>
-										<geom name="arm_right_3_link_geom_collision_0_arm_3_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_3_collision" class="collision"/>
+										<geom name="arm_right_3_link_geom_visual_0_arm_3" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_3" material="M_DarkGrey" class="tiago_dual_visual"/>
+										<geom name="arm_right_3_link_geom_collision_0_arm_3_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_3_collision" class="tiago_dual_collision"/>
 										<joint name="arm_right_3_joint" type="hinge" pos="0.0 0.0 0.0" range="-0.7853981852531433 3.9269907474517822" axis="0.0 0.0 1.0"/>
 										<body name="arm_right_4_link" pos="-0.019999999552965164 -0.027000000700354576 -0.22200000286102295" quat="-0.5 0.5 0.5 0.5">
 											<inertial mass="3.67008900642395" pos="-0.05060919374227524 -0.7061768174171448 0.6934573650360107" quat="0.966965913772583 0.22171927988529205 0.08499585837125778 -0.09269924461841583" diaginertia="0.005166410934180021 0.04315481707453728 0.04374336823821068"/>
-											<geom name="arm_right_4_link_geom_visual_0_arm_4" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_4" material="M_DarkGrey" class="visual"/>
-											<geom name="arm_right_4_link_geom_collision_0_arm_4_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_4_collision" class="collision"/>
+											<geom name="arm_right_4_link_geom_visual_0_arm_4" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_4" material="M_DarkGrey" class="tiago_dual_visual"/>
+											<geom name="arm_right_4_link_geom_collision_0_arm_4_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_4_collision" class="tiago_dual_collision"/>
 											<joint name="arm_right_4_joint" type="hinge" pos="-5.551115123125783e-17 -1.232595164407831e-32 1.232595164407831e-32" range="-0.39269909262657166 2.356194496154785" axis="0.0 0.0 1.0"/>
 											<body name="arm_right_5_link" pos="-0.16200000047683716 0.019999999552965164 0.027000000700354576" quat="0.7071067690849304 0.0 -0.7071067690849304 0.0">
 												<inertial mass="3.093937397003174" pos="-0.05284248664975166 -0.8697792291641235 0.6863790154457092" quat="-0.0012747449800372124 0.6893705129623413 0.0034514684230089188 0.7243995666503906" diaginertia="0.006034791935235262 0.028495630249381065 0.029476221650838852"/>
-												<geom name="arm_right_5_link_geom_visual_0_arm_5_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_5_wrist_2017" material="M_LightGrey" class="visual"/>
-												<geom name="arm_right_5_link_geom_collision_0_arm_5_collision_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_5_collision_wrist_2017" class="collision"/>
+												<geom name="arm_right_5_link_geom_visual_0_arm_5_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_5_wrist_2017" material="M_LightGrey" class="tiago_dual_visual"/>
+												<geom name="arm_right_5_link_geom_collision_0_arm_5_collision_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_5_collision_wrist_2017" class="tiago_dual_collision"/>
 												<joint name="arm_right_5_joint" type="hinge" pos="0.0 -3.469446951953614e-18 -1.5407439555097887e-33" range="-2.094395160675049 2.094395160675049" axis="0.0 0.0 1.0"/>
 												<body name="arm_right_6_link" pos="0.0 0.0 0.15000000596046448" quat="-0.5 0.5 0.5 0.5">
 													<inertial mass="0.3939484655857086" pos="-0.05744389444589615 -0.9500648379325867 0.6864820718765259" quat="0.9999984502792358 0.000989691005088389 3.2063271646620706e-05 0.0014668669318780303" diaginertia="0.00016052329738158733 0.00039506948087364435 0.00048799763317219913"/>
-													<geom name="arm_right_6_link_geom_visual_0_arm_6_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_6_wrist_2017" material="M_LightGrey" class="visual"/>
-													<geom name="arm_right_6_link_geom_collision_0_arm_6_collision_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_6_collision_wrist_2017" class="collision"/>
+													<geom name="arm_right_6_link_geom_visual_0_arm_6_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_6_wrist_2017" material="M_LightGrey" class="tiago_dual_visual"/>
+													<geom name="arm_right_6_link_geom_collision_0_arm_6_collision_wrist_2017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="arm_6_collision_wrist_2017" class="tiago_dual_collision"/>
 													<joint name="arm_right_6_joint" type="hinge" pos="0.0 0.0 0.0" range="-1.4137166738510132 1.4137166738510132" axis="0.0 0.0 1.0"/>
 													<body name="arm_right_7_link" pos="0.0 0.0 0.0" quat="0.5 0.5 0.5 0.5">
 														<joint name="arm_right_7_joint" type="hinge" pos="0.0 0.0 0.0" range="-2.094395160675049 2.094395160675049" axis="0.0 0.0 1.0"/>
 														<body name="arm_right_tool_link" pos="-6.938893903907228e-18 0.0 0.04600000008940697" quat="-0.5 0.5 0.5 0.5">
 															<inertial mass="0.0007853981805965304" pos="0.0 0.0 0.04699999839067459" quat="0.0 0.7071067690849304 0.0 0.7071067690849304" diaginertia="7.3303829672966e-09 7.3303829672966e-09 9.817476609441655e-09"/>
-															<geom name="arm_right_tool_link_geom_visual_0" type="cylinder" pos="0.0010000000474974513 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.004999999888241291 0.0024999999441206455 0.0" class="visual"/>
-															<geom name="arm_right_tool_link_geom_collision_0" type="cylinder" pos="0.0010000000474974513 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.004999999888241291 0.0024999999441206455 0.0" class="collision"/>
+															<geom name="arm_right_tool_link_geom_visual_0" type="cylinder" pos="0.0010000000474974513 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.004999999888241291 0.0024999999441206455 0.0" class="tiago_dual_visual"/>
+															<geom name="arm_right_tool_link_geom_collision_0" type="cylinder" pos="0.0010000000474974513 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.004999999888241291 0.0024999999441206455 0.0" class="tiago_dual_collision"/>
 															<body name="wrist_right_ft_link" pos="0.007849999703466892 -6.938893903907228e-18 1.1102230246251565e-16" quat="0.5 0.5 0.5 0.5">
 																<inertial mass="0.04993954300880432" pos="0.007849999703466892 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="7.346272923314245e-06 7.346272923314245e-06 1.2640946806641296e-05"/>
-																<geom name="wrist_right_ft_link_geom_visual_0" type="cylinder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02250000089406967 0.007849999703466892 0.0" class="visual"/>
-																<geom name="wrist_right_ft_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02250000089406967 0.007849999703466892 0.0" class="collision"/>
+																<geom name="wrist_right_ft_link_geom_visual_0" type="cylinder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02250000089406967 0.007849999703466892 0.0" class="tiago_dual_visual"/>
+																<geom name="wrist_right_ft_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.02250000089406967 0.007849999703466892 0.0" class="tiago_dual_collision"/>
 																<body name="wrist_right_ft_tool_link" pos="0.0 0.0 0.012725000269711018" quat="0.5 -0.5 -0.5 -0.5">
 																	<inertial mass="0.03828816115856171" pos="0.0 0.0 0.012725000269711018" quat="0.6532815098762512 -0.27059805393218994 0.6532815098762512 -0.27059805393218994" diaginertia="6.285838935582433e-06 6.285838935582433e-06 1.1965050362050533e-05"/>
-																	<geom name="wrist_right_ft_tool_link_geom_visual_0" type="cylinder" pos="0.0 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.02500000037252903 0.004875000100582838 0.0" class="visual"/>
-																	<geom name="wrist_right_ft_tool_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.02500000037252903 0.004875000100582838 0.0" class="collision"/>
+																	<geom name="wrist_right_ft_tool_link_geom_visual_0" type="cylinder" pos="0.0 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.02500000037252903 0.004875000100582838 0.0" class="tiago_dual_visual"/>
+																	<geom name="wrist_right_ft_tool_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.0" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" size="0.02500000037252903 0.004875000100582838 0.0" class="tiago_dual_collision"/>
 																	<body name="gripper_right_link" pos="0.009999999776482582 -6.938893903907228e-18 0.0" quat="7.028376979084235e-17 0.7071067690849304 1.631183789778442e-17 -0.7071067690849304">
 																		<inertial mass="1.1609281301498413" pos="0.055877234786748886 -6.149214186734753e-06 -6.216389465407701e-06" quat="0.4374878406524658 0.5555110573768616 -0.43751391768455505 0.5555118322372437" diaginertia="0.0014065168797969818 0.004091456066817045 0.004576720762997866"/>
-																		<geom name="gripper_right_link_geom_visual_0_gripper_link" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="gripper_link" material="M_White" class="visual"/>
-																		<geom name="gripper_right_link_geom_collision_0_gripper_link_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="gripper_link_collision" class="collision"/>
+																		<geom name="gripper_right_link_geom_visual_0_gripper_link" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="gripper_link" material="M_White" class="tiago_dual_visual"/>
+																		<geom name="gripper_right_link_geom_collision_0_gripper_link_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="gripper_link_collision" class="tiago_dual_collision"/>
 																		<body name="gripper_right_left_finger_link" pos="0.0 -1.3877787807814457e-17 0.0" quat="1.0 1.5407439555097887e-32 1.232595164407831e-32 -8.18010429158303e-33">
 																			<inertial mass="0.10103759169578552" pos="-0.061255477368831635 -1.1640191078186035 0.6854433417320251" quat="0.6956858038902283 -0.0912584662437439 0.7077611684799194 0.08226366341114044" diaginertia="2.8091548301745206e-05 0.0024298429489135742 0.0024481271393597126"/>
-																			<geom name="gripper_right_left_finger_link_geom_visual_0_gripper_finger_link" type="mesh" pos="0.0 0.0 0.0" quat="4.6326793381012976e-05 0.0 0.0 1.0" mesh="gripper_finger_link_1_000092625617981_0_9999073147773743_1_0" material="M_Black" class="visual"/>
-																			<geom name="gripper_right_left_finger_link_geom_collision_0" type="box" pos="-0.004999999888241291 0.0 -0.16500000655651093" quat="4.6326793381012976e-05 0.0 0.0 1.0" size="0.004999999888241291 0.02500000037252903 0.054999999701976776" class="collision"/>
+																			<geom name="gripper_right_left_finger_link_geom_visual_0_gripper_finger_link" type="mesh" pos="0.0 0.0 0.0" quat="4.6326793381012976e-05 0.0 0.0 1.0" mesh="gripper_finger_link_1_000092625617981_0_9999073147773743_1_0" material="M_Black" class="tiago_dual_visual"/>
+																			<geom name="gripper_right_left_finger_link_geom_collision_0" type="box" pos="-0.004999999888241291 0.0 -0.16500000655651093" quat="4.6326793381012976e-05 0.0 0.0 1.0" size="0.004999999888241291 0.02500000037252903 0.054999999701976776" class="tiago_dual_collision"/>
 																			<joint name="gripper_right_left_finger_joint" type="slide" pos="-3.0814879110195774e-33 -3.0814879110195774e-33 1.3877787807814457e-17" range="0.0 0.04500000178813934" axis="-1.0 0.0 0.0"/>
 																		</body>
 																		<body name="gripper_right_grasping_frame" pos="0.0 0.0 -0.11999999731779099" quat="0.49999815225601196 -0.5 0.5 0.500001847743988"/>
 																		<body name="gripper_right_right_finger_link" pos="0.0 -1.3877787807814457e-17 0.0" quat="1.0 1.5407439555097887e-32 1.232595164407831e-32 -8.18010429158303e-33">
 																			<inertial mass="0.10103759169578552" pos="-0.061255477368831635 -1.1640191078186035 0.6908868551254272" quat="-0.05466337502002716 0.6971017718315125 0.06641099601984024 0.7117939591407776" diaginertia="2.747980943240691e-05 0.0024304126854985952 0.0024481690488755703"/>
-																			<geom name="gripper_right_right_finger_link_geom_visual_0_gripper_finger_link" type="mesh" pos="0.0 0.0 0.0" quat="4.6326793381012976e-05 0.0 0.0 1.0" mesh="gripper_finger_link__1_000092625617981__0_9999073147773743_1_0" material="M_Black" class="visual"/>
-																			<geom name="gripper_right_right_finger_link_geom_collision_0" type="box" pos="0.004999999888241291 0.0 -0.16500000655651093" quat="4.6326793381012976e-05 0.0 0.0 1.0" size="0.004999999888241291 0.02500000037252903 0.054999999701976776" class="collision"/>
+																			<geom name="gripper_right_right_finger_link_geom_visual_0_gripper_finger_link" type="mesh" pos="0.0 0.0 0.0" quat="4.6326793381012976e-05 0.0 0.0 1.0" mesh="gripper_finger_link__1_000092625617981__0_9999073147773743_1_0" material="M_Black" class="tiago_dual_visual"/>
+																			<geom name="gripper_right_right_finger_link_geom_collision_0" type="box" pos="0.004999999888241291 0.0 -0.16500000655651093" quat="4.6326793381012976e-05 0.0 0.0 1.0" size="0.004999999888241291 0.02500000037252903 0.054999999701976776" class="tiago_dual_collision"/>
 																			<joint name="gripper_right_right_finger_joint" type="slide" pos="-3.0814879110195774e-33 -3.0814879110195774e-33 1.3877787807814457e-17" range="0.0 0.04500000178813934" axis="1.0 0.0 0.0"/>
 																		</body>
 																	</body>
@@ -315,13 +315,13 @@
 							</body>
 							<body name="head_1_link" pos="0.18199999630451202 0.0 0.0" quat="1.0 0.0 0.0 0.0">
 								<inertial mass="3.18123197555542" pos="0.1284070461988449 -3.3614639960433124e-08 0.9747036695480347" quat="0.4704481065273285 0.4704471826553345 0.5279010534286499 -0.5279000401496887" diaginertia="0.0075652096420526505 0.032833803445100784 0.03655494377017021"/>
-								<geom name="head_1_link_geom_visual_0_head_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="head_1" material="M_White" class="visual"/>
-								<geom name="head_1_link_geom_collision_0_head_1_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="head_1_collision" class="collision"/>
+								<geom name="head_1_link_geom_visual_0_head_1" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="head_1" material="M_White" class="tiago_dual_visual"/>
+								<geom name="head_1_link_geom_collision_0_head_1_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="head_1_collision" class="tiago_dual_collision"/>
 								<joint name="head_1_joint" type="hinge" pos="0.0 0.0 0.0" range="-1.3089969158172607 1.3089969158172607" axis="0.0 0.0 1.0"/>
 								<body name="head_2_link" pos="0.004999999888241291 0.0 0.09799999743700027" quat="0.7071067690849304 0.7071067690849304 0.0 0.0">
 									<inertial mass="10.35694408416748" pos="0.14982211589813232 2.6318464733776636e-05 1.0350416898727417" quat="-0.3248935639858246 -0.3230712413787842 0.6289271116256714 0.6281081438064575" diaginertia="0.06285744905471802 0.06905682384967804 0.0981026217341423"/>
-									<geom name="head_2_link_geom_visual_0_head_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="head_2" material="M_White" class="visual"/>
-									<geom name="head_2_link_geom_collision_0_head_2_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="head_2_collision" class="collision"/>
+									<geom name="head_2_link_geom_visual_0_head_2" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="head_2" material="M_White" class="tiago_dual_visual"/>
+									<geom name="head_2_link_geom_collision_0_head_2_collision" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="head_2_collision" class="tiago_dual_collision"/>
 									<joint name="head_2_joint" type="hinge" pos="0.0 0.0 0.0" range="-1.0471975803375244 0.7853981852531433" axis="0.0 0.0 1.0"/>
 									<body name="xtion_link" pos="0.09080000221729279 0.07999999821186066 0.0" quat="0.7071067690849304 -0.7071067690849304 0.0 0.0">
 										<body name="xtion_orbbec_aux_joint_frame" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
@@ -340,22 +340,22 @@
 					</body>
 					<body name="torso_fixed_column_link" pos="-0.06199999898672104 0.0 0.19499999284744263" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="48.89500045776367" pos="-0.06199999898672104 0.0 0.4699999988079071" quat="0.7071067690849304 0.0 0.7071067690849304 0.0" diaginertia="0.3759809136390686 5.111966133117676 5.12450647354126"/>
-						<geom name="torso_fixed_column_link_geom_visual_0" type="box" pos="0.0 0.0 0.2750000059604645" quat="1.0 0.0 0.0 0.0" size="0.09000000357627869 0.10000000149011612 0.2750000059604645" class="visual"/>
-						<geom name="torso_fixed_column_link_geom_collision_0" type="box" pos="0.0 0.0 0.2750000059604645" quat="1.0 0.0 0.0 0.0" size="0.11500000208616257 0.11500000208616257 0.2750000059604645" class="collision"/>
+						<geom name="torso_fixed_column_link_geom_visual_0" type="box" pos="0.0 0.0 0.2750000059604645" quat="1.0 0.0 0.0 0.0" size="0.09000000357627869 0.10000000149011612 0.2750000059604645" class="tiago_dual_visual"/>
+						<geom name="torso_fixed_column_link_geom_collision_0" type="box" pos="0.0 0.0 0.2750000059604645" quat="1.0 0.0 0.0 0.0" size="0.11500000208616257 0.11500000208616257 0.2750000059604645" class="tiago_dual_collision"/>
 					</body>
 					<body name="base_laser_link" pos="0.20200000703334808 0.0 -0.004000000189989805" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="0.22902466356754303" pos="0.1979040801525116 -5.744554437114857e-05 -0.03656253591179848" quat="0.46188902854919434 0.45480549335479736 0.5411881804466248 -0.535654604434967" diaginertia="0.00013584904081653804 0.0004223589785397053 0.0004473045119084418"/>
-						<geom name="base_laser_link_geom_visual_0_sick_tim551" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="sick_tim551" material="M_DarkGrey" class="visual"/>
+						<geom name="base_laser_link_geom_visual_0_sick_tim551" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="sick_tim551" material="M_DarkGrey" class="tiago_dual_visual"/>
 					</body>
 					<body name="base_mic_front_left_link" pos="0.2318200021982193 0.03901999816298485 0.19499999284744263" quat="1.0 0.0 0.0 0.0"/>
 					<body name="base_antenna_left_link" pos="-0.20100000500679016 0.10620000213384628 0.19499999284744263" quat="1.0 0.0 0.0 0.0">
 						<inertial mass="0.028692401945590973" pos="-0.20105348527431488 0.10620015114545822 0.2664972245693207" quat="-0.0014542610151693225 0.7070494294166565 0.0014557811664417386 0.7071611285209656" diaginertia="4.4050278802387766e-07 0.0002167977945646271 0.00021680167992599308"/>
-						<geom name="base_antenna_left_link_geom_visual_0_antenna" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="antenna" material="M_Black" class="visual"/>
-						<geom name="base_antenna_left_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.08500000089406967" quat="1.0 0.0 0.0 0.0" size="0.004999999888241291 0.08500000089406967 0.0" class="collision"/>
+						<geom name="base_antenna_left_link_geom_visual_0_antenna" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="antenna" material="M_Black" class="tiago_dual_visual"/>
+						<geom name="base_antenna_left_link_geom_collision_0" type="cylinder" pos="0.0 0.0 0.08500000089406967" quat="1.0 0.0 0.0 0.0" size="0.004999999888241291 0.08500000089406967 0.0" class="tiago_dual_collision"/>
 					</body>
 					<body name="base_sonar_02_link" pos="-0.2590000033378601 0.0 0.17299999296665192" quat="6.123234262925839e-17 0.0 0.0 1.0">
 						<inertial mass="0.0032655922695994377" pos="-0.25441616773605347 9.185491762764286e-06 0.1729976385831833" quat="0.7072985172271729 0.002778780646622181 0.0014203093014657497 0.706908106803894" diaginertia="1.5969527566994657e-07 6.359992426041572e-07 6.706197837047512e-07"/>
-						<geom name="base_sonar_02_link_geom_visual_0_srf05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="srf05" material="M_DarkGrey" class="visual"/>
+						<geom name="base_sonar_02_link_geom_visual_0_srf05" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="srf05" material="M_DarkGrey" class="tiago_dual_visual"/>
 					</body>
 					<body name="base_imu_link" pos="0.1017099991440773 0.0 0.11281999945640564" quat="0.7071067690849304 0.0 0.0 -0.7071067690849304"/>
 					<body name="base_mic_back_left_link" pos="-0.10819999873638153 -0.05990000069141388 0.19499999284744263" quat="1.0 0.0 0.0 0.0"/>
