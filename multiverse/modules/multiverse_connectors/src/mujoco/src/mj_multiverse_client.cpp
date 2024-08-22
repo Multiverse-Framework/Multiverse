@@ -418,6 +418,14 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 {
 	if (from_request_meta_data)
 	{
+		if (request_meta_data_json["receive"].empty())
+		{
+			receive_objects_json.clear();
+		}
+		if (request_meta_data_json["send"].empty())
+		{
+			send_objects_json.clear();
+		}
 		for (const std::string &object_name : request_meta_data_json["receive"].getMemberNames())
 		{
 			receive_objects_json[object_name] = request_meta_data_json["receive"][object_name];
