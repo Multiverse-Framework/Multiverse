@@ -4,6 +4,7 @@ import threading
 import unittest
 from typing import List
 from time import sleep, time
+import os
 
 from multiverse_client_py import MultiverseClient, MultiverseMetaData, SocketAddress
 
@@ -411,8 +412,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                                                                            "quaternion"]
         multiverse_client_test_spawn.send_and_receive_meta_data()
 
-        time_now = time() - self.time_start
-        multiverse_client_test_spawn.send_data = [time_now,
+        multiverse_client_test_spawn.send_data = [multiverse_client_test_spawn.sim_time,
                                                   0, 0, 5,
                                                   0.0, 0.0, 0.0, 1.0,
                                                   0, 0, 3,
@@ -436,6 +436,103 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
         # self.assertAlmostEqual(joint5_value, 0.0, 1)
 
         multiverse_client_test_spawn.stop()
+
+    def test_multiverse_client_callapi_save_load(self):
+        multiverse_client_test_spawn = self.create_multiverse_client_spawn("1337", "world")
+        multiverse_client_test_spawn.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
+        multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = ["position",
+                                                                              "quaternion"]
+        multiverse_client_test_spawn.request_meta_data["send"]["panda"] = ["position",
+                                                                           "quaternion"]
+        multiverse_client_test_spawn.send_and_receive_meta_data()
+
+        multiverse_client_test_spawn.send_data = [multiverse_client_test_spawn.sim_time,
+                                                  0, 0, 5,
+                                                  0.0, 0.0, 0.0, 1.0,
+                                                  0, 0, 3,
+                                                  0.0, 0.0, 0.0, 1.0]
+        multiverse_client_test_spawn.send_and_receive_data()
+
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
+                                                                               {
+                                                                                   "empty_simulation": [
+                                                                                       {"save": ["save_0"]},
+                                                                                   ]
+                                                                               })
+        save_response = multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["empty_simulation"]
+        save_path_0 = save_response[0]["save"][0]
+        self.assertTrue(os.path.exists(save_path_0))
+
+        multiverse_client_test_destroy = self.create_multiverse_client_destroy("1275", "world")
+        multiverse_client_test_destroy.request_meta_data["meta_data"]["simulation_name"] = "empty_simulation"
+        multiverse_client_test_destroy.request_meta_data["send"]["panda"] = []
+        multiverse_client_test_destroy.request_meta_data["receive"]["panda"] = []
+        multiverse_client_test_destroy.send_and_receive_meta_data()
+        multiverse_client_test_destroy.send_data = [multiverse_client_test_spawn.sim_time]
+        multiverse_client_test_destroy.send_and_receive_data()
+
+        multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+            "empty_simulation": [
+                {"save": ["save_1/awesome.xml"]},
+            ]
+        }
+        multiverse_client_test_callapi.send_and_receive_meta_data()
+        save_response = multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["empty_simulation"]
+        save_path_1 = save_response[0]["save"][0]
+        self.assertTrue(os.path.exists(save_path_1))
+
+        multiverse_client_test_destroy.request_meta_data["send"]["milk_box"] = []
+        multiverse_client_test_destroy.request_meta_data["receive"]["milk_box"] = []
+        multiverse_client_test_destroy.send_and_receive_meta_data()
+        multiverse_client_test_destroy.send_data = [multiverse_client_test_spawn.sim_time]
+        multiverse_client_test_destroy.send_and_receive_data()
+
+        multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+            "empty_simulation": [
+                {"save": ["save_2/another_awesome.xml"]},
+            ]
+        }
+        multiverse_client_test_callapi.send_and_receive_meta_data()
+        save_response = multiverse_client_test_callapi.response_meta_data["api_callbacks_response"]["empty_simulation"]
+        save_path_2 = save_response[0]["save"][0]
+        self.assertTrue(os.path.exists(save_path_2))
+
+        multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+            "empty_simulation": [
+                {"load": [save_path_0]},
+            ]
+        }
+        multiverse_client_test_callapi.send_and_receive_meta_data()
+
+        for _ in range(5):
+            # Load save_path_0
+            sleep(0.1)
+            multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+                "empty_simulation": [
+                    {"load": [save_path_0]},
+                ]
+            }
+            multiverse_client_test_callapi.send_and_receive_meta_data()
+
+            # Load save_path_1
+            sleep(0.1)
+            multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+                "empty_simulation": [
+                    {"load": [save_path_1]},
+                ]
+            }
+            multiverse_client_test_callapi.send_and_receive_meta_data()
+
+            # Load save_path_2
+            sleep(0.1)
+            multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+                "empty_simulation": [
+                    {"load": [save_path_2]},
+                ]
+            }
+            multiverse_client_test_callapi.send_and_receive_meta_data()
+
+        multiverse_client_test_callapi.stop()
 
     def test_multiverse_client_spawn_with_controller(self):
         # 1) Send controller data
@@ -498,7 +595,6 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
         multiverse_client_test_spawn.send_and_receive_data()
 
         # 3) Move the robot
-
         multiverse_client_test_spawn.request_meta_data["send"] = {}
         multiverse_client_test_spawn.request_meta_data["send"]["torso_lift_joint"] = ["joint_tvalue"]
         multiverse_client_test_spawn.request_meta_data["receive"] = {}
@@ -545,8 +641,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
             multiverse_client_test_spawn.request_meta_data["send"]["milk_box"] = []
             multiverse_client_test_spawn.request_meta_data["receive"]["milk_box"] = []
             multiverse_client_test_spawn.send_and_receive_meta_data()
-            time_now = time() - self.time_start
-            multiverse_client_test_spawn.send_data = [time_now]
+            multiverse_client_test_spawn.send_data = [multiverse_client_test_spawn.sim_time]
             multiverse_client_test_spawn.send_and_receive_data()
 
             # Destroy panda
@@ -555,8 +650,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
             multiverse_client_test_spawn.request_meta_data["send"]["panda"] = []
             multiverse_client_test_spawn.request_meta_data["receive"]["panda"] = []
             multiverse_client_test_spawn.send_and_receive_meta_data()
-            time_now = time() - self.time_start
-            multiverse_client_test_spawn.send_data = [time_now]
+            multiverse_client_test_spawn.send_data = [multiverse_client_test_spawn.sim_time]
             multiverse_client_test_spawn.send_and_receive_data()
 
             # Spawn milk box
@@ -566,8 +660,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                                                                                   "quaternion",
                                                                                   "relative_velocity"]
             multiverse_client_test_spawn.send_and_receive_meta_data()
-            time_now = time() - self.time_start
-            multiverse_client_test_spawn.send_data = [time_now,
+            multiverse_client_test_spawn.send_data = [multiverse_client_test_spawn.sim_time,
                                                       0, 0, 5,
                                                       0.0, 0.0, 0.0, 1.0,
                                                       0.0, 0.0, i / 10, 0.0, 0.0, 0.0]
@@ -579,8 +672,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
             multiverse_client_test_spawn.request_meta_data["send"]["panda"] = ["position",
                                                                                "quaternion"]
             multiverse_client_test_spawn.send_and_receive_meta_data()
-            time_now = time() - self.time_start
-            multiverse_client_test_spawn.send_data = [time_now,
+            multiverse_client_test_spawn.send_data = [multiverse_client_test_spawn.sim_time,
                                                       0, 0, 3,
                                                       0.0, 0.0, 0.0, 1.0]
             multiverse_client_test_spawn.send_and_receive_data()
