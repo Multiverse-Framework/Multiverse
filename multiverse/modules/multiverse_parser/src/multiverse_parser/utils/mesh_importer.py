@@ -39,7 +39,7 @@ def import_dae(in_daes: List[str],
 import math
 for in_dae in {in_daes}:
     bpy.ops.wm.collada_import(filepath=in_dae)
-    bpy.context.active_object.rotation_euler[0] += math.radians(-90)
+    bpy.context.active_object.rotation_euler[0] = 0.0
     bpy.ops.object.transform_apply(location=True, rotation=True, scale=True, isolate_users=True)
     bpy.context.view_layer.objects.active.scale = {mesh_scale.tolist()}
     
