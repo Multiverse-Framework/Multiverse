@@ -139,6 +139,7 @@ def main():
 
     semrep.setFREDKey(keyFRED)
     semrep.setWikiDataKey(keyWikiData)
+    semrep.initializeOntology()
 
     semantic_reporting(semrep, args.in_usd, args.in_TBox_usd, args.out_usd)
 
