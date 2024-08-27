@@ -5,6 +5,7 @@ import shutil
 import os
 import re
 from pxr import Usd, UsdGeom, UsdOntology
+import time
 
 synonyms = {
     "box": ["carton"],
@@ -129,6 +130,8 @@ def main():
     args = parser.parse_args()
 
     import dfl.semrep as semrep
+
+    print("Loading semantic reporting module...")
 
     keyFRED = 'b67a0577-8c76-3889-89b2-cf3dceab4a0e'
 
