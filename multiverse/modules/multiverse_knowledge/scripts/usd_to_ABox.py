@@ -93,7 +93,7 @@ def quatf_parser(string: str):
 
 
 def quatf_unparser(quatf: Gf.Quatf):
-    return "[" + str(quatf.GetReal()) + ", ".join([str(x) for x in quatf.GetImaginary()]) + "]"
+    return "[" + str(quatf.GetReal())+ ", " + ", ".join([str(x) for x in quatf.GetImaginary()]) + "]"
 
 
 declare_datatype(Gf.Quatf, "https://ease-crc.org/ont/USD.owl#quatf", quatf_parser, quatf_unparser)
