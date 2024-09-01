@@ -418,4 +418,28 @@ class "UrdfJointAPI" (
         displayName = "Joint Limit Velocity"
         doc = """The maximum velocity the joint can apply."""
     )
+
+    rel urdf:joint:mimic:joint (
+        customData = {
+            string apiName = "joint"
+        }
+        displayName = "Joint Mimic Joint"
+        doc = """This specifies the name of the joint to mimic."""
+    )
+
+    float urdf:joint:mimic:multiplier = 1.0 (
+        customData = {
+            string apiName = "multiplier"
+        }
+        displayName = "Joint Mimic Multiplier"
+        doc = """Specifies the multiplicative factor in the formula (value = multiplier * other_joint_value + offset)."""
+    )
+
+    float urdf:joint:mimic:offset = 0.0 (
+        customData = {
+            string apiName = "offset"
+        }
+        displayName = "Joint Mimic Offset"
+        doc = """Specifies the offset to add in the formula (value = multiplier * other_joint_value + offset). Defaults to 0 (radians for revolute joints, meters for prismatic joints)"""
+    )
 }

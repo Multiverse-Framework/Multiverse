@@ -76,7 +76,7 @@ while [ -n "$1" ]; do
                     elif [ "$module" = "parser" ]; then
                         DBUILD_SRC=ON
                         DBUILD_KNOWLEDGE=OFF
-                        DBUILD_PARSER=OFF
+                        DBUILD_PARSER=ON
                     fi
                 done
                 echo ""

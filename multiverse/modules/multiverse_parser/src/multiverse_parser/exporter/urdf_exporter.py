@@ -323,6 +323,15 @@ class UrdfExporter:
             urdf_joint.limit.effort = urdf_joint_api.GetEffortAttr().Get()
             urdf_joint.limit.velocity = urdf_joint_api.GetVelocityAttr().Get()
 
+        if len(urdf_joint_api.GetJointRel().GetTargets()) == 1:
+            mimic_joint_path = urdf_joint_api.GetJointRel().GetTargets()[0]
+            mimic_joint_prim = joint_prim.GetStage().GetPrimAtPath(mimic_joint_path)
+            mimic = urdf.JointMimic()
+            mimic.joint = mimic_joint_prim.GetName()
+            mimic.multiplier = urdf_joint_api.GetMultiplierAttr().Get()
+            mimic.offset = urdf_joint_api.GetOffsetAttr().Get()
+            urdf_joint.mimic = mimic
+
         return urdf_joint
 
     def _build_link(self, body_builder: BodyBuilder) -> None:
