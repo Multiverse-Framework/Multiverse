@@ -1,0 +1,140 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  hsrb_in_apartment:
+    simulator: mujoco
+    world:
+      name: world
+      path: apartment.xml
+    robots:
+      hsrb:
+        path: toyota/hsrb/hsrb.xml
+        apply:
+          body:
+            hsrb:
+              pos: [1.5, 2.5, 0]
+        disable_self_collision: auto
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  hsrb_in_apartment:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
+    receive:
+      hsrb: ["odometric_velocity"]
+      head_pan_actuator: ["cmd_joint_rvalue"]
+      head_tilt_actuator: ["cmd_joint_rvalue"]
+      arm_lift_actuator: ["cmd_joint_tvalue"]
+      arm_flex_actuator: ["cmd_joint_rvalue"]
+      arm_roll_actuator: ["cmd_joint_rvalue"]
+      wrist_flex_actuator: ["cmd_joint_rvalue"]
+      wrist_roll_actuator: ["cmd_joint_rvalue"]
+      hand_motor_actuator: ["cmd_joint_torque"]
+
+  ros:
+    ros_nodes:
+      services:
+        socket:
+          - port: 7400
+
+      publishers:
+        tf:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7301
+            topic: /tf
+            rate: 60
+            root_frame_id: map
+        odom:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7302
+            odom_topic: /odom
+            tf_topic: /tf
+            rate: 60
+            body: hsrb
+            frame_id: map
+
+      subscribers:
+        cmd_vel:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7200
+            topic: /cmd_vel
+            body: hsrb
+
+    ros_run:
+      rviz:
+        config: hsrb_in_apartment/config/rviz.rviz
+        robot_descriptions:
+          hsrb_description: toyota/hsrb/hsrb.urdf
+          apartment_description: apartment/urdf/apartment.urdf
+
+      map_server:
+        map: apartment/map/apartment.yaml
+
+      move_base:
+        base_global_planner: navfn/NavfnROS
+        base_local_planner: dwa_local_planner/DWAPlannerROS
+        config: toyota/hsrb/config/move_base.yaml
+  
+    ros_control:
+      - meta_data:
+          world_name: world
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        port: 7800
+        controller_manager:
+          robot: hsrb
+          robot_description: /robot_description
+          urdf: toyota/hsrb/hsrb.urdf
+          config: toyota/hsrb/config/ros_control.yaml
+          actuators:
+            arm_lift_actuator: arm_lift_joint
+            arm_flex_actuator: arm_flex_joint
+            arm_roll_actuator: arm_roll_joint
+            wrist_flex_actuator: wrist_flex_joint
+            wrist_roll_actuator: wrist_roll_joint
+            hand_motor_actuator: hand_motor_joint
+            head_pan_actuator: head_pan_joint
+            head_tilt_actuator: head_tilt_joint
+          controllers:
+            spawn:
+              - joint_state_controller
+                head_controller
+                arm_controller
+                hand_controller

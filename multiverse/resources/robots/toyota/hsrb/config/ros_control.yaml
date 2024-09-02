@@ -1,0 +1,22 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 60
+
+head_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - head_pan_joint
+    - head_tilt_joint
+
+arm_controller:
+  type: "position_controllers/JointTrajectoryController"
+  joints:
+    - arm_lift_joint
+    - arm_flex_joint
+    - arm_roll_joint
+    - wrist_flex_joint
+    - wrist_roll_joint
+
+hand_controller:
+  type: effort_controllers/JointEffortController
+  joint: hand_motor_joint
