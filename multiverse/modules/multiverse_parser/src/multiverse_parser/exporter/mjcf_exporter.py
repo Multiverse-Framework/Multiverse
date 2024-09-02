@@ -116,6 +116,12 @@ def get_mujoco_joint_api(joint_builder: JointBuilder) -> UsdMujoco.MujocoJointAP
     return mujoco_joint_api
 
 
+def get_urdf_joint_api(joint_builder: JointBuilder) -> UsdUrdf.UrdfJointAPI:
+    joint = joint_builder.joint
+    joint_prim = joint.GetPrim()
+    return UsdUrdf.UrdfJointAPI(joint_prim) if joint_prim.HasAPI(UsdUrdf.UrdfJointAPI) else None
+
+
 def get_mujoco_geom_api(geom_builder: GeomBuilder) -> UsdMujoco.MujocoGeomAPI:
     gprim = geom_builder.gprim
     gprim_prim = gprim.GetPrim()
@@ -359,6 +365,7 @@ class MjcfExporter:
             usd_mujoco.CreateModelAttr(model_name)
             self._import_option()
             self._import_asset()
+            self._import_equality()
 
     def _import_option(self):
         if not self.mujoco_prim.HasAPI(UsdMujoco.MujocoOptionAPI):
@@ -371,6 +378,11 @@ class MjcfExporter:
             UsdMujoco.MujocoMesh.Define(stage, "/mujoco/asset/meshes")
             UsdMujoco.MujocoMaterial.Define(stage, "/mujoco/asset/materials")
             UsdMujoco.MujocoTexture.Define(stage, "/mujoco/asset/textures")
+
+    def _import_equality(self):
+        stage = self.factory.world_builder.stage
+        if not stage.GetPrimAtPath("/mujoco/equality").IsValid():
+            UsdMujoco.MujocoEquality.Define(stage, "/mujoco/equality")
 
     def _build_mujoco_asset_mesh_and_material_prims(self):
         stage = self.factory.world_builder.stage
@@ -582,7 +594,7 @@ class MjcfExporter:
                     raise ValueError("Composite widths are not the same.")
 
             geom = ET.SubElement(composite, "geom")
-            geom.set("size", f"{geom_width/2}")
+            geom.set("size", f"{geom_width / 2}")
 
             points_display_color_attr = points.GetDisplayColorAttr()
             points_display_opacity_attr = points.GetDisplayOpacityAttr()
@@ -616,14 +628,24 @@ class MjcfExporter:
             joint_axis = mujoco_joint_api.GetAxisAttr().Get()
             joint.set("axis", " ".join(map(str, joint_axis)))
 
+        urdf_joint_api = get_urdf_joint_api(joint_builder=joint_builder)
+        if urdf_joint_api is not None and len(urdf_joint_api.GetJointRel().GetTargets()) > 0:
+            stage = self.factory.world_builder.stage
+            equality_prim = stage.GetPrimAtPath("/mujoco/equality")
+            joint1_path = joint_prim.GetPath()
+            joint2_path = urdf_joint_api.GetJointRel().GetTargets()[0]
+            equality_joint_path = equality_prim.GetPath().AppendChild(f"{joint1_path.name}_{joint2_path.name}")
+            equality_joint_prim = UsdMujoco.MujocoEqualityJoint.Define(stage, equality_joint_path)
+            equality_joint_prim.CreateJoint1Rel().SetTargets([joint1_path])
+            equality_joint_prim.CreateJoint2Rel().SetTargets([joint2_path])
+            a0 = urdf_joint_api.GetOffsetAttr().Get()
+            a1 = urdf_joint_api.GetMultiplierAttr().Get()
+            equality_joint_prim.CreatePolycoefAttr([a0, a1, 0.0, 0.0, 0.0])
+
     def _export_equality(self):
         stage = self.factory.world_builder.stage
 
-        equality_path = Sdf.Path("/mujoco/equality")
-        equality_prim = stage.GetPrimAtPath(equality_path)
-        if not equality_prim.IsValid():
-            equality_prim = UsdMujoco.MujocoEquality.Define(stage, equality_path).GetPrim()
-
+        equality_prim = stage.GetPrimAtPath("/mujoco/equality")
         equality = ET.SubElement(self.root, "equality")
         for child_prim in equality_prim.GetChildren():
             if child_prim.IsA(UsdMujoco.MujocoEqualityJoint):

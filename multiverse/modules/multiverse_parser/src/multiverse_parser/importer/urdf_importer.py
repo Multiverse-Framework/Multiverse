@@ -248,6 +248,8 @@ class UrdfImporter(Factory):
                                                   not hasattr(geom.material, "color") or
                                                   geom.material.color is None) \
             else geom.material.color.rgba
+        if geom_is_visible:
+            geom_rgba[3] = 1.0
         geom_type = self._geom_type_map[type(geom.geometry)]
         geom_density = 1000.0
         geom_property = GeomProperty(geom_type=geom_type,
