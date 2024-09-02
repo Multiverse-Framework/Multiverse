@@ -1,4 +1,4 @@
-resources: 
+resources:
   - ../robots
   - ../worlds
   - ../objects
@@ -13,23 +13,33 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: work_table_with_hands.xml
+      path: work_table.xml
     robots:
       panda:
-        path: mjcf/panda.xml
+        path: mjcf/panda_with_pos_control.xml
         apply:
           body:
             panda:
-              pos: [0.5, 0.0, 1.05]
+              pos: [0.0, -0.1, 1.05]
+              quat: [0.707, 0.0, 0.0, -0.707]
             gravcomp: 1
         disable_self_collision: "off"
+        joint_state:
+          joint1: 0.0
+          joint2: 0.0
+          joint3: 0.0
+          joint4: -1.57079
+          joint5: 0.0
+          joint6: 1.57079
+          joint7: -0.7853
     objects:
       task_board:
         path: task_board.xml
         apply:
           body:
             task_board:
-              pos: [0.114, 0.0, 1.05]
+              pos: [0.0, -0.7, 1.05]
+              quat: [-0.7071, 0.0, 0.0, 0.7071]
         prefix:
           geom: task_board_
       task_board_tool:
@@ -37,8 +47,8 @@ simulations:
         apply:
           body:
             task_board_tool:
-              pos: [0.1, -0.102, 1.146]
-              quat: [0.7071, 0.0, 0.0, 0.7071]
+              pos: [-0.102, -0.686, 1.146]
+              quat: [1.0, 0.0, 0.0, 0.0]
         prefix:
           geom: task_board_tool_
 
@@ -55,53 +65,92 @@ multiverse_clients:
     port: 7500
     send:
       body: ["position", "quaternion"]
-      joint: ["joint_rvalue", "joint_tvalue", "joint_linear_velocity", "joint_angular_velocity", "joint_force", "joint_torque"]
+      joint:
+        [
+          "joint_rvalue",
+          "joint_tvalue",
+          "joint_linear_velocity",
+          "joint_angular_velocity",
+          "joint_force",
+          "joint_torque",
+        ]
     receive:
-    #   # fingers_actuator: ["cmd_joint_tvalue"]
-      RightController_palm_r: ["position", "quaternion"]
-      LeftController_palm_l: ["position", "quaternion"]
+      actuator1: ["cmd_joint_rvalue"]
+      actuator2: ["cmd_joint_rvalue"]
+      actuator3: ["cmd_joint_rvalue"]
+      actuator4: ["cmd_joint_rvalue"]
+      actuator5: ["cmd_joint_rvalue"]
+      actuator6: ["cmd_joint_rvalue"]
+      actuator7: ["cmd_joint_rvalue"]
+      actuator8: ["cmd_joint_tvalue"]
 
-  # ros:
-  #   ros_nodes:
-  #     subscribers:
-  #       data:
-  #         - meta_data:
-  #             world_name: world
-  #             length_unit: m
-  #             angle_unit: rad
-  #             mass_unit: kg
-  #             time_unit: s
-  #             handedness: rhs
-  #           port: 7700
-  #           msg_type: std_msgs/Float64
-  #           send:
-  #             fingers_actuator: ["cmd_joint_tvalue"]
-  #           topic: /gripper_command
+  ros:
+    ros_nodes:
+      publishers:
+        tf:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7301
+            topic: /tf
+            rate: 60
+            root_frame_id: map
 
-  #     services:
-  #       socket:
-  #         - port: 7400
+      subscribers:
+        data:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7700
+            msg_type: std_msgs/Float64
+            send:
+              actuator8: ["cmd_joint_tvalue"]
+            topic: /gripper_command
 
-  # ros2:
-  #   ros_nodes:
-  #     publishers:
-  #       tf:
-  #         - meta_data:
-  #             world_name: world
-  #             length_unit: m
-  #             angle_unit: rad
-  #             mass_unit: kg
-  #             time_unit: s
-  #             handedness: rhs
-  #           port: 7301
-  #           topic: /tf
-  #           rate: 60
-  #           root_frame_id: map
+      services:
+        socket:
+          - port: 7400
 
-  #   ros_run:
-  #     rviz:
-  #       config: panda_ref_with_task_board/config/rviz.rviz2
-  #       robot_descriptions:
-  #         ur5e_description: panda/urdf/panda.urdf
-  #         task_board_description: task_board/urdf/task_board.urdf
-  #         task_board_tool_description: task_board/urdf/task_board_tool.urdf
+    ros_control:
+      - meta_data:
+          world_name: world
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        port: 7601
+        controller_manager:
+          robot: panda
+          robot_description: /robot_description
+          urdf: panda/urdf/panda.urdf
+          config: panda/config/ros_control.yaml
+          actuators:
+            actuator1: joint1
+            actuator2: joint2
+            actuator3: joint3
+            actuator4: joint4
+            actuator5: joint5
+            actuator6: joint6
+            actuator7: joint7
+          controllers:
+            spawn:
+              - joint_state_controller
+                joint_trajectory_controller
+
+    ros_run:
+      rviz:
+        config: panda_with_task_board/config/rviz.rviz
+        robot_descriptions:
+          panda_description: panda/urdf/panda.urdf
+          gripper_2F_85_description: gripper-2F-85/urdf/gripper-2F-85.urdf
+          task_board_description: task_board/urdf/task_board.urdf
+          task_board_tool_description: task_board/urdf/task_board_tool.urdf

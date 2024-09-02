@@ -280,7 +280,7 @@ def get_qpos_and_ctrl(m: mujoco.MjModel, joint_state: Dict[str, float]) -> (List
         if any(found_list):
             jnt_id = found_list.index(True)
             jnt_name = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, jnt_id)
-            if joint_state is not None and any(
+            if joint_state is not None and jnt_name in joint_state and any(
                     [other_jnt_name in jnt_name for other_jnt_name in joint_state]
             ):
                 qpos_list.append(joint_state[jnt_name])
@@ -714,7 +714,7 @@ class MujocoCompiler:
             body_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, body_name)
             dof_adr = m.body_dofadr[body_id]
             dof_num = m.body_dofnum[body_id]
-            if body_id == 1 or dof_adr == -1 or dof_num not in [3, 6]:
+            if body_id == 1 and dof_num == 3 or dof_adr == -1 or dof_num not in [3, 6]:
                 continue
 
             if isinstance(body_attributes, dict) and body_attributes.get("pos") is not None:
