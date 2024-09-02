@@ -1,0 +1,161 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  pr2_in_apartment:
+    simulator: mujoco
+    world:
+      name: world
+      path: apartment.xml
+    robots:
+      pr2:
+        path: pr2/pr2_with_pos_control.xml
+        apply:
+          body:
+            pr2:
+              pos: [1.5, 2.5, 0]
+        disable_self_collision: auto
+        joint_state:
+          torso_lift_joint: 0.33
+    config:
+      max_time_step: 0.002
+      min_time_step: 0.001
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  pr2_in_apartment:
+    port: 7500
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
+    receive:
+      pr2: ["odometric_velocity"]
+      head_pan_actuator: ["cmd_joint_rvalue"]
+      head_tilt_actuator: ["cmd_joint_rvalue"]
+      l_shoulder_pan_actuator: ["cmd_joint_rvalue"]
+      l_shoulder_lift_actuator: ["cmd_joint_rvalue"]
+      l_upper_arm_roll_actuator: ["cmd_joint_rvalue"]
+      l_elbow_flex_actuator: ["cmd_joint_rvalue"]
+      l_forearm_roll_actuator: ["cmd_joint_rvalue"]
+      l_wrist_flex_actuator: ["cmd_joint_rvalue"]
+      l_wrist_roll_actuator: ["cmd_joint_rvalue"]
+      r_shoulder_pan_actuator: ["cmd_joint_rvalue"]
+      r_shoulder_lift_actuator: ["cmd_joint_rvalue"]
+      r_upper_arm_roll_actuator: ["cmd_joint_rvalue"]
+      r_elbow_flex_actuator: ["cmd_joint_rvalue"]
+      r_forearm_roll_actuator: ["cmd_joint_rvalue"]
+      r_wrist_flex_actuator: ["cmd_joint_rvalue"]
+      r_wrist_roll_actuator: ["cmd_joint_rvalue"]
+      torso_lift_actuator: ["cmd_joint_tvalue"]
+
+  ros:
+    ros_nodes:
+      services:
+        socket:
+          - port: 7400
+
+      publishers:
+        tf:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7301
+            topic: /tf
+            rate: 60
+            root_frame_id: map
+        odom:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7302
+            odom_topic: /odom
+            tf_topic: /tf
+            rate: 60
+            body: pr2
+            frame_id: map
+
+      subscribers:
+        cmd_vel:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7200
+            topic: /cmd_vel
+            body: pr2
+
+    ros_run:
+      rviz:
+        config: pr2_in_apartment/config/rviz.rviz
+        robot_descriptions:
+          pr2_description: pr2/pr2.urdf
+          apartment_description: apartment/urdf/apartment.urdf
+
+      map_server:
+        map: apartment/map/apartment.yaml
+
+      move_base:
+        base_global_planner: navfn/NavfnROS
+        base_local_planner: dwa_local_planner/DWAPlannerROS
+        config: pr2/config/move_base.yaml
+  
+    ros_control:
+      - meta_data:
+          world_name: world
+          length_unit: m
+          angle_unit: rad
+          mass_unit: kg
+          time_unit: s
+          handedness: rhs
+        port: 7800
+        controller_manager:
+          robot: pr2
+          robot_description: /robot_description
+          urdf: pr2/pr2.urdf
+          config: pr2/config/ros_control.yaml
+          actuators:
+            head_pan_actuator: head_pan_joint
+            head_tilt_actuator: head_tilt_joint
+            l_shoulder_pan_actuator: l_shoulder_pan_joint
+            l_shoulder_lift_actuator: l_shoulder_lift_joint
+            l_upper_arm_roll_actuator: l_upper_arm_roll_joint
+            l_elbow_flex_actuator: l_elbow_flex_joint
+            l_forearm_roll_actuator: l_forearm_roll_joint
+            l_wrist_flex_actuator: l_wrist_flex_joint
+            l_wrist_roll_actuator: l_wrist_roll_joint
+            r_shoulder_pan_actuator: r_shoulder_pan_joint
+            r_shoulder_lift_actuator: r_shoulder_lift_joint
+            r_upper_arm_roll_actuator: r_upper_arm_roll_joint
+            r_elbow_flex_actuator: r_elbow_flex_joint
+            r_forearm_roll_actuator: r_forearm_roll_joint
+            r_wrist_flex_actuator: r_wrist_flex_joint
+            r_wrist_roll_actuator: r_wrist_roll_joint
+            torso_lift_actuator: torso_lift_joint
+          controllers:
+            spawn:
+              - joint_state_controller
+                head_controller
+                right_arm_controller
+                left_arm_controller
+                torso_controller
