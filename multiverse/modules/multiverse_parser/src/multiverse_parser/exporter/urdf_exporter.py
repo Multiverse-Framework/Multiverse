@@ -106,7 +106,8 @@ def get_urdf_geometry_api(gprim_prim: Usd.Prim) -> Union[UsdUrdf.UrdfLinkVisualA
 def build_geom(geom_name: str,
                link: urdf.Link,
                geometry: Union[urdf.Box, urdf.Sphere, urdf.Cylinder, urdf.Mesh],
-               urdf_geometry_api: Union[UsdUrdf.UrdfLinkVisualAPI, UsdUrdf.UrdfLinkCollisionAPI]):
+               urdf_geometry_api: Union[UsdUrdf.UrdfLinkVisualAPI, UsdUrdf.UrdfLinkCollisionAPI],
+               material: Optional[urdf.Material]) -> None:
     xyz = urdf_geometry_api.GetXyzAttr().Get()
     rpy = urdf_geometry_api.GetRpyAttr().Get()
     origin = urdf.Pose(xyz=xyz, rpy=rpy)
@@ -115,7 +116,8 @@ def build_geom(geom_name: str,
         visual = urdf.Visual(
             geometry=geometry,
             origin=origin,
-            name=geom_name)
+            name=geom_name,
+            material=material)
         link.visual = visual
     elif isinstance(urdf_geometry_api, UsdUrdf.UrdfLinkCollisionAPI):
         collision = urdf.Collision(
@@ -371,6 +373,7 @@ class UrdfExporter:
         gprim_prim = geom_builder.gprim.GetPrim()
         urdf_geometry_api = get_urdf_geometry_api(gprim_prim=gprim_prim)
         geom_name = gprim_prim.GetName()
+        material = urdf.Material(name=geom_name + "_material", color=urdf.Color(geom_builder.rgba)) if geom_builder.rgba is not None else None
         if geom_builder.type == GeomType.CUBE:
             urdf_geometry_box_api = get_urdf_geometry_box_api(geom_builder=geom_builder)
             size = urdf_geometry_box_api.GetSizeAttr().Get()
@@ -378,7 +381,8 @@ class UrdfExporter:
             build_geom(geom_name=geom_name,
                        link=link,
                        geometry=geometry,
-                       urdf_geometry_api=urdf_geometry_api)
+                       urdf_geometry_api=urdf_geometry_api,
+                       material=material)
         elif geom_builder.type == GeomType.SPHERE:
             urdf_geometry_sphere_api = get_urdf_geometry_sphere_api(geom_builder=geom_builder)
             radius = urdf_geometry_sphere_api.GetRadiusAttr().Get()
@@ -386,7 +390,8 @@ class UrdfExporter:
             build_geom(geom_name=geom_name,
                        link=link,
                        geometry=geometry,
-                       urdf_geometry_api=urdf_geometry_api)
+                       urdf_geometry_api=urdf_geometry_api,
+                       material=material)
         elif geom_builder.type in [GeomType.CYLINDER, GeomType.CAPSULE]:
             urdf_geometry_cylinder_api = get_urdf_geometry_cylinder_api(geom_builder=geom_builder)
             radius = urdf_geometry_cylinder_api.GetRadiusAttr().Get()
@@ -395,7 +400,8 @@ class UrdfExporter:
             build_geom(geom_name=geom_name,
                        link=link,
                        geometry=geometry,
-                       urdf_geometry_api=urdf_geometry_api)
+                       urdf_geometry_api=urdf_geometry_api,
+                       material=material)
         elif geom_builder.type == GeomType.MESH:
             usd_mesh_file_abspath = self._get_file_abspath_from_reference(prim=gprim_prim)
             tmp_usd_mesh_file_abspath = usd_mesh_file_abspath
@@ -403,6 +409,7 @@ class UrdfExporter:
             subset_prims = [subset_prim for subset_prim in gprim_prim.GetChildren()
                             if subset_prim.IsA(UsdGeom.Subset) and subset_prim.HasAPI(UsdShade.MaterialBindingAPI)]
             if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI) or len(subset_prims) > 0:
+                material = None
                 tmp_usd_mesh_file_abspath = tmp_usd_mesh_file_abspath.replace(".usda", "_tmp.usda")
                 shutil.copy2(usd_mesh_file_abspath, tmp_usd_mesh_file_abspath)
                 mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_abspath)
@@ -479,7 +486,8 @@ class UrdfExporter:
             build_geom(geom_name=geom_name,
                        link=link,
                        geometry=geometry,
-                       urdf_geometry_api=urdf_geometry_api)
+                       urdf_geometry_api=urdf_geometry_api,
+                       material=material)
         else:
             raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
 
