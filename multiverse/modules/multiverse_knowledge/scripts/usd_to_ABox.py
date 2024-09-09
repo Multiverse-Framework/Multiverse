@@ -131,7 +131,15 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
     usd_onto.load()
     onto_map[usd_onto.base_iri] = usd_onto
 
-    TBox_onto = get_ontology("file://" + in_onto_file)
+    tmp_onto_file = in_onto_file.replace(".owl", "_tmp.owl")
+    with open(in_onto_file, "r") as file:
+        content = file.read()
+
+    content = content.replace("file://./", "file://" + os.path.dirname(in_onto_file) + "/")
+    with open(tmp_onto_file, "w") as file:
+        file.write(content)
+
+    TBox_onto = get_ontology("file://" + tmp_onto_file)
     TBox_onto.load()
     get_namespaces(in_onto_file)
     import_ontos(TBox_onto)
@@ -368,6 +376,8 @@ def usd_to_owl(in_usd_file: str, in_onto_file: str, out_onto_file: str) -> None:
 
     with open(save_path, "w") as file:
         file.write(content)
+
+    os.remove(tmp_onto_file)
 
     return None
 
