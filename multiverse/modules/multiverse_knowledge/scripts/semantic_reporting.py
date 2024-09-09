@@ -106,9 +106,9 @@ def semantic_reporting(semrep, in_ABox_usd_file: str, in_TBox_Usd_file: str, out
             print(f"Found {report} for {prim.GetName()}")
 
             for sem_class in report:
-                dfl, sem_class = sem_class.split(":")
+                soma_dfl, sem_class = sem_class.split("#")
                 sem_class = sem_class.replace('.', '')
-                if dfl == 'dfl':
+                if soma_dfl == 'http://www.ease-crc.org/ont/SOMA_DFL.owl':
                     sem_path = f"/SOMA_DFL/_class_{sem_class}"
                     if stage_TBox.GetPrimAtPath(sem_path):
                         semanticTagAPI.CreateSemanticReportsRel().AddTarget(sem_path)
