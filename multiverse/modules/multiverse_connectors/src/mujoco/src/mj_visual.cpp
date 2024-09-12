@@ -275,14 +275,52 @@ void MjVisual::reload_model()
 {
     listAllocate(&con.baseMesh, &con.rangeMesh, 2 * m->nmesh);
 
+    memset(con.mat_texid, -1, sizeof(con.mat_texid));
+    memset(con.mat_texuniform, 0, sizeof(con.mat_texuniform));
+    memset(con.mat_texrepeat, 0, sizeof(con.mat_texrepeat));
+    for (int i = 0; i < m->nmat; i++)
+    {
+        if (m->mat_texid[i * mjNTEXROLE + mjTEXROLE_RGB] >= 0)
+        {
+            for (int j = 0; j < mjNTEXROLE; j++)
+            {
+                con.mat_texid[i * mjNTEXROLE + j] = m->mat_texid[i * mjNTEXROLE + j];
+            }
+            con.mat_texuniform[i] = m->mat_texuniform[i];
+            con.mat_texrepeat[2 * i] = m->mat_texrepeat[2 * i];
+            con.mat_texrepeat[2 * i + 1] = m->mat_texrepeat[2 * i + 1];
+        }
+    }
+    // find skybox texture
+    for (int i = 0; i < m->ntex; i++)
+    {
+        if (m->tex_type[i] == mjTEXTURE_SKYBOX)
+        {
+            for (int j = 0; j < mjNTEXROLE; j++)
+            {
+                con.mat_texid[mjNTEXROLE * (mjMAXMATERIAL - 1) + j] = -1;
+            }
+            con.mat_texid[mjNTEXROLE * (mjMAXMATERIAL - 1) + mjTEXROLE_RGB] = i;
+
+            break;
+        }
+    }
+
+    // save new size
+    con.ntexture = m->ntex;
+
+    // allocate and upload
+    glGenTextures(con.ntexture, con.texture);
+    for (int i = 0; i < m->ntex; i++)
+    {
+        con.textureType[i] = m->tex_type[i];
+        mjr_uploadTexture(m, &con, i);
+    }
+
     // process meshes
     for (int i = 0; i < m->nmesh; i++)
     {
         mjr_uploadMesh(m, &con, i);
-    }
-    for (int i = 0; i < m->ntex; i++)
-    {
-        mjr_uploadTexture(m, &con, i);
     }
 }
 
