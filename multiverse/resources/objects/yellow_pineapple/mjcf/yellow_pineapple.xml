@@ -1,0 +1,747 @@
+<?xml version="1.0" ?>
+<mujoco model="yellow_pineapple">
+	<compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="false"/>
+	<default>
+		<default class="visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="collision">
+			<geom rgba="0.9 0.9 0.9 0.0"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="PineappleFruitPeduncle" file="obj/PineappleFruitPeduncle.obj" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPeduncle_001" file="stl/PineappleFruitPeduncle_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf" file="obj/PineappleFruitPitLeaf.obj" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_001" file="stl/PineappleFruitPitLeaf_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_002" file="stl/PineappleFruitPitLeaf_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_003" file="stl/PineappleFruitPitLeaf_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_004" file="stl/PineappleFruitPitLeaf_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_005" file="stl/PineappleFruitPitLeaf_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_006" file="stl/PineappleFruitPitLeaf_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_007" file="stl/PineappleFruitPitLeaf_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_008" file="stl/PineappleFruitPitLeaf_008.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_009" file="stl/PineappleFruitPitLeaf_009.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitPitLeaf_010" file="stl/PineappleFruitPitLeaf_010.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf" file="obj/PineappleFruitLeaf.obj" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_001" file="stl/PineappleFruitLeaf_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_002" file="stl/PineappleFruitLeaf_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_003" file="stl/PineappleFruitLeaf_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_004" file="stl/PineappleFruitLeaf_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_005" file="stl/PineappleFruitLeaf_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_006" file="stl/PineappleFruitLeaf_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_007" file="stl/PineappleFruitLeaf_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_008" file="stl/PineappleFruitLeaf_008.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_009" file="stl/PineappleFruitLeaf_009.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_010" file="stl/PineappleFruitLeaf_010.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_011" file="stl/PineappleFruitLeaf_011.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_012" file="stl/PineappleFruitLeaf_012.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_013" file="stl/PineappleFruitLeaf_013.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_014" file="stl/PineappleFruitLeaf_014.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_015" file="stl/PineappleFruitLeaf_015.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_016" file="stl/PineappleFruitLeaf_016.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_017" file="stl/PineappleFruitLeaf_017.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_018" file="stl/PineappleFruitLeaf_018.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_019" file="stl/PineappleFruitLeaf_019.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_020" file="stl/PineappleFruitLeaf_020.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_021" file="stl/PineappleFruitLeaf_021.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_022" file="stl/PineappleFruitLeaf_022.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_023" file="stl/PineappleFruitLeaf_023.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_024" file="stl/PineappleFruitLeaf_024.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_025" file="stl/PineappleFruitLeaf_025.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_026" file="stl/PineappleFruitLeaf_026.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_027" file="stl/PineappleFruitLeaf_027.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_028" file="stl/PineappleFruitLeaf_028.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_029" file="stl/PineappleFruitLeaf_029.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_030" file="stl/PineappleFruitLeaf_030.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_031" file="stl/PineappleFruitLeaf_031.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_032" file="stl/PineappleFruitLeaf_032.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_033" file="stl/PineappleFruitLeaf_033.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_034" file="stl/PineappleFruitLeaf_034.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_035" file="stl/PineappleFruitLeaf_035.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_036" file="stl/PineappleFruitLeaf_036.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_037" file="stl/PineappleFruitLeaf_037.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_038" file="stl/PineappleFruitLeaf_038.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_039" file="stl/PineappleFruitLeaf_039.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_040" file="stl/PineappleFruitLeaf_040.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_041" file="stl/PineappleFruitLeaf_041.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_042" file="stl/PineappleFruitLeaf_042.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_043" file="stl/PineappleFruitLeaf_043.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_044" file="stl/PineappleFruitLeaf_044.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_045" file="stl/PineappleFruitLeaf_045.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_046" file="stl/PineappleFruitLeaf_046.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_047" file="stl/PineappleFruitLeaf_047.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_048" file="stl/PineappleFruitLeaf_048.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_049" file="stl/PineappleFruitLeaf_049.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_050" file="stl/PineappleFruitLeaf_050.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_051" file="stl/PineappleFruitLeaf_051.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_052" file="stl/PineappleFruitLeaf_052.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_053" file="stl/PineappleFruitLeaf_053.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_054" file="stl/PineappleFruitLeaf_054.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_055" file="stl/PineappleFruitLeaf_055.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_056" file="stl/PineappleFruitLeaf_056.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_057" file="stl/PineappleFruitLeaf_057.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_058" file="stl/PineappleFruitLeaf_058.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_059" file="stl/PineappleFruitLeaf_059.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_060" file="stl/PineappleFruitLeaf_060.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_061" file="stl/PineappleFruitLeaf_061.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_062" file="stl/PineappleFruitLeaf_062.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_063" file="stl/PineappleFruitLeaf_063.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_064" file="stl/PineappleFruitLeaf_064.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_065" file="stl/PineappleFruitLeaf_065.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_066" file="stl/PineappleFruitLeaf_066.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_067" file="stl/PineappleFruitLeaf_067.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_068" file="stl/PineappleFruitLeaf_068.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_069" file="stl/PineappleFruitLeaf_069.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_070" file="stl/PineappleFruitLeaf_070.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_071" file="stl/PineappleFruitLeaf_071.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_072" file="stl/PineappleFruitLeaf_072.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_073" file="stl/PineappleFruitLeaf_073.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_074" file="stl/PineappleFruitLeaf_074.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_075" file="stl/PineappleFruitLeaf_075.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_076" file="stl/PineappleFruitLeaf_076.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_077" file="stl/PineappleFruitLeaf_077.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_078" file="stl/PineappleFruitLeaf_078.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_079" file="stl/PineappleFruitLeaf_079.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_080" file="stl/PineappleFruitLeaf_080.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_081" file="stl/PineappleFruitLeaf_081.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_082" file="stl/PineappleFruitLeaf_082.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_083" file="stl/PineappleFruitLeaf_083.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_084" file="stl/PineappleFruitLeaf_084.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_085" file="stl/PineappleFruitLeaf_085.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_086" file="stl/PineappleFruitLeaf_086.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_087" file="stl/PineappleFruitLeaf_087.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_088" file="stl/PineappleFruitLeaf_088.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_089" file="stl/PineappleFruitLeaf_089.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_090" file="stl/PineappleFruitLeaf_090.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_091" file="stl/PineappleFruitLeaf_091.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_092" file="stl/PineappleFruitLeaf_092.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_093" file="stl/PineappleFruitLeaf_093.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_094" file="stl/PineappleFruitLeaf_094.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_095" file="stl/PineappleFruitLeaf_095.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_096" file="stl/PineappleFruitLeaf_096.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_097" file="stl/PineappleFruitLeaf_097.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_098" file="stl/PineappleFruitLeaf_098.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_099" file="stl/PineappleFruitLeaf_099.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_100" file="stl/PineappleFruitLeaf_100.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_101" file="stl/PineappleFruitLeaf_101.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_102" file="stl/PineappleFruitLeaf_102.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_103" file="stl/PineappleFruitLeaf_103.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_104" file="stl/PineappleFruitLeaf_104.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_105" file="stl/PineappleFruitLeaf_105.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_106" file="stl/PineappleFruitLeaf_106.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_107" file="stl/PineappleFruitLeaf_107.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_108" file="stl/PineappleFruitLeaf_108.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_109" file="stl/PineappleFruitLeaf_109.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_110" file="stl/PineappleFruitLeaf_110.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_111" file="stl/PineappleFruitLeaf_111.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_112" file="stl/PineappleFruitLeaf_112.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_113" file="stl/PineappleFruitLeaf_113.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_114" file="stl/PineappleFruitLeaf_114.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_115" file="stl/PineappleFruitLeaf_115.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_116" file="stl/PineappleFruitLeaf_116.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_117" file="stl/PineappleFruitLeaf_117.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_118" file="stl/PineappleFruitLeaf_118.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_119" file="stl/PineappleFruitLeaf_119.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_120" file="stl/PineappleFruitLeaf_120.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_121" file="stl/PineappleFruitLeaf_121.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_122" file="stl/PineappleFruitLeaf_122.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_123" file="stl/PineappleFruitLeaf_123.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_124" file="stl/PineappleFruitLeaf_124.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_125" file="stl/PineappleFruitLeaf_125.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_126" file="stl/PineappleFruitLeaf_126.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_127" file="stl/PineappleFruitLeaf_127.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_128" file="stl/PineappleFruitLeaf_128.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_129" file="stl/PineappleFruitLeaf_129.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_130" file="stl/PineappleFruitLeaf_130.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_131" file="stl/PineappleFruitLeaf_131.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_132" file="stl/PineappleFruitLeaf_132.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_133" file="stl/PineappleFruitLeaf_133.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_134" file="stl/PineappleFruitLeaf_134.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_135" file="stl/PineappleFruitLeaf_135.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_136" file="stl/PineappleFruitLeaf_136.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_137" file="stl/PineappleFruitLeaf_137.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_138" file="stl/PineappleFruitLeaf_138.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_139" file="stl/PineappleFruitLeaf_139.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_140" file="stl/PineappleFruitLeaf_140.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_141" file="stl/PineappleFruitLeaf_141.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_142" file="stl/PineappleFruitLeaf_142.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_143" file="stl/PineappleFruitLeaf_143.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_144" file="stl/PineappleFruitLeaf_144.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_145" file="stl/PineappleFruitLeaf_145.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_146" file="stl/PineappleFruitLeaf_146.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_147" file="stl/PineappleFruitLeaf_147.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_148" file="stl/PineappleFruitLeaf_148.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_149" file="stl/PineappleFruitLeaf_149.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_150" file="stl/PineappleFruitLeaf_150.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_151" file="stl/PineappleFruitLeaf_151.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_152" file="stl/PineappleFruitLeaf_152.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_153" file="stl/PineappleFruitLeaf_153.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_154" file="stl/PineappleFruitLeaf_154.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_155" file="stl/PineappleFruitLeaf_155.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_156" file="stl/PineappleFruitLeaf_156.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_157" file="stl/PineappleFruitLeaf_157.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_158" file="stl/PineappleFruitLeaf_158.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_159" file="stl/PineappleFruitLeaf_159.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_160" file="stl/PineappleFruitLeaf_160.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_161" file="stl/PineappleFruitLeaf_161.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_162" file="stl/PineappleFruitLeaf_162.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_163" file="stl/PineappleFruitLeaf_163.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_164" file="stl/PineappleFruitLeaf_164.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_165" file="stl/PineappleFruitLeaf_165.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_166" file="stl/PineappleFruitLeaf_166.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_167" file="stl/PineappleFruitLeaf_167.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_168" file="stl/PineappleFruitLeaf_168.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_169" file="stl/PineappleFruitLeaf_169.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_170" file="stl/PineappleFruitLeaf_170.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_171" file="stl/PineappleFruitLeaf_171.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_173" file="stl/PineappleFruitLeaf_173.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_174" file="stl/PineappleFruitLeaf_174.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_175" file="stl/PineappleFruitLeaf_175.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_176" file="stl/PineappleFruitLeaf_176.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_177" file="stl/PineappleFruitLeaf_177.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_178" file="stl/PineappleFruitLeaf_178.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_179" file="stl/PineappleFruitLeaf_179.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_180" file="stl/PineappleFruitLeaf_180.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_181" file="stl/PineappleFruitLeaf_181.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_182" file="stl/PineappleFruitLeaf_182.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_183" file="stl/PineappleFruitLeaf_183.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_184" file="stl/PineappleFruitLeaf_184.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_185" file="stl/PineappleFruitLeaf_185.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_186" file="stl/PineappleFruitLeaf_186.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_187" file="stl/PineappleFruitLeaf_187.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_188" file="stl/PineappleFruitLeaf_188.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_189" file="stl/PineappleFruitLeaf_189.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_190" file="stl/PineappleFruitLeaf_190.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_191" file="stl/PineappleFruitLeaf_191.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_192" file="stl/PineappleFruitLeaf_192.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_193" file="stl/PineappleFruitLeaf_193.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_194" file="stl/PineappleFruitLeaf_194.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFruitLeaf_195" file="stl/PineappleFruitLeaf_195.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh" file="obj/PineappleFlesh.obj" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_001" file="stl/PineappleFlesh_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_002" file="stl/PineappleFlesh_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_003" file="stl/PineappleFlesh_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_004" file="stl/PineappleFlesh_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_005" file="stl/PineappleFlesh_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_006" file="stl/PineappleFlesh_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_007" file="stl/PineappleFlesh_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_008" file="stl/PineappleFlesh_008.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_009" file="stl/PineappleFlesh_009.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_010" file="stl/PineappleFlesh_010.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_011" file="stl/PineappleFlesh_011.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_012" file="stl/PineappleFlesh_012.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_013" file="stl/PineappleFlesh_013.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_014" file="stl/PineappleFlesh_014.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineappleFlesh_015" file="stl/PineappleFlesh_015.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel" file="obj/PineapplePeel.obj" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_001" file="stl/PineapplePeel_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_002" file="stl/PineapplePeel_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_003" file="stl/PineapplePeel_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_004" file="stl/PineapplePeel_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_005" file="stl/PineapplePeel_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_006" file="stl/PineapplePeel_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_007" file="stl/PineapplePeel_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_008" file="stl/PineapplePeel_008.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_009" file="stl/PineapplePeel_009.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_010" file="stl/PineapplePeel_010.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_011" file="stl/PineapplePeel_011.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_012" file="stl/PineapplePeel_012.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_013" file="stl/PineapplePeel_013.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_014" file="stl/PineapplePeel_014.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_015" file="stl/PineapplePeel_015.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_016" file="stl/PineapplePeel_016.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_017" file="stl/PineapplePeel_017.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_018" file="stl/PineapplePeel_018.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_019" file="stl/PineapplePeel_019.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_020" file="stl/PineapplePeel_020.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_021" file="stl/PineapplePeel_021.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_022" file="stl/PineapplePeel_022.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_023" file="stl/PineapplePeel_023.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_024" file="stl/PineapplePeel_024.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_025" file="stl/PineapplePeel_025.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_026" file="stl/PineapplePeel_026.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_027" file="stl/PineapplePeel_027.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_028" file="stl/PineapplePeel_028.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_029" file="stl/PineapplePeel_029.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_030" file="stl/PineapplePeel_030.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_031" file="stl/PineapplePeel_031.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_032" file="stl/PineapplePeel_032.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_033" file="stl/PineapplePeel_033.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_034" file="stl/PineapplePeel_034.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_035" file="stl/PineapplePeel_035.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_036" file="stl/PineapplePeel_036.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_037" file="stl/PineapplePeel_037.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_038" file="stl/PineapplePeel_038.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_039" file="stl/PineapplePeel_039.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_040" file="stl/PineapplePeel_040.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_041" file="stl/PineapplePeel_041.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_042" file="stl/PineapplePeel_042.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_043" file="stl/PineapplePeel_043.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_044" file="stl/PineapplePeel_044.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_045" file="stl/PineapplePeel_045.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_046" file="stl/PineapplePeel_046.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_047" file="stl/PineapplePeel_047.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_048" file="stl/PineapplePeel_048.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_049" file="stl/PineapplePeel_049.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_050" file="stl/PineapplePeel_050.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_051" file="stl/PineapplePeel_051.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_052" file="stl/PineapplePeel_052.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_053" file="stl/PineapplePeel_053.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_054" file="stl/PineapplePeel_054.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_055" file="stl/PineapplePeel_055.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_056" file="stl/PineapplePeel_056.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_057" file="stl/PineapplePeel_057.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_058" file="stl/PineapplePeel_058.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_059" file="stl/PineapplePeel_059.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_060" file="stl/PineapplePeel_060.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_061" file="stl/PineapplePeel_061.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_062" file="stl/PineapplePeel_062.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_063" file="stl/PineapplePeel_063.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_064" file="stl/PineapplePeel_064.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_065" file="stl/PineapplePeel_065.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_066" file="stl/PineapplePeel_066.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_067" file="stl/PineapplePeel_067.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_068" file="stl/PineapplePeel_068.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_069" file="stl/PineapplePeel_069.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_070" file="stl/PineapplePeel_070.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_071" file="stl/PineapplePeel_071.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_072" file="stl/PineapplePeel_072.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_073" file="stl/PineapplePeel_073.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_074" file="stl/PineapplePeel_074.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_075" file="stl/PineapplePeel_075.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_076" file="stl/PineapplePeel_076.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_077" file="stl/PineapplePeel_077.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_078" file="stl/PineapplePeel_078.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_079" file="stl/PineapplePeel_079.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_080" file="stl/PineapplePeel_080.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_081" file="stl/PineapplePeel_081.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_082" file="stl/PineapplePeel_082.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_083" file="stl/PineapplePeel_083.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_084" file="stl/PineapplePeel_084.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_085" file="stl/PineapplePeel_085.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_086" file="stl/PineapplePeel_086.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_087" file="stl/PineapplePeel_087.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_088" file="stl/PineapplePeel_088.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_089" file="stl/PineapplePeel_089.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_090" file="stl/PineapplePeel_090.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_091" file="stl/PineapplePeel_091.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_092" file="stl/PineapplePeel_092.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_093" file="stl/PineapplePeel_093.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_094" file="stl/PineapplePeel_094.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_095" file="stl/PineapplePeel_095.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_096" file="stl/PineapplePeel_096.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_097" file="stl/PineapplePeel_097.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_098" file="stl/PineapplePeel_098.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_099" file="stl/PineapplePeel_099.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_100" file="stl/PineapplePeel_100.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_101" file="stl/PineapplePeel_101.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_102" file="stl/PineapplePeel_102.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_103" file="stl/PineapplePeel_103.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_104" file="stl/PineapplePeel_104.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_105" file="stl/PineapplePeel_105.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_106" file="stl/PineapplePeel_106.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_107" file="stl/PineapplePeel_107.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_108" file="stl/PineapplePeel_108.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_109" file="stl/PineapplePeel_109.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_110" file="stl/PineapplePeel_110.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_111" file="stl/PineapplePeel_111.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_112" file="stl/PineapplePeel_112.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_113" file="stl/PineapplePeel_113.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_114" file="stl/PineapplePeel_114.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_115" file="stl/PineapplePeel_115.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_116" file="stl/PineapplePeel_116.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_117" file="stl/PineapplePeel_117.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_118" file="stl/PineapplePeel_118.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_119" file="stl/PineapplePeel_119.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_120" file="stl/PineapplePeel_120.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_121" file="stl/PineapplePeel_121.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_122" file="stl/PineapplePeel_122.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_123" file="stl/PineapplePeel_123.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_124" file="stl/PineapplePeel_124.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_125" file="stl/PineapplePeel_125.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="PineapplePeel_126" file="stl/PineapplePeel_126.stl" scale="1.0 1.0 1.0"/>
+		<material name="M_PineappleFruitPeduncle" texture="T_PineappleFruitPeduncle"/>
+		<material name="M_PineappleFruitPitLeaf" texture="T_PineappleFruitPitLeaf"/>
+		<material name="M_PineappleFruitLeaf" texture="T_PineappleFruitLeaf"/>
+		<material name="M_PineappleFlesh" texture="T_PineappleFlesh"/>
+		<material name="M_PineapplePeel" texture="T_PineapplePeel"/>
+		<texture name="T_PineappleFruitPeduncle" type="2d" file="T_PineappleFruitPeduncle.png"/>
+		<texture name="T_PineappleFruitPitLeaf" type="2d" file="T_PineappleFruitPitLeaf.png"/>
+		<texture name="T_PineappleFruitLeaf" type="2d" file="T_PineappleFruitLeaf.png"/>
+		<texture name="T_PineappleFlesh" type="2d" file="T_PineappleFlesh.png"/>
+		<texture name="T_PineapplePeel" type="2d" file="T_PineapplePeel.png"/>
+	</asset>
+	<worldbody>
+		<body name="yellow_pineapple" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<freejoint />
+			<body name="pineapple_fruit_peduncle" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="0.020957540720701218" pos="0.0007257127435877919 0.008785493671894073 -0.15430571138858795" quat="-0.4923805296421051 0.5051732063293457 0.46488186717033386 0.5350198745727539" diaginertia="6.253495939745335e-06 0.0005039786919951439 0.0005039882380515337"/>
+				<geom name="PineappleFruitPeduncle" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPeduncle" material="M_PineappleFruitPeduncle" class="visual"/>
+				<geom name="PineappleFruitPeduncle_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPeduncle_001" class="collision"/>
+			</body>
+			<body name="pineapple_fruit_leaf" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="0.08300714194774628" pos="0.0014197156997397542 0.002582171931862831 0.07688748091459274" quat="0.6122853755950928 -0.3176640272140503 0.6579068899154663 0.30224937200546265" diaginertia="0.00017313568969257176 0.0005137795815244317 0.0005409469595178962"/>
+				<geom name="PineappleFruitLeaf" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf" material="M_PineappleFruitLeaf" class="visual"/>
+				<geom name="PineappleFruitLeaf_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_001" class="collision"/>
+				<geom name="PineappleFruitLeaf_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_002" class="collision"/>
+				<geom name="PineappleFruitLeaf_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_003" class="collision"/>
+				<geom name="PineappleFruitLeaf_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_004" class="collision"/>
+				<geom name="PineappleFruitLeaf_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_005" class="collision"/>
+				<geom name="PineappleFruitLeaf_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_006" class="collision"/>
+				<geom name="PineappleFruitLeaf_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_007" class="collision"/>
+				<geom name="PineappleFruitLeaf_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_008" class="collision"/>
+				<geom name="PineappleFruitLeaf_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_009" class="collision"/>
+				<geom name="PineappleFruitLeaf_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_010" class="collision"/>
+				<geom name="PineappleFruitLeaf_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_011" class="collision"/>
+				<geom name="PineappleFruitLeaf_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_012" class="collision"/>
+				<geom name="PineappleFruitLeaf_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_013" class="collision"/>
+				<geom name="PineappleFruitLeaf_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_014" class="collision"/>
+				<geom name="PineappleFruitLeaf_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_015" class="collision"/>
+				<geom name="PineappleFruitLeaf_016" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_016" class="collision"/>
+				<geom name="PineappleFruitLeaf_017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_017" class="collision"/>
+				<geom name="PineappleFruitLeaf_018" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_018" class="collision"/>
+				<geom name="PineappleFruitLeaf_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_019" class="collision"/>
+				<geom name="PineappleFruitLeaf_020" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_020" class="collision"/>
+				<geom name="PineappleFruitLeaf_021" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_021" class="collision"/>
+				<geom name="PineappleFruitLeaf_022" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_022" class="collision"/>
+				<geom name="PineappleFruitLeaf_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_023" class="collision"/>
+				<geom name="PineappleFruitLeaf_024" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_024" class="collision"/>
+				<geom name="PineappleFruitLeaf_025" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_025" class="collision"/>
+				<geom name="PineappleFruitLeaf_026" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_026" class="collision"/>
+				<geom name="PineappleFruitLeaf_027" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_027" class="collision"/>
+				<geom name="PineappleFruitLeaf_028" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_028" class="collision"/>
+				<geom name="PineappleFruitLeaf_029" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_029" class="collision"/>
+				<geom name="PineappleFruitLeaf_030" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_030" class="collision"/>
+				<geom name="PineappleFruitLeaf_031" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_031" class="collision"/>
+				<geom name="PineappleFruitLeaf_032" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_032" class="collision"/>
+				<geom name="PineappleFruitLeaf_033" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_033" class="collision"/>
+				<geom name="PineappleFruitLeaf_034" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_034" class="collision"/>
+				<geom name="PineappleFruitLeaf_035" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_035" class="collision"/>
+				<geom name="PineappleFruitLeaf_036" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_036" class="collision"/>
+				<geom name="PineappleFruitLeaf_037" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_037" class="collision"/>
+				<geom name="PineappleFruitLeaf_038" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_038" class="collision"/>
+				<geom name="PineappleFruitLeaf_039" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_039" class="collision"/>
+				<geom name="PineappleFruitLeaf_040" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_040" class="collision"/>
+				<geom name="PineappleFruitLeaf_041" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_041" class="collision"/>
+				<geom name="PineappleFruitLeaf_042" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_042" class="collision"/>
+				<geom name="PineappleFruitLeaf_043" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_043" class="collision"/>
+				<geom name="PineappleFruitLeaf_044" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_044" class="collision"/>
+				<geom name="PineappleFruitLeaf_045" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_045" class="collision"/>
+				<geom name="PineappleFruitLeaf_046" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_046" class="collision"/>
+				<geom name="PineappleFruitLeaf_047" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_047" class="collision"/>
+				<geom name="PineappleFruitLeaf_048" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_048" class="collision"/>
+				<geom name="PineappleFruitLeaf_049" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_049" class="collision"/>
+				<geom name="PineappleFruitLeaf_050" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_050" class="collision"/>
+				<geom name="PineappleFruitLeaf_051" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_051" class="collision"/>
+				<geom name="PineappleFruitLeaf_052" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_052" class="collision"/>
+				<geom name="PineappleFruitLeaf_053" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_053" class="collision"/>
+				<geom name="PineappleFruitLeaf_054" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_054" class="collision"/>
+				<geom name="PineappleFruitLeaf_055" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_055" class="collision"/>
+				<geom name="PineappleFruitLeaf_056" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_056" class="collision"/>
+				<geom name="PineappleFruitLeaf_057" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_057" class="collision"/>
+				<geom name="PineappleFruitLeaf_058" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_058" class="collision"/>
+				<geom name="PineappleFruitLeaf_059" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_059" class="collision"/>
+				<geom name="PineappleFruitLeaf_060" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_060" class="collision"/>
+				<geom name="PineappleFruitLeaf_061" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_061" class="collision"/>
+				<geom name="PineappleFruitLeaf_062" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_062" class="collision"/>
+				<geom name="PineappleFruitLeaf_063" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_063" class="collision"/>
+				<geom name="PineappleFruitLeaf_064" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_064" class="collision"/>
+				<geom name="PineappleFruitLeaf_065" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_065" class="collision"/>
+				<geom name="PineappleFruitLeaf_066" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_066" class="collision"/>
+				<geom name="PineappleFruitLeaf_067" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_067" class="collision"/>
+				<geom name="PineappleFruitLeaf_068" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_068" class="collision"/>
+				<geom name="PineappleFruitLeaf_069" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_069" class="collision"/>
+				<geom name="PineappleFruitLeaf_070" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_070" class="collision"/>
+				<geom name="PineappleFruitLeaf_071" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_071" class="collision"/>
+				<geom name="PineappleFruitLeaf_072" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_072" class="collision"/>
+				<geom name="PineappleFruitLeaf_073" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_073" class="collision"/>
+				<geom name="PineappleFruitLeaf_074" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_074" class="collision"/>
+				<geom name="PineappleFruitLeaf_075" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_075" class="collision"/>
+				<geom name="PineappleFruitLeaf_076" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_076" class="collision"/>
+				<geom name="PineappleFruitLeaf_077" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_077" class="collision"/>
+				<geom name="PineappleFruitLeaf_078" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_078" class="collision"/>
+				<geom name="PineappleFruitLeaf_079" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_079" class="collision"/>
+				<geom name="PineappleFruitLeaf_080" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_080" class="collision"/>
+				<geom name="PineappleFruitLeaf_081" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_081" class="collision"/>
+				<geom name="PineappleFruitLeaf_082" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_082" class="collision"/>
+				<geom name="PineappleFruitLeaf_083" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_083" class="collision"/>
+				<geom name="PineappleFruitLeaf_084" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_084" class="collision"/>
+				<geom name="PineappleFruitLeaf_085" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_085" class="collision"/>
+				<geom name="PineappleFruitLeaf_086" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_086" class="collision"/>
+				<geom name="PineappleFruitLeaf_087" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_087" class="collision"/>
+				<geom name="PineappleFruitLeaf_088" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_088" class="collision"/>
+				<geom name="PineappleFruitLeaf_089" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_089" class="collision"/>
+				<geom name="PineappleFruitLeaf_090" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_090" class="collision"/>
+				<geom name="PineappleFruitLeaf_091" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_091" class="collision"/>
+				<geom name="PineappleFruitLeaf_092" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_092" class="collision"/>
+				<geom name="PineappleFruitLeaf_093" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_093" class="collision"/>
+				<geom name="PineappleFruitLeaf_094" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_094" class="collision"/>
+				<geom name="PineappleFruitLeaf_095" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_095" class="collision"/>
+				<geom name="PineappleFruitLeaf_096" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_096" class="collision"/>
+				<geom name="PineappleFruitLeaf_097" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_097" class="collision"/>
+				<geom name="PineappleFruitLeaf_098" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_098" class="collision"/>
+				<geom name="PineappleFruitLeaf_099" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_099" class="collision"/>
+				<geom name="PineappleFruitLeaf_100" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_100" class="collision"/>
+				<geom name="PineappleFruitLeaf_101" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_101" class="collision"/>
+				<geom name="PineappleFruitLeaf_102" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_102" class="collision"/>
+				<geom name="PineappleFruitLeaf_103" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_103" class="collision"/>
+				<geom name="PineappleFruitLeaf_104" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_104" class="collision"/>
+				<geom name="PineappleFruitLeaf_105" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_105" class="collision"/>
+				<geom name="PineappleFruitLeaf_106" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_106" class="collision"/>
+				<geom name="PineappleFruitLeaf_107" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_107" class="collision"/>
+				<geom name="PineappleFruitLeaf_108" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_108" class="collision"/>
+				<geom name="PineappleFruitLeaf_109" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_109" class="collision"/>
+				<geom name="PineappleFruitLeaf_110" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_110" class="collision"/>
+				<geom name="PineappleFruitLeaf_111" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_111" class="collision"/>
+				<geom name="PineappleFruitLeaf_112" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_112" class="collision"/>
+				<geom name="PineappleFruitLeaf_113" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_113" class="collision"/>
+				<geom name="PineappleFruitLeaf_114" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_114" class="collision"/>
+				<geom name="PineappleFruitLeaf_115" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_115" class="collision"/>
+				<geom name="PineappleFruitLeaf_116" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_116" class="collision"/>
+				<geom name="PineappleFruitLeaf_117" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_117" class="collision"/>
+				<geom name="PineappleFruitLeaf_118" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_118" class="collision"/>
+				<geom name="PineappleFruitLeaf_119" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_119" class="collision"/>
+				<geom name="PineappleFruitLeaf_120" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_120" class="collision"/>
+				<geom name="PineappleFruitLeaf_121" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_121" class="collision"/>
+				<geom name="PineappleFruitLeaf_122" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_122" class="collision"/>
+				<geom name="PineappleFruitLeaf_123" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_123" class="collision"/>
+				<geom name="PineappleFruitLeaf_124" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_124" class="collision"/>
+				<geom name="PineappleFruitLeaf_125" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_125" class="collision"/>
+				<geom name="PineappleFruitLeaf_126" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_126" class="collision"/>
+				<geom name="PineappleFruitLeaf_127" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_127" class="collision"/>
+				<geom name="PineappleFruitLeaf_128" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_128" class="collision"/>
+				<geom name="PineappleFruitLeaf_129" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_129" class="collision"/>
+				<geom name="PineappleFruitLeaf_130" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_130" class="collision"/>
+				<geom name="PineappleFruitLeaf_131" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_131" class="collision"/>
+				<geom name="PineappleFruitLeaf_132" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_132" class="collision"/>
+				<geom name="PineappleFruitLeaf_133" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_133" class="collision"/>
+				<geom name="PineappleFruitLeaf_134" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_134" class="collision"/>
+				<geom name="PineappleFruitLeaf_135" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_135" class="collision"/>
+				<geom name="PineappleFruitLeaf_136" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_136" class="collision"/>
+				<geom name="PineappleFruitLeaf_137" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_137" class="collision"/>
+				<geom name="PineappleFruitLeaf_138" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_138" class="collision"/>
+				<geom name="PineappleFruitLeaf_139" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_139" class="collision"/>
+				<geom name="PineappleFruitLeaf_140" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_140" class="collision"/>
+				<geom name="PineappleFruitLeaf_141" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_141" class="collision"/>
+				<geom name="PineappleFruitLeaf_142" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_142" class="collision"/>
+				<geom name="PineappleFruitLeaf_143" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_143" class="collision"/>
+				<geom name="PineappleFruitLeaf_144" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_144" class="collision"/>
+				<geom name="PineappleFruitLeaf_145" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_145" class="collision"/>
+				<geom name="PineappleFruitLeaf_146" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_146" class="collision"/>
+				<geom name="PineappleFruitLeaf_147" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_147" class="collision"/>
+				<geom name="PineappleFruitLeaf_148" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_148" class="collision"/>
+				<geom name="PineappleFruitLeaf_149" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_149" class="collision"/>
+				<geom name="PineappleFruitLeaf_150" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_150" class="collision"/>
+				<geom name="PineappleFruitLeaf_151" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_151" class="collision"/>
+				<geom name="PineappleFruitLeaf_152" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_152" class="collision"/>
+				<geom name="PineappleFruitLeaf_153" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_153" class="collision"/>
+				<geom name="PineappleFruitLeaf_154" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_154" class="collision"/>
+				<geom name="PineappleFruitLeaf_155" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_155" class="collision"/>
+				<geom name="PineappleFruitLeaf_156" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_156" class="collision"/>
+				<geom name="PineappleFruitLeaf_157" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_157" class="collision"/>
+				<geom name="PineappleFruitLeaf_158" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_158" class="collision"/>
+				<geom name="PineappleFruitLeaf_159" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_159" class="collision"/>
+				<geom name="PineappleFruitLeaf_160" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_160" class="collision"/>
+				<geom name="PineappleFruitLeaf_161" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_161" class="collision"/>
+				<geom name="PineappleFruitLeaf_162" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_162" class="collision"/>
+				<geom name="PineappleFruitLeaf_163" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_163" class="collision"/>
+				<geom name="PineappleFruitLeaf_164" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_164" class="collision"/>
+				<geom name="PineappleFruitLeaf_165" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_165" class="collision"/>
+				<geom name="PineappleFruitLeaf_166" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_166" class="collision"/>
+				<geom name="PineappleFruitLeaf_167" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_167" class="collision"/>
+				<geom name="PineappleFruitLeaf_168" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_168" class="collision"/>
+				<geom name="PineappleFruitLeaf_169" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_169" class="collision"/>
+				<geom name="PineappleFruitLeaf_170" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_170" class="collision"/>
+				<geom name="PineappleFruitLeaf_171" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_171" class="collision"/>
+				<geom name="PineappleFruitLeaf_173" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_173" class="collision"/>
+				<geom name="PineappleFruitLeaf_174" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_174" class="collision"/>
+				<geom name="PineappleFruitLeaf_175" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_175" class="collision"/>
+				<geom name="PineappleFruitLeaf_176" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_176" class="collision"/>
+				<geom name="PineappleFruitLeaf_177" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_177" class="collision"/>
+				<geom name="PineappleFruitLeaf_178" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_178" class="collision"/>
+				<geom name="PineappleFruitLeaf_179" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_179" class="collision"/>
+				<geom name="PineappleFruitLeaf_180" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_180" class="collision"/>
+				<geom name="PineappleFruitLeaf_181" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_181" class="collision"/>
+				<geom name="PineappleFruitLeaf_182" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_182" class="collision"/>
+				<geom name="PineappleFruitLeaf_183" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_183" class="collision"/>
+				<geom name="PineappleFruitLeaf_184" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_184" class="collision"/>
+				<geom name="PineappleFruitLeaf_185" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_185" class="collision"/>
+				<geom name="PineappleFruitLeaf_186" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_186" class="collision"/>
+				<geom name="PineappleFruitLeaf_187" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_187" class="collision"/>
+				<geom name="PineappleFruitLeaf_188" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_188" class="collision"/>
+				<geom name="PineappleFruitLeaf_189" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_189" class="collision"/>
+				<geom name="PineappleFruitLeaf_190" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_190" class="collision"/>
+				<geom name="PineappleFruitLeaf_191" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_191" class="collision"/>
+				<geom name="PineappleFruitLeaf_192" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_192" class="collision"/>
+				<geom name="PineappleFruitLeaf_193" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_193" class="collision"/>
+				<geom name="PineappleFruitLeaf_194" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_194" class="collision"/>
+				<geom name="PineappleFruitLeaf_195" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitLeaf_195" class="collision"/>
+			</body>
+			<body name="pineapple_peel" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="0.6216333508491516" pos="0.0009605354862287641 0.008379553444683552 -0.05627232417464256" quat="-0.7017909288406372 -0.01260138489305973 0.7084019780158997 0.07414443045854568" diaginertia="0.0024904205929487944 0.004991290159523487 0.004999210126698017"/>
+				<geom name="PineapplePeel" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel" material="M_PineapplePeel" class="visual"/>
+				<geom name="PineapplePeel_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_001" class="collision"/>
+				<geom name="PineapplePeel_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_002" class="collision"/>
+				<geom name="PineapplePeel_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_003" class="collision"/>
+				<geom name="PineapplePeel_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_004" class="collision"/>
+				<geom name="PineapplePeel_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_005" class="collision"/>
+				<geom name="PineapplePeel_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_006" class="collision"/>
+				<geom name="PineapplePeel_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_007" class="collision"/>
+				<geom name="PineapplePeel_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_008" class="collision"/>
+				<geom name="PineapplePeel_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_009" class="collision"/>
+				<geom name="PineapplePeel_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_010" class="collision"/>
+				<geom name="PineapplePeel_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_011" class="collision"/>
+				<geom name="PineapplePeel_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_012" class="collision"/>
+				<geom name="PineapplePeel_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_013" class="collision"/>
+				<geom name="PineapplePeel_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_014" class="collision"/>
+				<geom name="PineapplePeel_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_015" class="collision"/>
+				<geom name="PineapplePeel_016" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_016" class="collision"/>
+				<geom name="PineapplePeel_017" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_017" class="collision"/>
+				<geom name="PineapplePeel_018" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_018" class="collision"/>
+				<geom name="PineapplePeel_019" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_019" class="collision"/>
+				<geom name="PineapplePeel_020" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_020" class="collision"/>
+				<geom name="PineapplePeel_021" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_021" class="collision"/>
+				<geom name="PineapplePeel_022" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_022" class="collision"/>
+				<geom name="PineapplePeel_023" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_023" class="collision"/>
+				<geom name="PineapplePeel_024" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_024" class="collision"/>
+				<geom name="PineapplePeel_025" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_025" class="collision"/>
+				<geom name="PineapplePeel_026" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_026" class="collision"/>
+				<geom name="PineapplePeel_027" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_027" class="collision"/>
+				<geom name="PineapplePeel_028" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_028" class="collision"/>
+				<geom name="PineapplePeel_029" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_029" class="collision"/>
+				<geom name="PineapplePeel_030" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_030" class="collision"/>
+				<geom name="PineapplePeel_031" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_031" class="collision"/>
+				<geom name="PineapplePeel_032" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_032" class="collision"/>
+				<geom name="PineapplePeel_033" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_033" class="collision"/>
+				<geom name="PineapplePeel_034" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_034" class="collision"/>
+				<geom name="PineapplePeel_035" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_035" class="collision"/>
+				<geom name="PineapplePeel_036" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_036" class="collision"/>
+				<geom name="PineapplePeel_037" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_037" class="collision"/>
+				<geom name="PineapplePeel_038" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_038" class="collision"/>
+				<geom name="PineapplePeel_039" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_039" class="collision"/>
+				<geom name="PineapplePeel_040" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_040" class="collision"/>
+				<geom name="PineapplePeel_041" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_041" class="collision"/>
+				<geom name="PineapplePeel_042" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_042" class="collision"/>
+				<geom name="PineapplePeel_043" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_043" class="collision"/>
+				<geom name="PineapplePeel_044" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_044" class="collision"/>
+				<geom name="PineapplePeel_045" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_045" class="collision"/>
+				<geom name="PineapplePeel_046" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_046" class="collision"/>
+				<geom name="PineapplePeel_047" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_047" class="collision"/>
+				<geom name="PineapplePeel_048" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_048" class="collision"/>
+				<geom name="PineapplePeel_049" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_049" class="collision"/>
+				<geom name="PineapplePeel_050" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_050" class="collision"/>
+				<geom name="PineapplePeel_051" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_051" class="collision"/>
+				<geom name="PineapplePeel_052" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_052" class="collision"/>
+				<geom name="PineapplePeel_053" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_053" class="collision"/>
+				<geom name="PineapplePeel_054" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_054" class="collision"/>
+				<geom name="PineapplePeel_055" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_055" class="collision"/>
+				<geom name="PineapplePeel_056" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_056" class="collision"/>
+				<geom name="PineapplePeel_057" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_057" class="collision"/>
+				<geom name="PineapplePeel_058" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_058" class="collision"/>
+				<geom name="PineapplePeel_059" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_059" class="collision"/>
+				<geom name="PineapplePeel_060" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_060" class="collision"/>
+				<geom name="PineapplePeel_061" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_061" class="collision"/>
+				<geom name="PineapplePeel_062" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_062" class="collision"/>
+				<geom name="PineapplePeel_063" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_063" class="collision"/>
+				<geom name="PineapplePeel_064" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_064" class="collision"/>
+				<geom name="PineapplePeel_065" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_065" class="collision"/>
+				<geom name="PineapplePeel_066" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_066" class="collision"/>
+				<geom name="PineapplePeel_067" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_067" class="collision"/>
+				<geom name="PineapplePeel_068" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_068" class="collision"/>
+				<geom name="PineapplePeel_069" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_069" class="collision"/>
+				<geom name="PineapplePeel_070" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_070" class="collision"/>
+				<geom name="PineapplePeel_071" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_071" class="collision"/>
+				<geom name="PineapplePeel_072" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_072" class="collision"/>
+				<geom name="PineapplePeel_073" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_073" class="collision"/>
+				<geom name="PineapplePeel_074" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_074" class="collision"/>
+				<geom name="PineapplePeel_075" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_075" class="collision"/>
+				<geom name="PineapplePeel_076" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_076" class="collision"/>
+				<geom name="PineapplePeel_077" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_077" class="collision"/>
+				<geom name="PineapplePeel_078" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_078" class="collision"/>
+				<geom name="PineapplePeel_079" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_079" class="collision"/>
+				<geom name="PineapplePeel_080" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_080" class="collision"/>
+				<geom name="PineapplePeel_081" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_081" class="collision"/>
+				<geom name="PineapplePeel_082" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_082" class="collision"/>
+				<geom name="PineapplePeel_083" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_083" class="collision"/>
+				<geom name="PineapplePeel_084" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_084" class="collision"/>
+				<geom name="PineapplePeel_085" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_085" class="collision"/>
+				<geom name="PineapplePeel_086" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_086" class="collision"/>
+				<geom name="PineapplePeel_087" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_087" class="collision"/>
+				<geom name="PineapplePeel_088" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_088" class="collision"/>
+				<geom name="PineapplePeel_089" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_089" class="collision"/>
+				<geom name="PineapplePeel_090" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_090" class="collision"/>
+				<geom name="PineapplePeel_091" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_091" class="collision"/>
+				<geom name="PineapplePeel_092" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_092" class="collision"/>
+				<geom name="PineapplePeel_093" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_093" class="collision"/>
+				<geom name="PineapplePeel_094" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_094" class="collision"/>
+				<geom name="PineapplePeel_095" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_095" class="collision"/>
+				<geom name="PineapplePeel_096" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_096" class="collision"/>
+				<geom name="PineapplePeel_097" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_097" class="collision"/>
+				<geom name="PineapplePeel_098" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_098" class="collision"/>
+				<geom name="PineapplePeel_099" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_099" class="collision"/>
+				<geom name="PineapplePeel_100" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_100" class="collision"/>
+				<geom name="PineapplePeel_101" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_101" class="collision"/>
+				<geom name="PineapplePeel_102" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_102" class="collision"/>
+				<geom name="PineapplePeel_103" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_103" class="collision"/>
+				<geom name="PineapplePeel_104" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_104" class="collision"/>
+				<geom name="PineapplePeel_105" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_105" class="collision"/>
+				<geom name="PineapplePeel_106" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_106" class="collision"/>
+				<geom name="PineapplePeel_107" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_107" class="collision"/>
+				<geom name="PineapplePeel_108" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_108" class="collision"/>
+				<geom name="PineapplePeel_109" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_109" class="collision"/>
+				<geom name="PineapplePeel_110" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_110" class="collision"/>
+				<geom name="PineapplePeel_111" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_111" class="collision"/>
+				<geom name="PineapplePeel_112" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_112" class="collision"/>
+				<geom name="PineapplePeel_113" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_113" class="collision"/>
+				<geom name="PineapplePeel_114" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_114" class="collision"/>
+				<geom name="PineapplePeel_115" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_115" class="collision"/>
+				<geom name="PineapplePeel_116" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_116" class="collision"/>
+				<geom name="PineapplePeel_117" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_117" class="collision"/>
+				<geom name="PineapplePeel_118" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_118" class="collision"/>
+				<geom name="PineapplePeel_119" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_119" class="collision"/>
+				<geom name="PineapplePeel_120" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_120" class="collision"/>
+				<geom name="PineapplePeel_121" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_121" class="collision"/>
+				<geom name="PineapplePeel_122" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_122" class="collision"/>
+				<geom name="PineapplePeel_123" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_123" class="collision"/>
+				<geom name="PineapplePeel_124" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_124" class="collision"/>
+				<geom name="PineapplePeel_125" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_125" class="collision"/>
+				<geom name="PineapplePeel_126" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineapplePeel_126" class="collision"/>
+			</body>
+			<body name="pineapple_fruit_pit_leaf" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="0.0013840114697813988" pos="0.00297576398588717 0.006090451963245869 -0.15747880935668945" quat="-0.7011365294456482 0.00930824689567089 0.7116743326187134 0.04290144518017769" diaginertia="1.2054131275363034e-06 3.481203020783141e-05 3.4963461075676605e-05"/>
+				<geom name="PineappleFruitPitLeaf" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf" material="M_PineappleFruitPitLeaf" class="visual"/>
+				<geom name="PineappleFruitPitLeaf_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_001" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_002" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_003" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_004" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_005" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_006" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_007" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_008" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_009" class="collision"/>
+				<geom name="PineappleFruitPitLeaf_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFruitPitLeaf_010" class="collision"/>
+			</body>
+			<body name="pineapple_flesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="1.9959545135498047" pos="0.0009946472709998488 0.008379540406167507 -0.057797253131866455" quat="-0.7028355002403259 0.003840456251055002 0.7073634266853333 0.07512976229190826" diaginertia="0.003578229807317257 0.013277610763907433 0.01332230493426323"/>
+				<geom name="PineappleFlesh" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh" material="M_PineappleFlesh" class="visual"/>
+				<geom name="PineappleFlesh_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_001" class="collision"/>
+				<geom name="PineappleFlesh_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_002" class="collision"/>
+				<geom name="PineappleFlesh_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_003" class="collision"/>
+				<geom name="PineappleFlesh_004" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_004" class="collision"/>
+				<geom name="PineappleFlesh_005" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_005" class="collision"/>
+				<geom name="PineappleFlesh_006" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_006" class="collision"/>
+				<geom name="PineappleFlesh_007" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_007" class="collision"/>
+				<geom name="PineappleFlesh_008" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_008" class="collision"/>
+				<geom name="PineappleFlesh_009" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_009" class="collision"/>
+				<geom name="PineappleFlesh_010" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_010" class="collision"/>
+				<geom name="PineappleFlesh_011" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_011" class="collision"/>
+				<geom name="PineappleFlesh_012" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_012" class="collision"/>
+				<geom name="PineappleFlesh_013" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_013" class="collision"/>
+				<geom name="PineappleFlesh_014" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_014" class="collision"/>
+				<geom name="PineappleFlesh_015" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="PineappleFlesh_015" class="collision"/>
+			</body>
+		</body>
+	</worldbody>
+	<equality/>
+</mujoco>

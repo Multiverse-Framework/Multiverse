@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<mujoco model="cutting_board">
+	<compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="false"/>
+	<default>
+		<default class="cutting_board_visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="cutting_board_collision">
+			<geom rgba="0.9 0.9 0.9 0.0"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="CuttingBoardMetal" file="stl/CuttingBoardMetal.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="CuttingBoardWoodiness" file="obj/CuttingBoardWoodiness.obj" scale="1.0 1.0 1.0"/>
+		<material name="M_CuttingBoardMetal" rgba="0.660099983215332 0.660099983215332 0.660099983215332 1.0" emission="0.0"/>
+		<material name="M_CuttingBoardWoodiness" texture="T_CuttingBoardWoodiness"/>
+		<texture name="T_CuttingBoardWoodiness" type="2d" file="T_CuttingBoardWoodiness.png"/>
+
+		<mesh name="UCX_CuttingBoard_001" file="stl/UCX_CuttingBoard_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_CuttingBoard_002" file="stl/UCX_CuttingBoard_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_CuttingBoard_003" file="stl/UCX_CuttingBoard_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_CuttingBoard_004" file="stl/UCX_CuttingBoard_004.stl" scale="1.0 1.0 1.0"/>
+	</asset>
+	<worldbody>
+		<body name="cutting_board" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<freejoint />
+			<inertial mass="0.9486618041992188" pos="0.00958931539207697 7.350090163527057e-05 -1.7599102193344152e-06" quat="1.0 -5.373578471079554e-09 -1.7391168512403965e-05 8.688193338457495e-05" diaginertia="0.003260483033955097 0.007564750965684652 0.010788618586957455"/>
+			<body name="cutting_board_metal" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="CuttingBoardMetal" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CuttingBoardMetal" material="M_CuttingBoardMetal" class="cutting_board_visual"/>
+				<geom name="UCX_CuttingBoard_001" type="mesh" mesh="UCX_CuttingBoard_001" class="cutting_board_collision"/>
+				<geom name="UCX_CuttingBoard_002" type="mesh" mesh="UCX_CuttingBoard_002" class="cutting_board_collision"/>
+				<geom name="UCX_CuttingBoard_003" type="mesh" mesh="UCX_CuttingBoard_003" class="cutting_board_collision"/>
+			</body>
+			<body name="cutting_board_woodiness" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="CuttingBoardWoodiness" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CuttingBoardWoodiness" material="M_CuttingBoardWoodiness" class="cutting_board_visual"/>
+				<geom name="UCX_CuttingBoard_004" type="mesh" mesh="UCX_CuttingBoard_004" class="cutting_board_collision"/>
+			</body>
+		</body>
+	</worldbody>
+	<equality/>
+</mujoco>

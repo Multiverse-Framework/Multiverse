@@ -242,7 +242,7 @@
     <worldbody>
         <body name="small_bowl">
             <freejoint />
-            <inertial mass="0.05838299170136452" pos="1.5258869723311363e-08 -2.7080032438675516e-08 -0.006071913987398148" quat="0.9949871301651001 -6.369656944116286e-07 -1.2577189067997097e-07 -0.1000032126903534" diaginertia="0.00010565296543063596 0.00010565326374489814 0.0001514565374236554"/>
+            <inertial mass="0.05838299170136452" pos="1.5258869723311363e-08 -2.7080032438675516e-08 -0.006071913987398148" diaginertia="0.00010565296543063596 0.00010565326374489814 0.0001514565374236554"/>
             <geom name="SmallBowl" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="SmallBowl" class="small_bowl_visual" />
             <geom name="UCX_SmallBowl_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_001" class="small_bowl_collision"/>
             <geom name="UCX_SmallBowl_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_SmallBowl_002" class="small_bowl_collision"/>

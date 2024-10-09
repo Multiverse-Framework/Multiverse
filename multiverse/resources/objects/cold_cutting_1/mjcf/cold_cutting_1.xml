@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<mujoco model="cold_cutting_1">
+	<compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="false"/>
+	<default>
+		<default class="cold_cutting_1_visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="cold_cutting_1_collision">
+			<geom rgba="0.9 0.9 0.9 0.0" />
+		</default>
+	</default>
+	<asset>
+		<mesh name="ColdCuttingMeat" file="obj/ColdCuttingMeat.obj" scale="1.0 1.0 1.0"/>
+		<mesh name="ColdCuttingExodermis" file="obj/ColdCuttingExodermis.obj" scale="1.0 1.0 1.0"/>
+		<material name="M_ColdCuttingMeat" texture="T_ColdCuttingMeat"/>
+		<material name="M_ColdCuttingExodermis" texture="T_ColdCuttingExodermis"/>
+		<texture name="T_ColdCuttingMeat" type="2d" file="T_ColdCuttingMeat.png"/>
+		<texture name="T_ColdCuttingExodermis" type="2d" file="T_ColdCuttingExodermis.png"/>
+	</asset>
+	<asset>
+		<mesh name="UCX_ColdCutting_001" file="stl/UCX_ColdCutting_001.stl" />
+	</asset>
+	<worldbody>
+		<body name="cold_cutting_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<freejoint />
+			<body name="cold_cutting_meat" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<inertial mass="0.5472894310951233" pos="-6.774790450858603e-11 -1.281197925528943e-10 -1.6847701012068228e-10" quat="0.9082376956939697 -0.418454647064209 -3.314617913474649e-08 -1.539701521835468e-08" diaginertia="0.0002485460427124053 0.001675912644714117 0.001675912644714117"/>
+				<geom name="UCX_ColdCutting_001" type="mesh" mesh="UCX_ColdCutting_001" class="cold_cutting_1_collision"/>
+				<geom name="ColdCuttingMeat" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="ColdCuttingMeat" material="M_ColdCuttingMeat" class="cold_cutting_1_visual"/>
+			</body>
+			<body name="cold_cutting_exodermis" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+				<geom name="ColdCuttingExodermis" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="ColdCuttingExodermis" material="M_ColdCuttingExodermis" class="cold_cutting_1_visual"/>
+			</body>
+		</body>
+	</worldbody>
+	<equality/>
+</mujoco>

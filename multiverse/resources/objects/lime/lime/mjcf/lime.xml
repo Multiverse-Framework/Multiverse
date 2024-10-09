@@ -1,0 +1,17 @@
+<mujoco model="lime">
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="false"/>
+    <asset>
+        <mesh name="LimePeel" file="obj/LimePeel.obj" />
+        <material name="M_LimePeel" texture="T_LimePeel"/>
+		<texture name="T_LimePeel" type="2d" file="T_LimePeel.png"/>
+    </asset>
+    <worldbody>
+        <body name="lime">
+            <freejoint />
+            <inertial mass="0.006688935682177544" pos="-0.0020861164666712284 -0.00036476828972809017 3.453579483903013e-05" quat="0.015134597197175026 0.9998217821121216 -0.00026754793361760676 0.011283377185463905" diaginertia="3.541381829563761e-06 6.077583293517819e-06 6.11683799434104e-06"/>
+            <geom name="Lime" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="LimePeel" material="M_LimePeel"/>
+        </body>
+    </worldbody>
+    <equality />
+    <contact />
+</mujoco>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mujoco model="soup_spoon">
-    <compiler meshdir="../soup_spoon/meshes" texturedir="soup_spoon/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="false"/>
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="false"/>
     <default>
         <default class="soup_spoon_visual">
             <geom contype="0" conaffinity="0" />

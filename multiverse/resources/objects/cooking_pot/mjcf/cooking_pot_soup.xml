@@ -1,4 +1,3 @@
-<?xml version='1.0' encoding='utf-8'?>
 <mujoco model="cooking_pot_soup">
 	<option solver="CG" tolerance="1e-6" timestep=".0075" />
 	<size memory="1G" />

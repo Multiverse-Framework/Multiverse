@@ -1,6 +1,6 @@
-<?xml version="1.0"?>
 <mujoco model="cooking_pot">
     <include file="cooking_pot_body.xml" />
     <include file="cooking_pot_soup.xml" />
     <include file="cooking_pot_lid.xml" />
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="true"/>
 </mujoco>

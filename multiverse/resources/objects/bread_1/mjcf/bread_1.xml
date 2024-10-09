@@ -11,13 +11,13 @@
             <geom contype="0" conaffinity="0" />
         </default>
         <default class="bread_1_collision">
-            <geom rgba="1.0 0.0 0.0 0.5" solimp="0.95 0.99 0.001" solref="0.004 1"/>
+            <geom rgba="0.9 0.9 0.9 0.0" />
         </default>
     </default>
     <worldbody>
         <body name="bread_1">
             <freejoint />
-            <inertial pos="0.0 0.0 0.0" mass="0.01" diaginertia="0.0008 0.0008 0.00015" />
+            <inertial mass="3.3634843826293945" pos="-8.569690544391051e-05 -0.0007341363816522062 0.0015977279981598258" quat="-0.7008997797966003 0.7131819128990173 0.006411583628505468 0.008364103734493256" diaginertia="0.008702706545591354 0.017596790567040443 0.020925816148519516"/>
             <geom name="Bread_1" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="Bread_1" material="bread_1_material" class="bread_1_visual" />
             <geom name="UCX_Bread_1_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Bread_1_001" class="bread_1_collision"/>
         </body>

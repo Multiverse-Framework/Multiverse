@@ -1,5 +1,5 @@
 <mujoco model="task_board">
-    <compiler angle="radian" meshdir="../meshes/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="false" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="true"/>
+    <compiler angle="radian" meshdir="../meshes/stl" autolimits="true" inertiafromgeom="false"/>
     <asset>
         <mesh name="task_board_part_1" file="task_board_part_1.stl"/>
         <mesh name="task_board_part_2" file="task_board_part_2.stl"/>
@@ -53,6 +53,7 @@
     <worldbody>
         <body name="task_board">
             <body name="task_board_main">
+                <inertial mass="2.636007070541382" pos="0.0007858076132833958 0.007140896748751402 0.03861437365412712" quat="0.6954004764556885 -0.08408170938491821 -0.13692009449005127 0.700429379940033" diaginertia="0.01115888636559248 0.021166224032640457 0.0217230636626482"/>
                 <geom type="box" pos="0 0 0.0062" size="0.077486 0.128209 0.0062" />
                 <geom type="mesh" mesh="task_board_part_2"/>
                 <geom type="mesh" mesh="task_board_part_3"/>
@@ -96,9 +97,11 @@
                 <geom type="mesh" mesh="task_board_part_41"/>
                 <geom type="mesh" mesh="task_board_part_42"/>
                 <body name="task_board_clock" pos="0.02361 0.09598 0.086058">
+                    <inertial mass="0.014450108632445335" pos="-1.5404576458877273e-07 3.820331357928808e-07 1.0391339344550943e-07" quat="0.9999918937683105 -0.0021431820932775736 2.051398769253865e-05 -0.00341184064745903" diaginertia="8.666096391607425e-07 2.8100657800678164e-06 3.248445409553824e-06"/>
                     <geom type="mesh" mesh="task_board_clock"/>
                 </body>
                 <body name="task_board_hole_1" pos="-0.0191 0.039 0.0734">
+                    <inertial mass="0.001326893107034266" pos="-2.1943561027140944e-19 8.837270100993977e-18 0.00035713426768779755" quat="0.5 0.5 -0.5 0.5" diaginertia="4.535419506623839e-08 4.661995589572143e-08 4.661996655386247e-08"/>
                     <geom type="mesh" mesh="task_board_hole_side"/>
                     <geom quat="0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
                     <geom quat="0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
@@ -133,6 +136,7 @@
                     <geom quat="-0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
                 </body>
                 <body name="task_board_hole_2" pos="-0.044 0.039 0.0734">
+                    <inertial mass="0.001326893107034266" pos="-2.1943561027140944e-19 8.837270100993977e-18 0.00035713426768779755" quat="0.5 0.5 -0.5 0.5" diaginertia="4.535419506623839e-08 4.661995589572143e-08 4.661996655386247e-08"/>
                     <geom type="mesh" mesh="task_board_hole_side"/>
                     <geom quat="0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
                     <geom quat="0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
@@ -167,6 +171,7 @@
                     <geom quat="-0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
                 </body>
                 <body name="task_board_hole_3" pos="0.037334 -0.102 0.0963" quat="0.707107 0 -0.707107 0">
+                    <inertial mass="0.001326893107034266" pos="-2.1943561027140944e-19 8.837270100993977e-18 0.00035713426768779755" quat="0.5 0.5 -0.5 0.5" diaginertia="4.535419506623839e-08 4.661995589572143e-08 4.661996655386247e-08"/>
                     <geom type="mesh" mesh="task_board_hole_side"/>
                     <geom quat="0.995185 0 0 0.0980171" type="mesh" mesh="task_board_hole_side"/>
                     <geom quat="0.980785 0 0 0.19509" type="mesh" mesh="task_board_hole_side"/>
@@ -202,6 +207,7 @@
                 </body>
                 <body name="task_board_lid" pos="0.033026 -0.0472 0.079405">
                     <joint name="task_board_lid_joint" pos="0 0 0" axis="0 1 0" range="0 2.07293"/>
+                    <inertial mass="0.043239474296569824" pos="-0.03705034404993057 9.640214102546452e-07 0.0020469322334975004" quat="0.999768853187561 1.7492717461209395e-06 0.021500125527381897 -2.631262395880185e-05" diaginertia="2.4859382392605767e-05 9.401317947776988e-05 0.00011849300790345296"/>
                     <geom type="mesh" mesh="task_board_lid"/>
                     <geom type="mesh" mesh="task_board_lid_hinge"/>
                     <body name="task_board_lid_knob" pos="-0.066776 0 0.010587">
@@ -211,14 +217,17 @@
                 </body>
                 <body name="task_board_slider" pos="0.04301 0.061594 0.082959">
                     <joint name="task_board_slider_joint" pos="0 0 0" axis="1 0 0" type="slide" range="-0.025 0.01" damping="0.5"/>
+                    <inertial mass="0.00019952877482865006" pos="-5.624972709838971e-11 -8.28391577556431e-10 3.68913427584161e-10" quat="-0.5004615187644958 0.5004618167877197 0.4995373487472534 0.49953848123550415" diaginertia="8.591624078846394e-10 1.873412092123772e-09 2.1721899834403757e-09"/>
                     <geom type="mesh" mesh="task_board_slider"/>
                 </body>
                 <body name="task_board_button_1" pos="-0.043957 0.09625 0.0835" gravcomp="1">
                     <joint name="task_board_button_1_joint" pos="0 0 0" axis="0 0 1" type="slide" range="-0.003 0" stiffness="1" springref="0"/>
+                    <inertial mass="0.0003199282509740442" pos="6.059810783994401e-20 3.0299053919972006e-20 -0.001550000160932541" quat="0.24415282905101776 2.3798252988898155e-18 -9.452293775678179e-18 0.9697367548942566" diaginertia="3.6523064572691055e-09 3.6523064572691055e-09 5.25494003866811e-09"/>
                     <geom type="mesh" mesh="task_board_button"/>
                 </body>
                 <body name="task_board_button_2" pos="-0.02995 0.09625 0.0835" gravcomp="1">
                     <joint name="task_board_button_2_joint" pos="0 0 0" axis="0 0 1" type="slide" range="-0.003 0" stiffness="1" springref="0"/>
+                    <inertial mass="0.0003199282509740442" pos="6.059810783994401e-20 3.0299053919972006e-20 -0.001550000160932541" quat="0.24415282905101776 2.3798252988898155e-18 -9.452293775678179e-18 0.9697367548942566" diaginertia="3.6523064572691055e-09 3.6523064572691055e-09 5.25494003866811e-09"/>
                     <geom type="mesh" mesh="task_board_button"/>
                 </body>
             </body>

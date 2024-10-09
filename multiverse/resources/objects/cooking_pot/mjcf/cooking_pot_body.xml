@@ -1,12 +1,11 @@
-<?xml version="1.0"?>
 <mujoco model="cooking_pot_body">
-    <compiler meshdir="../cooking_pot/meshes" texturedir="cooking_pot/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="true"/>
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="true"/>
     <default>
         <default class="cooking_body_visual">
             <geom contype="0" conaffinity="0" />
         </default>
         <default class="cooking_body_collision">
-            <geom rgba="0.9 0.9 0.9 1.0" />
+            <geom rgba="0.9 0.9 0.9 0.0" />
         </default>
     </default>
     <asset>
@@ -173,9 +172,10 @@
         <mesh name="CookingPotBody_160" file="stl/CookingPotBody_160.stl" />
         <mesh name="CookingPotBody_161" file="stl/CookingPotBody_161.stl" />
     </asset>
-    <worldbody>            
+    <worldbody>
         <body name="cooking_pot_body" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" >
             <joint name="cooking_pot_body_joint" type="hinge" axis="0 0 1"/>
+            <inertial mass="1.1017495393753052" pos="8.259895167839204e-08 1.6791013024430868e-07 -0.007815380580723286" diaginertia="0.017410216853022575 0.017410242930054665 0.023449677973985672"/>
             <geom name="CookingPotBody" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody" class="cooking_body_visual"/>
             <geom name="CookingPotBody_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_001" class="cooking_body_collision"/>
             <geom name="CookingPotBody_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="CookingPotBody_002" class="cooking_body_collision"/>

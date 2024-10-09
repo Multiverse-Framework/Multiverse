@@ -1,5 +1,5 @@
 <mujoco model="cup">
-    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="true"/>
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="false"/>
     <asset>
         <mesh name="Cup" file="obj/Cup.obj" />
         <mesh name="UCX_Cup_001" file="stl/UCX_Cup_001.stl" />
@@ -279,6 +279,7 @@
     <worldbody>
         <body name="cup">
             <freejoint />
+            <inertial mass="0.12088105082511902" pos="-0.004871407523751259 1.6298085029120557e-05 -0.0007817115401849151" quat="-0.7061712145805359 0.7066673040390015 0.031034601852297783 0.031310729682445526" diaginertia="0.00015440680726896971 0.00019119709031656384 0.00020002893870696425"/>
             <geom name="Cup" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="Cup" class="cup_visual" />
             <geom name="UCX_Cup_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_001" class="cup_collision"/>
             <geom name="UCX_Cup_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_Cup_002" class="cup_collision"/>

@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<mujoco model="chopstick">
+	<compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="false"/>
+	<default>
+		<default class="chopstick_visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="chopstick_collision">
+			<geom rgba="0.9 0.9 0.9 0.0"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="Chopstick" file="stl/Chopstick.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Chopstick_001" file="stl/UCX_Chopstick_001.stl" scale="1.0 1.0 1.0"/>
+	</asset>
+	<worldbody>
+		<body name="chopstick" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<freejoint/>
+			<inertial mass="0.009571676142513752" pos="-0.03242068737745285 -2.6069730665767565e-05 2.0396337276906706e-06" quat="-0.6296520829200745 0.7768771648406982 0.00026335494476370513 -0.0002916756202466786" diaginertia="7.328827678065863e-08 5.11551188537851e-05 5.115517706144601e-05"/>
+			<geom name="Chopstick" type="mesh" pos="-0.03242069110274315 -2.606967063911725e-05 2.0396691979840398e-06" quat="0.5490840077400208 0.44510242342948914 0.5495014190673828 0.44546470046043396" mesh="Chopstick" class="chopstick_visual"/>
+			<geom name="UCX_Chopstick_001" type="mesh" pos="-0.032421328127384186 -2.625211163831409e-05 1.849746809057251e-06" quat="0.5516233444213867 0.44195276498794556 0.5520375370979309 0.44231659173965454" mesh="UCX_Chopstick_001" class="chopstick_collision"/>
+		</body>
+	</worldbody>
+	<equality/>
+</mujoco>

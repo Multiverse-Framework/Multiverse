@@ -1,7 +1,7 @@
 <mujoco model="wooden_fork">
-    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="false"/>
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="true"/>
     <asset>
-        <mesh name="wooden_fork_visual" file="obj/WoodenFork.obj" />
+        <mesh name="WoodenFork" file="obj/WoodenFork.obj" />
         <mesh name="UCX_WoodenFork_001" file="stl/UCX_WoodenFork_001.stl" />
 		<mesh name="UCX_WoodenFork_002" file="stl/UCX_WoodenFork_002.stl" />
 		<mesh name="UCX_WoodenFork_003" file="stl/UCX_WoodenFork_003.stl" />
@@ -18,14 +18,14 @@
             <geom contype="0" conaffinity="0" />
         </default>
         <default class="wooden_fork_collision">
-            <geom rgba="1.0 0.0 0.0 0.5" />
+            <geom rgba="0.9 0.9 0.9 0.0" />
         </default>
     </default>
     <worldbody>
         <body name="wooden_fork">
             <freejoint />
-            <inertial pos="0.0 0.0 0.0" mass="1" diaginertia="0.00056 0.00757 0.00788" />
-            <geom name="wooden_fork_visual" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="wooden_fork_visual" class="wooden_fork_visual" />
+            <inertial mass="0.02809547260403633" pos="-0.0035083030816167593 0.00012133402196923271 1.0929613658561266e-08" quat="0.9999992847442627 7.312320917662873e-07 -1.095122215133415e-07 0.0011914810165762901" diaginertia="3.1255190151568968e-06 0.000181761643034406 0.00018478804850019515"/>
+            <geom name="WoodenFork" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="WoodenFork" class="wooden_fork_visual" />
             <geom name="UCX_WoodenFork_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenFork_001" class="wooden_fork_collision"/>
             <geom name="UCX_WoodenFork_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenFork_002" class="wooden_fork_collision"/>
             <geom name="UCX_WoodenFork_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_WoodenFork_003" class="wooden_fork_collision"/>

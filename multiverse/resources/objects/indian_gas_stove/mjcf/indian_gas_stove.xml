@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mujoco model="indian_gas_stove">
-    <compiler meshdir="../indian_gas_stove/meshes" texturedir="indian_gas_stove/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001" inertiafromgeom="true"/>
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="false"/>
     <default>
         <default class="indian_gas_stove_visual">
             <geom contype="0" conaffinity="0" />
@@ -17,6 +17,7 @@
     </asset>
     <worldbody>
         <body name="indian_gas_stove" pos="0.0 0.0 0.2" quat="1.0 0.0 0.0 0.0" >
+            <inertial mass="15.88277816772461" pos="0.005977602209895849 -0.01864658296108246 -0.013063529506325722" quat="0.9998757839202881 0.015736917033791542 0.0004497097688727081 -0.0007121074595488608" diaginertia="0.2842991054058075 1.3971433639526367 1.6677054166793823"/>
             <geom name="IndianGasStove" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="IndianGasStove" class="indian_gas_stove_visual"/>
             <geom name="IndianGasStove_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="IndianGasStove_001" class="indian_gas_stove_collision"/>
             <geom name="IndianGasStove_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="IndianGasStove_002" class="indian_gas_stove_collision"/>

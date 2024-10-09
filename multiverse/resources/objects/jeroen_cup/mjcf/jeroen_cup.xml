@@ -1,7 +1,7 @@
 <mujoco model="jeroen_cup">
     <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" autolimits="true" inertiafromgeom="true"/>
     <asset>
-        <!-- <mesh name="JeroenCup" file="obj/JeroenCup.obj" /> -->
+        <mesh name="JeroenCup" file="obj/JeroenCup.obj" />
         <mesh name="UCX_JeroenCup_001" file="stl/UCX_JeroenCup_01.stl" />
 		<mesh name="UCX_JeroenCup_002" file="stl/UCX_JeroenCup_02.stl" />
 		<mesh name="UCX_JeroenCup_003" file="stl/UCX_JeroenCup_03.stl" />
@@ -49,13 +49,14 @@
             <geom contype="0" conaffinity="0" />
         </default>
         <default class="cup_collision">
-            <geom rgba="0.9 0.9 0.9 1.0" />
+            <geom rgba="0.9 0.9 0.9 0.0" />
         </default>
     </default>
     <worldbody>
         <body name="jeroen_cup">
             <freejoint />
-            <!-- <geom name="JeroenCup" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="JeroenCup" class="cup_visual" /> -->
+            <inertial mass="0.3067432940006256" pos="0.00025758284027688205 -8.650930249132216e-05 -0.05204020068049431" diaginertia="0.0005065333680249751 0.0025513090658932924 0.002551322104409337"/>
+            <geom name="JeroenCup" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="JeroenCup" class="cup_visual" />
             <geom name="UCX_JeroenCup_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_JeroenCup_001" class="cup_collision"/>
             <geom name="UCX_JeroenCup_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_JeroenCup_002" class="cup_collision"/>
             <geom name="UCX_JeroenCup_003" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_JeroenCup_003" class="cup_collision"/>

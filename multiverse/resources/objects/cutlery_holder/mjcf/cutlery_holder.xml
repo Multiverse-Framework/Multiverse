@@ -1,5 +1,5 @@
 <mujoco model="cutlery_holder">
-    <compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" inertiafromgeom="true"/>
+    <compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="true"/>
     <asset>
         <mesh name="CutleryHolder" file="obj/CutleryHolder.obj" />
         <mesh name="UCX_CutleryHolder_001" file="stl/UCX_CutleryHolder_1001.stl" />
@@ -255,14 +255,15 @@
     </asset>
     <default>
         <default class="cutlery_holder_visual">
-            <geom contype="0" conaffinity="0" solimp="0.95 0.99 0.001" solref="0.004 1"/>
+            <geom contype="0" conaffinity="0" />
         </default>
         <default class="cutlery_holder_collision">
-            <geom rgba="0.0 0.0 0.0 0.0" />
+            <geom rgba="0.9 0.9 0.9 0.0" />
         </default>
     </default>
     <worldbody>
         <body name="cutlery_holder">
+            <inertial mass="0.0024092223029583693" pos="0.00039242958882823586 -0.00014951407501939684 0.018528643995523453" quat="0.7097811698913574 -0.0034899921156466007 -0.7042561173439026 0.01489575020968914" diaginertia="6.981517799431458e-06 9.253744792658836e-06 9.59177123149857e-06"/>
             <geom name="CutleryHolder" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="CutleryHolder" class="cutlery_holder_visual" />
             <geom name="UCX_CutleryHolder_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_001" class="cutlery_holder_collision"/>
             <geom name="UCX_CutleryHolder_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_CutleryHolder_002" class="cutlery_holder_collision"/>

@@ -1,5 +1,5 @@
 <mujoco model="task_board_tool">
-    <compiler angle="radian" meshdir="../meshes/stl/" autolimits="true" fusestatic="false" balanceinertia="true" discardvisual="false" boundmass="0.000001" boundinertia="0.000001"/>
+    <compiler angle="radian" meshdir="../meshes/stl" autolimits="true" inertiafromgeom="false"/>
     <asset>
         <mesh name="task_board_tool_1" file="task_board_tool_1.stl" />
         <mesh name="task_board_tool_2" file="task_board_tool_2.stl" />
@@ -10,6 +10,7 @@
     <worldbody>
         <body name="task_board_tool">
             <freejoint/>
+            <inertial mass="0.006231526378542185" pos="-2.27348695425178e-11 0.0001277880510315299 -3.0341962276025924e-09" quat="-0.4846147894859314 -0.5149257183074951 0.5149257183074951 0.4846147894859314" diaginertia="6.648315320489928e-08 5.043107648816658e-06 5.043107648816658e-06"/>
             <geom type="mesh" mesh="task_board_tool_1" friction="0.5" solimp="0.95 0.95 0.005" solref="0.03 1" condim="6"/>
             <geom type="mesh" mesh="task_board_tool_2" friction="0.5" solimp="0.95 0.95 0.005" solref="0.03 1" condim="6"/>
             <geom type="mesh" mesh="task_board_tool_3" friction="0.5" solimp="0.95 0.95 0.005" solref="0.03 1" condim="6"/>

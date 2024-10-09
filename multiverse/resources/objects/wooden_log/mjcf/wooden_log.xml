@@ -1,5 +1,5 @@
 <mujoco model="wooden_log">
-	<compiler angle="radian" meshdir="../meshes/" texturedir="../meshes/textures/" inertiafromgeom="true"/>
+	<compiler angle="radian" meshdir="../meshes/" texturedir="../textures/" autolimits="true" inertiafromgeom="true"/>
 	<asset>
 		<texture name="wooden_log_visual" type="2d" file="WoodenLog_Diffuse_8K.png" />
 		<material name="wooden_log_visual" texture="wooden_log_visual" />

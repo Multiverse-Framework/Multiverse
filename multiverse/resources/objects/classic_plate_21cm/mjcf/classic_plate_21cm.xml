@@ -137,13 +137,13 @@
             <geom contype="0" conaffinity="0" />
         </default>
         <default class="classic_plate_21cm_collision">
-            <geom rgba="1.0 0.0 0.0 0.5" solimp="0.95 0.99 0.001" solref="0.004 1"/>
+            <geom rgba="0.9 0.9 0.9 0.0" />
         </default>
     </default>
     <worldbody>
         <body name="classic_plate_21cm">
             <freejoint />
-            <inertial pos="0.0 0.0 0.0" mass="0.2" diaginertia="0.00128256 0.00128256 0.00256" />
+            <inertial mass="0.03725113347172737" pos="2.789805512293242e-05 0.00019620837701950222 4.606575021171011e-05" diaginertia="9.34386916924268e-05 9.344061254523695e-05 0.00018620108312461525"/>
             <geom name="ClassicPlate21cm" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" type="mesh" mesh="ClassicPlate21cm" class="classic_plate_21cm_visual" />
             <geom name="UCX_ClassicPlate21cm_001" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate21cm_001" class="classic_plate_21cm_collision"/>
             <geom name="UCX_ClassicPlate21cm_002" type="mesh" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" mesh="UCX_ClassicPlate21cm_002" class="classic_plate_21cm_collision"/>
