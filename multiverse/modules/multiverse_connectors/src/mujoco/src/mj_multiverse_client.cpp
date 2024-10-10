@@ -1523,11 +1523,33 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 			body_1_element_copy->DeleteChild(joint_element);
 		}
 		body_2_element->InsertEndChild(body_1_element_copy);
-		tinyxml2::XMLElement *parent_body_1_element = body_1_element->Parent()->ToElement();
-		parent_body_1_element->DeleteChild(body_1_element);
 
-		doc_1.SaveFile(doc_file_path_1.c_str());
-		doc_2.SaveFile(doc_file_path_2.c_str());
+		if (strcmp(doc_file_path_1.c_str(), doc_file_path_2.c_str()) == 0)
+		{
+			doc_2.SaveFile(doc_file_path_2.c_str());
+
+			tinyxml2::XMLDocument doc;
+			doc.LoadFile(scene_xml_path.c_str());
+
+			tinyxml2::XMLElement *found_body_element = nullptr;
+			for (tinyxml2::XMLElement *worldbody_element = doc.FirstChildElement("mujoco")->FirstChildElement("worldbody");
+				worldbody_element != nullptr;
+				worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
+			{
+				get_body_element(worldbody_element, found_body_element, object_1_name);
+			}
+
+			tinyxml2::XMLElement *parent_body_1_element = found_body_element->Parent()->ToElement();
+			parent_body_1_element->DeleteChildren();
+			doc.SaveFile(scene_xml_path.c_str());
+		}
+		else
+		{
+			tinyxml2::XMLElement *parent_body_1_element = body_1_element->Parent()->ToElement();
+			parent_body_1_element->DeleteChild(body_1_element);
+			doc_1.SaveFile(doc_file_path_1.c_str());
+			doc_2.SaveFile(doc_file_path_2.c_str());
+		}
 
 		const int body_1_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_1_name.c_str());
 		const int body_1_dof_num = m->body_dofnum[body_1_id];
