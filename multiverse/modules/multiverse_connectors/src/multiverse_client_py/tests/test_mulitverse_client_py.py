@@ -933,6 +933,14 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                                                'world_name': 'world'},
                                  'time': time_callapi})
 
+        # Re-attach milk box to hand at (0 0 0.5) (1 0 0 0)
+        multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
+            "empty_simulation": [
+                {"attach": ["milk_box", "hand", "0.0 0.0 0.5 1.0 0.0 0.0 0.0"]}
+            ]
+        }
+        multiverse_client_test_callapi.send_and_receive_meta_data()
+
         multiverse_client_test_callapi.stop()
 
     def test_multiverse_client_move(self):
@@ -991,6 +999,19 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                                                                                        {"is_mujoco": []},
                                                                                        {"something_else": ["param1",
                                                                                                            "param2"]}
+                                                                                   ]
+                                                                               })
+        print(multiverse_client_test_callapi.response_meta_data)
+
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
+                                                                               {
+                                                                                   "empty_simulation": [
+                                                                                       {"get_contact_points": [
+                                                                                           "milk_box"]},
+                                                                                       {"get_contact_points": [
+                                                                                           "link1"]},
+                                                                                       {"get_contact_points": [
+                                                                                           "link1", "milk_box"]}
                                                                                    ]
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
