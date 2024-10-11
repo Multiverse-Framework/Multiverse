@@ -5,7 +5,7 @@
   	<option timestep="0.002"/>
 	
 	<default>
-		<default class="visual">
+		<default class="apartment_visual">
 			<geom contype="0" conaffinity="0"/>
 		</default>
 		<default class="apartment_collision">
