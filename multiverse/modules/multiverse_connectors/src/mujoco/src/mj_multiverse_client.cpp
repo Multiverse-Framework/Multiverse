@@ -2056,7 +2056,20 @@ std::set<std::string> MjMultiverseClient::get_get_contact_points_response(const 
 
 			if ((body_1_id == m->geom_bodyid[geom_1_id] && body_2_id == m->geom_bodyid[geom_2_id]) || (body_1_id == m->geom_bodyid[geom_2_id] && body_2_id == m->geom_bodyid[geom_1_id]))
 			{
-				contact_results.push_back({contact.pos[0], contact.pos[1], contact.pos[2]});
+				std::vector<double> contact_point = {contact.pos[0], contact.pos[1], contact.pos[2]};
+				if (body_1_id == m->geom_bodyid[geom_2_id])
+				{
+					contact_point.push_back(contact.frame[0]);
+					contact_point.push_back(contact.frame[1]);
+					contact_point.push_back(contact.frame[2]);
+				}
+				else
+				{
+					contact_point.push_back(-contact.frame[0]);
+					contact_point.push_back(-contact.frame[1]);
+					contact_point.push_back(-contact.frame[2]);
+				}
+				contact_results.push_back(contact_point);
 			}
 		}
 	}
@@ -2074,7 +2087,20 @@ std::set<std::string> MjMultiverseClient::get_get_contact_points_response(const 
 
 			if (body_1_id == m->geom_bodyid[geom_1_id] || body_1_id == m->geom_bodyid[geom_2_id])
 			{
-				contact_results.push_back({contact.pos[0], contact.pos[1], contact.pos[2]});
+				std::vector<double> contact_point = {contact.pos[0], contact.pos[1], contact.pos[2]};
+				if (body_1_id == m->geom_bodyid[geom_2_id])
+				{
+					contact_point.push_back(contact.frame[0]);
+					contact_point.push_back(contact.frame[1]);
+					contact_point.push_back(contact.frame[2]);
+				}
+				else
+				{
+					contact_point.push_back(-contact.frame[0]);
+					contact_point.push_back(-contact.frame[1]);
+					contact_point.push_back(-contact.frame[2]);
+				}
+				contact_results.push_back(contact_point);
 			}
 		}
 	}
