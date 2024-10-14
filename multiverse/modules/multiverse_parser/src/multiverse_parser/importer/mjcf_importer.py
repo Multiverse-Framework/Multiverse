@@ -145,12 +145,12 @@ class MjcfImporter(Factory):
     def _import_body(self, mj_body) -> BodyBuilder:
         body_name = mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
 
-        if mj_body.id == 1:
+        parent_mj_body = self.mj_model.body(mj_body.parentid)
+        if parent_mj_body.id == 0:
             body_builder = self.world_builder.add_body(body_name=body_name,
                                                        parent_body_name=self._config.model_name,
                                                        body_id=mj_body.id)
         else:
-            parent_mj_body = self.mj_model.body(mj_body.parentid)
             parent_body_name = get_body_name(parent_mj_body)
             if self._config.with_physics and mj_body.jntnum[0] > 0:
                 body_builder = self.world_builder.add_body(body_name=body_name,
