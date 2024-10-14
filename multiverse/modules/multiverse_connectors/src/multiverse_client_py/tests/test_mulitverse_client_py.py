@@ -1030,7 +1030,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                                                                                        {"get_bounding_box": [
                                                                                            "link1"]},
                                                                                        {"get_bounding_box": [
-                                                                                           "panda"]}
+                                                                                           "panda", "with_children"]}
                                                                                    ]
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
