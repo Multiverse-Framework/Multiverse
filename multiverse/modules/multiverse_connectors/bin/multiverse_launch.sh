@@ -9,7 +9,7 @@ handle_sigint() {
 trap handle_sigint SIGINT
 
 NO_MULTIVERSE_SERVER=false
-COMMAND_PATTERNS=("multiverse_socket_node" "rviz" "multiverse_control_node" "mujoco" "multiverse_server")
+COMMAND_PATTERNS=("multiverse_socket_node" "rviz/rviz" "rviz2/rviz2" "multiverse_control_node" "mujoco" "multiverse_server")
 
 for arg in "$@"; do
     if [ "$arg" == "--no-multiverse-server" ]; then
