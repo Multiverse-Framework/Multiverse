@@ -2348,6 +2348,65 @@ std::string MjMultiverseClient::get_set_control_value_response(const Json::Value
 	return "success";
 }
 
+std::vector<std::string> MjMultiverseClient::get_get_bounding_box_response(const Json::Value &arguments) const
+{
+	if (!arguments.isArray() || (arguments.size() != 1 && arguments.size() != 2))
+	{
+		return {"failed (Arguments for get_bounding_box should be an array of strings with 1 or 2 elements.)"};
+	}
+
+	const std::string object_name = arguments[0].asString();
+	const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
+	if (body_id == -1)
+	{
+		return {"failed (Object " + object_name + " does not exist.)"};
+	}
+
+	std::set<int> body_ids = {body_id};
+	bool with_children = false;
+	if (arguments.size() == 2)
+	{
+		if (arguments[1].asString() != "with_children")
+		{
+			return {"failed (Second argument for get_contact_bodies should be \"with_children\".)"};
+		}
+		with_children = true;
+	}
+
+	if (with_children)
+	{
+		for (int child_body_id = body_id + 1; child_body_id < m->nbody; child_body_id++)
+		{
+			if (m->body_parentid[child_body_id] == body_id)
+			{
+				body_ids.insert(child_body_id);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	std::vector<std::string> bounding_box_results;
+	for (const int &body_id : body_ids)
+	{
+		for (int geom_id = m->body_geomadr[body_id]; geom_id < m->body_geomadr[body_id] + m->body_geomnum[body_id]; geom_id++)
+		{
+			mjtNum *aabb = m->geom_aabb + 6 * geom_id;
+			std::string bounding_box_result = "";
+			for (int i = 0; i < 6; i++)
+			{
+				bounding_box_result += std::to_string(aabb[i]) + " ";
+			}
+			bounding_box_result.pop_back();
+			bounding_box_results.push_back(bounding_box_result);
+		}
+	}
+
+	return bounding_box_results;
+}
+
 void MjMultiverseClient::bind_api_callbacks()
 {
 	const Json::Value &api_callbacks_json = response_meta_data_json["api_callbacks"];
@@ -2451,6 +2510,13 @@ void MjMultiverseClient::bind_api_callbacks_response()
 				for (const std::string &exist_response : get_exist_response(api_callback_json[api_callback_name]))
 				{
 					api_callback_response[api_callback_name].append(exist_response);
+				}
+			}
+			else if (strcmp(api_callback_name.c_str(), "get_bounding_box") == 0)
+			{
+				for (const std::string &get_bounding_box_response : get_get_bounding_box_response(api_callback_json[api_callback_name]))
+				{
+					api_callback_response[api_callback_name].append(get_bounding_box_response);
 				}
 			}
 			else if (strcmp(api_callback_name.c_str(), "set_control_value") == 0)

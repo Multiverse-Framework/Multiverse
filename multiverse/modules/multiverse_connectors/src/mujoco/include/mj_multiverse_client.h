@@ -83,6 +83,8 @@ private:
 
     std::string get_set_control_value_response(const Json::Value &arguments) const;
 
+    std::vector<std::string> get_get_bounding_box_response(const Json::Value &arguments) const;
+
 public:
     bool communicate(const bool resend_meta_data = false) override;
 
