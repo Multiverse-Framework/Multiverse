@@ -1,64 +1,5 @@
 #usda 1.0
 (
-    customLayerData = {
-        dictionary cameraSettings = {
-            dictionary Front = {
-                double3 position = (5, 0, 0)
-                double radius = 5
-            }
-            dictionary Perspective = {
-                double3 position = (2.374811500664988, 2.3748115006649884, 2.3748115633235916)
-                double3 target = (-3.978038343177559e-8, -3.978038209950796e-8, 7.956076908399723e-8)
-            }
-            dictionary Right = {
-                double3 position = (0, -5, 0)
-                double radius = 5
-            }
-            dictionary Top = {
-                double3 position = (0, 0, 5)
-                double radius = 5
-            }
-            string boundCamera = "/OmniverseKit_Persp"
-        }
-        dictionary omni_layer = {
-            string authoring_layer = "./ur5e.usda"
-        }
-        dictionary renderSettings = {
-            float3 "rtx:debugView:pixelDebug:textColor" = (0, 1e18, 0)
-            float3 "rtx:fog:fogColor" = (0.75, 0.75, 0.75)
-            float3 "rtx:index:backgroundColor" = (0, 0, 0)
-            float3 "rtx:index:regionOfInterestMax" = (0, 0, 0)
-            float3 "rtx:index:regionOfInterestMin" = (0, 0, 0)
-            float3 "rtx:post:backgroundZeroAlpha:backgroundDefaultColor" = (0, 0, 0)
-            float3 "rtx:post:colorcorr:contrast" = (1, 1, 1)
-            float3 "rtx:post:colorcorr:gain" = (1, 1, 1)
-            float3 "rtx:post:colorcorr:gamma" = (1, 1, 1)
-            float3 "rtx:post:colorcorr:offset" = (0, 0, 0)
-            float3 "rtx:post:colorcorr:saturation" = (1, 1, 1)
-            float3 "rtx:post:colorgrad:blackpoint" = (0, 0, 0)
-            float3 "rtx:post:colorgrad:contrast" = (1, 1, 1)
-            float3 "rtx:post:colorgrad:gain" = (1, 1, 1)
-            float3 "rtx:post:colorgrad:gamma" = (1, 1, 1)
-            float3 "rtx:post:colorgrad:lift" = (0, 0, 0)
-            float3 "rtx:post:colorgrad:multiply" = (1, 1, 1)
-            float3 "rtx:post:colorgrad:offset" = (0, 0, 0)
-            float3 "rtx:post:colorgrad:whitepoint" = (1, 1, 1)
-            float3 "rtx:post:lensDistortion:lensFocalLengthArray" = (10, 30, 50)
-            float3 "rtx:post:lensFlares:anisoFlareFalloffX" = (450, 475, 500)
-            float3 "rtx:post:lensFlares:anisoFlareFalloffY" = (10, 10, 10)
-            float3 "rtx:post:lensFlares:cutoffPoint" = (2, 2, 2)
-            float3 "rtx:post:lensFlares:haloFlareFalloff" = (10, 10, 10)
-            float3 "rtx:post:lensFlares:haloFlareRadius" = (75, 75, 75)
-            float3 "rtx:post:lensFlares:isotropicFlareFalloff" = (50, 50, 50)
-            float3 "rtx:post:lensFlares:spectralBlurWavelengthRange" = (380, 550, 770)
-            float3 "rtx:post:tonemap:whitepoint" = (1, 1, 1)
-            float3 "rtx:raytracing:indexdirect:svoBrickSize" = (32, 32, 32)
-            float3 "rtx:raytracing:inscattering:singleScatteringAlbedo" = (0.9, 0.9, 0.9)
-            float3 "rtx:raytracing:inscattering:transmittanceColor" = (0.5, 0.5, 0.5)
-            float3 "rtx:sceneDb:ambientLightColor" = (0.1, 0.1, 0.1)
-            float2 "rtx:viewTile:resolution" = (0, 0)
-        }
-    }
     defaultPrim = "ur5e"
     metersPerUnit = 1
     upAxis = "Z"
@@ -77,102 +18,102 @@ def Mujoco "mujoco" (
         {
             def MujocoMesh "base_0"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/base_0.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/base_0.stl@
             }
 
             def MujocoMesh "base_1"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/base_1.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/base_1.stl@
             }
 
             def MujocoMesh "shoulder_0"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/shoulder_0.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/shoulder_0.stl@
             }
 
             def MujocoMesh "shoulder_1"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/shoulder_1.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/shoulder_1.stl@
             }
 
             def MujocoMesh "shoulder_2"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/shoulder_2.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/shoulder_2.stl@
             }
 
             def MujocoMesh "upperarm_0"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/upperarm_0.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/upperarm_0.stl@
             }
 
             def MujocoMesh "upperarm_1"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/upperarm_1.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/upperarm_1.stl@
             }
 
             def MujocoMesh "upperarm_2"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/upperarm_2.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/upperarm_2.stl@
             }
 
             def MujocoMesh "upperarm_3"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/upperarm_3.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/upperarm_3.stl@
             }
 
             def MujocoMesh "forearm_0"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/forearm_0.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/forearm_0.stl@
             }
 
             def MujocoMesh "forearm_1"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/forearm_1.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/forearm_1.stl@
             }
 
             def MujocoMesh "forearm_2"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/forearm_2.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/forearm_2.stl@
             }
 
             def MujocoMesh "forearm_3"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/forearm_3.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/forearm_3.stl@
             }
 
             def MujocoMesh "wrist1_0"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/wrist1_0.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/wrist1_0.stl@
             }
 
             def MujocoMesh "wrist1_1"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/wrist1_1.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/wrist1_1.stl@
             }
 
             def MujocoMesh "wrist1_2"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/wrist1_2.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/wrist1_2.stl@
             }
 
             def MujocoMesh "wrist2_0"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/wrist2_0.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/wrist2_0.stl@
             }
 
             def MujocoMesh "wrist2_1"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/wrist2_1.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/wrist2_1.stl@
             }
 
             def MujocoMesh "wrist2_2"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/wrist2_2.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/wrist2_2.stl@
             }
 
             def MujocoMesh "wrist3"
             {
-                asset mujoco:mesh:file = @ur5e/meshes/stl/wrist3.stl@
+                asset mujoco:mesh:file = @./../meshes/stl/wrist3.stl@
             }
         }
 
@@ -217,25 +158,16 @@ def Mujoco "mujoco" (
     }
 }
 
-def Xform "ur5e" (
-    delete apiSchemas = ["PhysicsRigidBodyAPI"]
-    prepend apiSchemas = ["PhysicsMassAPI"]
-)
+def Xform "ur5e"
 {
-    point3f physics:centerOfMass = (0, 0, 0)
-    float3 physics:diagonalInertia = (0, 0, 0)
-    float physics:mass = 0
-    quatf physics:principalAxes = (1, 0, 0, 0)
-
     def Xform "base_link" (
-        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsMassAPI", "PhysicsRigidBodyAPI", "PhysxRigidBodyAPI"]
+        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
     {
         point3f mujoco:body:pos = (0, 0, 0)
         quatf mujoco:body:quat = (0.70710677, 0, 0, 0.70710677)
         point3f physics:centerOfMass = (0, 0, 0)
         float3 physics:diagonalInertia = (0.0044333315, 0.0044333315, 0.0072)
-        bool physics:kinematicEnabled = 0
         float physics:mass = 4
         quatf physics:principalAxes = (1, 0, 0, 0)
         bool physics:rigidBodyEnabled = 1
@@ -243,8 +175,8 @@ def Xform "ur5e" (
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "Geom_0" (
-            prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @./ur5e/meshes/usd/base_0.usda@</base_0>
+            prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
+            prepend references = @./../meshes/usd/base_0.usda@</base_0>
         )
         {
             rel material:binding = </ur5e/base_link/Geom_0/Materials/black>
@@ -254,8 +186,6 @@ def Xform "ur5e" (
             quatf mujoco:geom:quat = (0.4247327, 0.56532896, -0.42473835, 0.5653341)
             vector3f mujoco:geom:size = (1, 1, 1)
             uniform token mujoco:geom:type = "mesh"
-            uniform token physics:approximation = "convexHull"
-            bool physics:collisionEnabled = 1
             color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
             float[] primvars:displayOpacity = [1]
             matrix4d xformOp:transform = ( (-0.000010615485162457361, -0.0000019669532778099352, 0.9999999999417242, 0), (-0.960465541694468, -0.27839889206341883, -0.000010743405317925614, 0), (0.27839889206832286, -0.9604655417525397, 0.000001066148458628291, 0), (6.729613291636444e-7, -3.658243672095132e-7, 0.09357351479123255, 1) )
@@ -264,7 +194,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "black" (
-                    prepend references = @./ur5e/materials/usd/black.usda@</black>
+                    prepend references = @./../materials/usd/black.usda@</black>
                 )
                 {
                 }
@@ -272,8 +202,8 @@ def Xform "ur5e" (
         }
 
         def Mesh "Geom_1" (
-            prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI", "PhysicsCollisionAPI", "PhysxCollisionAPI", "PhysxConvexHullCollisionAPI", "PhysicsMeshCollisionAPI"]
-            prepend references = @./ur5e/meshes/usd/base_1.usda@</base_1>
+            prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
+            prepend references = @./../meshes/usd/base_1.usda@</base_1>
         )
         {
             rel material:binding = </ur5e/base_link/Geom_1/Materials/jointgray>
@@ -283,8 +213,6 @@ def Xform "ur5e" (
             quatf mujoco:geom:quat = (-0.22746089, 0.66952705, 0.22744595, 0.6695247)
             vector3f mujoco:geom:size = (1, 1, 1)
             uniform token mujoco:geom:type = "mesh"
-            uniform token physics:approximation = "convexHull"
-            bool physics:collisionEnabled = 1
             color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
             float[] primvars:displayOpacity = [1]
             matrix4d xformOp:transform = ( (0.000009939201961461919, -0.000018943927687808948, 0.9999999997711742, 0), (0.6091438304809984, -0.7930597665640762, -0.000021078070432112295, 0), (0.7930597667818973, 0.6091438305511072, 0.000003657195481010511, 0), (1.5050970612118353e-7, 5.029437897684572e-7, 0.03113409208382618, 1) )
@@ -293,7 +221,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "jointgray" (
-                    prepend references = @./ur5e/materials/usd/jointgray.usda@</jointgray>
+                    prepend references = @./../materials/usd/jointgray.usda@</jointgray>
                 )
                 {
                 }
@@ -322,7 +250,7 @@ def Xform "ur5e" (
     }
 
     def Xform "shoulder_link" (
-        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsMassAPI"]
+        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
     {
         point3f mujoco:body:pos = (0, 0, 0.163)
@@ -331,12 +259,13 @@ def Xform "ur5e" (
         float3 physics:diagonalInertia = (0.0102675, 0.0102675, 0.00666)
         float physics:mass = 3.7
         quatf physics:principalAxes = (1, 0, 0, 0)
+        bool physics:rigidBodyEnabled = 1
         matrix4d xformOp:transform = ( (2.220446049250313e-16, 0.9999999999999998, 0, 0), (-0.9999999999999998, 2.220446049250313e-16, 0, 0), (0, 0, 1, 0), (0, 0, 0.163, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "Geom_2" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/shoulder_0.usda@</shoulder_0>
+            prepend references = @./../meshes/usd/shoulder_0.usda@</shoulder_0>
         )
         {
             rel material:binding = </ur5e/shoulder_link/Geom_2/Materials/urblue>
@@ -354,7 +283,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "urblue" (
-                    prepend references = @./ur5e/materials/usd/urblue.usda@</urblue>
+                    prepend references = @./../materials/usd/urblue.usda@</urblue>
                 )
                 {
                 }
@@ -363,7 +292,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_3" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/shoulder_1.usda@</shoulder_1>
+            prepend references = @./../meshes/usd/shoulder_1.usda@</shoulder_1>
         )
         {
             rel material:binding = </ur5e/shoulder_link/Geom_3/Materials/black>
@@ -381,7 +310,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "black" (
-                    prepend references = @./ur5e/materials/usd/black.usda@</black>
+                    prepend references = @./../materials/usd/black.usda@</black>
                 )
                 {
                 }
@@ -390,7 +319,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_4" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/shoulder_2.usda@</shoulder_2>
+            prepend references = @./../meshes/usd/shoulder_2.usda@</shoulder_2>
         )
         {
             rel material:binding = </ur5e/shoulder_link/Geom_4/Materials/jointgray>
@@ -408,7 +337,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "jointgray" (
-                    prepend references = @./ur5e/materials/usd/jointgray.usda@</jointgray>
+                    prepend references = @./../materials/usd/jointgray.usda@</jointgray>
                 )
                 {
                 }
@@ -456,7 +385,7 @@ def Xform "ur5e" (
     }
 
     def Xform "upper_arm_link" (
-        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsMassAPI"]
+        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
     {
         point3f mujoco:body:pos = (0, 0.138, 0)
@@ -465,12 +394,13 @@ def Xform "ur5e" (
         float3 physics:diagonalInertia = (0.133886, 0.133886, 0.0151074)
         float physics:mass = 8.393
         quatf physics:principalAxes = (1, 0, 0, 0)
+        bool physics:rigidBodyEnabled = 1
         matrix4d xformOp:transform = ( (4.930380657631324e-32, 2.2204460492503126e-16, -0.9999999999999998, 0), (-0.9999999999999998, 2.220446049250313e-16, 0, 0), (2.2204460492503126e-16, 0.9999999999999996, 2.220446049250313e-16, 0), (-0.13799999999999998, 3.064215547965432e-17, 0.163, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "Geom_6" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/upperarm_0.usda@</upperarm_0>
+            prepend references = @./../meshes/usd/upperarm_0.usda@</upperarm_0>
         )
         {
             rel material:binding = </ur5e/upper_arm_link/Geom_6/Materials/linkgray>
@@ -488,7 +418,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "linkgray" (
-                    prepend references = @./ur5e/materials/usd/linkgray.usda@</linkgray>
+                    prepend references = @./../materials/usd/linkgray.usda@</linkgray>
                 )
                 {
                 }
@@ -497,7 +427,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_7" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/upperarm_1.usda@</upperarm_1>
+            prepend references = @./../meshes/usd/upperarm_1.usda@</upperarm_1>
         )
         {
             rel material:binding = </ur5e/upper_arm_link/Geom_7/Materials/black>
@@ -515,7 +445,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "black" (
-                    prepend references = @./ur5e/materials/usd/black.usda@</black>
+                    prepend references = @./../materials/usd/black.usda@</black>
                 )
                 {
                 }
@@ -524,7 +454,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_8" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/upperarm_2.usda@</upperarm_2>
+            prepend references = @./../meshes/usd/upperarm_2.usda@</upperarm_2>
         )
         {
             rel material:binding = </ur5e/upper_arm_link/Geom_8/Materials/jointgray>
@@ -542,7 +472,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "jointgray" (
-                    prepend references = @./ur5e/materials/usd/jointgray.usda@</jointgray>
+                    prepend references = @./../materials/usd/jointgray.usda@</jointgray>
                 )
                 {
                 }
@@ -551,7 +481,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_9" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/upperarm_3.usda@</upperarm_3>
+            prepend references = @./../meshes/usd/upperarm_3.usda@</upperarm_3>
         )
         {
             rel material:binding = </ur5e/upper_arm_link/Geom_9/Materials/urblue>
@@ -569,7 +499,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "urblue" (
-                    prepend references = @./ur5e/materials/usd/urblue.usda@</urblue>
+                    prepend references = @./../materials/usd/urblue.usda@</urblue>
                 )
                 {
                 }
@@ -636,7 +566,7 @@ def Xform "ur5e" (
     }
 
     def Xform "forearm_link" (
-        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsMassAPI"]
+        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
     {
         point3f mujoco:body:pos = (0, -0.131, 0.425)
@@ -645,12 +575,13 @@ def Xform "ur5e" (
         float3 physics:diagonalInertia = (0.0311796, 0.0311796, 0.004095)
         float physics:mass = 2.275
         quatf physics:principalAxes = (1, 0, 0, 0)
+        bool physics:rigidBodyEnabled = 1
         matrix4d xformOp:transform = ( (4.930380657631324e-32, 2.2204460492503126e-16, -0.9999999999999998, 0), (-0.9999999999999998, 2.220446049250313e-16, 0, 0), (2.2204460492503126e-16, 0.9999999999999996, 2.220446049250313e-16, 0), (-0.006999999999999923, 0.4249999999999998, 0.1630000000000001, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "Geom_12" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/forearm_0.usda@</forearm_0>
+            prepend references = @./../meshes/usd/forearm_0.usda@</forearm_0>
         )
         {
             rel material:binding = </ur5e/forearm_link/Geom_12/Materials/urblue>
@@ -668,7 +599,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "urblue" (
-                    prepend references = @./ur5e/materials/usd/urblue.usda@</urblue>
+                    prepend references = @./../materials/usd/urblue.usda@</urblue>
                 )
                 {
                 }
@@ -677,7 +608,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_13" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/forearm_1.usda@</forearm_1>
+            prepend references = @./../meshes/usd/forearm_1.usda@</forearm_1>
         )
         {
             rel material:binding = </ur5e/forearm_link/Geom_13/Materials/linkgray>
@@ -695,7 +626,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "linkgray" (
-                    prepend references = @./ur5e/materials/usd/linkgray.usda@</linkgray>
+                    prepend references = @./../materials/usd/linkgray.usda@</linkgray>
                 )
                 {
                 }
@@ -704,7 +635,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_14" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/forearm_2.usda@</forearm_2>
+            prepend references = @./../meshes/usd/forearm_2.usda@</forearm_2>
         )
         {
             rel material:binding = </ur5e/forearm_link/Geom_14/Materials/black>
@@ -722,7 +653,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "black" (
-                    prepend references = @./ur5e/materials/usd/black.usda@</black>
+                    prepend references = @./../materials/usd/black.usda@</black>
                 )
                 {
                 }
@@ -731,7 +662,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_15" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/forearm_3.usda@</forearm_3>
+            prepend references = @./../meshes/usd/forearm_3.usda@</forearm_3>
         )
         {
             rel material:binding = </ur5e/forearm_link/Geom_15/Materials/jointgray>
@@ -749,7 +680,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "jointgray" (
-                    prepend references = @./ur5e/materials/usd/jointgray.usda@</jointgray>
+                    prepend references = @./../materials/usd/jointgray.usda@</jointgray>
                 )
                 {
                 }
@@ -816,7 +747,7 @@ def Xform "ur5e" (
     }
 
     def Xform "wrist_1_link" (
-        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsMassAPI"]
+        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
     {
         point3f mujoco:body:pos = (0, 0, 0.392)
@@ -825,12 +756,13 @@ def Xform "ur5e" (
         float3 physics:diagonalInertia = (0.0025599, 0.0025599, 0.0021942)
         float physics:mass = 1.219
         quatf physics:principalAxes = (1, 0, 0, 0)
+        bool physics:rigidBodyEnabled = 1
         matrix4d xformOp:transform = ( (-2.220446049250312e-16, -0.9999999999999993, -4.440892098500625e-16, 0), (-0.9999999999999998, 2.220446049250313e-16, 0, 0), (9.860761315262645e-32, 4.440892098500624e-16, -0.9999999999999996, 0), (-0.006999999999999836, 0.8169999999999997, 0.16300000000000017, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "Geom_18" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/wrist1_0.usda@</wrist1_0>
+            prepend references = @./../meshes/usd/wrist1_0.usda@</wrist1_0>
         )
         {
             rel material:binding = </ur5e/wrist_1_link/Geom_18/Materials/black>
@@ -848,7 +780,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "black" (
-                    prepend references = @./ur5e/materials/usd/black.usda@</black>
+                    prepend references = @./../materials/usd/black.usda@</black>
                 )
                 {
                 }
@@ -857,7 +789,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_19" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/wrist1_1.usda@</wrist1_1>
+            prepend references = @./../meshes/usd/wrist1_1.usda@</wrist1_1>
         )
         {
             rel material:binding = </ur5e/wrist_1_link/Geom_19/Materials/urblue>
@@ -875,7 +807,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "urblue" (
-                    prepend references = @./ur5e/materials/usd/urblue.usda@</urblue>
+                    prepend references = @./../materials/usd/urblue.usda@</urblue>
                 )
                 {
                 }
@@ -884,7 +816,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_20" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/wrist1_2.usda@</wrist1_2>
+            prepend references = @./../meshes/usd/wrist1_2.usda@</wrist1_2>
         )
         {
             rel material:binding = </ur5e/wrist_1_link/Geom_20/Materials/jointgray>
@@ -902,7 +834,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "jointgray" (
-                    prepend references = @./ur5e/materials/usd/jointgray.usda@</jointgray>
+                    prepend references = @./../materials/usd/jointgray.usda@</jointgray>
                 )
                 {
                 }
@@ -950,7 +882,7 @@ def Xform "ur5e" (
     }
 
     def Xform "wrist_2_link" (
-        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsMassAPI"]
+        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
     {
         point3f mujoco:body:pos = (0, 0.127, 0)
@@ -959,12 +891,13 @@ def Xform "ur5e" (
         float3 physics:diagonalInertia = (0.0025599, 0.0025599, 0.0021942)
         float physics:mass = 1.219
         quatf physics:principalAxes = (1, 0, 0, 0)
+        bool physics:rigidBodyEnabled = 1
         matrix4d xformOp:transform = ( (-2.220446049250312e-16, -0.9999999999999993, -4.440892098500625e-16, 0), (-0.9999999999999998, 2.220446049250313e-16, 0, 0), (9.860761315262645e-32, 4.440892098500624e-16, -0.9999999999999996, 0), (-0.1339999999999998, 0.8169999999999997, 0.16300000000000017, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "Geom_22" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/wrist2_0.usda@</wrist2_0>
+            prepend references = @./../meshes/usd/wrist2_0.usda@</wrist2_0>
         )
         {
             rel material:binding = </ur5e/wrist_2_link/Geom_22/Materials/black>
@@ -982,7 +915,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "black" (
-                    prepend references = @./ur5e/materials/usd/black.usda@</black>
+                    prepend references = @./../materials/usd/black.usda@</black>
                 )
                 {
                 }
@@ -991,7 +924,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_23" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/wrist2_1.usda@</wrist2_1>
+            prepend references = @./../meshes/usd/wrist2_1.usda@</wrist2_1>
         )
         {
             rel material:binding = </ur5e/wrist_2_link/Geom_23/Materials/urblue>
@@ -1009,7 +942,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "urblue" (
-                    prepend references = @./ur5e/materials/usd/urblue.usda@</urblue>
+                    prepend references = @./../materials/usd/urblue.usda@</urblue>
                 )
                 {
                 }
@@ -1018,7 +951,7 @@ def Xform "ur5e" (
 
         def Mesh "Geom_24" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/wrist2_2.usda@</wrist2_2>
+            prepend references = @./../meshes/usd/wrist2_2.usda@</wrist2_2>
         )
         {
             rel material:binding = </ur5e/wrist_2_link/Geom_24/Materials/jointgray>
@@ -1036,7 +969,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "jointgray" (
-                    prepend references = @./ur5e/materials/usd/jointgray.usda@</jointgray>
+                    prepend references = @./../materials/usd/jointgray.usda@</jointgray>
                 )
                 {
                 }
@@ -1103,7 +1036,7 @@ def Xform "ur5e" (
     }
 
     def Xform "wrist_3_link" (
-        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsMassAPI"]
+        prepend apiSchemas = ["MujocoBodyAPI", "PhysicsRigidBodyAPI", "PhysicsMassAPI"]
     )
     {
         point3f mujoco:body:pos = (0, 0, 0.1)
@@ -1112,12 +1045,13 @@ def Xform "ur5e" (
         float3 physics:diagonalInertia = (0.000132134, 0.0000990863, 0.0000990863)
         float physics:mass = 0.1889
         quatf physics:principalAxes = (0.70710677, 0, 0, 0.70710677)
+        bool physics:rigidBodyEnabled = 1
         matrix4d xformOp:transform = ( (-2.220446049250312e-16, -0.9999999999999993, -4.440892098500625e-16, 0), (-0.9999999999999998, 2.220446049250313e-16, 0, 0), (9.860761315262645e-32, 4.440892098500624e-16, -0.9999999999999996, 0), (-0.1339999999999998, 0.8169999999999997, 0.06300000000000021, 1) )
         uniform token[] xformOpOrder = ["xformOp:transform"]
 
         def Mesh "Geom_27" (
             prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
-            prepend references = @./ur5e/meshes/usd/wrist3.usda@</wrist3>
+            prepend references = @./../meshes/usd/wrist3.usda@</wrist3>
         )
         {
             rel material:binding = </ur5e/wrist_3_link/Geom_27/Materials/linkgray>
@@ -1135,7 +1069,7 @@ def Xform "ur5e" (
             def Scope "Materials"
             {
                 def Material "linkgray" (
-                    prepend references = @./ur5e/materials/usd/linkgray.usda@</linkgray>
+                    prepend references = @./../materials/usd/linkgray.usda@</linkgray>
                 )
                 {
                 }
