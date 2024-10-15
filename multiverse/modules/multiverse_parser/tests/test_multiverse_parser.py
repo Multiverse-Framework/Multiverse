@@ -52,7 +52,7 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
         inertia_sources = [InertiaSource.FROM_SRC, InertiaSource.FROM_VISUAL_MESH, InertiaSource.FROM_COLLISION_MESH,
                            InertiaSource.FROM_SRC]
 
-        for i in range(1):
+        for i in range(4):
             factory = importer(file_path=input_path,
                                fixed_base=fixed_base,
                                with_physics=with_physics,
