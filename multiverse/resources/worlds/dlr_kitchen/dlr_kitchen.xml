@@ -1,0 +1,316 @@
+<?xml version="1.0" ?>
+<mujoco model="dlr_kitchen">
+	<compiler meshdir="dlr_kitchen/meshes" texturedir="dlr_kitchen/textures" angle="radian" autolimits="true" inertiafromgeom="false"/>
+	<default>
+		<default class="dlr_kitchen_visual">
+			<geom contype="0" conaffinity="0"/>
+		</default>
+		<default class="dlr_kitchen_collision">
+			<geom rgba="0.9 0.9 0.9 0.0"/>
+		</default>
+	</default>
+	<asset>
+		<mesh name="Kitchenette" file="stl/Kitchenette.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_001" file="stl/UCX_Kitchenette_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_002" file="stl/UCX_Kitchenette_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_003" file="stl/UCX_Kitchenette_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_004" file="stl/UCX_Kitchenette_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_005" file="stl/UCX_Kitchenette_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_006" file="stl/UCX_Kitchenette_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_007" file="stl/UCX_Kitchenette_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_008" file="stl/UCX_Kitchenette_008.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_009" file="stl/UCX_Kitchenette_009.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_010" file="stl/UCX_Kitchenette_010.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_011" file="stl/UCX_Kitchenette_011.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_012" file="stl/UCX_Kitchenette_012.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_013" file="stl/UCX_Kitchenette_013.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_014" file="stl/UCX_Kitchenette_014.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_015" file="stl/UCX_Kitchenette_015.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Kitchenette_016" file="stl/UCX_Kitchenette_016.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="Drawer_01" file="stl/Drawer_01.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_01_001" file="stl/UCX_Drawer_01_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_01_002" file="stl/UCX_Drawer_01_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_01_003" file="stl/UCX_Drawer_01_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_01_004" file="stl/UCX_Drawer_01_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_01_005" file="stl/UCX_Drawer_01_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_01_006" file="stl/UCX_Drawer_01_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_01_007" file="stl/UCX_Drawer_01_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="DrawerHandle" file="stl/DrawerHandle.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_DrawerHandle_001" file="stl/UCX_DrawerHandle_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_DrawerHandle_002" file="stl/UCX_DrawerHandle_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_DrawerHandle_003" file="stl/UCX_DrawerHandle_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="Drawer_02" file="stl/Drawer_02.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_02_001" file="stl/UCX_Drawer_02_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_02_002" file="stl/UCX_Drawer_02_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_02_003" file="stl/UCX_Drawer_02_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_02_004" file="stl/UCX_Drawer_02_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_02_005" file="stl/UCX_Drawer_02_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_02_006" file="stl/UCX_Drawer_02_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_02_007" file="stl/UCX_Drawer_02_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="Drawer_03" file="stl/Drawer_03.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_03_001" file="stl/UCX_Drawer_03_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_03_002" file="stl/UCX_Drawer_03_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_03_003" file="stl/UCX_Drawer_03_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_03_004" file="stl/UCX_Drawer_03_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_03_005" file="stl/UCX_Drawer_03_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_03_006" file="stl/UCX_Drawer_03_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_03_007" file="stl/UCX_Drawer_03_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="OvenDoor" file="stl/OvenDoor.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDoor_001" file="stl/UCX_OvenDoor_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="OvenDoorHandle" file="stl/OvenDoorHandle.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDoorHandle_001" file="stl/UCX_OvenDoorHandle_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDoorHandle_002" file="stl/UCX_OvenDoorHandle_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDoorHandle_003" file="stl/UCX_OvenDoorHandle_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="OvenDrawer" file="stl/OvenDrawer.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDrawer_001" file="stl/UCX_OvenDrawer_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDrawer_002" file="stl/UCX_OvenDrawer_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDrawer_003" file="stl/UCX_OvenDrawer_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDrawer_004" file="stl/UCX_OvenDrawer_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDrawer_005" file="stl/UCX_OvenDrawer_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDrawer_006" file="stl/UCX_OvenDrawer_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_OvenDrawer_007" file="stl/UCX_OvenDrawer_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="Drawer_04" file="stl/Drawer_04.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_04_001" file="stl/UCX_Drawer_04_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_04_002" file="stl/UCX_Drawer_04_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_04_003" file="stl/UCX_Drawer_04_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_04_004" file="stl/UCX_Drawer_04_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_04_005" file="stl/UCX_Drawer_04_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_04_006" file="stl/UCX_Drawer_04_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_04_007" file="stl/UCX_Drawer_04_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="Drawer_05" file="stl/Drawer_05.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_05_001" file="stl/UCX_Drawer_05_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_05_002" file="stl/UCX_Drawer_05_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_05_003" file="stl/UCX_Drawer_05_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_05_004" file="stl/UCX_Drawer_05_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_05_005" file="stl/UCX_Drawer_05_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_05_006" file="stl/UCX_Drawer_05_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_05_007" file="stl/UCX_Drawer_05_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="Drawer_06" file="stl/Drawer_06.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_06_001" file="stl/UCX_Drawer_06_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_06_002" file="stl/UCX_Drawer_06_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_06_003" file="stl/UCX_Drawer_06_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_06_004" file="stl/UCX_Drawer_06_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_06_005" file="stl/UCX_Drawer_06_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_06_006" file="stl/UCX_Drawer_06_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Drawer_06_007" file="stl/UCX_Drawer_06_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="Fridge" file="stl/Fridge.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Fridge_001" file="stl/UCX_Fridge_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Fridge_002" file="stl/UCX_Fridge_002.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Fridge_003" file="stl/UCX_Fridge_003.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Fridge_004" file="stl/UCX_Fridge_004.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Fridge_005" file="stl/UCX_Fridge_005.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Fridge_006" file="stl/UCX_Fridge_006.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Fridge_007" file="stl/UCX_Fridge_007.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_Fridge_008" file="stl/UCX_Fridge_008.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="FridgeDoor" file="stl/FridgeDoor.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_FridgeDoor_001" file="stl/UCX_FridgeDoor_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="FridgeDoorHandle" file="stl/FridgeDoorHandle.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_FridgeDoorHandle_001" file="stl/UCX_FridgeDoorHandle_001.stl" scale="1.0 1.0 1.0"/>
+		<mesh name="UCX_FridgeDoorHandle_002" file="stl/UCX_FridgeDoorHandle_002.stl" scale="1.0 1.0 1.0"/>
+	</asset>
+	<asset>
+		<texture type="2d" name="texplane" builtin="checker" mark="cross" rgb1="0.2 0.3 0.4" rgb2="0.1 0.15 0.2" markrgb="0.8 0.8 0.8" width="512" height="512"/>
+		<material name="matplane" texture="texplane" texuniform="true" reflectance="0.3"/>
+	</asset>
+	<visual>
+		<global azimuth="115" elevation="-20"/>
+	</visual>
+	<worldbody>
+		<geom name="ground" size="0 0 1" type="plane" condim="1" material="matplane"/>
+		<light pos="2 2 2" dir="0 0 -1" directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2"/>
+	</worldbody>
+	<worldbody>
+		<body name="dlr_kitchen" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0">
+			<body name="kitchenette" pos="2.4646999835968018 3.9658401012420654 0.786208987236023" quat="0.7071054577827454 0.0 0.0 0.7071080803871155">
+				<geom name="SM_kitchenette_visual_0" type="mesh" pos="0.01387875061482191 0.007003743667155504 -0.3109070956707001" quat="0.7032521367073059 0.7102856040000916 -0.021851060912013054 0.021292179822921753" mesh="Kitchenette" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+				<geom name="SM_kitchenette_collision_0" type="mesh" pos="-0.020835012197494507 -0.8877912759780884 -0.2846946716308594" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_Kitchenette_001" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_1" type="mesh" pos="-0.029884429648518562 -0.0010682791471481323 0.12630552053451538" quat="0.4999999701976776 0.5 -0.5 0.5" mesh="UCX_Kitchenette_002" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_2" type="mesh" pos="0.02936050295829773 -0.0010682791471481323 -0.7322090268135071" quat="0.4999999701976776 0.5 -0.5 0.5" mesh="UCX_Kitchenette_003" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_3" type="mesh" pos="0.2721650302410126 0.014695748686790466 -0.2846945822238922" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Kitchenette_004" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_4" type="mesh" pos="-0.020835012197494507 0.312196284532547 -0.2846946716308594" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_Kitchenette_005" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_5" type="mesh" pos="-0.020835012197494507 -0.28280389308929443 -0.2846946716308594" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_Kitchenette_006" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_6" type="mesh" pos="0.0046520233154296875 -0.23630383610725403 -0.2506870925426483" quat="0.4999999701976776 0.5 0.5 0.5" mesh="UCX_Kitchenette_007" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_7" type="mesh" pos="0.0046520233154296875 0.26569610834121704 -0.2506870925426483" quat="0.4999999701976776 0.5 0.5 0.5" mesh="UCX_Kitchenette_008" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_8" type="mesh" pos="-0.02066776156425476 0.014696180820465088 0.04396486654877663" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Kitchenette_009" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_9" type="mesh" pos="-0.321925550699234 0.01455312967300415 0.04396486654877663" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Kitchenette_010" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_10" type="mesh" pos="0.004652008414268494 0.014696180820465088 -0.04828861355781555" quat="0.4999999701976776 0.5 -0.5 0.5" mesh="UCX_Kitchenette_011" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_11" type="mesh" pos="0.004652008414268494 0.014696180820465088 -0.4580366015434265" quat="0.4999999701976776 0.5 -0.5 0.5" mesh="UCX_Kitchenette_012" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_12" type="mesh" pos="-0.33779048919677734 0.23469609022140503 0.04781178757548332" quat="1.0 0.0 -2.3883731046225876e-06 0.0" mesh="UCX_Kitchenette_013" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_13" type="mesh" pos="-0.3375648558139801 -0.20530390739440918 0.047811783850193024" quat="1.0 0.0 -2.3831610178604024e-06 0.0" mesh="UCX_Kitchenette_014" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_14" type="mesh" pos="-0.020835012197494507 0.9076964259147644 -0.2846946716308594" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_Kitchenette_015" class="dlr_kitchen_collision"/>
+				<geom name="SM_kitchenette_collision_15" type="mesh" pos="-0.03407277166843414 0.014845117926597595 0.1472908854484558" quat="0.4999999701976776 0.5 -0.5 0.5" mesh="UCX_Kitchenette_016" class="dlr_kitchen_collision"/>
+				<body name="drawer_03" pos="-0.09700000286102295 0.6159999966621399 -0.5220000147819519" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="7.75706672668457" pos="-0.009161547757685184 -0.0003281417884863913 -0.07310584932565689" quat="-0.0004589960153680295 0.9914058446884155 0.002175996545702219 -0.1308031678199768" diaginertia="0.3856464624404907 0.4764745831489563 0.6430068016052246"/>
+					<geom name="SM_drawer_03_visual_0" type="mesh" pos="-0.017179954797029495 -0.0015816334635019302 -0.05123864486813545" quat="-0.00031783804297447205 0.7771448493003845 0.0003079549642279744 0.6293216347694397" mesh="Drawer_03" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_drawer_03_collision_0" type="mesh" pos="0.06011587753891945 0.275023877620697 -0.11386485397815704" quat="0.5190479159355164 0.48019710183143616 0.5190479159355164 0.48019710183143616" mesh="UCX_Drawer_03_001" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_03_collision_1" type="mesh" pos="0.06011587753891945 -0.275023877620697 -0.11386485397815704" quat="0.48019707202911377 0.5190479159355164 0.48019713163375854 0.5190479159355164" mesh="UCX_Drawer_03_002" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_03_collision_2" type="mesh" pos="0.06011587008833885 0.2761983275413513 0.043912939727306366" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_03_003" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_03_collision_3" type="mesh" pos="0.06011587008833885 -0.2778016924858093 0.043912943452596664" quat="0.4999999701976776 0.5 0.5 0.5" mesh="UCX_Drawer_03_004" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_03_collision_4" type="mesh" pos="0.34315192699432373 -0.0003648996353149414 -0.04758702218532562" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_03_005" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_03_collision_5" type="mesh" pos="-0.2252175211906433 -0.0008446574211120605 0.026221953332424164" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_03_006" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_03_collision_6" type="mesh" pos="0.06329088658094406 1.4901161193847656e-08 -0.14908701181411743" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_03_007" class="dlr_kitchen_collision"/>
+					<joint name="drawer_03_joint" type="slide" pos="2.220429505638062e-16 -4.440900568830099e-16 0.0" damping="1000.0" stiffness="100" range="0.0 0.4000000059604645" axis="-1.0 0.0 0.0"/>
+					<body name="drawer_03_handle" pos="-0.26072901487350464 0.0004400000034365803 0.1899079978466034" quat="-0.7071054577827454 0.7071080803871155 2.697315683516607e-28 3.0146480308171322e-28">
+						<inertial mass="0.08398304134607315" pos="0.002653492381796241 0.0012064725160598755 -7.336092949117301e-06" quat="0.464603066444397 0.5330455303192139 -0.4646094739437103 0.5330520272254944" diaginertia="8.70224630489247e-06 0.0009674709290266037 0.0009694583131931722"/>
+						<geom name="SM_drawer_03_handle_visual_0" type="mesh" pos="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" quat="0.7070499658584595 3.021659040314262e-06 7.203262157418067e-06 0.7071635723114014" mesh="DrawerHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_drawer_03_handle_collision_0" type="mesh" pos="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" quat="1.0 0.0 0.0 0.0" mesh="UCX_DrawerHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_03_handle_collision_1" type="mesh" pos="0.018011700361967087 0.0012064725160598755 0.15946051478385925" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_002" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_03_handle_collision_2" type="mesh" pos="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_003" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+				<body name="oven_door" pos="-0.3160000145435333 0.004000000189989805 -0.4860000014305115" quat="1.0 0.0 0.0 0.0" gravcomp="1">
+					<inertial mass="3.3178019523620605" pos="-0.0060904622077941895 0.010207860730588436 0.23427262902259827" quat="0.019607368856668472 0.7137647867202759 -0.019632501527667046 -0.6998356580734253" diaginertia="0.09752883017063141 0.24083243310451508 0.3382197618484497"/>
+					<geom name="SM_oven_door_visual_0" type="mesh" pos="-0.006090500857681036 0.010207847692072392 0.2317724972963333" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="OvenDoor" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_oven_door_collision_0" type="mesh" pos="-0.0060904622077941895 0.01020786166191101 0.23427261412143707" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_OvenDoor_001" class="dlr_kitchen_collision"/>
+					<joint name="oven_door_joint" type="hinge" pos="-1.6605381195899062e-21 -4.440892098500626e-16 0.0" range="0.0 1.5708000659942627" damping="100.0" axis="0.0 -1.0 0.0"/>
+					<body name="oven_door_handle" pos="-0.046932999044656754 0.015960000455379486 0.4150789976119995" quat="-0.7071054577827454 0.7071080803871155 2.697315683516607e-28 3.0146480308171322e-28" gravcomp="1">
+						<inertial mass="0.27602100372314453" pos="-0.0016785800689831376 3.294409179943614e-05 -0.006125045474618673" quat="0.37975427508354187 0.5964575409889221 -0.37989985942840576 0.596406877040863" diaginertia="5.166541086509824e-05 0.0070423283614218235 0.007072341162711382"/>
+						<geom name="SM_oven_door_handle_visual_0" type="mesh" pos="0.00421177176758647 0.0022791714873164892 -0.004971041809767485" quat="0.5192747712135315 4.6001612645341083e-05 6.705335545120761e-05 0.854607343673706" mesh="OvenDoorHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_oven_door_handle_collision_0" type="mesh" pos="0.01523653045296669 0.007637110073119402 0.22170116007328033" quat="0.35202839970588684 0.35202839970588684 0.6132503747940063 0.6132503747940063" mesh="UCX_OvenDoorHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_oven_door_handle_collision_1" type="mesh" pos="0.01523653045296669 0.007637110073119402 -0.23288306593894958" quat="0.35202839970588684 0.35202839970588684 0.6132503747940063 0.6132503747940063" mesh="UCX_OvenDoorHandle_002" class="dlr_kitchen_collision"/>
+						<geom name="SM_oven_door_handle_collision_2" type="mesh" pos="-0.005733652971684933 -0.0017900086240842938 -0.0054426491260528564" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_OvenDoorHandle_003" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+				<body name="oven_drawer" pos="-0.14800000190734863 0.01600000075995922 -0.5569999814033508" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="5.920633316040039" pos="0.0732821673154831 -0.009599477052688599 -0.06487834453582764" quat="0.9967547655105591 0.0012570364633575082 0.06318791955709457 -0.04985636845231056" diaginertia="0.24096080660820007 0.3055170774459839 0.487155020236969"/>
+					<geom name="SM_oven_drawer_visual_0" type="mesh" pos="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" quat="-8.035358041524887e-05 0.6993697881698608 8.424239786108956e-05 0.7147600054740906" mesh="OvenDrawer" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_oven_drawer_collision_0" type="mesh" pos="0.11408046633005142 -0.001999989151954651 -0.08638660609722137" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_OvenDrawer_001" class="dlr_kitchen_collision"/>
+					<geom name="SM_oven_drawer_collision_1" type="mesh" pos="-0.17442794144153595 -0.0008446574211120605 -0.0429198332130909" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_OvenDrawer_002" class="dlr_kitchen_collision"/>
+					<geom name="SM_oven_drawer_collision_2" type="mesh" pos="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_OvenDrawer_003" class="dlr_kitchen_collision"/>
+					<geom name="SM_oven_drawer_collision_3" type="mesh" pos="0.11090544611215591 -0.2778016924858093 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_OvenDrawer_004" class="dlr_kitchen_collision"/>
+					<geom name="SM_oven_drawer_collision_4" type="mesh" pos="0.11090544611215591 0.2741983234882355 0.03661312907934189" quat="0.4999999701976776 0.5 0.5 0.5" mesh="UCX_OvenDrawer_005" class="dlr_kitchen_collision"/>
+					<geom name="SM_oven_drawer_collision_5" type="mesh" pos="0.11090545356273651 -0.275023877620697 -0.051164474338293076" quat="0.48019710183143616 0.5190479159355164 0.48019713163375854 0.5190479159355164" mesh="UCX_OvenDrawer_006" class="dlr_kitchen_collision"/>
+					<geom name="SM_oven_drawer_collision_6" type="mesh" pos="0.11090546101331711 0.2729228436946869 -0.052538223564624786" quat="0.5186224579811096 0.48065656423568726 0.5186225175857544 0.48065656423568726" mesh="UCX_OvenDrawer_007" class="dlr_kitchen_collision"/>
+					<joint name="oven_drawer_joint" type="slide" pos="0.0 0.0 0.0" damping="1000.0" stiffness="100" range="0.0 0.4000000059604645" axis="-1.0 0.0 0.0"/>
+					<body name="oven_drawer_handle" pos="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" quat="-0.7071054577827454 0.7071080803871155 2.697315683516607e-28 3.0146480308171322e-28">
+						<inertial mass="0.08398304134607315" pos="0.002653492381796241 0.0012064725160598755 -7.336092949117301e-06" quat="0.464603066444397 0.5330455303192139 -0.4646094739437103 0.5330520272254944" diaginertia="8.70224630489247e-06 0.0009674709290266037 0.0009694583131931722"/>
+						<geom name="SM_oven_drawer_handle_visual_0" type="mesh" pos="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" quat="0.7070499658584595 3.021659040314262e-06 7.203262157418067e-06 0.7071635723114014" mesh="DrawerHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_oven_drawer_handle_collision_0" type="mesh" pos="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" quat="1.0 0.0 0.0 0.0" mesh="UCX_DrawerHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_oven_drawer_handle_collision_1" type="mesh" pos="0.018011700361967087 0.0012064725160598755 0.15946051478385925" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_002" class="dlr_kitchen_collision"/>
+						<geom name="SM_oven_drawer_handle_collision_2" type="mesh" pos="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_003" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+				<body name="drawer_04" pos="-0.14800000190734863 -0.5839999914169312 0.0430000014603138" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="6.183145046234131" pos="0.07188066095113754 -0.00024755968479439616 -0.06287378072738647" quat="-0.00015158978931140155 0.9979493021965027 0.0003650127328000963 -0.06400767713785172" diaginertia="0.2596186697483063 0.3152993619441986 0.5144560933113098"/>
+					<geom name="SM_drawer_04_visual_0" type="mesh" pos="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" quat="-8.035358041524887e-05 0.6993697881698608 8.424239786108956e-05 0.7147600054740906" mesh="Drawer_04" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_drawer_04_collision_0" type="mesh" pos="0.11408046633005142 1.4901161193847656e-08 -0.08638661354780197" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_04_001" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_04_collision_1" type="mesh" pos="-0.17442794144153595 -0.0008446574211120605 -0.03791983425617218" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_04_002" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_04_collision_2" type="mesh" pos="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_04_003" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_04_collision_3" type="mesh" pos="0.11090544611215591 -0.2778016924858093 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_04_004" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_04_collision_4" type="mesh" pos="0.11090544611215591 0.2761983275413513 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_04_005" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_04_collision_5" type="mesh" pos="0.11090545356273651 -0.275023877620697 -0.051164474338293076" quat="0.48019710183143616 0.5190479159355164 0.48019713163375854 0.5190479159355164" mesh="UCX_Drawer_04_006" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_04_collision_6" type="mesh" pos="0.11090545356273651 0.275023877620697 -0.051164474338293076" quat="0.5190479159355164 0.48019710183143616 0.5190479159355164 0.48019710183143616" mesh="UCX_Drawer_04_007" class="dlr_kitchen_collision"/>
+					<joint name="drawer_04_joint" type="slide" pos="0.0 0.0 0.0" damping="1000.0" stiffness="100" range="0.0 0.4000000059604645" axis="-1.0 0.0 0.0"/>
+					<body name="drawer_04_handle" pos="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" quat="-0.7071054577827454 0.7071080803871155 2.697315683516607e-28 3.0146480308171322e-28">
+						<inertial mass="0.08398304134607315" pos="0.002653492381796241 0.0012064725160598755 -7.336092949117301e-06" quat="0.464603066444397 0.5330455303192139 -0.4646094739437103 0.5330520272254944" diaginertia="8.70224630489247e-06 0.0009674709290266037 0.0009694583131931722"/>
+						<geom name="SM_drawer_04_handle_visual_0" type="mesh" pos="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" quat="0.7070499658584595 3.021659040314262e-06 7.203262157418067e-06 0.7071635723114014" mesh="DrawerHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_drawer_04_handle_collision_0" type="mesh" pos="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" quat="1.0 0.0 0.0 0.0" mesh="UCX_DrawerHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_04_handle_collision_1" type="mesh" pos="0.018011700361967087 0.0012064725160598755 0.15946051478385925" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_002" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_04_handle_collision_2" type="mesh" pos="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_003" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+				<body name="drawer_05" pos="-0.14800000190734863 -0.5839999914169312 -0.15700000524520874" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="6.183145046234131" pos="0.07188066095113754 -0.00024755968479439616 -0.06287378072738647" quat="-0.00015158978931140155 0.9979493021965027 0.0003650127328000963 -0.06400767713785172" diaginertia="0.2596186697483063 0.3152993619441986 0.5144560933113098"/>
+					<geom name="SM_drawer_05_visual_0" type="mesh" pos="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" quat="-8.035358041524887e-05 0.6993697881698608 8.424239786108956e-05 0.7147600054740906" mesh="Drawer_05" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_drawer_05_collision_0" type="mesh" pos="0.11408046633005142 1.4901161193847656e-08 -0.08638661354780197" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_05_001" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_05_collision_1" type="mesh" pos="-0.17442794144153595 -0.0008446574211120605 -0.03791983425617218" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_05_002" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_05_collision_2" type="mesh" pos="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_05_003" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_05_collision_3" type="mesh" pos="0.11090544611215591 -0.2778016924858093 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_05_004" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_05_collision_4" type="mesh" pos="0.11090544611215591 0.2761983275413513 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_05_005" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_05_collision_5" type="mesh" pos="0.11090545356273651 -0.275023877620697 -0.051164474338293076" quat="0.48019710183143616 0.5190479159355164 0.48019713163375854 0.5190479159355164" mesh="UCX_Drawer_05_006" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_05_collision_6" type="mesh" pos="0.11090545356273651 0.275023877620697 -0.051164474338293076" quat="0.5190479159355164 0.48019710183143616 0.5190479159355164 0.48019710183143616" mesh="UCX_Drawer_05_007" class="dlr_kitchen_collision"/>
+					<joint name="drawer_05_joint" type="slide" pos="0.0 0.0 0.0" damping="1000.0" stiffness="100" range="0.0 0.4000000059604645" axis="-1.0 0.0 0.0"/>
+					<body name="drawer_05_handle" pos="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" quat="-0.7071054577827454 0.7071080803871155 2.697315683516607e-28 3.0146480308171322e-28">
+						<inertial mass="0.08398304134607315" pos="0.002653492381796241 0.0012064725160598755 -7.336092949117301e-06" quat="0.464603066444397 0.5330455303192139 -0.4646094739437103 0.5330520272254944" diaginertia="8.70224630489247e-06 0.0009674709290266037 0.0009694583131931722"/>
+						<geom name="SM_drawer_05_handle_visual_0" type="mesh" pos="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" quat="0.7070499658584595 3.021659040314262e-06 7.203262157418067e-06 0.7071635723114014" mesh="DrawerHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_drawer_05_handle_collision_0" type="mesh" pos="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" quat="1.0 0.0 0.0 0.0" mesh="UCX_DrawerHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_05_handle_collision_1" type="mesh" pos="0.018011700361967087 0.0012064725160598755 0.15946051478385925" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_002" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_05_handle_collision_2" type="mesh" pos="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_003" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+				<body name="drawer_06" pos="-0.09700000286102295 -0.5839999914169312 -0.5220000147819519" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="7.75706672668457" pos="-0.009161547757685184 -0.0003281417884863913 -0.07310584932565689" quat="-0.0004589960153680295 0.9914058446884155 0.002175996545702219 -0.1308031678199768" diaginertia="0.3856464624404907 0.4764745831489563 0.6430068016052246"/>
+					<geom name="SM_drawer_06_visual_0" type="mesh" pos="-0.017179954797029495 -0.0015816334635019302 -0.05123864486813545" quat="-0.00031783804297447205 0.7771448493003845 0.0003079549642279744 0.6293216347694397" mesh="Drawer_06" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_drawer_06_collision_0" type="mesh" pos="0.06011587753891945 0.275023877620697 -0.11386485397815704" quat="0.5190479159355164 0.48019710183143616 0.5190479159355164 0.48019710183143616" mesh="UCX_Drawer_06_001" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_06_collision_1" type="mesh" pos="0.06011587753891945 -0.275023877620697 -0.11386485397815704" quat="0.48019707202911377 0.5190479159355164 0.48019713163375854 0.5190479159355164" mesh="UCX_Drawer_06_002" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_06_collision_2" type="mesh" pos="0.06011587008833885 0.2761983275413513 0.043912939727306366" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_06_003" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_06_collision_3" type="mesh" pos="0.06011587008833885 -0.2778016924858093 0.043912943452596664" quat="0.4999999701976776 0.5 0.5 0.5" mesh="UCX_Drawer_06_004" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_06_collision_4" type="mesh" pos="0.34315192699432373 -0.0003648996353149414 -0.04758702218532562" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_06_005" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_06_collision_5" type="mesh" pos="-0.2252175211906433 -0.0008446574211120605 0.026221953332424164" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_06_006" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_06_collision_6" type="mesh" pos="0.06329088658094406 1.4901161193847656e-08 -0.14908701181411743" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_06_007" class="dlr_kitchen_collision"/>
+					<joint name="drawer_06_joint" type="slide" pos="0.0 0.0 0.0" damping="1000.0" stiffness="100" range="0.0 0.4000000059604645" axis="-1.0 0.0 0.0"/>
+					<body name="drawer_06_handle" pos="-0.26072901487350464 0.0004400000034365803 0.1899079978466034" quat="-0.7071054577827454 0.7071080803871155 2.697315683516607e-28 3.0146480308171322e-28">
+						<inertial mass="0.08398304134607315" pos="0.002653492381796241 0.0012064725160598755 -7.336092949117301e-06" quat="0.464603066444397 0.5330455303192139 -0.4646094739437103 0.5330520272254944" diaginertia="8.70224630489247e-06 0.0009674709290266037 0.0009694583131931722"/>
+						<geom name="SM_drawer_06_handle_visual_0" type="mesh" pos="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" quat="0.7070499658584595 3.021659040314262e-06 7.203262157418067e-06 0.7071635723114014" mesh="DrawerHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_drawer_06_handle_collision_0" type="mesh" pos="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" quat="1.0 0.0 0.0 0.0" mesh="UCX_DrawerHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_06_handle_collision_1" type="mesh" pos="0.018011700361967087 0.0012064725160598755 0.15946051478385925" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_002" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_06_handle_collision_2" type="mesh" pos="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_003" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+				<body name="drawer_01" pos="-0.14800000190734863 0.6159999966621399 0.0430000014603138" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="6.183145046234131" pos="0.07188066095113754 -0.00024755968479439616 -0.06287378072738647" quat="-0.00015158978931140155 0.9979493021965027 0.0003650127328000963 -0.06400767713785172" diaginertia="0.2596186697483063 0.3152993619441986 0.5144560933113098"/>
+					<geom name="SM_drawer_01_visual_0" type="mesh" pos="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" quat="-8.035358041524887e-05 0.6993697881698608 8.424239786108956e-05 0.7147600054740906" mesh="Drawer_01" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_drawer_01_collision_0" type="mesh" pos="0.11408046633005142 1.4901161193847656e-08 -0.08638661354780197" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_01_001" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_01_collision_1" type="mesh" pos="-0.17442794144153595 -0.0008446574211120605 -0.03791983425617218" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_01_002" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_01_collision_2" type="mesh" pos="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_01_003" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_01_collision_3" type="mesh" pos="0.11090544611215591 -0.2778016924858093 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_01_004" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_01_collision_4" type="mesh" pos="0.11090544611215591 0.2761983275413513 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_01_005" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_01_collision_5" type="mesh" pos="0.11090545356273651 -0.275023877620697 -0.051164474338293076" quat="0.48019710183143616 0.5190479159355164 0.48019713163375854 0.5190479159355164" mesh="UCX_Drawer_01_006" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_01_collision_6" type="mesh" pos="0.11090545356273651 0.275023877620697 -0.051164474338293076" quat="0.5190479159355164 0.48019710183143616 0.5190479159355164 0.48019710183143616" mesh="UCX_Drawer_01_007" class="dlr_kitchen_collision"/>
+					<joint name="drawer_01_joint" type="slide" pos="2.220446049250313e-16 -8.302690597949531e-22 0.0" damping="1000.0" stiffness="100" range="0.0 0.4000000059604645" axis="-1.0 0.0 0.0"/>
+					<body name="drawer_01_handle" pos="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" quat="-0.7071054577827454 0.7071080803871155 2.697315683516607e-28 3.0146480308171322e-28">
+						<inertial mass="0.08398304134607315" pos="0.002653492381796241 0.0012064725160598755 -7.336092949117301e-06" quat="0.464603066444397 0.5330455303192139 -0.4646094739437103 0.5330520272254944" diaginertia="8.70224630489247e-06 0.0009674709290266037 0.0009694583131931722"/>
+						<geom name="SM_drawer_01_handle_visual_0" type="mesh" pos="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" quat="0.7070499658584595 3.021659040314262e-06 7.203262157418067e-06 0.7071635723114014" mesh="DrawerHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_drawer_01_handle_collision_0" type="mesh" pos="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" quat="1.0 0.0 0.0 0.0" mesh="UCX_DrawerHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_01_handle_collision_1" type="mesh" pos="0.018011700361967087 0.0012064725160598755 0.15946051478385925" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_002" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_01_handle_collision_2" type="mesh" pos="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_003" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+				<body name="drawer_02" pos="-0.14800000190734863 0.6159999966621399 -0.15700000524520874" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="6.183145046234131" pos="0.07188066095113754 -0.00024755968479439616 -0.06287378072738647" quat="-0.00015158978931140155 0.9979493021965027 0.0003650127328000963 -0.06400767713785172" diaginertia="0.2596186697483063 0.3152993619441986 0.5144560933113098"/>
+					<geom name="SM_drawer_02_visual_0" type="mesh" pos="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" quat="-8.035358041524887e-05 0.6993697881698608 8.424239786108956e-05 0.7147600054740906" mesh="Drawer_02" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_drawer_02_collision_0" type="mesh" pos="0.11408046633005142 1.4901161193847656e-08 -0.08638661354780197" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_02_001" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_02_collision_1" type="mesh" pos="-0.17442794144153595 -0.0008446574211120605 -0.03791983425617218" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_02_002" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_02_collision_2" type="mesh" pos="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" quat="0.7071067690849304 0.7071067690849304 0.0 0.0" mesh="UCX_Drawer_02_003" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_02_collision_3" type="mesh" pos="0.11090544611215591 -0.2778016924858093 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_02_004" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_02_collision_4" type="mesh" pos="0.11090544611215591 0.2761983275413513 0.03661312907934189" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Drawer_02_005" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_02_collision_5" type="mesh" pos="0.11090545356273651 -0.275023877620697 -0.051164474338293076" quat="0.48019710183143616 0.5190479159355164 0.48019713163375854 0.5190479159355164" mesh="UCX_Drawer_02_006" class="dlr_kitchen_collision"/>
+					<geom name="SM_drawer_02_collision_6" type="mesh" pos="0.11090545356273651 0.275023877620697 -0.051164474338293076" quat="0.5190479159355164 0.48019710183143616 0.5190479159355164 0.48019710183143616" mesh="UCX_Drawer_02_007" class="dlr_kitchen_collision"/>
+					<joint name="drawer_02_joint" type="slide" pos="2.220446049250313e-16 -8.302690597949531e-22 0.0" damping="1000.0" stiffness="100" range="0.0 0.4000000059604645" axis="-1.0 0.0 0.0"/>
+					<body name="drawer_02_handle" pos="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" quat="-0.7071054577827454 0.7071080803871155 2.697315683516607e-28 3.0146480308171322e-28">
+						<inertial mass="0.08398304134607315" pos="0.002653492381796241 0.0012064725160598755 -7.336092949117301e-06" quat="0.464603066444397 0.5330455303192139 -0.4646094739437103 0.5330520272254944" diaginertia="8.70224630489247e-06 0.0009674709290266037 0.0009694583131931722"/>
+						<geom name="SM_drawer_02_handle_visual_0" type="mesh" pos="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" quat="0.7070499658584595 3.021659040314262e-06 7.203262157418067e-06 0.7071635723114014" mesh="DrawerHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_drawer_02_handle_collision_0" type="mesh" pos="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" quat="1.0 0.0 0.0 0.0" mesh="UCX_DrawerHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_02_handle_collision_1" type="mesh" pos="0.018011700361967087 0.0012064725160598755 0.15946051478385925" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_002" class="dlr_kitchen_collision"/>
+						<geom name="SM_drawer_02_handle_collision_2" type="mesh" pos="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_DrawerHandle_003" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+			</body>
+			<body name="fridge" pos="1.1964999437332153 3.903700113296509 0.9268059730529785" quat="0.7071054577827454 0.0 0.0 0.7071080803871155">
+				<inertial mass="570.9093627929688" pos="0.0594177320599556 -0.0009650051943026483 -0.11288334429264069" quat="-0.4827059805393219 -0.49052608013153076 -0.5086747407913208 0.5173287987709045" diaginertia="38.54607009887695 180.4210662841797 183.1431884765625"/>
+				<geom name="SM_fridge_visual_0" type="mesh" pos="0.011897856369614601 -0.00034987725666724145 0.019825316965579987" quat="0.7331607937812805 0.01451730914413929 0.015284528955817223 0.6797285079956055" mesh="Fridge" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+				<geom name="SM_fridge_collision_0" type="mesh" pos="0.04630070924758911 -0.0010071992874145508 0.9126619100570679" quat="-3.0908619663705394e-08 0.7071067690849304 3.0908619663705394e-08 0.7071067690849304" mesh="UCX_Fridge_001" class="dlr_kitchen_collision"/>
+				<geom name="SM_fridge_collision_1" type="mesh" pos="0.04630070924758911 -0.0010071992874145508 -0.34483811259269714" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_Fridge_002" class="dlr_kitchen_collision"/>
+				<geom name="SM_fridge_collision_2" type="mesh" pos="-0.27307605743408203 -0.0010071992874145508 -0.5025707483291626" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_003" class="dlr_kitchen_collision"/>
+				<geom name="SM_fridge_collision_3" type="mesh" pos="-0.308070570230484 0.29172080755233765 -0.19446273148059845" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_Fridge_004" class="dlr_kitchen_collision"/>
+				<geom name="SM_fridge_collision_4" type="mesh" pos="-0.3208375871181488 0.27221110463142395 -0.19446273148059845" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_005" class="dlr_kitchen_collision"/>
+				<geom name="SM_fridge_collision_5" type="mesh" pos="0.04630070924758911 0.2714942693710327 0.5531941652297974" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_Fridge_006" class="dlr_kitchen_collision"/>
+				<geom name="SM_fridge_collision_6" type="mesh" pos="0.04630070924758911 -0.2735057473182678 0.5531941652297974" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_Fridge_007" class="dlr_kitchen_collision"/>
+				<geom name="SM_fridge_collision_7" type="mesh" pos="0.2312992811203003 -0.0010042786598205566 0.5531941652297974" quat="1.0 0.0 0.0 0.0" mesh="UCX_Fridge_008" class="dlr_kitchen_collision"/>
+				<body name="fridge_door" pos="-0.2549999952316284 -0.2980000078678131 0.41100001335144043" quat="1.0 0.0 0.0 0.0">
+					<inertial mass="22.043718338012695" pos="-0.01869434490799904 0.2977440357208252 -2.4616718292236328e-05" quat="0.5117290019989014 0.5116276741027832 -0.488094687461853 -0.4879898726940155" diaginertia="1.822935700416565 2.6081459522247314 4.422137260437012"/>
+					<geom name="SM_fridge_door_visual_0" type="mesh" pos="-0.018724488094449043 0.2972032427787781 -0.0004452970752026886" quat="0.9999999403953552 0.0004143744008615613 3.338490205351263e-05 4.115946649108082e-05" mesh="FridgeDoor" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+					<geom name="SM_fridge_door_collision_0" type="mesh" pos="-0.01869434490799904 0.2977440357208252 -2.4616718292236328e-05" quat="1.0 0.0 0.0 0.0" mesh="UCX_FridgeDoor_001" class="dlr_kitchen_collision"/>
+					<joint name="fridge_door_joint" type="hinge" pos="-2.220446049250313e-16 8.302690597949531e-22 0.0" damping="100.0" stiffness="100" range="0.0 1.5708000659942627" axis="0.0 0.0 1.0"/>
+					<body name="fridge_door_handle" pos="-0.06551499664783478 0.5762209892272949 -0.39390599727630615" quat="1.0 0.0 0.0 0.0">
+						<inertial mass="0.07344737648963928" pos="0.006625249981880188 0.004243266768753529 2.2692051061312668e-05" quat="0.654325008392334 -0.2681185007095337 -0.6542975306510925 -0.2680782377719879" diaginertia="1.9355486074346118e-05 0.00020893302280455828 0.00022138170606922358"/>
+						<geom name="SM_fridge_door_handle_visual_0" type="mesh" pos="0.0073677171021699905 0.003459271742030978 -1.8390923287370242e-05" quat="0.942729651927948 -5.5459935538237914e-05 1.6518766642548144e-05 -0.33355778455734253" mesh="FridgeDoorHandle" rgba="0.9 0.9 0.9 1.0" class="dlr_kitchen_visual"/>
+						<geom name="SM_fridge_door_handle_collision_0" type="mesh" pos="0.012037085369229317 0.01207809615880251 2.2688880562782288e-05" quat="0.7071067690849304 0.0 0.0 0.7071067690849304" mesh="UCX_FridgeDoorHandle_001" class="dlr_kitchen_collision"/>
+						<geom name="SM_fridge_door_handle_collision_1" type="mesh" pos="-0.0006018296116963029 -0.00621953047811985 2.2688880562782288e-05" quat="1.0 0.0 0.0 0.0" mesh="UCX_FridgeDoorHandle_002" class="dlr_kitchen_collision"/>
+					</body>
+				</body>
+			</body>
+		</body>
+	</worldbody>
+	<equality/>
+</mujoco>

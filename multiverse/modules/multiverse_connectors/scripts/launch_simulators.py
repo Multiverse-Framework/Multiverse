@@ -109,7 +109,6 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
 
         config_dict = simulation_data.get("config", {})
         config_dict["rtf_desired"] = rtf_desired
-        config_dict["resources"] = self.resources_paths
         cmd += [f"{config_dict}".replace(" ", "").replace("'", '"')]
 
         if self.multiverse_clients.get(simulation_name) is not None:

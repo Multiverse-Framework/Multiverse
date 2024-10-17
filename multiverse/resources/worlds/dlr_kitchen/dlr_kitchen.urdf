@@ -1,0 +1,1038 @@
+<?xml version="1.0" ?>
+<robot name="dlr_kitchen" version="1.0">
+  <link name="dlr_kitchen"/>
+  <joint name="kitchenette_joint" type="fixed">
+    <origin xyz="2.4646999835968018 3.9658401012420654 0.786208987236023" rpy="0.0 0.0 1.5708000659942627"/>
+    <parent link="dlr_kitchen"/>
+    <child link="kitchenette"/>
+  </joint>
+  <link name="kitchenette">
+    <visual name="SM_kitchenette_visual_0">
+      <origin xyz="0.01387875061482191 0.007003743667155504 -0.3109070956707001" rpy="1.5807812213897705 -0.06101852282881737 -0.0010954838944599032"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/Kitchenette.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_kitchenette_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_kitchenette_collision_0">
+      <origin xyz="-0.020835012197494507 -0.8877912759780884 -0.2846946716308594" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_1">
+      <origin xyz="-0.029884429648518562 -0.0010682791471481323 0.12630552053451538" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_2">
+      <origin xyz="0.02936050295829773 -0.0010682791471481323 -0.7322090268135071" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_3">
+      <origin xyz="0.2721650302410126 0.014695748686790466 -0.2846945822238922" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_4">
+      <origin xyz="-0.020835012197494507 0.312196284532547 -0.2846946716308594" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_5">
+      <origin xyz="-0.020835012197494507 -0.28280389308929443 -0.2846946716308594" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_6">
+      <origin xyz="0.0046520233154296875 -0.23630383610725403 -0.2506870925426483" rpy="1.5707963705062866 -1.3322676295501878e-15 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_7">
+      <origin xyz="0.0046520233154296875 0.26569610834121704 -0.2506870925426483" rpy="1.5707963705062866 -1.3322676295501878e-15 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_008.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_8">
+      <origin xyz="-0.02066776156425476 0.014696180820465088 0.04396486654877663" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_009.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_9">
+      <origin xyz="-0.321925550699234 0.01455312967300415 0.04396486654877663" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_010.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_10">
+      <origin xyz="0.004652008414268494 0.014696180820465088 -0.04828861355781555" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_011.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_11">
+      <origin xyz="0.004652008414268494 0.014696180820465088 -0.4580366015434265" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_012.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_12">
+      <origin xyz="-0.33779048919677734 0.23469609022140503 0.04781178757548332" rpy="0.0 -4.776746209245175e-06 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_013.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_13">
+      <origin xyz="-0.3375648558139801 -0.20530390739440918 0.047811783850193024" rpy="0.0 -4.766322035720805e-06 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_014.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_14">
+      <origin xyz="-0.020835012197494507 0.9076964259147644 -0.2846946716308594" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_015.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_kitchenette_collision_15">
+      <origin xyz="-0.03407277166843414 0.014845117926597595 0.1472908854484558" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Kitchenette_016.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_02_joint" type="prismatic">
+    <origin xyz="-0.14800000190734863 0.6159999966621399 -0.15700000524520874" rpy="0.0 0.0 0.0"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="kitchenette"/>
+    <child link="drawer_02"/>
+    <limit effort="1000.0" lower="0.0" upper="0.4000000059604645" velocity="1000.0"/>
+  </joint>
+  <link name="drawer_02">
+    <inertial>
+      <origin xyz="0.07188069075345993 -0.0002475738583598286 -0.06287380307912827" rpy="-3.1412405967712402 0.1281028687953949 0.0007536601624451578"/>
+      <mass value="6.183144569396973"/>
+      <inertia ixx="0.2596186697483063" ixy="0.0" ixz="0.0" iyy="0.31529930233955383" iyz="0.0" izz="0.514456033706665"/>
+    </inertial>
+    <visual name="SM_drawer_02_visual_0">
+      <origin xyz="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" rpy="0.00036907565663568676 -1.5490309000015259 3.141456365585327"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/Drawer_02.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_02_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_02_collision_0">
+      <origin xyz="0.11408046633005142 1.4901161193847656e-08 -0.08638661354780197" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_02_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_02_collision_1">
+      <origin xyz="-0.17442794144153595 -0.0008446574211120605 -0.03791983425617218" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_02_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_02_collision_2">
+      <origin xyz="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_02_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_02_collision_3">
+      <origin xyz="0.11090544611215591 -0.2778016924858093 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_02_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_02_collision_4">
+      <origin xyz="0.11090544611215591 0.2761983275413513 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_02_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_02_collision_5">
+      <origin xyz="0.11090545356273651 -0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 -0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_02_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_02_collision_6">
+      <origin xyz="0.11090545356273651 0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_02_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_02_handle_joint" type="fixed">
+    <origin xyz="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" rpy="-1.5708000659942627 0.0 0.0"/>
+    <parent link="drawer_02"/>
+    <child link="drawer_02_handle"/>
+  </joint>
+  <link name="drawer_02_handle">
+    <inertial>
+      <origin xyz="0.002653492148965597 0.0012064726324751973 -7.335148893616861e-06" rpy="-1.4908064603805542 -1.5707833766937256 -3.084590196609497"/>
+      <mass value="0.08398303389549255"/>
+      <inertia ixx="8.702245395397767e-06" ixy="0.0" ixz="0.0" iyy="0.0009674708708189428" iyz="0.0" izz="0.0009694582549855113"/>
+    </inertial>
+    <visual name="SM_drawer_02_handle_visual_0">
+      <origin xyz="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" rpy="1.4460697457252536e-05 5.912518645345699e-06 1.5709569454193115"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/DrawerHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_02_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_02_handle_collision_0">
+      <origin xyz="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_02_handle_collision_1">
+      <origin xyz="0.018011700361967087 0.0012064725160598755 0.15946051478385925" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_02_handle_collision_2">
+      <origin xyz="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_03_joint" type="prismatic">
+    <origin xyz="-0.09700000286102295 0.6159999966621399 -0.5220000147819519" rpy="0.0 0.0 0.0"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="kitchenette"/>
+    <child link="drawer_03"/>
+    <limit effort="1000.0" lower="0.0" upper="0.4000000059604645" velocity="1000.0"/>
+  </joint>
+  <link name="drawer_03">
+    <inertial>
+      <origin xyz="-0.009161649271845818 -0.00032812097924761474 -0.0731058269739151" rpy="-3.1400609016418457 0.26235532760620117 0.004591593984514475"/>
+      <mass value="7.757067680358887"/>
+      <inertia ixx="0.3856465518474579" ixy="0.0" ixz="0.0" iyy="0.4764746129512787" iyz="0.0" izz="0.6430068016052246"/>
+    </inertial>
+    <visual name="SM_drawer_03_visual_0">
+      <origin xyz="-0.017179954797029495 -0.0015816334635019302 -0.05123864486813545" rpy="-3.141080856323242 -1.3613601922988892 0.00037808241904713213"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/Drawer_03.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_03_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_03_collision_0">
+      <origin xyz="0.06011587753891945 0.275023877620697 -0.11386485397815704" rpy="1.5707963705062866 0.07772117108106613 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_03_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_03_collision_1">
+      <origin xyz="0.06011587753891945 -0.275023877620697 -0.11386485397815704" rpy="1.5707963705062866 -0.07772117853164673 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_03_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_03_collision_2">
+      <origin xyz="0.06011587008833885 0.2761983275413513 0.043912939727306366" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_03_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_03_collision_3">
+      <origin xyz="0.06011587008833885 -0.2778016924858093 0.043912943452596664" rpy="1.5707963705062866 -1.3322676295501878e-15 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_03_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_03_collision_4">
+      <origin xyz="0.34315192699432373 -0.0003648996353149414 -0.04758702218532562" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_03_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_03_collision_5">
+      <origin xyz="-0.2252175211906433 -0.0008446574211120605 0.026221953332424164" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_03_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_03_collision_6">
+      <origin xyz="0.06329088658094406 1.4901161193847656e-08 -0.14908701181411743" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_03_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_03_handle_joint" type="fixed">
+    <origin xyz="-0.26072901487350464 0.0004400000034365803 0.1899079978466034" rpy="-1.5708000659942627 0.0 0.0"/>
+    <parent link="drawer_03"/>
+    <child link="drawer_03_handle"/>
+  </joint>
+  <link name="drawer_03_handle">
+    <inertial>
+      <origin xyz="0.002653492148965597 0.0012064726324751973 -7.335148893616861e-06" rpy="-1.4908064603805542 -1.5707833766937256 -3.084590196609497"/>
+      <mass value="0.08398303389549255"/>
+      <inertia ixx="8.702245395397767e-06" ixy="0.0" ixz="0.0" iyy="0.0009674708708189428" iyz="0.0" izz="0.0009694582549855113"/>
+    </inertial>
+    <visual name="SM_drawer_03_handle_visual_0">
+      <origin xyz="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" rpy="1.4460697457252536e-05 5.912518645345699e-06 1.5709569454193115"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/DrawerHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_03_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_03_handle_collision_0">
+      <origin xyz="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_03_handle_collision_1">
+      <origin xyz="0.018011700361967087 0.0012064725160598755 0.15946051478385925" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_03_handle_collision_2">
+      <origin xyz="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="oven_door_joint" type="revolute">
+    <origin xyz="-0.3160000145435333 0.004000000189989805 -0.4860000014305115" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="kitchenette"/>
+    <child link="oven_door"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="oven_door">
+    <inertial>
+      <origin xyz="-0.0060904622077941895 0.010207860730588436 0.23177263140678406" rpy="-3.1415927410125732 1.570796251296997 0.0"/>
+      <mass value="3.3539793491363525"/>
+      <inertia ixx="0.09859467297792435" ixy="0.0" ixz="0.0" iyy="0.240837961435318" iyz="0.0" izz="0.33928757905960083"/>
+    </inertial>
+    <visual name="SM_oven_door_visual_0">
+      <origin xyz="-0.006090500857681036 0.010207847692072392 0.2317724972963333" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/OvenDoor.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_oven_door_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_oven_door_collision_0">
+      <origin xyz="-0.0060904622077941895 0.01020786166191101 0.23427261412143707" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDoor_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="oven_door_handle_joint" type="fixed">
+    <origin xyz="-0.046932999044656754 0.015960000455379486 0.4150789976119995" rpy="-1.5708000659942627 0.0 0.0"/>
+    <parent link="oven_door"/>
+    <child link="oven_door_handle"/>
+  </joint>
+  <link name="oven_door_handle">
+    <inertial>
+      <origin xyz="-0.001678579836152494 3.294391353847459e-05 -0.006125034764409065" rpy="-2.4731194972991943 -1.5705783367156982 -1.802597999572754"/>
+      <mass value="0.27602100372314453"/>
+      <inertia ixx="5.1665414503077045e-05" ixy="0.0" ixz="0.0" iyy="0.0070423283614218235" iyz="0.0" izz="0.007072341162711382"/>
+    </inertial>
+    <visual name="SM_oven_door_handle_visual_0">
+      <origin xyz="0.00421177176758647 0.0022791714873164892 -0.004971041809767485" rpy="0.0001623835414648056 -8.98840244190069e-06 2.049588441848755"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/OvenDoorHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_oven_door_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_oven_door_handle_collision_0">
+      <origin xyz="0.01523653045296669 0.007637110073119402 0.22170116007328033" rpy="1.5707963705062866 -1.1102230246251565e-15 2.099372148513794"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDoorHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_door_handle_collision_1">
+      <origin xyz="0.01523653045296669 0.007637110073119402 -0.23288306593894958" rpy="1.5707963705062866 -1.1102230246251565e-15 2.099372148513794"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDoorHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_door_handle_collision_2">
+      <origin xyz="-0.005733652971684933 -0.0017900086240842938 -0.0054426491260528564" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDoorHandle_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="oven_drawer_joint" type="prismatic">
+    <origin xyz="-0.14800000190734863 0.01600000075995922 -0.5569999814033508" rpy="0.0 0.0 0.0"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="kitchenette"/>
+    <child link="oven_drawer"/>
+    <limit effort="1000.0" lower="0.0" upper="0.4000000059604645" velocity="1000.0"/>
+  </joint>
+  <link name="oven_drawer">
+    <inertial>
+      <origin xyz="0.0705825462937355 -0.009504063986241817 -0.06355083733797073" rpy="-0.004094849806278944 0.12804919481277466 -0.09981535375118256"/>
+      <mass value="5.985869407653809"/>
+      <inertia ixx="0.24297307431697845" ixy="0.0" ixz="0.0" iyy="0.30771157145500183" iyz="0.0" izz="0.49120616912841797"/>
+    </inertial>
+    <visual name="SM_oven_drawer_visual_0">
+      <origin xyz="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" rpy="0.00036907565663568676 -1.5490309000015259 3.141456365585327"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/OvenDrawer.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_oven_drawer_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_oven_drawer_collision_0">
+      <origin xyz="0.11408046633005142 -0.001999989151954651 -0.08638660609722137" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDrawer_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_drawer_collision_1">
+      <origin xyz="-0.17442794144153595 -0.0008446574211120605 -0.0429198332130909" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDrawer_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_drawer_collision_2">
+      <origin xyz="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDrawer_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_drawer_collision_3">
+      <origin xyz="0.11090544611215591 -0.2778016924858093 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDrawer_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_drawer_collision_4">
+      <origin xyz="0.11090544611215591 0.2741983234882355 0.03661312907934189" rpy="1.5707963705062866 -1.3322676295501878e-15 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDrawer_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_drawer_collision_5">
+      <origin xyz="0.11090545356273651 -0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 -0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDrawer_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_drawer_collision_6">
+      <origin xyz="0.11090546101331711 0.2729228436946869 -0.052538223564624786" rpy="1.5707963705062866 0.07595010846853256 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_OvenDrawer_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="oven_drawer_handle_joint" type="fixed">
+    <origin xyz="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" rpy="-1.5708000659942627 0.0 0.0"/>
+    <parent link="oven_drawer"/>
+    <child link="oven_drawer_handle"/>
+  </joint>
+  <link name="oven_drawer_handle">
+    <inertial>
+      <origin xyz="0.002653492148965597 0.0012064726324751973 -7.335148893616861e-06" rpy="-1.4908064603805542 -1.5707833766937256 -3.084590196609497"/>
+      <mass value="0.08398303389549255"/>
+      <inertia ixx="8.702245395397767e-06" ixy="0.0" ixz="0.0" iyy="0.0009674708708189428" iyz="0.0" izz="0.0009694582549855113"/>
+    </inertial>
+    <visual name="SM_oven_drawer_handle_visual_0">
+      <origin xyz="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" rpy="1.4460697457252536e-05 5.912518645345699e-06 1.5709569454193115"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/DrawerHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_oven_drawer_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_oven_drawer_handle_collision_0">
+      <origin xyz="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_drawer_handle_collision_1">
+      <origin xyz="0.018011700361967087 0.0012064725160598755 0.15946051478385925" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_oven_drawer_handle_collision_2">
+      <origin xyz="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_04_joint" type="prismatic">
+    <origin xyz="-0.14800000190734863 -0.5839999914169312 0.0430000014603138" rpy="0.0 0.0 0.0"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="kitchenette"/>
+    <child link="drawer_04"/>
+    <limit effort="1000.0" lower="0.0" upper="0.4000000059604645" velocity="1000.0"/>
+  </joint>
+  <link name="drawer_04">
+    <inertial>
+      <origin xyz="0.07188069075345993 -0.0002475738583598286 -0.06287380307912827" rpy="-3.1412405967712402 0.1281028687953949 0.0007536601624451578"/>
+      <mass value="6.183144569396973"/>
+      <inertia ixx="0.2596186697483063" ixy="0.0" ixz="0.0" iyy="0.31529930233955383" iyz="0.0" izz="0.514456033706665"/>
+    </inertial>
+    <visual name="SM_drawer_04_visual_0">
+      <origin xyz="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" rpy="0.00036907565663568676 -1.5490309000015259 3.141456365585327"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/Drawer_04.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_04_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_04_collision_0">
+      <origin xyz="0.11408046633005142 1.4901161193847656e-08 -0.08638661354780197" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_04_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_04_collision_1">
+      <origin xyz="-0.17442794144153595 -0.0008446574211120605 -0.03791983425617218" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_04_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_04_collision_2">
+      <origin xyz="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_04_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_04_collision_3">
+      <origin xyz="0.11090544611215591 -0.2778016924858093 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_04_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_04_collision_4">
+      <origin xyz="0.11090544611215591 0.2761983275413513 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_04_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_04_collision_5">
+      <origin xyz="0.11090545356273651 -0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 -0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_04_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_04_collision_6">
+      <origin xyz="0.11090545356273651 0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_04_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_04_handle_joint" type="fixed">
+    <origin xyz="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" rpy="-1.5708000659942627 0.0 0.0"/>
+    <parent link="drawer_04"/>
+    <child link="drawer_04_handle"/>
+  </joint>
+  <link name="drawer_04_handle">
+    <inertial>
+      <origin xyz="0.002653492148965597 0.0012064726324751973 -7.335148893616861e-06" rpy="-1.4908064603805542 -1.5707833766937256 -3.084590196609497"/>
+      <mass value="0.08398303389549255"/>
+      <inertia ixx="8.702245395397767e-06" ixy="0.0" ixz="0.0" iyy="0.0009674708708189428" iyz="0.0" izz="0.0009694582549855113"/>
+    </inertial>
+    <visual name="SM_drawer_04_handle_visual_0">
+      <origin xyz="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" rpy="1.4460697457252536e-05 5.912518645345699e-06 1.5709569454193115"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/DrawerHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_04_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_04_handle_collision_0">
+      <origin xyz="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_04_handle_collision_1">
+      <origin xyz="0.018011700361967087 0.0012064725160598755 0.15946051478385925" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_04_handle_collision_2">
+      <origin xyz="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_05_joint" type="prismatic">
+    <origin xyz="-0.14800000190734863 -0.5839999914169312 -0.15700000524520874" rpy="0.0 0.0 0.0"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="kitchenette"/>
+    <child link="drawer_05"/>
+    <limit effort="1000.0" lower="0.0" upper="0.4000000059604645" velocity="1000.0"/>
+  </joint>
+  <link name="drawer_05">
+    <inertial>
+      <origin xyz="0.07188069075345993 -0.0002475738583598286 -0.06287380307912827" rpy="-3.1412405967712402 0.1281028687953949 0.0007536601624451578"/>
+      <mass value="6.183144569396973"/>
+      <inertia ixx="0.2596186697483063" ixy="0.0" ixz="0.0" iyy="0.31529930233955383" iyz="0.0" izz="0.514456033706665"/>
+    </inertial>
+    <visual name="SM_drawer_05_visual_0">
+      <origin xyz="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" rpy="0.00036907565663568676 -1.5490309000015259 3.141456365585327"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/Drawer_05.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_05_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_05_collision_0">
+      <origin xyz="0.11408046633005142 1.4901161193847656e-08 -0.08638661354780197" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_05_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_05_collision_1">
+      <origin xyz="-0.17442794144153595 -0.0008446574211120605 -0.03791983425617218" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_05_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_05_collision_2">
+      <origin xyz="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_05_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_05_collision_3">
+      <origin xyz="0.11090544611215591 -0.2778016924858093 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_05_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_05_collision_4">
+      <origin xyz="0.11090544611215591 0.2761983275413513 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_05_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_05_collision_5">
+      <origin xyz="0.11090545356273651 -0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 -0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_05_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_05_collision_6">
+      <origin xyz="0.11090545356273651 0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_05_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_05_handle_joint" type="fixed">
+    <origin xyz="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" rpy="-1.5708000659942627 0.0 0.0"/>
+    <parent link="drawer_05"/>
+    <child link="drawer_05_handle"/>
+  </joint>
+  <link name="drawer_05_handle">
+    <inertial>
+      <origin xyz="0.002653492148965597 0.0012064726324751973 -7.335148893616861e-06" rpy="-1.4908064603805542 -1.5707833766937256 -3.084590196609497"/>
+      <mass value="0.08398303389549255"/>
+      <inertia ixx="8.702245395397767e-06" ixy="0.0" ixz="0.0" iyy="0.0009674708708189428" iyz="0.0" izz="0.0009694582549855113"/>
+    </inertial>
+    <visual name="SM_drawer_05_handle_visual_0">
+      <origin xyz="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" rpy="1.4460697457252536e-05 5.912518645345699e-06 1.5709569454193115"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/DrawerHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_05_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_05_handle_collision_0">
+      <origin xyz="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_05_handle_collision_1">
+      <origin xyz="0.018011700361967087 0.0012064725160598755 0.15946051478385925" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_05_handle_collision_2">
+      <origin xyz="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_06_joint" type="prismatic">
+    <origin xyz="-0.09700000286102295 -0.5839999914169312 -0.5220000147819519" rpy="0.0 0.0 0.0"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="kitchenette"/>
+    <child link="drawer_06"/>
+    <limit effort="1000.0" lower="0.0" upper="0.4000000059604645" velocity="1000.0"/>
+  </joint>
+  <link name="drawer_06">
+    <inertial>
+      <origin xyz="-0.009161649271845818 -0.00032812097924761474 -0.0731058269739151" rpy="-3.1400609016418457 0.26235532760620117 0.004591593984514475"/>
+      <mass value="7.757067680358887"/>
+      <inertia ixx="0.3856465518474579" ixy="0.0" ixz="0.0" iyy="0.4764746129512787" iyz="0.0" izz="0.6430068016052246"/>
+    </inertial>
+    <visual name="SM_drawer_06_visual_0">
+      <origin xyz="-0.017179954797029495 -0.0015816334635019302 -0.05123864486813545" rpy="-3.141080856323242 -1.3613601922988892 0.00037808241904713213"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/Drawer_06.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_06_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_06_collision_0">
+      <origin xyz="0.06011587753891945 0.275023877620697 -0.11386485397815704" rpy="1.5707963705062866 0.07772117108106613 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_06_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_06_collision_1">
+      <origin xyz="0.06011587753891945 -0.275023877620697 -0.11386485397815704" rpy="1.5707963705062866 -0.07772117853164673 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_06_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_06_collision_2">
+      <origin xyz="0.06011587008833885 0.2761983275413513 0.043912939727306366" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_06_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_06_collision_3">
+      <origin xyz="0.06011587008833885 -0.2778016924858093 0.043912943452596664" rpy="1.5707963705062866 -1.3322676295501878e-15 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_06_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_06_collision_4">
+      <origin xyz="0.34315192699432373 -0.0003648996353149414 -0.04758702218532562" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_06_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_06_collision_5">
+      <origin xyz="-0.2252175211906433 -0.0008446574211120605 0.026221953332424164" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_06_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_06_collision_6">
+      <origin xyz="0.06329088658094406 1.4901161193847656e-08 -0.14908701181411743" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_06_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_06_handle_joint" type="fixed">
+    <origin xyz="-0.26072901487350464 0.0004400000034365803 0.1899079978466034" rpy="-1.5708000659942627 0.0 0.0"/>
+    <parent link="drawer_06"/>
+    <child link="drawer_06_handle"/>
+  </joint>
+  <link name="drawer_06_handle">
+    <inertial>
+      <origin xyz="0.002653492148965597 0.0012064726324751973 -7.335148893616861e-06" rpy="-1.4908064603805542 -1.5707833766937256 -3.084590196609497"/>
+      <mass value="0.08398303389549255"/>
+      <inertia ixx="8.702245395397767e-06" ixy="0.0" ixz="0.0" iyy="0.0009674708708189428" iyz="0.0" izz="0.0009694582549855113"/>
+    </inertial>
+    <visual name="SM_drawer_06_handle_visual_0">
+      <origin xyz="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" rpy="1.4460697457252536e-05 5.912518645345699e-06 1.5709569454193115"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/DrawerHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_06_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_06_handle_collision_0">
+      <origin xyz="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_06_handle_collision_1">
+      <origin xyz="0.018011700361967087 0.0012064725160598755 0.15946051478385925" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_06_handle_collision_2">
+      <origin xyz="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_01_joint" type="prismatic">
+    <origin xyz="-0.14800000190734863 0.6159999966621399 0.0430000014603138" rpy="0.0 0.0 0.0"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="kitchenette"/>
+    <child link="drawer_01"/>
+    <limit effort="1000.0" lower="0.0" upper="0.4000000059604645" velocity="1000.0"/>
+  </joint>
+  <link name="drawer_01">
+    <inertial>
+      <origin xyz="0.07188069075345993 -0.0002475738583598286 -0.06287380307912827" rpy="-3.1412405967712402 0.1281028687953949 0.0007536601624451578"/>
+      <mass value="6.183144569396973"/>
+      <inertia ixx="0.2596186697483063" ixy="0.0" ixz="0.0" iyy="0.31529930233955383" iyz="0.0" izz="0.514456033706665"/>
+    </inertial>
+    <visual name="SM_drawer_01_visual_0">
+      <origin xyz="0.07832890003919601 -0.0008135421667248011 -0.04287593439221382" rpy="0.00036907565663568676 -1.5490309000015259 3.141456365585327"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/Drawer_01.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_01_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_01_collision_0">
+      <origin xyz="0.11408046633005142 1.4901161193847656e-08 -0.08638661354780197" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_01_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_01_collision_1">
+      <origin xyz="-0.17442794144153595 -0.0008446574211120605 -0.03791983425617218" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_01_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_01_collision_2">
+      <origin xyz="0.3939414918422699 -0.0008016228675842285 -0.019886843860149384" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_01_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_01_collision_3">
+      <origin xyz="0.11090544611215591 -0.2778016924858093 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_01_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_01_collision_4">
+      <origin xyz="0.11090544611215591 0.2761983275413513 0.03661312907934189" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_01_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_01_collision_5">
+      <origin xyz="0.11090545356273651 -0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 -0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_01_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_01_collision_6">
+      <origin xyz="0.11090545356273651 0.275023877620697 -0.051164474338293076" rpy="1.5707963705062866 0.07772114872932434 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Drawer_01_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="drawer_01_handle_joint" type="fixed">
+    <origin xyz="-0.20993900299072266 0.0011699999449774623 0.025767000392079353" rpy="-1.5708000659942627 0.0 0.0"/>
+    <parent link="drawer_01"/>
+    <child link="drawer_01_handle"/>
+  </joint>
+  <link name="drawer_01_handle">
+    <inertial>
+      <origin xyz="0.002653492148965597 0.0012064726324751973 -7.335148893616861e-06" rpy="-1.4908064603805542 -1.5707833766937256 -3.084590196609497"/>
+      <mass value="0.08398303389549255"/>
+      <inertia ixx="8.702245395397767e-06" ixy="0.0" ixz="0.0" iyy="0.0009674708708189428" iyz="0.0" izz="0.0009694582549855113"/>
+    </inertial>
+    <visual name="SM_drawer_01_handle_visual_0">
+      <origin xyz="0.00924370065331459 6.64619008716727e-08 3.315964204375632e-05" rpy="1.4460697457252536e-05 5.912518645345699e-06 1.5709569454193115"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/DrawerHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_drawer_01_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_drawer_01_handle_collision_0">
+      <origin xyz="2.346932888031006e-06 0.0012064725160598755 9.834766387939453e-07" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_01_handle_collision_1">
+      <origin xyz="0.018011700361967087 0.0012064725160598755 0.15946051478385925" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_drawer_01_handle_collision_2">
+      <origin xyz="0.018011700361967087 0.0012064723996445537 -0.15945649147033691" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_DrawerHandle_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="fridge_joint" type="fixed">
+    <origin xyz="1.1964999437332153 3.903700113296509 0.9268059730529785" rpy="0.0 0.0 1.5708000659942627"/>
+    <parent link="dlr_kitchen"/>
+    <child link="fridge"/>
+  </joint>
+  <link name="fridge">
+    <visual name="SM_fridge_visual_0">
+      <origin xyz="0.011897856369614601 -0.00034987725666724145 0.019825316965579987" rpy="0.04207827150821686 0.002676379634067416 1.4952532052993774"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/Fridge.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_fridge_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_fridge_collision_0">
+      <origin xyz="0.04630070924758911 -0.0010071992874145508 0.9126619100570679" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Fridge_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_fridge_collision_1">
+      <origin xyz="0.04630070924758911 -0.0010071992874145508 -0.34483811259269714" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Fridge_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_fridge_collision_2">
+      <origin xyz="-0.27307605743408203 -0.0010071992874145508 -0.5025707483291626" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Fridge_003.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_fridge_collision_3">
+      <origin xyz="-0.308070570230484 0.29172080755233765 -0.19446273148059845" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Fridge_004.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_fridge_collision_4">
+      <origin xyz="-0.3208375871181488 0.27221110463142395 -0.19446273148059845" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Fridge_005.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_fridge_collision_5">
+      <origin xyz="0.04630070924758911 0.2714942693710327 0.5531941652297974" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Fridge_006.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_fridge_collision_6">
+      <origin xyz="0.04630070924758911 -0.2735057473182678 0.5531941652297974" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Fridge_007.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_fridge_collision_7">
+      <origin xyz="0.2312992811203003 -0.0010042786598205566 0.5531941652297974" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_Fridge_008.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="fridge_door_joint" type="revolute">
+    <origin xyz="-0.2549999952316284 -0.2980000078678131 0.41100001335144043" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="fridge"/>
+    <child link="fridge_door"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="fridge_door">
+    <inertial>
+      <origin xyz="-0.01869434490799904 0.2977440357208252 -2.4621709599159658e-05" rpy="1.5707963705062866 0.0 -1.5707963705062866"/>
+      <mass value="22.043718338012695"/>
+      <inertia ixx="1.8229358196258545" ixy="0.0" ixz="0.0" iyy="2.6081459522247314" iyz="0.0" izz="4.422137260437012"/>
+    </inertial>
+    <visual name="SM_fridge_door_visual_0">
+      <origin xyz="-0.018724488094449043 0.2972032427787781 -0.0004452970752026886" rpy="0.0008287515956908464 6.673568714177236e-05 8.234659617301077e-05"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/FridgeDoor.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_fridge_door_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_fridge_door_collision_0">
+      <origin xyz="-0.01869434490799904 0.2977440357208252 -2.4616718292236328e-05" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_FridgeDoor_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="fridge_door_handle_joint" type="fixed">
+    <origin xyz="-0.06551499664783478 0.5762209892272949 -0.39390599727630615" rpy="0.0 0.0 0.0"/>
+    <parent link="fridge_door"/>
+    <child link="fridge_door_handle"/>
+  </joint>
+  <link name="fridge_door_handle">
+    <inertial>
+      <origin xyz="0.006625249516218901 0.004243266303092241 2.2690357582177967e-05" rpy="-1.3611613512039185 -1.5707273483276367 0.5834099054336548"/>
+      <mass value="0.07344737648963928"/>
+      <inertia ixx="1.9355486074346118e-05" ixy="0.0" ixz="0.0" iyy="0.00020893302280455828" iyz="0.0" izz="0.00022138169151730835"/>
+    </inertial>
+    <visual name="SM_fridge_door_handle_visual_0">
+      <origin xyz="0.0073677171021699905 0.003459271742030978 -1.8390923287370242e-05" rpy="-0.00011558737605810165 -5.852723916177638e-06 -0.6801499724388123"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/FridgeDoorHandle.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="SM_fridge_door_handle_visual_0_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="SM_fridge_door_handle_collision_0">
+      <origin xyz="0.012037085369229317 0.01207809615880251 2.2688880562782288e-05" rpy="0.0 0.0 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_FridgeDoorHandle_001.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="SM_fridge_door_handle_collision_1">
+      <origin xyz="-0.0006018296116963029 -0.00621953047811985 2.2688880562782288e-05" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://dlr_kitchen/meshes/stl/UCX_FridgeDoorHandle_002.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>

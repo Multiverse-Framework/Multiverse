@@ -5,7 +5,6 @@ import dataclasses
 import json
 import os
 import shutil
-import xml.etree.ElementTree as ET
 from typing import List, Dict, Set, Any, Union, Optional, Tuple
 
 
@@ -83,6 +82,12 @@ class IsaacSimCompiler:
             os.makedirs(self.save_dir_path)
         self.save_usd_path = os.path.join(self.save_dir_path, self.scene_name + ".usda")
         shutil.copy(self.world_usd_path, self.save_usd_path)
+        with open(self.save_usd_path, "r") as f:
+            data = f.read()
+        world_usd_dir = os.path.dirname(self.world_usd_path)
+        data = data.replace("@./", f"@{world_usd_dir}/")
+        with open(self.save_usd_path, "w") as f:
+            f.write(data)
 
 def main():
     # Initialize argument parser

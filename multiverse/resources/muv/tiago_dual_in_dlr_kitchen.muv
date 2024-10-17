@@ -24,4 +24,3 @@ multiverse_clients:
     port: 2000
     send:
       body: ["position", "quaternion"]
-      joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]

@@ -471,7 +471,7 @@ class MjcfImporter(Factory):
 
                 mujoco_mesh_path = self.mujoco_meshes_prim.GetPath().AppendChild(mesh_name)
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(self.world_builder.stage, mujoco_mesh_path)
-                mujoco_mesh.CreateFileAttr(tmp_mesh_file_path)
+                mujoco_mesh.CreateFileAttr(f"./{tmp_mesh_file_path}")
 
                 mujoco_geom_api.CreateMeshRel().SetTargets([mujoco_mesh_path])
 
