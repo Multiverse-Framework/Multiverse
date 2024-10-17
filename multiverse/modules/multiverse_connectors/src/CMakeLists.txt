@@ -6,6 +6,8 @@ elseif (WIN32)
     add_subdirectory(mujoco)
 endif()
 
+add_subdirectory(isaac_sim)
+
 add_subdirectory(multiverse_client_py)
 
 add_subdirectory(ros)

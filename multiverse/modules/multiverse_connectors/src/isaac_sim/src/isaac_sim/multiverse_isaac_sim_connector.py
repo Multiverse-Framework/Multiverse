@@ -36,12 +36,21 @@ if __name__ == "__main__":
 
     # Set up command line arguments
     parser = argparse.ArgumentParser("Multiverse Isaac Sim Connector")
-    parser.add_argument(
-        "--usd_path", type=str, help="Absolute path to usd file", required=True
-    )
+    parser.add_argument("--usd_path", type=str, help="Absolute path to usd file", required=True)
     parser.add_argument("--headless", default=False, action="store_true", help="Run stage headless")
+    parser.add_argument("--server_host", type=str, default="tcp://127.0.0.1", help="Multiverse Server Host")
+    parser.add_argument("--server_port", type=str, default="7000", help="Multiverse Server Port")
+    parser.add_argument("--client_port", type=str, default="2000", help="Multiverse Client Port")
+    parser.add_argument("--world_name", type=str, help="World Name", required=True)
+    parser.add_argument("--simulation_name", type=str, help="Simulation Name", required=True)
+    parser.add_argument("--send", type=str, required=True)
+    parser.add_argument("--receive", type=str, required=True)
 
     args, unknown = parser.parse_known_args()
+
+    # Start the Multiverse Client
+    multiverse_meta_data = MultiverseMetaData()
+
     # Start the omniverse application
     CONFIG["headless"] = args.headless
     simulation_app = SimulationApp(CONFIG)
@@ -63,7 +72,7 @@ if __name__ == "__main__":
         omni.usd.get_context().open_stage(usd_path)
     else:
         carb.log_error(
-            f"the usd path {usd_path} could not be opened, please make sure that {args.usd_path} is a valid usd file in {assets_root_path}"
+            f"the usd path {usd_path} could not be opened, please make sure that {args.usd_path} is a valid usd file"
         )
         simulation_app.close()
         sys.exit()

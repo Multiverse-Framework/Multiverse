@@ -31,9 +31,30 @@ def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
 
     return mujoco_args
 
+def parse_isaac_sim(resources_paths: List[str], mujoco_data: Dict[str, Any]):
+    worlds_path = find_files(resources_paths, mujoco_data["world"]["path"])
+    mujoco_args = [f"--world={worlds_path}"]
+
+    for entity_str in ["robots", "objects"]:
+        if entity_str in mujoco_data:
+            for entity_name in mujoco_data[entity_str]:
+                if "path" in mujoco_data[entity_str][entity_name]:
+                    mujoco_data[entity_str][entity_name]["path"] = find_files(resources_paths,
+                                                                              mujoco_data[entity_str][entity_name][
+                                                                                  "path"])
+            entity_dict = mujoco_data[entity_str]
+            mujoco_args.append(f"--{entity_str}={entity_dict}".replace(" ", ""))
+    if "references" in mujoco_data:
+        mujoco_args.append(f"--references={mujoco_data['references']}".replace(" ", ""))
+    should_add_key_frame = mujoco_data.get("should_add_key_frame", True)
+    if should_add_key_frame:
+        mujoco_args.append(f"--should_add_key_frame")
+
+    return mujoco_args
+
 
 class MultiverseSimulationLaunch(MultiverseLaunch):
-    simulators = {"mujoco", "mujoco_headless"}
+    simulators = {"mujoco", "mujoco_headless", "isaac_sim", "isaac_sim_headless"}
 
     def __init__(self):
         super().__init__()
@@ -51,6 +72,8 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
     def parse_simulator(self, simulation_data):
         if simulation_data["simulator"] == "mujoco" or simulation_data["simulator"] == "mujoco_headless":
             return parse_mujoco(self.resources_paths, simulation_data)
+        elif simulation_data["simulator"] == "isaac_sim" or simulation_data["simulator"] == "isaac_sim_headless":
+            return parse_isaac_sim(self.resources_paths, simulation_data)
         else:
             raise NotImplementedError(f"Simulator {simulation_data['simulator']} not implemented")
 

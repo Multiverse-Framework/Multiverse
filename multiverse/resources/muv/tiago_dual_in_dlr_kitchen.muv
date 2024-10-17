@@ -1,0 +1,27 @@
+resources: 
+  - ../robots
+  - ../worlds
+  - ../objects
+  - ../demos
+
+worlds:
+  world:
+    rtf_desired: 1
+
+simulations:
+  tiago_dual_in_dlr_kitchen:
+    simulator: isaac_sim
+    world:
+      name: world
+      path: dlr_kitchen.usda
+
+multiverse_server:
+  host: "tcp://127.0.0.1"
+  port: 7000
+
+multiverse_clients:
+  tiago_dual_in_dlr_kitchen:
+    port: 2000
+    send:
+      body: ["position", "quaternion"]
+      joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
