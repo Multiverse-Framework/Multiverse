@@ -24,3 +24,29 @@ multiverse_clients:
     port: 2000
     send:
       body: ["position", "quaternion"]
+
+  ros:
+    ros_nodes:
+      services:
+        socket:
+          - port: 7400
+
+      publishers:
+        tf:
+          - meta_data:
+              world_name: world
+              length_unit: m
+              angle_unit: rad
+              mass_unit: kg
+              time_unit: s
+              handedness: rhs
+            port: 7301
+            topic: /tf
+            rate: 60
+            root_frame_id: map
+
+    ros_run:
+      rviz:
+        config: tiago_dual_in_dlr_kitchen/config/rviz.rviz
+        robot_descriptions:
+          dlr_kitchen: dlr_kitchen/dlr_kitchen.urdf

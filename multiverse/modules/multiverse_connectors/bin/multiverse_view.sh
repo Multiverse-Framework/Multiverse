@@ -50,9 +50,7 @@ for var in "${vars[@]}"; do
     fi
 
     # Check if ROS2 or ROS1 exists
-    if [ -f "/opt/ros/foxy/setup.bash" ]; then
-        source /opt/ros/foxy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/local_setup.bash
-    elif [ -f "/opt/ros/noetic/setup.bash" ]; then
+    if [ -f "/opt/ros/noetic/setup.bash" ]; then
         source /opt/ros/noetic/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash
     else
         echo "Warning: ROS not found."

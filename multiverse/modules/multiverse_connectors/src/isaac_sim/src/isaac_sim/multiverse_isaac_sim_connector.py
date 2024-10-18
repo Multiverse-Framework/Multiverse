@@ -19,11 +19,11 @@ class IsaacSimConnector(MultiverseClient):
 
         for xform_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdGeom.Xform)]:
             body_name = xform_prim.GetName()
-            self.body_dict[body_name] = xform_prim.GetPath()
+            self.body_dict[body_name] = xform_prim
 
         for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.Joint)]:
             joint_name = joint_prim.GetName()
-            self.joint_dict[joint_name] = joint_prim.GetPath()
+            self.joint_dict[joint_name] = joint_prim
 
         if "body" in send_objects:
             for body_name in sorted(self.body_dict.keys()):
@@ -40,22 +40,44 @@ class IsaacSimConnector(MultiverseClient):
         self.request_meta_data = request_meta_data
 
     def bind_send_data(self) -> None:
-        send_data = [simulation_context.current_time]
-        print(dir(dc))
+        send_data = [self.world_time + self.sim_time]
         for object_name, attributes in self.request_meta_data["send"].items():
             if object_name in self.body_dict:
-                object_path = self.body_dict[object_name]
-                xform_prim = dc.get_rigid_body(object_path.pathString)
-                if xform_prim:
-                    xform_prim_pose = dc.get_rigid_body_pose(xform_prim)
-                    print(xform_prim, xform_prim_pose)
+                object_prim = self.body_dict[object_name]
+                if not object_prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                    parent_prim = object_prim.GetParent()
+                    while not parent_prim.IsPseudoRoot():
+                        if parent_prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                            break
+                        parent_prim = parent_prim.GetParent()
+                    
+                    relative_pose, _ = xform_cache.ComputeRelativeTransform(object_prim, parent_prim)
+                    if parent_prim.IsPseudoRoot():
+                        body_pose = relative_pose
+                    else:
+                        rigid_body_handle = dc.get_rigid_body(parent_prim.GetPath().pathString)
+                        parent_body_pose = dc.get_rigid_body_pose(rigid_body_handle)
+                        parent_body_pose_mat = Gf.Matrix4d()
+                        parent_body_pose_mat.SetTranslateOnly(Gf.Vec3d(*parent_body_pose.p))
+                        parent_body_pose_mat.SetRotateOnly(Gf.Quatd(parent_body_pose.r[3], Gf.Vec3d(*parent_body_pose.r[:3])))
+                        body_pose = relative_pose * parent_body_pose_mat
+
+                    p = body_pose.ExtractTranslation()
+                    q = body_pose.ExtractRotation().GetQuaternion()
+                    q = [q.GetImaginary()[0], q.GetImaginary()[1], q.GetImaginary()[2], q.GetReal()]
+                else:
+                    rigid_body_handle = dc.get_rigid_body(object_prim.GetPath().pathString)
+                    body_pose = dc.get_rigid_body_pose(rigid_body_handle)
+                    p = body_pose.p
+                    q = body_pose.r
+
+                position = [p[0], p[1], p[2]]
+                quaternion = [q[3], q[0], q[1], q[2]]
                 for attribute in attributes:
                     if attribute == "position":
-                        send_data += [0.0, 0.0, 0.0]
+                        send_data += position
                     elif attribute == "quaternion":
-                        # q = pose.ExtractRotation().GetQuaternion()
-                        # send_data += [q.GetReal(), q.GetImaginary()[0], q.GetImaginary()[1], q.GetImaginary()[2]]
-                        send_data += [0.0, 0.0, 0.0, 0.0]
+                        send_data += quaternion
         self.send_data = send_data
 
     def bind_receive_data(self) -> None:
@@ -77,9 +99,7 @@ class IsaacSimConnector(MultiverseClient):
         self.loginfo("Received response meta data: " + str(self.response_meta_data))
 
     def send_and_receive_data(self) -> None:
-        # self.loginfo("Sending data: " + str(self.send_data))
         self._communicate(False)
-        # self.loginfo("Received data: " + str(self.receive_data))
 
 
 ### Below is the code to run the Isaac Sim Connector
@@ -97,6 +117,7 @@ if __name__ == "__main__":
         "sync_loads": True,
         "headless": False,
         "renderer": "RayTracedLighting",
+        "hide_ui": False,
     }
 
     # Set up command line arguments
@@ -148,22 +169,21 @@ if __name__ == "__main__":
 
     # Start the omniverse application
     CONFIG["headless"] = args.headless
+    CONFIG["open_usd"] = usd_path
     simulation_app = SimulationApp(CONFIG)
 
     import carb
     from omni.isaac.nucleus import is_file
-    from pxr import Usd, UsdGeom, UsdPhysics
+    from pxr import Usd, UsdGeom, UsdPhysics, Gf
     from omni.isaac.core import SimulationContext
-    from omni.isaac.core.utils.stage import add_reference_to_stage, is_stage_loading
+    from omni.isaac.core.utils.stage import is_stage_loading
     from omni.isaac.dynamic_control import _dynamic_control
+
+    xform_cache = UsdGeom.XformCache()
 
     dc = _dynamic_control.acquire_dynamic_control_interface()
 
     simulation_context = SimulationContext()
-
-    stage = Usd.Stage.Open(usd_path)
-    default_prim = stage.GetDefaultPrim()
-    add_reference_to_stage(usd_path, default_prim.GetPath())
 
     isaac_sim_connector = IsaacSimConnector(client_addr=client_addr, 
                                             multiverse_meta_data=multiverse_meta_data,
@@ -198,6 +218,8 @@ if __name__ == "__main__":
 
     simulation_context.initialize_physics()
     simulation_context.play()
+
+    simulation_context.reset()
 
     while simulation_app.is_running():
         isaac_sim_connector.bind_send_data()
