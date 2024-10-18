@@ -37,6 +37,12 @@ class IsaacSimConnector(MultiverseClient):
                 for attr in send_objects["joint"]:
                     request_meta_data["send"][joint_name].append(attr)
 
+        for object_name in send_objects:
+            if object_name not in ["body", "joint"]:
+                request_meta_data["send"][object_name] = []
+                for attr in send_objects[object_name]:
+                    request_meta_data["send"][object_name].append(attr)
+
         self.request_meta_data = request_meta_data
 
     def bind_send_data(self) -> None:

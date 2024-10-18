@@ -6,7 +6,8 @@ import json
 import os
 import shutil
 from typing import List, Dict, Set, Any, Union, Optional, Tuple
-
+import numpy
+from pxr import Usd, UsdGeom, Gf
 
 @dataclasses.dataclass
 class Entity:
@@ -75,6 +76,31 @@ class IsaacSimCompiler:
         self.objects = []
 
     def build_world_usd(self, robots: Dict[str, Robot], objects: Dict[str, Object]):
+        for robot in robots.values():
+            robot_usd_path = os.path.join(self.save_dir_path, robot.name + ".usd")
+            shutil.copy(robot.path, robot_usd_path)
+            robot.path = robot_usd_path
+            robot_stage = Usd.Stage.Open(robot_usd_path)
+
+            if "body" in robot.apply:
+                body_apply = robot.apply["body"]
+                for xform_prim in [prim for prim in robot_stage.GetDefaultPrim().GetAllChildren() if prim.IsA(UsdGeom.Xform) and prim.GetName() in body_apply]:
+                    xform = UsdGeom.Xform(xform_prim)
+                    xform.ClearXformOpOrder()
+                    pos = body_apply[xform_prim.GetName()].get("pos", [0, 0, 0])
+                    quat = body_apply[xform_prim.GetName()].get("quat", [1, 0, 0, 0])
+
+                    pos = numpy.asfarray(pos)
+                    quat = numpy.asfarray(quat)
+                    mat = Gf.Matrix4d()
+                    mat.SetTranslateOnly(Gf.Vec3d(*pos))
+                    mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(*quat[1:])))
+
+                    xform.AddTransformOp().Set(mat)
+
+            robot_stage.GetRootLayer().Save()
+
+            self.robots.append(robot)
         self.create_world_usd()
 
     def create_world_usd(self):
@@ -88,6 +114,14 @@ class IsaacSimCompiler:
         data = data.replace("@./", f"@{world_usd_dir}/")
         with open(self.save_usd_path, "w") as f:
             f.write(data)
+
+        stage = Usd.Stage.Open(self.save_usd_path)
+
+        robot_paths = []
+        for robot in self.robots:
+            robot_paths.append(robot.path)
+        stage.GetRootLayer().subLayerPaths = robot_paths
+        stage.GetRootLayer().Save()
 
 def main():
     # Initialize argument parser
