@@ -7,7 +7,7 @@ import os
 import shutil
 from typing import List, Dict, Set, Any, Union, Optional, Tuple
 import numpy
-from pxr import Usd, UsdGeom, Gf
+from pxr import Usd, UsdGeom, Gf, UsdPhysics
 
 @dataclasses.dataclass
 class Entity:
@@ -84,7 +84,9 @@ class IsaacSimCompiler:
 
             if "body" in robot.apply:
                 body_apply = robot.apply["body"]
-                for xform_prim in [prim for prim in robot_stage.GetDefaultPrim().GetAllChildren() if prim.IsA(UsdGeom.Xform) and prim.GetName() in body_apply]:
+                for xform_prim in [prim for prim in robot_stage.Traverse() if prim.IsA(UsdGeom.Xform) and prim.GetName() in body_apply]:
+                    if xform_prim.GetName() == robot.name and xform_prim.GetParent().IsPseudoRoot():
+                        continue
                     xform = UsdGeom.Xform(xform_prim)
                     xform.ClearXformOpOrder()
                     pos = body_apply[xform_prim.GetName()].get("pos", [0, 0, 0])
@@ -97,6 +99,18 @@ class IsaacSimCompiler:
                     mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(*quat[1:])))
 
                     xform.AddTransformOp().Set(mat)
+
+            for joint_name, joint_value in robot.joint_state.items():
+                for joint_prim in [prim for prim in robot_stage.TraverseAll() if prim.IsA(UsdPhysics.Joint) and prim.GetName() == joint_name]:
+                    if joint_prim.IsA(UsdPhysics.RevoluteJoint) and joint_prim.HasAPI(UsdPhysics.DriveAPI):
+                        drive_api = UsdPhysics.DriveAPI.Apply(joint_prim, "angular")
+                        drive_api.GetTargetPositionAttr().Set(numpy.rad2deg(joint_value))
+
+                    elif joint_prim.IsA(UsdPhysics.PrismaticJoint) and joint_prim.HasAPI(UsdPhysics.DriveAPI):
+                        drive_api = UsdPhysics.DriveAPI.Apply(joint_prim, "linear")
+                        drive_api.GetTargetPositionAttr().Set(joint_value)
+                    else:
+                        print(f"Joint {joint_name} does not have DriveAPI")
 
             robot_stage.GetRootLayer().Save()
 

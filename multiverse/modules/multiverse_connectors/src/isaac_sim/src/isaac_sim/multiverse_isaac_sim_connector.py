@@ -10,34 +10,63 @@ class IsaacSimConnector(MultiverseClient):
                  receive_objects: Dict[str, List[str]]) -> None:
         super().__init__(client_addr, multiverse_meta_data)
         self.stage = Usd.Stage.Open(usd_path)
-        self.body_dict = {}
-        self.joint_dict = {}
+        self.body_name_dict = {}
+        self.joint_name_dict = {}
+        self.joint_art_dict = {}
         self.init(send_objects, receive_objects)
 
     def init(self, send_objects: Dict[str, List[str]], receive_objects: Dict[str, List[str]]) -> None:
         request_meta_data = self.request_meta_data
 
+        art_list = []
+
         for xform_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdGeom.Xform)]:
             body_name = xform_prim.GetName()
-            self.body_dict[body_name] = xform_prim
+            self.body_name_dict[body_name] = xform_prim
 
-        for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.Joint)]:
+            if xform_prim.HasAPI(UsdPhysics.ArticulationRootAPI):
+                art = dc.get_articulation(xform_prim.GetPath().pathString)
+                if art != 0 and art not in art_list:
+                    art_list.append(art)
+
+        print(art_list)
+
+        for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
             joint_name = joint_prim.GetName()
-            self.joint_dict[joint_name] = joint_prim
+            for art in art_list:
+                dof_ptr = dc.find_articulation_dof(art, joint_name)
+                if dof_ptr != 0:
+                    self.joint_name_dict[joint_name] = joint_prim
+                    self.joint_art_dict[joint_name] = art
+                    break
+                else:
+                    print(f"Joint {joint_name} is not in the articulation.")
+
+        for object_name in sorted(receive_objects.keys()):
+            request_meta_data["receive"][object_name] = []
+            for attr in receive_objects[object_name]:
+                request_meta_data["receive"][object_name].append(attr)
 
         if "body" in send_objects:
-            for body_name in sorted(self.body_dict.keys()):
+            for body_name in sorted(self.body_name_dict.keys()):
                 request_meta_data["send"][body_name] = []
                 for attr in send_objects["body"]:
+                    if body_name in request_meta_data["receive"] and attr in request_meta_data["receive"][body_name]:
+                        continue
                     request_meta_data["send"][body_name].append(attr)
 
         if "joint" in send_objects:
-            for joint_name in sorted(self.joint_dict.keys()):
+            for joint_name in sorted(self.joint_name_dict.keys()):
                 request_meta_data["send"][joint_name] = []
                 for attr in send_objects["joint"]:
-                    request_meta_data["send"][joint_name].append(attr)
+                    if joint_name in request_meta_data["receive"] and attr in request_meta_data["receive"][joint_name]:
+                        continue
+                    joint_prim = self.joint_name_dict[joint_name]
+                    if joint_prim.IsA(UsdPhysics.RevoluteJoint) and attr in ["joint_rvalue", "joint_angular_velocity", "joint_torque"] or \
+                        joint_prim.IsA(UsdPhysics.PrismaticJoint) and attr in ["joint_tvalue", "joint_linear_velocity", "joint_force"]:
+                        request_meta_data["send"][joint_name].append(attr)
 
-        for object_name in send_objects:
+        for object_name in sorted(send_objects.keys()):
             if object_name not in ["body", "joint"]:
                 request_meta_data["send"][object_name] = []
                 for attr in send_objects[object_name]:
@@ -48,16 +77,16 @@ class IsaacSimConnector(MultiverseClient):
     def bind_send_data(self) -> None:
         send_data = [self.world_time + self.sim_time]
         for object_name, attributes in self.request_meta_data["send"].items():
-            if object_name in self.body_dict:
-                object_prim = self.body_dict[object_name]
-                if not object_prim.HasAPI(UsdPhysics.RigidBodyAPI):
-                    parent_prim = object_prim.GetParent()
+            if object_name in self.body_name_dict:
+                body_prim = self.body_name_dict[object_name]
+                if not body_prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                    parent_prim = body_prim.GetParent()
                     while not parent_prim.IsPseudoRoot():
                         if parent_prim.HasAPI(UsdPhysics.RigidBodyAPI):
                             break
                         parent_prim = parent_prim.GetParent()
                     
-                    relative_pose, _ = xform_cache.ComputeRelativeTransform(object_prim, parent_prim)
+                    relative_pose, _ = xform_cache.ComputeRelativeTransform(body_prim, parent_prim)
                     if parent_prim.IsPseudoRoot():
                         body_pose = relative_pose
                     else:
@@ -72,7 +101,7 @@ class IsaacSimConnector(MultiverseClient):
                     q = body_pose.ExtractRotation().GetQuaternion()
                     q = [q.GetImaginary()[0], q.GetImaginary()[1], q.GetImaginary()[2], q.GetReal()]
                 else:
-                    rigid_body_handle = dc.get_rigid_body(object_prim.GetPath().pathString)
+                    rigid_body_handle = dc.get_rigid_body(body_prim.GetPath().pathString)
                     body_pose = dc.get_rigid_body_pose(rigid_body_handle)
                     p = body_pose.p
                     q = body_pose.r
@@ -84,10 +113,82 @@ class IsaacSimConnector(MultiverseClient):
                         send_data += position
                     elif attribute == "quaternion":
                         send_data += quaternion
+
+            elif object_name in self.joint_name_dict:
+                art = self.joint_art_dict[object_name]
+                dof_ptr = dc.find_articulation_dof(art, object_name)
+                dof_state = dc.get_dof_state(dof_ptr, _dynamic_control.STATE_ALL)
+
+                for attribute in attributes:
+                    if attribute == "joint_rvalue":
+                        send_data += [dof_state.pos]
+                    elif attribute == "joint_tvalue":
+                        send_data += [dof_state.pos]
+                    elif attribute == "joint_linear_velocity":
+                        send_data += [dof_state.vel]
+                    elif attribute == "joint_angular_velocity":
+                        send_data += [dof_state.vel]
+                    elif attribute == "joint_force":
+                        send_data += [dof_state.effort]
+                    elif attribute == "joint_torque":
+                        send_data += [dof_state.effort]
+
         self.send_data = send_data
 
     def bind_receive_data(self) -> None:
-        pass
+        receive_data = self.receive_data
+        sim_time = receive_data[0]
+        receive_data = receive_data[1:]
+        for object_name, attributes in self.request_meta_data["receive"].items():
+            for attribute in attributes:
+                if attribute == "odometric_velocity" and object_name in self.body_name_dict:
+                    body_prim = self.body_name_dict[object_name]
+                    rigid_body_handle = dc.get_rigid_body(body_prim.GetPath().pathString)
+                    body_pose = dc.get_rigid_body_pose(rigid_body_handle)
+
+                    w = body_pose.r[3]
+                    x = body_pose.r[0]
+                    y = body_pose.r[1]
+                    z = body_pose.r[2]
+
+                    sinr_cosp = 2 * (w * x + y * z)
+                    cosr_cosp = 1 - 2 * (x * x + y * y)
+                    odom_ang_x_joint_pos = numpy.arctan2(sinr_cosp, cosr_cosp)
+
+                    sinp = 2 * (w * y - z * x)
+                    if numpy.abs(sinp) >= 1:
+                        odom_ang_y_joint_pos = numpy.copysign(numpy.pi / 2, sinp)
+                    else:
+                        odom_ang_y_joint_pos = numpy.arcsin(sinp)
+
+                    siny_cosp = 2 * (w * z + x * y)
+                    cosy_cosp = 1 - 2 * (y * y + z * z)
+                    odom_ang_z_joint_pos = numpy.arctan2(siny_cosp, cosy_cosp)
+
+                    odom_velocity = receive_data[:6]
+                    receive_data = receive_data[6:]
+
+                    linear_velocity = [
+                        odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) + odom_velocity[1] * (numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) - numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)) + odom_velocity[2] * (numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) + numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)),
+                        odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) + odom_velocity[1] * (numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) + numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)) + odom_velocity[2] * (numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) - numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)),
+                        odom_velocity[0] * numpy.sin(odom_ang_y_joint_pos) + odom_velocity[1] * numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos) + odom_velocity[2] * numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos)
+                    ]
+                    
+                    angular_velocity = [
+                        odom_velocity[3],
+                        odom_velocity[4],
+                        odom_velocity[5]
+                    ]
+
+                    dc.set_rigid_body_linear_velocity(rigid_body_handle, linear_velocity)
+                    dc.set_rigid_body_angular_velocity(rigid_body_handle, angular_velocity)
+
+                elif attribute == "cmd_joint_rvalue" or attribute == "cmd_joint_tvalue" and object_name in self.joint_name_dict:
+                    art = self.joint_art_dict[object_name]
+                    dof_ptr = dc.find_articulation_dof(art, object_name)
+                    joint_value = receive_data[0]
+                    receive_data = receive_data[1:]
+                    dc.set_dof_position_target(dof_ptr, joint_value)
 
     def loginfo(self, message: str) -> None:
         print(f"INFO: {message}")
@@ -113,6 +214,7 @@ class IsaacSimConnector(MultiverseClient):
 import argparse
 import json
 import sys
+import numpy
 from isaacsim import SimulationApp
 
 if __name__ == "__main__":
@@ -191,15 +293,6 @@ if __name__ == "__main__":
 
     simulation_context = SimulationContext()
 
-    isaac_sim_connector = IsaacSimConnector(client_addr=client_addr, 
-                                            multiverse_meta_data=multiverse_meta_data,
-                                            usd_path=usd_path,
-                                            send_objects=send_objects,
-                                            receive_objects=receive_objects)
-    isaac_sim_connector.run()
-
-    isaac_sim_connector.send_and_receive_meta_data()
-
     # make sure the file exists before we try to open it
     try:
         result = is_file(usd_path)
@@ -226,6 +319,15 @@ if __name__ == "__main__":
     simulation_context.play()
 
     simulation_context.reset()
+
+    isaac_sim_connector = IsaacSimConnector(client_addr=client_addr, 
+                                            multiverse_meta_data=multiverse_meta_data,
+                                            usd_path=usd_path,
+                                            send_objects=send_objects,
+                                            receive_objects=receive_objects)
+    isaac_sim_connector.run()
+
+    isaac_sim_connector.send_and_receive_meta_data()
 
     while simulation_app.is_running():
         isaac_sim_connector.bind_send_data()

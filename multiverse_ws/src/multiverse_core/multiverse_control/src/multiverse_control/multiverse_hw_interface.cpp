@@ -244,7 +244,7 @@ void MultiverseHWInterface::bind_receive_data()
 {
     for (int i = 0; i < receive_buffer.buffer_double.size; i++)
     {
-        *receive_data_vec[i] =  send_buffer.buffer_double.data[i];
+        *receive_data_vec[i] = receive_buffer.buffer_double.data[i];
     }
 }
 
