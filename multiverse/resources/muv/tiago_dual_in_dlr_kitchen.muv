@@ -16,7 +16,7 @@ simulations:
       path: dlr_kitchen.usda
     robots:
       tiago_dual:
-        path: tiago_dual_with_pos_control.usd
+        path: tiago_dual_with_pos_control.usda
         apply:
           body:
             tiago_dual:

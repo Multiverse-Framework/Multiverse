@@ -120,14 +120,16 @@ class IsaacSimCompiler:
     def create_world_usd(self):
         if not os.path.exists(self.save_dir_path):
             os.makedirs(self.save_dir_path)
-        self.save_usd_path = os.path.join(self.save_dir_path, self.scene_name + ".usda")
+        file_ext = os.path.splitext(self.world_usd_path)[1]
+        self.save_usd_path = os.path.join(self.save_dir_path, self.scene_name + f"{file_ext}")
         shutil.copy(self.world_usd_path, self.save_usd_path)
-        with open(self.save_usd_path, "r") as f:
-            data = f.read()
-        world_usd_dir = os.path.dirname(self.world_usd_path)
-        data = data.replace("@./", f"@{world_usd_dir}/")
-        with open(self.save_usd_path, "w") as f:
-            f.write(data)
+        if file_ext == ".usda":
+            with open(self.save_usd_path, "r") as f:
+                data = f.read()
+            world_usd_dir = os.path.dirname(self.world_usd_path)
+            data = data.replace("@./", f"@{world_usd_dir}/")
+            with open(self.save_usd_path, "w") as f:
+                f.write(data)
 
         stage = Usd.Stage.Open(self.save_usd_path)
 
