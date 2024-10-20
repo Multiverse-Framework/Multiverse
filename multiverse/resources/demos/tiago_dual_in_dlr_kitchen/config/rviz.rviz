@@ -512,6 +512,22 @@ Visualization Manager:
       Update Interval: 0
       Value: true
       Visual Enabled: true
+    - Alpha: 1
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: true
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Name: MilkBoxModel
+      Robot Description: milk_box_description
+      TF Prefix: ""
+      Update Interval: 0
+      Value: true
+      Visual Enabled: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -540,7 +556,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.518704414367676
+      Distance: 5.224655628204346
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -548,17 +564,17 @@ Visualization Manager:
         Value: false
       Field of View: 0.7853981852531433
       Focal Point:
-        X: 1.9301865100860596
-        Y: 1.9554588794708252
-        Z: 0.39588838815689087
+        X: 2.2797675132751465
+        Y: 2.691845178604126
+        Z: 0.44383642077445984
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3347967267036438
+      Pitch: 0.5847973227500916
       Target Frame: <Fixed Frame>
-      Yaw: 0.09040521085262299
+      Yaw: 5.8736066818237305
     Saved: ~
 Window Geometry:
   Displays:

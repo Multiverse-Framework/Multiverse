@@ -1,0 +1,84 @@
+#usda 1.0
+(
+    defaultPrim = "milk_box"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Xform "milk_box"
+{
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (1, 1, 1)
+    double3 xformOp:translate = (0, 0, 0)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+    def Scope "Looks"
+    {
+        def Material "material_M_MilkBox"
+        {
+            token outputs:mdl:displacement.connect = </milk_box/Looks/material_M_MilkBox/Shader.outputs:out>
+            token outputs:mdl:surface.connect = </milk_box/Looks/material_M_MilkBox/Shader.outputs:out>
+            token outputs:mdl:volume.connect = </milk_box/Looks/material_M_MilkBox/Shader.outputs:out>
+
+            def Shader "Shader"
+            {
+                uniform token info:id = "UsdPreviewSurface"
+                uniform token info:implementationSource = "sourceAsset"
+                uniform asset info:mdl:sourceAsset = @OmniPBR.mdl@
+                uniform token info:mdl:sourceAsset:subIdentifier = "OmniPBR"
+                color3f inputs:diffuse_color_constant = (1, 1, 1)
+                asset inputs:diffuse_texture = @./../textures/milk_box.jpg@
+                color3f inputs:emissive_color = (0, 0, 0)
+                token outputs:out
+            }
+        }
+    }
+
+    def Xform "milk_box" (
+        apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+    )
+    {
+        point3f physics:centerOfMass = (0, 0, 0)
+        float3 physics:diagonalInertia = (0.0011993749, 0.004142, 0.0046573747)
+        float physics:mass = 1.14
+        quatf physics:principalAxes = (1, 0, 0, 0)
+        quatd xformOp:orient = (1, 0, 0, 0)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        def Mesh "visuals"
+        {
+            float3[] extent = [(-0.02999997, -0.04749995, -0.09999996), (0.02999997, 0.04749995, 0.09999996)]
+            int[] faceVertexCounts = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+            int[] faceVertexIndices = [0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4, 8, 9, 10, 10, 11, 8, 12, 13, 14, 14, 15, 12, 16, 17, 18, 18, 19, 16, 20, 21, 22, 22, 23, 20]
+            rel material:binding = </milk_box/Looks/material_M_MilkBox>
+            normal3f[] normals = [(0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, -1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (0, 0, 1), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (1, 0, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (0, -1, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0), (0, 1, 0)] (
+                interpolation = "faceVarying"
+            )
+            point3f[] points = [(0.02999997, 0.04749995, -0.09999996), (0.02999997, -0.04749995, -0.09999996), (-0.02999997, -0.04749995, -0.09999996), (-0.02999997, 0.04749995, -0.09999996), (0.02999997, 0.04749995, 0.09999996), (-0.02999997, 0.04749995, 0.09999996), (-0.02999997, -0.04749995, 0.09999996), (0.02999997, -0.04749995, 0.09999996), (0.02999997, 0.04749995, -0.09999996), (0.02999997, 0.04749995, 0.09999996), (0.02999997, -0.04749995, 0.09999996), (0.02999997, -0.04749995, -0.09999996), (0.02999997, -0.04749995, -0.09999996), (0.02999997, -0.04749995, 0.09999996), (-0.02999997, -0.04749995, 0.09999996), (-0.02999997, -0.04749995, -0.09999996), (-0.02999997, -0.04749995, -0.09999996), (-0.02999997, -0.04749995, 0.09999996), (-0.02999997, 0.04749995, 0.09999996), (-0.02999997, 0.04749995, -0.09999996), (0.02999997, 0.04749995, 0.09999996), (0.02999997, 0.04749995, -0.09999996), (-0.02999997, 0.04749995, -0.09999996), (-0.02999997, 0.04749995, 0.09999996)]
+            texCoord2f[] primvars:st = [(0.71131, 0.13337), (0.71131, 0.34454), (0.57794, 0.34454), (0.57794, 0.34454), (0.57794, 0.13337), (0.71131, 0.13337), (0, 0.13337), (0.13337, 0.13337), (0.13337, 0.34454), (0.13337, 0.34454), (0, 0.34454), (0, 0.13337), (1, 0), (1, 0.60777), (0.71131, 0.60777), (0.71131, 0.60777), (0.71131, 0), (1, 0), (0.57794, 0.47791), (0.13337, 0.47791), (0.13337, 0.34454), (0.13337, 0.34454), (0.57794, 0.34454), (0.57794, 0.47791), (0.57794, 0.34454), (0.13337, 0.34454), (0.13337, 0.13337), (0.13337, 0.13337), (0.57794, 0.13337), (0.57794, 0.34454), (0.13337, 0), (0.57794, 0), (0.57794, 0.13337), (0.57794, 0.13337), (0.13337, 0.13337), (0.13337, 0)] (
+                interpolation = "faceVarying"
+            )
+            uniform token subdivisionScheme = "bilinear"
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:scale = (1, 1, 1)
+            double3 xformOp:translate = (0, 7.430113663105772e-19, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+
+        def Cube "collisions" (
+            apiSchemas = ["PhysicsCollisionAPI"]
+        )
+        {
+            float3[] extent = [(-0.03, -0.0475, -0.1), (0.03, 0.0475, 0.1)]
+            uniform token purpose = "guide"
+            double size = 1
+            quatd xformOp:orient = (1, 0, 0, 0)
+            double3 xformOp:scale = (0.05999999865889549, 0.0949999988079071, 0.20000000298023224)
+            double3 xformOp:translate = (0, 0, 0)
+            uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+        }
+    }
+}
+

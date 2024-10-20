@@ -11,6 +11,8 @@ class IsaacSimConnector(MultiverseClient):
         super().__init__(client_addr, multiverse_meta_data)
         self.stage = Usd.Stage.Open(usd_path)
         self.body_name_dict = {}
+        self.body_prim_view = None
+        self.body_prim_view_idx_dict = {}
         self.joint_name_dict = {}
         self.joint_art_dict = {}
         self.init(send_objects, receive_objects)
@@ -76,47 +78,30 @@ class IsaacSimConnector(MultiverseClient):
                 for attr in send_objects[object_name]:
                     request_meta_data["send"][object_name].append(attr)
 
+        body_paths = []
+        for object_name in list(request_meta_data["send"].keys()) + list(request_meta_data["receive"].keys()):
+            if object_name in self.body_name_dict:
+                body_paths.append(self.body_name_dict[object_name].GetPath().pathString)
+                self.body_prim_view_idx_dict[object_name] = len(body_paths) - 1
+
+        self.body_prim_view = RigidPrimView(prim_paths_expr=body_paths)
+
         self.request_meta_data = request_meta_data
 
     def bind_send_data(self) -> None:
         send_data = [self.world_time + self.sim_time]
+        positions, quaternions = self.body_prim_view.get_world_poses()
         for object_name, attributes in self.request_meta_data["send"].items():
             if object_name in self.body_name_dict:
-                body_prim = self.body_name_dict[object_name]
-                if not body_prim.HasAPI(UsdPhysics.RigidBodyAPI):
-                    parent_prim = body_prim.GetParent()
-                    while not parent_prim.IsPseudoRoot():
-                        if parent_prim.HasAPI(UsdPhysics.RigidBodyAPI):
-                            break
-                        parent_prim = parent_prim.GetParent()
-                    
-                    relative_pose, _ = xform_cache.ComputeRelativeTransform(body_prim, parent_prim)
-                    if parent_prim.IsPseudoRoot():
-                        body_pose = relative_pose
-                    else:
-                        rigid_body_handle = dc.get_rigid_body(parent_prim.GetPath().pathString)
-                        parent_body_pose = dc.get_rigid_body_pose(rigid_body_handle)
-                        parent_body_pose_mat = Gf.Matrix4d()
-                        parent_body_pose_mat.SetTranslateOnly(Gf.Vec3d(*parent_body_pose.p))
-                        parent_body_pose_mat.SetRotateOnly(Gf.Quatd(parent_body_pose.r[3], Gf.Vec3d(*parent_body_pose.r[:3])))
-                        body_pose = relative_pose * parent_body_pose_mat
-
-                    p = body_pose.ExtractTranslation()
-                    q = body_pose.ExtractRotation().GetQuaternion()
-                    q = [q.GetImaginary()[0], q.GetImaginary()[1], q.GetImaginary()[2], q.GetReal()]
-                else:
-                    rigid_body_handle = dc.get_rigid_body(body_prim.GetPath().pathString)
-                    body_pose = dc.get_rigid_body_pose(rigid_body_handle)
-                    p = body_pose.p
-                    q = body_pose.r
-
-                position = [p[0], p[1], p[2]]
-                quaternion = [q[3], q[0], q[1], q[2]]
                 for attribute in attributes:
                     if attribute == "position":
-                        send_data += position
+                        pos_idx = self.body_prim_view_idx_dict[object_name]
+                        position = positions[pos_idx]
+                        send_data += [position[0], position[1], position[2]]
                     elif attribute == "quaternion":
-                        send_data += quaternion
+                        quat_idx = self.body_prim_view_idx_dict[object_name]
+                        quaternion = quaternions[quat_idx]
+                        send_data += [quaternion[0], quaternion[1], quaternion[2], quaternion[3]]
 
             elif object_name in self.joint_name_dict:
                 art = self.joint_art_dict[object_name]
@@ -288,10 +273,9 @@ if __name__ == "__main__":
     from omni.isaac.nucleus import is_file
     from pxr import Usd, UsdGeom, UsdPhysics, Gf
     from omni.isaac.core import SimulationContext
+    from omni.isaac.core.prims import RigidPrimView
     from omni.isaac.core.utils.stage import is_stage_loading
     from omni.isaac.dynamic_control import _dynamic_control
-
-    xform_cache = UsdGeom.XformCache()
 
     dc = _dynamic_control.acquire_dynamic_control_interface()
 
@@ -332,6 +316,8 @@ if __name__ == "__main__":
     isaac_sim_connector.send_and_receive_meta_data()
 
     simulation_context.reset()
+
+    isaac_sim_connector.body_prim_view.initialize(simulation_context.physics_sim_view)
 
     while simulation_app.is_running():
         isaac_sim_connector.bind_send_data()

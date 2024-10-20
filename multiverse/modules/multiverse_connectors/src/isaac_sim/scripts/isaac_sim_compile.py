@@ -76,16 +76,18 @@ class IsaacSimCompiler:
         self.objects = []
 
     def build_world_usd(self, robots: Dict[str, Robot], objects: Dict[str, Object]):
-        for robot in robots.values():
-            robot_usd_path = os.path.join(self.save_dir_path, robot.name + ".usd")
-            shutil.copy(robot.path, robot_usd_path)
-            robot.path = robot_usd_path
-            robot_stage = Usd.Stage.Open(robot_usd_path)
+        for entity in list(robots.values()) + list(objects.values()):
+            file_ext = os.path.splitext(entity.path)[1]
+            entity_usd_dir = os.path.dirname(entity.path)
+            entity_usd_path = os.path.join(self.save_dir_path, entity.name + f"{file_ext}")
+            shutil.copy(entity.path, entity_usd_path)
+            entity.path = entity_usd_path
+            entity_stage = Usd.Stage.Open(entity_usd_path)
 
-            if "body" in robot.apply:
-                body_apply = robot.apply["body"]
-                for xform_prim in [prim for prim in robot_stage.Traverse() if prim.IsA(UsdGeom.Xform) and prim.GetName() in body_apply]:
-                    if xform_prim.GetName() == robot.name and xform_prim.GetParent().IsPseudoRoot():
+            if "body" in entity.apply:
+                body_apply = entity.apply["body"]
+                for xform_prim in [prim for prim in entity_stage.Traverse() if prim.IsA(UsdGeom.Xform) and prim.GetName() in body_apply]:
+                    if xform_prim.GetName() == entity.name and xform_prim.GetParent().IsPseudoRoot():
                         continue
                     xform = UsdGeom.Xform(xform_prim)
                     xform.ClearXformOpOrder()
@@ -100,8 +102,8 @@ class IsaacSimCompiler:
 
                     xform.AddTransformOp().Set(mat)
 
-            for joint_name, joint_value in robot.joint_state.items():
-                for joint_prim in [prim for prim in robot_stage.TraverseAll() if prim.IsA(UsdPhysics.Joint) and prim.GetName() == joint_name]:
+            for joint_name, joint_value in entity.joint_state.items():
+                for joint_prim in [prim for prim in entity_stage.TraverseAll() if prim.IsA(UsdPhysics.Joint) and prim.GetName() == joint_name]:
                     if joint_prim.IsA(UsdPhysics.RevoluteJoint) and joint_prim.HasAPI(UsdPhysics.DriveAPI):
                         drive_api = UsdPhysics.DriveAPI.Apply(joint_prim, "angular")
                         drive_api.GetTargetPositionAttr().Set(numpy.rad2deg(joint_value))
@@ -112,9 +114,20 @@ class IsaacSimCompiler:
                     else:
                         print(f"Joint {joint_name} does not have DriveAPI")
 
-            robot_stage.GetRootLayer().Save()
+            entity_stage.GetRootLayer().Save()
 
-            self.robots.append(robot)
+            if file_ext == ".usda":
+                with open(entity_usd_path, "r") as f:
+                    data = f.read()
+                data = data.replace("@./", f"@{entity_usd_dir}/")
+                with open(entity_usd_path, "w") as f:
+                    f.write(data)
+
+            if isinstance(entity, Object):
+                self.objects.append(entity)
+            elif isinstance(entity, Robot):
+                self.robots.append(entity)
+
         self.create_world_usd()
 
     def create_world_usd(self):
@@ -133,10 +146,12 @@ class IsaacSimCompiler:
 
         stage = Usd.Stage.Open(self.save_usd_path)
 
-        robot_paths = []
+        sublayer_paths = []
         for robot in self.robots:
-            robot_paths.append(robot.path)
-        stage.GetRootLayer().subLayerPaths = robot_paths
+            sublayer_paths.append(robot.path)
+        for obj in self.objects:
+            sublayer_paths.append(obj.path)
+        stage.GetRootLayer().subLayerPaths = sublayer_paths
         stage.GetRootLayer().Save()
 
 def main():

@@ -38,6 +38,13 @@ simulations:
           arm_right_6_joint: 0.5
           arm_right_7_joint: 0.0
           torso_lift_joint: 0.3
+    objects:
+      milk_box:
+        path: milk_box/usd/milk_box.usda
+        apply:
+          body:
+            milk_box:
+              pos: [1.0, 1.0, 2.0]
 
 multiverse_server:
   host: "tcp://127.0.0.1"
@@ -49,6 +56,7 @@ multiverse_clients:
     send:
       body: ["position", "quaternion"]
       joint: ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_force", "joint_torque"]
+      milk_box: ["position", "quaternion"]
     receive:
       tiago_dual: ["odometric_velocity"]
       torso_lift_joint: ["cmd_joint_tvalue"]
@@ -108,6 +116,7 @@ multiverse_clients:
         robot_descriptions:
           dlr_kitchen_description: dlr_kitchen/dlr_kitchen.urdf
           tiago_dual_description: tiago_dual/urdf/tiago_dual.urdf
+          milk_box_description: milk_box/urdf/milk_box.urdf
 
     ros_control:
       - meta_data:
