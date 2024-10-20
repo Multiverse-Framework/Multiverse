@@ -14,13 +14,15 @@ class IsaacSimConnector(MultiverseClient):
         self.body_prim_view = None
         self.body_prim_view_idx_dict = {}
         self.joint_name_dict = {}
-        self.joint_art_dict = {}
+        self.joint_prim_view = None
+        self.joint_prim_view_idx_dict = {}
         self.init(send_objects, receive_objects)
 
     def init(self, send_objects: Dict[str, List[str]], receive_objects: Dict[str, List[str]]) -> None:
         request_meta_data = self.request_meta_data
 
         art_list = []
+        art_prim_paths = []
 
         for xform_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdGeom.Xform)]:
             body_name = xform_prim.GetName()
@@ -38,15 +40,7 @@ class IsaacSimConnector(MultiverseClient):
                 print(f"Articulation Root: {xform_prim.GetPath().pathString}, Articulation Handle: {art}")
                 if art != 0 and art not in art_list:
                     art_list.append(art)
-
-        for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
-            joint_name = joint_prim.GetName()
-            for art in art_list:
-                dof_ptr = dc.find_articulation_dof(art, joint_name)
-                if dof_ptr != 0:
-                    self.joint_name_dict[joint_name] = joint_prim
-                    self.joint_art_dict[joint_name] = art
-                    break
+                    art_prim_paths.append(xform_prim.GetPath().pathString)
 
         for object_name in sorted(receive_objects.keys()):
             request_meta_data["receive"][object_name] = []
@@ -78,11 +72,18 @@ class IsaacSimConnector(MultiverseClient):
                 for attr in send_objects[object_name]:
                     request_meta_data["send"][object_name].append(attr)
 
+        self.joint_prim_view = ArticulationView(prim_paths_expr=art_prim_paths)
+
         body_paths = []
         for object_name in list(request_meta_data["send"].keys()) + list(request_meta_data["receive"].keys()):
             if object_name in self.body_name_dict:
                 body_paths.append(self.body_name_dict[object_name].GetPath().pathString)
                 self.body_prim_view_idx_dict[object_name] = len(body_paths) - 1
+            if object_name in self.joint_name_dict:
+                for idx, dof_name in enumerate(self.joint_prim_view.dof_names):
+                    if dof_name == object_name:
+                        self.joint_prim_view_idx_dict[object_name] = idx
+                        break
 
         self.body_prim_view = RigidPrimView(prim_paths_expr=body_paths)
 
@@ -90,37 +91,38 @@ class IsaacSimConnector(MultiverseClient):
 
     def bind_send_data(self) -> None:
         send_data = [self.world_time + self.sim_time]
-        positions, quaternions = self.body_prim_view.get_world_poses()
+        if any(object_name in self.body_name_dict for object_name in self.request_meta_data["send"]):
+            positions, quaternions = self.body_prim_view.get_world_poses()
+        if any(object_name in self.joint_name_dict for object_name in self.request_meta_data["send"]):
+            joints_state = self.joint_prim_view.get_joints_state()
+            measured_joint_efforts = self.joint_prim_view.get_measured_joint_efforts()
         for object_name, attributes in self.request_meta_data["send"].items():
             if object_name in self.body_name_dict:
                 for attribute in attributes:
+                    body_idx = self.body_prim_view_idx_dict[object_name]
                     if attribute == "position":
-                        pos_idx = self.body_prim_view_idx_dict[object_name]
-                        position = positions[pos_idx]
+                        position = positions[body_idx]
                         send_data += [position[0], position[1], position[2]]
                     elif attribute == "quaternion":
-                        quat_idx = self.body_prim_view_idx_dict[object_name]
-                        quaternion = quaternions[quat_idx]
+                        quaternion = quaternions[body_idx]
                         send_data += [quaternion[0], quaternion[1], quaternion[2], quaternion[3]]
 
             elif object_name in self.joint_name_dict:
-                art = self.joint_art_dict[object_name]
-                dof_ptr = dc.find_articulation_dof(art, object_name)
-                dof_state = dc.get_dof_state(dof_ptr, _dynamic_control.STATE_ALL)
+                joint_idx = self.joint_prim_view_idx_dict[object_name]
 
                 for attribute in attributes:
                     if attribute == "joint_rvalue":
-                        send_data += [dof_state.pos]
+                        send_data += [joints_state.positions[0][joint_idx]]
                     elif attribute == "joint_tvalue":
-                        send_data += [dof_state.pos]
+                        send_data += [joints_state.positions[0][joint_idx]]
                     elif attribute == "joint_linear_velocity":
-                        send_data += [dof_state.vel]
+                        send_data += [joints_state.velocities[0][joint_idx]]
                     elif attribute == "joint_angular_velocity":
-                        send_data += [dof_state.vel]
+                        send_data += [joints_state.velocities[0][joint_idx]]
                     elif attribute == "joint_force":
-                        send_data += [dof_state.effort]
+                        send_data += [measured_joint_efforts[0][joint_idx]]
                     elif attribute == "joint_torque":
-                        send_data += [dof_state.effort]
+                        send_data += [measured_joint_efforts[0][joint_idx]]
 
         self.send_data = send_data
 
@@ -274,6 +276,7 @@ if __name__ == "__main__":
     from pxr import Usd, UsdGeom, UsdPhysics, Gf
     from omni.isaac.core import SimulationContext
     from omni.isaac.core.prims import RigidPrimView
+    from omni.isaac.core.articulations import ArticulationView
     from omni.isaac.core.utils.stage import is_stage_loading
     from omni.isaac.dynamic_control import _dynamic_control
 
@@ -318,6 +321,8 @@ if __name__ == "__main__":
     simulation_context.reset()
 
     isaac_sim_connector.body_prim_view.initialize(simulation_context.physics_sim_view)
+
+    # isaac_sim_connector.joint_prim_view.initialize(simulation_context.physics_sim_view)
 
     while simulation_app.is_running():
         isaac_sim_connector.bind_send_data()
