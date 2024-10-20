@@ -8,7 +8,7 @@
             }
             dictionary Perspective = {
                 double3 position = (11.381572514764732, -1.3554962742549457, 7.552772077530543)
-                double3 target = (-2.9804478529626977e-7, 8.611108253120392e-7, 5.321107030553662e-7)
+                double3 target = (-2.980447870726266e-7, 8.611108162082104e-7, 5.321107030553662e-7)
             }
             dictionary Right = {
                 double3 position = (0, -5, 0)
@@ -338,7 +338,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsRevoluteJoint "fridge_door_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:angular", "PhysicsDriveAPI:angular"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:angular"]
         )
         {
             float drive:angular:physics:damping = 0
@@ -853,7 +853,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsPrismaticJoint "drawer_01_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear", "PhysicsDriveAPI:linear"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 0
@@ -878,7 +878,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsPrismaticJoint "drawer_02_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear", "PhysicsDriveAPI:linear"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 0
@@ -903,7 +903,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsPrismaticJoint "drawer_03_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear", "PhysicsDriveAPI:linear"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 0
@@ -928,7 +928,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsPrismaticJoint "drawer_04_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear", "PhysicsDriveAPI:linear"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 0
@@ -953,7 +953,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsPrismaticJoint "drawer_05_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear", "PhysicsDriveAPI:linear"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 0
@@ -978,7 +978,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsPrismaticJoint "drawer_06_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear", "PhysicsDriveAPI:linear"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 0
@@ -1003,7 +1003,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsRevoluteJoint "oven_door_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:angular", "PhysicsDriveAPI:angular"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:angular"]
         )
         {
             float drive:angular:physics:damping = 0
@@ -1028,7 +1028,7 @@ def Xform "dlr_kitchen"
         }
 
         def PhysicsPrismaticJoint "oven_drawer_joint" (
-            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear", "PhysicsDriveAPI:linear"]
+            apiSchemas = ["PhysxJointAPI", "PhysicsJointStateAPI:linear"]
         )
         {
             float drive:linear:physics:damping = 0

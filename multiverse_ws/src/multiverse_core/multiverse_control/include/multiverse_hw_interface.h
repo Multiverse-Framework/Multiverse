@@ -108,4 +108,6 @@ private:
 
     // Commands
     std::map<std::string, double *> joint_commands;
+
+    double sim_start_time;
 };

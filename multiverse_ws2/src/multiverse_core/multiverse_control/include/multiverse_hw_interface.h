@@ -107,7 +107,7 @@ private:
 
     std::map<std::string, double *> joint_commands;
 
-    double sim_time;
+    double sim_start_time;
 
     std::thread commnunicate_thread;
 };

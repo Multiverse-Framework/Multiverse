@@ -24,12 +24,18 @@ class IsaacSimConnector(MultiverseClient):
             body_name = xform_prim.GetName()
             self.body_name_dict[body_name] = xform_prim
 
-            if xform_prim.HasAPI(UsdPhysics.ArticulationRootAPI):
+        for prim in self.stage.TraverseAll():
+            if prim.HasAPI(UsdPhysics.ArticulationRootAPI):
+                if prim.IsA(UsdGeom.Xform):
+                    xform_prim = prim
+                elif prim.IsA(UsdPhysics.Joint):
+                    joint = UsdPhysics.Joint(prim)
+                    xform_prim_path = joint.GetBody1Rel().GetTargets()[0]
+                    xform_prim = self.stage.GetPrimAtPath(xform_prim_path)
                 art = dc.get_articulation(xform_prim.GetPath().pathString)
+                print(f"Articulation Root: {xform_prim.GetPath().pathString}, Articulation Handle: {art}")
                 if art != 0 and art not in art_list:
                     art_list.append(art)
-
-        print(art_list)
 
         for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
             joint_name = joint_prim.GetName()
@@ -39,8 +45,6 @@ class IsaacSimConnector(MultiverseClient):
                     self.joint_name_dict[joint_name] = joint_prim
                     self.joint_art_dict[joint_name] = art
                     break
-                else:
-                    print(f"Joint {joint_name} is not in the articulation.")
 
         for object_name in sorted(receive_objects.keys()):
             request_meta_data["receive"][object_name] = []
@@ -318,8 +322,6 @@ if __name__ == "__main__":
     simulation_context.initialize_physics()
     simulation_context.play()
 
-    simulation_context.reset()
-
     isaac_sim_connector = IsaacSimConnector(client_addr=client_addr, 
                                             multiverse_meta_data=multiverse_meta_data,
                                             usd_path=usd_path,
@@ -328,6 +330,8 @@ if __name__ == "__main__":
     isaac_sim_connector.run()
 
     isaac_sim_connector.send_and_receive_meta_data()
+
+    simulation_context.reset()
 
     while simulation_app.is_running():
         isaac_sim_connector.bind_send_data()

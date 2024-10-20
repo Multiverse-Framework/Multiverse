@@ -150,7 +150,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
 
     *world_time = 0.0;
 
-    sim_time = get_time_now();
+    sim_start_time = get_time_now();
 
     commnunicate_thread = std::thread(
         [this]() {
@@ -323,7 +323,7 @@ void MultiverseHWInterface::init_send_and_receive_data()
 
 void MultiverseHWInterface::bind_send_data()
 {
-    *world_time = get_time_now() - sim_time;
+    *world_time = get_time_now() - sim_start_time;
     for (size_t i = 0; i < send_buffer.buffer_double.size; i++)
     {
         send_buffer.buffer_double.data[i] = *send_data_vec[i];
@@ -346,6 +346,7 @@ void MultiverseHWInterface::clean_up()
 
 void MultiverseHWInterface::reset()
 {
+    sim_start_time = get_time_now();
     for (const std::string &joint_name : joint_names)
     {
         joint_commands[joint_name][0] = init_joint_positions[joint_name];
