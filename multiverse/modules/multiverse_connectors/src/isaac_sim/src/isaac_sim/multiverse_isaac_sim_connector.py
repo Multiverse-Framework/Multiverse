@@ -39,23 +39,29 @@ class IsaacSimConnector(MultiverseClient):
                               "unpause": unpause}
 
         def bind_request_meta_data_callback() -> None:
-            objects_to_spawn = []
-            objects_to_destroy = []
+            objects_to_spawn = set()
+            objects_to_destroy = set()
 
             request_meta_data = self.request_meta_data
             for object_name in request_meta_data["send"]:
                 if object_name in ["body", "joint"] or object_name in self.body_name_dict:
                     continue
                 if any(attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["send"][object_name]):
-                    objects_to_spawn.append(object_name)
+                    objects_to_spawn.add(object_name)
                 elif len(request_meta_data["send"][object_name]) == 0 and \
                     object_name in self.request_meta_data["receive"] and \
                     len(request_meta_data["receive"][object_name]) == 0:
-                    objects_to_destroy.append(object_name)
+                    objects_to_destroy.add(object_name)
+
+            for object_name in request_meta_data["receive"]:
+                if object_name in ["body", "joint"] or object_name in self.body_name_dict:
+                    continue
+                if any(attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["receive"][object_name]):
+                    objects_to_spawn.add(object_name)
 
             for object_name in objects_to_spawn:
                 object_file_path = f"{object_name}.usda"
-                self.loginfo(f"Searching for object {object_name} in {self.resources}.")
+                self.loginfo(f"Searching for object {object_name} in {self.resources}...")
                 for resource in self.resources:
                     for root, _, files in os.walk(resource):
                         if object_file_path in files:
@@ -68,13 +74,19 @@ class IsaacSimConnector(MultiverseClient):
                             usd_path=object_file_path,
                             prim_path=f"/{object_name}"
                         )
+                        self.loginfo(f"Spawned object {object_name}.")
                         if object_name in request_meta_data["send"]:
                             send_objects[object_name] = request_meta_data["send"][object_name]
-                        else:
-                            del self.request_meta_data["send"][object_name]
+                        if object_name in request_meta_data["receive"]:
+                            receive_objects[object_name] = request_meta_data["receive"][object_name]
                         break
                 else:
                     self.logwarn(f"Object {object_name} not found in {self.resources}.")
+                    del self.request_meta_data["send"][object_name]
+                    del self.request_meta_data["receive"][object_name]
+
+            if len(objects_to_spawn) > 0 or len(objects_to_destroy) > 0:
+                simulation_app.update()
 
             self.loginfo("Sending request meta data: " + str(self.request_meta_data))
 
@@ -82,18 +94,24 @@ class IsaacSimConnector(MultiverseClient):
             response_meta_data = self.response_meta_data
             self.loginfo("Received response meta data: " + str(response_meta_data))
 
-            if "send" in response_meta_data and any(object_name in self.body_name_dict for object_name in response_meta_data["send"]):
-                positions, quaternions = self.body_prim_view.get_world_poses()
-                for object_name, attributes in response_meta_data["send"].items():
+            if self.body_prim_view is None:
+                return
+            positions, quaternions = self.body_prim_view.get_world_poses()
+            for send_receive in ["send", "receive"]:
+                if send_receive not in response_meta_data:
+                    continue
+                for object_name, attributes in response_meta_data[send_receive].items():
                     if object_name in self.body_name_dict:
                         body_idx = self.body_prim_view_idx_dict[object_name]
                         for attribute in attributes:
-                            data = response_meta_data["send"][object_name][attribute]
+                            data = response_meta_data[send_receive][object_name][attribute]
+                            if any(x is None for x in data):
+                                continue
                             if attribute == "position":
                                 positions[body_idx] = [data[0], data[1], data[2]]
                             elif attribute == "quaternion":
                                 quaternions[body_idx] = [data[0], data[1], data[2], data[3]]
-                self.body_prim_view.set_world_poses(positions, quaternions)
+            self.body_prim_view.set_world_poses(positions, quaternions)
 
         def init_objects_callback() -> None:
             request_meta_data = self.request_meta_data
@@ -119,7 +137,13 @@ class IsaacSimConnector(MultiverseClient):
                     if art != 0 and art not in art_list:
                         art_list.append(art)
 
+            non_free_bodies = set()
             for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
+                joint = UsdPhysics.Joint(joint_prim)
+                body0_name = joint.GetBody0Rel().GetTargets()[0].name
+                body1_name = joint.GetBody1Rel().GetTargets()[0].name
+                non_free_bodies.add(body0_name)
+                non_free_bodies.add(body1_name)
                 joint_name = joint_prim.GetName()
                 for art in art_list:
                     dof_ptr = dc.find_articulation_dof(art, joint_name)
@@ -127,7 +151,7 @@ class IsaacSimConnector(MultiverseClient):
                         self.joint_name_dict[joint_name] = joint_prim
                         self.joint_art_dict[joint_name] = art
                         break
-
+            
             for object_name in sorted(self.receive_objects.keys()):
                 request_meta_data["receive"][object_name] = []
                 for attr in self.receive_objects[object_name]:
@@ -138,6 +162,8 @@ class IsaacSimConnector(MultiverseClient):
                     request_meta_data["send"][body_name] = []
                     for attr in self.send_objects["body"]:
                         if body_name in request_meta_data["receive"] and attr in request_meta_data["receive"][body_name]:
+                            continue
+                        if attr == "relative_velocity" and body_name in non_free_bodies:
                             continue
                         request_meta_data["send"][body_name].append(attr)
 
@@ -175,19 +201,22 @@ class IsaacSimConnector(MultiverseClient):
 
     def bind_send_data(self) -> None:
         send_data = [self.world_time + self.sim_time]
-        if any(object_name in self.body_name_dict for object_name in self.request_meta_data["send"]):
+        if self.body_prim_view is not None:
             positions, quaternions = self.body_prim_view.get_world_poses()
+            velocities = self.body_prim_view.get_velocities()
         for object_name, attributes in self.request_meta_data["send"].items():
             if object_name in self.body_name_dict:
+                body_idx = self.body_prim_view_idx_dict[object_name]
                 for attribute in attributes:
                     if attribute == "position":
-                        pos_idx = self.body_prim_view_idx_dict[object_name]
-                        position = positions[pos_idx]
+                        position = positions[body_idx]
                         send_data += [position[0], position[1], position[2]]
                     elif attribute == "quaternion":
-                        quat_idx = self.body_prim_view_idx_dict[object_name]
-                        quaternion = quaternions[quat_idx]
+                        quaternion = quaternions[body_idx]
                         send_data += [quaternion[0], quaternion[1], quaternion[2], quaternion[3]]
+                    elif attribute == "relative_velocity":
+                        velocity = velocities[body_idx]
+                        send_data += [velocity[0], velocity[1], velocity[2], velocity[3], velocity[4], velocity[5]]
 
             elif object_name in self.joint_name_dict:
                 art = self.joint_art_dict[object_name]
