@@ -141,6 +141,21 @@ public:
         api_callbacks = in_api_callbacks;
     }
 
+    inline void set_bind_request_meta_data_callback(const std::function<void ()> &in_bind_request_meta_data_callback)
+    {
+        bind_request_meta_data_callback = in_bind_request_meta_data_callback;
+    }
+
+    inline void set_bind_response_meta_data_callback(const std::function<void ()> &in_bind_response_meta_data_callback)
+    {
+        bind_response_meta_data_callback = in_bind_response_meta_data_callback;
+    }
+
+    inline void set_init_objects_callback(const std::function<void ()> &in_init_objects_callback)
+    {
+        init_objects_callback = in_init_objects_callback;
+    }
+
 private:
     pybind11::dict request_meta_data_dict;
 
@@ -157,6 +172,12 @@ private:
     std::vector<uint8_t> receive_data_uint8_t;
 
     std::vector<uint16_t> receive_data_uint16_t;
+
+    std::function<void ()> bind_request_meta_data_callback = []() {};
+
+    std::function<void ()> bind_response_meta_data_callback = []() {};
+
+    std::function<void ()> init_objects_callback = []() {};
 
     std::map<std::string, std::function<pybind11::list(pybind11::list)>> api_callbacks;
 
@@ -331,6 +352,7 @@ private:
         {
             bind_request_meta_data();
         }
+        init_objects_callback();
         return true;
     }
 
@@ -338,14 +360,20 @@ private:
     {
         request_meta_data_str = pybind11::str(request_meta_data_dict).cast<std::string>();
         std::replace(request_meta_data_str.begin(), request_meta_data_str.end(), '\'', '"');
+        bind_request_meta_data_callback();
     }
 
     void bind_response_meta_data() override
     {
+        bind_response_meta_data_callback();
     }
 
     void bind_api_callbacks() override
     {
+        if (!response_meta_data_dict.contains("api_callbacks"))
+        {
+            return;
+        }
         pybind11::list api_callbacks_list = response_meta_data_dict["api_callbacks"].cast<pybind11::list>();
         for (size_t i = 0; i < pybind11::len(api_callbacks_list); i++)
         {
@@ -366,6 +394,10 @@ private:
 
     void bind_api_callbacks_response() override
     {
+        if (!response_meta_data_dict.contains("api_callbacks"))
+        {
+            return;
+        }
         request_meta_data_dict["api_callbacks_response"] = pybind11::list();
         pybind11::list api_callbacks_list = response_meta_data_dict["api_callbacks"].cast<pybind11::list>();
         for (size_t i = 0; i < pybind11::len(api_callbacks_list); i++)
@@ -492,5 +524,8 @@ PYBIND11_MODULE(multiverse_client_pybind, handle)
         .def("get_response_meta_data", &MultiverseClientPybind::get_response_meta_data)
         .def("set_send_data", &MultiverseClientPybind::set_send_data)
         .def("get_receive_data", &MultiverseClientPybind::get_receive_data)
-        .def("set_api_callbacks", &MultiverseClientPybind::set_api_callbacks);
+        .def("set_api_callbacks", &MultiverseClientPybind::set_api_callbacks)
+        .def("set_bind_request_meta_data_callback", &MultiverseClientPybind::set_bind_request_meta_data_callback)
+        .def("set_bind_response_meta_data_callback", &MultiverseClientPybind::set_bind_response_meta_data_callback)
+        .def("set_init_objects_callback", &MultiverseClientPybind::set_init_objects_callback);
 }

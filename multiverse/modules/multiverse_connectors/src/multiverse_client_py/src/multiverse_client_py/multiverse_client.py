@@ -42,6 +42,9 @@ class MultiverseClient:
     _multiverse_socket: MultiverseClientPybind
     _start_time: float
     _api_callbacks: Dict[str, Callable[[List[str]], List[str]]]
+    _bind_request_meta_data_callback: Callable
+    _bind_response_meta_data_callback: Callable
+    _init_objects_callback: Callable
 
     def __init__(
         self,
@@ -171,6 +174,36 @@ class MultiverseClient:
         """Set the api_callbacks."""
         self._multiverse_socket.set_api_callbacks(api_callbacks)
         self._api_callbacks = api_callbacks
+
+    @property
+    def bind_request_meta_data_callback(self) -> Callable:
+        """Get the bind_request_meta_data_callback."""
+        return self._bind_request_meta_data_callback
+
+    @bind_request_meta_data_callback.setter
+    def bind_request_meta_data_callback(self, request_meta_data_callback: Callable) -> None:
+        """Set the bind_request_meta_data_callback."""
+        self._multiverse_socket.set_bind_request_meta_data_callback(request_meta_data_callback)
+
+    @property
+    def bind_response_meta_data_callback(self) -> Callable:
+        """Get the bind_response_meta_data_callback."""
+        return self._bind_response_meta_data_callback
+
+    @bind_response_meta_data_callback.setter
+    def bind_response_meta_data_callback(self, response_meta_data_callback: Callable) -> None:
+        """Set the bind_response_meta_data_callback."""
+        self._multiverse_socket.set_bind_response_meta_data_callback(response_meta_data_callback)
+
+    @property
+    def init_objects_callback(self) -> Callable:
+        """Get the init_objects_callback."""
+        return self._init_objects_callback
+    
+    @init_objects_callback.setter
+    def init_objects_callback(self, init_objects_callback: Callable) -> None:
+        """Set the init_objects_callback."""
+        self._multiverse_socket.set_init_objects_callback(init_objects_callback)
 
     def _bind_request_meta_data(self, request_meta_data: T) -> T:
         """Bind the request_meta_data before sending it to the server.

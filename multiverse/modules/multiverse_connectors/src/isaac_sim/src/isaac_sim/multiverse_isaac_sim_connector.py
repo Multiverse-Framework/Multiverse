@@ -7,7 +7,8 @@ class IsaacSimConnector(MultiverseClient):
                  multiverse_meta_data: MultiverseMetaData,
                  usd_path: str,
                  send_objects: Dict[str, List[str]],
-                 receive_objects: Dict[str, List[str]]) -> None:
+                 receive_objects: Dict[str, List[str]],
+                 resources: List[str]) -> None:
         super().__init__(client_addr, multiverse_meta_data)
         self.stage = Usd.Stage.Open(usd_path)
         self.body_name_dict = {}
@@ -15,82 +16,167 @@ class IsaacSimConnector(MultiverseClient):
         self.body_prim_view_idx_dict = {}
         self.joint_name_dict = {}
         self.joint_art_dict = {}
-        self.init(send_objects, receive_objects)
+        self.ignore_names = ["defaultGroundPlane", "GroundPlane", "Environment"]
+        self.send_objects = send_objects
+        self.receive_objects = receive_objects
+        self.resources = resources
+        self.init_callbacks()        
 
-    def init(self, send_objects: Dict[str, List[str]], receive_objects: Dict[str, List[str]]) -> None:
-        request_meta_data = self.request_meta_data
+    def init_callbacks(self) -> None:
+        def is_isaac_sim(args: List[str]) -> List[str]:
+            return ["yes"]
 
-        art_list = []
+        def pause(args: List[str]) -> List[str]:
+            simulation_context.pause()
+            return ["paused"]
+        
+        def unpause(args: List[str]) -> List[str]:
+            simulation_context.play()
+            return ["unpaused"]
 
-        for xform_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdGeom.Xform)]:
-            body_name = xform_prim.GetName()
-            self.body_name_dict[body_name] = xform_prim
+        self.api_callbacks = {"is_isaac_sim": is_isaac_sim,
+                              "pause": pause,
+                              "unpause": unpause}
 
-        for prim in self.stage.TraverseAll():
-            if prim.HasAPI(UsdPhysics.ArticulationRootAPI):
-                if prim.IsA(UsdGeom.Xform):
-                    xform_prim = prim
-                elif prim.IsA(UsdPhysics.Joint):
-                    joint = UsdPhysics.Joint(prim)
-                    xform_prim_path = joint.GetBody1Rel().GetTargets()[0]
-                    xform_prim = self.stage.GetPrimAtPath(xform_prim_path)
-                art = dc.get_articulation(xform_prim.GetPath().pathString)
-                print(f"Articulation Root: {xform_prim.GetPath().pathString}, Articulation Handle: {art}")
-                if art != 0 and art not in art_list:
-                    art_list.append(art)
+        def bind_request_meta_data_callback() -> None:
+            objects_to_spawn = []
+            objects_to_destroy = []
 
-        for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
-            joint_name = joint_prim.GetName()
-            for art in art_list:
-                dof_ptr = dc.find_articulation_dof(art, joint_name)
-                if dof_ptr != 0:
-                    self.joint_name_dict[joint_name] = joint_prim
-                    self.joint_art_dict[joint_name] = art
-                    break
+            request_meta_data = self.request_meta_data
+            for object_name in request_meta_data["send"]:
+                if object_name in ["body", "joint"] or object_name in self.body_name_dict:
+                    continue
+                if any(attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["send"][object_name]):
+                    objects_to_spawn.append(object_name)
+                elif len(request_meta_data["send"][object_name]) == 0 and \
+                    object_name in self.request_meta_data["receive"] and \
+                    len(request_meta_data["receive"][object_name]) == 0:
+                    objects_to_destroy.append(object_name)
 
-        for object_name in sorted(receive_objects.keys()):
-            request_meta_data["receive"][object_name] = []
-            for attr in receive_objects[object_name]:
-                request_meta_data["receive"][object_name].append(attr)
+            for object_name in objects_to_spawn:
+                object_file_path = f"{object_name}.usda"
+                self.loginfo(f"Searching for object {object_name} in {self.resources}.")
+                for resource in self.resources:
+                    for root, _, files in os.walk(resource):
+                        if object_file_path in files:
+                            object_file_path = os.path.join(root, object_file_path)
+                            break
+                    if os.path.exists(object_file_path):
+                        self.loginfo(f"Found object {object_name} in {object_file_path}.")
+                        execute(
+                            "IsaacSimSpawnPrim",
+                            usd_path=object_file_path,
+                            prim_path=f"/{object_name}"
+                        )
+                        if object_name in request_meta_data["send"]:
+                            send_objects[object_name] = request_meta_data["send"][object_name]
+                        else:
+                            del self.request_meta_data["send"][object_name]
+                        break
+                else:
+                    self.logwarn(f"Object {object_name} not found in {self.resources}.")
 
-        if "body" in send_objects:
-            for body_name in sorted(self.body_name_dict.keys()):
-                request_meta_data["send"][body_name] = []
-                for attr in send_objects["body"]:
-                    if body_name in request_meta_data["receive"] and attr in request_meta_data["receive"][body_name]:
-                        continue
-                    request_meta_data["send"][body_name].append(attr)
+            self.loginfo("Sending request meta data: " + str(self.request_meta_data))
 
-        if "joint" in send_objects:
-            for joint_name in sorted(self.joint_name_dict.keys()):
-                request_meta_data["send"][joint_name] = []
-                for attr in send_objects["joint"]:
-                    if joint_name in request_meta_data["receive"] and attr in request_meta_data["receive"][joint_name]:
-                        continue
-                    joint_prim = self.joint_name_dict[joint_name]
-                    if joint_prim.IsA(UsdPhysics.RevoluteJoint) and attr in ["joint_rvalue", "joint_angular_velocity", "joint_torque"] or \
-                        joint_prim.IsA(UsdPhysics.PrismaticJoint) and attr in ["joint_tvalue", "joint_linear_velocity", "joint_force"]:
-                        request_meta_data["send"][joint_name].append(attr)
+        def bind_response_meta_data_callback() -> None:
+            response_meta_data = self.response_meta_data
+            self.loginfo("Received response meta data: " + str(response_meta_data))
 
-        for object_name in sorted(send_objects.keys()):
-            if object_name not in ["body", "joint"]:
-                request_meta_data["send"][object_name] = []
-                for attr in send_objects[object_name]:
-                    request_meta_data["send"][object_name].append(attr)
+            if "send" in response_meta_data and any(object_name in self.body_name_dict for object_name in response_meta_data["send"]):
+                positions, quaternions = self.body_prim_view.get_world_poses()
+                for object_name, attributes in response_meta_data["send"].items():
+                    if object_name in self.body_name_dict:
+                        body_idx = self.body_prim_view_idx_dict[object_name]
+                        for attribute in attributes:
+                            data = response_meta_data["send"][object_name][attribute]
+                            if attribute == "position":
+                                positions[body_idx] = [data[0], data[1], data[2]]
+                            elif attribute == "quaternion":
+                                quaternions[body_idx] = [data[0], data[1], data[2], data[3]]
+                self.body_prim_view.set_world_poses(positions, quaternions)
 
-        body_paths = []
-        for object_name in list(request_meta_data["send"].keys()) + list(request_meta_data["receive"].keys()):
-            if object_name in self.body_name_dict:
-                body_paths.append(self.body_name_dict[object_name].GetPath().pathString)
-                self.body_prim_view_idx_dict[object_name] = len(body_paths) - 1
+        def init_objects_callback() -> None:
+            request_meta_data = self.request_meta_data
 
-        self.body_prim_view = RigidPrimView(prim_paths_expr=body_paths)
+            art_list = []
 
-        self.request_meta_data = request_meta_data
+            for xform_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdGeom.Xform)]:
+                body_name = xform_prim.GetName()
+                if body_name in self.ignore_names:
+                    continue
+                self.body_name_dict[body_name] = xform_prim
+
+            for prim in self.stage.TraverseAll():
+                if prim.HasAPI(UsdPhysics.ArticulationRootAPI):
+                    if prim.IsA(UsdGeom.Xform):
+                        xform_prim = prim
+                    elif prim.IsA(UsdPhysics.Joint):
+                        joint = UsdPhysics.Joint(prim)
+                        xform_prim_path = joint.GetBody1Rel().GetTargets()[0]
+                        xform_prim = self.stage.GetPrimAtPath(xform_prim_path)
+                    art = dc.get_articulation(xform_prim.GetPath().pathString)
+                    print(f"Articulation Root: {xform_prim.GetPath().pathString}, Articulation Handle: {art}")
+                    if art != 0 and art not in art_list:
+                        art_list.append(art)
+
+            for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
+                joint_name = joint_prim.GetName()
+                for art in art_list:
+                    dof_ptr = dc.find_articulation_dof(art, joint_name)
+                    if dof_ptr != 0:
+                        self.joint_name_dict[joint_name] = joint_prim
+                        self.joint_art_dict[joint_name] = art
+                        break
+
+            for object_name in sorted(self.receive_objects.keys()):
+                request_meta_data["receive"][object_name] = []
+                for attr in self.receive_objects[object_name]:
+                    request_meta_data["receive"][object_name].append(attr)
+
+            if "body" in self.send_objects:
+                for body_name in sorted(self.body_name_dict.keys()):
+                    request_meta_data["send"][body_name] = []
+                    for attr in self.send_objects["body"]:
+                        if body_name in request_meta_data["receive"] and attr in request_meta_data["receive"][body_name]:
+                            continue
+                        request_meta_data["send"][body_name].append(attr)
+
+            if "joint" in self.send_objects:
+                for joint_name in sorted(self.joint_name_dict.keys()):
+                    request_meta_data["send"][joint_name] = []
+                    for attr in self.send_objects["joint"]:
+                        if joint_name in request_meta_data["receive"] and attr in request_meta_data["receive"][joint_name]:
+                            continue
+                        joint_prim = self.joint_name_dict[joint_name]
+                        if joint_prim.IsA(UsdPhysics.RevoluteJoint) and attr in ["joint_rvalue", "joint_angular_velocity", "joint_torque"] or \
+                            joint_prim.IsA(UsdPhysics.PrismaticJoint) and attr in ["joint_tvalue", "joint_linear_velocity", "joint_force"]:
+                            request_meta_data["send"][joint_name].append(attr)
+
+            for object_name in sorted(self.send_objects.keys()):
+                if object_name not in ["body", "joint"]:
+                    request_meta_data["send"][object_name] = []
+                    for attr in self.send_objects[object_name]:
+                        request_meta_data["send"][object_name].append(attr)
+
+            body_paths = []
+            for object_name in list(request_meta_data["send"].keys()) + list(request_meta_data["receive"].keys()):
+                if object_name in self.body_name_dict:
+                    body_paths.append(self.body_name_dict[object_name].GetPath().pathString)
+                    self.body_prim_view_idx_dict[object_name] = len(body_paths) - 1
+
+            if len(body_paths) > 0:
+                self.body_prim_view = RigidPrimView(prim_paths_expr=body_paths)
+
+            self.request_meta_data = request_meta_data
+
+        self.bind_request_meta_data_callback = bind_request_meta_data_callback
+        self.bind_response_meta_data_callback = bind_response_meta_data_callback
+        self.init_objects_callback = init_objects_callback
 
     def bind_send_data(self) -> None:
         send_data = [self.world_time + self.sim_time]
-        positions, quaternions = self.body_prim_view.get_world_poses()
+        if any(object_name in self.body_name_dict for object_name in self.request_meta_data["send"]):
+            positions, quaternions = self.body_prim_view.get_world_poses()
         for object_name, attributes in self.request_meta_data["send"].items():
             if object_name in self.body_name_dict:
                 for attribute in attributes:
@@ -190,9 +276,7 @@ class IsaacSimConnector(MultiverseClient):
         self._connect_and_start()
 
     def send_and_receive_meta_data(self) -> None:
-        self.loginfo("Sending request meta data: " + str(self.request_meta_data))
         self._communicate(True)
-        self.loginfo("Received response meta data: " + str(self.response_meta_data))
 
     def send_and_receive_data(self) -> None:
         self._communicate(False)
@@ -203,6 +287,7 @@ class IsaacSimConnector(MultiverseClient):
 import argparse
 import json
 import sys
+import os
 import numpy
 from isaacsim import SimulationApp
 
@@ -276,6 +361,7 @@ if __name__ == "__main__":
     from omni.isaac.core.prims import RigidPrimView
     from omni.isaac.core.utils.stage import is_stage_loading
     from omni.isaac.dynamic_control import _dynamic_control
+    from omni.kit.commands import execute
 
     dc = _dynamic_control.acquire_dynamic_control_interface()
 
@@ -310,14 +396,14 @@ if __name__ == "__main__":
                                             multiverse_meta_data=multiverse_meta_data,
                                             usd_path=usd_path,
                                             send_objects=send_objects,
-                                            receive_objects=receive_objects)
+                                            receive_objects=receive_objects,
+                                            resources=resources)
     isaac_sim_connector.run()
-
-    isaac_sim_connector.send_and_receive_meta_data()
 
     simulation_context.reset()
 
-    isaac_sim_connector.body_prim_view.initialize(simulation_context.physics_sim_view)
+    if isaac_sim_connector.body_prim_view is not None:
+        isaac_sim_connector.body_prim_view.initialize(simulation_context.physics_sim_view)
 
     while simulation_app.is_running():
         isaac_sim_connector.bind_send_data()

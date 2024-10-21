@@ -44,7 +44,7 @@ simulations:
         apply:
           body:
             milk_box:
-              pos: [1.0, 1.0, 2.0]
+              pos: [3.0, 4.0, 1.1]
 
 multiverse_server:
   host: "tcp://127.0.0.1"
