@@ -1,13 +1,16 @@
 from multiverse_client_py import MultiverseClient, MultiverseMetaData, SocketAddress
 from typing import Dict, List
 
+
 class IsaacSimConnector(MultiverseClient):
-    def __init__(self, 
-                 client_addr: SocketAddress, 
-                 multiverse_meta_data: MultiverseMetaData,
-                 send_objects: Dict[str, List[str]],
-                 receive_objects: Dict[str, List[str]],
-                 resources: List[str]) -> None:
+    def __init__(
+        self,
+        client_addr: SocketAddress,
+        multiverse_meta_data: MultiverseMetaData,
+        send_objects: Dict[str, List[str]],
+        receive_objects: Dict[str, List[str]],
+        resources: List[str],
+    ) -> None:
         super().__init__(client_addr, multiverse_meta_data)
         self.body_name_dict = {}
         self.body_prim_view = None
@@ -21,20 +24,24 @@ class IsaacSimConnector(MultiverseClient):
         self.init_callbacks()
 
     def init_callbacks(self) -> None:
-        def is_isaac_sim(args: List[str]) -> List[str]:
+        def is_isaac_sim_response(args: List[str]) -> List[str]:
             return ["yes"]
 
-        def pause(args: List[str]) -> List[str]:
-            simulation_context.pause()
-            return ["paused"]
-        
-        def unpause(args: List[str]) -> List[str]:
-            simulation_context.play()
-            return ["unpaused"]
+        def pause_response(args: List[str]) -> List[str]:
+            return ["paused"] if not simulation_context.is_playing() else ["failed to pause"]
 
-        self.api_callbacks = {"is_isaac_sim": is_isaac_sim,
-                              "pause": pause,
-                              "unpause": unpause}
+        def unpause_response(args: List[str]) -> List[str]:
+            return ["unpaused"] if simulation_context.is_playing() else ["failed to unpause"]
+
+        self.api_callbacks_response = {"is_isaac_sim": is_isaac_sim_response, "pause": pause_response, "unpause": unpause_response}
+
+        def pause(args: List[str]) -> None:
+            simulation_context.pause()
+
+        def unpause(args: List[str]) -> None:
+            simulation_context.play()
+
+        self.api_callbacks = {"pause": pause, "unpause": unpause}
 
         def bind_request_meta_data_callback() -> None:
             objects_to_spawn = set()
@@ -44,11 +51,15 @@ class IsaacSimConnector(MultiverseClient):
             for object_name in request_meta_data["send"]:
                 if object_name in ["body", "joint"]:
                     continue
-                if object_name not in self.body_name_dict and any(attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["send"][object_name]):
+                if object_name not in self.body_name_dict and any(
+                    attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["send"][object_name]
+                ):
                     objects_to_spawn.add(object_name)
-                elif len(request_meta_data["send"][object_name]) == 0 and \
-                    object_name in self.request_meta_data["receive"] and \
-                    len(request_meta_data["receive"][object_name]) == 0:
+                elif (
+                    len(request_meta_data["send"][object_name]) == 0
+                    and object_name in self.request_meta_data["receive"]
+                    and len(request_meta_data["receive"][object_name]) == 0
+                ):
                     objects_to_destroy.add(object_name)
 
             for object_name in request_meta_data["receive"]:
@@ -67,11 +78,7 @@ class IsaacSimConnector(MultiverseClient):
                             break
                     if os.path.exists(object_file_path):
                         self.loginfo(f"Found object {object_name} in {object_file_path}.")
-                        prims_utils.create_prim(
-                            prim_path=f"/{object_name}",
-                            prim_type="Xform",
-                            usd_path=object_file_path
-                        )
+                        prims_utils.create_prim(prim_path=f"/{object_name}", prim_type="Xform", usd_path=object_file_path)
                         self.loginfo(f"Spawned object {object_name}.")
                         if object_name in request_meta_data["send"]:
                             send_objects[object_name] = request_meta_data["send"][object_name]
@@ -99,6 +106,7 @@ class IsaacSimConnector(MultiverseClient):
 
             self.request_meta_data = request_meta_data
             self.loginfo("Sending request meta data: " + str(self.request_meta_data))
+
         self.bind_request_meta_data_callback = bind_request_meta_data_callback
 
         def bind_response_meta_data_callback() -> None:
@@ -123,6 +131,7 @@ class IsaacSimConnector(MultiverseClient):
                             elif attribute == "quaternion":
                                 quaternions[body_idx] = [data[0], data[1], data[2], data[3]]
             self.body_prim_view.set_world_poses(positions, quaternions)
+
         self.bind_response_meta_data_callback = bind_response_meta_data_callback
 
         def init_objects_callback() -> None:
@@ -155,7 +164,9 @@ class IsaacSimConnector(MultiverseClient):
                         art_list.append(art)
 
             non_free_bodies = set()
-            for joint_prim in [prim for prim in current_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
+            for joint_prim in [
+                prim for prim in current_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)
+            ]:
                 joint = UsdPhysics.Joint(joint_prim)
                 body0_name = joint.GetBody0Rel().GetTargets()[0].name
                 body1_name = joint.GetBody1Rel().GetTargets()[0].name
@@ -178,7 +189,7 @@ class IsaacSimConnector(MultiverseClient):
             for object_name in receive_object_names:
                 if object_name not in self.body_name_dict and object_name not in self.joint_name_dict:
                     del request_meta_data["receive"][object_name]
-            
+
             for object_name in sorted(self.receive_objects.keys()):
                 request_meta_data["receive"][object_name] = []
                 for attr in self.receive_objects[object_name]:
@@ -201,8 +212,12 @@ class IsaacSimConnector(MultiverseClient):
                         if joint_name in request_meta_data["receive"] and attr in request_meta_data["receive"][joint_name]:
                             continue
                         joint_prim = self.joint_name_dict[joint_name]
-                        if joint_prim.IsA(UsdPhysics.RevoluteJoint) and attr in ["joint_rvalue", "joint_angular_velocity", "joint_torque"] or \
-                            joint_prim.IsA(UsdPhysics.PrismaticJoint) and attr in ["joint_tvalue", "joint_linear_velocity", "joint_force"]:
+                        if (
+                            joint_prim.IsA(UsdPhysics.RevoluteJoint)
+                            and attr in ["joint_rvalue", "joint_angular_velocity", "joint_torque"]
+                            or joint_prim.IsA(UsdPhysics.PrismaticJoint)
+                            and attr in ["joint_tvalue", "joint_linear_velocity", "joint_force"]
+                        ):
                             request_meta_data["send"][joint_name].append(attr)
 
             for object_name in sorted(self.send_objects.keys()):
@@ -221,6 +236,7 @@ class IsaacSimConnector(MultiverseClient):
                 self.body_prim_view = RigidPrimView(prim_paths_expr=body_paths)
 
             self.request_meta_data = request_meta_data
+
         self.init_objects_callback = init_objects_callback
 
         def bind_send_data() -> None:
@@ -262,6 +278,7 @@ class IsaacSimConnector(MultiverseClient):
                             send_data += [dof_state.effort]
 
             self.send_data = send_data
+
         self.bind_send_data_callback = bind_send_data
 
         def bind_receive_data() -> None:
@@ -298,16 +315,34 @@ class IsaacSimConnector(MultiverseClient):
                         receive_data = receive_data[6:]
 
                         linear_velocity = [
-                            odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) + odom_velocity[1] * (numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) - numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)) + odom_velocity[2] * (numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) + numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)),
-                            odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) + odom_velocity[1] * (numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) + numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)) + odom_velocity[2] * (numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) - numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)),
-                            odom_velocity[0] * numpy.sin(odom_ang_y_joint_pos) + odom_velocity[1] * numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos) + odom_velocity[2] * numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos)
+                            odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                            + odom_velocity[1]
+                            * (
+                                numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                - numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                            )
+                            + odom_velocity[2]
+                            * (
+                                numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                + numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                            ),
+                            odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                            + odom_velocity[1]
+                            * (
+                                numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                + numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                            )
+                            + odom_velocity[2]
+                            * (
+                                numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                - numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                            ),
+                            odom_velocity[0] * numpy.sin(odom_ang_y_joint_pos)
+                            + odom_velocity[1] * numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos)
+                            + odom_velocity[2] * numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos),
                         ]
-                        
-                        angular_velocity = [
-                            odom_velocity[3],
-                            odom_velocity[4],
-                            odom_velocity[5]
-                        ]
+
+                        angular_velocity = [odom_velocity[3], odom_velocity[4], odom_velocity[5]]
 
                         dc.set_rigid_body_linear_velocity(rigid_body_handle, linear_velocity)
                         dc.set_rigid_body_angular_velocity(rigid_body_handle, angular_velocity)
@@ -318,6 +353,7 @@ class IsaacSimConnector(MultiverseClient):
                         joint_value = receive_data[0]
                         receive_data = receive_data[1:]
                         dc.set_dof_position_target(dof_ptr, joint_value)
+
         self.bind_receive_data_callback = bind_receive_data
 
     def loginfo(self, message: str) -> None:
@@ -359,24 +395,16 @@ if __name__ == "__main__":
 
     # Set up command line arguments
     parser = argparse.ArgumentParser("Multiverse Isaac Sim Connector")
-    parser.add_argument(
-        "--usd_path", type=str, help="Absolute path to usd file", required=True
-    )
-    parser.add_argument(
-        "--headless", default=False, action="store_true", help="Run stage headless"
-    )
+    parser.add_argument("--usd_path", type=str, help="Absolute path to usd file", required=True)
+    parser.add_argument("--headless", default=False, action="store_true", help="Run stage headless")
 
     parser.add_argument("--config_params", type=str, required=False)
     parser.add_argument("--multiverse_params", type=str, required=False)
 
     args, unknown = parser.parse_known_args()
 
-    config_params = (
-        json.loads(args.config_params) if args.config_params is not None else {}
-    )
-    multiverse_params = (
-        json.loads(args.multiverse_params) if args.multiverse_params is not None else {}
-    )
+    config_params = json.loads(args.config_params) if args.config_params is not None else {}
+    multiverse_params = json.loads(args.multiverse_params) if args.multiverse_params is not None else {}
 
     # Start the Multiverse Client
     multiverse_server_params = multiverse_params.get("multiverse_server", {})
@@ -387,18 +415,14 @@ if __name__ == "__main__":
 
     multiverse_client_meta_data_params = multiverse_client_params.get("meta_data", {})
     world_name = multiverse_client_meta_data_params.get("world_name", "world")
-    simulation_name = multiverse_client_meta_data_params.get(
-        "simulation_name", "isaac_sim"
-    )
+    simulation_name = multiverse_client_meta_data_params.get("simulation_name", "isaac_sim")
 
     resources = multiverse_client_params.get("resources", [])
 
     send_objects = multiverse_client_params.get("send", {})
     receive_objects = multiverse_client_params.get("receive", {})
 
-    multiverse_meta_data = MultiverseMetaData(
-        world_name=world_name, simulation_name=simulation_name
-    )
+    multiverse_meta_data = MultiverseMetaData(world_name=world_name, simulation_name=simulation_name)
 
     client_addr = SocketAddress(port=str(client_port))
 
@@ -429,9 +453,7 @@ if __name__ == "__main__":
         result = False
 
     if not result:
-        carb.log_error(
-            f"the usd path {usd_path} could not be opened, please make sure that {args.usd_path} is a valid usd file"
-        )
+        carb.log_error(f"the usd path {usd_path} could not be opened, please make sure that {args.usd_path} is a valid usd file")
         simulation_app.close()
         sys.exit()
 
@@ -447,11 +469,13 @@ if __name__ == "__main__":
     simulation_context.initialize_physics()
     simulation_context.play()
 
-    isaac_sim_connector = IsaacSimConnector(client_addr=client_addr, 
-                                            multiverse_meta_data=multiverse_meta_data,
-                                            send_objects=send_objects,
-                                            receive_objects=receive_objects,
-                                            resources=resources)
+    isaac_sim_connector = IsaacSimConnector(
+        client_addr=client_addr,
+        multiverse_meta_data=multiverse_meta_data,
+        send_objects=send_objects,
+        receive_objects=receive_objects,
+        resources=resources,
+    )
     isaac_sim_connector.run()
 
     simulation_context.reset()
@@ -461,11 +485,11 @@ if __name__ == "__main__":
 
     while simulation_app.is_running():
         isaac_sim_connector.send_and_receive_data()
-        
+
         # Run in realtime mode, we don't specify the step size
         simulation_context.step(render=True)
 
     simulation_context.stop()
-    simulation_app.close() # close Isaac Sim
+    simulation_app.close()  # close Isaac Sim
 
     isaac_sim_connector.stop()

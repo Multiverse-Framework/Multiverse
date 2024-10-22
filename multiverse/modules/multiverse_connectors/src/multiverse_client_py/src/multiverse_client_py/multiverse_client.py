@@ -41,7 +41,8 @@ class MultiverseClient:
     _meta_data: MultiverseMetaData
     _multiverse_socket: MultiverseClientPybind
     _start_time: float
-    _api_callbacks: Dict[str, Callable[[List[str]], List[str]]]
+    _api_callbacks: Dict[str, Callable]
+    _api_callbacks_response: Dict[str, Callable]
     _bind_request_meta_data_callback: Callable
     _bind_response_meta_data_callback: Callable
     _bind_send_data_callback: Callable
@@ -165,17 +166,28 @@ class MultiverseClient:
         return receive_data
 
     @property
-    def api_callbacks(self) -> Dict[str, Callable[[List[str]], List[str]]]:
+    def api_callbacks(self) -> Dict[str, Callable]:
         """Get the api_callbacks."""
         return self._api_callbacks
 
     @api_callbacks.setter
     def api_callbacks(
-        self, api_callbacks: Dict[str, Callable[[List[str]], List[str]]]
+        self, api_callbacks: Dict[str, Callable]
     ) -> None:
         """Set the api_callbacks."""
         self._multiverse_socket.set_api_callbacks(api_callbacks)
         self._api_callbacks = api_callbacks
+
+    @property
+    def api_callbacks_response(self) -> Dict[str, Callable]:
+        """Get the api_callbacks_response."""
+        return self._api_callbacks_response
+    
+    @api_callbacks_response.setter
+    def api_callbacks_response(self, api_callbacks_response: Dict[str, Callable]) -> None:
+        """Set the api_callbacks_response."""
+        self._multiverse_socket.set_api_callbacks_response(api_callbacks_response)
+        self._api_callbacks_response = api_callbacks_response
 
     @property
     def bind_request_meta_data_callback(self) -> Callable:
