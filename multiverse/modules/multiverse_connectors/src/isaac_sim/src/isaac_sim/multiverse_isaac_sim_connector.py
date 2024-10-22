@@ -99,6 +99,7 @@ class IsaacSimConnector(MultiverseClient):
 
             self.request_meta_data = request_meta_data
             self.loginfo("Sending request meta data: " + str(self.request_meta_data))
+        self.bind_request_meta_data_callback = bind_request_meta_data_callback
 
         def bind_response_meta_data_callback() -> None:
             response_meta_data = self.response_meta_data
@@ -122,6 +123,7 @@ class IsaacSimConnector(MultiverseClient):
                             elif attribute == "quaternion":
                                 quaternions[body_idx] = [data[0], data[1], data[2], data[3]]
             self.body_prim_view.set_world_poses(positions, quaternions)
+        self.bind_response_meta_data_callback = bind_response_meta_data_callback
 
         def init_objects_callback() -> None:
             request_meta_data = self.request_meta_data
@@ -219,105 +221,104 @@ class IsaacSimConnector(MultiverseClient):
                 self.body_prim_view = RigidPrimView(prim_paths_expr=body_paths)
 
             self.request_meta_data = request_meta_data
-
-        self.bind_request_meta_data_callback = bind_request_meta_data_callback
-        self.bind_response_meta_data_callback = bind_response_meta_data_callback
         self.init_objects_callback = init_objects_callback
 
-    def bind_send_data(self) -> None:
-        send_data = [self.world_time + self.sim_time]
-        if self.body_prim_view is not None:
-            positions, quaternions = self.body_prim_view.get_world_poses()
-            velocities = self.body_prim_view.get_velocities()
-        for object_name, attributes in self.request_meta_data["send"].items():
-            if object_name in self.body_name_dict:
-                body_idx = self.body_prim_view_idx_dict[object_name]
-                for attribute in attributes:
-                    if attribute == "position":
-                        position = positions[body_idx]
-                        send_data += [position[0], position[1], position[2]]
-                    elif attribute == "quaternion":
-                        quaternion = quaternions[body_idx]
-                        send_data += [quaternion[0], quaternion[1], quaternion[2], quaternion[3]]
-                    elif attribute == "relative_velocity":
-                        velocity = velocities[body_idx]
-                        send_data += [velocity[0], velocity[1], velocity[2], velocity[3], velocity[4], velocity[5]]
+        def bind_send_data() -> None:
+            send_data = [self.world_time + self.sim_time]
+            if self.body_prim_view is not None:
+                positions, quaternions = self.body_prim_view.get_world_poses()
+                velocities = self.body_prim_view.get_velocities()
+            for object_name, attributes in self.request_meta_data["send"].items():
+                if object_name in self.body_name_dict:
+                    body_idx = self.body_prim_view_idx_dict[object_name]
+                    for attribute in attributes:
+                        if attribute == "position":
+                            position = positions[body_idx]
+                            send_data += [position[0], position[1], position[2]]
+                        elif attribute == "quaternion":
+                            quaternion = quaternions[body_idx]
+                            send_data += [quaternion[0], quaternion[1], quaternion[2], quaternion[3]]
+                        elif attribute == "relative_velocity":
+                            velocity = velocities[body_idx]
+                            send_data += [velocity[0], velocity[1], velocity[2], velocity[3], velocity[4], velocity[5]]
 
-            elif object_name in self.joint_name_dict:
-                art = self.joint_art_dict[object_name]
-                dof_ptr = dc.find_articulation_dof(art, object_name)
-                dof_state = dc.get_dof_state(dof_ptr, _dynamic_control.STATE_ALL)
-
-                for attribute in attributes:
-                    if attribute == "joint_rvalue":
-                        send_data += [dof_state.pos]
-                    elif attribute == "joint_tvalue":
-                        send_data += [dof_state.pos]
-                    elif attribute == "joint_linear_velocity":
-                        send_data += [dof_state.vel]
-                    elif attribute == "joint_angular_velocity":
-                        send_data += [dof_state.vel]
-                    elif attribute == "joint_force":
-                        send_data += [dof_state.effort]
-                    elif attribute == "joint_torque":
-                        send_data += [dof_state.effort]
-
-        self.send_data = send_data
-
-    def bind_receive_data(self) -> None:
-        receive_data = self.receive_data
-        sim_time = receive_data[0]
-        receive_data = receive_data[1:]
-        for object_name, attributes in self.request_meta_data["receive"].items():
-            for attribute in attributes:
-                if attribute == "odometric_velocity" and object_name in self.body_name_dict:
-                    body_prim = self.body_name_dict[object_name]
-                    rigid_body_handle = dc.get_rigid_body(body_prim.GetPath().pathString)
-                    body_pose = dc.get_rigid_body_pose(rigid_body_handle)
-
-                    w = body_pose.r[3]
-                    x = body_pose.r[0]
-                    y = body_pose.r[1]
-                    z = body_pose.r[2]
-
-                    sinr_cosp = 2 * (w * x + y * z)
-                    cosr_cosp = 1 - 2 * (x * x + y * y)
-                    odom_ang_x_joint_pos = numpy.arctan2(sinr_cosp, cosr_cosp)
-
-                    sinp = 2 * (w * y - z * x)
-                    if numpy.abs(sinp) >= 1:
-                        odom_ang_y_joint_pos = numpy.copysign(numpy.pi / 2, sinp)
-                    else:
-                        odom_ang_y_joint_pos = numpy.arcsin(sinp)
-
-                    siny_cosp = 2 * (w * z + x * y)
-                    cosy_cosp = 1 - 2 * (y * y + z * z)
-                    odom_ang_z_joint_pos = numpy.arctan2(siny_cosp, cosy_cosp)
-
-                    odom_velocity = receive_data[:6]
-                    receive_data = receive_data[6:]
-
-                    linear_velocity = [
-                        odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) + odom_velocity[1] * (numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) - numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)) + odom_velocity[2] * (numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) + numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)),
-                        odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) + odom_velocity[1] * (numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) + numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)) + odom_velocity[2] * (numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) - numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)),
-                        odom_velocity[0] * numpy.sin(odom_ang_y_joint_pos) + odom_velocity[1] * numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos) + odom_velocity[2] * numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos)
-                    ]
-                    
-                    angular_velocity = [
-                        odom_velocity[3],
-                        odom_velocity[4],
-                        odom_velocity[5]
-                    ]
-
-                    dc.set_rigid_body_linear_velocity(rigid_body_handle, linear_velocity)
-                    dc.set_rigid_body_angular_velocity(rigid_body_handle, angular_velocity)
-
-                elif attribute == "cmd_joint_rvalue" or attribute == "cmd_joint_tvalue" and object_name in self.joint_name_dict:
+                elif object_name in self.joint_name_dict:
                     art = self.joint_art_dict[object_name]
                     dof_ptr = dc.find_articulation_dof(art, object_name)
-                    joint_value = receive_data[0]
-                    receive_data = receive_data[1:]
-                    dc.set_dof_position_target(dof_ptr, joint_value)
+                    dof_state = dc.get_dof_state(dof_ptr, _dynamic_control.STATE_ALL)
+
+                    for attribute in attributes:
+                        if attribute == "joint_rvalue":
+                            send_data += [dof_state.pos]
+                        elif attribute == "joint_tvalue":
+                            send_data += [dof_state.pos]
+                        elif attribute == "joint_linear_velocity":
+                            send_data += [dof_state.vel]
+                        elif attribute == "joint_angular_velocity":
+                            send_data += [dof_state.vel]
+                        elif attribute == "joint_force":
+                            send_data += [dof_state.effort]
+                        elif attribute == "joint_torque":
+                            send_data += [dof_state.effort]
+
+            self.send_data = send_data
+        self.bind_send_data_callback = bind_send_data
+
+        def bind_receive_data() -> None:
+            receive_data = self.receive_data
+            sim_time = receive_data[0]
+            receive_data = receive_data[1:]
+            for object_name, attributes in self.request_meta_data["receive"].items():
+                for attribute in attributes:
+                    if attribute == "odometric_velocity" and object_name in self.body_name_dict:
+                        body_prim = self.body_name_dict[object_name]
+                        rigid_body_handle = dc.get_rigid_body(body_prim.GetPath().pathString)
+                        body_pose = dc.get_rigid_body_pose(rigid_body_handle)
+
+                        w = body_pose.r[3]
+                        x = body_pose.r[0]
+                        y = body_pose.r[1]
+                        z = body_pose.r[2]
+
+                        sinr_cosp = 2 * (w * x + y * z)
+                        cosr_cosp = 1 - 2 * (x * x + y * y)
+                        odom_ang_x_joint_pos = numpy.arctan2(sinr_cosp, cosr_cosp)
+
+                        sinp = 2 * (w * y - z * x)
+                        if numpy.abs(sinp) >= 1:
+                            odom_ang_y_joint_pos = numpy.copysign(numpy.pi / 2, sinp)
+                        else:
+                            odom_ang_y_joint_pos = numpy.arcsin(sinp)
+
+                        siny_cosp = 2 * (w * z + x * y)
+                        cosy_cosp = 1 - 2 * (y * y + z * z)
+                        odom_ang_z_joint_pos = numpy.arctan2(siny_cosp, cosy_cosp)
+
+                        odom_velocity = receive_data[:6]
+                        receive_data = receive_data[6:]
+
+                        linear_velocity = [
+                            odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) + odom_velocity[1] * (numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) - numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)) + odom_velocity[2] * (numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos) + numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)),
+                            odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) + odom_velocity[1] * (numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) + numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)) + odom_velocity[2] * (numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos) - numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)),
+                            odom_velocity[0] * numpy.sin(odom_ang_y_joint_pos) + odom_velocity[1] * numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos) + odom_velocity[2] * numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos)
+                        ]
+                        
+                        angular_velocity = [
+                            odom_velocity[3],
+                            odom_velocity[4],
+                            odom_velocity[5]
+                        ]
+
+                        dc.set_rigid_body_linear_velocity(rigid_body_handle, linear_velocity)
+                        dc.set_rigid_body_angular_velocity(rigid_body_handle, angular_velocity)
+
+                    elif attribute == "cmd_joint_rvalue" or attribute == "cmd_joint_tvalue" and object_name in self.joint_name_dict:
+                        art = self.joint_art_dict[object_name]
+                        dof_ptr = dc.find_articulation_dof(art, object_name)
+                        joint_value = receive_data[0]
+                        receive_data = receive_data[1:]
+                        dc.set_dof_position_target(dof_ptr, joint_value)
+        self.bind_receive_data_callback = bind_receive_data
 
     def loginfo(self, message: str) -> None:
         print(f"INFO: {message}")
@@ -455,13 +456,11 @@ if __name__ == "__main__":
 
     simulation_context.reset()
 
-    if isaac_sim_connector.body_prim_view is not None:
-        isaac_sim_connector.body_prim_view.initialize(simulation_context.physics_sim_view)
+    # if isaac_sim_connector.body_prim_view is not None:
+    #     isaac_sim_connector.body_prim_view.initialize(simulation_context.physics_sim_view)
 
     while simulation_app.is_running():
-        isaac_sim_connector.bind_send_data()
         isaac_sim_connector.send_and_receive_data()
-        isaac_sim_connector.bind_receive_data()
         
         # Run in realtime mode, we don't specify the step size
         simulation_context.step(render=True)
