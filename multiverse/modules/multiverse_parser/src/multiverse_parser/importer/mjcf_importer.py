@@ -368,13 +368,13 @@ class MjcfImporter(Factory):
 
                 mat_id = mj_geom.matid[0]
                 if (mat_id == -1 or
-                        self.mj_model.mat_texid[mat_id][0] == -1 or
+                        self.mj_model.mat_texid[mat_id][mujoco.mjtTextureRole.mjTEXROLE_RGB] == -1 or
                         self.mj_model.mesh_texcoordadr[mesh_id] == -1):
                     file_ext = "stl"
                     texture_coordinates = None
                     texture_file_path = None
                 else:
-                    texture_id = self.mj_model.mat_texid[mat_id][0]
+                    texture_id = self.mj_model.mat_texid[mat_id][mujoco.mjtTextureRole.mjTEXROLE_RGB]
                     file_ext = "obj"
                     mesh_texcoordadr = self.mj_model.mesh_texcoordadr[mesh_id]
                     mesh_texcoordnum = self.mj_model.mesh_texcoordnum[mesh_id]
@@ -393,7 +393,7 @@ class MjcfImporter(Factory):
                     height = self.mj_model.tex_height[texture_id]
                     texture_adr = self.mj_model.tex_adr[texture_id]
                     texture_num = width * height * 3
-                    rgb = self.mj_model.tex_rgb[texture_adr:texture_adr + texture_num]
+                    rgb = self.mj_model.tex_data[texture_adr:texture_adr + texture_num]
                     rgb = rgb.reshape((height, width, 3))
                     texture_file_path = os.path.join(self._tmp_texture_dir_path, f"{texture_name}.png")
                     texture_builder = TextureBuilder(file_path=texture_file_path)
@@ -417,7 +417,7 @@ class MjcfImporter(Factory):
                                                                       mujoco_material_path)
                     mujoco_geom_api.CreateMaterialRel().SetTargets([mujoco_material_path])
 
-                    texture_id = self.mj_model.mat_texid[mat_id][0]
+                    texture_id = self.mj_model.mat_texid[mat_id][mujoco.mjtTextureRole.mjTEXROLE_RGB]
                     if texture_id == -1 or texture_file_path is None:
                         mat_rgba = self.mj_model.mat_rgba[mat_id]
                         mat_emission = float(self.mj_model.mat_emission[mat_id])
