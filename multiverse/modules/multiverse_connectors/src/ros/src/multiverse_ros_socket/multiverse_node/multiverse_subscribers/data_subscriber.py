@@ -31,7 +31,9 @@ class DataSubscriber(MultiverseSubscriber):
             topic_name=topic_name,
             multiverse_meta_data=multiverse_meta_data
         )
-        self.request_meta_data["send"] = kwargs["send"]
+        def bind_request_meta_data() -> None:
+            self.request_meta_data["send"] = kwargs["send"]
+        self.bind_request_meta_data_callback = bind_request_meta_data
 
     def _init_send_data(self) -> None:
         if self._msg_type == Float64:

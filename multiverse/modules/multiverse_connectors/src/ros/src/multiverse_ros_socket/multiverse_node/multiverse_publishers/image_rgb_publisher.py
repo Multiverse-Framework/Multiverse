@@ -39,25 +39,6 @@ class ImageRgbPublisher(MultiversePublisher):
             raise Exception("Image resolution not found.")
         self._camera_name = str(kwargs["camera"])
         self._frame_id = str(kwargs.get("frame_id", "map"))
-        image_res = str(kwargs["image_res"])
-        if image_res == "3840_2160":
-            self._msgs[0].width = 3840
-            self._msgs[0].height = 2160
-            self.request_meta_data["receive"][self._camera_name] = ["rgb_3840_2160"]
-        elif image_res == "1280_1024":
-            self._msgs[0].width = 1280
-            self._msgs[0].height = 1024
-            self.request_meta_data["receive"][self._camera_name] = ["rgb_1280_1024"]
-        elif image_res == "640_480":
-            self._msgs[0].width = 640
-            self._msgs[0].height = 480
-            self.request_meta_data["receive"][self._camera_name] = ["rgb_640_480"]
-        elif image_res == "128_128":
-            self._msgs[0].width = 128
-            self._msgs[0].height = 128
-            self.request_meta_data["receive"][self._camera_name] = ["rgb_128_128"]
-        else:
-            raise Exception(f"Invalid image resolution {image_res}.")
         
         if INTERFACE == Interface.ROS1:
             self._msgs[0].header.stamp = rospy.Time.now()
@@ -70,9 +51,27 @@ class ImageRgbPublisher(MultiversePublisher):
         self._msgs[0].is_bigendian = False
         self._msgs[0].step = 3
 
-    def _bind_response_meta_data(self, response_meta_data) -> None:
-        if response_meta_data.get("receive") is None:
-            return
+        def bind_request_meta_data() -> None:
+            image_res = str(kwargs["image_res"])
+            if image_res == "3840_2160":
+                self._msgs[0].width = 3840
+                self._msgs[0].height = 2160
+                self.request_meta_data["receive"][self._camera_name] = ["rgb_3840_2160"]
+            elif image_res == "1280_1024":
+                self._msgs[0].width = 1280
+                self._msgs[0].height = 1024
+                self.request_meta_data["receive"][self._camera_name] = ["rgb_1280_1024"]
+            elif image_res == "640_480":
+                self._msgs[0].width = 640
+                self._msgs[0].height = 480
+                self.request_meta_data["receive"][self._camera_name] = ["rgb_640_480"]
+            elif image_res == "128_128":
+                self._msgs[0].width = 128
+                self._msgs[0].height = 128
+                self.request_meta_data["receive"][self._camera_name] = ["rgb_128_128"]
+            else:
+                raise Exception(f"Invalid image resolution {image_res}.")
+        self.bind_request_meta_data_callback = bind_request_meta_data
 
     def _bind_receive_data(self, receive_data: List[float]) -> None:
         if len(receive_data) != self._msgs[0].height * self._msgs[0].width * 3 + 1:

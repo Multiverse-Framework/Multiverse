@@ -205,38 +205,6 @@ class MultiverseClient:
         """Set the init_objects_callback."""
         self._multiverse_socket.set_init_objects_callback(init_objects_callback)
 
-    def _bind_request_meta_data(self, request_meta_data: T) -> T:
-        """Bind the request_meta_data before sending it to the server.
-
-        Args:
-            request_meta_data: The request_meta_data to bind.
-        """
-        pass
-
-    def _bind_response_meta_data(self, response_meta_data: T) -> T:
-        """Bind the response_meta_data after receiving it from the server.
-
-        Args:
-            response_meta_data: The response_meta_data to bind.
-        """
-        pass
-
-    def _bind_send_data(self, send_data: T) -> T:
-        """Bind the send_data before sending it to the server.
-
-        Args:
-            send_data: The send_data to bind.
-        """
-        pass
-
-    def _bind_receive_data(self, receive_data: T) -> T:
-        """Bind the receive_data after receiving it from the server.
-
-        Args:
-            receive_data: The receive_data to bind.
-        """
-        pass
-
     def _connect_and_start(self) -> None:
         """Connect to the server and start the client."""
         self._multiverse_socket.connect(self._client_addr.host, self._client_addr.port)

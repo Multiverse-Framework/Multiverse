@@ -41,28 +41,32 @@ class OdomPublisher(MultiversePublisher):
             rate=rate,
             multiverse_meta_data=multiverse_meta_data,
         )
-        self.request_meta_data["receive"][self._body_name] = [
-            "position",
-            "quaternion",
-            "odometric_velocity",
-        ]
+        def bind_request_meta_data() -> None:
+            self.request_meta_data["receive"][self._body_name] = [
+                "position",
+                "quaternion",
+                "odometric_velocity",
+            ]
+        self.bind_request_meta_data_callback = bind_request_meta_data
 
-    def _bind_response_meta_data(self, response_meta_data) -> None:
-        if response_meta_data.get("receive") is None:
-            return
+        def bind_response_meta_data() -> None:
+            response_meta_data = self.response_meta_data
+            if response_meta_data.get("receive") is None:
+                return
 
-        if INTERFACE == Interface.ROS1:
-            self._msgs[0].header.seq += 1
-        self._msgs[0].header.frame_id = self._frame_id
-        self._msgs[0].child_frame_id = self._body_name
-        self._msgs[0].pose.covariance = [0.0] * 36
-        self._msgs[0].twist.covariance = [0.0] * 36
+            if INTERFACE == Interface.ROS1:
+                self._msgs[0].header.seq += 1
+            self._msgs[0].header.frame_id = self._frame_id
+            self._msgs[0].child_frame_id = self._body_name
+            self._msgs[0].pose.covariance = [0.0] * 36
+            self._msgs[0].twist.covariance = [0.0] * 36
 
-        self._msgs[1].transforms.clear()
-        tf_msg = TransformStamped()
-        tf_msg.header.frame_id = self._frame_id
-        tf_msg.child_frame_id = self._body_name
-        self._msgs[1].transforms.append(tf_msg)
+            self._msgs[1].transforms.clear()
+            tf_msg = TransformStamped()
+            tf_msg.header.frame_id = self._frame_id
+            tf_msg.child_frame_id = self._body_name
+            self._msgs[1].transforms.append(tf_msg)
+        self.bind_response_meta_data_callback = bind_response_meta_data
 
     def _bind_receive_data(self, receive_data: List[float]) -> None:
         if len (receive_data) != 14:
@@ -84,7 +88,7 @@ class OdomPublisher(MultiversePublisher):
         self._msgs[0].twist.twist.angular.x = receive_data[11]
         self._msgs[0].twist.twist.angular.y = receive_data[12]
         self._msgs[0].twist.twist.angular.z = receive_data[13]
-                                                           
+
         if INTERFACE == Interface.ROS1:
             self._msgs[1].transforms[0].header.stamp = rospy.Time.now()
             self._msgs[1].transforms[0].header.seq = self._seq
