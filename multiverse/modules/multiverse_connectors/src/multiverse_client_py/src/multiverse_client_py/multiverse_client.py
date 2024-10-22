@@ -44,6 +44,8 @@ class MultiverseClient:
     _api_callbacks: Dict[str, Callable[[List[str]], List[str]]]
     _bind_request_meta_data_callback: Callable
     _bind_response_meta_data_callback: Callable
+    _bind_send_data_callback: Callable
+    _bind_receive_data_callback: Callable
     _init_objects_callback: Callable
 
     def __init__(
@@ -181,9 +183,10 @@ class MultiverseClient:
         return self._bind_request_meta_data_callback
 
     @bind_request_meta_data_callback.setter
-    def bind_request_meta_data_callback(self, request_meta_data_callback: Callable) -> None:
+    def bind_request_meta_data_callback(self, bind_request_meta_data_callback: Callable) -> None:
         """Set the bind_request_meta_data_callback."""
-        self._multiverse_socket.set_bind_request_meta_data_callback(request_meta_data_callback)
+        self._multiverse_socket.set_bind_request_meta_data_callback(bind_request_meta_data_callback)
+        self._bind_request_meta_data_callback = bind_request_meta_data_callback
 
     @property
     def bind_response_meta_data_callback(self) -> Callable:
@@ -191,9 +194,32 @@ class MultiverseClient:
         return self._bind_response_meta_data_callback
 
     @bind_response_meta_data_callback.setter
-    def bind_response_meta_data_callback(self, response_meta_data_callback: Callable) -> None:
+    def bind_response_meta_data_callback(self, bind_response_meta_data_callback: Callable) -> None:
         """Set the bind_response_meta_data_callback."""
-        self._multiverse_socket.set_bind_response_meta_data_callback(response_meta_data_callback)
+        self._multiverse_socket.set_bind_response_meta_data_callback(bind_response_meta_data_callback)
+        self._bind_response_meta_data_callback = bind_response_meta_data_callback
+
+    @property
+    def bind_send_data_callback(self) -> Callable:
+        """Get the bind_send_data_callback."""
+        return self._bind_send_data_callback
+
+    @bind_send_data_callback.setter
+    def bind_send_data_callback(self, bind_send_data_callback: Callable) -> None:
+        """Set the bind_send_data_callback."""
+        self._multiverse_socket.set_bind_send_data_callback(bind_send_data_callback)
+        self._bind_send_data_callback = bind_send_data_callback
+
+    @property
+    def bind_receive_data_callback(self) -> Callable:
+        """Get the bind_receive_data_callback."""
+        return self._bind_receive_data_callback
+    
+    @bind_receive_data_callback.setter
+    def bind_receive_data_callback(self, bind_receive_data_callback: Callable) -> None:
+        """Set the bind_receive_data_callback."""
+        self._multiverse_socket.set_bind_receive_data_callback(bind_receive_data_callback)
+        self._bind_receive_data_callback = bind_receive_data_callback
 
     @property
     def init_objects_callback(self) -> Callable:

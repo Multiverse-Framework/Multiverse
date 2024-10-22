@@ -73,18 +73,24 @@ class ImageDepthPublisher(MultiversePublisher):
                 raise Exception(f"Invalid image resolution {image_res}.")
         self.bind_request_meta_data_callback = bind_request_meta_data
 
-    def _bind_receive_data(self, receive_data: List[float]) -> None:
-        if len(receive_data) != self._msgs[0].height * self._msgs[0].width + 1:
-            self.logwarn(
-                f"Invalid data length {len(receive_data)} for camera {self._camera_name}."
-            )
-            return
+        def bind_send_data() -> None:
+            self.send_data = [self.world_time + self.sim_time]
+        self.bind_send_data_callback = bind_send_data
 
-        if INTERFACE == Interface.ROS1:
-            self._msgs[0].header.stamp = rospy.Time.now()
-            self._msgs[0].header.seq += 1
-        elif INTERFACE == Interface.ROS2:
-            self._msgs[0].header.stamp = self.get_clock().now().to_msg()
-        
-        data_array = numpy.array(receive_data[1:], dtype=numpy.uint16)
-        self._msgs[0].data = data_array.tobytes()
+        def bind_receive_data() -> None:
+            receive_data = self.receive_data
+            if len(receive_data) != self._msgs[0].height * self._msgs[0].width + 1:
+                self.logwarn(
+                    f"Invalid data length {len(receive_data)} for camera {self._camera_name}."
+                )
+                return
+
+            if INTERFACE == Interface.ROS1:
+                self._msgs[0].header.stamp = rospy.Time.now()
+                self._msgs[0].header.seq += 1
+            elif INTERFACE == Interface.ROS2:
+                self._msgs[0].header.stamp = self.get_clock().now().to_msg()
+            
+            data_array = numpy.array(receive_data[1:], dtype=numpy.uint16)
+            self._msgs[0].data = data_array.tobytes()
+        self.bind_receive_data_callback = bind_receive_data

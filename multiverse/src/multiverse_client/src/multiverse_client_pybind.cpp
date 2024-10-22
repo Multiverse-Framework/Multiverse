@@ -151,6 +151,18 @@ public:
         bind_response_meta_data_callback = in_bind_response_meta_data_callback;
     }
 
+    inline void set_bind_send_data_callback(const std::function<void ()> &in_bind_send_data_callback)
+    {
+        printf("[Client %s] Setting bind_send_data_callback.\n", port.c_str());
+        bind_send_data_callback = in_bind_send_data_callback;
+    }
+
+    inline void set_bind_receive_data_callback(const std::function<void ()> &in_bind_receive_data_callback)
+    {
+        printf("[Client %s] Setting bind_receive_data_callback.\n", port.c_str());
+        bind_receive_data_callback = in_bind_receive_data_callback;
+    }
+
     inline void set_init_objects_callback(const std::function<void ()> &in_init_objects_callback)
     {
         init_objects_callback = in_init_objects_callback;
@@ -176,6 +188,10 @@ private:
     std::function<void ()> bind_request_meta_data_callback = []() {};
 
     std::function<void ()> bind_response_meta_data_callback = []() {};
+
+    std::function<void ()> bind_send_data_callback = []() {};
+
+    std::function<void ()> bind_receive_data_callback = []() {};
 
     std::function<void ()> init_objects_callback = []() {};
 
@@ -465,6 +481,7 @@ private:
 
     void bind_send_data() override
     {
+        bind_send_data_callback();
         if (send_data_double.size() != send_buffer.buffer_double.size || send_data_uint8_t.size() != send_buffer.buffer_uint8_t.size)
         {
             printf("[Client %s] The size of in_send_data [%zu - %zu - %zu] does not match with send_buffer_size [%zu - %zu - %zu].\n",
@@ -503,6 +520,7 @@ private:
         std::copy(receive_buffer.buffer_double.data, receive_buffer.buffer_double.data + receive_buffer.buffer_double.size, receive_data_double.begin());
         std::copy(receive_buffer.buffer_uint8_t.data, receive_buffer.buffer_uint8_t.data + receive_buffer.buffer_uint8_t.size, receive_data_uint8_t.begin());
         std::copy(receive_buffer.buffer_uint16_t.data, receive_buffer.buffer_uint16_t.data + receive_buffer.buffer_uint16_t.size, receive_data_uint16_t.begin());
+        bind_receive_data_callback();
     }
 };
 
@@ -527,5 +545,7 @@ PYBIND11_MODULE(multiverse_client_pybind, handle)
         .def("set_api_callbacks", &MultiverseClientPybind::set_api_callbacks)
         .def("set_bind_request_meta_data_callback", &MultiverseClientPybind::set_bind_request_meta_data_callback)
         .def("set_bind_response_meta_data_callback", &MultiverseClientPybind::set_bind_response_meta_data_callback)
+        .def("set_bind_send_data_callback", &MultiverseClientPybind::set_bind_send_data_callback)
+        .def("set_bind_receive_data_callback", &MultiverseClientPybind::set_bind_receive_data_callback)
         .def("set_init_objects_callback", &MultiverseClientPybind::set_init_objects_callback);
 }

@@ -70,9 +70,7 @@ class MultiversePublisher(MultiverseNode):
             if self._use_meta_data:
                 self._communicate(True)
             else:
-                self.send_data = [self.sim_time]
                 self._communicate(False)
-                self._bind_receive_data(self.receive_data)
             self._publish()
         except:
             return

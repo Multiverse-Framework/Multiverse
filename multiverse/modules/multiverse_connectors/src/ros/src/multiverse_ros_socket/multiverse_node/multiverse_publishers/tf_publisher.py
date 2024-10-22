@@ -37,6 +37,7 @@ class TfPublisher(MultiversePublisher):
             client_addr=client_addr,
             multiverse_meta_data=multiverse_meta_data,
         )
+
         def bind_request_meta_data() -> None:
             request_meta_data = self.request_meta_data
             request_meta_data["receive"] = {"": ["position", "quaternion"]}
