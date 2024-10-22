@@ -5,12 +5,10 @@ class IsaacSimConnector(MultiverseClient):
     def __init__(self, 
                  client_addr: SocketAddress, 
                  multiverse_meta_data: MultiverseMetaData,
-                 usd_path: str,
                  send_objects: Dict[str, List[str]],
                  receive_objects: Dict[str, List[str]],
                  resources: List[str]) -> None:
         super().__init__(client_addr, multiverse_meta_data)
-        self.stage = Usd.Stage.Open(usd_path)
         self.body_name_dict = {}
         self.body_prim_view = None
         self.body_prim_view_idx_dict = {}
@@ -20,7 +18,7 @@ class IsaacSimConnector(MultiverseClient):
         self.send_objects = send_objects
         self.receive_objects = receive_objects
         self.resources = resources
-        self.init_callbacks()        
+        self.init_callbacks()
 
     def init_callbacks(self) -> None:
         def is_isaac_sim(args: List[str]) -> List[str]:
@@ -44,9 +42,9 @@ class IsaacSimConnector(MultiverseClient):
 
             request_meta_data = self.request_meta_data
             for object_name in request_meta_data["send"]:
-                if object_name in ["body", "joint"] or object_name in self.body_name_dict:
+                if object_name in ["body", "joint"]:
                     continue
-                if any(attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["send"][object_name]):
+                if object_name not in self.body_name_dict and any(attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["send"][object_name]):
                     objects_to_spawn.add(object_name)
                 elif len(request_meta_data["send"][object_name]) == 0 and \
                     object_name in self.request_meta_data["receive"] and \
@@ -69,10 +67,10 @@ class IsaacSimConnector(MultiverseClient):
                             break
                     if os.path.exists(object_file_path):
                         self.loginfo(f"Found object {object_name} in {object_file_path}.")
-                        execute(
-                            "IsaacSimSpawnPrim",
-                            usd_path=object_file_path,
-                            prim_path=f"/{object_name}"
+                        prims_utils.create_prim(
+                            prim_path=f"/{object_name}",
+                            prim_type="Xform",
+                            usd_path=object_file_path
                         )
                         self.loginfo(f"Spawned object {object_name}.")
                         if object_name in request_meta_data["send"]:
@@ -82,12 +80,24 @@ class IsaacSimConnector(MultiverseClient):
                         break
                 else:
                     self.logwarn(f"Object {object_name} not found in {self.resources}.")
-                    del self.request_meta_data["send"][object_name]
-                    del self.request_meta_data["receive"][object_name]
+                    del request_meta_data["send"][object_name]
+                    del request_meta_data["receive"][object_name]
+
+            for object_name in objects_to_destroy:
+                if object_name in self.body_name_dict:
+                    prims_utils.delete_prim(prim_path=f"/{object_name}")
+                    if object_name in send_objects:
+                        del send_objects[object_name]
+                    if object_name in receive_objects:
+                        del receive_objects[object_name]
+                    self.loginfo(f"Destroyed object {object_name}.")
+                del request_meta_data["send"][object_name]
+                del request_meta_data["receive"][object_name]
 
             if len(objects_to_spawn) > 0 or len(objects_to_destroy) > 0:
                 simulation_app.update()
 
+            self.request_meta_data = request_meta_data
             self.loginfo("Sending request meta data: " + str(self.request_meta_data))
 
         def bind_response_meta_data_callback() -> None:
@@ -115,30 +125,35 @@ class IsaacSimConnector(MultiverseClient):
 
         def init_objects_callback() -> None:
             request_meta_data = self.request_meta_data
-
+            current_stage = stage.get_current_stage()
             art_list = []
+            self.body_name_dict = {}
+            self.body_prim_view = None
+            self.body_prim_view_idx_dict = {}
+            self.joint_name_dict = {}
+            self.joint_art_dict = {}
 
-            for xform_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdGeom.Xform)]:
+            for xform_prim in [prim for prim in current_stage.TraverseAll() if prim.IsA(UsdGeom.Xform)]:
                 body_name = xform_prim.GetName()
                 if body_name in self.ignore_names:
                     continue
                 self.body_name_dict[body_name] = xform_prim
 
-            for prim in self.stage.TraverseAll():
+            for prim in current_stage.TraverseAll():
                 if prim.HasAPI(UsdPhysics.ArticulationRootAPI):
                     if prim.IsA(UsdGeom.Xform):
                         xform_prim = prim
                     elif prim.IsA(UsdPhysics.Joint):
                         joint = UsdPhysics.Joint(prim)
                         xform_prim_path = joint.GetBody1Rel().GetTargets()[0]
-                        xform_prim = self.stage.GetPrimAtPath(xform_prim_path)
+                        xform_prim = current_stage.GetPrimAtPath(xform_prim_path)
                     art = dc.get_articulation(xform_prim.GetPath().pathString)
                     print(f"Articulation Root: {xform_prim.GetPath().pathString}, Articulation Handle: {art}")
                     if art != 0 and art not in art_list:
                         art_list.append(art)
 
             non_free_bodies = set()
-            for joint_prim in [prim for prim in self.stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
+            for joint_prim in [prim for prim in current_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
                 joint = UsdPhysics.Joint(joint_prim)
                 body0_name = joint.GetBody0Rel().GetTargets()[0].name
                 body1_name = joint.GetBody1Rel().GetTargets()[0].name
@@ -151,6 +166,16 @@ class IsaacSimConnector(MultiverseClient):
                         self.joint_name_dict[joint_name] = joint_prim
                         self.joint_art_dict[joint_name] = art
                         break
+
+            send_object_names = sorted(request_meta_data["send"].keys())
+            for object_name in send_object_names:
+                if object_name not in self.body_name_dict and object_name not in self.joint_name_dict:
+                    del request_meta_data["send"][object_name]
+
+            receive_object_names = sorted(request_meta_data["receive"].keys())
+            for object_name in receive_object_names:
+                if object_name not in self.body_name_dict and object_name not in self.joint_name_dict:
+                    del request_meta_data["receive"][object_name]
             
             for object_name in sorted(self.receive_objects.keys()):
                 request_meta_data["receive"][object_name] = []
@@ -385,12 +410,12 @@ if __name__ == "__main__":
 
     import carb
     from omni.isaac.nucleus import is_file
-    from pxr import Usd, UsdGeom, UsdPhysics, Gf
+    from pxr import UsdGeom, UsdPhysics, Gf
     from omni.isaac.core import SimulationContext
     from omni.isaac.core.prims import RigidPrimView
-    from omni.isaac.core.utils.stage import is_stage_loading
+    from omni.isaac.core.utils import stage
     from omni.isaac.dynamic_control import _dynamic_control
-    from omni.kit.commands import execute
+    import omni.isaac.core.utils.prims as prims_utils
 
     dc = _dynamic_control.acquire_dynamic_control_interface()
 
@@ -414,7 +439,7 @@ if __name__ == "__main__":
 
     print("Loading stage...")
 
-    while is_stage_loading():
+    while stage.is_stage_loading():
         simulation_app.update()
     print("Loading Complete")
 
@@ -423,7 +448,6 @@ if __name__ == "__main__":
 
     isaac_sim_connector = IsaacSimConnector(client_addr=client_addr, 
                                             multiverse_meta_data=multiverse_meta_data,
-                                            usd_path=usd_path,
                                             send_objects=send_objects,
                                             receive_objects=receive_objects,
                                             resources=resources)

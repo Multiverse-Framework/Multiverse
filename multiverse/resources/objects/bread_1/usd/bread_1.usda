@@ -1,0 +1,109 @@
+#usda 1.0
+(
+    defaultPrim = "bread_1"
+    metersPerUnit = 1
+    upAxis = "Z"
+)
+
+def Mujoco "mujoco" (
+    prepend apiSchemas = ["MujocoOptionAPI"]
+)
+{
+    string mujoco:model = "bread_1"
+    float mujoco:option:timestep = 0.002
+
+    def MujocoAsset "asset"
+    {
+        def MujocoMesh "meshes"
+        {
+            def MujocoMesh "Bread_1"
+            {
+                asset mujoco:mesh:file = @./../meshes/obj/Bread_1.obj@
+            }
+
+            def MujocoMesh "UCX_Bread_1_001"
+            {
+                asset mujoco:mesh:file = @./../meshes/stl/UCX_Bread_1_001.stl@
+            }
+        }
+
+        def MujocoMaterial "materials"
+        {
+            def MujocoMaterial "bread_1_material"
+            {
+                rel mujoco:material:texture = </mujoco/asset/textures/bread_1_texture>
+            }
+        }
+
+        def MujocoTexture "textures"
+        {
+            def MujocoTexture "bread_1_texture"
+            {
+                asset mujoco:texture:file = @bread_1_texture.png@
+                uniform token mujoco:texture:type = "2d"
+            }
+        }
+    }
+
+    def MujocoEquality "equality"
+    {
+    }
+}
+
+def Xform "bread_1" (
+    prepend apiSchemas = ["PhysicsRigidBodyAPI", "PhysicsMassAPI"]
+)
+{
+    point3f physics:centerOfMass = (-0.000085696905, -0.0007341364, 0.001597728)
+    float3 physics:diagonalInertia = (0.008702707, 0.01759679, 0.020925816)
+    float physics:mass = 3.3634844
+    quatf physics:principalAxes = (-0.7008998, 0.7131819, 0.0064115836, 0.008364104)
+    bool physics:rigidBodyEnabled = 1
+
+    def Mesh "Bread_1" (
+        prepend apiSchemas = ["MujocoGeomAPI", "MaterialBindingAPI"]
+        prepend references = @./../meshes/usd/Bread_1.usda@</Bread_1>
+    )
+    {
+        rel material:binding = </bread_1/Bread_1/Materials/bread_1_material>
+        rel mujoco:geom:material = </mujoco/asset/materials/bread_1_material>
+        rel mujoco:geom:mesh = </mujoco/asset/meshes/Bread_1>
+        point3f mujoco:geom:pos = (-0.000088082976, -0.0007318666, 0.0015847944)
+        quatf mujoco:geom:quat = (0.51043636, 0.49083105, 0.49866435, 0.4998735)
+        vector3f mujoco:geom:size = (1, 1, 1)
+        uniform token mujoco:geom:type = "mesh"
+        color3f[] primvars:displayColor = [(0.5, 0.5, 0.5)]
+        float[] primvars:displayOpacity = [1]
+        matrix4d xformOp:transform = ( (0.0029207530987126473, 0.9998270654190065, -0.01836595918975198, 0), (-0.02078733159906121, 0.01842277364394762, 0.999614169695618, 0), (0.9997796537469306, -0.0025378468998460413, 0.020837545123785883, 0), (-0.00008808297755052354, -0.0007318665954733684, 0.0015847943841738369, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+
+        def Scope "Materials"
+        {
+            def Material "bread_1_material" (
+                prepend references = @./../materials/usd/bread_1_material.usda@</bread_1_material>
+            )
+            {
+            }
+        }
+    }
+
+    def Mesh "UCX_Bread_1_001" (
+        prepend apiSchemas = ["PhysicsCollisionAPI", "PhysicsMeshCollisionAPI", "MujocoGeomAPI"]
+        prepend references = @./../meshes/usd/UCX_Bread_1_001.usda@</UCX_Bread_1_001>
+    )
+    {
+        rel mujoco:geom:mesh = </mujoco/asset/meshes/UCX_Bread_1_001>
+        point3f mujoco:geom:pos = (-0.0015112964, -0.0004812332, 0.0005008776)
+        quatf mujoco:geom:quat = (0.50940865, 0.49663937, 0.4955799, 0.49824965)
+        vector3f mujoco:geom:size = (1, 1, 1)
+        uniform token mujoco:geom:type = "mesh"
+        uniform token physics:approximation = "convexHull"
+        bool physics:collisionEnabled = 1
+        color3f[] primvars:displayColor = [(0.9, 0.9, 0.9)]
+        float[] primvars:displayOpacity = [1]
+        token visibility = "invisible"
+        matrix4d xformOp:transform = ( (0.012295693025768717, 0.9998743541341383, -0.010004592838332327, 0), (-0.015376424282139589, 0.010193234760218939, 0.9998298172896343, 0), (0.9998061719700058, -0.012139765647153966, 0.015499825183545535, 0), (-0.0015112964137424883, -0.0004812332010080143, 0.0005008776117109215, 1) )
+        uniform token[] xformOpOrder = ["xformOp:transform"]
+    }
+}
+

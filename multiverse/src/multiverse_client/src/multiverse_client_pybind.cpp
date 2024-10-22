@@ -358,9 +358,9 @@ private:
 
     void bind_request_meta_data() override
     {
+        bind_request_meta_data_callback();
         request_meta_data_str = pybind11::str(request_meta_data_dict).cast<std::string>();
         std::replace(request_meta_data_str.begin(), request_meta_data_str.end(), '\'', '"');
-        bind_request_meta_data_callback();
     }
 
     void bind_response_meta_data() override
