@@ -158,13 +158,11 @@ public:
 
     inline void set_bind_send_data_callback(const std::function<void ()> &in_bind_send_data_callback)
     {
-        printf("[Client %s] Setting bind_send_data_callback.\n", port.c_str());
         bind_send_data_callback = in_bind_send_data_callback;
     }
 
     inline void set_bind_receive_data_callback(const std::function<void ()> &in_bind_receive_data_callback)
     {
-        printf("[Client %s] Setting bind_receive_data_callback.\n", port.c_str());
         bind_receive_data_callback = in_bind_receive_data_callback;
     }
 

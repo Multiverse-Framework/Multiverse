@@ -31,26 +31,21 @@ def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
 
     return mujoco_args
 
-def parse_isaac_sim(resources_paths: List[str], mujoco_data: Dict[str, Any]):
-    worlds_path = find_files(resources_paths, mujoco_data["world"]["path"])
-    mujoco_args = [f"--world={worlds_path}"]
+def parse_isaac_sim(resources_paths: List[str], isaac_sim_data: Dict[str, Any]):
+    worlds_path = find_files(resources_paths, isaac_sim_data["world"]["path"])
+    isaac_sim_args = [f"--world={worlds_path}"]
 
     for entity_str in ["robots", "objects"]:
-        if entity_str in mujoco_data:
-            for entity_name in mujoco_data[entity_str]:
-                if "path" in mujoco_data[entity_str][entity_name]:
-                    mujoco_data[entity_str][entity_name]["path"] = find_files(resources_paths,
-                                                                              mujoco_data[entity_str][entity_name][
+        if entity_str in isaac_sim_data:
+            for entity_name in isaac_sim_data[entity_str]:
+                if "path" in isaac_sim_data[entity_str][entity_name]:
+                    isaac_sim_data[entity_str][entity_name]["path"] = find_files(resources_paths,
+                                                                              isaac_sim_data[entity_str][entity_name][
                                                                                   "path"])
-            entity_dict = mujoco_data[entity_str]
-            mujoco_args.append(f"--{entity_str}={entity_dict}".replace(" ", ""))
-    if "references" in mujoco_data:
-        mujoco_args.append(f"--references={mujoco_data['references']}".replace(" ", ""))
-    should_add_key_frame = mujoco_data.get("should_add_key_frame", True)
-    if should_add_key_frame:
-        mujoco_args.append(f"--should_add_key_frame")
+            entity_dict = isaac_sim_data[entity_str]
+            isaac_sim_args.append(f"--{entity_str}={entity_dict}".replace(" ", ""))
 
-    return mujoco_args
+    return isaac_sim_args
 
 
 class MultiverseSimulationLaunch(MultiverseLaunch):
