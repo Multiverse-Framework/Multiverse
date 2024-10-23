@@ -18,6 +18,7 @@ class IsaacSimConnector(MultiverseClient):
         self.joint_name_dict = {}
         self.articulation_views = {}
         self.articulation_views_idx_dict = {}
+        self.articulation_views_registered = {}
         self.ignore_names = ["defaultGroundPlane", "GroundPlane", "Environment", "OmniKit_Viewport_LightRig", "Lights"]
         self.send_objects = send_objects
         self.receive_objects = receive_objects
@@ -257,15 +258,15 @@ class IsaacSimConnector(MultiverseClient):
                         if rigid_body_handle == 0:
                             continue
                     if articulation_prim_path not in self.articulation_views:
-                        # articulation_view_name = f"{articulation_prim_path}_view"
-                        # world = dc.get_world()
-                        # if world.scene.object_exists(articulation_view_name):
-                        #     articulation_view = world.scene.get_object(articulation_view_name)
-                        # else:
-                        #     articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path, name=articulation_view_name)
-                        #     articulation_view.initialize(simulation_context.physics_sim_view)
-                        articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path)
-                        articulation_view.initialize(simulation_context.physics_sim_view)
+                        articulation_view_name = f"{articulation_prim_path}_view"
+                        if articulation_view_name in self.articulation_views_registered:
+                            articulation_view = self.articulation_views_registered[articulation_view_name]
+                        else:
+                            articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path, name=articulation_view_name)
+                            articulation_view.initialize(simulation_context.physics_sim_view)
+                            self.articulation_views_registered[articulation_view_name] = articulation_view
+                        # articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path, name=articulation_view_name)
+                        # articulation_view.initialize(simulation_context.physics_sim_view)
                         self.articulation_views[articulation_prim_path] = articulation_view
                     else:
                         articulation_view = self.articulation_views[articulation_prim_path]
@@ -512,7 +513,8 @@ if __name__ == "__main__":
     import carb
     from omni.isaac.nucleus import is_file
     from pxr import UsdGeom, UsdPhysics, Sdf
-    from omni.isaac.core import SimulationContext, World
+    from omni.isaac.core import SimulationContext
+    from omni.isaac.core.scenes import Scene
     from omni.isaac.core.prims import RigidPrimView
     from omni.isaac.core.articulations import ArticulationView
     from omni.isaac.core.utils.types import ArticulationActions
