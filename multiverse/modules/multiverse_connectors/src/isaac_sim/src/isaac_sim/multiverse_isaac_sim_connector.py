@@ -102,9 +102,10 @@ class IsaacSimConnector(MultiverseClient):
                 del request_meta_data["send"][object_name]
                 del request_meta_data["receive"][object_name]
 
+            if len(objects_to_spawn) > 0 or len(objects_to_destroy) > 0:
+                simulation_app.update()
+
             self.request_meta_data = request_meta_data
-            self.send_objects = self.request_meta_data["send"]
-            self.receive_objects = self.request_meta_data["receive"]
             self.loginfo("Sending request meta data: " + str(self.request_meta_data))
 
         self.bind_request_meta_data_callback = bind_request_meta_data_callback
@@ -182,6 +183,7 @@ class IsaacSimConnector(MultiverseClient):
                         xform_prim_path = joint.GetBody1Rel().GetTargets()[0].pathString
                     articulation_prim_paths.append(xform_prim_path)
 
+            print(articulation_prim_paths)
             non_free_bodies = set()
             for joint_prim in [
                 prim for prim in current_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)
@@ -214,7 +216,7 @@ class IsaacSimConnector(MultiverseClient):
             if "body" in self.send_objects:
                 for body_name in sorted(self.body_name_dict.keys()):
                     request_meta_data["send"][body_name] = []
-                    for attr in self.send_objects["body"]:
+                    for attr in sorted(self.send_objects["body"]):
                         if body_name in request_meta_data["receive"] and attr in request_meta_data["receive"][body_name]:
                             continue
                         if attr == "relative_velocity" and body_name in non_free_bodies:
@@ -224,7 +226,7 @@ class IsaacSimConnector(MultiverseClient):
             if "joint" in self.send_objects:
                 for joint_name in sorted(self.joint_name_dict.keys()):
                     request_meta_data["send"][joint_name] = []
-                    for attr in self.send_objects["joint"]:
+                    for attr in sorted(self.send_objects["joint"]):
                         if joint_name in request_meta_data["receive"] and attr in request_meta_data["receive"][joint_name]:
                             continue
                         joint_prim = self.joint_name_dict[joint_name]
@@ -239,7 +241,7 @@ class IsaacSimConnector(MultiverseClient):
             for object_name in sorted(self.send_objects.keys()):
                 if object_name not in ["body", "joint"]:
                     request_meta_data["send"][object_name] = []
-                    for attr in self.send_objects[object_name]:
+                    for attr in sorted(self.send_objects[object_name]):
                         request_meta_data["send"][object_name].append(attr)
 
             body_paths = []
@@ -255,6 +257,13 @@ class IsaacSimConnector(MultiverseClient):
                         if rigid_body_handle == 0:
                             continue
                     if articulation_prim_path not in self.articulation_views:
+                        # articulation_view_name = f"{articulation_prim_path}_view"
+                        # world = dc.get_world()
+                        # if world.scene.object_exists(articulation_view_name):
+                        #     articulation_view = world.scene.get_object(articulation_view_name)
+                        # else:
+                        #     articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path, name=articulation_view_name)
+                        #     articulation_view.initialize(simulation_context.physics_sim_view)
                         articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path)
                         articulation_view.initialize(simulation_context.physics_sim_view)
                         self.articulation_views[articulation_prim_path] = articulation_view
@@ -298,8 +307,7 @@ class IsaacSimConnector(MultiverseClient):
                 joints_state[articulation_view] = articulation_view.get_joints_state()
                 measured_joint_efforts[articulation_view] = articulation_view.get_measured_joint_efforts()
 
-            request_meta_data = self.request_meta_data
-            for object_name, attributes in request_meta_data.get("send", {}).items():
+            for object_name, attributes in self.request_meta_data.get("send", {}).items():
                 if object_name in self.body_name_dict:
                     view = None
                     if object_name in self.articulation_views_idx_dict:
@@ -310,7 +318,7 @@ class IsaacSimConnector(MultiverseClient):
                     else:
                         raise Exception(f"Object {object_name} not found in any view")
 
-                    for attribute in self.send_objects[object_name]:
+                    for attribute in attributes:
                         if attribute == "position":
                             position = body_positions[view][object_idx]
                             send_data += [position[0], position[1], position[2]]
@@ -323,7 +331,7 @@ class IsaacSimConnector(MultiverseClient):
 
                 elif object_name in self.joint_name_dict:
                     articulation_view, joint_idx = self.articulation_views_idx_dict[object_name]
-                    for attribute in self.send_objects[object_name]:
+                    for attribute in attributes:
                         if attribute == "joint_rvalue":
                             send_data += [joints_state[articulation_view].positions[0][joint_idx]]
                         elif attribute == "joint_tvalue":
@@ -350,9 +358,8 @@ class IsaacSimConnector(MultiverseClient):
                 cmd_joint_values[articulation_view] = articulation_view.get_joint_positions()
 
             active_articulation_views = set()
-            request_meta_data = self.request_meta_data
-            for object_name, attributes in request_meta_data.get("receive", {}).items():
-                for attribute in self.receive_objects[object_name]:
+            for object_name, attributes in self.request_meta_data.get("receive", {}).items():
+                for attribute in attributes:
                     if attribute == "odometric_velocity" and object_name in self.body_name_dict:
                         body_prim = self.body_name_dict[object_name]
                         rigid_body_handle = dc.get_rigid_body(body_prim.GetPath().pathString)
@@ -505,7 +512,7 @@ if __name__ == "__main__":
     import carb
     from omni.isaac.nucleus import is_file
     from pxr import UsdGeom, UsdPhysics, Sdf
-    from omni.isaac.core import SimulationContext
+    from omni.isaac.core import SimulationContext, World
     from omni.isaac.core.prims import RigidPrimView
     from omni.isaac.core.articulations import ArticulationView
     from omni.isaac.core.utils.types import ArticulationActions
