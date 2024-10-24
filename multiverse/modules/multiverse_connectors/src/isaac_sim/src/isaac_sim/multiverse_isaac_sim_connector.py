@@ -13,35 +13,37 @@ class IsaacSimConnector(MultiverseClient):
     ) -> None:
         super().__init__(client_addr, multiverse_meta_data)
         self.body_name_dict = {}
-        self.rigid_prim_view = None
-        self.rigid_prim_view_idx_dict = {}
+        self.object_rigid_prim_view_idx_dict = {}
         self.joint_name_dict = {}
-        self.articulation_views = {}
-        self.articulation_views_idx_dict = {}
-        self.articulation_views_registered = {}
+        self.object_articulation_view_idx_dict = {}
+        self.non_free_bodies = set()
         self.ignore_names = ["defaultGroundPlane", "GroundPlane", "Environment", "OmniKit_Viewport_LightRig", "Lights"]
         self.send_objects = send_objects
         self.receive_objects = receive_objects
         self.resources = resources
         self.init_callbacks()
 
+    @property
+    def scene_registry(self) -> "SceneRegistry":
+        return world.scene._scene_registry
+
     def init_callbacks(self) -> None:
         def is_isaac_sim_response(args: List[str]) -> List[str]:
             return ["yes"]
 
         def pause_response(args: List[str]) -> List[str]:
-            return ["paused"] if not simulation_context.is_playing() else ["failed to pause"]
+            return ["paused"] if not world.is_playing() else ["failed to pause"]
 
         def unpause_response(args: List[str]) -> List[str]:
-            return ["unpaused"] if simulation_context.is_playing() else ["failed to unpause"]
+            return ["unpaused"] if world.is_playing() else ["failed to unpause"]
 
         self.api_callbacks_response = {"is_isaac_sim": is_isaac_sim_response, "pause": pause_response, "unpause": unpause_response}
 
         def pause(args: List[str]) -> None:
-            simulation_context.pause()
+            world.pause()
 
         def unpause(args: List[str]) -> None:
-            simulation_context.play()
+            world.play()
 
         self.api_callbacks = {"pause": pause, "unpause": unpause}
 
@@ -70,6 +72,15 @@ class IsaacSimConnector(MultiverseClient):
                 if any(attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["receive"][object_name]):
                     objects_to_spawn.add(object_name)
 
+            if len(objects_to_spawn) > 0 or len(objects_to_destroy) > 0:
+                rigid_prim_view_names = list(self.scene_registry.rigid_prim_views.keys())
+                for rigid_prim_view_name in rigid_prim_view_names:
+                    world.scene.remove_object(rigid_prim_view_name)
+                articulated_view_names = list(self.scene_registry.articulated_views.keys())
+                for articulation_view_name in articulated_view_names:
+                    world.scene.remove_object(articulation_view_name)
+                simulation_app.update()
+
             for object_name in objects_to_spawn:
                 object_file_path = f"{object_name}.usda"
                 self.loginfo(f"Searching for object {object_name} in {self.resources}...")
@@ -94,7 +105,9 @@ class IsaacSimConnector(MultiverseClient):
 
             for object_name in objects_to_destroy:
                 if object_name in self.body_name_dict:
+                    self.loginfo(f"Destroying object {object_name}...")
                     prims_utils.delete_prim(prim_path=f"/{object_name}")
+                    self.loginfo(f"Destroyed object {object_name}.")
                     if object_name in send_objects:
                         del send_objects[object_name]
                     if object_name in receive_objects:
@@ -115,47 +128,57 @@ class IsaacSimConnector(MultiverseClient):
             response_meta_data = self.response_meta_data
             self.loginfo("Received response meta data: " + str(response_meta_data))
 
-            body_positions = {}
-            body_quaternions = {}
-            body_velocities = {}
-            joints_state = {}
-            measured_joint_efforts = {}
+            keep_body_names = []
+            bodies_positions = {}
+            bodies_quaternions = {}
+            bodies_velocities = {}
+            joints_states = {}
+            measured_joints_efforts = {}
 
-            if self.rigid_prim_view is not None:
-                body_positions[self.rigid_prim_view], body_quaternions[self.rigid_prim_view] = self.rigid_prim_view.get_world_poses()
-                body_velocities[self.rigid_prim_view] = self.rigid_prim_view.get_velocities()
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                for prim in rigid_prim_view.prims:
+                    keep_body_names.append(prim.GetName())
+                bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
+                bodies_velocities[rigid_prim_view_name] = rigid_prim_view.get_velocities()
 
-            for articulation_view in self.articulation_views.values():
-                body_positions[articulation_view], body_quaternions[articulation_view] = articulation_view.get_world_poses()
-                body_velocities[articulation_view] = articulation_view.get_velocities()
-                joints_state[articulation_view] = articulation_view.get_joints_state()
-                measured_joint_efforts[articulation_view] = articulation_view.get_measured_joint_efforts()
-            
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                for body_name in articulation_view.body_names:
+                    if body_name in keep_body_names:
+                        keep_body_names.remove(body_name)
+                bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name] = articulation_view.get_world_poses()
+                bodies_velocities[articulation_view_name] = articulation_view.get_velocities()
+                joints_states[articulation_view_name] = articulation_view.get_joints_state()
+                measured_joints_efforts[articulation_view_name] = articulation_view.get_measured_joint_efforts()
+
             for send_receive in ["send", "receive"]:
                 if send_receive not in response_meta_data:
                     continue
                 for object_name, attributes in response_meta_data[send_receive].items():
                     if object_name in self.body_name_dict:
-                        view = None
-                        if object_name in self.articulation_views_idx_dict:
-                            view, object_idx = self.articulation_views_idx_dict[object_name]
-                        elif object_name in self.rigid_prim_view_idx_dict:
-                            view = self.rigid_prim_view
-                            object_idx = self.rigid_prim_view_idx_dict[object_name]
+                        if object_name in self.object_articulation_view_idx_dict:
+                            view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
+                        elif object_name in self.object_rigid_prim_view_idx_dict:
+                            view_name, object_idx = self.object_rigid_prim_view_idx_dict[object_name]
+                        else:
+                            raise Exception(f"Body {object_name} not found in any view")
+
                         for attribute in attributes:
                             data = response_meta_data[send_receive][object_name][attribute]
                             if any(x is None for x in data):
                                 continue
-                            if attribute == "position":
-                                body_positions[view][object_idx] = [data[0], data[1], data[2]]
-                            elif attribute == "quaternion":
-                                body_quaternions[view][object_idx] = [data[0], data[1], data[2], data[3]]
-            
-            if self.rigid_prim_view is not None:
-                self.rigid_prim_view.set_world_poses(body_positions[self.rigid_prim_view], body_quaternions[self.rigid_prim_view])
+                            if attribute == "position" and object_name not in self.non_free_bodies:
+                                bodies_positions[view_name][object_idx] = [data[0], data[1], data[2]]
+                            elif attribute == "quaternion" and object_name not in self.non_free_bodies:
+                                bodies_quaternions[view_name][object_idx] = [data[0], data[1], data[2], data[3]]
 
-            for articulation_view in self.articulation_views.values():
-                articulation_view.set_world_poses(body_positions[articulation_view], body_quaternions[articulation_view])
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                keep_body_idxes = [idx for idx, prim in enumerate(rigid_prim_view.prims) if prim.GetName() in keep_body_names]
+                body_positions = bodies_positions[rigid_prim_view_name][keep_body_idxes]
+                body_quaternions = bodies_quaternions[rigid_prim_view_name][keep_body_idxes]
+                rigid_prim_view.set_world_poses(body_positions, body_quaternions, indices=keep_body_idxes)
+
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                articulation_view.set_world_poses(bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name])
 
         self.bind_response_meta_data_callback = bind_response_meta_data_callback
 
@@ -164,11 +187,9 @@ class IsaacSimConnector(MultiverseClient):
             current_stage = stage.get_current_stage()
             articulation_prim_paths = []
             self.body_name_dict = {}
-            self.rigid_prim_view = None
-            self.rigid_prim_view_idx_dict = {}
+            self.object_rigid_prim_view_idx_dict = {}
             self.joint_name_dict = {}
-            self.articulation_views = {}
-            self.articulation_views_idx_dict = {}
+            self.object_articulation_view_idx_dict = {}
 
             for prim in current_stage.TraverseAll():
                 if prim.IsA(UsdGeom.Xform):
@@ -184,16 +205,15 @@ class IsaacSimConnector(MultiverseClient):
                         xform_prim_path = joint.GetBody1Rel().GetTargets()[0].pathString
                     articulation_prim_paths.append(xform_prim_path)
 
-            print(articulation_prim_paths)
-            non_free_bodies = set()
+            self.non_free_bodies = set()
             for joint_prim in [
                 prim for prim in current_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)
             ]:
                 joint = UsdPhysics.Joint(joint_prim)
                 body0_name = joint.GetBody0Rel().GetTargets()[0].name
                 body1_name = joint.GetBody1Rel().GetTargets()[0].name
-                non_free_bodies.add(body0_name)
-                non_free_bodies.add(body1_name)
+                self.non_free_bodies.add(body0_name)
+                self.non_free_bodies.add(body1_name)
                 joint_name = joint_prim.GetName()
                 if joint_name in self.ignore_names:
                     continue
@@ -220,7 +240,7 @@ class IsaacSimConnector(MultiverseClient):
                     for attr in sorted(self.send_objects["body"]):
                         if body_name in request_meta_data["receive"] and attr in request_meta_data["receive"][body_name]:
                             continue
-                        if attr == "relative_velocity" and body_name in non_free_bodies:
+                        if attr == "relative_velocity" and body_name in self.non_free_bodies:
                             continue
                         request_meta_data["send"][body_name].append(attr)
 
@@ -257,34 +277,32 @@ class IsaacSimConnector(MultiverseClient):
                         rigid_body_handle = dc.get_rigid_body(self.body_name_dict[object_name].GetPath().pathString)
                         if rigid_body_handle == 0:
                             continue
-                    if articulation_prim_path not in self.articulation_views:
-                        articulation_view_name = f"{articulation_prim_path}_view"
-                        if articulation_view_name in self.articulation_views_registered:
-                            articulation_view = self.articulation_views_registered[articulation_view_name]
-                        else:
-                            articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path, name=articulation_view_name)
-                            articulation_view.initialize(simulation_context.physics_sim_view)
-                            self.articulation_views_registered[articulation_view_name] = articulation_view
-                        # articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path, name=articulation_view_name)
-                        # articulation_view.initialize(simulation_context.physics_sim_view)
-                        self.articulation_views[articulation_prim_path] = articulation_view
+
+                    articulation_view_name = f"{articulation_prim_path}_view"
+                    if self.scene_registry.name_exists(articulation_view_name):
+                        articulation_view = self.scene_registry.articulated_views[articulation_view_name]
                     else:
-                        articulation_view = self.articulation_views[articulation_prim_path]
+                        articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path, name=articulation_view_name)
+                        articulation_view.initialize(world.physics_sim_view)
+                        self.scene_registry.add_articulated_view(articulation_view.name, articulation_view)
                     if object_name in self.joint_name_dict and object_name in articulation_view.dof_names:
                         joint_idx = articulation_view.get_dof_index(object_name)
-                        self.articulation_views_idx_dict[object_name] = (articulation_view, joint_idx)
+                        self.object_articulation_view_idx_dict[object_name] = (articulation_view.name, joint_idx)
                     elif object_name in self.body_name_dict and object_name == Sdf.Path(articulation_prim_path).name:
                         body_idx = articulation_view.get_link_index(object_name)
-                        self.articulation_views_idx_dict[object_name] = (articulation_view, body_idx)
-                    if object_name in self.articulation_views_idx_dict:
+                        self.object_articulation_view_idx_dict[object_name] = (articulation_view.name, body_idx)
+                    if object_name in self.object_articulation_view_idx_dict:
                         break
                 else:
                     if object_name in self.body_name_dict:
-                        body_paths.append(self.body_name_dict[object_name].GetPath().pathString)
-                        self.rigid_prim_view_idx_dict[object_name] = len(body_paths) - 1
+                        body_paths.append(self.body_name_dict[object_name].GetPath())
 
             if len(body_paths) > 0:
-                self.rigid_prim_view = RigidPrimView(prim_paths_expr=body_paths)
+                rigid_prim_view = RigidPrimView(prim_paths_expr=[body_path.pathString for body_path in body_paths])
+                rigid_prim_view.initialize(world.physics_sim_view)
+                self.scene_registry.add_rigid_prim_view(rigid_prim_view.name, rigid_prim_view)
+                for body_idx, body_path in enumerate(body_paths):
+                    self.object_rigid_prim_view_idx_dict[body_path.name] = (rigid_prim_view.name, body_idx)
 
             self.request_meta_data = request_meta_data
 
@@ -292,59 +310,60 @@ class IsaacSimConnector(MultiverseClient):
 
         def bind_send_data() -> None:
             send_data = [self.world_time + self.sim_time]
-            body_positions = {}
-            body_quaternions = {}
-            body_velocities = {}
-            joints_state = {}
-            measured_joint_efforts = {}
+            bodies_positions = {}
+            bodies_quaternions = {}
+            bodies_velocities = {}
+            joints_states = {}
+            measured_joints_efforts = {}
 
-            if self.rigid_prim_view is not None:
-                body_positions[self.rigid_prim_view], body_quaternions[self.rigid_prim_view] = self.rigid_prim_view.get_world_poses()
-                body_velocities[self.rigid_prim_view] = self.rigid_prim_view.get_velocities()
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
+                bodies_velocities[rigid_prim_view_name] = rigid_prim_view.get_velocities()
 
-            for articulation_view in self.articulation_views.values():
-                body_positions[articulation_view], body_quaternions[articulation_view] = articulation_view.get_world_poses()
-                body_velocities[articulation_view] = articulation_view.get_velocities()
-                joints_state[articulation_view] = articulation_view.get_joints_state()
-                measured_joint_efforts[articulation_view] = articulation_view.get_measured_joint_efforts()
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name] = articulation_view.get_world_poses()
+                bodies_velocities[articulation_view_name] = articulation_view.get_velocities()
+                joints_states[articulation_view_name] = articulation_view.get_joints_state()
+                measured_joints_efforts[articulation_view_name] = articulation_view.get_measured_joint_efforts()
 
             for object_name, attributes in self.request_meta_data.get("send", {}).items():
                 if object_name in self.body_name_dict:
-                    view = None
-                    if object_name in self.articulation_views_idx_dict:
-                        view, object_idx = self.articulation_views_idx_dict[object_name]
-                    elif object_name in self.rigid_prim_view_idx_dict:
-                        view = self.rigid_prim_view
-                        object_idx = self.rigid_prim_view_idx_dict[object_name]
+                    if object_name in self.object_articulation_view_idx_dict:
+                        view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
+                    elif object_name in self.object_rigid_prim_view_idx_dict:
+                        view_name, object_idx = self.object_rigid_prim_view_idx_dict[object_name]
                     else:
-                        raise Exception(f"Object {object_name} not found in any view")
+                        raise Exception(f"Body {object_name} not found in any view")
 
                     for attribute in attributes:
                         if attribute == "position":
-                            position = body_positions[view][object_idx]
+                            position = bodies_positions[view_name][object_idx]
                             send_data += [position[0], position[1], position[2]]
                         elif attribute == "quaternion":
-                            quaternion = body_quaternions[view][object_idx]
+                            quaternion = bodies_quaternions[view_name][object_idx]
                             send_data += [quaternion[0], quaternion[1], quaternion[2], quaternion[3]]
                         elif attribute == "relative_velocity":
-                            velocity = body_velocities[view][object_idx]
+                            velocity = bodies_velocities[view_name][object_idx]
                             send_data += [velocity[0], velocity[1], velocity[2], velocity[3], velocity[4], velocity[5]]
 
                 elif object_name in self.joint_name_dict:
-                    articulation_view, joint_idx = self.articulation_views_idx_dict[object_name]
+                    if object_name in self.object_articulation_view_idx_dict:
+                        articulation_view_name, joint_idx = self.object_articulation_view_idx_dict[object_name]
+                    else:
+                        raise Exception(f"Joint {object_name} not found in any view")
                     for attribute in attributes:
                         if attribute == "joint_rvalue":
-                            send_data += [joints_state[articulation_view].positions[0][joint_idx]]
+                            send_data += [joints_states[articulation_view_name].positions[0][joint_idx]]
                         elif attribute == "joint_tvalue":
-                            send_data += [joints_state[articulation_view].positions[0][joint_idx]]
+                            send_data += [joints_states[articulation_view_name].positions[0][joint_idx]]
                         elif attribute == "joint_linear_velocity":
-                            send_data += [joints_state[articulation_view].velocities[0][joint_idx]]
+                            send_data += [joints_states[articulation_view_name].velocities[0][joint_idx]]
                         elif attribute == "joint_angular_velocity":
-                            send_data += [joints_state[articulation_view].velocities[0][joint_idx]]
+                            send_data += [joints_states[articulation_view_name].velocities[0][joint_idx]]
                         elif attribute == "joint_force":
-                            send_data += [measured_joint_efforts[articulation_view][0][joint_idx]]
+                            send_data += [measured_joints_efforts[articulation_view_name][0][joint_idx]]
                         elif attribute == "joint_torque":
-                            send_data += [measured_joint_efforts[articulation_view][0][joint_idx]]
+                            send_data += [measured_joints_efforts[articulation_view_name][0][joint_idx]]
 
             self.send_data = send_data
 
@@ -355,8 +374,8 @@ class IsaacSimConnector(MultiverseClient):
             sim_time = receive_data[0]
             receive_data = receive_data[1:]
             cmd_joint_values = {}
-            for articulation_view in self.articulation_views.values():
-                cmd_joint_values[articulation_view] = articulation_view.get_joint_positions()
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                cmd_joint_values[articulation_view_name] = articulation_view.get_joint_positions()
 
             active_articulation_views = set()
             for object_name, attributes in self.request_meta_data.get("receive", {}).items():
@@ -422,22 +441,23 @@ class IsaacSimConnector(MultiverseClient):
                         dc.set_rigid_body_angular_velocity(rigid_body_handle, angular_velocity)
 
                     elif attribute == "cmd_joint_rvalue" or attribute == "cmd_joint_tvalue" and object_name in self.joint_name_dict:
-                        articulation_view, joint_idx = self.articulation_views_idx_dict[object_name]
+                        articulation_view_name, joint_idx = self.object_articulation_view_idx_dict[object_name]
                         cmd_joint_value = receive_data[0]
                         receive_data = receive_data[1:]
-                        cmd_joint_values[articulation_view][0][joint_idx] = cmd_joint_value
+                        cmd_joint_values[articulation_view_name][0][joint_idx] = cmd_joint_value
+                        articulation_view = self.scene_registry.articulated_views[articulation_view_name]
                         active_articulation_views.add(articulation_view)
 
             for articulation_view in active_articulation_views:
-                action = ArticulationActions(joint_positions=cmd_joint_values[articulation_view])
+                action = ArticulationActions(joint_positions=cmd_joint_values[articulation_view.name])
                 articulation_view.apply_action(action)
         self.bind_receive_data_callback = bind_receive_data
 
     def loginfo(self, message: str) -> None:
-        print(f"INFO: {message}")
+        omni.kit.app.get_app().print_and_log(f"INFO: {message}")
 
     def logwarn(self, message: str) -> None:
-        print(f"WARN: {message}")
+        omni.kit.app.get_app().print_and_log(f"WARN: {message}")
 
     def _run(self) -> None:
         self.loginfo("Start running the Isaac Sim Connector.")
@@ -511,20 +531,21 @@ if __name__ == "__main__":
     simulation_app = SimulationApp(CONFIG)
 
     import carb
-    from omni.isaac.nucleus import is_file
-    from pxr import UsdGeom, UsdPhysics, Sdf
-    from omni.isaac.core import SimulationContext
-    from omni.isaac.core.scenes import Scene
+    import omni
+    from omni.isaac.core import World
+    from omni.isaac.core.scenes import Scene, SceneRegistry
     from omni.isaac.core.prims import RigidPrimView
     from omni.isaac.core.articulations import ArticulationView
     from omni.isaac.core.utils.types import ArticulationActions
-    from omni.isaac.core.utils import stage
     from omni.isaac.dynamic_control import _dynamic_control
+    from omni.isaac.core.utils import stage
     import omni.isaac.core.utils.prims as prims_utils
+    from omni.isaac.nucleus import is_file
+    from pxr import UsdGeom, UsdPhysics, Sdf
 
     dc = _dynamic_control.acquire_dynamic_control_interface()
 
-    simulation_context = SimulationContext()
+    world = World()
 
     # make sure the file exists before we try to open it
     try:
@@ -546,8 +567,8 @@ if __name__ == "__main__":
         simulation_app.update()
     print("Loading Complete")
 
-    simulation_context.initialize_physics()
-    simulation_context.play()
+    world.initialize_physics()
+    world.play()
 
     isaac_sim_connector = IsaacSimConnector(
         client_addr=client_addr,
@@ -557,7 +578,7 @@ if __name__ == "__main__":
         resources=resources,
     )
 
-    simulation_context.reset()
+    world.reset()
 
     isaac_sim_connector.run()
 
@@ -565,9 +586,9 @@ if __name__ == "__main__":
         isaac_sim_connector.send_and_receive_data()
 
         # Run in realtime mode, we don't specify the step size
-        simulation_context.step(render=True)
+        world.step(render=True)
 
-    simulation_context.stop()
+    world.stop()
     simulation_app.close()  # close Isaac Sim
 
     isaac_sim_connector.stop()

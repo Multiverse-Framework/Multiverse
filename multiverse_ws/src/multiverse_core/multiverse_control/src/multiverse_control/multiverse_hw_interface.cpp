@@ -114,7 +114,7 @@ MultiverseHWInterface::MultiverseHWInterface(const std::map<std::string, std::st
 
     *world_time = 0.0;
 
-    sim_start_time = get_time_now();
+    reset();
 }
 
 ros::Time MultiverseHWInterface::get_world_time(const double offset) const
