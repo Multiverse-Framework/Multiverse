@@ -373,84 +373,115 @@ class IsaacSimConnector(MultiverseClient):
             receive_data = self.receive_data
             sim_time = receive_data[0]
             receive_data = receive_data[1:]
-            cmd_joint_values = {}
+
+            bodies_positions = {}
+            bodies_quaternions = {}
+
+            bodies_velocities = {}
+            cmd_joints_values = {}
+
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
+                bodies_velocities[rigid_prim_view_name] = {}
+
             for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
-                cmd_joint_values[articulation_view_name] = articulation_view.get_joint_positions()
+                bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name] = articulation_view.get_world_poses()
+                bodies_velocities[articulation_view_name] = {}
+                cmd_joints_values[articulation_view_name] = {}
 
             active_articulation_views = set()
             for object_name, attributes in self.request_meta_data.get("receive", {}).items():
-                for attribute in attributes:
-                    if attribute == "odometric_velocity" and object_name in self.body_name_dict:
-                        body_prim = self.body_name_dict[object_name]
-                        rigid_body_handle = dc.get_rigid_body(body_prim.GetPath().pathString)
-                        body_pose = dc.get_rigid_body_pose(rigid_body_handle)
+                if object_name in self.body_name_dict:
+                    if object_name in self.object_articulation_view_idx_dict:
+                        view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
+                    elif object_name in self.object_rigid_prim_view_idx_dict:
+                        view_name, object_idx = self.object_rigid_prim_view_idx_dict[object_name]
+                    else:
+                        raise Exception(f"Body {object_name} not found in any view")
 
-                        w = body_pose.r[3]
-                        x = body_pose.r[0]
-                        y = body_pose.r[1]
-                        z = body_pose.r[2]
+                    for attribute in attributes:
+                        if attribute == "odometric_velocity" and object_name in self.body_name_dict:
+                            quaternion = bodies_quaternions[view_name][object_idx]
 
-                        sinr_cosp = 2 * (w * x + y * z)
-                        cosr_cosp = 1 - 2 * (x * x + y * y)
-                        odom_ang_x_joint_pos = numpy.arctan2(sinr_cosp, cosr_cosp)
+                            w = quaternion[0]
+                            x = quaternion[1]
+                            y = quaternion[2]
+                            z = quaternion[3]
 
-                        sinp = 2 * (w * y - z * x)
-                        if numpy.abs(sinp) >= 1:
-                            odom_ang_y_joint_pos = numpy.copysign(numpy.pi / 2, sinp)
-                        else:
-                            odom_ang_y_joint_pos = numpy.arcsin(sinp)
+                            sinr_cosp = 2 * (w * x + y * z)
+                            cosr_cosp = 1 - 2 * (x * x + y * y)
+                            odom_ang_x_joint_pos = numpy.arctan2(sinr_cosp, cosr_cosp)
 
-                        siny_cosp = 2 * (w * z + x * y)
-                        cosy_cosp = 1 - 2 * (y * y + z * z)
-                        odom_ang_z_joint_pos = numpy.arctan2(siny_cosp, cosy_cosp)
+                            sinp = 2 * (w * y - z * x)
+                            if numpy.abs(sinp) >= 1:
+                                odom_ang_y_joint_pos = numpy.copysign(numpy.pi / 2, sinp)
+                            else:
+                                odom_ang_y_joint_pos = numpy.arcsin(sinp)
 
-                        odom_velocity = receive_data[:6]
-                        receive_data = receive_data[6:]
+                            siny_cosp = 2 * (w * z + x * y)
+                            cosy_cosp = 1 - 2 * (y * y + z * z)
+                            odom_ang_z_joint_pos = numpy.arctan2(siny_cosp, cosy_cosp)
 
-                        linear_velocity = [
-                            odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
-                            + odom_velocity[1]
-                            * (
-                                numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
-                                - numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
-                            )
-                            + odom_velocity[2]
-                            * (
-                                numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
-                                + numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
-                            ),
-                            odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
-                            + odom_velocity[1]
-                            * (
-                                numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
-                                + numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
-                            )
-                            + odom_velocity[2]
-                            * (
-                                numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
-                                - numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
-                            ),
-                            odom_velocity[0] * numpy.sin(odom_ang_y_joint_pos)
-                            + odom_velocity[1] * numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos)
-                            + odom_velocity[2] * numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos),
-                        ]
+                            odom_velocity = receive_data[:6]
+                            receive_data = receive_data[6:]
 
-                        angular_velocity = [odom_velocity[3], odom_velocity[4], odom_velocity[5]]
+                            linear_velocity = [
+                                odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                + odom_velocity[1]
+                                * (
+                                    numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                    - numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                )
+                                + odom_velocity[2]
+                                * (
+                                    numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                    + numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                ),
+                                odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                + odom_velocity[1]
+                                * (
+                                    numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                    + numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                )
+                                + odom_velocity[2]
+                                * (
+                                    numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                    - numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                ),
+                                odom_velocity[0] * numpy.sin(odom_ang_y_joint_pos)
+                                + odom_velocity[1] * numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos)
+                                + odom_velocity[2] * numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos),
+                            ]
 
-                        dc.set_rigid_body_linear_velocity(rigid_body_handle, linear_velocity)
-                        dc.set_rigid_body_angular_velocity(rigid_body_handle, angular_velocity)
+                            angular_velocity = [odom_velocity[3], odom_velocity[4], odom_velocity[5]]
 
-                    elif attribute == "cmd_joint_rvalue" or attribute == "cmd_joint_tvalue" and object_name in self.joint_name_dict:
-                        articulation_view_name, joint_idx = self.object_articulation_view_idx_dict[object_name]
-                        cmd_joint_value = receive_data[0]
-                        receive_data = receive_data[1:]
-                        cmd_joint_values[articulation_view_name][0][joint_idx] = cmd_joint_value
-                        articulation_view = self.scene_registry.articulated_views[articulation_view_name]
-                        active_articulation_views.add(articulation_view)
+                            bodies_velocities[view_name] = {object_idx: linear_velocity + angular_velocity}
 
-            for articulation_view in active_articulation_views:
-                action = ArticulationActions(joint_positions=cmd_joint_values[articulation_view.name])
-                articulation_view.apply_action(action)
+                elif object_name in self.joint_name_dict:
+                    articulation_view_name, joint_idx = self.object_articulation_view_idx_dict[object_name]
+                    for attribute in attributes:
+                        if attribute == "cmd_joint_rvalue" or attribute == "cmd_joint_tvalue":
+                            cmd_joint_value = receive_data[0]
+                            receive_data = receive_data[1:]
+                            cmd_joints_values[articulation_view_name][joint_idx] = cmd_joint_value
+
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                if rigid_prim_view_name in bodies_velocities and len(bodies_velocities[rigid_prim_view_name]) > 0:
+                    cmd_body_velocities = list(bodies_velocities[rigid_prim_view_name].values())
+                    cmd_body_idxes = list(bodies_velocities[rigid_prim_view_name].keys())
+                    rigid_prim_view.set_velocities(velocities=cmd_body_velocities, indices=cmd_body_idxes)
+
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                if articulation_view_name in bodies_velocities and len(bodies_velocities[articulation_view_name]) > 0:
+                    cmd_body_velocities = list(bodies_velocities[articulation_view_name].values())
+                    cmd_body_idxes = list(bodies_velocities[articulation_view_name].keys())
+                    articulation_view.set_velocities(velocities=cmd_body_velocities, indices=cmd_body_idxes)
+
+                if articulation_view_name in cmd_joints_values and len(cmd_joints_values[articulation_view_name]) > 0:
+                    cmd_joint_values = list(cmd_joints_values[articulation_view_name].values())
+                    cmd_joint_idxes = list(cmd_joints_values[articulation_view_name].keys())
+                    action = ArticulationActions(joint_positions=cmd_joint_values, joint_indices=cmd_joint_idxes)
+                    articulation_view.apply_action(action)
         self.bind_receive_data_callback = bind_receive_data
 
     def loginfo(self, message: str) -> None:
