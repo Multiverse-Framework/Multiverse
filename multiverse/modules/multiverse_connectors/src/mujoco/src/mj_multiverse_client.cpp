@@ -1630,7 +1630,7 @@ std::string MjMultiverseClient::get_attach_response(const Json::Value &arguments
 {
 	if (!arguments.isArray() || arguments.size() < 2 || arguments.size() > 3)
 	{
-		return "failed (Arguments for weld should be an array of strings with 2 or 3 elements.)";
+		return "failed (Arguments for attach should be an array of strings with 2 or 3 elements.)";
 	}
 
 	const std::string object_1_name = arguments[0].asString();
@@ -1669,7 +1669,7 @@ std::string MjMultiverseClient::get_attach_response(const Json::Value &arguments
 	}
 	else
 	{
-		return "failed (attachment not found)";
+		return "failed (Attachment not found)";
 	}
 }
 
