@@ -28,16 +28,40 @@ class IsaacSimConnector(MultiverseClient):
         return world.scene._scene_registry
 
     def init_callbacks(self) -> None:
-        def is_isaac_sim_response(args: List[str]) -> List[str]:
+        def get_is_isaac_sim_response(args: List[str]) -> List[str]:
             return ["yes"]
 
-        def pause_response(args: List[str]) -> List[str]:
+        def get_pause_response(args: List[str]) -> List[str]:
             return ["paused"] if not world.is_playing() else ["failed to pause"]
 
-        def unpause_response(args: List[str]) -> List[str]:
+        def get_unpause_response(args: List[str]) -> List[str]:
             return ["unpaused"] if world.is_playing() else ["failed to unpause"]
+        
+        def get_attach_response(args: List[str]) -> List[str]:
+            if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 2 or len(args) > 3:
+                return ["failed (Arguments for attach should be an array of strings with 2 or 3 elements.)"]
+            
+            object_1_name = args[0]
+            object_2_name = args[1]
 
-        self.api_callbacks_response = {"is_isaac_sim": is_isaac_sim_response, "pause": pause_response, "unpause": unpause_response}
+            if object_1_name not in self.body_name_dict:
+                return [f"failed (Object {object_1_name} does not exist.)"]
+            
+            if object_2_name not in self.body_name_dict:
+                return [f"failed (Object {object_2_name} does not exist.)"]
+            
+            object_1_path = self.body_name_dict[object_1_name].GetPath()
+            object_2_path = self.body_name_dict[object_2_name].GetPath()
+
+            if object_1_path.GetParentPath() == object_2_path.GetParentPath():
+                if len(args == 3):
+                    relative_pose = args[2]
+                    print(f"Relative pose: {relative_pose}")
+                return ["success"]
+            else:
+                return [f"failed (Attachment not found)"]
+
+        self.api_callbacks_response = {"is_isaac_sim": get_is_isaac_sim_response, "pause": get_pause_response, "unpause": get_unpause_response, "attach": get_attach_response}
 
         def pause(args: List[str]) -> None:
             world.pause()
@@ -45,7 +69,28 @@ class IsaacSimConnector(MultiverseClient):
         def unpause(args: List[str]) -> None:
             world.play()
 
-        self.api_callbacks = {"pause": pause, "unpause": unpause}
+        def attach(args: List[str]) -> None:
+            attach_response = get_attach_response(args)
+            if attach_response[0] == "success":
+                self.loginfo("Attachment already exists")
+                return
+
+            if attach_response[0] != "failed (relative pose are different)" and attach_response[0] != "failed (Attachment not found)":
+                self.logwarn(attach_response[0])
+                return
+            
+            object_1_name = args[0]
+            object_1_path = self.body_name_dict[object_1_name].GetPath()
+            object_2_name = args[1]
+            object_2_path = self.body_name_dict[object_2_name].GetPath()
+
+            object_1_new_path = object_2_path.AppendChild(object_1_path.name)
+
+            prims_utils.move_prim(object_1_path.GetParentPath(), object_1_new_path)
+
+            simulation_app.update()
+
+        self.api_callbacks = {"pause": pause, "unpause": unpause, "attach": attach}
 
         def bind_request_meta_data_callback() -> None:
             objects_to_spawn = set()
@@ -120,13 +165,13 @@ class IsaacSimConnector(MultiverseClient):
                 simulation_app.update()
 
             self.request_meta_data = request_meta_data
-            self.loginfo("Sending request meta data: " + str(self.request_meta_data))
+            # self.loginfo("Sending request meta data: " + str(self.request_meta_data))
 
         self.bind_request_meta_data_callback = bind_request_meta_data_callback
 
         def bind_response_meta_data_callback() -> None:
             response_meta_data = self.response_meta_data
-            self.loginfo("Received response meta data: " + str(response_meta_data))
+            # self.loginfo("Received response meta data: " + str(response_meta_data))
 
             keep_body_names = []
             bodies_positions = {}
