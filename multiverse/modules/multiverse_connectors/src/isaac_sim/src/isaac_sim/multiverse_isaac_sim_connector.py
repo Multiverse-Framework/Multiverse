@@ -86,6 +86,17 @@ class IsaacSimConnector(MultiverseClient):
 
             object_1_new_path = object_2_path.AppendChild(object_1_path.name)
 
+            if object_1_name in self.object_articulation_view_idx_dict:
+                articulation_view_name, _ = self.object_articulation_view_idx_dict[object_1_name]
+                articulation_view = world.scene._scene_registry.articulated_views[articulation_view_name]
+                articulation_view._physics_sim_view.invalidate()
+                world.scene.remove_object(articulation_view_name)
+            elif object_1_name in self.object_rigid_prim_view_idx_dict:
+                rigid_prim_view_name, _ = self.object_rigid_prim_view_idx_dict[object_1_name]
+                rigid_prim_view = world.scene._scene_registry.rigid_prim_views[rigid_prim_view_name]
+                rigid_prim_view._physics_sim_view.invalidate()
+                world.scene.remove_object(rigid_prim_view_name)
+            
             prims_utils.move_prim(object_1_path.GetParentPath(), object_1_new_path)
 
             simulation_app.update()
@@ -117,15 +128,6 @@ class IsaacSimConnector(MultiverseClient):
                 if any(attribute_name in ["position", "quaternion"] for attribute_name in request_meta_data["receive"][object_name]):
                     objects_to_spawn.add(object_name)
 
-            if len(objects_to_spawn) > 0 or len(objects_to_destroy) > 0:
-                rigid_prim_view_names = list(self.scene_registry.rigid_prim_views.keys())
-                for rigid_prim_view_name in rigid_prim_view_names:
-                    world.scene.remove_object(rigid_prim_view_name)
-                articulated_view_names = list(self.scene_registry.articulated_views.keys())
-                for articulation_view_name in articulated_view_names:
-                    world.scene.remove_object(articulation_view_name)
-                simulation_app.update()
-
             for object_name in objects_to_spawn:
                 object_file_path = f"{object_name}.usda"
                 self.loginfo(f"Searching for object {object_name} in {self.resources}...")
@@ -151,8 +153,17 @@ class IsaacSimConnector(MultiverseClient):
             for object_name in objects_to_destroy:
                 if object_name in self.body_name_dict:
                     self.loginfo(f"Destroying object {object_name}...")
+                    if object_name in self.object_articulation_view_idx_dict:
+                        articulation_view_name, _ = self.object_articulation_view_idx_dict[object_name]
+                        articulation_view = world.scene._scene_registry.articulated_views[articulation_view_name]
+                        articulation_view._physics_sim_view.invalidate()
+                        world.scene.remove_object(articulation_view_name)
+                    elif object_name in self.object_rigid_prim_view_idx_dict:
+                        rigid_prim_view_name, _ = self.object_rigid_prim_view_idx_dict[object_name]
+                        rigid_prim_view = world.scene._scene_registry.rigid_prim_views[rigid_prim_view_name]
+                        rigid_prim_view._physics_sim_view.invalidate()
+                        world.scene.remove_object(rigid_prim_view_name)
                     prims_utils.delete_prim(prim_path=f"/{object_name}")
-                    self.loginfo(f"Destroyed object {object_name}.")
                     if object_name in send_objects:
                         del send_objects[object_name]
                     if object_name in receive_objects:
@@ -228,6 +239,7 @@ class IsaacSimConnector(MultiverseClient):
         self.bind_response_meta_data_callback = bind_response_meta_data_callback
 
         def init_objects_callback() -> None:
+            world.initialize_physics()
             request_meta_data = self.request_meta_data
             current_stage = stage.get_current_stage()
             articulation_prim_paths = []
@@ -434,7 +446,6 @@ class IsaacSimConnector(MultiverseClient):
                 bodies_velocities[articulation_view_name] = {}
                 cmd_joints_values[articulation_view_name] = {}
 
-            active_articulation_views = set()
             for object_name, attributes in self.request_meta_data.get("receive", {}).items():
                 if object_name in self.body_name_dict:
                     if object_name in self.object_articulation_view_idx_dict:
@@ -634,16 +645,11 @@ if __name__ == "__main__":
         simulation_app.close()
         sys.exit()
 
-    # wait for things to load
-    simulation_app.update()
-
     print("Loading stage...")
-
     while stage.is_stage_loading():
         simulation_app.update()
     print("Loading Complete")
 
-    world.initialize_physics()
     world.play()
 
     isaac_sim_connector = IsaacSimConnector(
