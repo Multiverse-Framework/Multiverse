@@ -872,7 +872,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
         # Re-attach milk box to hand at (0 0 0.5) (1 0 0 0)
         multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
             "empty_simulation": [
-                {"attach": ["milk_box", "hand", "0.0 0.0 0.5 1.0 0.0 0.0 0.0"]}
+                {"attach": ["milk_box", "hand", "0.0 0.0 -0.5 1.0 0.0 0.0 0.0"]}
             ]
         }
         multiverse_client_test_callapi.send_and_receive_meta_data()
@@ -938,7 +938,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
         # Re-attach milk box to hand at (0 0 0.5) (1 0 0 0)
         multiverse_client_test_callapi.request_meta_data["api_callbacks"] = {
             "empty_simulation": [
-                {"attach": ["milk_box", "hand", "0.0 0.0 0.5 1.0 0.0 0.0 0.0"]}
+                {"attach": ["milk_box", "hand", "0.0 0.0 -0.5 1.0 0.0 0.0 0.0"]}
             ]
         }
         multiverse_client_test_callapi.send_and_receive_meta_data()
@@ -958,7 +958,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                 multiverse_client_test_move.send_and_receive_meta_data()
                 time_now = time() - self.time_start
                 multiverse_client_test_move.send_data = [time_now,
-                                                         x_pos[i], y_pos[i], h,
+                                                         x_pos[i], y_pos[i], h + 1,
                                                          0.0, 0.0, 0.0, 1.0,
                                                          0.0, 0.0, h - i, 0.0, 0.0, 0.0]
                 multiverse_client_test_move.send_and_receive_data()
@@ -975,13 +975,11 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                 multiverse_client_test_receive.send_data = [time_now]
                 multiverse_client_test_receive.send_and_receive_data()
                 # expected_result = [time_now,
-                #                    x_pos[i], y_pos[i], h,
+                #                    x_pos[i], y_pos[i], h + 1,
                 #                    0.0, 0.0, 0.0, 1.0,
                 #                    0.0, 0.0, h - i, 0.0, 0.0, 0.0]
-                # for k in range(len(expected_result)):
+                # for k in range(len(expected_result) - 6):
                 #     self.assertEqual(multiverse_client_test_receive.receive_data[k], expected_result[k])
-
-                sleep(0.1)
 
         multiverse_client_test_move.stop()
 

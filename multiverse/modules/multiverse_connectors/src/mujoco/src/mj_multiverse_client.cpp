@@ -1681,7 +1681,7 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 		printf("Attachment not found, already detached.\n");
 		return;
 	}
-	if (strcmp(detach_response.c_str(), "failed (attachment found)") != 0)
+	if (strcmp(detach_response.c_str(), "failed (Attachment found)") != 0)
 	{
 		printf("%s\n", detach_response.c_str());
 		return;
@@ -1946,7 +1946,7 @@ std::string MjMultiverseClient::get_detach_response(const Json::Value &arguments
 		return "failed (Object " + object_2_name + " does not exist.)";
 	}
 
-	return m->body_parentid[body_1_id] == body_2_id ? "failed (attachment found)" : "success";
+	return m->body_parentid[body_1_id] == body_2_id ? "failed (Attachment found)" : "success";
 }
 
 std::set<std::string> MjMultiverseClient::get_get_contact_bodies_response(const Json::Value &arguments) const

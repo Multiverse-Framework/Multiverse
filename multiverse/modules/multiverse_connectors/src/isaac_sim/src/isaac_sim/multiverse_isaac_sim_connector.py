@@ -19,6 +19,7 @@ class IsaacSimConnector(MultiverseClient):
     ) -> None:
         super().__init__(client_addr, multiverse_meta_data)
         self.body_dict = {}
+        self.object_xform_prim_view_idx_dict = {}
         self.object_rigid_prim_view_idx_dict = {}
         self.joint_dict = {}
         self.object_articulation_view_idx_dict = {}
@@ -61,31 +62,52 @@ class IsaacSimConnector(MultiverseClient):
             
             if object_1_path.GetParentPath() == object_2_path:
                 if len(args) == 3:
-                    relative_pose = args[2].split()
-                    if object_1_name in self.object_articulation_view_idx_dict:
-                        articulation_view_name, object_idx = self.object_articulation_view_idx_dict[object_1_name]
-                        view = self.scene_registry.articulated_views[articulation_view_name]
+                    if object_1_name in self.object_xform_prim_view_idx_dict:
+                        xform_prim_view_name, object_idx = self.object_xform_prim_view_idx_dict[object_1_name]
+                        view = self.scene_registry.xform_prim_views[xform_prim_view_name]
                     elif object_1_name in self.object_rigid_prim_view_idx_dict:
                         rigid_prim_view_name, object_idx = self.object_rigid_prim_view_idx_dict[object_1_name]
                         view = self.scene_registry.rigid_prim_views[rigid_prim_view_name]
+                    elif object_1_name in self.object_articulation_view_idx_dict:
+                        articulation_view_name, object_idx = self.object_articulation_view_idx_dict[object_1_name]
+                        view = self.scene_registry.articulated_views[articulation_view_name]
                     else:
                         raise Exception(f"Body {object_1_name} not found in any view")
                     positions, quaternions = view.get_local_poses()
                     position = positions[object_idx]
                     quaternion = quaternions[object_idx]
-                    if relative_pose[0] != position[0] or \
-                        relative_pose[1] != position[1] or \
-                        relative_pose[2] != position[2] or \
-                        relative_pose[3] != quaternion[3] or \
-                        relative_pose[4] != quaternion[0] or \
-                        relative_pose[5] != quaternion[1] or \
-                        relative_pose[6] != quaternion[2]:
+                    relative_pose = [float(x) for x in args[2].split()]
+                    if not numpy.isclose(position, relative_pose[:3], atol=0.01).all() or not numpy.isclose(quaternion, relative_pose[3:], atol=0.01).all():
+                        print(position, relative_pose[:3])
+                        print(quaternion, relative_pose[3:])
                         return ["failed (Relative pose are different)"]
                 return ["success"]
             else:
                 return ["failed (Attachment not found)"]
+            
+        def get_detach_response(args: List[str]) -> List[str]:
+            if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 2 or len(args) > 3:
+                return ["failed (Arguments for detach should be an array of strings with 2 or 3 elements.)"]
+            
+            object_1_name = args[0]
+            object_2_name = args[1]
 
-        self.api_callbacks_response = {"is_isaac_sim": get_is_isaac_sim_response, "pause": get_pause_response, "unpause": get_unpause_response, "attach": get_attach_response}
+            if object_1_name not in self.body_dict:
+                return [f"failed (Object {object_1_name} does not exist.)"]
+            
+            if object_2_name not in self.body_dict:
+                return [f"failed (Object {object_2_name} does not exist.)"]
+            
+            object_1_path = self.body_dict[object_1_name].root_prim.GetPath()
+            object_2_path = self.body_dict[object_2_name].prim.GetPath()
+
+            return  ["failed (Attachment found)"] if object_1_path.GetParentPath() == object_2_path else ["success"]
+
+        self.api_callbacks_response = {"is_isaac_sim": get_is_isaac_sim_response, 
+                                       "pause": get_pause_response, 
+                                       "unpause": get_unpause_response, 
+                                       "attach": get_attach_response,
+                                       "detach": get_detach_response}
 
         def pause(args: List[str]) -> None:
             world.pause()
@@ -109,28 +131,70 @@ class IsaacSimConnector(MultiverseClient):
             object_2_name = args[1]
             object_2_path = self.body_dict[object_2_name].prim.GetPath()
 
-            object_1_new_root_path = object_2_path.AppendChild(object_1_root_path.name)
-            object_1_new_path = object_1_new_root_path.AppendChild(object_1_path.name)
+            if attach_response[0] == "failed (Attachment not found)":
+                object_1_new_root_path = object_2_path.AppendChild(object_1_root_path.name)
+                object_1_new_path = object_1_new_root_path.AppendChild(object_1_path.name)
 
-            self._remove_object_view(object_1_name)
-            
-            prims_utils.move_prim(object_1_root_path, object_1_new_root_path)
+                self._remove_all_object_views()
+                
+                prims_utils.move_prim(object_1_root_path, object_1_new_root_path)
 
-            # prims_utils.set_prim_attribute_value(object_1_new_path.pathString, attribute_name="physics:rigidBodyEnabled", value=False)
+                current_stage = stage.get_current_stage()
+                self.body_dict[object_1_name] = MultiverseObject(current_stage.GetPrimAtPath(object_1_new_path), 
+                                                                 current_stage.GetPrimAtPath(object_1_new_root_path))
+
+                prims_utils.set_prim_attribute_value(object_1_new_path.pathString, attribute_name="physics:rigidBodyEnabled", value=False)
+
+                object_1_path = self.body_dict[object_1_name].prim.GetPath()
+                object_1_root_path = self.body_dict[object_1_name].root_prim.GetPath()
 
             if len(args) == 3:
-                prims_utils.set_prim_attribute_value(object_1_new_path.pathString, attribute_name="xformOpOrder", value=["xformOp:translate", "xformOp:orient", "xformOp:scale"])
-                prims_utils.set_prim_attribute_value(object_1_new_path.pathString, attribute_name="xformOp:translate", value=[0, 0, 0])
-                prims_utils.set_prim_attribute_value(object_1_new_path.pathString, attribute_name="xformOp:orient", value=[0, 0, 0, 1])
+                prims_utils.set_prim_attribute_value(object_1_root_path.pathString, attribute_name="xformOpOrder", value=["xformOp:translate", "xformOp:orient", "xformOp:scale"])
+                prims_utils.set_prim_attribute_value(object_1_root_path.pathString, attribute_name="xformOp:translate", value=[0, 0, 0])
+                prims_utils.set_prim_attribute_value(object_1_root_path.pathString, attribute_name="xformOp:orient", value=[1, 0, 0, 0])
 
                 relative_pose = args[2].split()
                 positions = [float(x) for x in relative_pose[:3]]
-                quaternions = [float(x) for x in [relative_pose[6], relative_pose[3], relative_pose[4], relative_pose[5]]]
-                prims_utils.set_prim_attribute_value(object_1_new_root_path.pathString, attribute_name="xformOpOrder", value=["xformOp:translate", "xformOp:orient", "xformOp:scale"])
-                prims_utils.set_prim_attribute_value(object_1_new_root_path.pathString, attribute_name="xformOp:translate", value=positions)
-                prims_utils.set_prim_attribute_value(object_1_new_root_path.pathString, attribute_name="xformOp:orient", value=quaternions)
+                quaternions = [float(x) for x in relative_pose[3:]]
+                prims_utils.set_prim_attribute_value(object_1_path.pathString, attribute_name="xformOpOrder", value=["xformOp:translate", "xformOp:orient", "xformOp:scale"])
+                prims_utils.set_prim_attribute_value(object_1_path.pathString, attribute_name="xformOp:translate", value=positions)
+                prims_utils.set_prim_attribute_value(object_1_path.pathString, attribute_name="xformOp:orient", value=quaternions)
 
-        self.api_callbacks = {"pause": pause, "unpause": unpause, "attach": attach}
+        def detach(args: List[str]) -> None:
+            detach_response = get_detach_response(args)
+            if detach_response[0] == "success":
+                self.loginfo("Attachment not found, already detached.")
+                return
+
+            if detach_response[0] != "failed (Attachment found)":
+                self.logwarn(detach_response[0])
+                return
+
+            object_1_name = args[0]
+            object_1_root_path = self.body_dict[object_1_name].root_prim.GetPath()
+            object_1_path = self.body_dict[object_1_name].prim.GetPath()
+
+            object_1_new_root_path = Sdf.Path(f"/{object_1_root_path.name}")
+            object_1_new_path = object_1_new_root_path.AppendChild(object_1_path.name)
+
+            self._remove_all_object_views()
+            
+            prims_utils.move_prim(object_1_root_path, object_1_new_root_path)
+
+            current_stage = stage.get_current_stage()
+            self.body_dict[object_1_name] = MultiverseObject(current_stage.GetPrimAtPath(object_1_new_path), 
+                                                             current_stage.GetPrimAtPath(object_1_new_root_path))
+
+            prims_utils.set_prim_attribute_value(object_1_new_path.pathString, attribute_name="physics:rigidBodyEnabled", value=True)
+
+            if not world.is_playing():
+                world.play()
+                world.pause()
+
+        self.api_callbacks = {"pause": pause, 
+                              "unpause": unpause, 
+                              "attach": attach,
+                              "detach": detach}
 
         def bind_request_meta_data_callback() -> None:
             objects_to_spawn = set()
@@ -179,12 +243,14 @@ class IsaacSimConnector(MultiverseClient):
                     del request_meta_data["send"][object_name]
                     del request_meta_data["receive"][object_name]
 
+            if len(objects_to_destroy) > 0:
+                self._remove_all_object_views()
+
             for object_name in objects_to_destroy:
                 if object_name in self.body_dict:
                     self.loginfo(f"Destroying object {object_name}...")
-                    self._remove_object_view(object_name)
                     object_prim = self.body_dict[object_name].root_prim
-                    prims_utils.delete_prim(prim_path=object_prim.pathString)
+                    prims_utils.delete_prim(prim_path=object_prim.GetPath().pathString)
                     if object_name in send_objects:
                         del send_objects[object_name]
                     if object_name in receive_objects:
@@ -194,7 +260,9 @@ class IsaacSimConnector(MultiverseClient):
                 del request_meta_data["receive"][object_name]
 
             if len(objects_to_spawn) > 0 or len(objects_to_destroy) > 0:
-                simulation_app.update()
+                if not world.is_playing():
+                    world.play()
+                    world.pause()
 
             self.request_meta_data = request_meta_data
             self.loginfo("Sending request meta data: " + str(self.request_meta_data))
@@ -212,18 +280,18 @@ class IsaacSimConnector(MultiverseClient):
             joints_states = {}
             measured_joints_efforts = {}
 
+            for xform_prim_view_name, xform_prim_view in self.scene_registry.xform_prim_views.items():
+                bodies_positions[xform_prim_view_name], bodies_quaternions[xform_prim_view_name] = xform_prim_view.get_world_poses()
+
             for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
                 for prim in rigid_prim_view.prims:
-                    object_name = prim.GetName()
-                    if not self.body_dict[object_name].root_prim.GetParent().IsPseudoRoot():
-                        continue
                     keep_body_names.append(prim.GetName())
                 bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
                 bodies_velocities[rigid_prim_view_name] = rigid_prim_view.get_velocities()
 
             for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
                 for body_name in articulation_view.body_names:
-                    if body_name in keep_body_names:
+                    if body_name in self.non_free_bodies and body_name in keep_body_names:
                         keep_body_names.remove(body_name)
                 bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name] = articulation_view.get_world_poses()
                 bodies_velocities[articulation_view_name] = articulation_view.get_velocities()
@@ -235,10 +303,12 @@ class IsaacSimConnector(MultiverseClient):
                     continue
                 for object_name, attributes in response_meta_data[send_receive].items():
                     if object_name in self.body_dict:
-                        if object_name in self.object_articulation_view_idx_dict:
-                            view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
+                        if object_name in self.object_xform_prim_view_idx_dict:
+                            view_name, object_idx = self.object_xform_prim_view_idx_dict[object_name]
                         elif object_name in self.object_rigid_prim_view_idx_dict:
                             view_name, object_idx = self.object_rigid_prim_view_idx_dict[object_name]
+                        elif object_name in self.object_articulation_view_idx_dict:
+                            view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
                         else:
                             raise Exception(f"Body {object_name} not found in any view")
 
@@ -250,6 +320,8 @@ class IsaacSimConnector(MultiverseClient):
                                 bodies_positions[view_name][object_idx] = [data[0], data[1], data[2]]
                             elif attribute == "quaternion" and object_name not in self.non_free_bodies:
                                 bodies_quaternions[view_name][object_idx] = [data[0], data[1], data[2], data[3]]
+                            elif attribute == "relative_velocity" and object_name not in self.non_free_bodies:
+                                bodies_velocities[view_name][object_idx] = [data[0], data[1], data[2], data[3], data[4], data[5]]
 
             for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
                 keep_body_idxes = [idx for idx, prim in enumerate(rigid_prim_view.prims) if prim.GetName() in keep_body_names]
@@ -259,8 +331,12 @@ class IsaacSimConnector(MultiverseClient):
                 body_quaternions = bodies_quaternions[rigid_prim_view_name][keep_body_idxes]
                 rigid_prim_view.set_world_poses(body_positions, body_quaternions, indices=keep_body_idxes)
 
-            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
-                articulation_view.set_world_poses(bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name])
+                body_velocities = bodies_velocities[rigid_prim_view_name][keep_body_idxes]
+                rigid_prim_view.set_velocities(body_velocities, indices=keep_body_idxes)
+
+            if not world.is_playing():
+                world.play()
+                world.pause()
 
         self.bind_response_meta_data_callback = bind_response_meta_data_callback
 
@@ -270,6 +346,7 @@ class IsaacSimConnector(MultiverseClient):
             current_stage = stage.get_current_stage()
             articulation_prim_paths = []
             self.body_dict = {}
+            self.object_xform_prim_view_idx_dict = {}
             self.object_rigid_prim_view_idx_dict = {}
             self.joint_dict = {}
             self.object_articulation_view_idx_dict = {}
@@ -353,6 +430,7 @@ class IsaacSimConnector(MultiverseClient):
                         request_meta_data["send"][object_name].append(attr)
 
             body_paths = []
+
             for object_name in list(request_meta_data["send"].keys()) + list(request_meta_data["receive"].keys()):
                 for articulation_prim_path in articulation_prim_paths:
                     articulation = dc.get_articulation(articulation_prim_path)
@@ -361,9 +439,12 @@ class IsaacSimConnector(MultiverseClient):
                         if dof_ptr == 0:
                             continue
                     elif object_name in self.body_dict:
-                        rigid_body_handle = dc.get_rigid_body(self.body_dict[object_name].prim.GetPath().pathString)
-                        if rigid_body_handle == 0:
-                            continue
+                        prim = self.body_dict[object_name].prim
+                        if prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                            rigid_body_api = UsdPhysics.RigidBodyAPI(prim)
+                            rigid_body_enabled_attr = rigid_body_api.GetRigidBodyEnabledAttr().Get()
+                            if rigid_body_enabled_attr:
+                                continue
 
                     articulation_view_name = f"{articulation_prim_path}_view"
                     if self.scene_registry.name_exists(articulation_view_name):
@@ -385,11 +466,31 @@ class IsaacSimConnector(MultiverseClient):
                         body_paths.append(self.body_dict[object_name].prim.GetPath())
 
             if len(body_paths) > 0:
-                rigid_prim_view = RigidPrimView(prim_paths_expr=[body_path.pathString for body_path in body_paths])
-                rigid_prim_view.initialize(world.physics_sim_view)
-                self.scene_registry.add_rigid_prim_view(rigid_prim_view.name, rigid_prim_view)
-                for body_idx, body_path in enumerate(body_paths):
-                    self.object_rigid_prim_view_idx_dict[body_path.name] = (rigid_prim_view.name, body_idx)
+                xform_prim_paths = []
+                rigid_prim_paths = []
+                for body_path in body_paths:
+                    prim = current_stage.GetPrimAtPath(body_path)
+                    if prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                        rigid_body_api = UsdPhysics.RigidBodyAPI(prim)
+                        rigid_body_enabled_attr = rigid_body_api.GetRigidBodyEnabledAttr().Get()
+                        if rigid_body_enabled_attr:
+                            rigid_prim_paths.append(body_path)
+                            continue
+                    xform_prim_paths.append(body_path)
+
+                if len(xform_prim_paths) > 0:
+                    xform_prim_view = XFormPrimView(prim_paths_expr=[body_path.pathString for body_path in xform_prim_paths])
+                    xform_prim_view.initialize(world.physics_sim_view)
+                    self.scene_registry.add_xform_view(xform_prim_view.name, xform_prim_view)
+                    for body_idx, body_path in enumerate(xform_prim_paths):
+                        self.object_xform_prim_view_idx_dict[body_path.name] = (xform_prim_view.name, body_idx)
+
+                if len(rigid_prim_paths) > 0:
+                    rigid_prim_view = RigidPrimView(prim_paths_expr=[body_path.pathString for body_path in rigid_prim_paths])
+                    rigid_prim_view.initialize(world.physics_sim_view)
+                    self.scene_registry.add_rigid_prim_view(rigid_prim_view.name, rigid_prim_view)
+                    for body_idx, body_path in enumerate(rigid_prim_paths):
+                        self.object_rigid_prim_view_idx_dict[body_path.name] = (rigid_prim_view.name, body_idx)
 
             self.request_meta_data = request_meta_data
 
@@ -403,6 +504,9 @@ class IsaacSimConnector(MultiverseClient):
             joints_states = {}
             measured_joints_efforts = {}
 
+            for xform_prim_view_name, xform_prim_view in self.scene_registry.xform_prim_views.items():
+                bodies_positions[xform_prim_view_name], bodies_quaternions[xform_prim_view_name] = xform_prim_view.get_world_poses()
+
             for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
                 bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
                 bodies_velocities[rigid_prim_view_name] = rigid_prim_view.get_velocities()
@@ -415,10 +519,12 @@ class IsaacSimConnector(MultiverseClient):
 
             for object_name, attributes in self.request_meta_data.get("send", {}).items():
                 if object_name in self.body_dict:
-                    if object_name in self.object_articulation_view_idx_dict:
-                        view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
+                    if object_name in self.object_xform_prim_view_idx_dict:
+                        view_name, object_idx = self.object_xform_prim_view_idx_dict[object_name]
                     elif object_name in self.object_rigid_prim_view_idx_dict:
                         view_name, object_idx = self.object_rigid_prim_view_idx_dict[object_name]
+                    elif object_name in self.object_articulation_view_idx_dict:
+                        view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
                     else:
                         raise Exception(f"Body {object_name} not found in any view")
 
@@ -467,6 +573,9 @@ class IsaacSimConnector(MultiverseClient):
             bodies_velocities = {}
             cmd_joints_values = {}
 
+            for xform_prim_view_name, xform_prim_view in self.scene_registry.xform_prim_views.items():
+                bodies_positions[xform_prim_view_name], bodies_quaternions[xform_prim_view_name] = xform_prim_view.get_world_poses()
+
             for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
                 bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
                 bodies_velocities[rigid_prim_view_name] = {}
@@ -478,10 +587,12 @@ class IsaacSimConnector(MultiverseClient):
 
             for object_name, attributes in self.request_meta_data.get("receive", {}).items():
                 if object_name in self.body_dict:
-                    if object_name in self.object_articulation_view_idx_dict:
-                        view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
+                    if object_name in self.object_xform_prim_view_idx_dict:
+                        view_name, object_idx = self.object_xform_prim_view_idx_dict[object_name]
                     elif object_name in self.object_rigid_prim_view_idx_dict:
                         view_name, object_idx = self.object_rigid_prim_view_idx_dict[object_name]
+                    elif object_name in self.object_articulation_view_idx_dict:
+                        view_name, object_idx = self.object_articulation_view_idx_dict[object_name]
                     else:
                         raise Exception(f"Body {object_name} not found in any view")
 
@@ -586,13 +697,13 @@ class IsaacSimConnector(MultiverseClient):
     def send_and_receive_data(self) -> None:
         self._communicate(False)
 
-    def _remove_object_view(self, object_name: str) -> None:
-        if object_name in self.object_articulation_view_idx_dict:
-            articulation_view_name, _ = self.object_articulation_view_idx_dict[object_name]
-            articulation_view = world.scene._scene_registry.articulated_views[articulation_view_name]
+    def _remove_all_object_views(self) -> None:
+        for articulation_view_name, articulation_view in dict(self.scene_registry.articulated_views).items():
             articulation_view._physics_sim_view.invalidate()
             world.scene.remove_object(articulation_view_name)
-        for rigid_prim_view_name, rigid_prim_view in dict(world.scene._scene_registry.rigid_prim_views).items():
+        for xform_prim_view_name, _ in dict(self.scene_registry.xform_prim_views).items():
+            world.scene.remove_object(xform_prim_view_name)
+        for rigid_prim_view_name, rigid_prim_view in dict(self.scene_registry.rigid_prim_views).items():
             rigid_prim_view._physics_sim_view.invalidate()
             world.scene.remove_object(rigid_prim_view_name)
 
@@ -660,7 +771,7 @@ if __name__ == "__main__":
     import omni
     from omni.isaac.core import World
     from omni.isaac.core.scenes import Scene, SceneRegistry
-    from omni.isaac.core.prims import RigidPrimView
+    from omni.isaac.core.prims import XFormPrimView, RigidPrimView
     from omni.isaac.core.articulations import ArticulationView
     from omni.isaac.core.utils.types import ArticulationActions
     from omni.isaac.dynamic_control import _dynamic_control
