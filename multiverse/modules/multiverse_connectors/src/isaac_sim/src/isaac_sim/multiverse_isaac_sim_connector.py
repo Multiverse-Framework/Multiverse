@@ -21,6 +21,7 @@ class IsaacSimConnector(MultiverseClient):
         self.body_dict = {}
         self.object_xform_prim_view_idx_dict = {}
         self.object_rigid_prim_view_idx_dict = {}
+        self.object_rigid_contact_view_idx_dict = {}
         self.joint_dict = {}
         self.object_articulation_view_idx_dict = {}
         self.constrained_bodies = set()
@@ -101,11 +102,32 @@ class IsaacSimConnector(MultiverseClient):
 
             return  ["failed (Attachment found)"] if object_1_path.GetParentPath() == object_2_path else ["success"]
 
+        def get_get_contact_bodies_response(args: List[str]) -> List[str]:
+            if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 1 or len(args) > 2:
+                return ["failed (Arguments for get_contact_bodies should be an array of strings with 1 or 2 elements.)"]
+
+            object_name = args[0]
+
+            if object_name not in self.body_dict:
+                return [f"failed (Object {object_name} does not exist.)"]
+
+            rigid_contact_view_name = f"{object_name}_rigid_contact_view"
+            if rigid_contact_view_name not in self.scene_registry.rigid_contact_views:
+                return [f"failed (RigidContactView {rigid_contact_view_name} does not exist.)"]
+            
+            simulation_app.update()
+            rigid_contact_view = self.scene_registry.rigid_contact_views[rigid_contact_view_name]
+            contact_force_matrix = rigid_contact_view.get_contact_force_matrix()
+            print(contact_force_matrix)
+
+            return ["success"]
+
         self.api_callbacks_response = {"is_isaac_sim": get_is_isaac_sim_response, 
                                        "pause": get_pause_response, 
                                        "unpause": get_unpause_response, 
                                        "attach": get_attach_response,
-                                       "detach": get_detach_response}
+                                       "detach": get_detach_response,
+                                       "get_contact_bodies": get_get_contact_bodies_response}
 
         def pause(args: List[str]) -> None:
             world.pause()
@@ -189,10 +211,43 @@ class IsaacSimConnector(MultiverseClient):
                 world.play()
                 world.pause()
 
+        def get_contact_bodies(args: List[str]) -> None:
+            if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 1 or len(args) > 3:
+                return
+
+            object_name = args[0]
+
+            if object_name not in self.body_dict:
+                return
+
+            rigid_contact_view_name = f"{object_name}_rigid_contact_view"
+            if rigid_contact_view_name not in self.scene_registry.rigid_contact_views:
+                body_names = set()
+                body_names.add(object_name)
+                if len(args) == 2:
+                    if args[1] != "with_children":
+                        return
+                    if object_name in self.object_articulation_view_idx_dict:
+                        articulation_view_name, _ = self.object_articulation_view_idx_dict[object_name]
+                        articulation_view = self.scene_registry.articulated_views[articulation_view_name]
+                        body_names.update(articulation_view.body_names)
+                
+                prim_paths_expr = [self.body_dict[body_name].prim.GetPath().pathString for body_name in body_names]
+                filter_paths_expr = [self.body_dict[body_name].prim.GetPath().pathString for body_name in self.body_dict]
+                print(prim_paths_expr)
+                print(filter_paths_expr)
+                rigid_contact_view = RigidContactView(
+                    prim_paths_expr=prim_paths_expr,
+                    name=rigid_contact_view_name,
+                    filter_paths_expr=filter_paths_expr)
+                rigid_contact_view.initialize(world.physics_sim_view)
+                self.scene_registry.add_rigid_contact_view(rigid_contact_view_name, rigid_contact_view)
+
         self.api_callbacks = {"pause": pause, 
                               "unpause": unpause, 
                               "attach": attach,
-                              "detach": detach}
+                              "detach": detach,
+                              "get_contact_bodies": get_contact_bodies}
 
         def bind_request_meta_data_callback() -> None:
             objects_to_spawn = set()
@@ -348,10 +403,7 @@ class IsaacSimConnector(MultiverseClient):
             current_stage = stage.get_current_stage()
             articulation_prim_paths = []
             self.body_dict = {}
-            self.object_xform_prim_view_idx_dict = {}
-            self.object_rigid_prim_view_idx_dict = {}
             self.joint_dict = {}
-            self.object_articulation_view_idx_dict = {}
 
             for prim in current_stage.TraverseAll():
                 if prim.IsA(UsdGeom.Xform):
@@ -363,6 +415,7 @@ class IsaacSimConnector(MultiverseClient):
                     else:
                         root_prim = prim
                     self.body_dict[body_name] = MultiverseObject(prim, root_prim)
+                            
                 if prim.HasAPI(UsdPhysics.ArticulationRootAPI):
                     if prim.IsA(UsdGeom.Xform):
                         xform_prim_path = prim.GetPath().pathString
@@ -410,6 +463,8 @@ class IsaacSimConnector(MultiverseClient):
                         if body_name in request_meta_data["receive"] and attr in request_meta_data["receive"][body_name]:
                             continue
                         if attr == "relative_velocity" and body_name in self.constrained_bodies:
+                            continue
+                        if body_name == "floor":
                             continue
                         request_meta_data["send"][body_name].append(attr)
 
@@ -710,6 +765,14 @@ class IsaacSimConnector(MultiverseClient):
         for rigid_prim_view_name, rigid_prim_view in dict(self.scene_registry.rigid_prim_views).items():
             rigid_prim_view._physics_sim_view.invalidate()
             world.scene.remove_object(rigid_prim_view_name)
+        for rigid_contact_view_name, rigid_contact_view in dict(self.scene_registry.rigid_contact_views).items():
+            rigid_contact_view._physics_sim_view.invalidate()
+            world.scene.remove_object(rigid_contact_view_name)
+
+        self.object_xform_prim_view_idx_dict = {}
+        self.object_rigid_prim_view_idx_dict = {}
+        self.object_rigid_contact_view_idx_dict = {}
+        self.object_articulation_view_idx_dict = {}
 
 ### Below is the code to run the Isaac Sim Connector
 
@@ -774,8 +837,8 @@ if __name__ == "__main__":
     import carb
     import omni
     from omni.isaac.core import World
-    from omni.isaac.core.scenes import Scene, SceneRegistry
-    from omni.isaac.core.prims import XFormPrimView, RigidPrimView
+    from omni.isaac.core.scenes import SceneRegistry
+    from omni.isaac.core.prims import XFormPrimView, RigidPrimView, RigidContactView
     from omni.isaac.core.articulations import ArticulationView
     from omni.isaac.core.utils.types import ArticulationActions
     from omni.isaac.dynamic_control import _dynamic_control
