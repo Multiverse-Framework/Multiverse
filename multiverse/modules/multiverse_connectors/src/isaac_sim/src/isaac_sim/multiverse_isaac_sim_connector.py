@@ -23,7 +23,7 @@ class IsaacSimConnector(MultiverseClient):
         self.object_rigid_prim_view_idx_dict = {}
         self.joint_dict = {}
         self.object_articulation_view_idx_dict = {}
-        self.non_free_bodies = set()
+        self.constrained_bodies = set()
         self.ignore_names = ["defaultGroundPlane", "GroundPlane", "Environment", "OmniKit_Viewport_LightRig", "Lights"]
         self.send_objects = send_objects
         self.receive_objects = receive_objects
@@ -78,8 +78,6 @@ class IsaacSimConnector(MultiverseClient):
                     quaternion = quaternions[object_idx]
                     relative_pose = [float(x) for x in args[2].split()]
                     if not numpy.isclose(position, relative_pose[:3], atol=0.01).all() or not numpy.isclose(quaternion, relative_pose[3:], atol=0.01).all():
-                        print(position, relative_pose[:3])
-                        print(quaternion, relative_pose[3:])
                         return ["failed (Relative pose are different)"]
                 return ["success"]
             else:
@@ -273,7 +271,7 @@ class IsaacSimConnector(MultiverseClient):
             response_meta_data = self.response_meta_data
             self.loginfo("Received response meta data: " + str(response_meta_data))
 
-            keep_body_names = []
+            free_body_names = []
             bodies_positions = {}
             bodies_quaternions = {}
             bodies_velocities = {}
@@ -285,14 +283,14 @@ class IsaacSimConnector(MultiverseClient):
 
             for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
                 for prim in rigid_prim_view.prims:
-                    keep_body_names.append(prim.GetName())
+                    free_body_names.append(prim.GetName())
                 bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
                 bodies_velocities[rigid_prim_view_name] = rigid_prim_view.get_velocities()
 
             for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
                 for body_name in articulation_view.body_names:
-                    if body_name in self.non_free_bodies and body_name in keep_body_names:
-                        keep_body_names.remove(body_name)
+                    if body_name in self.constrained_bodies and body_name in free_body_names:
+                        free_body_names.remove(body_name)
                 bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name] = articulation_view.get_world_poses()
                 bodies_velocities[articulation_view_name] = articulation_view.get_velocities()
                 joints_states[articulation_view_name] = articulation_view.get_joints_state()
@@ -316,23 +314,27 @@ class IsaacSimConnector(MultiverseClient):
                             data = response_meta_data[send_receive][object_name][attribute]
                             if any(x is None for x in data):
                                 continue
-                            if attribute == "position" and object_name not in self.non_free_bodies:
+                            if attribute == "position":
                                 bodies_positions[view_name][object_idx] = [data[0], data[1], data[2]]
-                            elif attribute == "quaternion" and object_name not in self.non_free_bodies:
+                            elif attribute == "quaternion":
                                 bodies_quaternions[view_name][object_idx] = [data[0], data[1], data[2], data[3]]
-                            elif attribute == "relative_velocity" and object_name not in self.non_free_bodies:
+                            elif attribute == "relative_velocity":
                                 bodies_velocities[view_name][object_idx] = [data[0], data[1], data[2], data[3], data[4], data[5]]
 
             for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
-                keep_body_idxes = [idx for idx, prim in enumerate(rigid_prim_view.prims) if prim.GetName() in keep_body_names]
-                if len(keep_body_idxes) == 0:
+                free_body_idxes = [idx for idx, prim in enumerate(rigid_prim_view.prims) if prim.GetName() in free_body_names]
+                if len(free_body_idxes) == 0:
                     continue
-                body_positions = bodies_positions[rigid_prim_view_name][keep_body_idxes]
-                body_quaternions = bodies_quaternions[rigid_prim_view_name][keep_body_idxes]
-                rigid_prim_view.set_world_poses(body_positions, body_quaternions, indices=keep_body_idxes)
+                body_positions = bodies_positions[rigid_prim_view_name][free_body_idxes]
+                body_quaternions = bodies_quaternions[rigid_prim_view_name][free_body_idxes]
+                rigid_prim_view.set_world_poses(body_positions, body_quaternions, indices=free_body_idxes)
 
-                body_velocities = bodies_velocities[rigid_prim_view_name][keep_body_idxes]
-                rigid_prim_view.set_velocities(body_velocities, indices=keep_body_idxes)
+                body_velocities = bodies_velocities[rigid_prim_view_name][free_body_idxes]
+                rigid_prim_view.set_velocities(body_velocities, indices=free_body_idxes)
+
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                articulation_view.set_world_poses(bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name])
+                articulation_view.set_velocities(bodies_velocities[articulation_view_name])
 
             if not world.is_playing():
                 world.play()
@@ -369,19 +371,22 @@ class IsaacSimConnector(MultiverseClient):
                         xform_prim_path = joint.GetBody1Rel().GetTargets()[0].pathString
                     articulation_prim_paths.append(xform_prim_path)
 
-            self.non_free_bodies = set()
-            for joint_prim in [
-                prim for prim in current_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)
-            ]:
+            self.constrained_bodies = set()
+            for joint_prim in [prim for prim in current_stage.TraverseAll() if prim.IsA(UsdPhysics.Joint)]:
                 joint = UsdPhysics.Joint(joint_prim)
-                body0_name = joint.GetBody0Rel().GetTargets()[0].name
-                body1_name = joint.GetBody1Rel().GetTargets()[0].name
-                self.non_free_bodies.add(body0_name)
-                self.non_free_bodies.add(body1_name)
+                body0_targets = joint.GetBody0Rel().GetTargets()
+                if len(body0_targets) != 0:
+                    body0_name = body0_targets[0].name
+                    self.constrained_bodies.add(body0_name)
+                body1_targets = joint.GetBody1Rel().GetTargets()
+                if len(body1_targets) != 0:
+                    body1_name = body1_targets[0].name
+                    self.constrained_bodies.add(body1_name)
                 joint_name = joint_prim.GetName()
                 if joint_name in self.ignore_names:
                     continue
-                self.joint_dict[joint_prim.GetName()] = joint_prim
+                if joint_prim.IsA(UsdPhysics.RevoluteJoint) or joint_prim.IsA(UsdPhysics.PrismaticJoint):
+                    self.joint_dict[joint_prim.GetName()] = joint_prim
 
             send_object_names = sorted(request_meta_data["send"].keys())
             for object_name in send_object_names:
@@ -404,7 +409,7 @@ class IsaacSimConnector(MultiverseClient):
                     for attr in sorted(self.send_objects["body"]):
                         if body_name in request_meta_data["receive"] and attr in request_meta_data["receive"][body_name]:
                             continue
-                        if attr == "relative_velocity" and body_name in self.non_free_bodies:
+                        if attr == "relative_velocity" and body_name in self.constrained_bodies:
                             continue
                         request_meta_data["send"][body_name].append(attr)
 
@@ -440,11 +445,11 @@ class IsaacSimConnector(MultiverseClient):
                             continue
                     elif object_name in self.body_dict:
                         prim = self.body_dict[object_name].prim
-                        if prim.HasAPI(UsdPhysics.RigidBodyAPI):
-                            rigid_body_api = UsdPhysics.RigidBodyAPI(prim)
-                            rigid_body_enabled_attr = rigid_body_api.GetRigidBodyEnabledAttr().Get()
-                            if rigid_body_enabled_attr:
-                                continue
+                        if not prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                            break
+                        rigid_body_api = UsdPhysics.RigidBodyAPI(prim)
+                        if not rigid_body_api.GetRigidBodyEnabledAttr().Get():
+                            break
 
                     articulation_view_name = f"{articulation_prim_path}_view"
                     if self.scene_registry.name_exists(articulation_view_name):
@@ -461,9 +466,8 @@ class IsaacSimConnector(MultiverseClient):
                         self.object_articulation_view_idx_dict[object_name] = (articulation_view.name, body_idx)
                     if object_name in self.object_articulation_view_idx_dict:
                         break
-                else:
-                    if object_name in self.body_dict:
-                        body_paths.append(self.body_dict[object_name].prim.GetPath())
+                if object_name not in self.object_articulation_view_idx_dict and object_name in self.body_dict:
+                    body_paths.append(self.body_dict[object_name].prim.GetPath())
 
             if len(body_paths) > 0:
                 xform_prim_paths = []
