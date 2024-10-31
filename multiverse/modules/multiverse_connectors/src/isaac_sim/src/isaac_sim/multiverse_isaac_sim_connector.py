@@ -1,7 +1,6 @@
 from multiverse_client_py import MultiverseClient, MultiverseMetaData, SocketAddress
 from typing import Dict, List
 from dataclasses import dataclass
-from time import sleep
 
 @dataclass
 class MultiverseObject:
@@ -19,6 +18,7 @@ class IsaacSimConnector(MultiverseClient):
     ) -> None:
         super().__init__(client_addr, multiverse_meta_data)
         self.body_dict = {}
+        self.body_collision_geom_path_dict = {}
         self.object_xform_prim_view_idx_dict = {}
         self.object_rigid_prim_view_idx_dict = {}
         self.object_rigid_contact_view_idx_dict = {}
@@ -114,12 +114,20 @@ class IsaacSimConnector(MultiverseClient):
             rigid_contact_view_name = f"{object_name}_rigid_contact_view"
             if rigid_contact_view_name not in self.scene_registry.rigid_contact_views:
                 return [f"failed (RigidContactView {rigid_contact_view_name} does not exist.)"]
-            
-            rigid_contact_view = self.scene_registry.rigid_contact_views[rigid_contact_view_name]
-            contact_force_matrix = rigid_contact_view.get_contact_force_matrix()
-            print(contact_force_matrix)
 
-            return ["success"]
+            rigid_contact_view = self.scene_registry.rigid_contact_views[rigid_contact_view_name]
+            contact_force_matrix = rigid_contact_view.get_contact_force_matrix(dt=world.get_physics_dt())
+            if contact_force_matrix is None:
+                return ["failed (Physics Simulation View is not created yet)"]
+            body_names = []
+            geom_idx = 0
+            for body_name in self.body_dict:
+                for _ in self.body_collision_geom_path_dict[body_name]:
+                    contact_force = contact_force_matrix[0][geom_idx]
+                    if any(not numpy.isclose(x, 0, atol=0.01) for x in contact_force):
+                        body_names.append(body_name)
+                    geom_idx += 1
+            return body_names
 
         self.api_callbacks_response = {"is_isaac_sim": get_is_isaac_sim_response, 
                                        "pause": get_pause_response, 
@@ -232,7 +240,7 @@ class IsaacSimConnector(MultiverseClient):
                         body_names.update(articulation_view.body_names)
                 
                 prim_paths_expr = [self.body_dict[body_name].prim.GetPath().pathString for body_name in body_names]
-                filter_paths_expr = [self.body_dict[body_name].prim.GetPath().pathString for body_name in self.body_dict]
+                filter_paths_expr = [body_path for body_name in self.body_dict for body_path in self.body_collision_geom_path_dict[body_name]]
                 rigid_contact_view = RigidContactView(
                     prim_paths_expr=prim_paths_expr,
                     name=rigid_contact_view_name,
@@ -400,11 +408,14 @@ class IsaacSimConnector(MultiverseClient):
         self.bind_response_meta_data_callback = bind_response_meta_data_callback
 
         def init_objects_callback() -> None:
+            if len(self.scene_registry.rigid_contact_views) > 0: # Need to stop if rigid_contact_views are present
+                world.stop()
             world.initialize_physics() # Create SimulationView
             request_meta_data = self.request_meta_data
             current_stage = stage.get_current_stage()
             articulation_prim_paths = []
             self.body_dict = {}
+            self.body_collision_geom_path_dict = {}
             self.joint_dict = {}
             self.constrained_bodies = set()
 
@@ -429,6 +440,10 @@ class IsaacSimConnector(MultiverseClient):
                     articulation_prim_paths.append(xform_prim_path)
 
             for body_name, body_prim in self.body_dict.items():
+                self.body_collision_geom_path_dict[body_name] = []
+                for body_child_prim in body_prim.prim.GetChildren():
+                    if body_child_prim.HasAPI(UsdPhysics.CollisionAPI) or body_child_prim.HasAPI(UsdPhysics.MeshCollisionAPI):
+                        self.body_collision_geom_path_dict[body_name].append(body_child_prim.GetPath().pathString)
                 if not body_prim.prim.HasAPI(UsdPhysics.RigidBodyAPI) and not body_prim.root_prim.HasAPI(UsdPhysics.RigidBodyAPI):
                     self.constrained_bodies.add(body_name)
                 else:
@@ -854,10 +869,14 @@ if __name__ == "__main__":
     from omni.isaac.core.utils.types import ArticulationActions
     from omni.isaac.dynamic_control import _dynamic_control
     from omni.isaac.core.utils import stage
-    from omni.isaac.core.simulation_context import SimulationContext
+    import carb
+    from omni.physx.bindings import _physx
     import omni.isaac.core.utils.prims as prims_utils
     from omni.isaac.nucleus import is_file
     from pxr import UsdGeom, UsdPhysics, Sdf
+
+    settings = carb.settings.acquire_settings_interface()
+    settings.set(_physx.SETTING_RESET_ON_STOP, False)
 
     dc = _dynamic_control.acquire_dynamic_control_interface()
 
