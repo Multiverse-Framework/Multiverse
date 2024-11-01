@@ -258,7 +258,7 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
     time_start = 0.0
     _server_port = "7000"
     _process = None
-    simulation = "isaac_sim"
+    simulation = "mujoco"
 
     @classmethod
     def setUpClass(cls) -> None:
