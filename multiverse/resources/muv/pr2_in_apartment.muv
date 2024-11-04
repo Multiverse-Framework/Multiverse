@@ -57,6 +57,8 @@ multiverse_clients:
       r_wrist_flex_actuator: ["cmd_joint_rvalue"]
       r_wrist_roll_actuator: ["cmd_joint_rvalue"]
       torso_lift_actuator: ["cmd_joint_tvalue"]
+      l_gripper_actuator: ["cmd_joint_rvalue"]
+      r_gripper_actuator: ["cmd_joint_rvalue"]
 
   ros:
     ros_nodes:
@@ -152,6 +154,8 @@ multiverse_clients:
             r_wrist_flex_actuator: r_wrist_flex_joint
             r_wrist_roll_actuator: r_wrist_roll_joint
             torso_lift_actuator: torso_lift_joint
+            l_gripper_actuator: l_gripper_l_finger_joint
+            r_gripper_actuator: r_gripper_l_finger_joint
           controllers:
             spawn:
               - joint_state_controller
@@ -159,3 +163,5 @@ multiverse_clients:
                 right_arm_controller
                 left_arm_controller
                 torso_controller
+                left_gripper_controller
+                right_gripper_controller

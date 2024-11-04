@@ -449,7 +449,7 @@
 		<position name="head_pan_actuator" joint="head_pan_joint" kp="500" kv="20" forcerange="-500 500" ctrlrange="-3.006999969482422 3.006999969482422"/>
 		<position name="head_tilt_actuator" joint="head_tilt_joint" kp="500" kv="20" forcerange="-500 500" ctrlrange="-0.47123798727989197 1.3962600231170654"/>
 
-		<motor name="l_gripper_actuator" joint="l_gripper_l_finger_joint" />
-		<motor name="r_gripper_actuator" joint="r_gripper_l_finger_joint" />
+		<position name="l_gripper_actuator" joint="l_gripper_l_finger_joint" kp="20" kv="0.1" forcerange="-50 50" ctrlrange="0 0.5479999780654907"/>
+		<position name="r_gripper_actuator" joint="r_gripper_l_finger_joint" kp="20" kv="0.1" forcerange="-50 50" ctrlrange="0 0.5479999780654907"/>
 	</actuator>
 </mujoco>
