@@ -37,3 +37,11 @@ build_multiverse_ws2.bat        # Build the ROS2 workspace
 ```bash
 multiverse_launch 
 ```
+
+## Citation
+
+If you find this software helpful, please cite it as follows:
+
+```bibtex
+Giang Nguyen, & Beetz, M. (2024). Multiverse (0.0.0-alpha). Zenodo. https://doi.org/10.5281/zenodo.14035537
+```
