@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="pr2">
-	<compiler meshdir="pr2/meshes" texturedir="pr2/textures" angle="radian" autolimits="true" balanceinertia="true" boundmass="0.000001" boundinertia="0.000001"/>
+	<compiler meshdir="pr2/meshes" texturedir="pr2/textures" angle="radian" autolimits="true" balanceinertia="true" inertiafromgeom="true" />
 	<default>
 		<default class="pr2_visual">
 			<geom contype="0" conaffinity="0"/>
@@ -73,8 +73,6 @@
 						</body>
 					</body>
 					<body name="torso_lift_motor_screw_link" pos="-0.15000000596046448 0.0 0.699999988079071" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-						<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-						<joint name="torso_lift_motor_screw_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0" />
 					</body>
 					<body name="base_bellow_link" pos="-0.28999999165534973 0.0 0.800000011920929" quat="1.0 0.0 0.0 0.0" gravcomp="1">
 						<inertial mass="5.550000190734863" pos="0.0 0.0 0.0" quat="0.5 0.5 0.5 0.5" diaginertia="0.04278125613927841 0.0644725039601326 0.10494126379489899" />
@@ -226,11 +224,7 @@
 																	<geom name="SM_r_gripper_motor_accelerometer_link_collision_0" type="box" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.0005000000237487257 0.0005000000237487257 0.0005000000237487257" class="pr2_collision" />
 																</body>
 																<body name="r_gripper_motor_slider_link" pos="0.1682800054550171 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																	<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																	<joint name="r_gripper_motor_slider_joint" type="slide" pos="0.0 0.0 0.0" range="-0.10000000149011612 0.10000000149011612" axis="1.0 0.0 0.0" />
 																	<body name="r_gripper_motor_screw_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																		<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																		<joint name="r_gripper_motor_screw_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 1.0 0.0" />
 																	</body>
 																</body>
 																<body name="r_gripper_l_finger_link" pos="0.07690999656915665 0.009999999776482582 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
@@ -252,8 +246,6 @@
 																		<geom name="SM_r_gripper_r_finger_tip_link_collision_0" type="mesh" pos="0.0 0.0 0.0" quat="-4.371138828673793e-08 1.0 0.0 0.0" mesh="l_finger_tip" class="pr2_collision" />
 																		<joint name="r_gripper_r_finger_tip_joint" type="hinge" pos="0.0 0.0 0.0" range="0.0 0.5479999780654907" axis="0.0 0.0 1.0" />
 																		<body name="r_gripper_l_finger_tip_frame" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																			<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																			<joint name="r_gripper_joint" type="slide" pos="0.0 0.0 0.0" range="0.0 0.09000000357627869" axis="0.0 1.0 0.0" />
 																		</body>
 																	</body>
 																</body>
@@ -321,11 +313,7 @@
 																	<geom name="SM_l_gripper_motor_accelerometer_link_collision_0" type="box" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.0005000000237487257 0.0005000000237487257 0.0005000000237487257" class="pr2_collision" />
 																</body>
 																<body name="l_gripper_motor_slider_link" pos="0.1682800054550171 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																	<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																	<joint name="l_gripper_motor_slider_joint" type="slide" pos="0.0 0.0 0.0" range="-0.10000000149011612 0.10000000149011612" axis="1.0 0.0 0.0" />
 																	<body name="l_gripper_motor_screw_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																		<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																		<joint name="l_gripper_motor_screw_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 1.0 0.0" />
 																	</body>
 																</body>
 																<body name="l_gripper_l_finger_link" pos="0.07690999656915665 0.009999999776482582 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
@@ -347,8 +335,6 @@
 																		<geom name="SM_l_gripper_r_finger_tip_link_collision_0" type="mesh" pos="0.0 0.0 0.0" quat="-4.371138828673793e-08 1.0 0.0 0.0" mesh="l_finger_tip" class="pr2_collision" />
 																		<joint name="l_gripper_r_finger_tip_joint" type="hinge" pos="0.0 0.0 0.0" range="0.0 0.5479999780654907" axis="0.0 0.0 1.0" />
 																		<body name="l_gripper_l_finger_tip_frame" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																			<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																			<joint name="l_gripper_joint" type="slide" pos="0.0 0.0 0.0" range="0.0 0.09000000357627869" axis="0.0 1.0 0.0" />
 																		</body>
 																	</body>
 																</body>
@@ -430,4 +416,14 @@
         <exclude name="l_gripper_motor_accelerometer_link_l_forearm_link" body1="l_gripper_motor_accelerometer_link" body2="l_forearm_link"/>
         <exclude name="l_gripper_l_finger_tip_link_l_gripper_r_finger_tip_link" body1="l_gripper_l_finger_tip_link" body2="l_gripper_r_finger_tip_link"/>
     </contact>
+
+	<equality>
+		<joint name="l_gripper_l_finger_joint_l_gripper_r_finger_joint" joint1="l_gripper_l_finger_joint" joint2="l_gripper_r_finger_joint"/>
+		<joint name="l_gripper_l_finger_joint_l_gripper_l_finger_tip_joint" joint1="l_gripper_l_finger_joint" joint2="l_gripper_l_finger_tip_joint"/>
+		<joint name="l_gripper_l_finger_joint_l_l_gripper_r_finger_tip_joint" joint1="l_gripper_l_finger_joint" joint2="l_gripper_r_finger_tip_joint"/>
+
+		<joint name="r_gripper_l_finger_joint_r_gripper_r_finger_joint" joint1="r_gripper_l_finger_joint" joint2="r_gripper_r_finger_joint"/>
+		<joint name="r_gripper_l_finger_joint_r_gripper_l_finger_tip_joint" joint1="r_gripper_l_finger_joint" joint2="r_gripper_l_finger_tip_joint"/>
+		<joint name="r_gripper_l_finger_joint_l_r_gripper_r_finger_tip_joint" joint1="r_gripper_l_finger_joint" joint2="r_gripper_r_finger_tip_joint"/>
+	</equality>
 </mujoco>

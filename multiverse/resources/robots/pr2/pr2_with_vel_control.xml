@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <mujoco model="pr2">
-	<compiler meshdir="pr2/meshes" texturedir="pr2/textures" angle="radian" autolimits="true" balanceinertia="true" inertiafromgeom="false" boundmass="0.1" boundinertia="0.1"/>
+	<compiler meshdir="pr2/meshes" texturedir="pr2/textures" angle="radian" autolimits="true" balanceinertia="true" inertiafromgeom="true" />
 	<default>
 		<default class="pr2_visual">
 			<geom contype="0" conaffinity="0"/>
@@ -73,8 +73,6 @@
 						</body>
 					</body>
 					<body name="torso_lift_motor_screw_link" pos="-0.15000000596046448 0.0 0.699999988079071" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-						<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-						<joint name="torso_lift_motor_screw_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 0.0 1.0" />
 					</body>
 					<body name="base_bellow_link" pos="-0.28999999165534973 0.0 0.800000011920929" quat="1.0 0.0 0.0 0.0" gravcomp="1">
 						<inertial mass="5.550000190734863" pos="0.0 0.0 0.0" quat="0.5 0.5 0.5 0.5" diaginertia="0.04278125613927841 0.0644725039601326 0.10494126379489899" />
@@ -226,11 +224,7 @@
 																	<geom name="SM_r_gripper_motor_accelerometer_link_collision_0" type="box" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.0005000000237487257 0.0005000000237487257 0.0005000000237487257" class="pr2_collision" />
 																</body>
 																<body name="r_gripper_motor_slider_link" pos="0.1682800054550171 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																	<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																	<joint name="r_gripper_motor_slider_joint" type="slide" pos="0.0 0.0 0.0" range="-0.10000000149011612 0.10000000149011612" axis="1.0 0.0 0.0" />
 																	<body name="r_gripper_motor_screw_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																		<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																		<joint name="r_gripper_motor_screw_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 1.0 0.0" />
 																	</body>
 																</body>
 																<body name="r_gripper_l_finger_link" pos="0.07690999656915665 0.009999999776482582 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
@@ -252,8 +246,6 @@
 																		<geom name="SM_r_gripper_r_finger_tip_link_collision_0" type="mesh" pos="0.0 0.0 0.0" quat="-4.371138828673793e-08 1.0 0.0 0.0" mesh="l_finger_tip" class="pr2_collision" />
 																		<joint name="r_gripper_r_finger_tip_joint" type="hinge" pos="0.0 0.0 0.0" range="0.0 0.5479999780654907" axis="0.0 0.0 1.0" />
 																		<body name="r_gripper_l_finger_tip_frame" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																			<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																			<joint name="r_gripper_joint" type="slide" pos="0.0 0.0 0.0" range="0.0 0.09000000357627869" axis="0.0 1.0 0.0" />
 																		</body>
 																	</body>
 																</body>
@@ -321,11 +313,7 @@
 																	<geom name="SM_l_gripper_motor_accelerometer_link_collision_0" type="box" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" size="0.0005000000237487257 0.0005000000237487257 0.0005000000237487257" class="pr2_collision" />
 																</body>
 																<body name="l_gripper_motor_slider_link" pos="0.1682800054550171 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																	<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																	<joint name="l_gripper_motor_slider_joint" type="slide" pos="0.0 0.0 0.0" range="-0.10000000149011612 0.10000000149011612" axis="1.0 0.0 0.0" />
 																	<body name="l_gripper_motor_screw_link" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																		<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																		<joint name="l_gripper_motor_screw_joint" type="hinge" pos="0.0 0.0 0.0" axis="0.0 1.0 0.0" />
 																	</body>
 																</body>
 																<body name="l_gripper_l_finger_link" pos="0.07690999656915665 0.009999999776482582 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
@@ -347,8 +335,6 @@
 																		<geom name="SM_l_gripper_r_finger_tip_link_collision_0" type="mesh" pos="0.0 0.0 0.0" quat="-4.371138828673793e-08 1.0 0.0 0.0" mesh="l_finger_tip" class="pr2_collision" />
 																		<joint name="l_gripper_r_finger_tip_joint" type="hinge" pos="0.0 0.0 0.0" range="0.0 0.5479999780654907" axis="0.0 0.0 1.0" />
 																		<body name="l_gripper_l_finger_tip_frame" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" gravcomp="1">
-																			<inertial mass="0.0" pos="0.0 0.0 0.0" quat="1.0 0.0 0.0 0.0" diaginertia="0.0 0.0 0.0" />
-																			<joint name="l_gripper_joint" type="slide" pos="0.0 0.0 0.0" range="0.0 0.09000000357627869" axis="0.0 1.0 0.0" />
 																		</body>
 																	</body>
 																</body>
@@ -394,7 +380,6 @@
 			</body>
 		</body>
 	</worldbody>
-	<equality/>
 
 	<contact>
         <exclude name="base_link_br_caster_rotation_link" body1="base_link" body2="br_caster_rotation_link"/>
@@ -431,26 +416,39 @@
         <exclude name="l_gripper_l_finger_tip_link_l_gripper_r_finger_tip_link" body1="l_gripper_l_finger_tip_link" body2="l_gripper_r_finger_tip_link"/>
     </contact>
 
+	<equality>
+		<joint name="l_gripper_l_finger_joint_l_gripper_r_finger_joint" joint1="l_gripper_l_finger_joint" joint2="l_gripper_r_finger_joint"/>
+		<joint name="l_gripper_l_finger_joint_l_gripper_l_finger_tip_joint" joint1="l_gripper_l_finger_joint" joint2="l_gripper_l_finger_tip_joint"/>
+		<joint name="l_gripper_l_finger_joint_l_l_gripper_r_finger_tip_joint" joint1="l_gripper_l_finger_joint" joint2="l_gripper_r_finger_tip_joint"/>
+
+		<joint name="r_gripper_l_finger_joint_r_gripper_r_finger_joint" joint1="r_gripper_l_finger_joint" joint2="r_gripper_r_finger_joint"/>
+		<joint name="r_gripper_l_finger_joint_r_gripper_l_finger_tip_joint" joint1="r_gripper_l_finger_joint" joint2="r_gripper_l_finger_tip_joint"/>
+		<joint name="r_gripper_l_finger_joint_l_r_gripper_r_finger_tip_joint" joint1="r_gripper_l_finger_joint" joint2="r_gripper_r_finger_tip_joint"/>
+	</equality>
+
 	<actuator>
-		<velocity name="r_shoulder_pan_actuator" joint="r_shoulder_pan_joint" kv="500" forcerange="-15000 15000" />
-		<velocity name="r_shoulder_lift_actuator" joint="r_shoulder_lift_joint" kv="500" forcerange="-15000 15000" />
-		<velocity name="r_upper_arm_roll_actuator" joint="r_upper_arm_roll_joint" kv="100" forcerange="-10000 10000" />
-		<velocity name="r_elbow_flex_actuator" joint="r_elbow_flex_joint" kv="100" forcerange="-1500 1500" />
-		<velocity name="r_forearm_roll_actuator" joint="r_forearm_roll_joint" kv="100" forcerange="-1500 1500" />
-		<velocity name="r_wrist_flex_actuator" joint="r_wrist_flex_joint" kv="100" forcerange="-500 500" />
-		<velocity name="r_wrist_roll_actuator" joint="r_wrist_roll_joint" kv="100" forcerange="-500 500" />
+		<velocity name="r_shoulder_pan_actuator" joint="r_shoulder_pan_joint" kv="500" forcerange="-1500 1500" />
+		<velocity name="r_shoulder_lift_actuator" joint="r_shoulder_lift_joint" kv="500" forcerange="-1500 1500" />
+		<velocity name="r_upper_arm_roll_actuator" joint="r_upper_arm_roll_joint" kv="10" forcerange="-500 500" />
+		<velocity name="r_elbow_flex_actuator" joint="r_elbow_flex_joint" kv="20" forcerange="-500 500" />
+		<velocity name="r_forearm_roll_actuator" joint="r_forearm_roll_joint" kv="2" forcerange="-1500 1500" />
+		<velocity name="r_wrist_flex_actuator" joint="r_wrist_flex_joint" kv="2" forcerange="-50 50" />
+		<velocity name="r_wrist_roll_actuator" joint="r_wrist_roll_joint" kv="0.1" forcerange="-50 50" />
 
-		<velocity name="l_shoulder_pan_actuator" joint="l_shoulder_pan_joint" kv="500" forcerange="-15000 15000" />
-		<velocity name="l_shoulder_lift_actuator" joint="l_shoulder_lift_joint" kv="500" forcerange="-15000 15000" />
-		<velocity name="l_upper_arm_roll_actuator" joint="l_upper_arm_roll_joint" kv="100" forcerange="-10000 10000" />
-		<velocity name="l_elbow_flex_actuator" joint="l_elbow_flex_joint" kv="100" forcerange="-1500 1500" />
-		<velocity name="l_forearm_roll_actuator" joint="l_forearm_roll_joint" kv="100" forcerange="-1500 1500" />
-		<velocity name="l_wrist_flex_actuator" joint="l_wrist_flex_joint" kv="100" forcerange="-500 500" />
-		<velocity name="l_wrist_roll_actuator" joint="l_wrist_roll_joint" kv="100" forcerange="-500 500" />
+		<velocity name="l_shoulder_pan_actuator" joint="l_shoulder_pan_joint" kv="500" forcerange="-1500 1500" />
+		<velocity name="l_shoulder_lift_actuator" joint="l_shoulder_lift_joint" kv="500" forcerange="-1500 1500" />
+		<velocity name="l_upper_arm_roll_actuator" joint="l_upper_arm_roll_joint" kv="10" forcerange="-500 500" />
+		<velocity name="l_elbow_flex_actuator" joint="l_elbow_flex_joint" kv="20" forcerange="-500 500" />
+		<velocity name="l_forearm_roll_actuator" joint="l_forearm_roll_joint" kv="2" forcerange="-1500 1500" />
+		<velocity name="l_wrist_flex_actuator" joint="l_wrist_flex_joint" kv="2" forcerange="-50 50" />
+		<velocity name="l_wrist_roll_actuator" joint="l_wrist_roll_joint" kv="0.1" forcerange="-50 50" />
 
-		<velocity name="torso_lift_actuator" joint="torso_lift_joint" kv="2000" forcerange="-50000 50000" />
+		<velocity name="torso_lift_actuator" joint="torso_lift_joint" kv="2000" forcerange="-5000 5000" />
 
-		<velocity name="head_pan_actuator" joint="head_pan_joint" kv="200" forcerange="-5000 5000" />
-		<velocity name="head_tilt_actuator" joint="head_tilt_joint" kv="200" forcerange="-5000 5000" />
+		<velocity name="head_pan_actuator" joint="head_pan_joint" kv="20" forcerange="-500 500" />
+		<velocity name="head_tilt_actuator" joint="head_tilt_joint" kv="20" forcerange="-500 500" />
+
+		<motor name="l_gripper_actuator" joint="l_gripper_l_finger_joint" />
+		<motor name="r_gripper_actuator" joint="r_gripper_l_finger_joint" />
 	</actuator>
 </mujoco>
