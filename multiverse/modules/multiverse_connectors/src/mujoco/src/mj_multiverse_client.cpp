@@ -1452,7 +1452,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 		return;
 	}
 	if (strcmp(attach_response.c_str(), "failed (Relative pose are different)") != 0 &&
-		strcmp(attach_response.c_str(), "failed (attachment not found)") != 0)
+		strcmp(attach_response.c_str(), "failed (Attachment not found)") != 0)
 	{
 		printf("%s\n", attach_response.c_str());
 		return;
@@ -1502,7 +1502,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 
 	body_1_element->SetAttribute("pos", relative_pos.c_str());
 	body_1_element->SetAttribute("quat", relative_quat.c_str());
-	if (strcmp(attach_response.c_str(), "failed (attachment not found)") == 0)
+	if (strcmp(attach_response.c_str(), "failed (Attachment not found)") == 0)
 	{
 		tinyxml2::XMLElement *body_1_element_copy = body_1_element->DeepClone(&doc_2)->ToElement();
 		std::vector<tinyxml2::XMLElement *> body_1_joint_elements;
