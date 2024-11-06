@@ -1,5 +1,5 @@
 from multiverse_client_py import MultiverseClient, MultiverseMetaData, SocketAddress
-from typing import Dict, List
+from typing import Dict, List, Union, Optional
 from dataclasses import dataclass
 
 @dataclass
@@ -103,38 +103,63 @@ class IsaacSimConnector(MultiverseClient):
             return  ["failed (Attachment found)"] if object_1_path.GetParentPath() == object_2_path else ["success"]
 
         def get_get_contact_bodies_response(args: List[str]) -> List[str]:
-            if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 1 or len(args) > 2:
-                return ["failed (Arguments for get_contact_bodies should be an array of strings with 1 or 2 elements.)"]
+            rigid_contact_view = self.get_rigid_contact_view(api_name="get_contact_bodies", args=args)
+            if isinstance(rigid_contact_view, list):
+                return rigid_contact_view
 
-            object_name = args[0]
-
-            if object_name not in self.body_dict:
-                return [f"failed (Object {object_name} does not exist.)"]
-
-            rigid_contact_view_name = f"{object_name}_rigid_contact_view"
-            if rigid_contact_view_name not in self.scene_registry.rigid_contact_views:
-                return [f"failed (RigidContactView {rigid_contact_view_name} does not exist.)"]
-
-            rigid_contact_view = self.scene_registry.rigid_contact_views[rigid_contact_view_name]
-            contact_force_matrix = rigid_contact_view.get_contact_force_matrix(dt=world.get_physics_dt())
-            if contact_force_matrix is None:
+            contact_force_data = rigid_contact_view.get_contact_force_data()
+            if contact_force_data is None:
                 return ["failed (Physics Simulation View is not created yet)"]
+            pair_contacts_count = contact_force_data[4][0]
             body_names = []
             geom_idx = 0
             for body_name in self.body_dict:
                 for _ in self.body_collision_geom_path_dict[body_name]:
-                    contact_force = contact_force_matrix[0][geom_idx]
-                    if any(not numpy.isclose(x, 0, atol=0.01) for x in contact_force):
+                    pair_contact_count = pair_contacts_count[geom_idx]
+                    if body_name not in body_names and not numpy.isclose(pair_contact_count, 0, atol=0.01):
                         body_names.append(body_name)
                     geom_idx += 1
             return body_names
+        
+        def get_get_contact_points_response(args: List[str]) -> List[str]:
+            rigid_contact_view = self.get_rigid_contact_view(api_name="get_contact_points", args=args)
+            if isinstance(rigid_contact_view, list):
+                return rigid_contact_view
+            
+            contacted_body = None
+            if len(args) == 2:
+                contacted_body = args[1]
+                if contacted_body not in self.body_dict:
+                    return [f"failed (Object {contacted_body} does not exist.)"]
+
+            contact_force_data = rigid_contact_view.get_contact_force_data()
+            if contact_force_data is None:
+                return ["failed (Physics Simulation View is not created yet)"]
+            points = contact_force_data[1]
+            normals = contact_force_data[2]
+            pair_contacts_count = contact_force_data[4][0]
+            indices_of_pair_contacts = contact_force_data[5][0]
+            geom_idx = 0
+            contact_points = []
+            for body_name in self.body_dict:
+                for _ in self.body_collision_geom_path_dict[body_name]:
+                    pair_contact_count = pair_contacts_count[geom_idx]
+                    if (contacted_body is None or contacted_body == body_name) and not numpy.isclose(pair_contact_count, 0, atol=0.01):
+                        indices_of_pair_contacts = indices_of_pair_contacts[geom_idx]
+                        for i in range(pair_contact_count):
+                            point = points[indices_of_pair_contacts + i]
+                            normal = normals[indices_of_pair_contacts + i]
+                            contact_points.append(str(point[0]) + " " + str(point[1]) + " " + str(point[2]) + " " + str(normal[0]) + " " + str(normal[1]) + " " + str(normal[2]))
+                    geom_idx += 1
+            return contact_points
 
         self.api_callbacks_response = {"is_isaac_sim": get_is_isaac_sim_response, 
                                        "pause": get_pause_response, 
                                        "unpause": get_unpause_response, 
                                        "attach": get_attach_response,
                                        "detach": get_detach_response,
-                                       "get_contact_bodies": get_get_contact_bodies_response}
+                                       "get_contact_bodies": get_get_contact_bodies_response,
+                                       "get_contact_points": get_get_contact_points_response}
 
         def pause(args: List[str]) -> None:
             world.pause()
@@ -219,39 +244,17 @@ class IsaacSimConnector(MultiverseClient):
                 world.pause()
 
         def get_contact_bodies(args: List[str]) -> None:
-            if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 1 or len(args) > 3:
-                return
+            self.set_rigid_contact_view(args=args, second_arg="with_children", max_contact_count_per_geom=10)
 
-            object_name = args[0]
-
-            if object_name not in self.body_dict:
-                return
-
-            rigid_contact_view_name = f"{object_name}_rigid_contact_view"
-            if rigid_contact_view_name not in self.scene_registry.rigid_contact_views:
-                body_names = set()
-                body_names.add(object_name)
-                if len(args) == 2:
-                    if args[1] != "with_children":
-                        return
-                    if object_name in self.object_articulation_view_idx_dict:
-                        articulation_view_name, _ = self.object_articulation_view_idx_dict[object_name]
-                        articulation_view = self.scene_registry.articulated_views[articulation_view_name]
-                        body_names.update(articulation_view.body_names)
-                
-                prim_paths_expr = [self.body_dict[body_name].prim.GetPath().pathString for body_name in body_names]
-                filter_paths_expr = [body_path for body_name in self.body_dict for body_path in self.body_collision_geom_path_dict[body_name]]
-                rigid_contact_view = RigidContactView(
-                    prim_paths_expr=prim_paths_expr,
-                    name=rigid_contact_view_name,
-                    filter_paths_expr=filter_paths_expr)
-                self.scene_registry.add_rigid_contact_view(rigid_contact_view_name, rigid_contact_view)
+        def get_contact_points(args: List[str]) -> None:
+            self.set_rigid_contact_view(args=args, max_contact_count_per_geom=10)
 
         self.api_callbacks = {"pause": pause, 
                               "unpause": unpause, 
                               "attach": attach,
                               "detach": detach,
-                              "get_contact_bodies": get_contact_bodies}
+                              "get_contact_bodies": get_contact_bodies,
+                              "get_contact_points": get_contact_points}
 
         def bind_request_meta_data_callback() -> None:
             objects_to_spawn = set()
@@ -799,6 +802,51 @@ class IsaacSimConnector(MultiverseClient):
         self.object_rigid_prim_view_idx_dict = {}
         self.object_rigid_contact_view_idx_dict = {}
         self.object_articulation_view_idx_dict = {}
+
+    def set_rigid_contact_view(self, args: List[str], second_arg: str = None, max_contact_count_per_geom: int = 10) -> Optional[List[str]]:
+        if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 1 or len(args) > 3:
+            return
+
+        object_name = args[0]
+
+        if object_name not in self.body_dict:
+            return
+
+        rigid_contact_view_name = f"{object_name}_rigid_contact_view"
+        if rigid_contact_view_name not in self.scene_registry.rigid_contact_views:
+            body_names = set()
+            body_names.add(object_name)
+            if len(args) == 2 and second_arg is not None:
+                if args[1] !=second_arg:
+                    return
+                if object_name in self.object_articulation_view_idx_dict:
+                    articulation_view_name, _ = self.object_articulation_view_idx_dict[object_name]
+                    articulation_view = self.scene_registry.articulated_views[articulation_view_name]
+                    body_names.update(articulation_view.body_names)
+
+            prim_paths_expr = [self.body_dict[body_name].prim.GetPath().pathString for body_name in body_names]
+            filter_paths_expr = [body_path for body_name in self.body_dict for body_path in self.body_collision_geom_path_dict[body_name]]
+            rigid_contact_view = RigidContactView(
+                prim_paths_expr=prim_paths_expr,
+                name=rigid_contact_view_name,
+                filter_paths_expr=filter_paths_expr,
+                max_contact_count=max_contact_count_per_geom*len(filter_paths_expr))
+            self.scene_registry.add_rigid_contact_view(rigid_contact_view_name, rigid_contact_view)
+
+    def get_rigid_contact_view(self, api_name: str, args: List[str]) -> Union["RigidContactView", List[str]]:
+        if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 1 or len(args) > 2:
+            return [f"failed (Arguments for {api_name} should be an array of strings with 1 or 2 elements.)"]
+
+        object_name = args[0]
+
+        if object_name not in self.body_dict:
+            return [f"failed (Object {object_name} does not exist.)"]
+
+        rigid_contact_view_name = f"{object_name}_rigid_contact_view"
+        if rigid_contact_view_name not in self.scene_registry.rigid_contact_views:
+            return [f"failed (RigidContactView {rigid_contact_view_name} does not exist.)"]
+
+        return self.scene_registry.rigid_contact_views[rigid_contact_view_name]
 
 ### Below is the code to run the Isaac Sim Connector
 
