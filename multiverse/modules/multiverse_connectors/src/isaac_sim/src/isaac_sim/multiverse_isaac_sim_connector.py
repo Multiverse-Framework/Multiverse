@@ -45,6 +45,15 @@ class IsaacSimConnector(MultiverseClient):
         def get_unpause_response(args: List[str]) -> List[str]:
             return ["unpaused"] if world.is_playing() else ["failed to unpause"]
         
+        def get_exist_response(args: List[str]) -> List[str]:
+            if not isinstance(args, list) or any(not isinstance(x, str) for x in args):
+                return ["failed (Arguments for exist should be an array of strings.)"]
+            
+            exist_results = []
+            for arg in args:
+                exist_results.append("yes" if arg in self.body_dict else "no")
+            return exist_results
+        
         def get_attach_response(args: List[str]) -> List[str]:
             if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) < 2 or len(args) > 3:
                 return ["failed (Arguments for attach should be an array of strings with 2 or 3 elements.)"]
@@ -197,6 +206,7 @@ class IsaacSimConnector(MultiverseClient):
         self.api_callbacks_response = {"is_isaac_sim": get_is_isaac_sim_response, 
                                        "pause": get_pause_response, 
                                        "unpause": get_unpause_response, 
+                                       "exist": get_exist_response,
                                        "attach": get_attach_response,
                                        "detach": get_detach_response,
                                        "get_contact_bodies": get_get_contact_bodies_response,
