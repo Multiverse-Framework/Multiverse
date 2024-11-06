@@ -152,6 +152,47 @@ class IsaacSimConnector(MultiverseClient):
                             contact_points.append(str(point[0]) + " " + str(point[1]) + " " + str(point[2]) + " " + str(normal[0]) + " " + str(normal[1]) + " " + str(normal[2]))
                     geom_idx += 1
             return contact_points
+        
+        def get_get_rays_response(args: List[str]) -> List[str]:
+            if not isinstance(args, list) or any(not isinstance(x, str) for x in args) or len(args) != 2:
+                return ["failed (Arguments for get_rays should be an array of strings with 2 elements.)"]
+            
+            starting_points = [float(x) for x in args[0].split()]
+            if len(starting_points) % 3 != 0:
+                return ["failed (Starting points should have a multiple of 3 float elements.)"]
+            
+            ending_points = [float(x) for x in args[1].split()]
+            if len(ending_points) % 3 != 0:
+                return ["failed (Ending points should have a multiple of 3 float elements.)"]
+            
+            if len(starting_points) != len(ending_points):
+                return ["failed (Starting points and ending points should have the same number of points.)"]
+            
+            ray_num = len(starting_points) // 3
+            multi_ray_results = []
+            current_stage = stage.get_current_stage()
+            for i in range(ray_num):
+                direction = [ending_points[i * 3 + j] - starting_points[i * 3 + j] for j in range(3)]
+                distance = numpy.linalg.norm(direction)
+                direction = [x / distance for x in direction]
+                origin = starting_points[i * 3: i * 3 + 3]
+                origin = carb.Float3(origin[0], origin[1], origin[2])
+                direction = carb.Float3(direction[0], direction[1], direction[2])
+
+                hit = get_physx_scene_query_interface().raycast_closest(origin, direction, distance)
+                multi_ray_result = "None"
+                if hit["hit"]:
+                    hit_prim = current_stage.GetPrimAtPath(hit["rigidBody"])
+                    prim_name = hit_prim.GetName()
+                    if prim_name not in self.body_dict: # Check if the hit prim is a child of a body
+                        parent_prim = hit_prim.GetParent()
+                        prim_name = parent_prim.GetName()
+                    if prim_name in self.body_dict:
+                        hit_distance = hit["distance"]
+                        multi_ray_result= f"{prim_name} {hit_distance}"
+                multi_ray_results.append(multi_ray_result)
+
+            return multi_ray_results
 
         self.api_callbacks_response = {"is_isaac_sim": get_is_isaac_sim_response, 
                                        "pause": get_pause_response, 
@@ -159,7 +200,8 @@ class IsaacSimConnector(MultiverseClient):
                                        "attach": get_attach_response,
                                        "detach": get_detach_response,
                                        "get_contact_bodies": get_get_contact_bodies_response,
-                                       "get_contact_points": get_get_contact_points_response}
+                                       "get_contact_points": get_get_contact_points_response,
+                                       "get_rays": get_get_rays_response}
 
         def pause(args: List[str]) -> None:
             world.pause()
@@ -917,10 +959,10 @@ if __name__ == "__main__":
     from omni.isaac.core.utils.types import ArticulationActions
     from omni.isaac.dynamic_control import _dynamic_control
     from omni.isaac.core.utils import stage
-    import carb
     from omni.physx.bindings import _physx
     import omni.isaac.core.utils.prims as prims_utils
     from omni.isaac.nucleus import is_file
+    from omni.physx import get_physx_scene_query_interface
     from pxr import UsdGeom, UsdPhysics, Sdf
 
     settings = carb.settings.acquire_settings_interface()

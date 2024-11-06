@@ -2285,7 +2285,7 @@ std::vector<std::string> MjMultiverseClient::get_get_rays_response(const Json::V
 		}
 		else
 		{
-			multi_ray_results.push_back({"None"});
+			multi_ray_results.push_back("None");
 		}
 	}
 
