@@ -1978,7 +1978,7 @@ std::set<std::string> MjMultiverseClient::get_get_contact_bodies_response(const 
 	{
 		for (int child_body_id = body_id + 1; child_body_id < m->nbody; child_body_id++)
 		{
-			if (m->body_parentid[child_body_id] == body_id)
+			if (body_ids.find(m->body_parentid[child_body_id]) != body_ids.end())
 			{
 				body_ids.insert(child_body_id);
 			}
