@@ -149,7 +149,8 @@ cmake -S $PWD/multiverse -B $BUILD_DIR \
 make -C $BUILD_DIR
 cmake --install $BUILD_DIR
 
-if [ $DBUILD_SRC = ON ]; then
+ISAAC_SIM_PYTHON=/home/${USER}/.local/share/ov/pkg/isaac-sim-4.2.0/python.sh
+if [ -f $ISAAC_SIM_PYTHON ] && [ $DBUILD_SRC = ON ]; then
     cmake -S $PWD/multiverse -B $BUILD_DIR \
         -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
         -DBUILD_SRC=ON \
