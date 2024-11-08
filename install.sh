@@ -29,6 +29,9 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
     sudo update-alternatives --remove-all python3
     sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 100
 
+    # Install python3.10
+    sudo apt-get install -y python3.10-dev python3.10-venv
+
     # Install ROS1
     sudo apt-get install -y ros-noetic-desktop-full
     sudo apt-get install -y ros-noetic-xacro ros-noetic-rviz ros-noetic-joint-trajectory-controller ros-noetic-rqt-robot-steering ros-noetic-rqt-joint-trajectory-controller ros-noetic-joint-state-controller ros-noetic-joint-state-publisher-gui ros-noetic-effort-controllers ros-noetic-gripper-action-controller ros-noetic-dwa-local-planner ros-noetic-cob-gazebo-objects ros-noetic-map-server ros-noetic-move-base
