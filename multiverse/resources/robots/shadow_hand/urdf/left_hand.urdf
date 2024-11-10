@@ -1,0 +1,802 @@
+<?xml version="1.0" ?>
+<robot name="left_shadow_hand" version="1.0">
+  <link name="left_shadow_hand">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="lh_forearm_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="left_shadow_hand"/>
+    <child link="lh_forearm"/>
+  </joint>
+  <link name="lh_forearm">
+    <inertial>
+      <origin xyz="0.0 0.0 0.09000000357627869" rpy="0.0 0.0 0.0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.013799999840557575" ixy="0.0" ixz="0.0" iyy="0.013799999840557575" iyz="0.0" izz="0.007439999841153622"/>
+    </inertial>
+    <visual name="Geom_0">
+      <origin xyz="-0.0006274281768128276 2.5023158741532825e-05 0.006174841895699501" rpy="1.2117435932159424 -1.5707753896713257 1.912580132484436"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_forearm_0.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <visual name="Geom_1">
+      <origin xyz="0.0008932988857850432 4.971852831658907e-07 0.10642138868570328" rpy="0.041946735233068466 -0.0002782216761261225 1.576802134513855"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_forearm_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_2">
+      <origin xyz="-2.3000312765475428e-08 -2.1648977721611118e-08 0.09274562448263168" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/stl/left_forearm_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_3">
+      <origin xyz="0.009999999776482582 0.0 0.1809999942779541" rpy="2.36159348487854 0.0 0.0"/>
+      <geometry>
+        <box size="0.07000000029802322 0.07000000029802322 0.07000000029802322"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_WRJ2" type="revolute">
+    <origin xyz="0.009999999776482582 0.0 0.2130099982023239" rpy="0.0 0.0 1.5707963705062866"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="lh_forearm"/>
+    <child link="lh_wrist"/>
+    <limit effort="1000.0" lower="-0.5235990285873413" upper="0.17453299462795258" velocity="1000.0"/>
+  </joint>
+  <link name="lh_wrist">
+    <inertial>
+      <origin xyz="0.0 0.0 0.028999999165534973" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+      <mass value="0.10000000149011612"/>
+      <inertia ixx="6.399999983841553e-05" ixy="0.0" ixz="0.0" iyy="4.3799998820759356e-05" iyz="0.0" izz="3.5000000934815034e-05"/>
+    </inertial>
+    <visual name="Geom_4">
+      <origin xyz="-0.002649368019774556 2.261926420032978e-05 0.016064314171671867" rpy="1.586916446685791 -0.00156922556925565 1.5709199905395508"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_wrist.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_5">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.5707943439483643 1.570792317390442 3.1415905952453613"/>
+      <geometry>
+        <cylinder radius="0.013500000350177288" length="0.029999999329447746"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_6">
+      <origin xyz="0.026000000536441803 0.0 0.03400000184774399" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.010999999940395355" length="0.009999999776482582"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_7">
+      <origin xyz="-0.03099999949336052 0.0 0.03400000184774399" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.010999999940395355" length="0.009999999776482582"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_8">
+      <origin xyz="0.020999999716877937 0.0 0.010999999940395355" rpy="0.0 -0.7853996157646179 0.0"/>
+      <geometry>
+        <box size="0.027000000700354576 0.017999999225139618 0.009999999776482582"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_9">
+      <origin xyz="-0.026000000536441803 0.0 0.009999999776482582" rpy="0.0 0.7853996157646179 0.0"/>
+      <geometry>
+        <box size="0.027000000700354576 0.017999999225139618 0.009999999776482582"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_wrist_ref_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.03" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+    <parent link="lh_wrist"/>
+    <child link="lh_wrist_ref"/>
+  </joint>
+  <link name="lh_wrist_ref">
+    <inertial>
+      <origin xyz="0.0 0.0 0.029999999329447746" rpy="3.1415927410125732 -1.570796251296997 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="lh_WRJ1" type="revolute">
+    <origin xyz="0.0 1.734723475976807e-18 0.03400000184774399" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_wrist"/>
+    <child link="lh_palm"/>
+    <limit effort="1000.0" lower="-0.6981319785118103" upper="0.4886919856071472" velocity="1000.0"/>
+  </joint>
+  <link name="lh_palm">
+    <inertial>
+      <origin xyz="0.0 0.0 0.03500000014901161" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.30000001192092896"/>
+      <inertia ixx="0.0005287000094540417" ixy="0.0" ixz="0.0" iyy="0.0003580999909900129" iyz="0.0" izz="0.00019099999917671084"/>
+    </inertial>
+    <visual name="Geom_10">
+      <origin xyz="-0.005374445114284754 -0.0022442906629294157 0.0320129431784153" rpy="-0.21004584431648254 0.0831327810883522 1.5912715196609497"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_palm.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_11">
+      <origin xyz="-0.010999999940395355 0.008500000461935997 0.03799999877810478" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.06199999898672104 0.007000000216066837 0.09799999743700027"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_12">
+      <origin xyz="0.0020000000949949026 -0.0035000001080334187 0.03799999877810478" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.035999998450279236 0.017000000923871994 0.09799999743700027"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_13">
+      <origin xyz="-0.028999999165534973 -0.0035000001080334187 0.0820000022649765" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.026000000536441803 0.017000000923871994 0.009999999776482582"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_14">
+      <origin xyz="-0.026499999687075615 -0.0010000000474974513 0.07000000029802322" rpy="0.19393959641456604 0.04917139559984207 -0.24521610140800476"/>
+      <geometry>
+        <box size="0.026000000536441803 0.014000000432133675 0.017999999225139618"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_15">
+      <origin xyz="-0.03150000050663948 -0.008500000461935997 0.0010000000474974513" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.020999999716877937 0.027000000700354576 0.02239999920129776"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_16">
+      <origin xyz="-0.012500000186264515 -0.014999999664723873 0.004000000189989805" rpy="0.0 0.0 0.48000070452690125"/>
+      <geometry>
+        <box size="0.02199999988079071 0.004999999888241291 0.029999999329447746"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_17">
+      <origin xyz="-0.010999999940395355 0.0 0.08900000154972076" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.017999999225139618 0.024000000208616257 0.004000000189989805"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_18">
+      <origin xyz="0.029999999329447746 0.0 0.008999999612569809" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.019999999552965164 0.024000000208616257 0.03999999910593033"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_FFJ4" type="revolute">
+    <origin xyz="-0.032999999821186066 1.734723475976807e-18 0.0949999988079071" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="lh_palm"/>
+    <child link="lh_ffknuckle"/>
+    <limit effort="1000.0" lower="-0.34906598925590515" upper="0.34906598925590515" velocity="1000.0"/>
+  </joint>
+  <link name="lh_ffknuckle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <mass value="0.00800000037997961"/>
+      <inertia ixx="3.199999980552093e-07" ixy="0.0" ixz="0.0" iyy="2.6000000730164174e-07" iyz="0.0" izz="2.6000000730164174e-07"/>
+    </inertial>
+    <visual name="Geom_19">
+      <origin xyz="-8.015944331418723e-06 0.0002838333311956376 0.00031411449890583754" rpy="0.47613900899887085 0.007276731077581644 -0.011288821697235107"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_20">
+      <origin xyz="0.0 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.017999999225139618"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_FFJ3" type="revolute">
+    <origin xyz="0.0 1.734723475976807e-18 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_ffknuckle"/>
+    <child link="lh_ffproximal"/>
+    <limit effort="1000.0" lower="-0.26179900765419006" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_ffproximal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.02250000089406967" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.029999999329447746"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.800000043469481e-06" iyz="0.0" izz="1.7999999499807018e-06"/>
+    </inertial>
+    <visual name="Geom_21">
+      <origin xyz="1.2104673032808932e-06 9.761753062775824e-06 0.02288065291941166" rpy="-7.132562132028397e-06 0.011893934570252895 1.5705980062484741"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_proximal.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_22">
+      <origin xyz="0.0 0.0 0.02500000037252903" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.03999999910593033"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_FFJ2" type="revolute">
+    <origin xyz="0.0 1.734723475976807e-18 0.04500000178813934" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_ffproximal"/>
+    <child link="lh_ffmiddle"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_ffmiddle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.012500000186264515" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.017000000923871994"/>
+      <inertia ixx="2.7000000955013093e-06" ixy="0.0" ixz="0.0" iyy="2.6000000161729986e-06" iyz="0.0" izz="8.700000080352766e-07"/>
+    </inertial>
+    <visual name="Geom_23">
+      <origin xyz="-2.7197406780032907e-06 -3.219283462385647e-05 0.011511409655213356" rpy="-1.5153125787037425e-05 -0.00025673210620880127 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_middle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_24">
+      <origin xyz="0.0 0.0 0.012500000186264515" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.02500000037252903"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_FFJ1" type="revolute">
+    <origin xyz="0.0 1.734723475976807e-18 0.02500000037252903" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_ffmiddle"/>
+    <child link="lh_ffdistal"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_ffdistal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.013076899573206902" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.013000000268220901"/>
+      <inertia ixx="1.2809199461116805e-06" ixy="0.0" ixz="0.0" iyy="1.1209200465600588e-06" iyz="0.0" izz="5.300000225361146e-07"/>
+    </inertial>
+    <visual name="Geom_25">
+      <origin xyz="-2.3984350264072418e-05 0.0004207325691822916 0.01764647476375103" rpy="1.9593086108216085e-05 0.0026898421347141266 1.5822759866714478"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_distal_pst.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_26">
+      <origin xyz="-2.3984350264072418e-05 0.0004207325691822916 0.01764647476375103" rpy="1.9593086108216085e-05 0.0026898421347141266 1.5822759866714478"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/stl/left_f_distal_pst.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_ffdistal_ref_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+    <parent link="lh_ffdistal"/>
+    <child link="lh_ffdistal_ref"/>
+  </joint>
+  <link name="lh_ffdistal_ref">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.570796251296997 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="lh_MFJ4" type="revolute">
+    <origin xyz="-0.010999999940395355 1.734723475976807e-18 0.0989999994635582" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="lh_palm"/>
+    <child link="lh_mfknuckle"/>
+    <limit effort="1000.0" lower="-0.34906598925590515" upper="0.34906598925590515" velocity="1000.0"/>
+  </joint>
+  <link name="lh_mfknuckle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <mass value="0.00800000037997961"/>
+      <inertia ixx="3.199999980552093e-07" ixy="0.0" ixz="0.0" iyy="2.6000000730164174e-07" iyz="0.0" izz="2.6000000730164174e-07"/>
+    </inertial>
+    <visual name="Geom_27">
+      <origin xyz="-8.015944331418723e-06 0.0002838333311956376 0.00031411449890583754" rpy="0.47613900899887085 0.007276731077581644 -0.011288821697235107"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_28">
+      <origin xyz="0.0 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.017999999225139618"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_MFJ3" type="revolute">
+    <origin xyz="1.734723475976807e-18 1.734723475976807e-18 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_mfknuckle"/>
+    <child link="lh_mfproximal"/>
+    <limit effort="1000.0" lower="-0.26179900765419006" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_mfproximal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.02250000089406967" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.029999999329447746"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.800000043469481e-06" iyz="0.0" izz="1.7999999499807018e-06"/>
+    </inertial>
+    <visual name="Geom_29">
+      <origin xyz="1.2104673032808932e-06 9.761753062775824e-06 0.02288065291941166" rpy="-7.132562132028397e-06 0.011893934570252895 1.5705980062484741"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_proximal.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_30">
+      <origin xyz="0.0 0.0 0.02500000037252903" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.03999999910593033"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_MFJ2" type="revolute">
+    <origin xyz="1.734723475976807e-18 1.734723475976807e-18 0.04500000178813934" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_mfproximal"/>
+    <child link="lh_mfmiddle"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_mfmiddle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.012500000186264515" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.017000000923871994"/>
+      <inertia ixx="2.7000000955013093e-06" ixy="0.0" ixz="0.0" iyy="2.6000000161729986e-06" iyz="0.0" izz="8.700000080352766e-07"/>
+    </inertial>
+    <visual name="Geom_31">
+      <origin xyz="-2.7197406780032907e-06 -3.219283462385647e-05 0.011511409655213356" rpy="-1.5153125787037425e-05 -0.00025673210620880127 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_middle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_32">
+      <origin xyz="0.0 0.0 0.012500000186264515" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.02500000037252903"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_MFJ1" type="revolute">
+    <origin xyz="1.734723475976807e-18 1.734723475976807e-18 0.02500000037252903" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_mfmiddle"/>
+    <child link="lh_mfdistal"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_mfdistal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.013076899573206902" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.013000000268220901"/>
+      <inertia ixx="1.2809199461116805e-06" ixy="0.0" ixz="0.0" iyy="1.1209200465600588e-06" iyz="0.0" izz="5.300000225361146e-07"/>
+    </inertial>
+    <visual name="Geom_33">
+      <origin xyz="-2.3984350264072418e-05 0.0004207325691822916 0.01764647476375103" rpy="1.9593086108216085e-05 0.0026898421347141266 1.5822759866714478"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_distal_pst.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_34">
+      <origin xyz="-2.3984350264072418e-05 0.0004207325691822916 0.01764647476375103" rpy="1.9593086108216085e-05 0.0026898421347141266 1.5822759866714478"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/stl/left_f_distal_pst.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_mfdistal_ref_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+    <parent link="lh_mfdistal"/>
+    <child link="lh_mfdistal_ref"/>
+  </joint>
+  <link name="lh_mfdistal_ref">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.570796251296997 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="lh_RFJ4" type="revolute">
+    <origin xyz="0.010999999940395355 1.734723475976807e-18 0.0949999988079071" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="lh_palm"/>
+    <child link="lh_rfknuckle"/>
+    <limit effort="1000.0" lower="-0.34906598925590515" upper="0.34906598925590515" velocity="1000.0"/>
+  </joint>
+  <link name="lh_rfknuckle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <mass value="0.00800000037997961"/>
+      <inertia ixx="3.199999980552093e-07" ixy="0.0" ixz="0.0" iyy="2.6000000730164174e-07" iyz="0.0" izz="2.6000000730164174e-07"/>
+    </inertial>
+    <visual name="Geom_35">
+      <origin xyz="-8.015944331418723e-06 0.0002838333311956376 0.00031411449890583754" rpy="0.47613900899887085 0.007276731077581644 -0.011288821697235107"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_36">
+      <origin xyz="0.0 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.017999999225139618"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_RFJ3" type="revolute">
+    <origin xyz="-1.734723475976807e-18 1.734723475976807e-18 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_rfknuckle"/>
+    <child link="lh_rfproximal"/>
+    <limit effort="1000.0" lower="-0.26179900765419006" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_rfproximal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.02250000089406967" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.029999999329447746"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.800000043469481e-06" iyz="0.0" izz="1.7999999499807018e-06"/>
+    </inertial>
+    <visual name="Geom_37">
+      <origin xyz="1.2104673032808932e-06 9.761753062775824e-06 0.02288065291941166" rpy="-7.132562132028397e-06 0.011893934570252895 1.5705980062484741"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_proximal.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_38">
+      <origin xyz="0.0 0.0 0.02500000037252903" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.03999999910593033"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_RFJ2" type="revolute">
+    <origin xyz="-1.734723475976807e-18 1.734723475976807e-18 0.04500000178813934" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_rfproximal"/>
+    <child link="lh_rfmiddle"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_rfmiddle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.012500000186264515" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.017000000923871994"/>
+      <inertia ixx="2.7000000955013093e-06" ixy="0.0" ixz="0.0" iyy="2.6000000161729986e-06" iyz="0.0" izz="8.700000080352766e-07"/>
+    </inertial>
+    <visual name="Geom_39">
+      <origin xyz="-2.7197406780032907e-06 -3.219283462385647e-05 0.011511409655213356" rpy="-1.5153125787037425e-05 -0.00025673210620880127 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_middle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_40">
+      <origin xyz="0.0 0.0 0.012500000186264515" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.02500000037252903"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_RFJ1" type="revolute">
+    <origin xyz="-1.734723475976807e-18 1.734723475976807e-18 0.02500000037252903" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_rfmiddle"/>
+    <child link="lh_rfdistal"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_rfdistal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.013076899573206902" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.013000000268220901"/>
+      <inertia ixx="1.2809199461116805e-06" ixy="0.0" ixz="0.0" iyy="1.1209200465600588e-06" iyz="0.0" izz="5.300000225361146e-07"/>
+    </inertial>
+    <visual name="Geom_41">
+      <origin xyz="-2.3984350264072418e-05 0.0004207325691822916 0.01764647476375103" rpy="1.9593086108216085e-05 0.0026898421347141266 1.5822759866714478"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_distal_pst.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_42">
+      <origin xyz="-2.3984350264072418e-05 0.0004207325691822916 0.01764647476375103" rpy="1.9593086108216085e-05 0.0026898421347141266 1.5822759866714478"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/stl/left_f_distal_pst.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_rfdistal_ref_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+    <parent link="lh_rfdistal"/>
+    <child link="lh_rfdistal_ref"/>
+  </joint>
+  <link name="lh_rfdistal_ref">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.570796251296997 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="lh_LFJ5" type="revolute">
+    <origin xyz="0.032999999821186066 1.734723475976807e-18 0.02071000076830387" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.5735761523246765 0.0 -0.8191522359848022"/>
+    <parent link="lh_palm"/>
+    <child link="lh_lfmetacarpal"/>
+    <limit effort="1000.0" lower="0.0" upper="0.785398006439209" velocity="1000.0"/>
+  </joint>
+  <link name="lh_lfmetacarpal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.03999999910593033" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.029999999329447746"/>
+      <inertia ixx="1.6379999578930438e-05" ixy="0.0" ixz="0.0" iyy="1.4500000361294951e-05" iyz="0.0" izz="4.271999841876095e-06"/>
+    </inertial>
+    <visual name="Geom_43">
+      <origin xyz="-0.002477748552337289 0.0006623357185162604 0.03647977486252785" rpy="0.23066279292106628 0.03969007730484009 1.5920475721359253"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_lf_metacarpal.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_44">
+      <origin xyz="-0.0020000000949949026 0.0 0.032999999821186066" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.02199999988079071 0.024000000208616257 0.05000000074505806"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_LFJ4" type="revolute">
+    <origin xyz="0.0 1.734723475976807e-18 0.06578999757766724" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="lh_lfmetacarpal"/>
+    <child link="lh_lfknuckle"/>
+    <limit effort="1000.0" lower="-0.34906598925590515" upper="0.34906598925590515" velocity="1000.0"/>
+  </joint>
+  <link name="lh_lfknuckle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <mass value="0.00800000037997961"/>
+      <inertia ixx="3.199999980552093e-07" ixy="0.0" ixz="0.0" iyy="2.6000000730164174e-07" iyz="0.0" izz="2.6000000730164174e-07"/>
+    </inertial>
+    <visual name="Geom_45">
+      <origin xyz="-8.015944331418723e-06 0.0002838333311956376 0.00031411449890583754" rpy="0.47613900899887085 0.007276731077581644 -0.011288821697235107"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_46">
+      <origin xyz="0.0 0.0 0.0" rpy="-0.0 1.5707963705062866 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.017999999225139618"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_LFJ3" type="revolute">
+    <origin xyz="0.0 1.734723475976807e-18 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_lfknuckle"/>
+    <child link="lh_lfproximal"/>
+    <limit effort="1000.0" lower="-0.26179900765419006" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_lfproximal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.02250000089406967" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.029999999329447746"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.800000043469481e-06" iyz="0.0" izz="1.7999999499807018e-06"/>
+    </inertial>
+    <visual name="Geom_47">
+      <origin xyz="1.2104673032808932e-06 9.761753062775824e-06 0.02288065291941166" rpy="-7.132562132028397e-06 0.011893934570252895 1.5705980062484741"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_proximal.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_48">
+      <origin xyz="0.0 0.0 0.02500000037252903" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.03999999910593033"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_LFJ2" type="revolute">
+    <origin xyz="0.0 1.734723475976807e-18 0.04500000178813934" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_lfproximal"/>
+    <child link="lh_lfmiddle"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_lfmiddle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.012500000186264515" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.017000000923871994"/>
+      <inertia ixx="2.7000000955013093e-06" ixy="0.0" ixz="0.0" iyy="2.6000000161729986e-06" iyz="0.0" izz="8.700000080352766e-07"/>
+    </inertial>
+    <visual name="Geom_49">
+      <origin xyz="-2.7197406780032907e-06 -3.219283462385647e-05 0.011511409655213356" rpy="-1.5153125787037425e-05 -0.00025673210620880127 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_middle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_50">
+      <origin xyz="0.0 0.0 0.012500000186264515" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.02500000037252903"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_LFJ1" type="revolute">
+    <origin xyz="0.0 1.734723475976807e-18 0.02500000037252903" rpy="0.0 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_lfmiddle"/>
+    <child link="lh_lfdistal"/>
+    <limit effort="1000.0" lower="0.0" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_lfdistal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.013076899573206902" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.013000000268220901"/>
+      <inertia ixx="1.2809199461116805e-06" ixy="0.0" ixz="0.0" iyy="1.1209200465600588e-06" iyz="0.0" izz="5.300000225361146e-07"/>
+    </inertial>
+    <visual name="Geom_51">
+      <origin xyz="-2.3984350264072418e-05 0.0004207325691822916 0.01764647476375103" rpy="1.9593086108216085e-05 0.0026898421347141266 1.5822759866714478"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_f_distal_pst.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_52">
+      <origin xyz="-2.3984350264072418e-05 0.0004207325691822916 0.01764647476375103" rpy="1.9593086108216085e-05 0.0026898421347141266 1.5822759866714478"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/stl/left_f_distal_pst.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_lfdistal_ref_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+    <parent link="lh_lfdistal"/>
+    <child link="lh_lfdistal_ref"/>
+  </joint>
+  <link name="lh_lfdistal_ref">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.570796251296997 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+  <joint name="lh_THJ5" type="revolute">
+    <origin xyz="-0.03400000184774399 -0.008580000139772892 0.028999999165534973" rpy="-1.0211152818292549e-32 0.7853969931602478 -3.1415927410125732"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="lh_palm"/>
+    <child link="lh_thbase"/>
+    <limit effort="1000.0" lower="-1.0471999645233154" upper="1.0471999645233154" velocity="1000.0"/>
+  </joint>
+  <link name="lh_thbase">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="1.5999999902760464e-07" ixy="0.0" ixz="0.0" iyy="1.5999999902760464e-07" iyz="0.0" izz="1.5999999902760464e-07"/>
+    </inertial>
+    <collision name="Geom_53">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.013000000268220901"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_THJ4" type="revolute">
+    <origin xyz="0.0 0.0 -2.7755575615628914e-17" rpy="-1.232595164407831e-32 0.0 1.232595164407831e-32"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="lh_thbase"/>
+    <child link="lh_thproximal"/>
+    <limit effort="1000.0" lower="0.0" upper="1.2217299938201904" velocity="1000.0"/>
+  </joint>
+  <link name="lh_thproximal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.01899999938905239" rpy="0.0 0.0 0.0"/>
+      <mass value="0.03999999910593033"/>
+      <inertia ixx="1.359999987471383e-05" ixy="0.0" ixz="0.0" iyy="1.359999987471383e-05" iyz="0.0" izz="3.130000095552532e-06"/>
+    </inertial>
+    <visual name="Geom_54">
+      <origin xyz="-6.37889388599433e-06 -2.603128450573422e-05 0.01671529933810234" rpy="-4.187817012279993e-06 0.0010962407104671001 0.38475820422172546"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_th_proximal.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_55">
+      <origin xyz="0.0 0.0 0.019999999552965164" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.010499999858438969" length="0.017999999225139618"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_THJ3" type="revolute">
+    <origin xyz="-2.7755575615628914e-17 0.0 0.03799999877810478" rpy="-1.232595164407831e-32 0.0 1.232595164407831e-32"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="lh_thproximal"/>
+    <child link="lh_thhub"/>
+    <limit effort="1000.0" lower="-0.20943999290466309" upper="0.20943999290466309" velocity="1000.0"/>
+  </joint>
+  <link name="lh_thhub">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.004999999888241291"/>
+      <inertia ixx="9.999999974752427e-07" ixy="0.0" ixz="0.0" iyy="9.999999974752427e-07" iyz="0.0" izz="3.000000106112566e-07"/>
+    </inertial>
+    <collision name="Geom_56">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.010999999940395355"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_THJ2" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 1.232595164407831e-32"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="lh_thhub"/>
+    <child link="lh_thmiddle"/>
+    <limit effort="1000.0" lower="-0.6981319785118103" upper="0.6981319785118103" velocity="1000.0"/>
+  </joint>
+  <link name="lh_thmiddle">
+    <inertial>
+      <origin xyz="0.0 0.0 0.01600000075995922" rpy="0.0 0.0 0.0"/>
+      <mass value="0.019999999552965164"/>
+      <inertia ixx="5.100000180391362e-06" ixy="0.0" ixz="0.0" iyy="5.100000180391362e-06" iyz="0.0" izz="1.2100000503778574e-06"/>
+    </inertial>
+    <visual name="Geom_57">
+      <origin xyz="7.479629857698455e-05 -4.5069777115713805e-05 0.015348398126661777" rpy="0.0 -0.0009035486727952957 0.0"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_th_middle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_58">
+      <origin xyz="0.0 0.0 0.012000000104308128" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.008999999612569809" length="0.017999999225139618"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_59">
+      <origin xyz="0.0 0.0 0.029999999329447746" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.009999999776482582"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_THJ1" type="revolute">
+    <origin xyz="0.0 0.0 0.03200000151991844" rpy="0.0 0.0 -1.5707963705062866"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="lh_thmiddle"/>
+    <child link="lh_thdistal"/>
+    <limit effort="1000.0" lower="-0.26179900765419006" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="lh_thdistal">
+    <inertial>
+      <origin xyz="0.0 0.0 0.01455879956483841" rpy="0.0 0.0 1.5707963705062866"/>
+      <mass value="0.017000000923871994"/>
+      <inertia ixx="2.377940063524875e-06" ixy="0.0" ixz="0.0" iyy="2.277939984196564e-06" iyz="0.0" izz="9.999999974752427e-07"/>
+    </inertial>
+    <visual name="Geom_60">
+      <origin xyz="-8.254509680227784e-07 0.0008025187416933477 0.019553372636437416" rpy="-0.00010732068039942533 0.003173496574163437 1.570669412612915"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/obj/left_th_distal_pst.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </visual>
+    <collision name="Geom_61">
+      <origin xyz="-8.254509680227784e-07 0.0008025187416933477 0.019553372636437416" rpy="-0.00010732068039942533 0.003173496574163437 1.570669412612915"/>
+      <geometry>
+        <mesh filename="file://left_hand/meshes/stl/left_th_distal_pst.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lh_thdistal_ref_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.5707963705062866 0.0"/>
+    <parent link="lh_thdistal"/>
+    <child link="lh_thdistal_ref"/>
+  </joint>
+  <link name="lh_thdistal_ref">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="3.1415927410125732 -1.570796251296997 0.0"/>
+      <mass value="0.0"/>
+      <inertia ixx="0.0" ixy="0.0" ixz="0.0" iyy="0.0" iyz="0.0" izz="0.0"/>
+    </inertial>
+  </link>
+</robot>
