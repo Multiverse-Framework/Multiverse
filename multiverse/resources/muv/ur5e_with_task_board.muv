@@ -13,10 +13,13 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: work_table.xml
+      path: work_table_with_buttons.xml
     robots:
       gripper:
         path: gripper-2F-85.xml
+        apply:
+          body:
+            gravcomp: 1
         prefix:
           geom: gripper-2F-85_
         disable_self_collision: "off"
@@ -26,6 +29,7 @@ simulations:
           body:
             ur5e:
               pos: [0.0, 0.0, 1.05]
+            gravcomp: 1
         attach:
           wrist_3_link: 
             gripper:
@@ -76,41 +80,41 @@ simulations:
           geom: right_
     references:
       left_shadow_hand:
-        body1: LeftHand_Wrist_Root
+        body1: LeftHand_WristRoot
         body2: lh_wrist_ref
       lh_thdistal:
-        body1: LeftHand_Thumb_Tip
+        body1: LeftHand_ThumbTip
         body2: lh_thdistal_ref
       lh_ffdistal:
-        body1: LeftHand_Index_Tip
+        body1: LeftHand_IndexTip
         body2: lh_ffdistal_ref
       lh_mfdistal:
-        body1: LeftHand_Middle_Tip
+        body1: LeftHand_MiddleTip
         body2: lh_mfdistal_ref
       lh_rfdistal:
-        body1: LeftHand_Ring_Tip
+        body1: LeftHand_RingTip
         body2: lh_rfdistal_ref
       lh_lfdistal:
-        body1: LeftHand_Pinky_Tip
+        body1: LeftHand_PinkyTip
         body2: lh_lfdistal_ref
       
       right_shadow_hand:
-        body1: RightHand_Wrist_Root
+        body1: RightHand_WristRoot
         body2: rh_wrist_ref
       rh_thdistal:
-        body1: RightHand_Thumb_Tip
+        body1: RightHand_ThumbTip
         body2: rh_thdistal_ref
       rh_ffdistal:
-        body1: RightHand_Index_Tip
+        body1: RightHand_IndexTip
         body2: rh_ffdistal_ref
       rh_mfdistal:
-        body1: RightHand_Middle_Tip
+        body1: RightHand_MiddleTip
         body2: rh_mfdistal_ref
       rh_rfdistal:
-        body1: RightHand_Ring_Tip
+        body1: RightHand_RingTip
         body2: rh_rfdistal_ref
       rh_lfdistal:
-        body1: RightHand_Pinky_Tip
+        body1: RightHand_PinkyTip
         body2: rh_lfdistal_ref
     config:
       max_time_step: 0.002
@@ -135,18 +139,18 @@ multiverse_clients:
       wrist_2: ["cmd_joint_rvalue"]
       wrist_3: ["cmd_joint_rvalue"]
 
-      LeftHand_Wrist_Root: ["position", "quaternion"]
-      LeftHand_Thumb_Tip: ["position", "quaternion"]
-      LeftHand_Index_Tip: ["position", "quaternion"]
-      LeftHand_Middle_Tip: ["position", "quaternion"]
-      LeftHand_Ring_Tip: ["position", "quaternion"]
-      LeftHand_Pinky_Tip: ["position", "quaternion"]
-      RightHand_Wrist_Root: ["position", "quaternion"]
-      RightHand_Thumb_Tip: ["position", "quaternion"]
-      RightHand_Index_Tip: ["position", "quaternion"]
-      RightHand_Middle_Tip: ["position", "quaternion"]
-      RightHand_Ring_Tip: ["position", "quaternion"]
-      RightHand_Pinky_Tip: ["position", "quaternion"]
+      LeftHand_WristRoot: ["position", "quaternion"]
+      LeftHand_ThumbTip: ["position", "quaternion"]
+      LeftHand_IndexTip: ["position", "quaternion"]
+      LeftHand_MiddleTip: ["position", "quaternion"]
+      LeftHand_RingTip: ["position", "quaternion"]
+      LeftHand_PinkyTip: ["position", "quaternion"]
+      RightHand_WristRoot: ["position", "quaternion"]
+      RightHand_ThumbTip: ["position", "quaternion"]
+      RightHand_IndexTip: ["position", "quaternion"]
+      RightHand_MiddleTip: ["position", "quaternion"]
+      RightHand_RingTip: ["position", "quaternion"]
+      RightHand_PinkyTip: ["position", "quaternion"]
 
   ros:
     ros_nodes:
