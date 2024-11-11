@@ -133,7 +133,11 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 
 			boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
 			{
+#ifdef _WIN32
 				boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_options::overwrite_existing);
+#else
+				boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_option::overwrite_if_exists);
+#endif
 				tinyxml2::XMLDocument doc;
 				if (doc.LoadFile(new_object_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
 				{
@@ -1820,7 +1824,11 @@ std::string MjMultiverseClient::get_save_response(const Json::Value &arguments) 
 			{
 				file_path = scene_xml_path.parent_path() / file_path;
 			}
+#ifdef _WIN32
 			boost::filesystem::copy_file(file_path, save_path.parent_path() / file_path.filename(), boost::filesystem::copy_options::overwrite_existing);
+#else
+			boost::filesystem::copy_file(file_path, save_path.parent_path() / file_path.filename(), boost::filesystem::copy_option::overwrite_if_exists);
+#endif
 		}
 		doc.SaveFile(save_path.c_str());
 		printf("Saved scene to %s\n", save_path.c_str());
@@ -1856,7 +1864,11 @@ void MjMultiverseClient::load(const Json::Value &arguments)
 			{
 				file_path = load_path.parent_path() / file_path;
 			}
+#ifdef _WIN32
 			boost::filesystem::copy_file(load_path, scene_xml_path.parent_path() / load_path.filename(), boost::filesystem::copy_options::overwrite_existing);
+#else
+			boost::filesystem::copy_file(load_path, scene_xml_path.parent_path() / load_path.filename(), boost::filesystem::copy_option::overwrite_if_exists);
+#endif
 		}
 		doc.SaveFile(scene_xml_path.c_str());
 	}
