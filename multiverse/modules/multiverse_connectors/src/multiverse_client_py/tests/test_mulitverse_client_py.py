@@ -1016,6 +1016,17 @@ class MultiverseClientComplexTestCase(unittest.TestCase):
                                                                                })
         print(multiverse_client_test_callapi.response_meta_data)
 
+        multiverse_client_test_callapi = self.create_multiverse_client_callapi("1339", "world",
+                                                                               {
+                                                                                   "empty_simulation": [
+                                                                                       {"get_contact_bodies_and_points": [
+                                                                                           "panda", "with_children"]},
+                                                                                       {"get_contact_bodies_and_points": [
+                                                                                           "milk_box"]},
+                                                                                   ]
+                                                                               })
+        print(multiverse_client_test_callapi.response_meta_data)
+
     def test_multiverse_client_callapi_get_bounding_box(self):
         # Spawn panda and milk box
         self.test_multiverse_client_spawn()

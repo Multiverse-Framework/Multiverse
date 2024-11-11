@@ -73,6 +73,8 @@ private:
 
     std::set<std::string> get_get_contact_points_response(const Json::Value &arguments) const;
 
+    std::set<std::string> get_get_contact_bodies_and_points_response(const Json::Value &arguments) const;
+
     std::set<std::string> get_get_contact_islands_response(const Json::Value &arguments) const;
 
     std::string get_get_constraint_effort_response(const Json::Value &arguments) const;

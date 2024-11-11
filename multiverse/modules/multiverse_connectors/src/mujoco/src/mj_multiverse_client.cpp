@@ -133,11 +133,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 
 			boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
 			{
-#ifdef _WIN32
 				boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_options::overwrite_existing);
-#else
-				boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_option::overwrite_if_exists);
-#endif
 				tinyxml2::XMLDocument doc;
 				if (doc.LoadFile(new_object_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
 				{
@@ -1824,7 +1820,7 @@ std::string MjMultiverseClient::get_save_response(const Json::Value &arguments) 
 			{
 				file_path = scene_xml_path.parent_path() / file_path;
 			}
-			boost::filesystem::copy_file(file_path, save_path.parent_path() / file_path.filename(), boost::filesystem::copy_option::overwrite_if_exists);
+			boost::filesystem::copy_file(file_path, save_path.parent_path() / file_path.filename(), boost::filesystem::copy_options::overwrite_existing);
 		}
 		doc.SaveFile(save_path.c_str());
 		printf("Saved scene to %s\n", save_path.c_str());
@@ -1860,7 +1856,7 @@ void MjMultiverseClient::load(const Json::Value &arguments)
 			{
 				file_path = load_path.parent_path() / file_path;
 			}
-			boost::filesystem::copy_file(load_path, scene_xml_path.parent_path() / load_path.filename(), boost::filesystem::copy_option::overwrite_if_exists);
+			boost::filesystem::copy_file(load_path, scene_xml_path.parent_path() / load_path.filename(), boost::filesystem::copy_options::overwrite_existing);
 		}
 		doc.SaveFile(scene_xml_path.c_str());
 	}
@@ -2117,6 +2113,112 @@ std::set<std::string> MjMultiverseClient::get_get_contact_points_response(const 
 		contact_results_str.insert(contact_result_str);
 	}
 
+	return contact_results_str;
+}
+
+std::set<std::string> MjMultiverseClient::get_get_contact_bodies_and_points_response(const Json::Value &arguments) const
+{
+	if (!arguments.isArray() || (arguments.size() != 1 && arguments.size() != 2))
+	{
+		return {"failed (Arguments for get_contact_bodies_and_points should be an array of strings with 1 or 2 elements.)"};
+	}
+
+	const std::string object_name = arguments[0].asString();
+	const int body_id = mj_name2id(m, mjtObj::mjOBJ_BODY, object_name.c_str());
+	if (body_id == -1)
+	{
+		return {"failed (Object " + object_name + " does not exist.)"};
+	}
+
+	std::set<int> body_ids = {body_id};
+	bool with_children = false;
+	if (arguments.size() == 2)
+	{
+		if (arguments[1].asString() != "with_children")
+		{
+			return {"failed (Second argument for get_contact_bodies_and_points should be \"with_children\".)"};
+		}
+		with_children = true;
+	}
+
+	if (with_children)
+	{
+		for (int child_body_id = body_id + 1; child_body_id < m->nbody; child_body_id++)
+		{
+			if (body_ids.find(m->body_parentid[child_body_id]) != body_ids.end())
+			{
+				body_ids.insert(child_body_id);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	std::map<std::tuple<std::string, std::string>, std::vector<std::vector<double>>> contact_results;
+
+	for (int contact_id = 0; contact_id < d->ncon; contact_id++)
+	{
+		const mjContact contact = d->contact[contact_id];
+		if (contact.exclude != 0 && contact.exclude != 1)
+		{
+			continue;
+		}
+		const int geom_1_id = contact.geom[0];
+		const int geom_2_id = contact.geom[1];
+		const int body_1_id = m->geom_bodyid[geom_1_id];
+		const int body_2_id = m->geom_bodyid[geom_2_id];
+
+		if (body_ids.find(body_1_id) == body_ids.end() && body_ids.find(body_2_id) == body_ids.end())
+		{
+			continue;
+		}
+
+		const std::string body_1_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_1_id);
+		const std::string body_2_name = mj_id2name(m, mjtObj::mjOBJ_BODY, body_2_id);
+
+		const bool swap_body_names = body_ids.find(body_1_id) == body_ids.end();
+		const std::string body_first_name = swap_body_names ? body_2_name : body_1_name;
+		const std::string body_second_name = swap_body_names ? body_1_name : body_2_name;
+
+		const std::tuple<std::string, std::string> contact_key = std::make_tuple(body_first_name, body_second_name);
+		if (contact_results.count(contact_key) == 0)
+		{
+			contact_results[contact_key] = {};
+		}
+
+		std::vector<double> contact_point = {contact.pos[0], contact.pos[1], contact.pos[2]};
+		if (swap_body_names)
+		{
+			contact_point.push_back(-contact.frame[0]);
+			contact_point.push_back(-contact.frame[1]);
+			contact_point.push_back(-contact.frame[2]);
+		}
+		else
+		{
+			contact_point.push_back(contact.frame[0]);
+			contact_point.push_back(contact.frame[1]);
+			contact_point.push_back(contact.frame[2]);
+		}
+
+		contact_results[contact_key].push_back(contact_point);
+	}
+
+	std::set<std::string> contact_results_str;
+	for (const std::pair<const std::tuple<std::string, std::string>, std::vector<std::vector<double>>> &contact_result : contact_results)
+	{
+		std::string contact_result_str = "";
+		for (const std::vector<double> &contact_point : contact_result.second)
+		{
+			for (const double &contact_point_val : contact_point)
+			{
+				contact_result_str += std::to_string(contact_point_val) + " ";
+			}
+		}
+		contact_result_str.pop_back();
+		contact_results_str.insert(std::get<0>(contact_result.first) + " " + std::get<1>(contact_result.first) + " " + contact_result_str);
+	}
 	return contact_results_str;
 }
 
@@ -2484,6 +2586,13 @@ void MjMultiverseClient::bind_api_callbacks_response()
 				for (const std::string &get_contact_point_response : get_get_contact_points_response(api_callback_json[api_callback_name]))
 				{
 					api_callback_response[api_callback_name].append(get_contact_point_response);
+				}
+			}
+			else if (strcmp(api_callback_name.c_str(), "get_contact_bodies_and_points") == 0)
+			{
+				for (const std::string &get_contact_bodies_and_points_response : get_get_contact_bodies_and_points_response(api_callback_json[api_callback_name]))
+				{
+					api_callback_response[api_callback_name].append(get_contact_bodies_and_points_response);
 				}
 			}
 			else if (strcmp(api_callback_name.c_str(), "get_contact_islands") == 0)
