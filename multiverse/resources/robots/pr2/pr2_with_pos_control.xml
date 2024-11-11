@@ -452,6 +452,4 @@
 		<position name="l_gripper_actuator" joint="l_gripper_l_finger_joint" kp="20" kv="0.1" forcerange="-50 50" ctrlrange="0 0.5479999780654907"/>
 		<position name="r_gripper_actuator" joint="r_gripper_l_finger_joint" kp="20" kv="0.1" forcerange="-50 50" ctrlrange="0 0.5479999780654907"/>
 	</actuator>
-
-	<include file="milk.xml"/>
 </mujoco>
