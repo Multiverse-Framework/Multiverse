@@ -6,7 +6,7 @@
 			<geom contype="0" conaffinity="0"/>
 		</default>
 		<default class="pr2_collision">
-			<geom rgba="0.9 0.9 0.9 1.0"/>
+			<geom rgba="0.9 0.9 0.9 1.0" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
 		</default>
 	</default>
 	<asset>
@@ -452,4 +452,6 @@
 		<position name="l_gripper_actuator" joint="l_gripper_l_finger_joint" kp="20" kv="0.1" forcerange="-50 50" ctrlrange="0 0.5479999780654907"/>
 		<position name="r_gripper_actuator" joint="r_gripper_l_finger_joint" kp="20" kv="0.1" forcerange="-50 50" ctrlrange="0 0.5479999780654907"/>
 	</actuator>
+
+	<include file="milk.xml"/>
 </mujoco>
