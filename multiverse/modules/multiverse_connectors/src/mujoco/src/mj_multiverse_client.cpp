@@ -1260,7 +1260,7 @@ std::string MjMultiverseClient::get_weld_response(const Json::Value &arguments) 
 			{
 				for (int i = 0; i < 7; i++)
 				{
-					if (mju_abs(relative_pose[i] - m->eq_data[mjNEQDATA * equality_id + i + 3]) > 1e-3)
+					if (mju_abs(relative_pose[i] - m->eq_data[mjNEQDATA * equality_id + i + 3]) > 1E-3)
 					{
 						return "failed (Relative pose are different)";
 					}
@@ -1650,13 +1650,13 @@ std::string MjMultiverseClient::get_attach_response(const Json::Value &arguments
 		{
 			std::istringstream iss(arguments[2].asString());
 			std::vector<mjtNum> relative_pose = std::vector<mjtNum>(std::istream_iterator<mjtNum>(iss), std::istream_iterator<mjtNum>());
-			if (m->body_pos[3 * body_1_id] != relative_pose[0] ||
-				m->body_pos[3 * body_1_id + 1] != relative_pose[1] ||
-				m->body_pos[3 * body_1_id + 2] != relative_pose[2] ||
-				m->body_quat[4 * body_1_id] != relative_pose[3] ||
-				m->body_quat[4 * body_1_id + 1] != relative_pose[4] ||
-				m->body_quat[4 * body_1_id + 2] != relative_pose[5] ||
-				m->body_quat[4 * body_1_id + 3] != relative_pose[6])
+			if (mju_abs(m->body_pos[3 * body_1_id] - relative_pose[0]) > 1E-3 ||
+				mju_abs(m->body_pos[3 * body_1_id + 1] - relative_pose[1]) > 1E-3 ||
+				mju_abs(m->body_pos[3 * body_1_id + 2] - relative_pose[2]) > 1E-3 ||
+				mju_abs(m->body_quat[4 * body_1_id] - relative_pose[3]) > 1E-3 ||
+				mju_abs(m->body_quat[4 * body_1_id + 1] - relative_pose[4]) > 1E-3 ||
+				mju_abs(m->body_quat[4 * body_1_id + 2] - relative_pose[5]) > 1E-3 ||
+				mju_abs(m->body_quat[4 * body_1_id + 3] - relative_pose[6]) > 1E-3)
 			{
 				return "failed (Relative pose are different)";
 			}
@@ -3026,7 +3026,7 @@ void MjMultiverseClient::bind_receive_data()
 
 			const mjtNum sinp = 2 * (w * y - z * x);
 			mjtNum odom_ang_y_joint_pos;
-			if (std::abs(sinp) >= 1)
+			if (mju_abs(sinp) >= 1)
 			{
 				odom_ang_y_joint_pos = std::copysign(M_PI / 2, sinp); // use 90 degrees if out of range
 			}
