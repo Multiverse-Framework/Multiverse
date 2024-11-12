@@ -1,0 +1,42 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+arm_joint_trajectory_controller: 
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - shoulder_roll_structure_right_joint
+      - shoulder_yaw_structure_right_joint
+      - elbow_pitch_structure_right_joint
+      - forearm_link_right_joint
+      - shoulder_roll_structure_left_joint
+      - shoulder_yaw_structure_left_joint
+      - elbow_pitch_structure_left_joint
+      - forearm_link_left_joint
+    command_interfaces:
+      - position
+      - velocity
+      # - effort
+
+    state_interfaces:
+      - position
+      - velocity
+
+leg_joint_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - multirotor_x4_leg_001_joint
+      - multirotor_x4_leg_002_joint
+    command_interfaces:
+      - position
+      - velocity
+      # - effort
+
+    state_interfaces:
+      - position
+      - velocity
