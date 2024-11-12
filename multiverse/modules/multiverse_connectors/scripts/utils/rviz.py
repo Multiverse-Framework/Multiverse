@@ -5,7 +5,6 @@ import os
 from .utils import find_files, get_urdf_str_from_ros_package, get_urdf_str_abs, run_subprocess
 import yaml
 from urdf_parser_py import urdf
-from multiverse_parser import MjcfImporter, UrdfExporter
 import shutil
 
 def run_rviz(rviz_dict, resources_paths, mesh_abspath_prefix, multiverse_control_pkg_path) -> subprocess.Popen:
@@ -20,6 +19,7 @@ def run_rviz(rviz_dict, resources_paths, mesh_abspath_prefix, multiverse_control
             saved_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "saved")
             model_path = find_files([saved_path], urdf_path)
             if model_path.endswith(".xml"):
+                from multiverse_parser import MjcfImporter, UrdfExporter
                 print("Converting MJCF to URDF")
                 factory = MjcfImporter(file_path=model_path,
                                        fixed_base=True,
