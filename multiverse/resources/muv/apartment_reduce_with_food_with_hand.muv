@@ -16,6 +16,16 @@ simulations:
       path: apartment_full/mjcf/ApartmentReduce.xml
 
     robots:
+      pr2:
+        path: pr2/pr2_with_pos_control.xml
+        apply:
+          body:
+            pr2:
+              pos: [8.4, -6.4, 0]
+              quat: [0, 0, 0, 1]
+        disable_self_collision: auto
+        joint_state:
+          torso_lift_joint: 0.33
       panda:
         path: mjcf/panda.xml
         apply:
@@ -24,40 +34,6 @@ simulations:
               pos: [6.7, -5.2, 0.86]
             gravcomp: 1
         disable_self_collision: "off"
-
-    objects:
-      jeroen_cup:
-        path: jeroen_cup/mjcf/jeroen_cup.xml
-        apply:
-          body:
-            jeroen_cup:
-              pos: [7.25, -6.5, 0.97]
-
-      small_bowl:
-        path: small_bowl/mjcf/small_bowl.xml
-        apply:
-          body:
-            small_bowl:
-              pos: [7.1, -5.5, 0.90]
-      garlic:
-        path: garlic/garlic.xml
-        apply:
-          body:
-            garlic:
-              pos: [7.1, -5.2, 0.90]
-      lime:
-        path: lime/lime.xml
-        apply:
-          body:
-            lime:
-              pos: [7.1, -5.1, 0.90]
-      kiwi_1:
-        path: kiwi_1/kiwi_1.xml
-        apply:
-          body:
-            kiwi1:
-              pos: [7.0, -5.2, 0.90]
-
       left_hand:
         path: left_hand.xml
         apply:
@@ -74,6 +50,31 @@ simulations:
               pos: [8.0, -4.8, 1.05]
         prefix:
           geom: right_
+    objects:
+      small_bowl:
+        path: small_bowl/mjcf/small_bowl.xml
+        apply:
+          body:
+            small_bowl:
+              pos: [7.1, -5.5, 0.90]
+      garlic:
+        path: garlic/mjcf/garlic.xml
+        apply:
+          body:
+            garlic:
+              pos: [7.1, -5.2, 0.90]
+      lime:
+        path: lime/mjcf/lime.xml
+        apply:
+          body:
+            lime:
+              pos: [7.1, -5.1, 0.90]
+      kiwi_1:
+        path: kiwi_1/mjcf/kiwi_1.xml
+        apply:
+          body:
+            kiwi1:
+              pos: [7.0, -5.2, 0.90]
     references:
       left_shadow_hand:
         body1: LeftHand_WristRoot
