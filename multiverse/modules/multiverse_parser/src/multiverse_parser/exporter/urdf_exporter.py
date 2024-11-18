@@ -475,7 +475,6 @@ class UrdfExporter:
             self.factory.export_mesh(in_mesh_file_path=tmp_usd_mesh_file_abspath,
                                      out_mesh_file_path=tmp_mesh_file_abspath, execute_later=True)
             self._mesh_dict[geom_name] = (tmp_usd_mesh_file_abspath,
-                                          tmp_usd_mesh_file_abspath,
                                           tmp_mesh_file_relpath,
                                           geom_builder,
                                           link,
@@ -486,13 +485,12 @@ class UrdfExporter:
 
     def _build_meshes(self):
         for geom_name, (tmp_usd_mesh_file_abspath,
-                        tmp_usd_mesh_file_abspath,
                         tmp_mesh_file_relpath,
                         geom_builder,
                         link,
                         urdf_geometry_api,
                         material) in self._mesh_dict.items():
-            if "_tmp.usda" in tmp_usd_mesh_file_abspath:
+            if "_tmp.usda" in tmp_usd_mesh_file_abspath and os.path.exists(tmp_usd_mesh_file_abspath):
                 os.remove(tmp_usd_mesh_file_abspath)
 
             mesh_file_abspath = os.path.join(self._mesh_dir_abspath, tmp_mesh_file_relpath)
