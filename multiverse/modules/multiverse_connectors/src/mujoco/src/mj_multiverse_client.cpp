@@ -2702,7 +2702,7 @@ void MjMultiverseClient::init_send_and_receive_data()
 					}
 					else
 					{
-						printf("Send %s for %s not supported", attribute_name.c_str(), body_name.c_str());
+						printf("Send %s for %s not supported\n", attribute_name.c_str(), body_name.c_str());
 					}
 				}
 			}
@@ -2778,7 +2778,7 @@ void MjMultiverseClient::init_send_and_receive_data()
 					}
 					else
 					{
-						printf("Send %s for %s not supported", attribute_name.c_str(), body_name.c_str());
+						printf("Send %s for %s not supported\n", attribute_name.c_str(), body_name.c_str());
 					}
 				}
 			}
@@ -2813,7 +2813,7 @@ void MjMultiverseClient::init_send_and_receive_data()
 				}
 				else if (strcmp(attribute_name.c_str(), "joint_position") == 0)
 				{
-					printf("Send %s for %s not supported yet", attribute_name.c_str(), joint_name.c_str());
+					printf("Send %s for %s not supported yet\n", attribute_name.c_str(), joint_name.c_str());
 				}
 				else if (strcmp(attribute_name.c_str(), "joint_quaternion") == 0 &&
 						 m->jnt_type[joint_id] == mjtJoint::mjJNT_BALL)
@@ -2825,7 +2825,7 @@ void MjMultiverseClient::init_send_and_receive_data()
 				}
 				else
 				{
-					printf("Send %s for %s not supported", attribute_name.c_str(), joint_name.c_str());
+					printf("Send %s for %s not supported\n", attribute_name.c_str(), joint_name.c_str());
 				}
 			}
 		}
@@ -2859,7 +2859,7 @@ void MjMultiverseClient::init_send_and_receive_data()
 					}
 					else
 					{
-						printf("Send %s for %s not supported", attribute_name.c_str(), body_name.c_str());
+						printf("Send %s for %s not supported\n", attribute_name.c_str(), body_name.c_str());
 					}
 				}
 			}
