@@ -105,6 +105,7 @@ class MjcfImporter(Factory):
 
         self.world_builder.add_body(body_name=self._config.model_name)
 
+        body_dict = {}
         for body_id in range(1, self.mj_model.nbody):
             mj_body = self.mj_model.body(body_id)
 
@@ -117,8 +118,13 @@ class MjcfImporter(Factory):
                 body_builder = self._import_body(mj_body=mj_body)
                 self._import_geoms(mj_body=mj_body, body_builder=body_builder)
                 if self._config.with_physics:
+                    body_dict[mj_body] = body_builder
                     self._import_joints(mj_body=mj_body, body_builder=body_builder)
+        
+        self.execute_cmds()
 
+        if self._config.with_physics:
+            for mj_body, body_builder in body_dict.items():
                 self._import_inertial(mj_body=mj_body, body_builder=body_builder)
 
         for body_builder in self.world_builder.body_builders:
@@ -467,7 +473,8 @@ class MjcfImporter(Factory):
                                                   file_ext,
                                                   f"{mesh_name}.{file_ext}")
                 self.export_mesh(in_mesh_file_path=tmp_usd_mesh_file_path,
-                                 out_mesh_file_path=tmp_mesh_file_path)
+                                 out_mesh_file_path=tmp_mesh_file_path,
+                                 execute_later=True)
 
                 mujoco_mesh_path = self.mujoco_meshes_prim.GetPath().AppendChild(mesh_name)
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(self.world_builder.stage, mujoco_mesh_path)

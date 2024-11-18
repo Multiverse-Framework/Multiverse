@@ -436,7 +436,8 @@ class MjcfExporter:
                                                   f"{mesh_file_name}.{mesh_file_ext}")
                 if not os.path.exists(tmp_mesh_file_path):
                     self.factory.export_mesh(in_mesh_file_path=mesh_file_path,
-                                             out_mesh_file_path=tmp_mesh_file_path)
+                                             out_mesh_file_path=tmp_mesh_file_path,
+                                             execute_later=True)
 
                 mesh_file_name_scaled = add_scale_to_mesh_name(mesh_name=mesh_file_name,
                                                                mesh_scale=numpy.array(mesh_file_property.scale))
@@ -447,6 +448,8 @@ class MjcfExporter:
                 mujoco_mesh = UsdMujoco.MujocoMesh.Define(stage, mujoco_mesh_path)
                 mujoco_mesh.CreateFileAttr(f"./{tmp_mesh_file_path}")
                 mujoco_mesh.CreateScaleAttr(Gf.Vec3f(*mesh_file_property.scale))
+
+        self.factory.execute_cmds()
 
         materials = {}
         for material_prim in [child_prim for child_prim in stage.TraverseAll() if child_prim.IsA(UsdShade.Material)]:

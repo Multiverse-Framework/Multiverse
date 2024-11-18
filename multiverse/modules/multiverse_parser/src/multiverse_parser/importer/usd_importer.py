@@ -80,6 +80,7 @@ class UsdImporter(Factory):
 
         self.parent_map = {}
         self.usd_mesh_path_dict = {}
+        self.mesh_dict = {}
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         self._world_builder = WorldBuilder(self.tmp_usd_file_path)
@@ -95,8 +96,14 @@ class UsdImporter(Factory):
 
         self._import_body(body_prim=root_prim)
 
+        self._import_meshes()
+
         if self._config.with_physics:
             self._import_joints()
+
+            for body_prim in [body_prim for body_prim in self.stage.Traverse() if body_prim.IsA(UsdGeom.Xform)]:
+                body_builder = self.world_builder.get_body_builder(body_name=body_prim.GetName())
+                self._import_inertial(body_prim=body_prim, body_builder=body_builder)
 
         self.world_builder.export()
 
@@ -135,8 +142,6 @@ class UsdImporter(Factory):
         for child_body_prim in [child_body_prim for child_body_prim in body_prim.GetChildren()
                                 if child_body_prim.IsA(UsdGeom.Xform)]:
             self._import_body(body_prim=child_body_prim)
-
-        self._import_inertial(body_prim=body_prim, body_builder=body_builder)
 
     def _import_geom(self, gprim_prim: Usd.Prim, body_builder: BodyBuilder, zero_origin: bool = False) -> None:
         gprim = UsdGeom.Gprim(gprim_prim)
@@ -196,74 +201,95 @@ class UsdImporter(Factory):
             else:
                 mesh_file_path, mesh_path = get_usd_mesh_file_path(gprim_prim=gprim_prim)
                 tmp_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(mesh_file_path=mesh_file_path,
-                                                                                 merge_mesh=False)
+                                                                                 merge_mesh=False,
+                                                                                 execute_later=True)
+                self.mesh_dict[geom_name] = (tmp_mesh_file_path,
+                                             mesh_path,
+                                             gprim_prim,
+                                             body_builder,
+                                             geom_property,
+                                             geom_pos,
+                                             geom_quat,
+                                             geom_scale,
+                                             geom_is_visible)
 
-                mesh_name = gprim_prim.GetName()
-                mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_mesh_file_path,
-                                                                 mesh_path=mesh_path)
-                if mesh_property.mesh_file_name == os.path.basename(self.source_file_path).split('.')[0]:
-                    mesh_property.mesh_file_name = mesh_name
-                if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
-                    # TODO: Fix empty mesh
-                    return
+    def _import_meshes(self) -> None:
+        self.execute_cmds()
+        for geom_name, (tmp_mesh_file_path,
+                        mesh_path,
+                        gprim_prim,
+                        body_builder,
+                        geom_property,
+                        geom_pos,
+                        geom_quat,
+                        geom_scale,
+                        geom_is_visible) in self.mesh_dict.items():
+            mesh_name = gprim_prim.GetName()
+            mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_mesh_file_path,
+                                                             mesh_path=mesh_path)
+            if mesh_property.mesh_file_name == os.path.basename(self.source_file_path).split('.')[0]:
+                mesh_property.mesh_file_name = mesh_name
+            if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
+                # TODO: Fix empty mesh
+                return
 
-                geom_builder = body_builder.add_geom(geom_name=f"{mesh_name}",
-                                                     geom_property=geom_property)
-                geom_builder.build()
-                geom_builder.add_mesh(mesh_name=mesh_name,
-                                      mesh_property=mesh_property)
-                geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
+            geom_builder = body_builder.add_geom(geom_name=f"{mesh_name}",
+                                                 geom_property=geom_property)
+            geom_builder.build()
+            geom_builder.add_mesh(mesh_name=mesh_name,
+                                  mesh_property=mesh_property)
+            geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
 
-                if geom_is_visible:
-                    if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
-                        material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
-                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
-                        if len(material_paths) > 1:
-                            raise NotImplementedError(f"Mesh {geom_name} has more than one material.")
-                        if len(material_paths) == 0:
-                            raise ValueError(f"Mesh {geom_name} has no material.")
-                        material_prim = self.stage.GetPrimAtPath(material_paths[0])
-                        if len(material_prim.GetPrimStack()) >= 2:
-                            material_prim_stack = material_prim.GetPrimStack()[1]
-                            material_file_path = material_prim_stack.layer.realPath
-                            material_path = material_prim_stack.path
-                        else:
-                            material_file_path = material_prim.GetStage().GetRootLayer().realPath
-                            material_path = material_prim.GetPath()
-                        material_property = MaterialProperty.from_material_file_path(
-                            material_file_path=material_file_path,
-                            material_path=material_path)
-                        if material_property.opacity == 0.0:
-                            print(f"Opacity of {material_path} is 0.0. Set to 1.0.")
-                            material_property._opacity = 1.0
-                        geom_builder.add_material(material_name=material_path.name,
-                                                  material_property=material_property)
-                    for subset_prim in [subset_prim for subset_prim in gprim_prim.GetChildren() if
-                                        subset_prim.IsA(UsdGeom.Subset)]:
-                        subset_name = subset_prim.GetName()
-                        material_binding_api = UsdShade.MaterialBindingAPI(subset_prim)
-                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
-                        if len(material_paths) > 1:
-                            raise NotImplementedError(f"Subset {subset_name} has more than one material.")
-                        if len(material_paths) == 0:
-                            raise ValueError(f"Subset {subset_name} has no material.")
-                        material_prim = self.stage.GetPrimAtPath(material_paths[0])
-                        if len(material_prim.GetPrimStack()) >= 2:
-                            material_prim_stack = material_prim.GetPrimStack()[1]
-                            material_file_path = material_prim_stack.layer.realPath
-                            material_path = material_prim_stack.path
-                        else:
-                            material_file_path = material_prim.GetStage().GetRootLayer().realPath
-                            material_path = material_prim.GetPath()
-                        material_property = MaterialProperty.from_material_file_path(
-                            material_file_path=material_file_path,
-                            material_path=material_path)
-                        if material_property.opacity == 0.0:
-                            print(f"Opacity of {material_path} is 0.0. Set to 1.0.")
-                            material_property._opacity = 1.0
-                        geom_builder.add_material(material_name=material_path.name,
-                                                  material_property=material_property,
-                                                  subset=UsdGeom.Subset(subset_prim))
+            if geom_is_visible:
+                if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                    material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
+                    material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                    if len(material_paths) > 1:
+                        raise NotImplementedError(f"Mesh {geom_name} has more than one material.")
+                    if len(material_paths) == 0:
+                        raise ValueError(f"Mesh {geom_name} has no material.")
+                    material_prim = self.stage.GetPrimAtPath(material_paths[0])
+                    if len(material_prim.GetPrimStack()) >= 2:
+                        material_prim_stack = material_prim.GetPrimStack()[1]
+                        material_file_path = material_prim_stack.layer.realPath
+                        material_path = material_prim_stack.path
+                    else:
+                        material_file_path = material_prim.GetStage().GetRootLayer().realPath
+                        material_path = material_prim.GetPath()
+                    material_property = MaterialProperty.from_material_file_path(
+                        material_file_path=material_file_path,
+                        material_path=material_path)
+                    if material_property.opacity == 0.0:
+                        print(f"Opacity of {material_path} is 0.0. Set to 1.0.")
+                        material_property._opacity = 1.0
+                    geom_builder.add_material(material_name=material_path.name,
+                                              material_property=material_property)
+                for subset_prim in [subset_prim for subset_prim in gprim_prim.GetChildren() if
+                                    subset_prim.IsA(UsdGeom.Subset)]:
+                    subset_name = subset_prim.GetName()
+                    material_binding_api = UsdShade.MaterialBindingAPI(subset_prim)
+                    material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                    if len(material_paths) > 1:
+                        raise NotImplementedError(f"Subset {subset_name} has more than one material.")
+                    if len(material_paths) == 0:
+                        raise ValueError(f"Subset {subset_name} has no material.")
+                    material_prim = self.stage.GetPrimAtPath(material_paths[0])
+                    if len(material_prim.GetPrimStack()) >= 2:
+                        material_prim_stack = material_prim.GetPrimStack()[1]
+                        material_file_path = material_prim_stack.layer.realPath
+                        material_path = material_prim_stack.path
+                    else:
+                        material_file_path = material_prim.GetStage().GetRootLayer().realPath
+                        material_path = material_prim.GetPath()
+                    material_property = MaterialProperty.from_material_file_path(
+                        material_file_path=material_file_path,
+                        material_path=material_path)
+                    if material_property.opacity == 0.0:
+                        print(f"Opacity of {material_path} is 0.0. Set to 1.0.")
+                        material_property._opacity = 1.0
+                    geom_builder.add_material(material_name=material_path.name,
+                                              material_property=material_property,
+                                              subset=UsdGeom.Subset(subset_prim))
 
     def _import_inertial(self, body_prim: Usd.Prim, body_builder: BodyBuilder) -> None:
         if self._config.with_physics and not (self._config.fixed_base and body_prim == self.stage.GetDefaultPrim()):
