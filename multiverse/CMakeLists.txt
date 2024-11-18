@@ -18,7 +18,7 @@ set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)
 
 set(MULTIVERSE_CLIENT_LIBRARY_TYPE "STATIC" CACHE STRING "Type of library to create (SHARED or STATIC)")
 
-set(PYTHON_EXECUTABLE "python3" CACHE STRING "Type of library to create (SHARED or STATIC)")
+set(PYTHON_EXECUTABLE "python3.8" CACHE STRING "Python executable to use")
 
 option(BUILD_SRC "Build the src" ON)
 option(BUILD_MODULES "Build the modules" ON)

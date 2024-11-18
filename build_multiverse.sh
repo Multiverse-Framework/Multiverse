@@ -131,6 +131,14 @@ if [ ! -f $virtualenvwrapper ]; then
     exit 1
 fi
 
+UBUNTU_VERSION=$(lsb_release -rs)
+DPYTHON_EXECUTABLE=python3
+if [ $UBUNTU_VERSION = "20.04" ]; then
+    DPYTHON_EXECUTABLE=python3.8
+elif [ $UBUNTU_VERSION = "24.04" ]; then
+    DPYTHON_EXECUTABLE=python3.10
+fi
+
 # Build multiverse
 # cmake -S $PWD/multiverse -B $BUILD_DIR \
 #     -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=SHARED -DSTDLIB=libc++ \
@@ -145,7 +153,8 @@ cmake -S $PWD/multiverse -B $BUILD_DIR \
     -DBUILD_MODULES=$DBUILD_MODULES \
     -DBUILD_CONNECTORS=$DBUILD_CONNECTORS \
     -DBUILD_KNOWLEDGE=$DBUILD_KNOWLEDGE \
-    -DBUILD_PARSER=$DBUILD_PARSER
+    -DBUILD_PARSER=$DBUILD_PARSER \
+    -DPYTHON_EXECUTABLE=$DPYTHON_EXECUTABLE
 make -C $BUILD_DIR
 cmake --install $BUILD_DIR
 
