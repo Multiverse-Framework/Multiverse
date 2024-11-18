@@ -284,12 +284,15 @@ class Factory:
     def execute_cmds(self) -> None:
         if len(self.cmds) == 0:
             return
-        cmd = ["blender", "--background", "--python-expr", "import bpy"]
-        for sub_cmd in self.cmds:
-            cmd[3] += sub_cmd
 
-        process = subprocess.Popen(cmd)
-        process.wait()
+        processes = []
+        for sub_cmd in self.cmds:
+            cmd = ["blender", "--background", "--python-expr", "import bpy" + sub_cmd]
+            process = subprocess.Popen(cmd)
+            processes.append(process)
+
+        for process in processes:
+            process.wait()
 
         self._cmds = []
 
