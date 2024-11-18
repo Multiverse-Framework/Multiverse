@@ -72,8 +72,9 @@ class MultiverseImporterTestCase(MultiverseParserTestCase):
                             and (any([childPrim.IsA(UsdGeom.Xform) for childPrim in prim.GetChildren()])
                                  or fixed_base)):
                         continue
-                    self.assertEqual(prim.HasAPI(UsdPhysics.MassAPI), with_physics)
-                    # self.assertEqual(prim.HasAPI(UsdPhysics.RigidBodyAPI), with_physics)
+                    if not prim.GetParent().IsA(UsdGeom.Xform):
+                        self.assertEqual(prim.HasAPI(UsdPhysics.MassAPI), with_physics)
+                        self.assertEqual(prim.HasAPI(UsdPhysics.RigidBodyAPI), with_physics)
                 if not prim.IsA(UsdGeom.Gprim):
                     continue
                 if not is_visible[i]:
