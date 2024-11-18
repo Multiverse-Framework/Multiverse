@@ -212,11 +212,14 @@ class UrdfExporter:
         (self._mesh_dir_abspath,
          self._mesh_dir_rospath) = self._get_mesh_dir_paths(relative_to_ros_package=relative_to_ros_package)
         self._visual_mesh_file_extension = visual_mesh_file_extension
+        self._mesh_dict = {}
 
     def build(self) -> None:
         for body_builder in self.factory.world_builder.body_builders:
             self._build_joints(body_builder=body_builder)
             self._build_link(body_builder=body_builder)
+
+        self._build_meshes()
 
     def _get_mesh_dir_paths(self, relative_to_ros_package: Optional[str] = None) -> Tuple[str, str]:
         file_path = self.file_path
@@ -470,7 +473,25 @@ class UrdfExporter:
                                                                 usd_mesh_file_path=usd_mesh_file_abspath)
             tmp_mesh_file_abspath = os.path.join(self.factory.tmp_mesh_dir_path, tmp_mesh_file_relpath)
             self.factory.export_mesh(in_mesh_file_path=tmp_usd_mesh_file_abspath,
-                                     out_mesh_file_path=tmp_mesh_file_abspath)
+                                     out_mesh_file_path=tmp_mesh_file_abspath, execute_later=True)
+            self._mesh_dict[geom_name] = (tmp_usd_mesh_file_abspath,
+                                          tmp_usd_mesh_file_abspath,
+                                          tmp_mesh_file_relpath,
+                                          geom_builder,
+                                          link,
+                                          urdf_geometry_api,
+                                          material)
+        else:
+            raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
+
+    def _build_meshes(self):
+        for geom_name, (tmp_usd_mesh_file_abspath,
+                        tmp_usd_mesh_file_abspath,
+                        tmp_mesh_file_relpath,
+                        geom_builder,
+                        link,
+                        urdf_geometry_api,
+                        material) in self._mesh_dict.items():
             if "_tmp.usda" in tmp_usd_mesh_file_abspath:
                 os.remove(tmp_usd_mesh_file_abspath)
 
@@ -488,8 +509,6 @@ class UrdfExporter:
                        geometry=geometry,
                        urdf_geometry_api=urdf_geometry_api,
                        material=material)
-        else:
-            raise NotImplementedError(f"Geom type {geom_builder.type} not supported yet.")
 
     def _get_mesh_file_relpath(self, gprim_prim: UsdGeom.Gprim, usd_mesh_file_path: str) -> str:
         if (gprim_prim.HasAPI(UsdShade.MaterialBindingAPI) or

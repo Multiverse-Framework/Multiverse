@@ -131,6 +131,7 @@ class Factory:
          self._tmp_material_dir_path,
          self._tmp_texture_dir_path) = self._create_tmp_paths()
         self._config = config
+        self._cmds = []
         atexit.register(self.clean_up)
 
     def _create_tmp_paths(self) -> Tuple[str, str, str, str]:
@@ -163,11 +164,14 @@ class Factory:
     def import_mesh(self,
                     mesh_file_path: str,
                     mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
-                    merge_mesh: bool = False) -> Tuple[str, str]:
+                    merge_mesh: bool = False,
+                    execute_later: bool = False) -> Tuple[str, str]:
         """
         Import the mesh from the mesh file path to the temporary mesh directory path.
         :param mesh_file_path: Path to the mesh file.
         :param mesh_scale: Scale of the mesh.
+        :param merge_mesh: Merge the mesh.
+        :param execute_later: Execute the command later (for batch processing).
         :return: Tuple of the temporary USD mesh file path and the temporary mesh file path.
         """
         if mesh_file_path in self.mesh_file_path_dict:
@@ -208,26 +212,30 @@ class Factory:
         else:
             raise ValueError(f"Unsupported file extension {mesh_file_extension}.")
 
-        cmd = ["blender",
-               "--background",
-               "--python-expr",
-               f"import bpy"
-               f"{cmd}"]
+        if not execute_later:
+            cmd = ["blender",
+                   "--background",
+                   "--python-expr",
+                   f"import bpy"
+                   f"{cmd}"]
 
-        process = subprocess.Popen(cmd)
-        process.wait()
+            process = subprocess.Popen(cmd)
+            process.wait()
 
-        if mesh_file_path == self.source_file_path and os.path.exists(mesh_file_path_clone):
-            os.remove(mesh_file_path_clone)
+            if mesh_file_path == self.source_file_path and os.path.exists(mesh_file_path_clone):
+                os.remove(mesh_file_path_clone)
 
-        fix_texture_path(usd_mesh_file_path=tmp_usd_mesh_file_path)
+            fix_texture_path(usd_mesh_file_path=tmp_usd_mesh_file_path)
+        else:
+            self._cmds.append(cmd)
 
         return tmp_usd_mesh_file_path, tmp_mesh_file_path
 
     def export_mesh(self,
                     in_mesh_file_path: str,
                     out_mesh_file_path: str,
-                    mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0])) -> None:
+                    mesh_scale: numpy.ndarray = numpy.array([1.0, 1.0, 1.0]),
+                    execute_later: bool = False) -> None:
         in_mesh_file_extension = os.path.splitext(in_mesh_file_path)[1]
         out_mesh_file_extension = os.path.splitext(out_mesh_file_path)[1]
         if in_mesh_file_path in self.mesh_file_path_dict:
@@ -258,17 +266,32 @@ class Factory:
         else:
             raise ValueError(f"Unsupported file extension {out_mesh_file_extension}.")
 
-        cmd = ["blender",
-               "--background",
-               "--python-expr",
-               f"import bpy"
-               f"{cmd}"]
+        if not execute_later:
+            cmd = ["blender",
+                   "--background",
+                   "--python-expr",
+                   f"import bpy"
+                   f"{cmd}"]
+
+            process = subprocess.Popen(cmd)
+            process.wait()
+
+            if ".usd" in out_mesh_file_extension:
+                fix_texture_path(usd_mesh_file_path=out_mesh_file_path)
+        else:
+            self._cmds.append(cmd)
+
+    def execute_cmds(self) -> None:
+        if len(self.cmds) == 0:
+            return
+        cmd = ["blender", "--background", "--python-expr", "import bpy"]
+        for sub_cmd in self.cmds:
+            cmd[3] += sub_cmd
 
         process = subprocess.Popen(cmd)
         process.wait()
 
-        if ".usd" in out_mesh_file_extension:
-            fix_texture_path(usd_mesh_file_path=out_mesh_file_path)
+        self._cmds = []
 
     def save_tmp_model(self,
                        usd_file_path: str,
@@ -365,3 +388,7 @@ class Factory:
         if not isinstance(config, Configuration):
             raise TypeError(f"Expected {Configuration}, got {type(config)}")
         self._config = config
+
+    @property
+    def cmds(self) -> List[str]:
+        return self._cmds

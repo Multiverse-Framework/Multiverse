@@ -116,6 +116,7 @@ class UrdfImporter(Factory):
             default_rgba=default_rgba if default_rgba is not None else numpy.array([0.9, 0.9, 0.9, 1.0]),
             inertia_source=inertia_source
         ))
+        self.mesh_path_dict = {}
 
     def import_model(self, save_file_path: Optional[str] = None) -> str:
         self._world_builder = WorldBuilder(self.tmp_usd_file_path)
@@ -132,10 +133,11 @@ class UrdfImporter(Factory):
         self._import_geoms(link=self.urdf_model.link_map[self.urdf_model.get_root()],
                            body_builder=body_builder)
 
-        self._import_inertial(body=self.urdf_model.link_map[self.urdf_model.get_root()],
-                              body_builder=body_builder)
-
         self._import_body_and_joint(urdf_link_name=self.urdf_model.get_root())
+
+        self._import_meshes()
+
+        self._import_inertials()
 
         self.world_builder.export()
 
@@ -159,8 +161,6 @@ class UrdfImporter(Factory):
                                              joint=child_urdf_joint)
 
             self._import_geoms(link=self.urdf_model.link_map[child_urdf_link_name], body_builder=body_builder)
-
-            self._import_inertial(body=self.urdf_model.link_map[child_urdf_link_name], body_builder=body_builder)
 
             if self._config.with_physics:
                 self._import_joint(joint=child_urdf_joint,
@@ -290,76 +290,100 @@ class UrdfImporter(Factory):
             source_mesh_file_path = self.get_mesh_file_path(urdf_mesh_file_path=geom.geometry.filename)
             if source_mesh_file_path is not None:
                 tmp_usd_mesh_file_path, tmp_origin_mesh_file_path = self.import_mesh(
-                    mesh_file_path=source_mesh_file_path, merge_mesh=True)
-                mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_path)
-                for mesh_prim in [prim for prim in mesh_stage.Traverse() if prim.IsA(UsdGeom.Mesh)]:
-                    mesh_name = mesh_prim.GetName()
-                    mesh_path = mesh_prim.GetPath()
-                    mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_usd_mesh_file_path,
-                                                                     mesh_path=mesh_path)
+                    mesh_file_path=source_mesh_file_path, merge_mesh=True, execute_later=True)
 
-                    if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
-                        # TODO: Fix empty mesh
-                        continue
+                self.mesh_path_dict[geom_name] = (tmp_usd_mesh_file_path,
+                                                  tmp_origin_mesh_file_path,
+                                                  body_builder,
+                                                  geom_property,
+                                                  geom,
+                                                  geom_pos,
+                                                  geom_quat)
 
-                    geom_builder = body_builder.add_geom(geom_name=f"SM_{geom_name}",
-                                                         geom_property=geom_property)
+    def _import_meshes(self) -> None:
+        self.execute_cmds()
+        for geom_name, (tmp_usd_mesh_file_path,
+                        tmp_origin_mesh_file_path,
+                        body_builder,
+                        geom_property,
+                        geom,
+                        geom_pos,
+                        geom_quat) in self.mesh_path_dict.items():
+            mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_path)
+            for mesh_prim in [prim for prim in mesh_stage.Traverse() if prim.IsA(UsdGeom.Mesh)]:
+                mesh_name = mesh_prim.GetName()
+                mesh_path = mesh_prim.GetPath()
+                mesh_property = MeshProperty.from_mesh_file_path(mesh_file_path=tmp_usd_mesh_file_path,
+                                                                 mesh_path=mesh_path)
 
-                    geom_builder.add_mesh(mesh_name=f"SM_{mesh_name}",
-                                          mesh_property=mesh_property)
-                    geom_builder.build()
-                    geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
-                    geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
+                if mesh_property.face_vertex_counts.size == 0 or mesh_property.face_vertex_indices.size == 0:
+                    # TODO: Fix empty mesh
+                    continue
 
-                    gprim_prim = geom_builder.gprim.GetPrim()
-                    get_urdf_link_api(geom=geom, gprim_prim=gprim_prim)
+                geom_builder = body_builder.add_geom(geom_name=f"SM_{geom_name}",
+                                                     geom_property=geom_property)
 
-                    urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(gprim_prim)
-                    urdf_geometry_mesh_api.CreateFilenameAttr(f"./{tmp_origin_mesh_file_path}")
-                    if geom.geometry.scale is not None:
-                        urdf_geometry_mesh_api.CreateScaleAttr(Gf.Vec3f(*geom.geometry.scale))
+                geom_builder.add_mesh(mesh_name=f"SM_{mesh_name}",
+                                      mesh_property=mesh_property)
+                geom_builder.build()
+                geom_scale = numpy.array([1.0, 1.0, 1.0]) if geom.geometry.scale is None else geom.geometry.scale
+                geom_builder.set_transform(pos=geom_pos, quat=geom_quat, scale=geom_scale)
 
-                    if mesh_prim.HasAPI(UsdShade.MaterialBindingAPI):
-                        material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
-                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
-                        if len(material_paths) > 1:
-                            raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
-                        material_path = material_paths[0]
-                        material_property = MaterialProperty.from_material_file_path(
-                            material_file_path=tmp_usd_mesh_file_path,
-                            material_path=material_path)
-                        material_name = f"M_{geom_name}"
-                        material_builder = geom_builder.add_material(material_name=material_name,
-                                                                     material_property=material_property)
+                gprim_prim = geom_builder.gprim.GetPrim()
+                get_urdf_link_api(geom=geom, gprim_prim=gprim_prim)
 
-                        stage = self.world_builder.stage
-                        urdf_material_path = self.urdf_materials_prim.GetPath().AppendChild(material_name)
-                        if not stage.GetPrimAtPath(urdf_material_path).IsValid():
-                            urdf_material = UsdUrdf.UrdfMaterial.Define(stage, urdf_material_path)
+                urdf_geometry_mesh_api = UsdUrdf.UrdfGeometryMeshAPI.Apply(gprim_prim)
+                urdf_geometry_mesh_api.CreateFilenameAttr(f"./{tmp_origin_mesh_file_path}")
+                if geom.geometry.scale is not None:
+                    urdf_geometry_mesh_api.CreateScaleAttr(Gf.Vec3f(*geom.geometry.scale))
 
-                            if isinstance(material_builder.diffuse_color, str):
-                                urdf_material.CreateTextureAttr(f"./{material_builder.diffuse_color}")
-                            elif isinstance(material_builder.diffuse_color, numpy.ndarray):
-                                rgba = Gf.Vec4f(*material_builder.diffuse_color.tolist(), material_builder.opacity)
-                                urdf_material.CreateRgbaAttr(rgba)
-                            else:
-                                raise ValueError(f"Diffuse color {material_builder.diffuse_color} not supported.")
+                if mesh_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                    material_binding_api = UsdShade.MaterialBindingAPI(mesh_prim)
+                    material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                    if len(material_paths) > 1:
+                        raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
+                    material_path = material_paths[0]
+                    material_property = MaterialProperty.from_material_file_path(
+                        material_file_path=tmp_usd_mesh_file_path,
+                        material_path=material_path)
+                    material_name = f"M_{geom_name}"
+                    material_builder = geom_builder.add_material(material_name=material_name,
+                                                                 material_property=material_property)
 
-                        urdf_link_visual_api = UsdUrdf.UrdfLinkVisualAPI(gprim_prim)
-                        urdf_link_visual_api.CreateMaterialRel().SetTargets([urdf_material_path])
+                    stage = self.world_builder.stage
+                    urdf_material_path = self.urdf_materials_prim.GetPath().AppendChild(material_name)
+                    if not stage.GetPrimAtPath(urdf_material_path).IsValid():
+                        urdf_material = UsdUrdf.UrdfMaterial.Define(stage, urdf_material_path)
 
-                    for child_prim in [prim for prim in mesh_prim.GetChildren() if prim.IsA(UsdGeom.Subset)]:
-                        material_binding_api = UsdShade.MaterialBindingAPI(child_prim)
-                        material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
-                        if len(material_paths) > 1:
-                            raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
-                        material_path = material_paths[0]
-                        material_property = MaterialProperty.from_material_file_path(
-                            material_file_path=tmp_usd_mesh_file_path,
-                            material_path=material_path)
-                        geom_builder.add_material(material_name=material_name,
-                                                  material_property=material_property,
-                                                  subset=UsdGeom.Subset(child_prim))
+                        if isinstance(material_builder.diffuse_color, str):
+                            urdf_material.CreateTextureAttr(f"./{material_builder.diffuse_color}")
+                        elif isinstance(material_builder.diffuse_color, numpy.ndarray):
+                            rgba = Gf.Vec4f(*material_builder.diffuse_color.tolist(), material_builder.opacity)
+                            urdf_material.CreateRgbaAttr(rgba)
+                        else:
+                            raise ValueError(f"Diffuse color {material_builder.diffuse_color} not supported.")
+
+                    urdf_link_visual_api = UsdUrdf.UrdfLinkVisualAPI(gprim_prim)
+                    urdf_link_visual_api.CreateMaterialRel().SetTargets([urdf_material_path])
+
+                for child_prim in [prim for prim in mesh_prim.GetChildren() if prim.IsA(UsdGeom.Subset)]:
+                    material_binding_api = UsdShade.MaterialBindingAPI(child_prim)
+                    material_paths = material_binding_api.GetDirectBindingRel().GetTargets()
+                    if len(material_paths) > 1:
+                        raise NotImplementedError(f"Mesh {mesh_name} has more than one material.")
+                    material_path = material_paths[0]
+                    material_property = MaterialProperty.from_material_file_path(
+                        material_file_path=tmp_usd_mesh_file_path,
+                        material_path=material_path)
+                    geom_builder.add_material(material_name=material_name,
+                                              material_property=material_property,
+                                              subset=UsdGeom.Subset(child_prim))
+
+    def _import_inertials(self) -> None:
+        if self._config.with_physics:
+            for link_name, link in self.urdf_model.link_map.items():
+                body_builder = self.world_builder.get_body_builder(link_name)
+                self._import_inertial(body=link, body_builder=body_builder)
 
     def get_mesh_file_path(self, urdf_mesh_file_path: str) -> Optional[str]:
         mesh_file_path = None
@@ -460,7 +484,8 @@ class UrdfImporter(Factory):
                 mimic_joint_parent_body_path = mimic_joint_parent_body_builder.xform.GetPrim().GetPath()
                 mimic_joint_path = mimic_joint_parent_body_path.AppendChild(joint.mimic.joint)
                 urdf_joint_api.CreateJointRel().AddTarget(mimic_joint_path)
-                urdf_joint_api.CreateMultiplierAttr(float(joint.mimic.multiplier) if joint.mimic.multiplier is not None else 1.0)
+                urdf_joint_api.CreateMultiplierAttr(
+                    float(joint.mimic.multiplier) if joint.mimic.multiplier is not None else 1.0)
                 urdf_joint_api.CreateOffsetAttr(float(joint.mimic.offset) if joint.mimic.offset is not None else 0.0)
 
         return joint_builder
