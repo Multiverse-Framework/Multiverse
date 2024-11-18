@@ -136,7 +136,7 @@ DPYTHON_EXECUTABLE=python3
 if [ $UBUNTU_VERSION = "20.04" ]; then
     DPYTHON_EXECUTABLE=python3.8
 elif [ $UBUNTU_VERSION = "24.04" ]; then
-    DPYTHON_EXECUTABLE=python3.10
+    DPYTHON_EXECUTABLE=python3.12
 fi
 
 # Build multiverse
