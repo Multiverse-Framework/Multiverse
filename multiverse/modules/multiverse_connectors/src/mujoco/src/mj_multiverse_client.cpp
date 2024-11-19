@@ -39,7 +39,7 @@ bool contains_tag(const boost::filesystem::path &file_path, const std::string &m
 {
 	tinyxml2::XMLDocument doc;
 
-	if (doc.LoadFile(file_path.c_str()) == tinyxml2::XML_SUCCESS)
+	if (doc.LoadFile(file_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		for (const tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 			 mujoco_element != nullptr;
@@ -54,7 +54,7 @@ bool contains_tag(const boost::filesystem::path &file_path, const std::string &m
 	}
 	else
 	{
-		printf("Could not load file: %s\n", file_path.c_str());
+		printf("Could not load file: %s\n", file_path.string().c_str());
 	}
 	return false;
 }
@@ -128,8 +128,8 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 		if (!object_xml_paths.empty())
 		{
 			const boost::filesystem::path object_xml_path = object_xml_paths[0];
-			printf("Found XML file of [%s] at [%s].\n", object_name.c_str(), object_xml_path.c_str());
-			printf("Trying to spawn object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.c_str());
+			printf("Found XML file of [%s] at [%s].\n", object_name.c_str(), object_xml_path.string().c_str());
+			printf("Trying to spawn object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 
 			boost::filesystem::path new_object_xml_path = scene_xml_folder / object_xml_path.filename();
 			{
@@ -139,7 +139,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 				boost::filesystem::copy_file(object_xml_path, new_object_xml_path, boost::filesystem::copy_option::overwrite_if_exists);
 #endif
 				tinyxml2::XMLDocument doc;
-				if (doc.LoadFile(new_object_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+				if (doc.LoadFile(new_object_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 				{
 					tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 					for (const std::string &asset_type : {"mesh", "texture"})
@@ -174,7 +174,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 								if (!asset_file_path.empty() && asset_file_path.is_relative())
 								{
 									asset_file_path = asset_dir_path / asset_file_path;
-									asset_type_element->SetAttribute("file", asset_file_path.c_str());
+									asset_type_element->SetAttribute("file", asset_file_path.string().c_str());
 								}
 							}
 						}
@@ -257,32 +257,32 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 						}
 					}
 
-					doc.SaveFile(new_object_xml_path.c_str());
+					doc.SaveFile(new_object_xml_path.string().c_str());
 				}
 				else
 				{
-					printf("Could not load file: %s\n", new_object_xml_path.c_str());
+					printf("Could not load file: %s\n", new_object_xml_path.string().c_str());
 					return false;
 				}
 			}
 
 			tinyxml2::XMLDocument doc;
-			if (doc.LoadFile(scene_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+			if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 			{
 				tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 				tinyxml2::XMLElement *include_element = doc.NewElement("include");
 				mujoco_element->InsertEndChild(include_element);
 
 				include_element->SetAttribute("file", object_xml_path.filename().c_str());
-				doc.SaveFile(scene_xml_path.c_str());
+				doc.SaveFile(scene_xml_path.string().c_str());
 			}
 			else
 			{
-				printf("Could not load file: %s\n", scene_xml_path.c_str());
+				printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 				return false;
 			}
 
-			printf("Spawned object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.c_str());
+			printf("Spawned object [%s] to the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 		}
 		else
 		{
@@ -297,7 +297,7 @@ bool MjMultiverseClient::spawn_objects(std::set<std::string> &object_names)
 bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 {
 	tinyxml2::XMLDocument doc;
-	if (doc.LoadFile(scene_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 		for (tinyxml2::XMLElement *worldbody_element = mujoco_element->FirstChildElement("worldbody");
@@ -314,7 +314,7 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 		}
 		for (const std::string &object_name : std::set<std::string>(object_names))
 		{
-			printf("Trying to remove object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.c_str());
+			printf("Trying to remove object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 			for (tinyxml2::XMLElement *include_element = mujoco_element->FirstChildElement("include");
 				 include_element != nullptr; include_element = include_element->NextSiblingElement("include"))
 			{
@@ -347,14 +347,14 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 						}
 					}
 
-					printf("Removed object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.c_str());
+					printf("Removed object [%s] from the scene [%s].\n", object_name.c_str(), scene_xml_path.string().c_str());
 
 					if (cached_objects.find(include_file_path.string()) == cached_objects.end())
 					{
 						cached_objects[include_file_path.string()] = {};
 						char error[1000] = "Could not load binary model";
-						mjModel *m_include = mj_loadXML(include_file_path.c_str(), nullptr, error, 1000);
-						printf("Trying to load include model [%s].\n", include_file_path.c_str());
+						mjModel *m_include = mj_loadXML(include_file_path.string().c_str(), nullptr, error, 1000);
+						printf("Trying to load include model [%s].\n", include_file_path.string().c_str());
 						if (!m_include)
 						{
 							mju_error("Load include model error: %s", error);
@@ -385,7 +385,7 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 				else
 				{
 					tinyxml2::XMLDocument include_doc;
-					include_doc.LoadFile(include_file_path.c_str());
+					include_doc.LoadFile(include_file_path.string().c_str());
 					tinyxml2::XMLElement *include_mujoco_element = include_doc.FirstChildElement("mujoco");
 					for (tinyxml2::XMLElement *worldbody_element = include_mujoco_element->FirstChildElement("worldbody");
 						 worldbody_element != nullptr; worldbody_element = worldbody_element->NextSiblingElement("worldbody"))
@@ -402,11 +402,11 @@ bool MjMultiverseClient::destroy_objects(std::set<std::string> &object_names)
 				}
 			}
 		}
-		doc.SaveFile(scene_xml_path.c_str());
+		doc.SaveFile(scene_xml_path.string().c_str());
 	}
 	else
 	{
-		printf("Could not load file: %s\n", scene_xml_path.c_str());
+		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 		return false;
 	}
 
@@ -510,7 +510,7 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 	if (objects_to_spawn.size() > 0 || objects_to_destroy.size() > 0)
 	{
 		tinyxml2::XMLDocument doc;
-		if (doc.LoadFile(scene_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+		if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 		{
 			tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 			for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
@@ -527,11 +527,11 @@ bool MjMultiverseClient::init_objects(bool from_request_meta_data)
 					key_element->DeleteAttribute("mquat");
 				}
 			}
-			doc.SaveFile(scene_xml_path.c_str());
+			doc.SaveFile(scene_xml_path.string().c_str());
 		}
 		else
 		{
-			printf("Could not load file: %s\n", scene_xml_path.c_str());
+			printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 			return false;
 		}
 
@@ -1012,7 +1012,7 @@ void MjMultiverseClient::bind_response_meta_data()
 	}
 
 	tinyxml2::XMLDocument doc;
-	if (doc.LoadFile(scene_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 		tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
@@ -1102,11 +1102,11 @@ void MjMultiverseClient::bind_response_meta_data()
 			key_element->SetAttribute("mquat", mocap_quat_str.c_str());
 		}
 
-		doc.SaveFile(scene_xml_path.c_str());
+		doc.SaveFile(scene_xml_path.string().c_str());
 	}
 	else
 	{
-		printf("Could not load file: %s\n", scene_xml_path.c_str());
+		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 	}
 }
 
@@ -1154,7 +1154,7 @@ void MjMultiverseClient::weld(const Json::Value &arguments)
 	}
 
 	tinyxml2::XMLDocument doc;
-	if (doc.LoadFile(scene_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 
@@ -1197,11 +1197,11 @@ void MjMultiverseClient::weld(const Json::Value &arguments)
 			weld_element->SetAttribute("relpose", relative_pose.c_str());
 		}
 
-		doc.SaveFile(scene_xml_path.c_str());
+		doc.SaveFile(scene_xml_path.string().c_str());
 	}
 	else
 	{
-		printf("Could not load file: %s\n", scene_xml_path.c_str());
+		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 		return;
 	}
 
@@ -1296,7 +1296,7 @@ void MjMultiverseClient::unweld(const Json::Value &arguments)
 	const std::string object_2_name = arguments[1].asString();
 
 	tinyxml2::XMLDocument doc;
-	if (doc.LoadFile(scene_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 
@@ -1323,11 +1323,11 @@ void MjMultiverseClient::unweld(const Json::Value &arguments)
 			}
 		}
 
-		doc.SaveFile(scene_xml_path.c_str());
+		doc.SaveFile(scene_xml_path.string().c_str());
 	}
 	else
 	{
-		printf("Could not load file: %s\n", scene_xml_path.c_str());
+		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 		return;
 	}
 
@@ -1490,13 +1490,13 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 
 	tinyxml2::XMLDocument doc_1;
 	std::string doc_file_path_1;
-	doc_1.LoadFile(scene_xml_path.c_str());
+	doc_1.LoadFile(scene_xml_path.string().c_str());
 	tinyxml2::XMLElement *body_1_element = nullptr;
 	get_body_element(doc_1, doc_file_path_1, body_1_element, object_1_name);
 
 	tinyxml2::XMLDocument doc_2;
 	std::string doc_file_path_2;
-	doc_2.LoadFile(scene_xml_path.c_str());
+	doc_2.LoadFile(scene_xml_path.string().c_str());
 	tinyxml2::XMLElement *body_2_element = nullptr;
 	get_body_element(doc_2, doc_file_path_2, body_2_element, object_2_name);
 
@@ -1529,7 +1529,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 			doc_2.SaveFile(doc_file_path_2.c_str());
 
 			tinyxml2::XMLDocument doc;
-			doc.LoadFile(scene_xml_path.c_str());
+			doc.LoadFile(scene_xml_path.string().c_str());
 
 			tinyxml2::XMLElement *found_body_element = nullptr;
 			for (tinyxml2::XMLElement *worldbody_element = doc.FirstChildElement("mujoco")->FirstChildElement("worldbody");
@@ -1541,7 +1541,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 
 			tinyxml2::XMLElement *parent_body_1_element = found_body_element->Parent()->ToElement();
 			parent_body_1_element->DeleteChildren();
-			doc.SaveFile(scene_xml_path.c_str());
+			doc.SaveFile(scene_xml_path.string().c_str());
 		}
 		else
 		{
@@ -1556,7 +1556,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 		if (body_1_dof_num != 0)
 		{
 			tinyxml2::XMLDocument doc;
-			doc.LoadFile(scene_xml_path.c_str());
+			doc.LoadFile(scene_xml_path.string().c_str());
 			tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 			for (tinyxml2::XMLElement *keyframe_element = mujoco_element->FirstChildElement("keyframe");
 				 keyframe_element != nullptr; keyframe_element = keyframe_element->NextSiblingElement("keyframe"))
@@ -1614,7 +1614,7 @@ void MjMultiverseClient::attach(const Json::Value &arguments)
 					}
 				}
 			}
-			doc.SaveFile(scene_xml_path.c_str());
+			doc.SaveFile(scene_xml_path.string().c_str());
 		}
 	}
 	else
@@ -1692,7 +1692,7 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 
 	tinyxml2::XMLDocument object_doc;
 	std::string object_doc_file_path;
-	object_doc.LoadFile(scene_xml_path.c_str());
+	object_doc.LoadFile(scene_xml_path.string().c_str());
 	tinyxml2::XMLElement *body_1_element = nullptr;
 	get_body_element(object_doc, object_doc_file_path, body_1_element, object_1_name);
 
@@ -1701,9 +1701,9 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 	tinyxml2::XMLElement *worldbody_element;
 	tinyxml2::XMLElement *freejoint_element;
 	tinyxml2::XMLElement *body_1_element_copy;
-	if (strcmp(scene_xml_path.c_str(), object_doc_file_path.c_str()) != 0)
+	if (strcmp(scene_xml_path.string().c_str(), object_doc_file_path.c_str()) != 0)
 	{
-		scene_doc.LoadFile(scene_xml_path.c_str());
+		scene_doc.LoadFile(scene_xml_path.string().c_str());
 		mujoco_element = scene_doc.FirstChildElement("mujoco");
 		worldbody_element = scene_doc.NewElement("worldbody");
 		freejoint_element = scene_doc.NewElement("freejoint");
@@ -1774,14 +1774,14 @@ void MjMultiverseClient::detach(const Json::Value &arguments)
 		}
 	}
 
-	if (strcmp(scene_xml_path.c_str(), object_doc_file_path.c_str()) != 0)
+	if (strcmp(scene_xml_path.string().c_str(), object_doc_file_path.c_str()) != 0)
 	{
-		scene_doc.SaveFile(scene_xml_path.c_str());
+		scene_doc.SaveFile(scene_xml_path.string().c_str());
 		object_doc.SaveFile(object_doc_file_path.c_str());
 	}
 	else
 	{
-		object_doc.SaveFile(scene_xml_path.c_str());
+		object_doc.SaveFile(scene_xml_path.string().c_str());
 	}
 
 	printf("Detach %s from %s\n", object_1_name.c_str(), object_2_name.c_str());
@@ -1812,7 +1812,7 @@ std::string MjMultiverseClient::get_save_response(const Json::Value &arguments) 
 	}
 
 	tinyxml2::XMLDocument doc;
-	if (doc.LoadFile(scene_xml_path.c_str()) == tinyxml2::XML_SUCCESS)
+	if (doc.LoadFile(scene_xml_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 		for (tinyxml2::XMLElement *include_element = mujoco_element->FirstChildElement("include");
@@ -1830,12 +1830,12 @@ std::string MjMultiverseClient::get_save_response(const Json::Value &arguments) 
 			boost::filesystem::copy_file(file_path, save_path.parent_path() / file_path.filename(), boost::filesystem::copy_option::overwrite_if_exists);
 #endif
 		}
-		doc.SaveFile(save_path.c_str());
-		printf("Saved scene to %s\n", save_path.c_str());
+		doc.SaveFile(save_path.string().c_str());
+		printf("Saved scene to %s\n", save_path.string().c_str());
 	}
 	else
 	{
-		printf("Could not load file: %s\n", scene_xml_path.c_str());
+		printf("Could not load file: %s\n", scene_xml_path.string().c_str());
 	}
 
 	return save_path.string();
@@ -1852,7 +1852,7 @@ void MjMultiverseClient::load(const Json::Value &arguments)
 
 	boost::filesystem::path load_path = load_response;
 	tinyxml2::XMLDocument doc;
-	if (doc.LoadFile(load_path.c_str()) == tinyxml2::XML_SUCCESS)
+	if (doc.LoadFile(load_path.string().c_str()) == tinyxml2::XML_SUCCESS)
 	{
 		tinyxml2::XMLElement *mujoco_element = doc.FirstChildElement("mujoco");
 		for (tinyxml2::XMLElement *include_element = mujoco_element->FirstChildElement("include");
@@ -1870,7 +1870,7 @@ void MjMultiverseClient::load(const Json::Value &arguments)
 			boost::filesystem::copy_file(load_path, scene_xml_path.parent_path() / load_path.filename(), boost::filesystem::copy_option::overwrite_if_exists);
 #endif
 		}
-		doc.SaveFile(scene_xml_path.c_str());
+		doc.SaveFile(scene_xml_path.string().c_str());
 	}
 
 	printf("Loaded scene from %s\n", load_response.c_str());
