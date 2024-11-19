@@ -509,7 +509,7 @@ class MujocoCompiler:
     should_add_key_frame: bool
 
     def __init__(self, args):
-        self.world_xml_path = os.path.abspath(args.world)
+        self.world_xml_path = args.world
         print(f"World: {self.world_xml_path}")
         self.should_add_key_frame = args.should_add_key_frame
         self.scene_name = args.name

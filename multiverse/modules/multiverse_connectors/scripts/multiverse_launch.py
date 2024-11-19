@@ -41,6 +41,7 @@ class MultiverseLaunch:
                 resources_path) else resources_path
             for resources_path in resources_paths
         ]
+        resources_paths = [os.path.abspath(resources_path) for resources_path in resources_paths]
         return resources_paths
 
     @property
