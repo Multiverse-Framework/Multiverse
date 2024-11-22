@@ -248,14 +248,14 @@ bool MjVisual::is_window_closed()
 void MjVisual::run()
 {
     sim_start = d->time;
-    // reload_model();
+    reload_model();
     int nmesh = m->nmesh;
     int ntex = m->ntex;
     while (!stop)
     {
         if (nmesh != m->nmesh || ntex != m->ntex)
         {
-            // reload_model();
+            reload_model();
             nmesh = m->nmesh;
             ntex = m->ntex;
         }
