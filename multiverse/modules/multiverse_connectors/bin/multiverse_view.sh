@@ -52,6 +52,8 @@ for var in "${vars[@]}"; do
     # Check if ROS2 or ROS1 exists
     if [ -f "/opt/ros/noetic/setup.bash" ]; then
         source /opt/ros/noetic/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws/devel/setup.bash
+    elif [ -f "/opt/ros/jazzy/setup.bash" ]; then
+        source /opt/ros/jazzy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/setup.bash
     else
         echo "Warning: ROS not found."
     fi
