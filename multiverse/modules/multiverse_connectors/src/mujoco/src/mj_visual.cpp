@@ -248,14 +248,14 @@ bool MjVisual::is_window_closed()
 void MjVisual::run()
 {
     sim_start = d->time;
-    reload_model();
+    // reload_model();
     int nmesh = m->nmesh;
     int ntex = m->ntex;
     while (!stop)
     {
         if (nmesh != m->nmesh || ntex != m->ntex)
         {
-            reload_model();
+            // reload_model();
             nmesh = m->nmesh;
             ntex = m->ntex;
         }
@@ -273,8 +273,6 @@ void MjVisual::run()
 
 void MjVisual::reload_model()
 {
-    listAllocate(&con.baseMesh, &con.rangeMesh, 2 * m->nmesh);
-
     memset(con.mat_texid, -1, sizeof(con.mat_texid));
     memset(con.mat_texuniform, 0, sizeof(con.mat_texuniform));
     memset(con.mat_texrepeat, 0, sizeof(con.mat_texrepeat));
@@ -318,6 +316,7 @@ void MjVisual::reload_model()
     }
 
     // process meshes
+    listAllocate(&con.baseMesh, &con.rangeMesh, 2 * m->nmesh);
     for (int i = 0; i < m->nmesh; i++)
     {
         mjr_uploadMesh(m, &con, i);
