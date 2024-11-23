@@ -13,10 +13,10 @@ simulations:
     simulator: mujoco
     world:
       name: world
-      path: work_table.xml
+      path: work_table_with_buttons.xml
     robots:
       panda:
-        path: mjcf/panda_with_pos_control.xml
+        path: mjcf/panda_with_vel_control.xml
         apply:
           body:
             panda:
@@ -51,7 +51,60 @@ simulations:
               quat: [1.0, 0.0, 0.0, 0.0]
         prefix:
           geom: task_board_tool_
-
+      left_hand:
+        path: left_hand.xml
+        apply:
+          body:
+            left_shadow_hand:
+              pos: [1.0, -0.25, 1.05]
+        prefix:
+          geom: left_
+      right_hand:
+        path: right_hand.xml
+        apply:
+          body:
+            right_shadow_hand:
+              pos: [1.0, 0.25, 1.05]
+        prefix:
+          geom: right_
+    references:
+      left_shadow_hand:
+        body1: LeftHand_WristRoot
+        body2: lh_wrist_ref
+      lh_thdistal:
+        body1: LeftHand_ThumbTip
+        body2: lh_thdistal_ref
+      lh_ffdistal:
+        body1: LeftHand_IndexTip
+        body2: lh_ffdistal_ref
+      lh_mfdistal:
+        body1: LeftHand_MiddleTip
+        body2: lh_mfdistal_ref
+      lh_rfdistal:
+        body1: LeftHand_RingTip
+        body2: lh_rfdistal_ref
+      lh_lfdistal:
+        body1: LeftHand_PinkyTip
+        body2: lh_lfdistal_ref
+      
+      right_shadow_hand:
+        body1: RightHand_WristRoot
+        body2: rh_wrist_ref
+      rh_thdistal:
+        body1: RightHand_ThumbTip
+        body2: rh_thdistal_ref
+      rh_ffdistal:
+        body1: RightHand_IndexTip
+        body2: rh_ffdistal_ref
+      rh_mfdistal:
+        body1: RightHand_MiddleTip
+        body2: rh_mfdistal_ref
+      rh_rfdistal:
+        body1: RightHand_RingTip
+        body2: rh_rfdistal_ref
+      rh_lfdistal:
+        body1: RightHand_PinkyTip
+        body2: rh_lfdistal_ref
     config:
       max_time_step: 0.002
       min_time_step: 0.001
@@ -75,14 +128,36 @@ multiverse_clients:
           "joint_torque",
         ]
     receive:
-      actuator1: ["cmd_joint_rvalue"]
-      actuator2: ["cmd_joint_rvalue"]
-      actuator3: ["cmd_joint_rvalue"]
-      actuator4: ["cmd_joint_rvalue"]
-      actuator5: ["cmd_joint_rvalue"]
-      actuator6: ["cmd_joint_rvalue"]
-      actuator7: ["cmd_joint_rvalue"]
+      # actuator1: ["cmd_joint_rvalue"]
+      # actuator2: ["cmd_joint_rvalue"]
+      # actuator3: ["cmd_joint_rvalue"]
+      # actuator4: ["cmd_joint_rvalue"]
+      # actuator5: ["cmd_joint_rvalue"]
+      # actuator6: ["cmd_joint_rvalue"]
+      # actuator7: ["cmd_joint_rvalue"]
+
+      actuator1: ["cmd_joint_angular_velocity"]
+      actuator2: ["cmd_joint_angular_velocity"]
+      actuator3: ["cmd_joint_angular_velocity"]
+      actuator4: ["cmd_joint_angular_velocity"]
+      actuator5: ["cmd_joint_angular_velocity"]
+      actuator6: ["cmd_joint_angular_velocity"]
+      actuator7: ["cmd_joint_angular_velocity"]
+
       actuator8: ["cmd_joint_tvalue"]
+
+      LeftHand_WristRoot: ["position", "quaternion"]
+      LeftHand_ThumbTip: ["position", "quaternion"]
+      LeftHand_IndexTip: ["position", "quaternion"]
+      LeftHand_MiddleTip: ["position", "quaternion"]
+      LeftHand_RingTip: ["position", "quaternion"]
+      LeftHand_PinkyTip: ["position", "quaternion"]
+      RightHand_WristRoot: ["position", "quaternion"]
+      RightHand_ThumbTip: ["position", "quaternion"]
+      RightHand_IndexTip: ["position", "quaternion"]
+      RightHand_MiddleTip: ["position", "quaternion"]
+      RightHand_RingTip: ["position", "quaternion"]
+      RightHand_PinkyTip: ["position", "quaternion"]
 
   ros:
     ros_nodes:
@@ -144,7 +219,7 @@ multiverse_clients:
           controllers:
             spawn:
               - joint_state_controller
-                joint_trajectory_controller
+                joint_trajectory_velocity_controller
 
     ros_run:
       rviz:

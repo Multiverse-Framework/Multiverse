@@ -12,3 +12,23 @@ joint_trajectory_controller:
     - joint5
     - joint6
     - joint7
+
+joint_trajectory_velocity_controller: 
+  type: velocity_controllers/JointTrajectoryController  
+  joints:
+    - joint1
+    - joint2
+    - joint3
+    - joint4
+    - joint5
+    - joint6
+    - joint7
+
+  gains:
+    joint1: {p: 100, d: 10, i: 0}
+    joint2: {p: 100, d: 10, i: 0}
+    joint3: {p: 100, d: 10, i: 0}
+    joint4: {p: 100, d: 10, i: 0}
+    joint5: {p: 100, d: 10, i: 0}
+    joint6: {p: 100, d: 10, i: 0}
+    joint7: {p: 100, d: 10, i: 0}
