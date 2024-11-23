@@ -5,21 +5,21 @@
 
   <asset>
     <!-- Visual meshes -->
-    <mesh name="fingertip_1" file="fingertip.obj"/>
-    <mesh name="fingertip_2" file="fingertip.obj" scale="-1 1 1"/>
+    <mesh name="fingertip_1" file="fingertip.obj" scale="-1 1 1"/>
+    <mesh name="fingertip_2" file="fingertip.obj"/>
 
     <!-- Collision meshes -->
-    <mesh name="fingertip_1_001" file="UCX_fingertip_001.stl"/>
-    <mesh name="fingertip_1_002" file="UCX_fingertip_002.stl"/>
-    <mesh name="fingertip_1_003" file="UCX_fingertip_003.stl"/>
-    <mesh name="fingertip_1_004" file="UCX_fingertip_004.stl"/>
-    <mesh name="fingertip_1_005" file="UCX_fingertip_005.stl"/>
+    <mesh name="fingertip_1_001" file="UCX_fingertip_001.stl" scale="-1 1 1"/>
+    <mesh name="fingertip_1_002" file="UCX_fingertip_002.stl" scale="-1 1 1"/>
+    <mesh name="fingertip_1_003" file="UCX_fingertip_003.stl" scale="-1 1 1"/>
+    <mesh name="fingertip_1_004" file="UCX_fingertip_004.stl" scale="-1 1 1"/>
+    <mesh name="fingertip_1_005" file="UCX_fingertip_005.stl" scale="-1 1 1"/>
 
-    <mesh name="fingertip_2_001" file="UCX_fingertip_001.stl" scale="-1 1 1"/>
-    <mesh name="fingertip_2_002" file="UCX_fingertip_002.stl" scale="-1 1 1"/>
-    <mesh name="fingertip_2_003" file="UCX_fingertip_003.stl" scale="-1 1 1"/>
-    <mesh name="fingertip_2_004" file="UCX_fingertip_004.stl" scale="-1 1 1"/>
-    <mesh name="fingertip_2_005" file="UCX_fingertip_005.stl" scale="-1 1 1"/>
+    <mesh name="fingertip_2_001" file="UCX_fingertip_001.stl"/>
+    <mesh name="fingertip_2_002" file="UCX_fingertip_002.stl"/>
+    <mesh name="fingertip_2_003" file="UCX_fingertip_003.stl"/>
+    <mesh name="fingertip_2_004" file="UCX_fingertip_004.stl"/>
+    <mesh name="fingertip_2_005" file="UCX_fingertip_005.stl"/>
   </asset>
 
   <default>
