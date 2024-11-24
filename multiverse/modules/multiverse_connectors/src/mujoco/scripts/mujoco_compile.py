@@ -271,6 +271,7 @@ def add_key_frame_element(root: ET.Element, keyframe_dict: Dict[str, ET.Element]
             key_element.attrib.pop("ctrl")
         if key_element.get("qpos") != "" or key_element.get("ctrl") != "":
             keyframe_element.append(key_element)
+    return None
 
 
 def get_qpos_and_ctrl(m: mujoco.MjModel, joint_state: Dict[str, float]) -> (List[float], List[float]):
@@ -346,20 +347,19 @@ def indent(elem, space="    ", level=0):
 
 def add_mocap(save_xml_path: str,
               tree: ET.ElementTree,
-              mocap_dict: Dict[str, List[float]],
+              mocap_dict: Dict[str, Tuple[str, List[float], List[float]]],
               m: mujoco.MjModel,
               d: mujoco.MjData) -> None:
     worldbody_element = ET.Element("worldbody")
     root = tree.getroot()
     root.append(worldbody_element)
-    for mocap_name, body_id in mocap_dict.items():
-        mocap_pos = d.xpos[body_id]
-        mocap_quat = d.xquat[body_id]
+    for mocap_name, (body_id, body_pos, body_quat) in mocap_dict.items():
         body_element = ET.Element(
             "body",
-            {"name": mocap_name, "mocap": "true",
-             "pos": " ".join(map(str, mocap_pos)),
-             "quat": " ".join(map(str, mocap_quat))},
+            {"name": mocap_name, 
+             "mocap": "true",
+             "pos": " ".join(map(str, body_pos)),
+             "quat": " ".join(map(str, body_quat))},
         )
         geom_adr = m.body_geomadr[body_id]
         geom_num = m.body_geomnum[body_id]
@@ -459,20 +459,17 @@ def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) 
             raise ValueError(f"body1 or body2 must be valid body names in the model")
 
         mocap_name = None
-        body_name = None
         body_id = None
         if body1_id == -1:
             mocap_name = body1_name
-            body_name = body2_name
             body_id = body2_id
         if body2_id == -1:
             mocap_name = body2_name
-            body_name = body1_name
             body_id = body1_id
         if mocap_name is not None and body_id is not None:
             body_pos = d.xpos[body_id]
-            print(f"Add {mocap_name} as mocap of {body_name} at {body_pos} to the model")
-            mocap_dict[mocap_name] = body_id
+            body_quat = d.xquat[body_id]
+            mocap_dict[mocap_name] = (body_id, body_pos, body_quat)
 
         weld_element = ET.Element("weld", {"name": reference_name})
         for prop_key, prop_value in reference_props.items():
@@ -483,8 +480,29 @@ def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) 
         equality_element.append(weld_element)
 
     add_mocap(save_xml_path, tree, mocap_dict, m, d)
+
+    mujoco.mj_resetDataKeyframe(m, d, 0)
+    mujoco.mj_step(m, d)
+    mpos_list_str = "0 0 0"
+    mquat_list_str = "1 0 0 0"
+    for mocap_name, (body_id, _, _) in mocap_dict.items():
+        body_pos = d.xpos[body_id]
+        body_quat = d.xquat[body_id]
+        mpos_list_str += f" {body_pos[0]} {body_pos[1]} {body_pos[2]}"
+        mquat_list_str += f" {body_quat[0]} {body_quat[1]} {body_quat[2]} {body_quat[3]}"
+
+    keyframe_element = root.find(".//keyframe")
+    root.remove(keyframe_element)
+    key_element = keyframe_element.find(".//key")
+    keyframe_element.remove(key_element)
+    key_element.set("mpos", mpos_list_str)
+    key_element.set("mquat", mquat_list_str)
+    keyframe_element.append(key_element)
+    root.append(keyframe_element)
+
     indent(tree.getroot(), space="\t", level=0)
     tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
+    tree.write(save_xml_path + "2", encoding="utf-8", xml_declaration=True)
 
 
 def parse_references(references) -> Dict[str, any]:
