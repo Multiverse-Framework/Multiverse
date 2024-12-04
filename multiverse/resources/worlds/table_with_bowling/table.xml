@@ -18,7 +18,4 @@
     <visual>
 		<global fovy="45" azimuth="225" elevation="-30" />
 	</visual>
-    <worldbody>
-		<body name="cursor" mocap="true" pos="1.5 0 1" euler="0 0 0"/>
-	</worldbody>
 </mujoco>

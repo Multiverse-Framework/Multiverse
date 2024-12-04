@@ -29,6 +29,8 @@ def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
     should_add_key_frame = mujoco_data.get("should_add_key_frame", True)
     if should_add_key_frame:
         mujoco_args.append(f"--should_add_key_frame")
+    if not mujoco_data.get("multiverse_as_plugin", False):
+        mujoco_args.append(f"--add_cursor")
 
     return mujoco_args
 
