@@ -438,7 +438,7 @@ def add_mocap(save_xml_path: str,
         worldbody_element.append(body_element)
 
 
-def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) -> None:
+def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]], with_cursor: bool = True) -> None:
     m = mujoco.MjModel.from_xml_path(save_xml_path)
     d = mujoco.MjData(m)
     mujoco.mj_step(m, d)
@@ -483,8 +483,8 @@ def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) 
 
     mujoco.mj_resetDataKeyframe(m, d, 0)
     mujoco.mj_step(m, d)
-    mpos_list_str = "0 0 0"
-    mquat_list_str = "1 0 0 0"
+    mpos_list_str = "0 0 0" if with_cursor else ""
+    mquat_list_str = "1 0 0 0" if with_cursor else ""
     for mocap_name, (body_id, _, _) in mocap_dict.items():
         body_pos = d.xpos[body_id]
         body_quat = d.xquat[body_id]
@@ -502,7 +502,6 @@ def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) 
 
     indent(tree.getroot(), space="\t", level=0)
     tree.write(save_xml_path, encoding="utf-8", xml_declaration=True)
-    tree.write(save_xml_path + "2", encoding="utf-8", xml_declaration=True)
 
 
 def parse_references(references) -> Dict[str, any]:
@@ -583,12 +582,12 @@ class MujocoCompiler:
             add_key_frame_element(root, self.keyframe_dict)
             tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
-        self.add_visual_and_cursor_element(root)
-        indent(tree.getroot(), space="\t", level=0)
-        tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
+        # self.add_visual_and_cursor_element(root)
+        # indent(tree.getroot(), space="\t", level=0)
+        # tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         if self.references is not None:
-            apply_references(self.save_xml_path, self.references)
+            apply_references(self.save_xml_path, self.references, False)
 
     def create_world_xml(self):
         if not os.path.exists(self.save_dir_path):
