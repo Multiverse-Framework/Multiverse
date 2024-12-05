@@ -910,16 +910,6 @@ import numpy
 from isaacsim import SimulationApp
 
 if __name__ == "__main__":
-    # This sample loads a usd stage and starts simulation
-    CONFIG = {
-        "width": 1280,
-        "height": 720,
-        "sync_loads": True,
-        "headless": False,
-        "renderer": "RayTracedLighting",
-        "hide_ui": False,
-    }
-
     # Set up command line arguments
     parser = argparse.ArgumentParser("Multiverse Isaac Sim Connector")
     parser.add_argument("--usd_path", type=str, help="Absolute path to usd file", required=True)
@@ -955,9 +945,18 @@ if __name__ == "__main__":
 
     usd_path = args.usd_path
 
+    # This sample loads a usd stage and starts simulation
+    CONFIG = {
+        "width": 1280,
+        "height": 720,
+        "sync_loads": True,
+        "headless": args.headless,
+        "renderer": "RayTracedLighting",
+        "hide_ui": False,
+        "open_usd": usd_path,
+    }
+
     # Start the omniverse application
-    CONFIG["headless"] = args.headless
-    CONFIG["open_usd"] = usd_path
     simulation_app = SimulationApp(CONFIG)
 
     import carb

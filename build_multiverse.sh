@@ -134,7 +134,7 @@ fi
 UBUNTU_VERSION=$(lsb_release -rs)
 DPYTHON_EXECUTABLE=python3
 if [ $UBUNTU_VERSION = "20.04" ]; then
-    DPYTHON_EXECUTABLE=python3.8
+    DPYTHON_EXECUTABLE=python3.10
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     DPYTHON_EXECUTABLE=python3.12
 fi
@@ -157,20 +157,6 @@ cmake -S $PWD/multiverse -B $BUILD_DIR \
     -DPYTHON_EXECUTABLE=$DPYTHON_EXECUTABLE
 make -C $BUILD_DIR
 cmake --install $BUILD_DIR
-
-ISAAC_SIM_PYTHON=/home/${USER}/.local/share/ov/pkg/isaac-sim-4.2.0/python.sh
-if [ -f $ISAAC_SIM_PYTHON ] && [ $DBUILD_SRC = ON ] && [ $UBUNTU_VERSION = "20.04" ]; then
-    cmake -S $PWD/multiverse -B $BUILD_DIR \
-        -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
-        -DBUILD_SRC=ON \
-        -DBUILD_MODULES=OFF \
-        -DBUILD_CONNECTORS=OFF \
-        -DBUILD_KNOWLEDGE=OFF \
-        -DBUILD_PARSER=OFF \
-        -DPYTHON_EXECUTABLE=python3.10
-    make -C $BUILD_DIR
-    cmake --install $BUILD_DIR
-fi
 
 cd $CURRENT_DIR
 

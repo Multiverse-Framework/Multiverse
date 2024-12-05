@@ -1,10 +1,10 @@
 [project]
-name = "multiverse_client_py"
+name = "multiverse_simulator"
 version = "0.0.1"
 authors = [
   { name="Giang Nguyen", email="hoanggia@uni-bremen.de" },
 ]
-description = "The python binding of Multiverse Client"
+description = "The wrapper of simulators for Multiverse"
 readme = "README.md"
 requires-python = ">=3.8"
 classifiers = [

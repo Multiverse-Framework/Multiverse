@@ -24,11 +24,6 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
     # Update package lists
     sudo apt-get update
 
-    # Install python3.8
-    sudo apt-get install -y python3.8-dev python3.8-venv
-    sudo update-alternatives --remove-all python3
-    sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 100
-
     # Install python3.10
     sudo apt-get install -y python3.10-dev python3.10-venv
 
@@ -135,7 +130,7 @@ sudo apt-get install -y jupyter-notebook
 for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
         . $virtualenvwrapper
-        mkvirtualenv --system-site-packages multiverse
+        mkvirtualenv --system-site-packages multiverse -p python3.10
 
         # Instlal build
         pip install -U pip build
@@ -147,7 +142,7 @@ for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrap
         pip install urdf_parser_py
 
         # Install MuJoCo
-        pip install mujoco==3.2.2
+        pip install mujoco==3.2.6
 
         # Install additional packages for Jupyter Notebook
         pip install panel jupyter-server bash_kernel

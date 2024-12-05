@@ -124,56 +124,6 @@ def add_visual_element(root: ET.Element):
     visual_element.append(global_element)
 
 
-def add_cursor_element(root: ET.Element):
-    worldbody_element = ET.Element("worldbody")
-    root.append(worldbody_element)
-    body_element = ET.Element(
-        "body",
-        {"name": "cursor", "mocap": "true", "pos": "0 0 0", "euler": "0 0 0"},
-    )
-    worldbody_element.append(body_element)
-
-    body_element.append(
-        ET.Element(
-            "site",
-            {
-                "name": "cursor_x",
-                "pos": "0.1 0.0 0.0",
-                "size": "0.01 0.1",
-                "euler": "0.0 1.5708 0.0",
-                "type": "cylinder",
-                "rgba": "1 0 0 0.5",
-            },
-        )
-    )
-    body_element.append(
-        ET.Element(
-            "site",
-            {
-                "name": "cursor_y",
-                "pos": "0.0 0.1 0.0",
-                "size": "0.01 0.1",
-                "euler": "1.5708 0.0 0.0",
-                "type": "cylinder",
-                "rgba": "0 1 0 0.5",
-            },
-        )
-    )
-    body_element.append(
-        ET.Element(
-            "site",
-            {
-                "name": "cursor_z",
-                "pos": "0.0 0.0 0.1",
-                "size": "0.01 0.1",
-                "euler": "0.0 0.0 0.0",
-                "type": "cylinder",
-                "rgba": "0 0 1 0.5",
-            },
-        )
-    )
-
-
 def exclude_collision(
         root: ET.Element, xml_path: str, not_exclude_collision_bodies: List[str]
 ) -> Dict[str, Set[str]]:
@@ -438,7 +388,7 @@ def add_mocap(save_xml_path: str,
         worldbody_element.append(body_element)
 
 
-def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]], with_cursor: bool = True) -> None:
+def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) -> None:
     m = mujoco.MjModel.from_xml_path(save_xml_path)
     d = mujoco.MjData(m)
     mujoco.mj_step(m, d)
@@ -483,8 +433,8 @@ def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]], 
 
     mujoco.mj_resetDataKeyframe(m, d, 0)
     mujoco.mj_step(m, d)
-    mpos_list_str = "0 0 0" if with_cursor else ""
-    mquat_list_str = "1 0 0 0" if with_cursor else ""
+    mpos_list_str = ""
+    mquat_list_str = ""
     for mocap_name, (body_id, _, _) in mocap_dict.items():
         body_pos = d.xpos[body_id]
         body_quat = d.xquat[body_id]
@@ -538,7 +488,6 @@ class MujocoCompiler:
         self.keyframe_dict = {}
         self.asset_dict = {"mesh": {}, "texture": {}, "material": {}}
         self.references = parse_references(args.references)
-        self.add_cursor = args.add_cursor
 
     def build_world_xml(self, robots: Dict[str, Robot], objects: Dict[str, Object]):
         self.create_world_xml()
@@ -583,13 +532,8 @@ class MujocoCompiler:
             add_key_frame_element(root, self.keyframe_dict)
             tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
-        if self.add_cursor:
-            self.add_visual_and_cursor_element(root)
-            indent(tree.getroot(), space="\t", level=0)
-            tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
-
         if self.references is not None:
-            apply_references(self.save_xml_path, self.references, self.add_cursor)
+            apply_references(self.save_xml_path, self.references)
 
     def create_world_xml(self):
         if not os.path.exists(self.save_dir_path):
@@ -687,7 +631,6 @@ class MujocoCompiler:
             "global", {"fovy": "45", "azimuth": "225", "elevation": "-30"}
         )
         visual_element.append(global_element)
-        add_cursor_element(root)
 
     def append_key_frame_and_remove_from_root(self,
                                               root: ET.Element,
@@ -878,7 +821,6 @@ def main():
     parser.add_argument("--objects", help="JSON string with objects' data", required=False)
     parser.add_argument("--references", help="JSON string with references' data", required=False)
     parser.add_argument("--should_add_key_frame", help="Add key frame to the model", action="store_true")
-    parser.add_argument("--add_cursor", help="Add cursor", action="store_true")
     if os.path.basename(__file__) == "mujoco_compile":
         save_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "..", "saved"

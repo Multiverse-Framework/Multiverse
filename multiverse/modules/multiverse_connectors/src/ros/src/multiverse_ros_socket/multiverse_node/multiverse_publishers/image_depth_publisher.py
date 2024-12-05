@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List, Dict
+from typing import Dict
 import numpy
 
 from sensor_msgs.msg import Image
@@ -10,7 +10,7 @@ from .multiverse_publisher import Interface, INTERFACE
 if INTERFACE == Interface.ROS1:
     import rospy
 
-from .multiverse_publisher import MultiversePublisher, SocketAddress, MultiverseMetaData
+from .multiverse_publisher import MultiversePublisher, MultiverseMetaData
 
 
 class ImageDepthPublisher(MultiversePublisher):
@@ -21,14 +21,14 @@ class ImageDepthPublisher(MultiversePublisher):
 
     def __init__(
         self,
-        client_addr: SocketAddress,
+        port: str,
         topic_name: str = "/camera/depth/image_raw",
         rate: float = 60.0,
         multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
         **kwargs: Dict,
     ) -> None:
         super().__init__(
-            client_addr=client_addr,
+            port=port,
             topic_name=topic_name,
             rate=rate,
             multiverse_meta_data=multiverse_meta_data,

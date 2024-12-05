@@ -11,7 +11,7 @@ from .multiverse_publisher import Interface, INTERFACE
 if INTERFACE == Interface.ROS1:
     import rospy
 
-from .multiverse_publisher import MultiversePublisher, SocketAddress, MultiverseMetaData
+from .multiverse_publisher import MultiversePublisher, MultiverseMetaData
 
 
 class TfPublisher(MultiversePublisher):
@@ -22,7 +22,7 @@ class TfPublisher(MultiversePublisher):
 
     def __init__(
             self,
-            client_addr: SocketAddress,
+            port: str,
             topic_name: str = "/tf",
             rate: float = 60.0,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
@@ -34,7 +34,7 @@ class TfPublisher(MultiversePublisher):
         super().__init__(
             topic_name=topic_name,
             rate=rate,
-            client_addr=client_addr,
+            port=port,
             multiverse_meta_data=multiverse_meta_data,
         )
 

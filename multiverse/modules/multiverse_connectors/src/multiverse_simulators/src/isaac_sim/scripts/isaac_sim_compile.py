@@ -5,7 +5,7 @@ import dataclasses
 import json
 import os
 import shutil
-from typing import List, Dict, Set, Any, Union, Optional, Tuple
+from typing import List, Dict, Any
 import numpy
 from pxr import Usd, UsdGeom, Gf, UsdPhysics
 

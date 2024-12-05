@@ -64,9 +64,8 @@ std::map<std::string, size_t> attribute_map_uint16_t = {
 class MultiverseClientPybind final : public MultiverseClient
 {
 public:
-    MultiverseClientPybind(const std::string &in_server_socket_addr = "tcp:127.0.0.1:7000")
+    MultiverseClientPybind()
     {
-        server_socket_addr = in_server_socket_addr;
     }
 
     ~MultiverseClientPybind()
@@ -102,7 +101,7 @@ public:
     {
         if (in_send_data.size() != 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size + send_buffer.buffer_uint16_t.size)
         {
-            printf("[Client %s] The size of in_send_data (%zu) does not match with send_buffer_size (%zu).\n", port.c_str(), in_send_data.size(), 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size + send_buffer.buffer_uint16_t.size);
+            printf("[Client %s] The size of in_send_data (%zu) does not match with send_buffer_size (%zu).\n", client_port.c_str(), in_send_data.size(), 1 + send_buffer.buffer_double.size + send_buffer.buffer_uint8_t.size + send_buffer.buffer_uint16_t.size);
         }
         else
         {
@@ -125,7 +124,7 @@ public:
             }
             catch (const std::exception &e)
             {
-                printf("[Client %s] Error in set_send_data: %s\n", port.c_str(), e.what());
+                printf("[Client %s] Error in set_send_data: %s\n", client_port.c_str(), e.what());
                 throw std::runtime_error(e.what());
             }
         }
@@ -451,7 +450,7 @@ private:
 
     void reset() override
     {
-        printf("[Client %s] Resetting the client (will be implemented).\n", port.c_str());
+        printf("[Client %s] Resetting the client (will be implemented).\n", client_port.c_str());
     }
 
     void init_send_and_receive_data() override
@@ -488,7 +487,7 @@ private:
         if (send_data_double.size() != send_buffer.buffer_double.size || send_data_uint8_t.size() != send_buffer.buffer_uint8_t.size)
         {
             printf("[Client %s] The size of in_send_data [%zu - %zu - %zu] does not match with send_buffer_size [%zu - %zu - %zu].\n",
-                   port.c_str(),
+                   client_port.c_str(),
                    send_data_double.size(),
                    send_data_uint8_t.size(),
                    send_data_uint16_t.size(),
@@ -510,7 +509,7 @@ private:
             receive_data_uint16_t.size() != receive_buffer.buffer_uint16_t.size)
         {
             printf("[Client %s] The size of receive_data [%zu - %zu - %zu] does not match with receive_buffer_size [%zu - %zu - %zu].\n",
-                   port.c_str(),
+                   client_port.c_str(),
                    receive_data_double.size(),
                    receive_data_uint8_t.size(),
                    receive_data_uint16_t.size(),
@@ -532,14 +531,14 @@ PYBIND11_MODULE(multiverse_client_pybind, handle)
     handle.doc() = "";
 
     pybind11::class_<MultiverseClient>(handle, "MultiverseClient")
-        .def("connect", static_cast<void (MultiverseClient::*)(const std::string &, const std::string &)>(&MultiverseClient::connect))
+        .def("connect", static_cast<void (MultiverseClient::*)(const std::string &, const std::string &, const std::string &)>(&MultiverseClient::connect))
         .def("start", &MultiverseClient::start)
         .def("communicate", &MultiverseClient::communicate)
         .def("disconnect", &MultiverseClient::disconnect)
         .def("get_time_now", &MultiverseClient::get_time_now);
 
     pybind11::class_<MultiverseClientPybind, MultiverseClient>(handle, "MultiverseClientPybind")
-        .def(pybind11::init<const std::string &>())
+        .def(pybind11::init<>())
         .def("get_world_time", &MultiverseClientPybind::get_world_time)
         .def("set_request_meta_data", &MultiverseClientPybind::set_request_meta_data)
         .def("get_response_meta_data", &MultiverseClientPybind::get_response_meta_data)

@@ -20,25 +20,26 @@
 
 #pragma once
 
-#include <mujoco/mujoco.h>
+#include "multiverse_client.h"
+#ifdef __linux__
+#include <jsoncpp/json/json.h>
+#elif _WIN32
+#include <json/json.h>
+#endif
 
-#include <boost/filesystem.hpp>
-#include <mutex>
+class MultiverseClientJson : public MultiverseClient
+{
+protected:
+    bool compute_request_and_response_meta_data() override final;
 
-// MuJoCo data structures
-extern mjModel *m; // MuJoCo model
-extern mjData *d;  // MuJoCo data
+    void compute_request_buffer_sizes(std::map<std::string, size_t> &send_buffer_size, std::map<std::string, size_t> &receive_buffer_size) const override final;
 
-extern std::mutex mtx;
+    void compute_response_buffer_sizes(std::map<std::string, size_t> &send_buffer_size, std::map<std::string, size_t> &receive_buffer_size) const override final;
 
-extern boost::filesystem::path scene_xml_path;
+protected:
+    Json::Value request_meta_data_json;
 
-extern bool stop;
+    Json::Value response_meta_data_json;
 
-extern double rtf;
-
-extern double rtf_desired;
-
-extern double start_time;
-
-extern double real_time;
+    Json::Reader reader;
+};

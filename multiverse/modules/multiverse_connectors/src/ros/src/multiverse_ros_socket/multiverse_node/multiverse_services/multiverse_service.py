@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Dict, TypeVar, Any
+from typing import Dict, TypeVar
 
 from ... import Interface, INTERFACE
 
@@ -11,7 +11,7 @@ elif INTERFACE == Interface.ROS2:
 else:
     raise ValueError(f"Invalid interface {INTERFACE}")
 
-from ..multiverse_node import MultiverseNode, SocketAddress, MultiverseMetaData
+from ..multiverse_node import MultiverseNode, MultiverseMetaData
 
 SrvType = TypeVar("SrvType")
 SrvTypeRequest = TypeVar(f"SrvTypeRequest")
@@ -26,12 +26,12 @@ class MultiverseService(MultiverseNode):
 
     def __init__(
             self,
-            client_addr: SocketAddress,
+            port: str,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:
         super().__init__(
-            client_addr=client_addr,
+            port=port,
             multiverse_meta_data=multiverse_meta_data
         )
         if INTERFACE == Interface.ROS1:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import List, Dict
+from typing import Dict
 
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import TransformStamped
@@ -11,7 +11,7 @@ from .multiverse_publisher import Interface, INTERFACE
 if INTERFACE == Interface.ROS1:
     import rospy
 
-from .multiverse_publisher import MultiversePublisher, SocketAddress, MultiverseMetaData
+from .multiverse_publisher import MultiversePublisher, MultiverseMetaData
 
 
 class OdomPublisher(MultiversePublisher):
@@ -22,7 +22,7 @@ class OdomPublisher(MultiversePublisher):
 
     def __init__(
             self,
-            client_addr: SocketAddress,
+            port: str,
             rate: float = 60.0,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
@@ -36,7 +36,7 @@ class OdomPublisher(MultiversePublisher):
         self._body_name = str(kwargs["body"])
         self._frame_id = str(kwargs.get("frame_id", "map"))
         super().__init__(
-            client_addr=client_addr,
+            port=port,
             topic_name=[kwargs["odom_topic"], kwargs["tf_topic"]],
             rate=rate,
             multiverse_meta_data=multiverse_meta_data,

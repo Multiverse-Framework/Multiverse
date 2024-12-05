@@ -2,7 +2,7 @@
 
 from .. import Interface, INTERFACE
 
-from multiverse_client_py import MultiverseClient, MultiverseMetaData, SocketAddress
+from multiverse_client_py import MultiverseClient, MultiverseMetaData
 
 if INTERFACE == Interface.ROS1:
     import rospy
@@ -16,14 +16,14 @@ else:
 
 class MultiverseNode(MultiverseClient, Node):
     def __init__(self,
-                 client_addr: SocketAddress,
+                 port: str,
                  multiverse_meta_data: MultiverseMetaData = MultiverseMetaData()) -> None:
         if INTERFACE == Interface.ROS1:
-            multiverse_meta_data.simulation_name = f"ros_{client_addr.port}"
+            multiverse_meta_data.simulation_name = f"ros_{port}"
         elif INTERFACE == Interface.ROS2:
-            multiverse_meta_data.simulation_name = f"ros2_{client_addr.port}"
-            Node.__init__(self, node_name=f"{self.__class__.__name__}{client_addr.port}")
-        super().__init__(client_addr, multiverse_meta_data)
+            multiverse_meta_data.simulation_name = f"ros2_{port}"
+            Node.__init__(self, node_name=f"{self.__class__.__name__}{port}")
+        super().__init__(self._host, self._server_port, port, multiverse_meta_data)
 
     def loginfo(self, message: str) -> None:
         if INTERFACE == Interface.ROS1:

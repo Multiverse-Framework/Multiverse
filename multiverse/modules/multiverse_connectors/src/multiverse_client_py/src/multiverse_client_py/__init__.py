@@ -1,1 +1,1 @@
-from .multiverse_client import MultiverseClient, SocketAddress, MultiverseMetaData
+from .multiverse_client import MultiverseClient, MultiverseMetaData

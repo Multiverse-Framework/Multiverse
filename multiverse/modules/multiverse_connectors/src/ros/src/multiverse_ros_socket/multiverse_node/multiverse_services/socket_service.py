@@ -17,7 +17,7 @@ elif INTERFACE == Interface.ROS2:
 else:
     raise ValueError(f"Invalid interface {INTERFACE}")
 
-from .multiverse_service import MultiverseService, SocketAddress, MultiverseMetaData
+from .multiverse_service import MultiverseService, MultiverseMetaData
 
 
 class SocketService(MultiverseService):
@@ -30,12 +30,12 @@ class SocketService(MultiverseService):
 
     def __init__(
             self,
-            client_addr: SocketAddress,
+            port: str,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:
         super().__init__(
-            client_addr=client_addr,
+            port=port,
             multiverse_meta_data=multiverse_meta_data,
             **kwargs
         )

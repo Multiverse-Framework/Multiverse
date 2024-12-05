@@ -23,21 +23,12 @@ class MultiverseMetaData:
     handedness: str = "rhs"
 
 
-class SocketAddress:
-    """Socket address for the Multiverse Server and the Multiverse Client"""
-
-    host: str = "tcp://127.0.0.1"
-    port: str = ""
-
-    def __init__(self, port: str) -> None:
-        self.port = port
-
-
 class MultiverseClient:
     """Base class for the Multiverse Client"""
 
-    _server_addr: SocketAddress = SocketAddress(port="7000")
-    _client_addr: SocketAddress
+    _host: str = "tcp://127.0.0.1"
+    _server_port: str = "7000"
+    _client_port: str
     _meta_data: MultiverseMetaData
     _multiverse_socket: MultiverseClientPybind
     _start_time: float
@@ -51,7 +42,7 @@ class MultiverseClient:
 
     def __init__(
         self,
-        client_addr: SocketAddress,
+        port: str,
         multiverse_meta_data: MultiverseMetaData,
     ) -> None:
         """
@@ -60,16 +51,12 @@ class MultiverseClient:
             client_addr: The address of the client.
             multiverse_meta_data: The meta data for the Multiverse Client.
         """
-        if not isinstance(client_addr.port, str) or client_addr.port == "":
-            raise ValueError(f"Must specify client port for {self.__class__.__name__}.")
+        self._client_port = port
         if multiverse_meta_data.simulation_name == "":
             raise ValueError(f"Must specify simulation name.")
         self._send_data = None
-        self._client_addr = client_addr
         self._meta_data = multiverse_meta_data
-        self._multiverse_socket = MultiverseClientPybind(
-            f"{self._server_addr.host}:{self._server_addr.port}"
-        )
+        self._multiverse_socket = MultiverseClientPybind()
         self.request_meta_data = {
             "meta_data": self._meta_data.__dict__,
             "send": {},
@@ -245,7 +232,7 @@ class MultiverseClient:
 
     def _connect_and_start(self) -> None:
         """Connect to the server and start the client."""
-        self._multiverse_socket.connect(self._client_addr.host, self._client_addr.port)
+        self._multiverse_socket.connect(self._host, self._server_port, self._client_port)
         self._multiverse_socket.start()
         self._start_time = self._multiverse_socket.get_time_now()
 

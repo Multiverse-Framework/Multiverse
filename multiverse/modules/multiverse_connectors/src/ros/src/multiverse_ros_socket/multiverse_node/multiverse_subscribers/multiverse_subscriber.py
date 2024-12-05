@@ -11,7 +11,7 @@ elif INTERFACE == Interface.ROS2:
 else:
     raise ValueError(f"Invalid interface {INTERFACE}")
 
-from ..multiverse_node import MultiverseNode, SocketAddress, MultiverseMetaData
+from ..multiverse_node import MultiverseNode, MultiverseMetaData
 
 
 class MultiverseSubscriber(MultiverseNode):
@@ -21,13 +21,13 @@ class MultiverseSubscriber(MultiverseNode):
 
     def __init__(
             self,
-            client_addr: SocketAddress,
+            port: str,
             topic_name: str,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
     ) -> None:
         super().__init__(
-            client_addr=client_addr,
+            port=port,
             multiverse_meta_data=multiverse_meta_data
         )
         if INTERFACE == Interface.ROS1:

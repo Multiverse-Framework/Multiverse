@@ -12,7 +12,7 @@ class DataSubscriber(MultiverseSubscriber):
 
     def __init__(
             self,
-            client_addr: SocketAddress,
+            port: str,
             topic_name: str,
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
@@ -27,7 +27,7 @@ class DataSubscriber(MultiverseSubscriber):
         else:
             raise NotImplementedError(f"msg_type {msg_type} not implemented.")
         super().__init__(
-            client_addr=client_addr,
+            port=port,
             topic_name=topic_name,
             multiverse_meta_data=multiverse_meta_data
         )

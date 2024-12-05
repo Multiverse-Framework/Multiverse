@@ -4,7 +4,7 @@ from typing import Dict
 
 from geometry_msgs.msg import Twist
 
-from .multiverse_subscriber import MultiverseSubscriber, SocketAddress, MultiverseMetaData
+from .multiverse_subscriber import MultiverseSubscriber, MultiverseMetaData
 
 
 class CmdVelSubscriber(MultiverseSubscriber):
@@ -13,7 +13,7 @@ class CmdVelSubscriber(MultiverseSubscriber):
 
     def __init__(
             self,
-            client_addr: SocketAddress,
+            port: str,
             topic_name: str = "/cmd_vel",
             multiverse_meta_data: MultiverseMetaData = MultiverseMetaData(),
             **kwargs: Dict
@@ -22,7 +22,7 @@ class CmdVelSubscriber(MultiverseSubscriber):
             raise Exception("Body not found.")
         self._body_name = str(kwargs["body"])
         super().__init__(
-            client_addr=client_addr,
+            port=port,
             topic_name=topic_name,
             multiverse_meta_data=multiverse_meta_data
         )
