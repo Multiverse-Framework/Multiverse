@@ -13,3 +13,6 @@
 [submodule "multiverse/external/pybind11"]
 	path = multiverse/external/pybind11
 	url = https://github.com/pybind/pybind11
+[submodule "resources"]
+	path = multiverse/resources
+	url = https://github.com/Multiverse-Framework/Multiverse-Resources.git
