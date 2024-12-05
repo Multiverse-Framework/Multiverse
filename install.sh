@@ -104,7 +104,7 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
     pip install -U pip
 
     # Setup virtual environment
-    python3 -m pip install virtualenvwrapper
+    pip install virtualenvwrapper
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Install and link clang-17 for creating shared library
     sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
