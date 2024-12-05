@@ -538,6 +538,7 @@ class MujocoCompiler:
         self.keyframe_dict = {}
         self.asset_dict = {"mesh": {}, "texture": {}, "material": {}}
         self.references = parse_references(args.references)
+        self.add_cursor = args.add_cursor
 
     def build_world_xml(self, robots: Dict[str, Robot], objects: Dict[str, Object]):
         self.create_world_xml()
@@ -582,12 +583,13 @@ class MujocoCompiler:
             add_key_frame_element(root, self.keyframe_dict)
             tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
-        # self.add_visual_and_cursor_element(root)
-        # indent(tree.getroot(), space="\t", level=0)
-        # tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
+        if self.add_cursor:
+            self.add_visual_and_cursor_element(root)
+            indent(tree.getroot(), space="\t", level=0)
+            tree.write(self.save_xml_path, encoding="utf-8", xml_declaration=True)
 
         if self.references is not None:
-            apply_references(self.save_xml_path, self.references, False)
+            apply_references(self.save_xml_path, self.references, self.add_cursor)
 
     def create_world_xml(self):
         if not os.path.exists(self.save_dir_path):
@@ -876,6 +878,7 @@ def main():
     parser.add_argument("--objects", help="JSON string with objects' data", required=False)
     parser.add_argument("--references", help="JSON string with references' data", required=False)
     parser.add_argument("--should_add_key_frame", help="Add key frame to the model", action="store_true")
+    parser.add_argument("--add_cursor", help="Add cursor", action="store_true")
     if os.path.basename(__file__) == "mujoco_compile":
         save_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "..", "saved"

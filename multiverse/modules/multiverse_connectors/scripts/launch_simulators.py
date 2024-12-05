@@ -11,6 +11,21 @@ from utils import find_files, run_subprocess
 
 import xml.etree.ElementTree as ET
 
+def indent(elem, space="    ", level=0):
+    i = "\n" + level * space
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + space
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+        for elem in elem:
+            indent(elem, space, level + 1)
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+            
 def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
     worlds_path = find_files(resources_paths, mujoco_data["world"]["path"])
     mujoco_args = [f"--world={worlds_path}"]
@@ -29,6 +44,8 @@ def parse_mujoco(resources_paths: List[str], mujoco_data: Dict[str, Any]):
     should_add_key_frame = mujoco_data.get("should_add_key_frame", True)
     if should_add_key_frame:
         mujoco_args.append(f"--should_add_key_frame")
+    if not mujoco_data.get("multiverse_as_plugin", False):
+        mujoco_args.append(f"--add_cursor")
 
     return mujoco_args
 
@@ -152,7 +169,8 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
             config_receive_element.set("key", "receive")
             config_receive_element.set("value", str(receive_objects))
             
-            tree.write(scene_xml_path)
+            indent(tree.getroot(), space="\t", level=0)
+            tree.write(scene_xml_path, encoding="utf-8", xml_declaration=True)
 
             cmd = ["simulate"] + [f"{scene_xml_path}"]
         else:

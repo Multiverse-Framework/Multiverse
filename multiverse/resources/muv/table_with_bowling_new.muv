@@ -17,7 +17,7 @@ simulations:
     multiverse_as_plugin: true
     world:
       name: world
-      path: table_with_bowling/table_with_bowling_no_cursor.xml
+      path: table_with_bowling/table_with_bowling.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001
@@ -27,7 +27,7 @@ simulations:
     multiverse_as_plugin: true
     world:
       name: world
-      path: table_with_bowling/bowling_no_cursor.xml
+      path: table_with_bowling/bowling.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001
@@ -37,7 +37,7 @@ simulations:
     multiverse_as_plugin: true
     world:
       name: world
-      path: table_with_bowling/table_no_cursor.xml
+      path: table_with_bowling/table.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001
@@ -47,7 +47,7 @@ simulations:
     multiverse_as_plugin: true
     world:
       name: world
-      path: table_with_bowling/cube_no_cursor.xml
+      path: table_with_bowling/cube.xml
     config:
       max_time_step: 0.01
       min_time_step: 0.001
@@ -65,7 +65,7 @@ multiverse_clients:
     receive:
       bowling: ["relative_velocity", "position", "quaternion"]
       table: ["relative_velocity", "position", "quaternion"]
-      cube: ["position", "quaternion"]
+      cube: ["relative_velocity", "position", "quaternion"]
 
   bowling_simulation:
     port: 7502
@@ -84,4 +84,4 @@ multiverse_clients:
   cube_simulation:
     port: 7504
     send:
-      cube: ["position", "quaternion"]
+      cube: ["relative_velocity", "position", "quaternion"]
