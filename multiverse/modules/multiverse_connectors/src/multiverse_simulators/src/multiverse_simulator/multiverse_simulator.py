@@ -94,6 +94,7 @@ class MultiverseSimulator:
         self._state = MultiverseSimulatorState.STOPPED
         self._stop_reason = None
         self._viewer = MultiverseViewer()
+        self._current_view_time = self.current_real_time
         atexit.register(self.stop)
 
     def start(self,
@@ -206,7 +207,9 @@ class MultiverseSimulator:
         self._viewer = MultiverseViewer()
 
     def run_callback(self):
-        self.viewer.sync()
+        if self.current_real_time - self._current_view_time > 1.0 / 30.0:
+            self._current_view_time = self.current_real_time
+            self.viewer.sync()
 
     def step_callback(self):
         self._current_simulation_time += self.step_size

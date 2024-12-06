@@ -27,7 +27,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
     file_path = os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml")
     Simulator = MultiverseMujocoConnector
     headless = False
-    step_size = 0.02
+    step_size = 1E-2
 
     def test_running_in_10s(self):
         simulator = self.test_initialize_multiverse_simulator()
