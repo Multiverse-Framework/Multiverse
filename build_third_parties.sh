@@ -59,6 +59,14 @@ while [ -n "$1" ]; do
     esac
 done
 
+UBUNTU_VERSION=$(lsb_release -rs)
+
+if [ $UBUNTU_VERSION = "20.04" ]; then
+    PYTHON_EXECUTABLE=python3.10
+elif [ $UBUNTU_VERSION = "24.04" ]; then
+    PYTHON_EXECUTABLE=python3.12
+fi
+
 if [ $BUILD_USD = true ]; then
     echo "Building USD..."
     
@@ -80,9 +88,9 @@ if [ $BUILD_USD = true ]; then
     for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
         if [ -f $virtualenvwrapper ]; then
             . $virtualenvwrapper
-            mkvirtualenv --system-site-packages multiverse
-            pip install pyside6 pyopengl
-            python3 $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
+            mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
+            $PYTHON_EXECUTABLE -m pip install pyside6 pyopengl
+            $PYTHON_EXECUTABLE $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
             ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
             ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
             ln -sf $USD_BUILD_DIR/bin/usdcat $BIN_DIR

@@ -42,7 +42,7 @@ else
         echo "\n$LINE_TO_ADD" >> $USD_ONTOLOGY_CMAKE_PATH
     fi
     
-    python3 $USD_SRC_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
+    $PYTHON_EXECUTABLE $USD_SRC_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
 fi
 
-(cd ease_lexical_resources/src && pip install -e .)
+(cd ease_lexical_resources/src && $PYTHON_EXECUTABLE -m pip install -e .)

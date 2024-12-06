@@ -121,7 +121,7 @@ fi
 for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
         . $virtualenvwrapper
-        mkvirtualenv --system-site-packages multiverse
+        mkvirtualenv --system-site-packages multiverse -p python3.10
         pip install -U pip build # Ensure pip and build are up-to-date
         break
     fi
