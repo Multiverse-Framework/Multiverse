@@ -23,6 +23,8 @@ set(PYTHON_EXECUTABLE "python3.8" CACHE STRING "Python executable to use")
 option(BUILD_SRC "Build the src" ON)
 option(BUILD_MODULES "Build the modules" ON)
 
+option(BUILD_TESTS "Build the tests" ON)
+
 if (WIN32)
     set(PYTHON_EXECUTABLE "python")
 endif()

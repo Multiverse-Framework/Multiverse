@@ -43,7 +43,6 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
     def step_callback(self):
         mujoco.mj_step(self.mj_model, self.mj_data)
-        self.log_info(f"Step {self.current_number_of_steps}")
 
     def reset_callback(self):
         mujoco.mj_resetData(self.mj_model, self.mj_data)

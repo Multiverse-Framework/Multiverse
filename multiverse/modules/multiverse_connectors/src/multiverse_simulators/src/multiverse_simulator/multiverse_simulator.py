@@ -55,9 +55,14 @@ class MultiverseViewer:
         """Check if the viewer is running"""
         return self._is_running
 
+    def sync(self):
+        """Update the viewer"""
+        pass
+
     def close(self):
         """Close the viewer"""
         self._is_running = False
+
 
 class MultiverseSimulator:
     """Base class for Multiverse Simulator"""
@@ -124,9 +129,18 @@ class MultiverseSimulator:
                     self._state = MultiverseSimulatorState.STOPPED
                     break
                 if self.state == MultiverseSimulatorState.RUNNING:
-                    self.step()
+                    real_time_pass = self.current_real_time - self.start_real_time
+                    simulation_time_pass = self.current_simulation_time * self.real_time_factor
+                    delta_time = simulation_time_pass - real_time_pass
+                    if delta_time <= self.step_size:
+                        self.step()
+                    if delta_time > self.step_size * 10:
+                        self.log_warning(f"Real time is {delta_time} seconds ({delta_time / self.step_size} step_size) behind simulation time")
+                    elif delta_time < -self.step_size * 10:
+                        self.log_warning(f"Real time is {-delta_time} seconds ({-delta_time / self.step_size} step_size) ahead of simulation time")
                 elif self.state == MultiverseSimulatorState.PAUSED:
                     self.pause_callback()
+                self.run_callback()
         self.stop_callback()
 
     def step(self):
@@ -191,6 +205,9 @@ class MultiverseSimulator:
         self._current_simulation_time = 0.0
         self._viewer = MultiverseViewer()
 
+    def run_callback(self):
+        self.viewer.sync()
+
     def step_callback(self):
         self._current_simulation_time += self.step_size
 
@@ -198,7 +215,7 @@ class MultiverseSimulator:
         self.viewer.close()
 
     def pause_callback(self):
-        pass
+        self._start_real_time += self.current_real_time - self.current_simulation_time - self.start_real_time
 
     def unpause_callback(self):
         pass

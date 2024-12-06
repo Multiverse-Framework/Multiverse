@@ -13,6 +13,16 @@ add_custom_target(multiverse_simulator_install ALL
     VERBATIM
 )
 
+include(FetchContent)
+if (BUILD_TESTS)
+    FetchContent_Populate(
+      mujoco_menagerie
+      GIT_REPOSITORY https://github.com/google-deepmind/mujoco_menagerie.git
+      GIT_TAG        286cfe3563c963084df8dea781f39735d59c532e # Dec 6, 2024
+      SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/resources/mjcf/mujoco_menagerie
+    )
+endif()
+
 # if (UNIX)
 #     if(MULTIVERSE_CLIENT_LIBRARY_TYPE STREQUAL "STATIC" AND STDLIB STREQUAL "libstdc++")
 #         add_subdirectory(src/mujoco)

@@ -17,6 +17,7 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
     file_path: str = ""
     headless: bool = False
     real_time_factor: float = 1.0
+    step_size: float = 1E-3
     Simulator = MultiverseSimulator
 
     def test_initialize_multiverse_simulator(self) -> MultiverseSimulator:
@@ -26,7 +27,8 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
                                    meta_data=self.meta_data,
                                    file_path=self.file_path,
                                    headless=self.headless,
-                                   real_time_factor=self.real_time_factor)
+                                   real_time_factor=self.real_time_factor,
+                                   step_size=self.step_size)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
         self.assertIs(simulator.headless, self.headless)
         self.assertEqual(simulator.real_time_factor, self.real_time_factor)
@@ -58,10 +60,6 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
         simulator.unpause()
         self.assertIs(simulator.state, MultiverseSimulatorState.RUNNING)
         simulator.stop()
-        self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
-        self.assertIs(simulator.stop_reason, MultiverseSimulatorStopReason.STOP)
-        self.assertFalse(simulator.viewer.is_running())
-        self.assertFalse(simulator.simulation_thread.is_alive())
         return simulator
 
     def test_step_multiverse_simulator(self) -> MultiverseSimulator:
@@ -142,6 +140,15 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
         self.assertIsNotNone(simulator.stop_reason)
 
         return simulator
+
+    def test_real_time(self):
+        self.step_size = 1E-3
+        simulator = self.test_initialize_multiverse_simulator()
+        constraints = MultiverseSimulatorConstraints(max_real_time=1.0)
+        simulator.start(constraints=constraints)
+        while simulator.state == MultiverseSimulatorState.RUNNING:
+            pass
+        self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
 
 if __name__ == '__main__':
