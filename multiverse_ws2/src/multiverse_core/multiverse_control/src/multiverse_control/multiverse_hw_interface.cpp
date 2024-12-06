@@ -36,10 +36,9 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
     meta_data["time_unit"] = info_.hardware_parameters["time_unit"];
     meta_data["handedness"] = info_.hardware_parameters["handedness"];
 
-    server_socket_addr = info_.hardware_parameters["server_host"] + ":" + info_.hardware_parameters["server_port"];
-
-    host = info_.hardware_parameters["server_host"];
-    port = info_.hardware_parameters["client_port"];
+    host = info_.hardware_parameters["host"];
+    server_port = info_.hardware_parameters["server_port"];
+    client_port = info_.hardware_parameters["client_port"];
 
     urdf::Model urdf_model;
     const std::string robot_description = info_.original_xml;

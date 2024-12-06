@@ -43,20 +43,17 @@ int main(int argc, char **argv)
     std::map<std::string, std::string> joint_actuators;
     std::map<std::string, double> init_joint_states;
 
-    const Json::Value &multiverse_server_params_json = multiverse_params_json["multiverse_server"];
-    multiverse_params["server_host"] = multiverse_server_params_json["host"].asString();
-    multiverse_params["server_port"] = multiverse_server_params_json["port"].asString();
+    multiverse_params["host"] = multiverse_params_json["host"].asString();
+    multiverse_params["server_port"] = multiverse_params_json["server_port"].asString();
+    multiverse_params["client_port"] = multiverse_params_json["client_port"].asString();
 
-    const Json::Value &multiverse_client_params_json = multiverse_params_json["multiverse_client"];
-    multiverse_params["client_port"] = multiverse_client_params_json["port"].asString();
-
-    const Json::Value &multiverse_client_meta_data_json = multiverse_client_params_json["meta_data"];
-    multiverse_params["world_name"] = multiverse_client_meta_data_json["world_name"].asString();
-    multiverse_params["length_unit"] = multiverse_client_meta_data_json["length_unit"].asString();
-    multiverse_params["angle_unit"] = multiverse_client_meta_data_json["angle_unit"].asString();
-    multiverse_params["mass_unit"] = multiverse_client_meta_data_json["mass_unit"].asString();
-    multiverse_params["time_unit"] = multiverse_client_meta_data_json["time_unit"].asString();
-    multiverse_params["handedness"] = multiverse_client_meta_data_json["handedness"].asString();
+    const Json::Value &multiverse_meta_data_json = multiverse_params_json["meta_data"];
+    multiverse_params["world_name"] = multiverse_meta_data_json["world_name"].asString();
+    multiverse_params["length_unit"] = multiverse_meta_data_json["length_unit"].asString();
+    multiverse_params["angle_unit"] = multiverse_meta_data_json["angle_unit"].asString();
+    multiverse_params["mass_unit"] = multiverse_meta_data_json["mass_unit"].asString();
+    multiverse_params["time_unit"] = multiverse_meta_data_json["time_unit"].asString();
+    multiverse_params["handedness"] = multiverse_meta_data_json["handedness"].asString();
 
     const Json::Value &controller_manager_params_json = multiverse_params_json["controller_manager"];
     multiverse_params["robot"] = controller_manager_params_json["robot"].asString();

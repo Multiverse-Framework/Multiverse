@@ -151,8 +151,8 @@ if [ $BUILD_MUJOCO = true ]; then
     
     if [ $FROM_SRC = true ]; then
         # Build MuJoCo
-
-        # git submodule update --init $MUJOCO_EXT_DIR
+        
+        git submodule update --init $MUJOCO_EXT_DIR
         MUJOCO_PLUGIN_DIR=$MUJOCO_BUILD_DIR/bin/mujoco_plugin
         mkdir -p $MUJOCO_PLUGIN_DIR
         (cd $MUJOCO_BUILD_DIR && cmake $MUJOCO_EXT_DIR -DCMAKE_INSTALL_PREFIX=$MUJOCO_BUILD_DIR -Wno-deprecated -Wno-dev && cmake --build . && cmake --install . && cp $MUJOCO_BUILD_DIR/lib/libmultiverse_connector.so $MUJOCO_PLUGIN_DIR)

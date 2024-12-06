@@ -8,7 +8,7 @@ import shutil
 import xml.etree.ElementTree as ET
 from typing import List, Dict, Set, Any, Union, Optional, Tuple
 
-import mujoco
+import mujoco_connector
 
 
 @dataclasses.dataclass
@@ -36,9 +36,9 @@ class Object(Entity):
 
 def get_body_collision_dict(xml_path: str) -> Dict[str, Set[str]]:
     body_collision_dict = {}
-    m = mujoco.MjModel.from_xml_path(filename=xml_path)
-    d = mujoco.MjData(m)
-    mujoco.mj_step(m, d)
+    m = mujoco_connector.MjModel.from_xml_path(filename=xml_path)
+    d = mujoco_connector.MjData(m)
+    mujoco_connector.mj_step(m, d)
     for geom1_id, geom2_id in zip(d.contact.geom1, d.contact.geom2):
         body1_id = m.geom(geom1_id).bodyid[0]
         body1_name = m.body(body1_id).name
@@ -224,13 +224,13 @@ def add_key_frame_element(root: ET.Element, keyframe_dict: Dict[str, ET.Element]
     return None
 
 
-def get_qpos_and_ctrl(m: mujoco.MjModel, joint_state: Dict[str, float]) -> (List[float], List[float]):
+def get_qpos_and_ctrl(m: mujoco_connector.MjModel, joint_state: Dict[str, float]) -> (List[float], List[float]):
     qpos_list = []
     for qpos_id in range(m.nq):
         found_list = [qpos_id == m.jnt_qposadr[jnt_id] for jnt_id in range(m.njnt)]
         if any(found_list):
             jnt_id = found_list.index(True)
-            jnt_name = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, jnt_id)
+            jnt_name = mujoco_connector.mj_id2name(m, mujoco_connector.mjtObj.mjOBJ_JOINT, jnt_id)
             if joint_state is not None and jnt_name in joint_state and any(
                     [other_jnt_name in jnt_name for other_jnt_name in joint_state]
             ):
@@ -245,7 +245,7 @@ def get_qpos_and_ctrl(m: mujoco.MjModel, joint_state: Dict[str, float]) -> (List
         gain_prm = m.actuator_gainprm[ctrl_id]
         biasprm = m.actuator_biasprm[ctrl_id]
         jnt_id = m.actuator_trnid[ctrl_id][0]
-        jnt_name = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_JOINT, jnt_id)
+        jnt_name = mujoco_connector.mj_id2name(m, mujoco_connector.mjtObj.mjOBJ_JOINT, jnt_id)
         if joint_state is not None and jnt_name in joint_state and gain_prm[0] != 0 and gain_prm[0] == -biasprm[1]:
             ctrl_list.append(joint_state[jnt_name])
         else:
@@ -298,8 +298,8 @@ def indent(elem, space="    ", level=0):
 def add_mocap(save_xml_path: str,
               tree: ET.ElementTree,
               mocap_dict: Dict[str, Tuple[str, List[float], List[float]]],
-              m: mujoco.MjModel,
-              d: mujoco.MjData) -> None:
+              m: mujoco_connector.MjModel,
+              d: mujoco_connector.MjData) -> None:
     worldbody_element = ET.Element("worldbody")
     root = tree.getroot()
     root.append(worldbody_element)
@@ -359,24 +359,24 @@ def add_mocap(save_xml_path: str,
                     "conaffinity": "0",
                 },
             )
-            if geom_type == mujoco.mjtGeom.mjGEOM_MESH:
+            if geom_type == mujoco_connector.mjtGeom.mjGEOM_MESH:
                 geom_element.set("type", "mesh")
                 mesh_id = geom.dataid[0]
                 mesh = m.mesh(mesh_id)
                 mesh_name = mesh.name
                 geom_element.set("mesh", mesh_name)
             else:
-                if geom_type == mujoco.mjtGeom.mjGEOM_PLANE:
+                if geom_type == mujoco_connector.mjtGeom.mjGEOM_PLANE:
                     geom_element.set("type", "plane")
-                elif geom_type == mujoco.mjtGeom.mjGEOM_BOX:
+                elif geom_type == mujoco_connector.mjtGeom.mjGEOM_BOX:
                     geom_element.set("type", "box")
-                elif geom_type == mujoco.mjtGeom.mjGEOM_CYLINDER:
+                elif geom_type == mujoco_connector.mjtGeom.mjGEOM_CYLINDER:
                     geom_element.set("type", "cylinder")
-                elif geom_type == mujoco.mjtGeom.mjGEOM_CAPSULE:
+                elif geom_type == mujoco_connector.mjtGeom.mjGEOM_CAPSULE:
                     geom_element.set("type", "capsule")
-                elif geom_type == mujoco.mjtGeom.mjGEOM_SPHERE:
+                elif geom_type == mujoco_connector.mjtGeom.mjGEOM_SPHERE:
                     geom_element.set("type", "sphere")
-                elif geom_type == mujoco.mjtGeom.mjGEOM_ELLIPSOID:
+                elif geom_type == mujoco_connector.mjtGeom.mjGEOM_ELLIPSOID:
                     geom_element.set("type", "ellipsoid")
                 else:
                     raise NotImplementedError(f"Geom type {geom_type} not implemented")
@@ -389,9 +389,9 @@ def add_mocap(save_xml_path: str,
 
 
 def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) -> None:
-    m = mujoco.MjModel.from_xml_path(save_xml_path)
-    d = mujoco.MjData(m)
-    mujoco.mj_step(m, d)
+    m = mujoco_connector.MjModel.from_xml_path(save_xml_path)
+    d = mujoco_connector.MjData(m)
+    mujoco_connector.mj_step(m, d)
 
     tree = ET.parse(save_xml_path)
     root = tree.getroot()
@@ -403,8 +403,8 @@ def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) 
         body2_name = reference_props.get("body2")
         if body1_name is None or body2_name is None:
             raise ValueError(f"body1 and body2 are required for reference {reference_name}")
-        body1_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, body1_name)
-        body2_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, body2_name)
+        body1_id = mujoco_connector.mj_name2id(m, mujoco_connector.mjtObj.mjOBJ_BODY, body1_name)
+        body2_id = mujoco_connector.mj_name2id(m, mujoco_connector.mjtObj.mjOBJ_BODY, body2_name)
         if body1_id == -1 and body2_id == -1:
             raise ValueError(f"body1 or body2 must be valid body names in the model")
 
@@ -431,8 +431,8 @@ def apply_references(save_xml_path: str, references: Dict[str, Dict[str, any]]) 
 
     add_mocap(save_xml_path, tree, mocap_dict, m, d)
 
-    mujoco.mj_resetDataKeyframe(m, d, 0)
-    mujoco.mj_step(m, d)
+    mujoco_connector.mj_resetDataKeyframe(m, d, 0)
+    mujoco_connector.mj_step(m, d)
     mpos_list_str = ""
     mquat_list_str = ""
     for mocap_name, (body_id, _, _) in mocap_dict.items():
@@ -622,8 +622,8 @@ class MujocoCompiler:
             asset_element.append(material_element)
 
     def add_visual_and_cursor_element(self, root: ET.Element) -> None:
-        m = mujoco.MjModel.from_xml_path(self.save_xml_path)
-        if mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, "cursor") != -1:
+        m = mujoco_connector.MjModel.from_xml_path(self.save_xml_path)
+        if mujoco_connector.mj_name2id(m, mujoco_connector.mjtObj.mjOBJ_BODY, "cursor") != -1:
             return
         visual_element = ET.Element("visual")
         root.append(visual_element)
@@ -636,7 +636,7 @@ class MujocoCompiler:
                                               root: ET.Element,
                                               entity_path: str,
                                               joint_state: Dict[str, float] = None) -> None:
-        m = mujoco.MjModel.from_xml_path(entity_path)
+        m = mujoco_connector.MjModel.from_xml_path(entity_path)
         
         qpos_list, ctrl_list = get_qpos_and_ctrl(m, joint_state)
 
@@ -671,9 +671,9 @@ class MujocoCompiler:
             self.apply_key_frame(entity_xml_path, apply)
 
     def apply_key_frame(self, entity_xml_path: str, apply: Dict[str, Dict[str, Any]]) -> None:
-        m = mujoco.MjModel.from_xml_path(entity_xml_path)
+        m = mujoco_connector.MjModel.from_xml_path(entity_xml_path)
         for body_name, body_attributes in apply.get("body", {}).items():
-            body_id = mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, body_name)
+            body_id = mujoco_connector.mj_name2id(m, mujoco_connector.mjtObj.mjOBJ_BODY, body_name)
             dof_adr = m.body_dofadr[body_id]
             dof_num = m.body_dofnum[body_id]
             if body_id == 1 and dof_num == 3 or dof_adr == -1 or dof_num not in [3, 6]:
@@ -780,8 +780,8 @@ class MujocoCompiler:
             attach_entity_tree = ET.parse(attach_body_path)
             attach_entity_root = attach_entity_tree.getroot()
 
-            m = mujoco.MjModel.from_xml_path(attach_body.path)
-            first_body_name = mujoco.mj_id2name(m, mujoco.mjtObj.mjOBJ_BODY, 1)
+            m = mujoco_connector.MjModel.from_xml_path(attach_body.path)
+            first_body_name = mujoco_connector.mj_id2name(m, mujoco_connector.mjtObj.mjOBJ_BODY, 1)
             attach_body_found = [
                 element
                 for worldbody in attach_entity_root.findall(".//worldbody")
