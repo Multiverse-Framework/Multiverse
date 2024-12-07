@@ -2,6 +2,7 @@
 
 import unittest
 from typing import Optional
+import time
 
 from multiverse_client_py import MultiverseMetaData
 
@@ -142,12 +143,12 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
         return simulator
 
     def test_real_time(self):
-        self.step_size = 1E-3
+        self.step_size = 1E-4
         simulator = self.test_initialize_multiverse_simulator()
         constraints = MultiverseSimulatorConstraints(max_real_time=1.0)
         simulator.start(constraints=constraints)
         while simulator.state == MultiverseSimulatorState.RUNNING:
-            pass
+            time.sleep(1)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
 

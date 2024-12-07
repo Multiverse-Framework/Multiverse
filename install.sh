@@ -142,14 +142,14 @@ for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrap
         . $virtualenvwrapper
         mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
 
-        # Instlal build
-        $PYTHON_EXECUTABLE -m pip install -U pip build
+        # Install and upgrade pip build setuptools packaging
+        $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging
 
         # Install additional packages for USD and multiverse_knowledge
         $PYTHON_EXECUTABLE -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
 
         # Install additional packages for multiverse_parser
-        $PYTHON_EXECUTABLE -m pip install packaging>=22.0 urdf_parser_py
+        $PYTHON_EXECUTABLE -m pip install urdf_parser_py
 
         # Install MuJoCo
         $PYTHON_EXECUTABLE -m pip install mujoco==3.2.6

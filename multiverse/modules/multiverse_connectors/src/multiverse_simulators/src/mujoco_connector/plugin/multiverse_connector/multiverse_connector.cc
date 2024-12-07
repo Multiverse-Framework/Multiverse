@@ -283,7 +283,7 @@ void calculate_odom_velocities(std::map<int, mjtNum *> &odom_velocities, const m
 
 namespace mujoco::plugin::multiverse_connector
 {
-  constexpr char host_str[] = "server_host";
+  constexpr char host_str[] = "host";
   constexpr char server_port_str[] = "server_port";
   constexpr char client_port_str[] = "client_port";
   constexpr char world_name_str[] = "world_name";

@@ -31,6 +31,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         super().__init__(host, server_port, client_port, meta_data, **kwargs)
 
     def start_callback(self):
+        mujoco.mj_loadAllPluginLibraries(self.mujoco_plugins_dir)
         assert os.path.exists(self.file_path)
         self.mj_model = mujoco.MjModel.from_xml_path(filename=self.file_path)
         assert self.mj_model is not None
@@ -58,3 +59,17 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     @property
     def viewer(self):
         return self._viewer
+
+    @property
+    def mujoco_plugins_dir(self):
+        possible_mujoco_plugins_dir_1 = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..",
+                                                     "build", "mujoco", "bin", "mujoco_plugin")
+        possible_mujoco_plugins_dir_2 = os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "..",
+                                                     "..", "..", "..", "build", "mujoco", "bin", "mujoco_plugin")
+        if os.path.exists(possible_mujoco_plugins_dir_1):
+            return possible_mujoco_plugins_dir_1
+        elif os.path.exists(possible_mujoco_plugins_dir_2):
+            return possible_mujoco_plugins_dir_2
+        else:
+            raise FileNotFoundError(f"Could not find MuJoCo plugins directory at {possible_mujoco_plugins_dir_1} "
+                                    f"or {possible_mujoco_plugins_dir_2}")

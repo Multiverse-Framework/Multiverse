@@ -87,7 +87,7 @@ class MultiverseSimulator:
         :param kwargs: step_size, headless, real_time_factor
         """
         self._headless = kwargs.get("headless", False)
-        self._real_time_factor = kwargs.get("real_time_factor", -1.0)
+        self._real_time_factor = kwargs.get("real_time_factor", 1.0)
         self._step_size = kwargs.get("step_size", 1E-3)
         self._current_number_of_steps = 0
         self._start_real_time = self.current_real_time
@@ -130,15 +130,18 @@ class MultiverseSimulator:
                     self._state = MultiverseSimulatorState.STOPPED
                     break
                 if self.state == MultiverseSimulatorState.RUNNING:
-                    real_time_pass = self.current_real_time - self.start_real_time
-                    simulation_time_pass = self.current_simulation_time * self.real_time_factor
-                    delta_time = simulation_time_pass - real_time_pass
-                    if delta_time <= self.step_size:
+                    if self.real_time_factor > 0:
+                        real_time_pass = self.current_real_time - self.start_real_time
+                        simulation_time_pass = self.current_simulation_time * self.real_time_factor
+                        delta_time = simulation_time_pass - real_time_pass
+                        if delta_time <= self.step_size:
+                            self.step()
+                        if delta_time > self.step_size * 10:
+                            self.log_warning(f"Real time is {delta_time} seconds ({delta_time / self.step_size} step_size) behind simulation time")
+                        elif delta_time < -self.step_size * 10:
+                            self.log_warning(f"Real time is {-delta_time} seconds ({-delta_time / self.step_size} step_size) ahead of simulation time")
+                    else:
                         self.step()
-                    if delta_time > self.step_size * 10:
-                        self.log_warning(f"Real time is {delta_time} seconds ({delta_time / self.step_size} step_size) behind simulation time")
-                    elif delta_time < -self.step_size * 10:
-                        self.log_warning(f"Real time is {-delta_time} seconds ({-delta_time / self.step_size} step_size) ahead of simulation time")
                 elif self.state == MultiverseSimulatorState.PAUSED:
                     self.pause_callback()
                 self.run_callback()
@@ -207,7 +210,7 @@ class MultiverseSimulator:
         self._viewer = MultiverseViewer()
 
     def run_callback(self):
-        if self.current_real_time - self._current_view_time > 1.0 / 30.0:
+        if self.current_real_time - self._current_view_time > 1.0 / 60.0:
             self._current_view_time = self.current_real_time
             self.viewer.sync()
 
