@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Update package lists
-# sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get update && sudo apt-get upgrade -y
 
 # Install presiqisite for ubuntu
 sudo apt-get install -y software-properties-common curl python-is-python3
@@ -129,27 +129,34 @@ sudo apt-get install -y pybind11-dev
 # Install jupyter-notebook
 sudo apt-get install -y jupyter-notebook
 
+PYTHON_EXECUTABLE=python3
+if [ $UBUNTU_VERSION = "20.04" ]; then
+    PYTHON_EXECUTABLE=python3.10
+elif [ $UBUNTU_VERSION = "24.04" ]; then
+    PYTHON_EXECUTABLE=python3.12
+fi
+
 # Setup virtual environment
 for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
         . $virtualenvwrapper
-        mkvirtualenv --system-site-packages multiverse -p python3.10
+        mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
 
         # Instlal build
-        pip install -U pip build
+        $PYTHON_EXECUTABLE -m pip install -U pip build
 
         # Install additional packages for USD and multiverse_knowledge
-        pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
+        $PYTHON_EXECUTABLE -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
 
         # Install additional packages for multiverse_parser
-        pip install urdf_parser_py
+        $PYTHON_EXECUTABLE -m pip install packaging>=22.0 urdf_parser_py
 
         # Install MuJoCo
-        pip install mujoco==3.2.6
+        $PYTHON_EXECUTABLE -m pip install mujoco==3.2.6
 
         # Install additional packages for Jupyter Notebook
-        pip install panel jupyter-server bash_kernel
-        python3 -m bash_kernel.install
+        $PYTHON_EXECUTABLE -m pip install panel jupyter-server bash_kernel
+        $PYTHON_EXECUTABLE -m bash_kernel.install
         break
     fi
 done
