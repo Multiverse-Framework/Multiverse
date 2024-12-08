@@ -15,6 +15,7 @@ def main():
         parser.add_argument("--file_path", type=str, required=True, help="Path to the Mujoco XML file")
         parser.add_argument("--headless", required=False, action='store_true', help="Run in headless mode")
         parser.add_argument("--real_time_factor", type=float, required=False, default=1.0, help="Real time factor")
+        parser.add_argument("--step_size", type=float, required=False, default=0.01, help="Step size")
         parser.add_argument("--host", type=str, required=False, default="tcp://127.0.0.1", help="Multiverse Host")
         parser.add_argument("--server_port", type=str, required=False, default="7000", help="Multiverse Server Port")
         parser.add_argument("--client_port", type=str, required=False, default="8000", help="Multiverse Client Port")
@@ -32,7 +33,8 @@ def main():
                                               client_port=args.client_port,
                                               meta_data=MultiverseMetaData(),
                                               headless=args.headless,
-                                              real_time_factor=args.real_time_factor)
+                                              real_time_factor=args.real_time_factor,
+                                              step_size=args.step_size)
         if args.max_real_time is not None or args.max_number_of_steps is not None or args.max_simulation_time is not None:
             constraints = MultiverseSimulatorConstraints(max_real_time=args.max_real_time,
                                                          max_number_of_steps=args.max_number_of_steps,
