@@ -14,6 +14,7 @@ else:
 
 from ..multiverse_node import MultiverseNode, MultiverseMetaData
 
+
 class MultiversePublisher(MultiverseNode):
     _use_meta_data: bool = False
     _msg_types: List[Any] = None

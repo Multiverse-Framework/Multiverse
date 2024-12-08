@@ -6,7 +6,7 @@ import json
 import yaml
 from typing import Dict, List
 
-from multiverse_ros_socket.multiverse_node.multiverse_node import MultiverseNode, SocketAddress
+from multiverse_ros_socket.multiverse_node.multiverse_node import MultiverseNode
 from multiverse_ros_socket.multiverse_node.multiverse_node import Interface, INTERFACE
 from multiverse_ros_socket.multiverse_node.multiverse_node_properties import (MultiverseNodeProperties,
                                                                               MultiverseSubscriber, MultiversePublisher,
@@ -33,10 +33,12 @@ class MultiverseRosSocket:
 
     def __init__(
             self,
-            server_addr: SocketAddress,
+            host: str,
+            server_port: str,
             ros_node: RosNode,
     ) -> None:
-        MultiverseNode._server_addr = server_addr
+        MultiverseNode._host = host
+        MultiverseNode._server_port = server_port
         self.ros_node = ros_node
 
     def start(self):
@@ -116,12 +118,20 @@ def parse_ros_node(ros_node) -> dict:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Multiverse parser")
+    parser = argparse.ArgumentParser(description="Multiverse Ros Socket")
     parser.add_argument(
-        "--multiverse_server",
-        type=yaml.safe_load,
+        "--host",
+        type=str,
         required=False,
-        help="Parameters for multiverse server",
+        default="tcp://127.0.0.1",
+        help="Multiverse host",
+    )
+    parser.add_argument(
+        "--server_port",
+        type=str,
+        required=False,
+        default="7000",
+        help="Multiverse server port",
     )
     parser.add_argument(
         "--services",
@@ -143,23 +153,17 @@ def main():
     )
     args = parser.parse_args()
 
-    multiverse_server = (
-        json.loads(args.multiverse_server.replace("'", '"'))
-        if isinstance(args.multiverse_server, str)
-        else {"host": "tcp://127.0.0.1", "port": 7000}
-    )
     publishers = parse_ros_node(args.publishers)
     subscribers = parse_ros_node(args.subscribers)
     services = parse_ros_node(args.services)
 
-    SocketAddress.host = multiverse_server["host"]
-    socket_addr = SocketAddress(port=str(multiverse_server["port"]))
     ros_node = RosNode(
         publishers=publishers, subscribers=subscribers, services=services
     )
 
     multiverse_ros_socket = MultiverseRosSocket(
-        server_addr=socket_addr,
+        host=args.host,
+        server_port=args.server_port,
         ros_node=ros_node,
     )
     multiverse_ros_socket.start()

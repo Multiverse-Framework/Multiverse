@@ -4,7 +4,7 @@ from typing import Dict, Any
 
 from std_msgs.msg import Float64
 
-from .multiverse_subscriber import MultiverseSubscriber, SocketAddress, MultiverseMetaData
+from .multiverse_subscriber import MultiverseSubscriber, MultiverseMetaData
 
 
 class DataSubscriber(MultiverseSubscriber):
@@ -31,8 +31,10 @@ class DataSubscriber(MultiverseSubscriber):
             topic_name=topic_name,
             multiverse_meta_data=multiverse_meta_data
         )
+
         def bind_request_meta_data() -> None:
             self.request_meta_data["send"] = kwargs["send"]
+
         self.bind_request_meta_data_callback = bind_request_meta_data
 
     def _init_send_data(self) -> None:

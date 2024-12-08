@@ -48,7 +48,7 @@ class MultiverseClient:
         """
 
         Args:
-            client_addr: The address of the client.
+            port: The client port.
             multiverse_meta_data: The meta data for the Multiverse Client.
         """
         self._client_port = port
@@ -86,7 +86,7 @@ class MultiverseClient:
 
     def run(self) -> None:
         """Run the client. This method will call the _run() method."""
-        message = f"[Client {self._client_addr.port}] Start {self.__class__.__name__}{self._client_addr.port}."
+        message = f"[Client {self._client_port}] Start {self.__class__.__name__}{self._client_port}."
         self.loginfo(message)
         self._run()
 
@@ -120,7 +120,7 @@ class MultiverseClient:
         assert isinstance(response_meta_data, dict)
         if response_meta_data == {}:
             message = (
-                f"[Client {self._client_addr.port}] Receive empty response meta data."
+                f"[Client {self._client_port}] Receive empty response meta data."
             )
             self.logwarn(message)
         return response_meta_data
@@ -255,10 +255,12 @@ class MultiverseClient:
 
     @property
     def world_time(self) -> float:
-        """Get the current world time from the server in the time unit specified in multiverse_client_py.multiverse_client.MultiverseMetaData.time_unit."""
+        """Get the current world time from the server in the time unit specified in
+        multiverse_client_py.multiverse_client.MultiverseMetaData.time_unit."""
         return self._multiverse_socket.get_world_time()
 
     @property
     def sim_time(self) -> float:
-        """Get the current simulation time in the time unit specified in multiverse_client_py.multiverse_client.MultiverseMetaData.time_unit."""
+        """Get the current simulation time in the time unit specified in
+        multiverse_client_py.multiverse_client.MultiverseMetaData.time_unit."""
         return self._multiverse_socket.get_time_now() - self._start_time

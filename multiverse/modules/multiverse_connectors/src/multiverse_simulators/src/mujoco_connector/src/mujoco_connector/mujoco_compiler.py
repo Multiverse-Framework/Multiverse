@@ -25,7 +25,7 @@ def fix_mesh_and_texture_paths(spec: mujoco.MjSpec, default_path: str):
             texture.file = os.path.join(texturedir_abs, texture.file)
 
 
-def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame):
+def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: mujoco.MjsFrame):
     for entity_name, entity in entities.items():
         entity_spec = mujoco.MjSpec.from_file(filename=entity.path)
 
@@ -49,7 +49,43 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame):
         entity_model = entity_spec.compile()
         entity_root_name = entity_model.body(1).name
         child_body = entity_spec.find_body(entity_root_name)
-        worldbody_frame.attach_body(child_body, f"{entity_name}_", "")
+        worldbody_frame.attach_body(child_body, f"{entity_name}_", f"")
+
+
+def fix_prefix_and_suffix_each(entity_element_name: str, entity_prefix: str, entity_suffix: str, entity_name:str) -> str:
+    if entity_element_name[:len(entity_name) + 1] == f"{entity_name}_":
+        entity_element_name = entity_prefix + entity_element_name[len(entity_name) + 1:]
+    entity_element_name = entity_element_name + entity_suffix
+    return entity_element_name
+
+
+def fix_prefix_and_suffix(entities: Dict[str, Robot | Object], world_spec: mujoco.MjSpec):
+    for entity_name, entity in entities.items():
+        for entity_type in ["body", "joint", "geom", "actuator"]:
+            entity_prefix = entity.prefix.get(entity_type, "")
+            entity_suffix = entity.suffix.get(entity_type, "")
+            if entity_prefix != f"{entity_name}_" or entity_suffix != "":
+                if entity_type == "body":
+                    for body in world_spec.bodies:
+                        body.name = fix_prefix_and_suffix_each(body.name, entity_prefix, entity_suffix, entity_name)
+                elif entity_type == "joint":
+                    if len(world_spec.tendons) > 0:  # Can't change joint name if there are tendons
+                        continue
+                    for joint in world_spec.joints:
+                        joint.name = fix_prefix_and_suffix_each(joint.name, entity_prefix, entity_suffix, entity_name)
+                    for equality in world_spec.equalities:
+                        if equality.type == mujoco.mjtEq.mjEQ_JOINT:
+                            equality.name1 = fix_prefix_and_suffix_each(equality.name1, entity_prefix, entity_suffix,
+                                                                        entity_name)
+                            equality.name2 = fix_prefix_and_suffix_each(equality.name2, entity_prefix, entity_suffix,
+                                                                        entity_name)
+                elif entity_type == "geom":
+                    for geom in world_spec.geoms:
+                        geom.name = fix_prefix_and_suffix_each(geom.name, entity_prefix, entity_suffix, entity_name)
+                elif entity_type == "actuator":
+                    for actuator in world_spec.actuators:
+                        actuator.name = fix_prefix_and_suffix_each(actuator.name, entity_prefix, entity_suffix,
+                                                                   entity_name)
 
 
 class MujocoCompiler(MultiverseSimulatorCompiler):
@@ -72,7 +108,9 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
         worldbody_frame = world_spec.worldbody.add_frame()
 
         add_entity(robots, home_key, worldbody_frame)
+        fix_prefix_and_suffix(robots, world_spec)
         add_entity(objects, home_key, worldbody_frame)
+        fix_prefix_and_suffix(objects, world_spec)
 
         world_spec.compile()
         xml_string = world_spec.to_xml()

@@ -23,7 +23,7 @@ class MultiverseNode(MultiverseClient, Node):
         elif INTERFACE == Interface.ROS2:
             multiverse_meta_data.simulation_name = f"ros2_{port}"
             Node.__init__(self, node_name=f"{self.__class__.__name__}{port}")
-        super().__init__(self._host, self._server_port, port, multiverse_meta_data)
+        super().__init__(port, multiverse_meta_data)
 
     def loginfo(self, message: str) -> None:
         if INTERFACE == Interface.ROS1:

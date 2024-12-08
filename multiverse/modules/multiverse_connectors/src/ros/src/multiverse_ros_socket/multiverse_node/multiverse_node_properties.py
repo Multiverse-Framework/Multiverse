@@ -5,14 +5,14 @@ from typing_extensions import Dict
 from .multiverse_publishers.multiverse_publisher import MultiversePublisher
 from .multiverse_services.multiverse_service import MultiverseService
 from .multiverse_subscribers.multiverse_subscriber import MultiverseSubscriber
-from .multiverse_node import MultiverseMetaData, SocketAddress
+from .multiverse_node import MultiverseMetaData
 
 
 class MultiverseNodeProperties:
     ros_node_name: str
     ros_node_prop: Dict
     multiverse_meta_data: MultiverseMetaData = MultiverseMetaData()
-    client_addr: SocketAddress
+    client_port: str
 
     def __init__(self, ros_node_name: str, ros_name_prop: Dict):
         self.ros_node_name = ros_node_name
@@ -27,7 +27,7 @@ class MultiverseNodeProperties:
                 time_unit=meta_data.get("time_unit", "s"),
                 handedness=meta_data.get("handedness", "rhs"),
             )
-        self.client_addr = SocketAddress(port=str(self.ros_node_prop.pop("port")),)
+        self.port = str(self.ros_node_prop.pop("port"))
 
     @property
     def ros_node_name(self):
@@ -48,7 +48,7 @@ class MultiverseNodeProperties:
                 return subclass(
                     topic_name=topic_name,
                     rate=rate,
-                    client_addr=self.client_addr,
+                    port=self.port,
                     multiverse_meta_data=self.multiverse_meta_data,
                     **self.ros_node_prop,
                 )
@@ -62,7 +62,7 @@ class MultiverseNodeProperties:
             if subclass.__name__ == subscriber_name:
                 return subclass(
                     topic_name=topic_name,
-                    client_addr=self.client_addr,
+                    port=self.port,
                     multiverse_meta_data=self.multiverse_meta_data,
                     **self.ros_node_prop,
                 )
@@ -74,7 +74,7 @@ class MultiverseNodeProperties:
         for subclass in MultiverseService.__subclasses__():
             if subclass.__name__ == service_name:
                 return subclass(
-                    client_addr=self.client_addr,
+                    port=self.port,
                     multiverse_meta_data=self.multiverse_meta_data,
                     **self.ros_node_prop,
                 )

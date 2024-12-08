@@ -57,3 +57,9 @@ class MultiverseService(MultiverseNode):
 
     def _service_handler(self, request: SrvTypeRequest) -> SrvTypeResponse:
         return self._service_callback(request, self._srv_response_class())
+
+    def _bind_request_meta_data(self, request: SrvTypeRequest) -> SrvTypeRequest:
+        raise NotImplementedError("Method not implemented.")
+
+    def _bind_response_meta_data(self, response: SrvTypeResponse) -> SrvTypeResponse:
+        raise NotImplementedError("Method not implemented.")

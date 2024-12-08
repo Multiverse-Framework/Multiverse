@@ -56,3 +56,6 @@ class MultiverseSubscriber(MultiverseNode):
 
     def _init_send_data(self) -> None:
         pass
+
+    def _bind_send_data(self, data_msg: Any) -> Any:
+        raise NotImplementedError("Method not implemented.")

@@ -49,8 +49,8 @@ def parse_entity(data: str, cls: type) -> Dict[str, Any]:
         entity.path = entity_data.get("path", "")
         entity.apply = entity_data.get("apply", {})
         entity.attach = entity_data.get("attach", {})
-        entity.prefix = entity_data.get("prefix", {"body": "", "joint": "", "geom": ""})
-        entity.suffix = entity_data.get("suffix", {"body": "", "joint": "", "geom": ""})
+        entity.prefix = entity_data.get("prefix", {"body": "", "joint": "", "geom": "", "mesh": "", "actuator": ""})
+        entity.suffix = entity_data.get("suffix", {"body": "", "joint": "", "geom": "", "mesh": "", "actuator": ""})
         entity.joint_state = entity_data.get("joint_state", {})
         entity.disable_self_collision = entity_data.get(
             "disable_self_collision", "auto"

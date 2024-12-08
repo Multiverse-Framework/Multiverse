@@ -38,6 +38,12 @@ class MujocoCompilerTestCase(MultiverseSimulatorCompilerTestCase):
                         "quat": [0.5, 0.5, 0.5, 0.5],
                     }
                 }
+            },
+            "prefix": {
+                "body": "panda_1_",
+                "joint": "panda_1_",
+                "geom": "panda_1_",
+                "actuator": "panda_1_"
             }
         },
         "panda_2": {

@@ -79,14 +79,15 @@ class MultiverseRosLaunch(MultiverseLaunch):
     def run_multiverse_ros(self) -> Optional[subprocess.Popen]:
         ros_nodes = self.ros.get("ros_nodes")
         if ros_nodes is None or not any(
-            [key in ros_nodes for key in ["services", "publishers", "subscribers"]]
+                [key in ros_nodes for key in ["services", "publishers", "subscribers"]]
         ):
             return None
 
         if os.name == "posix":
             cmd = [
                 "multiverse_ros_run",
-                f'--multiverse_server="{self.multiverse_server}"',
+                f"--host={self.multiverse_server.get('host', 'tcp://127.0.0.1')}",
+                f"--server_port={self.multiverse_server.get('port', '7000')}",
             ]
         elif os.name == "nt":
             # Find the path to multiverse_ros_run.py from PATH
@@ -101,7 +102,8 @@ class MultiverseRosLaunch(MultiverseLaunch):
             cmd = [
                 sys.executable,
                 multiverse_ros_run_path,
-                f'--multiverse_server="{self.multiverse_server}"',
+                f"--host={self.multiverse_server.get('host', 'tcp://127.0.0.1')}",
+                f"--server_port={self.multiverse_server.get('port', '7000')}",
             ]
         else:
             raise ValueError(f"Unsupported OS: {os.name}")
@@ -138,8 +140,8 @@ class MultiverseRosLaunch(MultiverseLaunch):
         world_name = ros_control["meta_data"]["world_name"]
         for simulation in self.simulations.values():
             if (
-                simulation.get("world") is not None
-                and simulation["world"]["name"] == world_name
+                    simulation.get("world") is not None
+                    and simulation["world"]["name"] == world_name
             ):
                 robot = simulation["robots"][controller_manager["robot"]]
                 joint_state = robot.get("joint_state", {})
@@ -432,7 +434,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
         return processes
 
     def _run_controller_command(
-        self, ros_control: Dict[str, Any]
+            self, ros_control: Dict[str, Any]
     ) -> List[subprocess.Popen]:
         processes: List[subprocess.Popen] = []
 
@@ -456,12 +458,12 @@ class MultiverseRosLaunch(MultiverseLaunch):
             robot_description = controller_manager["robot_description"]
             for command, controllers in controller_manager["controllers"].items():
                 cmd = [
-                    "rosrun",
-                    "controller_manager",
-                    "controller_manager",
-                    f"robot_description:={robot_description}",
-                    f"{command}",
-                ] + controllers[0].split()
+                          "rosrun",
+                          "controller_manager",
+                          "controller_manager",
+                          f"robot_description:={robot_description}",
+                          f"{command}",
+                      ] + controllers[0].split()
                 process = run_subprocess(cmd)
                 processes.append(process)
 
