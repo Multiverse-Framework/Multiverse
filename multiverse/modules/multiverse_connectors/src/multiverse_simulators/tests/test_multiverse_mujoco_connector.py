@@ -42,7 +42,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
 
-# @unittest.skip("This test is not meant to be run in CI")
+@unittest.skip("This test is not meant to be run in CI")
 class MujocoSpeedTestCase(unittest.TestCase):
     file_path = os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml")
     step_size = 5E-4

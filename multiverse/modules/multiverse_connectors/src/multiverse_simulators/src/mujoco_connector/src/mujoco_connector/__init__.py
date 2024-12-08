@@ -1,1 +1,2 @@
-from .multiverse_mujoco_connector import MultiverseMujocoConnector
+from .mujoco_compiler import MujocoCompiler
+from .mujoco_connector import MultiverseMujocoConnector
