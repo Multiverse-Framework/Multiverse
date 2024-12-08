@@ -114,6 +114,14 @@ while [ -n "$1" ]; do
     esac
 done
 
+UBUNTU_VERSION=$(lsb_release -rs)
+PYTHON_EXECUTABLE=python3
+if [ $UBUNTU_VERSION = "20.04" ]; then
+    PYTHON_EXECUTABLE=python3.10
+elif [ $UBUNTU_VERSION = "24.04" ]; then
+    PYTHON_EXECUTABLE=python3.12
+fi
+
 if [ $DBUILD_KNOWLEDGE = ON ]; then
     echo "Updating multiverse_knowledge..."
     git submodule update --init $PWD/multiverse/modules/multiverse_knowledge
@@ -121,7 +129,7 @@ fi
 for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
         . $virtualenvwrapper
-        mkvirtualenv --system-site-packages multiverse -p python3.10
+        mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
         pip install -U pip build # Ensure pip and build are up-to-date
         break
     fi
@@ -129,14 +137,6 @@ done
 if [ ! -f $virtualenvwrapper ]; then
     echo "virtualenvwrapper.sh not found"
     exit 1
-fi
-
-UBUNTU_VERSION=$(lsb_release -rs)
-PYTHON_EXECUTABLE=python3
-if [ $UBUNTU_VERSION = "20.04" ]; then
-    PYTHON_EXECUTABLE=python3.10
-elif [ $UBUNTU_VERSION = "24.04" ]; then
-    PYTHON_EXECUTABLE=python3.12
 fi
 
 # Build multiverse

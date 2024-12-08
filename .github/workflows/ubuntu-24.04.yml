@@ -30,7 +30,7 @@ jobs:
     - name: Run build_multiverse.sh
       run: |
           chmod +x build_multiverse.sh
-          ./build_multiverse.sh
+          ./build_multiverse.sh  --no-modules knowledge
 
     - name: Run build_multiverse_ws2.sh
       run: |
