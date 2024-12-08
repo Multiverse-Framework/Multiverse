@@ -6,27 +6,30 @@ from typing import Dict
 import xml.etree.ElementTree as ET
 import numpy
 
-from multiverse_simulator import MultiverseSimulatorCompiler, Robot, Object
+from multiverse_simulator import MultiverseSimulatorCompiler, Robot, Object, multiverse_simulator_compiler_main
+
+
+def fix_mesh_and_texture_paths(spec: mujoco.MjSpec, default_path: str):
+    meshdir_abs = spec.meshdir
+    if not os.path.isabs(meshdir_abs):
+        meshdir_abs = os.path.join(default_path, meshdir_abs)
+    texturedir_abs = spec.texturedir
+    if not os.path.isabs(texturedir_abs):
+        texturedir_abs = os.path.join(default_path, texturedir_abs)
+
+    for mesh in spec.meshes:
+        if not os.path.isabs(mesh.file):
+            mesh.file = os.path.join(meshdir_abs, mesh.file)
+    for texture in spec.meshes:
+        if not os.path.isabs(texture.file):
+            texture.file = os.path.join(texturedir_abs, texture.file)
 
 
 def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame):
     for entity_name, entity in entities.items():
         entity_spec = mujoco.MjSpec.from_file(filename=entity.path)
 
-        meshdir_abs = entity_spec.meshdir
-        if not os.path.isabs(meshdir_abs):
-            meshdir_abs = os.path.join(os.path.dirname(entity.path), meshdir_abs)
-        texturedir_abs = entity_spec.texturedir
-        if not os.path.isabs(texturedir_abs):
-            texturedir_abs = os.path.join(os.path.dirname(entity.path), texturedir_abs)
-
-        for mesh in entity_spec.meshes:
-            if not os.path.isabs(mesh.file):
-                mesh.file = os.path.join(meshdir_abs, mesh.file)
-
-        for texture in entity_spec.meshes:
-            if not os.path.isabs(texture.file):
-                texture.file = os.path.join(texturedir_abs, texture.file)
+        fix_mesh_and_texture_paths(entity_spec, os.path.dirname(entity.path))
 
         for body_name, body_apply in entity.apply["body"].items():
             if isinstance(body_apply, dict):
@@ -58,6 +61,9 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
 
     def build_world(self, robots: Dict[str, Robot], objects: Dict[str, Object], multiverse_params: Dict[str, Dict]):
         world_spec = mujoco.MjSpec.from_file(filename=self.save_file_path)
+
+        fix_mesh_and_texture_paths(world_spec, os.path.dirname(self.world_path))
+
         if not any(key.name == "home" for key in world_spec.keys):
             world_spec.add_key(name="home")
         home_key = [key for key in world_spec.keys if key.name == "home"][0]
@@ -96,3 +102,7 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
             file_xml_string = ET.tostring(root, encoding='unicode', method='xml')
             with open(self.save_file_path, "w") as f:
                 f.write(file_xml_string)
+
+
+if __name__ == "__main__":
+    multiverse_simulator_compiler_main(MujocoCompiler)

@@ -935,7 +935,7 @@ namespace mujoco::plugin::multiverse_connector
 
   void MultiverseConnector::reset()
   {
-    // printf("[Client %s] Resetting the client (will be implemented).\n", port.c_str());
+
   }
 
   void MultiverseConnector::init_send_and_receive_data()

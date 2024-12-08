@@ -67,6 +67,9 @@ class MultiverseViewer:
 class MultiverseSimulator:
     """Base class for Multiverse Simulator"""
 
+    name: str = "Multiverse Simulation"
+    """Name of the simulator"""
+
     simulation_thread: Thread = None
     """Simulation thread, run step() method in this thread"""
 
@@ -130,6 +133,8 @@ class MultiverseSimulator:
                     self._state = MultiverseSimulatorState.STOPPED
                     break
                 if self.state == MultiverseSimulatorState.RUNNING:
+                    if self.current_simulation_time == 0.0:
+                        self.reset()
                     if self.real_time_factor > 0:
                         real_time_pass = self.current_real_time - self.start_real_time
                         simulation_time_pass = self.current_simulation_time * self.real_time_factor
@@ -233,13 +238,13 @@ class MultiverseSimulator:
         return None if self.viewer.is_running() else MultiverseSimulatorStopReason.VIEWER_IS_CLOSED
 
     def log_info(self, message: str):
-        self.logger.info(message)
+        self.logger.info(f"[{self.name}] {message}")
 
     def log_warning(self, message: str):
-        self.logger.warning(message)
+        self.logger.warning(f"[{self.name}] {message}")
 
     def log_error(self, message: str):
-        self.logger.error(message)
+        self.logger.error(f"[{self.name}] {message}")
 
     @property
     def headless(self) -> bool:

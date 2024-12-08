@@ -1,6 +1,6 @@
 if (UNIX)
     execute_process(
-        COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/mujoco_compile.py ${BIN_DIR}/mujoco_compile
+        COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco_connector/mujoco_compiler.py ${BIN_DIR}/mujoco_compiler
     )
     execute_process(
         COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/pymujoco.py ${BIN_DIR}/pymujoco
@@ -17,6 +17,6 @@ if (UNIX)
     )
 elseif (WIN32)
     execute_process(
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/scripts/mujoco_compile.py ${BIN_DIR}/mujoco_compile.py
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco_connector/mujoco_compile.py ${BIN_DIR}/mujoco_compile.py
     )
 endif()

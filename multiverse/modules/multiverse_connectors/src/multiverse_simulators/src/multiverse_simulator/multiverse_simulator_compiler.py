@@ -60,15 +60,6 @@ def parse_entity(data: str, cls: type) -> Dict[str, Any]:
     return entities
 
 
-def update_element_name(elements: list, element_type: str, prefix: str, suffix: str):
-    for element_id, element in enumerate(elements):
-        element_name = element.get("name", None)
-        if element_name is None:
-            element_name = f"{element_type}_{element_id}"
-            element.set("name", element_name)
-        element.set("name", f"{prefix}{element_name}{suffix}")
-
-
 class MultiverseSimulatorCompiler:
     ext: str = ""
 
@@ -114,16 +105,15 @@ class MultiverseSimulatorCompiler:
 
 
 def multiverse_simulator_compiler_main(Compiler=MultiverseSimulatorCompiler):
-    compiler_file_name = os.path.basename(__file__)
-    save_dir_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "saved")
-    if compiler_file_name == f"multiverse_simulator_compiler" or os.name == "nt":
-        pass
-    elif compiler_file_name == f"multiverse_simulator_compiler.py":
-        save_dir_path = (
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "..", "..", "saved"))
+    save_dir_path_1 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "saved")
+    save_dir_path_2 = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "..", "..",
+                                   "saved")
+    if os.path.exists(save_dir_path_1):
+        save_dir_path = save_dir_path_1
+    elif os.path.exists(save_dir_path_2):
+        save_dir_path = save_dir_path_2
     else:
-        raise RuntimeError(
-            f"Unknown file name multiverse_simulator_compiler, expected multiverse_simulator_compiler.py")
+        raise FileNotFoundError(f"Could not find default save directory")
 
     # Initialize argument parser
     parser = argparse.ArgumentParser(description=f"Compile {Compiler.ext} from world and robots.")

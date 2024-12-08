@@ -16,7 +16,7 @@ from utils import run_subprocess
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 RESOURCES_PATH = os.path.join(CURRENT_PATH, "..", "..", "..", "resources")
 MUV_PATH = os.path.join(RESOURCES_PATH, "muv")
-DEFAULT_MUV_FILE = os.path.join(MUV_PATH, "default.muv")
+DEFAULT_MUV_FILE = os.path.join(MUV_PATH, "table_with_bowling.muv")
 
 
 class MultiverseLaunchTestCase(unittest.TestCase):
@@ -30,9 +30,11 @@ class MultiverseLaunchTestCase(unittest.TestCase):
         self.assertEqual(multiverse_launch.muv_file, DEFAULT_MUV_FILE)
         self.assertEqual(multiverse_launch.multiverse_server["host"], "tcp://127.0.0.1")
         self.assertEqual(multiverse_launch.multiverse_server["port"], 7000)
-        self.assertEqual(multiverse_launch.resources_paths, [os.path.join(MUV_PATH, "..", "robots"),
-                                                             os.path.join(MUV_PATH, "..", "worlds"),
-                                                             os.path.join(MUV_PATH, "..", "objects")])
+        resources_paths = [os.path.join(MUV_PATH, "..", "robots"),
+                           os.path.join(MUV_PATH, "..", "worlds"),
+                           os.path.join(MUV_PATH, "..", "objects")]
+        resources_paths = [os.path.abspath(path) for path in resources_paths]
+        self.assertEqual(multiverse_launch.resources_paths, resources_paths)
 
     def test_run_subprocess(self):
         process = run_subprocess(["echo", "test"])
@@ -47,64 +49,6 @@ class LaunchSimulatorsTestCase(unittest.TestCase):
             "name": "world_1",
             "path": "floor.xml"
         },
-        "robots": {
-            "tiago_dual_1": {
-                "path": "tiago_dual.xml",
-                "apply": {
-                    "body": {
-                        "tiago_dual_1": {
-                            "pos": [1, 2, 0]
-                        },
-                        "gravcomp": 1
-                    }
-                },
-                "disable_self_collision": "auto",
-                "prefix": {
-                    "geom": "tiago_dual_",
-                },
-                "suffix": {
-                    "body": "_1",
-                    "joint": "_1",
-                    "geom": "_1",
-                    "position": "_1"
-                }
-            },
-            "tiago_dual_2": {
-                "path": "tiago_dual.xml",
-                "apply": {
-                    "body": {
-                        "tiago_dual_2": {
-                            "pos": [-1, -2, 0]
-                        },
-                    }
-                },
-                "disable_self_collision": "auto",
-                "prefix": {
-                    "geom": "tiago_dual_",
-                },
-                "suffix": {
-                    "body": "_2",
-                    "joint": "_2",
-                    "geom": "_2",
-                    "position": "_2"
-                }
-            }
-        },
-        "objects": {
-            "task_board": {
-                "path": "task_board.xml",
-                "apply": {
-                    "body": {
-                        "task_board": {
-                            "pos": [0, 0, 1]
-                        },
-                    }
-                },
-                "prefix": {
-                    "geom": "task_board_",
-                },
-            }
-        }
     }
 
     def test_parse_mujoco(self):
