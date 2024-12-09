@@ -52,6 +52,11 @@ class TfPublisher(MultiversePublisher):
 
             self._msgs[0].transforms.clear()
 
+            if INTERFACE == Interface.ROS1:
+                stamp = rospy.Time.now()
+            elif INTERFACE == Interface.ROS2:
+                stamp = self.get_clock().now().to_msg()
+
             for object_name, tf_data in objects.items():
                 tf_data = response_meta_data["receive"][object_name]
                 if "position" not in tf_data or "quaternion" not in tf_data:
@@ -62,12 +67,9 @@ class TfPublisher(MultiversePublisher):
                     continue
                 tf_msg = TransformStamped()
                 tf_msg.header.frame_id = self._root_frame_id
-
                 if INTERFACE == Interface.ROS1:
-                    tf_msg.header.stamp = rospy.Time.now()
                     tf_msg.header.seq = self._seq
-                elif INTERFACE == Interface.ROS2:
-                    tf_msg.header.stamp = self.get_clock().now().to_msg()
+                tf_msg.header.stamp = stamp
 
                 tf_msg.child_frame_id = object_name
                 tf_msg.transform.translation.x = float(tf_data["position"][0])

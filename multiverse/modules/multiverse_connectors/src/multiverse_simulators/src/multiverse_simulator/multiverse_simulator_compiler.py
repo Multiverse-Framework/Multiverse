@@ -7,7 +7,7 @@ import dataclasses
 import json
 import os
 import shutil
-from typing import List, Dict, Any
+from typing import Dict, Any
 
 
 @dataclasses.dataclass
@@ -67,8 +67,6 @@ class MultiverseSimulatorCompiler:
         self._world_path = args.world_path
         self._scene_name = args.name
         self._save_file_path = os.path.join(args.save_dir_path, f"{self.scene_name}.{self.ext}")
-        self._robots = []
-        self._objects = []
         self.create_world()
 
     @property
@@ -86,14 +84,6 @@ class MultiverseSimulatorCompiler:
     @property
     def save_dir_path(self) -> str:
         return os.path.dirname(self.save_file_path)
-
-    @property
-    def robots(self) -> List[Robot]:
-        return self._robots
-
-    @property
-    def objects(self) -> List[Object]:
-        return self._objects
 
     def build_world(self, robots: Dict[str, Robot], objects: Dict[str, Object], multiverse_params: Dict[str, Dict]):
         raise NotImplementedError("build_world method must be implemented")
@@ -131,7 +121,8 @@ def multiverse_simulator_compiler_main(Compiler=MultiverseSimulatorCompiler):
     # Parse arguments
     args = parser.parse_args()
 
-    assert os.path.exists(args.save_dir_path)
+    if not os.path.exists(args.save_dir_path):
+        os.makedirs(args.save_dir_path)
     assert args.world_path != "" and os.path.exists(args.world_path)
 
     if args.multiverse_params is None:
