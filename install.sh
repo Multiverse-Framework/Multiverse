@@ -45,6 +45,27 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
     sudo rosdep init
     sudo rosdep fix-permissions
     rosdep update
+elif [ $UBUNTU_VERSION = "22.04" ]; then
+    # Setup your sources.list
+    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+    
+    # Update package lists
+    sudo apt-get update && sudo apt-get upgrade -y
+
+    # Install python3.10
+    sudo apt-get install -y python3.10-dev python3.10-venv
+    
+    # Install ROS2
+    sudo apt-get install -y ros-humble-desktop
+    sudo apt-get install -y ros-dev-tools
+
+    # Install rosdep
+    sudo apt-get install -y python3-rosdep
+    sudo rosdep init
+    sudo rosdep fix-permissions
+    rosdep update
+fi
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Setup your sources.list
     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
@@ -108,6 +129,16 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
 
     # Setup virtual environment
     pip install virtualenvwrapper
+elif [ $UBUNTU_VERSION = "22.04" ]; then
+    # Install and link clang-17 for creating shared library
+    sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
+    sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
+    sudo update-alternatives --remove-all clang++
+    sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-17 100
+
+    # Setup virtual environment
+    python3 -m pip install virtualenvwrapper --break-system-packages
+fi
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Install and link clang-17 for creating shared library
     sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
@@ -131,6 +162,8 @@ sudo apt-get install -y jupyter-notebook
 
 PYTHON_EXECUTABLE=python3
 if [ $UBUNTU_VERSION = "20.04" ]; then
+    PYTHON_EXECUTABLE=python3.10
+elif [ $UBUNTU_VERSION = "22.04" ]; then
     PYTHON_EXECUTABLE=python3.10
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     PYTHON_EXECUTABLE=python3.12

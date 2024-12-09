@@ -1,4 +1,4 @@
-name: Ubuntu-20.04 CI
+name: Ubuntu-22.04 CI
 
 on:
   push:
@@ -9,10 +9,10 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Free Disk Space (Ubuntu)
       uses: jlumbroso/free-disk-space@v1.3.0
@@ -36,11 +36,6 @@ jobs:
       run: |
           chmod +x build_multiverse.sh
           ./build_multiverse.sh --only-modules connectors
-
-    - name: Run build_multiverse_ws.sh
-      run: |
-          chmod +x build_multiverse_ws.sh
-          ./build_multiverse_ws.sh
 
     - name: Run build_multiverse_ws2.sh
       run: |

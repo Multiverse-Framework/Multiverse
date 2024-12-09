@@ -32,10 +32,10 @@ jobs:
           chmod +x build_multiverse.sh
           ./build_multiverse.sh --only-src
 
-    - name: Run build_multiverse_ws.sh
+    - name: Run build_multiverse.sh (only connectors)
       run: |
-          chmod +x build_multiverse_ws.sh
-          ./build_multiverse_ws.sh
+          chmod +x build_multiverse.sh
+          ./build_multiverse.sh --only-modules connectors
 
     - name: Run build_multiverse_ws2.sh
       run: |
@@ -45,4 +45,4 @@ jobs:
     - name: Run build_multiverse.sh
       run: |
           chmod +x build_multiverse.sh
-          ./build_multiverse.sh --only-src
+          ./build_multiverse.sh
