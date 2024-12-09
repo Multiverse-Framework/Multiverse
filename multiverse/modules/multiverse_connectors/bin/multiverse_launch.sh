@@ -104,6 +104,9 @@ for distro in foxy jazzy; do
     fi
 done
 if [ "$ROS2_DISTRO" ]; then
+    if [ $ROS2_DISTRO = "foxy" ]; then
+        PYTHON_EXECUTABLE=python3.8 # ROS 2 Foxy only supports Python 3.8
+    fi
     (source /opt/ros/$ROS2_DISTRO/setup.bash && source "$MULTIVERSE_PATH"/../multiverse_ws2/install/local_setup.bash && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
 fi
 

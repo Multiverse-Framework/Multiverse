@@ -82,31 +82,32 @@ class MultiverseRosLaunch(MultiverseLaunch):
                 [key in ros_nodes for key in ["services", "publishers", "subscribers"]]
         ):
             return None
+        
+        python_executable = sys.executable
+        if INTERFACE == Interface.ROS2 and os.environ.get("ROS_DISTRO") == "foxy":
+            python_executable = "python3.8"
 
         if os.name == "posix":
-            cmd = [
-                "multiverse_ros_run",
-                f"--host={self.multiverse_server.get('host', 'tcp://127.0.0.1')}",
-                f"--server_port={self.multiverse_server.get('port', '7000')}",
-            ]
+            multiverse_ros_run_file_name = "multiverse_ros_run"
         elif os.name == "nt":
-            # Find the path to multiverse_ros_run.py from PATH
-            for path in os.environ["PATH"].split(os.pathsep):
-                path = path.strip('"')
-                multiverse_ros_run_path = os.path.join(path, "multiverse_ros_run.py")
-                if os.path.isfile(multiverse_ros_run_path):
-                    break
-            else:
-                raise FileNotFoundError("multiverse_ros_run.py not found in PATH")
-
-            cmd = [
-                sys.executable,
-                multiverse_ros_run_path,
-                f"--host={self.multiverse_server.get('host', 'tcp://127.0.0.1')}",
-                f"--server_port={self.multiverse_server.get('port', '7000')}",
-            ]
+            multiverse_ros_run_file_name = "multiverse_ros_run.py"
         else:
             raise ValueError(f"Unsupported OS: {os.name}")
+        
+        # Find the path to multiverse_ros_run.py from PATH
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            multiverse_ros_run_path = os.path.join(path, multiverse_ros_run_file_name)
+            if os.path.isfile(multiverse_ros_run_path):
+                break
+        else:
+            raise FileNotFoundError(f"{multiverse_ros_run_file_name} not found in PATH")        
+        cmd = [
+            python_executable,
+            multiverse_ros_run_path,
+            f"--host={self.multiverse_server.get('host', 'tcp://127.0.0.1')}",
+            f"--server_port={self.multiverse_server.get('port', '7000')}",
+        ]
         for ros_node_type in ["services", "publishers", "subscribers"]:
             if ros_node_type in ros_nodes:
                 cmd.append(f'--{ros_node_type}="{ros_nodes[ros_node_type]}"')
