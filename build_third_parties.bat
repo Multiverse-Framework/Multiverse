@@ -64,10 +64,11 @@ pause
 
 set "MUJOCO_BUILD_DIR=%BUILD_DIR%\mujoco"
 set "MUJOCO_EXT_DIR=%EXT_DIR%\mujoco"
-set "MUJOCO_FILE_NAME=mujoco-3.2.5-windows-x86_64"
+set "MUJOCO_VERSION=3.2.6"
+set "MUJOCO_FILE_NAME=mujoco-%MUJOCO_VERSION%-windows-x86_64"
 set "MUJOCO_ZIP_FILE=%MUJOCO_FILE_NAME%.zip"
 
-set "FROM_SRC=0"
+set "FROM_SRC=1"
 if not exist "%MUJOCO_BUILD_DIR%" (
     @REM Check if FROM_SRC is set to 1
     if "%FROM_SRC%"=="1" (
@@ -82,7 +83,7 @@ if not exist "%MUJOCO_BUILD_DIR%" (
         powershell -NoProfile -Command "cd %MUJOCO_BUILD_DIR%; cmake %MUJOCO_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%MUJOCO_BUILD_DIR% -Wno-deprecated -Wno-dev; cmake --build . --config Release; cmake --install ."
     ) else (
         powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MUJOCO_BUILD_DIR%\bin', [EnvironmentVariableTarget]::User)"
-        powershell -NoProfile -Command "curl -o '%EXT_DIR%\%MUJOCO_ZIP_FILE%' 'https://github.com/google-deepmind/mujoco/releases/download/3.2.5/%MUJOCO_ZIP_FILE%'"
+        powershell -NoProfile -Command "curl -o '%EXT_DIR%\%MUJOCO_ZIP_FILE%' 'https://github.com/google-deepmind/mujoco/releases/download/%MUJOCO_VERSION%/%MUJOCO_ZIP_FILE%'"
         powershell -NoProfile -Command "7z x '%EXT_DIR%\%MUJOCO_ZIP_FILE%' -o'%MUJOCO_BUILD_DIR%'"
     )
 ) else (
