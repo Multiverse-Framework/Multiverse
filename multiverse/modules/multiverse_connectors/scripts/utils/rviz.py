@@ -4,7 +4,6 @@ import subprocess
 import os
 from .utils import find_files, get_urdf_str_from_ros_package, get_urdf_str_abs, run_subprocess
 import yaml
-from urdf_parser_py import urdf
 import shutil
 
 def run_rviz(rviz_dict, resources_paths, mesh_abspath_prefix, multiverse_control_pkg_path) -> subprocess.Popen:

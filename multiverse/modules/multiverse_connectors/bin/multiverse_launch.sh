@@ -71,13 +71,21 @@ fi
 
 workon multiverse
 
+if [ $UBUNTU_VERSION = "20.04" ]; then
+    PYTHON_EXECUTABLE=python3.10
+elif [ $UBUNTU_VERSION = "24.04" ]; then
+    PYTHON_EXECUTABLE=python3.12
+else
+    PYTHON_EXECUTABLE=python3
+fi
+
 if [ "$NO_MULTIVERSE_SERVER" = true ]; then
     echo "Skipping the Multiverse server..."
 else
     echo "Launching the Multiverse server..."
-    (python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_multiverse_server.py --muv_file="$MUV_FILE")
+    ($PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_multiverse_server.py --muv_file="$MUV_FILE")
 fi
-(python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_simulators.py --muv_file="$MUV_FILE")
+($PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_simulators.py --muv_file="$MUV_FILE")
 
 for distro in noetic; do
     if [ -f "/opt/ros/$distro/setup.sh" ]; then
@@ -85,10 +93,8 @@ for distro in noetic; do
         break
     fi
 done
-if [ -z "$ROS_DISTRO" ]; then
-    echo "No ROS distro found"
-else
-    (source "$MULTIVERSE_PATH"/../multiverse_ws/devel/setup.bash && python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
+if [ "$ROS_DISTRO" ]; then
+    (source "$MULTIVERSE_PATH"/../multiverse_ws/devel/setup.bash && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
 fi
 
 for distro in foxy jazzy; do
@@ -97,10 +103,8 @@ for distro in foxy jazzy; do
         break
     fi
 done
-if [ -z "$ROS2_DISTRO" ]; then
-    echo "No ROS2 distro found"
-else
-    (source /opt/ros/$ROS2_DISTRO/setup.bash && source "$MULTIVERSE_PATH"/../multiverse_ws2/install/local_setup.bash && python3 "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
+if [ "$ROS2_DISTRO" ]; then
+    (source /opt/ros/$ROS2_DISTRO/setup.bash && source "$MULTIVERSE_PATH"/../multiverse_ws2/install/local_setup.bash && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
 fi
 
 # Your script's main logic here
