@@ -76,17 +76,8 @@ class MultiverseSimulator:
     logger: logging.Logger = logging.getLogger(__name__)
     """Logger for the simulator"""
 
-    def __init__(self,
-                 host: str = "tcp://127.0.0.1",
-                 server_port: str = "7000",
-                 client_port: str = "",
-                 meta_data: MultiverseMetaData = MultiverseMetaData(),
-                 **kwargs):
+    def __init__(self, **kwargs):
         """
-        :param host: Multiverse Host
-        :param server_port: Multiverse Server Port
-        :param client_port: Multiverse Client Port
-        :param meta_data: MultiverseMetaData
         :param kwargs: step_size, headless, real_time_factor
         """
         self._headless = kwargs.get("headless", False)

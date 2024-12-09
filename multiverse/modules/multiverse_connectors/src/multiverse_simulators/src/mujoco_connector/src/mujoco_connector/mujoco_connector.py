@@ -6,7 +6,6 @@ import os
 
 import mujoco
 import mujoco.viewer
-from multiverse_client_py import MultiverseMetaData
 
 from .utills import get_multiverse_connector_plugin
 from multiverse_simulator import MultiverseSimulator, MultiverseViewer
@@ -22,17 +21,11 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     mj_data = mujoco.MjData
     """MuJoCo data"""
 
-    def __init__(self,
-                 file_path: str,
-                 host: str,
-                 server_port: str,
-                 client_port: str,
-                 meta_data: MultiverseMetaData,
-                 **kwargs):
+    def __init__(self, file_path: str, **kwargs):
         self._file_path = file_path
         root = ET.parse(file_path).getroot()
         self.name = root.attrib.get("model", self.name)
-        super().__init__(host, server_port, client_port, meta_data, **kwargs)
+        super().__init__(**kwargs)
 
     def start_callback(self):
         mujoco.mj_loadPluginLibrary(get_multiverse_connector_plugin())

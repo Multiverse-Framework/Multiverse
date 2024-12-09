@@ -37,7 +37,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         simulator = self.test_initialize_multiverse_simulator()
         constraints = MultiverseSimulatorConstraints(max_real_time=10.0)
         simulator.start(constraints=constraints)
-        while simulator.state == MultiverseSimulatorState.RUNNING:
+        while simulator.state != MultiverseSimulatorState.STOPPED:
             time.sleep(1)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
