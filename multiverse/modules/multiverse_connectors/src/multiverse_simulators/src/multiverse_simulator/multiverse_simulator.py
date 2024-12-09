@@ -10,8 +10,6 @@ from enum import Enum
 from threading import Thread
 from typing import Optional
 
-from multiverse_client_py import MultiverseMetaData
-
 
 class MultiverseSimulatorState(Enum):
     """Multiverse Simulator State Enum"""
@@ -37,8 +35,8 @@ class MultiverseSimulatorConstraints:
     max_number_of_steps: int = None
 
 
-class MultiverseViewer:
-    """Base class for Multiverse Viewer"""
+class MultiverseRenderer:
+    """Base class for Multiverse Renderer"""
 
     _is_running: bool = True
 
@@ -52,15 +50,15 @@ class MultiverseViewer:
         self.close()
 
     def is_running(self) -> bool:
-        """Check if the viewer is running"""
+        """Check if the renderer is running"""
         return self._is_running
 
     def sync(self):
-        """Update the viewer"""
+        """Update the renderer"""
         pass
 
     def close(self):
-        """Close the viewer"""
+        """Close the renderer"""
         self._is_running = False
 
 
@@ -69,6 +67,9 @@ class MultiverseSimulator:
 
     name: str = "Multiverse Simulation"
     """Name of the simulator"""
+
+    ext: str = ""
+    """Extension of the simulator description file"""
 
     simulation_thread: Thread = None
     """Simulation thread, run step() method in this thread"""
@@ -87,7 +88,7 @@ class MultiverseSimulator:
         self._start_real_time = self.current_real_time
         self._state = MultiverseSimulatorState.STOPPED
         self._stop_reason = None
-        self._viewer = MultiverseViewer()
+        self._renderer = MultiverseRenderer()
         self._current_view_time = self.current_real_time
         atexit.register(self.stop)
 
@@ -117,7 +118,7 @@ class MultiverseSimulator:
 
         :param constraints: MultiverseSimulatorConstraints, constraints for stopping the simulator
         """
-        with self.viewer as viewer:
+        with self.renderer:
             while self.state != MultiverseSimulatorState.STOPPED:
                 self._stop_reason = self.should_stop(constraints)
                 if self.stop_reason is not None:
@@ -203,18 +204,18 @@ class MultiverseSimulator:
 
     def start_callback(self):
         self._current_simulation_time = 0.0
-        self._viewer = MultiverseViewer()
+        self._renderer = MultiverseRenderer()
 
     def run_callback(self):
         if self.current_real_time - self._current_view_time > 1.0 / 60.0:
             self._current_view_time = self.current_real_time
-            self.viewer.sync()
+            self.renderer.sync()
 
     def step_callback(self):
         self._current_simulation_time += self.step_size
 
     def stop_callback(self):
-        self.viewer.close()
+        self.renderer.close()
 
     def pause_callback(self):
         self._start_real_time += self.current_real_time - self.current_simulation_time - self.start_real_time
@@ -226,7 +227,7 @@ class MultiverseSimulator:
         self._current_simulation_time = 0.0
 
     def should_stop_callback(self) -> Optional[MultiverseSimulatorStopReason]:
-        return None if self.viewer.is_running() else MultiverseSimulatorStopReason.VIEWER_IS_CLOSED
+        return None if self.renderer.is_running() else MultiverseSimulatorStopReason.VIEWER_IS_CLOSED
 
     def log_info(self, message: str):
         self.logger.info(f"[{self.name}] {message}")
@@ -274,5 +275,5 @@ class MultiverseSimulator:
         return self._current_number_of_steps
 
     @property
-    def viewer(self) -> MultiverseViewer:
-        return self._viewer
+    def renderer(self) -> MultiverseRenderer:
+        return self._renderer

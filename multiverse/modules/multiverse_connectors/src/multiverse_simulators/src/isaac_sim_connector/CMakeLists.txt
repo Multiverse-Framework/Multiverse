@@ -1,12 +1,15 @@
 if (UNIX)
     execute_process(
-        COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/isaac_sim_compile.py ${BIN_DIR}/isaac_sim_compile
+        COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/src/isaac_sim_connector/isaac_sim_compiler.py ${BIN_DIR}/isaac_sim_compiler
     )
     execute_process(
-        COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/isaac_sim.sh ${BIN_DIR}/isaac_sim
+        COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/isaac_sim.py ${BIN_DIR}/isaac_sim
+    )
+    execute_process(
+        COMMAND sed -i "s|ISAAC_SIM_PATH|home/${USER}/.local/share/ov/pkg/isaac-sim-4.2.0|g" ${BIN_DIR}/isaac_sim
     )
 elseif (WIN32)
     execute_process(
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/scripts/isaac_sim_compile.py ${BIN_DIR}/isaac_sim_compile.py
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/scripts/isaac_sim_compiler.py ${BIN_DIR}/isaac_sim_compiler.py
     )
 endif()

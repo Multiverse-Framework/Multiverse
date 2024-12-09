@@ -8,8 +8,26 @@ import mujoco
 import mujoco.viewer
 
 from .utills import get_multiverse_connector_plugin
-from multiverse_simulator import MultiverseSimulator, MultiverseViewer
+from multiverse_simulator import MultiverseSimulator, MultiverseRenderer
 import xml.etree.ElementTree as ET
+
+
+class MultiverseMujocoRenderer(MultiverseRenderer):
+    """Multiverse Isaac Sim Renderer class"""
+
+    def __init__(self, mj_viewer: mujoco.viewer):
+        self._mj_viewer = mj_viewer
+        super().__init__()
+
+    def is_running(self) -> bool:
+        return self.mj_viewer.is_running()
+
+    def close(self):
+        self.mj_viewer.close()
+
+    @property
+    def mj_viewer(self) -> mujoco.viewer:
+        return self._mj_viewer
 
 
 class MultiverseMujocoConnector(MultiverseSimulator):
@@ -37,7 +55,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         if not self.headless:
             self._viewer = mujoco.viewer.launch_passive(self.mj_model, self.mj_data)
         else:
-            self._viewer = MultiverseViewer()
+            self._viewer = MultiverseRenderer()
 
     def step_callback(self):
         mujoco.mj_step(self.mj_model, self.mj_data)
@@ -54,5 +72,5 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         return self.mj_data.time
 
     @property
-    def viewer(self):
+    def renderer(self):
         return self._viewer

@@ -67,7 +67,7 @@ while [ -n "$1" ]; do
                     echo -n " $module"
                     shift 1
                     if [ "$module" = "connectors" ]; then
-                        DBUILD_SRC=ON
+                        DBUILD_SRC=OFF
                         DBUILD_KNOWLEDGE=OFF
                         DBUILD_PARSER=OFF
                     elif [ "$module" = "knowledge" ]; then

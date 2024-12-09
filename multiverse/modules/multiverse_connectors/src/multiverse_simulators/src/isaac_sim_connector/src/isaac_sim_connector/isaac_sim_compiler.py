@@ -168,7 +168,7 @@ def main():
         save_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "..", "saved"
         )
-    elif os.path.basename(__file__) == "isaac_sim_compile.py":
+    elif os.path.basename(__file__) == "isaac_sim_compiler.py":
         if os.name == "nt":
             save_dir = os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),

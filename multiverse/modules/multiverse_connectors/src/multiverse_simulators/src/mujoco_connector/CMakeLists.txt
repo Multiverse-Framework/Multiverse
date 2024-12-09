@@ -1,9 +1,9 @@
 if (UNIX)
     execute_process(
-        COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco_connector/mujoco_compiler.py ${BIN_DIR}/mujoco_compiler
+        COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco_connector/mujoco_compiler.py ${BIN_DIR}/mujoco_compiler
     )
     execute_process(
-        COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/pymujoco.py ${BIN_DIR}/pymujoco
+        COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/pymujoco.py ${BIN_DIR}/pymujoco
     )
 
     set(ENV{MUJOCO_SRC_DIR} ${EXT_DIR}/mujoco)

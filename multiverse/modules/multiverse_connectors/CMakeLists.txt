@@ -1,3 +1,5 @@
+project(multiverse_connectors)
+
 add_subdirectory(src)
 
 if (UNIX)
