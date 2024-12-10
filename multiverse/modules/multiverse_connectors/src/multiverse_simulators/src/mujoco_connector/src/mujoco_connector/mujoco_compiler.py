@@ -88,6 +88,7 @@ def fix_prefix_and_suffix_each(entity_element_name: str, entity_prefix: str, ent
     entity_element_name = entity_element_name + entity_suffix
     return entity_element_name
 
+
 class MujocoCompiler(MultiverseSimulatorCompiler):
     name: str = "mujoco"
     ext: str = "xml"
@@ -165,7 +166,8 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                         actuator.name = fix_prefix_and_suffix_each(actuator.name, entity_prefix, entity_suffix,
                                                                    entity_name)
                 elif entity_type == "joint":
-                    if len(self.world_spec.tendons) > 0 or len(self.world_spec.actuators) > 0: # TODO: Waiting for MuJoCo update
+                    if len(self.world_spec.tendons) > 0 or len(
+                            self.world_spec.actuators) > 0:  # TODO: Waiting for MuJoCo update
                         self.world_spec.compile()
                         xml_string = self.world_spec.to_xml()
                         with open(self.save_file_path, "w") as f:
@@ -202,6 +204,7 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                                                                         entity_name)
                             equality.name2 = fix_prefix_and_suffix_each(equality.name2, entity_prefix, entity_suffix,
                                                                         entity_name)
+
 
 if __name__ == "__main__":
     multiverse_simulator_compiler_main(MujocoCompiler)

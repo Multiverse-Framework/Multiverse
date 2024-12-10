@@ -1,1 +1,2 @@
 from .isaac_sim_connector import MultiverseIsaacSimConnector
+from .isaac_sim_compiler import IsaacSimCompiler

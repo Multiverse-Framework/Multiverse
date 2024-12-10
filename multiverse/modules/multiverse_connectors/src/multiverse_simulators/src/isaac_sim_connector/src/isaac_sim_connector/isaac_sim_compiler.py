@@ -1,81 +1,24 @@
 #!/usr/bin/env python3
 
-import argparse
-import dataclasses
-import json
 import os
-import shutil
-from typing import List, Dict, Any
+from typing import Dict
+
 import numpy
-from pxr import Usd, UsdGeom, Gf, UsdPhysics
+import shutil
 
-@dataclasses.dataclass
-class Entity:
-    name = ""
-    path = ""
-    saved_path = None
-    joint_state = {}
-    apply = {}
-    attach = {}
-    disable_self_collision = "auto"
-    prefix = {}
-    suffix = {}
+from multiverse_simulator import MultiverseSimulatorCompiler, Robot, Object, multiverse_simulator_compiler_main
+from pxr import Usd, UsdGeom, UsdPhysics, Gf
 
 
-@dataclasses.dataclass
-class Robot(Entity):
-    pass
-
-
-@dataclasses.dataclass
-class Object(Entity):
-    pass
-
-
-def parse_entity(data: str, cls: type) -> Dict[str, Any]:
-    if data is None:
-        return {}
-    try:
-        root = json.loads(data.replace("'", '"'))
-    except json.JSONDecodeError as e:
-        print(f"Failed to parse {data}: {str(e)}")
-        return {}
-
-    entities = {}
-    for entity_name, entity_data in root.items():
-        entity = cls()
-        entity.name = entity_name
-        entity.path = entity_data.get("path", "")
-        entity.apply = entity_data.get("apply", {})
-        entity.attach = entity_data.get("attach", {})
-        entity.prefix = entity_data.get("prefix", {"body": "", "joint": "", "geom": ""})
-        entity.suffix = entity_data.get("suffix", {"body": "", "joint": "", "geom": ""})
-        entity.joint_state = entity_data.get("joint_state", {})
-        entity.disable_self_collision = entity_data.get(
-            "disable_self_collision", "auto"
-        )
-        entities[entity_name] = entity
-
-    return entities
-
-
-class IsaacSimCompiler:
-    world_usd_path: str
-    scene_name: str
-    save_usd_path: str
-    robots: List[Robot]
-    objects: List[Object]
+class IsaacSimCompiler(MultiverseSimulatorCompiler):
+    name: str = "isaac_sim"
+    ext: str = "usda"
+    world_stage: Usd.Stage
 
     def __init__(self, args):
-        self.world_usd_path = args.world
-        print(f"World: {self.world_usd_path}")
-        self.scene_name = args.name
-        self.save_dir_path = os.path.join(args.save_dir, self.scene_name)
-        self.save_usd_dir = args.save_dir
-        self.robots = []
-        self.objects = []
+        super().__init__(args)
 
-    def build_world_usd(self, robots: Dict[str, Robot], objects: Dict[str, Object]):
+    def build_world(self, robots: Dict[str, Robot], objects: Dict[str, Object], multiverse_params: Dict[str, Dict]):
         for entity in list(robots.values()) + list(objects.values()):
             file_ext = os.path.splitext(entity.path)[1]
             entity_usd_dir = os.path.dirname(entity.path)
@@ -86,7 +29,8 @@ class IsaacSimCompiler:
 
             if "body" in entity.apply:
                 body_apply = entity.apply["body"]
-                for xform_prim in [prim for prim in entity_stage.Traverse() if prim.IsA(UsdGeom.Xform) and prim.GetName() in body_apply]:
+                for xform_prim in [prim for prim in entity_stage.Traverse() if
+                                   prim.IsA(UsdGeom.Xform) and prim.GetName() in body_apply]:
                     if xform_prim.GetName() == entity.name and xform_prim.GetParent().IsPseudoRoot():
                         continue
                     xform = UsdGeom.Xform(xform_prim)
@@ -94,8 +38,8 @@ class IsaacSimCompiler:
                     pos = body_apply[xform_prim.GetName()].get("pos", [0, 0, 0])
                     quat = body_apply[xform_prim.GetName()].get("quat", [1, 0, 0, 0])
 
-                    pos = numpy.asfarray(pos)
-                    quat = numpy.asfarray(quat)
+                    pos = numpy.asarray(pos)
+                    quat = numpy.asarray(quat)
                     mat = Gf.Matrix4d()
                     mat.SetTranslateOnly(Gf.Vec3d(*pos))
                     mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(*quat[1:])))
@@ -103,7 +47,8 @@ class IsaacSimCompiler:
                     xform.AddTransformOp().Set(mat)
 
             for joint_name, joint_value in entity.joint_state.items():
-                for joint_prim in [prim for prim in entity_stage.TraverseAll() if prim.IsA(UsdPhysics.Joint) and prim.GetName() == joint_name]:
+                for joint_prim in [prim for prim in entity_stage.TraverseAll() if
+                                   prim.IsA(UsdPhysics.Joint) and prim.GetName() == joint_name]:
                     if joint_prim.IsA(UsdPhysics.RevoluteJoint) and joint_prim.HasAPI(UsdPhysics.DriveAPI):
                         drive_api = UsdPhysics.DriveAPI.Apply(joint_prim, "angular")
                         drive_api.GetTargetPositionAttr().Set(numpy.rad2deg(joint_value))
@@ -123,83 +68,25 @@ class IsaacSimCompiler:
                 with open(entity_usd_path, "w") as f:
                     f.write(data)
 
-            if isinstance(entity, Object):
-                self.objects.append(entity)
-            elif isinstance(entity, Robot):
-                self.robots.append(entity)
-
-        self.create_world_usd()
-
-    def create_world_usd(self):
-        if not os.path.exists(self.save_dir_path):
-            os.makedirs(self.save_dir_path)
-        file_ext = os.path.splitext(self.world_usd_path)[1]
-        self.save_usd_path = os.path.join(self.save_dir_path, self.scene_name + f"{file_ext}")
-        shutil.copy(self.world_usd_path, self.save_usd_path)
+        file_ext = os.path.splitext(self.world_path)[1]
         if file_ext == ".usda":
-            with open(self.save_usd_path, "r") as f:
+            with open(self.save_file_path, "r") as f:
                 data = f.read()
-            world_usd_dir = os.path.dirname(self.world_usd_path)
+            world_usd_dir = os.path.dirname(self.world_path)
             data = data.replace("@./", f"@{world_usd_dir}/")
-            with open(self.save_usd_path, "w") as f:
+            with open(self.save_file_path, "w") as f:
                 f.write(data)
 
-        stage = Usd.Stage.Open(self.save_usd_path)
+        stage = Usd.Stage.Open(self.save_file_path)
 
         sublayer_paths = []
-        for robot in self.robots:
+        for robot in robots.values():
             sublayer_paths.append(robot.path)
-        for obj in self.objects:
+        for obj in objects.values():
             sublayer_paths.append(obj.path)
         stage.GetRootLayer().subLayerPaths = sublayer_paths
         stage.GetRootLayer().Save()
 
-def main():
-    # Initialize argument parser
-    parser = argparse.ArgumentParser(description="Compile MJCF from world and robots.")
-
-    # Define arguments
-    parser.add_argument("--name", help="Name of the simulation", required=True)
-    parser.add_argument("--world", help="Path to world MJCF", required=True)
-    parser.add_argument("--robots", help="JSON string with robots' data", required=False)
-    parser.add_argument("--objects", help="JSON string with objects' data", required=False)
-    parser.add_argument("--references", help="JSON string with references' data", required=False)
-    if os.path.basename(__file__) == "isaac_sim_compile":
-        save_dir = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "..", "saved"
-        )
-    elif os.path.basename(__file__) == "isaac_sim_compiler.py":
-        if os.name == "nt":
-            save_dir = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)),
-                "..",
-                "saved",
-            )
-        else:
-            save_dir = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)),
-                "..",
-                "..",
-                "..",
-                "..",
-                "..",
-                "saved",
-            )
-    else:
-        raise RuntimeError(f"Unknown file name {os.path.basename(__file__)}")
-
-    parser.add_argument("--save_dir", help="Path to save directory", required=False, default=save_dir)
-
-    # Parse arguments
-    args, _ = parser.parse_known_args()
-
-    compiler = IsaacSimCompiler(args)
-    compiler.build_world_usd(
-        robots=parse_entity(args.robots, Robot),
-        objects=parse_entity(args.objects, Object),
-    )
-    print(f"Scene: {compiler.save_usd_path}", end="")
-
 
 if __name__ == "__main__":
-    main()
+    multiverse_simulator_compiler_main(IsaacSimCompiler)
