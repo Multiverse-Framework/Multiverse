@@ -7,18 +7,19 @@ import numpy
 import shutil
 
 from multiverse_simulator import MultiverseSimulatorCompiler, Robot, Object, multiverse_simulator_compiler_main
-from pxr import Usd, UsdGeom, UsdPhysics, Gf
 
 
 class IsaacSimCompiler(MultiverseSimulatorCompiler):
     name: str = "isaac_sim"
     ext: str = "usda"
-    world_stage: Usd.Stage
+    world_stage: "Usd.Stage"
 
     def __init__(self, args):
         super().__init__(args)
 
     def build_world(self, robots: Dict[str, Robot], objects: Dict[str, Object], multiverse_params: Dict[str, Dict]):
+        from pxr import Usd, UsdGeom, UsdPhysics, Gf # Ask NVIDIA for this shitty importing style
+
         for entity in list(robots.values()) + list(objects.values()):
             file_ext = os.path.splitext(entity.path)[1]
             entity_usd_dir = os.path.dirname(entity.path)

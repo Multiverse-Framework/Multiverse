@@ -6,7 +6,7 @@ if (UNIX)
         COMMAND cp -rf ${CMAKE_CURRENT_SOURCE_DIR}/scripts/isaac_sim.py ${BIN_DIR}/isaac_sim
     )
     execute_process(
-        COMMAND sed -i "s|ISAAC_SIM_PATH|/home/${USER}/.local/share/ov/pkg/isaac-sim-4.2.0|g" ${BIN_DIR}/isaac_sim
+        COMMAND sed -i s|ISAAC_SIM_PATH|${ISAAC_SIM_PATH}|g ${BIN_DIR}/isaac_sim
     )
 elseif (WIN32)
     execute_process(
