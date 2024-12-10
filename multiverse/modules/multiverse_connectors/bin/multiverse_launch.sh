@@ -97,7 +97,7 @@ if [ "$ROS_DISTRO" ]; then
     (source "$MULTIVERSE_PATH"/../multiverse_ws/devel/setup.bash && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
 fi
 
-for distro in foxy jazzy; do
+for distro in foxy humble jazzy; do
     if [ -f "/opt/ros/$distro/setup.sh" ]; then
         ROS2_DISTRO=$distro
         break
