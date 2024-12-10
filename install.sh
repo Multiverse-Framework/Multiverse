@@ -110,8 +110,6 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
     # Install and link clang-11 for creating shared library
     sudo apt-get install -y clang-11 llvm-11-dev libc++-11-dev libc++abi-11-dev libstdc++-11-dev 
     sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
-    sudo update-alternatives --remove-all clang++
-    sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-11 100
 
     # Install and link gcc-11
     sudo apt-get install -y gcc-11
@@ -132,17 +130,13 @@ elif [ $UBUNTU_VERSION = "22.04" ]; then
     # Install and link clang-14 for creating shared library
     sudo apt-get install -y clang-14 llvm-14-dev libc++-14-dev libc++abi-14-dev libstdc++-12-dev 
     sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
-    sudo update-alternatives --remove-all clang++
-    sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-17 100
 
     # Setup virtual environment
-    python3 -m pip install virtualenvwrapper --break-system-packages
+    python3 -m pip install virtualenvwrapper
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Install and link clang-17 for creating shared library
     sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
     sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
-    sudo update-alternatives --remove-all clang++
-    sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang-14 100
 
     # Setup virtual environment
     python3 -m pip install virtualenvwrapper --break-system-packages
