@@ -10,11 +10,11 @@ if (UNIX)
     set(ENV{MUJOCO_BUILD_DIR} ${BUILD_DIR}/mujoco)
 
     # Execute the shell file during CMake configuration
-    execute_process(
-        COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/install.sh
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        RESULT_VARIABLE INSTALL_RESULT
-    )
+    # execute_process(
+    #     COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/install.sh
+    #     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    #     RESULT_VARIABLE INSTALL_RESULT
+    # )
 elseif (WIN32)
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco_connector/mujoco_compiler.py ${BIN_DIR}/mujoco_compiler.py
@@ -24,9 +24,9 @@ elseif (WIN32)
     set(ENV{MUJOCO_BUILD_DIR} ${BUILD_DIR}/mujoco)
 
     # Execute the batch file during CMake configuration
-    execute_process(
-        COMMAND cmd /c ${CMAKE_CURRENT_SOURCE_DIR}/install.bat
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        RESULT_VARIABLE INSTALL_RESULT
-    )
+    # execute_process(
+    #     COMMAND cmd /c ${CMAKE_CURRENT_SOURCE_DIR}/install.bat
+    #     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    #     RESULT_VARIABLE INSTALL_RESULT
+    # )
 endif()

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-for distro in foxy jazzy; do
+for distro in foxy humble jazzy; do
     if [ -f "/opt/ros/$distro/setup.sh" ]; then
         ROS2_DISTRO=$distro
         break

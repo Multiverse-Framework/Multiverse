@@ -22,10 +22,10 @@ jobs:
           chmod +x install.sh
           sudo ./install.sh
 
-    - name: Run build_third_parties.sh
+    - name: Run build_third_parties.sh (only mujoco and pybind11)
       run: |
           chmod +x build_third_parties.sh
-          ./build_third_parties.sh
+          ./build_third_parties.sh --excludes usd blender
 
     - name: Run build_multiverse.sh (only src)
       run: |
@@ -46,6 +46,11 @@ jobs:
       run: |
           chmod +x build_multiverse_ws2.sh
           ./build_multiverse_ws2.sh
+
+    - name: Run build_third_parties.sh
+      run: |
+          chmod +x build_third_parties.sh
+          ./build_third_parties.sh
 
     - name: Run build_multiverse.sh
       run: |

@@ -61,7 +61,10 @@ done
 
 UBUNTU_VERSION=$(lsb_release -rs)
 
+PYTHON_EXECUTABLE=python3
 if [ $UBUNTU_VERSION = "20.04" ]; then
+    PYTHON_EXECUTABLE=python3.10
+elif [ $UBUNTU_VERSION = "22.04" ]; then
     PYTHON_EXECUTABLE=python3.10
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     PYTHON_EXECUTABLE=python3.12
@@ -145,7 +148,7 @@ if [ $BUILD_MUJOCO = true ]; then
     
     # Build MuJoCo
     
-    FROM_SRC=true
+    FROM_SRC=false
     MUJOCO_BUILD_DIR=$BUILD_DIR/mujoco
     MUJOCO_EXT_DIR=$EXT_DIR/mujoco
     
@@ -167,8 +170,8 @@ if [ $BUILD_MUJOCO = true ]; then
     else
         # Download MuJoCo
         
-        MUJOCO_TAR_FILE=mujoco-3.2.5-linux-x86_64.tar.gz
-        curl -sL https://github.com/google-deepmind/mujoco/releases/download/3.2.5/$MUJOCO_TAR_FILE | tar zx -C $MUJOCO_BUILD_DIR --strip-components=1
+        MUJOCO_TAR_FILE=mujoco-3.2.6-linux-x86_64.tar.gz
+        curl -sL https://github.com/google-deepmind/mujoco/releases/download/3.2.6/$MUJOCO_TAR_FILE | tar zx -C $MUJOCO_BUILD_DIR --strip-components=1
     fi
     
     ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
