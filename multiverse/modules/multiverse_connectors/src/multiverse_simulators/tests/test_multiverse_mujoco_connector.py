@@ -18,6 +18,7 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
     Simulator = MultiverseMujocoConnector
     headless = False
     step_size = 1E-3
+    use_mjx = False
 
 
 class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBaseTestCase):
@@ -25,6 +26,7 @@ class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBas
     Simulator = MultiverseMujocoConnector
     headless = True
     step_size = 1E-3
+    use_mjx = False
 
 
 class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTestCase):

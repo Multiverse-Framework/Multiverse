@@ -6,7 +6,6 @@ import os
 
 import mujoco
 import mujoco.viewer
-from mujoco import mjx
 
 from .utills import get_multiverse_connector_plugin
 from multiverse_simulator import MultiverseSimulator, MultiverseRenderer
@@ -40,14 +39,16 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     mj_data = mujoco.MjData
     """MuJoCo data"""
 
-    mjx_model: mjx.Model = None
+    mjx_model: "mjx.Model" = None
     """MJX model"""
 
-    mjx_data: mjx.Data = None
+    mjx_data: "mjx.Data" = None
     """MJX data"""
 
     use_mjx: bool = False
     """Use MJX (https://mujoco.readthedocs.io/en/stable/mjx.html)"""
+
+    _mjx = None
 
     def __init__(self, file_path: str, **kwargs):
         self._file_path = file_path
@@ -64,16 +65,18 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         self.mj_model.opt.timestep = self.step_size
         self.mj_data = mujoco.MjData(self.mj_model)
         if self.use_mjx:
-            self.mjx_model = mjx.put_model(self.mj_model)
-            self.mjx_data = mjx.make_data(self.mj_model)
+            from mujoco import mjx
+            self._mjx = mjx
+            self.mjx_model = self.mjx.put_model(self.mj_model)
+            self.mjx_data = self.mjx.make_data(self.mj_model)
         if not self.headless:
-            self._viewer = mujoco.viewer.launch_passive(self.mj_model, self.mj_data)
+            self._renderer = mujoco.viewer.launch_passive(self.mj_model, self.mj_data)
         else:
-            self._viewer = MultiverseRenderer()
+            self._renderer = MultiverseRenderer()
 
     def step_callback(self):
         if self.use_mjx:
-            mjx.step(self.mjx_model, self.mjx_data)
+            self.mjx.step(self.mjx_model, self.mjx_data)
         else:
             mujoco.mj_step(self.mj_model, self.mj_data)
 
@@ -91,4 +94,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
     @property
     def renderer(self):
-        return self._viewer
+        return self._renderer
+
+    @property
+    def mjx(self):
+        return self._mjx
