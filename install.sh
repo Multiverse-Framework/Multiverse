@@ -65,7 +65,6 @@ elif [ $UBUNTU_VERSION = "22.04" ]; then
     sudo rosdep init
     sudo rosdep fix-permissions
     rosdep update
-fi
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Setup your sources.list
     sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
@@ -138,7 +137,6 @@ elif [ $UBUNTU_VERSION = "22.04" ]; then
 
     # Setup virtual environment
     python3 -m pip install virtualenvwrapper --break-system-packages
-fi
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Install and link clang-17 for creating shared library
     sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
