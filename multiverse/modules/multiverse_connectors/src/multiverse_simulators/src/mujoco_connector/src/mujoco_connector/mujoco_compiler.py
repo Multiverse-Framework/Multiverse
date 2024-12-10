@@ -166,8 +166,7 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                         actuator.name = fix_prefix_and_suffix_each(actuator.name, entity_prefix, entity_suffix,
                                                                    entity_name)
                 elif entity_type == "joint":
-                    if len(self.world_spec.tendons) > 0 or len(
-                            self.world_spec.actuators) > 0:  # TODO: Waiting for MuJoCo update
+                    if len(self.world_spec.tendons) > 0 or len(self.world_spec.actuators) > 0 or len(self.world_spec.sensors) > 0:  # TODO: Waiting for MuJoCo update
                         self.world_spec.compile()
                         xml_string = self.world_spec.to_xml()
                         with open(self.save_file_path, "w") as f:
@@ -190,6 +189,14 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                                 joint_name = fix_prefix_and_suffix_each(joint_name, entity_prefix, entity_suffix,
                                                                         entity_name)
                                 general_element.set("joint", joint_name)
+                        for sensor_element in root.findall("sensor"):
+                            for each_element in sensor_element.iter():
+                                if "joint" not in each_element.attrib:
+                                    continue
+                                joint_name = each_element.attrib["joint"]
+                                joint_name = fix_prefix_and_suffix_each(joint_name, entity_prefix, entity_suffix,
+                                                                        entity_name)
+                                each_element.set("joint", joint_name)
                         ET.indent(root)
                         file_xml_string = ET.tostring(root, encoding='unicode', method='xml')
                         with open(self.save_file_path, "w") as f:
