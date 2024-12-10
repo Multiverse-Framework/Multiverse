@@ -13,6 +13,8 @@ def main():
     try:
         parser = argparse.ArgumentParser(description="Run the Mujoco Connector")
         parser.add_argument("--file_path", type=str, required=True, help="Path to the Mujoco XML file")
+        parser.add_argument("--use_mjx", required=False, action='store_true',
+                            help="Use MJX (https://mujoco.readthedocs.io/en/stable/mjx.html)")
         parser.add_argument("--headless", required=False, action='store_true', help="Run in headless mode")
         parser.add_argument("--real_time_factor", type=float, required=False, default=1.0, help="Real time factor")
         parser.add_argument("--step_size", type=float, required=False, default=0.01, help="Step size")
@@ -35,6 +37,7 @@ def main():
                 multiverse_params = {}
 
         simulator = MultiverseMujocoConnector(file_path=args.file_path,
+                                              use_mjx=args.use_mjx,
                                               headless=args.headless,
                                               real_time_factor=args.real_time_factor,
                                               step_size=args.step_size)

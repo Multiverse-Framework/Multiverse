@@ -176,8 +176,9 @@ for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrap
         # Install additional packages for multiverse_parser
         $PYTHON_EXECUTABLE -m pip install urdf_parser_py
 
-        # Install MuJoCo
-        $PYTHON_EXECUTABLE -m pip install mujoco==3.2.6
+        # Install MuJoCo and JAX
+        $PYTHON_EXECUTABLE -m pip install mujoco==3.2.6 
+        $PYTHON_EXECUTABLE -m pip install mujoco-mjx==3.2.6 "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 
         # Install additional packages for Jupyter Notebook
         $PYTHON_EXECUTABLE -m pip install panel jupyter-server bash_kernel

@@ -41,6 +41,18 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
             time.sleep(1)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
+    def test_running_with_mjx_in_10s(self):
+        simulator = MultiverseMujocoConnector(file_path=os.path.join(resources_path, "mjcf/unitree/h1_scene.xml"),
+                                              use_mjx=True,
+                                              headless=self.headless,
+                                              real_time_factor=-1,
+                                              step_size=0.001)
+        constraints = MultiverseSimulatorConstraints(max_simulation_time=10.0)
+        simulator.start(constraints=constraints)
+        while simulator.state != MultiverseSimulatorState.STOPPED:
+            time.sleep(1)
+        self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+
 
 @unittest.skip("This test is not meant to be run in CI")
 class MujocoSpeedTestCase(unittest.TestCase):
