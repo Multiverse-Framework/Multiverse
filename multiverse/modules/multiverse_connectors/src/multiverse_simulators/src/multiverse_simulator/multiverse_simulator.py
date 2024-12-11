@@ -38,10 +38,11 @@ class MultiverseSimulatorConstraints:
 class MultiverseRenderer:
     """Base class for Multiverse Renderer"""
 
-    _is_running: bool = True
+    _is_running: bool = False
 
     def __init__(self):
-        pass
+        self._is_running = True
+        atexit.register(self.close)
 
     def __enter__(self):
         return self
@@ -94,15 +95,26 @@ class MultiverseSimulator:
 
     def start(self,
               run_in_thread: bool = True,
-              constraints: MultiverseSimulatorConstraints = None):
+              constraints: MultiverseSimulatorConstraints = None,
+              time_out_in_seconds: float = 10.0):
         """
         Start the simulator, if run_in_thread is True, run the simulator in a thread until the constraints are met
 
         :param constraints: MultiverseSimulatorConstraints, constraints for stopping the simulator
         :param run_in_thread: bool, True to run the simulator in a thread
         :param constraints: MultiverseSimulatorConstraints, constraints for stopping the simulator
+        :param time_out_in_seconds: float, timeout for starting the renderer
         """
         self.start_callback()
+        for i in range(int(10 * time_out_in_seconds)):
+            if self.renderer.is_running():
+                break
+            time.sleep(0.1)
+            if i % 10 == 0:
+                self.log_info(f"Waiting for {self.renderer.__name__} to start")
+        else:
+            self.log_error(f"{self.renderer.__name__} is not running")
+            return
         self._current_number_of_steps = 0
         self._start_real_time = self.current_real_time
         self._state = MultiverseSimulatorState.RUNNING
@@ -152,6 +164,8 @@ class MultiverseSimulator:
     def stop(self):
         """Stop the simulator"""
         self._state = MultiverseSimulatorState.STOPPED
+        if self.renderer.is_running():
+            self.renderer.close()
         if self.simulation_thread is not None and self.simulation_thread.is_alive():
             self.simulation_thread.join()
         self._stop_reason = MultiverseSimulatorStopReason.STOP
@@ -176,11 +190,9 @@ class MultiverseSimulator:
         Reset the simulator, set the start_real_time to current_real_time, current_simulate_time to 0.0,
         current_number_of_steps to 0, and run the simulator
         """
-        self.pause()
         self.reset_callback()
         self._current_number_of_steps = 0
         self._start_real_time = self.current_real_time
-        self.unpause()
 
     def should_stop(self,
                     constraints: MultiverseSimulatorConstraints = None) -> Optional[MultiverseSimulatorStopReason]:
@@ -215,7 +227,8 @@ class MultiverseSimulator:
         self._current_simulation_time += self.step_size
 
     def stop_callback(self):
-        self.renderer.close()
+        if self.renderer.is_running():
+            self.renderer.close()
 
     def pause_callback(self):
         self._start_real_time += self.current_real_time - self.current_simulation_time - self.start_real_time
