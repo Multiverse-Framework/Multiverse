@@ -163,9 +163,9 @@ class MultiverseSimulator:
 
     def stop(self):
         """Stop the simulator"""
-        self._state = MultiverseSimulatorState.STOPPED
         if self.renderer.is_running():
             self.renderer.close()
+        self._state = MultiverseSimulatorState.STOPPED
         if self.simulation_thread is not None and self.simulation_thread.is_alive():
             self.simulation_thread.join()
         self._stop_reason = MultiverseSimulatorStopReason.STOP
