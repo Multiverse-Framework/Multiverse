@@ -1,5 +1,7 @@
 from .multiverse_simulator import (
     MultiverseSimulator,
+    MultiverseViewer,
+    MultiverseAttribute,
     MultiverseRenderer,
     MultiverseSimulatorState,
     MultiverseSimulatorConstraints,

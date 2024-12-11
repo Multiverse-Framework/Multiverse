@@ -3,13 +3,14 @@
 """Multiverse Mujoco Connector class"""
 
 import os
+import xml.etree.ElementTree as ET
 
 import mujoco
 import mujoco.viewer
+import numpy
 
-from .utills import get_multiverse_connector_plugin
 from multiverse_simulator import MultiverseSimulator, MultiverseRenderer
-import xml.etree.ElementTree as ET
+from .utills import get_multiverse_connector_plugin
 
 
 class MultiverseMujocoRenderer(MultiverseRenderer):
@@ -81,8 +82,51 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             mujoco.mj_step(self.mj_model, self.mj_data)
 
     def reset_callback(self):
-        if not self.use_mjx:
+        if self.use_mjx:
+            pass  # TODO: Implement reset_callback for MJX
+        else:
             mujoco.mj_resetDataKeyframe(self.mj_model, self.mj_data, 0)
+
+    def write_data(self, in_data: numpy.ndarray):
+        if self.use_mjx:
+            pass  # TODO: Implement write_data for MJX
+        else:
+            i = 0
+            for name, attrs in self._viewer.send_objects.items():
+                for attr in attrs:
+                    if attr.name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
+                                     "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
+                        actuator = self.mj_data.actuator(name)
+                        actuator.ctrl[0] = in_data[i]
+                        i += 1
+                    else:
+                        self.log_error(f"Unknown attribute {attr.name} for object {name}")
+            if i != len(in_data):
+                self.log_error(f"Data length mismatch (expected {len(in_data)}, got {i})")
+
+    def read_data(self, out_data: numpy.ndarray):
+        if self.use_mjx:
+            pass
+        else:
+            i = 0
+            for name, attrs in self._viewer.receive_objects.items():
+                for attr in attrs:
+                    if attr.name in {"joint_rvalue", "joint_tvalue"}:
+                        joint = self.mj_data.joint(name)
+                        out_data[i] = joint.qpos[0]
+                        i += 1
+                    elif attr.name in {"joint_angular_velocity", "joint_linear_velocity"}:
+                        joint = self.mj_data.joint(name)
+                        out_data[i] = joint.qvel[0]
+                        i += 1
+                    elif attr.name in {"joint_torque", "joint_force"}:
+                        joint = self.mj_data.joint(name)
+                        out_data[i] = joint.qfrc_applied[0]
+                        i += 1
+                    else:
+                        self.log_error(f"Unknown attribute {attr.name} for object {name}")
+            if i != len(out_data):
+                self.log_error(f"Data length mismatch (expected {len(out_data)}, got {i})")
 
     @property
     def file_path(self) -> str:

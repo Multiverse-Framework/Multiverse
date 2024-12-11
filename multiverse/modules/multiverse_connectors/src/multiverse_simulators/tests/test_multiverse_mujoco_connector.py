@@ -1,6 +1,9 @@
 import unittest
 
-from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState
+import numpy
+
+from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
+    MultiverseAttribute
 from mujoco_connector import MultiverseMujocoConnector
 from test_multiverse_simulator import MultiverseSimulatorTestCase
 
@@ -41,6 +44,34 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         simulator.start(constraints=constraints)
         while simulator.state != MultiverseSimulatorState.STOPPED:
             time.sleep(1)
+        self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+
+    def test_running_in_10s_with_viewer(self):
+        send_attr = MultiverseAttribute(name="cmd_joint_rvalue", value=numpy.array([0.0]))
+        send_objects = {
+            "actuator1": [send_attr],
+            "actuator2": [send_attr],
+        }
+        receive_attr_1 = MultiverseAttribute(name="joint_rvalue", value=numpy.array([0.0]))
+        receive_attr_2 = MultiverseAttribute(name="joint_angular_velocity", value=numpy.array([0.0]))
+        receive_objects = {
+            "joint1": [receive_attr_1, receive_attr_2],
+            "joint2": [receive_attr_1, receive_attr_2],
+        }
+        viewer = MultiverseViewer(send_objects=send_objects, receive_objects=receive_objects)
+        simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
+        constraints = MultiverseSimulatorConstraints(max_simulation_time=10.0)
+        simulator.start(constraints=constraints)
+        while simulator.state != MultiverseSimulatorState.STOPPED:
+            time_now = time.time()
+            f = 0.5
+            act_1_value = numpy.pi / 6 * numpy.sin(2.0 * numpy.pi * f * time_now)
+            act_2_value = numpy.pi / 6 * numpy.sin(-1.0 * numpy.pi * f * time_now)
+            viewer.send_data = numpy.array([act_1_value, act_2_value])
+            time.sleep(0.01)
+            self.assertEqual(viewer.receive_data.shape, (4,))
+            self.assertAlmostEqual(viewer.receive_data[0], act_1_value, places=0)
+            self.assertAlmostEqual(viewer.receive_data[2], act_2_value, places=0)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_with_mjx_in_10s(self):

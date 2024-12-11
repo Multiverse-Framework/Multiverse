@@ -8,7 +8,9 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 from threading import Thread
-from typing import Optional
+from typing import Optional, Dict, List
+
+import numpy
 
 
 class MultiverseSimulatorState(Enum):
@@ -63,6 +65,84 @@ class MultiverseRenderer:
         self._is_running = False
 
 
+@dataclass
+class MultiverseAttribute:
+    """Base class for Multiverse Attribute"""
+
+    name: str
+    """Name of the attribute"""
+    value: numpy.ndarray
+    """Value of the attribute"""
+
+
+class MultiverseViewer:
+    """Base class for Multiverse Viewer"""
+
+    def __init__(
+            self,
+            send_objects: Optional[Dict[str, List[MultiverseAttribute]]] = None,
+            receive_objects: Optional[Dict[str, List[MultiverseAttribute]]] = None,
+    ):
+        self._send_objects = send_objects or {}
+        self._send_data = self._initialize_data(self._send_objects)
+
+        self._receive_objects = receive_objects or {}
+        self._receive_data = self._initialize_data(self._receive_objects)
+
+    @staticmethod
+    def _initialize_data(objects: Dict[str, List[MultiverseAttribute]]) -> numpy.ndarray:
+        """
+        Flatten attribute values into a NumPy array.
+
+        :param objects: Dict[str, List[MultiverseAttribute]], objects with attributes
+        :return: numpy.ndarray, flattened attribute values
+        """
+        return numpy.array([i for attrs in objects.values() for attr in attrs for i in attr.value])
+
+    @property
+    def send_objects(self) -> Dict[str, List[MultiverseAttribute]]:
+        self._update_objects(self._send_objects, self.send_data)
+        return self._send_objects
+
+    @property
+    def receive_objects(self) -> Dict[str, List[MultiverseAttribute]]:
+        self._update_objects(self._receive_objects, self.receive_data)
+        return self._receive_objects
+
+    @staticmethod
+    def _update_objects(objects: Dict[str, List[MultiverseAttribute]], data: numpy.ndarray):
+        """
+        Update object attribute values from the data array.
+
+        :param objects: Dict[str, List[MultiverseAttribute]], objects with attributes
+        """
+        i = 0
+        for attributes in objects.values():
+            for attr in attributes:
+                attr.value = data[i:i + len(attr.value)]
+                i += len(attr.value)
+
+    @property
+    def send_data(self) -> numpy.ndarray:
+        return self._send_data
+
+    @send_data.setter
+    def send_data(self, data: numpy.ndarray):
+        if len(data) != len(self._send_data):
+            raise ValueError("Data length mismatch with send_objects.")
+        self._send_data[:] = data
+
+    @property
+    def receive_data(self) -> numpy.ndarray:
+        return self._receive_data
+
+    @receive_data.setter
+    def receive_data(self, data: numpy.ndarray):
+        if len(data) != len(self._receive_data):
+            raise ValueError("Data length mismatch with receive_objects.")
+        self._receive_data[:] = data
+
+
 class MultiverseSimulator:
     """Base class for Multiverse Simulator"""
 
@@ -78,8 +158,11 @@ class MultiverseSimulator:
     logger: logging.Logger = logging.getLogger(__name__)
     """Logger for the simulator"""
 
-    def __init__(self, **kwargs):
+    def __init__(self, viewer: Optional[MultiverseViewer] = None, **kwargs):
         """
+        Initialize the simulator with the viewer and the following keyword arguments:
+
+        :param viewer: MultiverseViewer, viewer for the simulator
         :param kwargs: step_size, headless, real_time_factor
         """
         self._headless = kwargs.get("headless", False)
@@ -89,6 +172,7 @@ class MultiverseSimulator:
         self._start_real_time = self.current_real_time
         self._state = MultiverseSimulatorState.STOPPED
         self._stop_reason = None
+        self._viewer = viewer
         self._renderer = MultiverseRenderer()
         self._current_view_time = self.current_real_time
         atexit.register(self.stop)
@@ -146,9 +230,11 @@ class MultiverseSimulator:
                         if delta_time <= self.step_size:
                             self.step()
                         if delta_time > self.step_size * 10:
-                            self.log_warning(f"Real time is {delta_time} seconds ({delta_time / self.step_size} step_size) behind simulation time")
+                            self.log_warning(
+                                f"Real time is {delta_time} seconds ({delta_time / self.step_size} step_size) behind simulation time")
                         elif delta_time < -self.step_size * 10:
-                            self.log_warning(f"Real time is {-delta_time} seconds ({-delta_time / self.step_size} step_size) ahead of simulation time")
+                            self.log_warning(
+                                f"Real time is {-delta_time} seconds ({-delta_time / self.step_size} step_size) ahead of simulation time")
                     else:
                         self.step()
                 elif self.state == MultiverseSimulatorState.PAUSED:
@@ -158,8 +244,28 @@ class MultiverseSimulator:
 
     def step(self):
         """Step the simulator"""
+        if self._viewer is not None:
+            self.write_data(in_data=self._viewer.send_data)
         self.step_callback()
+        if self._viewer is not None:
+            self.read_data(out_data=self._viewer.receive_data)
         self._current_number_of_steps += 1
+
+    def write_data(self, in_data: numpy.ndarray):
+        """
+        Write data to the simulator
+
+        :param in_data: numpy.ndarray, data to write
+        """
+        raise NotImplementedError("write_data method is not implemented")
+
+    def read_data(self, out_data: numpy.ndarray):
+        """
+        Read data from the simulator
+
+        :param out_data: numpy.ndarray, data to read
+        """
+        raise NotImplementedError("read_data method is not implemented")
 
     def stop(self):
         """Stop the simulator"""
