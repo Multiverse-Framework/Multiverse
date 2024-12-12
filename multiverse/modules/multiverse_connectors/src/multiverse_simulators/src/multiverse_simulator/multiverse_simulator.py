@@ -8,7 +8,7 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 from threading import Thread
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Tuple
 
 import numpy
 
@@ -71,8 +71,30 @@ class MultiverseAttribute:
 
     name: str
     """Name of the attribute"""
-    value: numpy.ndarray
-    """Value of the attribute"""
+    default_value: numpy.ndarray
+    """Default value of the attribute"""
+    values: numpy.ndarray
+    """Values of the attribute"""
+
+    def __init__(self, name: str, default_value: numpy.ndarray):
+        self.name = name
+        self.default_value = default_value
+        self._values = None
+
+    @property
+    def values(self) -> numpy.ndarray:
+        if self._values is None:
+            raise ValueError(f"Attribute {self.name} value is not set")
+        return self._values
+
+    @values.setter
+    def values(self, values: numpy.ndarray):
+        if len(values.shape) != 2:
+            raise ValueError(f"Attribute {self.name} value shape is not 2D, got {len(values.shape)}D")
+        if values.shape[1] != self.default_value.shape[0]:
+            raise ValueError(f"Attribute {self.name} value shape mismatch, "
+                             f"expected {self.default_value.shape[0]}, got {values.shape[1]}")
+        self._values = values
 
 
 class MultiverseViewer:
@@ -80,67 +102,91 @@ class MultiverseViewer:
 
     def __init__(
             self,
-            send_objects: Optional[Dict[str, List[MultiverseAttribute]]] = None,
-            receive_objects: Optional[Dict[str, List[MultiverseAttribute]]] = None,
+            write_objects: Optional[Dict[str, List[MultiverseAttribute]]] = None,
+            read_objects: Optional[Dict[str, List[MultiverseAttribute]]] = None,
+            number_of_instances: int = 1,
     ):
-        self._send_objects = send_objects or {}
-        self._send_data = self._initialize_data(self._send_objects)
+        self._number_of_instances = number_of_instances
+        self._write_objects = write_objects or {}
+        self._read_objects = read_objects or {}
+        self._write_data = None
+        self._read_data = None
 
-        self._receive_objects = receive_objects or {}
-        self._receive_data = self._initialize_data(self._receive_objects)
+    def initialize_data(self, number_of_instances: int):
+        """
+        Initialize data for the viewer
+
+        :param number_of_instances: int, number of instances
+        """
+        self._write_objects, self._write_data = self._initialize_data(self._write_objects, number_of_instances)
+        self._read_objects, self._read_data = self._initialize_data(self._read_objects, number_of_instances)
 
     @staticmethod
-    def _initialize_data(objects: Dict[str, List[MultiverseAttribute]]) -> numpy.ndarray:
+    def _initialize_data(objects: Dict[str, List[MultiverseAttribute]],
+                         number_of_instances: int) -> Tuple[Dict[str, List[MultiverseAttribute]], numpy.ndarray]:
         """
         Flatten attribute values into a NumPy array.
 
         :param objects: Dict[str, List[MultiverseAttribute]], objects with attributes
-        :return: numpy.ndarray, flattened attribute values
+        :param number_of_instances: int, number of instances
+        :return: Tuple[Dict[str, List[MultiverseAttribute]], numpy.ndarray], objects with attributes and data
         """
-        return numpy.array([i for attrs in objects.values() for attr in attrs for i in attr.value])
+        for attributes in objects.values():
+            for attr in attributes:
+                attr.values = numpy.array([attr.default_value for _ in range(number_of_instances)])
+        return objects, numpy.array([[i for attrs in objects.values() for attr in attrs for i in attr.default_value]
+                                     for _ in range(number_of_instances)])
 
     @property
-    def send_objects(self) -> Dict[str, List[MultiverseAttribute]]:
-        self._update_objects(self._send_objects, self.send_data)
-        return self._send_objects
+    def write_objects(self) -> Dict[str, List[MultiverseAttribute]]:
+        self._update_objects(self._write_objects, self.write_data)
+        return self._write_objects
 
     @property
-    def receive_objects(self) -> Dict[str, List[MultiverseAttribute]]:
-        self._update_objects(self._receive_objects, self.receive_data)
-        return self._receive_objects
+    def read_objects(self) -> Dict[str, List[MultiverseAttribute]]:
+        self._update_objects(self._read_objects, self.read_data)
+        return self._read_objects
 
-    @staticmethod
-    def _update_objects(objects: Dict[str, List[MultiverseAttribute]], data: numpy.ndarray):
+    def _update_objects(self, objects: Dict[str, List[MultiverseAttribute]], data: numpy.ndarray):
         """
         Update object attribute values from the data array.
 
         :param objects: Dict[str, List[MultiverseAttribute]], objects with attributes
         """
-        i = 0
-        for attributes in objects.values():
-            for attr in attributes:
-                attr.value = data[i:i + len(attr.value)]
-                i += len(attr.value)
+        for instance_number in range(self.number_of_instances):
+            i = 0
+            for attributes in objects.values():
+                for attr in attributes:
+                    attr.values[instance_number] = data[instance_number][i:i + len(attr.default_value)]
+                    i += len(attr.values)
 
     @property
-    def send_data(self) -> numpy.ndarray:
-        return self._send_data
+    def write_data(self) -> numpy.ndarray:
+        if self._write_data is None:
+            raise ValueError("write_data is not initialized, call initialize_data() first")
+        return self._write_data
 
-    @send_data.setter
-    def send_data(self, data: numpy.ndarray):
-        if len(data) != len(self._send_data):
-            raise ValueError("Data length mismatch with send_objects.")
-        self._send_data[:] = data
+    @write_data.setter
+    def write_data(self, data: numpy.ndarray):
+        if data.shape != self._write_data.shape:
+            raise ValueError(f"write_data shape mismatch, expected {self._write_data.shape}, got {data.shape}")
+        self._write_data = data
 
     @property
-    def receive_data(self) -> numpy.ndarray:
-        return self._receive_data
+    def read_data(self) -> numpy.ndarray:
+        if self._read_data is None:
+            raise ValueError("read_data is not initialized, call initialize_data() first")
+        return self._read_data
 
-    @receive_data.setter
-    def receive_data(self, data: numpy.ndarray):
-        if len(data) != len(self._receive_data):
-            raise ValueError("Data length mismatch with receive_objects.")
-        self._receive_data[:] = data
+    @read_data.setter
+    def read_data(self, data: numpy.ndarray):
+        if data.shape != self._read_data.shape:
+            raise ValueError(f"read_data shape mismatch, expected {self._read_data.shape}, got {data.shape}")
+        self._read_data = data
+
+    @property
+    def number_of_instances(self) -> int:
+        return self._number_of_instances
 
 
 class MultiverseSimulator:
@@ -158,7 +204,7 @@ class MultiverseSimulator:
     logger: logging.Logger = logging.getLogger(__name__)
     """Logger for the simulator"""
 
-    def __init__(self, viewer: Optional[MultiverseViewer] = None, **kwargs):
+    def __init__(self, viewer: Optional[MultiverseViewer] = None, number_of_instances: int = 1, **kwargs):
         """
         Initialize the simulator with the viewer and the following keyword arguments:
 
@@ -172,9 +218,12 @@ class MultiverseSimulator:
         self._start_real_time = self.current_real_time
         self._state = MultiverseSimulatorState.STOPPED
         self._stop_reason = None
-        self._viewer = viewer
         self._renderer = MultiverseRenderer()
         self._current_view_time = self.current_real_time
+        self._number_of_instances = number_of_instances
+        self._viewer = viewer
+        if self._viewer is not None:
+            self._viewer.initialize_data(self._number_of_instances)
         atexit.register(self.stop)
 
     def start(self,
@@ -245,10 +294,10 @@ class MultiverseSimulator:
     def step(self):
         """Step the simulator"""
         if self._viewer is not None:
-            self.write_data(in_data=self._viewer.send_data)
+            self.write_data(in_data=self._viewer.write_data)
         self.step_callback()
         if self._viewer is not None:
-            self.read_data(out_data=self._viewer.receive_data)
+            self.read_data(out_data=self._viewer.read_data)
         self._current_number_of_steps += 1
 
     def write_data(self, in_data: numpy.ndarray):
@@ -396,3 +445,7 @@ class MultiverseSimulator:
     @property
     def renderer(self) -> MultiverseRenderer:
         return self._renderer
+
+    @property
+    def number_of_instances(self) -> int:
+        return self._number_of_instances
