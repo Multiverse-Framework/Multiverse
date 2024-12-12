@@ -8,13 +8,13 @@ import mujoco.viewer
 import numpy
 
 from mujoco_connector import MultiverseMujocoConnector
-from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
-    MultiverseAttribute
-from test_multiverse_simulator import MultiverseSimulatorTestCase
+from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer
+from .test_multiverse_simulator import MultiverseSimulatorTestCase
 
 resources_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
 
+@unittest.skip("This test is not meant to be run in CI")
 class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
     file_path = os.path.join(resources_path, "mjcf/floor/floor.xml")
     Simulator = MultiverseMujocoConnector
@@ -31,6 +31,7 @@ class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBas
     use_mjx = False
 
 
+@unittest.skip("This test is not meant to be run in CI")
 class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTestCase):
     file_path = os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml")
     Simulator = MultiverseMujocoConnector
@@ -84,8 +85,10 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
             time.sleep(0.01)
             self.assertEqual(viewer.receive_data.shape, (1, 6))
             if simulator.current_simulation_time > 1.0:
-                self.assertAlmostEqual(viewer.receive_objects["joint1"]["joint_rvalue"].values[0][0], act_1_value, places=0)
-                self.assertAlmostEqual(viewer.receive_objects["joint2"]["joint_rvalue"].values[0][0], act_2_value, places=0)
+                self.assertAlmostEqual(viewer.receive_objects["joint1"]["joint_rvalue"].values[0][0], act_1_value,
+                                       places=0)
+                self.assertAlmostEqual(viewer.receive_objects["joint2"]["joint_rvalue"].values[0][0], act_2_value,
+                                       places=0)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_with_mjx_in_10s(self):

@@ -52,6 +52,16 @@ jobs:
           chmod +x build_third_parties.sh
           ./build_third_parties.sh
 
+    - name: Run build_multiverse.sh (only parser)
+      run: |
+          chmod +x build_multiverse.sh --only-modules parser
+          ./build_multiverse.sh
+
+    - name: Test connectors
+      run: |
+          python3 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_compiler.py
+          python3 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_connector.py
+
     - name: Run build_multiverse.sh
       run: |
           chmod +x build_multiverse.sh
