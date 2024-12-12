@@ -9,12 +9,12 @@ import numpy
 
 from mujoco_connector import MultiverseMujocoConnector
 from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer
-from .test_multiverse_simulator import MultiverseSimulatorTestCase
+from test_multiverse_simulator import MultiverseSimulatorTestCase
 
 resources_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
 
-@unittest.skip("This test is not meant to be run in CI")
+# @unittest.skip("This test is not meant to be run in CI")
 class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
     file_path = os.path.join(resources_path, "mjcf/floor/floor.xml")
     Simulator = MultiverseMujocoConnector
@@ -31,7 +31,7 @@ class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBas
     use_mjx = False
 
 
-@unittest.skip("This test is not meant to be run in CI")
+# @unittest.skip("This test is not meant to be run in CI")
 class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTestCase):
     file_path = os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml")
     Simulator = MultiverseMujocoConnector
@@ -47,7 +47,6 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_in_10s_with_viewer(self):
-
         send_objects = {
             "actuator1": {
                 "cmd_joint_rvalue": [0.0]
@@ -76,12 +75,20 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
         constraints = MultiverseSimulatorConstraints(max_simulation_time=10.0)
         simulator.start(constraints=constraints)
+        use_send_data = True
         while simulator.state != MultiverseSimulatorState.STOPPED:
             time_now = time.time()
             f = 0.5
             act_1_value = numpy.pi / 6 * numpy.sin(2.0 * numpy.pi * f * time_now)
             act_2_value = numpy.pi / 6 * numpy.sin(-1.0 * numpy.pi * f * time_now)
-            viewer.send_data = numpy.array([[act_1_value, act_2_value]])
+            if use_send_data:
+                viewer.send_data = numpy.array([[act_1_value, act_2_value]])
+            else:
+                send_objects = viewer.send_objects
+                send_objects["actuator1"]["cmd_joint_rvalue"].values[0][0] = act_1_value
+                send_objects["actuator2"]["cmd_joint_rvalue"].values[0][0] = act_2_value
+                viewer.send_objects = send_objects
+            use_send_data = not use_send_data
             time.sleep(0.01)
             self.assertEqual(viewer.receive_data.shape, (1, 6))
             if simulator.current_simulation_time > 1.0:

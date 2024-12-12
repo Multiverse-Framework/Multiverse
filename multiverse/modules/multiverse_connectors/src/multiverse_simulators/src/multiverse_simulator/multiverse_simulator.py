@@ -158,13 +158,13 @@ class MultiverseViewer:
                 if attr_name not in self._send_objects[name]:
                     raise ValueError(f"Attribute {attr_name} not found in send_objects[{name}]")
                 for instance_id, value in enumerate(attr.values):
-                    send_data[instance_id].extend(value)
+                    send_data[instance_id] += list(value)
         send_data = numpy.array(send_data)
         if send_data.shape != self._send_data.shape:
             raise ValueError(f"Data length mismatch with send_objects, "
                              f"expected {self._send_data.shape}, got {send_data.shape}")
         self._send_objects = objects
-        self._send_data = numpy.array([send_data for attrs in objects.values() for attr in attrs.values() for send_data in attr.values])
+        self._send_data = send_data
 
     @property
     def receive_objects(self) -> Dict[str, Dict[str, MultiverseAttribute]]:
@@ -180,8 +180,8 @@ class MultiverseViewer:
         """
         for i, values in enumerate(data):
             j = 0
-            for attrs in objects.values():
-                for attr in attrs.values():
+            for obj_name, attrs in objects.items():
+                for name, attr in attrs.items():
                     attr.values[i] = values[j:j + len(attr.default_value)]
                     j += len(attr.default_value)
 

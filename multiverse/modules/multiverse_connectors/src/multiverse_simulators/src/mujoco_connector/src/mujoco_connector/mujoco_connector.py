@@ -53,10 +53,10 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         self._mj_data = mujoco.MjData(self._mj_model)
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
         if self.use_mjx:
-            qpos0 = numpy.array([self._mj_data.qpos] for _ in range(number_of_instances))
-            qvel0 = numpy.array([self._mj_data.qvel] for _ in range(number_of_instances))
-            act0 = numpy.array([self._mj_data.act] for _ in range(number_of_instances))
-            ctrl0 = numpy.array([self._mj_data.ctrl] for _ in range(number_of_instances))
+            qpos0 = numpy.array([self._mj_data.qpos for _ in range(number_of_instances)])
+            qvel0 = numpy.array([self._mj_data.qvel for _ in range(number_of_instances)])
+            act0 = numpy.array([self._mj_data.act for _ in range(number_of_instances)])
+            ctrl0 = numpy.array([self._mj_data.ctrl for _ in range(number_of_instances)])
             self._mjx_model = mjx.put_model(self._mj_model)
             self._mjx_data = mjx.put_data(self._mj_model, self._mj_data)
             self._batch0 = jax.vmap(lambda qpos, qvel, act, ctrl:
