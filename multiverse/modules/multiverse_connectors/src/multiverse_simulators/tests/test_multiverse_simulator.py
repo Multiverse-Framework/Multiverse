@@ -36,8 +36,8 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
                                           number_of_instances=2) -> MultiverseViewer:
         if send_objects is None:
             send_attrs = {
-                "cmd_joint_rvalue": MultiverseAttribute(default_value=numpy.array([1])),
-                "cmd_joint_angular_velocity": MultiverseAttribute(default_value=numpy.array([2]))
+                "cmd_joint_rvalue": [1.0],
+                "cmd_joint_angular_velocity": [2.0]
             }
             send_objects = {
                 "actuator1": send_attrs,
@@ -45,8 +45,8 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
             }
         if receive_objects is None:
             receive_attrs = {
-                "joint_rvalue": MultiverseAttribute(default_value=numpy.array([1])),
-                "joint_angular_velocity": MultiverseAttribute(default_value=numpy.array([2]))
+                "joint_rvalue": [1.0],
+                "joint_angular_velocity": [2.0]
             }
             receive_objects = {
                 "joint1": receive_attrs,
@@ -54,14 +54,12 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
             }
         viewer = MultiverseViewer(send_objects=send_objects, receive_objects=receive_objects)
         viewer.initialize_data(number_of_instances=number_of_instances)
-        self.assertEqual(viewer.send_objects, send_objects)
-        self.assertEqual(viewer.receive_objects, receive_objects)
 
         send_data = numpy.array([[i for attrs in send_objects.values()
-                                  for attr in attrs.values() for i in attr.default_value] for _ in
+                                  for attr in attrs.values() for i in attr] for _ in
                                  range(number_of_instances)])
         receive_data = numpy.array([[i for attrs in receive_objects.values()
-                                     for attr in attrs.values() for i in attr.default_value] for _ in
+                                     for attr in attrs.values() for i in attr] for _ in
                                     range(number_of_instances)])
         self.assertTrue(numpy.array_equal(viewer.send_data, send_data))
         self.assertTrue(numpy.array_equal(viewer.receive_data, receive_data))

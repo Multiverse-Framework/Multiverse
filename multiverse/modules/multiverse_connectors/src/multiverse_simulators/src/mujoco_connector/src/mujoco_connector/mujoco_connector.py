@@ -51,11 +51,17 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         assert self._mj_model is not None
         self._mj_model.opt.timestep = self.step_size
         self._mj_data = mujoco.MjData(self._mj_model)
+        mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
         if self.use_mjx:
+            qpos0 = numpy.array([self._mj_data.qpos] for _ in range(number_of_instances))
+            qvel0 = numpy.array([self._mj_data.qvel] for _ in range(number_of_instances))
+            act0 = numpy.array([self._mj_data.act] for _ in range(number_of_instances))
+            ctrl0 = numpy.array([self._mj_data.ctrl] for _ in range(number_of_instances))
             self._mjx_model = mjx.put_model(self._mj_model)
             self._mjx_data = mjx.put_data(self._mj_model, self._mj_data)
-            self._batch = jax.vmap(lambda ctrl0: self._mjx_data.replace(ctrl=ctrl0))(
-                ctrl0=numpy.array([[0.0 for _ in range(self._mj_model.nu)] for _ in range(number_of_instances)]))
+            self._batch0 = jax.vmap(lambda qpos, qvel, act, ctrl:
+                                    self._mjx_data.replace(qpos=qpos, qvel=qvel, act=act, ctrl=ctrl))(qpos0, qvel0, act0, ctrl0)
+            self._batch = self._batch0
             self._jit_step = jax.jit(jax.vmap(mjx.step, in_axes=(None, 0)))
 
     def start_callback(self):
@@ -74,7 +80,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
     def reset_callback(self):
         if self.use_mjx:
-            pass  # TODO: Implement reset_callback for MJX
+            self._batch = self._batch0
         else:
             mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
 
@@ -114,7 +120,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                         else:
                             qfrc_applied[joint_id] = data[i]
                     elif attr_name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
-                                     "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
+                                       "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
                         actuator_id = self._mj_data.actuator(name).id
                         if self.use_mjx:
                             ctrl[instance_id][actuator_id] = data[i]
@@ -160,16 +166,16 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                     if attr_name == "position":
                         body_id = self._mj_model.body(name).id
                         if self.use_mjx:
-                            read_data[instance_id][i:i+3] = xpos[instance_id][body_id]
+                            read_data[instance_id][i:i + 3] = xpos[instance_id][body_id]
                         else:
-                            read_data[instance_id][i:i+3] = xpos[body_id]
+                            read_data[instance_id][i:i + 3] = xpos[body_id]
                         i += 3
                     elif attr_name == "quaternion":
                         body_id = self._mj_model.body(name).id
                         if self.use_mjx:
-                            read_data[instance_id][i:i+4] = xquat[instance_id][body_id]
+                            read_data[instance_id][i:i + 4] = xquat[instance_id][body_id]
                         else:
-                            read_data[instance_id][i:i+4] = xquat[body_id]
+                            read_data[instance_id][i:i + 4] = xquat[body_id]
                         i += 4
                     elif attr_name in {"joint_rvalue", "joint_tvalue"}:
                         joint_id = self._mj_model.joint(name).id
@@ -193,7 +199,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                             read_data[instance_id][i] = qfrc_applied[joint_id]
                         i += 1
                     elif attr_name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
-                                     "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
+                                       "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
                         actuator_id = self._mj_model.actuator(name).id
                         if self.use_mjx:
                             read_data[instance_id][i] = ctrl[instance_id][actuator_id]

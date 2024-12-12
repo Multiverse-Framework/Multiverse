@@ -77,18 +77,6 @@ class MultiverseAttribute:
     def __init__(self, default_value: numpy.ndarray):
         self.default_value = default_value
 
-    @classmethod
-    def from_numpy_array(cls, data: Optional[numpy.ndarray]) -> Optional["MultiverseAttribute"]:
-        """
-        Convert a dictionary of numpy arrays to a dictionary of MultiverseAttribute
-
-        :param data: numpy.ndarray, data
-        :return: MultiverseAttribute, attribute
-        """
-        if data is None:
-            return None
-        return MultiverseAttribute(default_value=data)
-
     def initialize_data(self, number_of_instances: int):
         """
         Initialize the data for the attribute
@@ -127,7 +115,7 @@ class MultiverseViewer:
         :param data: Dict[str, Dict[str, numpy.ndarray]], data
         :return: Dict[str, Dict[str, MultiverseAttribute]], attributes
         """
-        return {key: {key2: MultiverseAttribute.from_numpy_array(value)
+        return {key: {key2: MultiverseAttribute(default_value=value)
                       for key2, value in value.items()} for key, value in data.items()}
 
     def initialize_data(self, number_of_instances: int) -> "MultiverseViewer":
@@ -159,6 +147,24 @@ class MultiverseViewer:
     def send_objects(self) -> Dict[str, Dict[str, MultiverseAttribute]]:
         self._update_objects(self._send_objects, self.send_data)
         return self._send_objects
+
+    @send_objects.setter
+    def send_objects(self, objects: Dict[str, Dict[str, MultiverseAttribute]]):
+        send_data = [[] for _ in range(self._send_data.shape[0])]
+        for name, attrs in objects.items():
+            if name not in self._send_objects:
+                raise ValueError(f"Object {name} not found in send_objects")
+            for attr_name, attr in attrs.items():
+                if attr_name not in self._send_objects[name]:
+                    raise ValueError(f"Attribute {attr_name} not found in send_objects[{name}]")
+                for instance_id, value in enumerate(attr.values):
+                    send_data[instance_id].extend(value)
+        send_data = numpy.array(send_data)
+        if send_data.shape != self._send_data.shape:
+            raise ValueError(f"Data length mismatch with send_objects, "
+                             f"expected {self._send_data.shape}, got {send_data.shape}")
+        self._send_objects = objects
+        self._send_data = numpy.array([send_data for attrs in objects.values() for attr in attrs.values() for send_data in attr.values])
 
     @property
     def receive_objects(self) -> Dict[str, Dict[str, MultiverseAttribute]]:

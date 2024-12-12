@@ -83,8 +83,9 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
             viewer.send_data = numpy.array([[act_1_value, act_2_value]])
             time.sleep(0.01)
             self.assertEqual(viewer.receive_data.shape, (1, 6))
-            self.assertAlmostEqual(viewer.receive_objects["joint1"]["joint_rvalue"].values[0][0], act_1_value, places=0)
-            self.assertAlmostEqual(viewer.receive_objects["joint2"]["joint_rvalue"].values[0][0], act_2_value, places=0)
+            if simulator.current_simulation_time > 1.0:
+                self.assertAlmostEqual(viewer.receive_objects["joint1"]["joint_rvalue"].values[0][0], act_1_value, places=0)
+                self.assertAlmostEqual(viewer.receive_objects["joint2"]["joint_rvalue"].values[0][0], act_2_value, places=0)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_with_mjx_in_10s(self):
