@@ -49,8 +49,8 @@ jobs:
 
     - name: Run build_multiverse.sh (only parser)
       run: |
-          chmod +x build_multiverse.sh --only-modules parser
-          ./build_multiverse.sh
+          chmod +x build_multiverse.sh
+          ./build_multiverse.sh --only-modules parser
 
     - name: Test connectors
       run: |
