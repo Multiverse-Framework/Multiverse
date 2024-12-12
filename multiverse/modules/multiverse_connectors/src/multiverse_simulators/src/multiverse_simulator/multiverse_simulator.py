@@ -69,16 +69,25 @@ class MultiverseRenderer:
 class MultiverseAttribute:
     """Base class for Multiverse Attribute"""
 
-    name: str
-    """Name of the attribute"""
     default_value: numpy.ndarray
     """Default value of the attribute"""
     _values: numpy.ndarray = None
     """Values of the attribute"""
 
-    def __init__(self, name: str, default_value: numpy.ndarray):
-        self.name = name
+    def __init__(self, default_value: numpy.ndarray):
         self.default_value = default_value
+
+    @classmethod
+    def from_numpy_array(cls, data: Optional[numpy.ndarray]) -> Optional["MultiverseAttribute"]:
+        """
+        Convert a dictionary of numpy arrays to a dictionary of MultiverseAttribute
+
+        :param data: numpy.ndarray, data
+        :return: MultiverseAttribute, attribute
+        """
+        if data is None:
+            return None
+        return MultiverseAttribute(default_value=data)
 
     def initialize_data(self, number_of_instances: int):
         """
@@ -100,14 +109,26 @@ class MultiverseViewer:
 
     def __init__(
             self,
-            send_objects: Optional[Dict[str, List[MultiverseAttribute]]] = None,
-            receive_objects: Optional[Dict[str, List[MultiverseAttribute]]] = None,
+            send_objects: Optional[Dict[str, Dict[str, numpy.ndarray | List[float]]]] = None,
+            receive_objects: Optional[Dict[str, Dict[str, numpy.ndarray | List[float]]]] = None,
     ):
-        self._send_objects = send_objects or {}
+        self._send_objects = self.from_numpy_array(send_objects) or {}
         self._send_data = numpy.array([])
 
-        self._receive_objects = receive_objects or {}
+        self._receive_objects = self.from_numpy_array(receive_objects) or {}
         self._receive_data = numpy.array([])
+
+    @staticmethod
+    def from_numpy_array(data: Dict[str, Dict[str, numpy.ndarray]]) \
+            -> Optional[Dict[str, Dict[str, MultiverseAttribute]]]:
+        """
+        Convert a dictionary of numpy arrays to a dictionary of MultiverseAttribute
+
+        :param data: Dict[str, Dict[str, numpy.ndarray]], data
+        :return: Dict[str, Dict[str, MultiverseAttribute]], attributes
+        """
+        return {key: {key2: MultiverseAttribute.from_numpy_array(value)
+                      for key2, value in value.items()} for key, value in data.items()}
 
     def initialize_data(self, number_of_instances: int) -> "MultiverseViewer":
         """
@@ -116,35 +137,36 @@ class MultiverseViewer:
         :param number_of_instances: int, number of instances
         """
         self._send_data = numpy.array([self._initialize_data(self._send_objects) for _ in range(number_of_instances)])
-        self._receive_data = numpy.array([self._initialize_data(self._receive_objects) for _ in range(number_of_instances)])
+        self._receive_data = numpy.array(
+            [self._initialize_data(self._receive_objects) for _ in range(number_of_instances)])
         for objects in [self._send_objects, self._receive_objects]:
             for attrs in objects.values():
-                for attr in attrs:
+                for attr in attrs.values():
                     attr.initialize_data(number_of_instances)
         return self
 
     @staticmethod
-    def _initialize_data(objects: Dict[str, List[MultiverseAttribute]]) -> numpy.ndarray:
+    def _initialize_data(objects: Dict[str, Dict[str, MultiverseAttribute]]) -> numpy.ndarray:
         """
         Flatten attribute values into a NumPy array.
 
-        :param objects: Dict[str, List[MultiverseAttribute]], objects with attributes
+        :param objects: Dict[str, Dict[str, MultiverseAttribute]], objects with attributes
         :return: numpy.ndarray, flattened attribute values
         """
-        return numpy.array([i for attrs in objects.values() for attr in attrs for i in attr.default_value])
+        return numpy.array([i for attrs in objects.values() for attr in attrs.values() for i in attr.default_value])
 
     @property
-    def send_objects(self) -> Dict[str, List[MultiverseAttribute]]:
+    def send_objects(self) -> Dict[str, Dict[str, MultiverseAttribute]]:
         self._update_objects(self._send_objects, self.send_data)
         return self._send_objects
 
     @property
-    def receive_objects(self) -> Dict[str, List[MultiverseAttribute]]:
+    def receive_objects(self) -> Dict[str, Dict[str, MultiverseAttribute]]:
         self._update_objects(self._receive_objects, self.receive_data)
         return self._receive_objects
 
     @staticmethod
-    def _update_objects(objects: Dict[str, List[MultiverseAttribute]], data: numpy.ndarray):
+    def _update_objects(objects: Dict[str, Dict[str, MultiverseAttribute]], data: numpy.ndarray):
         """
         Update object attribute values from the data array.
 
@@ -152,8 +174,8 @@ class MultiverseViewer:
         """
         for i, values in enumerate(data):
             j = 0
-            for attributes in objects.values():
-                for attr in attributes:
+            for attrs in objects.values():
+                for attr in attrs.values():
                     attr.values[i] = values[j:j + len(attr.default_value)]
                     j += len(attr.default_value)
 
@@ -164,7 +186,8 @@ class MultiverseViewer:
     @send_data.setter
     def send_data(self, data: numpy.ndarray):
         if data.shape != self._send_data.shape:
-            raise ValueError(f"Data length mismatch with send_objects, expected {self._send_data.shape}, got {data.shape}")
+            raise ValueError(
+                f"Data length mismatch with send_objects, expected {self._send_data.shape}, got {data.shape}")
         self._send_data[:] = data
 
     @property
@@ -174,7 +197,8 @@ class MultiverseViewer:
     @receive_data.setter
     def receive_data(self, data: numpy.ndarray):
         if data.shape != self._receive_data.shape:
-            raise ValueError("Data length mismatch with receive_objects, expected {self._receive_data.shape}, got {data.shape}")
+            raise ValueError(
+                "Data length mismatch with receive_objects, expected {self._receive_data.shape}, got {data.shape}")
         self._receive_data[:] = data
 
 

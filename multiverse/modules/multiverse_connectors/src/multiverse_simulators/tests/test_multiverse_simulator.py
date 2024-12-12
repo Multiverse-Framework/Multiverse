@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
+import time
 import unittest
 from typing import Optional, Tuple
-import time
 
 import numpy
 
@@ -35,18 +35,22 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
                                           receive_objects: Optional = None,
                                           number_of_instances=2) -> MultiverseViewer:
         if send_objects is None:
-            send_attr_1 = MultiverseAttribute(name="cmd_joint_rvalue", default_value=numpy.array([1]))
-            send_attr_2 = MultiverseAttribute(name="cmd_joint_angular_velocity", default_value=numpy.array([2]))
+            send_attrs = {
+                "cmd_joint_rvalue": MultiverseAttribute(default_value=numpy.array([1])),
+                "cmd_joint_angular_velocity": MultiverseAttribute(default_value=numpy.array([2]))
+            }
             send_objects = {
-                "actuator1": [send_attr_1, send_attr_2],
-                "actuator2": [send_attr_1, send_attr_2],
+                "actuator1": send_attrs,
+                "actuator2": send_attrs,
             }
         if receive_objects is None:
-            receive_attr_1 = MultiverseAttribute(name="joint_rvalue", default_value=numpy.array([1]))
-            receive_attr_2 = MultiverseAttribute(name="joint_angular_velocity", default_value=numpy.array([2]))
+            receive_attrs = {
+                "joint_rvalue": MultiverseAttribute(default_value=numpy.array([1])),
+                "joint_angular_velocity": MultiverseAttribute(default_value=numpy.array([2]))
+            }
             receive_objects = {
-                "joint1": [receive_attr_1, receive_attr_2],
-                "joint2": [receive_attr_1, receive_attr_2],
+                "joint1": receive_attrs,
+                "joint2": receive_attrs,
             }
         viewer = MultiverseViewer(send_objects=send_objects, receive_objects=receive_objects)
         viewer.initialize_data(number_of_instances=number_of_instances)
@@ -54,9 +58,11 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
         self.assertEqual(viewer.receive_objects, receive_objects)
 
         send_data = numpy.array([[i for attrs in send_objects.values()
-                                  for attr in attrs for i in attr.default_value] for _ in range(number_of_instances)])
+                                  for attr in attrs.values() for i in attr.default_value] for _ in
+                                 range(number_of_instances)])
         receive_data = numpy.array([[i for attrs in receive_objects.values()
-                                     for attr in attrs for i in attr.default_value] for _ in range(number_of_instances)])
+                                     for attr in attrs.values() for i in attr.default_value] for _ in
+                                    range(number_of_instances)])
         self.assertTrue(numpy.array_equal(viewer.send_data, send_data))
         self.assertTrue(numpy.array_equal(viewer.receive_data, receive_data))
         return viewer
@@ -182,6 +188,7 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
         while simulator.state == MultiverseSimulatorState.RUNNING:
             time.sleep(1)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,17 +1,16 @@
-import unittest
-
-import numpy
-
-from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
-    MultiverseAttribute
-from mujoco_connector import MultiverseMujocoConnector
-from test_multiverse_simulator import MultiverseSimulatorTestCase
-
 import os
+import time
+import unittest
+import xml.etree.ElementTree as ET
+
 import mujoco
 import mujoco.viewer
-import time
-import xml.etree.ElementTree as ET
+import numpy
+
+from mujoco_connector import MultiverseMujocoConnector
+from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
+    MultiverseAttribute
+from test_multiverse_simulator import MultiverseSimulatorTestCase
 
 resources_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
@@ -47,16 +46,30 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_in_10s_with_viewer(self):
-        send_attr = MultiverseAttribute(name="cmd_joint_rvalue", default_value=numpy.array([0.0]))
+
         send_objects = {
-            "actuator1": [send_attr],
-            "actuator2": [send_attr],
+            "actuator1": {
+                "cmd_joint_rvalue": [0.0]
+            },
+            "actuator2": {
+                "cmd_joint_rvalue": [0.0]
+            },
         }
-        receive_attr_1 = MultiverseAttribute(name="joint_rvalue", default_value=numpy.array([0.0]))
-        receive_attr_2 = MultiverseAttribute(name="joint_angular_velocity", default_value=numpy.array([0.0]))
         receive_objects = {
-            "joint1": [receive_attr_1, receive_attr_2],
-            "joint2": [receive_attr_1, receive_attr_2],
+            "joint1": {
+                "joint_rvalue": [0.0],
+                "joint_angular_velocity": [0.0]
+            },
+            "joint2": {
+                "joint_rvalue": [0.0],
+                "joint_angular_velocity": [0.0]
+            },
+            "actuator1": {
+                "cmd_joint_rvalue": [0.0]
+            },
+            "actuator2": {
+                "cmd_joint_rvalue": [0.0]
+            }
         }
         viewer = MultiverseViewer(send_objects=send_objects, receive_objects=receive_objects)
         simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
@@ -69,9 +82,9 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
             act_2_value = numpy.pi / 6 * numpy.sin(-1.0 * numpy.pi * f * time_now)
             viewer.send_data = numpy.array([[act_1_value, act_2_value]])
             time.sleep(0.01)
-            self.assertEqual(viewer.receive_data.shape, (1,4))
-            self.assertAlmostEqual(viewer.receive_data[0][0], act_1_value, places=0)
-            self.assertAlmostEqual(viewer.receive_data[0][2], act_2_value, places=0)
+            self.assertEqual(viewer.receive_data.shape, (1, 6))
+            self.assertAlmostEqual(viewer.receive_objects["joint1"]["joint_rvalue"].values[0][0], act_1_value, places=0)
+            self.assertAlmostEqual(viewer.receive_objects["joint2"]["joint_rvalue"].values[0][0], act_2_value, places=0)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_with_mjx_in_10s(self):

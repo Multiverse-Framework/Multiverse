@@ -82,22 +82,38 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         if not self.use_mjx and write_data.shape[0] > 1:
             raise NotImplementedError("Multiple instances for non MJX is not supported yet")
         if self.use_mjx:
-            ctrl = numpy.array(self._batch.ctrl)
             qpos = numpy.array(self._batch.qpos)
+            qvel = numpy.array(self._batch.qvel)
+            qfrc_applied = numpy.array(self._batch.qfrc_applied)
+            ctrl = numpy.array(self._batch.ctrl)
         else:
-            ctrl = self._mj_data.ctrl
             qpos = self._mj_data.qpos
+            qvel = self._mj_data.qvel
+            qfrc_applied = self._mj_data.qfrc_applied
+            ctrl = self._mj_data.ctrl
         for instance_id, data in enumerate(write_data):
             i = 0
             for name, attrs in self._viewer.send_objects.items():
-                for attr in attrs:
-                    if attr.name in {"joint_rvalue", "joint_tvalue"}:
-                        joint_id = self._mj_data.joint(name).id
+                for attr_name in attrs.keys():
+                    if attr_name in {"joint_rvalue", "joint_tvalue"}:
+                        joint_id = self._mj_model.joint(name).id
                         if self.use_mjx:
                             qpos[instance_id][joint_id] = data[i]
                         else:
                             qpos[joint_id] = data[i]
-                    elif attr.name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
+                    elif attr_name in {"joint_angular_velocity", "joint_linear_velocity"}:
+                        joint_id = self._mj_model.joint(name).id
+                        if self.use_mjx:
+                            qvel[instance_id][joint_id] = data[i]
+                        else:
+                            qvel[joint_id] = data[i]
+                    elif attr_name in {"joint_torque", "joint_force"}:
+                        joint_id = self._mj_model.joint(name).id
+                        if self.use_mjx:
+                            qfrc_applied[instance_id][joint_id] = data[i]
+                        else:
+                            qfrc_applied[joint_id] = data[i]
+                    elif attr_name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
                                      "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
                         actuator_id = self._mj_data.actuator(name).id
                         if self.use_mjx:
@@ -105,50 +121,87 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                         else:
                             ctrl[actuator_id] = data[i]
                     else:
-                        raise ValueError(f"Unknown attribute {attr.name} for object {name}")
+                        raise ValueError(f"Unknown attribute {attr_name} for object {name}")
                     i += 1
             if i != len(data):
                 raise ValueError(f"Data length mismatch (expected {len(data)}, got {i})")
             if self.use_mjx:
-                self._batch = self._batch.replace(qpos=qpos, ctrl=ctrl)
+                self._batch = self._batch.replace(qpos=qpos,
+                                                  qvel=qvel,
+                                                  qfrc_applied=qfrc_applied,
+                                                  ctrl=ctrl)
             else:
+                self._mj_data.qpos = qpos
+                self._mj_data.qvel = qvel
+                self._mj_data.qfrc_applied = qfrc_applied
                 self._mj_data.ctrl = ctrl
 
     def read_data_from_simulator(self, read_data: numpy.ndarray):
         if not self.use_mjx and read_data.shape[0] > 1:
             raise NotImplementedError("Multiple instances for non MJX is not supported yet")
+        if self.use_mjx:
+            xpos = numpy.array(self._batch.xpos)
+            xquat = numpy.array(self._batch.xquat)
+            qpos = numpy.array(self._batch.qpos)
+            qvel = numpy.array(self._batch.qvel)
+            qfrc_applied = numpy.array(self._batch.qfrc_applied)
+            ctrl = numpy.array(self._batch.ctrl)
+        else:
+            xpos = self._mj_data.xpos
+            xquat = self._mj_data.xquat
+            qpos = self._mj_data.qpos
+            qvel = self._mj_data.qvel
+            qfrc_applied = self._mj_data.qfrc_applied
+            ctrl = self._mj_data.ctrl
         for instance_id, data in enumerate(read_data):
             i = 0
             for name, attrs in self._viewer.receive_objects.items():
-                for attr in attrs:
-                    if attr.name in {"joint_rvalue", "joint_tvalue"}:
-                        joint_id = self._mj_data.joint(name).id
+                for attr_name in attrs.keys():
+                    if attr_name == "position":
+                        body_id = self._mj_model.body(name).id
                         if self.use_mjx:
-                            read_data[instance_id][i] = self._batch.qpos[instance_id][joint_id]
+                            read_data[instance_id][i:i+3] = xpos[instance_id][body_id]
                         else:
-                            read_data[instance_id][i] = self._mj_data.qpos[joint_id]
-                    elif attr.name in {"joint_angular_velocity", "joint_linear_velocity"}:
-                        joint_id = self._mj_data.joint(name).id
+                            read_data[instance_id][i:i+3] = xpos[body_id]
+                        i += 3
+                    elif attr_name == "quaternion":
+                        body_id = self._mj_model.body(name).id
                         if self.use_mjx:
-                            read_data[instance_id][i] = self._batch.qvel[instance_id][joint_id]
+                            read_data[instance_id][i:i+4] = xquat[instance_id][body_id]
                         else:
-                            read_data[instance_id][i] = self._mj_data.qvel[joint_id]
-                    elif attr.name in {"joint_torque", "joint_force"}:
-                        joint_id = self._mj_data.joint(name).id
+                            read_data[instance_id][i:i+4] = xquat[body_id]
+                        i += 4
+                    elif attr_name in {"joint_rvalue", "joint_tvalue"}:
+                        joint_id = self._mj_model.joint(name).id
                         if self.use_mjx:
-                            read_data[instance_id][i] = self._batch.qfrc_applied[instance_id][joint_id]
+                            read_data[instance_id][i] = qpos[instance_id][joint_id]
                         else:
-                            read_data[instance_id][i] = self._mj_data.qfrc_applied[joint_id]
-                    elif attr.name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
+                            read_data[instance_id][i] = qpos[joint_id]
+                        i += 1
+                    elif attr_name in {"joint_angular_velocity", "joint_linear_velocity"}:
+                        joint_id = self._mj_model.joint(name).id
+                        if self.use_mjx:
+                            read_data[instance_id][i] = qvel[instance_id][joint_id]
+                        else:
+                            read_data[instance_id][i] = qvel[joint_id]
+                        i += 1
+                    elif attr_name in {"joint_torque", "joint_force"}:
+                        joint_id = self._mj_model.joint(name).id
+                        if self.use_mjx:
+                            read_data[instance_id][i] = qfrc_applied[instance_id][joint_id]
+                        else:
+                            read_data[instance_id][i] = qfrc_applied[joint_id]
+                        i += 1
+                    elif attr_name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
                                      "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
-                        actuator_id = self._mj_data.actuator(name).id
+                        actuator_id = self._mj_model.actuator(name).id
                         if self.use_mjx:
-                            read_data[instance_id][i] = self._batch.ctrl[instance_id][actuator_id]
+                            read_data[instance_id][i] = ctrl[instance_id][actuator_id]
                         else:
-                            read_data[instance_id][i] = self._mj_data.ctrl[actuator_id]
+                            read_data[instance_id][i] = ctrl[actuator_id]
+                        i += 1
                     else:
-                        self.log_error(f"Unknown attribute {attr.name} for object {name}")
-                    i += 1
+                        self.log_error(f"Unknown attribute {attr_name} for object {name}")
             if i != len(data):
                 raise ValueError(f"Data length mismatch (expected {len(data)}, got {i})")
 
