@@ -59,8 +59,8 @@ jobs:
 
     - name: Test connectors
       run: |
-          python3 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_compiler.py
-          python3 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_connector.py
+          workon multiverse && python3 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_compiler.py
+          workon multiverse && python3 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_connector.py
 
     - name: Run build_multiverse.sh
       run: |
