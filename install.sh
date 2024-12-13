@@ -1,5 +1,51 @@
 #!/bin/bash
 
+INSTALL_ROS=true
+INSTALL_PARSER=true
+INSTALL_MUJOCO=true
+INSTALL_KNOWLEDGE=true
+
+while [ -n "$1" ]; do
+    case "$1" in
+        --minimal) echo "--minimal option passed"
+            shift 1
+            INSTALL_ROS=false
+            INSTALL_PARSER=false
+            INSTALL_KNOWLEDGE=false
+            break
+        ;;
+        --excludes) echo -n "--excludes option passed"
+            shift 1
+            if [ "$#" -eq 0 ]; then
+                echo ""
+                INSTALL_ROS=false
+                INSTALL_PARSER=false
+                INSTALL_MUJOCO=false
+                INSTALL_KNOWLEDGE=false
+            else
+                echo -n ", with value:"
+                for module in "$@"; do
+                    echo -n " $module"
+                    shift 1
+                    if [ "$module" = "ros" ]; then
+                        INSTALL_ROS=false
+                        elif [ "$module" = "parser" ]; then
+                        INSTALL_PARSER=false
+                        elif [ "$module" = "mujoco" ]; then
+                        INSTALL_MUJOCO=false
+                        elif [ "$module" = "knowledge" ]; then
+                        INSTALL_KNOWLEDGE=false
+                    fi
+                done
+                echo ""
+            fi
+        ;;
+        *) echo "Option $1 not recognized"
+            shift 1
+        ;;
+    esac
+done
+
 # Update package lists
 sudo apt-get update && sudo apt-get upgrade -y
 
@@ -11,82 +57,80 @@ sudo apt-get install -y python3-pip
 
 UBUNTU_VERSION=$(lsb_release -rs)
 
-if [ $UBUNTU_VERSION = "20.04" ]; then
-    # Setup your sources.list
-    sudo apt-get install software-properties-common
-    sudo add-apt-repository ppa:deadsnakes/ppa
+if [ $INSTALL_ROS = true ]; then
+    if [ $UBUNTU_VERSION = "20.04" ]; then
+        # Setup your sources.list
+        sudo apt-get install software-properties-common
+        sudo add-apt-repository ppa:deadsnakes/ppa
 
-    sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-    sudo curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-    sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+        sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+        sudo curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+        sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 
-    sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-    sudo add-apt-repository universe
+        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+        sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+        sudo add-apt-repository universe
 
-    # Update package lists
-    sudo apt-get update && sudo apt-get upgrade -y
+        # Update package lists
+        sudo apt-get update && sudo apt-get upgrade -y
 
-    # Install python3.10
-    sudo apt-get install -y python3.10-dev python3.10-venv
+        # Install python3.10
+        sudo apt-get install -y python3.10-dev python3.10-venv
 
-    # Install ROS1
-    sudo apt-get install -y ros-noetic-desktop-full
-    sudo apt-get install -y ros-noetic-xacro ros-noetic-rviz ros-noetic-joint-trajectory-controller ros-noetic-rqt-robot-steering ros-noetic-rqt-joint-trajectory-controller ros-noetic-joint-state-controller ros-noetic-joint-state-publisher-gui ros-noetic-effort-controllers ros-noetic-gripper-action-controller ros-noetic-dwa-local-planner ros-noetic-cob-gazebo-objects ros-noetic-map-server ros-noetic-move-base
-    sudo apt-get install -y python3-catkin-tools
+        # Install ROS1
+        sudo apt-get install -y ros-noetic-desktop-full
+        sudo apt-get install -y ros-noetic-xacro ros-noetic-rviz ros-noetic-joint-trajectory-controller ros-noetic-rqt-robot-steering ros-noetic-rqt-joint-trajectory-controller ros-noetic-joint-state-controller ros-noetic-joint-state-publisher-gui ros-noetic-effort-controllers ros-noetic-gripper-action-controller ros-noetic-dwa-local-planner ros-noetic-cob-gazebo-objects ros-noetic-map-server ros-noetic-move-base
+        sudo apt-get install -y python3-catkin-tools
 
-    # Install ROS2
-    sudo apt-get install -y ros-foxy-desktop
-    sudo apt-get install -y ros-foxy-joint-state-publisher-gui
-    sudo apt-get install -y ros-dev-tools
+        # Install ROS2
+        sudo apt-get install -y ros-foxy-desktop
+        sudo apt-get install -y ros-foxy-joint-state-publisher-gui
+        sudo apt-get install -y ros-dev-tools
 
-    # Install rosdep
-    sudo apt-get install -y python3-rosdep
-    sudo rosdep init
-    sudo rosdep fix-permissions
-    rosdep update
-elif [ $UBUNTU_VERSION = "22.04" ]; then
-    # Setup your sources.list
-    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-    sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-    
-    # Update package lists
-    sudo apt-get update && sudo apt-get upgrade -y
+        # Install rosdep
+        sudo apt-get install -y python3-rosdep
+        sudo rosdep init
+        sudo rosdep fix-permissions
+        rosdep update
+    elif [ $UBUNTU_VERSION = "22.04" ]; then
+        # Setup your sources.list
+        sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+        
+        # Update package lists
+        sudo apt-get update && sudo apt-get upgrade -y
 
-    # Install python3.10
-    sudo apt-get install -y python3.10-dev python3.10-venv
-    
-    # Install ROS2
-    sudo apt-get install -y ros-humble-desktop
-    sudo apt-get install -y ros-dev-tools
+        # Install python3.10
+        sudo apt-get install -y python3.10-dev python3.10-venv
+        
+        # Install ROS2
+        sudo apt-get install -y ros-humble-desktop
+        sudo apt-get install -y ros-dev-tools
 
-    # Install rosdep
-    sudo apt-get install -y python3-rosdep
-    sudo rosdep init
-    sudo rosdep fix-permissions
-    rosdep update
-elif [ $UBUNTU_VERSION = "24.04" ]; then
-    # Setup your sources.list
-    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-    sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-    
-    # Update package lists
-    sudo apt-get update && sudo apt-get upgrade -y
-    
-    # Install ROS2
-    sudo apt-get install -y ros-jazzy-desktop
-    sudo apt-get install -y ros-dev-tools
+        # Install rosdep
+        sudo apt-get install -y python3-rosdep
+        sudo rosdep init
+        sudo rosdep fix-permissions
+        rosdep update
+    elif [ $UBUNTU_VERSION = "24.04" ]; then
+        # Setup your sources.list
+        sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+        
+        # Update package lists
+        sudo apt-get update && sudo apt-get upgrade -y
+        
+        # Install ROS2
+        sudo apt-get install -y ros-jazzy-desktop
+        sudo apt-get install -y ros-dev-tools
 
-    # Install rosdep
-    sudo apt-get install -y python3-rosdep
-    sudo rosdep init
-    sudo rosdep fix-permissions
-    rosdep update
+        # Install rosdep
+        sudo apt-get install -y python3-rosdep
+        sudo rosdep init
+        sudo rosdep fix-permissions
+        rosdep update
+    fi
 fi
-
-# Install glfw3
-sudo apt-get install -y libglfw3
-sudo apt-get install -y libglfw3-dev
 
 # Install jsoncpp
 sudo apt-get install -y libjsoncpp-dev
@@ -97,14 +141,25 @@ sudo apt-get install -y libzmq3-dev
 # Install boost
 sudo apt-get install -y libboost-dev libboost-filesystem-dev
 
-# Install tinyxml2
-sudo apt-get install -y libtinyxml2-dev
+# Install glfw3
+sudo apt-get install -y libglfw3
+sudo apt-get install -y libglfw3-dev
 
-# Install additional packages for USD
-sudo apt-get install -y libxcb-cursor0
+# Install pybind11
+sudo apt-get install -y pybind11-dev
 
-# Install additional packages for MuJoCo
-sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
+# Install jupyter-notebook
+sudo apt-get install -y jupyter-notebook
+
+if [ $INSTALL_PARSER = true ]; then
+    # Install additional packages for USD
+    sudo apt-get install -y libxcb-cursor0
+fi
+
+if [ $INSTALL_MUJOCO = true ]; then
+    # Install additional packages for MuJoCo
+    sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
+fi
 
 if [ $UBUNTU_VERSION = "20.04" ]; then
     # Install and link clang-11 for creating shared library
@@ -142,15 +197,11 @@ elif [ $UBUNTU_VERSION = "24.04" ]; then
     python3 -m pip install virtualenvwrapper --break-system-packages
 fi
 
-# Install additional packages for blender
-sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
-sudo apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
-
-# Install pybind11
-sudo apt-get install -y pybind11-dev
-
-# Install jupyter-notebook
-sudo apt-get install -y jupyter-notebook
+if [ $INSTALL_PARSER = true ]; then
+    # Install additional packages for blender
+    sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
+    sudo apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
+fi
 
 PYTHON_EXECUTABLE=python3
 if [ $UBUNTU_VERSION = "20.04" ]; then
@@ -170,15 +221,19 @@ for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrap
         # Install and upgrade pip build setuptools packaging
         $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging
 
-        # Install additional packages for USD and multiverse_knowledge
-        $PYTHON_EXECUTABLE -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
+        if [ $INSTALL_PARSER = true ]; then
+            # Install additional packages for USD and multiverse_knowledge
+            $PYTHON_EXECUTABLE -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
 
-        # Install additional packages for multiverse_parser
-        $PYTHON_EXECUTABLE -m pip install urdf_parser_py
+            # Install additional packages for multiverse_parser
+            $PYTHON_EXECUTABLE -m pip install urdf_parser_py mujoco==3.2.6 
+        fi
 
-        # Install MuJoCo and JAX
-        $PYTHON_EXECUTABLE -m pip install mujoco==3.2.6 
-        $PYTHON_EXECUTABLE -m pip install mujoco-mjx==3.2.6 "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+        if [ $INSTALL_MUJOCO = true ]; then
+            # Install MuJoCo and JAX
+            $PYTHON_EXECUTABLE -m pip install mujoco==3.2.6 
+            $PYTHON_EXECUTABLE -m pip install mujoco-mjx==3.2.6 "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+        fi
 
         # Install additional packages for Jupyter Notebook
         $PYTHON_EXECUTABLE -m pip install panel jupyter-server bash_kernel
