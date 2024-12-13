@@ -26,18 +26,27 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
     def test_functions(self):
         simulator = self.Simulator(
             file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml"))
-        get_all_body_names_result = simulator.get_all_body_names()
-        self.assertIsInstance(get_all_body_names_result, MultiverseFunctionResult)
-        self.assertEqual(get_all_body_names_result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)
-        self.assertEqual(get_all_body_names_result.result, ['world', 'link0', 'link1', 'link2', 'link3', 'link4',
-                                                            'link5', 'link6', 'link7', 'hand', 'left_finger',
-                                                            'right_finger', 'box', 'mocap_target'])
+        result = simulator.get_all_body_names()
+        self.assertIsInstance(result, MultiverseFunctionResult)
+        self.assertEqual(result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)
+        self.assertEqual(result.result, ['world', 'link0', 'link1', 'link2', 'link3', 'link4',
+                                         'link5', 'link6', 'link7', 'hand', 'left_finger',
+                                         'right_finger', 'box', 'mocap_target'])
 
-        get_all_joint_names_result = simulator.get_all_joint_names()
-        self.assertIsInstance(get_all_joint_names_result, MultiverseFunctionResult)
-        self.assertEqual(get_all_joint_names_result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)
-        self.assertEqual(get_all_joint_names_result.result, ['joint1', 'joint2', 'joint3', 'joint4', 'joint5',
-                                                             'joint6', 'joint7', 'finger_joint1', 'finger_joint2', ''])
+        result = simulator.get_all_joint_names()
+        self.assertIsInstance(result, MultiverseFunctionResult)
+        self.assertEqual(result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)
+        self.assertEqual(result.result, ['joint1', 'joint2', 'joint3', 'joint4', 'joint5',
+                                         'joint6', 'joint7', 'finger_joint1', 'finger_joint2', ''])
+        result = simulator.attach("abc")
+        self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL, result.type)
+        self.assertEqual("Body 1 abc not found", result.info)
+        result = simulator.attach("world")
+        self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL, result.type)
+        self.assertEqual("Body 1 and body 2 are the same", result.info)
+        result = simulator.attach("box")
+        self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+        self.assertEqual("Body 1 box is already attached to body 2 world", result.info)
 
 
 class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBaseTestCase):

@@ -237,16 +237,77 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
     def _make_functions(self) -> List[MultiverseFunction | Callable]:
         def get_all_body_names() -> MultiverseFunctionResult:
+            result = [self._mj_model.body(body_id).name for body_id in range(self._mj_model.nbody)]
             return MultiverseFunctionResult(
                 type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
                 info="Getting all body names",
-                result=lambda: [self._mj_model.body(body_id).name for body_id in range(self._mj_model.nbody)]
+                result=result
             )
 
         def get_all_joint_names() -> MultiverseFunctionResult:
+            result = [self._mj_model.joint(joint_id).name for joint_id in range(self._mj_model.njnt)]
             return MultiverseFunctionResult(
                 type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
                 info="Getting all body names",
-                result=lambda: [self._mj_model.joint(joint_id).name for joint_id in range(self._mj_model.njnt)]
+                result=result
             )
-        return [get_all_body_names, get_all_joint_names]
+        def attach(body_1_name: str,
+                   body_2_name: Optional[str] = None,
+                   relative_position: Optional[numpy.ndarray] = None,
+                   relative_quaternion: Optional[numpy.ndarray] = None) -> MultiverseFunctionResult:
+            body_1_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_1_name)
+            if body_1_id == -1:
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL,
+                    info=f"Body 1 {body_1_name} not found"
+                )
+            if body_2_name is not None:
+                body_2_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_2_name)
+                if body_2_id == -1:
+                    return MultiverseFunctionResult(
+                        type=MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL,
+                        info=f"Body 2 {body_2_name} not found"
+                    )
+            else:
+                body_2_id = 0
+                body_2_name = mujoco.mj_id2name(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, id=body_2_id)
+            if body_1_id == body_2_id:
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL,
+                    info="Body 1 and body 2 are the same"
+                )
+
+            body_1 = self._mj_model.body(body_1_id)
+            body_2 = self._mj_model.body(body_2_id)
+
+            if relative_position is not None:
+                if len(relative_position) != 3 or any(not isinstance(x, (int, float)) for x in relative_position):
+                    return MultiverseFunctionResult(
+                        type=MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL,
+                        info=f"Invalid relative position {relative_position}"
+                    )
+            else:
+                relative_position = body_1.pos
+            if relative_quaternion is not None:
+                if len(relative_quaternion) != 4 or any(not isinstance(x, (int, float)) for x in relative_quaternion):
+                    return MultiverseFunctionResult(
+                        type=MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL,
+                        info=f"Invalid relative quaternion {relative_quaternion}"
+                    )
+            else:
+                relative_quaternion = body_1.quat
+
+            if (body_1.parentid[0] == body_2_id and
+                    numpy.isclose(body_1.pos, relative_position).all() and
+                    numpy.isclose(body_1.quat, relative_quaternion).all()):
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                    info=f"Body 1 {body_1_name} is already attached to body 2 {body_2_name}"
+                )
+
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL,
+                info="Attaching bodies is not supported yet"
+            )
+
+        return [get_all_body_names, get_all_joint_names, attach]

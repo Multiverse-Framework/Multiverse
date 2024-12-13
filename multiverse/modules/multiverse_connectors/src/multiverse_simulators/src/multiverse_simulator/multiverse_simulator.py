@@ -262,7 +262,7 @@ class MultiverseFunction:
         self.__name__ = callback.__name__
 
     def __call__(self, *args, **kwargs):
-        result = self._call(*args, **kwargs)()
+        result = self._call(*args, **kwargs)
         if not isinstance(result, MultiverseFunctionResult):
             raise TypeError("Callback function must return MultiverseFunctionResult")
         return result
@@ -314,7 +314,7 @@ class MultiverseSimulator:
         for func in self._make_functions() + (callbacks or []):
             if not isinstance(func, MultiverseFunction):
                 if isinstance(func, Callable):
-                    func = MultiverseFunction(func)
+                    func = MultiverseFunction(callback=func)
                 else:
                     raise TypeError(f"Function {func} must be an instance of MultiverseFunction or Callable, "
                                     f"got {type(func)}")
