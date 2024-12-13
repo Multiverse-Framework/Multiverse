@@ -344,9 +344,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             body_1_spec_new.quat = relative_quaternion
             self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
 
-            # TODO: Change to use get_state and set_state
-            self._renderer.close()
-            self._renderer = mujoco.viewer.launch_passive(self._mj_model, self._mj_data)
+            self._renderer._sim().load(self._mj_model, self._mj_data, "")
 
             return MultiverseFunctionResult(
                 type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL,

@@ -60,6 +60,7 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertIn("Attached body 1 box to body 2 hand", result.info)
             simulator.step()
             simulator.run_callback()
+            time.sleep(0.001)
         simulator.stop()
 
 
