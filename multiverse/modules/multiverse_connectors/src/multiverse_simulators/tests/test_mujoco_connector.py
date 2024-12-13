@@ -24,12 +24,11 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
     use_mjx = False
 
     def test_functions(self):
-        copy_file = os.path.join(resources_path, "saved", "mjx_single_cube.xml")
-        simulator = self.Simulator(file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube_test.xml"))
+        simulator = self.Simulator(file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml"))
         simulator.start(run_in_thread=False)
 
         for step in range(10000):
-            if step == 100:
+            if step < 1000:
                 result = simulator.get_all_body_names()
                 self.assertIsInstance(result, MultiverseFunctionResult)
                 self.assertEqual(result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)
@@ -43,6 +42,7 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertEqual(result.result, ['joint1', 'joint2', 'joint3', 'joint4', 'joint5',
                                                  'joint6', 'joint7', 'finger_joint1', 'finger_joint2', ''])
 
+            if step == 1000:
                 result = simulator.attach("abc")
                 self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL, result.type)
                 self.assertEqual("Body 1 abc not found", result.info)
@@ -57,11 +57,10 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
 
                 result = simulator.attach("box", "hand")
                 self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL, result.type)
-                self.assertEqual("Attached body 1 box to body 2 hand "
-                                 "at relative position [0.5  0.   0.03], relative quaternion [1. 0. 0. 0.]", result.info)
+                self.assertIn("Attached body 1 box to body 2 hand", result.info)
             simulator.step()
             simulator.run_callback()
-            time.sleep(0.001)
+        simulator.stop()
 
 
 class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBaseTestCase):

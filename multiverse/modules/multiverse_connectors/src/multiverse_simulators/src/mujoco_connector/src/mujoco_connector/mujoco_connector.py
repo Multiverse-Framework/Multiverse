@@ -280,18 +280,17 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
             body_1_xpos = self._mj_data.body(body_1_id).xpos
             body_1_xquat = self._mj_data.body(body_1_id).xquat
-            body_1_neq_quat = numpy.zeros(4)
-            mujoco.mju_negQuat(body_1_neq_quat, body_1_xquat)
-
             body_2_xpos = self._mj_data.body(body_2_id).xpos
             body_2_xquat = self._mj_data.body(body_2_id).xquat
 
-            body_2_in_1_pos = numpy.zeros(3)
-            body_2_in_1_quat = numpy.zeros(4)
+            body_1_in_2_pos = numpy.zeros(3)
+            body_1_in_2_quat = numpy.zeros(4)
 
-            mujoco.mju_sub3(body_2_in_1_pos, body_2_xpos, body_1_xpos)
-            mujoco.mju_rotVecQuat(body_2_in_1_pos, body_2_in_1_pos, body_1_neq_quat)
-            mujoco.mju_mulQuat(body_2_in_1_quat, body_1_neq_quat, body_2_xquat)
+            body_2_neq_quat = numpy.zeros(4)
+            mujoco.mju_negQuat(body_2_neq_quat, body_2_xquat)
+            mujoco.mju_sub3(body_1_in_2_pos, body_1_xpos, body_2_xpos)
+            mujoco.mju_rotVecQuat(body_1_in_2_pos, body_1_in_2_pos, body_2_neq_quat)
+            mujoco.mju_mulQuat(body_1_in_2_quat, body_2_neq_quat, body_1_xquat)
 
             body_1 = self._mj_model.body(body_1_id)
             if relative_position is not None:
@@ -304,7 +303,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 if body_1.parentid[0] == body_2_id:
                     relative_position = body_1.pos
                 else:
-                    relative_position = body_2_in_1_pos
+                    relative_position = body_1_in_2_pos
 
             if relative_quaternion is not None:
                 if len(relative_quaternion) != 4 or any(not isinstance(x, (int, float)) for x in relative_quaternion):
@@ -316,7 +315,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 if body_1.parentid[0] == body_2_id:
                     relative_quaternion = body_1.quat
                 else:
-                    relative_quaternion = body_2_in_1_quat
+                    relative_quaternion = body_1_in_2_quat
 
             if (body_1.parentid[0] == body_2_id and
                     numpy.isclose(body_1.pos, relative_position).all() and
@@ -333,7 +332,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 first_joint.delete()
             body_2_frame = body_2_spec.add_frame()
             prefix = "AVeryDumbassPrefixThatIsUnlikelyToBeUsedBecauseMuJoCoRequiresIt"
-            body_1_spec_new: mujoco.MjsBody = body_2_frame.attach_body(body_1_spec, prefix, "")
+            body_1_spec_new = body_2_frame.attach_body(body_1_spec, prefix, "")
             self._mj_spec.detach_body(body_1_spec)
             body_1_spec_new.name = body_1_name
             for body_1_child in (body_1_spec_new.bodies +
@@ -341,7 +340,13 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                                  body_1_spec_new.geoms +
                                  body_1_spec_new.sites):
                 body_1_child.name = body_1_child.name.replace(prefix, "")
-            self._mj_model = self._mj_spec.compile()
+            body_1_spec_new.pos = relative_position
+            body_1_spec_new.quat = relative_quaternion
+            self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
+
+            # TODO: Change to use get_state and set_state
+            self._renderer.close()
+            self._renderer = mujoco.viewer.launch_passive(self._mj_model, self._mj_data)
 
             return MultiverseFunctionResult(
                 type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL,
