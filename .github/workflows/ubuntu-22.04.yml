@@ -54,8 +54,8 @@ jobs:
 
     - name: Test connectors
       run: |
-          . /usr/local/bin/virtualenvwrapper.sh && workon multiverse && python3 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_compiler.py
-          . /usr/local/bin/virtualenvwrapper.sh && workon multiverse && python3 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_connector.py
+          . /usr/local/bin/virtualenvwrapper.sh && workon multiverse && python3.10 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_compiler.py
+          . /usr/local/bin/virtualenvwrapper.sh && workon multiverse && python3.10 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_connector.py
 
     - name: Run build_multiverse.sh
       run: |
