@@ -4,6 +4,7 @@
 
 import os
 import xml.etree.ElementTree as ET
+from typing import Optional, List, Callable
 
 import jax
 import mujoco
@@ -11,7 +12,8 @@ import mujoco.viewer
 import numpy
 from mujoco import mjx
 
-from multiverse_simulator import MultiverseSimulator, MultiverseRenderer, MultiverseViewer
+from multiverse_simulator import (MultiverseSimulator, MultiverseRenderer, MultiverseViewer,
+                                  MultiverseFunction, MultiverseFunctionResult)
 from .utills import get_multiverse_connector_plugin
 
 
@@ -39,12 +41,21 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     use_mjx: bool = False
     """Use MJX (https://mujoco.readthedocs.io/en/stable/mjx.html)"""
 
-    def __init__(self, file_path: str, viewer: MultiverseViewer = None, number_of_instances: int = 1, **kwargs):
+    def __init__(self,
+                 file_path: str,
+                 viewer: Optional[MultiverseViewer] = None,
+                 number_of_instances: int = 1,
+                 headless: bool = False,
+                 real_time_factor: float = 1.0,
+                 step_size: float = 1E-3,
+                 callbacks: Optional[List[MultiverseFunction]] = None,
+                 use_mjx: bool = False,
+                 **kwargs):
         self._file_path = file_path
         root = ET.parse(file_path).getroot()
         self.name = root.attrib.get("model", self.name)
-        self.use_mjx = kwargs.get("use_mjx", False)
-        super().__init__(viewer, number_of_instances, **kwargs)
+        self.use_mjx = use_mjx
+        super().__init__(viewer, number_of_instances, headless, real_time_factor, step_size, callbacks, **kwargs)
         mujoco.mj_loadPluginLibrary(get_multiverse_connector_plugin())
         assert os.path.exists(self.file_path)
         self._mj_model = mujoco.MjModel.from_xml_path(filename=self.file_path)
@@ -60,7 +71,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             self._mjx_model = mjx.put_model(self._mj_model)
             self._mjx_data = mjx.put_data(self._mj_model, self._mj_data)
             self._batch0 = jax.vmap(lambda qpos, qvel, act, ctrl:
-                                    self._mjx_data.replace(qpos=qpos, qvel=qvel, act=act, ctrl=ctrl))(qpos0, qvel0, act0, ctrl0)
+                                    self._mjx_data.replace(qpos=qpos, qvel=qvel, act=act, ctrl=ctrl))(qpos0, qvel0,
+                                                                                                      act0, ctrl0)
             self._batch = self._batch0
             self._jit_step = jax.jit(jax.vmap(mjx.step, in_axes=(None, 0)))
 
@@ -222,3 +234,19 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     @property
     def renderer(self):
         return self._renderer
+
+    def _make_functions(self) -> List[MultiverseFunction | Callable]:
+        def get_all_body_names() -> MultiverseFunctionResult:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                info="Getting all body names",
+                result=lambda: [self._mj_model.body(body_id).name for body_id in range(self._mj_model.nbody)]
+            )
+
+        def get_all_joint_names() -> MultiverseFunctionResult:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                info="Getting all body names",
+                result=lambda: [self._mj_model.joint(joint_id).name for joint_id in range(self._mj_model.njnt)]
+            )
+        return [get_all_body_names, get_all_joint_names]

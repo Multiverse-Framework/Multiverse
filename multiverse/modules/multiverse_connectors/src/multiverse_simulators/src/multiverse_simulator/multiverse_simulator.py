@@ -8,7 +8,7 @@ import time
 from dataclasses import dataclass
 from enum import Enum
 from threading import Thread
-from typing import Optional, Dict, List, Tuple
+from typing import Optional, Dict, List, Tuple, Any, Callable
 
 import numpy
 
@@ -162,23 +162,27 @@ class MultiverseViewer:
         return self._read_objects
 
     @read_objects.setter
-    def read_objects(self, objects: Dict[str, Dict[str, Dict[str, numpy.ndarray | List[float]]]]):
+    def read_objects(self, objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]]):
         number_of_instances = self._read_data.shape[0]
         self._read_objects, self._read_data = (
             self._get_objects_and_data_from_target_objects(objects, number_of_instances))
         assert self._read_data.shape[0] == self._write_data.shape[0]
 
     @staticmethod
-    def _get_objects_and_data_from_target_objects(target_objects: Dict[str, Dict[str, numpy.ndarray | List[float]]],
-                                                  number_of_instances: int) \
+    def _get_objects_and_data_from_target_objects(
+            target_objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]],
+            number_of_instances: int) \
             -> Tuple[Dict[str, Dict[str, MultiverseAttribute]], numpy.ndarray]:
         """
         Update object attribute values from the target objects.
 
-        :param target_objects: Dict[str, List[MultiverseAttribute]], target objects with attributes
+        :param target_objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]], target objects
         :param number_of_instances: int, number of instances
         """
-        objects = MultiverseViewer.from_array(target_objects) if target_objects is not None else {}
+        if any(isinstance(value, (numpy.ndarray, list)) for value in target_objects.values()):
+            objects = MultiverseViewer.from_array(target_objects) if target_objects is not None else {}
+        else:
+            objects = target_objects
         for attrs in objects.values():
             for attr in attrs.values():
                 attr.initialize_data(number_of_instances)
@@ -221,6 +225,49 @@ class MultiverseViewer:
         self._read_data[:] = data
 
 
+@dataclass
+class MultiverseFunctionResult:
+    """Multiverse Function Result Enum"""
+
+    class ResultType(Enum):
+        SUCCESS_WITHOUT_EXECUTION = 0
+        SUCCESS_AFTER_EXECUTION_ON_MODEL = 1
+        SUCCESS_AFTER_EXECUTION_ON_DATA = 2
+        FAILURE_BEFORE_EXECUTION_ON_MODEL = 3
+        FAILURE_AFTER_EXECUTION_ON_MODEL = 4
+        FAILURE_BEFORE_EXECUTION_ON_DATA = 5
+        FAILURE_AFTER_EXECUTION_ON_DATA = 6
+
+    type: ResultType
+    """Result type"""
+    info: str = None
+    """Information about the result"""
+    result: Any = None
+    """Result of the function"""
+
+    def __call__(self):
+        self.result = self.result()
+        return self
+
+class MultiverseFunction:
+    """Base class for Multiverse Function"""
+
+    def __init__(self, callback: Callable):
+        """
+        Initialize the function with the callback
+
+        :param callback: Callable, callback function, must return MultiverseFunctionResult
+        """
+        self._call = callback
+        self.__name__ = callback.__name__
+
+    def __call__(self, *args, **kwargs):
+        result = self._call(*args, **kwargs)()
+        if not isinstance(result, MultiverseFunctionResult):
+            raise TypeError("Callback function must return MultiverseFunctionResult")
+        return result
+
+
 class MultiverseSimulator:
     """Base class for Multiverse Simulator"""
 
@@ -236,23 +283,43 @@ class MultiverseSimulator:
     logger: logging.Logger = logging.getLogger(__name__)
     """Logger for the simulator"""
 
-    def __init__(self, viewer: Optional[MultiverseViewer] = None, number_of_instances: int = 1, **kwargs):
+    def __init__(self,
+                 viewer: Optional[MultiverseViewer] = None,
+                 number_of_instances: int = 1,
+                 headless: bool = False,
+                 real_time_factor: float = 1.0,
+                 step_size: float = 1E-3,
+                 callbacks: List[MultiverseFunction] = None,
+                 **kwargs):
         """
         Initialize the simulator with the viewer and the following keyword arguments:
 
         :param viewer: MultiverseViewer, viewer for the simulator
-        :param kwargs: step_size, headless, real_time_factor
+        :param number_of_instances: int, number of instances
+        :param headless: bool, True to run the simulator in headless mode
+        :param real_time_factor: float, real time factor
+        :param step_size: float, step size
+        :param callbacks: List[MultiverseFunction], list of callback functions
         """
-        self._headless = kwargs.get("headless", False)
-        self._real_time_factor = kwargs.get("real_time_factor", 1.0)
-        self._step_size = kwargs.get("step_size", 1E-3)
+        self._headless = headless
+        self._real_time_factor = real_time_factor
+        self._step_size = step_size
         self._current_number_of_steps = 0
         self._start_real_time = self.current_real_time
         self._state = MultiverseSimulatorState.STOPPED
         self._stop_reason = None
         self._viewer = viewer.initialize_data(number_of_instances) if viewer is not None else None
         self._renderer = MultiverseRenderer()
-        self._current_view_time = self.current_real_time
+        self._current_render_time = self.current_real_time
+        for func in self._make_functions() + (callbacks or []):
+            if not isinstance(func, MultiverseFunction):
+                if isinstance(func, Callable):
+                    func = MultiverseFunction(func)
+                else:
+                    raise TypeError(f"Function {func} must be an instance of MultiverseFunction or Callable, "
+                                    f"got {type(func)}")
+            setattr(self, func.__name__, func)
+            self.log_info(f"Function {func.__name__} is registered")
         atexit.register(self.stop)
 
     def start(self,
@@ -404,8 +471,8 @@ class MultiverseSimulator:
         self._renderer = MultiverseRenderer()
 
     def run_callback(self):
-        if self.current_real_time - self._current_view_time > 1.0 / 60.0:
-            self._current_view_time = self.current_real_time
+        if self.current_real_time - self._current_render_time > 1.0 / 60.0:
+            self._current_render_time = self.current_real_time
             self.renderer.sync()
 
     def step_callback(self):
@@ -475,3 +542,6 @@ class MultiverseSimulator:
     @property
     def renderer(self) -> MultiverseRenderer:
         return self._renderer
+
+    def _make_functions(self) -> List[MultiverseFunction]:
+        return []

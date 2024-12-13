@@ -8,7 +8,8 @@ import mujoco.viewer
 import numpy
 
 from mujoco_connector import MultiverseMujocoConnector
-from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer
+from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
+    MultiverseFunctionResult
 from test_multiverse_simulator import MultiverseSimulatorTestCase
 
 resources_path = os.path.join(os.path.dirname(__file__), "..", "resources")
@@ -22,6 +23,22 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
     step_size = 1E-3
     use_mjx = False
 
+    def test_functions(self):
+        simulator = self.Simulator(
+            file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml"))
+        get_all_body_names_result = simulator.get_all_body_names()
+        self.assertIsInstance(get_all_body_names_result, MultiverseFunctionResult)
+        self.assertEqual(get_all_body_names_result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)
+        self.assertEqual(get_all_body_names_result.result, ['world', 'link0', 'link1', 'link2', 'link3', 'link4',
+                                                            'link5', 'link6', 'link7', 'hand', 'left_finger',
+                                                            'right_finger', 'box', 'mocap_target'])
+
+        get_all_joint_names_result = simulator.get_all_joint_names()
+        self.assertIsInstance(get_all_joint_names_result, MultiverseFunctionResult)
+        self.assertEqual(get_all_joint_names_result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)
+        self.assertEqual(get_all_joint_names_result.result, ['joint1', 'joint2', 'joint3', 'joint4', 'joint5',
+                                                             'joint6', 'joint7', 'finger_joint1', 'finger_joint2', ''])
+
 
 class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBaseTestCase):
     file_path = os.path.join(resources_path, "mjcf/floor/floor.xml")
@@ -31,7 +48,7 @@ class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBas
     use_mjx = False
 
 
-# @unittest.skip("This test is not meant to be run in CI")
+@unittest.skip("This test is not meant to be run in CI")
 class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTestCase):
     file_path = os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml")
     Simulator = MultiverseMujocoConnector
@@ -96,7 +113,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                                        places=0)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
-    def test_getting_data_from_simulator_in_the_loop(self):
+    def test_read_and_write_data_in_the_loop(self):
         viewer = MultiverseViewer()
         simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
         simulator.start(run_in_thread=False)
