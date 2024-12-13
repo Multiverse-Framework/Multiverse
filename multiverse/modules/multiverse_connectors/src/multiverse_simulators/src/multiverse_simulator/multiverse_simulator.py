@@ -318,6 +318,8 @@ class MultiverseSimulator:
                 else:
                     raise TypeError(f"Function {func} must be an instance of MultiverseFunction or Callable, "
                                     f"got {type(func)}")
+            if hasattr(self, func.__name__):
+                raise AttributeError(f"Function {func.__name__} is already defined")
             setattr(self, func.__name__, func)
             self.log_info(f"Function {func.__name__} is registered")
         atexit.register(self.stop)

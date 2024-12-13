@@ -193,19 +193,23 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
     def test_making_functions(self):
         result_1 = MultiverseFunctionResult(type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
                                             info="Test function 1",
-                                            result="Hello, World!")
+                                            result=lambda: "Hello, World!")
         def function_1() -> MultiverseFunctionResult:
             return result_1
 
         result_2 = MultiverseFunctionResult(type=MultiverseFunctionResult.ResultType.FAILURE_AFTER_EXECUTION_ON_DATA,
                                             info="Test function 2",
-                                            result="Hello, World!")
+                                            result=lambda: "Hello, World!")
         def function_2() -> MultiverseFunctionResult:
             return result_2
 
         simulator = self.test_initialize_multiverse_simulator(callbacks=[function_1, function_2])
         self.assertEqual(simulator.function_1(), result_1)
         self.assertEqual(simulator.function_2(), result_2)
+
+        with self.assertRaises(Exception) as context:
+            simulator = self.test_initialize_multiverse_simulator(callbacks=[function_1, function_2, function_2])
+        self.assertTrue(f"Function {function_2.__name__} is already defined" in str(context.exception))
         return simulator
 
 
