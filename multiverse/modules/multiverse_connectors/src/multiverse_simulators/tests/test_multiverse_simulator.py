@@ -2,6 +2,7 @@
 
 import time
 import unittest
+from os import write
 from typing import Optional, Tuple
 
 import numpy
@@ -31,38 +32,38 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
         return simulator
 
     def test_initialize_multiverse_viewer(self,
-                                          send_objects: Optional = None,
-                                          receive_objects: Optional = None,
+                                          write_objects: Optional = None,
+                                          read_objects: Optional = None,
                                           number_of_instances=2) -> MultiverseViewer:
-        if send_objects is None:
-            send_attrs = {
+        if write_objects is None:
+            write_attrs = {
                 "cmd_joint_rvalue": [1.0],
                 "cmd_joint_angular_velocity": [2.0]
             }
-            send_objects = {
-                "actuator1": send_attrs,
-                "actuator2": send_attrs,
+            write_objects = {
+                "actuator1": write_attrs,
+                "actuator2": write_attrs,
             }
-        if receive_objects is None:
-            receive_attrs = {
+        if read_objects is None:
+            read_attrs = {
                 "joint_rvalue": [1.0],
                 "joint_angular_velocity": [2.0]
             }
-            receive_objects = {
-                "joint1": receive_attrs,
-                "joint2": receive_attrs,
+            read_objects = {
+                "joint1": read_attrs,
+                "joint2": read_attrs,
             }
-        viewer = MultiverseViewer(send_objects=send_objects, receive_objects=receive_objects)
+        viewer = MultiverseViewer(write_objects=write_objects, read_objects=read_objects)
         viewer.initialize_data(number_of_instances=number_of_instances)
 
-        send_data = numpy.array([[i for attrs in send_objects.values()
+        write_data = numpy.array([[i for attrs in write_objects.values()
+                                   for attr in attrs.values() for i in attr] for _ in
+                                  range(number_of_instances)])
+        read_data = numpy.array([[i for attrs in read_objects.values()
                                   for attr in attrs.values() for i in attr] for _ in
                                  range(number_of_instances)])
-        receive_data = numpy.array([[i for attrs in receive_objects.values()
-                                     for attr in attrs.values() for i in attr] for _ in
-                                    range(number_of_instances)])
-        self.assertTrue(numpy.array_equal(viewer.send_data, send_data))
-        self.assertTrue(numpy.array_equal(viewer.receive_data, receive_data))
+        self.assertTrue(numpy.array_equal(viewer.write_data, write_data))
+        self.assertTrue(numpy.array_equal(viewer.read_data, read_data))
         return viewer
 
     def test_initialize_multiverse_with_viewer(self) -> Tuple[MultiverseSimulator, MultiverseViewer]:

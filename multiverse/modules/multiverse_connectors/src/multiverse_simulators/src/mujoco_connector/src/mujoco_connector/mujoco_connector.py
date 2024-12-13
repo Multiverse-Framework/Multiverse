@@ -99,7 +99,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             ctrl = self._mj_data.ctrl
         for instance_id, data in enumerate(write_data):
             i = 0
-            for name, attrs in self._viewer.send_objects.items():
+            for name, attrs in self._viewer.write_objects.items():
                 for attr_name in attrs.keys():
                     if attr_name in {"joint_rvalue", "joint_tvalue"}:
                         joint_id = self._mj_model.joint(name).id
@@ -161,7 +161,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             ctrl = self._mj_data.ctrl
         for instance_id, data in enumerate(read_data):
             i = 0
-            for name, attrs in self._viewer.receive_objects.items():
+            for name, attrs in self._viewer.read_objects.items():
                 for attr_name in attrs.keys():
                     if attr_name == "position":
                         body_id = self._mj_model.body(name).id

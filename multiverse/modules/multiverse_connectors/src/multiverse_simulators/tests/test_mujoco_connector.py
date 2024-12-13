@@ -47,7 +47,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_in_10s_with_viewer(self):
-        send_objects = {
+        write_objects = {
             "actuator1": {
                 "cmd_joint_rvalue": [0.0]
             },
@@ -55,7 +55,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                 "cmd_joint_rvalue": [0.0]
             },
         }
-        receive_objects = {
+        read_objects = {
             "joint1": {
                 "joint_rvalue": [0.0],
                 "joint_angular_velocity": [0.0]
@@ -71,31 +71,103 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                 "cmd_joint_rvalue": [0.0]
             }
         }
-        viewer = MultiverseViewer(send_objects=send_objects, receive_objects=receive_objects)
+        viewer = MultiverseViewer(write_objects=write_objects, read_objects=read_objects)
         simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
         constraints = MultiverseSimulatorConstraints(max_simulation_time=10.0)
         simulator.start(constraints=constraints)
-        use_send_data = True
+        use_write_data = True
         while simulator.state != MultiverseSimulatorState.STOPPED:
             time_now = time.time()
             f = 0.5
             act_1_value = numpy.pi / 6 * numpy.sin(2.0 * numpy.pi * f * time_now)
             act_2_value = numpy.pi / 6 * numpy.sin(-1.0 * numpy.pi * f * time_now)
-            if use_send_data:
-                viewer.send_data = numpy.array([[act_1_value, act_2_value]])
+            if use_write_data:
+                viewer.write_data = numpy.array([[act_1_value, act_2_value]])
             else:
-                send_objects = viewer.send_objects
-                send_objects["actuator1"]["cmd_joint_rvalue"].values[0][0] = act_1_value
-                send_objects["actuator2"]["cmd_joint_rvalue"].values[0][0] = act_2_value
-                viewer.send_objects = send_objects
-            use_send_data = not use_send_data
+                viewer.write_objects["actuator1"]["cmd_joint_rvalue"].values[0][0] = act_1_value
+                viewer.write_objects["actuator2"]["cmd_joint_rvalue"].values[0][0] = act_2_value
+            use_write_data = not use_write_data
             time.sleep(0.01)
-            self.assertEqual(viewer.receive_data.shape, (1, 6))
+            self.assertEqual(viewer.read_data.shape, (1, 6))
             if simulator.current_simulation_time > 1.0:
-                self.assertAlmostEqual(viewer.receive_objects["joint1"]["joint_rvalue"].values[0][0], act_1_value,
+                self.assertAlmostEqual(viewer.read_objects["joint1"]["joint_rvalue"].values[0][0], act_1_value,
                                        places=0)
-                self.assertAlmostEqual(viewer.receive_objects["joint2"]["joint_rvalue"].values[0][0], act_2_value,
+                self.assertAlmostEqual(viewer.read_objects["joint2"]["joint_rvalue"].values[0][0], act_2_value,
                                        places=0)
+        self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+
+    def test_getting_data_from_simulator_in_the_loop(self):
+        viewer = MultiverseViewer()
+        simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
+        simulator.start(run_in_thread=False)
+        for step in range(10000):
+            if step == 100:
+                read_objects = {
+                    "joint1": {
+                        "joint_rvalue": [0.0],
+                        "joint_angular_velocity": [0.0]
+                    },
+                    "joint2": {
+                        "joint_rvalue": [0.0],
+                        "joint_angular_velocity": [0.0]
+                    }
+                }
+                viewer.read_objects = read_objects
+            elif step == 101:
+                read_objects = {
+                    "joint1": {
+                        "joint_angular_velocity": [0.0]
+                    },
+                    "joint2": {
+                        "joint_rvalue": [0.0],
+                        "joint_torque": [0.0]
+                    }
+                }
+                viewer.read_objects = read_objects
+            elif step == 102:
+                write_objects = {
+                    "joint1": {
+                        "joint_rvalue": [1.0]
+                    },
+                    "actuator2": {
+                        "cmd_joint_rvalue": [2.0]
+                    },
+                }
+                read_objects = {
+                    "joint1": {
+                        "joint_rvalue": [0.0],
+                        "joint_angular_velocity": [0.0]
+                    },
+                    "actuator2": {
+                        "cmd_joint_rvalue": [0.0]
+                    }
+                }
+                viewer.write_objects = write_objects
+                viewer.read_objects = read_objects
+            else:
+                viewer.read_objects = {}
+            simulator.step()
+            if step == 100:
+                self.assertEqual(viewer.read_data.shape, (1, 4))
+                self.assertEqual(viewer.read_objects["joint1"]["joint_rvalue"].values.shape, (1, 1))
+                self.assertEqual(viewer.read_objects["joint2"]["joint_rvalue"].values.shape, (1, 1))
+                self.assertEqual(viewer.read_objects["joint1"]["joint_angular_velocity"].values.shape, (1, 1))
+                self.assertEqual(viewer.read_objects["joint2"]["joint_angular_velocity"].values.shape, (1, 1))
+            elif step == 101:
+                self.assertEqual(viewer.read_data.shape, (1, 3))
+                self.assertEqual(viewer.read_objects["joint1"]["joint_angular_velocity"].values.shape, (1, 1))
+                self.assertEqual(viewer.read_objects["joint2"]["joint_rvalue"].values.shape, (1, 1))
+                self.assertEqual(viewer.read_objects["joint2"]["joint_torque"].values.shape, (1, 1))
+            elif step == 102:
+                self.assertEqual(viewer.write_data.shape, (1, 2))
+                self.assertEqual(viewer.write_objects["joint1"]["joint_rvalue"].values[0], (1.0,))
+                self.assertEqual(viewer.write_objects["actuator2"]["cmd_joint_rvalue"].values[0], (2.0,))
+                self.assertEqual(viewer.read_data.shape, (1, 3))
+                self.assertAlmostEqual(viewer.read_objects["joint1"]["joint_rvalue"].values[0][0], 1.0, places=3)
+                self.assertEqual(viewer.read_objects["actuator2"]["cmd_joint_rvalue"].values[0][0], 2.0)
+            else:
+                self.assertEqual(viewer.read_data.shape, (1, 0))
+        simulator.stop()
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_with_mjx_in_10s(self):
