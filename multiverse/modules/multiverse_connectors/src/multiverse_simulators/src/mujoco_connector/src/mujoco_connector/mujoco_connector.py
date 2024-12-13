@@ -10,7 +10,7 @@ import jax
 import mujoco
 import mujoco.viewer
 import numpy
-from mujoco import mjx
+from mujoco import mjx, MjsBody
 
 from multiverse_simulator import (MultiverseSimulator, MultiverseRenderer, MultiverseViewer,
                                   MultiverseFunction, MultiverseFunctionResult)
@@ -58,7 +58,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         super().__init__(viewer, number_of_instances, headless, real_time_factor, step_size, callbacks, **kwargs)
         mujoco.mj_loadPluginLibrary(get_multiverse_connector_plugin())
         assert os.path.exists(self.file_path)
-        self._mj_model = mujoco.MjModel.from_xml_path(filename=self.file_path)
+        self._mj_spec = mujoco.MjSpec.from_file(filename=self.file_path)
+        self._mj_model = self._mj_spec.compile()
         assert self._mj_model is not None
         self._mj_model.opt.timestep = self.step_size
         self._mj_data = mujoco.MjData(self._mj_model)
@@ -277,9 +278,22 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                     info="Body 1 and body 2 are the same"
                 )
 
-            body_1 = self._mj_model.body(body_1_id)
-            body_2 = self._mj_model.body(body_2_id)
+            body_1_xpos = self._mj_data.body(body_1_id).xpos
+            body_1_xquat = self._mj_data.body(body_1_id).xquat
+            body_1_neq_quat = numpy.zeros(4)
+            mujoco.mju_negQuat(body_1_neq_quat, body_1_xquat)
 
+            body_2_xpos = self._mj_data.body(body_2_id).xpos
+            body_2_xquat = self._mj_data.body(body_2_id).xquat
+
+            body_2_in_1_pos = numpy.zeros(3)
+            body_2_in_1_quat = numpy.zeros(4)
+
+            mujoco.mju_sub3(body_2_in_1_pos, body_2_xpos, body_1_xpos)
+            mujoco.mju_rotVecQuat(body_2_in_1_pos, body_2_in_1_pos, body_1_neq_quat)
+            mujoco.mju_mulQuat(body_2_in_1_quat, body_1_neq_quat, body_2_xquat)
+
+            body_1 = self._mj_model.body(body_1_id)
             if relative_position is not None:
                 if len(relative_position) != 3 or any(not isinstance(x, (int, float)) for x in relative_position):
                     return MultiverseFunctionResult(
@@ -287,7 +301,11 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                         info=f"Invalid relative position {relative_position}"
                     )
             else:
-                relative_position = body_1.pos
+                if body_1.parentid[0] == body_2_id:
+                    relative_position = body_1.pos
+                else:
+                    relative_position = body_2_in_1_pos
+
             if relative_quaternion is not None:
                 if len(relative_quaternion) != 4 or any(not isinstance(x, (int, float)) for x in relative_quaternion):
                     return MultiverseFunctionResult(
@@ -295,7 +313,10 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                         info=f"Invalid relative quaternion {relative_quaternion}"
                     )
             else:
-                relative_quaternion = body_1.quat
+                if body_1.parentid[0] == body_2_id:
+                    relative_quaternion = body_1.quat
+                else:
+                    relative_quaternion = body_2_in_1_quat
 
             if (body_1.parentid[0] == body_2_id and
                     numpy.isclose(body_1.pos, relative_position).all() and
@@ -305,9 +326,27 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                     info=f"Body 1 {body_1_name} is already attached to body 2 {body_2_name}"
                 )
 
+            body_1_spec = self._mj_spec.find_body(body_1_name)
+            body_2_spec = self._mj_spec.find_body(body_2_name)
+            first_joint: mujoco.MjsJoint = body_1_spec.first_joint()
+            if first_joint is not None and first_joint.type == mujoco.mjtJoint.mjJNT_FREE:
+                first_joint.delete()
+            body_2_frame = body_2_spec.add_frame()
+            prefix = "AVeryDumbassPrefixThatIsUnlikelyToBeUsedBecauseMuJoCoRequiresIt"
+            body_1_spec_new: mujoco.MjsBody = body_2_frame.attach_body(body_1_spec, prefix, "")
+            self._mj_spec.detach_body(body_1_spec)
+            body_1_spec_new.name = body_1_name
+            for body_1_child in (body_1_spec_new.bodies +
+                                 body_1_spec_new.joints +
+                                 body_1_spec_new.geoms +
+                                 body_1_spec_new.sites):
+                body_1_child.name = body_1_child.name.replace(prefix, "")
+            self._mj_model = self._mj_spec.compile()
+
             return MultiverseFunctionResult(
-                type=MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL,
-                info="Attaching bodies is not supported yet"
+                type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL,
+                info=f"Attached body 1 {body_1_name} to body 2 {body_2_name} "
+                     f"at relative position {relative_position}, relative quaternion {relative_quaternion}"
             )
 
         return [get_all_body_names, get_all_joint_names, attach]
