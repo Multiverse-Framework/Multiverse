@@ -56,7 +56,7 @@ while [ -n "$1" ]; do
             DBUILD_MODULES=OFF
             break
         ;;
-        --only-modules) echo -n "--only-modules option passed, with value:"
+        --only-modules) echo -n "--only-modules option passed"
             shift 1
             if [ "$#" -eq 0 ]; then
                 echo ""
@@ -67,16 +67,14 @@ while [ -n "$1" ]; do
                     echo -n " $module"
                     shift 1
                     if [ "$module" = "connectors" ]; then
-                        DBUILD_SRC=OFF
                         DBUILD_KNOWLEDGE=OFF
                         DBUILD_PARSER=OFF
                     elif [ "$module" = "knowledge" ]; then
                         DBUILD_CONNECTORS=OFF
                         DBUILD_PARSER=OFF
                     elif [ "$module" = "parser" ]; then
-                        DBUILD_SRC=ON
+                        DBUILD_CONNECTORS=OFF
                         DBUILD_KNOWLEDGE=OFF
-                        DBUILD_PARSER=ON
                     fi
                 done
                 echo ""
