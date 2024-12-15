@@ -59,7 +59,10 @@ jobs:
 
     - name: Test connectors
       run: |
-          . /usr/local/bin/virtualenvwrapper.sh && workon multiverse && export PYTHONPATH=$PYTHONPATH:/usr/lib/python3/dist-packages:/home/runner/work/Multiverse/Multiverse/multiverse/build/USD/lib/python:/home/runner/work/Multiverse/Multiverse/multiverse/lib/dist-packages
+          . /usr/local/bin/virtualenvwrapper.sh
+          workon multiverse
+          export PYTHONPATH=/usr/lib/python3/dist-packages:/home/runner/work/Multiverse/Multiverse/multiverse/build/USD/lib/python:/home/runner/work/Multiverse/Multiverse/multiverse/lib/dist-packages
+          python3.10 -m pip install mujoco
           python3.10 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_compiler.py
           python3.10 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_connector.py
 
