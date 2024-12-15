@@ -179,7 +179,8 @@ class MultiverseViewer:
         :param target_objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]], target objects
         :param number_of_instances: int, number of instances
         """
-        if any(isinstance(value, (numpy.ndarray, list)) for value in target_objects.values()):
+        if any(isinstance(value, (numpy.ndarray, list)) for values in target_objects.values() for value in
+               values.values()):
             objects = MultiverseViewer.from_array(target_objects) if target_objects is not None else {}
         else:
             objects = target_objects
@@ -248,6 +249,7 @@ class MultiverseFunctionResult:
     def __call__(self):
         self.result = self.result()
         return self
+
 
 class MultiverseFunction:
     """Base class for Multiverse Function"""
@@ -392,6 +394,7 @@ class MultiverseSimulator:
 
     def step(self):
         """Step the simulator"""
+        self.pre_step_callback()
         if self._viewer is not None:
             self.write_data_to_simulator(write_data=self._viewer.write_data)
         self.step_callback()
@@ -476,6 +479,9 @@ class MultiverseSimulator:
         if self.current_real_time - self._current_render_time > 1.0 / 60.0:
             self._current_render_time = self.current_real_time
             self.renderer.sync()
+
+    def pre_step_callback(self):
+        pass
 
     def step_callback(self):
         self._current_simulation_time += self.step_size
