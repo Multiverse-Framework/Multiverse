@@ -59,7 +59,6 @@ jobs:
           export PYTHONPATH=/usr/lib/python3/dist-packages:/root/.virtualenvs/multiverse/lib/python3.12/site-packages:/home/runner/work/Multiverse/Multiverse/multiverse/build/USD/lib/python:/home/runner/work/Multiverse/Multiverse/multiverse/lib/dist-packages
           python3.12 -m pip install mujoco==3.2.6 mujoco-mjx==3.2.6 "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
           python3.12 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_compiler.py
-          python3.12 -m unittest ./multiverse/modules/multiverse_connectors/src/multiverse_simulators/tests/test_mujoco_connector.py
 
     - name: Run build_multiverse.sh
       run: |

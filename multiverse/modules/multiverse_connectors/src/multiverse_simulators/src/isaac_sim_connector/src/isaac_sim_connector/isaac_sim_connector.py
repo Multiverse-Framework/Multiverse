@@ -4,14 +4,15 @@
 import os.path
 
 from multiverse_simulator import MultiverseSimulator, MultiverseRenderer
-from isaacsim import SimulationApp
+from omni.isaac.lab.app import AppLauncher
+from omni.isaac.kit import SimulationApp
 
 
 class MultiverseIsaacSimRenderer(MultiverseRenderer):
     """Multiverse Isaac Sim Renderer class"""
 
-    def __init__(self, simulation_app: SimulationApp):
-        self._simulation_app = simulation_app
+    def __init__(self, app_launcher: AppLauncher):
+        self._simulation_app = app_launcher.app
         super().__init__()
 
     def is_running(self) -> bool:
@@ -33,7 +34,6 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         self.name = os.path.basename(file_path).split(".")[0]
         super().__init__(**kwargs)
 
-    def start_callback(self):
         # Start the omniverse application
         simulation_app = SimulationApp({
             "width": 1280,
@@ -44,44 +44,31 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
             "hide_ui": False,
             "open_usd": self.file_path,
         })
-
-        import carb
-        import omni
-        from omni.isaac.core import World
-        from omni.isaac.core.utils import stage
-        from omni.physx.bindings import _physx
-
-        self._omni = omni
-
-        settings = carb.settings.acquire_settings_interface()
-        settings.set(_physx.SETTING_RESET_ON_STOP, False)
-        self._world = World()
-        self.log_info("Loading stage...")
-        while stage.is_stage_loading():
-            simulation_app.update()
-        self.log_info("Loading Complete")
-        self.world.play()
-        self.world.reset()
+        from omni.isaac.lab.sim import SimulationContext, SimulationCfg
+        simulation_config = SimulationCfg(dt=0.001)
+        self._simulation_context = SimulationContext(cfg=simulation_config)
         self._renderer = MultiverseIsaacSimRenderer(simulation_app)
 
+    def start_callback(self):        
+        pass
+
     def step_callback(self):
-        self.world.step(render=not self.headless)
+        self.simulation_context.step()
 
     def stop_callback(self):
-        self.world.stop()
-        super().stop_callback()
+        self.simulation_context.stop()
 
     def reset_callback(self):
-        self.world.reset()
+        self.simulation_context.reset()
 
     def log_info(self, message: str):
-        self.omni.kit.app.get_app().print_and_log(f"INFO: {message}")
+        print(f"INFO: {message}")
 
     def log_warning(self, message: str):
-        self.omni.kit.app.get_app().print_and_log(f"WARN: {message}")
+        print(f"WARN: {message}")
 
     def log_error(self, message: str):
-        self.omni.kit.app.get_app().print_and_log(f"ERROR: {message}")
+        print(f"ERROR: {message}")
 
     @property
     def file_path(self) -> str:
@@ -92,13 +79,5 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         return self._current_number_of_steps * self.step_size
 
     @property
-    def scene_registry(self) -> "SceneRegistry":
-        return self.world.scene._scene_registry
-
-    @property
-    def world(self) -> "World":
-        return self._world
-
-    @property
-    def omni(self):
-        return self._omni
+    def simulation_context(self) -> "SimulationContext":
+        return self._simulation_context
