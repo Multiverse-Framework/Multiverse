@@ -26,10 +26,10 @@ if not exist "C:\ProgramData\chocolatey" (
     exit /b 1
 )
 
-@REM Install python 3.8.3, vcredist2013, vcredist140, openssl, curl, cmake 7zip
+@REM Install vcredist2013, vcredist140, openssl, curl, cmake 7zip
 set "NEW_PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 set "SET_NEW_PATH=$env:Path = '%NEW_PATH%'; [System.Environment]::SetEnvironmentVariable('Path', $env:Path, [System.EnvironmentVariableTarget]::Process)"
-powershell -NoProfile -Command "%SET_NEW_PATH%; choco install -y vcredist2013 vcredist140; choco install -y python --version 3.8.3; choco install -y openssl --version 1.1.1.2100; choco install -y curl cmake 7zip"
+powershell -NoProfile -Command "%SET_NEW_PATH%; choco install -y vcredist2013 vcredist140; choco install -y openssl --version 1.1.1.2100; choco install -y curl cmake 7zip"
 
 @REM Download OpenCV
 set "OPENCV_DIR=%MULTIVERSE_DIR%\external\opencv"
@@ -75,20 +75,21 @@ if not exist "%TINYXML2_DIR%" (
     start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%TINYXML2_DIR%\%TINYXML2_NUPKG%' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/%TINYXML2_NUPKG%'; choco install -y -s %TINYXML2_DIR% tinyxml2"
 )
 
-set "PYTHON_EXECUTABLE=C:\Python38\python.exe"
+set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python312"
+set "PYTHON_EXECUTABLE=%PYTHON_DIR%\python.exe"
 if not exist "%PYTHON_EXECUTABLE%" (
     echo "Python executable not found: %PYTHON_EXECUTABLE%"
     exit /b 1
 )
+%PYTHON_EXECUTABLE% -m ensurepip
 %PYTHON_EXECUTABLE% -m pip install -U pip virtualenvwrapper-win
-set "MKVIRTUALENV_EXECUTABLE=C:\Python38\Scripts\mkvirtualenv.bat"
+set "MKVIRTUALENV_EXECUTABLE=%PYTHON_DIR%\Scripts\mkvirtualenv.bat"
 set "PYTHON_EXECUTABLE=%USERPROFILE%\Envs\multiverse\Scripts\python.exe"
 if not exist "%PYTHON_EXECUTABLE%" (
     powershell -NoProfile -Command "%MKVIRTUALENV_EXECUTABLE% --system-site-packages multiverse"
     @REM Wait for the virtual environment to be created
     TIMEOUT /T 1
 )
-%PYTHON_EXECUTABLE% -m pip install -U pip 
 %PYTHON_EXECUTABLE% -m pip install setuptools==59.6.0 catkin_pkg cryptography empy importlib-metadata jsonschema lark==1.1.1 lxml matplotlib netifaces numpy opencv-python PyQt5 pillow psutil pycairo pydot pyparsing==2.4.7 pytest pyyaml
 
 set "XMLLINT_DIR=%MULTIVERSE_DIR%\external\xmllint"
@@ -127,7 +128,7 @@ if not exist "%ROS_DIR%" (
 %PYTHON_EXECUTABLE% -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11
 
 @REM Install mujoco
-%PYTHON_EXECUTABLE% -m pip install mujoco==3.1.5
+%PYTHON_EXECUTABLE% -m pip install mujoco==3.2.6
 
 @REM Install urdf_parser_py
 %PYTHON_EXECUTABLE% -m pip install urdf_parser_py
