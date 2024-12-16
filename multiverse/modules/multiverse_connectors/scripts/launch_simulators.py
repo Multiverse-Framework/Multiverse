@@ -118,8 +118,11 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
             raise RuntimeError(f"Failed to compile {simulation_name}")
 
         scene_path = re.search(r"Scene:\s*([^\n]+)", compiler_result.stdout).group(1)
-        robots_path = re.search(r"Robots:\s*([^\n]+)", compiler_result.stdout).group(1)
-        cmd = [f"{simulation_data['simulator']}",  f"--file_path={scene_path}", f"--robots_path={robots_path}"]
+        cmd = [f"{simulation_data['simulator']}",  f"--file_path={scene_path}"]
+        robots_group = re.search(r"Robots:\s*([^\n]+)", compiler_result.stdout)
+        if robots_group is not None:
+            robots_path = robots_group.group(1)
+            cmd += [f"--robots_path={robots_path}"]
         if simulation_data.get("headless", False):
             cmd.append("--headless")
         for config_name, config_data in simulation_data.get("config", {}).items():
