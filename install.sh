@@ -168,13 +168,9 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
 
     # Install and link gcc-11
     sudo apt-get install -y gcc-11
-    sudo update-alternatives --remove-all gcc
-    sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 100
 
     # Install and link gcc+11
     sudo apt-get install -y g++-11
-    sudo update-alternatives --remove-all g++
-    sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 100
 
     # Upgrade pip
     pip install -U pip
