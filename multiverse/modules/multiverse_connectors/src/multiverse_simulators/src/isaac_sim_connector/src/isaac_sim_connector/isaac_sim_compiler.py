@@ -18,7 +18,7 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
         super().__init__(args)
 
     def build_world(self, robots: Dict[str, Robot], objects: Dict[str, Object], multiverse_params: Dict[str, Dict]):
-        from pxr import Usd, UsdGeom, UsdPhysics, Gf # Ask NVIDIA for this shitty importing style
+        from pxr import Usd, UsdGeom, UsdPhysics, Gf  # Ask NVIDIA for this shitty importing style
 
         for entity in list(robots.values()) + list(objects.values()):
             file_ext = os.path.splitext(entity.path)[1]
@@ -69,6 +69,18 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
                 with open(entity_usd_path, "w") as f:
                     f.write(data)
 
+        robots_path = os.path.join(self.save_dir_path, os.path.basename(self.save_file_path).split(".")[0] + "_robots.usda")
+        robots_stage = Usd.Stage.CreateNew(robots_path)
+        sublayer_paths = [robot.path for robot in robots.values()]
+        sublayer_paths = [sublayer_paths[0]] # TODO: Remove this line
+        robots_stage.GetRootLayer().subLayerPaths = sublayer_paths
+        if len(robots) > 0:
+            robots_stage.SetDefaultPrim(robots_stage.GetPrimAtPath(Usd.Stage.Open(sublayer_paths[0]).GetDefaultPrim().GetPath()))
+        robots_stage.Flatten()
+        robots_stage.Export(robots_path)
+
+        print(f"Robots: {robots_path}")
+
         file_ext = os.path.splitext(self.world_path)[1]
         if file_ext == ".usda":
             with open(self.save_file_path, "r") as f:
@@ -77,16 +89,6 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
             data = data.replace("@./", f"@{world_usd_dir}/")
             with open(self.save_file_path, "w") as f:
                 f.write(data)
-
-        stage = Usd.Stage.Open(self.save_file_path)
-
-        sublayer_paths = []
-        for robot in robots.values():
-            sublayer_paths.append(robot.path)
-        for obj in objects.values():
-            sublayer_paths.append(obj.path)
-        stage.GetRootLayer().subLayerPaths = sublayer_paths
-        stage.GetRootLayer().Save()
 
 
 if __name__ == "__main__":

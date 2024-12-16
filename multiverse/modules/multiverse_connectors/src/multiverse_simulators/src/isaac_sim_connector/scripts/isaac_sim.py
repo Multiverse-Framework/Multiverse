@@ -4,13 +4,24 @@ import argparse
 import sys
 import json
 import time
+from typing import Any, Dict
 from multiverse_simulator import MultiverseSimulatorConstraints
 from isaac_sim_connector import MultiverseIsaacSimConnector
+
+
+def load_json_str(json_str: str) -> Dict[str, Any]:
+    try:
+        return json.loads(json_str.replace("'", '"'))
+    except json.JSONDecodeError as e:
+        print(f"Failed to parse {json_str}: {str(e)}")
+        return {}
+
 
 if __name__ == "__main__":
     try:
         parser = argparse.ArgumentParser(description=f"Run the Isaac Sim Connector")
         parser.add_argument("--file_path", type=str, required=True, help=f"Path to the USD file")
+        parser.add_argument("--robots_path", type=str, required=False, help="Paths to the robots' USD files")
         parser.add_argument("--headless", required=False, action='store_true', help="Run in headless mode")
         parser.add_argument("--real_time_factor", type=float, required=False, default=1.0, help="Real time factor")
         parser.add_argument("--step_size", type=float, required=False, default=0.01, help="Step size")
@@ -23,16 +34,11 @@ if __name__ == "__main__":
 
         args = parser.parse_args()
 
-        if args.multiverse_params is None:
-            multiverse_params = {}
-        else:
-            try:
-                multiverse_params = json.loads(args.multiverse_params.replace("'", '"'))
-            except json.JSONDecodeError as e:
-                print(f"Failed to parse {args.multiverse_params}: {str(e)}")
-                multiverse_params = {}
+        multiverse_params = load_json_str(args.multiverse_params) if args.multiverse_params is not None else {}
+        robots_path = args.robots_path if args.robots_path is not None else ""
 
         simulator = MultiverseIsaacSimConnector(file_path=args.file_path,
+                                                robots_path=robots_path,
                                                 headless=args.headless,
                                                 real_time_factor=args.real_time_factor,
                                                 step_size=args.step_size)

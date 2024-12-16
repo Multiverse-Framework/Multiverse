@@ -54,6 +54,7 @@ jobs:
 
     - name: Test connectors
       run: |
+          chmod +x /root/.virtualenvs/multiverse/bin/python3
           . /usr/local/bin/virtualenvwrapper.sh
           workon multiverse
           export PYTHONPATH=/usr/lib/python3/dist-packages:/root/.virtualenvs/multiverse/lib/python3.12/site-packages:/home/runner/work/Multiverse/Multiverse/multiverse/build/USD/lib/python:/home/runner/work/Multiverse/Multiverse/multiverse/lib/dist-packages
