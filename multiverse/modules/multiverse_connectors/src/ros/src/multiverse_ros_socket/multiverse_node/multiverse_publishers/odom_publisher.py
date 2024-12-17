@@ -79,6 +79,7 @@ class OdomPublisher(MultiversePublisher):
                 return
             if INTERFACE == Interface.ROS1:
                 self._msgs[0].header.stamp = rospy.Time.now()
+                self._msgs[0].header.seq += 1
             elif INTERFACE == Interface.ROS2:
                 self._msgs[0].header.stamp = self.get_clock().now().to_msg()
             self._msgs[0].pose.pose.position.x = receive_data[1]
