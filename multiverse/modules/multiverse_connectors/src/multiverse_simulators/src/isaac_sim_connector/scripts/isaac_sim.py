@@ -38,7 +38,7 @@ if __name__ == "__main__":
         multiverse_params = load_json_str(args.multiverse_params) if args.multiverse_params is not None else {}
         robots_path = args.robots_path if args.robots_path is not None else ""
 
-        simulator = MultiverseIsaacSimConnector(file_path=args.file_path,
+        simulator = MultiverseIsaacSimConnector(world_path=args.file_path,
                                                 robots_path=robots_path,
                                                 headless=args.headless,
                                                 number_of_envs=args.number_of_envs,
