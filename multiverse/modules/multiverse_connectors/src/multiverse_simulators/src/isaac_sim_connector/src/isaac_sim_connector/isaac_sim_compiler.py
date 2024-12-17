@@ -32,7 +32,7 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
                 body_apply = entity.apply["body"]
                 for xform_prim in [prim for prim in entity_stage.Traverse() if
                                    prim.IsA(UsdGeom.Xform) and prim.GetName() in body_apply]:
-                    if xform_prim.GetName() == entity.name and xform_prim.GetParent().IsPseudoRoot():
+                    if xform_prim.GetName() == entity.name and not xform_prim.GetParent().IsPseudoRoot():
                         continue
                     xform = UsdGeom.Xform(xform_prim)
                     xform.ClearXformOpOrder()

@@ -23,6 +23,7 @@ if __name__ == "__main__":
         parser.add_argument("--file_path", type=str, required=True, help=f"Path to the USD file")
         parser.add_argument("--robots_path", type=str, required=False, help="Paths to the robots' USD files")
         parser.add_argument("--headless", required=False, action='store_true', help="Run in headless mode")
+        parser.add_argument("--number_of_envs", type=int, required=False, default=1, help="Number of environments")
         parser.add_argument("--real_time_factor", type=float, required=False, default=1.0, help="Real time factor")
         parser.add_argument("--step_size", type=float, required=False, default=0.01, help="Step size")
         parser.add_argument("--max_real_time", type=float, required=False, default=None, help="Maximum real time")
@@ -40,6 +41,7 @@ if __name__ == "__main__":
         simulator = MultiverseIsaacSimConnector(file_path=args.file_path,
                                                 robots_path=robots_path,
                                                 headless=args.headless,
+                                                number_of_envs=args.number_of_envs,
                                                 real_time_factor=args.real_time_factor,
                                                 step_size=args.step_size)
         if args.max_real_time is not None or args.max_number_of_steps is not None or args.max_simulation_time is not None:

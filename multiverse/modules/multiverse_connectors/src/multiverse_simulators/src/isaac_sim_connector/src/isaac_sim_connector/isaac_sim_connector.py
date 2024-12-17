@@ -29,18 +29,19 @@ class MultiverseIsaacSimRenderer(MultiverseRenderer):
 class MultiverseIsaacSimConnector(MultiverseSimulator):
     """Multiverse MuJoCo Connector class"""
 
-    def __init__(self,
-                 file_path: str,
-                 robots_path: str,
-                 number_of_envs: int = 1,
-                 env_spacing: float = 2.0,
-                 **kwargs):
+    def __init__(
+        self,
+        file_path: str,
+        robots_path: str,
+        number_of_envs: int = 1,
+        env_spacing: float = 2.0,
+        **kwargs,
+    ):
         self._file_path = file_path
         self.name = os.path.basename(file_path).split(".")[0]
         super().__init__(**kwargs)
 
-        app_launcher = AppLauncher(headless=self.headless,
-                                   open_usd=self.file_path)
+        app_launcher = AppLauncher(headless=self.headless, open_usd=self.file_path)
         self._renderer = MultiverseIsaacSimRenderer(app_launcher)
 
         import omni.isaac.lab.sim as sim_utils
@@ -48,12 +49,22 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         from omni.isaac.lab.scene import InteractiveScene, InteractiveSceneCfg
         from omni.isaac.lab.sim import SimulationContext
         from omni.isaac.lab.utils import configclass
+        from pxr import Usd, UsdGeom
+
+        robots_stage = Usd.Stage.Open(robots_path)
+        robots_prim = robots_stage.GetDefaultPrim()
+        robots_xform = UsdGeom.Xform(robots_prim)
+        robots_pos = robots_xform.GetLocalTransformation().ExtractTranslation()
+        robots_quat = robots_xform.GetLocalTransformation().ExtractRotation().GetQuat()
 
         @configclass
         class SceneCfg(InteractiveSceneCfg):
             # lights
             dome_light = AssetBaseCfg(
-                prim_path="/World/Light", spawn=sim_utils.DomeLightCfg(intensity=3000.0, color=(0.75, 0.75, 0.75))
+                prim_path="/World/Light",
+                spawn=sim_utils.DomeLightCfg(
+                    intensity=3000.0, color=(0.75, 0.75, 0.75)
+                ),
             )
 
             # articulation
@@ -75,7 +86,11 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                         stabilization_threshold=0.001,
                     ),
                 ),
-                actuators={}
+                init_state=ArticulationCfg.InitialStateCfg(
+                    pos=robots_pos,
+                    rot=(robots_quat.GetReal(), *robots_quat.GetImaginary())
+                ),
+                actuators={},
             ).replace(prim_path="{ENV_REGEX_NS}/Robot")
 
         simulation_config = sim_utils.SimulationCfg(dt=self.step_size)
