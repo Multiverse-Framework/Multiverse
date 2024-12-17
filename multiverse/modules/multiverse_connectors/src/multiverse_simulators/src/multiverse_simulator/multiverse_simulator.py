@@ -325,6 +325,10 @@ class MultiverseSimulator:
                 raise AttributeError(f"Function {func.__name__} is already defined")
             setattr(self, func.__name__, func)
             self.log_info(f"Function {func.__name__} is registered")
+        self._write_objects = {}
+        self._read_objects = {}
+        self._write_ids = {}
+        self._read_ids = {}
         atexit.register(self.stop)
 
     def start(self,
@@ -481,8 +485,33 @@ class MultiverseSimulator:
             self._current_render_time = self.current_real_time
             self.renderer.sync()
 
-    def pre_step_callback(self):
+    def _process_objects(self, objects, ids_dict):
+        """
+        Process objects for updating `read_ids` or `write_ids`.
+
+        :param objects: Dictionary of objects and attributes.
+        :param ids_dict: Dictionary to store processed IDs.
+        """
         pass
+
+    def pre_step_callback(self):
+        if self._viewer is not None:
+            self.__update_objects(self._viewer.write_objects, self._write_objects, self._write_ids)
+            self.__update_objects(self._viewer.read_objects, self._read_objects, self._read_ids)
+
+    def __update_objects(self, viewer_objects, cache_objects, object_ids):
+        if self.__should_process_objects(viewer_objects, cache_objects):
+            self._process_objects(viewer_objects, object_ids)
+            cache_objects.update(viewer_objects)
+
+    @staticmethod
+    def __should_process_objects(viewer_objects, cache_objects):
+        if viewer_objects == {} and cache_objects != {}:
+            return True
+        for name, attrs in viewer_objects.items():
+            if name not in cache_objects or any(attr_name not in cache_objects[name] for attr_name in attrs):
+                return True
+        return False
 
     def step_callback(self):
         self._current_simulation_time += self.step_size

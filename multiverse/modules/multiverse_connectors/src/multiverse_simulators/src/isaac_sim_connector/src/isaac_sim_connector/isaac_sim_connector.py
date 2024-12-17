@@ -2,8 +2,11 @@
 
 """Multiverse Isaac Sim Connector class"""
 import os.path
+from typing import Optional
 
-from multiverse_simulator import MultiverseSimulator, MultiverseRenderer
+import numpy
+
+from multiverse_simulator import MultiverseSimulator, MultiverseRenderer, MultiverseViewer
 from omni.isaac.lab.app import AppLauncher
 from omni.isaac.kit import SimulationApp
 from omni.isaac.lab.terrains import TerrainImporterCfg
@@ -36,10 +39,15 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
             robots_path: str,
             number_of_envs: int = 1,
             env_spacing: float = 2.0,
+            viewer: Optional[MultiverseViewer] = None,
+            number_of_instances: int = 1,
+            headless: bool = False,
+            real_time_factor: float = 1.0,
+            step_size: float = 1E-3,
             **kwargs,
     ):
         self.name = os.path.basename(world_path).split(".")[0]
-        super().__init__(**kwargs)
+        super().__init__(viewer, number_of_instances, headless, real_time_factor, step_size, **kwargs)
 
         self._app_launcher = AppLauncher(headless=self.headless)
 
@@ -142,10 +150,76 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         self.simulation_context.set_camera_view([2.5, 0.0, 4.0], [0.0, 0.0, 2.0])
         scene_cfg = SceneCfg(num_envs=number_of_envs, env_spacing=env_spacing)
         self._scene = InteractiveScene(scene_cfg)
+        self._write_objects = {}
+        self._read_objects = {}
+        self._write_ids = {}
+        self._read_ids = {}
 
     def start_callback(self):
         self._renderer = MultiverseIsaacSimRenderer(self.app_launcher)
         self.simulation_context.reset()
+
+    def _process_objects(self, objects, ids_dict):
+        """
+        Process objects for updating `read_ids` or `write_ids`.
+
+        :param objects: Dictionary of objects and attributes.
+        :param ids_dict: Dictionary to store processed IDs.
+        """
+        attr_map = {
+            "position": "body_pos_w",
+            "quaternion": "body_quat_w",
+            "joint_rvalue": "joint_pos",
+            "joint_tvalue": "joint_pos",
+            "joint_angular_velocity": "joint_vel",
+            "joint_linear_velocity": "joint_vel",
+            "cmd_joint_rvalue": "joint_pos_target",
+            "cmd_joint_angular_velocity": "joint_vel_target",
+            "cmd_joint_torque": "joint_effort_target",
+            "cmd_joint_tvalue": "joint_pos_target",
+            "cmd_joint_linear_velocity": "joint_vel_target",
+            "cmd_joint_force": "joint_effort_target"
+        }
+        attr_size = {
+            "body_pos_w": 3,
+            "body_quat_w": 4,
+            "joint_pos": 1,
+            "joint_vel": 1,
+            "qfrc_applied": 1,
+            "joint_pos_target": 1,
+            "joint_vel_target": 1,
+            "joint_effort_target": 1
+        }
+        i = 0
+        ids_dict.clear()
+        robots = self.scene["robots"]
+        body_names = robots.data.body_names
+        joint_names = robots.data.joint_names
+        for name, attrs in objects.items():
+            for attr_name in attrs.keys():
+                mj_attr_name = attr_map[attr_name]
+                if mj_attr_name not in ids_dict:
+                    ids_dict[mj_attr_name] = [[], []]
+
+                if attr_name in {"position", "quaternion"}:
+                    mj_attr_id = body_names.index(name)
+                elif attr_name in {"joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_torque", "joint_force"}:
+                    mj_attr_id = joint_names.index(name)
+                elif attr_name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
+                                   "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
+                    raise NotImplementedError("Not implemented yet")
+                else:
+                    raise ValueError(f"Unknown attribute {attr_name} for {name}")
+
+                ids_dict[mj_attr_name][0].append(mj_attr_id)
+                ids_dict[mj_attr_name][1] += [j for j in range(i, i + attr_size[mj_attr_name])]
+                i += attr_size[mj_attr_name]
+
+    def write_data_to_simulator(self, write_data: numpy.ndarray):
+        pass
+
+    def read_data_from_simulator(self, read_data: numpy.ndarray):
+        pass
 
     def step_callback(self):
         self.simulation_context.step()

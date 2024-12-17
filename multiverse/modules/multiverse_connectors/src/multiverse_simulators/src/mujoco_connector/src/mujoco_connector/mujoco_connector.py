@@ -63,10 +63,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         assert self._mj_model is not None
         self._mj_model.opt.timestep = self.step_size
         self._mj_data = mujoco.MjData(self._mj_model)
-        self._write_objects = {}
-        self._read_objects = {}
-        self._write_ids = {}
-        self._read_ids = {}
+
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
         if self.use_mjx:
             self._mjx_model = mjx.put_model(self._mj_model)
@@ -140,34 +137,6 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 ids_dict[mj_attr_name][0].append(mj_attr_id)
                 ids_dict[mj_attr_name][1] += [j for j in range(i, i + attr_size[mj_attr_name])]
                 i += attr_size[mj_attr_name]
-
-    def pre_step_callback(self):
-        if self._viewer is not None:
-            if any(
-                    name not in self._write_objects or any(
-                        attr_name not in self._write_objects[name]
-                        for attr_name in attrs
-                    )
-                    for name, attrs in self._viewer.write_objects.items()
-            ) or (self._viewer.write_objects == {} and self._write_objects != {}):
-                self._process_objects(
-                    self._viewer.write_objects,
-                    self._write_ids
-                )
-                self._write_objects = self._viewer.write_objects
-
-            if any(
-                    name not in self._read_objects or any(
-                        attr_name not in self._read_objects[name]
-                        for attr_name in attrs
-                    )
-                    for name, attrs in self._viewer.read_objects.items()
-            ) or (self._viewer.read_objects == {} and self._read_objects != {}):
-                self._process_objects(
-                    self._viewer.read_objects,
-                    self._read_ids
-                )
-                self._read_objects = self._viewer.read_objects
 
     def step_callback(self):
         if self.use_mjx:
