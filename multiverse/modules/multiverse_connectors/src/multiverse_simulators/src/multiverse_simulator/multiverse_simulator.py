@@ -339,8 +339,8 @@ class MultiverseSimulator:
         :param constraints: MultiverseSimulatorConstraints, constraints for stopping the simulator
         :param time_out_in_seconds: float, timeout for starting the renderer
         """
-        self.reset()
         self.start_callback()
+        self.reset()
         for i in range(int(10 * time_out_in_seconds)):
             if self.renderer.is_running():
                 break

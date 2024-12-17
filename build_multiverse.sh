@@ -153,8 +153,19 @@ cmake -S $PWD/multiverse -B $BUILD_DIR \
     -DBUILD_KNOWLEDGE=$DBUILD_KNOWLEDGE \
     -DBUILD_PARSER=$DBUILD_PARSER \
     -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
-make -C $BUILD_DIR
-cmake --install $BUILD_DIR
+
+if [ $DBUILD_SRC = ON ] && [ $UBUNTU_VERSION = "20.04" ]; then
+    cmake -S $PWD/multiverse -B $BUILD_DIR \
+        -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
+        -DBUILD_SRC=$DBUILD_SRC \
+        -DBUILD_MODULES=OFF \
+        -DBUILD_CONNECTORS=OFF \
+        -DBUILD_KNOWLEDGE=OFF \
+        -DBUILD_PARSER=OFF \
+        -DPYTHON_EXECUTABLE=python3.8
+    make -C $BUILD_DIR
+    cmake --install $BUILD_DIR
+fi
 
 cd $CURRENT_DIR
 
