@@ -10,12 +10,12 @@ trap handle_sigint SIGINT
 
 NO_MULTIVERSE_SERVER=false
 KILL_EVERYTHING_FROM_START=true
-COMMAND_PATTERNS=("multiverse_socket_node" "multiverse_ros_run" "rviz/rviz" "rviz2/rviz2" "multiverse_control_node" "isaac_sim" "pymujoco" "multiverse_server")
+COMMAND_PATTERNS=("multiverse_socket_node" "multiverse_ros_run" "rviz/rviz" "rviz2/rviz2" "multiverse_control_node" "isaac-sim-4.2.0/kit/python/bin/python3" "pymujoco" "multiverse_server")
 
 for arg in "$@"; do
     if [ "$arg" == "--no-multiverse-server" ]; then
         NO_MULTIVERSE_SERVER=true
-        COMMAND_PATTERNS=("multiverse_socket_node" "multiverse_ros_run" "rviz/rviz" "rviz2/rviz2" "multiverse_control_node" "isaac_sim" "pymujoco")
+        COMMAND_PATTERNS=("multiverse_socket_node" "multiverse_ros_run" "rviz/rviz" "rviz2/rviz2" "multiverse_control_node" "isaac-sim-4.2.0/kit/python/bin/python3" "pymujoco")
     fi
     if [ "$arg" == "--keep-everything" ]; then
         KILL_EVERYTHING_FROM_START=false
