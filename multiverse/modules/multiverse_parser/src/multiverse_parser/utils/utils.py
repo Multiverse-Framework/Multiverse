@@ -15,9 +15,9 @@ xform_cache = UsdGeom.XformCache()
 
 
 def get_transform(pos: numpy.ndarray, quat: numpy.ndarray, scale: numpy.ndarray):
-    pos = numpy.asfarray(pos)
-    quat = numpy.asfarray(quat)
-    scale = numpy.asfarray(scale)
+    pos = numpy.asarray(pos)
+    quat = numpy.asarray(quat)
+    scale = numpy.asarray(scale)
     mat = Gf.Matrix4d()
     mat.SetTranslateOnly(Gf.Vec3d(*pos))
     mat.SetRotateOnly(Gf.Quatd(quat[3], Gf.Vec3d(*quat[:3])))
