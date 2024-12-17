@@ -4,7 +4,7 @@
 
 import os
 import xml.etree.ElementTree as ET
-from typing import Optional, List, Callable
+from typing import Optional, List, Callable, Set
 
 import jax
 import mujoco
@@ -322,20 +322,12 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             if first_joint is not None and first_joint.type == mujoco.mjtJoint.mjJNT_FREE:
                 first_joint.delete()
             body_2_frame = body_2_spec.add_frame()
-            prefix = "AVeryDumbassPrefixThatIsUnlikelyToBeUsedBecauseMuJoCoRequiresIt"
-            body_1_spec_new = body_2_frame.attach_body(body_1_spec, prefix, "")
-            self._mj_spec.detach_body(body_1_spec)
-            body_1_spec_new.name = body_1_name
-            for body_1_child in (body_1_spec_new.bodies +
-                                 body_1_spec_new.joints +
-                                 body_1_spec_new.geoms +
-                                 body_1_spec_new.sites):
-                body_1_child.name = body_1_child.name.replace(prefix, "")
+            dummy_prefix = "AVeryDumbassPrefixThatIsUnlikelyToBeUsedBecauseMuJoCoRequiresIt"
+            body_1_spec_new = body_2_frame.attach_body(body_1_spec, dummy_prefix, "")
             body_1_spec_new.pos = relative_position
             body_1_spec_new.quat = relative_quaternion
-            self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
-
-            self._renderer._sim().load(self._mj_model, self._mj_data, "")
+            self._mj_spec.detach_body(body_1_spec)
+            self._fix_prefix_and_recompile(body_1_spec_new, dummy_prefix, body_1_name)
 
             return MultiverseFunctionResult(
                 type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL,
@@ -343,4 +335,137 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                      f"at relative position {relative_position}, relative quaternion {relative_quaternion}"
             )
 
-        return [get_all_body_names, get_all_joint_names, attach]
+        def detach(body_name: str, add_freejoint: bool = True) -> MultiverseFunctionResult:
+            body_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_name)
+            if body_id == -1:
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL,
+                    info=f"Body {body_name} not found"
+                )
+
+            parent_body_id = self._mj_model.body(body_id).parentid[0]
+            if parent_body_id == 0:
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                    info=f"Body {body_name} is already detached"
+                )
+
+            absolute_position = self._mj_data.body(body_id).xpos
+            absolute_quaternion = self._mj_data.body(body_id).xquat
+            parent_body_name = self._mj_model.body(parent_body_id).name
+            body_spec = self._mj_spec.find_body(body_name)
+            dummy_prefix = "AVeryDumbassPrefixThatIsUnlikelyToBeUsedBecauseMuJoCoRequiresIt"
+            body_spec_new = self._mj_spec.worldbody.add_frame().attach_body(body_spec, dummy_prefix, "")
+            body_spec_new.pos = absolute_position
+            body_spec_new.quat = absolute_quaternion
+            if add_freejoint:
+                body_spec_new.add_freejoint()
+            self._mj_spec.detach_body(body_spec)
+            self._fix_prefix_and_recompile(body_spec_new, dummy_prefix, body_name)
+
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL,
+                info=f"Detached body {body_name} from body {parent_body_name}"
+            )
+
+        def get_children_ids(body_id: int) -> Set[int]:
+            children_ids = set()
+            for child_body_id in range(body_id + 1, self._mj_model.nbody):
+                if self._mj_model.body(child_body_id).parentid[0] == body_id:
+                    children_ids.add(child_body_id)
+                else:
+                    break
+            return children_ids
+
+        def get_contact_bodies(body_name: str, including_children: bool = True):
+            body_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_name)
+            if body_id == -1:
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                    info=f"Body {body_name} not found"
+                )
+
+            body_ids = {body_id}
+            if including_children:
+                body_ids.update(get_children_ids(body_id))
+
+            contact_body_ids = set()
+            for contact_id in range(self._mj_data.ncon):
+                contact = self._mj_data.contact[contact_id]
+                if contact.exclude != 0 and contact.exclude != 1:
+                    continue
+                geom_1_id = contact.geom1
+                geom_2_id = contact.geom2
+                body_1_id = self._mj_model.geom_bodyid[geom_1_id]
+                body_2_id = self._mj_model.geom_bodyid[geom_2_id]
+                if body_1_id in body_ids and body_2_id not in body_ids:
+                    contact_body_ids.add(body_2_id)
+                elif body_2_id in body_ids and body_1_id not in body_ids:
+                    contact_body_ids.add(body_1_id)
+
+            contact_body_names = {self._mj_model.body(contact_body_id).name for contact_body_id in contact_body_ids}
+            including_children_str = f"with its {len(body_ids) - 1} children" if including_children else "without children"
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                info=f"There are {len(contact_body_names)} contact bodies with body {body_name} {including_children_str}",
+                result=contact_body_names
+            )
+
+        def get_contact_points(body_1_name: str, body_2_name: Optional[str] = None, including_children: bool = True):
+            body_1_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_1_name)
+            if body_1_id == -1:
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                    info=f"Body {body_1_id} not found"
+                )
+
+            if body_2_name is not None:
+                body_2_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_2_name)
+                if body_2_id == -1:
+                    return MultiverseFunctionResult(
+                        type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                        info=f"Body {body_2_id} not found"
+                    )
+            else:
+                body_2_id = None
+
+            contact_body_points = []
+            for contact_id in range(self._mj_data.ncon):
+                contact = self._mj_data.contact[contact_id]
+                if contact.exclude != 0 and contact.exclude != 1:
+                    continue
+                geom_1_id = contact.geom1
+                geom_2_id = contact.geom2
+                if body_1_id == self._mj_model.geom_bodyid[geom_1_id]:
+                    if body_2_id is None or body_2_id == self._mj_model.geom_bodyid[geom_2_id]:
+                        contact_body_points.append(contact.frame)
+                elif body_1_id == self._mj_model.geom_bodyid[geom_2_id]:
+                    if body_2_id is None or body_2_id == self._mj_model.geom_bodyid[geom_1_id]:
+                        contact_body_points.append(-contact.frame)
+
+            contact_body_str = f" with body {body_2_name}" if body_2_name is not None else ""
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                info=f"There are {len(contact_body_points)} contact points of body {body_1_name}{contact_body_str}",
+                result=contact_body_points
+            )
+
+        def get_contact_bodies_and_points(body_1_name: str, body_2_name: Optional[str] = None,
+                                          including_children: bool = True):
+            pass
+
+        return [get_all_body_names, get_all_joint_names, attach, detach, get_contact_bodies, get_contact_points]
+
+    def _fix_prefix_and_recompile(self, body_spec: mujoco.MjsBody, dummy_prefix: str, body_name: str):
+        body_spec.name = body_name
+        for body_child in (body_spec.bodies +
+                           body_spec.joints +
+                           body_spec.geoms +
+                           body_spec.sites):
+            body_child.name = body_child.name.replace(dummy_prefix, "")
+        self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
+        for key in self._mj_spec.keys:
+            if key.name != "home":
+                key.delete()
+        self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
+        self._renderer._sim().load(self._mj_model, self._mj_data, "")

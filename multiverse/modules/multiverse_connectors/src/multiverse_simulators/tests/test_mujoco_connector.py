@@ -10,7 +10,7 @@ import numpy
 from mujoco_connector import MultiverseMujocoConnector
 from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
     MultiverseFunctionResult
-from .test_multiverse_simulator import MultiverseSimulatorTestCase
+from test_multiverse_simulator import MultiverseSimulatorTestCase
 
 resources_path = os.path.join(os.path.dirname(__file__), "..", "resources")
 
@@ -42,22 +42,53 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertEqual(result.result, ['joint1', 'joint2', 'joint3', 'joint4', 'joint5',
                                                  'joint6', 'joint7', 'finger_joint1', 'finger_joint2', ''])
 
-            if step == 1000:
-                result = simulator.attach("abc")
+            if step == 1000 or step == 3000:
+                result = simulator.attach(body_1_name="abc")
                 self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL, result.type)
                 self.assertEqual("Body 1 abc not found", result.info)
 
-                result = simulator.attach("world")
+                result = simulator.attach(body_1_name="world")
                 self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL, result.type)
                 self.assertEqual("Body 1 and body 2 are the same", result.info)
 
-                result = simulator.attach("box")
+                result = simulator.attach(body_1_name="box")
                 self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
                 self.assertEqual("Body 1 box is already attached to body 2 world", result.info)
 
-                result = simulator.attach("box", "hand")
+                result = simulator.attach(body_1_name="box", body_2_name="hand")
                 self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL, result.type)
                 self.assertIn("Attached body 1 box to body 2 hand", result.info)
+
+                result = simulator.attach(body_1_name="box", body_2_name="hand")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertEqual("Body 1 box is already attached to body 2 hand", result.info)
+
+            if step == 2000 or step == 4000:
+                result = simulator.detach(body_name="abc")
+                self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL, result.type)
+                self.assertEqual("Body abc not found", result.info)
+
+                result = simulator.detach(body_name="world")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertEqual("Body world is already detached", result.info)
+
+                result = simulator.detach(body_name="box")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL, result.type)
+                self.assertEqual("Detached body box from body hand", result.info)
+
+                result = simulator.detach(body_name="box")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertEqual("Body box is already detached", result.info)
+
+            if step == 8000:
+                result = simulator.get_contact_bodies(body_name="abc")
+                self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION, result.type)
+                self.assertEqual("Body abc not found", result.info)
+
+                result = simulator.get_contact_bodies(body_name="hand")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, set)
+
             simulator.step()
             simulator.run_callback()
             time.sleep(0.001)
