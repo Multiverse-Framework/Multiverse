@@ -3,6 +3,7 @@
 from typing import Dict
 import numpy
 
+from std_msgs.msg import Header
 from geometry_msgs.msg import TransformStamped
 from tf2_msgs.msg import TFMessage
 
@@ -51,11 +52,13 @@ class TfPublisher(MultiversePublisher):
                 return
 
             self._msgs[0].transforms.clear()
-
+            header = Header()
+            header.frame_id = self._root_frame_id
             if INTERFACE == Interface.ROS1:
-                stamp = rospy.Time.now()
+                header.seq = self._seq
+                header.stamp = rospy.Time.now()
             elif INTERFACE == Interface.ROS2:
-                stamp = self.get_clock().now().to_msg()
+                header.stamp = self.get_clock().now().to_msg()
 
             for object_name, tf_data in objects.items():
                 tf_data = response_meta_data["receive"][object_name]
@@ -66,11 +69,7 @@ class TfPublisher(MultiversePublisher):
                 ):
                     continue
                 tf_msg = TransformStamped()
-                tf_msg.header.frame_id = self._root_frame_id
-                if INTERFACE == Interface.ROS1:
-                    tf_msg.header.seq = self._seq
-                tf_msg.header.stamp = stamp
-
+                tf_msg.header = header
                 tf_msg.child_frame_id = object_name
                 tf_msg.transform.translation.x = float(tf_data["position"][0])
                 tf_msg.transform.translation.y = float(tf_data["position"][1])
