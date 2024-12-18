@@ -44,7 +44,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     def __init__(self,
                  file_path: str,
                  viewer: Optional[MultiverseViewer] = None,
-                 number_of_instances: int = 1,
+                 number_of_envs: int = 1,
                  headless: bool = False,
                  real_time_factor: float = 1.0,
                  step_size: float = 1E-3,
@@ -55,7 +55,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         root = ET.parse(file_path).getroot()
         self.name = root.attrib.get("model", self.name)
         self.use_mjx = use_mjx
-        super().__init__(viewer, number_of_instances, headless, real_time_factor, step_size, callbacks, **kwargs)
+        super().__init__(viewer, number_of_envs, headless, real_time_factor, step_size, callbacks, **kwargs)
         mujoco.mj_loadPluginLibrary(get_multiverse_connector_plugin())
         assert os.path.exists(self.file_path)
         self._mj_spec = mujoco.MjSpec.from_file(filename=self.file_path)
@@ -68,10 +68,10 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         if self.use_mjx:
             self._mjx_model = mjx.put_model(self._mj_model)
             self._mjx_data = mjx.put_data(self._mj_model, self._mj_data)
-            qpos0 = numpy.array([self._mj_data.qpos for _ in range(number_of_instances)])
-            qvel0 = numpy.array([self._mj_data.qvel for _ in range(number_of_instances)])
-            act0 = numpy.array([self._mj_data.act for _ in range(number_of_instances)])
-            ctrl0 = numpy.array([self._mj_data.ctrl for _ in range(number_of_instances)])
+            qpos0 = numpy.array([self._mj_data.qpos for _ in range(number_of_envs)])
+            qvel0 = numpy.array([self._mj_data.qvel for _ in range(number_of_envs)])
+            act0 = numpy.array([self._mj_data.act for _ in range(number_of_envs)])
+            ctrl0 = numpy.array([self._mj_data.ctrl for _ in range(number_of_envs)])
             self._batch = jax.vmap(lambda qpos, qvel, act, ctrl:
                                    self._mjx_data.replace(qpos=qpos, qvel=qvel, act=act, ctrl=ctrl))(qpos0, qvel0,
                                                                                                      act0, ctrl0)
@@ -149,18 +149,18 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     def reset_callback(self):
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
         if self.use_mjx:
-            number_of_instances = self._batch.time.shape[0]
-            qpos0 = numpy.array([self._mj_data.qpos for _ in range(number_of_instances)])
-            qvel0 = numpy.array([self._mj_data.qvel for _ in range(number_of_instances)])
-            act0 = numpy.array([self._mj_data.act for _ in range(number_of_instances)])
-            ctrl0 = numpy.array([self._mj_data.ctrl for _ in range(number_of_instances)])
+            number_of_envs = self._batch.time.shape[0]
+            qpos0 = numpy.array([self._mj_data.qpos for _ in range(number_of_envs)])
+            qvel0 = numpy.array([self._mj_data.qvel for _ in range(number_of_envs)])
+            act0 = numpy.array([self._mj_data.act for _ in range(number_of_envs)])
+            ctrl0 = numpy.array([self._mj_data.ctrl for _ in range(number_of_envs)])
             self._batch = jax.vmap(lambda qpos, qvel, act, ctrl:
                                    self._mjx_data.replace(qpos=qpos, qvel=qvel, act=act, ctrl=ctrl))(qpos0, qvel0,
                                                                                                      act0, ctrl0)
 
     def write_data_to_simulator(self, write_data: numpy.ndarray):
         if not self.use_mjx and write_data.shape[0] > 1:
-            raise NotImplementedError("Multiple instances for non MJX is not supported yet")
+            raise NotImplementedError("Multiple environments for non MJX is not supported yet")
         if self.use_mjx:
             batch_data = {}
             for attr, indices in self._write_ids.items():
@@ -173,7 +173,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
     def read_data_from_simulator(self, read_data: numpy.ndarray):
         if not self.use_mjx and read_data.shape[0] > 1:
-            raise NotImplementedError("Multiple instances for non MJX is not supported yet")
+            raise NotImplementedError("Multiple environments for non MJX is not supported yet")
         if self.use_mjx:
             for attr, indices in self._read_ids.items():
                 attr_values = getattr(self._batch, attr)

@@ -5,10 +5,11 @@ import os.path
 from typing import Optional
 
 import numpy
+import torch
+from isaacsim import SimulationApp
+from omni.isaac.lab.app import AppLauncher
 
 from multiverse_simulator import MultiverseSimulator, MultiverseRenderer, MultiverseViewer
-from omni.isaac.lab.app import AppLauncher
-from omni.isaac.kit import SimulationApp
 
 
 class MultiverseIsaacSimRenderer(MultiverseRenderer):
@@ -35,18 +36,17 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
     def __init__(
             self,
             world_path: str,
-            robots_path: str,
+            robots_path: Optional[str] = None,
             number_of_envs: int = 1,
             env_spacing: float = 2.0,
             viewer: Optional[MultiverseViewer] = None,
-            number_of_instances: int = 1,
             headless: bool = False,
             real_time_factor: float = 1.0,
             step_size: float = 1E-3,
             **kwargs,
     ):
         self.name = os.path.basename(world_path).split(".")[0]
-        super().__init__(viewer, number_of_instances, headless, real_time_factor, step_size, **kwargs)
+        super().__init__(viewer, number_of_envs, headless, real_time_factor, step_size, **kwargs)
 
         self._app_launcher = AppLauncher(headless=self.headless)
 
@@ -60,19 +60,22 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
 
         world_stage = Usd.Stage.Open(world_path)
         world_prim = world_stage.GetDefaultPrim()
+
+        @configclass
+        class WorldCfg(InteractiveSceneCfg):
+            terrain = TerrainImporterCfg(prim_path="/World/ground", terrain_type="plane", debug_vis=False)
+
+            # lights
+            dome_light = AssetBaseCfg(
+                prim_path="/World/Light",
+                spawn=sim_utils.DomeLightCfg(
+                    intensity=3000.0, color=(0.75, 0.75, 0.75)
+                ),
+            )
+
         if world_prim.IsValid():
             @configclass
-            class WorldCfg(InteractiveSceneCfg):
-                terrain = TerrainImporterCfg(prim_path="/World/ground", terrain_type="plane", debug_vis=False)
-
-                # lights
-                dome_light = AssetBaseCfg(
-                    prim_path="/World/Light",
-                    spawn=sim_utils.DomeLightCfg(
-                        intensity=3000.0, color=(0.75, 0.75, 0.75)
-                    ),
-                )
-
+            class WorldCfg(WorldCfg):
                 # world articulation
                 world = ArticulationCfg(
                     spawn=sim_utils.UsdFileCfg(
@@ -93,57 +96,46 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                         ),
                     ),
                 ).replace(prim_path="{ENV_REGEX_NS}/World")
-        else:
-            @configclass
-            class WorldCfg(InteractiveSceneCfg):
-                terrain = TerrainImporterCfg(prim_path="/World/ground", terrain_type="plane", debug_vis=False)
 
-                # lights
-                dome_light = AssetBaseCfg(
-                    prim_path="/World/Light",
-                    spawn=sim_utils.DomeLightCfg(
-                        intensity=3000.0, color=(0.75, 0.75, 0.75)
-                    ),
-                )
+        @configclass
+        class SceneCfg(WorldCfg):
+            pass
 
-        robots_stage = Usd.Stage.Open(robots_path)
-        robots_prim = robots_stage.GetDefaultPrim()
-        if robots_prim.IsValid():
-            robots_xform = UsdGeom.Xform(robots_prim)
-            robots_pos = robots_xform.GetLocalTransformation().ExtractTranslation()
-            robots_quat = robots_xform.GetLocalTransformation().ExtractRotation().GetQuat()
+        if robots_path is not None:
+            robots_stage = Usd.Stage.Open(robots_path)
+            robots_prim = robots_stage.GetDefaultPrim()
+            if robots_prim.IsValid():
+                robots_xform = UsdGeom.Xform(robots_prim)
+                robots_pos = robots_xform.GetLocalTransformation().ExtractTranslation()
+                robots_quat = robots_xform.GetLocalTransformation().ExtractRotation().GetQuat()
 
-            @configclass
-            class SceneCfg(WorldCfg):
-                # robots articulation
-                robots = ArticulationCfg(
-                    spawn=sim_utils.UsdFileCfg(
-                        usd_path=robots_path,
-                        rigid_props=sim_utils.RigidBodyPropertiesCfg(
-                            rigid_body_enabled=True,
-                            max_linear_velocity=1000.0,
-                            max_angular_velocity=1000.0,
-                            max_depenetration_velocity=100.0,
-                            enable_gyroscopic_forces=True,
+                @configclass
+                class SceneCfg(WorldCfg):
+                    # robots articulation
+                    robots = ArticulationCfg(
+                        spawn=sim_utils.UsdFileCfg(
+                            usd_path=robots_path,
+                            rigid_props=sim_utils.RigidBodyPropertiesCfg(
+                                rigid_body_enabled=True,
+                                max_linear_velocity=1000.0,
+                                max_angular_velocity=1000.0,
+                                max_depenetration_velocity=100.0,
+                                enable_gyroscopic_forces=True,
+                            ),
+                            articulation_props=sim_utils.ArticulationRootPropertiesCfg(
+                                enabled_self_collisions=True,
+                                solver_position_iteration_count=4,
+                                solver_velocity_iteration_count=0,
+                                sleep_threshold=0.005,
+                                stabilization_threshold=0.001,
+                            ),
                         ),
-                        articulation_props=sim_utils.ArticulationRootPropertiesCfg(
-                            enabled_self_collisions=True,
-                            solver_position_iteration_count=4,
-                            solver_velocity_iteration_count=0,
-                            sleep_threshold=0.005,
-                            stabilization_threshold=0.001,
+                        init_state=ArticulationCfg.InitialStateCfg(
+                            pos=robots_pos,
+                            rot=(robots_quat.GetReal(), *robots_quat.GetImaginary())
                         ),
-                    ),
-                    init_state=ArticulationCfg.InitialStateCfg(
-                        pos=robots_pos,
-                        rot=(robots_quat.GetReal(), *robots_quat.GetImaginary())
-                    ),
-                    actuators={},
-                ).replace(prim_path="{ENV_REGEX_NS}/Robot")
-        else:
-            @configclass
-            class SceneCfg(WorldCfg):
-                pass
+                        actuators={},
+                    ).replace(prim_path="{ENV_REGEX_NS}/Robot")
 
         simulation_config = sim_utils.SimulationCfg(dt=self.step_size)
         self._simulation_context = SimulationContext(cfg=simulation_config)
@@ -190,36 +182,69 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
             "joint_vel_target": 1,
             "joint_effort_target": 1
         }
-        i = 0
+
         ids_dict.clear()
-        robots = self.scene["robots"]
-        body_names = robots.data.body_names
-        joint_names = robots.data.joint_names
+        entity_types = [entity_type for entity_type in ["world", "robots"] if entity_type in self.scene.keys()]
+        name_to_index = {"body": {}, "joint": {}}
+        for entity_type in entity_types:
+            entity = self.scene[entity_type]
+            name_to_index["body"].update({
+                **{name: (i, entity_type) for i, name in enumerate(entity.data.body_names)}
+            })
+            name_to_index["joint"].update({
+                **{name: (i, entity_type) for i, name in enumerate(entity.data.joint_names)}
+            })
+
+        i = [0] * len(entity_types)  # Index counters for world and robots respectively
+
         for name, attrs in objects.items():
-            for attr_name in attrs.keys():
-                mj_attr_name = attr_map[attr_name]
-                if mj_attr_name not in ids_dict:
-                    ids_dict[mj_attr_name] = [[], []]
+            for obj_type in name_to_index.keys():
+                if name not in name_to_index[obj_type]:
+                    continue
 
-                if attr_name in {"position", "quaternion"}:
-                    mj_attr_id = body_names.index(name)
-                elif attr_name in {"joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_torque", "joint_force"}:
-                    mj_attr_id = joint_names.index(name)
-                elif attr_name in {"cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque",
-                                   "cmd_joint_tvalue", "cmd_joint_linear_velocity", "cmd_joint_force"}:
-                    raise NotImplementedError("Not implemented yet")
-                else:
-                    raise ValueError(f"Unknown attribute {attr_name} for {name}")
+                index, entity_type = name_to_index[obj_type][name]
+                entity_id = entity_types.index(entity_type)
 
-                ids_dict[mj_attr_name][0].append(mj_attr_id)
-                ids_dict[mj_attr_name][1] += [j for j in range(i, i + attr_size[mj_attr_name])]
-                i += attr_size[mj_attr_name]
+                for attr_name in attrs:
+                    if attr_name not in attr_map:
+                        raise ValueError(f"Unknown attribute {attr_name} for {name}")
+
+                    isaac_sim_attr_name = attr_map[attr_name]
+                    if isaac_sim_attr_name not in ids_dict:
+                        ids_dict[isaac_sim_attr_name] = [[[], []]] * len(entity_types)
+
+                    ids_dict[isaac_sim_attr_name][entity_id][0].append(index)
+                    ids_dict[isaac_sim_attr_name][entity_id][1].extend(
+                        range(i[entity_id], i[entity_id] + attr_size[isaac_sim_attr_name]))
+                    i[entity_id] += attr_size[isaac_sim_attr_name]
 
     def write_data_to_simulator(self, write_data: numpy.ndarray):
-        pass
+        entity_types = [entity_type for entity_type in ["world", "robots"] if entity_type in self.scene.keys()]
+
+        write_data_torch = torch.tensor(write_data).to("cuda").float()
+        for entity_id, entity_type in enumerate(entity_types):
+            entity = self.scene[entity_type]
+            joint_position = entity.data.joint_pos
+            joint_velocity = entity.data.joint_vel
+            for attr_name, indices in self._write_ids.items():
+                entity_ids = indices[entity_id]
+                if attr_name == "joint_pos":
+                    joint_position[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
+                elif attr_name == "joint_vel":
+                    joint_velocity[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
+            entity.write_joint_state_to_sim(position=joint_position, velocity=joint_velocity)
 
     def read_data_from_simulator(self, read_data: numpy.ndarray):
-        pass
+        entity_types = [entity_type for entity_type in ["world", "robots"] if entity_type in self.scene.keys()]
+
+        for attr, indices in self._read_ids.items():
+            for entity_id, entity_type in enumerate(entity_types):
+                entity = self.scene[entity_type]
+                entity_ids = indices[entity_id]
+                if len(entity_ids[0]) == 0:
+                    continue
+                attr_values = getattr(entity.data, attr).cpu().numpy()
+                read_data[:, entity_ids[1]] = attr_values[:, entity_ids[0]].reshape(attr_values.shape[0], -1)
 
     def step_callback(self):
         self.simulation_context.step()

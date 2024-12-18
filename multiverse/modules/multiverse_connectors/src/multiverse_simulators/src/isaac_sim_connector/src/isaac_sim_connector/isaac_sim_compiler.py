@@ -71,10 +71,9 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
 
         robots_path = os.path.join(self.save_dir_path, os.path.basename(self.save_file_path).split(".")[0] + "_robots.usda")
         robots_stage = Usd.Stage.CreateNew(robots_path)
-        sublayer_paths = [robot.path for robot in robots.values()]
-        sublayer_paths = [sublayer_paths[0]] # TODO: Remove this line
-        robots_stage.GetRootLayer().subLayerPaths = sublayer_paths
-        if len(robots) > 0:
+        if len(robots) == 1:
+            sublayer_paths = [robot.path for robot in robots.values()]
+            robots_stage.GetRootLayer().subLayerPaths = sublayer_paths
             robots_stage.SetDefaultPrim(robots_stage.GetPrimAtPath(Usd.Stage.Open(sublayer_paths[0]).GetDefaultPrim().GetPath()))
         robots_stage.Flatten()
         robots_stage.Export(robots_path)

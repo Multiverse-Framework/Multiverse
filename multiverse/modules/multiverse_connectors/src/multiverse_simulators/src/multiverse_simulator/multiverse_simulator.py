@@ -77,13 +77,13 @@ class MultiverseAttribute:
     def __init__(self, default_value: numpy.ndarray):
         self.default_value = default_value
 
-    def initialize_data(self, number_of_instances: int):
+    def initialize_data(self, number_of_envs: int):
         """
         Initialize the data for the attribute
 
-        :param number_of_instances: int, number of instances
+        :param number_of_envs: int, number of environments
         """
-        self._values = numpy.array([self.default_value for _ in range(number_of_instances)])
+        self._values = numpy.array([self.default_value for _ in range(number_of_envs)])
 
     @property
     def values(self):
@@ -118,20 +118,20 @@ class MultiverseViewer:
         return {key: {key2: MultiverseAttribute(default_value=value)
                       for key2, value in value.items()} for key, value in data.items()}
 
-    def initialize_data(self, number_of_instances: int) -> "MultiverseViewer":
+    def initialize_data(self, number_of_envs: int) -> "MultiverseViewer":
         """
         Initialize the data for the viewer
 
-        :param number_of_instances: int, number of instances
+        :param number_of_envs: int, number of environments
         """
         self._write_data = numpy.array([self._initialize_data(self._write_objects)
-                                        for _ in range(number_of_instances)])
+                                        for _ in range(number_of_envs)])
         self._read_data = numpy.array([self._initialize_data(self._read_objects)
-                                       for _ in range(number_of_instances)])
+                                       for _ in range(number_of_envs)])
         for objects in [self._write_objects, self._read_objects]:
             for attrs in objects.values():
                 for attr in attrs.values():
-                    attr.initialize_data(number_of_instances)
+                    attr.initialize_data(number_of_envs)
         return self
 
     @staticmethod
@@ -151,9 +151,9 @@ class MultiverseViewer:
 
     @write_objects.setter
     def write_objects(self, send_objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]]):
-        number_of_instances = self._write_data.shape[0]
+        number_of_envs = self._write_data.shape[0]
         self._write_objects, self._write_data = (
-            self._get_objects_and_data_from_target_objects(send_objects, number_of_instances))
+            self._get_objects_and_data_from_target_objects(send_objects, number_of_envs))
         assert self._write_data.shape[0] == self._read_data.shape[0]
 
     @property
@@ -163,21 +163,21 @@ class MultiverseViewer:
 
     @read_objects.setter
     def read_objects(self, objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]]):
-        number_of_instances = self._read_data.shape[0]
+        number_of_envs = self._read_data.shape[0]
         self._read_objects, self._read_data = (
-            self._get_objects_and_data_from_target_objects(objects, number_of_instances))
+            self._get_objects_and_data_from_target_objects(objects, number_of_envs))
         assert self._read_data.shape[0] == self._write_data.shape[0]
 
     @staticmethod
     def _get_objects_and_data_from_target_objects(
             target_objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]],
-            number_of_instances: int) \
+            number_of_envs: int) \
             -> Tuple[Dict[str, Dict[str, MultiverseAttribute]], numpy.ndarray]:
         """
         Update object attribute values from the target objects.
 
         :param target_objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]], target objects
-        :param number_of_instances: int, number of instances
+        :param number_of_envs: int, number of environments
         """
         if any(isinstance(value, (numpy.ndarray, list)) for values in target_objects.values() for value in
                values.values()):
@@ -186,8 +186,8 @@ class MultiverseViewer:
             objects = target_objects
         for attrs in objects.values():
             for attr in attrs.values():
-                attr.initialize_data(number_of_instances)
-        return objects, numpy.array([MultiverseViewer._initialize_data(objects) for _ in range(number_of_instances)])
+                attr.initialize_data(number_of_envs)
+        return objects, numpy.array([MultiverseViewer._initialize_data(objects) for _ in range(number_of_envs)])
 
     @staticmethod
     def _update_objects_from_data(objects: Dict[str, Dict[str, MultiverseAttribute]], data: numpy.ndarray):
@@ -288,7 +288,7 @@ class MultiverseSimulator:
 
     def __init__(self,
                  viewer: Optional[MultiverseViewer] = None,
-                 number_of_instances: int = 1,
+                 number_of_envs: int = 1,
                  headless: bool = False,
                  real_time_factor: float = 1.0,
                  step_size: float = 1E-3,
@@ -298,7 +298,7 @@ class MultiverseSimulator:
         Initialize the simulator with the viewer and the following keyword arguments:
 
         :param viewer: MultiverseViewer, viewer for the simulator
-        :param number_of_instances: int, number of instances
+        :param number_of_envs: int, number of environments
         :param headless: bool, True to run the simulator in headless mode
         :param real_time_factor: float, real time factor
         :param step_size: float, step size
@@ -311,7 +311,7 @@ class MultiverseSimulator:
         self._start_real_time = self.current_real_time
         self._state = MultiverseSimulatorState.STOPPED
         self._stop_reason = None
-        self._viewer = viewer.initialize_data(number_of_instances) if viewer is not None else None
+        self._viewer = viewer.initialize_data(number_of_envs) if viewer is not None else None
         self._renderer = MultiverseRenderer()
         self._current_render_time = self.current_real_time
         for func in self._make_functions() + (callbacks or []):

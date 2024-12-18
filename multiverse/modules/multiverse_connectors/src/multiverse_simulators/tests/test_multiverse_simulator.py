@@ -12,19 +12,25 @@ from multiverse_simulator import MultiverseSimulator, MultiverseSimulatorState, 
 
 class MultiverseSimulatorTestCase(unittest.TestCase):
     file_path: str = ""
+    world_path: str = ""
+    robots_path: Optional[str] = None
     headless: bool = False
     real_time_factor: float = 1.0
     step_size: float = 1E-3
     Simulator = MultiverseSimulator
+    number_of_envs: int = 1
 
     def test_initialize_multiverse_simulator(self,
                                              viewer: Optional[MultiverseViewer] = None,
                                              callbacks: Optional[List[MultiverseFunction]] = None) -> MultiverseSimulator:
         simulator = self.Simulator(viewer=viewer,
                                    file_path=self.file_path,
+                                   world_path=self.world_path,
+                                   robots_path=self.robots_path,
                                    headless=self.headless,
                                    real_time_factor=self.real_time_factor,
                                    step_size=self.step_size,
+                                   number_of_envs=self.number_of_envs,
                                    callbacks=callbacks)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
         self.assertIs(simulator.headless, self.headless)
@@ -36,7 +42,7 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
     def test_initialize_multiverse_viewer(self,
                                           write_objects: Optional = None,
                                           read_objects: Optional = None,
-                                          number_of_instances=2) -> MultiverseViewer:
+                                          number_of_envs=2) -> MultiverseViewer:
         if write_objects is None:
             write_attrs = {
                 "cmd_joint_rvalue": [1.0],
@@ -56,14 +62,14 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
                 "joint2": read_attrs,
             }
         viewer = MultiverseViewer(write_objects=write_objects, read_objects=read_objects)
-        viewer.initialize_data(number_of_instances=number_of_instances)
+        viewer.initialize_data(number_of_envs=number_of_envs)
 
         write_data = numpy.array([[i for attrs in write_objects.values()
                                    for attr in attrs.values() for i in attr] for _ in
-                                  range(number_of_instances)])
+                                  range(number_of_envs)])
         read_data = numpy.array([[i for attrs in read_objects.values()
                                   for attr in attrs.values() for i in attr] for _ in
-                                 range(number_of_instances)])
+                                 range(number_of_envs)])
         self.assertTrue(numpy.array_equal(viewer.write_data, write_data))
         self.assertTrue(numpy.array_equal(viewer.read_data, read_data))
         return viewer
