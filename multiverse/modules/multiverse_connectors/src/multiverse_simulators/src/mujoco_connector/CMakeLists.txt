@@ -15,6 +15,13 @@ if (UNIX)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         RESULT_VARIABLE INSTALL_RESULT
     )
+
+    # Check the result of the script execution
+    if(INSTALL_RESULT EQUAL 0)
+        message(VERBOSE "install.sh executed successfully.")
+    else()
+        message(FATAL_ERROR "Failed to execute install.sh.")
+    endif()
 elseif (WIN32)
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco_connector/mujoco_compiler.py ${BIN_DIR}/mujoco_compiler.py
@@ -29,4 +36,11 @@ elseif (WIN32)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         RESULT_VARIABLE INSTALL_RESULT
     )
+
+    # Check the result of the script execution
+    if(INSTALL_RESULT EQUAL 0)
+        message(VERBOSE "install.bat executed successfully.")
+    else()
+        message(FATAL_ERROR "Failed to execute install.bat.")
+    endif()
 endif()

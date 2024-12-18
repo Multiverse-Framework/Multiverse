@@ -1,17 +1,26 @@
-add_custom_target(multiverse_simulator_build ALL
+execute_process(
     COMMAND ${PYTHON_EXECUTABLE} -m build ${CMAKE_CURRENT_SOURCE_DIR} --outdir ${CMAKE_CURRENT_BINARY_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Building multiverse_simulator package"
-    VERBATIM
+    RESULT_VARIABLE BUILD_RESULT
 )
 
-add_custom_target(multiverse_simulator_install ALL
-    DEPENDS multiverse_simulator_build
+if(BUILD_RESULT EQUAL 0)
+  message(VERBOSE "Build multiverse_simulator successfully.")
+else()
+  message(FATAL_ERROR "Failed to build multiverse_simulator.")
+endif()
+
+execute_process(
     COMMAND ${PYTHON_EXECUTABLE} -m pip install -U ${CMAKE_CURRENT_BINARY_DIR}/multiverse_simulator-0.0.1.tar.gz -t ${LIB_DIR}/dist-packages
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "Installing multiverse_simulator package"
-    VERBATIM
+    RESULT_VARIABLE INSTALL_RESULT
 )
+
+if(INSTALL_RESULT EQUAL 0)
+  message(VERBOSE "Install multiverse_simulator successfully.")
+else()
+  message(FATAL_ERROR "Failed to install multiverse_simulator.")
+endif()
 
 include(FetchContent)
 if (BUILD_TESTS)

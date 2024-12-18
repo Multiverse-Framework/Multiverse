@@ -153,6 +153,8 @@ cmake -S $PWD/multiverse -B $BUILD_DIR \
     -DBUILD_KNOWLEDGE=$DBUILD_KNOWLEDGE \
     -DBUILD_PARSER=$DBUILD_PARSER \
     -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
+make -C $BUILD_DIR
+cmake --install $BUILD_DIR
 
 if [ $DBUILD_SRC = ON ] && [ $UBUNTU_VERSION = "20.04" ]; then
     cmake -S $PWD/multiverse -B $BUILD_DIR \

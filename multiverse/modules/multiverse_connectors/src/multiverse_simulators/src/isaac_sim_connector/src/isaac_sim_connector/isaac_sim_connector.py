@@ -9,7 +9,6 @@ import numpy
 from multiverse_simulator import MultiverseSimulator, MultiverseRenderer, MultiverseViewer
 from omni.isaac.lab.app import AppLauncher
 from omni.isaac.kit import SimulationApp
-from omni.isaac.lab.terrains import TerrainImporterCfg
 
 
 class MultiverseIsaacSimRenderer(MultiverseRenderer):
@@ -52,6 +51,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         self._app_launcher = AppLauncher(headless=self.headless)
 
         import omni.isaac.lab.sim as sim_utils
+        from omni.isaac.lab.terrains import TerrainImporterCfg
         from omni.isaac.lab.assets import ArticulationCfg, AssetBaseCfg
         from omni.isaac.lab.scene import InteractiveScene, InteractiveSceneCfg
         from omni.isaac.lab.sim import SimulationContext
