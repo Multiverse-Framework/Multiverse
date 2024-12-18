@@ -165,12 +165,33 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         if self.use_mjx:
             batch_data = {}
             for attr, indices in self._write_ids.items():
-                batch_data[attr] = numpy.array(getattr(self._batch, attr))
-                batch_data[attr][:, indices[0]] = write_data[:, indices[1]]
+                if attr not in {"xpos", "xquat"}:
+                    batch_data[attr] = numpy.array(getattr(self._batch, attr))
+                    batch_data[attr][:, indices[0]] = write_data[:, indices[1]]
+                else:
+                    body_id = indices[0][0]
+                    dof_adr = self._mj_model.body(body_id).dofadr[0]
+                    dof_num = self._mj_model.body(body_id).dofnum[0]
+                    assert dof_num == 6
+                    batch_data["qpos"] = numpy.array(self._batch.qpos)
+                    if attr == "xpos":
+                        batch_data["qpos"][:, dof_adr:dof_adr+3] = write_data[:, indices[1]]
+                    elif attr == "xquat":
+                        batch_data["qpos"][:, dof_adr+3:dof_adr+7] = write_data[:, indices[1]]
             self._batch = self._batch.replace(**batch_data)
         else:
-            for attr in self._write_ids.keys():
-                getattr(self._mj_data, attr)[self._write_ids[attr][0]] = write_data[0][self._write_ids[attr][1]]
+            for attr, indices in self._write_ids.items():
+                if attr not in {"xpos", "xquat"}:
+                    getattr(self._mj_data, attr)[indices[0]] = write_data[0][indices[1]]
+                else:
+                    body_id = indices[0][0]
+                    dof_adr = self._mj_model.body(body_id).dofadr[0]
+                    dof_num = self._mj_model.body(body_id).dofnum[0]
+                    assert dof_num == 6
+                    if attr == "xpos":
+                        self._mj_data.qpos[dof_adr:dof_adr+3] = write_data[0][indices[1]]
+                    elif attr == "xquat":
+                        self._mj_data.qpos[dof_adr+3:dof_adr+7] = write_data[0][indices[1]]
 
     def read_data_from_simulator(self, read_data: numpy.ndarray):
         if not self.use_mjx and read_data.shape[0] > 1:
