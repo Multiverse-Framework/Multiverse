@@ -3,6 +3,7 @@
 """Multiverse Mujoco Connector class"""
 
 import os
+os.environ['XLA_FLAGS'] = '--xla_gpu_triton_gemm_any=true'
 import xml.etree.ElementTree as ET
 from typing import Optional, List, Callable, Set
 
