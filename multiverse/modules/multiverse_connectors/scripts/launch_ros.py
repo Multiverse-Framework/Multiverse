@@ -161,11 +161,10 @@ class MultiverseRosLaunch(MultiverseLaunch):
 
             rospy.set_param(f"{robot_description}", f"{robot_urdf_str}")
             multiverse_dict = {
-                "multiverse_server": self.multiverse_server,
-                "multiverse_client": {
-                    "port": ros_control["port"],
-                    "meta_data": ros_control["meta_data"],
-                },
+                "host": self.multiverse_server["host"],
+                "server_port": self.multiverse_server["port"],
+                "client_port": ros_control["port"],
+                "meta_data": ros_control["meta_data"],
                 "controller_manager": {
                     "robot": controller_manager["robot"],
                     "robot_description": robot_description,

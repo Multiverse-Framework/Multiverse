@@ -326,10 +326,14 @@ namespace mujoco::plugin::multiverse_connector
       {
         for (int object_id = 0; object_id < object_type_num; object_id++)
         {
+          if (object_type_int == mjOBJ_JOINT && m->jnt_type[object_id] == mjJNT_FREE)
+          {
+            continue;
+          }
           const char *object_name = mj_id2name(m, object_type_int, object_id);
           if (!object_name)
           {
-            mju_warning("Object with id %d does not have a name\n", object_id);
+            mju_warning("%s with id %d does not have a name\n", obj_type_str.c_str(), object_id);
             continue;
           }
           config.send_objects[object_name] = {};

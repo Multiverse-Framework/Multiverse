@@ -109,10 +109,13 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
 
         worldbody_frame = self.world_spec.worldbody.add_frame()
 
-        add_entity(robots, home_key, worldbody_frame)
-        self.fix_prefix_and_suffix(robots)
         add_entity(objects, home_key, worldbody_frame)
         self.fix_prefix_and_suffix(objects)
+        add_entity(robots, home_key, worldbody_frame)
+        self.fix_prefix_and_suffix(robots)
+
+        for key in self.world_spec.keys[:-1]:
+            key.delete()
 
         self.world_spec.compile()
         xml_string = self.world_spec.to_xml()
@@ -145,7 +148,7 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
 
     def fix_prefix_and_suffix(self, entities: Dict[str, Robot | Object]):
         for entity_name, entity in entities.items():
-            for entity_type in ["body", "joint", "geom", "actuator"]:
+            for entity_type in ["body", "joint", "geom", "actuator", "key"]:
                 entity_prefix = entity.prefix.get(entity_type, "")
                 entity_suffix = entity.suffix.get(entity_type, "")
                 if entity_prefix == f"{entity_name}_" and entity_suffix == "":
@@ -166,7 +169,8 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                         actuator.name = fix_prefix_and_suffix_each(actuator.name, entity_prefix, entity_suffix,
                                                                    entity_name)
                 elif entity_type == "joint":
-                    if len(self.world_spec.tendons) > 0 or len(self.world_spec.actuators) > 0 or len(self.world_spec.sensors) > 0:  # TODO: Waiting for MuJoCo update
+                    if len(self.world_spec.tendons) > 0 or len(self.world_spec.actuators) > 0 or len(
+                            self.world_spec.sensors) > 0:  # TODO: Waiting for MuJoCo update
                         self.world_spec.compile()
                         xml_string = self.world_spec.to_xml()
                         with open(self.save_file_path, "w") as f:
@@ -211,6 +215,9 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                                                                         entity_name)
                             equality.name2 = fix_prefix_and_suffix_each(equality.name2, entity_prefix, entity_suffix,
                                                                         entity_name)
+                elif entity_type == "key":
+                    for key in self.world_spec.keys:
+                        key.name = fix_prefix_and_suffix_each(key.name, entity_prefix, entity_suffix, entity_name)
 
 
 if __name__ == "__main__":
