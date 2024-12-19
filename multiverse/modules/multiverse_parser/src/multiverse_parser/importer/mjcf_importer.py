@@ -151,7 +151,7 @@ class MjcfImporter(Factory):
     def _import_body(self, mj_body) -> BodyBuilder:
         body_name = mj_body.name if mj_body.name is not None else "Body_" + str(mj_body.id)
 
-        parent_mj_body = self.mj_model.body(mj_body.parentid)
+        parent_mj_body = self.mj_model.body(mj_body.parentid[0])
         if parent_mj_body.id == 0:
             body_builder = self.world_builder.add_body(body_name=body_name,
                                                        parent_body_name=self._config.model_name,
@@ -244,7 +244,7 @@ class MjcfImporter(Factory):
         joint_name = mj_joint.name if mj_joint.name is not None else "Joint_" + str(joint_id)
         joint_type = JointType.from_mujoco(jnt_type=mj_joint.type)
 
-        parent_body_id = mj_body.parentid
+        parent_body_id = mj_body.parentid[0]
         parent_body_name = get_body_name(self.mj_model.body(parent_body_id))
         parent_body_builder = self.world_builder.get_body_builder(body_name=parent_body_name)
         joint_axis, joint_quat = get_joint_axis_and_quat(joint_axis=mj_joint.axis)
@@ -320,7 +320,12 @@ class MjcfImporter(Factory):
 
         if geom_is_visible and self._config.with_visual or geom_is_collidable and self._config.with_collision:
             geom_name = mj_geom.name if mj_geom.name != "" else "Geom_" + str(geom_id)
-            geom_rgba = mj_geom.rgba
+            mat_id = mj_geom.matid[0]
+            if mat_id == -1:
+                geom_rgba = mj_geom.rgba
+            else:
+                mj_mat = self.mj_model.mat(mat_id)
+                geom_rgba = mj_mat.rgba
             geom_type = self._geom_type_map[mj_geom.type[0]]
             geom_density = 1000.0
             geom_property = GeomProperty(geom_type=geom_type,
@@ -372,7 +377,6 @@ class MjcfImporter(Factory):
                                                       "usd",
                                                       f"{mesh_name}.usda")
 
-                mat_id = mj_geom.matid[0]
                 if (mat_id == -1 or
                         self.mj_model.mat_texid[mat_id][mujoco.mjtTextureRole.mjTEXROLE_RGB] == -1 or
                         self.mj_model.mesh_texcoordadr[mesh_id] == -1):

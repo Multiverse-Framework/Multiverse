@@ -370,6 +370,8 @@ class UrdfExporter:
         for geom_builder in body_builder.geom_builders:
             self._build_geom(geom_builder=geom_builder, link=link)
 
+        self.factory.execute_cmds()
+
         self.robot.add_link(link)
 
     def _build_geom(self, geom_builder: GeomBuilder, link: urdf.Link):
@@ -421,7 +423,6 @@ class UrdfExporter:
                 UsdGeom.Scope.Define(mesh_stage, mesh_material_scope_path)
 
                 if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
-                    material = None
                     material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
                     material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
                     material_prim = geom_builder.stage.GetPrimAtPath(material_path)

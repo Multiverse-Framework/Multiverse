@@ -22,14 +22,23 @@ else()
   message(FATAL_ERROR "Failed to install multiverse_simulator.")
 endif()
 
-include(FetchContent)
-if (BUILD_TESTS)
+set(MUJOCO_MENAGERIE_DIR ${MULTIVERSE_DIR}/resources/robots/mujoco_menagerie)
+if(EXISTS "${MUJOCO_MENAGERIE_DIR}")
+  execute_process(
+    COMMAND ln -sf ${MUJOCO_MENAGERIE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/resources/mjcf/mujoco_menagerie
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+else()
+  include(FetchContent)
+
+  if(BUILD_TESTS)
     FetchContent_Populate(
       mujoco_menagerie
       GIT_REPOSITORY https://github.com/google-deepmind/mujoco_menagerie.git
-      GIT_TAG        286cfe3563c963084df8dea781f39735d59c532e # Dec 6, 2024
+      GIT_TAG 286cfe3563c963084df8dea781f39735d59c532e # Dec 6, 2024
       SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/resources/mjcf/mujoco_menagerie
     )
+  endif()
 endif()
 
 add_subdirectory(src/mujoco_connector)

@@ -2,17 +2,19 @@ cmake_minimum_required(VERSION 3.10.0)
 
 project(Multiverse)
 
-set(BIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
+set(MULTIVERSE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-set(BUILD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/build)
+set(BIN_DIR ${MULTIVERSE_DIR}/bin)
 
-set(EXT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/external)
+set(BUILD_DIR ${MULTIVERSE_DIR}/build)
 
-set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(EXT_DIR ${MULTIVERSE_DIR}/external)
 
-set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(LIB_DIR ${MULTIVERSE_DIR}/lib)
 
-set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
+set(SRC_DIR ${MULTIVERSE_DIR}/src)
+
+set(TEST_DIR ${MULTIVERSE_DIR}/tests)
 
 set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)")
 
