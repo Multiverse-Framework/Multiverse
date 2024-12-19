@@ -48,12 +48,14 @@ DBUILD_MODULES=ON
 DBUILD_CONNECTORS=ON
 DBUILD_KNOWLEDGE=ON
 DBUILD_PARSER=ON
+DBUILD_RESOURCES=ON
 
 while [ -n "$1" ]; do
     case "$1" in
         --only-src) echo "--only-src option passed"
             shift 1
             DBUILD_MODULES=OFF
+            DBUILD_RESOURCES=OFF
             break
         ;;
         --only-modules) echo -n "--only-modules option passed"
@@ -63,6 +65,7 @@ while [ -n "$1" ]; do
             else
                 echo -n ", with value:"
                 DBUILD_SRC=OFF
+                DBUILD_RESOURCES=OFF
                 for module in "$@"; do
                     echo -n " $module"
                     shift 1
@@ -122,7 +125,11 @@ fi
 
 if [ $DBUILD_KNOWLEDGE = ON ]; then
     echo "Updating multiverse_knowledge..."
-    git submodule update --init $PWD/multiverse/modules/multiverse_knowledge
+    git submodule update --init $CURRENT_DIR/multiverse/modules/multiverse_knowledge
+fi
+if [ $DBUILD_RESOURCES = ON ]; then
+    echo "Updating multiverse_resources..."
+    (git submodule update --init $CURRENT_DIR/multiverse/resources; cd $CURRENT_DIR/multiverse/resources; git submodule update --init)
 fi
 for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
