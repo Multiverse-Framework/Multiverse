@@ -412,7 +412,6 @@ class UrdfExporter:
             subset_prims = [subset_prim for subset_prim in gprim_prim.GetChildren()
                             if subset_prim.IsA(UsdGeom.Subset) and subset_prim.HasAPI(UsdShade.MaterialBindingAPI)]
             if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI) or len(subset_prims) > 0:
-                material = None
                 tmp_usd_mesh_file_abspath = tmp_usd_mesh_file_abspath.replace(".usda", "_tmp.usda")
                 shutil.copy2(usd_mesh_file_abspath, tmp_usd_mesh_file_abspath)
                 mesh_stage = Usd.Stage.Open(tmp_usd_mesh_file_abspath)
@@ -422,6 +421,7 @@ class UrdfExporter:
                 UsdGeom.Scope.Define(mesh_stage, mesh_material_scope_path)
 
                 if gprim_prim.HasAPI(UsdShade.MaterialBindingAPI):
+                    material = None
                     material_binding_api = UsdShade.MaterialBindingAPI(gprim_prim)
                     material_path = material_binding_api.GetDirectBindingRel().GetTargets()[0]
                     material_prim = geom_builder.stage.GetPrimAtPath(material_path)
