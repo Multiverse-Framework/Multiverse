@@ -204,6 +204,10 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                     "actuator2": {
                         "cmd_joint_rvalue": [2.0]
                     },
+                    "box": {
+                        "position": [1.1, 2.2, 3.3],
+                        "quaternion": [0.707, 0.0, 0.707, 0.0]
+                    }
                 }
                 read_objects = {
                     "joint1": {
@@ -212,6 +216,10 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                     },
                     "actuator2": {
                         "cmd_joint_rvalue": [0.0]
+                    },
+                    "box": {
+                        "position": [0.0, 0.0, 0.0],
+                        "quaternion": [0.0, 0.0, 0.0, 0.0]
                     }
                 }
                 viewer.write_objects = write_objects
@@ -231,12 +239,26 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                 self.assertEqual(viewer.read_objects["joint2"]["joint_rvalue"].values.shape, (1, 1))
                 self.assertEqual(viewer.read_objects["joint2"]["joint_torque"].values.shape, (1, 1))
             elif step == 102:
-                self.assertEqual(viewer.write_data.shape, (1, 2))
+                self.assertEqual(viewer.write_data.shape, (1, 9))
                 self.assertEqual(viewer.write_objects["joint1"]["joint_rvalue"].values[0], (1.0,))
                 self.assertEqual(viewer.write_objects["actuator2"]["cmd_joint_rvalue"].values[0], (2.0,))
-                self.assertEqual(viewer.read_data.shape, (1, 3))
+                self.assertEqual(viewer.write_objects["box"]["position"].values[0][0], 1.1)
+                self.assertEqual(viewer.write_objects["box"]["position"].values[0][1], 2.2)
+                self.assertEqual(viewer.write_objects["box"]["position"].values[0][2], 3.3)
+                self.assertEqual(viewer.write_objects["box"]["quaternion"].values[0][0], 0.707)
+                self.assertEqual(viewer.write_objects["box"]["quaternion"].values[0][1], 0.0)
+                self.assertEqual(viewer.write_objects["box"]["quaternion"].values[0][2], 0.707)
+                self.assertEqual(viewer.write_objects["box"]["quaternion"].values[0][3], 0.0)
+                self.assertEqual(viewer.read_data.shape, (1, 10))
                 self.assertAlmostEqual(viewer.read_objects["joint1"]["joint_rvalue"].values[0][0], 1.0, places=3)
                 self.assertEqual(viewer.read_objects["actuator2"]["cmd_joint_rvalue"].values[0][0], 2.0)
+                self.assertEqual(viewer.read_objects["box"]["position"].values[0][0], 1.1)
+                self.assertEqual(viewer.read_objects["box"]["position"].values[0][1], 2.2)
+                self.assertEqual(viewer.read_objects["box"]["position"].values[0][2], 3.3)
+                self.assertAlmostEqual(viewer.read_objects["box"]["quaternion"].values[0][0], 0.7071067811865475)
+                self.assertEqual(viewer.read_objects["box"]["quaternion"].values[0][1], 0.0)
+                self.assertAlmostEqual(viewer.read_objects["box"]["quaternion"].values[0][2], 0.7071067811865475)
+                self.assertEqual(viewer.read_objects["box"]["quaternion"].values[0][3], 0.0)
             else:
                 self.assertEqual(viewer.read_data.shape, (1, 0))
         simulator.stop()
