@@ -3,6 +3,7 @@
 """Multiverse Mujoco Connector class"""
 
 import os
+
 os.environ['XLA_FLAGS'] = '--xla_gpu_triton_gemm_any=true'
 import xml.etree.ElementTree as ET
 from typing import Optional, List, Callable, Set
@@ -49,6 +50,12 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                  headless: bool = False,
                  real_time_factor: float = 1.0,
                  step_size: float = 1E-3,
+                 integrator: str = "IMPLICITFAST",
+                 noslip_iterations: int = 0,
+                 noslip_tolerance: float = 1E-6,
+                 cone: str = "ELLIPTIC",
+                 impratio: int = 100,
+                 multiccd: bool = True,
                  callbacks: Optional[List[MultiverseFunction]] = None,
                  use_mjx: bool = False,
                  **kwargs):
@@ -60,9 +67,16 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         mujoco.mj_loadPluginLibrary(get_multiverse_connector_plugin())
         assert os.path.exists(self.file_path)
         self._mj_spec = mujoco.MjSpec.from_file(filename=self.file_path)
+        self._mj_spec.option.integrator = getattr(mujoco.mjtIntegrator, f"mjINT_{integrator}")
+        self._mj_spec.option.noslip_iterations = noslip_iterations
+        self._mj_spec.option.noslip_tolerance = noslip_tolerance
+        self._mj_spec.option.cone = getattr(mujoco.mjtCone, f"mjCONE_{cone}")
+        self._mj_spec.option.impratio = impratio
         self._mj_model = self._mj_spec.compile()
         assert self._mj_model is not None
         self._mj_model.opt.timestep = self.step_size
+        if multiccd:
+            self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_MULTICCD
         self._mj_data = mujoco.MjData(self._mj_model)
 
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
@@ -176,9 +190,9 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                     qpos_adr = jnt.qposadr
                     batch_data["qpos"] = numpy.array(self._batch.qpos)
                     if attr == "xpos":
-                        batch_data["qpos"][:, qpos_adr:qpos_adr+3] = write_data[:, indices[1]]
+                        batch_data["qpos"][:, qpos_adr:qpos_adr + 3] = write_data[:, indices[1]]
                     elif attr == "xquat":
-                        batch_data["qpos"][:, qpos_adr+3:qpos_adr+7] = write_data[:, indices[1]]
+                        batch_data["qpos"][:, qpos_adr + 3:qpos_adr + 7] = write_data[:, indices[1]]
             self._batch = self._batch.replace(**batch_data)
         else:
             for attr, indices in self._write_ids.items():
@@ -191,9 +205,9 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                     assert jnt.type == mujoco.mjtJoint.mjJNT_FREE
                     qpos_adr = jnt.qposadr[0]
                     if attr == "xpos":
-                        self._mj_data.qpos[qpos_adr:qpos_adr+3] = write_data[0][indices[1]]
+                        self._mj_data.qpos[qpos_adr:qpos_adr + 3] = write_data[0][indices[1]]
                     elif attr == "xquat":
-                        self._mj_data.qpos[qpos_adr+3:qpos_adr+7] = write_data[0][indices[1]]
+                        self._mj_data.qpos[qpos_adr + 3:qpos_adr + 7] = write_data[0][indices[1]]
 
     def read_data_from_simulator(self, read_data: numpy.ndarray):
         if not self.use_mjx and read_data.shape[0] > 1:

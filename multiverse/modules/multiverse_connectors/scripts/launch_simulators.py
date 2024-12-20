@@ -50,9 +50,7 @@ def parse_isaac_sim(resources_paths: List[str], isaac_sim_data: Dict[str, Any]):
 class MultiverseSimulationLaunch(MultiverseLaunch):
     simulator_compilers = {
         "pymujoco": "mujoco_compiler",
-        "pymujoco_headless": "mujoco_compiler",
         "isaac_sim": "isaac_sim_compiler",
-        "isaac_sim_headless": "isaac_sim_compiler",
     }
 
     def __init__(self):
@@ -70,9 +68,9 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         return processes
 
     def parse_simulator(self, simulation_data):
-        if simulation_data["simulator"] == "pymujoco" or simulation_data["simulator"] == "pymujoco_headless":
+        if simulation_data["simulator"] == "pymujoco":
             return parse_mujoco(self.resources_paths, simulation_data)
-        elif simulation_data["simulator"] == "isaac_sim" or simulation_data["simulator"] == "isaac_sim_headless":
+        elif simulation_data["simulator"] == "isaac_sim":
             return parse_isaac_sim(self.resources_paths, simulation_data)
         else:
             raise NotImplementedError(f"Simulator {simulation_data['simulator']} not implemented")
@@ -97,8 +95,7 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
             current_file = os.path.abspath(__file__)
             multiverse_bin_dir = os.path.join(os.path.dirname(current_file), "..", "..", "..", "bin")
             simulator_compile_file = os.path.join(multiverse_bin_dir,
-                                                  f"{simulation_data['simulator']}_compiler.py".replace("_headless",
-                                                                                                        ""))
+                                                  f"{simulation_data['simulator']}_compiler.py")
             cmd = [sys.executable, simulator_compile_file, f"--name={compiler_name}"] + cmd
         elif os.name == "posix":
             cmd = [f"{compiler_name}", f"--name={simulation_name}"] + cmd
@@ -123,8 +120,6 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         if robots_group is not None:
             robots_path = robots_group.group(1)
             cmd += [f"--robots_path={robots_path}"]
-        if simulation_data.get("headless", False):
-            cmd.append("--headless")
         for config_name, config_data in simulation_data.get("config", {}).items():
             cmd.append(f"--{config_name}={config_data}")
 
