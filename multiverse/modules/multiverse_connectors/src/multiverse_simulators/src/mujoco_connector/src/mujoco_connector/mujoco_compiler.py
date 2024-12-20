@@ -117,6 +117,8 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
         for key in self.world_spec.keys[:-1]:
             key.delete()
 
+        self.world_spec.option.integrator = mujoco.mjtIntegrator.mjINT_IMPLICITFAST
+
         self.world_spec.compile()
         xml_string = self.world_spec.to_xml()
         with open(self.save_file_path, "w") as f:
