@@ -96,9 +96,11 @@ class MultiverseRosSocket:
             exit_str = f"[{self.__class__.__name__}] Caught SIGINT (Ctrl+C), exiting..."
             print(f"[ROS] {exit_str}")
             if INTERFACE == Interface.ROS1:
-                rospy.signal_shutdown(exit_str)
+                if not rospy.is_shutdown():
+                    rospy.signal_shutdown(exit_str)
             elif INTERFACE == Interface.ROS2:
-                rclpy.shutdown()
+                if rclpy.ok():
+                    rclpy.shutdown()
         finally:
             for subscriber in subscriber_list:
                 subscriber.stop()

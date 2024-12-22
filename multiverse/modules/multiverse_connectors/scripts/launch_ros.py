@@ -237,7 +237,7 @@ class MultiverseRosLaunch(MultiverseLaunch):
             hardware_element.append(handedness_param_element)
 
             server_host_param_element = ET.Element("param")
-            server_host_param_element.set("name", "server_host")
+            server_host_param_element.set("name", "host")
             server_host_param_element.text = self.multiverse_server["host"]
             hardware_element.append(server_host_param_element)
 
