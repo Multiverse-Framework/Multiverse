@@ -25,7 +25,7 @@ endif()
 set(MUJOCO_MENAGERIE_DIR ${MULTIVERSE_DIR}/resources/robots/mujoco_menagerie)
 if(EXISTS "${MUJOCO_MENAGERIE_DIR}")
   execute_process(
-    COMMAND ln -sf ${MUJOCO_MENAGERIE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/resources/mjcf/mujoco_menagerie
+    COMMAND ln -sf ${MUJOCO_MENAGERIE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/resources/mjcf
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   )
 else()
