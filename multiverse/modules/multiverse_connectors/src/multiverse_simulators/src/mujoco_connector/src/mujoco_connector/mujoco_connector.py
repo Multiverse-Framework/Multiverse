@@ -50,12 +50,6 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                  headless: bool = False,
                  real_time_factor: float = 1.0,
                  step_size: float = 1E-3,
-                 integrator: str = "IMPLICITFAST",
-                 noslip_iterations: int = 0,
-                 noslip_tolerance: float = 1E-6,
-                 cone: str = "ELLIPTIC",
-                 impratio: int = 100,
-                 multiccd: bool = True,
                  callbacks: Optional[List[MultiverseFunction]] = None,
                  use_mjx: bool = False,
                  **kwargs):
@@ -67,16 +61,22 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         mujoco.mj_loadPluginLibrary(get_multiverse_connector_plugin())
         assert os.path.exists(self.file_path)
         self._mj_spec = mujoco.MjSpec.from_file(filename=self.file_path)
-        self._mj_spec.option.integrator = getattr(mujoco.mjtIntegrator, f"mjINT_{integrator}")
-        self._mj_spec.option.noslip_iterations = noslip_iterations
-        self._mj_spec.option.noslip_tolerance = noslip_tolerance
-        self._mj_spec.option.cone = getattr(mujoco.mjtCone, f"mjCONE_{cone}")
-        self._mj_spec.option.impratio = impratio
+
+        self._mj_spec.option.integrator = getattr(mujoco.mjtIntegrator,
+                                                  f"mjINT_{kwargs.get('integrator', 'EULER')}")
+        self._mj_spec.option.noslip_iterations = int(kwargs.get('noslip_iterations', 0))
+        self._mj_spec.option.noslip_tolerance = float(kwargs.get('noslip_tolerance', 1E-6))
+        self._mj_spec.option.cone = getattr(mujoco.mjtCone,
+                                            f"mjCONE_{kwargs.get('cone', 'PYRAMIDAL')}")
+        self._mj_spec.option.impratio = float(kwargs.get('impratio', 1))
+
         self._mj_model = self._mj_spec.compile()
         assert self._mj_model is not None
         self._mj_model.opt.timestep = self.step_size
-        if multiccd:
+        if kwargs.get('multiccd', False):
             self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_MULTICCD
+        if kwargs.get('nativeccd', False):
+            self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_NATIVECCD
         self._mj_data = mujoco.MjData(self._mj_model)
 
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)

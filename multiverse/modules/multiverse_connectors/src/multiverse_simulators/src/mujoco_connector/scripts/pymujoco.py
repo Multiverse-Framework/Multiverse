@@ -1,12 +1,45 @@
 #!/usr/bin/env python3
 
 import time
+from typing import List, Dict, Any
+
 from multiverse_simulator import MultiverseSimulatorConstraints
 from mujoco_connector import MultiverseMujocoConnector
 
 import argparse
+import re
 import sys
 import json
+
+
+def parse_unknown_args(unknown: List[str]) -> Dict[str, Any]:
+    """
+    Parse the list of unknown arguments from argparse into a dictionary.
+    This version specifically handles arguments in the form '--key=value'.
+    """
+    arg_dict = {}
+    pattern = re.compile(r'--([^=]+)=(.*)')
+    for arg in unknown:
+        match = pattern.match(arg)
+        if match:
+            key, value = match.groups()
+            # Convert value to boolean if it's 'True' or 'False'
+            if value == 'True':
+                value = True
+            elif value == 'False':
+                value = False
+            # Check if the key already exists
+            if key in arg_dict:
+                if isinstance(arg_dict[key], list):
+                    arg_dict[key].append(value)
+                else:
+                    arg_dict[key] = [arg_dict[key], value]
+            else:
+                arg_dict[key] = value
+        else:
+            # If the argument doesn't match the pattern, treat it as a flag
+            arg_dict[arg.lstrip('-')] = True
+    return arg_dict
 
 
 def main():
@@ -22,22 +55,6 @@ def main():
                             help="Real time factor")
         parser.add_argument("--step_size", type=float, required=False, default=0.01,
                             help="Step size")
-        parser.add_argument("--integrator", type=str, required=False, default="IMPLICITFAST",
-                            help="This attribute selects the numerical integrator to be used "
-                                 "(EULER, RK4, IMPLICIT, IMPLICITFAST)")
-        parser.add_argument("--noslip_iterations", type=int, required=False, default=0,
-                            help="Maximum number of iterations of the Noslip solver")
-        parser.add_argument("--noslip_tolerance", type=float, required=False, default=1e-6,
-                            help="Tolerance of the Noslip solver")
-        parser.add_argument("--cone", type=str, required=False, default="ELLIPTIC",
-                            help="This attribute selects the contact friction model to be used "
-                                 "(PYRAMIDAL, ELLIPTIC)")
-        parser.add_argument("--impratio", type=int, required=False, default=100,
-                            help="This attribute determines the ratio of frictional-to-normal constraint impedance "
-                                 "for elliptic friction cones")
-        parser.add_argument("--multiccd", type=bool, required=False, default=True,
-                            help="This flag enables multiple-contact collision detection for geom pairs "
-                                 "that use a general-purpose convex-convex collider e.g., mesh-mesh collisions")
         parser.add_argument("--max_real_time", type=float, required=False, default=None,
                             help="Maximum real time")
         parser.add_argument("--max_number_of_steps", type=float, required=False, default=None,
@@ -46,7 +63,10 @@ def main():
                             help="Maximum simulation time")
         parser.add_argument("--multiverse_params", type=str, required=False, help="JSON string with multiverse' data")
 
-        args = parser.parse_args()
+        args, unknown = parser.parse_known_args()
+
+        # Convert unknown arguments into a dictionary
+        unknown_args_dict = parse_unknown_args(unknown)
 
         if args.multiverse_params is None:
             multiverse_params = {}
@@ -62,12 +82,7 @@ def main():
                                               headless=args.headless,
                                               real_time_factor=args.real_time_factor,
                                               step_size=args.step_size,
-                                              integrator=args.integrator,
-                                              noslip_iterations=args.noslip_iterations,
-                                              noslip_tolerance=args.noslip_tolerance,
-                                              cone=args.cone,
-                                              impratio=args.impratio,
-                                              multiccd=args.multiccd)
+                                              **unknown_args_dict)
         if args.max_real_time is not None or args.max_number_of_steps is not None or args.max_simulation_time is not None:
             constraints = MultiverseSimulatorConstraints(max_real_time=args.max_real_time,
                                                          max_number_of_steps=args.max_number_of_steps,

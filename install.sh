@@ -214,8 +214,8 @@ for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrap
         . $virtualenvwrapper
         mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
 
-        # Install and upgrade pip build setuptools packaging
-        $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging
+        # Install and upgrade pip build setuptools packaging distro
+        $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
 
         if [ $INSTALL_PARSER = true ]; then
             # Install additional packages for USD and multiverse_knowledge

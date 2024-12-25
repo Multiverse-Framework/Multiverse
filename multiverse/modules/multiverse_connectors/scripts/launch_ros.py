@@ -2,7 +2,7 @@
 
 import os, sys
 import subprocess
-import platform
+import distro
 from typing import Dict, Any, Optional, List
 
 from multiverse_ros_socket import Interface, INTERFACE
@@ -16,7 +16,7 @@ from utils import (
     is_roscore_running,
 )
 
-ubuntu_version = platform.freedesktop_os_release().get("VERSION_ID")
+ubuntu_version = distro.os_release_info().get('version_id')
 
 
 class MultiverseRosLaunch(MultiverseLaunch):
