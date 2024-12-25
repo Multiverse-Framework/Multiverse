@@ -2,6 +2,7 @@
 
 import os, sys
 import subprocess
+import platform
 from typing import Dict, Any, Optional, List
 
 from multiverse_ros_socket import Interface, INTERFACE
@@ -14,6 +15,8 @@ from utils import (
     get_urdf_str_abs,
     is_roscore_running,
 )
+
+ubuntu_version = platform.freedesktop_os_release().get("VERSION_ID")
 
 
 class MultiverseRosLaunch(MultiverseLaunch):
@@ -354,16 +357,22 @@ class MultiverseRosLaunch(MultiverseLaunch):
             robot_urdf_str = ET.tostring(robot_element, encoding="unicode")
 
             tf_topic = controller_manager.get("tf_topic", "/tf")
+            if ubuntu_version == "22.04":
+                ns = "~"
+            else:
+                ns = ""
             cmd = [
                 "ros2",
                 "run",
                 "robot_state_publisher",
                 "robot_state_publisher",
                 "--ros-args",
+                "--remap",
+                f"{ns}/robot_description:={robot_description}",
                 "-p",
                 f"robot_description:={robot_urdf_str}",
                 "-r",
-                f"tf:={tf_topic}"
+                f"tf:={tf_topic}",
             ]
 
         return run_subprocess(cmd)
@@ -468,12 +477,19 @@ class MultiverseRosLaunch(MultiverseLaunch):
                 processes.append(process)
 
         elif INTERFACE == Interface.ROS2:
+            robot_description = controller_manager["robot_description"]
+            if ubuntu_version == "22.04":
+                ns = "~"
+            else:
+                ns = ""
             cmd = [
                 "ros2",
                 "run",
                 "controller_manager",
                 "ros2_control_node",
                 "--ros-args",
+                "--remap",
+                f"{ns}/robot_description:={robot_description}",
                 "--params-file",
                 f"{control_config_path}",
             ]
