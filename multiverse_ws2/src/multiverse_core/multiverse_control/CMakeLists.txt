@@ -24,6 +24,7 @@ set(HW_IF_INCLUDE_DEPENDS
   pluginlib
   rcpputils
   hardware_interface
+  urdf
 )
 
 # Specify the required version of ros2_control
