@@ -44,7 +44,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
     const std::string robot_description = info_.original_xml;
     if (!urdf_model.initString(robot_description))
     {
-        RCLCPP_ERROR(get_logger(), "Failed to load robot_description");
+        RCLCPP_ERROR(rclcpp::get_logger("multiverse_hw_interface"), "Failed to load robot_description");
         return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::ERROR;
     }
 
@@ -72,7 +72,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
         }
         else
         {
-            RCLCPP_WARN(get_logger(), "Joint %s is not prismatic, revolute or continuous, will be ignored", joint.name.c_str());
+            RCLCPP_WARN(rclcpp::get_logger("multiverse_hw_interface"), "Joint %s is not prismatic, revolute or continuous, will be ignored", joint.name.c_str());
         }
 
         for (const hardware_interface::InterfaceInfo &state_interface : joint.state_interfaces)
@@ -81,7 +81,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
             {
                 if (state_interface.initial_value.empty())
                 {
-                    RCLCPP_WARN(get_logger(), "initial_value not found for joint %s, set default position as 0.0", joint.name.c_str());
+                    RCLCPP_WARN(rclcpp::get_logger("multiverse_hw_interface"), "initial_value not found for joint %s, set default position as 0.0", joint.name.c_str());
                 }
                 else
                 {
@@ -120,7 +120,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
                 }
                 else
                 {
-                    RCLCPP_WARN(get_logger(), "Command interface %s is not supported for joint %s", command_interface.name.c_str(), joint.name.c_str());
+                    RCLCPP_WARN(rclcpp::get_logger("multiverse_hw_interface"), "Command interface %s is not supported for joint %s", command_interface.name.c_str(), joint.name.c_str());
                 }
             }
             else if (joint_type == urdf::Joint::REVOLUTE || joint_type == urdf::Joint::CONTINUOUS)
@@ -139,7 +139,7 @@ rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn Multiv
                 }
                 else
                 {
-                    RCLCPP_WARN(get_logger(), "Command interface %s is not supported for joint %s", command_interface.name.c_str(), joint.name.c_str());
+                    RCLCPP_WARN(rclcpp::get_logger("multiverse_hw_interface"), "Command interface %s is not supported for joint %s", command_interface.name.c_str(), joint.name.c_str());
                 }
             }
         }
