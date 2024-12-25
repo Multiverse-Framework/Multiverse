@@ -7,8 +7,8 @@ execute_process(
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
-if(NOT ${UBUNTU_VERSION} STREQUAL "24.04")
-  message(WARNING "multiverse_control is only supported on Ubuntu 24.04")
+if(NOT ${UBUNTU_VERSION} STREQUAL "22.04" AND NOT ${UBUNTU_VERSION} STREQUAL "24.04")
+  message(WARNING "multiverse_control is only supported on Ubuntu 22.04 or Ubuntu 24.04")
   return()
 endif()
 
@@ -27,11 +27,11 @@ set(HW_IF_INCLUDE_DEPENDS
 )
 
 # Specify the required version of ros2_control
-find_package(controller_manager 4.0.0)
+find_package(controller_manager)
 
 # Handle the case where the required version is not found
 if(NOT controller_manager_FOUND)
-  message(FATAL_ERROR "ros2_control version 4.0.0 or higher is required. ")
+  message(FATAL_ERROR "controller_manager package not found. Please install ros2_control.")
 endif()
 
 # find dependencies
