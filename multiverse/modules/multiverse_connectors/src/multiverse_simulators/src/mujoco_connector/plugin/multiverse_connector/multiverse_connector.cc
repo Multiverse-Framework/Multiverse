@@ -23,6 +23,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
+#include <bits/stdc++.h>
 
 #ifdef __linux__
 #include <jsoncpp/json/reader.h>

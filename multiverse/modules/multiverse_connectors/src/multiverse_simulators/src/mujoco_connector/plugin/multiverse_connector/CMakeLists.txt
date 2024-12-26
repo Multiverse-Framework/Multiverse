@@ -19,9 +19,8 @@ target_include_directories(multiverse_connector PRIVATE ${MUJOCO_MULTIVERSE_CONN
 if (UNIX)
   target_link_libraries(multiverse_connector PRIVATE 
     mujoco 
-    jsoncpp 
-    zmq 
-    atomic
+    ${CMAKE_CURRENT_SOURCE_DIR}/libmultiverse_client_json.so
+    ${CMAKE_CURRENT_SOURCE_DIR}/libmultiverse_client.a
   )
 elseif (WIN32)
   target_link_libraries(multiverse_connector PRIVATE 

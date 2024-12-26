@@ -7,12 +7,14 @@ if [ -z "$MUJOCO_SRC_DIR" ] || [ -z "$MUJOCO_BUILD_DIR" ]; then
 else
     echo "MUJOCO_SRC_DIR is set to: $MUJOCO_SRC_DIR"
     echo "MUJOCO_BUILD_DIR is set to: $MUJOCO_BUILD_DIR"
+
+    MULTIVERSE_DIR="$PWD/../../../../../.."
     
     cp -r plugin/multiverse_connector $MUJOCO_SRC_DIR/plugin
-    cp -f ../../../../../../src/multiverse_client/include/multiverse_client.h $MUJOCO_SRC_DIR/plugin/multiverse_connector
-    cp -f ../../../../../../src/multiverse_client/include/multiverse_client_json.h $MUJOCO_SRC_DIR/plugin/multiverse_connector
-    cp -f ../../../../../../src/multiverse_client/src/multiverse_client.cpp $MUJOCO_SRC_DIR/plugin/multiverse_connector
-    cp -f ../../../../../../src/multiverse_client/src/multiverse_client_json.cpp $MUJOCO_SRC_DIR/plugin/multiverse_connector
+    ln -sf $MULTIVERSE_DIR/src/multiverse_client/include/multiverse_client.h $MUJOCO_SRC_DIR/plugin/multiverse_connector
+    ln -sf $MULTIVERSE_DIR/src/multiverse_client/include/multiverse_client_json.h $MUJOCO_SRC_DIR/plugin/multiverse_connector
+    ln -sf $MULTIVERSE_DIR/lib/libstdc++/libmultiverse_client_json.so $MUJOCO_SRC_DIR/plugin/multiverse_connector
+    ln -sf $MULTIVERSE_DIR/lib/libstdc++/libmultiverse_client.a $MUJOCO_SRC_DIR/plugin/multiverse_connector
     
     # Specify the file path
     MUJOCO_CMAKE_PATH="$MUJOCO_SRC_DIR/CMakeLists.txt"
