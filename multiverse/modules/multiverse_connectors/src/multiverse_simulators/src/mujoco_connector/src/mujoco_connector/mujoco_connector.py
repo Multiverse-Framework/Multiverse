@@ -64,7 +64,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         self._mj_spec = mujoco.MjSpec.from_file(filename=self.file_path)
 
         self._mj_spec.option.integrator = getattr(mujoco.mjtIntegrator,
-                                                  f"mjINT_{kwargs.get('integrator', 'EULER')}")
+                                                  f"mjINT_{kwargs.get('integrator', 'RK4')}")
         self._mj_spec.option.noslip_iterations = int(kwargs.get('noslip_iterations', 0))
         self._mj_spec.option.noslip_tolerance = float(kwargs.get('noslip_tolerance', 1E-6))
         self._mj_spec.option.cone = getattr(mujoco.mjtCone,
