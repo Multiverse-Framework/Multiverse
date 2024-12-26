@@ -47,9 +47,8 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: m
         home_key.qpos = numpy.append(home_key.qpos, entity_home_key.qpos)
         home_key.ctrl = numpy.append(home_key.ctrl, entity_home_key.ctrl)
 
-        entity_model = entity_spec.compile()
-
         if entity.disable_self_collision != "off":
+            entity_model = mujoco.MjModel.from_xml_path(entity.path)
             entity_data = mujoco.MjData(entity_model)
             mujoco.mj_step(entity_model, entity_data)
             if entity.disable_self_collision == "auto":
@@ -74,9 +73,8 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: m
                             entity_spec.add_exclude(name=f"{body_1.name}_{body_2.name}",
                                                     bodyname1=body_1.name,
                                                     bodyname2=body_2.name)
-            entity_model = entity_spec.compile()
 
-        entity_root_name = entity_model.body(1).name
+        entity_root_name = list(entity_spec.bodies)[1].name
         child_body = entity_spec.find_body(entity_root_name)
         worldbody_frame.attach_body(child_body, f"{entity_name}_", f"")
 
