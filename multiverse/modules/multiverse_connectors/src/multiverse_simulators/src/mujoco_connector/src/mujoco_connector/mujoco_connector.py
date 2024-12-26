@@ -16,7 +16,7 @@ from mujoco import mjx
 
 from multiverse_simulator import (MultiverseSimulator, MultiverseRenderer, MultiverseViewer,
                                   MultiverseFunction, MultiverseFunctionResult)
-from .utills import get_multiverse_connector_plugin
+from .utills import get_multiverse_connector_plugins
 
 
 class MultiverseMujocoRenderer(MultiverseRenderer):
@@ -58,7 +58,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         self.name = root.attrib.get("model", self.name)
         self.use_mjx = use_mjx
         super().__init__(viewer, number_of_envs, headless, real_time_factor, step_size, callbacks, **kwargs)
-        mujoco.mj_loadPluginLibrary(get_multiverse_connector_plugin())
+        for plugin in get_multiverse_connector_plugins():
+            mujoco.mj_loadPluginLibrary(plugin)
         assert os.path.exists(self.file_path)
         self._mj_spec = mujoco.MjSpec.from_file(filename=self.file_path)
 

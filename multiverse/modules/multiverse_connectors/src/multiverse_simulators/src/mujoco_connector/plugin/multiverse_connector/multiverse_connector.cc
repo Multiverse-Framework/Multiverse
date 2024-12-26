@@ -20,7 +20,10 @@
 
 #include "multiverse_connector.h"
 
-#include <boost/algorithm/string/replace.hpp>
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <iostream>
+
 #ifdef __linux__
 #include <jsoncpp/json/reader.h>
 #elif _WIN32
@@ -29,9 +32,21 @@
 
 #include <mujoco/mujoco.h>
 
+void replace_all(std::string& str, const std::string& from, const std::string& to) {
+  if (from.empty()) {
+    return; // Avoid infinite loop
+  }
+
+  size_t start_pos = 0;
+  while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+    str.replace(start_pos, from.length(), to);
+    start_pos += to.length(); // Move past the last replaced segment
+  }
+}
+
 Json::Value string_to_json(std::string &str)
 {
-  boost::replace_all(str, "'", "\"");
+  replace_all(str, "'", "\"");
   if (str.empty())
   {
     return Json::Value();
@@ -309,7 +324,7 @@ namespace mujoco::plugin::multiverse_connector
     Json::Reader reader;
 
     std::string send_json_str = GetStringAttr(m, instance, send_str);
-    boost::replace_all(send_json_str, "'", "\"");
+    replace_all(send_json_str, "'", "\"");
     Json::Value send_json = string_to_json(send_json_str);
     const std::map<std::string, std::pair<int, int>> obj_type_map = 
     {
@@ -368,7 +383,7 @@ namespace mujoco::plugin::multiverse_connector
     }
 
     std::string receive_json_str = GetStringAttr(m, instance, receive_str);
-    boost::replace_all(receive_json_str, "'", "\"");
+    replace_all(receive_json_str, "'", "\"");
     Json::Value receive_json = string_to_json(receive_json_str);
     for (const std::string &object_name : receive_json.getMemberNames())
     {

@@ -128,7 +128,7 @@ if not exist "%ROS_DIR%" (
 %PYTHON_EXECUTABLE% -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11
 
 @REM Install mujoco
-%PYTHON_EXECUTABLE% -m pip install mujoco==3.2.6
+%PYTHON_EXECUTABLE% -m pip install mujoco==3.2.6 mujoco-mjx==3.2.6 "jax[cuda12]" jaxlib==0.4.21
 
 @REM Install urdf_parser_py
 %PYTHON_EXECUTABLE% -m pip install urdf_parser_py

@@ -26,6 +26,9 @@ elseif (WIN32)
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/src/mujoco_connector/mujoco_compiler.py ${BIN_DIR}/mujoco_compiler.py
     )
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/scripts/pymujoco.py ${BIN_DIR}/pymujoco.py
+    )
 
     set(ENV{MUJOCO_SRC_DIR} ${EXT_DIR}/mujoco)
     set(ENV{MUJOCO_BUILD_DIR} ${BUILD_DIR}/mujoco)

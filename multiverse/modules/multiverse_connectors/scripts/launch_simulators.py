@@ -94,9 +94,8 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         if os.name == "nt":
             current_file = os.path.abspath(__file__)
             multiverse_bin_dir = os.path.join(os.path.dirname(current_file), "..", "..", "..", "bin")
-            simulator_compile_file = os.path.join(multiverse_bin_dir,
-                                                  f"{simulation_data['simulator']}_compiler.py")
-            cmd = [sys.executable, simulator_compile_file, f"--name={compiler_name}"] + cmd
+            simulator_compile_file = os.path.join(multiverse_bin_dir, f"{compiler_name}.py")
+            cmd = [sys.executable, simulator_compile_file, f"--name={simulation_name}"] + cmd
         elif os.name == "posix":
             cmd = [f"{compiler_name}", f"--name={simulation_name}"] + cmd
         else:
@@ -115,7 +114,15 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
             raise RuntimeError(f"Failed to compile {simulation_name}")
 
         scene_path = re.search(r"Scene:\s*([^\n]+)", compiler_result.stdout).group(1)
-        cmd = [f"{simulation_data['simulator']}",  f"--file_path={scene_path}"]
+        if os.name == "nt":
+            current_file = os.path.abspath(__file__)
+            multiverse_bin_dir = os.path.join(os.path.dirname(current_file), "..", "..", "..", "bin")
+            simulator_file = os.path.join(multiverse_bin_dir, f"{simulation_data['simulator']}.py")
+            cmd = [sys.executable, simulator_file, f"--file_path={scene_path}"]
+        elif os.name == "posix":
+            cmd = [f"{simulation_data['simulator']}",  f"--file_path={scene_path}"]
+        else:
+            raise NotImplementedError(f"OS {os.name} not implemented")
         robots_group = re.search(r"Robots:\s*([^\n]+)", compiler_result.stdout)
         if robots_group is not None:
             robots_path = robots_group.group(1)

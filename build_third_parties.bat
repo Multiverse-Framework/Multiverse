@@ -80,7 +80,7 @@ if not exist "%MUJOCO_BUILD_DIR%" (
         echo "Folder created: %MUJOCO_BUILD_DIR%"
 
         powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MUJOCO_BUILD_DIR%\bin', [EnvironmentVariableTarget]::User)"
-        powershell -NoProfile -Command "cd %MUJOCO_BUILD_DIR%; cmake %MUJOCO_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%MUJOCO_BUILD_DIR% -Wno-deprecated -Wno-dev; cmake --build . --config Release; cmake --install ."
+        powershell -NoProfile -Command "cd %MUJOCO_BUILD_DIR%; cmake %MUJOCO_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%MUJOCO_BUILD_DIR% -Wno-deprecated -Wno-dev; cmake --build . --config Release -- /p:VcpkgEnableManifest=true; cmake --install ."
     ) else (
         powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MUJOCO_BUILD_DIR%\bin', [EnvironmentVariableTarget]::User)"
         powershell -NoProfile -Command "curl -o '%EXT_DIR%\%MUJOCO_ZIP_FILE%' 'https://github.com/google-deepmind/mujoco/releases/download/%MUJOCO_VERSION%/%MUJOCO_ZIP_FILE%'"
