@@ -20,7 +20,7 @@ set(STDLIB "libstdc++" CACHE STRING "Type of stdlib to use (libc++ or libstdc++)
 
 set(MULTIVERSE_CLIENT_LIBRARY_TYPE "STATIC" CACHE STRING "Type of library to create (SHARED or STATIC)")
 
-set(PYTHON_EXECUTABLE "python3.8" CACHE STRING "Python executable to use")
+set(PYTHON_EXECUTABLE "python3" CACHE STRING "Python executable to use")
 
 set(ISAAC_SIM_PATH "/home/$ENV{USER}/.local/share/ov/pkg/isaac-sim-4.2.0" CACHE STRING "Path to Isaac Sim")
 
@@ -28,10 +28,6 @@ option(BUILD_SRC "Build the src" ON)
 option(BUILD_MODULES "Build the modules" ON)
 
 option(BUILD_TESTS "Build the tests" ON)
-
-if (WIN32)
-    set(PYTHON_EXECUTABLE "python")
-endif()
 
 if(BUILD_SRC)
     add_subdirectory(src)
