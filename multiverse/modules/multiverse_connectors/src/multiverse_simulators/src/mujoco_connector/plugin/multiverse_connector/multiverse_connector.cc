@@ -23,9 +23,9 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <iostream>
-#include <bits/stdc++.h>
 
 #ifdef __linux__
+#include <bits/stdc++.h>
 #include <jsoncpp/json/reader.h>
 #elif _WIN32
 #include <json/reader.h>
