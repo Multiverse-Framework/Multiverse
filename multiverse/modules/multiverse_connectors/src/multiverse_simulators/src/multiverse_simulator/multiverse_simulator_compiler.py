@@ -4,10 +4,10 @@
 
 import argparse
 import dataclasses
-import json
 import os
 import shutil
 from typing import Dict, Any
+from .utils import str_to_dict
 
 
 @dataclasses.dataclass
@@ -34,12 +34,8 @@ class Object(Entity):
 
 
 def parse_entity(data: str, cls: type) -> Dict[str, Any]:
-    if data is None:
-        return {}
-    try:
-        root = json.loads(data.replace("'", '"'))
-    except json.JSONDecodeError as e:
-        print(f"Failed to parse {data}: {str(e)}")
+    root = str_to_dict(data)
+    if root == {}:
         return {}
 
     entities = {}
@@ -85,7 +81,11 @@ class MultiverseSimulatorCompiler:
     def save_dir_path(self) -> str:
         return os.path.dirname(self.save_file_path)
 
-    def build_world(self, robots: Dict[str, Robot], objects: Dict[str, Object], multiverse_params: Dict[str, Dict]):
+    def build_world(self,
+                    robots: Dict[str, Robot],
+                    objects: Dict[str, Object],
+                    references: Dict[str, Dict[str, Any]] = None,
+                    multiverse_params: Dict[str, Dict] = None):
         raise NotImplementedError("build_world method must be implemented")
 
     def create_world(self):
@@ -125,20 +125,12 @@ def multiverse_simulator_compiler_main(Compiler=MultiverseSimulatorCompiler):
         os.makedirs(args.save_dir_path)
     assert args.world_path != "" and os.path.exists(args.world_path)
 
-    if args.multiverse_params is None:
-        multiverse_params = {}
-    else:
-        try:
-            multiverse_params = json.loads(args.multiverse_params.replace("'", '"'))
-        except json.JSONDecodeError as e:
-            print(f"Failed to parse {args.multiverse_params}: {str(e)}")
-            multiverse_params = {}
-
     compiler = Compiler(args)
     compiler.build_world(
         robots=parse_entity(args.robots, Robot),
         objects=parse_entity(args.objects, Object),
-        multiverse_params=multiverse_params
+        references=str_to_dict(args.references),
+        multiverse_params=str_to_dict(args.multiverse_params)
     )
     print(f"World: {compiler.world_path}")
     print(f"Scene: {compiler.save_file_path}", end="")

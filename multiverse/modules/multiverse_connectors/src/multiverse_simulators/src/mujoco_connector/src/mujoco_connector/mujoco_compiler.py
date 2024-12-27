@@ -2,7 +2,7 @@
 
 import os
 import xml.etree.ElementTree as ET
-from typing import Dict
+from typing import Dict, Any
 
 import mujoco
 import numpy
@@ -32,6 +32,7 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: m
 
         fix_mesh_and_texture_paths(entity_spec, os.path.dirname(entity.path))
 
+        entity_model = mujoco.MjModel.from_xml_path(entity.path)
         for body_name, body_apply in entity.apply.get("body", {}).items():
             if isinstance(body_apply, dict):
                 applied_body = entity_spec.find_body(body_name)
@@ -40,6 +41,19 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: m
             else:
                 for applied_body in entity_spec.bodies:
                     setattr(applied_body, body_name, body_apply)
+
+        for geom_name, geom_apply in entity.apply.get("geom", {}).items():
+            if isinstance(geom_apply, dict):
+                if geom_name.isdigit():
+                    geom_id = int(geom_name)
+                else:
+                    geom_id = entity_model.geom(geom_name).id
+                applied_geom = entity_spec.geoms[geom_id]
+                for apply_name, apply_data in geom_apply.items():
+                    setattr(applied_geom, apply_name, apply_data)
+            else:
+                for applied_geom in entity_spec.geoms:
+                    setattr(applied_geom, geom_name, geom_apply)
 
         if not any(key.name == "home" for key in entity_spec.keys):
             entity_spec.add_key(name="home")
@@ -95,7 +109,11 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
     def __init__(self, args):
         super().__init__(args)
 
-    def build_world(self, robots: Dict[str, Robot], objects: Dict[str, Object], multiverse_params: Dict[str, Dict]):
+    def build_world(self,
+                    robots: Dict[str, Robot],
+                    objects: Dict[str, Object],
+                    references: Dict[str, Dict[str, Any]] = None,
+                    multiverse_params: Dict[str, Dict] = None):
         self.world_spec = mujoco.MjSpec.from_file(filename=self.save_file_path)
 
         fix_mesh_and_texture_paths(self.world_spec, os.path.dirname(self.world_path))
@@ -115,7 +133,7 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
         for key in self.world_spec.keys[:-1]:
             key.delete()
 
-        self.world_spec.option.integrator = mujoco.mjtIntegrator.mjINT_IMPLICITFAST
+        self.add_references(references)
 
         self.world_spec.compile()
         xml_string = self.world_spec.to_xml()
@@ -218,6 +236,67 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                 elif entity_type == "key":
                     for key in self.world_spec.keys:
                         key.name = fix_prefix_and_suffix_each(key.name, entity_prefix, entity_suffix, entity_name)
+
+    def add_references(self, references: Dict[str, Dict[str, Any]]):
+        home_key = self.world_spec.keys[0]
+        world_model = self.world_spec.compile()
+        world_data = mujoco.MjData(world_model)
+        for reference_name, reference in references.items():
+            body_ref_name = reference.get("body1", None)
+            if body_ref_name is None:
+                raise ValueError("Reference must have a body1")
+            body_name = reference.get("body2", None)
+            if body_name is None:
+                raise ValueError("Reference must have a body2")
+            body_ref = self.world_spec.find_body(body_ref_name)
+            if body_ref is None:
+                mujoco.mj_resetData(world_model, world_data)
+                mujoco.mj_step(world_model, world_data)
+                body = world_data.body(body_name)
+                if body is None:
+                    raise ValueError(f"Body {body_name} not found")
+                body_ref = self.world_spec.worldbody.add_body(
+                    name=body_ref_name,
+                    pos=body.xpos,
+                    quat=body.xquat,
+                    mocap=True
+                )
+
+                for geom in self.world_spec.find_body(body_name).geoms:
+                    if geom.conaffinity == 0 and geom.contype == 0:
+                        body_ref.add_geom(
+                            name=geom.name,
+                            type=geom.type,
+                            size=geom.size,
+                            rgba=[0, 1, 0, 1],
+                            pos=geom.pos,
+                            quat=geom.quat,
+                            meshname=geom.meshname,
+                            group=geom.group,
+                            conaffinity=geom.conaffinity,
+                            contype=geom.contype,
+                        )
+
+                mujoco.mj_resetDataKeyframe(world_model, world_data, 0)
+                mujoco.mj_step(world_model, world_data)
+                body = world_data.body(body_name)
+                home_key.mpos = numpy.append(home_key.mpos, body.xpos)
+                home_key.mquat = numpy.append(home_key.mquat, body.xquat)
+            equality: mujoco.MjsEquality = self.world_spec.add_equality()
+            equality.type = mujoco.mjtEq.mjEQ_WELD
+            equality.name = reference_name
+            equality.objtype = mujoco.mjtObj.mjOBJ_BODY
+            for key, value in reference.items():
+                if key == "body1":
+                    equality.name1 = value
+                elif key == "body2":
+                    equality.name2 = value
+                elif key == "relpose":
+                    equality.data[:7] = value
+                elif key == "anchor":
+                    equality.data[:3] = value
+                elif key == "torquescale":
+                    equality.data[10] = value
 
 
 if __name__ == "__main__":

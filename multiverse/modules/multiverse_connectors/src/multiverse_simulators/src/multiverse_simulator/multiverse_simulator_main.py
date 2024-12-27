@@ -2,10 +2,10 @@
 
 import argparse
 import sys
-import json
 import time
 from multiverse_simulator import MultiverseSimulator, MultiverseSimulatorConstraints
 from typing import Type
+from .utils import str_to_dict
 
 
 def multiverse_simulator_main(Simulator: Type[MultiverseSimulator]):
@@ -24,14 +24,7 @@ def multiverse_simulator_main(Simulator: Type[MultiverseSimulator]):
 
         args = parser.parse_args()
 
-        if args.multiverse_params is None:
-            multiverse_params = {}
-        else:
-            try:
-                multiverse_params = json.loads(args.multiverse_params.replace("'", '"'))
-            except json.JSONDecodeError as e:
-                print(f"Failed to parse {args.multiverse_params}: {str(e)}")
-                multiverse_params = {}
+        multiverse_params = str_to_dict(args.multiverse_params)
 
         simulator = MultiverseSimulator(file_path=args.file_path,
                                         headless=args.headless,

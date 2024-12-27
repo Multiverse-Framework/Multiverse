@@ -3,7 +3,7 @@
 import time
 from typing import List, Dict, Any
 
-from multiverse_simulator import MultiverseSimulatorConstraints
+from multiverse_simulator import MultiverseSimulatorConstraints, str_to_dict
 from mujoco_connector import MultiverseMujocoConnector
 
 import argparse
@@ -68,14 +68,7 @@ def main():
         # Convert unknown arguments into a dictionary
         unknown_args_dict = parse_unknown_args(unknown)
 
-        if args.multiverse_params is None:
-            multiverse_params = {}
-        else:
-            try:
-                multiverse_params = json.loads(args.multiverse_params.replace("'", '"'))
-            except json.JSONDecodeError as e:
-                print(f"Failed to parse {args.multiverse_params}: {str(e)}")
-                multiverse_params = {}
+        multiverse_params = str_to_dict(args.multiverse_params)
 
         simulator = MultiverseMujocoConnector(file_path=args.file_path,
                                               use_mjx=args.use_mjx,

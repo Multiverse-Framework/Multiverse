@@ -37,6 +37,13 @@ class MujocoCompilerTestCase(MultiverseSimulatorCompilerTestCase):
                         "pos": [-0.5, 0.5, 1.0],
                         "quat": [0.5, 0.5, 0.5, 0.5],
                     }
+                },
+                "geom": {
+                    "68": {
+                        "friction": [10, 0.005, 0.0001],
+                        "solimp": [0.95, 0.99, 0.001, 0.5, 2],
+                        "solref": [0.004, 1]
+                    }
                 }
             },
             "disable_self_collision": "on",
@@ -98,6 +105,13 @@ class MujocoCompilerTestCase(MultiverseSimulatorCompilerTestCase):
                       "joint_force"]
         },
         "receive": {}
+    }
+    references = {
+        "reference_1": {
+            "body1": "panda_1_hand_ref",
+            "body2": "panda_1_hand",
+            "torquescale": 1
+        }
     }
 
     @patch('argparse.ArgumentParser.parse_args',
@@ -163,6 +177,19 @@ class MujocoCompilerTestCase(MultiverseSimulatorCompilerTestCase):
     def test_mujoco_compiler_world_with_robots_and_multiverse(self, _):
         multiverse_simulator_compiler_main(Compiler=MujocoCompiler)
         xml_file_path = os.path.join(save_dir_path, "mujoco_simulation_5.xml")
+        self.assertTrue(os.path.exists(xml_file_path))
+
+    @patch('argparse.ArgumentParser.parse_args',
+           return_value=argparse.Namespace(name="mujoco_simulation_6",
+                                           world_path=world_path,
+                                           robots=str(franka_emika_pandas),
+                                           objects="{}",
+                                           references=str(references),
+                                           save_dir_path=save_dir_path,
+                                           multiverse_params=str(multiverse_params)))
+    def test_mujoco_compiler_world_with_robots_and_refs_and_multiverse(self, _):
+        multiverse_simulator_compiler_main(Compiler=MujocoCompiler)
+        xml_file_path = os.path.join(save_dir_path, "mujoco_simulation_6.xml")
         self.assertTrue(os.path.exists(xml_file_path))
 
 

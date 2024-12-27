@@ -2,20 +2,9 @@
 
 import argparse
 import sys
-import json
 import time
-from typing import Any, Dict
-from multiverse_simulator import MultiverseSimulatorConstraints
+from multiverse_simulator import MultiverseSimulatorConstraints, str_to_dict
 from isaac_sim_connector import MultiverseIsaacSimConnector
-
-
-def load_json_str(json_str: str) -> Dict[str, Any]:
-    try:
-        return json.loads(json_str.replace("'", '"'))
-    except json.JSONDecodeError as e:
-        print(f"Failed to parse {json_str}: {str(e)}")
-        return {}
-
 
 if __name__ == "__main__":
     try:
@@ -35,7 +24,7 @@ if __name__ == "__main__":
 
         args = parser.parse_args()
 
-        multiverse_params = load_json_str(args.multiverse_params) if args.multiverse_params is not None else {}
+        multiverse_params = str_to_dict(args.multiverse_params)
         robots_path = args.robots_path if args.robots_path is not None else ""
 
         simulator = MultiverseIsaacSimConnector(world_path=args.file_path,
