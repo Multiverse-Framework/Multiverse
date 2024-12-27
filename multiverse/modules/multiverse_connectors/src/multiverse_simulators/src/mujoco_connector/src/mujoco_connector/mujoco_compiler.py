@@ -42,6 +42,19 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: m
                 for applied_body in entity_spec.bodies:
                     setattr(applied_body, body_name, body_apply)
 
+        for joint_name, joint_apply in entity.apply.get("joint", {}).items():
+            if isinstance(joint_apply, dict):
+                if joint_name.isdigit():
+                    joint_id = int(joint_name)
+                else:
+                    joint_id = entity_model.joint(joint_name).id
+                applied_joint = entity_spec.joints[joint_id]
+                for apply_name, apply_data in joint_apply.items():
+                    setattr(applied_joint, apply_name, apply_data)
+            else:
+                for applied_joint in entity_spec.joints:
+                    setattr(applied_joint, joint_name, joint_apply)
+
         for geom_name, geom_apply in entity.apply.get("geom", {}).items():
             if isinstance(geom_apply, dict):
                 if geom_name.isdigit():

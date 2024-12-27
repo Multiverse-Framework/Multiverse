@@ -38,6 +38,11 @@ class MujocoCompilerTestCase(MultiverseSimulatorCompilerTestCase):
                         "quat": [0.5, 0.5, 0.5, 0.5],
                     }
                 },
+                "joint": {
+                    "joint1": {
+                        "damping": 100
+                    }
+                },
                 "geom": {
                     "68": {
                         "friction": [10, 0.005, 0.0001],
