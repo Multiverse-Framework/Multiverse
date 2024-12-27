@@ -535,9 +535,17 @@ namespace mujoco::plugin::multiverse_connector
 
     std::set<std::string> objects_to_spawn;
     std::set<std::string> objects_to_destroy;
-    for (const std::pair<const std::string, std::set<std::string>> &send_object : config_.send_objects)
+    for (const std::pair<const std::string, std::set<std::string>> send_object : config_.send_objects)
     {
       const std::string object_name = send_object.first;
+      for (const std::string &attribute_name : send_object.second)
+      {
+        if (config_.receive_objects.count(object_name) > 0 &&
+            config_.receive_objects[object_name].count(attribute_name) > 0)
+        {
+          config_.send_objects.erase(object_name);
+        }
+      }
       if (strcmp(object_name.c_str(), "body") == 0 || strcmp(object_name.c_str(), "joint") == 0) // Skip if object name is "body" or "joint"
       {
         continue;
