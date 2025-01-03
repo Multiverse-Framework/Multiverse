@@ -154,6 +154,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 ids_dict[mj_attr_name][1] += [j for j in range(i, i + attr_size[mj_attr_name])]
                 i += attr_size[mj_attr_name]
 
+
     def step_callback(self):
         if self.use_mjx:
             self._batch = self._jit_step(self._mjx_model, self._batch)
@@ -200,15 +201,15 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 if attr not in {"xpos", "xquat"}:
                     getattr(self._mj_data, attr)[indices[0]] = write_data[0][indices[1]]
                 else:
-                    body_id = indices[0][0]
-                    jntid = self._mj_model.body(body_id).jntadr[0]
-                    jnt = self._mj_model.jnt(jntid)
-                    assert jnt.type == mujoco.mjtJoint.mjJNT_FREE
-                    qpos_adr = jnt.qposadr[0]
-                    if attr == "xpos":
-                        self._mj_data.qpos[qpos_adr:qpos_adr + 3] = write_data[0][indices[1]]
-                    elif attr == "xquat":
-                        self._mj_data.qpos[qpos_adr + 3:qpos_adr + 7] = write_data[0][indices[1]]
+                    for i, body_id in enumerate(indices[0]):
+                        jntid = self._mj_model.body(body_id).jntadr[0]
+                        jnt = self._mj_model.jnt(jntid)
+                        assert jnt.type == mujoco.mjtJoint.mjJNT_FREE
+                        qpos_adr = jnt.qposadr[0]
+                        if attr == "xpos":
+                            self._mj_data.qpos[qpos_adr:qpos_adr + 3] = write_data[0][indices[1][3*i:3*i+3]]
+                        elif attr == "xquat":
+                            self._mj_data.qpos[qpos_adr + 3:qpos_adr + 7] = write_data[0][indices[1][4*i:4*i+4]]
 
     def read_data_from_simulator(self, read_data: numpy.ndarray):
         if not self.use_mjx and read_data.shape[0] > 1:
@@ -220,7 +221,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         else:
             for attr, indices in self._read_ids.items():
                 attr_values = getattr(self._mj_data, attr)
-                read_data[0][indices[1]] = attr_values[indices[0]]
+                read_data[0][indices[1]] = attr_values[indices[0]].reshape(-1)
 
     @property
     def file_path(self) -> str:

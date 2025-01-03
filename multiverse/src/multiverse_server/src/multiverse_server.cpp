@@ -211,6 +211,48 @@ static double get_time_now()
     return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() / 1000000.0;
 }
 
+static Json::Value sort_json_array(const Json::Value &original)
+{
+    std::vector<std::string> vec;
+    for (const auto& item : original) {
+        vec.push_back(item.asString());
+    }
+
+    std::sort(vec.begin(), vec.end());
+
+    Json::Value sorted;
+    for (const auto& item : vec) {
+        sorted.append(item);
+    }
+
+    return sorted;
+}
+
+static Json::Value sort_json_by_key(const Json::Value &original)
+{
+    std::vector<std::string> keys;
+    for (const std::string &key : original.getMemberNames())
+    {
+        keys.push_back(key);
+    }
+    std::sort(keys.begin(), keys.end()); // Sort keys alphabetically
+
+    Json::Value sorted(Json::objectValue);
+    for (const std::string &key : keys)
+    {
+        sorted[key] = original[key].isObject() ? sort_json_by_key(original[key]) : original[key].isArray() ? sort_json_array(original[key]) : original[key];
+    }
+    return sorted;
+}
+
+static Json::Value sort_meta_data_json(const Json::Value &original)
+{
+    Json::Value sorted(original);
+    sorted["send"] = sort_json_by_key(sorted["send"]);
+    sorted["receive"] = sort_json_by_key(sorted["receive"]);
+    return sorted;
+}
+
 MultiverseServer::MultiverseServer(const std::string &in_socket_addr)
 {
     socket = zmq::socket_t(server_context, zmq::socket_type::rep);
@@ -395,7 +437,7 @@ void MultiverseServer::start()
         {
             receive_data();
         }
-        if (flag != EMultiverseServerState::ReceiveSendData && 
+        if (flag != EMultiverseServerState::ReceiveSendData &&
             flag != EMultiverseServerState::ReceiveRequestMetaData)
         {
             try
@@ -450,6 +492,7 @@ EMultiverseServerState MultiverseServer::receive_data()
             {
                 if (reader.parse(request_array[1].to_string(), request_meta_data_json) && !request_meta_data_json.empty())
                 {
+                    request_meta_data_json = sort_meta_data_json(request_meta_data_json);
                     send_buffer.buffer_double.data_vec.clear();
                     send_buffer.buffer_uint8_t.data_vec.clear();
                     send_buffer.buffer_uint16_t.data_vec.clear();

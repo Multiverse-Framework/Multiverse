@@ -186,8 +186,12 @@ class MultiverseViewer:
             objects = target_objects
         for attrs in objects.values():
             for attr in attrs.values():
-                attr.initialize_data(number_of_envs)
-        return objects, numpy.array([MultiverseViewer._initialize_data(objects) for _ in range(number_of_envs)])
+                if attr._values is None:
+                    attr.initialize_data(number_of_envs)
+        data = numpy.array([[value for attrs in objects.values()
+                             for attr in attrs.values()
+                             for value in attr.values[env_id]] for env_id in range(number_of_envs)])
+        return objects, data
 
     @staticmethod
     def _update_objects_from_data(objects: Dict[str, Dict[str, MultiverseAttribute]], data: numpy.ndarray):
@@ -376,8 +380,8 @@ class MultiverseSimulator:
                     self._state = MultiverseSimulatorState.STOPPED
                     break
                 if self.state == MultiverseSimulatorState.RUNNING:
-                    if self.current_simulation_time == 0.0:
-                        self.reset()
+                    if self.current_simulation_time == 0.0 or not numpy.isclose(self.current_number_of_steps * self.step_size, self.current_simulation_time):
+                        self.reset() 
                     if self.real_time_factor > 0:
                         real_time_pass = self.current_real_time - self.start_real_time
                         simulation_time_pass = self.current_simulation_time * self.real_time_factor

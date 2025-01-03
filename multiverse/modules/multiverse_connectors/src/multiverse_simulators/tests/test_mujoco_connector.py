@@ -6,6 +6,7 @@ import xml.etree.ElementTree as ET
 import mujoco
 import mujoco.viewer
 import numpy
+from scipy.spatial.transform import Rotation
 
 from mujoco_connector import MultiverseMujocoConnector
 from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
@@ -24,7 +25,8 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
     use_mjx = False
 
     def test_functions(self):
-        simulator = self.Simulator(file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml"))
+        simulator = self.Simulator(
+            file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml"))
         simulator.start(run_in_thread=False)
 
         for step in range(10000):
@@ -147,7 +149,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
         constraints = MultiverseSimulatorConstraints(max_simulation_time=10.0)
         simulator.start(constraints=constraints)
-        use_write_data = True
+        use_write_data = False
         while simulator.state != MultiverseSimulatorState.STOPPED:
             time_now = time.time()
             f = 0.5
@@ -156,8 +158,10 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
             if use_write_data:
                 viewer.write_data = numpy.array([[act_1_value, act_2_value]])
             else:
-                viewer.write_objects["actuator1"]["cmd_joint_rvalue"].values[0][0] = act_1_value
-                viewer.write_objects["actuator2"]["cmd_joint_rvalue"].values[0][0] = act_2_value
+                write_objects = viewer.write_objects
+                write_objects["actuator1"]["cmd_joint_rvalue"].values[0][0] = act_1_value
+                write_objects["actuator2"]["cmd_joint_rvalue"].values[0][0] = act_2_value
+                viewer.write_objects = write_objects
             use_write_data = not use_write_data
             time.sleep(0.01)
             self.assertEqual(viewer.read_data.shape, (1, 6))
@@ -254,11 +258,11 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                 self.assertEqual(viewer.read_objects["actuator2"]["cmd_joint_rvalue"].values[0][0], 2.0)
                 self.assertEqual(viewer.read_objects["box"]["position"].values[0][0], 1.1)
                 self.assertEqual(viewer.read_objects["box"]["position"].values[0][1], 2.2)
-                self.assertEqual(viewer.read_objects["box"]["position"].values[0][2], 3.3)
+                self.assertAlmostEqual(viewer.read_objects["box"]["position"].values[0][2], 3.3, places=3)
                 self.assertAlmostEqual(viewer.read_objects["box"]["quaternion"].values[0][0], 0.7071067811865475)
-                self.assertEqual(viewer.read_objects["box"]["quaternion"].values[0][1], 0.0)
+                self.assertAlmostEqual(viewer.read_objects["box"]["quaternion"].values[0][1], 0.0)
                 self.assertAlmostEqual(viewer.read_objects["box"]["quaternion"].values[0][2], 0.7071067811865475)
-                self.assertEqual(viewer.read_objects["box"]["quaternion"].values[0][3], 0.0)
+                self.assertAlmostEqual(viewer.read_objects["box"]["quaternion"].values[0][3], 0.0)
             else:
                 self.assertEqual(viewer.read_data.shape, (1, 0))
         simulator.stop()

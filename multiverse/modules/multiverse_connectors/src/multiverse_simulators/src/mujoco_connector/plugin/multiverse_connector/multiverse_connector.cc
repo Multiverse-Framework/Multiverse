@@ -535,7 +535,7 @@ namespace mujoco::plugin::multiverse_connector
 
     std::set<std::string> objects_to_spawn;
     std::set<std::string> objects_to_destroy;
-    for (const std::pair<const std::string, std::set<std::string>> send_object : config_.send_objects)
+    for (const std::pair<const std::string, std::set<std::string>> &send_object : config_.send_objects)
     {
       const std::string object_name = send_object.first;
       for (const std::string &attribute_name : send_object.second)
@@ -963,7 +963,7 @@ namespace mujoco::plugin::multiverse_connector
 
   void MultiverseConnector::reset()
   {
-
+    d_->time = 0.0;
   }
 
   void MultiverseConnector::init_send_and_receive_data()
