@@ -79,17 +79,20 @@ if __name__ == "__main__":
 
     last_receive_data = multiverse_logger.receive_data
     N = args.interpolation_factor
-    while current_time < starting_time + args.time:
-        multiverse_logger.send_data = [current_time]
-        multiverse_logger.send_and_receive_data()
-        new_receive_data = numpy.array([current_time] + multiverse_logger.receive_data[1:])
-        if current_time >= starting_time + 0.1:
-            for i in range(1, N+1):
-                t = i / N
-                receive_data += (t * new_receive_data + (1 - t) * last_receive_data).tolist()
-        last_receive_data = new_receive_data
-        current_time = multiverse_logger.sim_time
-        time.sleep(args.time_step)
+    try:
+        while args.time < 0.0 or current_time < starting_time + args.time:
+            multiverse_logger.send_data = [current_time]
+            multiverse_logger.send_and_receive_data()
+            new_receive_data = numpy.array([current_time] + multiverse_logger.receive_data[1:])
+            if current_time >= starting_time + 0.1:
+                for i in range(1, N+1):
+                    t = i / N
+                    receive_data += (t * new_receive_data + (1 - t) * last_receive_data).tolist()
+            last_receive_data = new_receive_data
+            current_time = multiverse_logger.sim_time
+            time.sleep(args.time_step)
+    except KeyboardInterrupt:
+        pass
 
     multiverse_logger.stop()
 
