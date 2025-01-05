@@ -26,6 +26,7 @@ class MultiverseLogger(MultiverseClient):
 
 import argparse
 import time
+import numpy
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=f"Logging data from multiverse.")
@@ -81,13 +82,11 @@ if __name__ == "__main__":
     while current_time < starting_time + args.time:
         multiverse_logger.send_data = [current_time]
         multiverse_logger.send_and_receive_data()
-        new_receive_data = [current_time] + multiverse_logger.receive_data[1:]
+        new_receive_data = numpy.array([current_time] + multiverse_logger.receive_data[1:])
         if current_time >= starting_time + 0.1:
             for i in range(1, N+1):
-                new_receive_data_each = []
-                for j in range(len(new_receive_data)):
-                    new_receive_data_each.append(new_receive_data[j] * i / N + ((N - i) / N) * last_receive_data[j])
-                receive_data += new_receive_data_each
+                t = i / N
+                receive_data += (t * new_receive_data + (1 - t) * last_receive_data).tolist()
         last_receive_data = new_receive_data
         current_time = multiverse_logger.sim_time
         time.sleep(args.time_step)

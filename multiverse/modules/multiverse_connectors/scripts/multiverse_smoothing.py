@@ -26,6 +26,7 @@ class MultiverseSmoother(MultiverseClient):
 
 import argparse
 import time
+import numpy
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=f"Logging data from multiverse.")
@@ -51,8 +52,7 @@ if __name__ == "__main__":
         time_unit="s",
         handedness="rhs",
     )
-    multiverse_logger = MultiverseSmoother(port=args.port,
-                                         multiverse_meta_data=multiverse_meta_data)
+    multiverse_logger = MultiverseSmoother(port=args.port, multiverse_meta_data=multiverse_meta_data)
     multiverse_logger.run()
 
     object_names = args.object_names.split(",")
@@ -71,41 +71,42 @@ if __name__ == "__main__":
         for attribute_name, attribute_values in object_data.items():
             send_data += attribute_values
 
-    multiverse_logger.send_data = [0.0] + send_data
+    send_data = numpy.array(send_data)
+    multiverse_logger.send_data = [0.0] + send_data.tolist()
     multiverse_logger.send_and_receive_data()
 
-    T = 0.01
-    D = 2
+    T = 0.02
+    D = 1
     T1 = T * T
     T2 = 2 * D * T
 
-    y_1 = send_data
-    y_2 = send_data
+    y_1 = numpy.array(send_data)
+    y_2 = numpy.array(send_data)
 
     starting_time = multiverse_logger.sim_time
     current_time = starting_time
     t_2 = current_time
 
-    multiverse_logger.send_data = [current_time] + send_data
+    multiverse_logger.send_data = [current_time] + send_data.tolist()
     multiverse_logger.send_and_receive_data()
     current_time = multiverse_logger.sim_time
     t_1 = current_time
 
+    current_step = current_time
     try:
         while multiverse_logger.receive_data[0] >= 0.0:
             current_time = multiverse_logger.sim_time
             delta_T_1 = current_time - t_1
             delta_T_2 = t_1 - t_2
-            u = multiverse_logger.receive_data[1:]
+            u = numpy.array(multiverse_logger.receive_data[1:])
 
-            for i in range(len(send_data)):
-                # send_data[i] = u[i]
-                # send_data[i] = (-delta_T_1 / T + 1) * y_1[i] + (delta_T_1 / T) * u[i]
-                send_data[i] = (delta_T_1 * delta_T_2 / T1) * (u[i]
-                                                            + (-T2 / delta_T_1 + T1 / delta_T_1 ** 2 + T1 / (delta_T_1 * delta_T_2)) * y_1[i]
-                                                            + (-1 + T2 / delta_T_1 - T1 / delta_T_1 ** 2) * y_2[i])
-            
-            multiverse_logger.send_data = [current_time] + send_data
+            if current_time - current_step >= 0.001:
+                send_data = (delta_T_1 * delta_T_2 / T1) * (u
+                                                            + (-T2 / delta_T_1 + T1 / delta_T_1 ** 2 + T1 / (delta_T_1 * delta_T_2)) * y_1
+                                                            + (-1 + T2 / delta_T_1 - T1 / delta_T_1 ** 2) * y_2)
+                current_step = current_time
+
+            multiverse_logger.send_data = [current_time] + send_data.tolist()
             multiverse_logger.send_and_receive_data()
 
             t_2 = t_1
