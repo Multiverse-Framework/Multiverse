@@ -334,4 +334,16 @@ private:
      * 
      */
     bool should_shut_down = false;
+
+    /**
+     * @brief Reset cool down in seconds
+     * 
+     */
+    double reset_cool_down = 1.0;
+    
+    /**
+     * @brief Reset time
+     * 
+     */
+    double reset_time = 0.0;
 };

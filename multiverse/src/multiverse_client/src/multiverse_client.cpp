@@ -432,8 +432,13 @@ void MultiverseClient::receive_data()
 
     if (!should_shut_down && *world_time == 0.0)
     {
-        printf("[Client %s] The socket %s from the server has received reset command.\n", client_port.c_str(), socket_addr.c_str());
-        reset();
+        const double time_now = get_time_now();
+        if (time_now - reset_time > reset_cool_down)
+        {
+            printf("[Client %s] The socket %s from the server has received reset command.\n", client_port.c_str(), socket_addr.c_str());
+            reset_time = time_now;
+            reset();
+        }
     }
 
     flag = EMultiverseClientState::BindReceiveData;
