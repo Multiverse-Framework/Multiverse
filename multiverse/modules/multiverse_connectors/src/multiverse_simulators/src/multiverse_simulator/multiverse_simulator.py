@@ -92,19 +92,81 @@ class MultiverseAttribute:
         return self._values
 
 
+class MultiverseLogger:
+    """Base class for Multiverse Logger"""
+
+    def __init__(self, objects: Dict[str, Dict[str, MultiverseAttribute]]):
+        self._data_size = 0
+        for object_data in objects.values():
+            for attribute_values in object_data.values():
+                self._data_size += len(attribute_values.default_value)
+        self._objects = objects
+        self._data = numpy.array([])
+        self._start_time = time.time()
+
+    def log_data(self, new_data: numpy.ndarray):
+        if new_data.size != self._data_size:
+            raise ValueError("New data size does not match existing data size.")
+        self._data = numpy.append(self._data, new_data)
+
+    def save_data(self, save_file_path: str):
+        data = {}
+        number_of_data = int(len(self._data) / self._data_size)
+        data['step'] = numpy.arange(0, number_of_data)
+        data_adr = 0
+        for object_name, object_data in self.objects.items():
+            for attribute_name, attribute_values in object_data.items():
+                if len(attribute_values.default_value) == 1:
+                    data_name = f"{object_name}_{attribute_name}"
+                    data[data_name] = self.data[data_adr::self._data_size]
+                    data_adr += 1
+                else:
+                    for i in range(len(attribute_values.default_value)):
+                        data_name = f"{object_name}_{attribute_name}_{i}"
+                        data[data_name] = self.data[data_adr::self._data_size]
+                        data_adr += 1
+
+        import pandas as pd
+
+        # Create a DataFrame
+        df = pd.DataFrame(data)
+
+        # Writing to CSV, index=False to avoid writing row numbers
+        df.to_csv(save_file_path, index=False)
+
+    @property
+    def objects(self):
+        return self._objects
+
+    @property
+    def data(self):
+        return self._data
+
+    @property
+    def start_time(self):
+        return self._start_time
+
+
 class MultiverseViewer:
     """Base class for Multiverse Viewer"""
+
+    logger: Optional[MultiverseLogger] = None
 
     def __init__(
             self,
             write_objects: Optional[Dict[str, Dict[str, numpy.ndarray | List[float]]]] = None,
             read_objects: Optional[Dict[str, Dict[str, numpy.ndarray | List[float]]]] = None,
+            logging_interval: float = -1
     ):
         self._write_objects = self.from_array(write_objects) if write_objects is not None else {}
         self._write_data = numpy.array([])
 
         self._read_objects = self.from_array(read_objects) if read_objects is not None else {}
         self._read_data = numpy.array([])
+
+        self._logging_interval = logging_interval
+        if self.logging_interval > 0:
+            self.logger = MultiverseLogger(self.read_objects)
 
     @staticmethod
     def from_array(data: Dict[str, Dict[str, numpy.ndarray | List[float]]]) \
@@ -151,10 +213,10 @@ class MultiverseViewer:
 
     @write_objects.setter
     def write_objects(self, send_objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]]):
-        number_of_envs = self._write_data.shape[0]
-        self._write_objects, self._write_data = (
+        number_of_envs = self.write_data.shape[0]
+        self._write_objects, self.write_data = (
             self._get_objects_and_data_from_target_objects(send_objects, number_of_envs))
-        assert self._write_data.shape[0] == self._read_data.shape[0]
+        assert self.write_data.shape[0] == self.read_data.shape[0]
 
     @property
     def read_objects(self) -> Dict[str, Dict[str, MultiverseAttribute]]:
@@ -163,10 +225,12 @@ class MultiverseViewer:
 
     @read_objects.setter
     def read_objects(self, objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]]):
-        number_of_envs = self._read_data.shape[0]
-        self._read_objects, self._read_data = (
+        number_of_envs = self.read_data.shape[0]
+        self._read_objects, self.read_data = (
             self._get_objects_and_data_from_target_objects(objects, number_of_envs))
-        assert self._read_data.shape[0] == self._write_data.shape[0]
+        assert self.read_data.shape[0] == self.write_data.shape[0]
+        if self.logging_interval > 0:
+            self.logger = MultiverseLogger(self.read_objects)
 
     @staticmethod
     def _get_objects_and_data_from_target_objects(
@@ -228,6 +292,10 @@ class MultiverseViewer:
             raise ValueError(
                 "Data length mismatch with read_objects, expected {self._read_data.shape}, got {data.shape}")
         self._read_data[:] = data
+
+    @property
+    def logging_interval(self) -> float:
+        return self._logging_interval
 
 
 @dataclass
@@ -406,9 +474,12 @@ class MultiverseSimulator:
         self.pre_step_callback()
         if self._viewer is not None:
             self.write_data_to_simulator(write_data=self._viewer.write_data)
-        self.step_callback()
-        if self._viewer is not None:
+            self.step_callback()
             self.read_data_from_simulator(read_data=self._viewer.read_data)
+            if self._viewer.logging_interval > 0.0:
+                self._viewer.logger.log_data(new_data=self._viewer.read_data)
+        else:
+            self.step_callback()
         self._current_number_of_steps += 1
 
     def write_data_to_simulator(self, write_data: numpy.ndarray):

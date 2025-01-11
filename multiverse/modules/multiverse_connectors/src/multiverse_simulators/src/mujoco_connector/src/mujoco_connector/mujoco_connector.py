@@ -78,6 +78,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_MULTICCD
         if kwargs.get('nativeccd', False):
             self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_NATIVECCD
+        if kwargs.get('energy', True):
+            self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_ENERGY
         self._mj_data = mujoco.MjData(self._mj_model)
 
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
@@ -120,7 +122,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             "cmd_joint_torque": "ctrl",
             "cmd_joint_tvalue": "ctrl",
             "cmd_joint_linear_velocity": "ctrl",
-            "cmd_joint_force": "ctrl"
+            "cmd_joint_force": "ctrl",
+            "energy": "energy",
         }
         attr_size = {
             "xpos": 3,
@@ -128,7 +131,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             "qpos": 1,
             "qvel": 1,
             "qfrc_applied": 1,
-            "ctrl": 1
+            "ctrl": 1,
+            "energy": 2,
         }
         i = 0
         ids_dict.clear()
@@ -138,8 +142,10 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 if mj_attr_name not in ids_dict:
                     ids_dict[mj_attr_name] = [[], []]
 
-                if attr_name in {"position", "quaternion"}:
+                if attr_name in {"position", "quaternion", "energy"}:
                     mj_attr_id = self._mj_model.body(name).id
+                    if attr_name == "energy" and name != "world":
+                        raise NotImplementedError("Not supported")
                 elif attr_name in {"joint_rvalue", "joint_tvalue"}:
                     mj_attr_id = self._mj_model.joint(name).qposadr[0]
                 elif attr_name in {"joint_angular_velocity", "joint_linear_velocity", "joint_torque", "joint_force"}:

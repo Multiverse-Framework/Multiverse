@@ -143,9 +143,12 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
             },
             "actuator2": {
                 "cmd_joint_rvalue": [0.0]
+            },
+            "world": {
+                "energy": [0.0, 0.0]
             }
         }
-        viewer = MultiverseViewer(write_objects=write_objects, read_objects=read_objects)
+        viewer = MultiverseViewer(write_objects=write_objects, read_objects=read_objects, logging_interval=0.01)
         simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
         constraints = MultiverseSimulatorConstraints(max_simulation_time=10.0)
         simulator.start(constraints=constraints)
@@ -164,13 +167,19 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                 viewer.write_objects = write_objects
             use_write_data = not use_write_data
             time.sleep(0.01)
-            self.assertEqual(viewer.read_data.shape, (1, 6))
+            self.assertEqual(viewer.read_data.shape, (1, 8))
             if simulator.current_simulation_time > 1.0:
                 self.assertAlmostEqual(viewer.read_objects["joint1"]["joint_rvalue"].values[0][0], act_1_value,
                                        places=0)
                 self.assertAlmostEqual(viewer.read_objects["joint2"]["joint_rvalue"].values[0][0], act_2_value,
                                        places=0)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+        save_file_path = os.path.join(resources_path, "../output/data.csv")
+        if os.path.exists(save_file_path):
+            os.remove(save_file_path)
+            self.assertFalse(os.path.exists(save_file_path))
+        viewer.logger.save_data(save_file_path)
+        self.assertTrue(os.path.exists(save_file_path))
 
     def test_read_and_write_data_in_the_loop(self):
         viewer = MultiverseViewer()

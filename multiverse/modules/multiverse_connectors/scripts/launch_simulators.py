@@ -130,6 +130,15 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         for config_name, config_data in simulation_data.get("config", {}).items():
             cmd.append(f"--{config_name}={config_data}")
 
+        if "viewer" in simulation_data:
+            viewer = simulation_data["viewer"]
+            read_objects = viewer.get("read", {})
+            logging_interval = viewer.get("logging_interval", -1.0)
+            save_log_path = viewer.get("save_log_path", "data.csv")
+            cmd.append(f"--read_objects={read_objects}".replace(" ", ""))
+            cmd.append(f"--logging_interval={logging_interval}")
+            cmd.append(f"--save_log_path={save_log_path}")
+
         return run_subprocess(cmd)
 
 

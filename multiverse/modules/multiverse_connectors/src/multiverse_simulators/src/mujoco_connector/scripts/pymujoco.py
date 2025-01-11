@@ -3,13 +3,12 @@
 import time
 from typing import List, Dict, Any
 
-from multiverse_simulator import MultiverseSimulatorConstraints, str_to_dict
+from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseViewer, str_to_dict
 from mujoco_connector import MultiverseMujocoConnector
 
 import argparse
 import re
 import sys
-import json
 
 
 def parse_unknown_args(unknown: List[str]) -> Dict[str, Any]:
@@ -61,7 +60,10 @@ def main():
                             help="Maximum number of steps")
         parser.add_argument("--max_simulation_time", type=float, required=False, default=None,
                             help="Maximum simulation time")
-        parser.add_argument("--multiverse_params", type=str, required=False, help="JSON string with multiverse' data")
+        parser.add_argument("--multiverse_params", type=str, required=False, default=None, help="JSON string with multiverse' data")
+        parser.add_argument("--read_objects", type=str, required=False, default=None, help="JSON string with read objects")
+        parser.add_argument("--logging_interval", type=float, required=False, default=-1.0, help="Logging interval in seconds")
+        parser.add_argument("--save_log_path", type=str, required=False, default="data.csv", help="Path to save log file")
 
         args, unknown = parser.parse_known_args()
 
@@ -70,7 +72,11 @@ def main():
 
         multiverse_params = str_to_dict(args.multiverse_params)
 
+        read_objects = str_to_dict(args.read_objects)
+
+        viewer = MultiverseViewer(read_objects=read_objects) if read_objects is not None else None
         simulator = MultiverseMujocoConnector(file_path=args.file_path,
+                                              viewer=viewer,
                                               use_mjx=args.use_mjx,
                                               headless=args.headless,
                                               real_time_factor=args.real_time_factor,
@@ -83,8 +89,10 @@ def main():
             simulator.start(constraints=constraints, run_in_thread=False)
         else:
             simulator.start(run_in_thread=False)
-        simulator.run()  # TODO: Implement viewer using multiverse_params
+        simulator.run()
         simulator.stop()
+        if viewer is not None and args.logging_interval > 0.0:
+            simulator._viewer.logger.save_data(args.save_log_path)
         time.sleep(1)  # Extra time to clean up
     except KeyboardInterrupt:
         time.sleep(1)  # Extra time to clean up
