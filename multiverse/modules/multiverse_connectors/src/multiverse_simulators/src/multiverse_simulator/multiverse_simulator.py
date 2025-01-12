@@ -96,7 +96,7 @@ class MultiverseLogger:
     """Base class for Multiverse Logger"""
 
     def __init__(self, objects: Dict[str, Dict[str, MultiverseAttribute]]):
-        self._data_size = 0
+        self._data_size = 1
         for object_data in objects.values():
             for attribute_values in object_data.values():
                 self._data_size += len(attribute_values.default_value)
@@ -105,15 +105,17 @@ class MultiverseLogger:
         self._start_time = time.time()
 
     def log_data(self, new_data: numpy.ndarray):
-        if new_data.size != self._data_size:
+        if new_data.size != self._data_size - 1:
             raise ValueError("New data size does not match existing data size.")
+        new_data = numpy.append([time.time()], new_data)
         self._data = numpy.append(self._data, new_data)
 
     def save_data(self, save_file_path: str):
         data = {}
         number_of_data = int(len(self._data) / self._data_size)
         data['step'] = numpy.arange(0, number_of_data)
-        data_adr = 0
+        data['time'] = self._data[0::self._data_size]
+        data_adr = 1
         for object_name, object_data in self.objects.items():
             for attribute_name, attribute_values in object_data.items():
                 if len(attribute_values.default_value) == 1:
@@ -132,6 +134,7 @@ class MultiverseLogger:
         df = pd.DataFrame(data)
 
         # Writing to CSV, index=False to avoid writing row numbers
+        print(f"Saving data to {save_file_path}")
         df.to_csv(save_file_path, index=False)
 
     @property

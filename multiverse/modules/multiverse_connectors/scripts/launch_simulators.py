@@ -129,6 +129,9 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
             cmd += [f"--robots_path={robots_path}"]
         for config_name, config_data in simulation_data.get("config", {}).items():
             cmd.append(f"--{config_name}={config_data}")
+        world_name = simulation_data.get("world", {}).get("name", "world")
+        for config_name, config_data in self.worlds.get(world_name, {}).items():
+            cmd.append(f"--{config_name}={config_data}")
 
         if "viewer" in simulation_data:
             viewer = simulation_data["viewer"]
