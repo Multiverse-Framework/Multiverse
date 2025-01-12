@@ -187,10 +187,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         if self.use_mjx:
             batch_data = {}
             for attr, indices in self._write_ids.items():
-                if attr not in {"xpos", "xquat"}:
-                    batch_data[attr] = numpy.array(getattr(self._batch, attr))
-                    batch_data[attr][:, indices[0]] = write_data[:, indices[1]]
-                else:
+                if attr in {"xpos", "xquat"}:
                     body_id = indices[0][0]
                     jntid = self._mj_model.body(body_id).jntadr[0]
                     jnt = self._mj_model.jnt(jntid)
@@ -201,12 +198,15 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                         batch_data["qpos"][:, qpos_adr:qpos_adr + 3] = write_data[:, indices[1]]
                     elif attr == "xquat":
                         batch_data["qpos"][:, qpos_adr + 3:qpos_adr + 7] = write_data[:, indices[1]]
+                elif attr == "energy":
+                    raise NotImplementedError("Not supported")
+                else:
+                    batch_data[attr] = numpy.array(getattr(self._batch, attr))
+                    batch_data[attr][:, indices[0]] = write_data[:, indices[1]]
             self._batch = self._batch.replace(**batch_data)
         else:
             for attr, indices in self._write_ids.items():
-                if attr not in {"xpos", "xquat"}:
-                    getattr(self._mj_data, attr)[indices[0]] = write_data[0][indices[1]]
-                else:
+                if attr in {"xpos", "xquat"}:
                     for i, body_id in enumerate(indices[0]):
                         jntid = self._mj_model.body(body_id).jntadr[0]
                         jnt = self._mj_model.jnt(jntid)
@@ -216,14 +216,21 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                             self._mj_data.qpos[qpos_adr:qpos_adr + 3] = write_data[0][indices[1][3*i:3*i+3]]
                         elif attr == "xquat":
                             self._mj_data.qpos[qpos_adr + 3:qpos_adr + 7] = write_data[0][indices[1][4*i:4*i+4]]
+                elif attr == "energy":
+                    raise NotImplementedError("Not supported")
+                else:
+                    getattr(self._mj_data, attr)[indices[0]] = write_data[0][indices[1]]
 
     def read_data_from_simulator(self, read_data: numpy.ndarray):
         if not self.use_mjx and read_data.shape[0] > 1:
             raise NotImplementedError("Multiple environments for non MJX is not supported yet")
         if self.use_mjx:
             for attr, indices in self._read_ids.items():
-                attr_values = getattr(self._batch, attr)
-                read_data[:, indices[1]] = attr_values[:, indices[0]].reshape(attr_values.shape[0], -1)
+                if attr == "energy":
+                    read_data[:, indices[1]] = self._mj_data.energy
+                else:
+                    attr_values = getattr(self._batch, attr)
+                    read_data[:, indices[1]] = attr_values[:, indices[0]].reshape(attr_values.shape[0], -1)
         else:
             for attr, indices in self._read_ids.items():
                 if attr == "energy":
