@@ -226,8 +226,11 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 read_data[:, indices[1]] = attr_values[:, indices[0]].reshape(attr_values.shape[0], -1)
         else:
             for attr, indices in self._read_ids.items():
-                attr_values = getattr(self._mj_data, attr)
-                read_data[0][indices[1]] = attr_values[indices[0]].reshape(-1)
+                if attr == "energy":
+                    read_data[0][indices[1]] = self._mj_data.energy
+                else:
+                    attr_values = getattr(self._mj_data, attr)[indices[0]]
+                    read_data[0][indices[1]] = attr_values[indices[0]].reshape(-1)
 
     @property
     def file_path(self) -> str:
