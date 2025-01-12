@@ -9,6 +9,7 @@ from mujoco_connector import MultiverseMujocoConnector
 import argparse
 import re
 import sys
+import os
 
 
 def parse_unknown_args(unknown: List[str]) -> Dict[str, Any]:
@@ -74,7 +75,7 @@ def main():
 
         read_objects = str_to_dict(args.read_objects)
 
-        viewer = MultiverseViewer(read_objects=read_objects) if read_objects is not None else None
+        viewer = MultiverseViewer(read_objects=read_objects, logging_interval=args.logging_interval) if read_objects is not None else None
         simulator = MultiverseMujocoConnector(file_path=args.file_path,
                                               viewer=viewer,
                                               use_mjx=args.use_mjx,
@@ -82,17 +83,22 @@ def main():
                                               real_time_factor=args.real_time_factor,
                                               step_size=args.step_size,
                                               **unknown_args_dict)
+        simulator.start(run_in_thread=False)
         if args.max_real_time is not None or args.max_number_of_steps is not None or args.max_simulation_time is not None:
             constraints = MultiverseSimulatorConstraints(max_real_time=args.max_real_time,
                                                          max_number_of_steps=args.max_number_of_steps,
                                                          max_simulation_time=args.max_simulation_time)
-            simulator.start(constraints=constraints, run_in_thread=False)
+            simulator.run(constraints=constraints)
         else:
-            simulator.start(run_in_thread=False)
-        simulator.run()
+            simulator.run()
         simulator.stop()
         if viewer is not None and args.logging_interval > 0.0:
-            simulator._viewer.logger.save_data(args.save_log_path)
+            save_log_path = args.save_log_path
+            if not os.path.isabs(save_log_path):
+                save_log_path = os.path.join(os.path.dirname(args.file_path), save_log_path)
+            if os.path.exists(save_log_path):
+                os.remove(save_log_path)
+            simulator._viewer.logger.save_data(save_log_path)
         time.sleep(1)  # Extra time to clean up
     except KeyboardInterrupt:
         time.sleep(1)  # Extra time to clean up

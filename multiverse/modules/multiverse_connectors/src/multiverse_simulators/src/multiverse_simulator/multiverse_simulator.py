@@ -459,10 +459,10 @@ class MultiverseSimulator:
                         delta_time = simulation_time_pass - real_time_pass
                         if delta_time <= self.step_size:
                             self.step()
-                        if delta_time > self.step_size * 10:
+                        if delta_time > self.step_size * self.real_time_factor * 10:
                             self.log_warning(
                                 f"Real time is {delta_time} seconds ({delta_time / self.step_size} step_size) behind simulation time")
-                        elif delta_time < -self.step_size * 10:
+                        elif delta_time < -self.step_size * self.real_time_factor * 10:
                             self.log_warning(
                                 f"Real time is {-delta_time} seconds ({-delta_time / self.step_size} step_size) ahead of simulation time")
                     else:
