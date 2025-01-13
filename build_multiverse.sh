@@ -27,14 +27,6 @@ if ! echo "$PATH" | grep -q "$BIN_DIR"; then
     RELOAD=true
 fi
 
-if ! echo "$PYTHONPATH" | grep -q "$USD_BUILD_DIR/lib/python"; then
-    PYTHONPATH=$PYTHONPATH:$USD_BUILD_DIR/lib/python
-    PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH"
-    echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
-    echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
-    RELOAD=true
-fi
-
 if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/dist-packages"; then
     PYTHONPATH=$PYTHONPATH:$LIB_DIR/dist-packages
     PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH"
@@ -123,6 +115,18 @@ elif [ $UBUNTU_VERSION = "24.04" ]; then
     PYTHON_EXECUTABLE=python3.12
 fi
 
+if [ $DBUILD_PARSER = ON ]; then
+    echo "Updating multiverse_parser..."
+    git submodule update --init $CURRENT_DIR/multiverse/modules/multiverse_parser
+
+    if ! echo "$PYTHONPATH" | grep -q "$USD_BUILD_DIR/lib/python"; then
+        PYTHONPATH=$PYTHONPATH:$USD_BUILD_DIR/lib/python
+        PYTHONPATH_TO_ADD="export PYTHONPATH=$PYTHONPATH"
+        echo "$PYTHONPATH_TO_ADD" >> ~/.bashrc
+        echo "Add $PYTHONPATH_TO_ADD to ~/.bashrc"
+        RELOAD=true
+    fi
+fi
 if [ $DBUILD_KNOWLEDGE = ON ]; then
     echo "Updating multiverse_knowledge..."
     git submodule update --init $CURRENT_DIR/multiverse/modules/multiverse_knowledge
