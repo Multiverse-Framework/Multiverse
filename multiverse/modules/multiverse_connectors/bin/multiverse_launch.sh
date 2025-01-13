@@ -104,8 +104,10 @@ for distro in noetic; do
         break
     fi
 done
-if [ "$ROS_DISTRO" ]; then
-    (source "$MULTIVERSE_PATH"/../multiverse_ws/devel/setup.bash && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
+
+MULTIVERSE_WS_PATH="$MULTIVERSE_PATH"/../multiverse_ws/devel/setup.bash
+if [ "$ROS_DISTRO" ] && [ -f "$MULTIVERSE_WS_PATH" ]; then
+    (source $MULTIVERSE_WS_PATH && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
 fi
 
 for distro in foxy humble jazzy; do
@@ -114,11 +116,13 @@ for distro in foxy humble jazzy; do
         break
     fi
 done
-if [ "$ROS2_DISTRO" ]; then
+
+MULTIVERSE_WS2_PATH="$MULTIVERSE_PATH"/../multiverse_ws2/install/local_setup.bash
+if [ "$ROS2_DISTRO" ] && [ -f "$MULTIVERSE_WS2_PATH" ]; then
     if [ $ROS2_DISTRO = "foxy" ]; then
         PYTHON_EXECUTABLE=python3.8 # ROS 2 Foxy only supports Python 3.8
     fi
-    (source /opt/ros/$ROS2_DISTRO/setup.bash && source "$MULTIVERSE_PATH"/../multiverse_ws2/install/local_setup.bash && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
+    (source /opt/ros/$ROS2_DISTRO/setup.bash && source "$MULTIVERSE_WS2_PATH" && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
 fi
 
 # Your script's main logic here
