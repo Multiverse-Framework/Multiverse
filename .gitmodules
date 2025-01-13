@@ -16,3 +16,6 @@
 [submodule "multiverse/multiverse_knowledge"]
 	path = multiverse/modules/multiverse_knowledge
 	url = https://github.com/Multiverse-Framework/Multiverse-Knowledge.git
+[submodule "multiverse/modules/multiverse_parser"]
+	path = multiverse/modules/multiverse_parser
+	url = https://github.com/Multiverse-Framework/Multiverse-Parser.git
