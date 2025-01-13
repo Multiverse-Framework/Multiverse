@@ -86,9 +86,8 @@ Destroy an object
             time_unit="s",
             handedness="rhs",
         )
-        client_addr = SocketAddress(port="5000")
-        my_connector = MyConnector(client_addr=client_addr,
-                                multiverse_meta_data=multiverse_meta_data)
+        my_connector = MyConnector(port="5000",
+                                   multiverse_meta_data=multiverse_meta_data)
         my_connector.run()
 
         # Spawn an object called milk_box in the simulation called empty_simulation
@@ -154,10 +153,8 @@ Call API
             time_unit="s",
             handedness="rhs",
         )
-        client_addr = SocketAddress(port="5000")
-        my_connector = MyConnector(
-            client_addr=client_addr, multiverse_meta_data=multiverse_meta_data
-        )
+        my_connector = MyConnector(port="5000",
+                                   multiverse_meta_data=multiverse_meta_data)
         my_connector.run()
 
         # Spawn an object called milk_box in the simulation called empty_simulation

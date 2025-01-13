@@ -32,8 +32,8 @@ Write the Multiverse Connector
 .. code-block:: python
 
     class MyConnector(MultiverseClient):
-        def __init__(self, client_addr: SocketAddress, multiverse_meta_data: MultiverseMetaData) -> None:
-            super().__init__(client_addr, multiverse_meta_data)
+        def __init__(self, port: str, multiverse_meta_data: MultiverseMetaData) -> None:
+            super().__init__(port, multiverse_meta_data)
 
         def loginfo(self, message: str) -> None:
             print(f"INFO: {message}")
@@ -68,8 +68,7 @@ Write the Multiverse Connector
             time_unit="s",
             handedness="rhs",
         )
-        client_addr = SocketAddress(port="5000")
-        my_connector = MyConnector(client_addr=client_addr,
+        my_connector = MyConnector(port="5000",
                                    multiverse_meta_data=multiverse_meta_data)
         my_connector.run()
         my_connector.stop()
@@ -141,8 +140,7 @@ Once the connection is established, you can send data to the server by populatin
         time_unit="s",
         handedness="rhs",
     )
-    client_addr = SocketAddress(port="5000")
-    my_connector = MyConnector(client_addr=client_addr,
+    my_connector = MyConnector(port="5000",
                                multiverse_meta_data=multiverse_meta_data)
     my_connector.run()
 
@@ -192,9 +190,8 @@ When you send data to the server, make sure to set the first value of the `send_
             time_unit="s",
             handedness="rhs",
         )
-        client_addr = SocketAddress(port="5000")
-        my_connector = MyConnector(client_addr=client_addr,
-                                multiverse_meta_data=multiverse_meta_data)
+        my_connector = MyConnector(port="5000",
+                                   multiverse_meta_data=multiverse_meta_data)
         my_connector.run()
 
         my_connector.request_meta_data["send"] = {}
@@ -259,9 +256,8 @@ Therefore we will continue from the step 12.
             time_unit="s",
             handedness="rhs",
         )
-        client_addr = SocketAddress(port="5000")
-        my_connector = MyConnector(client_addr=client_addr,
-                                multiverse_meta_data=multiverse_meta_data)
+        my_connector = MyConnector(port="5000",
+                                   multiverse_meta_data=multiverse_meta_data)
         my_connector.run()
 
         my_connector.request_meta_data["send"] = {}
