@@ -1,5 +1,11 @@
 #!/bin/bash
 
+CURRENT_DIR=$PWD
+
+cd $(dirname $0)
+
+MULTIVERSE_DIR=$PWD/multiverse
+
 INSTALL_ROS=true
 INSTALL_PARSER=true
 INSTALL_MUJOCO=true
@@ -50,10 +56,7 @@ done
 sudo apt-get update && sudo apt-get upgrade -y
 
 # Install presiqisite for ubuntu
-sudo apt-get install -y software-properties-common curl python-is-python3
-
-# Install python3-pip
-sudo apt-get install -y python3-pip
+sudo apt-get install -y software-properties-common curl python-is-python3 python3-pip
 
 UBUNTU_VERSION=$(lsb_release -rs)
 
@@ -141,25 +144,8 @@ sudo apt-get install -y libzmq3-dev
 # Install boost
 sudo apt-get install -y libboost-dev libboost-filesystem-dev
 
-# Install glfw3
-sudo apt-get install -y libglfw3
-sudo apt-get install -y libglfw3-dev
-
 # Install pybind11
 sudo apt-get install -y pybind11-dev
-
-# Install jupyter-notebook
-sudo apt-get install -y jupyter-notebook
-
-if [ $INSTALL_PARSER = true ]; then
-    # Install additional packages for USD
-    sudo apt-get install -y libxcb-cursor0
-fi
-
-if [ $INSTALL_MUJOCO = true ]; then
-    # Install additional packages for MuJoCo
-    sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
-fi
 
 if [ $UBUNTU_VERSION = "20.04" ]; then
     # Install and link clang-11 for creating shared library
@@ -193,12 +179,6 @@ elif [ $UBUNTU_VERSION = "24.04" ]; then
     python3 -m pip install virtualenvwrapper --break-system-packages
 fi
 
-if [ $INSTALL_PARSER = true ]; then
-    # Install additional packages for blender
-    sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev
-    sudo apt-get install -y libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
-fi
-
 PYTHON_EXECUTABLE=python3
 if [ $UBUNTU_VERSION = "20.04" ]; then
     PYTHON_EXECUTABLE=python3.10
@@ -218,22 +198,29 @@ for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrap
         $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
 
         if [ $INSTALL_PARSER = true ]; then
-            # Install additional packages for USD and multiverse_knowledge
-            $PYTHON_EXECUTABLE -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11 inflection
+            # Install additional packages for blender
+            sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
+            
+            # Install additional packages for USD
+            sudo apt-get install -y libxcb-cursor0
+            $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_parser/requirements.txt
+        fi
 
-            # Install additional packages for multiverse_parser
-            $PYTHON_EXECUTABLE -m pip install urdf_parser_py mujoco==3.2.6 
+        if [ $INSTALL_KNOWLEDGE = true ]; then
+            # Install additional packages for multiverse_knowledge
+            $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_parser/requirements.txt
         fi
 
         if [ $INSTALL_MUJOCO = true ]; then
-            # Install MuJoCo and JAX
-            $PYTHON_EXECUTABLE -m pip install mujoco==3.2.6 
-            $PYTHON_EXECUTABLE -m pip install mujoco-mjx==3.2.6 "jax[cuda12_pip]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+            # Install additional packages for MuJoCo
+            sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
+
+            # Install glfw3
+            sudo apt-get install -y libglfw3
+            sudo apt-get install -y libglfw3-dev
+            $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_connectors/src/multiverse_simulators/src/mujoco_connector/requirements.txt
         fi
 
-        # Install additional packages for Jupyter Notebook
-        $PYTHON_EXECUTABLE -m pip install panel jupyter-server bash_kernel
-        $PYTHON_EXECUTABLE -m bash_kernel.install
         break
     fi
 done
