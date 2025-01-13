@@ -36,5 +36,6 @@ else
         mkdir -p $MUJOCO_BUILD_DIR
         MUJOCO_TAR_FILE=mujoco-3.2.6-linux-x86_64.tar.gz
         curl -sL https://github.com/google-deepmind/mujoco/releases/download/3.2.6/$MUJOCO_TAR_FILE | tar zx -C $MUJOCO_BUILD_DIR --strip-components=1
+        cp -r mujoco_plugin $MUJOCO_BUILD_DIR/bin
     fi
 fi
