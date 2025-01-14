@@ -25,7 +25,7 @@ Write the Multiverse Connector
 
 .. code-block:: python
 
-    from multiverse_client_py import MultiverseClient, MultiverseMetaData, SocketAddress
+    from multiverse_client_py import MultiverseClient, MultiverseMetaData
 
 4. Add the following lines to the Python file to define the Multiverse Connector class:
 
@@ -62,6 +62,7 @@ Write the Multiverse Connector
     if __name__ == "__main__":
         multiverse_meta_data = MultiverseMetaData(
             world_name="my_world",
+            simulation_name="my_simulation",
             length_unit="m",
             angle_unit="rad",
             mass_unit="kg",
