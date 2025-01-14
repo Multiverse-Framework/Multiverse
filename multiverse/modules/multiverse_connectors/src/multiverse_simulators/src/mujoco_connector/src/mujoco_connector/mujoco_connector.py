@@ -59,7 +59,9 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         self.use_mjx = use_mjx
         super().__init__(viewer, number_of_envs, headless, real_time_factor, step_size, callbacks, **kwargs)
         for plugin in get_multiverse_connector_plugins():
-            mujoco.mj_loadPluginLibrary(plugin)
+            plugin_name = os.path.basename(plugin)
+            if "multiverse_connector" in plugin_name:
+                mujoco.mj_loadPluginLibrary(plugin)
         assert os.path.exists(self.file_path)
         self._mj_spec = mujoco.MjSpec.from_file(filename=self.file_path)
 
