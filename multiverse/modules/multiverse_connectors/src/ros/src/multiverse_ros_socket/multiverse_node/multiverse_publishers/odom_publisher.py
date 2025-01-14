@@ -44,9 +44,9 @@ class OdomPublisher(MultiversePublisher):
 
         def bind_request_meta_data() -> None:
             self.request_meta_data["receive"][self._body_name] = [
+                "odometric_velocity",
                 "position",
                 "quaternion",
-                "odometric_velocity",
             ]
         self.bind_request_meta_data_callback = bind_request_meta_data
 
@@ -86,28 +86,28 @@ class OdomPublisher(MultiversePublisher):
             if INTERFACE == Interface.ROS1:
                 self._msgs[0].header.seq += 1
             self._msgs[0].header.stamp = stamp
-            self._msgs[0].pose.pose.position.x = receive_data[1]
-            self._msgs[0].pose.pose.position.y = receive_data[2]
-            self._msgs[0].pose.pose.position.z = receive_data[3]
-            self._msgs[0].pose.pose.orientation.w = receive_data[4]
-            self._msgs[0].pose.pose.orientation.x = receive_data[5]
-            self._msgs[0].pose.pose.orientation.y = receive_data[6]
-            self._msgs[0].pose.pose.orientation.z = receive_data[7]
-            self._msgs[0].twist.twist.linear.x = receive_data[8]
-            self._msgs[0].twist.twist.linear.y = receive_data[9]
-            self._msgs[0].twist.twist.linear.z = receive_data[10]
-            self._msgs[0].twist.twist.angular.x = receive_data[11]
-            self._msgs[0].twist.twist.angular.y = receive_data[12]
-            self._msgs[0].twist.twist.angular.z = receive_data[13]
+            self._msgs[0].twist.twist.linear.x = receive_data[1]
+            self._msgs[0].twist.twist.linear.y = receive_data[2]
+            self._msgs[0].twist.twist.linear.z = receive_data[3]
+            self._msgs[0].twist.twist.angular.x = receive_data[4]
+            self._msgs[0].twist.twist.angular.y = receive_data[5]
+            self._msgs[0].twist.twist.angular.z = receive_data[6]
+            self._msgs[0].pose.pose.position.x = receive_data[7]
+            self._msgs[0].pose.pose.position.y = receive_data[8]
+            self._msgs[0].pose.pose.position.z = receive_data[9]
+            self._msgs[0].pose.pose.orientation.w = receive_data[10]
+            self._msgs[0].pose.pose.orientation.x = receive_data[11]
+            self._msgs[0].pose.pose.orientation.y = receive_data[12]
+            self._msgs[0].pose.pose.orientation.z = receive_data[13]
 
             if INTERFACE == Interface.ROS1:
                 self._msgs[1].transforms[0].header.seq += 1
             self._msgs[1].transforms[0].header.stamp = stamp
-            self._msgs[1].transforms[0].transform.translation.x = receive_data[1]
-            self._msgs[1].transforms[0].transform.translation.y = receive_data[2]
-            self._msgs[1].transforms[0].transform.translation.z = receive_data[3]
-            self._msgs[1].transforms[0].transform.rotation.w = receive_data[4]
-            self._msgs[1].transforms[0].transform.rotation.x = receive_data[5]
-            self._msgs[1].transforms[0].transform.rotation.y = receive_data[6]
-            self._msgs[1].transforms[0].transform.rotation.z = receive_data[7]
+            self._msgs[1].transforms[0].transform.translation.x = receive_data[7]
+            self._msgs[1].transforms[0].transform.translation.y = receive_data[8]
+            self._msgs[1].transforms[0].transform.translation.z = receive_data[9]
+            self._msgs[1].transforms[0].transform.rotation.w = receive_data[10]
+            self._msgs[1].transforms[0].transform.rotation.x = receive_data[11]
+            self._msgs[1].transforms[0].transform.rotation.y = receive_data[12]
+            self._msgs[1].transforms[0].transform.rotation.z = receive_data[13]
         self.bind_receive_data_callback = bind_receive_data
