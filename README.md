@@ -54,7 +54,7 @@ If you find this software helpful, please cite it as follows:
   title = {Multiverse: Simulate Everything, Everywhere, All At Once},
   month = {December},
   year = {2024},
-  url = {https://github.com/Multiverse-Framework/Multiverse}
+  url = {https://github.com/Multiverse-Framework/Multiverse},
   doi = {https://doi.org/10.5281/zenodo.14035537}
 }
 ```
