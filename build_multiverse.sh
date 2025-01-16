@@ -130,6 +130,7 @@ fi
 if [ $DBUILD_KNOWLEDGE = ON ]; then
     echo "Updating multiverse_knowledge..."
     git submodule update --init $CURRENT_DIR/multiverse/modules/multiverse_knowledge
+    (cd $CURRENT_DIR/multiverse/modules/multiverse_knowledge && git submodule update --init ease_lexical_resources)
 fi
 if [ $DBUILD_RESOURCES = ON ]; then
     echo "Updating multiverse_resources..."
