@@ -11,7 +11,11 @@ https://multiverseframework.readthedocs.io/en/latest
 
 ## Installation
 
-Start by cloning this repository and navigating to the Multiverse folder.
+```bash
+git clone https://github.com/Multiverse-Framework/Multiverse --depth 1
+```
+
+Install IsaacSim and IsaacLab according to this [documentation](https://isaac-sim.github.io/IsaacLab/main/source/setup/installation/binaries_installation.html#installation-using-isaac-sim-binaries). Make sure Isaac Sim is installed in the directory `${HOME}/.local/share/ov/pkg/isaac_sim-*`, with `*` corresponding to the Isaac Sim version.
 
 ### Linux
 

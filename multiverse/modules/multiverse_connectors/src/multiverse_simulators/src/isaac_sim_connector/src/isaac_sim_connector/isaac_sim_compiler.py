@@ -17,7 +17,11 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
     def __init__(self, args):
         super().__init__(args)
 
-    def build_world(self, robots: Dict[str, Robot], objects: Dict[str, Object], multiverse_params: Dict[str, Dict]):
+    def build_world(self,
+                    robots: Dict[str, Robot],
+                    objects: Dict[str, Object],
+                    references: Dict[str, Dict[str, Any]] = None,
+                    multiverse_params: Dict[str, Dict] = None):
         from pxr import Usd, UsdGeom, UsdPhysics, Gf  # Ask NVIDIA for this shitty importing style
 
         for entity in list(robots.values()) + list(objects.values()):
