@@ -35,9 +35,13 @@ if __name__ == '__main__':
     parser.add_argument("--world_name", type=str, required=False, default="world", help="Name of the world")
     parser.add_argument("--port", type=str, required=False, default="4000", help="Port number")
     parser.add_argument("--data_path", type=str, default="data.csv", required=False, help='Path to the CSV file containing the simulation log data')
+    parser.add_argument("--attribute_names", type=str, default="", required=False, help='Attribute names to send')
+    parser.add_argument("--start_time", type=float, default=0.0, required=False, help='Start time of the simulation')
     
     # Parse arguments
     args = parser.parse_args()
+
+    attribute_names = args.attribute_names.split(',')
 
     # Load the CSV file to examine its contents
     data_path = args.data_path
@@ -58,7 +62,7 @@ if __name__ == '__main__':
     multiverse_logger = MultiverseReplay(port=args.port, multiverse_meta_data=multiverse_meta_data)
     multiverse_logger.run()
 
-    data_columns = [col for col in data.columns if 'time' not in col]
+    data_columns = [col for col in data.columns if 'time' not in col and (len(attribute_names) == 0 or any([attr in col for attr in attribute_names]))]
     data_values = data[data_columns]
 
     multiverse_logger.request_meta_data["send"] = {}
@@ -66,6 +70,8 @@ if __name__ == '__main__':
     for data_name in data_columns:
         object_name = data_name.split(':')[0]
         attribute_name = data_name.split(':')[1]
+        if len(attribute_names) > 0 and attribute_name not in attribute_names:
+            continue
         multiverse_logger.request_meta_data["send"][object_name] = [f"{attribute_name}"]
     multiverse_logger.send_and_receive_meta_data()
 
@@ -73,8 +79,9 @@ if __name__ == '__main__':
     multiverse_logger.send_and_receive_data()
 
     data_time = data['time']
-    start_time = data_time[0]
-    for i in range(len(data_time)):
+    start_time = min(data_time, key=lambda x:abs(x-args.start_time))
+    start_time_index = data_time[data_time == start_time].index[0]
+    for i in range(start_time_index, len(data_time)):
         time.sleep(data_time[i] - start_time)
         multiverse_logger.send_data = [data_time[i]] + data_values.iloc[i].values.tolist()
         multiverse_logger.send_and_receive_data()
