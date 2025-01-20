@@ -8,6 +8,10 @@ set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/../..
 )
 
 set(MUJOCO_MULTIVERSE_CONNECTOR_SRCS
+  multiverse_client.cpp
+  multiverse_client.h
+  multiverse_client_json.cpp
+  multiverse_client_json.h
   multiverse_connector.cc
   multiverse_connector.h
   register.cc
@@ -25,8 +29,8 @@ if (UNIX)
 elseif (WIN32)
   target_link_libraries(multiverse_connector PRIVATE 
     mujoco
-    ${CMAKE_CURRENT_SOURCE_DIR}/multiverse_client.lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/multiverse_client_json.lib
+    JsonCpp::JsonCpp
+    cppzmq
   )
 endif()
 target_compile_options(
