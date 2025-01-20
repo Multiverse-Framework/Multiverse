@@ -35,19 +35,25 @@ if ! echo "$PYTHONPATH" | grep -q "$LIB_DIR/dist-packages"; then
     RELOAD=true
 fi
 
-DBUILD_SRC=ON
-DBUILD_MODULES=ON
-DBUILD_CONNECTORS=ON
-DBUILD_KNOWLEDGE=ON
-DBUILD_PARSER=ON
-DBUILD_RESOURCES=ON
+BUILD_SRC=ON
+BUILD_MODULES=ON
+BUILD_CONNECTORS=ON
+BUILD_KNOWLEDGE=ON
+BUILD_PARSER=ON
+BUILD_RESOURCES=ON
+BUILD_TESTS=OFF
 
 while [ -n "$1" ]; do
     case "$1" in
+        --with-tests) echo "--with-tests option passed"
+            shift 1
+            BUILD_TESTS=ON
+            break
+        ;;
         --only-src) echo "--only-src option passed"
             shift 1
-            DBUILD_MODULES=OFF
-            DBUILD_RESOURCES=OFF
+            BUILD_MODULES=OFF
+            BUILD_RESOURCES=OFF
             break
         ;;
         --only-modules) echo -n "--only-modules option passed"
@@ -56,20 +62,20 @@ while [ -n "$1" ]; do
                 echo ""
             else
                 echo -n ", with value:"
-                DBUILD_SRC=OFF
-                DBUILD_RESOURCES=OFF
+                BUILD_SRC=OFF
+                BUILD_RESOURCES=OFF
                 for module in "$@"; do
                     echo -n " $module"
                     shift 1
                     if [ "$module" = "connectors" ]; then
-                        DBUILD_KNOWLEDGE=OFF
-                        DBUILD_PARSER=OFF
+                        BUILD_KNOWLEDGE=OFF
+                        BUILD_PARSER=OFF
                     elif [ "$module" = "knowledge" ]; then
-                        DBUILD_CONNECTORS=OFF
-                        DBUILD_PARSER=OFF
+                        BUILD_CONNECTORS=OFF
+                        BUILD_PARSER=OFF
                     elif [ "$module" = "parser" ]; then
-                        DBUILD_CONNECTORS=OFF
-                        DBUILD_KNOWLEDGE=OFF
+                        BUILD_CONNECTORS=OFF
+                        BUILD_KNOWLEDGE=OFF
                     fi
                 done
                 echo ""
@@ -78,24 +84,24 @@ while [ -n "$1" ]; do
         ;;
         --no-src) echo "--no-src option passed"
             shift 1
-            DBUILD_SRC=OFF
+            BUILD_SRC=OFF
         ;;
         --no-modules) echo -n "--no-modules option passed"
             shift 1
             if [ "$#" -eq 0 ]; then
                 echo ""
-                DBUILD_MODULES=OFF
+                BUILD_MODULES=OFF
             else
                 echo -n ", with value:"
                 for module in "$@"; do
                     echo -n " $module"
                     shift 1
                     if [ "$module" = "connectors" ]; then
-                        DBUILD_CONNECTORS=OFF
+                        BUILD_CONNECTORS=OFF
                     elif [ "$module" = "knowledge" ]; then
-                        DBUILD_KNOWLEDGE=OFF
+                        BUILD_KNOWLEDGE=OFF
                     elif [ "$module" = "parser" ]; then
-                        DBUILD_PARSER=OFF
+                        BUILD_PARSER=OFF
                     fi
                 done
                 echo ""
@@ -115,7 +121,7 @@ elif [ $UBUNTU_VERSION = "24.04" ]; then
     PYTHON_EXECUTABLE=python3.12
 fi
 
-if [ $DBUILD_PARSER = ON ]; then
+if [ $BUILD_PARSER = ON ]; then
     echo "Updating multiverse_parser..."
     git submodule update --init $CURRENT_DIR/multiverse/modules/multiverse_parser
 
@@ -127,12 +133,12 @@ if [ $DBUILD_PARSER = ON ]; then
         RELOAD=true
     fi
 fi
-if [ $DBUILD_KNOWLEDGE = ON ]; then
+if [ $BUILD_KNOWLEDGE = ON ]; then
     echo "Updating multiverse_knowledge..."
     git submodule update --init $CURRENT_DIR/multiverse/modules/multiverse_knowledge
     (cd $CURRENT_DIR/multiverse/modules/multiverse_knowledge && git submodule update --init ease_lexical_resources)
 fi
-if [ $DBUILD_RESOURCES = ON ]; then
+if [ $BUILD_RESOURCES = ON ]; then
     echo "Updating multiverse_resources..."
     (git submodule update --init $CURRENT_DIR/multiverse/resources; cd $CURRENT_DIR/multiverse/resources; git submodule update --init)
 fi
@@ -152,27 +158,27 @@ fi
 # Build multiverse
 # cmake -S $PWD/multiverse -B $BUILD_DIR \
 #     -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=SHARED -DSTDLIB=libc++ \
-#     -DBUILD_SRC=$DBUILD_SRC \
-#     -DBUILD_MODULES=$DBUILD_MODULES \
-#     -DBUILD_CONNECTORS=$DBUILD_CONNECTORS \
-#     -DBUILD_KNOWLEDGE=$DBUILD_KNOWLEDGE \
-#     -DBUILD_PARSER=$DBUILD_PARSER
+#     -DBUILD_SRC=$BUILD_SRC \
+#     -DBUILD_MODULES=$BUILD_MODULES \
+#     -DBUILD_CONNECTORS=$BUILD_CONNECTORS \
+#     -DBUILD_KNOWLEDGE=$BUILD_KNOWLEDGE \
+#     -DBUILD_PARSER=$BUILD_PARSER
 cmake -S $PWD/multiverse -B $BUILD_DIR \
     -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
-    -DBUILD_SRC=$DBUILD_SRC \
-    -DBUILD_MODULES=$DBUILD_MODULES \
-    -DBUILD_CONNECTORS=$DBUILD_CONNECTORS \
-    -DBUILD_KNOWLEDGE=$DBUILD_KNOWLEDGE \
-    -DBUILD_PARSER=$DBUILD_PARSER \
-    -DBUILD_TESTS=OFF \
+    -DBUILD_SRC=$BUILD_SRC \
+    -DBUILD_MODULES=$BUILD_MODULES \
+    -DBUILD_CONNECTORS=$BUILD_CONNECTORS \
+    -DBUILD_KNOWLEDGE=$BUILD_KNOWLEDGE \
+    -DBUILD_PARSER=$BUILD_PARSER \
+    -DBUILD_TESTS=$BUILD_TESTS \
     -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
 make -C $BUILD_DIR
 cmake --install $BUILD_DIR
 
-if [ $DBUILD_SRC = ON ] && [ $UBUNTU_VERSION = "20.04" ]; then
+if [ $BUILD_SRC = ON ] && [ $UBUNTU_VERSION = "20.04" ]; then
     cmake -S $PWD/multiverse -B $BUILD_DIR \
         -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
-        -DBUILD_SRC=$DBUILD_SRC \
+        -DBUILD_SRC=ON \
         -DBUILD_MODULES=OFF \
         -DBUILD_CONNECTORS=OFF \
         -DBUILD_KNOWLEDGE=OFF \

@@ -35,7 +35,7 @@ jobs:
     - name: Run build_multiverse.sh (only connectors)
       run: |
           chmod +x build_multiverse.sh
-          ./build_multiverse.sh --only-modules connectors
+          ./build_multiverse.sh --with-tests --only-modules connectors
 
     - name: Run build_multiverse_ws.sh
       run: |
