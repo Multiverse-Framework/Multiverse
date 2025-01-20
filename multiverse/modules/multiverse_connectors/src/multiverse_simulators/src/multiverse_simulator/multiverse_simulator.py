@@ -389,17 +389,10 @@ class MultiverseSimulator:
         self._viewer = viewer.initialize_data(number_of_envs) if viewer is not None else None
         self._renderer = MultiverseRenderer()
         self._current_render_time = self.current_real_time
-        for func in self._make_functions() + (callbacks or []):
-            if not isinstance(func, MultiverseFunction):
-                if isinstance(func, Callable):
-                    func = MultiverseFunction(callback=func)
-                else:
-                    raise TypeError(f"Function {func} must be an instance of MultiverseFunction or Callable, "
-                                    f"got {type(func)}")
-            if hasattr(self, func.__name__):
-                raise AttributeError(f"Function {func.__name__} is already defined")
-            setattr(self, func.__name__, func)
-            self.log_info(f"Function {func.__name__} is registered")
+        self._callbacks = []
+        if callbacks is not None:
+            for func in callbacks:
+                self.add_callback(func)
         self._write_objects = {}
         self._read_objects = {}
         self._write_ids = {}
@@ -451,8 +444,9 @@ class MultiverseSimulator:
                     self._state = MultiverseSimulatorState.STOPPED
                     break
                 if self.state == MultiverseSimulatorState.RUNNING:
-                    if self.current_simulation_time == 0.0 or not numpy.isclose(self.current_number_of_steps * self.step_size, self.current_simulation_time):
-                        self.reset() 
+                    if self.current_simulation_time == 0.0 or not numpy.isclose(
+                            self.current_number_of_steps * self.step_size, self.current_simulation_time):
+                        self.reset()
                     if self.real_time_factor > 0:
                         real_time_pass = self.current_real_time - self.start_real_time
                         simulation_time_pass = self.current_simulation_time * self.real_time_factor
@@ -620,6 +614,10 @@ class MultiverseSimulator:
         self.logger.error(f"[{self.name}] {message}")
 
     @property
+    def callbacks(self) -> Dict[str, MultiverseFunction]:
+        return {callback.__name__: callback for callback in self._callbacks}
+
+    @property
     def headless(self) -> bool:
         return self._headless
 
@@ -659,5 +657,21 @@ class MultiverseSimulator:
     def renderer(self) -> MultiverseRenderer:
         return self._renderer
 
-    def _make_functions(self) -> List[MultiverseFunction]:
-        return []
+    def add_callback(self, func: Callable):
+        if not isinstance(func, MultiverseFunction):
+            if isinstance(func, Callable):
+                func = MultiverseFunction(callback=func)
+            else:
+                raise TypeError(f"Function {func} must be an instance of MultiverseFunction or Callable, "
+                                f"got {type(func)}")
+        if func.__name__ in [callback.__name__ for callback in self._callbacks]:
+            raise AttributeError(f"Function {func.__name__} is already defined")
+        self._callbacks.append(func)
+        self.log_info(f"Function {func.__name__} is registered")
+
+    def multiverse_function(func):
+        def add_function(self):
+            self.add_callback(func)
+            return func
+        print(f"Adding function {func.__name__}")
+        return add_function
