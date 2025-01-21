@@ -200,20 +200,20 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
         result_1 = MultiverseFunctionResult(type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
                                             info="Test function 1",
                                             result="Hello, World!")
-        def function_1() -> MultiverseFunctionResult:
+        def function_1(multiverse_simulator: MultiverseSimulator) -> MultiverseFunctionResult:
             return result_1
         function_1 = MultiverseFunction(function_1)
 
         result_2 = MultiverseFunctionResult(type=MultiverseFunctionResult.ResultType.FAILURE_AFTER_EXECUTION_ON_DATA,
                                             info="Test function 2",
                                             result="Hello, World!")
-        def function_2() -> MultiverseFunctionResult:
+        def function_2(multiverse_simulator: MultiverseSimulator) -> MultiverseFunctionResult:
             return result_2
         function_2 = MultiverseFunction(function_2)
 
         simulator = self.test_initialize_multiverse_simulator(callbacks=[function_1, function_2])
-        self.assertEqual(simulator.function_1(), result_1)
-        self.assertEqual(simulator.function_2(), result_2)
+        self.assertEqual(simulator.callbacks["function_1"](), result_1)
+        self.assertEqual(simulator.callbacks["function_2"](), result_2)
 
         with self.assertRaises(Exception) as context:
             simulator = self.test_initialize_multiverse_simulator(callbacks=[function_1, function_2, function_2])

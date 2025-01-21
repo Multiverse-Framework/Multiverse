@@ -10,7 +10,7 @@ else
 
     MULTIVERSE_DIR="$PWD/../../../../../.."
 
-    if [ -f "$MUJOCO_SRC_DIR" ]; then
+    if [ -d "$MUJOCO_SRC_DIR" ]; then
         cp -r plugin/multiverse_connector $MUJOCO_SRC_DIR/plugin
         ln -sf $MULTIVERSE_DIR/src/multiverse_client/include/multiverse_client.h $MUJOCO_SRC_DIR/plugin/multiverse_connector
         ln -sf $MULTIVERSE_DIR/src/multiverse_client/include/multiverse_client_json.h $MUJOCO_SRC_DIR/plugin/multiverse_connector

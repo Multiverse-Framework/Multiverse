@@ -31,7 +31,6 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
 
         for step in range(10000):
             if step < 1000:
-                print(simulator.callbacks)
                 result = simulator.callbacks["get_all_body_names"]()
                 self.assertIsInstance(result, MultiverseFunctionResult)
                 self.assertEqual(result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)

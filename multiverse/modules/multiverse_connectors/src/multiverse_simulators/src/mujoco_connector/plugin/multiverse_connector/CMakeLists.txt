@@ -7,15 +7,23 @@ set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/../..
                             ${CMAKE_CURRENT_SOURCE_DIR}/../../src
 )
 
-set(MUJOCO_MULTIVERSE_CONNECTOR_SRCS
-  multiverse_client.cpp
-  multiverse_client.h
-  multiverse_client_json.cpp
-  multiverse_client_json.h
-  multiverse_connector.cc
-  multiverse_connector.h
-  register.cc
-)
+if (UNIX)
+  set(MUJOCO_MULTIVERSE_CONNECTOR_SRCS
+    multiverse_connector.cc
+    multiverse_connector.h
+    register.cc
+  )
+elseif (WIN32)
+  set(MUJOCO_MULTIVERSE_CONNECTOR_SRCS
+    multiverse_client.cpp
+    multiverse_client.h
+    multiverse_client_json.cpp
+    multiverse_client_json.h
+    multiverse_connector.cc
+    multiverse_connector.h
+    register.cc
+  )
+endif()
 
 add_library(multiverse_connector SHARED)
 target_sources(multiverse_connector PRIVATE ${MUJOCO_MULTIVERSE_CONNECTOR_SRCS})
