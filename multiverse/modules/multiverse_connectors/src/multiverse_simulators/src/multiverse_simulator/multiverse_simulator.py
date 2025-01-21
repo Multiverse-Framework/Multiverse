@@ -666,30 +666,25 @@ class MultiverseSimulator:
     def renderer(self) -> MultiverseRenderer:
         return self._renderer
 
-    def add_instance_callback(self, func: Callable):
+    @classmethod
+    def add_callback(cls, func: Callable | MultiverseFunction, callbacks: List[MultiverseFunction]):
         if not isinstance(func, MultiverseFunction):
             if isinstance(func, Callable):
                 func = MultiverseFunction(callback=func)
             else:
                 raise TypeError(f"Function {func} must be an instance of MultiverseFunction or Callable, "
                                 f"got {type(func)}")
-        if func.__name__ in [callback.__name__ for callback in self.instance_level_callbacks]:
+        if func.__name__ in [callback.__name__ for callback in callbacks]:
             raise AttributeError(f"Function {func.__name__} is already defined")
-        self.instance_level_callbacks.append(func)
-        self.log_info(f"Function {func.__name__} is registered")
+        callbacks.append(func)
+        cls.log_info(f"Function {func.__name__} is registered")
+
+    def add_instance_callback(self, func: Callable | MultiverseFunction):
+        self.add_callback(func, self.instance_level_callbacks)
 
     @classmethod
-    def add_class_callback(cls, func: Callable):
-        if not isinstance(func, MultiverseFunction):
-            if isinstance(func, Callable):
-                func = MultiverseFunction(callback=func)
-            else:
-                raise TypeError(f"Function {func} must be an instance of MultiverseFunction or Callable, "
-                                f"got {type(func)}")
-        if func.__name__ in [callback.__name__ for callback in cls.class_level_callbacks]:
-            raise AttributeError(f"Function {func.__name__} is already defined")
-        cls.class_level_callbacks.append(func)
-        cls.log_info(f"Function {func.__name__} is registered")
+    def add_class_callback(cls, func: Callable | MultiverseFunction):
+        cls.add_callback(func, cls.class_level_callbacks)
 
     @classmethod
     def multiverse_function(cls, func):
