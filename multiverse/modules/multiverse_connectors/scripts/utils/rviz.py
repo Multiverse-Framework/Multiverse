@@ -9,10 +9,24 @@ import shutil
 def run_rviz(rviz_dict, resources_paths, mesh_abspath_prefix, multiverse_control_pkg_path) -> subprocess.Popen:
     import rospy
     for robot_description, urdf_path in rviz_dict.get("robot_descriptions", {}).items():
+        prefix = ""
+        suffix = ""
+        if isinstance(urdf_path, dict):
+            prefix = urdf_path.get("prefix", "")
+            suffix = urdf_path.get("suffix", "")
+            urdf_path = urdf_path.get("path")
+
         if urdf_path.endswith(".urdf"):
             urdf_path = find_files(resources_paths, urdf_path)
-            urdf_str = get_urdf_str_from_ros_package(mesh_abspath_prefix, multiverse_control_pkg_path,
-                                                    urdf_path)
+            urdf_str = get_urdf_str_from_ros_package(mesh_abspath_prefix, multiverse_control_pkg_path, urdf_path)
+            if prefix != "" or suffix != "":
+                from xml.etree import ElementTree as ET
+                root = ET.fromstring(urdf_str)
+                for link in root.findall(".//link"):
+                    link_name = link.get("name")
+                    print(f"Link name: {link_name}")
+                    link.set("name", f"{prefix}{link_name}{suffix}")
+                urdf_str = ET.tostring(root, encoding="unicode")
             rospy.set_param(f"/{robot_description}", f"{urdf_str}")
         else:
             saved_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "saved")
@@ -21,10 +35,10 @@ def run_rviz(rviz_dict, resources_paths, mesh_abspath_prefix, multiverse_control
                 from multiverse_parser import MjcfImporter, UrdfExporter
                 print("Converting MJCF to URDF")
                 factory = MjcfImporter(file_path=model_path,
-                                       fixed_base=True,
-                                       with_physics=False,
-                                       with_visual=True,
-                                       with_collision=True)
+                                    fixed_base=True,
+                                    with_physics=False,
+                                    with_visual=True,
+                                    with_collision=True)
                 factory.import_model()
                 model_dir = os.path.dirname(model_path)
                 urdf_path = os.path.join(model_dir, f"{urdf_path.replace('.xml', '.urdf')}")
