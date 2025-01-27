@@ -110,7 +110,7 @@ def fix_prefix_and_suffix_each(entity_element_name: str, entity_prefix: str, ent
                                entity_name: str) -> str:
     if entity_element_name[:len(entity_name) + 1] == f"{entity_name}_":
         entity_element_name = entity_prefix + entity_element_name[len(entity_name) + 1:]
-    entity_element_name = entity_element_name + entity_suffix
+        entity_element_name = entity_element_name + entity_suffix
     return entity_element_name
 
 
