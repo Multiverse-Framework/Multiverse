@@ -21,25 +21,20 @@ if(UNIX)
         message(FATAL_ERROR "STDLIB must be either libc++ or libstdc++")
     endif()
 
-    if (STDLIB STREQUAL "libc++")
-        set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
-        set(CMAKE_CXX_STANDARD 17)
-    elseif (STDLIB STREQUAL "libstdc++")
-        execute_process(
-            COMMAND lsb_release -rs
-            OUTPUT_VARIABLE UBUNTU_VERSION
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
-        if (UBUNTU_VERSION STREQUAL "20.04")
-            set(CMAKE_CXX_COMPILER "/usr/bin/clang++-11")
-            set(CMAKE_CXX_STANDARD 11)
-        elseif (UBUNTU_VERSION STREQUAL "22.04")
-            set(CMAKE_CXX_COMPILER "/usr/bin/clang++-14")
-            set(CMAKE_CXX_STANDARD 14)
-        elseif (UBUNTU_VERSION STREQUAL "24.04")
-            set(CMAKE_CXX_COMPILER "/usr/bin/clang++-17")
-            set(CMAKE_CXX_STANDARD 14)
-        endif()
+    execute_process(
+        COMMAND lsb_release -rs
+        OUTPUT_VARIABLE UBUNTU_VERSION
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    if (UBUNTU_VERSION STREQUAL "20.04")
+        set(CMAKE_CXX_COMPILER "/usr/bin/clang++-11")
+        set(CMAKE_CXX_STANDARD 11)
+    elseif (UBUNTU_VERSION STREQUAL "22.04")
+        set(CMAKE_CXX_COMPILER "/usr/bin/clang++-14")
+        set(CMAKE_CXX_STANDARD 14)
+    elseif (UBUNTU_VERSION STREQUAL "24.04")
+        set(CMAKE_CXX_COMPILER "/usr/bin/clang++-17")
+        set(CMAKE_CXX_STANDARD 14)
     endif()
 endif()
 
