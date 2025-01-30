@@ -171,6 +171,29 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertIsInstance(result.result["joint2"], float)
                 self.assertAlmostEqual(joint1_value, result.result["joint1"], places=3)
 
+            if step == 1550:
+                result = simulator.callbacks["save"](key_name="step_1550")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.key_id = result.result
+
+            if step == 1560:
+                result = simulator.callbacks["load"](key_id=self.key_id)
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA, result.type)
+                self.assertEqual(self.key_id, result.result)
+
+            if step == 1570:
+                self.save_file_path = os.path.join(resources_path, "../output/step_1570.xml")
+                if not os.path.exists(os.path.dirname(self.save_file_path)):
+                    os.makedirs(os.path.dirname(self.save_file_path))
+                result = simulator.callbacks["save"](file_path=self.save_file_path, key_name="step_1570")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.key_id = result.result
+
+            if step == 1580:
+                result = simulator.callbacks["load"](file_path=self.save_file_path, key_id=self.key_id)
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA, result.type)
+                self.assertEqual(self.key_id, result.result)
+
             if step == 2000 or step == 4000:
                 result = simulator.callbacks["detach"](body_name="abc")
                 self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_BEFORE_EXECUTION_ON_MODEL, result.type)

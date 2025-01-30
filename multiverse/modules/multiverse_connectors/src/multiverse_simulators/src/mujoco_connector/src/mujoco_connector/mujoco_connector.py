@@ -6,7 +6,7 @@ import os
 
 os.environ['XLA_FLAGS'] = '--xla_gpu_triton_gemm_any=true'
 import xml.etree.ElementTree as ET
-from typing import Optional, List, Callable, Set, Dict
+from typing import Optional, List, Set, Dict
 
 import jax
 import mujoco
@@ -443,7 +443,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         )
 
     @MultiverseSimulator.multiverse_callback
-    def get_all_joint_names(self, joint_types: Optional[List[mujoco.mjtJoint]]=None) -> MultiverseFunctionResult:
+    def get_all_joint_names(self, joint_types: Optional[List[mujoco.mjtJoint]] = None) -> MultiverseFunctionResult:
         if joint_types is None:
             joint_types = [mujoco.mjtJoint.mjJNT_HINGE, mujoco.mjtJoint.mjJNT_SLIDE]
         result = [self._mj_model.joint(joint_id).name for joint_id in
@@ -455,7 +455,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         )
 
     @MultiverseSimulator.multiverse_callback
-    def get_joint(self, joint_name: str, allowed_joint_types: Optional[mujoco.mjtJoint] = None) -> MultiverseFunctionResult:
+    def get_joint(self, joint_name: str,
+                  allowed_joint_types: Optional[mujoco.mjtJoint] = None) -> MultiverseFunctionResult:
         if allowed_joint_types is None:
             allowed_joint_types = [mujoco.mjtJoint.mjJNT_HINGE, mujoco.mjtJoint.mjJNT_SLIDE]
         joint_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_JOINT, name=joint_name)
@@ -751,3 +752,74 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                                       body_2_name: Optional[str] = None,
                                       including_children: bool = True):
         pass
+
+    @MultiverseSimulator.multiverse_callback
+    def save(self,
+             file_path: Optional[str] = None,
+             key_name: Optional[str] = None) -> MultiverseFunctionResult:
+        if key_name is None:
+            key_id = 0
+        else:
+            key_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_KEY, name=key_name)
+            if key_id == -1:
+                self._mj_spec.add_key(name=key_name,
+                                      qpos=self._mj_data.qpos,
+                                      qvel=self._mj_data.qvel,
+                                      act=self._mj_data.act,
+                                      ctrl=self._mj_data.ctrl,
+                                      time=self.current_simulation_time)
+                self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
+                self._renderer._sim().load(self._mj_model, self._mj_data, "")
+                key_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_KEY, name=key_name)
+        mujoco.mj_setKeyframe(self._mj_model, self._mj_data, key_id)
+        if file_path is not None:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            xml_string = self._mj_spec.to_xml()
+            with open(file_path, "w") as f:
+                f.write(xml_string)
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                info=f"Saved simulation with key {key_name} to {file_path}",
+                result=key_id
+            )
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Saved simulation with key {key_name}",
+            result=key_id
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def load(self,
+             file_path: Optional[str] = None,
+             key_id: int = 0) -> MultiverseFunctionResult:
+        if file_path is not None:
+            if not os.path.exists(file_path):
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                    info=f"File {file_path} not found"
+                )
+            self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
+            self._renderer._sim().load(self._mj_model, self._mj_data, "")
+            if key_id >= self._mj_model.nkey:
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                    info=f"Key {key_id} not found"
+                )
+            mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, key_id)
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
+                info=f"Loaded simulation with key_id {key_id} from {file_path}",
+                result=key_id
+            )
+        if key_id >= self._mj_model.nkey:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Key {key_id} not found"
+            )
+        mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, key_id)
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
+            info=f"Loaded simulation with key_id {key_id}",
+            result=key_id
+        )

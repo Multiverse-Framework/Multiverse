@@ -363,8 +363,10 @@ class MultiverseSimulator:
     """Logger for the simulator"""
 
     class_level_callbacks: List[MultiverseFunction] = []
+    """Class level callback functions"""
 
     instance_level_callbacks: List[MultiverseFunction] = None
+    """Instance level callback functions"""
 
     def __init__(self,
                  viewer: Optional[MultiverseViewer] = None,
