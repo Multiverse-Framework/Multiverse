@@ -33,11 +33,11 @@ class CmdVelSubscriber(MultiverseSubscriber):
         self.bind_request_meta_data_callback = bind_request_meta_data
 
     def _init_send_data(self) -> None:
-        self.send_data = [self.world_time + self.sim_time] + [0.0] * 6
+        self.send_data = [self.sim_time] + [0.0] * 6
 
     def _bind_send_data(self, twist_msg: Twist) -> Twist:
         self.send_data = [
-            self.world_time + self.sim_time,
+            self.sim_time,
             twist_msg.linear.x,
             twist_msg.linear.y,
             twist_msg.linear.z,

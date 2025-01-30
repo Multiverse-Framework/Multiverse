@@ -364,9 +364,9 @@ private:
     {
     }
 
-    bool init_objects(bool from_response_meta_data = false) override
+    bool init_objects(bool from_request_meta_data = false) override
     {
-        if (from_response_meta_data)
+        if (from_request_meta_data)
         {
             bind_request_meta_data();
         }

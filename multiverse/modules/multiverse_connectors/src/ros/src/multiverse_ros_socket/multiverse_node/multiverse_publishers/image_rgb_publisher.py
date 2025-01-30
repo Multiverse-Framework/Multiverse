@@ -74,7 +74,7 @@ class ImageRgbPublisher(MultiversePublisher):
         self.bind_request_meta_data_callback = bind_request_meta_data
 
         def bind_send_data() -> None:
-            self.send_data = [self.world_time + self.sim_time]
+            self.send_data = [self.sim_time]
         self.bind_send_data_callback = bind_send_data
 
         def bind_receive_data() -> None:

@@ -7,18 +7,77 @@
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 #
 
-import numpy as np
+import sys
+import os
+
+for path in os.environ["PYTHONPATH"].split(os.pathsep):
+    multiverse_client_path = os.path.join(path, "multiverse_client_py")
+    if os.path.exists(multiverse_client_path):
+        if multiverse_client_path not in sys.path:
+            sys.path.append(path)
+        break
+else:
+    for path in sys.path:
+        multiverse_client_path = os.path.join(path, "multiverse_client_py")
+        if os.path.exists(multiverse_client_path):
+            break
+    else:
+        raise ImportError("multiverse_client_py not found in PYTHONPATH")
+
+from multiverse_client_py import MultiverseClient, MultiverseMetaData
+
+class MultiverseConnector(MultiverseClient):
+    def __init__(self, port: str, multiverse_meta_data: MultiverseMetaData) -> None:
+        super().__init__(port, multiverse_meta_data)
+
+    def loginfo(self, message: str) -> None:
+        print(f"INFO: {message}")
+
+    def logwarn(self, message: str) -> None:
+        print(f"WARN: {message}")
+
+    def _run(self) -> None:
+        self.loginfo("Start running the client.")
+        self._connect_and_start()
+
+    def send_and_receive_meta_data(self) -> None:
+        self.loginfo("Sending request meta data: " + str(self.request_meta_data))
+        self._communicate(True)
+        self.loginfo("Received response meta data: " + str(self.response_meta_data))
+
+    def send_and_receive_data(self) -> None:
+        self.loginfo("Sending data: " + str(self.send_data))
+        self._communicate(False)
+        self.loginfo("Received data: " + str(self.receive_data))
+
+from dataclasses import dataclass
+
+@dataclass
+class MultiverseObject:
+    prim: ...
+    root_prim: ...
+
+import numpy
 import omni.timeline
 import omni.ui as ui
-from omni.isaac.core.articulations import Articulation
-from omni.isaac.core.utils.prims import get_prim_object_type
-from omni.isaac.core.utils.types import ArticulationAction
-from omni.isaac.ui.element_wrappers import CollapsableFrame, DropDown, FloatField, TextBlock, StringField, IntField, CheckBox
+from omni.isaac.ui.element_wrappers import CollapsableFrame, TextBlock, StringField, IntField, CheckBox
 from omni.ui import Button
 from omni.isaac.ui.ui_utils import get_style
 
+from omni.isaac.core import World
+from omni.isaac.core.scenes import SceneRegistry
+from omni.isaac.core.prims import XFormPrimView, RigidPrimView, RigidContactView
+from omni.isaac.core.articulations import ArticulationView
+from omni.isaac.core.utils.types import ArticulationActions
+from omni.isaac.core.utils import stage
+from omni.isaac.dynamic_control import _dynamic_control
+from pxr import UsdGeom, UsdPhysics, Sdf
 
-class UIBuilder:
+dc = _dynamic_control.acquire_dynamic_control_interface()
+
+world = World()
+
+class UIBuilder(MultiverseConnector):
     def __init__(self):
         # Frames are sub-windows that can contain multiple UI elements
         self.frames = []
@@ -26,44 +85,27 @@ class UIBuilder:
         # UI elements created using a UIElementWrapper from omni.isaac.ui.element_wrappers
         self.wrapped_ui_elements = []
 
-        self._send_object_names = {}
-        self._receive_object_names = {}
+        self._send_prims_dict = {}
+        self._receive_prims_dict = {}
+        self._send_names_dict = {}
+        self._receive_names_dict = {}
         self._send_objects = {}
         self._receive_objects = {}
-        self._send_objects_check_boxes = {}
-        self._receive_objects_check_boxes = {}
+        self._send_prims_check_boxes = {}
+        self._receive_prims_check_boxes = {}
+
+        self._body_dict = {}
+        self._body_collision_geom_path_dict = {}
+        self._object_xform_prim_view_idx_dict = {}
+        self._object_rigid_prim_view_idx_dict = {}
+        self._object_rigid_contact_view_idx_dict = {}
+        self._joint_dict = {}
+        self._object_articulation_view_idx_dict = {}
+        self._constrained_bodies = set()
+        self._ignore_names = ["defaultGroundPlane", "Environment", "OmniKit_Viewport_LightRig", "Lights"]
 
         # Get access to the timeline to control stop/pause/play programmatically
         self._timeline = omni.timeline.get_timeline_interface()
-
-        # Run initialization for the provided example
-        self._on_init()
-
-    def add_send_object(self, object_name: str, object_attribute: str):
-        object_name = self._send_object_names[object_name].get_value()
-        if object_name not in self._send_objects:
-            self._send_objects[object_name] = set()
-        self._send_objects[object_name].add(object_attribute)
-
-    def remove_send_object(self, object_name: str, object_attribute: str):
-        object_name = self._send_object_names[object_name].get_value()
-        if object_name in self._send_objects and object_attribute in self._send_objects[object_name]:
-            self._send_objects[object_name].remove(object_attribute)
-            if len(self._send_objects[object_name]) == 0:
-                del self._send_objects[object_name]
-
-    def add_receive_object(self, object_field: StringField, object_attribute: str):
-        object_name = self._receive_object_names[object_field]
-        if object_name not in self._receive_objects:
-            self._receive_objects[object_name] = set()
-        self._receive_objects[object_name].add(object_attribute)
-
-    def remove_receive_object(self, object_field: StringField, object_attribute: str):
-        object_name = self._receive_object_names[object_field]
-        if object_name in self._receive_objects and object_attribute in self._receive_objects[object_name]:
-            self._receive_objects[object_name].remove(object_attribute)
-            if len(self._receive_objects[object_name]) == 0:
-                del self._receive_objects[object_name]
 
     ###################################################################################
     #           The Functions Below Are Called Automatically By extension.py
@@ -95,10 +137,8 @@ class UIBuilder:
         Args:
             step (float): Size of physics step
         """
-        print(f"Send Object Names: {[object_name.get_value() for object_name in self._send_object_names.values()]}")
-        print(f"Receive Object Names: {[object_name.get_value() for object_name in self._receive_object_names.keys()]}")
-        print(f"Sending objects: {self._send_objects}")
-        print(f"Receiving objects: {self._receive_objects}")
+        if len(self._send_objects) + len(self._receive_objects) > 0:
+            self.send_and_receive_data()
 
     def on_stage_event(self, event):
         """Callback for Stage Events
@@ -107,13 +147,14 @@ class UIBuilder:
             event (omni.usd.StageEventType): Event Type
         """
         if event.type == int(omni.usd.StageEventType.ASSETS_LOADED):  # Any asset added or removed
-            pass
+            self._init()
         elif event.type == int(omni.usd.StageEventType.SIMULATION_START_PLAY):  # Timeline played
-            self._init_objects()
+            self._init()
         elif event.type == int(omni.usd.StageEventType.SIMULATION_STOP_PLAY):  # Timeline stopped
             # Ignore pause events
             if self._timeline.is_stopped():
-                pass
+                self._send_objects = {}
+                self._receive_objects = {}
 
     def cleanup(self):
         """
@@ -170,22 +211,21 @@ class UIBuilder:
                     default_value="isaac_sim"
                 )
 
-                import omni.usd
-                from pxr import UsdPhysics, UsdGeom
-                stage = omni.usd.get_context().get_stage()
                 prims = {
                     "body": [],
                     "revolute_joint": [],
                     "prismatic_joint": []
                 }
-                if stage:
-                    for prim in stage.Traverse():
-                        if prim.IsA(UsdGeom.Xform):
-                            prims["body"].append(prim)
-                        elif prim.IsA(UsdPhysics.RevoluteJoint):
-                            prims["revolute_joint"].append(prim)
-                        elif prim.IsA(UsdPhysics.PrismaticJoint):
-                            prims["prismatic_joint"].append(prim)
+                current_stage = stage.get_current_stage()
+                for prim in current_stage.TraverseAll():
+                    if prim.GetName() in self._ignore_names:
+                        continue
+                    if prim.IsA(UsdGeom.Xform):
+                        prims["body"].append(prim)
+                    elif prim.IsA(UsdPhysics.RevoluteJoint):
+                        prims["revolute_joint"].append(prim)
+                    elif prim.IsA(UsdPhysics.PrismaticJoint):
+                        prims["prismatic_joint"].append(prim)
                 attributes = {
                     "body": ["position", "quaternion", "relative_velocity"],
                     "revolute_joint": ["joint_rvalue", "joint_angular_velocity", "joint_torque", "cmd_joint_rvalue", "cmd_joint_angular_velocity", "cmd_joint_torque"],
@@ -211,9 +251,10 @@ class UIBuilder:
                             with prim_type_frame:
                                 with ui.VStack():
                                     for prim in prim_list:
-                                        prim_name = prim.GetName()
+                                        prim_path = prim.GetPath()
+                                        prim_name = prim_path.name
                                         prim_frame = CollapsableFrame(
-                                            title=prim_name,
+                                            title=prim_path.pathString,
                                             collapsed=True,
                                             enabled=True)
                                         with prim_frame:
@@ -221,17 +262,17 @@ class UIBuilder:
                                                 name_field = StringField(
                                                     label="name",
                                                     default_value=prim_name,
-                                                    tooltip=f"Send name of {prim_name}."
+                                                    tooltip=f"Send name of {prim_path}."
                                                 )
-                                                self._send_object_names[prim_name] = name_field
-                                                self._send_objects_check_boxes[prim_name] = []
+                                                self._send_prims_dict[prim] = name_field
+                                                self._send_prims_check_boxes[prim] = []
                                                 for attr in attributes[prim_type]:
                                                     check_box = CheckBox(
                                                         label=attr,
                                                         default_value=False,
-                                                        tooltip=f"Send {attr} of {prim_name}."
+                                                        tooltip=f"Send {attr} of {prim_path}."
                                                     )
-                                                    self._send_objects_check_boxes[prim_name].append(check_box)
+                                                    self._send_prims_check_boxes[prim].append(check_box)
 
                 self._receive_objects_frame = CollapsableFrame(
                     title="Receive Objects",
@@ -247,9 +288,10 @@ class UIBuilder:
                             with prim_type_frame:
                                 with ui.VStack():
                                     for prim in prim_list:
-                                        prim_name = prim.GetName()
+                                        prim_path = prim.GetPath()
+                                        prim_name = prim_path.name
                                         prim_frame = CollapsableFrame(
-                                            title=prim_name,
+                                            title=prim_path.pathString,
                                             collapsed=True,
                                             enabled=True)
                                         with prim_frame:
@@ -257,135 +299,499 @@ class UIBuilder:
                                                 name_field = StringField(
                                                     label="name",
                                                     default_value=prim_name,
-                                                    tooltip=f"Receive name of {prim_name}."
+                                                    tooltip=f"Receive name of {prim_path}."
                                                 )
-                                                self._receive_object_names[name_field] = prim_name
-                                                self._receive_objects_check_boxes[name_field] = []
+                                                self._receive_prims_dict[prim] = name_field
+                                                self._receive_prims_check_boxes[prim] = []
                                                 for attr in attributes[prim_type]:
                                                     check_box = CheckBox(
                                                         label=attr,
                                                         default_value=False,
-                                                        tooltip=f"Receive {attr} of {prim_name}."
+                                                        tooltip=f"Receive {attr} of {prim_path}."
                                                     )
-                                                    self._receive_objects_check_boxes[name_field].append(check_box)
+                                                    self._receive_prims_check_boxes[prim].append(check_box)
 
     ######################################################################################
     # Functions Below This Point Support The Provided Example And Can Be Replaced/Deleted
     ######################################################################################
 
-    def _on_init(self):
-        pass
+    def _init(self):
+        multiverse_meta_data = MultiverseMetaData(
+            world_name=self._world_name_field.get_value(),
+            simulation_name=self._simulation_name_field.get_value(),
+            length_unit="m",
+            angle_unit="rad",
+            mass_unit="kg",
+            time_unit="s",
+            handedness="rhs"
+        )
+        super().__init__(port=str(self._client_port_field.get_value()),
+                         multiverse_meta_data=multiverse_meta_data)
+        
+        def init_objects_callback() -> None:
+            self._send_objects = {}
+            self._receive_objects = {}
+            for prim, check_boxes in self._send_prims_check_boxes.items():
+                for check_box in check_boxes:
+                    if check_box.get_value():
+                        self.__add_send_object(prim, check_box.label.text)
+                    else:
+                        self.__remove_send_object(prim, check_box.label.text)
+            for prim, check_boxes in self._receive_prims_check_boxes.items():
+                for check_box in check_boxes:
+                    if check_box.get_value():
+                        self.__add_receive_object(prim, check_box.label.text)
+                    else:
+                        self.__remove_receive_object(prim, check_box.label.text)
 
-    def _init_objects(self):
-        self._send_objects = {}
-        self._receive_objects = {}
-        for object_name, check_boxes in self._send_objects_check_boxes.items():
-            for check_box in check_boxes:
-                if check_box.get_value():
-                    self.add_send_object(object_name, check_box.label.text)
+            if len(self.scene_registry.rigid_contact_views) > 0: # Need to stop if rigid_contact_views are present
+                world.stop()
+            world.initialize_physics() # Create SimulationView
+            current_stage = stage.get_current_stage()
+            articulation_prim_paths = []
+            self._body_dict = {}
+            self._body_collision_geom_path_dict = {}
+            self._joint_dict = {}
+            self._constrained_bodies = set()
+
+            for prim in current_stage.TraverseAll():
+                if prim.IsA(UsdGeom.Xform):
+                    prim_path = prim.GetPath()
+                    body_name = prim_path.name
+                    if body_name in self._ignore_names:
+                        continue
+                    parent_prim = prim.GetParent()
+                    if parent_prim.IsA(UsdGeom.Xform) and parent_prim.GetName() == body_name:
+                        root_prim = parent_prim
+                    else:
+                        root_prim = prim
+                    self._body_dict[prim_path] = MultiverseObject(prim, root_prim)
+
+                if prim.HasAPI(UsdPhysics.ArticulationRootAPI):
+                    if prim.IsA(UsdGeom.Xform):
+                        xform_prim_path = prim.GetPath()
+                    elif prim.IsA(UsdPhysics.Joint):
+                        joint = UsdPhysics.Joint(prim)
+                        xform_prim_path = joint.GetBody1Rel().GetTargets()[0]
+                    articulation_prim_paths.append(xform_prim_path)
+
+            for body_path, body_prim in self._body_dict.items():
+                self._body_collision_geom_path_dict[body_path] = []
+                for body_child_prim in body_prim.prim.GetChildren():
+                    if body_child_prim.HasAPI(UsdPhysics.CollisionAPI) or body_child_prim.HasAPI(UsdPhysics.MeshCollisionAPI):
+                        self._body_collision_geom_path_dict[body_path].append(body_child_prim.GetPath())
+                if not body_prim.prim.HasAPI(UsdPhysics.RigidBodyAPI) and not body_prim.root_prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                    self._constrained_bodies.add(body_path)
                 else:
-                    self.remove_send_object(object_name, check_box.label.text)
-        for object_field, check_boxes in self._receive_objects_check_boxes.items():
-            for check_box in check_boxes:
-                if check_box.get_value():
-                    self.add_receive_object(object_field, check_box.label.text)
-                else:
-                    self.remove_receive_object(object_field, check_box.label.text)
+                    rigid_body_api = UsdPhysics.RigidBodyAPI(prim)
+                    if not rigid_body_api.GetRigidBodyEnabledAttr().Get():
+                        self._constrained_bodies.add(body_path)
 
-    # def _invalidate_articulation(self):
-    #     """
-    #     This function handles the event that the existing articulation becomes invalid and there is
-    #     not a new articulation to select.  It is called explicitly in the code when the timeline is
-    #     stopped and when the DropDown menu finds no articulations on the stage.
-    #     """
-    #     self.articulation = None
-    #     self._robot_control_frame.collapsed = True
-    #     self._robot_control_frame.enabled = False
+            for joint_prim in [prim for prim in current_stage.TraverseAll() if prim.IsA(UsdPhysics.Joint)]:
+                joint = UsdPhysics.Joint(joint_prim)
+                body0_targets = joint.GetBody0Rel().GetTargets()
+                if len(body0_targets) != 0:
+                    body0_path = body0_targets[0]
+                    self._constrained_bodies.add(body0_path)
+                body1_targets = joint.GetBody1Rel().GetTargets()
+                if len(body1_targets) != 0:
+                    body1_path = body1_targets[0]
+                    self._constrained_bodies.add(body1_path)
+                joint_name = joint_prim.GetName()
+                if joint_name in self._ignore_names:
+                    continue
+                if joint_prim.IsA(UsdPhysics.RevoluteJoint) or joint_prim.IsA(UsdPhysics.PrismaticJoint):
+                    joint_path = joint_prim.GetPath()
+                    self._joint_dict[joint_path] = joint_prim
 
-    # def _on_articulation_selection(self, selection: str):
-    #     """
-    #     This function is called whenever a new selection is made in the
-    #     "Select Articulation" DropDown.  A new selection may also be
-    #     made implicitly any time self._selection_menu.repopulate() is called
-    #     since the Articulation they had selected may no longer be present on the stage.
+            body_paths = []
 
-    #     Args:
-    #         selection (str): The item that is currently selected in the drop-down menu.
-    #     """
-    #     # If the timeline is stopped, the Articulation won't be usable.
-    #     if selection is None or self._timeline.is_stopped():
-    #         self._invalidate_articulation()
-    #         return
+            for prim in [*self._send_objects, *self._receive_objects]:
+                prim_path = prim.GetPath()
+                prim_name = prim_path.name
+                for articulation_prim_path in articulation_prim_paths:
+                    articulation = dc.get_articulation(articulation_prim_path.pathString)
+                    if prim_path in self._joint_dict:
+                        dof_ptr = dc.find_articulation_dof(articulation, prim_name)
+                        if dof_ptr == 0:
+                            continue
+                    elif prim_path in self._body_dict:
+                        prim = self._body_dict[prim_path].prim
+                        if not prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                            break
+                        rigid_body_api = UsdPhysics.RigidBodyAPI(prim)
+                        if not rigid_body_api.GetRigidBodyEnabledAttr().Get():
+                            break
 
-    #     self.articulation = Articulation(selection)
-    #     self.articulation.initialize()
+                    articulation_view_name = f"{articulation_prim_path}_view"
+                    if self.scene_registry.name_exists(articulation_view_name):
+                        articulation_view = self.scene_registry.articulated_views[articulation_view_name]
+                    else:
+                        articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path.pathString, name=articulation_view_name)
+                        articulation_view.initialize(world.physics_sim_view)
+                        self.scene_registry.add_articulated_view(articulation_view.name, articulation_view)
+                    if prim_path in self._joint_dict and prim_name in articulation_view.dof_names:
+                        joint_idx = articulation_view.get_dof_index(prim_name)
+                        self._object_articulation_view_idx_dict[prim_path] = (articulation_view.name, joint_idx)
+                    elif prim_path in self._body_dict and prim_path == articulation_prim_path:
+                        body_idx = articulation_view.get_link_index(prim_name)
+                        self._object_articulation_view_idx_dict[prim_path] = (articulation_view.name, body_idx)
+                    if prim_path in self._object_articulation_view_idx_dict:
+                        break
+                if prim_path not in self._object_articulation_view_idx_dict and prim_path in self._body_dict:
+                    body_paths.append(self._body_dict[prim_path].prim.GetPath())
 
-    #     self._robot_control_frame.collapsed = False
-    #     self._robot_control_frame.enabled = True
-    #     self._robot_control_frame.rebuild()
+            if len(body_paths) > 0:
+                xform_prim_paths = []
+                rigid_prim_paths = []
+                for body_path in body_paths:
+                    prim = current_stage.GetPrimAtPath(body_path)
+                    if prim.HasAPI(UsdPhysics.RigidBodyAPI):
+                        rigid_body_api = UsdPhysics.RigidBodyAPI(prim)
+                        rigid_body_enabled_attr = rigid_body_api.GetRigidBodyEnabledAttr().Get()
+                        if rigid_body_enabled_attr:
+                            rigid_prim_paths.append(body_path)
+                            continue
+                    xform_prim_paths.append(body_path)
 
-    # def _setup_joint_control_frames(self):
-    #     """
-    #     Once a robot has been chosen, update the UI to match robot properties:
-    #         Make a frame visible for each robot joint.
-    #         Rename each frame to match the human-readable name of the joint it controls.
-    #         Change the FloatField for each joint to match the current robot position.
-    #         Apply the robot's joint limits to each FloatField.
-    #     """
-    #     num_dof = self.articulation.num_dof
-    #     dof_names = self.articulation.dof_names
-    #     joint_positions = self.articulation.get_joint_positions()
+                if len(xform_prim_paths) > 0:
+                    xform_prim_view = XFormPrimView(prim_paths_expr=[body_path.pathString for body_path in xform_prim_paths])
+                    xform_prim_view.initialize(world.physics_sim_view)
+                    self.scene_registry.add_xform_view(xform_prim_view.name, xform_prim_view)
+                    for body_idx, body_path in enumerate(xform_prim_paths):
+                        self._object_xform_prim_view_idx_dict[body_path] = (xform_prim_view.name, body_idx)
 
-    #     lower_joint_limits = self.articulation.dof_properties["lower"]
-    #     upper_joint_limits = self.articulation.dof_properties["upper"]
+                if len(rigid_prim_paths) > 0:
+                    rigid_prim_view = RigidPrimView(prim_paths_expr=[body_path.pathString for body_path in rigid_prim_paths])
+                    rigid_prim_view.initialize(world.physics_sim_view)
+                    self.scene_registry.add_rigid_prim_view(rigid_prim_view.name, rigid_prim_view)
+                    for body_idx, body_path in enumerate(rigid_prim_paths):
+                        self._object_rigid_prim_view_idx_dict[body_path] = (rigid_prim_view.name, body_idx)
+        self.init_objects_callback = init_objects_callback
+        
+        def bind_request_meta_data() -> None:
+            request_meta_data = self.request_meta_data
+            for prim, attrs in self._send_objects.items():
+                object_name = self._send_prims_dict[prim].get_value()
+                self._send_names_dict[object_name] = prim
+                request_meta_data["send"][object_name] = attrs
+            for prim, attrs in self._receive_objects.items():
+                object_name = self._receive_prims_dict[prim].get_value()
+                self._receive_names_dict[object_name] = prim
+                request_meta_data["receive"][object_name] = attrs
+            self.request_meta_data = request_meta_data
+        self.bind_request_meta_data_callback = bind_request_meta_data
 
-    #     for i in range(num_dof):
-    #         frame = self._joint_control_frames[i]
-    #         position_float_field = self._joint_position_float_fields[i]
+        def bind_response_meta_data() -> None:
+            response_meta_data = self.response_meta_data
 
-    #         # Write the human-readable names of each joint
-    #         frame.title = dof_names[i]
-    #         position = joint_positions[i]
+            free_body_names = []
+            bodies_positions = {}
+            bodies_quaternions = {}
+            bodies_velocities = {}
+            joints_states = {}
+            measured_joints_efforts = {}
 
-    #         position_float_field.set_value(position)
-    #         position_float_field.set_upper_limit(upper_joint_limits[i])
-    #         position_float_field.set_lower_limit(lower_joint_limits[i])
+            for xform_prim_view_name, xform_prim_view in self.scene_registry.xform_prim_views.items():
+                bodies_positions[xform_prim_view_name], bodies_quaternions[xform_prim_view_name] = xform_prim_view.get_world_poses()
 
-    # def _on_set_joint_position_target(self, joint_index: int, position_target: float):
-    #     """
-    #     This function is called when the user changes one of the float fields
-    #     to control a robot joint position target.  The index of the joint and the new
-    #     desired value are passed in as arguments.
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                for prim in rigid_prim_view.prims:
+                    free_body_names.append(prim.GetName())
+                bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
+                bodies_velocities[rigid_prim_view_name] = rigid_prim_view.get_velocities()
 
-    #     This function assumes that there is a guarantee it is called safely.
-    #     I.e. A valid Articulation has been selected and initialized
-    #     and the timeline is playing.  These gurantees are given by careful UI
-    #     programming.  The joint control frames are only visible to the user when
-    #     these guarantees are met.
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                for body_name in articulation_view.body_names:
+                    if body_name in [body_path.name for body_path in self._constrained_bodies] and body_name in free_body_names:
+                        free_body_names.remove(body_name)
+                bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name] = articulation_view.get_world_poses()
+                bodies_velocities[articulation_view_name] = articulation_view.get_velocities()
+                joints_states[articulation_view_name] = articulation_view.get_joints_state()
+                measured_joints_efforts[articulation_view_name] = articulation_view.get_measured_joint_efforts()
 
-    #     Args:
-    #         joint_index (int): Index of robot joint that was modified
-    #         position_target (float): New position target for robot joint
-    #     """
-    #     robot_action = ArticulationAction(
-    #         joint_positions=np.array([position_target]),
-    #         joint_velocities=np.array([0]),
-    #         joint_indices=np.array([joint_index]),
-    #     )
-    #     self.articulation.apply_action(robot_action)
+            for send_receive in ["send", "receive"]:
+                if send_receive not in response_meta_data:
+                    continue
+                for object_name, attributes in response_meta_data[send_receive].items():
+                    prim = self._send_names_dict[object_name] if send_receive == "send" else self._receive_names_dict[object_name]
+                    prim_path = prim.GetPath()
+                    if prim_path in self._body_dict:
+                        if prim_path in self._object_xform_prim_view_idx_dict:
+                            view_name, object_idx = self._object_xform_prim_view_idx_dict[prim_path]
+                        elif prim_path in self._object_rigid_prim_view_idx_dict:
+                            view_name, object_idx = self._object_rigid_prim_view_idx_dict[prim_path]
+                        elif prim_path in self._object_articulation_view_idx_dict:
+                            view_name, object_idx = self._object_articulation_view_idx_dict[prim_path]
+                        else:
+                            raise Exception(f"Body {object_name} not found in any view")
 
-    # def _find_all_articulations(self):
-    # #    Commented code left in to help a curious user gain a thorough understanding
+                        for attribute in attributes:
+                            data = response_meta_data[send_receive][object_name][attribute]
+                            if any(x is None for x in data):
+                                continue
+                            if attribute == "position":
+                                bodies_positions[view_name][object_idx] = [data[0], data[1], data[2]]
+                            elif attribute == "quaternion":
+                                bodies_quaternions[view_name][object_idx] = [data[0], data[1], data[2], data[3]]
+                            elif attribute == "relative_velocity":
+                                bodies_velocities[view_name][object_idx] = [data[0], data[1], data[2], data[3], data[4], data[5]]
 
-    #     import omni.usd
-    #     from pxr import Usd
-    #     items = []
-    #     stage = omni.usd.get_context().get_stage()
-    #     if stage:
-    #         for prim in Usd.PrimRange(stage.GetPrimAtPath("/")):
-    #             path = str(prim.GetPath())
-    #             # Get prim type get_prim_object_type
-    #             type = get_prim_object_type(path)
-    #             if type == "articulation":
-    #                 items.append(path)
-    #     return items
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                free_body_idxes = [idx for idx, prim in enumerate(rigid_prim_view.prims) if prim.GetName() in free_body_names]
+                if len(free_body_idxes) == 0:
+                    continue
+                body_positions = bodies_positions[rigid_prim_view_name][free_body_idxes]
+                body_quaternions = bodies_quaternions[rigid_prim_view_name][free_body_idxes]
+                rigid_prim_view.set_world_poses(body_positions, body_quaternions, indices=free_body_idxes)
+
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                articulation_view.set_world_poses(bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name])
+
+            if not world.is_playing():
+                world.play()
+                world.pause()
+
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                free_body_idxes = [idx for idx, prim in enumerate(rigid_prim_view.prims) if prim.GetName() in free_body_names]
+                if len(free_body_idxes) == 0:
+                    continue
+
+                body_velocities = bodies_velocities[rigid_prim_view_name][free_body_idxes]
+                rigid_prim_view.set_velocities(body_velocities, indices=free_body_idxes)
+
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                articulation_view.set_velocities(bodies_velocities[articulation_view_name])
+        self.bind_response_meta_data_callback = bind_response_meta_data
+
+        def bind_send_data() -> None:
+            send_data = [self.sim_time]
+            for prim, attrs in self._send_objects.items():
+                for attr in attrs:
+                    if attr == "position":
+                        send_data += [0, 0, 0]
+                    elif attr == "quaternion":
+                        send_data += [1, 0, 0, 0]
+            self.send_data = send_data
+        self.bind_send_data_callback = bind_send_data
+
+        def bind_send_data() -> None:
+            send_data = [self.sim_time]
+            bodies_positions = {}
+            bodies_quaternions = {}
+            bodies_velocities = {}
+            joints_states = {}
+            measured_joints_efforts = {}
+
+            for xform_prim_view_name, xform_prim_view in self.scene_registry.xform_prim_views.items():
+                bodies_positions[xform_prim_view_name], bodies_quaternions[xform_prim_view_name] = xform_prim_view.get_world_poses()
+
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
+                bodies_velocities[rigid_prim_view_name] = rigid_prim_view.get_velocities()
+
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name] = articulation_view.get_world_poses()
+                bodies_velocities[articulation_view_name] = articulation_view.get_velocities()
+                joints_states[articulation_view_name] = articulation_view.get_joints_state()
+                measured_joints_efforts[articulation_view_name] = articulation_view.get_measured_joint_efforts()
+
+            for object_name, attributes in self.response_meta_data.get("send", {}).items():
+                prim = self._send_names_dict[object_name]
+                prim_path = prim.GetPath()
+                if prim_path in self._body_dict:
+                    if prim_path in self._object_xform_prim_view_idx_dict:
+                        view_name, object_idx = self._object_xform_prim_view_idx_dict[prim_path]
+                    elif prim_path in self._object_rigid_prim_view_idx_dict:
+                        view_name, object_idx = self._object_rigid_prim_view_idx_dict[prim_path]
+                    elif prim_path in self._object_articulation_view_idx_dict:
+                        view_name, object_idx = self._object_articulation_view_idx_dict[prim_path]
+                    else:
+                        raise Exception(f"Body {prim_path.pathString} not found in any view")
+
+                    for attribute in attributes.keys():
+                        if attribute == "position":
+                            position = bodies_positions[view_name][object_idx]
+                            send_data += [position[0], position[1], position[2]]
+                        elif attribute == "quaternion":
+                            quaternion = bodies_quaternions[view_name][object_idx]
+                            send_data += [quaternion[0], quaternion[1], quaternion[2], quaternion[3]]
+                        elif attribute == "relative_velocity":
+                            velocity = bodies_velocities[view_name][object_idx]
+                            send_data += [velocity[0], velocity[1], velocity[2], velocity[3], velocity[4], velocity[5]]
+
+                elif prim_path in self._joint_dict:
+                    if prim_path in self._object_articulation_view_idx_dict:
+                        articulation_view_name, joint_idx = self._object_articulation_view_idx_dict[prim_path]
+                    else:
+                        raise Exception(f"Joint {prim_path.pathString} not found in any view")
+                    for attribute in attributes:
+                        if attribute == "joint_rvalue":
+                            send_data += [joints_states[articulation_view_name].positions[0][joint_idx]]
+                        elif attribute == "joint_tvalue":
+                            send_data += [joints_states[articulation_view_name].positions[0][joint_idx]]
+                        elif attribute == "joint_linear_velocity":
+                            send_data += [joints_states[articulation_view_name].velocities[0][joint_idx]]
+                        elif attribute == "joint_angular_velocity":
+                            send_data += [joints_states[articulation_view_name].velocities[0][joint_idx]]
+                        elif attribute == "joint_force":
+                            send_data += [measured_joints_efforts[articulation_view_name][0][joint_idx]]
+                        elif attribute == "joint_torque":
+                            send_data += [measured_joints_efforts[articulation_view_name][0][joint_idx]]
+
+            self.send_data = send_data
+        self.bind_send_data_callback = bind_send_data
+
+        def bind_receive_data() -> None:
+            receive_data = self.receive_data
+            sim_time = receive_data[0]
+            receive_data = receive_data[1:]
+
+            bodies_positions = {}
+            bodies_quaternions = {}
+
+            bodies_velocities = {}
+            cmd_joints_values = {}
+
+            for xform_prim_view_name, xform_prim_view in self.scene_registry.xform_prim_views.items():
+                bodies_positions[xform_prim_view_name], bodies_quaternions[xform_prim_view_name] = xform_prim_view.get_world_poses()
+
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                bodies_positions[rigid_prim_view_name], bodies_quaternions[rigid_prim_view_name] = rigid_prim_view.get_world_poses()
+                bodies_velocities[rigid_prim_view_name] = {}
+
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                bodies_positions[articulation_view_name], bodies_quaternions[articulation_view_name] = articulation_view.get_world_poses()
+                bodies_velocities[articulation_view_name] = {}
+                cmd_joints_values[articulation_view_name] = {}
+
+            for object_name, attributes in self.request_meta_data.get("receive", {}).items():
+                prim = self._receive_names_dict[object_name]
+                prim_path = prim.GetPath()
+                if prim_path in self._body_dict:
+                    if prim_path in self._object_xform_prim_view_idx_dict:
+                        view_name, object_idx = self._object_xform_prim_view_idx_dict[prim_path]
+                    elif prim_path in self._object_rigid_prim_view_idx_dict:
+                        view_name, object_idx = self._object_rigid_prim_view_idx_dict[prim_path]
+                    elif prim_path in self._object_articulation_view_idx_dict:
+                        view_name, object_idx = self._object_articulation_view_idx_dict[prim_path]
+                    else:
+                        raise Exception(f"Body {prim_path.pathString} not found in any view")
+
+                    for attribute in attributes:
+                        if attribute == "odometric_velocity" and prim_path in self.body_dict:
+                            quaternion = bodies_quaternions[view_name][object_idx]
+
+                            w = quaternion[0]
+                            x = quaternion[1]
+                            y = quaternion[2]
+                            z = quaternion[3]
+
+                            sinr_cosp = 2 * (w * x + y * z)
+                            cosr_cosp = 1 - 2 * (x * x + y * y)
+                            odom_ang_x_joint_pos = numpy.arctan2(sinr_cosp, cosr_cosp)
+
+                            sinp = 2 * (w * y - z * x)
+                            if numpy.abs(sinp) >= 1:
+                                odom_ang_y_joint_pos = numpy.copysign(numpy.pi / 2, sinp)
+                            else:
+                                odom_ang_y_joint_pos = numpy.arcsin(sinp)
+
+                            siny_cosp = 2 * (w * z + x * y)
+                            cosy_cosp = 1 - 2 * (y * y + z * z)
+                            odom_ang_z_joint_pos = numpy.arctan2(siny_cosp, cosy_cosp)
+
+                            odom_velocity = receive_data[:6]
+                            receive_data = receive_data[6:]
+
+                            linear_velocity = [
+                                odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                + odom_velocity[1]
+                                * (
+                                    numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                    - numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                )
+                                + odom_velocity[2]
+                                * (
+                                    numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                    + numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                ),
+                                odom_velocity[0] * numpy.cos(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                + odom_velocity[1]
+                                * (
+                                    numpy.sin(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                    + numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                )
+                                + odom_velocity[2]
+                                * (
+                                    numpy.cos(odom_ang_x_joint_pos) * numpy.sin(odom_ang_y_joint_pos) * numpy.sin(odom_ang_z_joint_pos)
+                                    - numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_z_joint_pos)
+                                ),
+                                odom_velocity[0] * numpy.sin(odom_ang_y_joint_pos)
+                                + odom_velocity[1] * numpy.sin(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos)
+                                + odom_velocity[2] * numpy.cos(odom_ang_x_joint_pos) * numpy.cos(odom_ang_y_joint_pos),
+                            ]
+
+                            angular_velocity = [odom_velocity[3], odom_velocity[4], odom_velocity[5]]
+
+                            bodies_velocities[view_name] = {object_idx: linear_velocity + angular_velocity}
+
+                elif prim_path in self._joint_dict:
+                    articulation_view_name, joint_idx = self._object_articulation_view_idx_dict[prim_path]
+                    for attribute in attributes:
+                        if attribute == "cmd_joint_rvalue" or attribute == "cmd_joint_tvalue":
+                            cmd_joint_value = receive_data[0]
+                            receive_data = receive_data[1:]
+                            cmd_joints_values[articulation_view_name][joint_idx] = cmd_joint_value
+
+            for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
+                if rigid_prim_view_name in bodies_velocities and len(bodies_velocities[rigid_prim_view_name]) > 0:
+                    cmd_body_velocities = list(bodies_velocities[rigid_prim_view_name].values())
+                    cmd_body_idxes = list(bodies_velocities[rigid_prim_view_name].keys())
+                    rigid_prim_view.set_velocities(velocities=cmd_body_velocities, indices=cmd_body_idxes)
+
+            for articulation_view_name, articulation_view in self.scene_registry.articulated_views.items():
+                if articulation_view_name in bodies_velocities and len(bodies_velocities[articulation_view_name]) > 0:
+                    cmd_body_velocities = list(bodies_velocities[articulation_view_name].values())
+                    cmd_body_idxes = list(bodies_velocities[articulation_view_name].keys())
+                    articulation_view.set_velocities(velocities=cmd_body_velocities, indices=cmd_body_idxes)
+
+                if articulation_view_name in cmd_joints_values and len(cmd_joints_values[articulation_view_name]) > 0:
+                    cmd_joint_values = list(cmd_joints_values[articulation_view_name].values())
+                    cmd_joint_idxes = list(cmd_joints_values[articulation_view_name].keys())
+                    print(cmd_joint_values)
+                    action = ArticulationActions(joint_positions=cmd_joint_values, joint_indices=cmd_joint_idxes)
+                    articulation_view.apply_action(action)
+        self.bind_receive_data_callback = bind_receive_data
+
+        self.run()
+
+        self.send_and_receive_meta_data()
+
+    def __add_send_object(self, prim, attr: str):
+        if prim not in self._send_objects:
+            self._send_objects[prim] = []
+        if attr not in self._send_objects[prim]:
+            self._send_objects[prim].append(attr)
+
+    def __remove_send_object(self, prim, attr: str):
+        if prim in self._send_objects and attr in self._send_objects[prim]:
+            self._send_objects[prim].remove(attr)
+            if len(self._send_objects[prim]) == 0:
+                del self._send_objects[prim]
+
+    def __add_receive_object(self, prim, attr: str):
+        if prim not in self._receive_objects:
+            self._receive_objects[prim] = []
+        if attr not in self._receive_objects[prim]:
+            self._receive_objects[prim].append(attr)
+
+    def __remove_receive_object(self, prim, attr: str):
+        if prim in self._receive_objects and attr in self._receive_objects[prim]:
+            self._receive_objects[prim].remove(attr)
+            if len(self._receive_objects[prim]) == 0:
+                del self._receive_objects[prim]
+
+    @property
+    def scene_registry(self) -> "SceneRegistry":
+        return world.scene._scene_registry
