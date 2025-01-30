@@ -239,6 +239,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
                 viewer.read_objects = read_objects
             else:
                 viewer.read_objects = {}
+            print(step)
             simulator.step()
             if step == 100:
                 self.assertEqual(viewer.read_data.shape, (1, 4))

@@ -237,7 +237,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 if attr == "energy":
                     read_data[0][indices[1]] = self._mj_data.energy
                 else:
-                    attr_values = getattr(self._mj_data, attr)[indices[0]]
+                    attr_values = getattr(self._mj_data, attr)
                     read_data[0][indices[1]] = attr_values[indices[0]].reshape(-1)
 
     def _fix_prefix_and_recompile(self, body_spec: mujoco.MjsBody, dummy_prefix: str, body_name: str):
@@ -266,7 +266,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     def renderer(self):
         return self._renderer
 
-    @MultiverseSimulator.multiverse_function
+    @MultiverseSimulator.multiverse_callback
     def get_all_body_names(self) -> MultiverseFunctionResult:
         result = [self._mj_model.body(body_id).name for body_id in
                   range(self._mj_model.nbody)]
@@ -276,7 +276,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             result=result
         )
 
-    @MultiverseSimulator.multiverse_function
+    @MultiverseSimulator.multiverse_callback
     def get_all_joint_names(self) -> MultiverseFunctionResult:
         result = [self._mj_model.joint(joint_id).name for joint_id in
                   range(self._mj_model.njnt)]
@@ -286,7 +286,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             result=result
         )
 
-    @MultiverseSimulator.multiverse_function
+    @MultiverseSimulator.multiverse_callback
     def attach(self,
                body_1_name: str,
                body_2_name: Optional[str] = None,
@@ -380,7 +380,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                  f"at relative position {relative_position}, relative quaternion {relative_quaternion}"
         )
 
-    @MultiverseSimulator.multiverse_function
+    @MultiverseSimulator.multiverse_callback
     def detach(self, body_name: str, add_freejoint: bool = True) -> MultiverseFunctionResult:
         body_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_name)
         if body_id == -1:
@@ -414,7 +414,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             info=f"Detached body {body_name} from body {parent_body_name}"
         )
 
-    @MultiverseSimulator.multiverse_function
+    @MultiverseSimulator.multiverse_callback
     def get_children_ids(self, body_id: int) -> Set[int]:
         children_ids = set()
         for child_body_id in range(body_id + 1, self._mj_model.nbody):
@@ -424,7 +424,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 break
         return children_ids
 
-    @MultiverseSimulator.multiverse_function
+    @MultiverseSimulator.multiverse_callback
     def get_contact_bodies(self, body_name: str, including_children: bool = True):
         body_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_name)
         if body_id == -1:
@@ -459,7 +459,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             result=contact_body_names
         )
 
-    @MultiverseSimulator.multiverse_function
+    @MultiverseSimulator.multiverse_callback
     def get_contact_points(self, body_1_name: str, body_2_name: Optional[str] = None, including_children: bool = True):
         body_1_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_1_name)
         if body_1_id == -1:
@@ -499,7 +499,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             result=contact_body_points
         )
 
-    @MultiverseSimulator.multiverse_function
+    @MultiverseSimulator.multiverse_callback
     def get_contact_bodies_and_points(self,
                                       body_1_name: str,
                                       body_2_name: Optional[str] = None,

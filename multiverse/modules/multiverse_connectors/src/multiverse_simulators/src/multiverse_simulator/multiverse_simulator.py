@@ -218,7 +218,7 @@ class MultiverseViewer:
     @write_objects.setter
     def write_objects(self, send_objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]]):
         number_of_envs = self.write_data.shape[0]
-        self._write_objects, self.write_data = (
+        self._write_objects, self._write_data = (
             self._get_objects_and_data_from_target_objects(send_objects, number_of_envs))
         assert self.write_data.shape[0] == self.read_data.shape[0]
 
@@ -230,7 +230,7 @@ class MultiverseViewer:
     @read_objects.setter
     def read_objects(self, objects: Dict[str, Dict[str, numpy.ndarray | List[float] | MultiverseAttribute]]):
         number_of_envs = self.read_data.shape[0]
-        self._read_objects, self.read_data = (
+        self._read_objects, self._read_data = (
             self._get_objects_and_data_from_target_objects(objects, number_of_envs))
         assert self.read_data.shape[0] == self.write_data.shape[0]
         if self.logging_interval > 0:
@@ -294,7 +294,7 @@ class MultiverseViewer:
     def read_data(self, data: numpy.ndarray):
         if data.shape != self._read_data.shape:
             raise ValueError(
-                "Data length mismatch with read_objects, expected {self._read_data.shape}, got {data.shape}")
+                f"Data length mismatch with read_objects, expected {self._read_data.shape}, got {data.shape}")
         self._read_data[:] = data
 
     @property
@@ -667,26 +667,26 @@ class MultiverseSimulator:
         return self._renderer
 
     @classmethod
-    def add_callback(cls, func: Callable | MultiverseFunction, callbacks: List[MultiverseFunction]):
-        if not isinstance(func, MultiverseFunction):
-            if isinstance(func, Callable):
-                func = MultiverseFunction(callback=func)
+    def add_callback(cls, callback: Callable | MultiverseFunction, callbacks: List[MultiverseFunction]):
+        if not isinstance(callback, MultiverseFunction):
+            if isinstance(callback, Callable):
+                callback = MultiverseFunction(callback=callback)
             else:
-                raise TypeError(f"Function {func} must be an instance of MultiverseFunction or Callable, "
-                                f"got {type(func)}")
-        if func.__name__ in [callback.__name__ for callback in callbacks]:
-            raise AttributeError(f"Function {func.__name__} is already defined")
-        callbacks.append(func)
-        cls.log_info(f"Function {func.__name__} is registered")
+                raise TypeError(f"Function {callback} must be an instance of MultiverseFunction or Callable, "
+                                f"got {type(callback)}")
+        if callback.__name__ in [callback.__name__ for callback in callbacks]:
+            raise AttributeError(f"Function {callback.__name__} is already defined")
+        callbacks.append(callback)
+        cls.log_info(f"Function {callback.__name__} is registered")
 
-    def add_instance_callback(self, func: Callable | MultiverseFunction):
-        self.add_callback(func, self.instance_level_callbacks)
-
-    @classmethod
-    def add_class_callback(cls, func: Callable | MultiverseFunction):
-        cls.add_callback(func, cls.class_level_callbacks)
+    def add_instance_callback(self, callback: Callable | MultiverseFunction):
+        self.add_callback(callback, self.instance_level_callbacks)
 
     @classmethod
-    def multiverse_function(cls, func):
-        cls.add_class_callback(func)
-        return func
+    def add_class_callback(cls, callback: Callable | MultiverseFunction):
+        cls.add_callback(callback, cls.class_level_callbacks)
+
+    @classmethod
+    def multiverse_callback(cls, callback):
+        cls.add_class_callback(callback)
+        return callback
