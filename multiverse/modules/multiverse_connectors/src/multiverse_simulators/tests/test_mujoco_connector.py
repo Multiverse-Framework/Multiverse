@@ -120,6 +120,13 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertIsInstance(result.result, numpy.ndarray)
                 self.assertTrue(numpy.allclose(box_position, result.result))
 
+                box_position = numpy.array([0.7, 0.0, 2.0])
+                result = simulator.callbacks["set_bodies_positions"](bodies_positions={"box": box_position})
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA, result.type)
+
+                result = simulator.callbacks["get_body_position"](body_name="box")
+                self.assertTrue(numpy.allclose(box_position, result.result))
+
                 box_quaternion = numpy.array([0.707, 0.707, 0.0, 0.0])
                 box_quaternion /= numpy.linalg.norm(box_quaternion)
                 result = simulator.callbacks["set_body_quaternion"](body_name="box", quaternion=box_quaternion)
@@ -128,6 +135,14 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 result = simulator.callbacks["get_body_quaternion"](body_name="box")
                 self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
                 self.assertIsInstance(result.result, numpy.ndarray)
+                self.assertTrue(numpy.allclose(box_quaternion, result.result))
+
+                box_quaternion = numpy.array([0.707, 0.0, 0.707, 0.0])
+                box_quaternion /= numpy.linalg.norm(box_quaternion)
+                result = simulator.callbacks["set_bodies_quaternions"](bodies_quaternions={"box": box_quaternion})
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA, result.type)
+
+                result = simulator.callbacks["get_body_quaternion"](body_name="box")
                 self.assertTrue(numpy.allclose(box_quaternion, result.result))
 
                 joint1_value = 0.3

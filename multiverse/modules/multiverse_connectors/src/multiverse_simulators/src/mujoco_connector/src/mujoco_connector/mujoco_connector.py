@@ -389,6 +389,18 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         )
 
     @MultiverseSimulator.multiverse_callback
+    def set_bodies_positions(self, bodies_positions: Dict[str, numpy.ndarray]) -> MultiverseFunctionResult:
+        for body_name, position in bodies_positions.items():
+            set_body_position = self.set_body_position(body_name, position)
+            if set_body_position.type not in [MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                                              MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA]:
+                return set_body_position
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
+            info=f"Set bodies positions of {bodies_positions}"
+        )
+
+    @MultiverseSimulator.multiverse_callback
     def set_body_quaternion(self, body_name: str, quaternion: numpy.ndarray) -> MultiverseFunctionResult:
         get_body_joints = self.get_body_joints(body_name)
         if get_body_joints.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
@@ -416,6 +428,18 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         return MultiverseFunctionResult(
             type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
             info=f"Set body {body_name} to quaternion (WXYZ) {quaternion}"
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def set_bodies_quaternions(self, bodies_quaternions: Dict[str, numpy.ndarray]) -> MultiverseFunctionResult:
+        for body_name, quaternion in bodies_quaternions.items():
+            set_body_quaternion = self.set_body_quaternion(body_name, quaternion)
+            if set_body_quaternion.type not in [MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                                                MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA]:
+                return set_body_quaternion
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
+            info=f"Set bodies quaternions of {bodies_quaternions}"
         )
 
     @MultiverseSimulator.multiverse_callback
