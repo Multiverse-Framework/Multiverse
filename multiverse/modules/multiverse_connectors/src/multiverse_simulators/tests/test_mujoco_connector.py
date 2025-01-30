@@ -6,7 +6,6 @@ import xml.etree.ElementTree as ET
 import mujoco
 import mujoco.viewer
 import numpy
-from scipy.spatial.transform import Rotation
 
 from mujoco_connector import MultiverseMujocoConnector
 from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
@@ -42,7 +41,7 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertIsInstance(result, MultiverseFunctionResult)
                 self.assertEqual(result.type, MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION)
                 self.assertEqual(result.result, ['joint1', 'joint2', 'joint3', 'joint4', 'joint5',
-                                                 'joint6', 'joint7', 'finger_joint1', 'finger_joint2', ''])
+                                                 'joint6', 'joint7', 'finger_joint1', 'finger_joint2'])
 
             if step == 1000 or step == 3000:
                 result = simulator.callbacks["attach"](body_1_name='abc')
@@ -64,6 +63,98 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 result = simulator.callbacks["attach"](body_1_name="box", body_2_name="hand")
                 self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
                 self.assertEqual("Body 1 box is already attached to body 2 hand", result.info)
+
+            if step == 1200:
+                result = simulator.callbacks["get_joint_value"](joint_name="joint1")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, float)
+                joint1_value = result.result
+
+                result = simulator.callbacks["get_joints_values"](joint_names=["joint1", "joint2"])
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, dict)
+                self.assertEqual(len(result.result), 2)
+                self.assertIn("joint1", result.result)
+                self.assertIsInstance(result.result["joint1"], float)
+                self.assertIn("joint2", result.result)
+                self.assertIsInstance(result.result["joint2"], float)
+                self.assertEqual(joint1_value, result.result["joint1"])
+
+                result = simulator.callbacks["get_body_position"](body_name="box")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, numpy.ndarray)
+                box_position = result.result
+
+                result = simulator.callbacks["get_body_quaternion"](body_name="box")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, numpy.ndarray)
+                box_quaternion = result.result
+
+                result = simulator.callbacks["get_bodies_positions"](body_names=["box", "link0"])
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, dict)
+                self.assertEqual(len(result.result), 2)
+                self.assertIn("box", result.result)
+                self.assertIsInstance(result.result["box"], numpy.ndarray)
+                self.assertIn("link0", result.result)
+                self.assertIsInstance(result.result["link0"], numpy.ndarray)
+                self.assertTrue(numpy.allclose(box_position, result.result["box"]))
+
+                result = simulator.callbacks["get_bodies_quaternions"](body_names=["box", "link0"])
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, dict)
+                self.assertEqual(len(result.result), 2)
+                self.assertIn("box", result.result)
+                self.assertIsInstance(result.result["box"], numpy.ndarray)
+                self.assertIn("link0", result.result)
+                self.assertIsInstance(result.result["link0"], numpy.ndarray)
+                self.assertTrue(numpy.allclose(box_quaternion, result.result["box"]))
+
+            if step == 800:
+                box_position = numpy.array([0.7, 0.0, 1.0])
+                result = simulator.callbacks["set_body_position"](body_name="box", position=box_position)
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA, result.type)
+
+                result = simulator.callbacks["get_body_position"](body_name="box")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, numpy.ndarray)
+                self.assertTrue(numpy.allclose(box_position, result.result))
+
+                box_quaternion = numpy.array([0.707, 0.707, 0.0, 0.0])
+                box_quaternion /= numpy.linalg.norm(box_quaternion)
+                result = simulator.callbacks["set_body_quaternion"](body_name="box", quaternion=box_quaternion)
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA, result.type)
+
+                result = simulator.callbacks["get_body_quaternion"](body_name="box")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, numpy.ndarray)
+                self.assertTrue(numpy.allclose(box_quaternion, result.result))
+
+                joint1_value = 0.3
+                result = simulator.callbacks["set_joint_value"](joint_name="joint1", value=joint1_value)
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA, result.type)
+
+                result = simulator.callbacks["get_joint_value"](joint_name="joint1")
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, float)
+                self.assertAlmostEqual(joint1_value, result.result, places=3)
+
+                joints_values = {
+                    "joint1": joint1_value,
+                    "joint2": 0.5
+                }
+                result = simulator.callbacks["set_joints_values"](joints_values=joints_values)
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA, result.type)
+
+                result = simulator.callbacks["get_joints_values"](joint_names=["joint1", "joint2"])
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertIsInstance(result.result, dict)
+                self.assertEqual(len(result.result), 2)
+                self.assertIn("joint1", result.result)
+                self.assertIsInstance(result.result["joint1"], float)
+                self.assertIn("joint2", result.result)
+                self.assertIsInstance(result.result["joint2"], float)
+                self.assertAlmostEqual(joint1_value, result.result["joint1"], places=3)
 
             if step == 2000 or step == 4000:
                 result = simulator.callbacks["detach"](body_name="abc")

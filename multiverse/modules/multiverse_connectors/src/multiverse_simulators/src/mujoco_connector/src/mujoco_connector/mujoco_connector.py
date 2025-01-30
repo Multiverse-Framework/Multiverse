@@ -6,7 +6,7 @@ import os
 
 os.environ['XLA_FLAGS'] = '--xla_gpu_triton_gemm_any=true'
 import xml.etree.ElementTree as ET
-from typing import Optional, List, Callable, Set
+from typing import Optional, List, Callable, Set, Dict
 
 import jax
 import mujoco
@@ -277,13 +277,235 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         )
 
     @MultiverseSimulator.multiverse_callback
-    def get_all_joint_names(self) -> MultiverseFunctionResult:
-        result = [self._mj_model.joint(joint_id).name for joint_id in
-                  range(self._mj_model.njnt)]
+    def get_body(self, body_name: str) -> MultiverseFunctionResult:
+        body_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_name)
+        if body_id == -1:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Body {body_name} not found"
+            )
+        body = self._mj_data.body(body_id)
         return MultiverseFunctionResult(
             type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
-            info="Getting all body names",
+            info=f"Getting body id of {body_name}",
+            result=body
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_body_position(self, body_name: str) -> MultiverseFunctionResult:
+        get_body = self.get_body(body_name)
+        if get_body.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+            return get_body
+        body = get_body.result
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Getting body position of {body_name}",
+            result=body.xpos
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_body_quaternion(self, body_name: str) -> MultiverseFunctionResult:
+        get_body = self.get_body(body_name)
+        if get_body.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+            return get_body
+        body = get_body.result
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Getting body quaternion (WXYZ) of {body_name}",
+            result=body.xquat
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_bodies_positions(self, body_names: List[str]) -> MultiverseFunctionResult:
+        result = {}
+        for body_name in body_names:
+            get_body_position = self.get_body_position(body_name)
+            if get_body_position.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+                return get_body_position
+            result[body_name] = get_body_position.result
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Getting bodies positions of {body_names}",
             result=result
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_bodies_quaternions(self, body_names: List[str]) -> MultiverseFunctionResult:
+        result = {}
+        for body_name in body_names:
+            get_body_quaternion = self.get_body_quaternion(body_name)
+            if get_body_quaternion.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+                return get_body_quaternion
+            result[body_name] = get_body_quaternion.result
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Getting bodies quaternions of {body_names}",
+            result=result
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_body_joints(self, body_name):
+        get_body = self.get_body(body_name)
+        if get_body.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+            return get_body
+        body = get_body.result
+        body_id = body.id
+        jntids = self._mj_model.body(body_id).jntadr
+        joints = [self._mj_model.joint(jntid) for jntid in jntids if jntid != -1]
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Getting body {body_name} joints",
+            result=joints
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def set_body_position(self, body_name: str, position: numpy.ndarray) -> MultiverseFunctionResult:
+        get_body_joints = self.get_body_joints(body_name)
+        if get_body_joints.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+            return get_body_joints
+        joints = get_body_joints.result
+        if len(joints) != 1:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Body {body_name} doesn't have exactly one joint"
+            )
+        joint = joints[0]
+        if joint.type != mujoco.mjtJoint.mjJNT_FREE:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Body {body_name} joint is not free"
+            )
+        qpos_adr = joint.qposadr[0]
+        if numpy.isclose(self._mj_data.qpos[qpos_adr:qpos_adr + 3], position).all():
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                info=f"Body {body_name} is already at position {position}"
+            )
+        self._mj_data.qpos[qpos_adr:qpos_adr + 3] = position
+        mujoco.mj_step1(self._mj_model, self._mj_data)
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
+            info=f"Set body {body_name} to position {position}"
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def set_body_quaternion(self, body_name: str, quaternion: numpy.ndarray) -> MultiverseFunctionResult:
+        get_body_joints = self.get_body_joints(body_name)
+        if get_body_joints.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+            return get_body_joints
+        joints = get_body_joints.result
+        if len(joints) != 1:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Body {body_name} doesn't have exactly one joint"
+            )
+        joint = joints[0]
+        if joint.type != mujoco.mjtJoint.mjJNT_FREE:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Body {body_name} joint is not free"
+            )
+        qpos_adr = joint.qposadr[0]
+        if numpy.isclose(self._mj_data.qpos[qpos_adr + 3:qpos_adr + 7], quaternion).all():
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                info=f"Body {body_name} is already at quaternion {quaternion}"
+            )
+        self._mj_data.qpos[qpos_adr + 3:qpos_adr + 7] = quaternion
+        mujoco.mj_step1(self._mj_model, self._mj_data)
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
+            info=f"Set body {body_name} to quaternion (WXYZ) {quaternion}"
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_all_joint_names(self, joint_types: Optional[List[mujoco.mjtJoint]]=None) -> MultiverseFunctionResult:
+        if joint_types is None:
+            joint_types = [mujoco.mjtJoint.mjJNT_HINGE, mujoco.mjtJoint.mjJNT_SLIDE]
+        result = [self._mj_model.joint(joint_id).name for joint_id in
+                  range(self._mj_model.njnt) if self._mj_model.joint(joint_id).type in joint_types]
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info="Getting all joint names",
+            result=result
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_joint(self, joint_name: str, allowed_joint_types: Optional[mujoco.mjtJoint] = None) -> MultiverseFunctionResult:
+        if allowed_joint_types is None:
+            allowed_joint_types = [mujoco.mjtJoint.mjJNT_HINGE, mujoco.mjtJoint.mjJNT_SLIDE]
+        joint_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_JOINT, name=joint_name)
+        if joint_id == -1:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Joint {joint_name} not found"
+            )
+        if self._mj_model.joint(joint_id).type not in allowed_joint_types:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Joint {joint_name} does not have allowed joint types {allowed_joint_types}"
+            )
+        joint = self._mj_data.joint(joint_id)
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Getting joint id of {joint_name}",
+            result=joint
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_joint_value(self, joint_name: str) -> MultiverseFunctionResult:
+        get_joint = self.get_joint(joint_name)
+        if get_joint.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+            return get_joint
+        joint = get_joint.result
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Getting joint value of {joint_name}",
+            result=joint.qpos[0]
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def get_joints_values(self, joint_names: List[str]) -> MultiverseFunctionResult:
+        result = {}
+        for joint_name in joint_names:
+            joint_value = self.get_joint_value(joint_name)
+            if joint_value.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+                return joint_value
+            result[joint_name] = joint_value.result
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Getting joints values of {joint_names}",
+            result=result
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def set_joint_value(self, joint_name: str, value: float) -> MultiverseFunctionResult:
+        get_joint = self.get_joint(joint_name)
+        if get_joint.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+            return get_joint
+        joint = get_joint.result
+        if numpy.isclose(joint.qpos[0], value):
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                info=f"Joint {joint_name} is already at value {value}"
+            )
+        joint.qpos[0] = value
+        mujoco.mj_step1(self._mj_model, self._mj_data)
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
+            info=f"Set joint {joint_name} to value {value}"
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def set_joints_values(self, joints_values: Dict[str, float]) -> MultiverseFunctionResult:
+        for joint_name, value in joints_values.items():
+            set_joint_value = self.set_joint_value(joint_name, value)
+            if set_joint_value.type not in [MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+                                            MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA]:
+                return set_joint_value
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_DATA,
+            info=f"Set joints values of {joints_values}"
         )
 
     @MultiverseSimulator.multiverse_callback
