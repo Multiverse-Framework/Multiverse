@@ -68,16 +68,14 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: m
                 for applied_geom in entity_spec.geoms:
                     setattr(applied_geom, geom_name, geom_apply)
 
-        if not any(key.name == "home" for key in entity_spec.keys):
-            entity_spec.add_key(name="home")
-        entity_home_key = [key for key in entity_spec.keys if key.name == "home"][0]
-        home_key.qpos = numpy.append(home_key.qpos, entity_home_key.qpos)
-        home_key.ctrl = numpy.append(home_key.ctrl, entity_home_key.ctrl)
+        entity_model = entity_spec.compile()
+        entity_data = mujoco.MjData(entity_model)
+        mujoco.mj_step1(entity_model, entity_data)
+
+        home_key.qpos = numpy.append(home_key.qpos, entity_data.qpos)
+        home_key.ctrl = numpy.append(home_key.ctrl, entity_data.ctrl)
 
         if entity.disable_self_collision != "off":
-            entity_model = mujoco.MjModel.from_xml_path(entity.path)
-            entity_data = mujoco.MjData(entity_model)
-            mujoco.mj_step(entity_model, entity_data)
             if entity.disable_self_collision == "auto":
                 body_collision_dict = {}
                 for geom1_id, geom2_id in zip(entity_data.contact.geom1, entity_data.contact.geom2):
@@ -128,6 +126,8 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                     references: Dict[str, Dict[str, Any]] = None,
                     multiverse_params: Dict[str, Dict] = None):
         self.world_spec = mujoco.MjSpec.from_file(filename=self.save_file_path)
+        save_file_name = os.path.basename(self.save_file_path)
+        self.world_spec.modelname = os.path.splitext(save_file_name)[0]
 
         fix_mesh_and_texture_paths(self.world_spec, os.path.dirname(self.world_path))
 
@@ -276,19 +276,19 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                 )
 
                 for geom in self.world_spec.find_body(body_name).geoms:
-                    if geom.conaffinity == 0 and geom.contype == 0:
-                        body_ref.add_geom(
-                            name=geom.name,
-                            type=geom.type,
-                            size=geom.size,
-                            rgba=[0, 1, 0, 1],
-                            pos=geom.pos,
-                            quat=geom.quat,
-                            meshname=geom.meshname,
-                            group=geom.group,
-                            conaffinity=geom.conaffinity,
-                            contype=geom.contype,
-                        )
+                    geom_name = f"{body_ref_name}_{geom.name}"
+                    body_ref.add_geom(
+                        name=geom_name,
+                        type=geom.type,
+                        size=geom.size,
+                        rgba=[0, 1, 0, 1],
+                        pos=geom.pos,
+                        quat=geom.quat,
+                        meshname=geom.meshname,
+                        group=geom.group,
+                        conaffinity=0,
+                        contype=0,
+                    )
 
                 mujoco.mj_resetDataKeyframe(world_model, world_data, 0)
                 mujoco.mj_step(world_model, world_data)
