@@ -275,8 +275,11 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                     mocap=True
                 )
 
-                for geom in self.world_spec.find_body(body_name).geoms:
-                    geom_name = f"{body_ref_name}_{geom.name}"
+                for geom_id, geom in enumerate(self.world_spec.find_body(body_name).geoms):
+                    geom_name = geom.name
+                    if geom_name == "":
+                        geom_name = f"geom_{geom_id}"
+                    geom_name = f"{body_ref_name}_{geom_name}"
                     body_ref.add_geom(
                         name=geom_name,
                         type=geom.type,
