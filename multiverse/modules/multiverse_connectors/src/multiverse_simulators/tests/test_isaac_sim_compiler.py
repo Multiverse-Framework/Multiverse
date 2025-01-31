@@ -32,6 +32,19 @@ class IsaacSimCompilerTestCase(MultiverseSimulatorCompilerTestCase):
             "path": os.path.join(resources_path, "usd/isaac_sim_examples/panda_arm.usd"),
         }
     }
+    multiverse_params = {
+        "host": "tcp://127.0.0.1",
+        "server_port": "7000",
+        "client_port": "8000",
+        "world_name": "world",
+        "simulation_name": "mujoco_simulation_3",
+        "send": {
+            "body": ["position", "quaternion", "relative_velocity"],
+            "joint": ["joint_rvalue", "joint_tvalue", "joint_angular_velocity", "joint_linear_velocity", "joint_torque",
+                      "joint_force"]
+        },
+        "receive": {}
+    }
 
     @patch('argparse.ArgumentParser.parse_args',
            return_value=argparse.Namespace(name="isaac_sim_simulation_1",
@@ -57,6 +70,19 @@ class IsaacSimCompilerTestCase(MultiverseSimulatorCompilerTestCase):
     def test_mujoco_compiler_world_with_robot(self, _):
         multiverse_simulator_compiler_main(Compiler=IsaacSimCompiler)
         usd_file_path = os.path.join(save_dir_path, "isaac_sim_simulation_2.usda")
+        self.assertTrue(os.path.exists(usd_file_path))
+
+    @patch('argparse.ArgumentParser.parse_args',
+           return_value=argparse.Namespace(name="isaac_sim_simulation_3",
+                                           world_path=world_path,
+                                           robots=str(franka_emika_panda),
+                                           objects="{}",
+                                           references="{}",
+                                           save_dir_path=save_dir_path,
+                                           multiverse_params=str(multiverse_params)))
+    def test_mujoco_compiler_world_with_robot_with_multiverse_params(self, _):
+        multiverse_simulator_compiler_main(Compiler=IsaacSimCompiler)
+        usd_file_path = os.path.join(save_dir_path, "isaac_sim_simulation_3.usda")
         self.assertTrue(os.path.exists(usd_file_path))
 
 

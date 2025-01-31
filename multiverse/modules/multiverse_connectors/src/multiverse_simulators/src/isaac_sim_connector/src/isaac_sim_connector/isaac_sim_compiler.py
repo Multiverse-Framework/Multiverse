@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import os
-from typing import Dict
+from typing import Dict, Any
 
 import numpy
 import shutil
+import json
 
 from multiverse_simulator import MultiverseSimulatorCompiler, Robot, Object, multiverse_simulator_compiler_main
 
@@ -12,7 +13,6 @@ from multiverse_simulator import MultiverseSimulatorCompiler, Robot, Object, mul
 class IsaacSimCompiler(MultiverseSimulatorCompiler):
     name: str = "isaac_sim"
     ext: str = "usda"
-    world_stage: "Usd.Stage"
 
     def __init__(self, args):
         super().__init__(args)
@@ -92,6 +92,22 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
             data = data.replace("@./", f"@{world_usd_dir}/")
             with open(self.save_file_path, "w") as f:
                 f.write(data)
+
+        if multiverse_params is not None:
+            world_stage = Usd.Stage.Open(self.save_file_path)
+            customLayerData = world_stage.GetRootLayer().customLayerData
+            customLayerData["multiverse_connector"] = {}
+            customLayerData["multiverse_connector"]["host"] = multiverse_params.get("host", "tcp://127.0.0.1")
+            customLayerData["multiverse_connector"]["server_port"] = multiverse_params.get("server_port", "7000")
+            customLayerData["multiverse_connector"]["client_port"] = multiverse_params.get("client_port", "8000")
+            customLayerData["multiverse_connector"]["world_name"] = multiverse_params.get("world_name", "world")
+            customLayerData["multiverse_connector"]["simulation_name"] = multiverse_params.get("simulation_name", "isaac_sim")
+            for send_receive in ["send", "receive"]:
+                customLayerData["multiverse_connector"][send_receive] = multiverse_params.get(send_receive, {})
+                for key, values in customLayerData["multiverse_connector"][send_receive].items():
+                    customLayerData["multiverse_connector"][send_receive][key] = json.dumps(values)
+            world_stage.GetRootLayer().customLayerData = customLayerData
+            world_stage.GetRootLayer().Save()
 
 
 if __name__ == "__main__":

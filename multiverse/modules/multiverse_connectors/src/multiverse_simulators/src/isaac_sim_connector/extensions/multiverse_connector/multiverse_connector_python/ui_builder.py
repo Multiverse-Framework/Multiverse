@@ -147,7 +147,23 @@ class UIBuilder(MultiverseConnector):
             event (omni.usd.StageEventType): Event Type
         """
         if event.type == int(omni.usd.StageEventType.ASSETS_LOADED):  # Any asset added or removed
-            self._init()
+            self._send_prims_dict = {}
+            self._receive_prims_dict = {}
+            self._send_names_dict = {}
+            self._receive_names_dict = {}
+            self._send_objects = {}
+            self._receive_objects = {}
+            self._send_prims_check_boxes = {}
+            self._receive_prims_check_boxes = {}
+
+            self._body_dict = {}
+            self._body_collision_geom_path_dict = {}
+            self._object_xform_prim_view_idx_dict = {}
+            self._object_rigid_prim_view_idx_dict = {}
+            self._object_rigid_contact_view_idx_dict = {}
+            self._joint_dict = {}
+            self._object_articulation_view_idx_dict = {}
+            self._constrained_bodies = set()
         elif event.type == int(omni.usd.StageEventType.SIMULATION_START_PLAY):  # Timeline played
             self._init()
         elif event.type == int(omni.usd.StageEventType.SIMULATION_STOP_PLAY):  # Timeline stopped
@@ -170,6 +186,27 @@ class UIBuilder(MultiverseConnector):
         Build a custom UI tool to run your extension.
         This function will be called any time the UI window is closed and reopened.
         """
+
+        current_stage = stage.get_current_stage()
+        customLayerData = current_stage.GetRootLayer().customLayerData
+        host = "tcp://127.0.0.1"
+        server_port = 7000
+        client_port = 8000
+        world_name = "world"
+        simulation_name = "isaac_sim"
+        send = {}
+        receive = {}
+
+        if "multiverse_connector" in customLayerData:
+            multiverse_params = customLayerData["multiverse_connector"]
+            host = multiverse_params.get("host", host)
+            server_port = multiverse_params.get("server_port", server_port)
+            client_port = multiverse_params.get("client_port", client_port)
+            world_name = multiverse_params.get("world_name", world_name)
+            simulation_name = multiverse_params.get("simulation_name", simulation_name)
+            send = multiverse_params.get("send", send)
+            receive = multiverse_params.get("receive", receive)
+                                                                    
         selection_panel_frame = CollapsableFrame("Multiverse Connector", collapsed=False)
 
         with selection_panel_frame:
@@ -181,34 +218,34 @@ class UIBuilder(MultiverseConnector):
                     num_lines=1,
                 )
 
-                self._server_host_field = StringField(
+                self._host_field = StringField(
                     label="Server Host",
                     tooltip="Enter the server host address.",
-                    default_value="tcp://127.0.0.1"
+                    default_value=host
                 )
                 self._server_port_field = IntField(
                     label="Server Port",
                     tooltip="Enter the server port number.",
-                    default_value=7000,
+                    default_value=server_port,
                     lower_limit=1000,
                     upper_limit=9999
                 )
                 self._client_port_field = IntField(
                     label="Client Port",
                     tooltip="Enter the client port number.",
-                    default_value=8000,
+                    default_value=client_port,
                     lower_limit=1000,
                     upper_limit=9999
                 )
                 self._world_name_field = StringField(
                     label="World Name",
                     tooltip="Enter the name of the world.",
-                    default_value="world"
+                    default_value=world_name
                 )
                 self._simulation_name_field = StringField(
                     label="Simulation Name",
                     tooltip="Enter the name of the simulation.",
-                    default_value="isaac_sim"
+                    default_value=simulation_name
                 )
 
                 prims = {
@@ -267,9 +304,18 @@ class UIBuilder(MultiverseConnector):
                                                 self._send_prims_dict[prim] = name_field
                                                 self._send_prims_check_boxes[prim] = []
                                                 for attr in attributes[prim_type]:
+                                                    default_value = False
+                                                    if prim_name in send and attr in send[prim_name]:
+                                                        default_value = True
+                                                    if prim_type == "body":
+                                                        if "body" in send and attr in send["body"]:
+                                                            default_value = True
+                                                    elif prim_type in ["revolute_joint", "prismatic_joint"]:
+                                                        if "joint" in send and attr in send["joint"]:
+                                                            default_value = True
                                                     check_box = CheckBox(
                                                         label=attr,
-                                                        default_value=False,
+                                                        default_value=default_value,
                                                         tooltip=f"Send {attr} of {prim_path}."
                                                     )
                                                     self._send_prims_check_boxes[prim].append(check_box)
@@ -304,9 +350,18 @@ class UIBuilder(MultiverseConnector):
                                                 self._receive_prims_dict[prim] = name_field
                                                 self._receive_prims_check_boxes[prim] = []
                                                 for attr in attributes[prim_type]:
+                                                    default_value = False
+                                                    if prim_name in send and attr in send[prim_name]:
+                                                        default_value = True
+                                                    if prim_type == "body":
+                                                        if "body" in receive and attr in receive["body"]:
+                                                            default_value = True
+                                                    elif prim_type in ["revolute_joint", "prismatic_joint"]:
+                                                        if "joint" in receive and attr in receive["joint"]:
+                                                            default_value = True
                                                     check_box = CheckBox(
                                                         label=attr,
-                                                        default_value=False,
+                                                        default_value=default_value,
                                                         tooltip=f"Receive {attr} of {prim_path}."
                                                     )
                                                     self._receive_prims_check_boxes[prim].append(check_box)
@@ -325,6 +380,7 @@ class UIBuilder(MultiverseConnector):
             time_unit="s",
             handedness="rhs"
         )
+        MultiverseConnector._host = self._host_field.get_value()
         super().__init__(port=str(self._client_port_field.get_value()),
                          multiverse_meta_data=multiverse_meta_data)
         
