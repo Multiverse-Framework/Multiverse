@@ -56,6 +56,9 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         from omni.isaac.lab.scene import InteractiveScene, InteractiveSceneCfg
         from omni.isaac.lab.sim import SimulationContext
         from omni.isaac.lab.utils import configclass
+        from omni.isaac.core.utils.extensions import enable_extension
+        enable_extension("multiverse_connector") # Extension name
+
         from pxr import Usd, UsdGeom
 
         world_stage = Usd.Stage.Open(world_path)

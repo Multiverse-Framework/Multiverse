@@ -52,7 +52,7 @@ class Extension(omni.ext.IExt):
 
         # Build Window
         self._window = ScrollingWindow(
-            title=EXTENSION_TITLE, width=600, height=500, visible=False, dockPreference=ui.DockPreference.LEFT_BOTTOM
+            title=EXTENSION_TITLE, width=600, height=500, visible=True, dockPreference=ui.DockPreference.LEFT_BOTTOM
         )
         self._window.set_visibility_changed_fn(self._on_window)
 
@@ -79,6 +79,8 @@ class Extension(omni.ext.IExt):
         self._stage_event_sub = None
         self._timeline = omni.timeline.get_timeline_interface()
 
+        self._on_window(True)
+
     def on_shutdown(self):
         self._models = {}
         remove_menu_items(self._menu_items, EXTENSION_TITLE)
@@ -92,7 +94,7 @@ class Extension(omni.ext.IExt):
         gc.collect()
 
     def _on_window(self, visible):
-        if self._window.visible:
+        if visible:
             # Subscribe to Stage and Timeline Events
             self._usd_context = omni.usd.get_context()
             events = self._usd_context.get_stage_event_stream()
