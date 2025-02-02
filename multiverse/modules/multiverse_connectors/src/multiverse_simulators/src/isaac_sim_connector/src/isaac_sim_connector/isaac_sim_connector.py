@@ -59,7 +59,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         from omni.isaac.core.utils.extensions import enable_extension
         enable_extension("multiverse_connector") # Extension name
 
-        from pxr import Usd, UsdGeom
+        from pxr import Usd, UsdGeom, UsdPhysics
 
         world_stage = Usd.Stage.Open(world_path)
         world_prim = world_stage.GetDefaultPrim()
@@ -111,6 +111,18 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                 robots_xform = UsdGeom.Xform(robots_prim)
                 robots_pos = robots_xform.GetLocalTransformation().ExtractTranslation()
                 robots_quat = robots_xform.GetLocalTransformation().ExtractRotation().GetQuat()
+                robots_joint_pos = {}
+                for prim in [prim for prim in robots_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
+                    joint = UsdPhysics.RevoluteJoint(prim) if prim.IsA(UsdPhysics.RevoluteJoint) else UsdPhysics.PrismaticJoint(prim)
+                    lower_limit_joint = joint.GetLowerLimitAttr().Get()
+                    upper_limit_joint = joint.GetUpperLimitAttr().Get()
+                    joint_pos = 0.0
+                    if joint_pos < lower_limit_joint or joint_pos > upper_limit_joint:
+                        joint_pos = (lower_limit_joint + upper_limit_joint) / 2.0
+                    if UsdPhysics.RevoluteJoint(prim):
+                        joint_pos = float(numpy.deg2rad(joint_pos))
+
+                    robots_joint_pos[prim.GetName()] = joint_pos
 
                 @configclass
                 class SceneCfg(WorldCfg):
@@ -135,7 +147,8 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                         ),
                         init_state=ArticulationCfg.InitialStateCfg(
                             pos=robots_pos,
-                            rot=(robots_quat.GetReal(), *robots_quat.GetImaginary())
+                            rot=(robots_quat.GetReal(), *robots_quat.GetImaginary()),
+                            joint_pos=robots_joint_pos
                         ),
                         actuators={},
                     ).replace(prim_path="{ENV_REGEX_NS}/Robot")
