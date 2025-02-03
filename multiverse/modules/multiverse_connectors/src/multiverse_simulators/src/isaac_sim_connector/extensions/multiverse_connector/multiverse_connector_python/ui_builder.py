@@ -43,7 +43,7 @@ class MultiverseConnector(MultiverseClient):
     def send_and_receive_meta_data(self) -> None:
         # self.loginfo("Sending request meta data: " + str(self.request_meta_data))
         self._communicate(True)
-        self.loginfo("Received response meta data: " + str(self.response_meta_data))
+        # self.loginfo("Received response meta data: " + str(self.response_meta_data))
 
     def send_and_receive_data(self) -> None:
         # self.loginfo("Sending data: " + str(self.send_data))
@@ -133,16 +133,22 @@ class UIBuilder(MultiverseConnector):
         Args:
             event (omni.usd.StageEventType): Event Type
         """
-        if event.type == int(omni.usd.StageEventType.SIMULATION_START_PLAY):  # Timeline played
+        if event.type == int(omni.usd.StageEventType.ASSETS_LOADED):
+            if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext) and self._timeline.is_playing():
+                self._clean_up()
+                self.build_ui()
+                self._init()
+        elif event.type == int(omni.usd.StageEventType.SIMULATION_START_PLAY):
             if isinstance(self.world, omni.isaac.core.world.world.World):
                 # self.build_ui()
                 self._init()
-        elif event.type == int(omni.usd.StageEventType.ANIMATION_START_PLAY):  # Timeline played
+        elif event.type == int(omni.usd.StageEventType.ANIMATION_START_PLAY):
             if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext):
-                self._init()
-        elif event.type == int(omni.usd.StageEventType.SIMULATION_STOP_PLAY):  # Timeline stopped
+                # self._init()
+                pass # TODO: Make pause and unpause in IsaacLab work
+        elif event.type == int(omni.usd.StageEventType.SIMULATION_STOP_PLAY):
             # Ignore pause events
-            if self._timeline.is_stopped():
+            if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext) or self._timeline.is_stopped():
                 self._clean_up(clean_ui=False)
 
     def cleanup(self):
@@ -810,6 +816,10 @@ class UIBuilder(MultiverseConnector):
                     cmd_joint_positions = [cmd_joint_value[0] for cmd_joint_value in cmd_joint_values]
                     cmd_joint_velocities = [cmd_joint_value[1] for cmd_joint_value in cmd_joint_values]
                     cmd_joint_efforts = [cmd_joint_value[2] for cmd_joint_value in cmd_joint_values]
+                    if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext):
+                        cmd_joint_positions = torch.tensor(cmd_joint_positions).to("cuda").float()
+                        cmd_joint_velocities = torch.tensor(cmd_joint_velocities).to("cuda").float()
+                        cmd_joint_efforts = torch.tensor(cmd_joint_efforts).to("cuda").float()
                     cmd_joint_idxes = list(cmd_joints_values[articulation_view_name].keys())
                     action = ArticulationActions(
                         joint_positions=cmd_joint_positions,

@@ -57,11 +57,15 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         from omni.isaac.lab.sim import SimulationContext
         from omni.isaac.lab.utils import configclass
         from omni.isaac.core.utils.extensions import enable_extension
-        enable_extension("multiverse_connector") # Extension name
 
-        from pxr import Usd, UsdGeom, UsdPhysics
+        from pxr import Usd, UsdGeom, UsdPhysics, PhysxSchema
 
         world_stage = Usd.Stage.Open(world_path)
+
+        customLayerData = world_stage.GetRootLayer().customLayerData
+        if "multiverse_connector" in customLayerData:
+            enable_extension("multiverse_connector") # Extension name
+
         world_prim = world_stage.GetDefaultPrim()
 
         @configclass
@@ -117,8 +121,14 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                     lower_limit_joint = joint.GetLowerLimitAttr().Get()
                     upper_limit_joint = joint.GetUpperLimitAttr().Get()
                     joint_pos = 0.0
+                    if prim.HasAPI(UsdPhysics.DriveAPI):
+                        drive_api = UsdPhysics.DriveAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                        joint_pos = drive_api.GetTargetPositionAttr().Get()
                     if joint_pos < lower_limit_joint or joint_pos > upper_limit_joint:
                         joint_pos = (lower_limit_joint + upper_limit_joint) / 2.0
+                    if prim.HasAPI(PhysxSchema.JointStateAPI):
+                        joint_state_api = PhysxSchema.JointStateAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                        joint_state_api.GetPositionAttr().Set(joint_pos)
                     if UsdPhysics.RevoluteJoint(prim):
                         joint_pos = float(numpy.deg2rad(joint_pos))
 

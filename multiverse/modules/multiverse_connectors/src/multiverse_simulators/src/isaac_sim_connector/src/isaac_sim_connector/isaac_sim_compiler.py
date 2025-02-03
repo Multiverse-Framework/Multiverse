@@ -54,13 +54,9 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
             for joint_name, joint_value in entity.joint_state.items():
                 for joint_prim in [prim for prim in entity_stage.TraverseAll() if
                                    prim.IsA(UsdPhysics.Joint) and prim.GetName() == joint_name]:
-                    if joint_prim.IsA(UsdPhysics.RevoluteJoint) and joint_prim.HasAPI(UsdPhysics.DriveAPI):
-                        drive_api = UsdPhysics.DriveAPI.Apply(joint_prim, "angular")
-                        drive_api.GetTargetPositionAttr().Set(numpy.rad2deg(joint_value))
-
-                    elif joint_prim.IsA(UsdPhysics.PrismaticJoint) and joint_prim.HasAPI(UsdPhysics.DriveAPI):
-                        drive_api = UsdPhysics.DriveAPI.Apply(joint_prim, "linear")
-                        drive_api.GetTargetPositionAttr().Set(joint_value)
+                    if joint_prim.HasAPI(UsdPhysics.DriveAPI):
+                        drive_api = UsdPhysics.DriveAPI.Apply(joint_prim, "angular" if joint_prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                        drive_api.GetTargetPositionAttr().Set(numpy.rad2deg(joint_value) if joint_prim.IsA(UsdPhysics.RevoluteJoint) else joint_value)
                     else:
                         print(f"Joint {joint_name} does not have DriveAPI")
 
@@ -93,7 +89,7 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
             with open(self.save_file_path, "w") as f:
                 f.write(data)
 
-        if multiverse_params is not None:
+        if multiverse_params is not None and multiverse_params != {}:
             world_stage = Usd.Stage.Open(self.save_file_path)
             customLayerData = world_stage.GetRootLayer().customLayerData
             customLayerData["multiverse_connector"] = {}
