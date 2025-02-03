@@ -43,7 +43,7 @@ class MultiverseConnector(MultiverseClient):
     def send_and_receive_meta_data(self) -> None:
         # self.loginfo("Sending request meta data: " + str(self.request_meta_data))
         self._communicate(True)
-        # self.loginfo("Received response meta data: " + str(self.response_meta_data))
+        self.loginfo("Received response meta data: " + str(self.response_meta_data))
 
     def send_and_receive_data(self) -> None:
         # self.loginfo("Sending data: " + str(self.send_data))
@@ -58,6 +58,7 @@ class MultiverseObject:
     root_prim: ...
 
 import numpy
+import json
 import torch
 import omni.timeline
 import omni.ui as ui
@@ -92,8 +93,6 @@ class UIBuilder(MultiverseConnector):
 
         # Get access to the timeline to control stop/pause/play programmatically
         self._timeline = omni.timeline.get_timeline_interface()
-
-        print("UIBuilder initialized")
 
     ###################################################################################
     #           The Functions Below Are Called Automatically By extension.py
@@ -134,18 +133,17 @@ class UIBuilder(MultiverseConnector):
         Args:
             event (omni.usd.StageEventType): Event Type
         """
-        if event.type == int(omni.usd.StageEventType.ASSETS_LOADED):  # Any asset added or removed
-            self._clean_up()
-            self.build_ui()
-            self._init()
-        elif event.type == int(omni.usd.StageEventType.SIMULATION_START_PLAY):  # Timeline played
-            # self._init()
-            pass
+        if event.type == int(omni.usd.StageEventType.SIMULATION_START_PLAY):  # Timeline played
+            if isinstance(self.world, omni.isaac.core.world.world.World):
+                # self.build_ui()
+                self._init()
+        elif event.type == int(omni.usd.StageEventType.ANIMATION_START_PLAY):  # Timeline played
+            if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext):
+                self._init()
         elif event.type == int(omni.usd.StageEventType.SIMULATION_STOP_PLAY):  # Timeline stopped
             # Ignore pause events
             if self._timeline.is_stopped():
-                self._send_objects = {}
-                self._receive_objects = {}
+                self._clean_up(clean_ui=False)
 
     def cleanup(self):
         """
@@ -162,7 +160,6 @@ class UIBuilder(MultiverseConnector):
         Build a custom UI tool to run your extension.
         This function will be called any time the UI window is closed and reopened.
         """
-
         current_stage = stage.get_current_stage()
         customLayerData = current_stage.GetRootLayer().customLayerData
         host = "tcp://127.0.0.1"
@@ -173,29 +170,30 @@ class UIBuilder(MultiverseConnector):
         send = {}
         receive = {}
 
+        multiverse_params = {}
         if "multiverse_connector" in customLayerData:
             multiverse_params = customLayerData["multiverse_connector"]
-            host = multiverse_params.get("host", host)
-            server_port = multiverse_params.get("server_port", server_port)
-            client_port = multiverse_params.get("client_port", client_port)
-            world_name = multiverse_params.get("world_name", world_name)
-            simulation_name = multiverse_params.get("simulation_name", simulation_name)
-            send = multiverse_params.get("send", send)
-            receive = multiverse_params.get("receive", receive)
         else:
             tmp_path = "/tmp/multiverse_isaacsim_connector.yaml"
             if os.path.exists(tmp_path):
                 import yaml
                 with open(tmp_path, "r") as file:
                     multiverse_params = yaml.safe_load(file)
-                    host = multiverse_params.get("host", host)
-                    server_port = multiverse_params.get("server_port", server_port)
-                    client_port = multiverse_params.get("client_port", client_port)
-                    world_name = multiverse_params.get("world_name", world_name)
-                    simulation_name = multiverse_params.get("simulation_name", simulation_name)
-                    send = multiverse_params.get("send", send)
-                    receive = multiverse_params.get("receive", receive)
-                                                                    
+
+        host = multiverse_params.get("host", host)
+        server_port = multiverse_params.get("server_port", server_port)
+        client_port = multiverse_params.get("client_port", client_port)
+        world_name = multiverse_params.get("world_name", world_name)
+        simulation_name = multiverse_params.get("simulation_name", simulation_name)
+        send = multiverse_params.get("send", send)
+        receive = multiverse_params.get("receive", receive)
+        for key, values in send.items():
+            if isinstance(values, str):
+                send[key] = json.loads(values)
+        for key, values in receive.items():
+            if isinstance(values, str):
+                receive[key] = json.loads(values)
+
         selection_panel_frame = CollapsableFrame("Multiverse Connector", collapsed=False)
 
         with selection_panel_frame:
@@ -339,7 +337,7 @@ class UIBuilder(MultiverseConnector):
                                                 self._receive_prims_check_boxes[prim] = []
                                                 for attr in attributes[prim_type]:
                                                     default_value = False
-                                                    if prim_name in send and attr in send[prim_name]:
+                                                    if prim_name in receive and attr in receive[prim_name]:
                                                         default_value = True
                                                     if prim_type == "body":
                                                         if "body" in receive and attr in receive["body"]:
@@ -390,7 +388,6 @@ class UIBuilder(MultiverseConnector):
 
             if len(self.scene_registry.rigid_contact_views) > 0: # Need to stop if rigid_contact_views are present
                 self.world.stop()
-            self.world.initialize_physics() # Create SimulationView
             current_stage = stage.get_current_stage()
             articulation_prim_paths = []
             self._body_dict = {}
@@ -574,7 +571,8 @@ class UIBuilder(MultiverseConnector):
                             data = response_meta_data[send_receive][object_name][attribute]
                             if any(x is None for x in data):
                                 continue
-                            data = torch.tensor(data).to("cuda").float()
+                            if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext):
+                                data = torch.tensor(data).to("cuda").float()
                             if attribute == "position":
                                 bodies_positions[view_name][object_idx] = data[:3]
                             elif attribute == "quaternion":
@@ -781,10 +779,19 @@ class UIBuilder(MultiverseConnector):
                 elif prim_path in self._joint_dict:
                     articulation_view_name, joint_idx = self._object_articulation_view_idx_dict[prim_path]
                     for attribute in attributes:
-                        if attribute == "cmd_joint_rvalue" or attribute == "cmd_joint_tvalue":
+                        cmd_joints_values[articulation_view_name][joint_idx] = [0.0, 0.0, 0.0]
+                        if attribute in ["cmd_joint_rvalue", "cmd_joint_tvalue"]:
                             cmd_joint_value = receive_data[0]
                             receive_data = receive_data[1:]
-                            cmd_joints_values[articulation_view_name][joint_idx] = cmd_joint_value
+                            cmd_joints_values[articulation_view_name][joint_idx][0] = cmd_joint_value
+                        elif attribute in ["cmd_joint_angular_velocity", "cmd_joint_linear_velocity"]:
+                            cmd_joint_velocity = receive_data[0]
+                            receive_data = receive_data[1:]
+                            cmd_joints_values[articulation_view_name][joint_idx][1] = cmd_joint_velocity
+                        elif attribute in ["cmd_joint_force", "cmd_joint_torque"]:
+                            cmd_joint_effort = receive_data[0]
+                            receive_data = receive_data[1:]
+                            cmd_joints_values[articulation_view_name][joint_idx][2] = cmd_joint_effort
 
             for rigid_prim_view_name, rigid_prim_view in self.scene_registry.rigid_prim_views.items():
                 if rigid_prim_view_name in bodies_velocities and len(bodies_velocities[rigid_prim_view_name]) > 0:
@@ -799,10 +806,16 @@ class UIBuilder(MultiverseConnector):
                     articulation_view.set_velocities(velocities=cmd_body_velocities, indices=cmd_body_idxes)
 
                 if articulation_view_name in cmd_joints_values and len(cmd_joints_values[articulation_view_name]) > 0:
-                    cmd_joint_values = list(cmd_joints_values[articulation_view_name].values())
+                    cmd_joint_values = cmd_joints_values[articulation_view_name].values()
+                    cmd_joint_positions = [cmd_joint_value[0] for cmd_joint_value in cmd_joint_values]
+                    cmd_joint_velocities = [cmd_joint_value[1] for cmd_joint_value in cmd_joint_values]
+                    cmd_joint_efforts = [cmd_joint_value[2] for cmd_joint_value in cmd_joint_values]
                     cmd_joint_idxes = list(cmd_joints_values[articulation_view_name].keys())
-                    print(cmd_joint_values)
-                    action = ArticulationActions(joint_positions=cmd_joint_values, joint_indices=cmd_joint_idxes)
+                    action = ArticulationActions(
+                        joint_positions=cmd_joint_positions,
+                        joint_velocities=cmd_joint_velocities,
+                        joint_efforts=cmd_joint_efforts,
+                        joint_indices=cmd_joint_idxes)
                     articulation_view.apply_action(action)
         self.bind_receive_data_callback = bind_receive_data
 
@@ -834,24 +847,28 @@ class UIBuilder(MultiverseConnector):
             if len(self._receive_objects[prim]) == 0:
                 del self._receive_objects[prim]
 
-    def _clean_up(self):
-        self._send_prims_dict = {}
-        self._receive_prims_dict = {}
-        self._send_names_dict = {}
-        self._receive_names_dict = {}
+    def _clean_up(self, clean_ui=True):
+        self._world = None
+        self._scene = None
         self._send_objects = {}
         self._receive_objects = {}
-        self._send_prims_check_boxes = {}
-        self._receive_prims_check_boxes = {}
 
-        self._body_dict = {}
-        self._body_collision_geom_path_dict = {}
-        self._object_xform_prim_view_idx_dict = {}
-        self._object_rigid_prim_view_idx_dict = {}
-        self._object_rigid_contact_view_idx_dict = {}
-        self._joint_dict = {}
-        self._object_articulation_view_idx_dict = {}
-        self._constrained_bodies = set()
+        if clean_ui:
+            self._send_prims_dict = {}
+            self._receive_prims_dict = {}
+            self._send_names_dict = {}
+            self._receive_names_dict = {}
+            self._send_prims_check_boxes = {}
+            self._receive_prims_check_boxes = {}
+
+            self._body_dict = {}
+            self._body_collision_geom_path_dict = {}
+            self._object_xform_prim_view_idx_dict = {}
+            self._object_rigid_prim_view_idx_dict = {}
+            self._object_rigid_contact_view_idx_dict = {}
+            self._joint_dict = {}
+            self._object_articulation_view_idx_dict = {}
+            self._constrained_bodies = set()
 
     @property
     def scene_registry(self) -> "SceneRegistry":
@@ -863,4 +880,5 @@ class UIBuilder(MultiverseConnector):
     def world(self) -> "World":
         if self._world is None:
             self._world = World()
+            self._world.initialize_physics()
         return self._world

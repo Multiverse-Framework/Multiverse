@@ -109,6 +109,9 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
             world_stage.GetRootLayer().customLayerData = customLayerData
             world_stage.GetRootLayer().Save()
 
+            tmp_path = "/tmp/multiverse_isaacsim_connector.yaml"
+            with open(tmp_path, "w") as f:
+                f.write(str(customLayerData["multiverse_connector"]))
 
 if __name__ == "__main__":
     multiverse_simulator_compiler_main(IsaacSimCompiler)

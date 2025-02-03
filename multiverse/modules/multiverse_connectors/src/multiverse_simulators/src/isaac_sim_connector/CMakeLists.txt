@@ -8,6 +8,10 @@ if (UNIX)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
     execute_process(
+        COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/extensions/multiverse_connector /home/$ENV{USER}/Documents/Kit/shared/exts
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+    execute_process(
         COMMAND sed -i s|ISAAC_SIM_PATH|${ISAAC_SIM_PATH}|g ${BIN_DIR}/isaac_sim
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
