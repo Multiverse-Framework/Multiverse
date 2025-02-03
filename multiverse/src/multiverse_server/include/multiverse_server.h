@@ -50,6 +50,8 @@ enum class EAttribute : unsigned char
     JointTvalue,
     JointLinearVelocity,
     JointAngularVelocity,
+    JointLinearAcceleration,
+    JointAngularAcceleration,
     JointForce,
     JointTorque,
     CmdJointRvalue,

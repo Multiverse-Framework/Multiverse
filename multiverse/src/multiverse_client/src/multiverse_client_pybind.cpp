@@ -36,6 +36,8 @@ std::map<std::string, size_t> attribute_map_double = {
     {"joint_tvalue", 1},
     {"joint_linear_velocity", 1},
     {"joint_angular_velocity", 1},
+    {"joint_linear_acceleration", 1},
+    {"joint_angular_acceleration", 1},
     {"joint_force", 1},
     {"joint_torque", 1},
     {"cmd_joint_rvalue", 1},

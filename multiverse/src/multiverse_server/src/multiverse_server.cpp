@@ -50,6 +50,8 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map_
         {"joint_tvalue", {EAttribute::JointTvalue, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_linear_velocity", {EAttribute::JointLinearVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_angular_velocity", {EAttribute::JointAngularVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_linear_acceleration", {EAttribute::JointLinearAcceleration, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"joint_angular_acceleration", {EAttribute::JointAngularAcceleration, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_force", {EAttribute::JointForce, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_torque", {EAttribute::JointTorque, {std::numeric_limits<double>::quiet_NaN()}}},
         {"cmd_joint_rvalue", {EAttribute::CmdJointRvalue, {std::numeric_limits<double>::quiet_NaN()}}},
@@ -117,6 +119,12 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
          {{"rhs", {1.0}},
           {"lhs", {1.0}}}},
         {EAttribute::JointAngularVelocity,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::JointLinearAcceleration,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::JointAngularAcceleration,
          {{"rhs", {1.0}},
           {"lhs", {1.0}}}},
         {EAttribute::JointForce,
@@ -734,6 +742,14 @@ void MultiverseServer::bind_meta_data()
     std::for_each(conversion_map_double[EAttribute::JointAngularVelocity].begin(), conversion_map_double[EAttribute::JointAngularVelocity].end(),
                   [angle_unit, time_unit](double &joint_angular_velocity)
                   { joint_angular_velocity = unit_scale[angle_unit] / unit_scale[time_unit]; });
+
+    std::for_each(conversion_map_double[EAttribute::JointLinearAcceleration].begin(), conversion_map_double[EAttribute::JointLinearAcceleration].end(),
+                  [length_unit, time_unit](double &joint_linear_acceleration)
+                  { joint_linear_acceleration = unit_scale[length_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
+
+    std::for_each(conversion_map_double[EAttribute::JointAngularAcceleration].begin(), conversion_map_double[EAttribute::JointAngularAcceleration].end(),
+                  [angle_unit, time_unit](double &joint_angular_acceleration)
+                  { joint_angular_acceleration = unit_scale[angle_unit] / (unit_scale[time_unit] * unit_scale[time_unit]); });
 
     std::for_each(conversion_map_double[EAttribute::JointForce].begin(), conversion_map_double[EAttribute::JointForce].end(),
                   [mass_unit, length_unit, time_unit](double &force)

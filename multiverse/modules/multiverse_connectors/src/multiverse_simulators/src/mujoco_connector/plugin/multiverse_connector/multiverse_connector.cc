@@ -137,7 +137,7 @@ bool is_attribute_valid(const std::string &obj_name, const std::string &attr_nam
     const int joint_type = m->jnt_type[joint_id];
     if (joint_type == mjJNT_HINGE)
     {
-      const std::set<const char *> joint_attributes = {"joint_rvalue", "joint_angular_velocity", "joint_torque",};
+      const std::set<const char *> joint_attributes = {"joint_rvalue", "joint_angular_velocity", "joint_angular_acceleration", "joint_torque",};
       if (std::find(joint_attributes.begin(), joint_attributes.end(), attr_name) != joint_attributes.end())
       {
         attr_size = 1;
@@ -146,7 +146,7 @@ bool is_attribute_valid(const std::string &obj_name, const std::string &attr_nam
     }
     else if (joint_type == mjJNT_SLIDE)
     {
-      const std::set<const char *> joint_attributes = {"joint_tvalue", "joint_linear_velocity", "joint_force"};
+      const std::set<const char *> joint_attributes = {"joint_tvalue", "joint_linear_velocity", "joint_linear_acceleration", "joint_force"};
       if (std::find(joint_attributes.begin(), joint_attributes.end(), attr_name) != joint_attributes.end())
       {
         attr_size = 1;
@@ -462,10 +462,6 @@ namespace mujoco::plugin::multiverse_connector
       auto *multiverse_connector = reinterpret_cast<MultiverseConnector *>(d->plugin_data[instance]);
       multiverse_connector->Compute(m, d, instance);
     };
-    // plugin.advance = +[](const mjModel* m, mjData* d, int instance) {
-    //   auto* pid = reinterpret_cast<MultiverseConnector*>(d_->plugin_data[instance]);
-    //   pid_->Advance(m, d, instance);
-    // };
     mjp_registerPlugin(&plugin);
   }
 
@@ -578,40 +574,6 @@ namespace mujoco::plugin::multiverse_connector
         objects_to_destroy.insert(object_name); // Then add object to destroy
       }
     }
-    // for (const std::string &object_name : receive_objects_json.getMemberNames())
-    // {
-    //   if (strcmp(object_name.c_str(), "body") == 0 || strcmp(object_name.c_str(), "joint") == 0)
-    //   {
-    //     continue;
-    //   }
-    //   bool stop = true;
-    //   for (const Json::Value &attribute_json : receive_objects_json[object_name])
-    //   {
-    //     const std::string attribute_name = attribute_json.asString();
-    //     if (strcmp(attribute_name.c_str(), "position") == 0 || strcmp(attribute_name.c_str(), "quaternion") == 0)
-    //     {
-    //       stop = false;
-    //     }
-    //   }
-    //   if (stop)
-    //   {
-    //     continue;
-    //   }
-
-    //   if (mj_name2id(m_, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
-    //       mj_name2id(m_, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
-    //       mj_name2id(m_, mjtObj::mjOBJ_ACTUATOR, object_name.c_str()) == -1 &&
-    //       !(send_objects_json.isMember(object_name) &&
-    //         send_objects_json[object_name].empty()))
-    //   {
-    //     objects_to_spawn.insert(object_name);
-    //   }
-    // }
-    // for (const std::string &object_name : objects_to_destroy)
-    // {
-    //   receive_objects_json.removeMember(object_name);
-    //   send_objects_json.removeMember(object_name);
-    // }
     return true;
   }
 
@@ -896,6 +858,16 @@ namespace mujoco::plugin::multiverse_connector
               d_->qvel[dof_id] = v_json.asDouble();
             }
           }
+          else if ((strcmp(attribute_name.c_str(), "joint_angular_acceleration") == 0 && is_revolute_joint) ||
+                   (strcmp(attribute_name.c_str(), "joint_linear_acceleration") == 0 && is_prismatic_joint))
+          {
+            const Json::Value v_json = attribute_data[0];
+            if (!v_json.isNull())
+            {
+              const int dof_id = m_->jnt_dofadr[joint_id];
+              d_->qacc[dof_id] = v_json.asDouble();
+            }
+          }
           else if ((strcmp(attribute_name.c_str(), "joint_torque") == 0 && is_revolute_joint) ||
                    (strcmp(attribute_name.c_str(), "joint_force") == 0 && is_prismatic_joint))
           {
@@ -1081,6 +1053,11 @@ namespace mujoco::plugin::multiverse_connector
                    (strcmp(attribute_name.c_str(), "joint_linear_velocity") == 0 && is_prismatic_joint))
           {
             send_data_vec.emplace_back(&d_->qvel[dof_id]);
+          }
+          else if ((strcmp(attribute_name.c_str(), "joint_angular_acceleration") == 0 && is_revolute_joint) ||
+                   (strcmp(attribute_name.c_str(), "joint_linear_acceleration") == 0 && is_prismatic_joint))
+          {
+            send_data_vec.emplace_back(&d_->qacc[dof_id]);
           }
           else if ((strcmp(attribute_name.c_str(), "joint_torque") == 0 && is_revolute_joint) ||
                    (strcmp(attribute_name.c_str(), "joint_force") == 0 && is_prismatic_joint))
