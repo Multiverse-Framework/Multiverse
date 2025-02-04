@@ -635,6 +635,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         body_1_spec_new.quat = relative_quaternion
         self._mj_spec.detach_body(body_1_spec)
         self._fix_prefix_and_recompile(body_1_spec_new, dummy_prefix, body_1_name)
+        mujoco.mj_step1(self._mj_model, self._mj_data)
 
         return MultiverseFunctionResult(
             type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL,
@@ -670,6 +671,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             body_spec_new.add_freejoint()
         self._mj_spec.detach_body(body_spec)
         self._fix_prefix_and_recompile(body_spec_new, dummy_prefix, body_name)
+        mujoco.mj_step1(self._mj_model, self._mj_data)
 
         return MultiverseFunctionResult(
             type=MultiverseFunctionResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL,
