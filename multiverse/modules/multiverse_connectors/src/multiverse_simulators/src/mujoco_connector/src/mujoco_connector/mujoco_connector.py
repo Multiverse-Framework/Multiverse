@@ -189,16 +189,16 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             batch_data = {}
             for attr, indices in self._write_ids.items():
                 if attr in {"xpos", "xquat"}:
-                    body_id = indices[0][0]
-                    jntid = self._mj_model.body(body_id).jntadr[0]
-                    jnt = self._mj_model.jnt(jntid)
-                    assert jnt.type == mujoco.mjtJoint.mjJNT_FREE
-                    qpos_adr = jnt.qposadr
-                    batch_data["qpos"] = numpy.array(self._batch.qpos)
-                    if attr == "xpos":
-                        batch_data["qpos"][:, qpos_adr:qpos_adr + 3] = write_data[:, indices[1]]
-                    elif attr == "xquat":
-                        batch_data["qpos"][:, qpos_adr + 3:qpos_adr + 7] = write_data[:, indices[1]]
+                    for i, body_id in enumerate(indices[0]):
+                        jntid = self._mj_model.body(body_id).jntadr[0]
+                        jnt = self._mj_model.jnt(jntid)
+                        assert jnt.type == mujoco.mjtJoint.mjJNT_FREE
+                        qpos_adr = jnt.qposadr[0]
+                        batch_data["qpos"] = numpy.array(self._batch.qpos)
+                        if attr == "xpos":  # TODO: Check it again
+                            batch_data["qpos"][:, qpos_adr:qpos_adr + 3] = write_data[:, indices[1]][3 * i:3 * i + 3]
+                        elif attr == "xquat":
+                            batch_data["qpos"][:, qpos_adr + 3:qpos_adr + 7] = write_data[:, indices[1]][4 * i:4 * i + 4]
                 elif attr == "energy":
                     raise NotImplementedError("Not supported")
                 else:
@@ -242,11 +242,20 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
     def _fix_prefix_and_recompile(self, body_spec: mujoco.MjsBody, dummy_prefix: str, body_name: str):
         body_spec.name = body_name
-        for body_child in (body_spec.bodies +
-                           body_spec.joints +
-                           body_spec.geoms +
-                           body_spec.sites):
-            body_child.name = body_child.name.replace(dummy_prefix, "")
+        try:
+            for body_child in (body_spec.bodies +
+                               body_spec.joints +
+                               body_spec.geoms +
+                               body_spec.sites):
+                body_child.name = body_child.name.replace(dummy_prefix, "")
+        except ValueError:
+            self.log_warning(f"Failed to resolve body_spec for {body_name}, this is a bug from MuJoCo")
+            self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
+            for body_child in (body_spec.bodies +
+                               body_spec.joints +
+                               body_spec.geoms +
+                               body_spec.sites):
+                body_child.name = body_child.name.replace(dummy_prefix, "")
         self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
         for key in self._mj_spec.keys:
             if key.name != "home":
@@ -609,7 +618,13 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             )
 
         body_1_spec = self._mj_spec.find_body(body_1_name)
+        if body_1_spec is None:
+            self.log_warning(f"Body 1 {body_1_name} not found in the model specification, this is a bug from MuJoCo")
+            body_1_spec = next(body for body in self._mj_spec.bodies if body.name == body_1_name)
         body_2_spec = self._mj_spec.find_body(body_2_name)
+        if body_2_spec is None:
+            self.log_warning(f"Body 2 {body_2_name} not found in the model specification, this is a bug from MuJoCo")
+            body_2_spec = next(body for body in self._mj_spec.bodies if body.name == body_2_name)
         first_joint: mujoco.MjsJoint = body_1_spec.first_joint()
         if first_joint is not None and first_joint.type == mujoco.mjtJoint.mjJNT_FREE:
             first_joint.delete()
