@@ -759,6 +759,12 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             return get_body_1_root_name
         body_root_map = {body_1_name: get_body_1_root_name.result}
 
+        if including_children:
+            body_1_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_1_name)
+            body_root_map.update({self._mj_model.body(child_body_id).name: get_body_1_root_name.result
+                                  for child_body_id in self.get_children_ids(body_1_id)})
+        body_1_names = list(body_root_map.keys())
+
         if body_2_name is not None:
             get_body_2_root_name = self.get_body_root_name(body_2_name)
             if get_body_2_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
@@ -807,10 +813,10 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                              "lateralFrictionDir2": contact.frame[6:9]}
             contact_points.append(contact_point)
 
-        contact_points_str = f" with bodies {[body_2_name for body_2_name in contact_bodies if body_2_name != body_1_name]}" if len(contact_bodies) > 1 else ""
+        contact_points_str = f" with bodies {[body_2_name for body_2_name in contact_bodies if body_2_name not in body_1_names]}" if len(contact_bodies) > 1 else ""
         return MultiverseFunctionResult(
             type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
-            info=f"There are {len(contact_points)} contact points of body {body_1_name}{contact_points_str}",
+            info=f"There are {len(contact_points)} contact points of bodies {body_1_names}{contact_points_str}.",
             result=contact_points
         )
 
