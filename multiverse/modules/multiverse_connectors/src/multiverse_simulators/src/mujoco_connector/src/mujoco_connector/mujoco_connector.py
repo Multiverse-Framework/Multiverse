@@ -744,8 +744,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
     @MultiverseSimulator.multiverse_callback
     def get_contact_points(self,
-                           body_1_name: str,
-                           body_2_name: Optional[str] = None,
+                           body_1_names: List[str],
+                           body_2_names: Optional[List[str]] = None,
                            including_children: bool = True,
                            contact_style: str = "pybullet") -> MultiverseFunctionResult:
         if contact_style != "pybullet":
@@ -754,22 +754,31 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 info=f"Contact style {contact_style} is not supported"
             )
 
-        get_body_1_root_name = self.get_body_root_name(body_1_name)
-        if get_body_1_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
-            return get_body_1_root_name
-        body_root_map = {body_1_name: get_body_1_root_name.result}
+        if len(body_1_names) == 0:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info="Body 1 names are empty"
+            )
 
-        if including_children:
-            body_1_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_1_name)
-            body_root_map.update({self._mj_model.body(child_body_id).name: get_body_1_root_name.result
-                                  for child_body_id in self.get_children_ids(body_1_id)})
+        body_root_map = {}
+        for body_1_name in body_1_names:
+            get_body_1_root_name = self.get_body_root_name(body_1_name)
+            if get_body_1_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+                return get_body_1_root_name
+            body_root_map[body_1_name] = get_body_1_root_name.result
+
+            if including_children:
+                body_1_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_1_name)
+                body_root_map.update({self._mj_model.body(child_body_id).name: get_body_1_root_name.result
+                                      for child_body_id in self.get_children_ids(body_1_id)})
         body_1_names = list(body_root_map.keys())
 
-        if body_2_name is not None:
-            get_body_2_root_name = self.get_body_root_name(body_2_name)
-            if get_body_2_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
-                return get_body_2_root_name
-            body_root_map[body_2_name] = get_body_1_root_name.result
+        if body_2_names is not None:
+            for body_2_name in body_2_names:
+                get_body_2_root_name = self.get_body_root_name(body_2_name)
+                if get_body_2_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+                    return get_body_2_root_name
+                body_root_map[body_2_name] = get_body_2_root_name.result
         else:
             for body_2_id in range(self._mj_model.nbody):
                 body_2_name = self._mj_model.body(body_2_id).name
@@ -813,19 +822,12 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                              "lateralFrictionDir2": contact.frame[6:9]}
             contact_points.append(contact_point)
 
-        contact_points_str = f" with bodies {[body_2_name for body_2_name in contact_bodies if body_2_name not in body_1_names]}" if len(contact_bodies) > 1 else ""
+        contact_points_str = f" with bodies {[body_2_name for body_2_name in contact_bodies if body_2_name not in body_1_names]}" if len(contact_bodies) > len(body_1_names) else ""
         return MultiverseFunctionResult(
             type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
             info=f"There are {len(contact_points)} contact points of bodies {body_1_names}{contact_points_str}.",
             result=contact_points
         )
-
-    @MultiverseSimulator.multiverse_callback
-    def get_contact_bodies_and_points(self,
-                                      body_1_name: str,
-                                      body_2_name: Optional[str] = None,
-                                      including_children: bool = True):
-        pass
 
     @MultiverseSimulator.multiverse_callback
     def save(self,
