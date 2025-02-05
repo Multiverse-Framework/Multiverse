@@ -182,8 +182,6 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
             for entity_type in ["body", "joint", "geom", "actuator", "key"]:
                 entity_prefix = entity.prefix.get(entity_type, "")
                 entity_suffix = entity.suffix.get(entity_type, "")
-                if entity_prefix == f"{entity_name}_" and entity_suffix == "":
-                    continue
                 if entity_type == "body":
                     for body in self.world_spec.bodies:
                         body.name = fix_prefix_and_suffix_each(body.name, entity_prefix, entity_suffix, entity_name)
@@ -192,6 +190,12 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                                                                        entity_name)
                         exclude.bodyname2 = fix_prefix_and_suffix_each(exclude.bodyname2, entity_prefix, entity_suffix,
                                                                        entity_name)
+                    for equality in self.world_spec.equalities:
+                        if equality.type == mujoco.mjtEq.mjEQ_CONNECT:
+                            equality.name1 = fix_prefix_and_suffix_each(equality.name1, entity_prefix, entity_suffix,
+                                                                        entity_name)
+                            equality.name2 = fix_prefix_and_suffix_each(equality.name2, entity_prefix, entity_suffix,
+                                                                        entity_name)
                 elif entity_type == "geom":
                     for geom in self.world_spec.geoms:
                         geom.name = fix_prefix_and_suffix_each(geom.name, entity_prefix, entity_suffix, entity_name)
@@ -251,8 +255,8 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                         key.name = fix_prefix_and_suffix_each(key.name, entity_prefix, entity_suffix, entity_name)
 
     def add_references(self, references: Dict[str, Dict[str, Any]]):
-        home_key = self.world_spec.keys[0]
         world_model = self.world_spec.compile()
+        home_key = self.world_spec.keys[0]
         world_data = mujoco.MjData(world_model)
         for reference_name, reference in references.items():
             body_ref_name = reference.get("body1", None)
