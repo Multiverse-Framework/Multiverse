@@ -139,15 +139,17 @@ if [ $BUILD_RESOURCES = ON ]; then
 fi
 for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
-        . $virtualenvwrapper
-        mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
-        pip install -U pip build # Ensure pip and build are up-to-date
         break
     fi
 done
 if [ ! -f $virtualenvwrapper ]; then
     echo "virtualenvwrapper.sh not found"
     exit 1
+else
+    . $virtualenvwrapper
+    mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
+    $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
+    $PYTHON_EXECUTABLE -m pip numpy==1.26.4 # Fix numpy version
 fi
 
 # Build multiverse
@@ -158,19 +160,8 @@ fi
 #     -DBUILD_CONNECTORS=$BUILD_CONNECTORS \
 #     -DBUILD_KNOWLEDGE=$BUILD_KNOWLEDGE \
 #     -DBUILD_PARSER=$BUILD_PARSER
-cmake -S $PWD/multiverse -B $BUILD_DIR \
-    -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
-    -DBUILD_SRC=$BUILD_SRC \
-    -DBUILD_MODULES=$BUILD_MODULES \
-    -DBUILD_CONNECTORS=$BUILD_CONNECTORS \
-    -DBUILD_KNOWLEDGE=$BUILD_KNOWLEDGE \
-    -DBUILD_PARSER=$BUILD_PARSER \
-    -DBUILD_TESTS=$BUILD_TESTS \
-    -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
-make -C $BUILD_DIR
-cmake --install $BUILD_DIR
 
-if [ $BUILD_SRC = ON ] && [ $UBUNTU_VERSION = "20.04" ]; then
+if [ $BUILD_SRC = ON ]; then
     cmake -S $PWD/multiverse -B $BUILD_DIR \
         -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
         -DBUILD_SRC=ON \
@@ -179,10 +170,36 @@ if [ $BUILD_SRC = ON ] && [ $UBUNTU_VERSION = "20.04" ]; then
         -DBUILD_KNOWLEDGE=OFF \
         -DBUILD_PARSER=OFF \
         -DBUILD_TESTS=OFF \
-        -DPYTHON_EXECUTABLE=python3.8
+        -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
     make -C $BUILD_DIR
     cmake --install $BUILD_DIR
+
+    if [ $UBUNTU_VERSION = "20.04" ]; then
+        cmake -S $PWD/multiverse -B $BUILD_DIR \
+            -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
+            -DBUILD_SRC=ON \
+            -DBUILD_MODULES=OFF \
+            -DBUILD_CONNECTORS=OFF \
+            -DBUILD_KNOWLEDGE=OFF \
+            -DBUILD_PARSER=OFF \
+            -DBUILD_TESTS=OFF \
+            -DPYTHON_EXECUTABLE=python3.8
+        make -C $BUILD_DIR
+        cmake --install $BUILD_DIR
+    fi
 fi
+
+cmake -S $PWD/multiverse -B $BUILD_DIR \
+    -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
+    -DBUILD_SRC=OFF \
+    -DBUILD_MODULES=$BUILD_MODULES \
+    -DBUILD_CONNECTORS=$BUILD_CONNECTORS \
+    -DBUILD_KNOWLEDGE=$BUILD_KNOWLEDGE \
+    -DBUILD_PARSER=$BUILD_PARSER \
+    -DBUILD_TESTS=$BUILD_TESTS \
+    -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
+make -C $BUILD_DIR
+cmake --install $BUILD_DIR
 
 cd $CURRENT_DIR
 

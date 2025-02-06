@@ -87,18 +87,20 @@ if [ $BUILD_USD = true ]; then
     
     for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
         if [ -f $virtualenvwrapper ]; then
-            . $virtualenvwrapper
-            mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
-            $PYTHON_EXECUTABLE -m pip install pyside6 pyopengl
-            $PYTHON_EXECUTABLE $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
-            ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
-            ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
-            ln -sf $USD_BUILD_DIR/bin/usdcat $BIN_DIR
             break
         fi
     done
     if [ ! -f $virtualenvwrapper ]; then
         echo "virtualenvwrapper.sh not found"
+    else
+        . $virtualenvwrapper
+        mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
+        $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
+        $PYTHON_EXECUTABLE -m pip install pyside6 pyopengl
+        $PYTHON_EXECUTABLE $USD_EXT_DIR/build_scripts/build_usd.py $USD_BUILD_DIR
+        ln -sf $USD_BUILD_DIR/bin/usdview $BIN_DIR
+        ln -sf $USD_BUILD_DIR/bin/usdGenSchema $BIN_DIR
+        ln -sf $USD_BUILD_DIR/bin/usdcat $BIN_DIR
     fi
 fi
 
@@ -178,10 +180,23 @@ if [ $BUILD_ISAACLAB = true ]; then
     
     # Download IsaacLab
     
-    ISAACLAB_EXT_DIR=$EXT_DIR/isaaclab
+    ISAACLAB_EXT_DIR=$EXT_DIR/IsaacLab
     
     git submodule update --init $ISAACLAB_EXT_DIR
-    (cd $ISAACLAB_EXT_DIR && ./isaaclab.sh --install)
+
+    for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
+        if [ -f $virtualenvwrapper ]; then
+            break
+        fi
+    done
+    if [ ! -f $virtualenvwrapper ]; then
+        echo "virtualenvwrapper.sh not found"
+    else
+        . $virtualenvwrapper
+        mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
+        $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
+        (cd $ISAACLAB_EXT_DIR && ./isaaclab.sh --install)
+    fi
 fi
 
 if [ $BUILD_PYBIND11 = true ]; then
