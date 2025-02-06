@@ -68,7 +68,7 @@ from isaacsim.gui.components.ui_utils import get_style
 from isaacsim.core.api.world.world import World
 from isaacsim.core.api.scenes.scene import Scene
 from isaacsim.core.api.scenes.scene_registry import SceneRegistry
-from isaacsim.core.prims import XFormPrim, Articulation
+from isaacsim.core.prims import XFormPrim, RigidPrim, Articulation
 from isaacsim.core.utils.types import ArticulationActions
 from isaacsim.core.utils import stage
 from omni.isaac.dynamic_control import _dynamic_control
@@ -508,7 +508,7 @@ class UIBuilder(MultiverseConnector):
                         self._object_xform_prim_view_idx_dict[body_path] = (xform_prim_view.name, body_idx)
 
                 if len(rigid_prim_paths) > 0:
-                    rigid_prim_view = XFormPrim(prim_paths_expr=[body_path.pathString for body_path in rigid_prim_paths])
+                    rigid_prim_view = RigidPrim(prim_paths_expr=[body_path.pathString for body_path in rigid_prim_paths])
                     rigid_prim_view.initialize(self.world.physics_sim_view)
                     self.scene_registry.add_rigid_prim_view(rigid_prim_view.name, rigid_prim_view)
                     for body_idx, body_path in enumerate(rigid_prim_paths):
