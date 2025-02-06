@@ -9,6 +9,7 @@ MULTIVERSE_DIR=$PWD/multiverse
 INSTALL_ROS=true
 INSTALL_PARSER=true
 INSTALL_MUJOCO=true
+INSTALL_ISAACLAB=true
 INSTALL_KNOWLEDGE=true
 
 while [ -n "$1" ]; do
@@ -18,6 +19,7 @@ while [ -n "$1" ]; do
             INSTALL_ROS=false
             INSTALL_PARSER=false
             INSTALL_KNOWLEDGE=false
+            INSTALL_ISAACLAB=false
             break
         ;;
         --excludes) echo -n "--excludes option passed"
@@ -27,6 +29,7 @@ while [ -n "$1" ]; do
                 INSTALL_ROS=false
                 INSTALL_PARSER=false
                 INSTALL_MUJOCO=false
+                INSTALL_ISAACLAB=false
                 INSTALL_KNOWLEDGE=false
             else
                 echo -n ", with value:"
@@ -35,11 +38,13 @@ while [ -n "$1" ]; do
                     shift 1
                     if [ "$module" = "ros" ]; then
                         INSTALL_ROS=false
-                        elif [ "$module" = "parser" ]; then
+                    elif [ "$module" = "parser" ]; then
                         INSTALL_PARSER=false
-                        elif [ "$module" = "mujoco" ]; then
+                    elif [ "$module" = "mujoco" ]; then
                         INSTALL_MUJOCO=false
-                        elif [ "$module" = "knowledge" ]; then
+                    elif [ "$module" = "isaaclab" ]; then
+                        INSTALL_ISAACLAB=false
+                    elif [ "$module" = "knowledge" ]; then
                         INSTALL_KNOWLEDGE=false
                     fi
                 done
@@ -57,15 +62,15 @@ sudo apt-get update && sudo apt-get upgrade -y
 
 # Install presiqisite for ubuntu
 sudo apt-get install -y software-properties-common curl python-is-python3 python3-pip
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get install -y python3.10-dev python3.10-venv
 
 UBUNTU_VERSION=$(lsb_release -rs)
 
 if [ $INSTALL_ROS = true ]; then
     if [ $UBUNTU_VERSION = "20.04" ]; then
         # Setup your sources.list
-        sudo apt-get install software-properties-common
-        sudo add-apt-repository ppa:deadsnakes/ppa
-
         sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
         sudo curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -99,13 +104,10 @@ if [ $INSTALL_ROS = true ]; then
         # Setup your sources.list
         sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
         sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-        
+
         # Update package lists
         sudo apt-get update && sudo apt-get upgrade -y
 
-        # Install python3.10
-        sudo apt-get install -y python3.10-dev python3.10-venv
-        
         # Install ROS2
         sudo apt-get install -y ros-humble-desktop
         sudo apt-get install -y ros-dev-tools
@@ -119,10 +121,10 @@ if [ $INSTALL_ROS = true ]; then
         # Setup your sources.list
         sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
         sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-        
+
         # Update package lists
         sudo apt-get update && sudo apt-get upgrade -y
-        
+
         # Install ROS2
         sudo apt-get install -y ros-jazzy-desktop
         sudo apt-get install -y ros-dev-tools
@@ -179,56 +181,53 @@ elif [ $UBUNTU_VERSION = "24.04" ]; then
     python3 -m pip install virtualenvwrapper --break-system-packages
 fi
 
-PYTHON_EXECUTABLE=python3
-if [ $UBUNTU_VERSION = "20.04" ]; then
-    PYTHON_EXECUTABLE=python3.10
-elif [ $UBUNTU_VERSION = "22.04" ]; then
-    PYTHON_EXECUTABLE=python3.10
-elif [ $UBUNTU_VERSION = "24.04" ]; then
-    PYTHON_EXECUTABLE=python3.12
-fi
+PYTHON_EXECUTABLE=python3.10
 
 # Setup virtual environment
 for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
     if [ -f $virtualenvwrapper ]; then
-        . $virtualenvwrapper
-        mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
-
-        # Install and upgrade pip build setuptools packaging distro
-        $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
-
-        if [ $INSTALL_PARSER = true ]; then
-            git submodule update --init $MULTIVERSE_DIR/multiverse/modules/multiverse_parser
-
-            # Install additional packages for blender
-            sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
-            
-            # Install additional packages for USD
-            sudo apt-get install -y libxcb-cursor0
-            $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_parser/requirements.txt
-        fi
-
-        if [ $INSTALL_KNOWLEDGE = true ]; then
-            git submodule update --init $MULTIVERSE_DIR/multiverse/modules/multiverse_knowledge
-            (cd $MULTIVERSE_DIR/multiverse/modules/multiverse_knowledge; git submodule update --init ease_lexical_resources)
-
-            # Install additional packages for multiverse_knowledge
-            $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_knowledge/requirements.txt
-        fi
-
-        if [ $INSTALL_MUJOCO = true ]; then
-            # Install additional packages for MuJoCo
-            sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
-
-            # Install glfw3
-            sudo apt-get install -y libglfw3
-            sudo apt-get install -y libglfw3-dev
-            $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_connectors/src/multiverse_simulators/src/mujoco_connector/requirements.txt
-        fi
-
         break
     fi
 done
 if [ ! -f $virtualenvwrapper ]; then
     echo "virtualenvwrapper.sh not found"
+else
+    . $virtualenvwrapper
+    mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
+
+    # Install and upgrade pip build setuptools packaging distro
+    $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
+
+    if [ $INSTALL_PARSER = true ]; then
+        git submodule update --init $MULTIVERSE_DIR/multiverse/modules/multiverse_parser
+
+        # Install additional packages for blender
+        sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
+        
+        # Install additional packages for USD
+        sudo apt-get install -y libxcb-cursor0
+        $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_parser/requirements.txt
+    fi
+
+    if [ $INSTALL_KNOWLEDGE = true ]; then
+        git submodule update --init $MULTIVERSE_DIR/multiverse/modules/multiverse_knowledge
+        (cd $MULTIVERSE_DIR/multiverse/modules/multiverse_knowledge; git submodule update --init ease_lexical_resources)
+
+        # Install additional packages for multiverse_knowledge
+        $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_knowledge/requirements.txt
+    fi
+
+    if [ $INSTALL_MUJOCO = true ]; then
+        # Install additional packages for MuJoCo
+        sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev libxt-dev
+
+        # Install glfw3
+        sudo apt-get install -y libglfw3
+        sudo apt-get install -y libglfw3-dev
+        $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_connectors/src/multiverse_simulators/src/mujoco_connector/requirements.txt
+    fi
+
+    if [ $INSTALL_ISAACLAB = true ]; then
+        $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_connectors/src/multiverse_simulators/src/isaac_sim_connector/requirements.txt
+    fi
 fi

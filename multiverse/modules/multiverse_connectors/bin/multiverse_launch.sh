@@ -78,17 +78,7 @@ fi
 
 workon multiverse
 
-UBUNTU_VERSION=$(lsb_release -rs)
-PYTHON_EXECUTABLE=python3
-if [ $UBUNTU_VERSION = "20.04" ]; then
-    PYTHON_EXECUTABLE=python3.10
-elif [ $UBUNTU_VERSION = "22.04" ]; then
-    PYTHON_EXECUTABLE=python3.10
-elif [ $UBUNTU_VERSION = "24.04" ]; then
-    PYTHON_EXECUTABLE=python3.12
-else
-    PYTHON_EXECUTABLE=python3
-fi
+PYTHON_EXECUTABLE=python3.10
 
 if [ "$NO_MULTIVERSE_SERVER" = true ]; then
     echo "Skipping the Multiverse server..."

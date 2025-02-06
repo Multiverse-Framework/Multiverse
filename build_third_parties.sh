@@ -23,6 +23,7 @@ INCLUDE_DIR=$MULTIVERSE_DIR/include
 BUILD_BLENDER=true
 BUILD_USD=true
 BUILD_MUJOCO=true
+BUILD_ISAACLAB=true
 BUILD_PYBIND11=true
 
 while [ -n "$1" ]; do
@@ -35,19 +36,22 @@ while [ -n "$1" ]; do
                 BUILD_USD=false
                 BUILD_MUJOCO=false
                 BUILD_PYBIND11=false
+                BUILD_ISAACLAB=false
             else
                 echo -n ", with value:"
                 for module in "$@"; do
                     echo -n " $module"
                     shift 1
                     if [ "$module" = "blender" ]; then
-                        BUILD_BLENDER=OFF
+                        BUILD_BLENDER=false
                         elif [ "$module" = "usd" ]; then
-                        BUILD_USD=OFF
+                        BUILD_USD=false
                         elif [ "$module" = "mujoco" ]; then
-                        BUILD_MUJOCO=OFF
+                        BUILD_MUJOCO=false
+                        elif [ "$module" = "mujoco" ]; then
+                        BUILD_ISAACLAB=false
                         elif [ "$module" = "pybind11" ]; then
-                        BUILD_PYBIND11=OFF
+                        BUILD_PYBIND11=false
                     fi
                 done
                 echo ""
@@ -61,14 +65,7 @@ done
 
 UBUNTU_VERSION=$(lsb_release -rs)
 
-PYTHON_EXECUTABLE=python3
-if [ $UBUNTU_VERSION = "20.04" ]; then
-    PYTHON_EXECUTABLE=python3.10
-elif [ $UBUNTU_VERSION = "22.04" ]; then
-    PYTHON_EXECUTABLE=python3.10
-elif [ $UBUNTU_VERSION = "24.04" ]; then
-    PYTHON_EXECUTABLE=python3.12
-fi
+PYTHON_EXECUTABLE=python3.10
 
 if [ $BUILD_USD = true ]; then
     echo "Building USD..."
@@ -137,7 +134,7 @@ if [ $BUILD_BLENDER = true ]; then
     fi
     
     (cd $BLENDER_BUILD_DIR/4.2/python/bin;
-        ./python3.11 -m pip install --upgrade pip build --no-warn-script-location;
+    ./python3.11 -m pip install --upgrade pip build --no-warn-script-location;
     ./python3.11 -m pip install bpy Pillow --no-warn-script-location) # For blender
     ln -sf $BLENDER_BUILD_DIR/blender $BIN_DIR
     ln -sf $BLENDER_BUILD_DIR/4.2/python/bin/python3.11 $BIN_DIR
@@ -146,11 +143,8 @@ fi
 if [ $BUILD_MUJOCO = true ]; then
     echo "Building MuJoCo..."
     
-    # Build MuJoCo
-    
     FROM_SRC=false
     MUJOCO_BUILD_DIR=$BUILD_DIR/mujoco
-    MUJOCO_EXT_DIR=$EXT_DIR/mujoco
     
     if [ ! -d "$MUJOCO_BUILD_DIR" ]; then
         # Create the folder if it doesn't exist
@@ -163,6 +157,8 @@ if [ $BUILD_MUJOCO = true ]; then
     if [ $FROM_SRC = false ]; then
         # Build MuJoCo
         
+        MUJOCO_EXT_DIR=$EXT_DIR/mujoco
+
         git submodule update --init $MUJOCO_EXT_DIR
         MUJOCO_PLUGIN_DIR=$MUJOCO_BUILD_DIR/bin/mujoco_plugin
         mkdir -p $MUJOCO_PLUGIN_DIR
@@ -175,6 +171,17 @@ if [ $BUILD_MUJOCO = true ]; then
     fi
     
     ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
+fi
+
+if [ $BUILD_ISAACLAB = true ]; then
+    echo "Building IsaacLab..."
+    
+    # Download IsaacLab
+    
+    ISAACLAB_EXT_DIR=$EXT_DIR/isaaclab
+    
+    git submodule update --init $ISAACLAB_EXT_DIR
+    (cd $ISAACLAB_EXT_DIR && ./isaaclab.sh --install)
 fi
 
 if [ $BUILD_PYBIND11 = true ]; then

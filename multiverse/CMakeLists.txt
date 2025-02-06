@@ -22,8 +22,6 @@ set(MULTIVERSE_CLIENT_LIBRARY_TYPE "STATIC" CACHE STRING "Type of library to cre
 
 set(PYTHON_EXECUTABLE "python3" CACHE STRING "Python executable to use")
 
-set(ISAAC_SIM_PATH "/home/$ENV{USER}/.local/share/ov/pkg/isaac-sim-4.2.0" CACHE STRING "Path to Isaac Sim")
-
 option(BUILD_SRC "Build the src" ON)
 option(BUILD_MODULES "Build the modules" ON)
 

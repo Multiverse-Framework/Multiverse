@@ -114,12 +114,7 @@ while [ -n "$1" ]; do
 done
 
 UBUNTU_VERSION=$(lsb_release -rs)
-PYTHON_EXECUTABLE=python3
-if [ $UBUNTU_VERSION = "20.04" ]; then
-    PYTHON_EXECUTABLE=python3.10
-elif [ $UBUNTU_VERSION = "24.04" ]; then
-    PYTHON_EXECUTABLE=python3.12
-fi
+PYTHON_EXECUTABLE=python3.10
 
 if [ $BUILD_PARSER = ON ]; then
     echo "Updating multiverse_parser..."

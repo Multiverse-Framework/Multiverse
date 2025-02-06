@@ -43,6 +43,4 @@ endif()
 
 add_subdirectory(src/mujoco_connector)
 
-if(EXISTS "${ISAAC_SIM_PATH}")
-    add_subdirectory(src/isaac_sim_connector)
-endif()
+add_subdirectory(src/isaac_sim_connector)
