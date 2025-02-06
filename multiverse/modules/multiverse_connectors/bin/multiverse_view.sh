@@ -35,6 +35,17 @@ MULTIVERSE_PATH=$(dirname $(dirname "$0"))
 # Split the input string into an array of variables
 read -ra vars <<< "$@"
 
+for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
+    if [ -f $virtualenvwrapper ]; then
+        . $virtualenvwrapper
+        break
+    fi
+done
+if [ ! -f $virtualenvwrapper ]; then
+    echo "virtualenvwrapper.sh not found"
+    exit 1
+fi
+
 # Print each variable
 for var in "${vars[@]}"; do
     echo "$var"
@@ -51,10 +62,13 @@ for var in "${vars[@]}"; do
 
     # Check if ROS2 or ROS1 exists
     if [ -f "/opt/ros/foxy/setup.bash" ]; then
+        workon multiverse3.8
         source /opt/ros/foxy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/setup.bash
     elif [ -f "/opt/ros/humble/setup.bash" ]; then
+        workon multiverse
         source /opt/ros/humble/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/setup.bash
     elif [ -f "/opt/ros/jazzy/setup.bash" ]; then
+        workon multiverse3.12
         source /opt/ros/jazzy/setup.bash && source $MULTIVERSE_PATH/../multiverse_ws2/install/setup.bash
     else
         echo "Warning: ROS not found."

@@ -22,7 +22,7 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
                     objects: Dict[str, Object],
                     references: Dict[str, Dict[str, Any]] = None,
                     multiverse_params: Dict[str, Dict] = None):
-        from pxr import Usd, UsdGeom, UsdPhysics, Gf  # Ask NVIDIA for this shitty importing style
+        from pxr import Usd, UsdGeom, UsdPhysics, Gf, Sdf  # Ask NVIDIA for this shitty importing style
 
         for entity in list(robots.values()) + list(objects.values()):
             file_ext = os.path.splitext(entity.path)[1]
@@ -30,6 +30,13 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
             entity_usd_path = os.path.join(self.save_dir_path, entity.name + f"{file_ext}")
             shutil.copy(entity.path, entity_usd_path)
             entity.path = entity_usd_path
+
+            if file_ext == ".usda":
+                with open(entity_usd_path, "r") as f:
+                    data = f.read()
+                data = data.replace("@./", f"@{entity_usd_dir}/")
+                with open(entity_usd_path, "w") as f:
+                    f.write(data)
             entity_stage = Usd.Stage.Open(entity_usd_path)
 
             if "body" in entity.apply:
@@ -39,12 +46,17 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
                     if xform_prim.GetName() == entity.name and not xform_prim.GetParent().IsPseudoRoot():
                         continue
                     xform = UsdGeom.Xform(xform_prim)
+                    pose = xform.GetLocalTransformation()
+                    pos = pose.ExtractTranslation()
+                    pos = [*pos]
+                    quat = pose.ExtractRotationQuat()
+                    quat = [*quat.GetImaginary(), quat.GetReal()]
                     xform.ClearXformOpOrder()
-                    pos = body_apply[xform_prim.GetName()].get("pos", [0, 0, 0])
-                    quat = body_apply[xform_prim.GetName()].get("quat", [1, 0, 0, 0])
+                    pos = body_apply[xform_prim.GetName()].get("pos", pos)
+                    quat = body_apply[xform_prim.GetName()].get("quat", quat)
 
-                    pos = numpy.asarray(pos)
-                    quat = numpy.asarray(quat)
+                    pos = numpy.asfarray(pos)
+                    quat = numpy.asfarray(quat)
                     mat = Gf.Matrix4d()
                     mat.SetTranslateOnly(Gf.Vec3d(*pos))
                     mat.SetRotateOnly(Gf.Quatd(quat[0], Gf.Vec3d(*quat[1:])))
@@ -62,13 +74,6 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
 
             entity_stage.GetRootLayer().Save()
 
-            if file_ext == ".usda":
-                with open(entity_usd_path, "r") as f:
-                    data = f.read()
-                data = data.replace("@./", f"@{entity_usd_dir}/")
-                with open(entity_usd_path, "w") as f:
-                    f.write(data)
-
         robots_path = os.path.join(self.save_dir_path, os.path.basename(self.save_file_path).split(".")[0] + "_robots.usda")
         robots_stage = Usd.Stage.CreateNew(robots_path)
         if len(robots) == 1:
@@ -79,6 +84,25 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
         robots_stage.Export(robots_path)
 
         print(f"Robots: {robots_path}")
+
+        objects_path = os.path.join(self.save_dir_path, os.path.basename(self.save_file_path).split(".")[0] + "_objects.usda")
+        objects_stage = Usd.Stage.CreateNew(objects_path)
+        objects_prim_path = Sdf.Path("/Objects")
+        objects_xform = UsdGeom.Xform.Define(objects_stage, objects_prim_path)
+        objects_prim = objects_xform.GetPrim()
+        objects_stage.SetDefaultPrim(objects_prim)
+
+        for object in objects.values():
+            object_prim_path = objects_prim_path.AppendChild(object.name)
+            object_xform = UsdGeom.Xform.Define(objects_stage, object_prim_path)
+            object_prim = object_xform.GetPrim()
+            object_stage = Usd.Stage.Open(object.path)
+            object_prim.GetReferences().AddReference(object_stage.GetRootLayer().identifier, object_stage.GetDefaultPrim().GetPath())
+
+        objects_stage.Flatten()
+        objects_stage.Export(objects_path)
+
+        print(f"Objects: {objects_path}")
 
         file_ext = os.path.splitext(self.world_path)[1]
         if file_ext == ".usda":

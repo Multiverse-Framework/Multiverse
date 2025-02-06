@@ -6,7 +6,6 @@ from typing import Optional
 
 import numpy
 import torch
-from isaacsim import SimulationApp
 from isaaclab.app import AppLauncher
 
 from multiverse_simulator import MultiverseSimulator, MultiverseRenderer, MultiverseViewer
@@ -26,7 +25,7 @@ class MultiverseIsaacSimRenderer(MultiverseRenderer):
         self.simulation_app.close()
 
     @property
-    def simulation_app(self) -> SimulationApp:
+    def simulation_app(self) -> "SimulationApp":
         return self._simulation_app
 
 
@@ -37,6 +36,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
             self,
             world_path: str,
             robots_path: Optional[str] = None,
+            objects_path: Optional[str] = None,
             number_of_envs: int = 1,
             env_spacing: float = 2.0,
             viewer: Optional[MultiverseViewer] = None,
@@ -105,7 +105,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                 ).replace(prim_path="{ENV_REGEX_NS}/World")
 
         @configclass
-        class SceneCfg(WorldCfg):
+        class SceneWithRobotsCfg(WorldCfg):
             pass
 
         if robots_path is not None:
@@ -135,7 +135,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                     robots_joint_pos[prim.GetName()] = joint_pos
 
                 @configclass
-                class SceneCfg(WorldCfg):
+                class SceneWithRobotsCfg(WorldCfg):
                     # robots articulation
                     robots = ArticulationCfg(
                         spawn=sim_utils.UsdFileCfg(
@@ -162,6 +162,49 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                         ),
                         actuators={},
                     ).replace(prim_path="{ENV_REGEX_NS}/Robot")
+
+        @configclass
+        class SceneCfg(SceneWithRobotsCfg):
+            pass
+
+        if objects_path is not None:
+            objects_stage = Usd.Stage.Open(objects_path)
+            objects_prim = objects_stage.GetDefaultPrim()
+            if objects_prim.IsValid():
+                objects_xform = UsdGeom.Xform(objects_prim)
+                objects_pos = objects_xform.GetLocalTransformation().ExtractTranslation()
+                objects_quat = objects_xform.GetLocalTransformation().ExtractRotation().GetQuat()
+                objects_joint_pos = {}
+                for prim in [prim for prim in objects_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
+                    joint = UsdPhysics.RevoluteJoint(prim) if prim.IsA(UsdPhysics.RevoluteJoint) else UsdPhysics.PrismaticJoint(prim)
+                    lower_limit_joint = joint.GetLowerLimitAttr().Get()
+                    upper_limit_joint = joint.GetUpperLimitAttr().Get()
+                    joint_pos = 0.0
+                    if prim.HasAPI(UsdPhysics.DriveAPI):
+                        drive_api = UsdPhysics.DriveAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                        joint_pos = drive_api.GetTargetPositionAttr().Get()
+                    if joint_pos < lower_limit_joint or joint_pos > upper_limit_joint:
+                        joint_pos = (lower_limit_joint + upper_limit_joint) / 2.0
+                    if prim.HasAPI(PhysxSchema.JointStateAPI):
+                        joint_state_api = PhysxSchema.JointStateAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                        joint_state_api.GetPositionAttr().Set(joint_pos)
+                    if UsdPhysics.RevoluteJoint(prim):
+                        joint_pos = float(numpy.deg2rad(joint_pos))
+
+                    objects_joint_pos[prim.GetName()] = joint_pos
+
+                @configclass
+                class SceneCfg(SceneWithRobotsCfg):
+                    # objects asset
+                    objects = AssetBaseCfg(
+                        spawn=sim_utils.UsdFileCfg(
+                            usd_path=objects_path,
+                        ),
+                        init_state=AssetBaseCfg.InitialStateCfg(
+                            pos=objects_pos,
+                            rot=(objects_quat.GetReal(), *objects_quat.GetImaginary())
+                        ),
+                    ).replace(prim_path="{ENV_REGEX_NS}/Objects")
 
         simulation_config = sim_utils.SimulationCfg(dt=self.step_size)
         self._simulation_context = SimulationContext(cfg=simulation_config)

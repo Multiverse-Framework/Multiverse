@@ -62,9 +62,9 @@ import json
 import torch
 import omni.timeline
 import omni.ui as ui
+from isaaclab.sim import SimulationContext
 from isaacsim.gui.components.element_wrappers import CollapsableFrame, TextBlock, StringField, IntField, CheckBox
 from isaacsim.gui.components.ui_utils import get_style
-
 from isaacsim.core.api.world.world import World
 from isaacsim.core.api.scenes.scene import Scene
 from isaacsim.core.api.scenes.scene_registry import SceneRegistry
@@ -133,7 +133,7 @@ class UIBuilder(MultiverseConnector):
             event (omni.usd.StageEventType): Event Type
         """
         if event.type == int(omni.usd.StageEventType.ASSETS_LOADED):
-            if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext) and self._timeline.is_playing():
+            if isinstance(self.world, SimulationContext) and self._timeline.is_playing():
                 self._clean_up()
                 self.build_ui()
                 self._init()
@@ -142,12 +142,12 @@ class UIBuilder(MultiverseConnector):
                 # self.build_ui()
                 self._init()
         elif event.type == int(omni.usd.StageEventType.ANIMATION_START_PLAY):
-            if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext):
+            if isinstance(self.world, SimulationContext):
                 # self._init()
                 pass # TODO: Make pause and unpause in IsaacLab work
         elif event.type == int(omni.usd.StageEventType.SIMULATION_STOP_PLAY):
             # Ignore pause events
-            if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext) or self._timeline.is_stopped():
+            if isinstance(self.world, SimulationContext) or self._timeline.is_stopped():
                 self._clean_up(clean_ui=False)
 
     def cleanup(self):
@@ -576,7 +576,7 @@ class UIBuilder(MultiverseConnector):
                             data = response_meta_data[send_receive][object_name][attribute]
                             if any(x is None for x in data):
                                 continue
-                            if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext):
+                            if isinstance(self.world, SimulationContext):
                                 data = torch.tensor(data).to("cuda").float()
                             if attribute == "position":
                                 bodies_positions[view_name][object_idx] = data[:3]
@@ -815,7 +815,7 @@ class UIBuilder(MultiverseConnector):
                     cmd_joint_positions = [cmd_joint_value[0] for cmd_joint_value in cmd_joint_values]
                     cmd_joint_velocities = [cmd_joint_value[1] for cmd_joint_value in cmd_joint_values]
                     cmd_joint_efforts = [cmd_joint_value[2] for cmd_joint_value in cmd_joint_values]
-                    if hasattr(omni.isaac, 'lab') and isinstance(self.world, omni.isaac.lab.sim.simulation_context.SimulationContext):
+                    if isinstance(self.world, SimulationContext):
                         cmd_joint_positions = torch.tensor(cmd_joint_positions).to("cuda").float()
                         cmd_joint_velocities = torch.tensor(cmd_joint_velocities).to("cuda").float()
                         cmd_joint_efforts = torch.tensor(cmd_joint_efforts).to("cuda").float()
@@ -889,5 +889,4 @@ class UIBuilder(MultiverseConnector):
     def world(self) -> "World":
         if self._world is None:
             self._world = World()
-            self._world.initialize_physics()
         return self._world

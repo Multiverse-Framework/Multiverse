@@ -127,6 +127,10 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         if robots_group is not None:
             robots_path = robots_group.group(1)
             cmd += [f"--robots_path={robots_path}"]
+        objects_group = re.search(r"Objects:\s*([^\n]+)", compiler_result.stdout)
+        if objects_group is not None:
+            objects_path = objects_group.group(1)
+            cmd += [f"--objects_path={objects_path}"]
         for config_name, config_data in simulation_data.get("config", {}).items():
             cmd.append(f"--{config_name}={config_data}")
         world_name = simulation_data.get("world", {}).get("name", "world")
