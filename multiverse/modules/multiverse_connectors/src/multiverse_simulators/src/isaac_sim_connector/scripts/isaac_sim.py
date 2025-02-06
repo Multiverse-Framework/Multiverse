@@ -1,4 +1,4 @@
-#!ISAAC_SIM_PATH/python.sh
+#!/usr/bin/env python3
 
 import argparse
 import sys

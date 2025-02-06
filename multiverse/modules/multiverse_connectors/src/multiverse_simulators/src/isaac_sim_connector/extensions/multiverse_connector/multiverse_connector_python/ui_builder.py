@@ -62,16 +62,15 @@ import json
 import torch
 import omni.timeline
 import omni.ui as ui
-from omni.isaac.ui.element_wrappers import CollapsableFrame, TextBlock, StringField, IntField, CheckBox
-from omni.isaac.ui.ui_utils import get_style
+from isaacsim.gui.components.element_wrappers import CollapsableFrame, TextBlock, StringField, IntField, CheckBox
+from isaacsim.gui.components.ui_utils import get_style
 
-from omni.isaac.core import World
-from omni.isaac.core.scenes.scene import Scene
-from omni.isaac.core.scenes import SceneRegistry
-from omni.isaac.core.prims import XFormPrimView, RigidPrimView
-from omni.isaac.core.articulations import ArticulationView
-from omni.isaac.core.utils.types import ArticulationActions
-from omni.isaac.core.utils import stage
+from isaacsim.core.api.world.world import World
+from isaacsim.core.api.scenes.scene import Scene
+from isaacsim.core.api.scenes.scene_registry import SceneRegistry
+from isaacsim.core.prims import XFormPrim, Articulation
+from isaacsim.core.utils.types import ArticulationActions
+from isaacsim.core.utils import stage
 from omni.isaac.dynamic_control import _dynamic_control
 from pxr import UsdGeom, UsdPhysics
 
@@ -82,7 +81,7 @@ class UIBuilder(MultiverseConnector):
         # Frames are sub-windows that can contain multiple UI elements
         self.frames = []
 
-        # UI elements created using a UIElementWrapper from omni.isaac.ui.element_wrappers
+        # UI elements created using a UIElementWrapper from isaacsim.gui.components.element_wrappers
         self.wrapped_ui_elements = []
 
         self._world = None
@@ -155,7 +154,7 @@ class UIBuilder(MultiverseConnector):
         """
         Called when the stage is closed or the extension is hot reloaded.
         Perform any necessary cleanup such as removing active callback functions
-        Buttons imported from omni.isaac.ui.element_wrappers implement a cleanup function that should be called
+        Buttons imported from isaacsim.gui.components.element_wrappers implement a cleanup function that should be called
         """
         self._clean_up()
         for ui_elem in self.wrapped_ui_elements:
@@ -474,7 +473,7 @@ class UIBuilder(MultiverseConnector):
                     if self.scene_registry.name_exists(articulation_view_name):
                         articulation_view = self.scene_registry.articulated_views[articulation_view_name]
                     else:
-                        articulation_view = ArticulationView(prim_paths_expr=articulation_prim_path.pathString, name=articulation_view_name)
+                        articulation_view = Articulation(prim_paths_expr=articulation_prim_path.pathString, name=articulation_view_name)
                         articulation_view.initialize(self.world.physics_sim_view)
                         self.scene_registry.add_articulated_view(articulation_view.name, articulation_view)
                     if prim_path in self._joint_dict and prim_name in articulation_view.dof_names:
@@ -502,14 +501,14 @@ class UIBuilder(MultiverseConnector):
                     xform_prim_paths.append(body_path)
 
                 if len(xform_prim_paths) > 0:
-                    xform_prim_view = XFormPrimView(prim_paths_expr=[body_path.pathString for body_path in xform_prim_paths])
+                    xform_prim_view = XFormPrim(prim_paths_expr=[body_path.pathString for body_path in xform_prim_paths])
                     xform_prim_view.initialize(self.world.physics_sim_view)
                     self.scene_registry.add_xform_view(xform_prim_view.name, xform_prim_view)
                     for body_idx, body_path in enumerate(xform_prim_paths):
                         self._object_xform_prim_view_idx_dict[body_path] = (xform_prim_view.name, body_idx)
 
                 if len(rigid_prim_paths) > 0:
-                    rigid_prim_view = RigidPrimView(prim_paths_expr=[body_path.pathString for body_path in rigid_prim_paths])
+                    rigid_prim_view = XFormPrim(prim_paths_expr=[body_path.pathString for body_path in rigid_prim_paths])
                     rigid_prim_view.initialize(self.world.physics_sim_view)
                     self.scene_registry.add_rigid_prim_view(rigid_prim_view.name, rigid_prim_view)
                     for body_idx, body_path in enumerate(rigid_prim_paths):

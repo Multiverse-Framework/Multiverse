@@ -3,11 +3,11 @@ reloadable = true
 order = 0
 
 [package]
-version = "1.0.0"
+version = "1.0.1"
 category = "Simulation"
 title = "multiverse_connector"
 description = "Multiverse Connector"
-authors = ["Giang Nguyen"]
+authors = ["NVIDIA"]
 repository = ""
 keywords = []
 changelog = "docs/CHANGELOG.md"
@@ -18,8 +18,8 @@ icon = "data/icon.png"
 
 [dependencies]
 "omni.kit.uiapp" = {}
-"omni.isaac.ui" = {}
-"omni.isaac.core" = {}
+"isaacsim.gui.components" = {}
+"isaacsim.core.api" = {}
 
 [[python.module]]
 name = "multiverse_connector_python"

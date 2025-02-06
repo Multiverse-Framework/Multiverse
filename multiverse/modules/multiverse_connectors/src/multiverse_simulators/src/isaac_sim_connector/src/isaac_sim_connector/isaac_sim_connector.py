@@ -7,7 +7,7 @@ from typing import Optional
 import numpy
 import torch
 from isaacsim import SimulationApp
-from omni.isaac.lab.app import AppLauncher
+from isaaclab.app import AppLauncher
 
 from multiverse_simulator import MultiverseSimulator, MultiverseRenderer, MultiverseViewer
 
@@ -50,13 +50,13 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
 
         self._app_launcher = AppLauncher(headless=self.headless)
 
-        import omni.isaac.lab.sim as sim_utils
-        from omni.isaac.lab.terrains import TerrainImporterCfg
-        from omni.isaac.lab.assets import ArticulationCfg, AssetBaseCfg
-        from omni.isaac.lab.scene import InteractiveScene, InteractiveSceneCfg
-        from omni.isaac.lab.sim import SimulationContext
-        from omni.isaac.lab.utils import configclass
-        from omni.isaac.core.utils.extensions import enable_extension
+        import isaaclab.sim as sim_utils
+        from isaaclab.terrains import TerrainImporterCfg
+        from isaaclab.assets import ArticulationCfg, AssetBaseCfg
+        from isaaclab.scene import InteractiveScene, InteractiveSceneCfg
+        from isaaclab.sim import SimulationContext
+        from isaaclab.utils import configclass
+        from isaacsim.core.utils.extensions import enable_extension
 
         from pxr import Usd, UsdGeom, UsdPhysics, PhysxSchema
 
