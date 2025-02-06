@@ -199,8 +199,8 @@ else
     $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
 
     if [ $INSTALL_PARSER = true ]; then
-        git submodule update --init $MULTIVERSE_DIR/multiverse/modules/multiverse_parser
-
+        git submodule update --init multiverse/modules/multiverse_parser
+        
         # Install additional packages for blender
         sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
         
@@ -210,7 +210,7 @@ else
     fi
 
     if [ $INSTALL_KNOWLEDGE = true ]; then
-        git submodule update --init $MULTIVERSE_DIR/multiverse/modules/multiverse_knowledge
+        git submodule update --init multiverse/modules/multiverse_knowledge
         (cd $MULTIVERSE_DIR/multiverse/modules/multiverse_knowledge; git submodule update --init ease_lexical_resources)
 
         # Install additional packages for multiverse_knowledge
