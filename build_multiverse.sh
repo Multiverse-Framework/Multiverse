@@ -186,6 +186,18 @@ if [ $BUILD_SRC = ON ]; then
             -DPYTHON_EXECUTABLE=python3.8
         make -C $BUILD_DIR
         cmake --install $BUILD_DIR
+    elif [ $UBUNTU_VERSION = "24.04" ]; then
+        cmake -S $PWD/multiverse -B $BUILD_DIR \
+            -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
+            -DBUILD_SRC=ON \
+            -DBUILD_MODULES=OFF \
+            -DBUILD_CONNECTORS=OFF \
+            -DBUILD_KNOWLEDGE=OFF \
+            -DBUILD_PARSER=OFF \
+            -DBUILD_TESTS=OFF \
+            -DPYTHON_EXECUTABLE=python3.12
+        make -C $BUILD_DIR
+        cmake --install $BUILD_DIR
     fi
 fi
 

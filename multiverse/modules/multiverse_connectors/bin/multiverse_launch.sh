@@ -110,7 +110,11 @@ done
 MULTIVERSE_WS2_PATH="$MULTIVERSE_PATH"/../multiverse_ws2/install/local_setup.bash
 if [ "$ROS2_DISTRO" ] && [ -f "$MULTIVERSE_WS2_PATH" ]; then
     if [ $ROS2_DISTRO = "foxy" ]; then
+        workon multiverse3.8
         PYTHON_EXECUTABLE=python3.8 # ROS 2 Foxy only supports Python 3.8
+    elif [ $ROS2_DISTRO = "jazzy" ]; then
+        workon multiverse3.12
+        PYTHON_EXECUTABLE=python3.12 # ROS 2 Jazzy only supports Python 3.12
     fi
     (source /opt/ros/$ROS2_DISTRO/setup.bash && source "$MULTIVERSE_WS2_PATH" && $PYTHON_EXECUTABLE "$MULTIVERSE_PATH"/modules/multiverse_connectors/scripts/launch_ros.py --muv_file="$MUV_FILE")
 fi

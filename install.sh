@@ -100,6 +100,20 @@ if [ $INSTALL_ROS = true ]; then
         sudo rosdep init
         sudo rosdep fix-permissions
         rosdep update
+
+        PYTHON_EXECUTABLE=python3.8
+        for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
+            if [ -f $virtualenvwrapper ]; then
+                break
+            fi
+        done
+        if [ ! -f $virtualenvwrapper ]; then
+            echo "virtualenvwrapper.sh not found"
+        else
+            . $virtualenvwrapper
+            mkvirtualenv --system-site-packages multiverse3.8 -p $PYTHON_EXECUTABLE
+            $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
+        fi
     elif [ $UBUNTU_VERSION = "22.04" ]; then
         # Setup your sources.list
         sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
@@ -134,6 +148,21 @@ if [ $INSTALL_ROS = true ]; then
         sudo rosdep init
         sudo rosdep fix-permissions
         rosdep update
+
+        PYTHON_EXECUTABLE=python3.12
+        for virtualenvwrapper in $(which virtualenvwrapper.sh) /usr/share/virtualenvwrapper/virtualenvwrapper.sh /usr/local/bin/virtualenvwrapper.sh /home/$USER/.local/bin/virtualenvwrapper.sh; do
+            if [ -f $virtualenvwrapper ]; then
+                break
+            fi
+        done
+        if [ ! -f $virtualenvwrapper ]; then
+            echo "virtualenvwrapper.sh not found"
+        else
+            . $virtualenvwrapper
+            mkvirtualenv --system-site-packages multiverse3.12 -p $PYTHON_EXECUTABLE
+            $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
+            $PYTHON_EXECUTABLE -m pip install -U urdf_parser_py
+        fi
     fi
 fi
 
@@ -211,7 +240,7 @@ else
 
     if [ $INSTALL_KNOWLEDGE = true ]; then
         git submodule update --init multiverse/modules/multiverse_knowledge
-        (cd $MULTIVERSE_DIR/multiverse/modules/multiverse_knowledge; git submodule update --init ease_lexical_resources)
+        (cd $MULTIVERSE_DIR/modules/multiverse_knowledge; git submodule update --init ease_lexical_resources)
 
         # Install additional packages for multiverse_knowledge
         $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_knowledge/requirements.txt
