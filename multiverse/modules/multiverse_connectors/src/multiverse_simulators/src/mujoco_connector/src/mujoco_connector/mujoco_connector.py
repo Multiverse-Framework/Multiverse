@@ -683,7 +683,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     def get_children_ids(self, body_id: int) -> Set[int]:
         children_ids = set()
         for child_body_id in range(body_id + 1, self._mj_model.nbody):
-            if self._mj_model.body(child_body_id).parentid[0] == body_id:
+            parent_body_id = self._mj_model.body(child_body_id).parentid[0]
+            if parent_body_id == body_id or parent_body_id in children_ids:
                 children_ids.add(child_body_id)
             else:
                 break
