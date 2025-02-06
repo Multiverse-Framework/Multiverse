@@ -782,6 +782,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         else:
             for body_2_id in range(self._mj_model.nbody):
                 body_2_name = self._mj_model.body(body_2_id).name
+                if body_2_name in body_1_names:
+                    continue
                 body_2_root_id = body_2_id
                 while self._mj_model.body(body_2_root_id).parentid[0] != 0:
                     body_2_root_id = self._mj_model.body(body_2_root_id).parentid[0]
@@ -800,7 +802,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             body_B_id = self._mj_model.geom(geom_B_id).bodyid[0]
             body_A_name = self._mj_model.body(body_A_id).name
             body_B_name = self._mj_model.body(body_B_id).name
-            if body_A_name not in body_root_map and body_B_name not in body_root_map:
+            if body_A_name not in body_1_names and body_B_name not in body_1_names:
                 continue
             contact_bodies.add(body_A_name)
             contact_bodies.add(body_B_name)
