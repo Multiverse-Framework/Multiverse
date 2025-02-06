@@ -796,8 +796,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 continue
             geom_A_id = contact.geom[1]
             geom_B_id = contact.geom[0]
-            body_A_id = self._mj_model.geom(geom_A_id).bodyid
-            body_B_id = self._mj_model.geom(geom_B_id).bodyid
+            body_A_id = self._mj_model.geom(geom_A_id).bodyid[0]
+            body_B_id = self._mj_model.geom(geom_B_id).bodyid[0]
             body_A_name = self._mj_model.body(body_A_id).name
             body_B_name = self._mj_model.body(body_B_id).name
             if body_A_name not in body_root_map and body_B_name not in body_root_map:
