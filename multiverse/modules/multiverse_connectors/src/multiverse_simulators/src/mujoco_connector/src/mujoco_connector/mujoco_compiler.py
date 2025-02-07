@@ -179,7 +179,7 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
 
     def fix_prefix_and_suffix(self, entities: Dict[str, Robot | Object]):
         for entity_name, entity in entities.items():
-            for entity_type in ["body", "joint", "geom", "actuator", "key"]:
+            for entity_type in ["key", "body", "joint", "geom", "actuator"]:
                 entity_prefix = entity.prefix.get(entity_type, "")
                 entity_suffix = entity.suffix.get(entity_type, "")
                 if entity_type == "body":
@@ -206,6 +206,8 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                 elif entity_type == "joint":
                     if len(self.world_spec.tendons) > 0 or len(self.world_spec.actuators) > 0 or len(
                             self.world_spec.sensors) > 0:  # TODO: Waiting for MuJoCo update
+                        for key in self.world_spec.keys[:-1]:
+                            key.delete()
                         self.world_spec.compile()
                         xml_string = self.world_spec.to_xml()
                         with open(self.save_file_path, "w") as f:

@@ -6,7 +6,7 @@ import os
 
 os.environ['XLA_FLAGS'] = '--xla_gpu_triton_gemm_any=true'
 import xml.etree.ElementTree as ET
-from typing import Optional, List, Set, Dict
+from typing import Optional, List, Set, Dict, Union
 
 import jax
 import mujoco
@@ -748,8 +748,10 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                            body_1_names: List[str],
                            body_2_names: Optional[List[str]] = None,
                            including_children: bool = True,
-                           contact_style: str = "pybullet") -> MultiverseFunctionResult:
-        if contact_style != "pybullet":
+                           contact_style: Union[MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
+        if isinstance(contact_style, str):
+            contact_style = MultiverseFunctionResult.OutType(contact_style)
+        if contact_style != MultiverseFunctionResult.OutType.PYBULLET:
             return MultiverseFunctionResult(
                 type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
                 info=f"Contact style {contact_style} is not supported"
@@ -825,11 +827,130 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                              "lateralFrictionDir2": contact.frame[6:9]}
             contact_points.append(contact_point)
 
-        contact_points_str = f" with bodies {[body_2_name for body_2_name in contact_bodies if body_2_name not in body_1_names]}" if len(contact_bodies) > len(body_1_names) else ""
+        contact_points_str = f" with bodies {[body_2_name for body_2_name in contact_bodies if body_2_name not in body_1_names]}" if len(
+            contact_bodies) > len(body_1_names) else ""
         return MultiverseFunctionResult(
             type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
             info=f"There are {len(contact_points)} contact points of bodies {body_1_names}{contact_points_str}.",
             result=contact_points
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def ray_test(self,
+                 ray_from_position: List[float],
+                 ray_to_position: List[float],
+                 ray_style: Union[MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
+        if isinstance(ray_style, str):
+            ray_style = MultiverseFunctionResult.OutType(ray_style)
+        if ray_style != MultiverseFunctionResult.OutType.PYBULLET:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Ray style {ray_style} is not supported"
+            )
+        if len(ray_from_position) != 3 or len(ray_to_position) != 3:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Invalid ray from position {ray_from_position} or ray to position {ray_to_position}"
+            )
+        pnt = numpy.array(ray_from_position)
+        vec = numpy.array(ray_to_position) - pnt
+        geomgroup = numpy.ones(6, numpy.uint8)
+        vec_len = mujoco.mju_normalize3(vec)
+        geom_id = numpy.zeros(1, numpy.int32)
+
+        dist = mujoco.mj_ray(m=self._mj_model,
+                             d=self._mj_data,
+                             pnt=pnt,
+                             vec=vec,
+                             geomgroup=geomgroup,
+                             flg_static=1,
+                             bodyexclude=-1,
+                             geomid=geom_id)
+        if geom_id.item() >= 0 and dist <= vec_len:
+            geom = self._mj_model.geom(geom_id.item())
+            hit_normal = None  # TODO: get hit normal
+            body_id = geom.bodyid[0]
+            body_name = self._mj_model.body(body_id).name
+            get_body_root_name = self.get_body_root_name(body_name)
+            if get_body_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+                return get_body_root_name
+            root_body_name = get_body_root_name.result
+            result = {"objectUniqueName": root_body_name,
+                      "linkName": body_name,
+                      "hit_fraction": dist / vec_len,
+                      "hit_position": pnt + vec * dist,
+                      "hit_normal": hit_normal}
+        else:
+            result = None
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Single raycast from {ray_from_position} to {ray_to_position}",
+            result=result
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def ray_test_batch(self,
+                       ray_from_position: List[float],
+                       ray_to_positions: List[List[float]],
+                       parent_link_name: Optional[str] = None,
+                       ray_style: Union[MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
+        if isinstance(ray_style, str):
+            ray_style = MultiverseFunctionResult.OutType(ray_style)
+        if ray_style != MultiverseFunctionResult.OutType.PYBULLET:
+            return MultiverseFunctionResult(
+                type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Ray style {ray_style} is not supported"
+            )
+        pnt = numpy.array(ray_from_position)
+        N = len(ray_to_positions)
+        vec = numpy.array([numpy.array(ray_to_position) - pnt for ray_to_position in ray_to_positions])
+        geomgroup = numpy.ones(6, numpy.uint8)
+        if parent_link_name is not None:
+            body_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=parent_link_name)
+            if body_id == -1:
+                return MultiverseFunctionResult(
+                    type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                    info=f"Parent link {parent_link_name} not found"
+                )
+            body = self._mj_model.body(body_id)
+            mujoco.mju_mulMatVec3(res=pnt, mat=body.xmat, vec=pnt)
+            for i in range(N):
+                mujoco.mju_mulMatVec3(res=vec[i], mat=body.xmat, vec=vec[i])
+        geom_id = numpy.zeros(N, numpy.int32)
+        dist = numpy.zeros(N, numpy.float64)
+        mujoco.mj_multiRay(m=self._mj_model,
+                           d=self._mj_data,
+                           pnt=pnt,
+                           vec=vec.flatten(),
+                           geomgroup=geomgroup,
+                           flg_static=1,
+                           bodyexclude=-1,
+                           geomid=geom_id,
+                           dist=dist,
+                           nray=N,
+                           cutoff=mujoco.mjMAXVAL)
+        results = []
+        for i in range(N):
+            if geom_id[i] < 0:
+                results.append(None)
+            else:
+                geom = self._mj_model.geom(geom_id[i])
+                body_id = geom.bodyid[0]
+                body_name = self._mj_model.body(body_id).name
+                get_body_root_name = self.get_body_root_name(body_name)
+                if get_body_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+                    return get_body_root_name
+                root_body_name = get_body_root_name.result
+                hit_normal = None  # TODO: get hit normal
+                results.append({"objectUniqueName": root_body_name,
+                                "linkName": body_name,
+                                "hit_fraction": dist[i],
+                                "hit_position": pnt + vec[i] * dist[i],
+                                "hit_normal": hit_normal})
+        return MultiverseFunctionResult(
+            type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info=f"Batch raycast from {ray_from_position} to {ray_to_positions}",
+            result=results
         )
 
     @MultiverseSimulator.multiverse_callback

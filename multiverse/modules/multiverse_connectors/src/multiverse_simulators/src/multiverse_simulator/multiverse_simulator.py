@@ -306,6 +306,11 @@ class MultiverseViewer:
 class MultiverseFunctionResult:
     """Multiverse Function Result Enum"""
 
+    class OutType(str, Enum):
+        MUJOCO = "mujoco"
+        PYBULLET = "pybullet"
+        ISAACSIM = "isaacsim"
+
     class ResultType(Enum):
         SUCCESS_WITHOUT_EXECUTION = 0
         SUCCESS_AFTER_EXECUTION_ON_MODEL = 1

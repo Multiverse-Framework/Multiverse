@@ -225,10 +225,37 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION, result.type)
                 self.assertEqual("Body abc not found", result.info)
 
-                result = simulator.callbacks["get_contact_points"](body_1_names=["hand"])
+                result = simulator.callbacks["get_contact_points"](body_1_names=["box"])
                 self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
                 self.assertIsInstance(result.result, list)
                 self.assertEqual(len(result.result), 4)
+
+            if step == 500:
+                result = simulator.callbacks["ray_test"](ray_from_position=[0.7, 0.0, 1.0],
+                                                         ray_to_position=[0.7, 0.0, 0.0])
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertEqual(result.result["linkName"], "link6")
+                self.assertEqual(result.result["objectUniqueName"], "link0")
+
+                result = simulator.callbacks["ray_test"](ray_from_position=[0.7, 0.0, 0.2],
+                                                         ray_to_position=[0.7, 0.0, 0.0])
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertEqual(result.result["linkName"], "box")
+                self.assertEqual(result.result["objectUniqueName"], "box")
+                self.assertAlmostEqual(result.result["hit_position"][0], 0.7)
+                self.assertAlmostEqual(result.result["hit_position"][1], 0.0)
+                self.assertAlmostEqual(result.result["hit_position"][2], 0.0599, places=3)
+
+                result = simulator.callbacks["ray_test_batch"](ray_from_position=[0.7, 0.0, 0.2],
+                                                               ray_to_positions=[[0.7, 0.0, 1.0], [0.7, 0.0, 0.0]])
+                self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
+                self.assertEqual(result.result[0]["linkName"], "hand")
+                self.assertEqual(result.result[0]["objectUniqueName"], "link0")
+                self.assertEqual(result.result[1]["linkName"], "box")
+                self.assertEqual(result.result[1]["objectUniqueName"], "box")
+                self.assertAlmostEqual(result.result[1]["hit_position"][0], 0.7)
+                self.assertAlmostEqual(result.result[1]["hit_position"][1], 0.0)
+                self.assertAlmostEqual(result.result[1]["hit_position"][2], 0.0599, places=3)
 
             simulator.step()
             simulator.run_callback()
