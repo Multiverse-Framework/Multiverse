@@ -256,7 +256,7 @@ else
         $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_connectors/src/multiverse_simulators/src/mujoco_connector/requirements.txt
     fi
 
-    if [ $INSTALL_ISAACLAB = true ]; then
+    if [ $INSTALL_ISAACLAB = true ] && [ $UBUNTU_VERSION != "20.04" ]; then
         $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_connectors/src/multiverse_simulators/src/isaac_sim_connector/requirements.txt
     fi
 fi

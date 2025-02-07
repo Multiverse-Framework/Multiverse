@@ -43,4 +43,11 @@ endif()
 
 add_subdirectory(src/mujoco_connector)
 
-add_subdirectory(src/isaac_sim_connector)
+execute_process(
+  COMMAND lsb_release -rs
+  OUTPUT_VARIABLE UBUNTU_VERSION
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+if (NOT UBUNTU_VERSION STREQUAL "20.04")
+  add_subdirectory(src/isaac_sim_connector)
+endif()

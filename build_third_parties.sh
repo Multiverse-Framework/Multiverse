@@ -175,7 +175,8 @@ if [ $BUILD_MUJOCO = true ]; then
     ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
 fi
 
-if [ $BUILD_ISAACLAB = true ]; then
+UBUNTU_VERSION=$(lsb_release -rs)
+if [ $BUILD_ISAACLAB = true ] && [ $UBUNTU_VERSION != "20.04" ]; then
     echo "Building IsaacLab..."
     
     # Download IsaacLab

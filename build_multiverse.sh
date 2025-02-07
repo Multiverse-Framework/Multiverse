@@ -149,7 +149,7 @@ else
     . $virtualenvwrapper
     mkvirtualenv --system-site-packages multiverse -p $PYTHON_EXECUTABLE
     $PYTHON_EXECUTABLE -m pip install -U pip build setuptools packaging distro
-    $PYTHON_EXECUTABLE -m pip numpy==1.26.4 # Fix numpy version
+    $PYTHON_EXECUTABLE -m pip install numpy==1.26.4 # Fix numpy version
 fi
 
 # Build multiverse
