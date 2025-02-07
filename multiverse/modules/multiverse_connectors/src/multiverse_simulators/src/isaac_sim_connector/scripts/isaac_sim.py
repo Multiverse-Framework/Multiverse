@@ -12,6 +12,7 @@ if __name__ == "__main__":
         parser.add_argument("--file_path", type=str, required=True, help=f"Path to the USD file")
         parser.add_argument("--robots_path", type=str, required=False, help="Paths to the robots' USD files")
         parser.add_argument("--objects_path", type=str, required=False, help="Paths to the objects' USD files")
+        parser.add_argument("--joint_state", type=str, required=False, help="JSON string with joint states")
         parser.add_argument("--headless", required=False, action='store_true', help="Run in headless mode")
         parser.add_argument("--number_of_envs", type=int, required=False, default=1, help="Number of environments")
         parser.add_argument("--env_spacing", type=float, required=False, default=2.0, help="Environment spacing")
@@ -26,11 +27,13 @@ if __name__ == "__main__":
 
         args = parser.parse_args()
 
+        joint_state = str_to_dict(args.joint_state)
         multiverse_params = str_to_dict(args.multiverse_params)
 
         simulator = MultiverseIsaacSimConnector(world_path=args.file_path,
                                                 robots_path=args.robots_path,
                                                 objects_path=args.objects_path,
+                                                joint_state=joint_state,
                                                 headless=args.headless,
                                                 number_of_envs=args.number_of_envs,
                                                 env_spacing=args.env_spacing,

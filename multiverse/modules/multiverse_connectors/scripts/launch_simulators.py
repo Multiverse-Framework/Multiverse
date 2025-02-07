@@ -131,6 +131,13 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         if objects_group is not None:
             objects_path = objects_group.group(1)
             cmd += [f"--objects_path={objects_path}"]
+        if simulation_data["simulator"] == "isaac_sim":
+            joint_state = {}
+            for entities in list(simulation_data["robots"].values()) + list(simulation_data["objects"].values()):
+                if "joint_state" in entities:
+                    for joint_name, joint_state_data in entities["joint_state"].items():
+                        joint_state[joint_name] = joint_state_data
+            cmd += [f"--joint_state={joint_state}".replace(" ", "")]
         for config_name, config_data in simulation_data.get("config", {}).items():
             cmd.append(f"--{config_name}={config_data}")
         world_name = simulation_data.get("world", {}).get("name", "world")

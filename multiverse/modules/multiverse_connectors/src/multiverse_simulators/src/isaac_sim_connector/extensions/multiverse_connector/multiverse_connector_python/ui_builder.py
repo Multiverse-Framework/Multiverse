@@ -88,7 +88,7 @@ class UIBuilder(MultiverseConnector):
         self._scene = None
 
         self._clean_up()
-        self._ignore_names = ["defaultGroundPlane", "Environment", "OmniKit_Viewport_LightRig", "Lights"]
+        self._ignore_names = ["defaultGroundPlane", "Environment", "OmniKit_Viewport_LightRig", "Lights", "Robot", "Objects"]
 
         # Get access to the timeline to control stop/pause/play programmatically
         self._timeline = omni.timeline.get_timeline_interface()

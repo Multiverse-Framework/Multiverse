@@ -72,6 +72,11 @@ class IsaacSimCompiler(MultiverseSimulatorCompiler):
                     else:
                         print(f"Joint {joint_name} does not have DriveAPI")
 
+            # entity_editor = Usd.NamespaceEditor(entity_stage)
+            # entity_prim = entity_stage.GetDefaultPrim()
+            # entity_editor.RenamePrim(entity_prim, entity.name)
+            # entity_editor.ApplyEdits()
+
             entity_stage.GetRootLayer().Save()
 
         robots_path = os.path.join(self.save_dir_path, os.path.basename(self.save_file_path).split(".")[0] + "_robots.usda")

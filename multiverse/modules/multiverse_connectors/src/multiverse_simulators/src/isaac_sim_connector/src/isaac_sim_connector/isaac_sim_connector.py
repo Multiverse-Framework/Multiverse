@@ -37,6 +37,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
             world_path: str,
             robots_path: Optional[str] = None,
             objects_path: Optional[str] = None,
+            joint_state: Optional[dict] = None,
             number_of_envs: int = 1,
             env_spacing: float = 2.0,
             viewer: Optional[MultiverseViewer] = None,
@@ -58,7 +59,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         from isaaclab.utils import configclass
         from isaacsim.core.utils.extensions import enable_extension
 
-        from pxr import Usd, UsdGeom, UsdPhysics, PhysxSchema
+        from pxr import Usd, UsdGeom, UsdPhysics
 
         world_stage = Usd.Stage.Open(world_path)
 
@@ -66,43 +67,15 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         if "multiverse_connector" in customLayerData:
             enable_extension("multiverse_connector") # Extension name
 
-        world_prim = world_stage.GetDefaultPrim()
-
         @configclass
         class WorldCfg(InteractiveSceneCfg):
-            terrain = TerrainImporterCfg(prim_path="/World/ground", terrain_type="plane", debug_vis=False)
-
-            # lights
-            dome_light = AssetBaseCfg(
-                prim_path="/World/Light",
-                spawn=sim_utils.DomeLightCfg(
-                    intensity=3000.0, color=(0.75, 0.75, 0.75)
+            # world asset
+            world = AssetBaseCfg(
+                spawn=sim_utils.UsdFileCfg(
+                    usd_path=world_path,
                 ),
-            )
-
-        if world_prim.IsValid():
-            @configclass
-            class WorldCfg(WorldCfg):
-                # world articulation
-                world = ArticulationCfg(
-                    spawn=sim_utils.UsdFileCfg(
-                        usd_path=world_path,
-                        rigid_props=sim_utils.RigidBodyPropertiesCfg(
-                            rigid_body_enabled=True,
-                            max_linear_velocity=1000.0,
-                            max_angular_velocity=1000.0,
-                            max_depenetration_velocity=100.0,
-                            enable_gyroscopic_forces=True,
-                        ),
-                        articulation_props=sim_utils.ArticulationRootPropertiesCfg(
-                            enabled_self_collisions=True,
-                            solver_position_iteration_count=1,
-                            solver_velocity_iteration_count=0,
-                            sleep_threshold=0.005,
-                            stabilization_threshold=0.001,
-                        ),
-                    ),
-                ).replace(prim_path="{ENV_REGEX_NS}/World")
+                init_state=AssetBaseCfg.InitialStateCfg(),
+            ).replace(prim_path="{ENV_REGEX_NS}/World")
 
         @configclass
         class SceneWithRobotsCfg(WorldCfg):
@@ -117,22 +90,17 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                 robots_quat = robots_xform.GetLocalTransformation().ExtractRotation().GetQuat()
                 robots_joint_pos = {}
                 for prim in [prim for prim in robots_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
-                    joint = UsdPhysics.RevoluteJoint(prim) if prim.IsA(UsdPhysics.RevoluteJoint) else UsdPhysics.PrismaticJoint(prim)
-                    lower_limit_joint = joint.GetLowerLimitAttr().Get()
-                    upper_limit_joint = joint.GetUpperLimitAttr().Get()
-                    joint_pos = 0.0
-                    if prim.HasAPI(UsdPhysics.DriveAPI):
-                        drive_api = UsdPhysics.DriveAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
-                        joint_pos = drive_api.GetTargetPositionAttr().Get()
-                    if joint_pos < lower_limit_joint or joint_pos > upper_limit_joint:
-                        joint_pos = (lower_limit_joint + upper_limit_joint) / 2.0
-                    if prim.HasAPI(PhysxSchema.JointStateAPI):
-                        joint_state_api = PhysxSchema.JointStateAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
-                        joint_state_api.GetPositionAttr().Set(joint_pos)
-                    if UsdPhysics.RevoluteJoint(prim):
-                        joint_pos = float(numpy.deg2rad(joint_pos))
+                    prim_name = prim.GetName()
+                    if joint_state is not None and prim_name in joint_state:
+                        joint_pos = joint_state[prim_name]
+                    else:
+                        joint_pos = 0.0
+                        if prim.HasAPI(UsdPhysics.DriveAPI):
+                            drive_api = UsdPhysics.DriveAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                            if drive_api.GetStiffnessAttr().Get() > 0.0:
+                                joint_pos = drive_api.GetTargetPositionAttr().Get()
 
-                    robots_joint_pos[prim.GetName()] = joint_pos
+                    robots_joint_pos[prim_name] = joint_pos
 
                 @configclass
                 class SceneWithRobotsCfg(WorldCfg):
@@ -176,20 +144,15 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                 objects_quat = objects_xform.GetLocalTransformation().ExtractRotation().GetQuat()
                 objects_joint_pos = {}
                 for prim in [prim for prim in objects_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
-                    joint = UsdPhysics.RevoluteJoint(prim) if prim.IsA(UsdPhysics.RevoluteJoint) else UsdPhysics.PrismaticJoint(prim)
-                    lower_limit_joint = joint.GetLowerLimitAttr().Get()
-                    upper_limit_joint = joint.GetUpperLimitAttr().Get()
-                    joint_pos = 0.0
-                    if prim.HasAPI(UsdPhysics.DriveAPI):
-                        drive_api = UsdPhysics.DriveAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
-                        joint_pos = drive_api.GetTargetPositionAttr().Get()
-                    if joint_pos < lower_limit_joint or joint_pos > upper_limit_joint:
-                        joint_pos = (lower_limit_joint + upper_limit_joint) / 2.0
-                    if prim.HasAPI(PhysxSchema.JointStateAPI):
-                        joint_state_api = PhysxSchema.JointStateAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
-                        joint_state_api.GetPositionAttr().Set(joint_pos)
-                    if UsdPhysics.RevoluteJoint(prim):
-                        joint_pos = float(numpy.deg2rad(joint_pos))
+                    prim_name = prim.GetName()
+                    if joint_state is not None and prim_name in joint_state:
+                        joint_pos = joint_state[prim_name]
+                    else:
+                        joint_pos = 0.0
+                        if prim.HasAPI(UsdPhysics.DriveAPI):
+                            drive_api = UsdPhysics.DriveAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                            if drive_api.GetStiffnessAttr().Get() > 0.0:
+                                joint_pos = drive_api.GetTargetPositionAttr().Get()
 
                     objects_joint_pos[prim.GetName()] = joint_pos
 
