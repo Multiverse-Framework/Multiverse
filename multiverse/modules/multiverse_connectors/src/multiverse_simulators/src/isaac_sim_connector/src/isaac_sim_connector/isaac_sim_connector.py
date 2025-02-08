@@ -2,6 +2,7 @@
 
 """Multiverse Isaac Sim Connector class"""
 import os.path
+import shutil
 from typing import Optional
 
 import numpy
@@ -55,6 +56,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         from isaaclab.terrains import TerrainImporterCfg
         from isaaclab.assets import ArticulationCfg, AssetBaseCfg
         from isaaclab.scene import InteractiveScene, InteractiveSceneCfg
+        from isaaclab.actuators import ImplicitActuatorCfg
         from isaaclab.sim import SimulationContext
         from isaaclab.utils import configclass
         from isaacsim.core.utils.extensions import enable_extension
@@ -71,11 +73,12 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         class WorldCfg(InteractiveSceneCfg):
             # world asset
             world = AssetBaseCfg(
+                prim_path="{ENV_REGEX_NS}/World",
                 spawn=sim_utils.UsdFileCfg(
                     usd_path=world_path,
                 ),
                 init_state=AssetBaseCfg.InitialStateCfg(),
-            ).replace(prim_path="{ENV_REGEX_NS}/World")
+            )
 
         @configclass
         class SceneWithRobotsCfg(WorldCfg):
@@ -89,23 +92,32 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                 robots_pos = robots_xform.GetLocalTransformation().ExtractTranslation()
                 robots_quat = robots_xform.GetLocalTransformation().ExtractRotation().GetQuat()
                 robots_joint_pos = {}
+                robots_actuators = {}
                 for prim in [prim for prim in robots_stage.TraverseAll() if prim.IsA(UsdPhysics.RevoluteJoint) or prim.IsA(UsdPhysics.PrismaticJoint)]:
                     prim_name = prim.GetName()
                     if joint_state is not None and prim_name in joint_state:
                         joint_pos = joint_state[prim_name]
                     else:
                         joint_pos = 0.0
-                        if prim.HasAPI(UsdPhysics.DriveAPI):
-                            drive_api = UsdPhysics.DriveAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
-                            if drive_api.GetStiffnessAttr().Get() > 0.0:
-                                joint_pos = drive_api.GetTargetPositionAttr().Get()
-
+                    if prim.HasAPI(UsdPhysics.DriveAPI):
+                        drive_api = UsdPhysics.DriveAPI(prim, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                        robots_actuators[prim_name] = (drive_api.GetStiffnessAttr().Get(), drive_api.GetDampingAttr().Get())
+                        if drive_api.GetStiffnessAttr().Get() > 0.0:
+                            joint_pos = drive_api.GetTargetPositionAttr().Get()
+                        # for attr in drive_api.GetSchemaAttributeNames():
+                        #     attr = attr.replace("__INSTANCE_NAME__", "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                        #     prim.RemoveProperty(attr)
+                        # prim.RemoveAPI(UsdPhysics.DriveAPI, "angular" if prim.IsA(UsdPhysics.RevoluteJoint) else "linear")
+                    else:
+                        robots_actuators[prim_name] = (0.0, 0.0)
                     robots_joint_pos[prim_name] = joint_pos
+                # robots_stage.GetRootLayer().Save()
 
                 @configclass
                 class SceneWithRobotsCfg(WorldCfg):
                     # robots articulation
                     robots = ArticulationCfg(
+                        prim_path="{ENV_REGEX_NS}/Robot",
                         spawn=sim_utils.UsdFileCfg(
                             usd_path=robots_path,
                             rigid_props=sim_utils.RigidBodyPropertiesCfg(
@@ -128,8 +140,15 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                             rot=(robots_quat.GetReal(), *robots_quat.GetImaginary()),
                             joint_pos=robots_joint_pos
                         ),
-                        actuators={},
-                    ).replace(prim_path="{ENV_REGEX_NS}/Robot")
+                        actuators={
+                            joint_name: ImplicitActuatorCfg(
+                                joint_names_expr=[joint_name],
+                                stiffness=stiffness,
+                                damping=damping,
+                            )
+                            for joint_name, (stiffness, damping) in robots_actuators.items()
+                        },
+                    )
 
         @configclass
         class SceneCfg(SceneWithRobotsCfg):
@@ -160,6 +179,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                 class SceneCfg(SceneWithRobotsCfg):
                     # objects asset
                     objects = AssetBaseCfg(
+                        prim_path="{ENV_REGEX_NS}/Objects",
                         spawn=sim_utils.UsdFileCfg(
                             usd_path=objects_path,
                         ),
@@ -167,7 +187,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                             pos=objects_pos,
                             rot=(objects_quat.GetReal(), *objects_quat.GetImaginary())
                         ),
-                    ).replace(prim_path="{ENV_REGEX_NS}/Objects")
+                    )
 
         simulation_config = sim_utils.SimulationCfg(dt=self.step_size)
         self._simulation_context = SimulationContext(cfg=simulation_config)
@@ -216,7 +236,7 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
         }
 
         ids_dict.clear()
-        entity_types = [entity_type for entity_type in ["world", "robots"] if entity_type in self.scene.keys()]
+        entity_types = [entity_type for entity_type in ["robots"] if entity_type in self.scene.keys()]
         name_to_index = {"body": {}, "joint": {}}
         for entity_type in entity_types:
             entity = self.scene[entity_type]
@@ -251,23 +271,45 @@ class MultiverseIsaacSimConnector(MultiverseSimulator):
                     i[entity_id] += attr_size[isaac_sim_attr_name]
 
     def write_data_to_simulator(self, write_data: numpy.ndarray):
-        entity_types = [entity_type for entity_type in ["world", "robots"] if entity_type in self.scene.keys()]
+        entity_types = [entity_type for entity_type in ["robots"] if entity_type in self.scene.keys()]
 
         write_data_torch = torch.tensor(write_data).to("cuda").float()
         for entity_id, entity_type in enumerate(entity_types):
             entity = self.scene[entity_type]
-            joint_position = entity.data.joint_pos
-            joint_velocity = entity.data.joint_vel
+            changed = {"joint_state": False, "joint_pos_target": False, "joint_vel_target": False, "joint_effort_target": False}
+            joint_pos = entity.data.joint_pos
+            joint_vel = entity.data.joint_vel
+            joint_pos_target = entity.data.joint_pos_target
+            joint_vel_target = entity.data.joint_vel_target
+            joint_effort_target = entity.data.joint_effort_target
             for attr_name, indices in self._write_ids.items():
                 entity_ids = indices[entity_id]
                 if attr_name == "joint_pos":
-                    joint_position[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
+                    joint_pos[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
+                    changed["joint_state"] = True
                 elif attr_name == "joint_vel":
-                    joint_velocity[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
-            entity.write_joint_state_to_sim(position=joint_position, velocity=joint_velocity)
+                    joint_vel[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
+                    changed["joint_state"] = True
+                elif attr_name == "joint_pos_target":
+                    joint_pos_target[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
+                    changed["joint_pos_target"] = True
+                elif attr_name == "joint_vel_target":
+                    joint_vel_target[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
+                    changed["joint_vel_target"] = True
+                elif attr_name == "joint_effort_target":
+                    joint_effort_target[:, entity_ids[0]] = write_data_torch[:, entity_ids[1]]
+                    changed["joint_effort_target"] = True
+            if changed["joint_state"]:
+                entity.write_joint_state_to_sim(position=joint_pos, velocity=joint_vel)
+            if changed["joint_pos_target"]:
+                entity.set_joint_position_target(target=joint_pos_target)
+            if changed["joint_vel_target"]:
+                entity.set_joint_velocity_target(target=joint_vel_target)
+            if changed["joint_effort_target"]:
+                entity.set_joint_effort_target(target=joint_effort_target)
 
     def read_data_from_simulator(self, read_data: numpy.ndarray):
-        entity_types = [entity_type for entity_type in ["world", "robots"] if entity_type in self.scene.keys()]
+        entity_types = [entity_type for entity_type in ["robots"] if entity_type in self.scene.keys()]
 
         for attr, indices in self._read_ids.items():
             for entity_id, entity_type in enumerate(entity_types):
