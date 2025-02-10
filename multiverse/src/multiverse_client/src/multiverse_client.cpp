@@ -44,6 +44,11 @@ enum class EMultiverseClientState : unsigned char
 
 void MultiverseClient::connect_to_server()
 {
+    if (!client_socket)
+    {
+        return;
+    }
+
     zmq_disconnect(client_socket, socket_addr.c_str());
 
     if (should_shut_down)
@@ -250,12 +255,36 @@ void MultiverseClient::run()
         {
             const int message_int = 0;
             zmq_send(client_socket, &message_int, sizeof(message_int), 0);
-            free(send_buffer.buffer_double.data);
-            free(send_buffer.buffer_uint8_t.data);
-            free(send_buffer.buffer_uint16_t.data);
-            free(receive_buffer.buffer_double.data);
-            free(receive_buffer.buffer_uint8_t.data);
-            free(receive_buffer.buffer_uint16_t.data);
+            if (send_buffer.buffer_double.data != nullptr)
+            {
+                free(send_buffer.buffer_double.data);
+                send_buffer.buffer_double.data = nullptr;
+            }
+            if (send_buffer.buffer_uint8_t.data != nullptr)
+            {
+                free(send_buffer.buffer_uint8_t.data);
+                send_buffer.buffer_uint8_t.data = nullptr;
+            }
+            if (send_buffer.buffer_uint16_t.data != nullptr)
+            {
+                free(send_buffer.buffer_uint16_t.data);
+                send_buffer.buffer_uint16_t.data = nullptr;
+            }
+            if (receive_buffer.buffer_double.data != nullptr)
+            {
+                free(receive_buffer.buffer_double.data);
+                receive_buffer.buffer_double.data = nullptr;
+            }
+            if (receive_buffer.buffer_uint8_t.data != nullptr)
+            {
+                free(receive_buffer.buffer_uint8_t.data);
+                receive_buffer.buffer_uint8_t.data = nullptr;
+            }
+            if (receive_buffer.buffer_uint16_t.data != nullptr)
+            {
+                free(receive_buffer.buffer_uint16_t.data);
+                receive_buffer.buffer_uint16_t.data = nullptr;
+            }
         }
 
         clean_up();
@@ -557,6 +586,10 @@ bool MultiverseClient::communicate(const bool resend_request_meta_data)
 
 void MultiverseClient::disconnect()
 {
+    if (context == nullptr)
+    {
+        return;
+    }
     should_shut_down = true;
 
     run();
