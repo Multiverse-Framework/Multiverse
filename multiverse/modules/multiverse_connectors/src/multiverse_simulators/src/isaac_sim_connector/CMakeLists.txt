@@ -11,9 +11,6 @@ if (UNIX)
         COMMAND ln -sf ${CMAKE_CURRENT_SOURCE_DIR}/extensions/multiverse_connector /home/$ENV{USER}/Documents/Kit/shared/exts
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     )
-    execute_process(
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    )
 elseif (WIN32)
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/scripts/isaac_sim_compiler.py ${BIN_DIR}/isaac_sim_compiler.py
