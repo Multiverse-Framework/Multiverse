@@ -258,33 +258,34 @@ void MultiverseClient::run()
             zmq_send(client_socket, &message_int, sizeof(message_int), 0);
             if (send_buffer.buffer_double.data != nullptr)
             {
-                free(send_buffer.buffer_double.data);
-                delete send_buffer.buffer_double.data;
+                delete[] send_buffer.buffer_double.data;
+                send_buffer.buffer_double.data = nullptr;
             }
             if (send_buffer.buffer_uint8_t.data != nullptr)
             {
                 free(send_buffer.buffer_uint8_t.data);
-                delete send_buffer.buffer_uint8_t.data;
+                delete[] send_buffer.buffer_uint8_t.data;
+                send_buffer.buffer_uint8_t.data = nullptr;
             }
             if (send_buffer.buffer_uint16_t.data != nullptr)
             {
-                free(send_buffer.buffer_uint16_t.data);
-                delete send_buffer.buffer_uint16_t.data;
+                delete[] send_buffer.buffer_uint16_t.data;
+                send_buffer.buffer_uint16_t.data = nullptr;
             }
             if (receive_buffer.buffer_double.data != nullptr)
             {
-                free(receive_buffer.buffer_double.data);
-                delete receive_buffer.buffer_double.data;
+                delete[] receive_buffer.buffer_double.data;
+                receive_buffer.buffer_double.data = nullptr;
             }
             if (receive_buffer.buffer_uint8_t.data != nullptr)
             {
-                free(receive_buffer.buffer_uint8_t.data);
-                delete receive_buffer.buffer_uint8_t.data;
+                delete[] receive_buffer.buffer_uint8_t.data;
+                receive_buffer.buffer_uint8_t.data = nullptr;
             }
             if (receive_buffer.buffer_uint16_t.data != nullptr)
             {
-                free(receive_buffer.buffer_uint16_t.data);
-                delete receive_buffer.buffer_uint16_t.data;
+                delete[] receive_buffer.buffer_uint16_t.data;
+                receive_buffer.buffer_uint16_t.data = nullptr;
             }
         }
 
