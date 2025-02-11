@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 #include "multiverse_client_json.h"
+
 #include <algorithm>
 
 std::map<std::string, size_t> attribute_map_double = {

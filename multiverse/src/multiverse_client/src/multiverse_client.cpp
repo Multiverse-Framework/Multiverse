@@ -21,9 +21,6 @@
 #include "multiverse_client.h"
 
 #include <chrono>
-#include <cmath>
-#include <map>
-#include <basetsd.h>
 #include <zmq.hpp>
 
 #define STRING_SIZE 200
