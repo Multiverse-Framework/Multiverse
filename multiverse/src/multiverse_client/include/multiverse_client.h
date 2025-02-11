@@ -321,13 +321,13 @@ private:
      * @brief The context of the client, used for the client socket
      * 
      */
-    void *context;
+    void *context = nullptr;
 
     /**
      * @brief The client socket
      * 
      */
-    void *client_socket;
+    void *client_socket = nullptr;
 
     /**
      * @brief True if the client should be shut down

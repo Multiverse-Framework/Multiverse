@@ -23,6 +23,7 @@
 #include <chrono>
 #include <cmath>
 #include <map>
+#include <basetsd.h>
 #include <zmq.hpp>
 
 #define STRING_SIZE 200
@@ -44,6 +45,11 @@ enum class EMultiverseClientState : unsigned char
 
 void MultiverseClient::connect_to_server()
 {
+    if (client_socket == nullptr)
+    {
+        printf("[Client %s] The client socket is not initialized.\n", client_port.c_str());
+        return;
+    }
     zmq_disconnect(client_socket, socket_addr.c_str());
 
     if (should_shut_down)
@@ -250,12 +256,36 @@ void MultiverseClient::run()
         {
             const int message_int = 0;
             zmq_send(client_socket, &message_int, sizeof(message_int), 0);
-            free(send_buffer.buffer_double.data);
-            free(send_buffer.buffer_uint8_t.data);
-            free(send_buffer.buffer_uint16_t.data);
-            free(receive_buffer.buffer_double.data);
-            free(receive_buffer.buffer_uint8_t.data);
-            free(receive_buffer.buffer_uint16_t.data);
+            if (send_buffer.buffer_double.data != nullptr)
+            {
+                free(send_buffer.buffer_double.data);
+                delete send_buffer.buffer_double.data;
+            }
+            if (send_buffer.buffer_uint8_t.data != nullptr)
+            {
+                free(send_buffer.buffer_uint8_t.data);
+                delete send_buffer.buffer_uint8_t.data;
+            }
+            if (send_buffer.buffer_uint16_t.data != nullptr)
+            {
+                free(send_buffer.buffer_uint16_t.data);
+                delete send_buffer.buffer_uint16_t.data;
+            }
+            if (receive_buffer.buffer_double.data != nullptr)
+            {
+                free(receive_buffer.buffer_double.data);
+                delete receive_buffer.buffer_double.data;
+            }
+            if (receive_buffer.buffer_uint8_t.data != nullptr)
+            {
+                free(receive_buffer.buffer_uint8_t.data);
+                delete receive_buffer.buffer_uint8_t.data;
+            }
+            if (receive_buffer.buffer_uint16_t.data != nullptr)
+            {
+                free(receive_buffer.buffer_uint16_t.data);
+                delete receive_buffer.buffer_uint16_t.data;
+            }
         }
 
         clean_up();
@@ -557,11 +587,19 @@ bool MultiverseClient::communicate(const bool resend_request_meta_data)
 
 void MultiverseClient::disconnect()
 {
+    if (context == nullptr)
+    {
+        printf("[Client %s] The client context is not initialized.\n", client_port.c_str());
+        return;
+    }
+
     should_shut_down = true;
 
     run();
 
     zmq_ctx_shutdown(context);
+
+    zmq_ctx_destroy(context);
 
     wait_for_meta_data_thread_finish();
 
