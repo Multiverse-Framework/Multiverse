@@ -104,9 +104,12 @@ if __name__ == "__main__":
             if len(attribute_values) == 1:
                 data_name = object_name + ":" + attribute_name
                 data[data_name] = receive_data[data_adr::data_size]
+                data_adr += 1
             else:
-                print(f"Attribute {attribute_name} has more than one value. Skipping.")
-            data_adr += len(attribute_values)
+                for i in range(len(attribute_values)):
+                    data_name = object_name + ":" + attribute_name + "_" + str(i)
+                    data[data_name] = receive_data[data_adr::data_size]
+                    data_adr += 1
 
     import pandas as pd
 
