@@ -58,6 +58,8 @@ std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map_
         {"cmd_joint_tvalue", {EAttribute::CmdJointTvalue, {std::numeric_limits<double>::quiet_NaN()}}},
         {"cmd_joint_linear_velocity", {EAttribute::CmdJointLinearVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
         {"cmd_joint_angular_velocity", {EAttribute::CmdJointAngularVelocity, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"cmd_joint_linear_acceleration", {EAttribute::CmdJointLinearAcceleration, {std::numeric_limits<double>::quiet_NaN()}}},
+        {"cmd_joint_angular_acceleration", {EAttribute::CmdJointAngularAcceleration, {std::numeric_limits<double>::quiet_NaN()}}},
         {"cmd_joint_force", {EAttribute::CmdJointForce, {std::numeric_limits<double>::quiet_NaN()}}},
         {"cmd_joint_torque", {EAttribute::CmdJointTorque, {std::numeric_limits<double>::quiet_NaN()}}},
         {"joint_position", {EAttribute::JointPosition, std::vector<double>(3, std::numeric_limits<double>::quiet_NaN())}},
@@ -145,6 +147,12 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
         {EAttribute::CmdJointAngularVelocity,
          {{"rhs", {1.0}},
           {"lhs", {1.0}}}},
+        {EAttribute::CmdJointLinearAcceleration,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
+        {EAttribute::CmdJointAngularAcceleration,
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
         {EAttribute::CmdJointForce,
          {{"rhs", {1.0}},
           {"lhs", {1.0}}}},
@@ -222,14 +230,16 @@ static double get_time_now()
 static Json::Value sort_json_array(const Json::Value &original)
 {
     std::vector<std::string> vec;
-    for (const auto& item : original) {
+    for (const auto &item : original)
+    {
         vec.push_back(item.asString());
     }
 
     std::sort(vec.begin(), vec.end());
 
     Json::Value sorted;
-    for (const auto& item : vec) {
+    for (const auto &item : vec)
+    {
         sorted.append(item);
     }
 
@@ -248,7 +258,8 @@ static Json::Value sort_json_by_key(const Json::Value &original)
     Json::Value sorted(Json::objectValue);
     for (const std::string &key : keys)
     {
-        sorted[key] = original[key].isObject() ? sort_json_by_key(original[key]) : original[key].isArray() ? sort_json_array(original[key]) : original[key];
+        sorted[key] = original[key].isObject() ? sort_json_by_key(original[key]) : original[key].isArray() ? sort_json_array(original[key])
+                                                                                                           : original[key];
     }
     return sorted;
 }
@@ -274,27 +285,27 @@ MultiverseServer::~MultiverseServer()
 {
     printf("[Server] Close socket %s.\n", socket_addr.c_str());
 
-    if (send_buffer.buffer_double.size > 0)
+    if (send_buffer.buffer_double.data != nullptr)
     {
         free(send_buffer.buffer_double.data);
     }
-    if (send_buffer.buffer_uint8_t.size > 0)
+    if (send_buffer.buffer_uint8_t.data != nullptr)
     {
         free(send_buffer.buffer_uint8_t.data);
     }
-    if (send_buffer.buffer_uint16_t.size > 0)
+    if (send_buffer.buffer_uint16_t.data != nullptr)
     {
         free(send_buffer.buffer_uint16_t.data);
     }
-    if (receive_buffer.buffer_double.size > 0)
+    if (receive_buffer.buffer_double.data != nullptr)
     {
         free(receive_buffer.buffer_double.data);
     }
-    if (receive_buffer.buffer_uint8_t.size > 0)
+    if (receive_buffer.buffer_uint8_t.data != nullptr)
     {
         free(receive_buffer.buffer_uint8_t.data);
     }
-    if (receive_buffer.buffer_uint16_t.size > 0)
+    if (receive_buffer.buffer_uint16_t.data != nullptr)
     {
         free(receive_buffer.buffer_uint16_t.data);
     }
@@ -791,6 +802,10 @@ void MultiverseServer::bind_meta_data()
     conversion_map_double[EAttribute::CmdJointLinearVelocity] = conversion_map_double[EAttribute::JointLinearVelocity];
 
     conversion_map_double[EAttribute::CmdJointAngularVelocity] = conversion_map_double[EAttribute::JointAngularVelocity];
+
+    conversion_map_double[EAttribute::CmdJointLinearAcceleration] = conversion_map_double[EAttribute::JointLinearAcceleration];
+
+    conversion_map_double[EAttribute::CmdJointAngularAcceleration] = conversion_map_double[EAttribute::JointAngularAcceleration];
 
     conversion_map_double[EAttribute::CmdJointForce] = conversion_map_double[EAttribute::Force];
 

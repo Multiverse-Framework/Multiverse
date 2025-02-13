@@ -157,7 +157,7 @@ bool is_attribute_valid(const std::string &obj_name, const std::string &attr_nam
   }
   case mjOBJ_ACTUATOR:
   {
-    const std::set<const char *> actuator_attributes = {"cmd_joint_rvalue", "cmd_joint_tvalue", "cmd_joint_angular_velocity", "cmd_joint_linear_velocity", "cmd_joint_torque", "cmd_joint_force"};
+    const std::set<const char *> actuator_attributes = {"cmd_joint_rvalue", "cmd_joint_tvalue", "cmd_joint_angular_velocity", "cmd_joint_linear_velocity", "cmd_joint_angular_acceleration", "cmd_joint_linear_acceleration", "cmd_joint_torque", "cmd_joint_force"};
     if (std::find(actuator_attributes.begin(), actuator_attributes.end(), attr_name) != actuator_attributes.end())
     {
       attr_size = 1;
@@ -528,52 +528,6 @@ namespace mujoco::plugin::multiverse_connector
         }
       }
     }
-
-    std::set<std::string> objects_to_spawn;
-    std::set<std::string> objects_to_destroy;
-    for (const std::pair<const std::string, std::set<std::string>> &send_object : config_.send_objects)
-    {
-      const std::string object_name = send_object.first;
-      for (const std::string &attribute_name : send_object.second)
-      {
-        if (config_.receive_objects.count(object_name) > 0 &&
-            config_.receive_objects[object_name].count(attribute_name) > 0)
-        {
-          config_.send_objects.erase(object_name);
-        }
-      }
-      if (strcmp(object_name.c_str(), "body") == 0 || strcmp(object_name.c_str(), "joint") == 0) // Skip if object name is "body" or "joint"
-      {
-        continue;
-      }
-      bool stop = !send_object.second.empty(); // Skip if object has no attributes
-      for (const std::string &attribute_name : send_object.second)
-      {
-        if (strcmp(attribute_name.c_str(), "position") == 0 || strcmp(attribute_name.c_str(), "quaternion") == 0)
-        {
-          stop = false;
-        }
-      }
-      if (stop)
-      {
-        continue;
-      }
-
-      if (mj_name2id(m_, mjtObj::mjOBJ_BODY, object_name.c_str()) == -1 &&
-          mj_name2id(m_, mjtObj::mjOBJ_JOINT, object_name.c_str()) == -1 &&
-          mj_name2id(m_, mjtObj::mjOBJ_ACTUATOR, object_name.c_str()) == -1 &&
-          !(config_.receive_objects.count(object_name) > 0 &&
-            config_.receive_objects[object_name].empty())) // If object does not exist as body or joint or actuator and has no receive attributes
-      {
-        objects_to_spawn.insert(object_name); // Then add object to spawn
-      }
-      else if (send_object.second.empty() == 0 &&
-               config_.receive_objects.count(object_name) > 0 &&
-               config_.receive_objects[object_name].empty()) // If object has no send attributes and has no receive attributes
-      {
-        objects_to_destroy.insert(object_name); // Then add object to destroy
-      }
-    }
     return true;
   }
 
@@ -904,6 +858,8 @@ namespace mujoco::plugin::multiverse_connector
               strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 ||
               strcmp(attribute_name.c_str(), "cmd_joint_angular_velocity") == 0 ||
               strcmp(attribute_name.c_str(), "cmd_joint_linear_velocity") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_angular_acceleration") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_linear_acceleration") == 0 ||
               strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0 ||
               strcmp(attribute_name.c_str(), "cmd_joint_force") == 0)
           {
@@ -928,7 +884,10 @@ namespace mujoco::plugin::multiverse_connector
 
     for (std::pair<const int, mjtNum *> &contact_effort : contact_efforts)
     {
-      free(contact_effort.second);
+      if (contact_effort.second != nullptr)
+      {
+        free(contact_effort.second);
+      }
     }
     contact_efforts.clear();
   }
@@ -1196,6 +1155,11 @@ namespace mujoco::plugin::multiverse_connector
           {
             receive_data_vec.emplace_back(&d_->qvel[dof_id]);
           }
+          else if ((strcmp(attribute_name.c_str(), "joint_angular_acceleration") == 0 && is_revolute_joint) ||
+                   (strcmp(attribute_name.c_str(), "joint_linear_acceleration") == 0 && is_prismatic_joint))
+          {
+            receive_data_vec.emplace_back(&d_->qvel[dof_id]);
+          }
           else if ((strcmp(attribute_name.c_str(), "joint_torque") == 0 && is_revolute_joint) ||
                    (strcmp(attribute_name.c_str(), "joint_force") == 0 && is_prismatic_joint))
           {
@@ -1212,6 +1176,8 @@ namespace mujoco::plugin::multiverse_connector
               strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 ||
               strcmp(attribute_name.c_str(), "cmd_joint_angular_velocity") == 0 ||
               strcmp(attribute_name.c_str(), "cmd_joint_linear_velocity") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_angular_acceleration") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_linear_acceleration") == 0 ||
               strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0 ||
               strcmp(attribute_name.c_str(), "cmd_joint_force") == 0)
           {
