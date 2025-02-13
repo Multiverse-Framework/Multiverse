@@ -745,10 +745,10 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
     @MultiverseSimulator.multiverse_callback
     def get_contact_points(self,
-                           body_1_names: List[str],
-                           body_2_names: Optional[List[str]] = None,
+                           body_names: List[str],
                            including_children: bool = True,
-                           contact_style: Union[MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
+                           contact_style: Union[
+                               MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
         if isinstance(contact_style, str):
             contact_style = MultiverseFunctionResult.OutType(contact_style)
         if contact_style != MultiverseFunctionResult.OutType.PYBULLET:
@@ -757,41 +757,24 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                 info=f"Contact style {contact_style} is not supported"
             )
 
-        if len(body_1_names) == 0:
+        if len(body_names) == 0:
             return MultiverseFunctionResult(
                 type=MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION,
                 info="Body 1 names are empty"
             )
 
-        body_root_map = {}
-        for body_1_name in body_1_names:
-            get_body_1_root_name = self.get_body_root_name(body_1_name)
-            if get_body_1_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
-                return get_body_1_root_name
-            body_root_map[body_1_name] = get_body_1_root_name.result
+        body_root_map = {"world": "world"}
+        for body_name in body_names:
+            get_body_root_name = self.get_body_root_name(body_name)
+            if get_body_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
+                return get_body_root_name
+            body_root_map[body_name] = get_body_root_name.result
 
             if including_children:
-                body_1_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_1_name)
-                body_root_map.update({self._mj_model.body(child_body_id).name: get_body_1_root_name.result
-                                      for child_body_id in self.get_children_ids(body_1_id)})
-        body_1_names = list(body_root_map.keys())
-
-        if body_2_names is not None:
-            for body_2_name in body_2_names:
-                get_body_2_root_name = self.get_body_root_name(body_2_name)
-                if get_body_2_root_name.type != MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION:
-                    return get_body_2_root_name
-                body_root_map[body_2_name] = get_body_2_root_name.result
-        else:
-            for body_2_id in range(self._mj_model.nbody):
-                body_2_name = self._mj_model.body(body_2_id).name
-                if body_2_name in body_1_names:
-                    continue
-                body_2_root_id = body_2_id
-                while self._mj_model.body(body_2_root_id).parentid[0] != 0:
-                    body_2_root_id = self._mj_model.body(body_2_root_id).parentid[0]
-                body_2_root_name = self._mj_model.body(body_2_root_id).name
-                body_root_map[body_2_name] = body_2_root_name
+                body_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_name)
+                body_root_map.update({self._mj_model.body(child_body_id).name: get_body_root_name.result
+                                      for child_body_id in self.get_children_ids(body_id)})
+        body_names = list(body_root_map.keys())
 
         contact_points = []
         contact_bodies = set()
@@ -805,7 +788,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             body_B_id = self._mj_model.geom(geom_B_id).bodyid[0]
             body_A_name = self._mj_model.body(body_A_id).name
             body_B_name = self._mj_model.body(body_B_id).name
-            if body_A_name not in body_1_names and body_B_name not in body_1_names:
+            if body_A_name not in body_names and body_B_name not in body_names:
                 continue
             contact_bodies.add(body_A_name)
             contact_bodies.add(body_B_name)
@@ -827,11 +810,9 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                              "lateralFrictionDir2": contact.frame[6:9]}
             contact_points.append(contact_point)
 
-        contact_points_str = f" with bodies {[body_2_name for body_2_name in contact_bodies if body_2_name not in body_1_names]}" if len(
-            contact_bodies) > len(body_1_names) else ""
         return MultiverseFunctionResult(
             type=MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
-            info=f"There are {len(contact_points)} contact points of bodies {body_1_names}{contact_points_str}.",
+            info=f"There are {len(contact_points)} contact points of bodies {body_names}.",
             result=contact_points
         )
 
@@ -839,7 +820,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
     def ray_test(self,
                  ray_from_position: List[float],
                  ray_to_position: List[float],
-                 ray_style: Union[MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
+                 ray_style: Union[
+                     MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
         if isinstance(ray_style, str):
             ray_style = MultiverseFunctionResult.OutType(ray_style)
         if ray_style != MultiverseFunctionResult.OutType.PYBULLET:
@@ -893,7 +875,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                        ray_from_position: List[float],
                        ray_to_positions: List[List[float]],
                        parent_link_name: Optional[str] = None,
-                       ray_style: Union[MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
+                       ray_style: Union[
+                           MultiverseFunctionResult.OutType, str] = MultiverseFunctionResult.OutType.PYBULLET) -> MultiverseFunctionResult:
         if isinstance(ray_style, str):
             ray_style = MultiverseFunctionResult.OutType(ray_style)
         if ray_style != MultiverseFunctionResult.OutType.PYBULLET:

@@ -221,11 +221,11 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertIsInstance(result.result, set)
 
             if step == 100:
-                result = simulator.callbacks["get_contact_points"](body_1_names=["abc"])
+                result = simulator.callbacks["get_contact_points"](body_names=["abc"])
                 self.assertEqual(MultiverseFunctionResult.ResultType.FAILURE_WITHOUT_EXECUTION, result.type)
                 self.assertEqual("Body abc not found", result.info)
 
-                result = simulator.callbacks["get_contact_points"](body_1_names=["box"])
+                result = simulator.callbacks["get_contact_points"](body_names=["box", "hand"])
                 self.assertEqual(MultiverseFunctionResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
                 self.assertIsInstance(result.result, list)
                 self.assertEqual(len(result.result), 4)
