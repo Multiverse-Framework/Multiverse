@@ -1,10 +1,6 @@
-if(WIN32)
-    find_package(cppzmq REQUIRED)
-    find_package(jsoncpp REQUIRED)
-endif()
-
-set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR}/../..
-                            ${CMAKE_CURRENT_SOURCE_DIR}/../../src
+set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE 
+  ${CMAKE_CURRENT_SOURCE_DIR}/../..
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../src
 )
 
 if (UNIX)
@@ -37,8 +33,6 @@ if (UNIX)
 elseif (WIN32)
   target_link_libraries(multiverse_connector PRIVATE 
     mujoco
-    JsonCpp::JsonCpp
-    cppzmq
   )
 endif()
 target_compile_options(
