@@ -308,15 +308,18 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
             equality.type = mujoco.mjtEq.mjEQ_WELD
             equality.name = reference_name
             equality.objtype = mujoco.mjtObj.mjOBJ_BODY
+            equality.data[:3] = [0, 0, 0]
+            equality.data[3:10] = [0, 0, 0, 1, 0, 0, 0]
+            equality.data[10] = 1
             for key, value in reference.items():
                 if key == "body1":
                     equality.name1 = value
                 elif key == "body2":
                     equality.name2 = value
-                elif key == "relpose":
-                    equality.data[:7] = value
                 elif key == "anchor":
                     equality.data[:3] = value
+                elif key == "relpose":
+                    equality.data[3:10] = value
                 elif key == "torquescale":
                     equality.data[10] = value
 
