@@ -303,7 +303,7 @@ class MultiverseViewer:
 
 
 @dataclass
-class MultiverseFunctionResult:
+class MultiverseCallbackResult:
     """Multiverse Function Result Enum"""
 
     class OutType(str, Enum):
@@ -326,29 +326,34 @@ class MultiverseFunctionResult:
     info: str = None
     """Information about the result"""
     result: Any = None
-    """Result of the function"""
+    """Result of the callback"""
 
     def __call__(self):
         self.result = self.result()
         return self
 
 
-class MultiverseFunction:
-    """Base class for Multiverse Function"""
+class MultiverseCallback:
+    """Base class for Multiverse Callback"""
 
     def __init__(self, callback: Callable):
         """
         Initialize the function with the callback
 
-        :param callback: Callable, callback function, must return MultiverseFunctionResult
+        :param callback: Callable, callback function, must return MultiverseCallbackResult
         """
         self._call = callback
         self.__name__ = callback.__name__
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args, render: bool=True, **kwargs):
         result = self._call(*args, **kwargs)
-        if not isinstance(result, MultiverseFunctionResult):
-            raise TypeError("Callback function must return MultiverseFunctionResult")
+        if not isinstance(result, MultiverseCallbackResult):
+            raise TypeError("Callback function must return MultiverseCallbackResult")
+        simulator = args[0]
+        if not isinstance(simulator, MultiverseSimulator):
+            raise TypeError("First argument must be of type MultiverseSimulator")
+        if render:
+            simulator.renderer.sync()
         return result
 
 
@@ -367,10 +372,10 @@ class MultiverseSimulator:
     logger: logging.Logger = logging.getLogger(__name__)
     """Logger for the simulator"""
 
-    class_level_callbacks: List[MultiverseFunction] = []
+    class_level_callbacks: List[MultiverseCallback] = []
     """Class level callback functions"""
 
-    instance_level_callbacks: List[MultiverseFunction] = None
+    instance_level_callbacks: List[MultiverseCallback] = None
     """Instance level callback functions"""
 
     def __init__(self,
@@ -379,7 +384,7 @@ class MultiverseSimulator:
                  headless: bool = False,
                  real_time_factor: float = 1.0,
                  step_size: float = 1E-3,
-                 callbacks: List[MultiverseFunction] = None,
+                 callbacks: List[MultiverseCallback] = None,
                  **kwargs):
         """
         Initialize the simulator with the viewer and the following keyword arguments:
@@ -389,7 +394,7 @@ class MultiverseSimulator:
         :param headless: bool, True to run the simulator in headless mode
         :param real_time_factor: float, real time factor
         :param step_size: float, step size
-        :param callbacks: List[MultiverseFunction], list of callback functions
+        :param callbacks: List[MultiverseCallback], list of callback functions
         """
         self._headless = headless
         self._real_time_factor = real_time_factor
@@ -674,23 +679,23 @@ class MultiverseSimulator:
         return self._renderer
 
     @classmethod
-    def add_callback(cls, callback: Callable | MultiverseFunction, callbacks: List[MultiverseFunction]):
-        if not isinstance(callback, MultiverseFunction):
+    def add_callback(cls, callback: Callable | MultiverseCallback, callbacks: List[MultiverseCallback]):
+        if not isinstance(callback, MultiverseCallback):
             if isinstance(callback, Callable):
-                callback = MultiverseFunction(callback=callback)
+                callback = MultiverseCallback(callback=callback)
             else:
-                raise TypeError(f"Function {callback} must be an instance of MultiverseFunction or Callable, "
+                raise TypeError(f"Function {callback} must be an instance of MultiverseCallback or Callable, "
                                 f"got {type(callback)}")
         if callback.__name__ in [callback.__name__ for callback in callbacks]:
             raise AttributeError(f"Function {callback.__name__} is already defined")
         callbacks.append(callback)
         cls.log_info(f"Function {callback.__name__} is registered")
 
-    def add_instance_callback(self, callback: Callable | MultiverseFunction):
+    def add_instance_callback(self, callback: Callable | MultiverseCallback):
         self.add_callback(callback, self.instance_level_callbacks)
 
     @classmethod
-    def add_class_callback(cls, callback: Callable | MultiverseFunction):
+    def add_class_callback(cls, callback: Callable | MultiverseCallback):
         cls.add_callback(callback, cls.class_level_callbacks)
 
     @classmethod

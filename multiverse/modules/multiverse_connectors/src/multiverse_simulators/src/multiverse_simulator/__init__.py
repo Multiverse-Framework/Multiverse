@@ -6,8 +6,8 @@ from .multiverse_simulator import (
     MultiverseSimulatorState,
     MultiverseSimulatorConstraints,
     MultiverseSimulatorStopReason,
-    MultiverseFunctionResult,
-    MultiverseFunction
+    MultiverseCallbackResult,
+    MultiverseCallback
 )
 
 from .multiverse_simulator_compiler import (
