@@ -255,33 +255,27 @@ void MultiverseClient::run()
             zmq_send(client_socket, &message_int, sizeof(message_int), 0);
             if (send_buffer.buffer_double.data != nullptr)
             {
-                delete[] send_buffer.buffer_double.data;
-                send_buffer.buffer_double.data = nullptr;
+                free(send_buffer.buffer_double.data);
             }
             if (send_buffer.buffer_uint8_t.data != nullptr)
             {
-                delete[] send_buffer.buffer_uint8_t.data;
-                send_buffer.buffer_uint8_t.data = nullptr;
+                free(send_buffer.buffer_uint8_t.data);
             }
             if (send_buffer.buffer_uint16_t.data != nullptr)
             {
-                delete[] send_buffer.buffer_uint16_t.data;
-                send_buffer.buffer_uint16_t.data = nullptr;
+                free(send_buffer.buffer_uint16_t.data);
             }
             if (receive_buffer.buffer_double.data != nullptr)
             {
-                delete[] receive_buffer.buffer_double.data;
-                receive_buffer.buffer_double.data = nullptr;
+                free(receive_buffer.buffer_double.data);
             }
             if (receive_buffer.buffer_uint8_t.data != nullptr)
             {
-                delete[] receive_buffer.buffer_uint8_t.data;
-                receive_buffer.buffer_uint8_t.data = nullptr;
+                free(receive_buffer.buffer_uint8_t.data);
             }
             if (receive_buffer.buffer_uint16_t.data != nullptr)
             {
-                delete[] receive_buffer.buffer_uint16_t.data;
-                receive_buffer.buffer_uint16_t.data = nullptr;
+                free(receive_buffer.buffer_uint16_t.data);
             }
         }
 
@@ -595,8 +589,6 @@ void MultiverseClient::disconnect()
     run();
 
     zmq_ctx_shutdown(context);
-
-    zmq_ctx_destroy(context);
 
     wait_for_meta_data_thread_finish();
 
