@@ -260,7 +260,6 @@ void MultiverseClient::run()
             }
             if (send_buffer.buffer_uint8_t.data != nullptr)
             {
-                free(send_buffer.buffer_uint8_t.data);
                 delete[] send_buffer.buffer_uint8_t.data;
                 send_buffer.buffer_uint8_t.data = nullptr;
             }
