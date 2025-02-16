@@ -108,7 +108,7 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
 
     def test_step_multiverse_simulator(self) -> MultiverseSimulator:
         simulator = self.test_pause_and_unpause_multiverse_simulator()
-        simulator.start(run_in_thread=False)
+        simulator.start(simulate_in_thread=False)
         self.assertIsNone(simulator.stop_reason)
         for i in range(10):
             self.assertIs(simulator.current_number_of_steps, i)
@@ -124,7 +124,7 @@ class MultiverseSimulatorTestCase(unittest.TestCase):
 
     def test_reset_multiverse_simulator(self) -> MultiverseSimulator:
         simulator = self.test_initialize_multiverse_simulator()
-        simulator.start(run_in_thread=False)
+        simulator.start(simulate_in_thread=False)
         simulator.reset()
         self.assertEqual(simulator.current_number_of_steps, 0)
         self.assertEqual(simulator.current_simulation_time, 0.0)

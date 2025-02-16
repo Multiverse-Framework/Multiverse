@@ -23,7 +23,7 @@ class MultiverseIsaacSimConnectorBaseTestCase(MultiverseSimulatorTestCase):
 
     def test_functions(self):
         simulator = self.Simulator(file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml"))
-        simulator.start(run_in_thread=False)
+        simulator.start(simulate_in_thread=False)
 
         for step in range(10000):
             if step < 1000:
@@ -88,7 +88,7 @@ class MultiverseIsaacSimConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertIsInstance(result.result, set)
 
             simulator.step()
-            simulator.run_callback()
+            simulator.render()
             time.sleep(0.001)
         simulator.stop()
 
@@ -112,7 +112,7 @@ class MultiverseIsaacSimConnectorComplexTestCase(MultiverseIsaacSimConnectorBase
 
     def test_running_in_10s(self):
         simulator = self.test_initialize_multiverse_simulator()
-        simulator.start(run_in_thread=False)
+        simulator.start(simulate_in_thread=False)
         start_time = time.time()
         while time.time() - start_time < 10.0:
             simulator.step()
@@ -140,7 +140,7 @@ class MultiverseIsaacSimConnectorComplexTestCase(MultiverseIsaacSimConnectorBase
         }
         viewer = MultiverseViewer(write_objects=write_objects, read_objects=read_objects)
         simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
-        simulator.start(run_in_thread=False)
+        simulator.start(simulate_in_thread=False)
         use_write_data = True
         start_time = time.time()
         while time.time() - start_time < 100.0:

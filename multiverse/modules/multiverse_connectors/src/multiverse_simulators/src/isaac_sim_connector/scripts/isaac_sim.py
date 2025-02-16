@@ -43,9 +43,9 @@ if __name__ == "__main__":
             constraints = MultiverseSimulatorConstraints(max_real_time=args.max_real_time,
                                                          max_number_of_steps=args.max_number_of_steps,
                                                          max_simulation_time=args.max_simulation_time)
-            simulator.start(constraints=constraints, run_in_thread=False)
+            simulator.start(constraints=constraints, simulate_in_thread=False)
         else:
-            simulator.start(run_in_thread=False)
+            simulator.start(simulate_in_thread=False)
         simulator.run()  # TODO: Implement viewer using multiverse_params
         simulator.stop()
         time.sleep(1)  # Extra time to clean up

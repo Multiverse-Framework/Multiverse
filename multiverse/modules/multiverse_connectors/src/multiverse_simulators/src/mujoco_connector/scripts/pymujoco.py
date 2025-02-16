@@ -83,7 +83,7 @@ def main():
                                               real_time_factor=args.real_time_factor,
                                               step_size=args.step_size,
                                               **unknown_args_dict)
-        simulator.start(run_in_thread=False)
+        simulator.start(simulate_in_thread=False)
         if args.max_real_time is not None or args.max_number_of_steps is not None or args.max_simulation_time is not None:
             constraints = MultiverseSimulatorConstraints(max_real_time=args.max_real_time,
                                                          max_number_of_steps=args.max_number_of_steps,

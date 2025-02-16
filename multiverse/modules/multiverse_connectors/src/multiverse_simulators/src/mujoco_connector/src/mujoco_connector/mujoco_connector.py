@@ -168,7 +168,11 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             if not self.headless:
                 self._mj_data = mjx.get_data(self._mj_model, self._batch)
         else:
-            mujoco.mj_step(self._mj_model, self._mj_data)
+            if self.render_thread is not None:
+                with self.renderer.lock():
+                    mujoco.mj_step(self._mj_model, self._mj_data)
+            else:
+                mujoco.mj_step(self._mj_model, self._mj_data)
 
     def reset_callback(self):
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
@@ -262,7 +266,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             if key.name != "home":
                 key.delete()
         self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
-        self._renderer._sim().load(self._mj_model, self._mj_data, "")
+        if not self.headless:
+            self._renderer._sim().load(self._mj_model, self._mj_data, "")
 
     @property
     def file_path(self) -> str:
@@ -952,7 +957,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                                       ctrl=self._mj_data.ctrl,
                                       time=self.current_simulation_time)
                 self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
-                self._renderer._sim().load(self._mj_model, self._mj_data, "")
+                if not self.headless:
+                    self._renderer._sim().load(self._mj_model, self._mj_data, "")
                 key_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_KEY, name=key_name)
         mujoco.mj_setKeyframe(self._mj_model, self._mj_data, key_id)
         if file_path is not None:
@@ -983,7 +989,8 @@ class MultiverseMujocoConnector(MultiverseSimulator):
                     info=f"File {file_path} not found"
                 )
             self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
-            self._renderer._sim().load(self._mj_model, self._mj_data, "")
+            if not self.headless:
+                self._renderer._sim().load(self._mj_model, self._mj_data, "")
             if key_id >= self._mj_model.nkey:
                 return MultiverseCallbackResult(
                     type=MultiverseCallbackResult.ResultType.FAILURE_WITHOUT_EXECUTION,

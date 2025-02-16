@@ -26,7 +26,7 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
     def test_functions(self):
         simulator = self.Simulator(
             file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml"))
-        simulator.start(run_in_thread=False)
+        simulator.start(simulate_in_thread=False, render_in_thread=True)
 
         for step in range(10000):
             if step < 1000:
@@ -258,7 +258,6 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertAlmostEqual(result.result[1]["hit_position"][2], 0.0599, places=3)
 
             simulator.step()
-            simulator.run_callback()
             time.sleep(0.001)
         simulator.stop()
 
@@ -285,6 +284,20 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         while simulator.state != MultiverseSimulatorState.STOPPED:
             time.sleep(1)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+
+    def test_running_2_simulators_in_10s(self):
+        simulator1 = self.test_initialize_multiverse_simulator()
+        # simulator2 = self.test_initialize_multiverse_simulator()
+        simulator1.start(simulate_in_thread=False, render_in_thread=True)
+        # simulator2.start(simulate_in_thread=False, render_in_thread=False)
+        for step in range(10000):
+            simulator1.step()
+            # simulator2.step()
+            time.sleep(0.001)
+        simulator1.stop()
+        # simulator2.stop()
+        self.assertIs(simulator1.state, MultiverseSimulatorState.STOPPED)
+        # self.assertIs(simulator2.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_in_10s_with_viewer(self):
         write_objects = {
@@ -350,7 +363,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
     def test_read_and_write_data_in_the_loop(self):
         viewer = MultiverseViewer()
         simulator = self.test_initialize_multiverse_simulator(viewer=viewer)
-        simulator.start(run_in_thread=False)
+        simulator.start(simulate_in_thread=False)
         for step in range(10000):
             if step == 100:
                 read_objects = {

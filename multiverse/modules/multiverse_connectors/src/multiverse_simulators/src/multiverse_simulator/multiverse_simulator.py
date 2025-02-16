@@ -345,7 +345,7 @@ class MultiverseCallback:
         self._call = callback
         self.__name__ = callback.__name__
 
-    def __call__(self, *args, render: bool=True, **kwargs):
+    def __call__(self, *args, render: bool = True, **kwargs):
         result = self._call(*args, **kwargs)
         if not isinstance(result, MultiverseCallbackResult):
             raise TypeError("Callback function must return MultiverseCallbackResult")
@@ -368,6 +368,9 @@ class MultiverseSimulator:
 
     simulation_thread: Thread = None
     """Simulation thread, run step() method in this thread"""
+
+    render_thread: Thread = None
+    """Render thread, run render() method in this thread"""
 
     logger: logging.Logger = logging.getLogger(__name__)
     """Logger for the simulator"""
@@ -422,17 +425,21 @@ class MultiverseSimulator:
                 [*self.class_level_callbacks, *self.instance_level_callbacks]}
 
     def start(self,
-              run_in_thread: bool = True,
+              simulate_in_thread: bool = True,
+              render_in_thread: bool = False,
               constraints: MultiverseSimulatorConstraints = None,
               time_out_in_seconds: float = 10.0):
         """
         Start the simulator, if run_in_thread is True, run the simulator in a thread until the constraints are met
 
         :param constraints: MultiverseSimulatorConstraints, constraints for stopping the simulator
-        :param run_in_thread: bool, True to run the simulator in a thread
+        :param simulate_in_thread: bool, True to simulate the simulator in a thread
+        :param render_in_thread: bool, True to render the simulator in a thread
         :param constraints: MultiverseSimulatorConstraints, constraints for stopping the simulator
         :param time_out_in_seconds: float, timeout for starting the renderer
         """
+        if simulate_in_thread and render_in_thread:
+            raise ValueError("Cannot simulate and render in threads simultaneously")
         self.start_callback()
         self.reset()
         for i in range(int(10 * time_out_in_seconds)):
@@ -448,9 +455,18 @@ class MultiverseSimulator:
         self._start_real_time = self.current_real_time
         self._state = MultiverseSimulatorState.RUNNING
         self._stop_reason = None
-        if run_in_thread:
+        if simulate_in_thread:
             self.simulation_thread = Thread(target=self.run, args=(constraints,))
             self.simulation_thread.start()
+        if render_in_thread:
+            def render():
+                with self.renderer:
+                    while self.renderer.is_running():
+                        self.renderer.sync()
+                        time.sleep(1.0 / 60.0)
+
+            self.render_thread = Thread(target=render)
+            self.render_thread.start()
 
     def run(self,
             constraints: MultiverseSimulatorConstraints = None):
@@ -485,7 +501,9 @@ class MultiverseSimulator:
                         self.step()
                 elif self.state == MultiverseSimulatorState.PAUSED:
                     self.pause_callback()
-                self.run_callback()
+                if self.render_thread is None and self.current_real_time - self._current_render_time > 1.0 / 60.0:
+                    self._current_render_time = self.current_real_time
+                    self.render()
         self.stop_callback()
 
     def step(self):
@@ -521,6 +539,8 @@ class MultiverseSimulator:
         """Stop the simulator"""
         if self.renderer.is_running():
             self.renderer.close()
+        if self.render_thread is not None and self.render_thread.is_alive():
+            self.render_thread.join()
         self._state = MultiverseSimulatorState.STOPPED
         if self.simulation_thread is not None and self.simulation_thread.is_alive():
             self.simulation_thread.join()
@@ -574,10 +594,8 @@ class MultiverseSimulator:
         self._current_simulation_time = 0.0
         self._renderer = MultiverseRenderer()
 
-    def run_callback(self):
-        if self.current_real_time - self._current_render_time > 1.0 / 60.0:
-            self._current_render_time = self.current_real_time
-            self.renderer.sync()
+    def render(self):
+        self.renderer.sync()
 
     def _process_objects(self, objects, ids_dict):
         """
