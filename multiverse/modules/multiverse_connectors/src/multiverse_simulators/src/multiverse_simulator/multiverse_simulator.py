@@ -438,8 +438,6 @@ class MultiverseSimulator:
         :param constraints: MultiverseSimulatorConstraints, constraints for stopping the simulator
         :param time_out_in_seconds: float, timeout for starting the renderer
         """
-        if simulate_in_thread and render_in_thread:
-            raise ValueError("Cannot simulate and render in threads simultaneously")
         self.start_callback()
         self.reset()
         for i in range(int(10 * time_out_in_seconds)):

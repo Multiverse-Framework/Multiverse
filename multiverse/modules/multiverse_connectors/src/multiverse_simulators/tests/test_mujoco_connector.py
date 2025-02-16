@@ -277,27 +277,59 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
     headless = False
     step_size = 5E-4
 
-    def test_running_in_10s(self):
+    def test_running_in_10s_in_1(self):
         simulator = self.test_initialize_multiverse_simulator()
         constraints = MultiverseSimulatorConstraints(max_real_time=10.0)
-        simulator.start(constraints=constraints)
+        simulator.start(constraints=constraints, simulate_in_thread=True, render_in_thread=True)
         while simulator.state != MultiverseSimulatorState.STOPPED:
             time.sleep(1)
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
+    def test_running_in_10s_2(self):
+        simulator = self.test_initialize_multiverse_simulator()
+        constraints = MultiverseSimulatorConstraints(max_real_time=10.0)
+        simulator.start(constraints=constraints, simulate_in_thread=True, render_in_thread=False)
+        while simulator.state != MultiverseSimulatorState.STOPPED:
+            time.sleep(1)
+        self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+
+    def test_running_in_10s_3(self):
+        simulator = self.test_initialize_multiverse_simulator()
+        constraints = MultiverseSimulatorConstraints(max_real_time=10.0)
+        simulator.start(constraints=constraints, simulate_in_thread=False, render_in_thread=True)
+        while simulator.state != MultiverseSimulatorState.STOPPED:
+            simulator.step()
+            time.sleep(0.001)
+            if simulator.current_number_of_steps == 1000:
+                simulator.stop()
+        self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+
+    def test_running_in_10s_4(self):
+        simulator = self.test_initialize_multiverse_simulator()
+        constraints = MultiverseSimulatorConstraints(max_real_time=10.0)
+        simulator.start(constraints=constraints, simulate_in_thread=False, render_in_thread=False)
+        while simulator.state != MultiverseSimulatorState.STOPPED:
+            simulator.step()
+            simulator.render()
+            time.sleep(0.001)
+            if simulator.current_number_of_steps == 1000:
+                simulator.stop()
+        self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
+
     def test_running_2_simulators_in_10s(self):
         simulator1 = self.test_initialize_multiverse_simulator()
-        # simulator2 = self.test_initialize_multiverse_simulator()
+        simulator2 = self.test_initialize_multiverse_simulator()
         simulator1.start(simulate_in_thread=False, render_in_thread=True)
-        # simulator2.start(simulate_in_thread=False, render_in_thread=False)
+        simulator2.start(simulate_in_thread=False, render_in_thread=True)
         for step in range(10000):
             simulator1.step()
-            # simulator2.step()
+            simulator2.step()
             time.sleep(0.001)
+            print(step)
         simulator1.stop()
-        # simulator2.stop()
+        simulator2.stop()
         self.assertIs(simulator1.state, MultiverseSimulatorState.STOPPED)
-        # self.assertIs(simulator2.state, MultiverseSimulatorState.STOPPED)
+        self.assertIs(simulator2.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_in_10s_with_viewer(self):
         write_objects = {
@@ -470,7 +502,7 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
         self.assertIs(simulator.state, MultiverseSimulatorState.STOPPED)
 
 
-@unittest.skip("This test is not meant to be run in CI")
+# @unittest.skip("This test is not meant to be run in CI")
 class MujocoSpeedTestCase(unittest.TestCase):
     file_path = os.path.join(resources_path, "mjcf/mujoco_menagerie/franka_emika_panda/mjx_single_cube.xml")
     step_size = 5E-4
@@ -491,6 +523,46 @@ class MujocoSpeedTestCase(unittest.TestCase):
         </plugin>
     </extension>
     """
+
+    def test_simulation(self):
+        # Load the model
+        model = mujoco.MjModel.from_xml_path(self.file_path)
+        data = mujoco.MjData(model)
+
+        # Create a viewer within the thread
+        with mujoco.viewer.launch_passive(model, data) as viewer:
+            while viewer.is_running():
+                mujoco.mj_step(model, data)
+                viewer.sync()
+                time.sleep(0.001)  # Control the simulation speed
+
+    def test_2_simulations(self):
+        # Load the model
+        model_1 = mujoco.MjModel.from_xml_path(self.file_path)
+        data_1 = mujoco.MjData(model_1)
+        mujoco.mj_step(model_1, data_1)
+
+        model_2 = mujoco.MjModel.from_xml_path(self.file_path)
+        data_2 = mujoco.MjData(model_2)
+        mujoco.mj_step(model_2, data_2)
+
+        def render(model, data):
+            with mujoco.viewer.launch_passive(model, data) as viewer:
+                while viewer.is_running():
+                    viewer.sync()
+                    time.sleep(0.001)
+
+        import multiprocessing
+        thread1 = multiprocessing.Process(target=render, args=(model_1, data_1))
+        thread1.start()
+        thread2 = multiprocessing.Process(target=render, args=(model_2, data_2))
+        thread2.start()
+        for _ in range(10000):
+            mujoco.mj_step(model_1, data_1)
+            mujoco.mj_step(model_2, data_2)
+            time.sleep(0.001)
+
+        thread1.join()
 
     def test_running_speed(self):
         m = mujoco.MjModel.from_xml_path(self.file_path)
