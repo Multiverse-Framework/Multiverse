@@ -318,18 +318,22 @@ class MultiverseMujocoConnectorComplexTestCase(MultiverseMujocoConnectorBaseTest
 
     def test_running_2_simulators_in_10s(self):
         simulator1 = self.test_initialize_multiverse_simulator()
-        simulator2 = self.test_initialize_multiverse_simulator()
         simulator1.start(simulate_in_thread=False, render_in_thread=True)
-        simulator2.start(simulate_in_thread=False, render_in_thread=True)
+        self.headless = True
+        simulator2 = self.test_initialize_multiverse_simulator()
+        simulator2.start(simulate_in_thread=False)
+        simulator3 = self.test_initialize_multiverse_simulator()
+        simulator3.start(simulate_in_thread=False)
         for step in range(10000):
             simulator1.step()
             simulator2.step()
-            time.sleep(0.001)
-            print(step)
+            simulator3.step()
         simulator1.stop()
         simulator2.stop()
+        simulator3.stop()
         self.assertIs(simulator1.state, MultiverseSimulatorState.STOPPED)
         self.assertIs(simulator2.state, MultiverseSimulatorState.STOPPED)
+        self.assertIs(simulator3.state, MultiverseSimulatorState.STOPPED)
 
     def test_running_in_10s_with_viewer(self):
         write_objects = {

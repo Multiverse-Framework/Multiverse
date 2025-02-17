@@ -456,7 +456,7 @@ class MultiverseSimulator:
         if simulate_in_thread:
             self.simulation_thread = Thread(target=self.run, args=(constraints,))
             self.simulation_thread.start()
-        if render_in_thread:
+        if not self.headless and render_in_thread:
             def render():
                 with self.renderer:
                     while self.renderer.is_running():
