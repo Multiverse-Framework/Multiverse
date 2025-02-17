@@ -133,7 +133,7 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
             cmd += [f"--objects_path={objects_path}"]
         if simulation_data["simulator"] == "isaac_sim":
             joint_state = {}
-            for entities in list(simulation_data["robots"].values()) + list(simulation_data["objects"].values()):
+            for entities in list(simulation_data.get("robots", {}).values()) + list(simulation_data.get("objects", {}).values()):
                 if "joint_state" in entities:
                     for joint_name, joint_state_data in entities["joint_state"].items():
                         joint_state[joint_name] = joint_state_data
