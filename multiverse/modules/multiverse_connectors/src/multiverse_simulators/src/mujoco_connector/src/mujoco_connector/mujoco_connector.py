@@ -783,6 +783,7 @@ class MultiverseMujocoConnector(MultiverseSimulator):
 
         contact_points = []
         contact_bodies = set()
+        mujoco.mj_collision(self._mj_model, self._mj_data)
         for contact_id in range(self._mj_data.ncon):
             contact = self._mj_data.contact[contact_id]
             if contact.exclude != 0 and contact.exclude != 1:
