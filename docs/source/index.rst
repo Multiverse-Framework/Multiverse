@@ -58,8 +58,10 @@ The Multiverse Knowledge addresses this by taking the first step in understandin
 
 Please try out some examples in this `tutorial <https://binder.intel4coro.de/v2/gh/Multiverse-Framework/Multiverse-Docker/main>`_ on the Multiverse Knowledge.
 
+.. _Acknowledgements:
+
 Acknowledgements
-~~~~~~~~~~~~~~~~
+================
 
 This work has been (partially) supported by:
 
