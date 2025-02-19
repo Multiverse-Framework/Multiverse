@@ -58,6 +58,14 @@ The Multiverse Knowledge addresses this by taking the first step in understandin
 
 Please try out some examples in this `tutorial <https://binder.intel4coro.de/v2/gh/Multiverse-Framework/Multiverse-Docker/main>`_ on the Multiverse Knowledge.
 
+Acknowledgements
+----------------
+
+This work has been (partially) supported by
+- The European Union's Horizon Europe Framework Programme under grant agreement No 101070596.
+- The German Research Foundation DFG, as part of Collaborative Research Center (Sonderforschungsbereich) 1320 Project-ID 329551904 “EASE - Everyday Activity Science and Engineering”, University of Bremen (http://ease-crc.org/). The research was conducted in subproject R03.
+- The German Federal Ministry for Economic Affairs and Climate Action BMWK as a part of the Knowledge4Retail project.
+
 Contents
 --------
 
