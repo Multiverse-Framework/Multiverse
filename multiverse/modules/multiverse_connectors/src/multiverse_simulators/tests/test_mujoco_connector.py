@@ -6,7 +6,6 @@ import xml.etree.ElementTree as ET
 import mujoco
 import mujoco.viewer
 import numpy
-
 from mujoco_connector import MultiverseMujocoConnector
 from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseSimulatorState, MultiverseViewer, \
     MultiverseCallbackResult
@@ -261,6 +260,26 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
             time.sleep(0.001)
         simulator.stop()
 
+    def test_cameras(self):
+        simulator = self.Simulator(
+            file_path=os.path.join(resources_path, "mjcf/mujoco_menagerie/hello_robot_stretch_3/scene.xml"),
+            integrator="IMPLICITFAST",
+            impratio=10,
+            cone="ELLIPTIC",
+            multiccd=True,
+            nativeccd=False,
+            step_size=0.001,
+            noslip_iterations=3,
+        )
+        simulator.start(simulate_in_thread=False, render_in_thread=True)
+        frames = []
+        with mujoco.Renderer(simulator._mj_model) as renderer:
+            for step in range(100):
+                simulator.step()
+                renderer.update_scene(simulator._mj_data)
+                pixels = renderer.render()
+                frames.append(pixels)
+        simulator.stop()
 
 class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBaseTestCase):
     file_path = os.path.join(resources_path, "mjcf/floor/floor.xml")
