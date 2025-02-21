@@ -272,13 +272,20 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
             noslip_iterations=3,
         )
         simulator.start(simulate_in_thread=False, render_in_thread=True)
-        frames = []
-        with mujoco.Renderer(simulator._mj_model) as renderer:
-            for step in range(100):
-                simulator.step()
-                renderer.update_scene(simulator._mj_data)
-                pixels = renderer.render()
-                frames.append(pixels)
+        import cv2
+        for step in range(1000):
+            if step == 500:
+                capture_rgb = simulator.capture_rgb()
+                rgb = capture_rgb.result
+                # Save as png
+                cv2.imwrite(os.path.join(resources_path, "../output/rgb1.png"), cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
+            if step == 501:
+                capture_rgb = simulator.capture_rgb(camera_name="d405_rgb")
+                rgb = capture_rgb.result
+                # Save as png
+                cv2.imwrite(os.path.join(resources_path, "../output/rgb2.png"), cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
+
+            simulator.step()
         simulator.stop()
 
 class MultiverseMujocoConnectorHeadlessBaseTestCase(MultiverseMujocoConnectorBaseTestCase):

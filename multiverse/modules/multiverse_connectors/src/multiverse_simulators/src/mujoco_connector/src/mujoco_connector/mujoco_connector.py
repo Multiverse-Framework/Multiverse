@@ -1016,3 +1016,17 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             info=f"Loaded simulation with key_id {key_id}",
             result=key_id
         )
+
+    @MultiverseSimulator.multiverse_callback
+    def capture_rgb(self, camera_name: str = None) -> MultiverseCallbackResult:
+        with mujoco.Renderer(self._mj_model) as renderer:
+            if camera_name is not None:
+                renderer.update_scene(self._mj_data, camera_name)
+            else:
+                renderer.update_scene(self._mj_data)
+            rgb = renderer.render()
+        return MultiverseCallbackResult(
+            type=MultiverseCallbackResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info="Captured RGB data",
+            result=rgb
+        )
