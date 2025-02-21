@@ -1018,8 +1018,17 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         )
 
     @MultiverseSimulator.multiverse_callback
-    def capture_rgb(self, camera_name: str = None) -> MultiverseCallbackResult:
-        with mujoco.Renderer(self._mj_model) as renderer:
+    def capture_rgb(self, camera_name: str = None, height=240, width=320) -> MultiverseCallbackResult:
+        """
+        This method returns a NumPy uint8 array of RGB values.
+
+        :param camera_name: The name of the camera to capture the RGB data from. If None, the default camera is used.
+        :param height: The height of the image to capture.
+        :param width: The width of the image to capture.
+
+        :return: A MultiverseCallbackResult object with the captured RGB data.
+        """
+        with mujoco.Renderer(self._mj_model, height, width) as renderer:
             if camera_name is not None:
                 renderer.update_scene(self._mj_data, camera_name)
             else:
@@ -1029,4 +1038,54 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             type=MultiverseCallbackResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
             info="Captured RGB data",
             result=rgb
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def capture_depth(self, camera_name: str = None, height=240, width=320) -> MultiverseCallbackResult:
+        """
+        This method returns a NumPy float array of depth values (in meters).
+
+        :param camera_name: The name of the camera to capture the depth from. If None, the default camera is used.
+        :param height: The height of the image to capture.
+        :param width: The width of the image to capture.
+
+        :return: A MultiverseCallbackResult object with the captured depth data.
+        """
+        with mujoco.Renderer(self._mj_model, height, width) as renderer:
+            renderer.enable_depth_rendering()
+            if camera_name is not None:
+                renderer.update_scene(self._mj_data, camera_name)
+            else:
+                renderer.update_scene(self._mj_data)
+            depth = renderer.render()
+        return MultiverseCallbackResult(
+            type=MultiverseCallbackResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info="Captured depth data",
+            result=depth
+        )
+
+    @MultiverseSimulator.multiverse_callback
+    def capture_segmentation(self, camera_name: str = None, height=240, width=320) -> MultiverseCallbackResult:
+        """
+        This method returns a 2-channel NumPy int32 array of label values where the pixels of each object are labeled with the pair (mjModel ID, mjtObj enum object type).
+        Background pixels are labeled (-1, -1).
+
+        :param camera_name: The name of the camera to capture the segmentation data from. If None, the default camera is used.
+        :param height: The height of the rendered image.
+        :param width: The width of the rendered image.
+
+        :return: A MultiverseCallbackResult object with the segmentation data as the result.
+        """
+
+        with mujoco.Renderer(self._mj_model, height, width) as renderer:
+            renderer.enable_segmentation_rendering()
+            if camera_name is not None:
+                renderer.update_scene(self._mj_data, camera_name)
+            else:
+                renderer.update_scene(self._mj_data)
+            segmentation = renderer.render()
+        return MultiverseCallbackResult(
+            type=MultiverseCallbackResult.ResultType.SUCCESS_WITHOUT_EXECUTION,
+            info="Captured segmentation data",
+            result=segmentation
         )

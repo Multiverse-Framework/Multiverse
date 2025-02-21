@@ -284,6 +284,17 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 rgb = capture_rgb.result
                 # Save as png
                 cv2.imwrite(os.path.join(resources_path, "../output/rgb2.png"), cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR))
+            if step == 502:
+                capture_depth = simulator.capture_depth(camera_name="d405_depth")
+                depth = capture_depth.result
+                # Save as png
+                cv2.imwrite(os.path.join(resources_path, "../output/depth.png"), depth)
+            if step == 503:
+                capture_segmentation = simulator.capture_segmentation(camera_name="d405_rgb")
+                segmentation = capture_segmentation.result
+                # Save as png
+                cv2.imwrite(os.path.join(resources_path, "../output/segmentation1.png"), segmentation[:, :, 0])
+                cv2.imwrite(os.path.join(resources_path, "../output/segmentation2.png"), segmentation[:, :, 1])
 
             simulator.step()
         simulator.stop()
