@@ -904,6 +904,7 @@ namespace mujoco::plugin::multiverse_connector
       const int body_id = mj_name2id(m_, mjtObj::mjOBJ_BODY, send_object.first.c_str());
       const int mocap_id = m_->body_mocapid[body_id];
       const int joint_id = mj_name2id(m_, mjtObj::mjOBJ_JOINT, send_object.first.c_str());
+      const int actuator_id = mj_name2id(m_, mjtObj::mjOBJ_ACTUATOR, send_object.first.c_str());
       if (body_id != -1)
       {
         const std::string body_name = send_object.first;
@@ -924,7 +925,7 @@ namespace mujoco::plugin::multiverse_connector
               send_data_vec.emplace_back(&d_->mocap_quat[4 * mocap_id + 2]);
               send_data_vec.emplace_back(&d_->mocap_quat[4 * mocap_id + 3]);
             }
-            else
+            else if (joint_id == -1 && actuator_id == -1)
             {
               mju_warning("Send %s for %s not supported\n", attribute_name.c_str(), body_name.c_str());
             }
@@ -993,7 +994,7 @@ namespace mujoco::plugin::multiverse_connector
           }
         }
       }
-      else if (joint_id != -1)
+      if (joint_id != -1)
       {
         const std::string joint_name = send_object.first;
         const int qpos_id = m_->jnt_qposadr[joint_id];
@@ -1034,9 +1035,31 @@ namespace mujoco::plugin::multiverse_connector
             send_data_vec.emplace_back(&d_->qpos[qpos_id + 2]);
             send_data_vec.emplace_back(&d_->qpos[qpos_id + 3]);
           }
-          else
+          else if (body_id == -1 && actuator_id == -1)
           {
             mju_warning("Send %s for %s not supported\n", attribute_name.c_str(), joint_name.c_str());
+          }
+        }
+      }
+      if (actuator_id != -1)
+      {
+        const std::string actuator_name = send_object.first;
+        for (const std::string &attribute_name : send_object.second)
+        {
+          if (strcmp(attribute_name.c_str(), "cmd_joint_rvalue") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_tvalue") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_angular_velocity") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_linear_velocity") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_angular_acceleration") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_linear_acceleration") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_torque") == 0 ||
+              strcmp(attribute_name.c_str(), "cmd_joint_force") == 0)
+          {
+            send_data_vec.emplace_back(&d_->ctrl[actuator_id]);
+          }
+          else if (body_id == -1 && joint_id == -1)
+          {
+            printf("Send %s for %s not supported\n", attribute_name.c_str(), actuator_name.c_str());
           }
         }
       }
@@ -1136,7 +1159,7 @@ namespace mujoco::plugin::multiverse_connector
           }
         }
       }
-      else if (joint_id != -1)
+      if (joint_id != -1)
       {
         const std::string joint_name = receive_object.first;
         const int qpos_id = m_->jnt_qposadr[joint_id];
@@ -1167,7 +1190,7 @@ namespace mujoco::plugin::multiverse_connector
           }
         }
       }
-      else if (actuator_id != -1)
+      if (actuator_id != -1)
       {
         const std::string actuator_name = receive_object.first;
         for (const std::string &attribute_name : receive_object.second)
@@ -1183,7 +1206,7 @@ namespace mujoco::plugin::multiverse_connector
           {
             receive_data_vec.emplace_back(&d_->ctrl[actuator_id]);
           }
-          else
+          else if (body_id == -1 && joint_id == -1)
           {
             printf("Receive %s for %s not supported\n", attribute_name.c_str(), actuator_name.c_str());
           }
