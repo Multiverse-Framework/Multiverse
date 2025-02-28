@@ -1089,3 +1089,48 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             info="Captured segmentation data",
             result=segmentation
         )
+
+    @MultiverseSimulator.multiverse_callback
+    def enable_contact(self, body_1_name: str, body_2_name: str) -> MultiverseCallbackResult:
+        """
+        This method enables contact between two bodies.
+
+        :param body_1_name: The name of the first body.
+        :param body_2_name: The name of the second body.
+        """
+
+        body_1_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_1_name)
+        if body_1_id == -1:
+            return MultiverseCallbackResult(
+                type=MultiverseCallbackResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Body 1 {body_1_name} not found"
+            )
+        body_2_id = mujoco.mj_name2id(m=self._mj_model, type=mujoco.mjtObj.mjOBJ_BODY, name=body_2_name)
+        if body_2_id == -1:
+            return MultiverseCallbackResult(
+                type=MultiverseCallbackResult.ResultType.FAILURE_WITHOUT_EXECUTION,
+                info=f"Body 2 {body_2_name} not found"
+            )
+
+        body_1 = self._mj_model.body(body_1_id)
+        body_2 = self._mj_model.body(body_2_id)
+        for geom_1_id in range(body_1.geomadr[0], body_1.geomadr[0] + body_1.geomnum[0]):
+            geom_1 = self._mj_model.geom(geom_1_id)
+            if geom_1.contype[0] == 0 and geom_1.conaffinity[0] == 0:
+                continue
+            geom_1_name = geom_1.name
+            for geom_2_id in range(body_2.geomadr[0], body_2.geomadr[0] + body_2.geomnum[0]):
+                geom_2 = self._mj_model.geom(geom_2_id)
+                if geom_2.contype == 0 and geom_2.conaffinity == 0:
+                    continue
+                geom_2_name = geom_2.name
+                pair_name = f"{geom_1_name}-{geom_2_name}"
+                self._mj_spec.add_pair(name=pair_name, geomname1=geom_1_name, geomname2=geom_2_name)
+        self._mj_model, self._mj_data = self._mj_spec.recompile(self._mj_model, self._mj_data)
+        if not self.headless:
+            self._renderer._sim().load(self._mj_model, self._mj_data, "")
+            mujoco.mj_step1(self._mj_model, self._mj_data)
+        return MultiverseCallbackResult(
+            type=MultiverseCallbackResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL,
+            info=f"Enabled contact between {body_1_name} and {body_2_name}"
+        )

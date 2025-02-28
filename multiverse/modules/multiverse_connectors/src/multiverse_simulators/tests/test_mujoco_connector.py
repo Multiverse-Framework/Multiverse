@@ -59,6 +59,11 @@ class MultiverseMujocoConnectorBaseTestCase(MultiverseSimulatorTestCase):
                 self.assertEqual(MultiverseCallbackResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL, result.type)
                 self.assertIn("Attached body 1 box to body 2 hand", result.info)
 
+                result = simulator.callbacks["enable_contact"](body_1_name="box", body_2_name="left_finger")
+                self.assertEqual(MultiverseCallbackResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL, result.type)
+                result = simulator.enable_contact(body_1_name="box", body_2_name="right_finger")
+                self.assertEqual(MultiverseCallbackResult.ResultType.SUCCESS_AFTER_EXECUTION_ON_MODEL, result.type)
+
                 result = simulator.callbacks["attach"](body_1_name="box", body_2_name="hand")
                 self.assertEqual(MultiverseCallbackResult.ResultType.SUCCESS_WITHOUT_EXECUTION, result.type)
                 self.assertEqual("Body 1 box is already attached to body 2 hand", result.info)
