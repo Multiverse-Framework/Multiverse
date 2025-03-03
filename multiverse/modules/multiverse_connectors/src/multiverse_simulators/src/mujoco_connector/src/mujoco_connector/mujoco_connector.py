@@ -82,6 +82,10 @@ class MultiverseMujocoConnector(MultiverseSimulator):
             self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_NATIVECCD
         if kwargs.get('energy', True):
             self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_ENERGY
+        if not kwargs.get('contact', True):
+            self._mj_model.opt.disableflags |= mujoco.mjtDisableBit.mjDSBL_CONTACT
+        if not kwargs.get('gravity', True):
+            self._mj_model.opt.disableflags |= mujoco.mjtDisableBit.mjDSBL_GRAVITY
         self._mj_data = mujoco.MjData(self._mj_model)
 
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)
