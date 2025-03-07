@@ -398,6 +398,14 @@ namespace mujoco::plugin::multiverse_connector
           if (is_attribute_valid(object_name, attribute_name, obj_type, attr_size, m))
           {
             config.receive_objects[object_name].insert(attribute_name);
+            if (config.send_objects.find(object_name) != config.send_objects.end() && config.send_objects[object_name].find(attribute_name) != config.send_objects[object_name].end())
+            {
+              config.send_objects[object_name].erase(attribute_name);
+              if (config.send_objects[object_name].empty())
+              {
+                config.send_objects.erase(object_name);
+              }
+            }
           }
         }
       }
