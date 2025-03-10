@@ -44,6 +44,14 @@ def get_urdf_str_from_ros_package(mesh_abspath_prefix: str, ros_pkg_path: str, u
 def get_urdf_str_abs(urdf_path: str) -> str:
     tree = ET.parse(urdf_path)
     root = tree.getroot()
+    for link in root.findall(".//link/visual/geometry/mesh"):
+        filename = link.get("filename")
+        if not filename.startswith("package://") and not filename.startswith("file://"):
+            link.set("filename", f"file://{os.path.abspath(os.path.join(os.path.dirname(urdf_path), filename))}")
+    for link in root.findall(".//link/collision/geometry/mesh"):
+        filename = link.get("filename")
+        if not filename.startswith("package://") and not filename.startswith("file://"):
+            link.set("filename", f"file://{os.path.abspath(os.path.join(os.path.dirname(urdf_path), filename))}")
     robot_urdf_str = ET.tostring(root, encoding="unicode")
     mesh_abspath_prefix = os.path.dirname(urdf_path) + "/"
     pattern = r'filename="file://([^"]*)"'
