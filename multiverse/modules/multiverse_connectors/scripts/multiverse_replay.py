@@ -72,7 +72,7 @@ if __name__ == '__main__':
         attribute_name = data_name.split(':')[1]
         if attribute_name[-2] == '_' and attribute_name[-1].isdigit():
             attribute_name = attribute_name[:-2]
-        if len(attribute_names) > 0 and attribute_name not in attribute_names:
+        if len(attribute_names) > 0 and attribute_name not in attribute_names and attribute_names != [""]:
             continue
         if object_name not in multiverse_logger.request_meta_data["send"]:
             multiverse_logger.request_meta_data["send"][object_name] = [f"{attribute_name}"]
