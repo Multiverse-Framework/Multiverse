@@ -70,9 +70,14 @@ if __name__ == '__main__':
     for data_name in data_columns:
         object_name = data_name.split(':')[0]
         attribute_name = data_name.split(':')[1]
+        if attribute_name[-2] == '_' and attribute_name[-1].isdigit():
+            attribute_name = attribute_name[:-2]
         if len(attribute_names) > 0 and attribute_name not in attribute_names:
             continue
-        multiverse_logger.request_meta_data["send"][object_name] = [f"{attribute_name}"]
+        if object_name not in multiverse_logger.request_meta_data["send"]:
+            multiverse_logger.request_meta_data["send"][object_name] = [f"{attribute_name}"]
+        elif f"{attribute_name}" not in multiverse_logger.request_meta_data["send"][object_name]:
+            multiverse_logger.request_meta_data["send"][object_name].append(f"{attribute_name}")
     multiverse_logger.send_and_receive_meta_data()
 
     multiverse_logger.send_data = [0.0] + data_values.iloc[0].values.tolist()
