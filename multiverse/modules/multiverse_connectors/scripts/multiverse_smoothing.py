@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
     # Define arguments
     parser.add_argument("--world_name", type=str, required=False, default="world", help="Name of the world")
+    parser.add_argument("--simulation_name", type=str, required=False, default="multiverse_smoothing", help="Name of the simulation")
     parser.add_argument("--port", type=str, required=False, default="6000", help="Port number")
     parser.add_argument("--object_names", type=str, required=False, default="", help="Object names to smooth data from")
     parser.add_argument("--attribute_names", type=str, required=False, default="", help="Attribute names to smooth data from")
@@ -45,7 +46,7 @@ if __name__ == "__main__":
 
     multiverse_meta_data = MultiverseMetaData(
         world_name=args.world_name,
-        simulation_name="multiverse_smoother",
+        simulation_name=args.simulation_name,
         length_unit="m",
         angle_unit="rad",
         mass_unit="kg",
