@@ -54,6 +54,8 @@ while [ -n "$1" ]; do
             shift 1
             BUILD_MODULES=OFF
             BUILD_RESOURCES=OFF
+            BUILD_KNOWLEDGE=OFF
+            BUILD_PARSER=OFF
             break
         ;;
         --only-modules) echo -n "--only-modules option passed"

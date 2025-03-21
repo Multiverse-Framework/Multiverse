@@ -243,6 +243,8 @@ else
         (cd $MULTIVERSE_DIR/modules/multiverse_knowledge; git submodule update --init ease_lexical_resources)
 
         # Install additional packages for multiverse_knowledge
+        sudo apt-get install -y libfmt-dev
+
         $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_knowledge/requirements.txt
     fi
 
