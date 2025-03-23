@@ -60,6 +60,7 @@ int main(int argc, char **argv)
 
     while (!should_shut_down)
     {
+        zmq_sleep(0.1);
     }
 
     bool can_shut_down = true;
