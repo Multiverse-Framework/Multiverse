@@ -27,7 +27,7 @@ if(UNIX)
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
     if (UBUNTU_VERSION STREQUAL "20.04")
-        set(CMAKE_CXX_COMPILER "/usr/bin/g++-9")
+        set(CMAKE_CXX_COMPILER "/usr/bin/clang++-11")
         set(CMAKE_CXX_STANDARD 11)
     elseif (UBUNTU_VERSION STREQUAL "22.04")
         set(CMAKE_CXX_COMPILER "/usr/bin/clang++-14")
