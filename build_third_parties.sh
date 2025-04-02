@@ -130,16 +130,16 @@ if [ $BUILD_BLENDER = true ]; then
     else
         # Download blender
         
-        BLENDER_TAR_FILE=blender-4.2.0-linux-x64.tar.xz
-        curl -o $EXT_DIR/$BLENDER_TAR_FILE https://download.blender.org/release/Blender4.2/$BLENDER_TAR_FILE
+        BLENDER_TAR_FILE=blender-4.4.0-linux-x64.tar.xz
+        curl -o $EXT_DIR/$BLENDER_TAR_FILE https://download.blender.org/release/Blender4.4/$BLENDER_TAR_FILE
         tar xf $EXT_DIR/$BLENDER_TAR_FILE -C $BLENDER_BUILD_DIR --strip-components=1
     fi
     
-    (cd $BLENDER_BUILD_DIR/4.2/python/bin;
+    (cd $BLENDER_BUILD_DIR/4.4/python/bin;
     ./python3.11 -m pip install --upgrade pip build --no-warn-script-location;
     ./python3.11 -m pip install bpy Pillow --no-warn-script-location) # For blender
     ln -sf $BLENDER_BUILD_DIR/blender $BIN_DIR
-    ln -sf $BLENDER_BUILD_DIR/4.2/python/bin/python3.11 $BIN_DIR
+    ln -sf $BLENDER_BUILD_DIR/4.4/python/bin/python3.11 $BIN_DIR
 fi
 
 if [ $BUILD_MUJOCO = true ]; then
@@ -168,8 +168,8 @@ if [ $BUILD_MUJOCO = true ]; then
     else
         # Download MuJoCo
         
-        MUJOCO_TAR_FILE=mujoco-3.2.6-linux-x86_64.tar.gz
-        curl -sL https://github.com/google-deepmind/mujoco/releases/download/3.2.6/$MUJOCO_TAR_FILE | tar zx -C $MUJOCO_BUILD_DIR --strip-components=1
+        MUJOCO_TAR_FILE=mujoco-3.3.0-linux-x86_64.tar.gz
+        curl -sL https://github.com/google-deepmind/mujoco/releases/download/3.3.0/$MUJOCO_TAR_FILE | tar zx -C $MUJOCO_BUILD_DIR --strip-components=1
     fi
     
     ln -sf $MUJOCO_BUILD_DIR/bin/simulate $BIN_DIR
