@@ -20,8 +20,8 @@ set MULTIVERSE_DIR=%CURRENT_DIR%\..\..\..\..\..\..
 xcopy /E /I /Y %CURRENT_DIR%\plugin %MUJOCO_SRC_DIR%\plugin
 mklink /H %MUJOCO_SRC_DIR%\plugin\multiverse_connector\multiverse_client.h %MULTIVERSE_DIR%\src\multiverse_client\include\multiverse_client.h
 mklink /H %MUJOCO_SRC_DIR%\plugin\multiverse_connector\multiverse_client_json.h %MULTIVERSE_DIR%\src\multiverse_client\include\multiverse_client_json.h
-mklink /H %MUJOCO_SRC_DIR%\plugin\multiverse_connector\multiverse_client.cpp %MULTIVERSE_DIR%\src\multiverse_client\src\multiverse_client.cpp
-mklink /H %MUJOCO_SRC_DIR%\plugin\multiverse_connector\multiverse_client_json.cpp %MULTIVERSE_DIR%\src\multiverse_client\src\multiverse_client_json.cpp
+mklink /H %MUJOCO_SRC_DIR%\plugin\multiverse_connector\multiverse_client.lib %MULTIVERSE_DIR%\lib\multiverse_client.lib
+mklink /H %MUJOCO_SRC_DIR%\plugin\multiverse_connector\multiverse_client_json.lib %MULTIVERSE_DIR%\lib\multiverse_client_json.lib
 
 @REM Specify the file path
 set MUJOCO_CMAKE_PATH=%MUJOCO_SRC_DIR%\CMakeLists.txt
@@ -52,4 +52,6 @@ if errorlevel 1 exit /b 1
 "%CMAKE_BIN_DIR%\cmake.exe" --install . 
 if errorlevel 1 exit /b 1
 copy /Y "%MUJOCO_BUILD_DIR%\bin\Release\multiverse_connector.dll" "%MUJOCO_PLUGIN_DIR%"
+copy /Y "%MUJOCO_BUILD_DIR%\bin\Release\jsoncpp.dll" "%MUJOCO_BUILD_DIR%\bin"
+copy /Y "%MUJOCO_BUILD_DIR%\bin\Release\libzmq-mt-4_3_5.dll" "%MUJOCO_BUILD_DIR%\bin"
 popd

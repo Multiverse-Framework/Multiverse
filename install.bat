@@ -82,7 +82,7 @@ if not exist "%PYTHON_EXECUTABLE%" (
     exit /b 1
 )
 %PYTHON_EXECUTABLE% -m ensurepip
-%PYTHON_EXECUTABLE% -m pip install -U pip virtualenvwrapper-win
+%PYTHON_EXECUTABLE% -m pip install -U pip virtualenvwrapper-win pytest
 set "MKVIRTUALENV_EXECUTABLE=%PYTHON_DIR%\Scripts\mkvirtualenv.bat"
 set "PYTHON_EXECUTABLE=%USERPROFILE%\Envs\multiverse\Scripts\python.exe"
 if not exist "%PYTHON_EXECUTABLE%" (
@@ -141,7 +141,8 @@ set "MSYS2_DIR=%MULTIVERSE_DIR%\external\msys2"
 if not exist "%MSYS2_DIR%" (
     mkdir "%MSYS2_DIR%"
     powershell -NoProfile -Command "curl -o '%MSYS2_DIR%\msys2-x86_64-20241208.exe' 'https://github.com/msys2/msys2-installer/releases/download/2024-12-08/msys2-x86_64-20241208.exe'; %MSYS2_DIR%\msys2-x86_64-20241208.exe in --confirm-command --accept-messages --root %MSYS2_DIR%; %MSYS2_DIR%\msys2_shell.cmd -defterm -here -no-start -c 'pacman -y -Syu'"
-    powershell -NoProfile -Command "%MSYS2_DIR%\msys2_shell.cmd -defterm -here -no-start -c 'pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-cmake mingw-w64-x86_64-zeromq mingw-w64-x86_64-cppzmq mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-boost mingw-w64-x86_64-glfw mingw-w64-x86_64-tinyxml2'"
+    powershell -NoProfile -Command "%MSYS2_DIR%\msys2_shell.cmd -defterm -here -no-start -c 'pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-cmake mingw-w64-x86_64-zeromq mingw-w64-x86_64-cppzmq mingw-w64-x86_64-jsoncpp mingw-w64-x86_64-boost mingw-w64-x86_64-glfw mingw-w64-x86_64-tinyxml2 mingw-w64-x86_64-eigen3'"
+    powershell -NoProfile -Command "%MSYS2_DIR%\msys2_shell.cmd -defterm -here -no-start -c 'pacman -y -Syu'"
     powershell -NoProfile -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MULTIVERSE_DIR%\external\msys2\mingw64\bin', [EnvironmentVariableTarget]::User)"
 )
 

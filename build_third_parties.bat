@@ -102,37 +102,37 @@ if not exist "%PYBIND11_BUILD_DIR%" (
     mkdir "%PYBIND11_BUILD_DIR%"
     echo "Folder created: %PYBIND11_BUILD_DIR%"
 
-    powershell -NoProfile -Command "cd %PYBIND11_BUILD_DIR%; cmake %PYBIND11_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%PYBIND11_BUILD_DIR% -Wno-deprecated -Wno-dev; cmake --build .; cmake --install ."
+    powershell -NoProfile -Command "cd %PYBIND11_BUILD_DIR%; cmake -G 'MinGW Makefiles' %PYBIND11_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%PYBIND11_BUILD_DIR% -DDOWNLOAD_CATCH=ON -Wno-deprecated -Wno-dev; cmake --build .; cmake --install ."
 ) else (
     echo "Folder already exists: %PYBIND11_BUILD_DIR%"
 )
 
-pause
+@REM pause
 
-@REM Build USD
+@REM @REM Build USD
 
-set "USD_BUILD_DIR=%BUILD_DIR%\USD"
-set "USD_EXT_DIR=%EXT_DIR%\USD"
-set "VCVARS64=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-if not exist "%USD_BUILD_DIR%" (
-    git submodule update --init "%USD_EXT_DIR%"
+@REM set "USD_BUILD_DIR=%BUILD_DIR%\USD"
+@REM set "USD_EXT_DIR=%EXT_DIR%\USD"
+@REM set "VCVARS64=C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+@REM if not exist "%USD_BUILD_DIR%" (
+@REM     git submodule update --init "%USD_EXT_DIR%"
 
-    @REM Create the folder if it doesn't exist
-    mkdir "%USD_BUILD_DIR%"
-    echo "Folder created: %USD_BUILD_DIR%"
+@REM     @REM Create the folder if it doesn't exist
+@REM     mkdir "%USD_BUILD_DIR%"
+@REM     echo "Folder created: %USD_BUILD_DIR%"
 
-    if not exist "%VCVARS64%" (
-        echo "Visual Studio 2022 not found: %VCVARS64%"
-        exit /b 1
-    )
-    powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%USD_BUILD_DIR%\bin;%USD_BUILD_DIR%\lib', [EnvironmentVariableTarget]::User)"
-    powershell -Command "[Environment]::SetEnvironmentVariable('PYTHONPATH', [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User') + ';%USD_BUILD_DIR%\lib\python', [EnvironmentVariableTarget]::User)"
-    workon multiverse
-    call "%VCVARS64%"
-    powershell -NoProfile -Command "%PYTHON_EXECUTABLE% %USD_EXT_DIR%\build_scripts\build_usd.py %USD_BUILD_DIR%"
-) else (
-    echo "Folder already exists: %USD_BUILD_DIR%"
-)
+@REM     if not exist "%VCVARS64%" (
+@REM         echo "Visual Studio 2022 not found: %VCVARS64%"
+@REM         exit /b 1
+@REM     )
+@REM     powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%USD_BUILD_DIR%\bin;%USD_BUILD_DIR%\lib', [EnvironmentVariableTarget]::User)"
+@REM     powershell -Command "[Environment]::SetEnvironmentVariable('PYTHONPATH', [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User') + ';%USD_BUILD_DIR%\lib\python', [EnvironmentVariableTarget]::User)"
+@REM     workon multiverse
+@REM     call "%VCVARS64%"
+@REM     powershell -NoProfile -Command "%PYTHON_EXECUTABLE% %USD_EXT_DIR%\build_scripts\build_usd.py %USD_BUILD_DIR%"
+@REM ) else (
+@REM     echo "Folder already exists: %USD_BUILD_DIR%"
+@REM )
 
 echo "Third parties built successfully"
 pause

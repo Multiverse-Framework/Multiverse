@@ -23,6 +23,10 @@ if "%CMAKE_TOOL_CHAIN%"=="vcpkg" (
     set "BUILD_WITH_VCPKG=0"
 )
 
+git submodule update --init --depth 1 %MULTIVERSE_DIR%\resources
+cd  %MULTIVERSE_DIR%\resources
+git submodule update --init --depth 1
+
 if "%BUILD_WITH_VCPKG%"=="1" (
     echo Building with vcpkg
 
