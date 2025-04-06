@@ -30,7 +30,7 @@ set "INCLUDE_DIR=%MULTIVERSE_DIR%\include"
 
 set "BLENDER_BUILD_DIR=%BUILD_DIR%\blender"
 set "BLENDER_EXT_DIR=%EXT_DIR%\blender-git"
-set "BLENDER_FILE_NAME=blender-4.2.0-windows-x64"
+set "BLENDER_FILE_NAME=blender-4.4.0-windows-x64"
 set "BLENDER_ZIP_FILE=%BLENDER_FILE_NAME%.zip"
 
 set "FROM_SRC=0"
@@ -49,10 +49,10 @@ if not exist "%BLENDER_BUILD_DIR%" (
         powershell -NoProfile -Command "cd '%BLENDER_EXT_DIR%\blender\lib\windows_x64\python\311\bin'; .\python.exe -m pip install --upgrade pip build --no-warn-script-location; .\python.exe -m pip install bpy --no-warn-script-location"
     ) else (
         powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%BLENDER_BUILD_DIR%', [EnvironmentVariableTarget]::User)"
-        powershell -NoProfile -Command "curl -o '%EXT_DIR%\%BLENDER_ZIP_FILE%' 'https://download.blender.org/release/Blender4.2/%BLENDER_ZIP_FILE%'"
+        powershell -NoProfile -Command "curl -o '%EXT_DIR%\%BLENDER_ZIP_FILE%' 'https://download.blender.org/release/Blender4.4/%BLENDER_ZIP_FILE%'"
         powershell -NoProfile -Command "7z x '%EXT_DIR%\%BLENDER_ZIP_FILE%' -o'%BUILD_DIR%'"
         powershell -NoProfile -Command "move '%BUILD_DIR%\%BLENDER_FILE_NAME%' '%BLENDER_BUILD_DIR%'"
-        powershell -NoProfile -Command "cd '%BLENDER_BUILD_DIR%\4.2\python\bin'; .\python.exe -m pip install --upgrade pip build --no-warn-script-location; .\python.exe -m pip install bpy --no-warn-script-location"
+        powershell -NoProfile -Command "cd '%BLENDER_BUILD_DIR%\4.4\python\bin'; .\python.exe -m pip install --upgrade pip build --no-warn-script-location; .\python.exe -m pip install bpy --no-warn-script-location"
     )
 ) else (
     echo "Folder already exists: %BLENDER_BUILD_DIR%"
@@ -64,7 +64,7 @@ pause
 
 set "MUJOCO_BUILD_DIR=%BUILD_DIR%\mujoco"
 set "MUJOCO_EXT_DIR=%EXT_DIR%\mujoco"
-set "MUJOCO_VERSION=3.2.6"
+set "MUJOCO_VERSION=3.3.0"
 set "MUJOCO_FILE_NAME=mujoco-%MUJOCO_VERSION%-windows-x86_64"
 set "MUJOCO_ZIP_FILE=%MUJOCO_FILE_NAME%.zip"
 
@@ -72,7 +72,6 @@ set "FROM_SRC=1"
 if not exist "%MUJOCO_BUILD_DIR%" (
     @REM Check if FROM_SRC is set to 1
     if "%FROM_SRC%"=="1" (
-        
         git submodule update --init "%MUJOCO_EXT_DIR%"
 
         @REM Create the folder if it doesn't exist
@@ -80,7 +79,7 @@ if not exist "%MUJOCO_BUILD_DIR%" (
         echo "Folder created: %MUJOCO_BUILD_DIR%"
 
         powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MUJOCO_BUILD_DIR%\bin', [EnvironmentVariableTarget]::User)"
-        powershell -NoProfile -Command "cd %MUJOCO_BUILD_DIR%; cmake %MUJOCO_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%MUJOCO_BUILD_DIR% -Wno-deprecated -Wno-dev; cmake --build . --config Release -- /p:VcpkgEnableManifest=true; cmake --install ."
+        powershell -NoProfile -Command "cd %MUJOCO_BUILD_DIR%; cmake %MUJOCO_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%MUJOCO_BUILD_DIR% -DCMAKE_POLICY_VERSION_MINIMUM='3.5' -Wno-deprecated -Wno-dev; cmake --build . --config Release -- /p:VcpkgEnableManifest=true; cmake --install ."
     ) else (
         powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MUJOCO_BUILD_DIR%\bin', [EnvironmentVariableTarget]::User)"
         powershell -NoProfile -Command "curl -o '%EXT_DIR%\%MUJOCO_ZIP_FILE%' 'https://github.com/google-deepmind/mujoco/releases/download/%MUJOCO_VERSION%/%MUJOCO_ZIP_FILE%'"

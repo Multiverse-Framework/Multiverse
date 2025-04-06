@@ -124,14 +124,14 @@ if not exist "%ROS_DIR%" (
 @REM Install build
 %PYTHON_EXECUTABLE% -m pip install build
 
-@REM Install additional packages for USD and multiverse_knowledge
-%PYTHON_EXECUTABLE% -m pip install pyside6 pyopengl wheel cython owlready2 markupsafe==2.0.1 jinja2 pybind11
+@REM Install additional packages for multiverse_parser
+@REM %PYTHON_EXECUTABLE% -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_parser\requirements.txt
 
-@REM Install mujoco
-%PYTHON_EXECUTABLE% -m pip install mujoco==3.2.6 mujoco-mjx==3.2.6 "jax[cuda12]" jaxlib==0.4.21
+@REM Install additional packages for multiverse_knowledge
+@REM %PYTHON_EXECUTABLE% -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_knowledge\requirements.txt
 
-@REM Install urdf_parser_py
-%PYTHON_EXECUTABLE% -m pip install urdf_parser_py
+@REM Install additional packages for mujoco_connector
+%PYTHON_EXECUTABLE% -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_connectors\src\multiverse_simulators\src\mujoco_connector\requirements.txt
 
 @REM Install ros_dep_tools
 %PYTHON_EXECUTABLE% -m pip install rosdep colcon-core
