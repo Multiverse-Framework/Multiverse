@@ -25,21 +25,21 @@ echo Version: %OSVERSION%
 
 echo %OSCAPTION% | findstr /i "Windows 11" >nul
 if %errorlevel%==0 (
-    echo Detected OS: %OSCAPTION%
+    echo Detected Windows 11: %OSCAPTION%
     set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python312"
     goto :next
 )
 
 echo %OSCAPTION% | findstr /i "Windows 10" >nul
 if %errorlevel%==0 (
-    echo Detected OS: %OSCAPTION%
+    echo Detected Windows 10: %OSCAPTION%
     set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python38"
     goto :next
 )
 
 echo %OSCAPTION% | findstr /i "Windows Server 2022" >nul
 if %errorlevel%==0 (
-    echo Detected OS: %OSCAPTION%
+    echo Detected Windows Server 2022: %OSCAPTION%
     for /f "delims=" %%i in ('where python') do (
         set "PYTHON_EXE=%%i"
         goto :found
