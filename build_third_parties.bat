@@ -1,4 +1,17 @@
 @echo off
+setlocal EnableDelayedExpansion
+
+REM Read first argument (e.g., enable_pause)
+set "ENABLE_PAUSE=%1"
+
+REM Check if it matches "enable_pause"
+if "!ENABLE_PAUSE!"=="enable_pause" (
+    echo Pause is enabled
+    set "SHOULD_PAUSE=1"
+) else (
+    echo Pause not enabled
+    set "SHOULD_PAUSE=0"
+)
 
 set "PYTHON_EXECUTABLE=%USERPROFILE%\Envs\multiverse\Scripts\python.exe"
 if not exist "%PYTHON_EXECUTABLE%" (
@@ -48,7 +61,9 @@ if not exist "%CMAKE_EXECUTABLE%" (
         exit /b 1
     )
 )
-pause
+if "!SHOULD_PAUSE!"=="1" (
+    pause
+)
 
 @REM Build blender
 
@@ -81,8 +96,9 @@ if not exist "%BLENDER_BUILD_DIR%" (
 ) else (
     echo Folder already exists: %BLENDER_BUILD_DIR%
 )
-
-pause
+if "!SHOULD_PAUSE!"=="1" (
+    pause
+)
 
 @REM Build MuJoCo
 
@@ -112,8 +128,9 @@ if not exist "%MUJOCO_BUILD_DIR%" (
 ) else (
     echo Folder already exists: %MUJOCO_BUILD_DIR%
 )
-
-pause
+if "!SHOULD_PAUSE!"=="1" (
+    pause
+)
 
 @REM Build pybind11
 
@@ -130,8 +147,9 @@ if not exist "%PYBIND11_BUILD_DIR%" (
 ) else (
     echo Folder already exists: %PYBIND11_BUILD_DIR%
 )
-
-pause
+if "!SHOULD_PAUSE!"=="1" (
+    pause
+)
 
 @REM @REM Build USD
 
@@ -159,4 +177,6 @@ pause
 @REM )
 
 echo Third parties built successfully
-pause
+if "!SHOULD_PAUSE!"=="1" (
+    pause
+)

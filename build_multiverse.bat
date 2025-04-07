@@ -1,6 +1,18 @@
 @echo off
 setlocal EnableDelayedExpansion
 
+REM Read first argument (e.g., enable_pause)
+set "ENABLE_PAUSE=%1"
+
+REM Check if it matches "enable_pause"
+if "!ENABLE_PAUSE!"=="enable_pause" (
+    echo Pause is enabled
+    set "SHOULD_PAUSE=1"
+) else (
+    echo Pause not enabled
+    set "SHOULD_PAUSE=0"
+)
+
 set "CMAKE_TOOL_CHAIN=%1"
 
 set "MULTIVERSE_DIR=%~dp0multiverse"
@@ -58,7 +70,9 @@ if "%BUILD_WITH_VCPKG%"=="1" (
 
     powershell -Command "if (-not ($env:PATH.Split(';') -contains '%MULTIVERSE_DIR%\bin')) {[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MULTIVERSE_DIR%\bin', [EnvironmentVariableTarget]::User)}"
     powershell -Command "if (-not ($env:PYTHONPATH.Split(';') -contains '%MULTIVERSE_DIR%\lib\dist-packages')) {[Environment]::SetEnvironmentVariable('PYTHONPATH', [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User') + ';%MULTIVERSE_DIR%\lib\dist-packages', [EnvironmentVariableTarget]::User)}"
-    pause
+    if "!SHOULD_PAUSE!"=="1" (
+        pause
+    )
 )
 
 if "%CMAKE_TOOL_CHAIN%"=="" (
@@ -82,9 +96,13 @@ if "%BUILD_WITH_MSYS2%"=="1" (
 
         powershell -Command "if (-not ($env:PATH.Split(';') -contains '%MULTIVERSE_DIR%\bin')) {[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MULTIVERSE_DIR%\bin', [EnvironmentVariableTarget]::User)}"
         powershell -Command "if (-not ($env:PYTHONPATH.Split(';') -contains '%MULTIVERSE_DIR%\lib\dist-packages')) {[Environment]::SetEnvironmentVariable('PYTHONPATH', [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User') + ';%MULTIVERSE_DIR%\lib\dist-packages', [EnvironmentVariableTarget]::User)}"
-        pause
+        if "!SHOULD_PAUSE!"=="1" (
+            pause
+        )
     ) else (
         echo %MSYS2_BIN_DIR%\cmake.exe not found. Please run install.bat first.
-        pause
+        if "!SHOULD_PAUSE!"=="1" (
+            pause
+        )
     )
 )
