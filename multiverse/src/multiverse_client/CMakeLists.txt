@@ -7,6 +7,9 @@ set(PYBIND11_FINDPYTHON ON)
 if (EXISTS ${BUILD_DIR}/pybind11/share/cmake/pybind11)
     set(pybind11_DIR ${BUILD_DIR}/pybind11/share/cmake/pybind11)
 endif()
+
+find_program(Python_EXECUTABLE ${PYTHON_EXECUTABLE})
+find_package(Python REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 REQUIRED)
 
 set(MULTIVERSE_CLIENT multiverse_client)
