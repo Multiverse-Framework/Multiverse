@@ -15,14 +15,49 @@ cd %CURRENT_DIR%
 
 set "MULTIVERSE_DIR=%CURRENT_DIR%multiverse"
 
-for /f "tokens=3 delims=." %%i in ('ver') do set build=%%i
-if %build% lss 22000 (
-    echo Detected Windows 10
-    set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python38"
-) else (
-    echo Detected Windows 11
+for /f "delims=" %%i in ('powershell -NoProfile -Command ^
+    "[System.Environment]::OSVersion.VersionString"') do set OSVERSION=%%i
+
+for /f "delims=" %%i in ('powershell -NoProfile -Command ^
+    "(Get-CimInstance Win32_OperatingSystem).Caption"') do set "OSCAPTION=%%i"
+
+echo Version: %OSVERSION%
+
+echo %OSCAPTION% | findstr /i "Windows 11" >nul
+if %errorlevel%==0 (
+    echo Detected OS: %OSCAPTION%
     set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python312"
+    goto :next
 )
+
+echo %OSCAPTION% | findstr /i "Windows 10" >nul
+if %errorlevel%==0 (
+    echo Detected OS: %OSCAPTION%
+    set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python38"
+    goto :next
+)
+
+echo %OSCAPTION% | findstr /i "Windows Server 2022" >nul
+if %errorlevel%==0 (
+    echo Detected OS: %OSCAPTION%
+    for /f "delims=" %%i in ('where python') do (
+        set "PYTHON_EXE=%%i"
+        goto :found
+    )
+
+    echo Python executable not found in PATH, please install Python 3.8 or later.
+    exit /b 1
+
+    :found
+    echo Python found at: %PYTHON_EXE%
+    set "PYTHON_DIR=%PYTHON_EXE%\.."
+    goto :next
+)
+
+echo Unknown or unsupported Windows version
+exit /b 1
+
+:next
 
 set "PYTHON_EXECUTABLE=%PYTHON_DIR%\python.exe"
 if not exist "%PYTHON_EXECUTABLE%" (
