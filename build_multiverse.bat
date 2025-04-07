@@ -69,7 +69,6 @@ if "%BUILD_WITH_VCPKG%"=="1" (
     powershell -NoProfile -Command "workon multiverse; & '%CMAKE_EXECUTABLE%' --build %MULTIVERSE_DIR%\build --config %CONFIG% --target INSTALL"
 
     powershell -Command "if (-not ($env:PATH.Split(';') -contains '%MULTIVERSE_DIR%\bin')) {[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MULTIVERSE_DIR%\bin', [EnvironmentVariableTarget]::User)}"
-    set "PYTHON_ADD=%MULTIVERSE_DIR%\lib\dist-packages"
     powershell -Command "$pp = [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User'); if (-not $pp) { $pp = '' }; if (-not ($pp.Split(';') -contains '%MULTIVERSE_DIR%\lib\dist-packages')) {[Environment]::SetEnvironmentVariable('PYTHONPATH', ($pp + ';%MULTIVERSE_DIR%\lib\dist-packages').Trim(';'), 'User')}"
 
     if "!SHOULD_PAUSE!"=="1" (
@@ -97,7 +96,6 @@ if "%BUILD_WITH_MSYS2%"=="1" (
         copy /Y "%MSYS2_BIN_DIR%\libsodium-26.dll" "%MULTIVERSE_DIR%\lib\dist-packages"
 
         powershell -Command "if (-not ($env:PATH.Split(';') -contains '%MULTIVERSE_DIR%\bin')) {[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MULTIVERSE_DIR%\bin', [EnvironmentVariableTarget]::User)}"
-        set "PYTHON_ADD=%MULTIVERSE_DIR%\lib\dist-packages"
         powershell -Command "$pp = [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User'); if (-not $pp) { $pp = '' }; if (-not ($pp.Split(';') -contains '%MULTIVERSE_DIR%\lib\dist-packages')) {[Environment]::SetEnvironmentVariable('PYTHONPATH', ($pp + ';%MULTIVERSE_DIR%\lib\dist-packages').Trim(';'), 'User')}"
 
         if "!SHOULD_PAUSE!"=="1" (
