@@ -5,7 +5,20 @@ set "CMAKE_TOOL_CHAIN=%1"
 set "MULTIVERSE_DIR=%~dp0multiverse"
 set "CONFIG=Release"
 set "MSYS2_BIN_DIR=%MULTIVERSE_DIR%\external\msys2\mingw64\bin"
-set "CMAKE_BIN_DIR=C:\Program Files\CMake\bin"
+set "CMAKE_BUILD_DIR=%MULTIVERSE_DIR%\build\CMake"
+set "CMAKE_EXECUTABLE=%CMAKE_BUILD_DIR%\bin\cmake.exe"
+if not exist "%CMAKE_EXECUTABLE%" (
+    for /f "delims=" %%i in ('where cmake') do (
+        set "CMAKE_EXECUTABLE=%%i"
+        goto :found
+    )
+
+    :found
+    if not exist "%CMAKE_EXECUTABLE%" (
+        echo "CMake executable not found"
+        exit /b 1
+    )
+)
 set "PYTHON_EXECUTABLE=%USERPROFILE%\Envs\multiverse\Scripts\python.exe"
 if not exist "%PYTHON_EXECUTABLE%" (
     echo "Python executable not found: %PYTHON_EXECUTABLE%"
@@ -23,12 +36,14 @@ if "%CMAKE_TOOL_CHAIN%"=="vcpkg" (
     set "BUILD_WITH_VCPKG=0"
 )
 
-git submodule update --init --depth 1 %MULTIVERSE_DIR%\resources
-cd  %MULTIVERSE_DIR%\resources
+pushd "%MULTIVERSE_DIR%"
+git submodule update --init --depth 1 resources
+pushd  "%MULTIVERSE_DIR%\resources"
 git submodule update --init --depth 1
 
 if "%BUILD_WITH_VCPKG%"=="1" (
     echo Building with vcpkg
+    echo Building with CMake executable: %CMAKE_EXECUTABLE%
 
     if not exist "%MULTIVERSE_DIR%\external\vcpkg" (
         git clone https://github.com/Microsoft/vcpkg.git "%MULTIVERSE_DIR%\external\vcpkg"
@@ -37,17 +52,12 @@ if "%BUILD_WITH_VCPKG%"=="1" (
         vcpkg integrate install
     )
 
-    if exist "%CMAKE_BIN_DIR%\cmake.exe" (
-        powershell -NoProfile -Command "workon multiverse; & '%CMAKE_BIN_DIR%\cmake.exe' -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -DBUILD_MODULES=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
-        powershell -NoProfile -Command "workon multiverse; & '%CMAKE_BIN_DIR%\cmake.exe' --build %MULTIVERSE_DIR%\build --config %CONFIG% --target INSTALL"
+    powershell -NoProfile -Command "workon multiverse; & '%CMAKE_EXECUTABLE%' -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -DBUILD_MODULES=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
+    powershell -NoProfile -Command "workon multiverse; & '%CMAKE_EXECUTABLE%' --build %MULTIVERSE_DIR%\build --config %CONFIG% --target INSTALL"
 
-        powershell -Command "if (-not ($env:PATH.Split(';') -contains '%MULTIVERSE_DIR%\bin')) {[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MULTIVERSE_DIR%\bin', [EnvironmentVariableTarget]::User)}"
-        powershell -Command "if (-not ($env:PYTHONPATH.Split(';') -contains '%MULTIVERSE_DIR%\lib\dist-packages')) {[Environment]::SetEnvironmentVariable('PYTHONPATH', [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User') + ';%MULTIVERSE_DIR%\lib\dist-packages', [EnvironmentVariableTarget]::User)}"
-        pause
-    ) else (
-        echo "%CMAKE_BIN_DIR%\cmake.exe not found. Please run install.bat first."
-        pause
-    )
+    powershell -Command "if (-not ($env:PATH.Split(';') -contains '%MULTIVERSE_DIR%\bin')) {[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MULTIVERSE_DIR%\bin', [EnvironmentVariableTarget]::User)}"
+    powershell -Command "if (-not ($env:PYTHONPATH.Split(';') -contains '%MULTIVERSE_DIR%\lib\dist-packages')) {[Environment]::SetEnvironmentVariable('PYTHONPATH', [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User') + ';%MULTIVERSE_DIR%\lib\dist-packages', [EnvironmentVariableTarget]::User)}"
+    pause
 )
 
 if "%CMAKE_TOOL_CHAIN%"=="" (
@@ -73,7 +83,7 @@ if "%BUILD_WITH_MSYS2%"=="1" (
         powershell -Command "if (-not ($env:PYTHONPATH.Split(';') -contains '%MULTIVERSE_DIR%\lib\dist-packages')) {[Environment]::SetEnvironmentVariable('PYTHONPATH', [Environment]::GetEnvironmentVariable('PYTHONPATH', 'User') + ';%MULTIVERSE_DIR%\lib\dist-packages', [EnvironmentVariableTarget]::User)}"
         pause
     ) else (
-        echo "%MSYS2_BIN_DIR%\cmake.exe not found. Please run install.bat first."
+        echo %MSYS2_BIN_DIR%\cmake.exe not found. Please run install.bat first.
         pause
     )
 )

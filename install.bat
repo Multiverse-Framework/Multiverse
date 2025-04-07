@@ -17,16 +17,16 @@ set "MULTIVERSE_DIR=%CURRENT_DIR%multiverse"
 
 for /f "tokens=3 delims=." %%i in ('ver') do set build=%%i
 if %build% lss 22000 (
-    echo "Detected Windows 10"
+    echo Detected Windows 10
     set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python38"
 ) else (
-    echo "Detected Windows 11"
+    echo Detected Windows 11
     set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python312"
 )
 
 set "PYTHON_EXECUTABLE=%PYTHON_DIR%\python.exe"
 if not exist "%PYTHON_EXECUTABLE%" (
-    echo "Python executable not found: %PYTHON_EXECUTABLE%"
+    echo Python executable not found: %PYTHON_EXECUTABLE%
     exit /b 1
 )
 %PYTHON_EXECUTABLE% -m ensurepip
@@ -46,7 +46,7 @@ if %build% lss 22000 (
     )
 
     if not exist "C:\ProgramData\chocolatey" (
-        echo "Chocolatey installation failed."
+        echo Chocolatey installation failed.
         pause
         exit /b 1
     )

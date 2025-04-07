@@ -41,15 +41,28 @@ if not exist "%MUJOCO_PLUGIN_DIR%" (
     mkdir "%MUJOCO_PLUGIN_DIR%"
 )
 
-set "CMAKE_BIN_DIR=C:\Program Files\CMake\bin"
+set "CMAKE_BUILD_DIR=%MULTIVERSE_DIR%\build\CMake"
+set "CMAKE_EXECUTABLE=%CMAKE_BUILD_DIR%\bin\cmake.exe"
+if not exist "%CMAKE_EXECUTABLE%" (
+    for /f "delims=" %%i in ('where cmake') do (
+        set "CMAKE_EXECUTABLE=%%i"
+        goto :found
+    )
+
+    :found
+    if not exist "%CMAKE_EXECUTABLE%" (
+        echo "CMake executable not found"
+        exit /b 1
+    )
+)
 
 @REM Run cmake commands
 pushd "%MUJOCO_BUILD_DIR%"
-"%CMAKE_BIN_DIR%\cmake.exe" "%MUJOCO_SRC_DIR%" -DCMAKE_INSTALL_PREFIX="%MUJOCO_BUILD_DIR%" -Wno-deprecated -Wno-dev
+"%CMAKE_EXECUTABLE%" "%MUJOCO_SRC_DIR%" -DCMAKE_INSTALL_PREFIX="%MUJOCO_BUILD_DIR%" -Wno-deprecated -Wno-dev
 if errorlevel 1 exit /b 1
-"%CMAKE_BIN_DIR%\cmake.exe" --build . --config Release -- /p:VcpkgEnableManifest=true
+"%CMAKE_EXECUTABLE%" --build . --config Release -- /p:VcpkgEnableManifest=true
 if errorlevel 1 exit /b 1
-"%CMAKE_BIN_DIR%\cmake.exe" --install . 
+"%CMAKE_EXECUTABLE%" --install . 
 if errorlevel 1 exit /b 1
 copy /Y "%MUJOCO_BUILD_DIR%\bin\Release\multiverse_connector.dll" "%MUJOCO_PLUGIN_DIR%"
 copy /Y "%MUJOCO_BUILD_DIR%\bin\Release\jsoncpp.dll" "%MUJOCO_BUILD_DIR%\bin"
