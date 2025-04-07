@@ -1,0 +1,21 @@
+name: WindowsServer-2022 CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: windows-2022
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+
+    - name: Run install.bat
+      run: |
+          powershell Start-Process install.bat -Verb RunAs
