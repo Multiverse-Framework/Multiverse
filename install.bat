@@ -19,8 +19,8 @@ set "MULTIVERSE_DIR=%CURRENT_DIR%multiverse"
 for /f "delims=" %%i in ('powershell -NoProfile -Command ^
     "[System.Environment]::OSVersion.VersionString"') do set OSVERSION=%%i
 
-for /f "delims=" %%i in ('powershell -NoProfile -Command ^
-    "(Get-CimInstance Win32_OperatingSystem).Caption"') do set "OSCAPTION=%%i"
+for /f "usebackq delims=" %%i in (`powershell -NoProfile -Command ^
+    "(Get-CimInstance Win32_OperatingSystem).Caption.Trim()"`) do set "OSCAPTION=%%i"
 
 echo Version: !OSVERSION!
 
