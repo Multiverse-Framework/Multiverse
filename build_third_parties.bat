@@ -143,7 +143,7 @@ if not exist "%PYBIND11_BUILD_DIR%" (
     mkdir "%PYBIND11_BUILD_DIR%"
     echo Folder created: %PYBIND11_BUILD_DIR%
 
-    powershell -NoProfile -Command "cd %PYBIND11_BUILD_DIR%; %CMAKE_EXECUTABLE% -G 'MinGW Makefiles' %PYBIND11_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%PYBIND11_BUILD_DIR% -DDOWNLOAD_CATCH=ON -Wno-deprecated -Wno-dev; %CMAKE_EXECUTABLE% --build .; %CMAKE_EXECUTABLE% --install ."
+    powershell -NoProfile -Command "cd %PYBIND11_BUILD_DIR%; %CMAKE_EXECUTABLE% -G 'MinGW Makefiles' %PYBIND11_EXT_DIR% -DCMAKE_INSTALL_PREFIX=%PYBIND11_BUILD_DIR% -DDOWNLOAD_CATCH=ON -DDOWNLOAD_EIGEN=ON -Wno-deprecated -Wno-dev; %CMAKE_EXECUTABLE% --build .; %CMAKE_EXECUTABLE% --install ."
 ) else (
     echo Folder already exists: %PYBIND11_BUILD_DIR%
 )
