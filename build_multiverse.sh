@@ -177,9 +177,6 @@ if [ $BUILD_SRC = ON ]; then
         -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
         -DBUILD_SRC=ON \
         -DBUILD_MODULES=OFF \
-        -DBUILD_CONNECTORS=OFF \
-        -DBUILD_KNOWLEDGE=OFF \
-        -DBUILD_PARSER=OFF \
         -DBUILD_TESTS=OFF \
         -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
     make -C $BUILD_DIR
@@ -190,9 +187,6 @@ if [ $BUILD_SRC = ON ]; then
             -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
             -DBUILD_SRC=ON \
             -DBUILD_MODULES=OFF \
-            -DBUILD_CONNECTORS=OFF \
-            -DBUILD_KNOWLEDGE=OFF \
-            -DBUILD_PARSER=OFF \
             -DBUILD_TESTS=OFF \
             -DPYTHON_EXECUTABLE=python3.8
         make -C $BUILD_DIR
@@ -202,9 +196,6 @@ if [ $BUILD_SRC = ON ]; then
             -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
             -DBUILD_SRC=ON \
             -DBUILD_MODULES=OFF \
-            -DBUILD_CONNECTORS=OFF \
-            -DBUILD_KNOWLEDGE=OFF \
-            -DBUILD_PARSER=OFF \
             -DBUILD_TESTS=OFF \
             -DPYTHON_EXECUTABLE=python3.12
         make -C $BUILD_DIR
