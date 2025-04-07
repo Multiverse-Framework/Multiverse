@@ -118,6 +118,15 @@ done
 UBUNTU_VERSION=$(lsb_release -rs)
 PYTHON_EXECUTABLE=python3.10
 
+CMAKE_EXECUTABLE=$BUILD_DIR/CMake/bin/cmake
+if [ ! -f "$CMAKE_EXECUTABLE" ]; then
+    CMAKE_EXECUTABLE=$(which cmake)
+fi
+if [ ! -f "$CMAKE_EXECUTABLE" ]; then
+    echo "cmake does not exist."
+    exit 1
+fi
+
 if [ $BUILD_PARSER = ON ]; then
     echo "Updating multiverse_parser..."
     git submodule update --init $CURRENT_DIR/multiverse/modules/multiverse_parser
@@ -164,7 +173,7 @@ fi
 #     -DBUILD_PARSER=$BUILD_PARSER
 
 if [ $BUILD_SRC = ON ]; then
-    cmake -S $PWD/multiverse -B $BUILD_DIR \
+    $CMAKE_EXECUTABLE -S $PWD/multiverse -B $BUILD_DIR \
         -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
         -DBUILD_SRC=ON \
         -DBUILD_MODULES=OFF \
@@ -174,10 +183,10 @@ if [ $BUILD_SRC = ON ]; then
         -DBUILD_TESTS=OFF \
         -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
     make -C $BUILD_DIR
-    cmake --install $BUILD_DIR
+    $CMAKE_EXECUTABLE --install $BUILD_DIR
 
     if [ $UBUNTU_VERSION = "20.04" ]; then
-        cmake -S $PWD/multiverse -B $BUILD_DIR \
+        $CMAKE_EXECUTABLE -S $PWD/multiverse -B $BUILD_DIR \
             -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
             -DBUILD_SRC=ON \
             -DBUILD_MODULES=OFF \
@@ -187,9 +196,9 @@ if [ $BUILD_SRC = ON ]; then
             -DBUILD_TESTS=OFF \
             -DPYTHON_EXECUTABLE=python3.8
         make -C $BUILD_DIR
-        cmake --install $BUILD_DIR
+        $CMAKE_EXECUTABLE --install $BUILD_DIR
     elif [ $UBUNTU_VERSION = "24.04" ]; then
-        cmake -S $PWD/multiverse -B $BUILD_DIR \
+        $CMAKE_EXECUTABLE -S $PWD/multiverse -B $BUILD_DIR \
             -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
             -DBUILD_SRC=ON \
             -DBUILD_MODULES=OFF \
@@ -199,11 +208,11 @@ if [ $BUILD_SRC = ON ]; then
             -DBUILD_TESTS=OFF \
             -DPYTHON_EXECUTABLE=python3.12
         make -C $BUILD_DIR
-        cmake --install $BUILD_DIR
+        $CMAKE_EXECUTABLE --install $BUILD_DIR
     fi
 fi
 
-cmake -S $PWD/multiverse -B $BUILD_DIR \
+$CMAKE_EXECUTABLE -S $PWD/multiverse -B $BUILD_DIR \
     -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
     -DBUILD_SRC=OFF \
     -DBUILD_MODULES=$BUILD_MODULES \
@@ -213,7 +222,7 @@ cmake -S $PWD/multiverse -B $BUILD_DIR \
     -DBUILD_TESTS=$BUILD_TESTS \
     -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
 make -C $BUILD_DIR
-cmake --install $BUILD_DIR
+$CMAKE_EXECUTABLE --install $BUILD_DIR
 
 cd $CURRENT_DIR
 

@@ -14,45 +14,48 @@ INSTALL_KNOWLEDGE=true
 
 while [ -n "$1" ]; do
     case "$1" in
-        --minimal) echo "--minimal option passed"
-            shift 1
+    --minimal)
+        echo "--minimal option passed"
+        shift 1
+        INSTALL_ROS=false
+        INSTALL_PARSER=false
+        INSTALL_KNOWLEDGE=false
+        INSTALL_ISAACLAB=false
+        break
+        ;;
+    --excludes)
+        echo -n "--excludes option passed"
+        shift 1
+        if [ "$#" -eq 0 ]; then
+            echo ""
             INSTALL_ROS=false
             INSTALL_PARSER=false
-            INSTALL_KNOWLEDGE=false
+            INSTALL_MUJOCO=false
             INSTALL_ISAACLAB=false
-            break
+            INSTALL_KNOWLEDGE=false
+        else
+            echo -n ", with value:"
+            for module in "$@"; do
+                echo -n " $module"
+                shift 1
+                if [ "$module" = "ros" ]; then
+                    INSTALL_ROS=false
+                elif [ "$module" = "parser" ]; then
+                    INSTALL_PARSER=false
+                elif [ "$module" = "mujoco" ]; then
+                    INSTALL_MUJOCO=false
+                elif [ "$module" = "isaaclab" ]; then
+                    INSTALL_ISAACLAB=false
+                elif [ "$module" = "knowledge" ]; then
+                    INSTALL_KNOWLEDGE=false
+                fi
+            done
+            echo ""
+        fi
         ;;
-        --excludes) echo -n "--excludes option passed"
-            shift 1
-            if [ "$#" -eq 0 ]; then
-                echo ""
-                INSTALL_ROS=false
-                INSTALL_PARSER=false
-                INSTALL_MUJOCO=false
-                INSTALL_ISAACLAB=false
-                INSTALL_KNOWLEDGE=false
-            else
-                echo -n ", with value:"
-                for module in "$@"; do
-                    echo -n " $module"
-                    shift 1
-                    if [ "$module" = "ros" ]; then
-                        INSTALL_ROS=false
-                    elif [ "$module" = "parser" ]; then
-                        INSTALL_PARSER=false
-                    elif [ "$module" = "mujoco" ]; then
-                        INSTALL_MUJOCO=false
-                    elif [ "$module" = "isaaclab" ]; then
-                        INSTALL_ISAACLAB=false
-                    elif [ "$module" = "knowledge" ]; then
-                        INSTALL_KNOWLEDGE=false
-                    fi
-                done
-                echo ""
-            fi
-        ;;
-        *) echo "Option $1 not recognized"
-            shift 1
+    *)
+        echo "Option $1 not recognized"
+        shift 1
         ;;
     esac
 done
@@ -75,7 +78,7 @@ if [ $INSTALL_ROS = true ]; then
         sudo curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
         sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 
-        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list >/dev/null
         sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
         sudo add-apt-repository universe
 
@@ -117,7 +120,7 @@ if [ $INSTALL_ROS = true ]; then
     elif [ $UBUNTU_VERSION = "22.04" ]; then
         # Setup your sources.list
         sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list >/dev/null
 
         # Update package lists
         sudo apt-get update && sudo apt-get upgrade -y
@@ -134,7 +137,7 @@ if [ $INSTALL_ROS = true ]; then
     elif [ $UBUNTU_VERSION = "24.04" ]; then
         # Setup your sources.list
         sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+        sudo echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list >/dev/null
 
         # Update package lists
         sudo apt-get update && sudo apt-get upgrade -y
@@ -180,7 +183,7 @@ sudo apt-get install -y pybind11-dev
 
 if [ $UBUNTU_VERSION = "20.04" ]; then
     # Install and link clang-11 for creating shared library
-    sudo apt-get install -y clang-11 llvm-11-dev libc++-11-dev libc++abi-11-dev libstdc++-11-dev 
+    sudo apt-get install -y clang-11 llvm-11-dev libc++-11-dev libc++abi-11-dev libstdc++-11-dev
     sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
 
     # Install and link gcc-11
@@ -196,14 +199,14 @@ if [ $UBUNTU_VERSION = "20.04" ]; then
     pip install virtualenvwrapper
 elif [ $UBUNTU_VERSION = "22.04" ]; then
     # Install and link clang-14 for creating shared library
-    sudo apt-get install -y clang-14 llvm-14-dev libc++-14-dev libc++abi-14-dev libstdc++-12-dev 
+    sudo apt-get install -y clang-14 llvm-14-dev libc++-14-dev libc++abi-14-dev libstdc++-12-dev
     sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
 
     # Setup virtual environment
     python3 -m pip install virtualenvwrapper
 elif [ $UBUNTU_VERSION = "24.04" ]; then
     # Install and link clang-17 for creating shared library
-    sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev 
+    sudo apt-get install -y clang-17 llvm-17-dev libc++-17-dev libc++abi-17-dev libstdc++-14-dev
     sudo ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /usr/lib/x86_64-linux-gnu/libstdc++.so
 
     # Setup virtual environment
@@ -229,10 +232,10 @@ else
 
     if [ $INSTALL_PARSER = true ]; then
         git submodule update --init multiverse/modules/multiverse_parser
-        
+
         # Install additional packages for blender
         sudo apt-get install -y build-essential git git-lfs subversion cmake libx11-dev libxxf86vm-dev libxcursor-dev libxi-dev libxrandr-dev libxinerama-dev libegl-dev libwayland-dev wayland-protocols libxkbcommon-dev libdbus-1-dev linux-libc-dev
-        
+
         # Install additional packages for USD
         sudo apt-get install -y libxcb-cursor0
         $PYTHON_EXECUTABLE -m pip install -r $MULTIVERSE_DIR/modules/multiverse_parser/requirements.txt
@@ -240,7 +243,10 @@ else
 
     if [ $INSTALL_KNOWLEDGE = true ]; then
         git submodule update --init multiverse/modules/multiverse_knowledge
-        (cd $MULTIVERSE_DIR/modules/multiverse_knowledge; git submodule update --init ease_lexical_resources)
+        (
+            cd $MULTIVERSE_DIR/modules/multiverse_knowledge
+            git submodule update --init ease_lexical_resources
+        )
 
         # Install additional packages for multiverse_knowledge
         sudo apt-get install -y libfmt-dev
