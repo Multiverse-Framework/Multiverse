@@ -27,7 +27,7 @@ Install IsaacSim and IsaacLab according to this [documentation](https://isaac-si
 ./build_multiverse_ws2.sh                                                       # Build the ROS2 workspace (for Ubuntu >= 20.04)
 ```
 
-### Windows 11
+### Windows 10/11
 
 Run Windows Powershell as Administrator and execute these scripts, restart the Powershell before running each script to refresh the environment paths
 
@@ -35,7 +35,7 @@ Run Windows Powershell as Administrator and execute these scripts, restart the P
 install.bat                     # Install all prerequisites (as Administrator)
 build_third_parties.bat         # Build the dependencies
 build_multiverse.bat            # Build the software
-build_multiverse_ws2.bat        # Build the ROS2 workspace
+build_multiverse_ws2.bat        # Build the ROS2 workspace (only for Windows 10)
 ```
 
 ## Test
