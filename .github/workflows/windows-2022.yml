@@ -20,10 +20,14 @@ jobs:
       shell: cmd
       run: install.bat
 
-    - name: Run build_third_parties.bat
+    - name: Run build_multiverse.bat msys2
       shell: cmd
-      run: build_third_parties.bat
+      run: |
+        build_multiverse.bat msys2
 
-    - name: Run build_multiverse.bat
+    - name: Run build_multiverse.bat vcpkg
       shell: cmd
-      run: build_multiverse.bat
+      run: |
+        del /f multiverse\build\CMakeCache.txt
+        rmdir /s /q multiverse\build\CMakeFiles
+        build_multiverse.bat vcpkg
