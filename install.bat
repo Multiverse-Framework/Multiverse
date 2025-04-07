@@ -1,8 +1,9 @@
 @echo off
+setlocal EnableDelayedExpansion
 
 @REM Check for administrative permissions
 net session >nul 2>&1
-if %errorlevel% neq 0 (
+if !errorlevel! neq 0 (
     echo This script requires administrative privileges.
     echo Please run as an administrator.
     pause
@@ -21,54 +22,53 @@ for /f "delims=" %%i in ('powershell -NoProfile -Command ^
 for /f "delims=" %%i in ('powershell -NoProfile -Command ^
     "(Get-CimInstance Win32_OperatingSystem).Caption"') do set "OSCAPTION=%%i"
 
-echo Version: %OSVERSION%
+echo Version: !OSVERSION!
 
-echo %OSCAPTION% | findstr /i "Windows 11" >nul
-if %errorlevel%==0 (
-    echo Detected Windows 11: %OSCAPTION%
+echo !OSCAPTION! | findstr /i "Windows 11" >nul
+if !errorlevel! == 0 (
+    echo Detected Windows 11: !OSCAPTION!
     set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python312"
     goto :next
 )
 
-echo %OSCAPTION% | findstr /i "Windows 10" >nul
-if %errorlevel%==0 (
-    echo Detected Windows 10: %OSCAPTION%
+echo !OSCAPTION! | findstr /i "Windows 10" >nul
+if !errorlevel! == 0 (
+    echo Detected Windows 10: !OSCAPTION!
     set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python38"
     goto :next
 )
 
-echo %OSCAPTION% | findstr /i "Windows Server 2022" >nul
-if %errorlevel%==0 (
-    echo Detected Windows Server 2022: %OSCAPTION%
+echo !OSCAPTION! | findstr /i "Windows Server 2022" >nul
+if !errorlevel! == 0 (
+    echo Detected Windows Server 2022: !OSCAPTION!
     for /f "delims=" %%i in ('where python') do (
         set "PYTHON_EXE=%%i"
-        goto :found
     )
-
-    echo Python executable not found in PATH, please install Python 3.8 or later.
-    exit /b 1
-
-    :found
-    echo Python found at: %PYTHON_EXE%
-    set "PYTHON_DIR=%PYTHON_EXE%\.."
+    if not defined PYTHON_EXE (
+        echo Python executable not found in PATH, please install Python 3.8 or later.
+        exit /b 1
+    )
+    echo Python found at: !PYTHON_EXE!
+    for %%d in ("!PYTHON_EXE!") do set "PYTHON_DIR=%%~dpd"
     goto :next
 )
 
-echo Unknown or unsupported Windows version
+echo Unknown or unsupported Windows version: !OSCAPTION!
 exit /b 1
 
 :next
-
-set "PYTHON_EXECUTABLE=%PYTHON_DIR%\python.exe"
-if not exist "%PYTHON_EXECUTABLE%" (
-    echo Python executable not found: %PYTHON_EXECUTABLE%
+set "PYTHON_EXECUTABLE=!PYTHON_DIR!\python.exe"
+if not exist "!PYTHON_EXECUTABLE!" (
+    echo Python executable not found: !PYTHON_EXECUTABLE!
     exit /b 1
 )
-%PYTHON_EXECUTABLE% -m ensurepip
-%PYTHON_EXECUTABLE% -m pip install -U pip virtualenvwrapper-win pytest
+echo Python executable path is: !PYTHON_EXECUTABLE!
+
+!PYTHON_EXECUTABLE! -m ensurepip
+!PYTHON_EXECUTABLE! -m pip install -U pip virtualenvwrapper-win pytest
 set "MKVIRTUALENV_EXECUTABLE=%PYTHON_DIR%\Scripts\mkvirtualenv.bat"
 set "PYTHON_EXECUTABLE=%USERPROFILE%\Envs\multiverse\Scripts\python.exe"
-if not exist "%PYTHON_EXECUTABLE%" (
+if not exist "!PYTHON_EXECUTABLE!" (
     powershell -NoProfile -Command "%MKVIRTUALENV_EXECUTABLE% --system-site-packages multiverse"
     @REM Wait for the virtual environment to be created
     TIMEOUT /T 1
@@ -134,7 +134,7 @@ if %build% lss 22000 (
         mkdir "%TINYXML2_DIR%"
         start powershell -NoProfile -Command "%SET_NEW_PATH%; curl -o '%TINYXML2_DIR%\%TINYXML2_NUPKG%' 'https://github.com/ros2/choco-packages/releases/download/2022-03-15/%TINYXML2_NUPKG%'; choco install -y -s %TINYXML2_DIR% tinyxml2"
     )
-    %PYTHON_EXECUTABLE% -m pip install setuptools==59.6.0 catkin_pkg cryptography empy importlib-metadata jsonschema lark==1.1.1 lxml matplotlib netifaces numpy opencv-python PyQt5 pillow psutil pycairo pydot pyparsing==2.4.7 pytest pyyaml
+    !PYTHON_EXECUTABLE! -m pip install setuptools==59.6.0 catkin_pkg cryptography empy importlib-metadata jsonschema lark==1.1.1 lxml matplotlib netifaces numpy opencv-python PyQt5 pillow psutil pycairo pydot pyparsing==2.4.7 pytest pyyaml
 
     set "XMLLINT_DIR=%MULTIVERSE_DIR%\external\xmllint"
     set "LIBXML2_7Z=libxml2-2.9.3-win32-x86_64.7z"
@@ -160,26 +160,26 @@ if %build% lss 22000 (
     set "ROS_ZIP=ros2-jazzy-20240705-windows-release-amd64.zip"
     if not exist "%ROS_DIR%" (
         mkdir "%ROS_DIR%"
-        start powershell -NoProfile -Command "curl -o '%ROS_DIR%\%ROS_ZIP%' 'https://github.com/ros2/ros2/releases/download/release-jazzy-20240705/%ROS_ZIP%'; 7z x '%ROS_DIR%\%ROS_ZIP%' -o'%ROS_DIR%'; Move-Item -Path '%ROS_DIR%\ros2-windows\*' '%ROS_DIR%' -Force; Remove-Item -Path '%ROS_DIR%\%ROS_ZIP%'; Remove-Item -Path '%ROS_DIR%\ros2-windows'; workon multiverse; %PYTHON_EXECUTABLE% %ROS_DIR%/../fix_shebang.py %ROS_DIR%"
+        start powershell -NoProfile -Command "curl -o '%ROS_DIR%\%ROS_ZIP%' 'https://github.com/ros2/ros2/releases/download/release-jazzy-20240705/%ROS_ZIP%'; 7z x '%ROS_DIR%\%ROS_ZIP%' -o'%ROS_DIR%'; Move-Item -Path '%ROS_DIR%\ros2-windows\*' '%ROS_DIR%' -Force; Remove-Item -Path '%ROS_DIR%\%ROS_ZIP%'; Remove-Item -Path '%ROS_DIR%\ros2-windows'; workon multiverse; !PYTHON_EXECUTABLE! %ROS_DIR%/../fix_shebang.py %ROS_DIR%"
     )
 )
 
 @REM Install build
-%PYTHON_EXECUTABLE% -m pip install build
+!PYTHON_EXECUTABLE! -m pip install build
 
 if %build% lss 22000 (
     @REM Install ros_dep_tools
-    %PYTHON_EXECUTABLE% -m pip install rosdep colcon-core
+    !PYTHON_EXECUTABLE! -m pip install rosdep colcon-core
 )
 
 @REM Install additional packages for multiverse_parser
-@REM %PYTHON_EXECUTABLE% -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_parser\requirements.txt
+@REM !PYTHON_EXECUTABLE! -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_parser\requirements.txt
 
 @REM Install additional packages for multiverse_knowledge
-@REM %PYTHON_EXECUTABLE% -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_knowledge\requirements.txt
+@REM !PYTHON_EXECUTABLE! -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_knowledge\requirements.txt
 
 @REM Install additional packages for mujoco_connector
-%PYTHON_EXECUTABLE% -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_connectors\src\multiverse_simulators\src\mujoco_connector\requirements.txt
+!PYTHON_EXECUTABLE! -m pip install -r %MULTIVERSE_DIR%\modules\multiverse_connectors\src\multiverse_simulators\src\mujoco_connector\requirements.txt
 
 @REM Install msys2
 set "MSYS2_DIR=%MULTIVERSE_DIR%\external\msys2"
