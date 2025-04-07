@@ -74,7 +74,11 @@ if not exist "!PYTHON_EXECUTABLE!" (
     TIMEOUT /T 1
 )
 
-if %build% lss 22000 (
+echo Change Python executable to: !PYTHON_EXECUTABLE!
+!PYTHON_EXECUTABLE! -m pip install build
+
+echo !PYTHON_VERSION! | findstr /b "3.8" >nul
+if !errorlevel! == 0 (
   @REM Install chocolatey (https://chocolatey.org/install)
     if not exist "C:\ProgramData\chocolatey" (
         powershell -NoProfile -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
@@ -162,12 +166,7 @@ if %build% lss 22000 (
         mkdir "%ROS_DIR%"
         start powershell -NoProfile -Command "curl -o '%ROS_DIR%\%ROS_ZIP%' 'https://github.com/ros2/ros2/releases/download/release-jazzy-20240705/%ROS_ZIP%'; 7z x '%ROS_DIR%\%ROS_ZIP%' -o'%ROS_DIR%'; Move-Item -Path '%ROS_DIR%\ros2-windows\*' '%ROS_DIR%' -Force; Remove-Item -Path '%ROS_DIR%\%ROS_ZIP%'; Remove-Item -Path '%ROS_DIR%\ros2-windows'; workon multiverse; !PYTHON_EXECUTABLE! %ROS_DIR%/../fix_shebang.py %ROS_DIR%"
     )
-)
 
-@REM Install build
-!PYTHON_EXECUTABLE! -m pip install build
-
-if %build% lss 22000 (
     @REM Install ros_dep_tools
     !PYTHON_EXECUTABLE! -m pip install rosdep colcon-core
 )
