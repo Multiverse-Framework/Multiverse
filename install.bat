@@ -112,12 +112,12 @@ if not exist "%GRAPHVIZ_DIR%" (
     powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%GRAPHVIZ_DIR%\Graphviz-12.0.0-win64\bin', [EnvironmentVariableTarget]::User)"
 )
 
-set "ROS_DIR=%MULTIVERSE_DIR%\external\ros\ros2_jazzy"
-set "ROS_ZIP=ros2-jazzy-20240705-windows-release-amd64.zip"
-if not exist "%ROS_DIR%" (
-    mkdir "%ROS_DIR%"
-    start powershell -NoProfile -Command "curl -o '%ROS_DIR%\%ROS_ZIP%' 'https://github.com/ros2/ros2/releases/download/release-jazzy-20240705/%ROS_ZIP%'; 7z x '%ROS_DIR%\%ROS_ZIP%' -o'%ROS_DIR%'; Move-Item -Path '%ROS_DIR%\ros2-windows\*' '%ROS_DIR%' -Force; Remove-Item -Path '%ROS_DIR%\%ROS_ZIP%'; Remove-Item -Path '%ROS_DIR%\ros2-windows'; workon multiverse; %PYTHON_EXECUTABLE% %ROS_DIR%/../fix_shebang.py %ROS_DIR%"
-)
+@REM set "ROS_DIR=%MULTIVERSE_DIR%\external\ros\ros2_jazzy"
+@REM set "ROS_ZIP=ros2-jazzy-20240705-windows-release-amd64.zip"
+@REM if not exist "%ROS_DIR%" (
+@REM     mkdir "%ROS_DIR%"
+@REM     start powershell -NoProfile -Command "curl -o '%ROS_DIR%\%ROS_ZIP%' 'https://github.com/ros2/ros2/releases/download/release-jazzy-20240705/%ROS_ZIP%'; 7z x '%ROS_DIR%\%ROS_ZIP%' -o'%ROS_DIR%'; Move-Item -Path '%ROS_DIR%\ros2-windows\*' '%ROS_DIR%' -Force; Remove-Item -Path '%ROS_DIR%\%ROS_ZIP%'; Remove-Item -Path '%ROS_DIR%\ros2-windows'; workon multiverse; %PYTHON_EXECUTABLE% %ROS_DIR%/../fix_shebang.py %ROS_DIR%"
+@REM )
 
 @REM Install dependencies for the rest packages
 

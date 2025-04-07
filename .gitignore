@@ -50,6 +50,7 @@ multiverse/external
 multiverse/saved
 build
 resources
+vcpkg_installed
 
 # VSC
 .vscode
