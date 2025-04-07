@@ -3,17 +3,17 @@ setlocal EnableDelayedExpansion
 
 REM Read first argument (e.g., enable_pause)
 set "ENABLE_PAUSE=%1"
+set "CMAKE_TOOL_CHAIN=%1"
 
 REM Check if it matches "enable_pause"
 if "!ENABLE_PAUSE!"=="enable_pause" (
     echo Pause is enabled
     set "SHOULD_PAUSE=1"
+    set "CMAKE_TOOL_CHAIN=%2"
 ) else (
     echo Pause not enabled
     set "SHOULD_PAUSE=0"
 )
-
-set "CMAKE_TOOL_CHAIN=%1"
 
 set "MULTIVERSE_DIR=%~dp0multiverse"
 set "CONFIG=Release"
