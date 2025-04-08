@@ -86,12 +86,6 @@ if "%BUILD_WITH_MSYS2%"=="1" (
     echo Building with msys2
     echo Building with CMake executable: %MSYS2_BIN_DIR%\cmake.exe
 
-    if exist "C:\vcpkg" (
-        cd "C:\vcpkg"
-        bootstrap-vcpkg.bat
-        vcpkg integrate install
-    )
-
     if exist "%MSYS2_BIN_DIR%\cmake.exe" if exist "%MSYS2_BIN_DIR%\ninja.exe" (
         set "PATH=%MSYS2_BIN_DIR%;%PATH%"
         powershell -NoProfile -Command "workon multiverse; %MSYS2_BIN_DIR%\cmake.exe -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -G Ninja -DCMAKE_MAKE_PROGRAM=%MSYS2_BIN_DIR%\ninja.exe -D CMAKE_C_COMPILER=%MSYS2_BIN_DIR%\gcc.exe -D CMAKE_CXX_COMPILER=%MSYS2_BIN_DIR%\g++.exe -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -Wno-dev -DBUILD_SRC=ON -DBUILD_MODULES=OFF -DBUILD_TESTS=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
