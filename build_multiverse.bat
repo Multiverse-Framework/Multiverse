@@ -83,6 +83,13 @@ if "%CMAKE_TOOL_CHAIN%"=="" (
 
 if "%BUILD_WITH_MSYS2%"=="1" (
     echo Building with msys2
+    echo Building with CMake executable: %MSYS2_BIN_DIR%\cmake.exe
+
+    if exist "C:\vcpkg" (
+        cd "C:\vcpkg"
+        bootstrap-vcpkg.bat
+        vcpkg integrate install
+    )
 
     if exist "%MSYS2_BIN_DIR%\cmake.exe" if exist "%MSYS2_BIN_DIR%\ninja.exe" (
         set "PATH=%MSYS2_BIN_DIR%;%PATH%"
