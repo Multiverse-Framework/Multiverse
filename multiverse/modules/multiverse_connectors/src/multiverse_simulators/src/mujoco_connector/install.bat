@@ -58,7 +58,7 @@ if not exist "%CMAKE_EXECUTABLE%" (
 
 @REM Run cmake commands
 pushd "%MUJOCO_BUILD_DIR%"
-"%CMAKE_EXECUTABLE%" "%MUJOCO_SRC_DIR%" -DCMAKE_INSTALL_PREFIX="%MUJOCO_BUILD_DIR%" -Wno-deprecated -Wno-dev
+"%CMAKE_EXECUTABLE%" "%MUJOCO_SRC_DIR%" -DCMAKE_INSTALL_PREFIX="%MUJOCO_BUILD_DIR%" -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -Wno-deprecated -Wno-dev
 if errorlevel 1 exit /b 1
 "%CMAKE_EXECUTABLE%" --build . --config Release -- /p:VcpkgEnableManifest=true
 if errorlevel 1 exit /b 1

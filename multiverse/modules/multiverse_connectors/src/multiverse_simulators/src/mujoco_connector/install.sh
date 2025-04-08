@@ -43,7 +43,7 @@ else
         (
             cd $MUJOCO_BUILD_DIR
             echo "Building MuJoCo plugin using CMake: $CMAKE_EXECUTABLE"
-            $CMAKE_EXECUTABLE $MUJOCO_SRC_DIR -DCMAKE_INSTALL_PREFIX=$MUJOCO_BUILD_DIR -Wno-deprecated -Wno-dev && $CMAKE_EXECUTABLE --build . && $CMAKE_EXECUTABLE --install .
+            $CMAKE_EXECUTABLE $MUJOCO_SRC_DIR -DCMAKE_INSTALL_PREFIX=$MUJOCO_BUILD_DIR -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -Wno-deprecated -Wno-dev && $CMAKE_EXECUTABLE --build . && $CMAKE_EXECUTABLE --install .
             cp $MUJOCO_BUILD_DIR/lib/libmultiverse_connector.so $MUJOCO_PLUGIN_DIR
         )
     else
