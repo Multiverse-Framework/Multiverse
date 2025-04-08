@@ -29,6 +29,7 @@ def fix_mesh_and_texture_paths(spec: mujoco.MjSpec, default_path: str):
 def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: mujoco.MjsFrame):
     for entity_name, entity in entities.items():
         entity_spec: mujoco.MjSpec = mujoco.MjSpec.from_file(filename=entity.path)
+        entity_spec.compiler.degree = 0
 
         fix_mesh_and_texture_paths(entity_spec, os.path.dirname(entity.path))
 
@@ -132,6 +133,7 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                     references: Dict[str, Dict[str, Any]] = None,
                     multiverse_params: Dict[str, Dict] = None):
         self.world_spec = mujoco.MjSpec.from_file(filename=self.save_file_path)
+        self.world_spec.compiler.degree = 0
         save_file_name = os.path.basename(self.save_file_path)
         self.world_spec.modelname = os.path.splitext(save_file_name)[0]
 
@@ -251,6 +253,7 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                         with open(self.save_file_path, "w") as f:
                             f.write(file_xml_string)
                         self.world_spec = mujoco.MjSpec.from_file(filename=self.save_file_path)
+                        self.world_spec.compiler.degree = 0
 
                     for joint in self.world_spec.joints:
                         joint.name = fix_prefix_and_suffix_each(joint.name, entity_prefix, entity_suffix, entity_name)
