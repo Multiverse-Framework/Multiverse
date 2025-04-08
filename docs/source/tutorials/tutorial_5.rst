@@ -182,7 +182,7 @@ Define ROS Configuration in the MUV file
                         gripper_right_left_finger_actuator: gripper_right_left_finger_joint
                         gripper_right_right_finger_actuator: gripper_right_right_finger_joint
                     controllers:
-                        spawn:
+                        spawner:
                         - joint_state_controller
                             torso_controller
                             head_controller

@@ -9,6 +9,10 @@ To install Multiverse with all connectors, ensure you have at least 50 GB of fre
 
 Start by cloning this `repository <https://github.com/Multiverse-Framework/Multiverse>`_ and navigating to the Multiverse folder.
 
+.. code-block:: console
+
+    git clone https://github.com/Multiverse-Framework/Multiverse --depth 1
+
 Linux (Ubuntu >= 20.04)
 -----------------------
 
@@ -17,7 +21,7 @@ Open a terminal and run the following commands:
 .. code-block:: console
 
     ./install.sh                                                                    # Install all prerequisites
-    ./build_third_parties.sh #--excludes blender usd mujoco pybind11                # Build the dependencies with optional exclusions
+    ./build_third_parties.sh #--excludes cmake blender usd mujoco pybind11 isaaclab # Build the dependencies with optional exclusions
     ./build_multiverse.sh #--only-src / --only-modules connectors parser knowledge  # Build the software with optional inclusions
     ./build_multiverse_ws.sh                                                        # Build the ROS workspace (only for Ubuntu 20.04)
     ./build_multiverse_ws2.sh                                                       # Build the ROS2 workspace (for Ubuntu >= 20.04)
@@ -32,7 +36,7 @@ Run Windows PowerShell as Administrator and execute the following scripts. Resta
     install.bat                     # Install all prerequisites (Administrator required)
     build_third_parties.bat         # Build the dependencies
     build_multiverse.bat            # Build the software
-    build_multiverse_ws2.bat        # Build the ROS2 workspace
+    build_multiverse_ws2.bat        # Build the ROS2 workspace (only for Windows 10)
 
 Testing the Installation
 ------------------------
