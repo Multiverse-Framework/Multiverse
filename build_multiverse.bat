@@ -77,7 +77,7 @@ if "%BUILD_WITH_VCPKG%"=="1" (
     )
 )
 
-if "%CMAKE_TOOL_CHAIN%"=="" (
+if "!CMAKE_TOOL_CHAIN!"=="" (
     del /F "%MULTIVERSE_DIR%\build\CMakeCache.txt"
     rmdir /S /Q "%MULTIVERSE_DIR%\build\CMakeFiles"
 )
