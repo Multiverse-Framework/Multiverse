@@ -54,6 +54,8 @@ git submodule update --init --depth 1 resources
 pushd  "%MULTIVERSE_DIR%\resources"
 git submodule update --init --depth 1
 
+echo Start building multiverse
+
 if "!BUILD_WITH_VCPKG!"=="1" (
     echo Building with vcpkg
     echo Building with CMake executable: %CMAKE_EXECUTABLE%
@@ -77,10 +79,16 @@ if "!BUILD_WITH_VCPKG!"=="1" (
     )
 )
 
+echo Finished or skipped vcpkg build
+
 if "!CMAKE_TOOL_CHAIN!"=="" (
+    echo Removing CMake cache to force a rebuild using CMake executable: %MSYS2_BIN_DIR%\cmake.exe...
     del /F "%MULTIVERSE_DIR%\build\CMakeCache.txt"
     rmdir /S /Q "%MULTIVERSE_DIR%\build\CMakeFiles"
+    echo Removed CMake cache
 )
+
+echo Finished or skipped CMake cache removal
 
 if "!BUILD_WITH_MSYS2!"=="1" (
     echo Building with msys2
@@ -111,3 +119,5 @@ if "!BUILD_WITH_MSYS2!"=="1" (
         )
     )
 )
+
+echo Done
