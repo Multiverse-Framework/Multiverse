@@ -49,7 +49,7 @@ def parse_isaac_sim(resources_paths: List[str], isaac_sim_data: Dict[str, Any]):
 
 class MultiverseSimulationLaunch(MultiverseLaunch):
     simulator_compilers = {
-        "pymujoco": "mujoco_compiler",
+        "mujoco": "mujoco_compiler",
         "isaac_sim": "isaac_sim_compiler",
     }
 
@@ -68,7 +68,7 @@ class MultiverseSimulationLaunch(MultiverseLaunch):
         return processes
 
     def parse_simulator(self, simulation_data):
-        if simulation_data["simulator"] == "pymujoco":
+        if simulation_data["simulator"] == "mujoco":
             return parse_mujoco(self.resources_paths, simulation_data)
         elif simulation_data["simulator"] == "isaac_sim":
             return parse_isaac_sim(self.resources_paths, simulation_data)
