@@ -65,7 +65,7 @@ if "%BUILD_WITH_VCPKG%"=="1" (
         vcpkg integrate install
     )
 
-    powershell -NoProfile -Command "workon multiverse; & '%CMAKE_EXECUTABLE%' -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -DBUILD_MODULES=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
+    powershell -NoProfile -Command "workon multiverse; & '%CMAKE_EXECUTABLE%' -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -DCMAKE_POLICY_VERSION_MINIMUM='3.5' -Wno-deprecated -DBUILD_MODULES=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
     powershell -NoProfile -Command "workon multiverse; & '%CMAKE_EXECUTABLE%' --build %MULTIVERSE_DIR%\build --config %CONFIG% --target INSTALL"
 
     powershell -Command "if (-not ($env:PATH.Split(';') -contains '%MULTIVERSE_DIR%\bin')) {[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%MULTIVERSE_DIR%\bin', [EnvironmentVariableTarget]::User)}"
@@ -86,7 +86,7 @@ if "%BUILD_WITH_MSYS2%"=="1" (
 
     if exist "%MSYS2_BIN_DIR%\cmake.exe" if exist "%MSYS2_BIN_DIR%\ninja.exe" (
         set "PATH=%MSYS2_BIN_DIR%;%PATH%"
-        powershell -NoProfile -Command "workon multiverse; %MSYS2_BIN_DIR%\cmake.exe -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -G Ninja -DCMAKE_MAKE_PROGRAM=%MSYS2_BIN_DIR%\ninja.exe -D CMAKE_C_COMPILER=%MSYS2_BIN_DIR%\gcc.exe -D CMAKE_CXX_COMPILER=%MSYS2_BIN_DIR%\g++.exe -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -Wno-dev -DBUILD_MODULES=ON -DBUILD_TESTS=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
+        powershell -NoProfile -Command "workon multiverse; %MSYS2_BIN_DIR%\cmake.exe -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -G Ninja -DCMAKE_MAKE_PROGRAM=%MSYS2_BIN_DIR%\ninja.exe -D CMAKE_C_COMPILER=%MSYS2_BIN_DIR%\gcc.exe -D CMAKE_CXX_COMPILER=%MSYS2_BIN_DIR%\g++.exe -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -DCMAKE_POLICY_VERSION_MINIMUM='3.5' -Wno-deprecated -Wno-dev -DBUILD_MODULES=ON -DBUILD_TESTS=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
         powershell -NoProfile -Command "workon multiverse; %MSYS2_BIN_DIR%\cmake.exe --build %MULTIVERSE_DIR%\build --config %CONFIG%"
         powershell -NoProfile -Command "workon multiverse; %MSYS2_BIN_DIR%\cmake.exe --install %MULTIVERSE_DIR%\build"
         
