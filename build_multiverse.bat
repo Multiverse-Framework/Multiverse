@@ -140,6 +140,11 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
         )
     )
 
+    echo Removing CMake cache to force a rebuild using CMake executable: %MSYS2_BIN_DIR%\cmake.exe...
+    del /F "%MULTIVERSE_DIR%\build\CMakeCache.txt"
+    rmdir /S /Q "%MULTIVERSE_DIR%\build\CMakeFiles"
+    echo Removed CMake cache
+
     echo Building modules with vcpkg
     echo Building modules with CMake executable: %CMAKE_EXECUTABLE%
 
