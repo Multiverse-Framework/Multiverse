@@ -2,36 +2,35 @@ name: WindowsServer-2022 CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
-
     runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: false
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
 
-    - name: Run install.bat
-      shell: cmd
-      run: install.bat
+      - name: Run install.bat
+        shell: cmd
+        run: install.bat
 
-    - name: Run build_third_parties.bat
-      shell: cmd
-      run: build_third_parties.bat
+      - name: Run build_third_parties.bat
+        shell: cmd
+        run: build_third_parties.bat
 
-    - name: Run build_multiverse.bat msys2
-      shell: cmd
-      run: |
-        build_multiverse.bat msys2
+      - name: Run build_multiverse.bat vcpkg
+        shell: cmd
+        run: |
+          build_multiverse.bat vcpkg
 
-    - name: Run build_multiverse.bat vcpkg
-      shell: cmd
-      run: |
-        del /f multiverse\build\CMakeCache.txt
-        rmdir /s /q multiverse\build\CMakeFiles
-        build_multiverse.bat vcpkg
+      - name: Run build_multiverse.bat msys2
+        shell: cmd
+        run: |
+          del /f multiverse\build\CMakeCache.txt
+          rmdir /s /q multiverse\build\CMakeFiles
+          build_multiverse.bat msys2
