@@ -16,6 +16,21 @@ echo MUJOCO_BUILD_DIR is set to: %MUJOCO_BUILD_DIR%
 set CURRENT_DIR=%CD%
 set MULTIVERSE_DIR=%CURRENT_DIR%\..\..\..\..\..\..
 
+set "CMAKE_BUILD_DIR=%MULTIVERSE_DIR%\build\CMake"
+set "CMAKE_EXECUTABLE=%CMAKE_BUILD_DIR%\bin\cmake.exe"
+if not exist "%CMAKE_EXECUTABLE%" (
+    for /f "delims=" %%i in ('where cmake') do (
+        set "CMAKE_EXECUTABLE=%%i"
+        goto :found
+    )
+
+    :found
+    if not exist "%CMAKE_EXECUTABLE%" (
+        echo "CMake executable not found"
+        exit /b 1
+    )
+)
+
 @REM Copy files and directories
 xcopy /E /I /Y %CURRENT_DIR%\plugin %MUJOCO_SRC_DIR%\plugin
 mklink /H %MUJOCO_SRC_DIR%\plugin\multiverse_connector\multiverse_client.h %MULTIVERSE_DIR%\src\multiverse_client\include\multiverse_client.h
@@ -41,23 +56,8 @@ if not exist "%MUJOCO_PLUGIN_DIR%" (
     mkdir "%MUJOCO_PLUGIN_DIR%"
 )
 
-set "CMAKE_BUILD_DIR=%MULTIVERSE_DIR%\build\CMake"
-set "CMAKE_EXECUTABLE=%CMAKE_BUILD_DIR%\bin\cmake.exe"
-if not exist "%CMAKE_EXECUTABLE%" (
-    for /f "delims=" %%i in ('where cmake') do (
-        set "CMAKE_EXECUTABLE=%%i"
-        goto :found
-    )
-
-    :found
-    if not exist "%CMAKE_EXECUTABLE%" (
-        echo "CMake executable not found"
-        exit /b 1
-    )
-)
-
-@REM Run cmake commands
 pushd "%MUJOCO_BUILD_DIR%"
+echo Building MuJoCo plugin using CMake: "%CMAKE_EXECUTABLE%"
 "%CMAKE_EXECUTABLE%" "%MUJOCO_SRC_DIR%" -DCMAKE_INSTALL_PREFIX="%MUJOCO_BUILD_DIR%" -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -Wno-deprecated -Wno-dev
 if errorlevel 1 exit /b 1
 "%CMAKE_EXECUTABLE%" --build . --config Release -- /p:VcpkgEnableManifest=true

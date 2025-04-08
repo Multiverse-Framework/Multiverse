@@ -61,6 +61,7 @@ if not exist "%CMAKE_EXECUTABLE%" (
         exit /b 1
     )
 )
+echo Using CMake executable: %CMAKE_EXECUTABLE%
 if "!SHOULD_PAUSE!"=="1" (
     pause
 )
