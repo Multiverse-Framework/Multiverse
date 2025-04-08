@@ -78,14 +78,18 @@ class MultiverseMujocoConnector(MultiverseSimulator):
         self._mj_model.opt.timestep = self.step_size
         if kwargs.get('multiccd', False):
             self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_MULTICCD
-        if kwargs.get('nativeccd', False):
-            self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_NATIVECCD
         if kwargs.get('energy', True):
             self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_ENERGY
         if not kwargs.get('contact', True):
             self._mj_model.opt.disableflags |= mujoco.mjtDisableBit.mjDSBL_CONTACT
         if not kwargs.get('gravity', True):
             self._mj_model.opt.disableflags |= mujoco.mjtDisableBit.mjDSBL_GRAVITY
+        if mujoco.mj_version() >= 330:
+            if not kwargs.get('nativeccd', True):
+                self._mj_model.opt.disableflags |= mujoco.mjtDisableBit.mjENBL_NATIVECCD
+        else:
+            if kwargs.get('nativeccd', False):
+                self._mj_model.opt.enableflags |= mujoco.mjtEnableBit.mjENBL_NATIVECCD
         self._mj_data = mujoco.MjData(self._mj_model)
 
         mujoco.mj_resetDataKeyframe(self._mj_model, self._mj_data, 0)

@@ -35,7 +35,10 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: m
         entity_model = mujoco.MjModel.from_xml_path(entity.path)
         for body_name, body_apply in entity.apply.get("body", {}).items():
             if isinstance(body_apply, dict):
-                applied_body = entity_spec.find_body(body_name)
+                if mujoco.mj_version() >= 330:
+                    applied_body = entity_spec.body(body_name)
+                else:
+                    applied_body = entity_spec.find_body(body_name)
                 for apply_name, apply_data in body_apply.items():
                     setattr(applied_body, apply_name, apply_data)
             else:
@@ -100,7 +103,10 @@ def add_entity(entities: Dict[str, Robot | Object], home_key, worldbody_frame: m
                                                     bodyname2=body_2.name)
 
         entity_root_name = list(entity_spec.bodies)[1].name
-        child_body = entity_spec.find_body(entity_root_name)
+        if mujoco.mj_version() >= 330:
+            child_body = entity_spec.body(entity_root_name)
+        else:
+            child_body = entity_spec.find_body(entity_root_name)
         worldbody_frame.attach_body(child_body, f"{entity_name}_", f"")
 
 
@@ -137,6 +143,8 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
         home_key.time = 0.0
 
         worldbody_frame = self.world_spec.worldbody.add_frame()
+        if mujoco.mj_version() >= 330:
+            self.world_spec.compile()
 
         add_entity(objects, home_key, worldbody_frame)
         self.fix_prefix_and_suffix(objects)
@@ -267,7 +275,10 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
             body_name = reference.get("body2", None)
             if body_name is None:
                 raise ValueError("Reference must have a body2")
-            body_ref = self.world_spec.find_body(body_ref_name)
+            if mujoco.mj_version() >= 330:
+                body_ref = self.world_spec.body(body_ref_name)
+            else:
+                body_ref = self.world_spec.find_body(body_ref_name)
             if body_ref is None:
                 mujoco.mj_resetData(world_model, world_data)
                 mujoco.mj_step(world_model, world_data)
@@ -281,7 +292,11 @@ class MujocoCompiler(MultiverseSimulatorCompiler):
                     mocap=True
                 )
 
-                for geom_id, geom in enumerate(self.world_spec.find_body(body_name).geoms):
+                if mujoco.mj_version() >= 330:
+                    geoms = self.world_spec.body(body_name).geoms
+                else:
+                    geoms = self.world_spec.find_body(body_name).geoms
+                for geom_id, geom in enumerate(geoms):
                     geom_name = geom.name
                     if geom_name == "":
                         geom_name = f"geom_{geom_id}"
