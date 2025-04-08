@@ -20,6 +20,10 @@ jobs:
       shell: cmd
       run: install.bat
 
+    - name: Run build_third_parties.bat
+      shell: cmd
+      run: build_third_parties.bat
+
     - name: Run build_multiverse.bat msys2
       shell: cmd
       run: |
