@@ -37,11 +37,6 @@ elseif (WIN32)
     set(ENV{MUJOCO_SRC_DIR} ${EXT_DIR}/mujoco)
     set(ENV{MUJOCO_BUILD_DIR} ${BUILD_DIR}/mujoco)
 
-    if(WIN32)
-        find_package(cppzmq REQUIRED)
-        find_package(jsoncpp REQUIRED)
-    endif()
-
     # Execute the batch file during CMake configuration
     execute_process(
         COMMAND cmd /c ${CMAKE_CURRENT_SOURCE_DIR}/install.bat
