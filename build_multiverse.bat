@@ -100,36 +100,40 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
     echo Building src with vcpkg
     echo Building src with CMake executable: %CMAKE_EXECUTABLE%
 
-    if not exist "%MULTIVERSE_DIR%\external\vcpkg" (
-        git clone https://github.com/Microsoft/vcpkg.git "%MULTIVERSE_DIR%\external\vcpkg"
-        cd "%MULTIVERSE_DIR%\external\vcpkg"
-        bootstrap-vcpkg.bat
-        vcpkg integrate install
+    if exist "%MULTIVERSE_DIR%\external\vcpkg" (
+        echo Remove existing vcpkg directory
+        rmdir /S /Q "%MULTIVERSE_DIR%\external\vcpkg"
     )
+
+    git clone https://github.com/Microsoft/vcpkg.git "%MULTIVERSE_DIR%\external\vcpkg"
+    cd "%MULTIVERSE_DIR%\external\vcpkg"
+    bootstrap-vcpkg.bat
+    vcpkg integrate install
 
     powershell -NoProfile -Command "& '%CMAKE_EXECUTABLE%' -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -DBUILD_SRC=ON -DBUILD_MODULES=OFF -DBUILD_TESTS=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
     powershell -NoProfile -Command "& '%CMAKE_EXECUTABLE%' --build %MULTIVERSE_DIR%\build --config %CONFIG% --target INSTALL"
 
-    echo Listing files in %MULTIVERSE_DIR%\build:
-    echo -----------------------------------
-    for /d %%F in ("%MULTIVERSE_DIR%\build\*") do (
-        echo [DIR]  %%F
-    )
+    set "KEEP_ITEMS=blender;mujoco;pybind11;USD"
 
-    echo -----------------------------------
-    echo Listing files in %MULTIVERSE_DIR%\build:
-    echo -----------------------------------
-    for %%F in ("%MULTIVERSE_DIR%\build\*") do (
-        if not exist "%%F\" (
-            echo [FILE] %%F
+    for /d %%F in ("%MULTIVERSE_DIR%\build\*") do (
+        set ITEM_NAME=%%~nF
+        set "KEEP_ITEM=0"
+        for %%K in (!KEEP_ITEMS!) do (
+            if "!ITEM_NAME!"=="%%K" (
+                set "KEEP_ITEM=1"
+            )
+        )
+        if "!KEEP_ITEM!"=="0" (
+            echo Removing directory: %%F
+            rmdir /S /Q "%%F"
         )
     )
-    echo -----------------------------------
-
-    echo Removing CMake cache to force a rebuild using CMake executable: %MSYS2_BIN_DIR%\cmake.exe...
-    del /F "%MULTIVERSE_DIR%\build\CMakeCache.txt"
-    rmdir /S /Q "%MULTIVERSE_DIR%\build\CMakeFiles"
-    echo Removed CMake cache
+    for %%F in ("%MULTIVERSE_DIR%\build\*") do (
+        if not exist "%%F\" (
+            echo Removing file: %%F
+            del /F "%%F"
+        )
+    )
 
     echo Building src with msys2
     echo Building src with CMake executable: %MSYS2_BIN_DIR%\cmake.exe
@@ -156,29 +160,34 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
         )
     )
 
-    echo Listing files in %MULTIVERSE_DIR%\build:
-    echo -----------------------------------
     for /d %%F in ("%MULTIVERSE_DIR%\build\*") do (
-        echo [DIR]  %%F
-    )
-
-    echo -----------------------------------
-    echo Listing files in %MULTIVERSE_DIR%\build:
-    echo -----------------------------------
-    for %%F in ("%MULTIVERSE_DIR%\build\*") do (
-        if not exist "%%F\" (
-            echo [FILE] %%F
+        set ITEM_NAME=%%~nF
+        set "KEEP_ITEM=0"
+        for %%K in (!KEEP_ITEMS!) do (
+            if "!ITEM_NAME!"=="%%K" (
+                set "KEEP_ITEM=1"
+            )
+        )
+        if "!KEEP_ITEM!"=="0" (
+            echo Removing directory: %%F
+            rmdir /S /Q "%%F"
         )
     )
-    echo -----------------------------------
-
-    echo Removing CMake cache to force a rebuild using CMake executable: %MSYS2_BIN_DIR%\cmake.exe...
-    del /F "%MULTIVERSE_DIR%\build\CMakeCache.txt"
-    rmdir /S /Q "%MULTIVERSE_DIR%\build\CMakeFiles"
-    echo Removed CMake cache
+    for %%F in ("%MULTIVERSE_DIR%\build\*") do (
+        if not exist "%%F\" (
+            echo Removing file: %%F
+            del /F "%%F"
+        )
+    )
 
     echo Building modules with vcpkg
     echo Building modules with CMake executable: %CMAKE_EXECUTABLE%
+
+    rmdir /S /Q "%MULTIVERSE_DIR%\external\vcpkg"
+    git clone https://github.com/Microsoft/vcpkg.git "%MULTIVERSE_DIR%\external\vcpkg"
+    cd "%MULTIVERSE_DIR%\external\vcpkg"
+    bootstrap-vcpkg.bat
+    vcpkg integrate install
 
     powershell -NoProfile -Command "& '%CMAKE_EXECUTABLE%' -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -DBUILD_SRC=OFF -DBUILD_MODULES=ON -DBUILD_TESTS=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
 
