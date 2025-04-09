@@ -112,18 +112,8 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
     powershell -NoProfile -Command "& '%CMAKE_EXECUTABLE%' --build %MULTIVERSE_DIR%\build --config %CONFIG% --target INSTALL"
 
     echo Removing CMake cache to force a rebuild using CMake executable: %MSYS2_BIN_DIR%\cmake.exe...
-    rmdir /S /Q "%MULTIVERSE_DIR%\external\vcpkg"
-    set "KEEP_FOLDERS=blender;mujoco;pybind11;USD;modules"
-    for /d %%i in ("%MULTIVERSE_DIR%\build\*") do (
-        set "FOLDER_NAME=%%~nxi"
-        if "!KEEP_FOLDERS!" neq "" (
-            echo !KEEP_FOLDERS! | findstr /C:"!FOLDER_NAME!" >nul
-            if errorlevel 1 (
-                echo Deleting folder: %%i
-                rmdir /S /Q "%%i"
-            )
-        )
-    )
+    del /F "%MULTIVERSE_DIR%\build\CMakeCache.txt"
+    rmdir /S /Q "%MULTIVERSE_DIR%\build\CMakeFiles"
     echo Removed CMake cache
 
     echo Building src with msys2
@@ -151,7 +141,7 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
         )
     )
 
-    echo Removing CMake cache to force a rebuild using CMake executable: %CMAKE_EXECUTABLE%...
+    echo Removing CMake cache to force a rebuild using CMake executable: %MSYS2_BIN_DIR%\cmake.exe...
     set "KEEP_FOLDERS=blender;mujoco;pybind11;USD;modules"
     for /d %%i in ("%MULTIVERSE_DIR%\build\*") do (
         set "FOLDER_NAME=%%~nxi"
@@ -167,7 +157,8 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
 
     echo Building modules with vcpkg
     echo Building modules with CMake executable: %CMAKE_EXECUTABLE%
-    
+
+    rmdir /S /Q "%MULTIVERSE_DIR%\external\vcpkg"
     git clone https://github.com/Microsoft/vcpkg.git "%MULTIVERSE_DIR%\external\vcpkg"
     cd "%MULTIVERSE_DIR%\external\vcpkg"
     bootstrap-vcpkg.bat
