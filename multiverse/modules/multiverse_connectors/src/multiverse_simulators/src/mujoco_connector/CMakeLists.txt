@@ -36,7 +36,6 @@ elseif (WIN32)
 
     set(ENV{MUJOCO_SRC_DIR} ${EXT_DIR}/mujoco)
     set(ENV{MUJOCO_BUILD_DIR} ${BUILD_DIR}/mujoco)
-    set(ENV{CMAKE_TOOLCHAIN_FILE} ${CMAKE_TOOLCHAIN_FILE})
 
     # Execute the batch file during CMake configuration
     execute_process(
