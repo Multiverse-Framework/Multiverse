@@ -1,3 +1,8 @@
+if(WIN32)
+    find_package(cppzmq REQUIRED)
+    find_package(jsoncpp REQUIRED)
+endif()
+
 set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE 
   ${CMAKE_CURRENT_SOURCE_DIR}/../..
   ${CMAKE_CURRENT_SOURCE_DIR}/../../src
