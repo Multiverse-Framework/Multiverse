@@ -110,6 +110,22 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
     powershell -NoProfile -Command "& '%CMAKE_EXECUTABLE%' -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -DBUILD_SRC=ON -DBUILD_MODULES=OFF -DBUILD_TESTS=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
     powershell -NoProfile -Command "& '%CMAKE_EXECUTABLE%' --build %MULTIVERSE_DIR%\build --config %CONFIG% --target INSTALL"
 
+    echo Listing files in %MULTIVERSE_DIR%\build:
+    echo -----------------------------------
+    for /d %%F in ("%MULTIVERSE_DIR%\build\*") do (
+        echo [DIR]  %%F
+    )
+
+    echo -----------------------------------
+    echo Listing files in %MULTIVERSE_DIR%\build:
+    echo -----------------------------------
+    for %%F in ("%MULTIVERSE_DIR%\build\*") do (
+        if not exist "%%F\" (
+            echo [FILE] %%F
+        )
+    )
+    echo -----------------------------------
+
     echo Removing CMake cache to force a rebuild using CMake executable: %MSYS2_BIN_DIR%\cmake.exe...
     del /F "%MULTIVERSE_DIR%\build\CMakeCache.txt"
     rmdir /S /Q "%MULTIVERSE_DIR%\build\CMakeFiles"
@@ -139,6 +155,22 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
             pause
         )
     )
+
+    echo Listing files in %MULTIVERSE_DIR%\build:
+    echo -----------------------------------
+    for /d %%F in ("%MULTIVERSE_DIR%\build\*") do (
+        echo [DIR]  %%F
+    )
+
+    echo -----------------------------------
+    echo Listing files in %MULTIVERSE_DIR%\build:
+    echo -----------------------------------
+    for %%F in ("%MULTIVERSE_DIR%\build\*") do (
+        if not exist "%%F\" (
+            echo [FILE] %%F
+        )
+    )
+    echo -----------------------------------
 
     echo Removing CMake cache to force a rebuild using CMake executable: %MSYS2_BIN_DIR%\cmake.exe...
     del /F "%MULTIVERSE_DIR%\build\CMakeCache.txt"
