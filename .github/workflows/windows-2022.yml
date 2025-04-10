@@ -23,6 +23,10 @@ jobs:
         shell: cmd
         run: build_third_parties.bat
 
-      - name: Run build_multiverse.bat
+      - name: Run build_multiverse.bat vcpkg
         shell: cmd
-        run: build_multiverse.bat
+        run: build_multiverse.bat vcpkg
+
+      - name: Run build_multiverse.bat msys2
+        shell: cmd
+        run: build_multiverse.bat msys2
