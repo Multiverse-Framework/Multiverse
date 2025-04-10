@@ -489,6 +489,7 @@ EMultiverseServerState MultiverseServer::receive_data()
         std::vector<zmq::message_t> request_array;
         sockets_need_clean_up[socket_addr] = false;
         zmq::recv_result_t recv_result_t = zmq::recv_multipart(socket, std::back_inserter(request_array), zmq::recv_flags::none);
+        assert(recv_result_t.has_value());
         sockets_need_clean_up[socket_addr] = true;
 
         const size_t request_array_size = request_array.size();
@@ -525,10 +526,10 @@ EMultiverseServerState MultiverseServer::receive_data()
                     throw std::invalid_argument("[Server] Received invalid message [" + request_array[1].to_string() + "] at socket " + socket_addr + ".");
                 }
             }
-            else if (message_spec_int == 2 && request_array_size == 2 ||
-                     message_spec_int == 3 && request_array_size == 3 ||
-                     message_spec_int == 4 && request_array_size == 4 ||
-                     message_spec_int == 5 && request_array_size == 5)
+            else if ((message_spec_int == 2 && request_array_size == 2) ||
+                     (message_spec_int == 3 && request_array_size == 3) ||
+                     (message_spec_int == 4 && request_array_size == 4) ||
+                     (message_spec_int == 5 && request_array_size == 5))
             {
                 memcpy(&worlds[world_name].time, request_array[1].data(), sizeof(double));
 
@@ -658,7 +659,7 @@ void MultiverseServer::bind_meta_data()
             }
         }
 
-        for (const std::string &type_str : {"send", "receive"})
+        for (const char* const &type_str : {"send", "receive"})
         {
             for (const std::string &object_name : request_meta_data_json[type_str].getMemberNames())
             {
@@ -986,9 +987,9 @@ void MultiverseServer::validate_meta_data()
         std::find(receive_objects_json[""].begin(), receive_objects_json[""].end(), "") != receive_objects_json[""].end())
     {
         receive_objects_json = Json::objectValue;
-        for (const std::pair<std::string, Object> &object : worlds[world_name].objects)
+        for (const std::pair<const std::string, Object> &object : worlds[world_name].objects)
         {
-            for (const std::pair<std::string, Attribute> &attribute_pair : object.second.attributes)
+            for (const std::pair<const std::string, Attribute> &attribute_pair : object.second.attributes)
             {
                 receive_objects_json[object.first].append(attribute_pair.first);
             }
@@ -1009,7 +1010,7 @@ void MultiverseServer::validate_meta_data()
                 }
 
                 receive_objects_json[object_name] = Json::arrayValue;
-                for (const std::pair<std::string, Attribute> &attribute_pair : worlds[world_name].objects[object_name].attributes)
+                for (const std::pair<const std::string, Attribute> &attribute_pair : worlds[world_name].objects[object_name].attributes)
                 {
                     receive_objects_json[object_name].append(attribute_pair.first);
                 }
@@ -1021,7 +1022,7 @@ void MultiverseServer::validate_meta_data()
             for (const Json::Value &attribute_json : request_meta_data_json["receive"][object_name])
             {
                 const std::string &attribute_name = attribute_json.asString();
-                for (const std::pair<std::string, Object> &object_pair : worlds[world_name].objects)
+                for (const std::pair<const std::string, Object> &object_pair : worlds[world_name].objects)
                 {
                     if (object_pair.second.attributes.count(attribute_name) > 0)
                     {
@@ -1190,7 +1191,7 @@ void MultiverseServer::wait_for_api_callbacks_response()
         response_meta_data_json["api_callbacks_response"][called_simulation_name] = Json::arrayValue;
         for (const std::map<std::string, std::vector<std::string>> &api_callbacks_response : simulation.api_callbacks_response)
         {
-            for (const std::pair<std::string, std::vector<std::string>> &api_callback_response : api_callbacks_response)
+            for (const std::pair<const std::string, std::vector<std::string>> &api_callback_response : api_callbacks_response)
             {
                 Json::Value api_callback_response_json;
                 api_callback_response_json[api_callback_response.first] = Json::arrayValue;
@@ -1578,6 +1579,7 @@ void start_multiverse_server(const std::string &server_socket_addr)
             zmq::message_t request;
             printf("[Server] Waiting for request...\n");
             zmq::recv_result_t recv_result_t = server_socket.recv(request, zmq::recv_flags::none);
+            assert(recv_result_t.has_value());
             receive_addr = request.to_string();
             printf("[Server] Received request to open socket %s.\n", receive_addr.c_str());
         }

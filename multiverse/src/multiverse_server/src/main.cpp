@@ -27,7 +27,7 @@
 #include "multiverse_server.h"
 
 /**
- * @brief multiverse_server takes one argument as the server socket address, default is "tcp://*:7000", 
+ * @brief multiverse_server takes one argument as the server socket address, default is "tcp://<*>:7000", 
  * meaning the server will listen on all interfaces on port 7000.
  * 
  * @param argc Number of arguments
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     do
     {
         can_shut_down = true;
-        for (const std::pair<std::string, bool> &socket_needs_clean_up : sockets_need_clean_up)
+        for (const std::pair<const std::string, bool> &socket_needs_clean_up : sockets_need_clean_up)
         {
             if (socket_needs_clean_up.second)
             {
