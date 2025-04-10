@@ -188,6 +188,7 @@ if "!CMAKE_TOOL_CHAIN!"=="vcpkg" (
     cd "%MULTIVERSE_DIR%\external\vcpkg"
     bootstrap-vcpkg.bat
     vcpkg integrate install
+    vcpkg install zeromq:x64-windows
 
     powershell -NoProfile -Command "& '%CMAKE_EXECUTABLE%' -S %MULTIVERSE_DIR% -B %MULTIVERSE_DIR%\build -DCMAKE_TOOLCHAIN_FILE=%MULTIVERSE_DIR%\external\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_INSTALL_PREFIX:PATH=%MULTIVERSE_DIR% -Wno-deprecated -DBUILD_SRC=OFF -DBUILD_MODULES=ON -DBUILD_TESTS=OFF -DPYTHON_EXECUTABLE=%PYTHON_EXECUTABLE%"
 
