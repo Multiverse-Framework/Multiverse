@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 import xml.etree.ElementTree as ET
 from typing import Dict, Any
 
+sys.path = [p for p in sys.path if p != os.path.dirname(os.path.abspath(__file__))]
 import mujoco
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 import numpy
 
 from multiverse_simulator import MultiverseSimulatorCompiler, Robot, Object, multiverse_simulator_compiler_main

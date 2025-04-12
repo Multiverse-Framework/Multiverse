@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
 
+import os
+import sys
 import time
 from typing import List, Dict, Any
 
 from multiverse_simulator import MultiverseSimulatorConstraints, MultiverseViewer, str_to_dict
+
+sys.path = [p for p in sys.path if p != os.path.dirname(os.path.abspath(__file__))]
 from mujoco_connector import MultiverseMujocoConnector
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import argparse
 import re

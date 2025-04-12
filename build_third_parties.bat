@@ -41,10 +41,12 @@ set "INCLUDE_DIR=%MULTIVERSE_DIR%\include"
 
 @REM Build CMake
 set "CMAKE_BUILD_DIR=%BUILD_DIR%\CMake"
-set "CMAKE_FILE_NAME=cmake-4.0.0-windows-x86_64"
+set "CMAKE_FILE_NAME=cmake-4.0.1-windows-x86_64"
 set "CMAKE_ZIP_FILE=%CMAKE_FILE_NAME%.zip"
 if not exist "%CMAKE_BUILD_DIR%" (
-    powershell -NoProfile -Command "curl -o '%EXT_DIR%\%CMAKE_ZIP_FILE%' 'https://github.com/Kitware/CMake/releases/download/v4.0.0/%CMAKE_ZIP_FILE%'"
+    if not exist "%EXT_DIR%\%CMAKE_ZIP_FILE%" (
+        powershell -NoProfile -Command "curl -o '%EXT_DIR%\%CMAKE_ZIP_FILE%' 'https://github.com/Kitware/CMake/releases/download/v4.0.1/%CMAKE_ZIP_FILE%'"
+    )
     powershell -NoProfile -Command "7z x '%EXT_DIR%\%CMAKE_ZIP_FILE%' -o'%BUILD_DIR%'"
     powershell -NoProfile -Command "move '%BUILD_DIR%\%CMAKE_FILE_NAME%' '%CMAKE_BUILD_DIR%'"
 )
@@ -89,7 +91,9 @@ if not exist "%BLENDER_BUILD_DIR%" (
         powershell -NoProfile -Command "cd '%BLENDER_EXT_DIR%\blender\lib\windows_x64\python\311\bin'; .\python.exe -m pip install --upgrade pip build --no-warn-script-location; .\python.exe -m pip install bpy --no-warn-script-location"
     ) else (
         powershell -Command "[Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%BLENDER_BUILD_DIR%', [EnvironmentVariableTarget]::User)"
-        powershell -NoProfile -Command "curl -o '%EXT_DIR%\%BLENDER_ZIP_FILE%' 'https://download.blender.org/release/Blender4.4/%BLENDER_ZIP_FILE%'"
+        if not exist "%EXT_DIR%\%BLENDER_ZIP_FILE%" (
+            powershell -NoProfile -Command "curl -o '%EXT_DIR%\%BLENDER_ZIP_FILE%' 'https://download.blender.org/release/Blender4.4/%BLENDER_ZIP_FILE%'"
+        )
         powershell -NoProfile -Command "7z x '%EXT_DIR%\%BLENDER_ZIP_FILE%' -o'%BUILD_DIR%'"
         powershell -NoProfile -Command "move '%BUILD_DIR%\%BLENDER_FILE_NAME%' '%BLENDER_BUILD_DIR%'"
         powershell -NoProfile -Command "cd '%BLENDER_BUILD_DIR%\4.4\python\bin'; .\python.exe -m pip install --upgrade pip build --no-warn-script-location; .\python.exe -m pip install bpy --no-warn-script-location"

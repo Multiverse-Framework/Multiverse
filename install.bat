@@ -10,6 +10,27 @@ if !errorlevel! neq 0 (
     exit /b 1
 )
 
+for /f "delims=" %%i in ('where python 2^>nul') do (
+    set "PYTHON_EXECUTABLE=%%i"
+    set "PYTHON_DIR=%%~dpi"
+    goto :found
+)
+
+echo python.exe not found in PATH.
+exit /b 1
+
+:found
+echo Found Python: !PYTHON_EXECUTABLE!
+
+for /f "tokens=2 delims= " %%v in ('"!PYTHON_EXECUTABLE!" --version 2^>nul') do (
+    set "PYTHON_VERSION=%%v"
+)
+
+for /f "tokens=1,2 delims=." %%a in ("!PYTHON_VERSION!") do (
+    set "PY_MAJOR=%%a"
+    set "PY_MINOR=%%b"
+)
+
 set "CURRENT_DIR=%~dp0"
 
 cd %CURRENT_DIR%
@@ -27,29 +48,26 @@ echo Version: !OSVERSION!
 echo !OSCAPTION! | findstr "windows 10" >nul
 if !errorlevel! == 0 (
     echo Detected Windows 10: !OSCAPTION!
-    set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python38"
+    if not "!PY_MAJOR!"=="3" if not "!PY_MINOR!"=="8" (
+        echo Python version is not 3.8: !PYTHON_VERSION!
+        exit /b 1
+    )
     goto :next
 )
 
 echo !OSCAPTION! | findstr "windows 11" >nul
 if !errorlevel! == 0 (
     echo Detected Windows 11: !OSCAPTION!
-    set "PYTHON_DIR=%USERPROFILE%\AppData\Local\Programs\Python\Python312"
+    if not "!PY_MAJOR!"=="3" if not "!PY_MINOR!"=="12" (
+        echo Python version is not 3.12: !PYTHON_VERSION!
+        exit /b 1
+    )
     goto :next
 )
 
 echo !OSCAPTION! | findstr "windows server 2022" >nul
 if !errorlevel! == 0 (
     echo Detected Windows Server 2022: !OSCAPTION!
-    for /f "delims=" %%i in ('where python') do (
-        set "PYTHON_EXE=%%i"
-    )
-    if not defined PYTHON_EXE (
-        echo Python executable not found in PATH, please install Python 3.8 or later.
-        exit /b 1
-    )
-    echo Python found at: !PYTHON_EXE!
-    for %%d in ("!PYTHON_EXE!") do set "PYTHON_DIR=%%~dpd"
     goto :next
 )
 
@@ -57,7 +75,6 @@ echo Unknown or unsupported Windows version: !OSCAPTION!
 exit /b 1
 
 :next
-set "PYTHON_EXECUTABLE=!PYTHON_DIR!\python.exe"
 if not exist "!PYTHON_EXECUTABLE!" (
     echo Python executable not found: !PYTHON_EXECUTABLE!
     exit /b 1
@@ -66,6 +83,14 @@ echo Python executable path is: !PYTHON_EXECUTABLE!
 
 !PYTHON_EXECUTABLE! -m ensurepip
 !PYTHON_EXECUTABLE! -m pip install -U pip virtualenvwrapper-win pytest
+echo Python directory: !PYTHON_DIR!
+
+set "SCRIPT_PATH=!PYTHON_DIR!Scripts\mkvirtualenv.bat"
+if not exist "!SCRIPT_PATH!" (
+    echo mkvirtualenv.bat not found in Scripts directory: !SCRIPT_PATH!
+    exit /b 1
+)
+
 set "MKVIRTUALENV_EXECUTABLE=%PYTHON_DIR%\Scripts\mkvirtualenv.bat"
 set "PYTHON_EXECUTABLE=%USERPROFILE%\Envs\multiverse\Scripts\python.exe"
 if not exist "!PYTHON_EXECUTABLE!" (
@@ -73,26 +98,34 @@ if not exist "!PYTHON_EXECUTABLE!" (
     @REM Wait for the virtual environment to be created
     TIMEOUT /T 1
 )
+if not exist "!PYTHON_EXECUTABLE!" (
+    echo Python executable not found in virtual environment: !PYTHON_EXECUTABLE!
+    exit /b 1
+)
 
 echo Change Python executable to: !PYTHON_EXECUTABLE!
-!PYTHON_EXECUTABLE! -m pip install build
+!PYTHON_EXECUTABLE! -m pip install build pyyaml
+
+@REM Install chocolatey (https://chocolatey.org/install)
+if not exist "C:\ProgramData\chocolatey" (
+    powershell -NoProfile -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+)
+
+if not exist "C:\ProgramData\chocolatey" (
+    echo Chocolatey installation failed.
+    pause
+    exit /b 1
+)
+
+@REM Install cmake 7zip
+set "NEW_PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
+powershell -Command "if (-not ($env:PATH.Split(';') -contains '%ALLUSERSPROFILE%\chocolatey\bin')) {[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('Path', 'User') + ';%ALLUSERSPROFILE%\chocolatey\bin', [EnvironmentVariableTarget]::User)}"
+set "SET_NEW_PATH=$env:Path = '%NEW_PATH%'; [System.Environment]::SetEnvironmentVariable('Path', $env:Path, [System.EnvironmentVariableTarget]::Process)"
+powershell -NoProfile -Command "%SET_NEW_PATH%; choco install -y curl cmake 7zip"
 
 echo !PYTHON_VERSION! | findstr /b "3.8" >nul
 if !errorlevel! == 0 (
-  @REM Install chocolatey (https://chocolatey.org/install)
-    if not exist "C:\ProgramData\chocolatey" (
-        powershell -NoProfile -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
-    )
-
-    if not exist "C:\ProgramData\chocolatey" (
-        echo Chocolatey installation failed.
-        pause
-        exit /b 1
-    )
-
-    @REM Install vcredist2013, vcredist140, openssl, curl, cmake 7zip
-    set "NEW_PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-    set "SET_NEW_PATH=$env:Path = '%NEW_PATH%'; [System.Environment]::SetEnvironmentVariable('Path', $env:Path, [System.EnvironmentVariableTarget]::Process)"
+    @REM Install vcredist2013, vcredist140, openssl, curl
     powershell -NoProfile -Command "%SET_NEW_PATH%; choco install -y vcredist2013 vcredist140; choco install -y openssl --version 1.1.1.2100; choco install -y curl cmake 7zip"
 
     @REM Download OpenCV

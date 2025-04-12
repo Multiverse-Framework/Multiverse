@@ -1,6 +1,16 @@
-if(WIN32)
-    find_package(cppzmq REQUIRED)
-    find_package(jsoncpp REQUIRED)
+if (WIN32)
+  find_library(JSONCPP_LIBRARY
+    NAMES jsoncpp
+    PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../../../../build/vcpkg_installed/x64-windows/lib"
+    NO_DEFAULT_PATH
+    REQUIRED
+  )
+  find_library(ZMQ_LIBRARY
+    NAMES libzmq-mt-4_3_5
+    PATHS "${CMAKE_CURRENT_SOURCE_DIR}/../../../../build/vcpkg_installed/x64-windows/lib"
+    NO_DEFAULT_PATH
+    REQUIRED
+  )
 endif()
 
 set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE 
@@ -28,6 +38,8 @@ elseif (WIN32)
     mujoco
     ${CMAKE_CURRENT_SOURCE_DIR}/multiverse_client_json.lib
     ${CMAKE_CURRENT_SOURCE_DIR}/multiverse_client.lib
+    ${JSONCPP_LIBRARY}
+    ${ZMQ_LIBRARY}
   )
 endif()
 target_compile_options(

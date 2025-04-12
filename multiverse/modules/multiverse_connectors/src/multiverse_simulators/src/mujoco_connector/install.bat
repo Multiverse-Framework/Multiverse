@@ -65,6 +65,6 @@ if errorlevel 1 exit /b 1
 "%CMAKE_EXECUTABLE%" --install . 
 if errorlevel 1 exit /b 1
 copy /Y "%MUJOCO_BUILD_DIR%\bin\Release\multiverse_connector.dll" "%MUJOCO_PLUGIN_DIR%"
-copy /Y "%MUJOCO_BUILD_DIR%\bin\Release\jsoncpp.dll" "%MUJOCO_BUILD_DIR%\bin"
-copy /Y "%MUJOCO_BUILD_DIR%\bin\Release\libzmq-mt-4_3_5.dll" "%MUJOCO_BUILD_DIR%\bin"
+copy /Y "%MUJOCO_BUILD_DIR%\..\vcpkg_installed\x64-windows\bin\jsoncpp.dll" "%MUJOCO_BUILD_DIR%\bin"
+copy /Y "%MUJOCO_BUILD_DIR%\..\vcpkg_installed\x64-windows\bin\libzmq-mt-4_3_5.dll" "%MUJOCO_BUILD_DIR%\bin"
 popd
