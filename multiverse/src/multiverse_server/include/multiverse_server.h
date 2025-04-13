@@ -42,6 +42,7 @@
 enum class EAttribute : unsigned char
 {
     Time,
+    Scalar,
     Position,
     Quaternion,
     RelativeVelocity,

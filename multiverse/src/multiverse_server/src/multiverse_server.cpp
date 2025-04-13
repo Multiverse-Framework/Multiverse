@@ -42,6 +42,7 @@ std::set<std::string> cumulative_attribute_names = {"force", "torque"};
 std::map<std::string, std::pair<EAttribute, std::vector<double>>> attribute_map_double =
     {
         {"time", {EAttribute::Time, {0.0}}},
+        {"scalar", {EAttribute::Scalar, {std::numeric_limits<double>::quiet_NaN()}}},
         {"position", {EAttribute::Position, std::vector<double>(3, std::numeric_limits<double>::quiet_NaN())}},
         {"quaternion", {EAttribute::Quaternion, std::vector<double>(4, std::numeric_limits<double>::quiet_NaN())}},
         {"relative_velocity", {EAttribute::RelativeVelocity, std::vector<double>(6, 0.0)}},
@@ -99,6 +100,9 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
         {EAttribute::Time,
          {{"rhs", {1.0}},
           {"lhs", {1.0}}}},
+        {EAttribute::Scalar,
+            {{"rhs", {1.0}},
+            {"lhs", {1.0}}}},
         {EAttribute::Position,
          {{"rhs", {1.0, 1.0, 1.0}},
           {"lhs", {1.0, -1.0, 1.0}}}},
@@ -730,6 +734,10 @@ void MultiverseServer::bind_meta_data()
     std::for_each(conversion_map_double[EAttribute::Time].begin(), conversion_map_double[EAttribute::Time].end(),
                   [time_unit](double &time)
                   { time = unit_scale[time_unit]; });
+    
+    std::for_each(conversion_map_double[EAttribute::Scalar].begin(), conversion_map_double[EAttribute::Scalar].end(),
+                  [](double &scalar)
+                  { scalar = 1.0; });
 
     std::for_each(conversion_map_double[EAttribute::Position].begin(), conversion_map_double[EAttribute::Position].end(),
                   [length_unit](double &position)

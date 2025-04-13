@@ -28,6 +28,7 @@
 
 std::map<std::string, size_t> attribute_map_double = {
     {"", 0},
+    {"scalar", 1},
     {"position", 3},
     {"quaternion", 4},
     {"relative_velocity", 6},
