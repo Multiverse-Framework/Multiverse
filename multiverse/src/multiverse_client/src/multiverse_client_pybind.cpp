@@ -28,6 +28,7 @@
 
 std::map<std::string, size_t> attribute_map_double = {
     {"", 0},
+    {"time", 1},
     {"scalar", 1},
     {"position", 3},
     {"quaternion", 4},
@@ -173,6 +174,11 @@ public:
         init_objects_callback = in_init_objects_callback;
     }
 
+    inline void set_reset_callback(const std::function<void ()> &in_reset_callback)
+    {
+        reset_callback = in_reset_callback;
+    }
+
 private:
     pybind11::dict request_meta_data_dict;
 
@@ -199,6 +205,8 @@ private:
     std::function<void ()> bind_receive_data_callback = []() {};
 
     std::function<void ()> init_objects_callback = []() {};
+
+    std::function<void ()> reset_callback = [this]() { printf("[Client %s] Resetting the client (will be implemented).\n", client_port.c_str()); };
 
     std::map<std::string, std::function<void (pybind11::list)>> api_callbacks;
 
@@ -453,7 +461,7 @@ private:
 
     void reset() override
     {
-        printf("[Client %s] Resetting the client (will be implemented).\n", client_port.c_str());
+        reset_callback();
     }
 
     void init_send_and_receive_data() override
@@ -553,5 +561,6 @@ PYBIND11_MODULE(multiverse_client_pybind, handle)
         .def("set_bind_response_meta_data_callback", &MultiverseClientPybind::set_bind_response_meta_data_callback)
         .def("set_bind_send_data_callback", &MultiverseClientPybind::set_bind_send_data_callback)
         .def("set_bind_receive_data_callback", &MultiverseClientPybind::set_bind_receive_data_callback)
-        .def("set_init_objects_callback", &MultiverseClientPybind::set_init_objects_callback);
+        .def("set_init_objects_callback", &MultiverseClientPybind::set_init_objects_callback)
+        .def("set_reset_callback", &MultiverseClientPybind::set_reset_callback);
 }

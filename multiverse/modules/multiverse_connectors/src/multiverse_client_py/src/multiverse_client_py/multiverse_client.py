@@ -39,6 +39,7 @@ class MultiverseClient:
     _bind_send_data_callback: Callable
     _bind_receive_data_callback: Callable
     _init_objects_callback: Callable
+    _reset_callback: Callable
 
     def __init__(
         self,
@@ -229,6 +230,18 @@ class MultiverseClient:
     def init_objects_callback(self, init_objects_callback: Callable) -> None:
         """Set the init_objects_callback."""
         self._multiverse_socket.set_init_objects_callback(init_objects_callback)
+        self._init_objects_callback = init_objects_callback
+
+    @property
+    def reset_callback(self) -> Callable:
+        """Get the reset_callback."""
+        return self._reset_callback
+
+    @reset_callback.setter
+    def reset_callback(self, reset_callback: Callable) -> None:
+        """Set the reset_callback."""
+        self._multiverse_socket.set_reset_callback(reset_callback)
+        self._reset_callback = reset_callback
 
     def _connect_and_start(self) -> None:
         """Connect to the server and start the client."""
