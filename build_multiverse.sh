@@ -172,6 +172,7 @@ fi
 #     -DBUILD_KNOWLEDGE=$BUILD_KNOWLEDGE \
 #     -DBUILD_PARSER=$BUILD_PARSER
 
+rm -f $BUILD_DIR/CMakeCache.txt
 if [ $BUILD_SRC = ON ]; then
     $CMAKE_EXECUTABLE -S $PWD/multiverse -B $BUILD_DIR \
         -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
@@ -181,8 +182,9 @@ if [ $BUILD_SRC = ON ]; then
         -DPYTHON_EXECUTABLE=$PYTHON_EXECUTABLE
     make -C $BUILD_DIR
     $CMAKE_EXECUTABLE --install $BUILD_DIR
-
+    
     if [ $UBUNTU_VERSION = "20.04" ]; then
+        rm -f $BUILD_DIR/CMakeCache.txt
         $CMAKE_EXECUTABLE -S $PWD/multiverse -B $BUILD_DIR \
             -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
             -DBUILD_SRC=ON \
@@ -192,6 +194,7 @@ if [ $BUILD_SRC = ON ]; then
         make -C $BUILD_DIR
         $CMAKE_EXECUTABLE --install $BUILD_DIR
     elif [ $UBUNTU_VERSION = "24.04" ]; then
+        rm -f $BUILD_DIR/CMakeCache.txt
         $CMAKE_EXECUTABLE -S $PWD/multiverse -B $BUILD_DIR \
             -DCMAKE_INSTALL_PREFIX:PATH=$PWD/multiverse -DMULTIVERSE_CLIENT_LIBRARY_TYPE=STATIC -DSTDLIB=libstdc++ \
             -DBUILD_SRC=ON \
