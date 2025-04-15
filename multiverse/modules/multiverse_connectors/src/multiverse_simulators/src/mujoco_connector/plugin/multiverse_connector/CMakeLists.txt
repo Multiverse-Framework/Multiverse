@@ -13,10 +13,18 @@ if (WIN32)
   )
 endif()
 
-set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE 
-  ${CMAKE_CURRENT_SOURCE_DIR}/../..
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../src
-)
+if (UNIX)
+  set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/../..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src
+  )
+elseif (WIN32)
+  set(MUJOCO_MULTIVERSE_CONNECTOR_INCLUDE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../build/vcpkg_installed/x64-windows/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src
+  )
+endif()
 
 set(MUJOCO_MULTIVERSE_CONNECTOR_SRCS
   multiverse_connector.cc
