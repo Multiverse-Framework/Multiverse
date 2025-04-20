@@ -1,6 +1,5 @@
 # Multiverse
 
-[![Ubuntu-20.04 CI](https://github.com/Multiverse-Framework/Multiverse/actions/workflows/ubuntu-20.04.yml/badge.svg?branch=main)](https://github.com/Multiverse-Framework/Multiverse/actions/workflows/ubuntu-20.04.yml)
 [![Ubuntu-22.04 CI](https://github.com/Multiverse-Framework/Multiverse/actions/workflows/ubuntu-22.04.yml/badge.svg?branch=main)](https://github.com/Multiverse-Framework/Multiverse/actions/workflows/ubuntu-22.04.yml)
 [![Ubuntu-24.04 CI](https://github.com/Multiverse-Framework/Multiverse/actions/workflows/ubuntu-24.04.yml/badge.svg?branch=main)](https://github.com/Multiverse-Framework/Multiverse/actions/workflows/ubuntu-24.04.yml)
 [![WindowsServer-2022 CI](https://github.com/Multiverse-Framework/Multiverse/actions/workflows/windows-2022.yml/badge.svg?branch=main)](https://github.com/Multiverse-Framework/Multiverse/actions/workflows/windows-2022.yml)
