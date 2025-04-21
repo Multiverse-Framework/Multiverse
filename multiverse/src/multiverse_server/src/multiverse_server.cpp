@@ -101,8 +101,8 @@ std::map<EAttribute, std::map<std::string, std::vector<double>>> handedness_scal
          {{"rhs", {1.0}},
           {"lhs", {1.0}}}},
         {EAttribute::Scalar,
-            {{"rhs", {1.0}},
-            {"lhs", {1.0}}}},
+         {{"rhs", {1.0}},
+          {"lhs", {1.0}}}},
         {EAttribute::Position,
          {{"rhs", {1.0, 1.0, 1.0}},
           {"lhs", {1.0, -1.0, 1.0}}}},
@@ -663,7 +663,7 @@ void MultiverseServer::bind_meta_data()
             }
         }
 
-        for (const char* const &type_str : {"send", "receive"})
+        for (const char *const &type_str : {"send", "receive"})
         {
             for (const std::string &object_name : request_meta_data_json[type_str].getMemberNames())
             {
@@ -734,7 +734,7 @@ void MultiverseServer::bind_meta_data()
     std::for_each(conversion_map_double[EAttribute::Time].begin(), conversion_map_double[EAttribute::Time].end(),
                   [time_unit](double &time)
                   { time = unit_scale[time_unit]; });
-    
+
     std::for_each(conversion_map_double[EAttribute::Scalar].begin(), conversion_map_double[EAttribute::Scalar].end(),
                   [](double &scalar)
                   { scalar = 1.0; });
