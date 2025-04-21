@@ -282,7 +282,7 @@ private:
             for (const auto &send_objects : request_meta_data_dict[request_buffer_size.first.c_str()].cast<pybind11::dict>())
             {
                 const std::string object_name = send_objects.first.cast<std::string>();
-                if (object_name.compare("") == 0 || request_buffer_size.second["double"] == -1 || request_buffer_size.second["uint8"] == -1 || request_buffer_size.second["uint16"] == -1)
+                if (object_name.compare("") == 0 || (int)request_buffer_size.second["double"] == -1 || (int)request_buffer_size.second["uint8"] == -1 || (int)request_buffer_size.second["uint16"] == -1)
                 {
                     request_buffer_size.second["double"] = -1;
                     request_buffer_size.second["uint8"] = -1;
