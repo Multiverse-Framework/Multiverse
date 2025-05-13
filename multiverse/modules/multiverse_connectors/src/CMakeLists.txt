@@ -1,5 +1,0 @@
-add_subdirectory(multiverse_simulators)
-
-add_subdirectory(multiverse_client_py)
-
-add_subdirectory(ros)
