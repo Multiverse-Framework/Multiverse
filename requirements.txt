@@ -1,0 +1,72 @@
+# ===============================
+# Dependency Resolution & Packaging
+# ===============================
+pip
+setuptools             # For building/installing Python packages
+packaging              # Handles version and package specifiers
+typeguard              # Runtime type checking
+pyyaml                 # YAML parsing
+attrs                 # Class attribute management
+distro                # Linux distro info
+zipp                  # Zip file utilities
+future                # Python 2/3 compatibility
+
+# ===============================
+# USD & GUI Dependencies
+# ===============================
+pyopengl               # OpenGL interface
+jinja2                 # Templating engine (lowercase variant)
+Jinja2                 # Templating engine (capitalized variant — kept in case some tool uses it)
+pyside6                # Qt for GUI
+pyside2                # Qt for GUI (older version)
+PyQt5                  # Alternative Qt bindings
+docutils               # Used by Sphinx, documentation tools
+tornado                # Web server (used by some USD GUI tools)
+wheel                  # For building wheels
+empy==3.3.4            # Required for ROS build system (template system)
+
+# ===============================
+# Knowledge & Ontology
+# ===============================
+owlready2              # Ontology management
+rdflib                 # RDF graph handling
+lxml                   # XML/HTML processing
+lark-parser            # Parsing tool (used in grammar-based systems)
+
+# ===============================
+# Robotics/ROS Dependencies
+# ===============================
+urdf_parser_py         # URDF parsing
+rospkg                 # ROS package utility
+rosdistro              # ROS distro information
+
+# ===============================
+# Mujoco & Physics Sim
+# ===============================
+mujoco==3.3.2          # Mujoco physics engine
+mujoco-mjx==3.3.2      # Mujoco MJX for enhanced simulation
+
+# ===============================
+# Data Science & ML Utilities
+# ===============================
+numpy
+pandas
+scipy
+plotly
+opencv-python
+tqdm
+requests
+pillow
+Pillow                 # Duplicate kept for compatibility — safe to keep one
+
+# ===============================
+# Multiverse Parser / Custom Tools
+# ===============================
+#pyfactxx               # Custom or lesser-known package (verify source)
+
+# ===============================
+# Testing
+# ===============================
+pytest
+pytest-cov
+coverage
