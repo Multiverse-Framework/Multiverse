@@ -1,15 +1,15 @@
 [submodule "Multiverse-Launch"]
 	path = Multiverse-Launch
-	url = https://github.com/Multiverse-Framework/Multiverse-Launch.git
+	url = https://github.com/mitsav01/Multiverse/Multiverse-Launch.git
 [submodule "Multiverse-Resources"]
 	path = Multiverse-Resources
-	url = https://github.com/Multiverse-Framework/Multiverse-Resources.git
+	url = https://github.com/mitsav01/Multiverse/Multiverse-Resources.git
 [submodule "Multiverse-Utilities"]
 	path = Multiverse-Utilities
-	url = https://github.com/Multiverse-Framework/Multiverse-Utilities.git
+	url = https://github.com/mitsav01/Multiverse/Multiverse-Utilities.git
 [submodule "Multiverse-Knowledge"]
 	path = Multiverse-Knowledge
-	url = https://github.com/Multiverse-Framework/Multiverse-Knowledge.git
+	url = https://github.com/mitsav01/Multiverse/Multiverse-Knowledge.git
 [submodule "Multiverse-Parser"]
 	path = Multiverse-Parser
-	url = https://github.com/Multiverse-Framework/Multiverse-Parser.git
+	url = https://github.com/mitsav01/Multiverse/Multiverse-Parser.git
