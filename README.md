@@ -49,6 +49,7 @@ pip install -r ./Multiverse-Launch/src/multiverse_connectors/multiverse_simulato
 ### 4. Install ROS Connector
 
 ```bash
+pip install -r ./Multiverse-Launch/src/multiverse_connectors/multiverse_ros_connector/requirements.txt
 source /opt/ros/$ROS_DISTRO/setup.bash
 cd ./Multiverse-Launch/src/multiverse_connectors/multiverse_ros_connector/ros_ws
 ```
