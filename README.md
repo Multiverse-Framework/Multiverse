@@ -97,7 +97,7 @@ You'll see four different windows showing an example of 'Table with ball and Squ
 Note: In order to save the time to write whole command to launch `multiverse_launch`, we can use following command.
 
 ```bash
-echo 'alias multiverse_launch='bash /home/akshay/Multiverse/Multiverse-Launch/bin/multiverse_launch'' >> ~/.bashrc
+echo 'alias multiverse_launch='bash /path/to/Multiverse/Multiverse-Launch/bin/multiverse_launch'' >> ~/.bashrc
 ```
 Everytime, we can launch 'Multiverse' just by writing `multiverse_launch` in the terminal.
 
