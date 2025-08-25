@@ -13,7 +13,7 @@ print('****************************************')
 
 project = 'MultiverseFramework'
 author = 'Giang Nguyen'
-copyright = 'Institute for Artificial Intelligence, University of Bremen'
+copyright = 'Giang Nguyen, Institute for Artificial Intelligence, University of Bremen'
 
 release = '0.1'
 version = '0.0.1'
