@@ -348,4 +348,4 @@ Congratulations! You have successfully written your own Multiverse Connector in 
 Next Steps
 ----------
 
-- Run the Multiverse Connector as a MuJoCo Plugin
+- Use Multiverse Connector in MuJoCo as a plugin: :ref:`tutorial_2`
