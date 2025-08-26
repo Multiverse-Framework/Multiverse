@@ -85,12 +85,28 @@ The installation of ```OpenUSD``` will take really long (~15-20 minutes). At the
 echo 'export PATH=$PATH:path/to/OpenUSD/install/bin' >> ~/.bashrc
 echo 'export PYTHONPATH=$PYTHONPATH:path/to/OpenUSD/install/lib/python' >> ~/.bashrc
 ```
-### Step 5: Verifying Installation
+### Step 5: Building workspace
+
+It is also important to build and source `ros_ws` or `ros2_ws` everytime, we use this framework.
+We can build the `ros2_ws` with below command:
+
+```bash
+cd /path/to/Multiverse/Multiverse-Launch/src/multiverse_connectors/multiverse_ros_connector/ros_ws/multiverse_ws2
+colcon build --symlink-install
+source install/setup.bash
+````
+In order to make it easy, we can add following line to `~/.bashrc`:
+
+```bash
+source /path/to/Multiverse/Multiverse-Launch/src/multiverse_connectors/multiverse_ros_connector/ros_ws/multiverse_ws2/install/setup.bash
+```
+
+### Step 6: Verifying Installation
 
 After successful execution of ```install.sh```, we can verify the installation of 'Multiverse' framework using below command:
 
 ```bash
-cd path/to/Multiverse/Multiverse-Launch/bin
+cd /path/to/Multiverse/Multiverse-Launch/bin
 multiverse_launch
 ```
 You'll see four different windows showing an example of 'Table with ball and Square' in simulation. 
