@@ -269,3 +269,13 @@ The result should look like this:
 
 .. image:: ../_static/images/MultiverseROSControlConnector.png
    :width: 1000
+
+Conclusion
+----------
+
+Congratulations! You have successfully integrated the Multiverse Connector with ROS to control a robot in a MuJoCo simulation. You can now extend this setup by adding more ROS nodes, sensors, and controllers to create complex robotic applications.
+
+Next Steps
+----------
+
+- Use Multiverse Connector in MATLAB as a S-Function: :ref:`tutorial_7`
