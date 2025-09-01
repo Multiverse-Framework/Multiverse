@@ -54,18 +54,18 @@ Getting Started
 For **ROS1 (Noetic):**
 
 .. code-block:: bash
-
-    cd <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws
+	
+	cd <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws
 	rosdep install --from-paths src --ignore-src -r -y
-    catkin build   # or catkin_make
+	catkin build   # or catkin_make
 
 For **ROS2 (Foxy, Humble, Jazzy):**
 
 .. code-block:: bash
-
-    cd <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws2
+	
+	cd <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws2
 	rosdep install --from-paths src --ignore-src -r -y
-    colcon build --symlink-install
+	colcon build --symlink-install
 
 Start the Multiverse Server
 ---------------------------
@@ -225,42 +225,44 @@ To set up either `ros_control` or `ros2_control`, you need at least two configur
 - **Controller Configuration (YAML):**  
   Specifies which controllers to run (e.g., position, velocity, or effort controllers).  
 
-In this tutorial, we use the following **URDF** and **YAML** files for the `Hello Robot Stretch 3` model:
-
-- **URDF file:** `stretch.urdf <../_static/others/stretch.urdf>`_
-- **YAML file:** `stretch.yaml <../_static/others/stretch.yaml>`_
-
-Download these files and modify them as needed for your robot model.
+For **ROS1 (Noetic)** with `ros_control`: not documented yet.
 
 For **ROS2 (Foxy, Humble, Jazzy)** with `ros2_control`:
 
-	Publish the robot description to the ROS topic `/robot_description` in a new terminal:
+	In this tutorial, we use the following **URDF** and **YAML** files for the `Hello Robot Stretch 3` model:
 
-	.. code-block:: bash
-		
-		source /opt/ros/<distro>/setup.bash
-		ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro <path/to/your/urdf>stretch.urdf)"
+	- **URDF file:** `stretch.urdf <../_static/others/stretch.urdf>`_
+	- **YAML file:** `stretch_ros2_control.yaml <../_static/others/stretch_ros2_control.yaml>`_
 
-	Launch the controllers using the `controller_manager` in another terminal:
+	Download these files and modify them as needed for your robot model.
 
-	.. code-block:: bash
-		
-		source <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws2/install/setup.bash
-		ros2 run controller_manager controller_manager --ros-args --params-file <path/to/your/yaml>/stretch.yaml
+		Publish the robot description to the ROS topic `/robot_description` in a new terminal:
 
-	Spawn the necessary controllers (e.g., `joint_state_broadcaster` and `joint_trajectory_controller`) in another terminal:
+		.. code-block:: bash
+			
+			source /opt/ros/<distro>/setup.bash
+			ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro <path/to/your/urdf>stretch.urdf)"
 
-	.. code-block:: bash
-		
-		source /opt/ros/<distro>/setup.bash
-		ros2 run controller_manager spawner -p <path/to/your/yaml>/stretch.yaml joint_state_broadcaster joint_trajectory_controller
+		Launch the controllers using the `controller_manager` in another terminal:
 
-	(Optional) Open `rqt_joint_trajectory_controller` to send trajectory commands to the robot in another terminal:
+		.. code-block:: bash
+			
+			source <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws2/install/setup.bash
+			ros2 run controller_manager controller_manager --ros-args --params-file <path/to/your/yaml>/stretch_ros2_control.yaml
 
-	.. code-block:: bash
-		
-		source /opt/ros/<distro>/setup.bash
-		ros2 run rqt_joint_trajectory_controller rqt_joint_trajectory_controller
+		Spawn the necessary controllers (e.g., `joint_state_broadcaster` and `joint_trajectory_controller`) in another terminal:
+
+		.. code-block:: bash
+			
+			source /opt/ros/<distro>/setup.bash
+			ros2 run controller_manager spawner -p <path/to/your/yaml>/stretch_ros2_control.yaml joint_state_broadcaster joint_trajectory_controller
+
+		(Optional) Open `rqt_joint_trajectory_controller` to send trajectory commands to the robot in another terminal:
+
+		.. code-block:: bash
+			
+			source /opt/ros/<distro>/setup.bash
+			ros2 run rqt_joint_trajectory_controller rqt_joint_trajectory_controller
 
 Now the robot in the MuJoCo simulation should respond to the trajectory commands sent from `rqt_joint_trajectory_controller`.
 The result should look like this:
