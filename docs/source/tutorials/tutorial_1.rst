@@ -15,7 +15,7 @@ Welcome to the first tutorial on Multiverse! In this tutorial, we will cover the
 
 In this tutorial, you will:
 
-- Start the Multiverse Server
+- `Start the Multiverse Server tutorial_1.html#getting-started`
 - Implement a simple Multiverse Connector in Python
 - Run the Multiverse Connector and connect it to the Multiverse Server
 
@@ -46,6 +46,9 @@ Getting Started
       **No Git?** Open each repository on GitHub, click **Code → Download ZIP**,
       and extract the archives locally.
 
+Start the Multiverse Server
+---------------------------
+
 2. Start the Multiverse Server by running the following command in a terminal:
 
 .. code-block:: bash
@@ -61,6 +64,9 @@ The following output should appear in the terminal:
     Start Multiverse Server...
     [Server] Create server socket tcp://*:7000
     [Server] Waiting for request...
+
+Implement a simple Multiverse Connector in Python
+-------------------------------------------------
 
 3. Create a new Python script named `my_connector.py` in the `Multiverse-ClientPy` directory with the following content:
 
@@ -107,6 +113,9 @@ The following output should appear in the terminal:
         my_connector.stop()
 
 Save the Python file and you are ready to run your Multiverse Connector.
+
+Run the Multiverse Connector and connect it to the Multiverse Server
+--------------------------------------------------------------------
 
 4. Run the Multiverse Connector by executing the following command in a new terminal:
 
