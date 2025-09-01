@@ -15,9 +15,9 @@ Welcome to the first tutorial on Multiverse! In this tutorial, we will cover the
 
 In this tutorial, you will:
 
-- `Start the Multiverse Server tutorial_1.html#getting-started`
-- Implement a simple Multiverse Connector in Python
-- Run the Multiverse Connector and connect it to the Multiverse Server
+- `Start the Multiverse Server. <tutorial_1.html#id1>`_
+- `Implement a simple Multiverse Connector in Python. <tutorial_1.html#id2>`_
+- `Run the Multiverse Connector and connect it to the Multiverse Server. <tutorial_1.html#id3>`_
 
 Key Concepts
 ------------

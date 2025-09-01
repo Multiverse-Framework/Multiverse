@@ -11,10 +11,10 @@ This tutorial demonstrates how to use the Multiverse Connector in a ROS (Robot O
 
 In this tutorial, you will:
 
-- Start the Multiverse Server
-- Start a robot simulation in MuJoCo with the Multiverse Connector plugin
-- Run ROS nodes as Multiverse Connectors to interact with the simulation  
-- Use `ros_control <http://wiki.ros.org/ros_control>`_ / `ros2_control <https://control.ros.org/jazzy/index.html>`_ controllers to operate the robot through Multiverse Control as hardware interfaces
+- `Start the Multiverse Server. <tutorial_6.html#id1>`_
+- `Start a robot simulation in MuJoCo with the Multiverse Connector plugin. <tutorial_6.html#start-a-robot-simulation-with-the-multiverse-connector-plugin>`_
+- `Run ROS nodes as Multiverse Connectors to interact with the simulation. <tutorial_6.html#start-the-multiverse-connector-in-ros>`_
+- `Use ros_control / ros2_control controllers to operate the robot through Multiverse Control as hardware interfaces. <tutorial_6.html#controlling-the-robot-with-ros-control-ros2-control>`_
 
 .. note::
 

@@ -15,9 +15,9 @@ Welcome to the second tutorial of the Multiverse Framework! In this tutorial, yo
 
 In this tutorial, you will:
 
-- Start the Multiverse Server
-- Define simple MJCF environments with the Multiverse Connector as a plugin  
-- Run the MuJoCo simulation — the Multiverse Connector plugin will handle the connection to the Multiverse Server and keep data flowing in real time.
+- `Start the Multiverse Server. <tutorial_2.html#id1>`_
+- `Define a simple MJCF environment with the Multiverse Connector as a plugin. <tutorial_2.html#define-simple-mjcf-environments-with-the-multiverse-connector-as-a-plugin>`_
+- `Run the MuJoCo simulation — the Multiverse Connector plugin will handle the connection to the Multiverse Server and keep data flowing in real time. <tutorial_2.html#run-the-mujoco-simulation>`_
 
 Key Concepts
 ------------
@@ -134,6 +134,8 @@ After copying, you can verify that the Multiverse Connector plugin is loaded by 
    In this case, double-check that you have the correct version of the plugin for your MuJoCo installation and operating system.
    Make sure the file is placed in ``<mujoco_root>/bin/mujoco_plugin`` and restart MuJoCo.
 
+Start the Multiverse Server
+---------------------------
 
 4. Start the Multiverse Server by running the following command in a terminal:
 
@@ -150,6 +152,9 @@ The following output should appear in the terminal:
     Start Multiverse Server...
     [Server] Create server socket tcp://*:7000
     [Server] Waiting for request...
+
+Define simple MJCF environments with the Multiverse Connector as a plugin
+-------------------------------------------------------------------------
 
 5. Create a new MJCF environment that uses the Multiverse Connector plugin.
 
@@ -183,6 +188,9 @@ while sending its position, orientation, and velocity data to the Multiverse Ser
     </mujoco>
 
 Save this file as ``cube.xml`` inside your working directory.
+
+Run the MuJoCo simulation
+-------------------------
 
 6. Run the MuJoCo simulation with the Multiverse Connector plugin:
 
