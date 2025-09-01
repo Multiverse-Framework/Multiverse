@@ -14,6 +14,7 @@ Welcome to the first tutorial on Multiverse! In this tutorial, we will cover the
    Just **download the prebuilt package** and run it. No dependencies, no setup.
 
 In this tutorial, you will:
+
 - Start the Multiverse Server
 - Implement a simple Multiverse Connector in Python
 - Run the Multiverse Connector and connect it to the Multiverse Server
