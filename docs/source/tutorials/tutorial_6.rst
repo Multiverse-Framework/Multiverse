@@ -49,7 +49,28 @@ Getting Started
 	**No Git?** Open each repository on GitHub, click **Code → Download ZIP**,
 	and extract the archives locally.
 
-2. Start the Multiverse Server by running the following command in a terminal:
+2. Build the ROS workspace for the Multiverse ROS Connector:
+
+For **ROS1 (Noetic):**
+
+.. code-block:: bash
+
+    cd <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws
+	rosdep install --from-paths src --ignore-src -r -y
+    catkin build   # or catkin_make
+
+For **ROS2 (Foxy, Humble, Jazzy):**
+
+.. code-block:: bash
+
+    cd <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws2
+	rosdep install --from-paths src --ignore-src -r -y
+    colcon build --symlink-install
+
+Start the Multiverse Server
+---------------------------
+
+3. Start the Multiverse Server by running the following command in a terminal:
 
 .. code-block:: bash
 
@@ -65,22 +86,8 @@ The following output should appear in the terminal:
     [Server] Create server socket tcp://*:7000
     [Server] Waiting for request...
 
-3. Build the ROS workspace for the Multiverse ROS Connector:
-
-For **ROS1 (Noetic):**
-
-.. code-block:: bash
-
-    cd <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws
-    catkin build   # or catkin_make
-
-For **ROS2 (Foxy, Humble, Jazzy):**
-
-.. code-block:: bash
-
-    cd <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws2
-    colcon build --symlink-install
-
+Start a Robot Simulation with the Multiverse Connector Plugin
+-------------------------------------------------------------
 
 4. Choose a robot model from the `MuJoCo Menagerie <https://github.com/google-deepmind/mujoco_menagerie>`_ and download it locally.  
 
@@ -106,7 +113,6 @@ Append the following XML snippet to the end of the MuJoCo model file (e.g. `scen
 This configuration streams all body poses, joint states (positions, velocities, forces, torques), and sensor data to the Multiverse Server.  
 You can customize the `send` parameter to include or exclude specific data.  
 
-
 5. Start the MuJoCo simulation with the Multiverse Connector plugin (ensure MuJoCo is installed and the plugin is properly configured, see `<tutorial_2.html#getting-started>`_):
 
 .. code-block:: bash
@@ -115,6 +121,8 @@ You can customize the `send` parameter to include or exclude specific data.
 
 The simulation should now be running and transmitting data to the Multiverse Server.
 
+Start the Multiverse Connector in ROS
+-------------------------------------
 
 6. Launch the ROS node for the Multiverse Connector in a new terminal.
 
@@ -174,7 +182,39 @@ The visualization should look like this:
 .. image:: ../_static/images/MultiverseROSConnector.png
    :width: 1000
 
-8. Control the robot with `ros_control <http://wiki.ros.org/ros_control>`_ or `ros2_control <https://control.ros.org/jazzy/index.html>`_:
+Controlling the Robot with ros_control / ros2_control
+-----------------------------------------------------
+
+8. Modify the `extension` section of the MuJoCo model file to writing actuators for the robot joints.
+
+.. code-block:: xml
+
+    <extension>
+        <plugin plugin="mujoco.multiverse_connector">
+            <instance name="mujoco_client">
+                <config key="host" value="tcp://127.0.0.1" />
+                <config key="server_port" value="7000" />
+                <config key="client_port" value="7500" />
+                <config key="world_name" value="world" />
+                <config key="simulation_name" value="scene_simulation" />
+                <config key="send" value="{'body': ['position', 'quaternion'], 'joint': ['joint_angular_position', 'joint_linear_position', 'joint_angular_velocity', 'joint_linear_velocity', 'joint_force', 'joint_torque'], 'sensor': ['scalar']}" />
+				<config key="receive" value="{'lift': ['cmd_joint_angular_position'], 'arm': ['cmd_joint_angular_position'], 'wrist_yaw': ['cmd_joint_angular_position'], 'wrist_pitch': ['cmd_joint_angular_position'], 'wrist_roll': ['cmd_joint_angular_position'], 'gripper': ['cmd_joint_linear_position'], 'head_pan': ['cmd_joint_angular_position'], 'head_tilt': ['cmd_joint_angular_position']}" />
+			</instance>
+        </plugin>
+    </extension>
+
+The `receive` parameter defines which actuator commands are accepted for the robot joints.  
+Ensure that the actuator types match the joint definitions in your robot model (e.g., use `cmd_joint_angular_position` for revolute joints, `cmd_joint_linear_position` for prismatic joints, and `scalar` for tendons).
+
+Restart the MuJoCo simulation to apply the updated configuration:
+
+.. code-block:: bash
+
+    <path/to/mujoco>/bin/simulate <path/to/your/model>/scene.xml
+
+The Multiverse Server should now be waiting for controller commands.
+
+9. Control the robot with `ros_control <http://wiki.ros.org/ros_control>`_ or `ros2_control <https://control.ros.org/jazzy/index.html>`_:
 
 To set up either `ros_control` or `ros2_control`, you need at least two configuration files:
 
@@ -184,3 +224,46 @@ To set up either `ros_control` or `ros2_control`, you need at least two configur
 
 - **Controller Configuration (YAML):**  
   Specifies which controllers to run (e.g., position, velocity, or effort controllers).  
+
+In this tutorial, we use the following **URDF** and **YAML** files for the `Hello Robot Stretch 3` model:
+
+- **URDF file:** `stretch.urdf <../_static/others/stretch.urdf>`_
+- **YAML file:** `stretch.yaml <../_static/others/stretch.yaml>`_
+
+Download these files and modify them as needed for your robot model.
+
+For **ROS2 (Foxy, Humble, Jazzy)** with `ros2_control`:
+
+	Publish the robot description to the ROS topic `/robot_description` in a new terminal:
+
+	.. code-block:: bash
+		
+		source /opt/ros/<distro>/setup.bash
+		ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$(xacro <path/to/your/urdf>stretch.urdf)"
+
+	Launch the controllers using the `controller_manager` in another terminal:
+
+	.. code-block:: bash
+		
+		source <path/to/Multiverse-ROS-Connector>/ros_ws/multiverse_ws2/install/setup.bash
+		ros2 run controller_manager controller_manager --ros-args --params-file <path/to/your/yaml>/stretch.yaml
+
+	Spawn the necessary controllers (e.g., `joint_state_broadcaster` and `joint_trajectory_controller`) in another terminal:
+
+	.. code-block:: bash
+		
+		source /opt/ros/<distro>/setup.bash
+		ros2 run controller_manager spawner -p <path/to/your/yaml>/stretch.yaml joint_state_broadcaster joint_trajectory_controller
+
+	(Optional) Open `rqt_joint_trajectory_controller` to send trajectory commands to the robot in another terminal:
+
+	.. code-block:: bash
+		
+		source /opt/ros/<distro>/setup.bash
+		ros2 run rqt_joint_trajectory_controller rqt_joint_trajectory_controller
+
+Now the robot in the MuJoCo simulation should respond to the trajectory commands sent from `rqt_joint_trajectory_controller`.
+The result should look like this:
+
+.. image:: ../_static/images/MultiverseROSControlConnector.png
+   :width: 1000

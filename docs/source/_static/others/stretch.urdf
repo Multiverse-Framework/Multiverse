@@ -1,0 +1,725 @@
+<?xml version="1.0" ?>
+<robot name="stretch" version="1.0">
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.10805757343769073 0.0017275259597226977 0.09253103286027908" rpy="0.0 0.0 0.0"/>
+      <mass value="15.0"/>
+      <inertia ixx="0.13820317387580872" ixy="1.519233137514675e-05" ixz="-0.0021504354663193226" iyy="0.13205254077911377" iyz="3.190832103427965e-06" izz="0.22857636213302612"/>
+    </inertial>
+  </link>
+  <joint name="base_imu_joint" type="fixed">
+    <origin xyz="-0.12838 0.0031592 0.1474" rpy="-3.1415927410125732 -7.346410257014213e-06 -1.5707999467849731"/>
+    <parent link="base_link"/>
+    <child link="base_imu"/>
+  </joint>
+  <link name="base_imu">
+    <inertial>
+      <origin xyz="-0.12838000059127808 0.0031592000741511583 0.14740000665187836" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="-1.2157690848556974e-27" ixz="-8.859882486183823e-28" iyy="9.999999747378752e-06" iyz="1.0467755115091217e-26" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="link_mast_joint" type="fixed">
+    <origin xyz="-0.067 0.135 0.0284" rpy="1.5707963705062866 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="link_mast"/>
+  </joint>
+  <link name="link_mast">
+    <inertial>
+      <origin xyz="4.172070501073254e-19 0.7075000405311584 1.8159175151146177e-20" rpy="0.0 0.0 0.0"/>
+      <mass value="1.8285000324249268"/>
+      <inertia ixx="0.25181815028190613" ixy="0.0" ixz="0.0" iyy="0.0004254745435900986" iyz="0.0" izz="0.25181815028190613"/>
+    </inertial>
+  </link>
+  <joint name="link_head_joint" type="fixed">
+    <origin xyz="-0.067 0.134995 1.3584" rpy="0.0 0.0 -1.5707963705062866"/>
+    <parent link="base_link"/>
+    <child link="link_head"/>
+  </joint>
+  <link name="link_head">
+    <inertial>
+      <origin xyz="0.04060257226228714 0.03996450826525688 0.031247857958078384" rpy="0.0 0.0 0.0"/>
+      <mass value="0.8330272436141968"/>
+      <inertia ixx="0.0011614259565249085" ixy="-0.0007562522077932954" ixz="1.4246119462768547e-05" iyy="0.002341967076063156" iyz="1.738405330797832e-06" izz="0.0032787411473691463"/>
+    </inertial>
+  </link>
+  <joint name="link_aruco_right_base_joint" type="fixed">
+    <origin xyz="-0.0015028 -0.130497 0.159748" rpy="0.0 0.0 -1.5707963705062866"/>
+    <parent link="base_link"/>
+    <child link="link_aruco_right_base"/>
+  </joint>
+  <link name="link_aruco_right_base">
+    <inertial>
+      <origin xyz="7.300385085869748e-21 8.760461779926271e-20 -0.0001250000059371814" rpy="0.0 0.0 0.0"/>
+      <mass value="3.5999998999614036e-06"/>
+      <inertia ixx="1.0865879307431214e-09" ixy="0.0" ixz="0.0" iyy="1.0865879307431214e-09" iyz="0.0" izz="2.1730639510053607e-09"/>
+    </inertial>
+  </link>
+  <joint name="link_aruco_left_base_joint" type="fixed">
+    <origin xyz="-0.0015028 0.130497 0.159748" rpy="0.0 0.0 -1.5707963705062866"/>
+    <parent link="base_link"/>
+    <child link="link_aruco_left_base"/>
+  </joint>
+  <link name="link_aruco_left_base">
+    <inertial>
+      <origin xyz="7.300385085869748e-21 8.760461779926271e-20 -0.0001250000059371814" rpy="0.0 0.0 0.0"/>
+      <mass value="3.5999998999614036e-06"/>
+      <inertia ixx="1.0865879307431214e-09" ixy="0.0" ixz="0.0" iyy="1.0865879307431214e-09" iyz="0.0" izz="2.1730639510053607e-09"/>
+    </inertial>
+  </link>
+  <joint name="laser_joint" type="fixed">
+    <origin xyz="0.004 0.0 0.1664" rpy="0.0 0.0 3.1415927410125732"/>
+    <parent link="base_link"/>
+    <child link="laser"/>
+  </joint>
+  <link name="laser">
+    <inertial>
+      <origin xyz="-5.140597668747811e-19 -2.1764626027891812e-20 -0.0007513812743127346" rpy="0.0 0.0 0.0"/>
+      <mass value="0.23999999463558197"/>
+      <inertia ixx="8.087759488262236e-05" ixy="0.0" ixz="0.0" iyy="8.08781260275282e-05" iyz="0.0" izz="0.0001465701061533764"/>
+    </inertial>
+  </link>
+  <joint name="joint_right_wheel" type="revolute">
+    <origin xyz="0.0 -0.17035000026226044 0.05079999938607216" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="link_right_wheel"/>
+    <limit effort="1000.0" lower="0.0" upper="0.0" velocity="1000.0"/>
+  </joint>
+  <link name="link_right_wheel">
+    <inertial>
+      <origin xyz="-6.062242263737971e-09 -2.7741287045301988e-09 0.012700000777840614" rpy="0.0 0.0 0.0"/>
+      <mass value="0.15000000596046448"/>
+      <inertia ixx="0.00010773087706184015" ixy="0.0" ixz="0.0" iyy="0.00010773073881864548" iyz="0.0" izz="0.00020521951955743134"/>
+    </inertial>
+  </link>
+  <joint name="joint_left_wheel" type="revolute">
+    <origin xyz="0.0 0.17035000026226044 0.05079999938607216" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="link_left_wheel"/>
+    <limit effort="1000.0" lower="0.0" upper="0.0" velocity="1000.0"/>
+  </joint>
+  <link name="link_left_wheel">
+    <inertial>
+      <origin xyz="2.7741287045301988e-09 6.062242263737971e-09 -0.012700000777840614" rpy="0.0 0.0 0.0"/>
+      <mass value="0.15000000596046448"/>
+      <inertia ixx="0.00010773073881864548" ixy="0.0" ixz="0.0" iyy="0.00010773087706184015" iyz="0.0" izz="0.00020521951955743134"/>
+    </inertial>
+  </link>
+  <joint name="joint_lift" type="prismatic">
+    <origin xyz="-0.10438500344753265 0.13499900698661804 0.20000000298023224" rpy="0.0 0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="link_lift"/>
+    <limit effort="1000.0" lower="0.0" upper="1.100000023841858" velocity="1000.0"/>
+  </joint>
+  <link name="link_lift">
+    <inertial>
+      <origin xyz="-0.029792530462145805 0.035797927528619766 0.0064752777107059956" rpy="0.0 0.0 0.0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.013704642653465271" ixy="0.004228672012686729" ixz="-0.0007078549242578447" iyy="0.008131996728479862" iyz="4.081234146724455e-05" izz="0.01619645021855831"/>
+    </inertial>
+  </link>
+  <joint name="link_arm_l4_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="link_lift"/>
+    <child link="link_arm_l4"/>
+  </joint>
+  <link name="link_arm_l4">
+    <inertial>
+      <origin xyz="-0.13758155703544617 -4.482779184687719e-19 -7.537898528095699e-20" rpy="0.0 0.0 0.0"/>
+      <mass value="0.16809499263763428"/>
+      <inertia ixx="6.603641668334603e-05" ixy="0.0" ixz="0.0" iyy="0.00042794321780093014" iyz="0.0" izz="0.00042794321780093014"/>
+    </inertial>
+  </link>
+  <joint name="joint_arm_l3" type="prismatic">
+    <origin xyz="-0.2676999866962433 1.3877787807814457e-17 0.0" rpy="1.5707963705062866 0.0 -1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="link_arm_l4"/>
+    <child link="link_arm_l3"/>
+    <limit effort="1000.0" lower="0.0" upper="0.12999999523162842" velocity="1000.0"/>
+  </joint>
+  <link name="link_arm_l3">
+    <inertial>
+      <origin xyz="-1.3149758698649958e-19 1.92419788067851e-19 -0.11927351355552673" rpy="0.0 0.0 0.0"/>
+      <mass value="0.16289299726486206"/>
+      <inertia ixx="0.00042493391083553433" ixy="0.0" ixz="0.0" iyy="0.00042493391083553433" iyz="0.0" izz="5.320530181052163e-05"/>
+    </inertial>
+  </link>
+  <joint name="joint_arm_l2" type="prismatic">
+    <origin xyz="-1.3877787807814457e-17 0.0 0.013000000268220901" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="link_arm_l3"/>
+    <child link="link_arm_l2"/>
+    <limit effort="1000.0" lower="0.0" upper="0.12999999523162842" velocity="1000.0"/>
+  </joint>
+  <link name="link_arm_l2">
+    <inertial>
+      <origin xyz="-2.693842136267822e-19 2.020381537577381e-19 -0.11943428963422775" rpy="0.0 0.0 0.0"/>
+      <mass value="0.15713900327682495"/>
+      <inertia ixx="0.00040654820622876287" ixy="0.0" ixz="0.0" iyy="0.00040654820622876287" iyz="0.0" izz="4.186766454949975e-05"/>
+    </inertial>
+  </link>
+  <joint name="joint_arm_l1" type="prismatic">
+    <origin xyz="0.0 0.0 0.013000000268220901" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="link_arm_l2"/>
+    <child link="link_arm_l1"/>
+    <limit effort="1000.0" lower="0.0" upper="0.12999999523162842" velocity="1000.0"/>
+  </joint>
+  <link name="link_arm_l1">
+    <inertial>
+      <origin xyz="0.0 -4.228642934129404e-20 -0.119635209441185" rpy="0.0 0.0 0.0"/>
+      <mass value="0.15138199925422668"/>
+      <inertia ixx="0.00038916425546631217" ixy="0.0" ixz="0.0" iyy="0.00038916425546631217" iyz="0.0" izz="3.21267762046773e-05"/>
+    </inertial>
+  </link>
+  <joint name="joint_arm_l0" type="prismatic">
+    <origin xyz="-2.7755575615628914e-17 0.0 -0.013749999925494194" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="link_arm_l1"/>
+    <child link="link_arm_l0"/>
+    <limit effort="1000.0" lower="0.0" upper="0.12999999523162842" velocity="1000.0"/>
+  </joint>
+  <link name="link_arm_l0">
+    <inertial>
+      <origin xyz="-2.6921727069861845e-09 2.6921727069861845e-09 -0.09513352811336517" rpy="0.0 0.0 0.0"/>
+      <mass value="0.2850100100040436"/>
+      <inertia ixx="0.0007044257363304496" ixy="0.0" ixz="0.0" iyy="0.0007044257363304496" iyz="0.0" izz="4.692434231401421e-05"/>
+    </inertial>
+  </link>
+  <joint name="link_aruco_top_wrist_joint" type="fixed">
+    <origin xyz="0.04725 0.029285 0.0" rpy="1.5707963705062866 0.0 3.1415927410125732"/>
+    <parent link="link_arm_l0"/>
+    <child link="link_aruco_top_wrist"/>
+  </joint>
+  <link name="link_aruco_top_wrist">
+    <inertial>
+      <origin xyz="-9.445125635284947e-20 -1.7437156013195062e-19 -0.0001250000059371814" rpy="0.0 0.0 0.0"/>
+      <mass value="3.5999998999614036e-06"/>
+      <inertia ixx="2.7220126153082447e-10" ixy="0.0" ixz="0.0" iyy="2.7220126153082447e-10" iyz="0.0" izz="5.442912232034303e-10"/>
+    </inertial>
+  </link>
+  <joint name="link_aruco_inner_wrist_joint" type="fixed">
+    <origin xyz="0.04725 -0.0119 -0.02725" rpy="3.1415927410125732 0.0 3.1415927410125732"/>
+    <parent link="link_arm_l0"/>
+    <child link="link_aruco_inner_wrist"/>
+  </joint>
+  <link name="link_aruco_inner_wrist">
+    <inertial>
+      <origin xyz="-1.7437156013195062e-19 9.445125635284947e-20 -0.0001250000059371814" rpy="0.0 0.0 0.0"/>
+      <mass value="3.5999998999614036e-06"/>
+      <inertia ixx="2.7220126153082447e-10" ixy="0.0" ixz="0.0" iyy="2.7220126153082447e-10" iyz="0.0" izz="5.442912232034303e-10"/>
+    </inertial>
+  </link>
+  <joint name="joint_wrist_yaw" type="revolute">
+    <origin xyz="0.08299999684095383 -0.030750000849366188 0.0" rpy="1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 -1.0"/>
+    <parent link="link_arm_l0"/>
+    <child link="link_wrist_yaw"/>
+    <limit effort="1000.0" lower="-1.3900001049041748" upper="4.420000076293945" velocity="1000.0"/>
+  </joint>
+  <link name="link_wrist_yaw">
+    <inertial>
+      <origin xyz="-3.849929797183904e-08 -7.618496601935476e-05 -0.019045284017920494" rpy="0.0 0.0 0.0"/>
+      <mass value="0.1445000022649765"/>
+      <inertia ixx="2.057840902125463e-05" ixy="0.0" ixz="0.0" iyy="2.0536588635877706e-05" iyz="7.083925623874165e-08" izz="1.097897347790422e-05"/>
+    </inertial>
+  </link>
+  <joint name="joint_wrist_pitch" type="revolute">
+    <origin xyz="-0.019460000097751617 -2.7755575615628914e-17 0.030500000342726707" rpy="-1.5700000524520874 0.000796317879576236 -1.5707956552505493"/>
+    <axis xyz="0.0 0.0 -1.0"/>
+    <parent link="link_wrist_yaw"/>
+    <child link="link_DW3_wrist_pitch"/>
+    <limit effort="1000.0" lower="-1.5700000524520874" upper="0.5600000023841858" velocity="1000.0"/>
+  </joint>
+  <link name="link_DW3_wrist_pitch">
+    <inertial>
+      <origin xyz="-0.003282344900071621 -0.018906064331531525 0.01895439811050892" rpy="0.0 0.0 0.0"/>
+      <mass value="0.11649999767541885"/>
+      <inertia ixx="5.6670345657039434e-05" ixy="-2.4715420749998884e-06" ixz="2.2628923090906028e-07" iyy="3.446309347054921e-05" iyz="1.1968369335590978e-06" izz="6.452272646129131e-05"/>
+    </inertial>
+  </link>
+  <joint name="joint_wrist_roll" type="revolute">
+    <origin xyz="-0.039900001138448715 -0.024000000208616257 0.019600000232458115" rpy="5.421010862427522e-20 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="link_DW3_wrist_pitch"/>
+    <child link="link_SG3_gripper_body"/>
+    <limit effort="1000.0" lower="-3.140000104904175" upper="3.140000104904175" velocity="1000.0"/>
+  </joint>
+  <link name="link_SG3_gripper_body">
+    <inertial>
+      <origin xyz="0.0008490915643051267 0.017734326422214508 0.045017264783382416" rpy="0.0 0.0 0.0"/>
+      <mass value="0.28999999165534973"/>
+      <inertia ixx="0.00043512682896107435" ixy="-1.2196580428280868e-05" ixz="-7.250294942195978e-08" iyy="0.0001703895686659962" iyz="-1.9883070763171418e-06" izz="0.0003833875816781074"/>
+    </inertial>
+  </link>
+  <joint name="link_SG3_aruco_d405_joint" type="fixed">
+    <origin xyz="0.0 0.0671264013906604 0.0297716109784749" rpy="-1.7445324659347534 -0.0013868090463802218 -3.1394219398498535"/>
+    <parent link="link_SG3_gripper_body"/>
+    <child link="link_SG3_aruco_d405"/>
+  </joint>
+  <link name="link_SG3_aruco_d405">
+    <inertial>
+      <origin xyz="5.764725086458619e-20 -8.299999899463728e-05 -1.976477117108539e-19" rpy="0.0 0.0 0.0"/>
+      <mass value="3.5999998999614036e-06"/>
+      <inertia ixx="4.816157472831151e-10" ixy="0.0" ixz="0.0" iyy="9.631822006639368e-10" iyz="0.0" izz="4.816157472831151e-10"/>
+    </inertial>
+  </link>
+  <joint name="link_d405_joint" type="fixed">
+    <origin xyz="0.0 -0.03068 0.0" rpy="1.5700000524520874 0.0 0.0"/>
+    <parent link="link_SG3_aruco_d405"/>
+    <child link="link_d405"/>
+  </joint>
+  <link name="link_d405">
+    <inertial>
+      <origin xyz="5.8399851695867255e-05 6.797248261136701e-06 -0.011129792779684067" rpy="0.0 0.0 0.0"/>
+      <mass value="0.29000720381736755"/>
+      <inertia ixx="5.3070925787324086e-05" ixy="0.0" ixz="7.608903018763158e-08" iyy="5.3465486416826025e-05" iyz="0.0" izz="8.094876102404669e-05"/>
+    </inertial>
+  </link>
+  <joint name="d405_cam_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 3.140000104904175"/>
+    <parent link="link_d405"/>
+    <child link="d405_cam"/>
+  </joint>
+  <link name="d405_cam">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="-2.8790520032435718e-24" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="link_grasp_center_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.23" rpy="-1.5707963705062866 3.552713678800501e-15 1.5707963705062866"/>
+    <parent link="link_SG3_gripper_body"/>
+    <child link="link_grasp_center"/>
+  </joint>
+  <link name="link_grasp_center">
+    <inertial>
+      <origin xyz="0.0 0.0 0.23000000417232513" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="joint_gripper_slide" type="prismatic">
+    <origin xyz="-3.469446951953614e-18 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="link_SG3_gripper_body"/>
+    <child link="link_gripper_slider"/>
+    <limit effort="1000.0" lower="-0.019999999552965164" upper="0.03999999910593033" velocity="1000.0"/>
+  </joint>
+  <link name="link_gripper_slider">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.05000000074505806"/>
+      <inertia ixx="8.333333312293689e-07" ixy="0.0" ixz="0.0" iyy="1.541666642879136e-05" iyz="0.0" izz="1.541666642879136e-05"/>
+    </inertial>
+  </link>
+  <joint name="joint_gripper_finger_left_open" type="revolute">
+    <origin xyz="0.022919999435544014 0.0020216999109834433 0.03529699891805649" rpy="0.009208970703184605 1.5699999332427979 -3.1323835849761963"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="link_gripper_slider"/>
+    <child link="link_gripper_finger_left"/>
+    <limit effort="1000.0" lower="-0.6000000238418579" upper="0.6000000238418579" velocity="1000.0"/>
+  </joint>
+  <link name="link_gripper_finger_left">
+    <inertial>
+      <origin xyz="-0.14064696431159973 0.0019309005001559854 -0.002549003576859832" rpy="0.0 0.0 0.0"/>
+      <mass value="0.10000000149011612"/>
+      <inertia ixx="1.1580999853322282e-05" ixy="-2.354344275090625e-09" ixz="-2.9391530915745534e-05" iyy="0.00015493483806494623" iyz="1.9264183137579494e-08" izz="0.0001473040465498343"/>
+    </inertial>
+  </link>
+  <joint name="rubber_left_x" type="revolute">
+    <origin xyz="-0.1777700036764145 0.0018451999640092254 -0.011272000148892403" rpy="0.0027809946332126856 -0.2617855370044708 -0.01074510533362627"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="link_gripper_finger_left"/>
+    <child link="rubber_tip_left"/>
+    <limit effort="1000.0" lower="0.0" upper="0.0" velocity="1000.0"/>
+  </joint>
+  <joint name="rubber_left_y" type="revolute">
+    <origin xyz="-0.1777700036764145 0.0018451999640092254 -0.011272000148892403" rpy="0.002780959475785494 -0.2617855370044708 -0.010745101608335972"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="link_gripper_finger_left"/>
+    <child link="rubber_tip_left"/>
+    <limit effort="1000.0" lower="0.0" upper="0.0" velocity="1000.0"/>
+  </joint>
+  <link name="rubber_tip_left">
+    <inertial>
+      <origin xyz="7.618761799221829e-08 -1.0457117838313934e-07 0.010368396528065205" rpy="0.0 0.0 0.0"/>
+      <mass value="0.004999999888241291"/>
+      <inertia ixx="4.4810036570197553e-07" ixy="0.0" ixz="0.0" iyy="4.48092407623335e-07" iyz="0.0" izz="7.856472734601994e-07"/>
+    </inertial>
+  </link>
+  <joint name="link_SG3_gripper_left_finger_aruco_joint" type="fixed">
+    <origin xyz="-0.14425 0.0014877 -0.005189" rpy="-0.31336137652397156 -0.9374310374259949 -2.8921751976013184"/>
+    <parent link="link_gripper_finger_left"/>
+    <child link="link_SG3_gripper_left_finger_aruco"/>
+  </joint>
+  <link name="link_SG3_gripper_left_finger_aruco">
+    <inertial>
+      <origin xyz="-7.209253567452834e-07 -5.303619673213689e-06 -7.547631685156375e-05" rpy="0.0 0.0 0.0"/>
+      <mass value="3.5999998999614036e-06"/>
+      <inertia ixx="9.920046034617158e-11" ixy="0.0" ixz="0.0" iyy="9.96961471710911e-11" iyz="7.015954223837939e-12" izz="1.978428393334397e-10"/>
+    </inertial>
+  </link>
+  <joint name="joint_gripper_finger_right_open" type="revolute">
+    <origin xyz="-0.023281000554561615 1.3877787807814457e-17 0.035287000238895416" rpy="-3.123176097869873 -1.5699998140335083 3.123176097869873"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="link_gripper_slider"/>
+    <child link="link_gripper_finger_right"/>
+    <limit effort="1000.0" lower="-0.6000000238418579" upper="0.6000000238418579" velocity="1000.0"/>
+  </joint>
+  <link name="link_gripper_finger_right">
+    <inertial>
+      <origin xyz="0.12111902981996536 -0.000129366060718894 0.005390972830355167" rpy="0.0 0.0 0.0"/>
+      <mass value="0.15000000596046448"/>
+      <inertia ixx="1.5584977518301457e-05" ixy="4.1642829273769166e-07" ixz="-2.1202835341682658e-05" iyy="0.00038009946001693606" iyz="-3.92915282532158e-08" izz="0.0003694301121868193"/>
+    </inertial>
+  </link>
+  <joint name="rubber_right_x" type="revolute">
+    <origin xyz="0.17778000235557556 -1.3877787807814457e-17 0.011272000148892403" rpy="-3.14158296585083 0.26180002093315125 -3.14158296585083"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="link_gripper_finger_right"/>
+    <child link="rubber_tip_right"/>
+    <limit effort="1000.0" lower="0.0" upper="0.0" velocity="1000.0"/>
+  </joint>
+  <joint name="rubber_right_y" type="revolute">
+    <origin xyz="0.17778000235557556 -1.3877787807814457e-17 0.011272000148892403" rpy="-3.141583204269409 0.26179999113082886 -3.14158296585083"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <parent link="link_gripper_finger_right"/>
+    <child link="rubber_tip_right"/>
+    <limit effort="1000.0" lower="0.0" upper="0.0" velocity="1000.0"/>
+  </joint>
+  <link name="rubber_tip_right">
+    <inertial>
+      <origin xyz="-7.496989695709999e-08 1.05445458586928e-07 0.010368396528065205" rpy="0.0 0.0 0.0"/>
+      <mass value="0.004999999888241291"/>
+      <inertia ixx="4.481005362322321e-07" ixy="0.0" ixz="0.0" iyy="4.4809223709307844e-07" iyz="0.0" izz="7.856472734601994e-07"/>
+    </inertial>
+  </link>
+  <joint name="link_SG3_gripper_right_finger_aruco_joint" type="fixed">
+    <origin xyz="0.14426 0.0 0.005189" rpy="2.814847469329834 -0.9341628551483154 -2.8755528926849365"/>
+    <parent link="link_gripper_finger_right"/>
+    <child link="link_SG3_gripper_right_finger_aruco"/>
+  </joint>
+  <link name="link_SG3_gripper_right_finger_aruco">
+    <inertial>
+      <origin xyz="4.994042228645412e-07 -5.0905691750813276e-06 -7.548259600298479e-05" rpy="0.0 0.0 0.0"/>
+      <mass value="3.5999998999614036e-06"/>
+      <inertia ixx="9.920064769630699e-11" ixy="0.0" ixz="0.0" iyy="9.969874231741116e-11" iyz="7.017362385619563e-12" izz="1.978456565243647e-10"/>
+    </inertial>
+  </link>
+  <joint name="link_aruco_shoulder_joint" type="fixed">
+    <origin xyz="-0.0133769 0.0558541 0.0865" rpy="0.0 0.0 0.0"/>
+    <parent link="link_lift"/>
+    <child link="link_aruco_shoulder"/>
+  </joint>
+  <link name="link_aruco_shoulder">
+    <inertial>
+      <origin xyz="-4.517787794656436e-20 1.1697614698979561e-19 -0.0001250000059371814" rpy="0.0 0.0 0.0"/>
+      <mass value="3.5999998999614036e-06"/>
+      <inertia ixx="4.836457900836422e-10" ixy="0.0" ixz="0.0" iyy="4.836457900836422e-10" iyz="0.0" izz="9.671800027533095e-10"/>
+    </inertial>
+  </link>
+  <joint name="joint_head_pan" type="revolute">
+    <origin xyz="0.006100019905716181 0.0 1.3552000522613525" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="base_link"/>
+    <child link="link_head_pan"/>
+    <limit effort="1000.0" lower="-4.039999961853027" upper="1.7300000190734863" velocity="1000.0"/>
+  </joint>
+  <link name="link_head_pan">
+    <inertial>
+      <origin xyz="-0.00037135995808057487 0.008691000752151012 -0.0026943942066282034" rpy="0.0 0.0 0.0"/>
+      <mass value="0.1273760050535202"/>
+      <inertia ixx="9.697741188574582e-05" ixy="7.539267130596272e-07" ixz="-1.3750017160418793e-06" iyy="8.269021054729819e-05" iyz="3.1034232961246744e-05" izz="2.7388759917812422e-05"/>
+    </inertial>
+  </link>
+  <joint name="joint_head_tilt" type="revolute">
+    <origin xyz="-0.0013000000035390258 0.027762500569224358 -0.05331080034375191" rpy="1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="link_head_pan"/>
+    <child link="link_head_tilt"/>
+    <limit effort="1000.0" lower="-1.5299999713897705" upper="0.7899999618530273" velocity="1000.0"/>
+  </joint>
+  <link name="link_head_tilt">
+    <inertial>
+      <origin xyz="0.015385630540549755 -0.025151191279292107 0.0315730944275856" rpy="0.0 0.0 0.0"/>
+      <mass value="0.2622169852256775"/>
+      <inertia ixx="0.00033203428029082716" ixy="3.6664987419499084e-06" ixz="-7.951776410664024e-07" iyy="0.00017372233560308814" iyz="1.049690126819769e-06" izz="0.0003582799690775573"/>
+    </inertial>
+  </link>
+  <joint name="realsense_joint" type="fixed">
+    <origin xyz="0.0406 0.0053 0.0307" rpy="0.0 0.0 0.0"/>
+    <parent link="link_head_tilt"/>
+    <child link="realsense"/>
+  </joint>
+  <link name="realsense">
+    <inertial>
+      <origin xyz="0.0406000018119812 0.0052999998442828655 0.030700000002980232" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="joint_head_nav_cam" type="revolute">
+    <origin xyz="0.03999999910593033 -0.041200000792741776 -0.02459999918937683" rpy="-0.0 1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="link_head_tilt"/>
+    <child link="link_SE3_head_nav_cam"/>
+    <limit effort="1000.0" lower="-1.5299999713897705" upper="0.7899999618530273" velocity="1000.0"/>
+  </joint>
+  <link name="link_SE3_head_nav_cam">
+    <inertial>
+      <origin xyz="-0.0035182300489395857 -0.0008487695013172925 -0.0176022220402956" rpy="0.0 0.0 0.0"/>
+      <mass value="0.028346169739961624"/>
+      <inertia ixx="6.9660800363635644e-06" ixy="-4.3643416347549646e-07" ixz="-1.444037479814142e-06" iyy="7.774956429784652e-06" iyz="-6.036274839971156e-07" izz="8.297844033222646e-06"/>
+    </inertial>
+  </link>
+  <joint name="head_nav_cam_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="link_SE3_head_nav_cam"/>
+    <child link="head_nav_cam"/>
+  </joint>
+  <link name="head_nav_cam">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+
+  <ros2_control name="stretch" type="system">
+    <hardware>
+      <plugin>/MultiverseHWInterface</plugin>
+      <param name="world_name">world</param>
+      <param name="length_unit">m</param>
+      <param name="angle_unit">rad</param>
+      <param name="mass_unit">kg</param>
+      <param name="time_unit">s</param>
+      <param name="handedness">rhs</param>
+      <param name="host">tcp://127.0.0.1</param>
+      <param name="server_port">7000</param>
+      <param name="client_port">7601</param>
+    </hardware>
+    <joint name="joint_right_wheel">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="joint_left_wheel">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="joint_lift">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">lift</param>
+      <command_interface name="position">
+        <param name="min">0.0</param>
+        <param name="max">1.100000023841858</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-70.0</param>
+        <param name="max">70.0</param>
+      </command_interface>
+    </joint>
+    <joint name="joint_arm_l3">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="joint_arm_l2">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="joint_arm_l1">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="joint_arm_l0">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="joint_wrist_yaw">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">wrist_yaw</param>
+      <command_interface name="position">
+        <param name="min">-1.3900001049041748</param>
+        <param name="max">4.420000076293945</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="joint_wrist_pitch">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">wrist_pitch</param>
+      <command_interface name="position">
+        <param name="min">-1.5700000524520874</param>
+        <param name="max">0.5600000023841858</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="joint_wrist_roll">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">wrist_roll</param>
+      <command_interface name="position">
+        <param name="min">-3.140000104904175</param>
+        <param name="max">3.140000104904175</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="joint_gripper_slide">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">gripper</param>
+      <command_interface name="position">
+        <param name="min">-0.019999999552965164</param>
+        <param name="max">0.03999999910593033</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="joint_gripper_finger_left_open">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="rubber_left_x">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="rubber_left_y">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="joint_gripper_finger_right_open">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="rubber_right_x">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="rubber_right_y">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="joint_head_pan">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">head_pan</param>
+      <command_interface name="position">
+        <param name="min">-4.039999961853027</param>
+        <param name="max">1.7300000190734863</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="joint_head_tilt">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">head_tilt</param>
+      <command_interface name="position">
+        <param name="min">-1.5299999713897705</param>
+        <param name="max">0.7899999618530273</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="joint_head_nav_cam">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+  </ros2_control>
+</robot>
