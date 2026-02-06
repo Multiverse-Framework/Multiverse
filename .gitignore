@@ -46,3 +46,6 @@ multiverse
 cram_ws
 giskard_ws
 tutorial_ws
+**/multiverse_ws2/build
+**/multiverse_ws2/install
+**/multiverse_ws2/log
