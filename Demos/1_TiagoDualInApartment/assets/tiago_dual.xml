@@ -40,14 +40,14 @@
   </asset>
 
   <default class="main">
-    <geom contype="0" conaffinity="1" group="1" type="mesh" mass="0"/>
+    <geom contype="0" conaffinity="0" group="1" type="mesh" mass="0"/>
     <joint axis="0 0 1"/>
     <default class="arm">
-      <geom contype="1" conaffinity="1"/>
+      <geom contype="0" conaffinity="0"/>
       <joint frictionloss="1"/>
     </default>
     <default class="wheel">
-      <geom contype="0" conaffinity="0"/>
+      <geom contype="0" conaffinity="1"/>
     </default>
   </default>
 

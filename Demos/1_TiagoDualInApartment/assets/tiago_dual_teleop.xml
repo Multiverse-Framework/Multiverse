@@ -180,7 +180,7 @@
         </body>
       </body>
     </body>
-    <body name="arm_left_7_link_ref" pos="-0.05444 0.9385 0.6642" quat="-0.707107 -0.707107 0 0" mocap="true">
+    <!-- <body name="arm_left_7_link_ref" pos="-0.05444 0.9385 0.6642" quat="-0.707107 -0.707107 0 0" mocap="true">
       <geom pos="0 0 -0.076575" quat="0.707107 0 0 -0.707107" conaffinity="0" group="2" mass="0" rgba="0 0 0.9 0.9" mesh="gripper_link"/>
     </body>
     <body name="arm_right_7_link_ref" pos="-0.05744 -0.9385 0.6642" quat="0 0 -0.707107 0.707107" mocap="true">
@@ -188,10 +188,10 @@
     </body>
     <body name="base_link_ref" mocap="true">
       <geom pos="0 0 0.0762" quat="1 0 0 0" conaffinity="0" group="2" mass="0" material="gray75" rgba="0 0 0.9 0.9" mesh="base_link"/>
-    </body>
+    </body> -->
   </worldbody>
 
-  <equality>
+  <!-- <equality>
     <weld name="arm_left_7_link" body1="arm_left_7_link_ref" body2="arm_left_7_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
     <weld name="arm_right_7_link" body1="arm_right_7_link_ref" body2="arm_right_7_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
     <weld name="base_link" body1="base_link_ref" body2="base_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
@@ -221,5 +221,5 @@
         <config key="receive" value="{'base_link_ref': ['position', 'quaternion'], 'arm_left_7_link_ref': ['position', 'quaternion'], 'arm_right_7_link_ref': ['position', 'quaternion'], 'gripper_left_left_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_left_right_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_right_left_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_right_right_finger_joint_position': ['cmd_joint_angular_position']}" />
       </instance>
     </plugin>
-  </extension>
+  </extension> -->
 </mujoco>
