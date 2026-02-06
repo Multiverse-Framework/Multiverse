@@ -73,6 +73,16 @@ export MUJOCO_VERSION=3.4.0
 " C-m
 
 ############################################
+# Window 3 — Start ros2_control_node
+############################################
+tmux new-window -t "$SESH":3 -n ros2_control_node
+tmux send-keys -t "$SESH":3 "
+source /opt/ros/jazzy/setup.bash
+source ./MultiverseConnector/ros_connector/ros_ws/multiverse_ws2/install/setup.bash
+ros2 run controller_manager ros2_control_node --ros-args --params-file './Demos/1_TiagoDualInApartment/config/ros2_control.yaml'
+" C-m
+
+############################################
 # Attach to session
 ############################################
 tmux select-window -t "$SESH":0

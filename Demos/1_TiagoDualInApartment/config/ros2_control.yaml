@@ -1,0 +1,101 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+joint_state_broadcaster:
+  ros__parameters:
+    type: joint_state_broadcaster/JointStateBroadcaster
+
+arm_joint_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - arm_left_1_joint
+      - arm_left_2_joint
+      - arm_left_3_joint
+      - arm_left_4_joint
+      - arm_left_5_joint
+      - arm_left_6_joint
+      - arm_left_7_joint
+      - arm_right_1_joint
+      - arm_right_2_joint
+      - arm_right_3_joint
+      - arm_right_4_joint
+      - arm_right_5_joint
+      - arm_right_6_joint
+      - arm_right_7_joint
+
+    command_interfaces:
+      - position
+      # - velocity
+      # - effort
+
+    state_interfaces:
+      - position
+      - velocity
+
+    open_loop_control: True
+
+arms_velocity_controller:
+  ros__parameters:
+    type: velocity_controllers/JointGroupVelocityController
+    joints:
+      - arm_left_1_joint
+      - arm_left_2_joint
+      - arm_left_3_joint
+      - arm_left_4_joint
+      - arm_left_5_joint
+      - arm_left_6_joint
+      - arm_left_7_joint
+      - arm_right_1_joint
+      - arm_right_2_joint
+      - arm_right_3_joint
+      - arm_right_4_joint
+      - arm_right_5_joint
+      - arm_right_6_joint
+      - arm_right_7_joint
+
+torso_joint_trajectory_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - torso_lift_joint
+
+    command_interfaces:
+      - position
+      # - velocity
+      # - effort
+
+    state_interfaces:
+      - position
+      - velocity
+
+    open_loop_control: True
+
+head_position_controller:
+  ros__parameters:
+    type: joint_trajectory_controller/JointTrajectoryController
+    joints:
+      - head_1_joint
+      - head_2_joint
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+      - velocity
+
+left_gripper_controller:
+  ros__parameters:
+    type: position_controllers/JointGroupPositionController
+    joints:
+      - gripper_left_left_finger_joint
+      - gripper_left_right_finger_joint
+
+right_gripper_controller:
+  ros__parameters:
+    type: position_controllers/JointGroupPositionController
+    joints:
+      - gripper_right_left_finger_joint
+      - gripper_right_right_finger_joint
