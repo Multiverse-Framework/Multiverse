@@ -1,0 +1,225 @@
+<mujoco model="tiago_dual">
+  <compiler angle="radian" meshdir="./meshes/"/>
+
+  <option integrator="implicitfast">
+    <flag gravity="disable"/>
+  </option>
+
+  <default>
+    <geom type="mesh" contype="0" group="1"/>
+    <default class="arm">
+      <joint frictionloss="1"/>
+      <geom contype="1"/>
+    </default>
+    <default class="wheel">
+      <geom conaffinity="0"/>
+    </default>
+  </default>
+
+  <asset>
+    <texture type="skybox" colorspace="auto" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
+    <texture type="2d" colorspace="auto" name="texplane" builtin="checker" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="200" height="100"/>
+    <material name="black" rgba="0 0 0 1"/>
+    <material name="gray10" rgba="0.1 0.1 0.1 1"/>
+    <material name="gray25" rgba="0.25098 0.25098 0.25098 1"/>
+    <material name="gray75" rgba="0.75294 0.75294 0.75294 1"/>
+    <material name="mercury" rgba="0.9 0.9 0.9 1"/>
+    <material name="white"/>
+    <material name="MatPlane" texture="texplane" texuniform="true" texrepeat="5 5" specular="1" shininess="0.4" reflectance="0.1"/>
+    <mesh name="sick_tim551" file="sensors/sick_tim551.stl"/>
+    <mesh name="base_link" file="base/base_link.stl"/>
+    <mesh name="base_dock_link" file="base/base_dock_link.stl"/>
+    <mesh name="antenna" file="objects/antenna.stl"/>
+    <mesh name="torso_fix" file="torso/torso_fix.stl"/>
+    <mesh name="torso_lift_dual_arm" file="torso/torso_lift_dual_arm.stl"/>
+    <mesh name="head_1" file="head/head_1.stl"/>
+    <mesh name="head_2" file="head/head_2.stl"/>
+    <mesh name="arm_left_1" file="arm/arm_1.stl" scale="1 -1 -1"/>
+    <mesh name="arm_left_2" file="arm/arm_2.stl" scale="1 1 -1"/>
+    <mesh name="arm_left_3" file="arm/arm_3.stl" scale="1 1 -1"/>
+    <mesh name="arm_left_4" file="arm/arm_4.stl" scale="-1 -1 -1"/>
+    <mesh name="arm_left_5" file="arm/arm_5-wrist-2017.stl" scale="-1 -1 -1"/>
+    <mesh name="arm_left_6" file="arm/arm_6-wrist-2017.stl" scale="-1 1 1"/>
+    <mesh name="arm_right_1" content_type="model/stl" file="arm/arm_1.stl" scale="1 -1 1"/>
+    <mesh name="arm_right_2" content_type="model/stl" file="arm/arm_2.stl"/>
+    <mesh name="arm_right_3" content_type="model/stl" file="arm/arm_3.stl"/>
+    <mesh name="arm_right_4" content_type="model/stl" file="arm/arm_4.stl"/>
+    <mesh name="arm_right_5" content_type="model/stl" file="arm/arm_5-wrist-2017.stl"/>
+    <mesh name="arm_right_6" content_type="model/stl" file="arm/arm_6-wrist-2017.stl"/>
+    <mesh name="gripper_link" file="gripper/gripper_link.stl"/>
+    <mesh name="gripper_right_finger_link" file="gripper/gripper_finger_link.stl" scale="-1 -1 1"/>
+    <mesh name="gripper_left_finger_link" content_type="model/stl" file="gripper/gripper_finger_link.stl"/>
+  </asset>
+
+  <worldbody>
+    <light name="spotlight" target="base_link" pos="1 0 10" dir="0 0 -1" mode="targetbody"/>
+    <body name="base_link">
+      <inertial pos="-0.00511 -0.00037 0.13715" mass="59.5385" diaginertia="2.326 2.585 3.471"/>
+      <joint name="teleop_base_link" pos="0 0 0" axis="0 0 1" type="slide"/>
+      <geom pos="0 0 0.0762" quat="1 0 0 0" mass="0" material="gray75" mesh="base_link"/>
+      <geom pos="-0.27512 0.18297 0.20864" quat="0 -0.382683 -0.92388 0" mass="0" material="gray10" mesh="sick_tim551"/>
+      <geom pos="0.27512 -0.18297 0.20864" quat="0 -0.92388 0.382683 0" mass="0" material="gray10" mesh="sick_tim551"/>
+      <geom pos="0.3535 0 0.1358" mass="0" material="gray25" mesh="base_dock_link"/>
+      <geom pos="-0.2015 -0.13 0.2927" mass="0" material="black" mesh="antenna"/>
+      <geom pos="-0.2015 0.13 0.2927" mass="0" material="black" mesh="antenna"/>
+      <geom pos="-0.062 0 0.2692" quat="1 0 0 0" mass="0" material="mercury" mesh="torso_fix"/>
+      <geom size="0.09 0.1 0.275" pos="-0.062 0 0.5462" type="box" mass="0" material="gray10"/>
+      <body name="torso_lift_link" pos="-0.062 0 0.8662">
+        <inertial pos="0.039536 -0.002841 -0.190987" mass="7.33895" diaginertia="0.229088 0.245188 0.092397"/>
+        <joint name="teleop_torso_lift_joint" pos="0 0 0" axis="0 0 1" type="slide" range="0 0.35" actuatorfrcrange="-500 500"/>
+        <geom mass="0" material="white" mesh="torso_lift_dual_arm"/>
+        <body name="head_1_link" pos="0.182 0 0">
+          <inertial pos="-0.00508 0.00237 0.07229" mass="0.6222" diaginertia="0.00140223 0.00121968 0.000861083"/>
+          <joint name="teleop_head_1_joint" pos="0 0 0" axis="0 0 1" range="-1.309 1.309" actuatorfrcrange="-5.197 5.197" damping="0.5"/>
+          <geom mass="0" material="white" mesh="head_1"/>
+          <body name="head_2_link" pos="0.005 0 0.098" quat="0.707107 0.707107 0 0">
+            <inertial pos="0.0558274 0.0609987 1.58542e-05" mass="0.88693" diaginertia="0.00554181 0.00436261 0.00347586"/>
+            <joint name="teleop_head_2_joint" pos="0 0 0" axis="0 0 1" range="-1.0472 0.785398" actuatorfrcrange="-5.197 5.197" damping="0.5"/>
+            <geom mass="0" material="white" mesh="head_2"/>
+          </body>
+        </body>
+        <body name="arm_left_1_link" childclass="arm" pos="0.02556 0.19 -0.171" quat="0 0.707107 0.707107 0">
+          <inertial pos="0.061191 -0.022397 0.012835" mass="1.56343" diaginertia="0.00510233 0.00510233 0.00510233"/>
+          <joint name="teleop_arm_left_1_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40"/>
+          <geom mass="0" material="white" mesh="arm_left_1"/>
+          <body name="arm_left_2_link" pos="0.125 -0.0195 0.031" quat="0.707107 0.707107 0 0">
+            <inertial pos="0.030432 0.000229 0.005942" mass="1.8004" diaginertia="0.00437039 0.00432895 0.00178367"/>
+            <joint name="teleop_arm_left_2_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40"/>
+            <geom mass="0" material="gray10" mesh="arm_left_2"/>
+            <body name="arm_left_3_link" pos="0.0895 0 -0.0015" quat="0.5 0.5 0.5 0.5">
+              <inertial pos="0.007418 -0.004361 0.134194" mass="1.8" diaginertia="0.0199798 0.0197147 0.00264646"/>
+              <joint name="teleop_arm_left_3_joint" pos="0 0 0" axis="0 0 1" range="-0.785398 3.92699" actuatorfrcrange="-26 26" damping="40"/>
+              <geom mass="0" material="gray10" mesh="arm_left_3"/>
+              <body name="arm_left_4_link" pos="-0.02 -0.027 0.222" quat="0.5 0.5 -0.5 0.5">
+                <inertial pos="0.095658 -0.014666 -0.018133" mass="1.4327" diaginertia="0.00204 0.008424 0.008686"/>
+                <joint name="teleop_arm_left_4_joint" pos="0 0 0" axis="0 0 1" range="-0.392699 2.35619" actuatorfrcrange="-26 26" damping="40"/>
+                <geom mass="0" material="gray10" mesh="arm_left_4"/>
+                <body name="arm_left_5_link" pos="0.162 -0.02 -0.027" quat="0.707107 0 -0.707107 0">
+                  <inertial pos="0.001078 -0.000151 0.077173" mass="1.65582" diaginertia="0.00614362 0.00564 0.001797"/>
+                  <joint name="teleop_arm_left_5_joint" pos="0 0 0" axis="0 0 1" range="-2.0944 2.0944" actuatorfrcrange="-3 3" damping="1"/>
+                  <geom mass="0" material="mercury" mesh="arm_left_5"/>
+                  <body name="arm_left_6_link" pos="0 0 -0.15" quat="0.5 -0.5 -0.5 -0.5">
+                    <inertial pos="-0.000153 -0.003122 0.000183" mass="0.370063" diaginertia="0.000215 0.000174828 0.000169172"/>
+                    <joint name="teleop_arm_left_6_joint" pos="0 0 0" axis="0 0 1" range="-1.41372 1.41372" actuatorfrcrange="-6.6 6.6" damping="1"/>
+                    <geom mass="0" material="mercury" mesh="arm_left_6"/>
+                    <body name="arm_left_7_link" quat="0.5 0.5 0.5 0.5">
+                      <inertial pos="0.000156301 0.000155213 -0.07437" mass="1.13701" diaginertia="0.00313273 0.00277743 0.000778245"/>
+                      <joint name="teleop_arm_left_7_joint" pos="0 0 0" axis="0 0 1" range="-2.0944 2.0944" actuatorfrcrange="-6.6 6.6" damping="1"/>
+                      <geom size="0.005 0.0025" pos="0 0 -0.047" quat="0 -0.707107 0.707107 0" type="cylinder" mass="0" material="mercury"/>
+                      <geom size="0.0225 0.00785" pos="0 0 -0.05385" quat="0 0 1 0" type="cylinder" mass="0" material="mercury"/>
+                      <geom size="0.025 0.004875" pos="0 0 -0.066575" quat="0 -0.707107 0.707107 0" type="cylinder" mass="0" material="gray10"/>
+                      <geom pos="0 0 -0.076575" quat="0.707107 0 0 -0.707107" mass="0" material="white" mesh="gripper_link"/>
+                      <body name="gripper_left_right_finger_link" pos="0 0 -0.076575" quat="0.707107 0 0 -0.707107">
+                        <inertial pos="0.008658 0.019724 -0.149125" mass="0.107001" diaginertia="0.000242 0.000236 1.8e-05"/>
+                        <joint name="teleop_gripper_left_right_finger_joint" pos="0 0 0" axis="1 0 0" type="slide" range="0 0.045" damping="1"/>
+                        <geom quat="4.63268e-05 0 0 1" contype="0" conaffinity="0" mass="0" material="black" mesh="gripper_right_finger_link"/>
+                        <geom size="0.0025 0.02 0.07" pos="0.0025 0 -0.15" type="box" group="3" mass="0" rgba="0 0 1 1"/>
+                      </body>
+                      <body name="gripper_left_left_finger_link" pos="0 0 -0.076575" quat="0.707107 0 0 -0.707107">
+                        <inertial pos="-0.008658 -0.019724 -0.149125" mass="0.107001" diaginertia="0.000242 0.000236 1.8e-05"/>
+                        <joint name="teleop_gripper_left_left_finger_joint" pos="0 0 0" axis="-1 0 0" type="slide" range="0 0.045" damping="1"/>
+                        <geom quat="4.63268e-05 0 0 1" contype="0" conaffinity="0" mass="0" material="black" mesh="gripper_left_finger_link"/>
+                        <geom size="0.0025 0.02 0.07" pos="-0.0025 0 -0.15" type="box" group="3" mass="0" rgba="0 0 1 1"/>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+        <body name="arm_right_1_link" childclass="arm" pos="0.02556 -0.19 -0.171" quat="0.707107 0 0 -0.707107">
+          <inertial pos="0.061191 -0.022397 -0.012835" mass="1.56343" diaginertia="0.00510233 0.00510233 0.00510233"/>
+          <joint name="teleop_arm_right_1_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40"/>
+          <geom mass="0" material="white" mesh="arm_right_1"/>
+          <body name="arm_right_2_link" pos="0.125 -0.0195 -0.031" quat="0.707107 -0.707107 0 0">
+            <inertial pos="0.030432 0.000229 -0.005942" mass="1.8004" diaginertia="0.00437229 0.00432701 0.0017837"/>
+            <joint name="teleop_arm_right_2_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40"/>
+            <geom mass="0" material="gray10" mesh="arm_right_2"/>
+            <body name="arm_right_3_link" pos="0.0895 0 -0.0015" quat="0.5 -0.5 -0.5 0.5">
+              <inertial pos="0.007418 -0.004361 -0.134194" mass="1.8" diaginertia="0.0200771 0.0196154 0.00264853"/>
+              <joint name="teleop_arm_right_3_joint" pos="0 0 0" axis="0 0 1" range="-3.53429 1.5708" actuatorfrcrange="-26 26" damping="40"/>
+              <geom mass="0" material="gray10" mesh="arm_right_3"/>
+              <body name="arm_right_4_link" pos="-0.02 -0.027 -0.222" quat="0.5 -0.5 -0.5 -0.5">
+                <inertial pos="-0.095658 0.014666 0.018133" mass="1.4327" diaginertia="0.00204 0.008424 0.008686"/>
+                <joint name="teleop_arm_right_4_joint" pos="0 0 0" axis="0 0 1" range="-0.392699 2.35619" actuatorfrcrange="-26 26" damping="40"/>
+                <geom mass="0" material="gray10" mesh="arm_right_4"/>
+                <body name="arm_right_5_link" pos="-0.162 0.02 0.027" quat="0.707107 0 -0.707107 0">
+                  <inertial pos="0.001078 -0.000151 -0.077173" mass="0.935914" diaginertia="0.00103619 0.000794527 0.000439824"/>
+                  <joint name="teleop_arm_right_5_joint" pos="0 0 0" axis="0 0 1" range="-2.0944 2.0944" actuatorfrcrange="-3 3" damping="1"/>
+                  <geom mass="0" material="mercury" mesh="arm_right_5"/>
+                  <body name="arm_right_6_link" pos="0 0 0.15" quat="0.5 -0.5 -0.5 -0.5">
+                    <inertial pos="-0.000153 -0.003122 0.000183" mass="0.302758" diaginertia="3.85419e-05 3.33205e-05 3.29226e-05"/>
+                    <joint name="teleop_arm_right_6_joint" pos="0 0 0" axis="0 0 1" range="-1.41372 1.41372" actuatorfrcrange="-6.6 6.6" damping="1"/>
+                    <geom mass="0" material="mercury" mesh="arm_right_6"/>
+                    <body name="arm_right_7_link" quat="0.5 0.5 0.5 0.5">
+                      <inertial pos="-0.000173894 0.000176395 0.0817355" mass="1.00276" diaginertia="0.0025841 0.0022568 0.000746434"/>
+                      <joint name="teleop_arm_right_7_joint" pos="0 0 0" axis="0 0 1" range="-2.0944 2.0944" actuatorfrcrange="-6.6 6.6" damping="1"/>
+                      <geom size="0.005 0.0025" pos="0 0 0.047" quat="-0.707107 0 0 0.707107" type="cylinder" mass="0" material="mercury"/>
+                      <geom size="0.0225 0.00785" pos="0 0 0.05385" quat="-1 0 0 0" type="cylinder" mass="0" material="mercury"/>
+                      <geom size="0.025 0.004875" pos="0 0 0.066575" quat="-0.707107 0 0 0.707107" type="cylinder" mass="0" material="gray10"/>
+                      <geom pos="0 0 0.076575" quat="0 -0.707107 0.707107 0" mass="0" material="white" mesh="gripper_link"/>
+                      <body name="gripper_right_right_finger_link" pos="0 0 0.076575" quat="0 -0.707107 0.707107 0">
+                        <inertial pos="0.008658 0.019724 -0.149125" mass="0.107001" diaginertia="0.000242 0.000236 1.8e-05"/>
+                        <joint name="teleop_gripper_right_right_finger_joint" pos="0 0 0" axis="1 0 0" type="slide" range="0 0.045" damping="1"/>
+                        <geom quat="4.63268e-05 0 0 1" contype="0" conaffinity="0" mass="0" material="black" mesh="gripper_right_finger_link"/>
+                        <geom size="0.0025 0.02 0.07" pos="0.0025 0 -0.15" type="box" group="3" mass="0" rgba="0 0 1 1"/>
+                      </body>
+                      <body name="gripper_right_left_finger_link" pos="0 0 0.076575" quat="0 -0.707107 0.707107 0">
+                        <inertial pos="-0.008658 -0.019724 -0.149125" mass="0.107001" diaginertia="0.000242 0.000236 1.8e-05"/>
+                        <joint name="teleop_gripper_right_left_finger_joint" pos="0 0 0" axis="-1 0 0" type="slide" range="0 0.045" damping="1"/>
+                        <geom quat="4.63268e-05 0 0 1" contype="0" conaffinity="0" mass="0" material="black" mesh="gripper_left_finger_link"/>
+                        <geom size="0.0025 0.02 0.07" pos="-0.0025 0 -0.15" type="box" group="3" mass="0" rgba="0 0 1 1"/>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="arm_left_7_link_ref" pos="-0.05444 0.9385 0.6642" quat="-0.707107 -0.707107 0 0" mocap="true">
+      <geom pos="0 0 -0.076575" quat="0.707107 0 0 -0.707107" conaffinity="0" group="2" mass="0" rgba="0 0 0.9 0.9" mesh="gripper_link"/>
+    </body>
+    <body name="arm_right_7_link_ref" pos="-0.05744 -0.9385 0.6642" quat="0 0 -0.707107 0.707107" mocap="true">
+      <geom pos="0 0 0.076575" quat="0 -0.707107 0.707107 0" conaffinity="0" group="2" mass="0" rgba="0 0 0.9 0.9" mesh="gripper_link"/>
+    </body>
+    <body name="base_link_ref" mocap="true">
+      <geom pos="0 0 0.0762" quat="1 0 0 0" conaffinity="0" group="2" mass="0" material="gray75" rgba="0 0 0.9 0.9" mesh="base_link"/>
+    </body>
+  </worldbody>
+
+  <equality>
+    <weld name="arm_left_7_link" body1="arm_left_7_link_ref" body2="arm_left_7_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
+    <weld name="arm_right_7_link" body1="arm_right_7_link_ref" body2="arm_right_7_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
+    <weld name="base_link" body1="base_link_ref" body2="base_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
+  </equality>
+
+  <actuator>
+    <general name="gripper_left_left_finger_joint_position" joint="teleop_gripper_left_left_finger_joint" ctrlrange="2.25e-05 0.0449775" forcerange="-5.197 5.197" biastype="affine" gainprm="500" biasprm="0 -500"/>
+    <general name="gripper_left_right_finger_joint_position" joint="teleop_gripper_left_right_finger_joint" ctrlrange="2.25e-05 0.0449775" forcerange="-5.197 5.197" biastype="affine" gainprm="500" biasprm="0 -500"/>
+    <general name="gripper_right_left_finger_joint_position" joint="teleop_gripper_right_left_finger_joint" ctrlrange="2.25e-05 0.0449775" forcerange="-5.197 5.197" biastype="affine" gainprm="500" biasprm="0 -500"/>
+    <general name="gripper_right_right_finger_joint_position" joint="teleop_gripper_right_right_finger_joint" ctrlrange="2.25e-05 0.0449775" forcerange="-5.197 5.197" biastype="affine" gainprm="500" biasprm="0 -500"/>
+  </actuator>
+
+  <keyframe>
+    <key name="home" qpos="0 0 0 0 0.27 -1.07 1.5 1.96 -2.0 1.2 0.5 0 0 0.27 -1.07 1.5 1.96 -2.0 1.2 0.5 0 0" mpos="0.30545347 0.31013647 0.86056989 0.30256216 -0.31093667 0.86056989" mquat="0.99842364 -0.05568347 -0.00570851 0.00412208 0.00570851 0.00412208 0.99842364 0.05568347"/>
+  </keyframe>
+
+  <extension>
+    <plugin plugin="mujoco.multiverse_connector">
+      <instance name="mujoco_client">
+        <config key="transport" value="zmq" />
+        <config key="host" value="tcp://127.0.0.1" />
+        <config key="server_port" value="7000" />
+        <config key="client_port" value="7500" />
+        <config key="world_name" value="world" />
+        <config key="simulation_name" value="tiago_dual_teleop_simulation" />
+        <config key="send" value="{'base_link': ['position', 'quaternion'], 'joint': ['joint_angular_position']}" />
+        <config key="receive" value="{'base_link_ref': ['position', 'quaternion'], 'arm_left_7_link_ref': ['position', 'quaternion'], 'arm_right_7_link_ref': ['position', 'quaternion'], 'gripper_left_left_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_left_right_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_right_left_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_right_right_finger_joint_position': ['cmd_joint_angular_position']}" />
+      </instance>
+    </plugin>
+  </extension>
+</mujoco>

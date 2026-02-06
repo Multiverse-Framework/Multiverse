@@ -1,0 +1,60 @@
+arm_left_7_link_ref:
+  position: [0.30545347, 0.31013647, 0.86056989]
+  quaternion: [0.99842364, -0.05568347, -0.00570851, 0.00412208]
+arm_right_7_link_ref:
+  position: [0.30256216, -0.31093667, 0.86056989]
+  quaternion: [0.00570851, 0.00412208, 0.99842364, 0.05568347]
+base_link_ref:
+  position: [0.0, 0.0, 0.0]
+  quaternion: [1.0, 0.0, 0.0, 0.0]
+
+teleop_arm_left_1_joint:
+  joint_angular_position: [0.0]
+teleop_arm_left_2_joint:
+  joint_angular_position: [0.0]
+teleop_arm_left_3_joint:
+  joint_angular_position: [0.0]
+teleop_arm_left_4_joint:
+  joint_angular_position: [0.0]
+teleop_arm_left_5_joint:
+  joint_angular_position: [0.0]
+teleop_arm_left_6_joint:
+  joint_angular_position: [0.0]
+teleop_arm_left_7_joint:
+  joint_angular_position: [0.0]
+teleop_arm_right_1_joint:
+  joint_angular_position: [0.0]
+teleop_arm_right_2_joint:
+  joint_angular_position: [0.0]
+teleop_arm_right_3_joint:
+  joint_angular_position: [0.0]
+teleop_arm_right_4_joint:
+  joint_angular_position: [0.0]
+teleop_arm_right_5_joint:
+  joint_angular_position: [0.0]
+teleop_arm_right_6_joint:
+  joint_angular_position: [0.0]
+teleop_arm_right_7_joint:
+  joint_angular_position: [0.0]
+teleop_gripper_left_right_finger_joint:
+  joint_angular_position: [0.0]
+teleop_gripper_left_left_finger_joint:
+  joint_angular_position: [0.0]
+teleop_gripper_right_right_finger_joint:
+  joint_angular_position: [0.0]
+teleop_gripper_right_left_finger_joint:
+  joint_angular_position: [0.0]
+
+gripper_left_left_finger_joint_position:
+  cmd_joint_angular_position: [0.0]
+gripper_left_right_finger_joint_position:
+  cmd_joint_angular_position: [0.0]
+gripper_right_left_finger_joint_position:
+  cmd_joint_angular_position: [0.0]
+gripper_right_right_finger_joint_position:
+  cmd_joint_angular_position: [0.0]
+
+left_gripper:
+  scalar: [0.0]
+right_gripper:
+  scalar: [0.0]
