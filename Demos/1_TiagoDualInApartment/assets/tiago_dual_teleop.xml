@@ -55,7 +55,6 @@
     <light name="spotlight" target="base_link" pos="1 0 10" dir="0 0 -1" mode="targetbody"/>
     <body name="base_link">
       <inertial pos="-0.00511 -0.00037 0.13715" mass="59.5385" diaginertia="2.326 2.585 3.471"/>
-      <joint name="teleop_base_link" pos="0 0 0" axis="0 0 1" type="slide"/>
       <geom pos="0 0 0.0762" quat="1 0 0 0" mass="0" material="gray75" mesh="base_link"/>
       <geom pos="-0.27512 0.18297 0.20864" quat="0 -0.382683 -0.92388 0" mass="0" material="gray10" mesh="sick_tim551"/>
       <geom pos="0.27512 -0.18297 0.20864" quat="0 -0.92388 0.382683 0" mass="0" material="gray10" mesh="sick_tim551"/>
@@ -180,7 +179,7 @@
         </body>
       </body>
     </body>
-    <!-- <body name="arm_left_7_link_ref" pos="-0.05444 0.9385 0.6642" quat="-0.707107 -0.707107 0 0" mocap="true">
+    <body name="arm_left_7_link_ref" pos="-0.05444 0.9385 0.6642" quat="-0.707107 -0.707107 0 0" mocap="true">
       <geom pos="0 0 -0.076575" quat="0.707107 0 0 -0.707107" conaffinity="0" group="2" mass="0" rgba="0 0 0.9 0.9" mesh="gripper_link"/>
     </body>
     <body name="arm_right_7_link_ref" pos="-0.05744 -0.9385 0.6642" quat="0 0 -0.707107 0.707107" mocap="true">
@@ -188,10 +187,10 @@
     </body>
     <body name="base_link_ref" mocap="true">
       <geom pos="0 0 0.0762" quat="1 0 0 0" conaffinity="0" group="2" mass="0" material="gray75" rgba="0 0 0.9 0.9" mesh="base_link"/>
-    </body> -->
+    </body>
   </worldbody>
 
-  <!-- <equality>
+  <equality>
     <weld name="arm_left_7_link" body1="arm_left_7_link_ref" body2="arm_left_7_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
     <weld name="arm_right_7_link" body1="arm_right_7_link_ref" body2="arm_right_7_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
     <weld name="base_link" body1="base_link_ref" body2="base_link" anchor="0 0 0" relpose="0 0 0 0 0 0 0" torquescale="1"/>
@@ -205,7 +204,7 @@
   </actuator>
 
   <keyframe>
-    <key name="home" qpos="0 0 0 0 0.27 -1.07 1.5 1.96 -2.0 1.2 0.5 0 0 0.27 -1.07 1.5 1.96 -2.0 1.2 0.5 0 0" mpos="0.30545347 0.31013647 0.86056989 0.30256216 -0.31093667 0.86056989" mquat="0.99842364 -0.05568347 -0.00570851 0.00412208 0.00570851 0.00412208 0.99842364 0.05568347"/>
+    <key name="home" qpos="0 0 0 0.27 -1.07 1.5 1.96 -2.0 1.2 0.5 0 0 0.27 -1.07 1.5 1.96 -2.0 1.2 0.5 0 0" mpos="0.30545347 0.31013647 0.86056989 0.30256216 -0.31093667 0.86056989" mquat="0.99842364 -0.05568347 -0.00570851 0.00412208 0.00570851 0.00412208 0.99842364 0.05568347"/>
   </keyframe>
 
   <extension>
@@ -217,9 +216,9 @@
         <config key="client_port" value="7500" />
         <config key="world_name" value="world" />
         <config key="simulation_name" value="tiago_dual_teleop_simulation" />
-        <config key="send" value="{'base_link': ['position', 'quaternion'], 'joint': ['joint_angular_position']}" />
+        <config key="send" value="{'base_link': ['position', 'quaternion'], 'joint': ['joint_angular_position', 'joint_linear_position']}" />
         <config key="receive" value="{'base_link_ref': ['position', 'quaternion'], 'arm_left_7_link_ref': ['position', 'quaternion'], 'arm_right_7_link_ref': ['position', 'quaternion'], 'gripper_left_left_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_left_right_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_right_left_finger_joint_position': ['cmd_joint_angular_position'], 'gripper_right_right_finger_joint_position': ['cmd_joint_angular_position']}" />
       </instance>
     </plugin>
-  </extension> -->
+  </extension>
 </mujoco>

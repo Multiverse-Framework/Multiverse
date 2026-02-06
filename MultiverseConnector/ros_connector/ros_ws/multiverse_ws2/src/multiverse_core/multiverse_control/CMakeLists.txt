@@ -54,6 +54,7 @@ target_link_libraries(
   ${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultiverse_client_json_all.a
   ${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultiverse_client_all.a
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/libjsoncpp.a
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/libzmq.a
 	pthread
 )
 

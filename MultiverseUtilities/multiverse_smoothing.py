@@ -110,14 +110,18 @@ if __name__ == "__main__":
                     break
             time.sleep(1.0)
         while True:
+            should_break = True
             send_data = []
             for object_name, object_data in multiverse_logger.response_meta_data["receive"].items():
                 for attribute_name, attribute_values in object_data.items():
+                    if any(x is None for x in attribute_values):
+                        should_break = False
                     send_data += attribute_values
-            if any(x is None for x in send_data):
-                time.sleep(1.0)
-            else:
+            if should_break:
                 break
+            multiverse_logger.send_and_receive_meta_data()
+            time.sleep(1.0)
+            should_break = True
     except KeyboardInterrupt:
         multiverse_logger.stop()
         exit(0)

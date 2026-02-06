@@ -4,11 +4,6 @@
     <compiler meshdir="meshes/tiago_dual" discardvisual="false" />
   </mujoco>
   <link name="base_link">
-    <inertial>
-      <origin xyz="-0.005109999794512987 -0.0003699999942909926 0.13715000450611115" rpy="0.0 0.0 0.0"/>
-      <mass value="59.53853988647461"/>
-      <inertia ixx="2.3259999752044678" ixy="0.0" ixz="0.0" iyy="2.5850000381469727" iyz="0.0" izz="3.4709999561309814"/>
-    </inertial>
     <visual name="Geom_8">
       <origin xyz="-0.06199999898672104 0.0 0.5461999773979187" rpy="0.0 0.0 0.0"/>
       <geometry>
@@ -711,4 +706,462 @@
       </material>
     </visual>
   </link>
+  <ros2_control name="tiago_dual" type="system">
+    <hardware>
+      <plugin>/MultiverseHWInterface</plugin>
+      <param name="world_name">world</param>
+      <param name="length_unit">m</param>
+      <param name="angle_unit">rad</param>
+      <param name="mass_unit">kg</param>
+      <param name="time_unit">s</param>
+      <param name="handedness">rhs</param>
+      <param name="host">tcp://127.0.0.1</param>
+      <param name="server_port">7000</param>
+      <param name="client_port">7600</param>
+    </hardware>
+    <joint name="wheel_front_right_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="wheel_front_left_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="wheel_rear_right_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="wheel_rear_left_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="torso_lift_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">torso_lift_joint_position</param>
+      <command_interface name="position">
+        <param name="min">0.0</param>
+        <param name="max">0.3499999940395355</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="head_1_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">head_1_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.309000015258789</param>
+        <param name="max">1.309000015258789</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="head_2_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">head_2_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.0471999645233154</param>
+        <param name="max">0.785398006439209</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_1_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.27</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_1_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.1780999898910522</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">0.27</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_2_joint">
+      <state_interface name="position">
+        <param name="initial_value">-1.07</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_2_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.1780999898910522</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">-1.07</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_3_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.5</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_3_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-0.785398006439209</param>
+        <param name="max">3.926990032196045</param>
+        <param name="initial_value">1.5</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_4_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.96</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_4_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-0.3926990032196045</param>
+        <param name="max">2.3561899662017822</param>
+        <param name="initial_value">1.96</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_5_joint">
+      <state_interface name="position">
+        <param name="initial_value">-2.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_5_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-2.094399929046631</param>
+        <param name="max">2.094399929046631</param>
+        <param name="initial_value">-2.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_6_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.2</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_6_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.4137200117111206</param>
+        <param name="max">1.4137200117111206</param>
+        <param name="initial_value">1.2</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_7_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.5</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_7_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-2.094399929046631</param>
+        <param name="max">2.094399929046631</param>
+        <param name="initial_value">0.5</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="gripper_left_right_finger_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">gripper_left_right_finger_joint_position</param>
+      <command_interface name="position">
+        <param name="min">0.0</param>
+        <param name="max">0.04500000178813934</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="gripper_left_left_finger_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">gripper_left_left_finger_joint_position</param>
+      <command_interface name="position">
+        <param name="min">0.0</param>
+        <param name="max">0.04500000178813934</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_1_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.27</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_1_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.1780999898910522</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">0.27</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_2_joint">
+      <state_interface name="position">
+        <param name="initial_value">-1.07</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_2_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.1780999898910522</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">-1.07</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_3_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.5</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_3_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-3.534289836883545</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">1.5</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_4_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.96</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_4_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-0.3926990032196045</param>
+        <param name="max">2.3561899662017822</param>
+        <param name="initial_value">1.96</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_5_joint">
+      <state_interface name="position">
+        <param name="initial_value">-2.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_5_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-2.094399929046631</param>
+        <param name="max">2.094399929046631</param>
+        <param name="initial_value">-2.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_6_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.2</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_6_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.4137200117111206</param>
+        <param name="max">1.4137200117111206</param>
+        <param name="initial_value">1.2</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_7_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.5</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_7_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-2.094399929046631</param>
+        <param name="max">2.094399929046631</param>
+        <param name="initial_value">0.5</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="gripper_right_right_finger_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">gripper_right_right_finger_joint_position</param>
+      <command_interface name="position">
+        <param name="min">0.0</param>
+        <param name="max">0.04500000178813934</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="gripper_right_left_finger_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">gripper_right_left_finger_joint_position</param>
+      <command_interface name="position">
+        <param name="min">0.0</param>
+        <param name="max">0.04500000178813934</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+  </ros2_control>
 </robot>
