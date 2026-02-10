@@ -1,0 +1,7 @@
+multiverse_msgs/MetaData meta_data
+multiverse_msgs/ObjectData[] send
+multiverse_msgs/ObjectAttribute[] receive
+---
+multiverse_msgs/MetaData meta_data
+multiverse_msgs/ObjectData[] send
+multiverse_msgs/ObjectData[] receive

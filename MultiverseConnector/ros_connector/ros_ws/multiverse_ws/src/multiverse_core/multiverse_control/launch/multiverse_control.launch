@@ -1,0 +1,7 @@
+<launch>
+
+    <arg name="multiverse_params" />
+    <node pkg="multiverse_control" type="multiverse_control_node" name="multiverse_control"
+        output="screen" args="$(arg multiverse_params)" />
+
+</launch>

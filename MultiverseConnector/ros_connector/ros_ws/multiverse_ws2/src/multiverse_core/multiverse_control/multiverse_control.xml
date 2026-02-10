@@ -1,0 +1,7 @@
+<library path="multiverse_control">
+	<class name="/MultiverseHWInterface" type="MultiverseHWInterface" base_class_type="hardware_interface::SystemInterface">
+		<description>
+			Robot hardware plugin.
+		</description>
+	</class>
+</library>

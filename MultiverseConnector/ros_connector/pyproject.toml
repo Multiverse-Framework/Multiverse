@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "multiverse_ros_connector"
+version = "0.0.9"
+authors = [
+  { name="Giang Nguyen", email="hoanggia@uni-bremen.de" },
+]
+description = "A ROS connector for the Multiverse framework, enabling seamless integration between ROS and Multiverse Server."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = { text = "MIT" }
+
+dependencies = [
+    "rosdistro",
+    "urdf-parser-py",
+    "empy==3.3.4",
+    "lark-parser",
+]
+
+scripts = { multiverse_ros_run = "multiverse_ros_socket.__main__:main" }
+
+[project.urls]
+"Homepage" = "https://github.com/Multiverse-Framework/Multiverse"
+"Bug Tracker" = "https://github.com/Multiverse-Framework/Multiverse-ROS-Connector/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
