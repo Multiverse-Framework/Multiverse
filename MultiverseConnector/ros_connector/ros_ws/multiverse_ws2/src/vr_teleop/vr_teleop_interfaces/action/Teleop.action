@@ -1,0 +1,25 @@
+# Goal
+builtin_interfaces/Duration timeout
+
+---
+
+# Result
+uint8 DONE=0
+uint8 TIMEOUT=1
+uint8 CANCELED=2
+uint8 FAILED=3
+
+uint8 return_code
+string message
+builtin_interfaces/Duration duration
+
+---
+
+# Feedback
+uint8 SYNCHRONIZING=0
+uint8 WAITING_FOR_OPERATOR=1
+uint8 ACTIVE=2
+uint8 COMPLETING=3
+uint8 ERROR=4
+
+uint8 state
