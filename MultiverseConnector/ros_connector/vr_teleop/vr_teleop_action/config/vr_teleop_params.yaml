@@ -1,0 +1,102 @@
+vr_teleop_action_server:
+  ros__parameters:
+    sim_path: ./mujoco-3.4.0/bin/simulate
+    model_path: ./assets/vr_h3_1_with_RH56E2_hand_teleop.xml
+    meta_data:
+      transport: zmq
+      host: "tcp://127.0.0.1"
+      server_port: "7000"
+      client_port: "2000"
+      world_name: world
+      simulation_name: vr_teleop
+    publishers:
+      arm_publisher:
+        topic: /arms_joint_position_controller/commands
+        rate: 100
+        joints:
+          left_shoulder_pitch_joint:
+            from: mujoco_left_shoulder_pitch_joint
+            type: cmd_joint_angular_position
+          left_shoulder_roll_joint:
+            from: mujoco_left_shoulder_roll_joint
+            type: cmd_joint_angular_position
+          left_shoulder_yaw_joint:
+            from: mujoco_left_shoulder_yaw_joint
+            type: cmd_joint_angular_position
+          left_elbow_pitch_joint:
+            from: mujoco_left_elbow_pitch_joint
+            type: cmd_joint_angular_position
+          left_wrist_yaw_joint:
+            from: mujoco_left_wrist_yaw_joint
+            type: cmd_joint_angular_position
+          left_wrist_roll_joint:
+            from: mujoco_left_wrist_roll_joint
+            type: cmd_joint_angular_position
+          left_wrist_pitch_joint:
+            from: mujoco_left_wrist_pitch_joint
+            type: cmd_joint_angular_position
+          right_shoulder_pitch_joint:
+            from: mujoco_right_shoulder_pitch_joint
+            type: cmd_joint_angular_position
+          right_shoulder_roll_joint:
+            from: mujoco_right_shoulder_roll_joint
+            type: cmd_joint_angular_position
+          right_shoulder_yaw_joint:
+            from: mujoco_right_shoulder_yaw_joint
+            type: cmd_joint_angular_position
+          right_elbow_pitch_joint:
+            from: mujoco_right_elbow_pitch_joint
+            type: cmd_joint_angular_position
+          right_wrist_yaw_joint:
+            from: mujoco_right_wrist_yaw_joint
+            type: cmd_joint_angular_position
+          right_wrist_roll_joint:
+            from: mujoco_right_wrist_roll_joint
+            type: cmd_joint_angular_position
+          right_wrist_pitch_joint:
+            from: mujoco_right_wrist_pitch_joint
+            type: cmd_joint_angular_position
+      left_hand_publisher:
+        topic: /left_hand_joint_position_controller/commands
+        rate: 100
+        joints:
+          L_thumb_swing_joint:
+            from: mujoco_L_thumb_swing_joint
+            type: cmd_joint_angular_position
+          L_thumb_1_joint:
+            from: mujoco_L_thumb_1_joint
+            type: cmd_joint_angular_position
+          L_index_1_joint:
+            from: mujoco_L_index_1_joint
+            type: cmd_joint_angular_position
+          L_middle_1_joint:
+            from: mujoco_L_middle_1_joint
+            type: cmd_joint_angular_position
+          L_ring_1_joint:
+            from: mujoco_L_ring_1_joint
+            type: cmd_joint_angular_position
+          L_pinky_1_joint:
+            from: mujoco_L_pinky_1_joint
+            type: cmd_joint_angular_position
+      right_hand_publisher:
+        topic: /right_hand_joint_position_controller/commands
+        rate: 100
+        joints:
+          R_thumb_swing_joint:
+            from: mujoco_R_thumb_swing_joint
+            type: cmd_joint_angular_position
+          R_thumb_1_joint:
+            from: mujoco_R_thumb_1_joint
+            type: cmd_joint_angular_position
+          R_index_1_joint:
+            from: mujoco_R_index_1_joint
+            type: cmd_joint_angular_position
+          R_middle_1_joint:
+            from: mujoco_R_middle_1_joint
+            type: cmd_joint_angular_position
+          R_ring_1_joint:
+            from: mujoco_R_ring_1_joint
+            type: cmd_joint_angular_position
+          R_pinky_1_joint:
+            from: mujoco_R_pinky_1_joint
+            type: cmd_joint_angular_position
