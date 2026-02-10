@@ -56,7 +56,7 @@ cd ../..
 ############################################
 tmux new-window -t "$SESH":1 -n server
 tmux send-keys -t "$SESH":1 "
-./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000
+./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000 --transport tcp --bind 192.168.0.101:8000
 " C-m
 
 ############################################
@@ -106,7 +106,7 @@ tmux new-window -t "$SESH":6 -n spawner
 tmux send-keys -t "$SESH":6 "
 source /opt/ros/jazzy/setup.bash
 source ./MultiverseConnector/ros_connector/ros_ws/multiverse_ws2/install/setup.bash
-ros2 run controller_manager spawner joint_state_broadcaster arm_position_controller torso_joint_trajectory_controller head_position_controller left_gripper_controller right_gripper_controller --param-file './Demos/1_TiagoDualInApartment/config/ros2_control.yaml'
+ros2 run controller_manager spawner joint_state_broadcaster upper_body_position_controller left_gripper_controller right_gripper_controller --param-file './Demos/1_TiagoDualInApartment/config/ros2_control.yaml'
 ros2 run rviz2 rviz2 --display-config './Demos/1_TiagoDualInApartment/config/rviz2.rviz'
 " C-m
 
@@ -152,12 +152,12 @@ python ./MultiverseUtilities/multiverse_smoothing.py \\
 ############################################
 # Window 10 — Upper Body Command
 ############################################
-tmux new-window -t "$SESH":10 -n upper_body_command
+tmux new-window -t "$SESH":10 -n whole_body_command
 tmux send-keys -t "$SESH":10 "
 source /opt/ros/jazzy/setup.bash
 . ./Demos/1_TiagoDualInApartment/multiverse/bin/activate
 sleep 5
-python ./Demos/1_TiagoDualInApartment/upper_body_command.py --port=4500
+python ./Demos/1_TiagoDualInApartment/whole_body_command.py --port=4500
 " C-m
 
 ############################################

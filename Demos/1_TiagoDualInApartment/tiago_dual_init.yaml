@@ -1,12 +1,15 @@
-arm_left_7_link_ref:
+hand_left_ref:
   position: [0.30545347, 0.31013647, 0.86056989]
   quaternion: [0.99842364, -0.05568347, -0.00570851, 0.00412208]
-arm_right_7_link_ref:
+hand_right_ref:
   position: [0.30256216, -0.31093667, 0.86056989]
   quaternion: [0.00570851, 0.00412208, 0.99842364, 0.05568347]
 base_link_ref:
   position: [0.0, 0.0, 0.0]
   quaternion: [1.0, 0.0, 0.0, 0.0]
+head_2_link_ref:
+  position: [0.125, 0, 0.9642]
+  quaternion: [0.707107, 0.707107, 0, 0]
 
 arm_left_1_joint:
   joint_angular_position: [0.27]
@@ -48,7 +51,7 @@ arm_right_6_joint:
   joint_angular_position: [1.2]
   joint_angular_velocity: [0.0]
 arm_right_7_joint:
-  joint_angular_position: [0.]
+  joint_angular_position: [0.5]
   joint_angular_velocity: [0.0]
 
 torso_lift_joint:
@@ -90,7 +93,6 @@ wheel_front_right_joint:
 
 arm_left_1_joint_position:
   cmd_joint_angular_position: [0.27]
-  joint_angular_velocity: [0.0]
 arm_left_2_joint_position:
   cmd_joint_angular_position: [-1.07]
 arm_left_3_joint_position:
@@ -99,7 +101,6 @@ arm_left_4_joint_position:
   cmd_joint_angular_position: [1.96]
 arm_left_5_joint_position:
   cmd_joint_angular_position: [-2.0]
-  joint_angular_velocity: [0.0]
 arm_left_6_joint_position:
   cmd_joint_angular_position: [1.2]
 arm_left_7_joint_position:
@@ -127,42 +128,42 @@ head_1_joint_position:
 head_2_joint_position:
   cmd_joint_angular_position: [0.0]
 
-# teleop_arm_left_1_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_left_2_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_left_3_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_left_4_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_left_5_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_left_6_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_left_7_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_right_1_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_right_2_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_right_3_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_right_4_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_right_5_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_right_6_joint:
-#   joint_angular_position: [0.0]
-# teleop_arm_right_7_joint:
-#   joint_angular_position: [0.0]
-# teleop_gripper_left_right_finger_joint:
-#   joint_linear_position: [0.0]
-# teleop_gripper_left_left_finger_joint:
-#   joint_linear_position: [0.0]
-# teleop_gripper_right_right_finger_joint:
-#   joint_linear_position: [0.0]
-# teleop_gripper_right_left_finger_joint:
-#   joint_linear_position: [0.0]
+teleop_arm_left_1_joint:
+  joint_angular_position: [0.27]
+teleop_arm_left_2_joint:
+  joint_angular_position: [-1.07]
+teleop_arm_left_3_joint:
+  joint_angular_position: [1.5]
+teleop_arm_left_4_joint:
+  joint_angular_position: [1.96]
+teleop_arm_left_5_joint:
+  joint_angular_position: [-2.0]
+teleop_arm_left_6_joint:
+  joint_angular_position: [1.2]
+teleop_arm_left_7_joint:
+  joint_angular_position: [0.5]
+teleop_arm_right_1_joint:
+  joint_angular_position: [0.27]
+teleop_arm_right_2_joint:
+  joint_angular_position: [-1.07]
+teleop_arm_right_3_joint:
+  joint_angular_position: [1.5]
+teleop_arm_right_4_joint:
+  joint_angular_position: [1.96]
+teleop_arm_right_5_joint:
+  joint_angular_position: [-2.0]
+teleop_arm_right_6_joint:
+  joint_angular_position: [1.2]
+teleop_arm_right_7_joint:
+  joint_angular_position: [0.5]
+teleop_gripper_left_right_finger_joint:
+  joint_linear_position: [0.0]
+teleop_gripper_left_left_finger_joint:
+  joint_linear_position: [0.0]
+teleop_gripper_right_right_finger_joint:
+  joint_linear_position: [0.0]
+teleop_gripper_right_left_finger_joint:
+  joint_linear_position: [0.0]
 
 gripper_left_left_finger_joint_position:
   cmd_joint_angular_position: [0.0]
