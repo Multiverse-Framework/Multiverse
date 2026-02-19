@@ -1,18 +1,6 @@
 <?xml version="1.0" ?>
 <robot name="base_footprint" version="1.0">
-  <link name="base_footprint">
-    <inertial>
-      <origin xyz="0.0 0.0 0.15000000596046448" rpy="0.0 0.0 0.0"/>
-      <mass value="68.70663452148438"/>
-      <inertia ixx="1.767478108406067" ixy="0.0" ixz="0.0" iyy="1.767478108406067" iyz="0.0" izz="2.504356622695923"/>
-    </inertial>
-    <collision name="Geom_0">
-      <origin xyz="0.0 0.0 0.15000000596046448" rpy="0.0 0.0 0.0"/>
-      <geometry>
-        <cylinder radius="0.27000001072883606" length="0.30000001192092896"/>
-      </geometry>
-    </collision>
-  </link>
+  <link name="base_footprint"/>
   <joint name="base_link_joint" type="fixed">
     <origin xyz="0.0 0.0 0.0985" rpy="0.0 0.0 0.0"/>
     <parent link="base_footprint"/>

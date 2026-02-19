@@ -26,16 +26,19 @@ tmux new-session -d -s "$SESH" -n server
 tmux set-option -t "$SESH" -g mouse on
 tmux set-option -t "$SESH" -g history-limit 200000
 
-# 6 panes: 3 columns x 2 rows
+# --- 3 columns (make 3 panes horizontally) ---
 tmux split-window -t "$SESH":0 -h
 tmux split-window -t "$SESH":0 -h
 
-tmux select-pane -t "$SESH":0.0
-tmux split-window -t "$SESH":0 -v
-tmux select-pane -t "$SESH":0.1
-tmux split-window -t "$SESH":0 -v
-tmux select-pane -t "$SESH":0.2
-tmux split-window -t "$SESH":0 -v
+mapfile -t COLS < <(tmux list-panes -t "$SESH":0 -F '#{pane_id}' | head -n 3)
+
+# --- for each column, split twice vertically to make 3 rows ---
+for col in "${COLS[@]}"; do
+  tmux select-pane -t "$col"
+  tmux split-window -t "$col" -v             # add 2nd row
+  tmux select-pane -t "$col"
+  tmux split-window -t "$col" -v             # add 3rd row
+done
 
 tmux select-layout -t "$SESH":0 tiled
 
@@ -72,12 +75,26 @@ cp ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago.urdf /tmp/iai_tiago.urdf
 sed -i 's|file://\([^/]\)|file://'"'"'$PWD'"'"'/./Demos/1_TiagoDualInApartment/assets/urdf/\1|g' /tmp/iai_tiago.urdf
 ros2 run rviz2 rviz2 --display-config ./Demos/1_TiagoDualInApartment/config/rviz2.rviz" C-m
 
-
+# Pane 5 - vr_teleop_action_server
 tmux send-keys -t "$SESH":0.5 \
 "source /opt/ros/jazzy/setup.bash
 source ./MultiverseConnector/ros_connector/ros_ws/multiverse_ws2/install/setup.bash
 cd ./Demos/1_TiagoDualInApartment
 ros2 run vr_teleop_action vr_teleop_action_server --ros-args --params-file ./config/vr_teleop.yaml" C-m
+
+# Pane 6 - 
+tmux send-keys -t "$SESH":0.6 \
+"source /opt/ros/jazzy/setup.bash
+source ./MultiverseConnector/ros_connector/ros_ws/multiverse_ws2/install/setup.bash
+ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \"timeout: {sec: -1}\"" C-m
+
+# Pane 7 - 
+tmux send-keys -t "$SESH":0.7 \
+"" C-m
+
+# Pane 8 - 
+tmux send-keys -t "$SESH":0.8 \
+"" C-m
 
 tmux select-pane -t "$SESH":0.0
 tmux attach -t "$SESH"

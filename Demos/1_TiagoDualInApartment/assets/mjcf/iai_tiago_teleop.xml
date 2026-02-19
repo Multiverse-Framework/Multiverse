@@ -427,11 +427,11 @@
         <config key="transport" value="zmq" />
         <config key="host" value="tcp://127.0.0.1" />
         <config key="server_port" value="7000" />
-        <config key="client_port" value="7500" />
+        <config key="client_port" value="7550" />
         <config key="world_name" value="world" />
-        <config key="simulation_name" value="tiago_dual_teleop_simulation" />
+        <config key="simulation_name" value="iai_tiago_teleop" />
         <config key="send" value="{'joint': ['joint_angular_position', 'joint_linear_position']}" />
-        <!-- <config key="receive" value="{'head_2_link_ref': ['position', 'quaternion'], 'hand_left_ref': ['position', 'quaternion'], 'hand_right_ref': ['position', 'quaternion'], 'gripper_right_fingers_actuator': ['scalar'], 'gripper_right_base_link': ['scalar']}" /> -->
+        <config key="receive" value="{'head_2_link_ref': ['position', 'quaternion'], 'hand_left_ref': ['position', 'quaternion'], 'hand_right_ref': ['position', 'quaternion'], 'gripper_right_fingers_actuator': ['scalar'], 'gripper_left_fingers_actuator': ['scalar']}" />
       </instance>
     </plugin>
   </extension>
