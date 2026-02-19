@@ -9,94 +9,247 @@ vr_teleop_action_server:
       client_port: "2000"
       world_name: world
       simulation_name: vr_teleop
+    filter:
+      time_constant: 0.02
+      damping: 1.0
+    initializers:
+      markers_initializer:
+        topic: /tf
+        frame_id: pelvis
+        frames:
+          pelvis_ref: pelvis
+          waist_roll_link_ref: waist_roll_link
+          left_hand_ref: left_wrist_pitch_link
+          right_hand_ref: right_wrist_pitch_link
+          head_ref: head_pitch_link
+      joint_state_initializer:
+        topic: /joint_states
+        joints:
+          teleop_left_hip_pitch_joint: left_hip_pitch_joint
+          teleop_left_hip_roll_joint: left_hip_roll_joint
+          teleop_left_hip_yaw_joint: left_hip_yaw_joint
+          teleop_left_knee_pitch_joint: left_knee_pitch_joint
+          teleop_left_ankle_pitch_joint: left_ankle_pitch_joint
+          teleop_left_ankle_roll_joint: left_ankle_roll_joint
+          teleop_right_hip_pitch_joint: right_hip_pitch_joint
+          teleop_right_hip_roll_joint: right_hip_roll_joint
+          teleop_right_hip_yaw_joint: right_hip_yaw_joint
+          teleop_right_knee_pitch_joint: right_knee_pitch_joint
+          teleop_right_ankle_pitch_joint: right_ankle_pitch_joint
+          teleop_right_ankle_roll_joint: right_ankle_roll_joint
+          teleop_waist_yaw_joint: waist_yaw_joint
+          teleop_waist_roll_joint: waist_roll_joint
+          teleop_left_shoulder_pitch_joint: left_shoulder_pitch_joint
+          teleop_left_shoulder_roll_joint: left_shoulder_roll_joint
+          teleop_left_shoulder_yaw_joint: left_shoulder_yaw_joint
+          teleop_left_elbow_pitch_joint: left_elbow_pitch_joint
+          teleop_left_wrist_yaw_joint: left_wrist_yaw_joint
+          teleop_left_wrist_roll_joint: left_wrist_roll_joint
+          teleop_left_wrist_pitch_joint: left_wrist_pitch_joint          
+          teleop_L_thumb_swing_joint: L_thumb_swing_joint
+          teleop_L_thumb_1_joint: L_thumb_1_joint
+          teleop_L_thumb_2_joint: L_thumb_2_joint
+          teleop_L_thumb_3_joint: L_thumb_3_joint
+          teleop_L_index_1_joint: L_index_1_joint
+          teleop_L_index_2_joint: L_index_2_joint
+          teleop_L_middle_1_joint: L_middle_1_joint
+          teleop_L_middle_2_joint: L_middle_2_joint
+          teleop_L_ring_1_joint: L_ring_1_joint
+          teleop_L_ring_2_joint: L_ring_2_joint
+          teleop_L_pinky_1_joint: L_pinky_1_joint
+          teleop_L_pinky_2_joint: L_pinky_2_joint
+          teleop_right_shoulder_pitch_joint: right_shoulder_pitch_joint
+          teleop_right_shoulder_roll_joint: right_shoulder_roll_joint
+          teleop_right_shoulder_yaw_joint: right_shoulder_yaw_joint
+          teleop_right_elbow_pitch_joint: right_elbow_pitch_joint
+          teleop_right_wrist_yaw_joint: right_wrist_yaw_joint
+          teleop_right_wrist_roll_joint: right_wrist_roll_joint
+          teleop_right_wrist_pitch_joint: right_wrist_pitch_joint     
+          teleop_R_thumb_swing_joint: R_thumb_swing_joint
+          teleop_R_thumb_1_joint: R_thumb_1_joint
+          teleop_R_thumb_2_joint: R_thumb_2_joint
+          teleop_R_thumb_3_joint: R_thumb_3_joint
+          teleop_R_index_1_joint: R_index_1_joint
+          teleop_R_index_2_joint: R_index_2_joint
+          teleop_R_middle_1_joint: R_middle_1_joint
+          teleop_R_middle_2_joint: R_middle_2_joint
+          teleop_R_ring_1_joint: R_ring_1_joint
+          teleop_R_ring_2_joint: R_ring_2_joint
+          teleop_R_pinky_1_joint: R_pinky_1_joint
+          teleop_R_pinky_2_joint: R_pinky_2_joint
+          teleop_head_yaw_joint: head_yaw_joint
+          teleop_head_pitch_joint: head_pitch_joint
+          
     publishers:
       arm_publisher:
         topic: /arms_joint_position_controller/commands
         rate: 100
         joints:
           left_shoulder_pitch_joint:
-            from: mujoco_left_shoulder_pitch_joint
-            type: cmd_joint_angular_position
+            from: teleop_left_shoulder_pitch_joint
+            type: joint_angular_position
           left_shoulder_roll_joint:
-            from: mujoco_left_shoulder_roll_joint
-            type: cmd_joint_angular_position
+            from: teleop_left_shoulder_roll_joint
+            type: joint_angular_position
           left_shoulder_yaw_joint:
-            from: mujoco_left_shoulder_yaw_joint
-            type: cmd_joint_angular_position
+            from: teleop_left_shoulder_yaw_joint
+            type: joint_angular_position
           left_elbow_pitch_joint:
-            from: mujoco_left_elbow_pitch_joint
-            type: cmd_joint_angular_position
+            from: teleop_left_elbow_pitch_joint
+            type: joint_angular_position
           left_wrist_yaw_joint:
-            from: mujoco_left_wrist_yaw_joint
-            type: cmd_joint_angular_position
+            from: teleop_left_wrist_yaw_joint
+            type: joint_angular_position
           left_wrist_roll_joint:
-            from: mujoco_left_wrist_roll_joint
-            type: cmd_joint_angular_position
+            from: teleop_left_wrist_roll_joint
+            type: joint_angular_position
           left_wrist_pitch_joint:
-            from: mujoco_left_wrist_pitch_joint
-            type: cmd_joint_angular_position
+            from: teleop_left_wrist_pitch_joint
+            type: joint_angular_position
           right_shoulder_pitch_joint:
-            from: mujoco_right_shoulder_pitch_joint
-            type: cmd_joint_angular_position
+            from: teleop_right_shoulder_pitch_joint
+            type: joint_angular_position
           right_shoulder_roll_joint:
-            from: mujoco_right_shoulder_roll_joint
-            type: cmd_joint_angular_position
+            from: teleop_right_shoulder_roll_joint
+            type: joint_angular_position
           right_shoulder_yaw_joint:
-            from: mujoco_right_shoulder_yaw_joint
-            type: cmd_joint_angular_position
+            from: teleop_right_shoulder_yaw_joint
+            type: joint_angular_position
           right_elbow_pitch_joint:
-            from: mujoco_right_elbow_pitch_joint
-            type: cmd_joint_angular_position
+            from: teleop_right_elbow_pitch_joint
+            type: joint_angular_position
           right_wrist_yaw_joint:
-            from: mujoco_right_wrist_yaw_joint
-            type: cmd_joint_angular_position
+            from: teleop_right_wrist_yaw_joint
+            type: joint_angular_position
           right_wrist_roll_joint:
-            from: mujoco_right_wrist_roll_joint
-            type: cmd_joint_angular_position
+            from: teleop_right_wrist_roll_joint
+            type: joint_angular_position
           right_wrist_pitch_joint:
-            from: mujoco_right_wrist_pitch_joint
-            type: cmd_joint_angular_position
+            from: teleop_right_wrist_pitch_joint
+            type: joint_angular_position
       left_hand_publisher:
         topic: /left_hand_joint_position_controller/commands
         rate: 100
         joints:
           L_thumb_swing_joint:
-            from: mujoco_L_thumb_swing_joint
-            type: cmd_joint_angular_position
+            from: teleop_L_thumb_swing_joint
+            type: joint_angular_position
           L_thumb_1_joint:
-            from: mujoco_L_thumb_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_L_thumb_1_joint
+            type: joint_angular_position
           L_index_1_joint:
-            from: mujoco_L_index_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_L_index_1_joint
+            type: joint_angular_position
           L_middle_1_joint:
-            from: mujoco_L_middle_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_L_middle_1_joint
+            type: joint_angular_position
           L_ring_1_joint:
-            from: mujoco_L_ring_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_L_ring_1_joint
+            type: joint_angular_position
           L_pinky_1_joint:
-            from: mujoco_L_pinky_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_L_pinky_1_joint
+            type: joint_angular_position
       right_hand_publisher:
         topic: /right_hand_joint_position_controller/commands
         rate: 100
         joints:
           R_thumb_swing_joint:
-            from: mujoco_R_thumb_swing_joint
-            type: cmd_joint_angular_position
+            from: teleop_R_thumb_swing_joint
+            type: joint_angular_position
           R_thumb_1_joint:
-            from: mujoco_R_thumb_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_R_thumb_1_joint
+            type: joint_angular_position
           R_index_1_joint:
-            from: mujoco_R_index_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_R_index_1_joint
+            type: joint_angular_position
           R_middle_1_joint:
-            from: mujoco_R_middle_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_R_middle_1_joint
+            type: joint_angular_position
           R_ring_1_joint:
-            from: mujoco_R_ring_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_R_ring_1_joint
+            type: joint_angular_position
           R_pinky_1_joint:
-            from: mujoco_R_pinky_1_joint
-            type: cmd_joint_angular_position
+            from: teleop_R_pinky_1_joint
+            type: joint_angular_position
+    subscribers:
+      whole_body_subscriber:
+        topic: /joint_states
+        joints:
+          left_shoulder_pitch_joint:
+            to: left_shoulder_pitch_joint
+            type: joint_angular_position
+          left_shoulder_roll_joint:
+            to: left_shoulder_roll_joint
+            type: joint_angular_position
+          left_shoulder_yaw_joint:
+            to: left_shoulder_yaw_joint
+            type: joint_angular_position
+          left_elbow_pitch_joint:
+            to: left_elbow_pitch_joint
+            type: joint_angular_position
+          left_wrist_yaw_joint:
+            to: left_wrist_yaw_joint
+            type: joint_angular_position
+          left_wrist_roll_joint:
+            to: left_wrist_roll_joint
+            type: joint_angular_position
+          left_wrist_pitch_joint:
+            to: left_wrist_pitch_joint
+            type: joint_angular_position
+          right_shoulder_pitch_joint:
+            to: right_shoulder_pitch_joint
+            type: joint_angular_position
+          right_shoulder_roll_joint:
+            to: right_shoulder_roll_joint
+            type: joint_angular_position
+          right_shoulder_yaw_joint:
+            to: right_shoulder_yaw_joint
+            type: joint_angular_position
+          right_elbow_pitch_joint:
+            to: right_elbow_pitch_joint
+            type: joint_angular_position
+          right_wrist_yaw_joint:
+            to: right_wrist_yaw_joint
+            type: joint_angular_position
+          right_wrist_roll_joint:
+            to: right_wrist_roll_joint
+            type: joint_angular_position
+          right_wrist_pitch_joint:
+            to: right_wrist_pitch_joint
+            type: joint_angular_position
+          L_thumb_swing_joint:
+            to: L_thumb_swing_joint
+            type: joint_angular_position
+          L_thumb_1_joint:
+            to: L_thumb_1_joint
+            type: joint_angular_position
+          L_index_1_joint:
+            to: L_index_1_joint
+            type: joint_angular_position
+          L_middle_1_joint:
+            to: L_middle_1_joint
+            type: joint_angular_position
+          L_ring_1_joint:
+            to: L_ring_1_joint
+            type: joint_angular_position
+          L_pinky_1_joint:
+            to: L_pinky_1_joint
+            type: joint_angular_position
+          R_thumb_swing_joint:
+            to: R_thumb_swing_joint
+            type: joint_angular_position
+          R_thumb_1_joint:
+            to: R_thumb_1_joint
+            type: joint_angular_position
+          R_index_1_joint:
+            to: R_index_1_joint
+            type: joint_angular_position
+          R_middle_1_joint:
+            to: R_middle_1_joint
+            type: joint_angular_position
+          R_ring_1_joint:
+            to: R_ring_1_joint
+            type: joint_angular_position
+          R_pinky_1_joint:
+            to: R_pinky_1_joint
+            type: joint_angular_position

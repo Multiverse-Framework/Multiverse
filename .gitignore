@@ -35,7 +35,7 @@ __pycache__
 *.egg-info
 *.idea
 *.pytest_cache
-mujoco-3.4.0
+mujoco-3.*.0
 multiverse
 
 # VSC

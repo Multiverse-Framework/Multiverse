@@ -108,17 +108,3 @@ head_position_controller:
     joints:
       - head_1_joint
       - head_2_joint
-
-left_gripper_controller:
-  ros__parameters:
-    type: position_controllers/JointGroupPositionController
-    joints:
-      - gripper_left_left_finger_joint
-      - gripper_left_right_finger_joint
-
-right_gripper_controller:
-  ros__parameters:
-    type: position_controllers/JointGroupPositionController
-    joints:
-      - gripper_right_left_finger_joint
-      - gripper_right_right_finger_joint

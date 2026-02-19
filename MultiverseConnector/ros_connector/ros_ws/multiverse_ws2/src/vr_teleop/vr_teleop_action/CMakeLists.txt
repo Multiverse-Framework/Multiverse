@@ -12,6 +12,8 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 add_library(action_server SHARED
   src/vr_teleop_action_server.cpp)
@@ -33,7 +35,9 @@ ament_target_dependencies(action_server
   "rclcpp"
   "rclcpp_action"
   "rclcpp_components"
-  "std_msgs")
+  "std_msgs"
+  "sensor_msgs"
+  "tf2_ros")
 rclcpp_components_register_node(action_server PLUGIN "vr_teleop_action::VrTeleopActionServer" EXECUTABLE vr_teleop_action_server)
 install(TARGETS
   action_server

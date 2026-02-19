@@ -1,0 +1,96 @@
+arm_left_1_joint:
+  joint_angular_position: [0.27]
+  joint_angular_velocity: [0.0]
+arm_left_2_joint:
+  joint_angular_position: [-1.07]
+  joint_angular_velocity: [0.0]
+arm_left_3_joint:
+  joint_angular_position: [1.5]
+  joint_angular_velocity: [0.0]
+arm_left_4_joint:
+  joint_angular_position: [1.96]
+  joint_angular_velocity: [0.0]
+arm_left_5_joint:
+  joint_angular_position: [-2.0]
+  joint_angular_velocity: [0.0]
+arm_left_6_joint:
+  joint_angular_position: [1.2]
+  joint_angular_velocity: [0.0]
+arm_left_7_joint:
+  joint_angular_position: [0.5]
+  joint_angular_velocity: [0.0]
+arm_right_1_joint:
+  joint_angular_position: [0.27]
+  joint_angular_velocity: [0.0]
+arm_right_2_joint:
+  joint_angular_position: [-1.07]
+  joint_angular_velocity: [0.0]
+arm_right_3_joint:
+  joint_angular_position: [1.5]
+  joint_angular_velocity: [0.0]
+arm_right_4_joint:
+  joint_angular_position: [1.96]
+  joint_angular_velocity: [0.0]
+arm_right_5_joint:
+  joint_angular_position: [-2.0]
+  joint_angular_velocity: [0.0]
+arm_right_6_joint:
+  joint_angular_position: [1.2]
+  joint_angular_velocity: [0.0]
+arm_right_7_joint:
+  joint_angular_position: [0.5]
+  joint_angular_velocity: [0.0]
+
+torso_lift_joint:
+  joint_linear_position: [0.0]
+  joint_linear_velocity: [0.0]
+
+head_1_joint:
+  joint_angular_position: [0.0]
+  joint_angular_velocity: [0.0]
+head_2_joint:
+  joint_angular_position: [0.0]
+  joint_angular_velocity: [0.0]
+
+arm_left_1_joint_position:
+  cmd_joint_angular_position: [0.27]
+arm_left_2_joint_position:
+  cmd_joint_angular_position: [-1.07]
+arm_left_3_joint_position:
+  cmd_joint_angular_position: [1.5]
+arm_left_4_joint_position:
+  cmd_joint_angular_position: [1.96]
+arm_left_5_joint_position:
+  cmd_joint_angular_position: [-2.0]
+arm_left_6_joint_position:
+  cmd_joint_angular_position: [1.2]
+arm_left_7_joint_position:
+  cmd_joint_angular_position: [0.5]
+arm_right_1_joint_position:
+  cmd_joint_angular_position: [0.27]
+arm_right_2_joint_position:
+  cmd_joint_angular_position: [-1.07]
+arm_right_3_joint_position:
+  cmd_joint_angular_position: [1.5]
+arm_right_4_joint_position:
+  cmd_joint_angular_position: [1.96]
+arm_right_5_joint_position:
+  cmd_joint_angular_position: [-2.0]
+arm_right_6_joint_position:
+  cmd_joint_angular_position: [1.2]
+arm_right_7_joint_position:
+  cmd_joint_angular_position: [0.5]
+
+torso_lift_joint_position:
+  joint_linear_position: [0.0]
+  joint_linear_velocity: [0.0]
+
+head_1_joint_position:
+  cmd_joint_angular_position: [0.0]
+head_2_joint_position:
+  cmd_joint_angular_position: [0.0]
+
+gripper_right_fingers_actuator:
+  scalar: [0.0]
+gripper_left_fingers_actuator:
+  scalar: [0.0]

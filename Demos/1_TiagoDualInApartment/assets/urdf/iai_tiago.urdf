@@ -1,0 +1,1844 @@
+<?xml version="1.0" ?>
+<robot name="base_footprint" version="1.0">
+  <link name="base_footprint">
+    <inertial>
+      <origin xyz="0.0 0.0 0.15000000596046448" rpy="0.0 0.0 0.0"/>
+      <mass value="68.70663452148438"/>
+      <inertia ixx="1.767478108406067" ixy="0.0" ixz="0.0" iyy="1.767478108406067" iyz="0.0" izz="2.504356622695923"/>
+    </inertial>
+    <collision name="Geom_0">
+      <origin xyz="0.0 0.0 0.15000000596046448" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.27000001072883606" length="0.30000001192092896"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0985" rpy="0.0 0.0 0.0"/>
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+  </joint>
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.0020640359725803137 0.00011406785779399797 0.06972470879554749" rpy="0.0 0.0 0.0"/>
+      <mass value="201.04734802246094"/>
+      <inertia ixx="4.200783729553223" ixy="0.002113376511260867" ixz="0.0662025511264801" iyy="4.523361682891846" iyz="0.0019745363388210535" izz="6.476358890533447"/>
+    </inertial>
+    <visual name="Geom_1">
+      <origin xyz="0.0015155593864619732 0.000196770706679672 0.058584269136190414" rpy="3.0199689865112305 -1.5556684732437134 0.11661209911108017"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/base.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_1_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+    <collision name="Geom_2">
+      <origin xyz="-0.00711810402572155 -2.701158791751368e-06 0.08545401692390442" rpy="1.5707272291183472 -1.533373236656189 0.00042232408304698765"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/base_collision.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_laser_link_joint" type="fixed">
+    <origin xyz="0.202 0.0 -0.004" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_laser_link"/>
+  </joint>
+  <link name="base_laser_link">
+    <inertial>
+      <origin xyz="-0.007821361534297466 -0.0014750047121196985 -0.039517078548669815" rpy="0.0 0.0 0.0"/>
+      <mass value="0.3772903084754944"/>
+      <inertia ixx="0.0002621730091050267" ixy="3.205596840416547e-06" ixz="-3.0289334972621873e-05" iyy="0.0003280552919022739" iyz="-7.227324658742873e-07" izz="0.00026102099218405783"/>
+    </inertial>
+    <collision name="Geom_3">
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.009999999776482582" length="0.009999999776482582"/>
+      </geometry>
+    </collision>
+    <visual name="Geom_4">
+      <origin xyz="-0.007887034676969051 -0.0014873897889629006 -0.03984889015555382" rpy="0.8160449266433716 0.039992284029722214 1.5038965940475464"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/sick_tim551.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_4_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_sonar_02_link_joint" type="fixed">
+    <origin xyz="-0.259 0.0 0.173" rpy="0.0 0.0 3.1415927410125732"/>
+    <parent link="base_link"/>
+    <child link="base_sonar_02_link"/>
+  </joint>
+  <link name="base_sonar_02_link">
+    <inertial>
+      <origin xyz="-0.005075091030448675 -4.064200766151771e-05 4.2048095565405674e-06" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0044513000175356865"/>
+      <inertia ixx="7.100039738361374e-07" ixy="0.0" ixz="0.0" iyy="1.126955453401024e-07" iyz="0.0" izz="6.779729915251664e-07"/>
+    </inertial>
+    <visual name="Geom_5">
+      <origin xyz="-0.005075091030448675 -4.064200766151771e-05 4.2048095565405674e-06" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/srf05.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_5_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_mic_front_left_link_joint" type="fixed">
+    <origin xyz="0.23182 0.03902 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_mic_front_left_link"/>
+  </joint>
+  <link name="base_mic_front_left_link">
+    <inertial>
+      <origin xyz="0.2318200021982193 0.03901999816298485 0.19499999284744263" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="base_mic_back_left_link_joint" type="fixed">
+    <origin xyz="-0.1082 -0.0599 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_mic_back_left_link"/>
+  </joint>
+  <link name="base_mic_back_left_link">
+    <inertial>
+      <origin xyz="-0.10819999873638153 -0.05990000069141388 0.19499999284744263" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="base_dock_link_joint" type="fixed">
+    <origin xyz="0.2675 0.0 0.061" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_dock_link"/>
+  </joint>
+  <link name="base_dock_link">
+    <inertial>
+      <origin xyz="-0.0037082000635564327 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.032242000102996826"/>
+      <inertia ixx="2.1300000298651867e-05" ixy="0.0" ixz="0.0" iyy="1.2100000276404899e-05" iyz="0.0" izz="1.0099999599333387e-05"/>
+    </inertial>
+    <visual name="Geom_6">
+      <origin xyz="-0.006253296975046396 -7.037353444863963e-20 -3.04891510107292e-19" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/base_dock_link.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_6_material">
+        <color rgba="0.25098 0.25098 0.25098 1.0"/>
+      </material>
+    </visual>
+    <collision name="Geom_7">
+      <origin xyz="-0.006253296975046396 -7.037353444863963e-20 -3.04891510107292e-19" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/base_dock_link.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="base_antenna_right_link_joint" type="fixed">
+    <origin xyz="-0.201 -0.1062 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_antenna_right_link"/>
+  </joint>
+  <link name="base_antenna_right_link">
+    <inertial>
+      <origin xyz="-8.485243597533554e-05 1.0281187456939733e-07 0.06548337638378143" rpy="0.0 0.0 0.0"/>
+      <mass value="0.036020636558532715"/>
+      <inertia ixx="8.655064448248595e-05" ixy="0.0" ixz="-1.1686891099316199e-07" iyy="8.653633994981647e-05" iyz="0.0" izz="5.367779181142396e-07"/>
+    </inertial>
+    <collision name="Geom_8">
+      <origin xyz="0.0 0.0 0.08500000089406967" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.17000000178813934"/>
+      </geometry>
+    </collision>
+    <visual name="Geom_9">
+      <origin xyz="-0.00013482979557011276 1.6336718999809818e-07 0.053988248109817505" rpy="0.0 0.0017822254449129105 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/antenna.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_9_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="suspension_left_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="suspension_left_link"/>
+  </joint>
+  <link name="suspension_left_link">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.019999999552965164" rpy="0.0 0.0 0.0"/>
+      <mass value="10.0"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </link>
+  <joint name="wheel_left_joint" type="revolute">
+    <origin xyz="0.0 0.2021999955177307 0.0" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="suspension_left_link"/>
+    <child link="wheel_left_link"/>
+    <limit effort="1000.0" lower="0.0" upper="0.0" velocity="1000.0"/>
+  </joint>
+  <link name="wheel_left_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0020699999295175076" rpy="0.0 0.0 0.0"/>
+      <mass value="1.8236199617385864"/>
+      <inertia ixx="0.004997458308935165" ixy="-4.94216436663919e-08" ixz="0.0" iyy="0.00499744201079011" iyz="0.0" izz="0.008392400108277798"/>
+    </inertial>
+    <visual name="Geom_10">
+      <origin xyz="8.546559911337681e-06 6.882949037390063e-06 -0.0019978759810328484" rpy="1.6753565073013306 1.5703744888305664 1.8622938394546509"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/wheel.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_10_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="caster_front_right_1_link_joint" type="fixed">
+    <origin xyz="0.1695 -0.102 -0.0335" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="caster_front_right_1_link"/>
+  </joint>
+  <link name="caster_front_right_1_link">
+    <inertial>
+      <origin xyz="-0.006345999892801046 5.3499999921768904e-05 -0.020375199615955353" rpy="0.0 0.0 0.0"/>
+      <mass value="0.05144760012626648"/>
+      <inertia ixx="1.5174557120190002e-05" ixy="-3.0607136380922384e-08" ixz="2.669622290341067e-06" iyy="1.3100426258461084e-05" iyz="-4.9912674882079955e-08" izz="1.2025016076222528e-05"/>
+    </inertial>
+    <visual name="Geom_11">
+      <origin xyz="-0.007199014537036419 3.055634323345657e-08 -0.024253934621810913" rpy="-0.0003356116358190775 0.5594065189361572 -3.1170812458958252e-18"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/caster_1.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_11_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="caster_front_right_2_link_joint" type="fixed">
+    <origin xyz="-0.016 0.0 -0.04" rpy="-1.5707963705062866 0.0 0.0"/>
+    <parent link="caster_front_right_1_link"/>
+    <child link="caster_front_right_2_link"/>
+  </joint>
+  <link name="caster_front_right_2_link">
+    <inertial>
+      <origin xyz="-2.0214718006172916e-06 8.690596473570622e-07 -1.3986274325361592e-06" rpy="0.0 0.0 0.0"/>
+      <mass value="0.03966137766838074"/>
+      <inertia ixx="6.768649200239452e-06" ixy="-2.0068131600936567e-09" ixz="-1.6326361219940135e-22" iyy="6.765461876057088e-06" iyz="-3.381550341417604e-22" izz="1.1229720257688314e-05"/>
+    </inertial>
+    <visual name="Geom_12">
+      <origin xyz="-2.0214718006172916e-06 8.690596473570622e-07 -1.3986274325361592e-06" rpy="1.1209975481033325 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/caster_2.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_12_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="caster_front_left_1_link_joint" type="fixed">
+    <origin xyz="0.1695 0.102 -0.0335" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="caster_front_left_1_link"/>
+  </joint>
+  <link name="caster_front_left_1_link">
+    <inertial>
+      <origin xyz="-0.006345999892801046 5.3499999921768904e-05 -0.020375199615955353" rpy="0.0 0.0 0.0"/>
+      <mass value="0.05144760012626648"/>
+      <inertia ixx="1.5174557120190002e-05" ixy="-3.0607136380922384e-08" ixz="2.669622290341067e-06" iyy="1.3100426258461084e-05" iyz="-4.9912674882079955e-08" izz="1.2025016076222528e-05"/>
+    </inertial>
+    <visual name="Geom_13">
+      <origin xyz="-0.007199014537036419 3.055634323345657e-08 -0.024253934621810913" rpy="-0.0003356116358190775 0.5594065189361572 -3.1170812458958252e-18"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/caster_1.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_13_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="caster_front_left_2_link_joint" type="fixed">
+    <origin xyz="-0.016 0.0 -0.04" rpy="-1.5707963705062866 0.0 0.0"/>
+    <parent link="caster_front_left_1_link"/>
+    <child link="caster_front_left_2_link"/>
+  </joint>
+  <link name="caster_front_left_2_link">
+    <inertial>
+      <origin xyz="-2.0214718006172916e-06 8.690596473570622e-07 -1.3986274325361592e-06" rpy="0.0 0.0 0.0"/>
+      <mass value="0.03966137766838074"/>
+      <inertia ixx="6.768649200239452e-06" ixy="-2.0068131600936567e-09" ixz="-1.6326361219940135e-22" iyy="6.765461876057088e-06" iyz="-3.381550341417604e-22" izz="1.1229720257688314e-05"/>
+    </inertial>
+    <visual name="Geom_14">
+      <origin xyz="-2.0214718006172916e-06 8.690596473570622e-07 -1.3986274325361592e-06" rpy="1.1209975481033325 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/caster_2.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_14_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="caster_back_right_1_link_joint" type="fixed">
+    <origin xyz="-0.1735 -0.102 -0.0335" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="caster_back_right_1_link"/>
+  </joint>
+  <link name="caster_back_right_1_link">
+    <inertial>
+      <origin xyz="-0.006345999892801046 5.3499999921768904e-05 -0.020375199615955353" rpy="0.0 0.0 0.0"/>
+      <mass value="0.05144760012626648"/>
+      <inertia ixx="1.5174557120190002e-05" ixy="-3.0607136380922384e-08" ixz="2.669622290341067e-06" iyy="1.3100426258461084e-05" iyz="-4.9912674882079955e-08" izz="1.2025016076222528e-05"/>
+    </inertial>
+    <visual name="Geom_15">
+      <origin xyz="-0.007199014537036419 3.055634323345657e-08 -0.024253934621810913" rpy="-0.0003356116358190775 0.5594065189361572 -3.1170812458958252e-18"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/caster_1.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_15_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="caster_back_right_2_link_joint" type="fixed">
+    <origin xyz="-0.016 0.0 -0.04" rpy="-1.5707963705062866 0.0 0.0"/>
+    <parent link="caster_back_right_1_link"/>
+    <child link="caster_back_right_2_link"/>
+  </joint>
+  <link name="caster_back_right_2_link">
+    <inertial>
+      <origin xyz="-2.0214718006172916e-06 8.690596473570622e-07 -1.3986274325361592e-06" rpy="0.0 0.0 0.0"/>
+      <mass value="0.03966137766838074"/>
+      <inertia ixx="6.768649200239452e-06" ixy="-2.0068131600936567e-09" ixz="-1.6326361219940135e-22" iyy="6.765461876057088e-06" iyz="-3.381550341417604e-22" izz="1.1229720257688314e-05"/>
+    </inertial>
+    <visual name="Geom_16">
+      <origin xyz="-2.0214718006172916e-06 8.690596473570622e-07 -1.3986274325361592e-06" rpy="1.1209975481033325 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/caster_2.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_16_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="caster_back_left_1_link_joint" type="fixed">
+    <origin xyz="-0.1735 0.102 -0.0335" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="caster_back_left_1_link"/>
+  </joint>
+  <link name="caster_back_left_1_link">
+    <inertial>
+      <origin xyz="-0.006345999892801046 5.3499999921768904e-05 -0.020375199615955353" rpy="0.0 0.0 0.0"/>
+      <mass value="0.05144760012626648"/>
+      <inertia ixx="1.5174557120190002e-05" ixy="-3.0607136380922384e-08" ixz="2.669622290341067e-06" iyy="1.3100426258461084e-05" iyz="-4.9912674882079955e-08" izz="1.2025016076222528e-05"/>
+    </inertial>
+    <visual name="Geom_17">
+      <origin xyz="-0.007199014537036419 3.055634323345657e-08 -0.024253934621810913" rpy="-0.0003356116358190775 0.5594065189361572 -3.1170812458958252e-18"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/caster_1.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_17_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="caster_back_left_2_link_joint" type="fixed">
+    <origin xyz="-0.016 0.0 -0.04" rpy="-1.5707963705062866 0.0 0.0"/>
+    <parent link="caster_back_left_1_link"/>
+    <child link="caster_back_left_2_link"/>
+  </joint>
+  <link name="caster_back_left_2_link">
+    <inertial>
+      <origin xyz="-2.0214718006172916e-06 8.690596473570622e-07 -1.3986274325361592e-06" rpy="0.0 0.0 0.0"/>
+      <mass value="0.03966137766838074"/>
+      <inertia ixx="6.768649200239452e-06" ixy="-2.0068131600936567e-09" ixz="-1.6326361219940135e-22" iyy="6.765461876057088e-06" iyz="-3.381550341417604e-22" izz="1.1229720257688314e-05"/>
+    </inertial>
+    <visual name="Geom_18">
+      <origin xyz="-2.0214718006172916e-06 8.690596473570622e-07 -1.3986274325361592e-06" rpy="1.1209975481033325 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/caster_2.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_18_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="torso_fixed_link_joint" type="fixed">
+    <origin xyz="-0.062 0.0 0.193" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="torso_fixed_link"/>
+  </joint>
+  <link name="torso_fixed_link">
+    <inertial>
+      <origin xyz="0.05779330059885979 -3.26514287612642e-13 0.03275070711970329" rpy="0.0 0.0 0.0"/>
+      <mass value="15.668097496032715"/>
+      <inertia ixx="0.09715144336223602" ixy="0.0" ixz="0.009172104299068451" iyy="0.19500192999839783" iyz="0.0" izz="0.2783765196800232"/>
+    </inertial>
+    <collision name="Geom_19">
+      <origin xyz="0.08500000089406967 0.0 0.019999999552965164" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.4000000059604645 0.26499998569488525 0.05700000002980232"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_20">
+      <origin xyz="0.0 0.0 0.05000000074505806" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.25 0.26499998569488525 0.052000001072883606"/>
+      </geometry>
+    </collision>
+    <visual name="Geom_21">
+      <origin xyz="0.06340961903333664 -8.276616696688277e-13 0.035600677132606506" rpy="3.1415927410125732 -1.5183167457580566 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/torso_fix.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_21_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="torso_lift_joint" type="prismatic">
+    <origin xyz="0.0 0.0 0.597000002861023" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="torso_fixed_link"/>
+    <child link="torso_lift_link"/>
+    <limit effort="1000.0" lower="0.0" upper="0.3499999940395355" velocity="1000.0"/>
+  </joint>
+  <link name="torso_lift_link">
+    <inertial>
+      <origin xyz="0.0395359992980957 -0.0028409999795258045 -0.1909870058298111" rpy="0.0 0.0 0.0"/>
+      <mass value="7.338950157165527"/>
+      <inertia ixx="0.22908799350261688" ixy="0.0" ixz="0.0" iyy="0.24518799781799316" iyz="0.0" izz="0.09239699691534042"/>
+    </inertial>
+    <collision name="Geom_22">
+      <origin xyz="0.008324982598423958 9.267596033168957e-05 -0.20267997682094574" rpy="-0.0014478468801826239 0.027225002646446228 0.0012620562920346856"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/torso_lift_dual_arm.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_1_joint" type="revolute">
+    <origin xyz="0.02556000091135502 -0.1899999976158142 -0.17100000381469727" rpy="0.0 0.0 -1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="torso_lift_link"/>
+    <child link="arm_right_1_link"/>
+    <limit effort="1000.0" lower="-1.1780999898910522" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_1_link">
+    <inertial>
+      <origin xyz="0.061191000044345856 -0.022397000342607498 -0.012834999710321426" rpy="0.0 0.0 0.0"/>
+      <mass value="1.5634299516677856"/>
+      <inertia ixx="0.005102300085127354" ixy="0.0" ixz="0.0" iyy="0.005102300085127354" iyz="0.0" izz="0.005102300085127354"/>
+    </inertial>
+    <collision name="Geom_23">
+      <origin xyz="0.07808643579483032 -0.032326169312000275 -0.013299822807312012" rpy="2.889946699142456 -1.26142418384552 -0.19242295622825623"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_right_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_2_joint" type="revolute">
+    <origin xyz="0.125 -0.019500000402331352 -0.03099999949336052" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_1_link"/>
+    <child link="arm_right_2_link"/>
+    <limit effort="1000.0" lower="-1.1780999898910522" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_2_link">
+    <inertial>
+      <origin xyz="0.030432000756263733 0.00022899999748915434 -0.005942000076174736" rpy="0.0 0.0 0.0"/>
+      <mass value="1.8004000186920166"/>
+      <inertia ixx="0.004372300114482641" ixy="0.0" ixz="0.0" iyy="0.004327000118792057" iyz="0.0" izz="0.0017836999613791704"/>
+    </inertial>
+    <collision name="Geom_24">
+      <origin xyz="0.02370639704167843 9.225682151736692e-05 0.013983087614178658" rpy="-3.13736891746521 -1.0792927742004395 -0.004221487790346146"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_right_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_3_joint" type="revolute">
+    <origin xyz="0.08950000256299973 0.0 -0.001500000013038516" rpy="-1.5707963705062866 0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_2_link"/>
+    <child link="arm_right_3_link"/>
+    <limit effort="1000.0" lower="-3.534289836883545" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_3_link">
+    <inertial>
+      <origin xyz="0.007418000139296055 -0.004360999912023544 -0.1341940015554428" rpy="0.0 0.0 0.0"/>
+      <mass value="1.7999999523162842"/>
+      <inertia ixx="0.02007710002362728" ixy="0.0" ixz="0.0" iyy="0.019615400582551956" iyz="0.0" izz="0.0026485000271350145"/>
+    </inertial>
+    <collision name="Geom_25">
+      <origin xyz="-0.0026167999021708965 0.005651607643812895 -0.12450383603572845" rpy="0.10726087540388107 -0.07503989338874817 1.1100659370422363"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_right_3.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_4_joint" type="revolute">
+    <origin xyz="-0.019999999552965164 -0.027000000700354576 -0.22200000286102295" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_3_link"/>
+    <child link="arm_right_4_link"/>
+    <limit effort="1000.0" lower="-0.3926990032196045" upper="2.3561899662017822" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_4_link">
+    <inertial>
+      <origin xyz="-0.09565799683332443 0.014666000381112099 0.018132999539375305" rpy="0.0 0.0 0.0"/>
+      <mass value="1.4327000379562378"/>
+      <inertia ixx="0.00203999993391335" ixy="0.0" ixz="0.0" iyy="0.008423999883234501" iyz="0.0" izz="0.008685999549925327"/>
+    </inertial>
+    <collision name="Geom_26">
+      <origin xyz="-0.08055655658245087 0.016018036752939224 0.020240843296051025" rpy="-1.9858064651489258 -1.1720080375671387 -1.2853622436523438"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_right_4.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_5_joint" type="revolute">
+    <origin xyz="-0.16200000047683716 0.019999999552965164 0.027000000700354576" rpy="0.0 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_4_link"/>
+    <child link="arm_right_5_link"/>
+    <limit effort="1000.0" lower="-2.094399929046631" upper="2.094399929046631" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_5_link">
+    <inertial>
+      <origin xyz="0.0010779999429360032 -0.00015100000018719584 -0.07717300206422806" rpy="0.0 0.0 0.0"/>
+      <mass value="0.9359139800071716"/>
+      <inertia ixx="0.0010361999738961458" ixy="0.0" ixz="0.0" iyy="0.0007944999961182475" iyz="0.0" izz="0.0004398000019136816"/>
+    </inertial>
+    <collision name="Geom_27">
+      <origin xyz="-0.005094317253679037 2.310533818672411e-05 0.07825614511966705" rpy="-0.002001233631744981 0.04423227533698082 -0.0005554198287427425"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_right_5.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_6_joint" type="revolute">
+    <origin xyz="6.938893903907228e-18 0.0 0.15000000596046448" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_5_link"/>
+    <child link="arm_right_6_link"/>
+    <limit effort="1000.0" lower="-1.4137200117111206" upper="1.4137200117111206" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_6_link">
+    <inertial>
+      <origin xyz="-0.00015300000086426735 -0.0031220000237226486 0.0001829999964684248" rpy="0.0 0.0 0.0"/>
+      <mass value="0.30275800824165344"/>
+      <inertia ixx="3.849999848171137e-05" ixy="0.0" ixz="0.0" iyy="3.3299998904112726e-05" iyz="0.0" izz="3.2899999496294186e-05"/>
+    </inertial>
+    <collision name="Geom_28">
+      <origin xyz="0.011458860710263252 7.318072814399557e-09 -1.7091250015255355e-07" rpy="1.570812463760376 -1.570719599723816 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_right_6.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_7_joint" type="revolute">
+    <origin xyz="1.1102230246251565e-16 6.938893903907228e-18 0.0" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_right_6_link"/>
+    <child link="arm_right_7_link"/>
+    <limit effort="1000.0" lower="-2.094399929046631" upper="2.094399929046631" velocity="1000.0"/>
+  </joint>
+  <link name="arm_right_7_link">
+    <inertial>
+      <origin xyz="-0.00017389999993611127 0.00017640000442042947 0.08173549920320511" rpy="0.0 0.0 0.0"/>
+      <mass value="1.0027600526809692"/>
+      <inertia ixx="0.002584100002422929" ixy="0.0" ixz="0.0" iyy="0.002256799954921007" iyz="0.0" izz="0.0007463999791070819"/>
+    </inertial>
+    <collision name="Geom_29">
+      <origin xyz="0.0 0.0 0.04699999839067459" rpy="0.0 0.0 -1.5707963705062866"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.004999999888241291"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_30">
+      <origin xyz="0.0 0.0 0.053849998861551285" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <cylinder radius="0.02250000089406967" length="0.015699999406933784"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_31">
+      <origin xyz="0.0 0.0 0.06657499819993973" rpy="0.0 0.0 -1.5707963705062866"/>
+      <geometry>
+        <cylinder radius="0.02500000037252903" length="0.009750000201165676"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_right_tool_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0615" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <parent link="arm_right_7_link"/>
+    <child link="arm_right_tool_link"/>
+  </joint>
+  <link name="arm_right_tool_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.061500001698732376" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="gripper_right_base_link_joint" type="fixed">
+    <origin xyz="0.0312 0.0 0.0" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+    <parent link="arm_right_tool_link"/>
+    <child link="gripper_right_base_link"/>
+  </joint>
+  <link name="gripper_right_base_link">
+    <inertial>
+      <origin xyz="2.1052210286143236e-05 -3.52319005969548e-07 0.03281207010149956" rpy="0.0 0.0 0.0"/>
+      <mass value="0.2511079013347626"/>
+      <inertia ixx="0.00018791867478284985" ixy="1.8129745482653448e-09" ixz="1.5533842656623165e-07" iyy="0.00022201414685696363" iyz="1.971175667137004e-09" izz="0.00015073957911226898"/>
+    </inertial>
+    <visual name="Geom_32">
+      <origin xyz="2.1052210286143236e-05 -3.52319005969548e-07 0.03281207010149956" rpy="-0.004178010858595371 -2.7772186513175257e-05 1.5707430839538574"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_base_link.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_32_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_right_left_driver_joint" type="revolute">
+    <origin xyz="0.030601000413298607 0.0 0.0549050010740757" rpy="2.2957966327667236 0.0 1.5707963705062866"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="gripper_right_base_link"/>
+    <child link="gripper_right_left_outer_knuckle"/>
+    <limit effort="1000.0" lower="0.0" upper="0.699999988079071" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_right_left_outer_knuckle">
+    <inertial>
+      <origin xyz="-0.013063499704003334 0.016963500529527664 0.003465639892965555" rpy="0.0 0.0 0.0"/>
+      <mass value="0.031146200373768806"/>
+      <inertia ixx="2.6046454877359793e-05" ixy="-4.4947455535293557e-07" ixz="-3.894218480127165e-06" iyy="1.7785579984774813e-05" iyz="4.665731012210017e-06" izz="1.4917363841959741e-05"/>
+    </inertial>
+    <visual name="Geom_33">
+      <origin xyz="-0.00020010197476949543 0.008578719571232796 0.007976497523486614" rpy="2.3367536067962646 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_outer_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_33_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual name="Geom_34">
+      <origin xyz="-0.0002425674319965765 0.06129258871078491 0.009338585659861565" rpy="0.005726042669266462 -1.2611802816390991 1.562634825706482"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_outer_finger.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_34_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_right_left_inner_finger_joint" type="revolute">
+    <origin xyz="0.0 0.09997539967298508 -0.002218530047684908" rpy="-0.7250003218650818 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_right_left_outer_knuckle"/>
+    <child link="gripper_right_left_inner_finger"/>
+    <limit effort="1000.0" lower="-0.875700056552887" upper="0.875700056552887" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_right_left_inner_finger">
+    <inertial>
+      <origin xyz="0.00011931399785680696 0.033924400806427 -0.021841000765562057" rpy="0.0 0.0 0.0"/>
+      <mass value="0.026150299236178398"/>
+      <inertia ixx="1.5913228708086535e-05" ixy="5.589529195049181e-08" ixz="-2.5416911242359674e-08" iyy="3.1707138532510726e-06" iyz="3.1950796710589202e-06" izz="1.54593162733363e-05"/>
+    </inertial>
+    <collision name="Geom_36">
+      <origin xyz="0.0 0.045755401253700256 -0.02722029946744442" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.029999999329447746 0.07000000029802322 0.007499999832361937"/>
+      </geometry>
+    </collision>
+    <visual name="Geom_35">
+      <origin xyz="-0.00019994808826595545 0.01603655517101288 -0.013207088224589825" rpy="1.2069073915481567 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_inner_finger.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_35_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_right_left_inner_knuckle_joint" type="revolute">
+    <origin xyz="0.01269999984651804 0.0 0.061420001089572906" rpy="2.2957966327667236 0.0 1.5707963705062866"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_right_base_link"/>
+    <child link="gripper_right_left_inner_knuckle"/>
+    <limit effort="1000.0" lower="-0.875700056552887" upper="0.875700056552887" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_right_left_inner_knuckle">
+    <inertial>
+      <origin xyz="0.00012301199603825808 0.05078509822487831 0.0010396899888291955" rpy="0.0 0.0 0.0"/>
+      <mass value="0.02711769938468933"/>
+      <inertia ixx="2.619106089696288e-05" ixy="-2.436103727632144e-07" ixz="-6.378186867550539e-09" iyy="2.8270221719139954e-06" iyz="-5.371741735871183e-07" izz="2.8369608116918243e-05"/>
+    </inertial>
+    <collision name="Geom_37">
+      <origin xyz="0.0008866069256328046 0.04881138354539871 -0.0010790227679535747" rpy="0.1654229313135147 -1.5481873750686646 1.3671026229858398"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_inner_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_right_right_driver_joint" type="revolute">
+    <origin xyz="-0.030601000413298607 0.0 0.0549050010740757" rpy="2.2957966327667236 0.0 -1.5707963705062866"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="gripper_right_base_link"/>
+    <child link="gripper_right_right_outer_knuckle"/>
+    <limit effort="1000.0" lower="0.0" upper="0.699999988079071" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_right_right_outer_knuckle">
+    <inertial>
+      <origin xyz="-0.013063499704003334 0.016963500529527664 0.003465639892965555" rpy="0.0 0.0 0.0"/>
+      <mass value="0.031146200373768806"/>
+      <inertia ixx="2.6046454877359793e-05" ixy="-4.4947455535293557e-07" ixz="-3.894218480127165e-06" iyy="1.7785579984774813e-05" iyz="4.665731012210017e-06" izz="1.4917363841959741e-05"/>
+    </inertial>
+    <visual name="Geom_38">
+      <origin xyz="-0.00020010197476949543 0.008578719571232796 0.007976497523486614" rpy="2.3367536067962646 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_outer_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_38_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual name="Geom_39">
+      <origin xyz="-0.0002425674319965765 0.06129258871078491 0.009338585659861565" rpy="0.005726042669266462 -1.2611802816390991 1.562634825706482"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_outer_finger.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_39_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_right_right_inner_finger_joint" type="revolute">
+    <origin xyz="0.0 0.09997539967298508 -0.002218530047684908" rpy="-0.7250003218650818 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_right_right_outer_knuckle"/>
+    <child link="gripper_right_right_inner_finger"/>
+    <limit effort="1000.0" lower="-0.875700056552887" upper="0.875700056552887" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_right_right_inner_finger">
+    <inertial>
+      <origin xyz="0.00011931399785680696 0.033924400806427 -0.021841000765562057" rpy="0.0 0.0 0.0"/>
+      <mass value="0.026150299236178398"/>
+      <inertia ixx="1.5913228708086535e-05" ixy="5.589529195049181e-08" ixz="-2.5416911242359674e-08" iyy="3.1707138532510726e-06" iyz="3.1950796710589202e-06" izz="1.54593162733363e-05"/>
+    </inertial>
+    <collision name="Geom_41">
+      <origin xyz="0.0 0.045755401253700256 -0.02722029946744442" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.029999999329447746 0.07000000029802322 0.007499999832361937"/>
+      </geometry>
+    </collision>
+    <visual name="Geom_40">
+      <origin xyz="-0.00019994808826595545 0.01603655517101288 -0.013207088224589825" rpy="1.2069073915481567 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_inner_finger.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_40_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_right_right_inner_knuckle_joint" type="revolute">
+    <origin xyz="-0.01269999984651804 0.0 0.061420001089572906" rpy="2.2957966327667236 0.0 -1.5707963705062866"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_right_base_link"/>
+    <child link="gripper_right_right_inner_knuckle"/>
+    <limit effort="1000.0" lower="-0.875700056552887" upper="0.875700056552887" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_right_right_inner_knuckle">
+    <inertial>
+      <origin xyz="0.00012301199603825808 0.05078509822487831 0.0010396899888291955" rpy="0.0 0.0 0.0"/>
+      <mass value="0.02711769938468933"/>
+      <inertia ixx="2.619106089696288e-05" ixy="-2.436103727632144e-07" ixz="-6.378186867550539e-09" iyy="2.8270221719139954e-06" iyz="-5.371741735871183e-07" izz="2.8369608116918243e-05"/>
+    </inertial>
+    <collision name="Geom_42">
+      <origin xyz="0.0008866069256328046 0.04881138354539871 -0.0010790227679535747" rpy="0.1654229313135147 -1.5481873750686646 1.3671026229858398"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_inner_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="head_1_joint" type="revolute">
+    <origin xyz="0.18199999630451202 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="torso_lift_link"/>
+    <child link="head_1_link"/>
+    <limit effort="1000.0" lower="-1.309000015258789" upper="1.309000015258789" velocity="1000.0"/>
+  </joint>
+  <link name="head_1_link">
+    <inertial>
+      <origin xyz="-0.005080000031739473 0.002369999885559082 0.07229000329971313" rpy="0.0 0.0 0.0"/>
+      <mass value="0.6222000122070312"/>
+      <inertia ixx="0.0014021999668329954" ixy="0.0" ixz="0.0" iyy="0.0012196999741718173" iyz="0.0" izz="0.0008610999793745577"/>
+    </inertial>
+    <collision name="Geom_43">
+      <origin xyz="0.007740858476608992 -3.852190388897725e-08 0.08860164880752563" rpy="0.35489529371261597 2.488450491000549e-06 1.5707972049713135"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/head_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="head_2_joint" type="revolute">
+    <origin xyz="0.004999999888241291 0.0 0.09799999743700027" rpy="1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="head_1_link"/>
+    <child link="head_2_link"/>
+    <limit effort="1000.0" lower="-1.0471999645233154" upper="0.785398006439209" velocity="1000.0"/>
+  </joint>
+  <link name="head_2_link">
+    <inertial>
+      <origin xyz="0.05582740157842636 0.06099870055913925 1.5899999198154546e-05" rpy="0.0 0.0 0.0"/>
+      <mass value="0.886929988861084"/>
+      <inertia ixx="0.005541800055652857" ixy="0.0" ixz="0.0" iyy="0.004362599924206734" iyz="0.0" izz="0.0034759000409394503"/>
+    </inertial>
+    <collision name="Geom_44">
+      <origin xyz="0.028065964579582214 0.048764217644929886 -7.89526711741928e-06" rpy="3.873794776154682e-05 3.7604697809001664e-06 2.1247029304504395"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/head_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="head_front_camera_link_joint" type="fixed">
+    <origin xyz="0.0908 0.08 0.0" rpy="-1.5707963705062866 0.0 0.0"/>
+    <parent link="head_2_link"/>
+    <child link="head_front_camera_link"/>
+  </joint>
+  <link name="head_front_camera_link">
+    <inertial>
+      <origin xyz="0.09080000221729279 0.07999999821186066 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="head_front_camera_depth_frame_joint" type="fixed">
+    <origin xyz="0.0 0.049 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="head_front_camera_link"/>
+    <child link="head_front_camera_depth_frame"/>
+  </joint>
+  <link name="head_front_camera_depth_frame">
+    <inertial>
+      <origin xyz="0.0 0.04899999871850014 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="head_front_camera_depth_optical_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5707963705062866 0.0 -1.5707963705062866"/>
+    <parent link="head_front_camera_depth_frame"/>
+    <child link="head_front_camera_depth_optical_frame"/>
+  </joint>
+  <link name="head_front_camera_depth_optical_frame">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="head_front_camera_color_frame_joint" type="fixed">
+    <origin xyz="0.0 0.022 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="head_front_camera_link"/>
+    <child link="head_front_camera_color_frame"/>
+  </joint>
+  <link name="head_front_camera_color_frame">
+    <inertial>
+      <origin xyz="0.0 0.02199999988079071 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="head_front_camera_color_optical_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5707963705062866 0.0 -1.5707963705062866"/>
+    <parent link="head_front_camera_color_frame"/>
+    <child link="head_front_camera_color_optical_frame"/>
+  </joint>
+  <link name="head_front_camera_color_optical_frame">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="head_front_camera_optical_frame_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="-1.5707963705062866 0.0 -1.5707963705062866"/>
+    <parent link="head_front_camera_link"/>
+    <child link="head_front_camera_optical_frame"/>
+  </joint>
+  <link name="head_front_camera_optical_frame">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="arm_left_1_joint" type="revolute">
+    <origin xyz="0.02556000091135502 0.1899999976158142 -0.17100000381469727" rpy="3.1415927410125732 0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="torso_lift_link"/>
+    <child link="arm_left_1_link"/>
+    <limit effort="1000.0" lower="-1.1780999898910522" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_1_link">
+    <inertial>
+      <origin xyz="0.061191000044345856 -0.022397000342607498 0.012834999710321426" rpy="0.0 0.0 0.0"/>
+      <mass value="1.5634299516677856"/>
+      <inertia ixx="0.005102300085127354" ixy="0.0" ixz="0.0" iyy="0.005102300085127354" iyz="0.0" izz="0.005102300085127354"/>
+    </inertial>
+    <collision name="Geom_45">
+      <origin xyz="0.07808643579483032 -0.032326169312000275 0.013299822807312012" rpy="-0.25164595246315 -1.26142418384552 2.949169635772705"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_left_1.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_2_joint" type="revolute">
+    <origin xyz="0.125 -0.019500000402331352 0.03099999949336052" rpy="1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_1_link"/>
+    <child link="arm_left_2_link"/>
+    <limit effort="1000.0" lower="-1.1780999898910522" upper="1.5708000659942627" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_2_link">
+    <inertial>
+      <origin xyz="0.030432000756263733 0.00022899999748915434 0.005942000076174736" rpy="0.0 0.0 0.0"/>
+      <mass value="1.8004000186920166"/>
+      <inertia ixx="0.004370400216430426" ixy="0.0" ixz="0.0" iyy="0.004328900016844273" iyz="0.0" izz="0.0017836999613791704"/>
+    </inertial>
+    <collision name="Geom_46">
+      <origin xyz="0.02370639704167843 9.225682151736692e-05 -0.013983087614178658" rpy="0.004223653580993414 -1.0792927742004395 3.137371063232422"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_left_2.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_3_joint" type="revolute">
+    <origin xyz="0.08950000256299973 0.0 -0.001500000013038516" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_2_link"/>
+    <child link="arm_left_3_link"/>
+    <limit effort="1000.0" lower="-0.785398006439209" upper="3.926990032196045" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_3_link">
+    <inertial>
+      <origin xyz="0.007418000139296055 -0.004360999912023544 0.1341940015554428" rpy="0.0 0.0 0.0"/>
+      <mass value="1.7999999523162842"/>
+      <inertia ixx="0.019979799166321754" ixy="0.0" ixz="0.0" iyy="0.019714700058102608" iyz="0.0" izz="0.002646500011906028"/>
+    </inertial>
+    <collision name="Geom_47">
+      <origin xyz="-0.0026167999021708965 0.005651607643812895 0.12450383603572845" rpy="-0.10726087540388107 0.07503989338874817 1.1100659370422363"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_left_3.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_4_joint" type="revolute">
+    <origin xyz="-0.019999999552965164 -0.027000000700354576 0.22200000286102295" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_3_link"/>
+    <child link="arm_left_4_link"/>
+    <limit effort="1000.0" lower="-0.3926990032196045" upper="2.3561899662017822" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_4_link">
+    <inertial>
+      <origin xyz="0.09565799683332443 -0.014666000381112099 -0.018132999539375305" rpy="0.0 0.0 0.0"/>
+      <mass value="1.4327000379562378"/>
+      <inertia ixx="0.00203999993391335" ixy="0.0" ixz="0.0" iyy="0.008423999883234501" iyz="0.0" izz="0.008685999549925327"/>
+    </inertial>
+    <collision name="Geom_48">
+      <origin xyz="0.08055655658245087 -0.016018036752939224 -0.020240843296051025" rpy="-1.9858064651489258 -1.1720080375671387 -1.2853622436523438"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_left_4.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_5_joint" type="revolute">
+    <origin xyz="0.16200000047683716 -0.019999999552965164 -0.027000000700354576" rpy="0.0 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_4_link"/>
+    <child link="arm_left_5_link"/>
+    <limit effort="1000.0" lower="-2.094399929046631" upper="2.094399929046631" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_5_link">
+    <inertial>
+      <origin xyz="0.0010779999429360032 -0.00015100000018719584 0.07717300206422806" rpy="0.0 0.0 0.0"/>
+      <mass value="1.6558200120925903"/>
+      <inertia ixx="0.0061436002142727375" ixy="0.0" ixz="0.0" iyy="0.005640000104904175" iyz="0.0" izz="0.0017969999462366104"/>
+    </inertial>
+    <collision name="Geom_49">
+      <origin xyz="0.005094317253679037 -2.310533818672411e-05 -0.07825614511966705" rpy="-0.002001233631744981 0.04423227533698082 -0.0005554198287427425"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_left_5.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_6_joint" type="revolute">
+    <origin xyz="6.938893903907228e-18 0.0 -0.15000000596046448" rpy="-1.5707963705062866 -1.5707963705062866 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_5_link"/>
+    <child link="arm_left_6_link"/>
+    <limit effort="1000.0" lower="-1.4137200117111206" upper="1.4137200117111206" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_6_link">
+    <inertial>
+      <origin xyz="-0.00015300000086426735 -0.0031220000237226486 0.0001829999964684248" rpy="0.0 0.0 0.0"/>
+      <mass value="0.37006300687789917"/>
+      <inertia ixx="0.00021499999274965376" ixy="0.0" ixz="0.0" iyy="0.0001748000067891553" iyz="0.0" izz="0.0001691999932518229"/>
+    </inertial>
+    <collision name="Geom_50">
+      <origin xyz="-0.011458860710263252 7.318072814399557e-09 -1.7091250015255355e-07" rpy="1.5707802772521973 -1.570719599723816 1.5707963705062866"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/arm_left_6.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_7_joint" type="revolute">
+    <origin xyz="-1.1102230246251565e-16 6.938893903907228e-18 0.0" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="arm_left_6_link"/>
+    <child link="arm_left_7_link"/>
+    <limit effort="1000.0" lower="-2.094399929046631" upper="2.094399929046631" velocity="1000.0"/>
+  </joint>
+  <link name="arm_left_7_link">
+    <inertial>
+      <origin xyz="0.00015629999688826501 0.00015520000306423753 -0.07436999678611755" rpy="0.0 0.0 0.0"/>
+      <mass value="1.1370099782943726"/>
+      <inertia ixx="0.003132699988782406" ixy="0.0" ixz="0.0" iyy="0.0027773999609053135" iyz="0.0" izz="0.0007781999884173274"/>
+    </inertial>
+    <collision name="Geom_51">
+      <origin xyz="0.0 0.0 -0.04699999839067459" rpy="-3.1415927410125732 0.0 -1.5707963705062866"/>
+      <geometry>
+        <cylinder radius="0.004999999888241291" length="0.004999999888241291"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_52">
+      <origin xyz="0.0 0.0 -0.053849998861551285" rpy="3.1415927410125732 0.0 3.1415927410125732"/>
+      <geometry>
+        <cylinder radius="0.02250000089406967" length="0.015699999406933784"/>
+      </geometry>
+    </collision>
+    <collision name="Geom_53">
+      <origin xyz="0.0 0.0 -0.06657499819993973" rpy="-3.1415927410125732 0.0 -1.5707963705062866"/>
+      <geometry>
+        <cylinder radius="0.02500000037252903" length="0.009750000201165676"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="arm_left_tool_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 -0.0615" rpy="-1.5707963705062866 1.5707963705062866 0.0"/>
+    <parent link="arm_left_7_link"/>
+    <child link="arm_left_tool_link"/>
+  </joint>
+  <link name="arm_left_tool_link">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.061500001698732376" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="gripper_left_base_link_joint" type="fixed">
+    <origin xyz="0.0312 0.0 0.0" rpy="1.5707963705062866 0.0 1.5707963705062866"/>
+    <parent link="arm_left_tool_link"/>
+    <child link="gripper_left_base_link"/>
+  </joint>
+  <link name="gripper_left_base_link">
+    <inertial>
+      <origin xyz="2.1052210286143236e-05 -3.52319005969548e-07 0.03281207010149956" rpy="0.0 0.0 0.0"/>
+      <mass value="0.2511079013347626"/>
+      <inertia ixx="0.00018791867478284985" ixy="1.8129745482653448e-09" ixz="1.5533842656623165e-07" iyy="0.00022201414685696363" iyz="1.971175667137004e-09" izz="0.00015073957911226898"/>
+    </inertial>
+    <visual name="Geom_54">
+      <origin xyz="2.1052210286143236e-05 -3.52319005969548e-07 0.03281207010149956" rpy="-0.004178010858595371 -2.7772186513175257e-05 1.5707430839538574"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_base_link.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_54_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_left_left_driver_joint" type="revolute">
+    <origin xyz="0.030601000413298607 0.0 0.0549050010740757" rpy="2.2957966327667236 0.0 1.5707963705062866"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="gripper_left_base_link"/>
+    <child link="gripper_left_left_outer_knuckle"/>
+    <limit effort="1000.0" lower="0.0" upper="0.699999988079071" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_left_left_outer_knuckle">
+    <inertial>
+      <origin xyz="-0.013063499704003334 0.016963500529527664 0.003465639892965555" rpy="0.0 0.0 0.0"/>
+      <mass value="0.031146200373768806"/>
+      <inertia ixx="2.6046454877359793e-05" ixy="-4.4947455535293557e-07" ixz="-3.894218480127165e-06" iyy="1.7785579984774813e-05" iyz="4.665731012210017e-06" izz="1.4917363841959741e-05"/>
+    </inertial>
+    <visual name="Geom_55">
+      <origin xyz="-0.00020010197476949543 0.008578719571232796 0.007976497523486614" rpy="2.3367536067962646 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_outer_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_55_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual name="Geom_56">
+      <origin xyz="-0.0002425674319965765 0.06129258871078491 0.009338585659861565" rpy="0.005726042669266462 -1.2611802816390991 1.562634825706482"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_outer_finger.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_56_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_left_left_inner_finger_joint" type="revolute">
+    <origin xyz="-1.1102230246251565e-16 0.09997539967298508 -0.002218530047684908" rpy="-0.7250003218650818 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_left_left_outer_knuckle"/>
+    <child link="gripper_left_left_inner_finger"/>
+    <limit effort="1000.0" lower="-0.875700056552887" upper="0.875700056552887" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_left_left_inner_finger">
+    <inertial>
+      <origin xyz="0.00011931399785680696 0.033924400806427 -0.021841000765562057" rpy="0.0 0.0 0.0"/>
+      <mass value="0.026150299236178398"/>
+      <inertia ixx="1.5913228708086535e-05" ixy="5.589529195049181e-08" ixz="-2.5416911242359674e-08" iyy="3.1707138532510726e-06" iyz="3.1950796710589202e-06" izz="1.54593162733363e-05"/>
+    </inertial>
+    <collision name="Geom_58">
+      <origin xyz="0.0 0.045755401253700256 -0.02722029946744442" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.029999999329447746 0.07000000029802322 0.007499999832361937"/>
+      </geometry>
+    </collision>
+    <visual name="Geom_57">
+      <origin xyz="-0.00019994808826595545 0.01603655517101288 -0.013207088224589825" rpy="1.2069073915481567 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_inner_finger.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_57_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_left_left_inner_knuckle_joint" type="revolute">
+    <origin xyz="0.01269999984651804 0.0 0.061420001089572906" rpy="2.2957966327667236 0.0 1.5707963705062866"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_left_base_link"/>
+    <child link="gripper_left_left_inner_knuckle"/>
+    <limit effort="1000.0" lower="-0.875700056552887" upper="0.875700056552887" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_left_left_inner_knuckle">
+    <inertial>
+      <origin xyz="0.00012301199603825808 0.05078509822487831 0.0010396899888291955" rpy="0.0 0.0 0.0"/>
+      <mass value="0.02711769938468933"/>
+      <inertia ixx="2.619106089696288e-05" ixy="-2.436103727632144e-07" ixz="-6.378186867550539e-09" iyy="2.8270221719139954e-06" iyz="-5.371741735871183e-07" izz="2.8369608116918243e-05"/>
+    </inertial>
+    <collision name="Geom_59">
+      <origin xyz="0.0008866069256328046 0.04881138354539871 -0.0010790227679535747" rpy="0.1654229313135147 -1.5481873750686646 1.3671026229858398"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_inner_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="gripper_left_right_driver_joint" type="revolute">
+    <origin xyz="-0.030601000413298607 0.0 0.0549050010740757" rpy="2.2957966327667236 0.0 -1.5707963705062866"/>
+    <axis xyz="-1.0 0.0 0.0"/>
+    <parent link="gripper_left_base_link"/>
+    <child link="gripper_left_right_outer_knuckle"/>
+    <limit effort="1000.0" lower="0.0" upper="0.699999988079071" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_left_right_outer_knuckle">
+    <inertial>
+      <origin xyz="-0.013063499704003334 0.016963500529527664 0.003465639892965555" rpy="0.0 0.0 0.0"/>
+      <mass value="0.031146200373768806"/>
+      <inertia ixx="2.6046454877359793e-05" ixy="-4.4947455535293557e-07" ixz="-3.894218480127165e-06" iyy="1.7785579984774813e-05" iyz="4.665731012210017e-06" izz="1.4917363841959741e-05"/>
+    </inertial>
+    <visual name="Geom_60">
+      <origin xyz="-0.00020010197476949543 0.008578719571232796 0.007976497523486614" rpy="2.3367536067962646 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_outer_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_60_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <visual name="Geom_61">
+      <origin xyz="-0.0002425674319965765 0.06129258871078491 0.009338585659861565" rpy="0.005726042669266462 -1.2611802816390991 1.562634825706482"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_outer_finger.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_61_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_left_right_inner_finger_joint" type="revolute">
+    <origin xyz="1.1102230246251565e-16 0.09997539967298508 -0.002218530047684908" rpy="-0.7250003218650818 0.0 0.0"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_left_right_outer_knuckle"/>
+    <child link="gripper_left_right_inner_finger"/>
+    <limit effort="1000.0" lower="-0.875700056552887" upper="0.875700056552887" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_left_right_inner_finger">
+    <inertial>
+      <origin xyz="0.00011931399785680696 0.033924400806427 -0.021841000765562057" rpy="0.0 0.0 0.0"/>
+      <mass value="0.026150299236178398"/>
+      <inertia ixx="1.5913228708086535e-05" ixy="5.589529195049181e-08" ixz="-2.5416911242359674e-08" iyy="3.1707138532510726e-06" iyz="3.1950796710589202e-06" izz="1.54593162733363e-05"/>
+    </inertial>
+    <collision name="Geom_63">
+      <origin xyz="0.0 0.045755401253700256 -0.02722029946744442" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.029999999329447746 0.07000000029802322 0.007499999832361937"/>
+      </geometry>
+    </collision>
+    <visual name="Geom_62">
+      <origin xyz="-0.00019994808826595545 0.01603655517101288 -0.013207088224589825" rpy="1.2069073915481567 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_inner_finger.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_62_material">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="gripper_left_right_inner_knuckle_joint" type="revolute">
+    <origin xyz="-0.01269999984651804 0.0 0.061420001089572906" rpy="2.2957966327667236 0.0 -1.5707963705062866"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <parent link="gripper_left_base_link"/>
+    <child link="gripper_left_right_inner_knuckle"/>
+    <limit effort="1000.0" lower="-0.875700056552887" upper="0.875700056552887" velocity="1000.0"/>
+  </joint>
+  <link name="gripper_left_right_inner_knuckle">
+    <inertial>
+      <origin xyz="0.00012301199603825808 0.05078509822487831 0.0010396899888291955" rpy="0.0 0.0 0.0"/>
+      <mass value="0.02711769938468933"/>
+      <inertia ixx="2.619106089696288e-05" ixy="-2.436103727632144e-07" ixz="-6.378186867550539e-09" iyy="2.8270221719139954e-06" iyz="-5.371741735871183e-07" izz="2.8369608116918243e-05"/>
+    </inertial>
+    <collision name="Geom_64">
+      <origin xyz="0.0008866069256328046 0.04881138354539871 -0.0010790227679535747" rpy="0.1654229313135147 -1.5481873750686646 1.3671026229858398"/>
+      <geometry>
+        <mesh filename="file://meshes/obj/robotiq_2f_140_inner_knuckle.obj" scale="1.0 1.0 1.0"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="torso_fixed_column_link_joint" type="fixed">
+    <origin xyz="-0.062 0.0 0.193" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="torso_fixed_column_link"/>
+  </joint>
+  <link name="torso_fixed_column_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.2750000059604645" rpy="0.0 0.0 0.0"/>
+      <mass value="19.799999237060547"/>
+      <inertia ixx="0.5651249885559082" ixy="0.0" ixz="0.0" iyy="0.5525850057601929" iyz="0.0" izz="0.11946000158786774"/>
+    </inertial>
+    <visual name="Geom_65">
+      <origin xyz="0.0 0.0 0.2750000059604645" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.18000000715255737 0.20000000298023224 0.550000011920929"/>
+      </geometry>
+      <material name="Geom_65_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_imu_link_joint" type="fixed">
+    <origin xyz="0.10171 0.0 0.11282" rpy="0.0 0.0 -1.5707963705062866"/>
+    <parent link="base_link"/>
+    <child link="base_imu_link"/>
+  </joint>
+  <link name="base_imu_link">
+    <inertial>
+      <origin xyz="0.1017099991440773 0.0 0.11281999945640564" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="base_sonar_01_link_joint" type="fixed">
+    <origin xyz="-0.183 -0.183 0.173" rpy="0.0 0.0 -2.3561956882476807"/>
+    <parent link="base_link"/>
+    <child link="base_sonar_01_link"/>
+  </joint>
+  <link name="base_sonar_01_link">
+    <inertial>
+      <origin xyz="-0.005075091030448675 -4.064200766151771e-05 4.2048095565405674e-06" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0044513000175356865"/>
+      <inertia ixx="7.100039738361374e-07" ixy="0.0" ixz="0.0" iyy="1.126955453401024e-07" iyz="0.0" izz="6.779729915251664e-07"/>
+    </inertial>
+    <visual name="Geom_66">
+      <origin xyz="-0.005075091030448675 -4.064200766151771e-05 4.2048095565405674e-06" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/srf05.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_66_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_mic_back_right_link_joint" type="fixed">
+    <origin xyz="-0.1082 -0.13789 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_mic_back_right_link"/>
+  </joint>
+  <link name="base_mic_back_right_link">
+    <inertial>
+      <origin xyz="-0.10819999873638153 -0.13788999617099762 0.19499999284744263" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="suspension_right_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="suspension_right_link"/>
+  </joint>
+  <link name="suspension_right_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="wheel_right_joint" type="revolute">
+    <origin xyz="0.0 -0.2021999955177307 0.0" rpy="-1.5707963705062866 0.0 0.0"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <parent link="suspension_right_link"/>
+    <child link="wheel_right_link"/>
+    <limit effort="1000.0" lower="0.0" upper="0.0" velocity="1000.0"/>
+  </joint>
+  <link name="wheel_right_link">
+    <inertial>
+      <origin xyz="0.0 0.0 -0.0020699999295175076" rpy="0.0 0.0 0.0"/>
+      <mass value="1.8236199617385864"/>
+      <inertia ixx="0.004997458308935165" ixy="4.94216436663919e-08" ixz="0.0" iyy="0.00499744201079011" iyz="0.0" izz="0.008392400108277798"/>
+    </inertial>
+    <visual name="Geom_67">
+      <origin xyz="8.546559911337681e-06 -6.882949037390063e-06 0.0019978759810328484" rpy="-1.4662362337112427 -1.5703744888305664 -1.8622938394546509"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/wheel.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_67_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_sonar_03_link_joint" type="fixed">
+    <origin xyz="-0.183 0.183 0.173" rpy="0.0 0.0 2.3561956882476807"/>
+    <parent link="base_link"/>
+    <child link="base_sonar_03_link"/>
+  </joint>
+  <link name="base_sonar_03_link">
+    <inertial>
+      <origin xyz="-0.005075091030448675 -4.064200766151771e-05 4.2048095565405674e-06" rpy="0.0 0.0 0.0"/>
+      <mass value="0.0044513000175356865"/>
+      <inertia ixx="7.100039738361374e-07" ixy="0.0" ixz="0.0" iyy="1.126955453401024e-07" iyz="0.0" izz="6.779729915251664e-07"/>
+    </inertial>
+    <visual name="Geom_68">
+      <origin xyz="-0.005075091030448675 -4.064200766151771e-05 4.2048095565405674e-06" rpy="1.5707963705062866 0.0 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/srf05.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_68_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_antenna_left_link_joint" type="fixed">
+    <origin xyz="-0.201 0.1062 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_antenna_left_link"/>
+  </joint>
+  <link name="base_antenna_left_link">
+    <inertial>
+      <origin xyz="-0.00013482979557011276 1.6336718999809818e-07 0.053988248109817505" rpy="0.0 0.0 0.0"/>
+      <mass value="0.02266886830329895"/>
+      <inertia ixx="4.623059794539586e-05" ixy="0.0" ixz="-8.173475407602382e-08" iyy="4.6216140617616475e-05" iyz="0.0" izz="3.6972804196011566e-07"/>
+    </inertial>
+    <visual name="Geom_69">
+      <origin xyz="-0.00013482979557011276 1.6336718999809818e-07 0.053988248109817505" rpy="0.0 0.0017822254449129105 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/antenna.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_69_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <joint name="base_mic_front_right_link_joint" type="fixed">
+    <origin xyz="0.23182 -0.03902 0.195" rpy="0.0 0.0 0.0"/>
+    <parent link="base_link"/>
+    <child link="base_mic_front_right_link"/>
+  </joint>
+  <link name="base_mic_front_right_link">
+    <inertial>
+      <origin xyz="0.2318200021982193 -0.03901999816298485 0.19499999284744263" rpy="0.0 0.0 0.0"/>
+      <mass value="0.009999999776482582"/>
+      <inertia ixx="9.999999747378752e-06" ixy="0.0" ixz="0.0" iyy="9.999999747378752e-06" iyz="0.0" izz="9.999999747378752e-06"/>
+    </inertial>
+  </link>
+  <joint name="base_cover_link_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.13" rpy="0.0 0.0 0.0"/>
+    <parent link="base_footprint"/>
+    <child link="base_cover_link"/>
+  </joint>
+  <link name="base_cover_link">
+    <inertial>
+      <origin xyz="-0.012082758359611034 1.1166712519938837e-11 0.04249999299645424" rpy="0.0 0.0 0.0"/>
+      <mass value="23.815080642700195"/>
+      <inertia ixx="0.554070770740509" ixy="0.0" ixz="0.0" iyy="0.4792879819869995" iyz="0.0" izz="1.0160841941833496"/>
+    </inertial>
+    <visual name="Geom_70">
+      <origin xyz="-0.012082758359611034 1.1166712519938837e-11 0.04249999299645424" rpy="1.5707963705062866 -1.5707963705062866 0.0"/>
+      <geometry>
+        <mesh filename="file://meshes/stl/base_ring.stl" scale="1.0 1.0 1.0"/>
+      </geometry>
+      <material name="Geom_70_material">
+        <color rgba="0.9 0.9 0.9 1.0"/>
+      </material>
+    </visual>
+  </link>
+  <ros2_control name="tiago_dual" type="system">
+    <hardware>
+      <plugin>/MultiverseHWInterface</plugin>
+      <param name="world_name">world</param>
+      <param name="length_unit">m</param>
+      <param name="angle_unit">rad</param>
+      <param name="mass_unit">kg</param>
+      <param name="time_unit">s</param>
+      <param name="handedness">rhs</param>
+      <param name="host">tcp://127.0.0.1</param>
+      <param name="server_port">7000</param>
+      <param name="client_port">7600</param>
+    </hardware>
+    <joint name="wheel_left_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="wheel_right_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="torso_lift_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">torso_lift_joint_position</param>
+      <command_interface name="position">
+        <param name="min">0.0</param>
+        <param name="max">0.3499999940395355</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="head_1_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">head_1_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.309000015258789</param>
+        <param name="max">1.309000015258789</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="head_2_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">head_2_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.0471999645233154</param>
+        <param name="max">0.785398006439209</param>
+        <param name="initial_value">0.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_1_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.27</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_1_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.1780999898910522</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">0.27</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_2_joint">
+      <state_interface name="position">
+        <param name="initial_value">-1.07</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_2_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.1780999898910522</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">-1.07</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_3_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.5</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_3_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-0.785398006439209</param>
+        <param name="max">3.926990032196045</param>
+        <param name="initial_value">1.5</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_4_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.96</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_4_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-0.3926990032196045</param>
+        <param name="max">2.3561899662017822</param>
+        <param name="initial_value">1.96</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_5_joint">
+      <state_interface name="position">
+        <param name="initial_value">-2.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_5_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-2.094399929046631</param>
+        <param name="max">2.094399929046631</param>
+        <param name="initial_value">-2.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_6_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.2</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_6_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.4137200117111206</param>
+        <param name="max">1.4137200117111206</param>
+        <param name="initial_value">1.2</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_left_7_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.5</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_left_7_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-2.094399929046631</param>
+        <param name="max">2.094399929046631</param>
+        <param name="initial_value">0.5</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_1_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.27</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_1_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.1780999898910522</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">0.27</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_2_joint">
+      <state_interface name="position">
+        <param name="initial_value">-1.07</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_2_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.1780999898910522</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">-1.07</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_3_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.5</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_3_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-3.534289836883545</param>
+        <param name="max">1.5708000659942627</param>
+        <param name="initial_value">1.5</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_4_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.96</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_4_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-0.3926990032196045</param>
+        <param name="max">2.3561899662017822</param>
+        <param name="initial_value">1.96</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_5_joint">
+      <state_interface name="position">
+        <param name="initial_value">-2.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_5_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-2.094399929046631</param>
+        <param name="max">2.094399929046631</param>
+        <param name="initial_value">-2.0</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_6_joint">
+      <state_interface name="position">
+        <param name="initial_value">1.2</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_6_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-1.4137200117111206</param>
+        <param name="max">1.4137200117111206</param>
+        <param name="initial_value">1.2</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint>
+    <joint name="arm_right_7_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.5</param>
+      </state_interface>
+      <state_interface name="velocity" />
+      <param name="actuator">arm_right_7_joint_position</param>
+      <command_interface name="position">
+        <param name="min">-2.094399929046631</param>
+        <param name="max">2.094399929046631</param>
+        <param name="initial_value">0.5</param>
+      </command_interface>
+      <command_interface name="velocity">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+      <command_interface name="effort">
+        <param name="min">-1000.0</param>
+        <param name="max">1000.0</param>
+      </command_interface>
+    </joint><joint name="gripper_left_left_driver_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_left_right_driver_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_left_left_inner_knuckle_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_left_right_inner_knuckle_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_left_left_inner_finger_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_left_right_inner_finger_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_right_left_driver_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_right_right_driver_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_right_left_inner_knuckle_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_right_right_inner_knuckle_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_right_left_inner_finger_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+    <joint name="gripper_right_right_inner_finger_joint">
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+      <state_interface name="velocity" />
+    </joint>
+  </ros2_control>
+</robot>
