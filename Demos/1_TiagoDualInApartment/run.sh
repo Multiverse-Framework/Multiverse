@@ -67,7 +67,7 @@ tmux send-keys -t "$SESH":0.1 \
 "source ./Demos/1_TiagoDualInApartment/multiverse/bin/activate
 python ./MultiverseUtilities/multiverse_initializing.py --data_path=./Demos/1_TiagoDualInApartment/config/multiverse.yaml
 export MUJOCO_VERSION=3.5.0
-./Demos/1_TiagoDualInApartment/mujoco-\${MUJOCO_VERSION}/bin/simulate ./Demos/1_TiagoDualInApartment/assets/mjcf/scene_position.xml" C-m
+./Demos/1_TiagoDualInApartment/mujoco-\${MUJOCO_VERSION}/bin/simulate ./Demos/1_TiagoDualInApartment/assets/mjcf/scene_position_with_multiverse.xml" C-m
 
 # Pane 2 - robot_state_publisher
 tmux send-keys -t "$SESH":0.2 \

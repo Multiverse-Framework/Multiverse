@@ -1,0 +1,7 @@
+<mujoco model="iai_tiago_in_apartment_scene">
+
+  <include file="scene_position.xml"/>
+
+  <include file="apartment.xml"/>
+
+</mujoco>

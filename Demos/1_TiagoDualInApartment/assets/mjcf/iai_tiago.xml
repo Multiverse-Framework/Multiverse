@@ -262,6 +262,7 @@
                 <joint name="head_2_joint" pos="0 0 0" axis="0 0 1" range="-1.0472 0.785398" actuatorfrcrange="-5.197 5.197" damping="0.5" />
                 <geom material="white" mesh="head_2" />
                 <body name="head_front_camera_link" pos="0.0908 0.08 0" quat="0.707107 -0.707107 0 0">
+                  <camera name="head_camera" quat="0.5 0.5 -0.5 -0.5" mode="fixed" fovy="45.5" resolution="640 480"/>
                   <body name="head_front_camera_depth_frame" pos="0 0.049 0">
                     <body name="head_front_camera_depth_optical_frame" quat="0.5 -0.5 0.5 -0.5" />
                   </body>
@@ -400,7 +401,7 @@
   </equality>
 
   <actuator>
-    <general class="2f140" name="gripper_right_fingers_actuator" tendon="gripper_right_split" forcerange="-5 5" ctrlrange="0 255" gainprm="0.27450980392156865 0 0" biasprm="0 -100 -10"/>
-    <general class="2f140" name="gripper_left_fingers_actuator" tendon="gripper_left_split" forcerange="-5 5" ctrlrange="0 255" gainprm="0.27450980392156865 0 0" biasprm="0 -100 -10"/>
+    <general class="2f140" name="gripper_right_fingers_actuator" tendon="gripper_right_split" forcerange="-5 5" ctrlrange="0 255" gainprm="0.274 0 0" biasprm="0 -100 -10"/>
+    <general class="2f140" name="gripper_left_fingers_actuator" tendon="gripper_left_split" forcerange="-5 5" ctrlrange="0 255" gainprm="0.274 0 0" biasprm="0 -100 -10"/>
   </actuator>
 </mujoco>
