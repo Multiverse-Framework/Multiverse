@@ -75,7 +75,7 @@ export MUJOCO_VERSION=3.5.0
 tmux send-keys -t "$SESH":0.2 \
 "source /opt/ros/jazzy/setup.bash
 source ${ROSPKG_PATH}
-ros2 run robot_state_publisher robot_state_publisher --ros-args --remap /robot_description:=/robot_description -p robot_description:=\"\$(xacro ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago_with_ros2_control)\" -r tf:=/tf" C-m
+ros2 run robot_state_publisher robot_state_publisher --ros-args --remap /robot_description:=/robot_description -p robot_description:=\"\$(xacro ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago_with_ros2_control.urdf)\" -r tf:=/tf" C-m
 
 # Pane 3 - ros2_control_node
 tmux send-keys -t "$SESH":0.3 \
@@ -89,7 +89,7 @@ tmux send-keys -t "$SESH":0.4 \
 "source /opt/ros/jazzy/setup.bash
 source ${ROSPKG_PATH}
 ros2 run controller_manager spawner joint_state_broadcaster upper_body_position_controller --param-file ./Demos/1_TiagoDualInApartment/config/ros2_control.yaml
-cp ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago_with_ros2_control /tmp/iai_tiago.urdf
+cp ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago_with_ros2_control.urdf /tmp/iai_tiago.urdf
 sed -i 's|file://\([^/]\)|file://'"'"'$PWD'"'"'/./Demos/1_TiagoDualInApartment/assets/urdf/\1|g' /tmp/iai_tiago.urdf
 ros2 run rviz2 rviz2 --display-config ./Demos/1_TiagoDualInApartment/config/rviz2.rviz" C-m
 
