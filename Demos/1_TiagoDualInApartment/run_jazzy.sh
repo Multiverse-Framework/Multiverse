@@ -98,7 +98,7 @@ tmux send-keys -t "$SESH":0.5 \
 "source /opt/ros/jazzy/setup.bash
 source ${ROSPKG_PATH}
 cd ./Demos/1_TiagoDualInApartment
-ros2 run vr_teleop_action vr_teleop_action_server --ros-args --params-file ./config/vr_teleop.yaml" C-m
+ros2 run vr_teleop_action vr_teleop_action_server --ros-args --params-file ./config/vr_teleop_jazzy.yaml" C-m
 
 # Pane 6 - run vr_teleop_action_client
 tmux send-keys -t "$SESH":0.6 \
