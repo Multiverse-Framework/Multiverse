@@ -34,7 +34,9 @@ if [ ! -f "${ROSPKG_PATH}" ]; then
   source /opt/ros/jazzy/setup.bash
   cd "$PWD"/MultiverseConnector/ros_connector/ros_ws/multiverse_ws2 || exit
   colcon build --symlink-install
-  cd ../../../../
+  cd ../../
+  pip install -e .
+  cd ../../
 fi
 
 tmux new-session -d -s "$SESH" -n server
@@ -60,7 +62,7 @@ tmux select-layout -t "$SESH":0 tiled
 
 # Pane 0 - Multiverse Server
 tmux send-keys -t "$SESH":0.0 \
-"./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000" C-m
+"./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000 --transport tcp --bind 192.168.0.101:8000" C-m
 
 # Pane 1 - MuJoCo
 tmux send-keys -t "$SESH":0.1 \
@@ -98,15 +100,18 @@ source ${ROSPKG_PATH}
 cd ./Demos/1_TiagoDualInApartment
 ros2 run vr_teleop_action vr_teleop_action_server --ros-args --params-file ./config/vr_teleop.yaml" C-m
 
-# Pane 6 - 
+# Pane 6 - run vr_teleop_action_client
 tmux send-keys -t "$SESH":0.6 \
 "source /opt/ros/jazzy/setup.bash
 source ${ROSPKG_PATH}
 ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \"timeout: {sec: -1}\"" C-m
 
-# Pane 7 - 
+# Pane 7 - run joint_state_subscriber
 tmux send-keys -t "$SESH":0.7 \
-"" C-m
+"source ./Demos/1_TiagoDualInApartment/multiverse/bin/activate
+source /opt/ros/jazzy/setup.bash
+source ${ROSPKG_PATH}
+multiverse_ros_connector --subscribers=\"{'joint_state': [{'meta_data': {'world_name': 'world', 'length_unit': 'm', 'angle_unit': 'rad', 'mass_unit': 'kg', 'time_unit': 's', 'handedness': 'rhs'}, 'port': 7300, 'topic': '/joint_states', 'rate': 60, 'joint_types': {'torso_lift_joint': 'prismatic'}}]}\"" C-m
 
 # Pane 8 - 
 tmux send-keys -t "$SESH":0.8 \

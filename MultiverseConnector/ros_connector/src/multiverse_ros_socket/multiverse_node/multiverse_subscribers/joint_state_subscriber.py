@@ -36,7 +36,7 @@ class JointStateSubscriber(MultiverseSubscriber):
         for joint_name in self.response_meta_data["send"].keys():
             if isinstance(self._joint_types, dict):
                 if joint_name not in self._joint_types:
-                    continue
+                    self._joint_types[joint_name] = "revolute"
                 joint_type = self._joint_types[joint_name]
             else:
                 joint_type = self._joint_types
@@ -74,8 +74,9 @@ class JointStateSubscriber(MultiverseSubscriber):
         for joint_name in joint_state_msg.name:
             if isinstance(self._joint_types, dict):
                 if joint_name not in self._joint_types:
-                    continue
-                joint_type = self._joint_types[joint_name]
+                    joint_type = "revolute"
+                else:
+                    joint_type = self._joint_types[joint_name]
             else:
                 joint_type = self._joint_types
             if joint_type not in ["revolute", "prismatic"]:

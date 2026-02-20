@@ -4,13 +4,7 @@ import argparse
 import dataclasses
 import json
 import yaml
-import os
-import sys
 from typing import Dict, List
-
-current_dir = os.path.dirname(__file__)
-src_dir = os.path.abspath(os.path.join(current_dir, '..', 'src'))
-sys.path.insert(0, src_dir)
 
 from multiverse_ros_socket.multiverse_node.multiverse_node import MultiverseNode
 from multiverse_ros_socket.multiverse_node.multiverse_node import Interface, INTERFACE
@@ -43,6 +37,7 @@ class MultiverseRosSocket:
             server_port: str,
             ros_node: RosNode,
     ) -> None:
+        MultiverseNode._transport = "Zmq"
         MultiverseNode._host = host
         MultiverseNode._server_port = server_port
         self.ros_node = ros_node

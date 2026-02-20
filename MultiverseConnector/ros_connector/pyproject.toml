@@ -24,7 +24,8 @@ dependencies = [
     "lark-parser",
 ]
 
-scripts = { multiverse_ros_run = "multiverse_ros_socket.__main__:main" }
+[project.scripts]
+multiverse_ros_connector = "multiverse_ros_socket.__main__:main"
 
 [project.urls]
 "Homepage" = "https://github.com/Multiverse-Framework/Multiverse"
