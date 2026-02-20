@@ -105,7 +105,25 @@ rosrun vr_teleop_action vr_teleop_action_server_node __name:=vr_teleop_action_se
 # Pane 6 - run vr_teleop_action_client
 tmux send-keys -t "$SESH":0.6 \
 "source /opt/ros/noetic/setup.bash
-source ${ROSPKG_PATH}" C-m
+source ${ROSPKG_PATH}
+rostopic pub /vr_teleop_action_server/goal vr_teleop_msgs/TeleopActionGoal \"
+header:
+  seq: 0
+  stamp:
+    secs: 0
+    nsecs: 0
+  frame_id: ''
+goal_id:
+  stamp:
+    secs: 0
+    nsecs: 0
+  id: ''
+goal:
+  timeout:
+    secs: -1
+    nsecs: 0
+\"
+" C-m
 
 # Pane 7 - run joint_state_subscriber
 tmux send-keys -t "$SESH":0.7 \
