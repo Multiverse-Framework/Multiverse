@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>vr_teleop_msgs</name>
+  <version>0.0.0</version>
+  <description>The vr_teleop_msgs package</description>
+  <maintainer email="hoanggia@uni-bremen.de">Giang Nguyen</maintainer>
+  <license>MIT</license>
+  <url type="website">https://github.com/Multiverse-Framework/Multiverse</url>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>actionlib_msgs</build_depend>
+  <build_export_depend>actionlib_msgs</build_export_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
+  <exec_depend>message_runtime</exec_depend>
+  
+</package>

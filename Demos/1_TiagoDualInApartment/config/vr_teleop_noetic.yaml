@@ -1,0 +1,201 @@
+vr_teleop_action_server:
+    sim_path: ./mujoco-3.4.0/bin/simulate
+    model_path: ./assets/mjcf/iai_tiago_teleop.xml
+    meta_data:
+      transport: zmq
+      host: "tcp://127.0.0.1"
+      server_port: "7000"
+      client_port: "2000"
+      world_name: world
+      simulation_name: vr_teleop
+    filter:
+      time_constant: 0.02
+      damping: 1.0
+    initializers:
+      markers_initializer:
+        topic: /tf
+        frame_id: base_footprint
+        frames:
+          hand_left_ref: gripper_left_base_link
+          hand_right_ref: gripper_right_base_link
+          head_2_link_ref: head_2_link
+      joint_state_initializer:
+        topic: /joint_states
+        joints:
+          teleop_torso_lift_joint: torso_lift_joint
+          teleop_arm_right_1_joint: arm_right_1_joint
+          teleop_arm_right_2_joint: arm_right_2_joint
+          teleop_arm_right_3_joint: arm_right_3_joint
+          teleop_arm_right_4_joint: arm_right_4_joint
+          teleop_arm_right_5_joint: arm_right_5_joint
+          teleop_arm_right_6_joint: arm_right_6_joint
+          teleop_arm_right_7_joint: arm_right_7_joint
+          teleop_gripper_right_left_driver_joint: gripper_right_left_driver_joint
+          teleop_gripper_right_left_inner_finger_joint: gripper_right_left_inner_finger_joint
+          teleop_gripper_right_left_inner_knuckle_joint: gripper_right_left_inner_knuckle_joint
+          teleop_gripper_right_right_driver_joint: gripper_right_right_driver_joint
+          teleop_gripper_right_right_inner_finger_joint: gripper_right_right_inner_finger_joint
+          teleop_gripper_right_right_inner_knuckle_joint: gripper_right_right_inner_knuckle_joint
+          teleop_head_1_joint: head_1_joint
+          teleop_head_2_joint: head_2_joint
+          teleop_arm_left_1_joint: arm_left_1_joint
+          teleop_arm_left_2_joint: arm_left_2_joint
+          teleop_arm_left_3_joint: arm_left_3_joint
+          teleop_arm_left_4_joint: arm_left_4_joint
+          teleop_arm_left_5_joint: arm_left_5_joint
+          teleop_arm_left_6_joint: arm_left_6_joint
+          teleop_arm_left_7_joint: arm_left_7_joint
+          teleop_gripper_left_left_driver_joint: gripper_left_left_driver_joint
+          teleop_gripper_left_left_inner_finger_joint: gripper_left_left_inner_finger_joint
+          teleop_gripper_left_left_inner_knuckle_joint: gripper_left_left_inner_knuckle_joint
+          teleop_gripper_left_right_driver_joint: gripper_left_right_driver_joint
+          teleop_gripper_left_right_inner_finger_joint: gripper_left_right_inner_finger_joint
+          teleop_gripper_left_right_inner_knuckle_joint: gripper_left_right_inner_knuckle_joint
+
+    publishers:
+      upper_body_publisher:
+        topic: /upper_body_position_controller/command
+        rate: 100
+        joints:
+          torso_lift_joint:
+            from: teleop_torso_lift_joint
+            type: joint_linear_position
+          arm_right_1_joint:
+            from: teleop_arm_right_1_joint
+            type: joint_angular_position
+          arm_right_2_joint:
+            from: teleop_arm_right_2_joint
+            type: joint_angular_position
+          arm_right_3_joint:
+            from: teleop_arm_right_3_joint
+            type: joint_angular_position
+          arm_right_4_joint:
+            from: teleop_arm_right_4_joint
+            type: joint_angular_position
+          arm_right_5_joint:
+            from: teleop_arm_right_5_joint
+            type: joint_angular_position
+          arm_right_6_joint:
+            from: teleop_arm_right_6_joint
+            type: joint_angular_position
+          arm_right_7_joint:
+            from: teleop_arm_right_7_joint
+            type: joint_angular_position
+          head_1_joint:
+            from: teleop_head_1_joint
+            type: joint_angular_position
+          head_2_joint:
+            from: teleop_head_2_joint
+            type: joint_angular_position
+          arm_left_1_joint:
+            from: teleop_arm_left_1_joint
+            type: joint_angular_position
+          arm_left_2_joint:
+            from: teleop_arm_left_2_joint
+            type: joint_angular_position
+          arm_left_3_joint:
+            from: teleop_arm_left_3_joint
+            type: joint_angular_position
+          arm_left_4_joint:
+            from: teleop_arm_left_4_joint
+            type: joint_angular_position
+          arm_left_5_joint:
+            from: teleop_arm_left_5_joint
+            type: joint_angular_position
+          arm_left_6_joint:
+            from: teleop_arm_left_6_joint
+            type: joint_angular_position
+          arm_left_7_joint:
+            from: teleop_arm_left_7_joint
+            type: joint_angular_position
+    # subscribers:
+    #   whole_body_subscriber:
+    #     topic: /joint_states
+    #     joints:
+    #       torso_lift_joint:
+    #         to: torso_lift_joint
+    #         type: joint_linear_position
+    #       arm_right_1_joint:
+    #         to: arm_right_1_joint
+    #         type: joint_angular_position
+    #       arm_right_2_joint:
+    #         to: arm_right_2_joint
+    #         type: joint_angular_position
+    #       arm_right_3_joint:
+    #         to: arm_right_3_joint
+    #         type: joint_angular_position
+    #       arm_right_4_joint:
+    #         to: arm_right_4_joint
+    #         type: joint_angular_position
+    #       arm_right_5_joint:
+    #         to: arm_right_5_joint
+    #         type: joint_angular_position
+    #       arm_right_6_joint:
+    #         to: arm_right_6_joint
+    #         type: joint_angular_position
+    #       arm_right_7_joint:
+    #         to: arm_right_7_joint
+    #         type: joint_angular_position
+    #       gripper_right_left_driver_joint:
+    #         to: gripper_right_left_driver_joint
+    #         type: joint_angular_position
+    #       gripper_right_left_inner_finger_joint:
+    #         to: gripper_right_left_inner_finger_joint
+    #         type: joint_angular_position
+    #       gripper_right_left_inner_knuckle_joint:
+    #         to: gripper_right_left_inner_knuckle_joint
+    #         type: joint_angular_position
+    #       gripper_right_right_driver_joint:
+    #         to: gripper_right_right_driver_joint
+    #         type: joint_angular_position
+    #       gripper_right_right_inner_finger_joint:
+    #         to: gripper_right_right_inner_finger_joint
+    #         type: joint_angular_position
+    #       gripper_right_right_inner_knuckle_joint:
+    #         to: gripper_right_right_inner_knuckle_joint
+    #         type: joint_angular_position
+    #       head_1_joint:
+    #         to: head_1_joint
+    #         type: joint_angular_position
+    #       head_2_joint:
+    #         to: head_2_joint
+    #         type: joint_angular_position
+    #       arm_left_1_joint:
+    #         to: arm_left_1_joint
+    #         type: joint_angular_position
+    #       arm_left_2_joint:
+    #         to: arm_left_2_joint
+    #         type: joint_angular_position
+    #       arm_left_3_joint:
+    #         to: arm_left_3_joint
+    #         type: joint_angular_position
+    #       arm_left_4_joint:
+    #         to: arm_left_4_joint
+    #         type: joint_angular_position
+    #       arm_left_5_joint:
+    #         to: arm_left_5_joint
+    #         type: joint_angular_position
+    #       arm_left_6_joint:
+    #         to: arm_left_6_joint
+    #         type: joint_angular_position
+    #       arm_left_7_joint:
+    #         to: arm_left_7_joint
+    #         type: joint_angular_position
+    #       gripper_left_left_driver_joint:
+    #         to: gripper_left_left_driver_joint
+    #         type: joint_angular_position
+    #       gripper_left_left_inner_finger_joint:
+    #         to: gripper_left_left_inner_finger_joint
+    #         type: joint_angular_position
+    #       gripper_left_left_inner_knuckle_joint:
+    #         to: gripper_left_left_inner_knuckle_joint
+    #         type: joint_angular_position
+    #       gripper_left_right_driver_joint:
+    #         to: gripper_left_right_driver_joint
+    #         type: joint_angular_position
+    #       gripper_left_right_inner_finger_joint:
+    #         to: gripper_left_right_inner_finger_joint
+    #         type: joint_angular_position
+    #       gripper_left_right_inner_knuckle_joint:
+    #         to: gripper_left_right_inner_knuckle_joint
+    #         type: joint_angular_position

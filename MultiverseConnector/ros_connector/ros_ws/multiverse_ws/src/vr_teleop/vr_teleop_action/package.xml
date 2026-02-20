@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>vr_teleop_action</name>
+  <version>0.0.0</version>
+  <description>The vr_teleop_action package</description>
+
+  <maintainer email="hoanggia@uni-bremen.de">Giang Nguyen</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>vr_teleop_msgs</build_depend>
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>vr_teleop_msgs</exec_depend>
+</package>

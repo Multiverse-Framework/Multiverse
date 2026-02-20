@@ -28,10 +28,10 @@ if [ ! -d "$PWD/Demos/1_TiagoDualInApartment/mujoco-${MUJOCO_VERSION}" ]; then
   cp -f ./MultiverseConnector/mujoco_connector/mujoco-${MUJOCO_VERSION}/*.so ./Demos/1_TiagoDualInApartment/mujoco-${MUJOCO_VERSION}/bin/mujoco_plugin/
 fi
 
+source /opt/ros/noetic/setup.bash
 ROSPKG_PATH="$PWD"/MultiverseConnector/ros_connector/ros_ws/multiverse_ws/devel/setup.bash
 if [ ! -f "${ROSPKG_PATH}" ]; then
   echo "ROS package not found. Building it..."
-  source /opt/ros/noetic/setup.bash
   cd "$PWD"/MultiverseConnector/ros_connector/ros_ws/multiverse_ws || exit
   catkin build
   cd ../../
@@ -80,41 +80,32 @@ source \"${ROSPKG_PATH}\"
 rosrun robot_state_publisher robot_state_publisher tf:=/tf" C-m
 
 # Pane 3 - multiverse_control_node
-JSON_CONFIG="{\\\"host\\\":\\\"tcp://127.0.0.1\\\",\\\"server_port\\\":7000,\\\"client_port\\\":7601,\\\"meta_data\\\":{\\\"world_name\\\":\\\"world\\\",\\\"length_unit\\\":\\\"m\\\",\\\"angle_unit\\\":\\\"rad\\\",\\\"mass_unit\\\":\\\"kg\\\",\\\"time_unit\\\":\\\"s\\\",\\\"handedness\\\":\\\"rhs\\\"},\\\"controller_manager\\\":{\\\"robot\\\":\\\"iai_tiago\\\",\\\"robot_description\\\":\\\"/robot_description\\\",\\\"actuators\\\":{\\\"torso_lift_joint_position\\\":\\\"torso_lift_joint\\\",\\\"arm_left_1_joint_position\\\":\\\"arm_left_1_joint\\\",\\\"arm_left_2_joint_position\\\":\\\"arm_left_2_joint\\\",\\\"arm_left_3_joint_position\\\":\\\"arm_left_3_joint\\\",\\\"arm_left_4_joint_position\\\":\\\"arm_left_4_joint\\\",\\\"arm_left_5_joint_position\\\":\\\"arm_left_5_joint\\\",\\\"arm_left_6_joint_position\\\":\\\"arm_left_6_joint\\\",\\\"arm_left_7_joint_position\\\":\\\"arm_left_7_joint\\\",\\\"arm_right_1_joint_position\\\":\\\"arm_right_1_joint\\\",\\\"arm_right_2_joint_position\\\":\\\"arm_right_2_joint\\\",\\\"arm_right_3_joint_position\\\":\\\"arm_right_3_joint\\\",\\\"arm_right_4_joint_position\\\":\\\"arm_right_4_joint\\\",\\\"arm_right_5_joint_position\\\":\\\"arm_right_5_joint\\\",\\\"arm_right_6_joint_position\\\":\\\"arm_right_6_joint\\\",\\\"arm_right_7_joint_position\\\":\\\"arm_right_7_joint\\\",\\\"head_1_joint_position\\\":\\\"head_1_joint\\\",\\\"head_2_joint_position\\\":\\\"head_2_joint\\\"},\\\"init_joint_state\\\":{}}}"
+JSON_CONFIG="{\\\"host\\\":\\\"tcp://127.0.0.1\\\",\\\"server_port\\\":7000,\\\"client_port\\\":7601,\\\"meta_data\\\":{\\\"world_name\\\":\\\"world\\\",\\\"length_unit\\\":\\\"m\\\",\\\"angle_unit\\\":\\\"rad\\\",\\\"mass_unit\\\":\\\"kg\\\",\\\"time_unit\\\":\\\"s\\\",\\\"handedness\\\":\\\"rhs\\\"},\\\"controller_manager\\\":{\\\"robot\\\":\\\"iai_tiago\\\",\\\"robot_description\\\":\\\"/robot_description\\\",\\\"actuators\\\":{\\\"torso_lift_joint_position\\\":\\\"torso_lift_joint\\\",\\\"arm_left_1_joint_position\\\":\\\"arm_left_1_joint\\\",\\\"arm_left_2_joint_position\\\":\\\"arm_left_2_joint\\\",\\\"arm_left_3_joint_position\\\":\\\"arm_left_3_joint\\\",\\\"arm_left_4_joint_position\\\":\\\"arm_left_4_joint\\\",\\\"arm_left_5_joint_position\\\":\\\"arm_left_5_joint\\\",\\\"arm_left_6_joint_position\\\":\\\"arm_left_6_joint\\\",\\\"arm_left_7_joint_position\\\":\\\"arm_left_7_joint\\\",\\\"arm_right_1_joint_position\\\":\\\"arm_right_1_joint\\\",\\\"arm_right_2_joint_position\\\":\\\"arm_right_2_joint\\\",\\\"arm_right_3_joint_position\\\":\\\"arm_right_3_joint\\\",\\\"arm_right_4_joint_position\\\":\\\"arm_right_4_joint\\\",\\\"arm_right_5_joint_position\\\":\\\"arm_right_5_joint\\\",\\\"arm_right_6_joint_position\\\":\\\"arm_right_6_joint\\\",\\\"arm_right_7_joint_position\\\":\\\"arm_right_7_joint\\\",\\\"head_1_joint_position\\\":\\\"head_1_joint\\\",\\\"head_2_joint_position\\\":\\\"head_2_joint\\\"},\\\"init_joint_state\\\":{\\\"arm_left_1_joint\\\":0.27,\\\"arm_left_2_joint\\\":-1.07,\\\"arm_left_3_joint\\\":1.5,\\\"arm_left_4_joint\\\":1.96,\\\"arm_left_5_joint\\\":-2.0,\\\"arm_left_6_joint\\\":1.2,\\\"arm_left_7_joint\\\":0.5,\\\"arm_right_1_joint\\\":0.27,\\\"arm_right_2_joint\\\":-1.07,\\\"arm_right_3_joint\\\":1.5,\\\"arm_right_4_joint\\\":1.96,\\\"arm_right_5_joint\\\":-2.0,\\\"arm_right_6_joint\\\":1.2,\\\"arm_right_7_joint\\\":0.5}}}"
 
 tmux send-keys -t "$SESH":0.3 "
 source /opt/ros/noetic/setup.bash
 source ${ROSPKG_PATH}
-rosrun multiverse_control multiverse_control_node robot_description:=/robot_description \"$JSON_CONFIG\"
-" C-m
+rosrun multiverse_control multiverse_control_node robot_description:=/robot_description \"$JSON_CONFIG\" " C-m
 
 # Pane 4 - spawn controllers + rviz2
 tmux send-keys -t "$SESH":0.4 \
 "source /opt/ros/noetic/setup.bash
 source ${ROSPKG_PATH}
-rosparam load ./Demos/1_TiagoDualInApartment/config/ros_control.yaml /world/iai_tiago
-rosrun controller_manager spawner joint_state_controller upper_body_position_controller --namespace=/world/iai_tiago
-# cp ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago.urdf /tmp/iai_tiago.urdf
-# sed -i 's|file://\([^/]\)|file://'"'"'$PWD'"'"'/./Demos/1_TiagoDualInApartment/assets/urdf/\1|g' /tmp/iai_tiago.urdf
-# ros2 run rviz2 rviz2 --display-config ./Demos/1_TiagoDualInApartment/config/rviz2.rviz
-" C-m
+rosparam load ./Demos/1_TiagoDualInApartment/config/ros_control.yaml
+rosrun controller_manager spawner joint_state_controller upper_body_position_controller" C-m
 
 # Pane 5 - vr_teleop_action_server
 tmux send-keys -t "$SESH":0.5 \
-"
-# source /opt/ros/jazzy/setup.bash
-# source ${ROSPKG_PATH}
-# cd ./Demos/1_TiagoDualInApartment
-# ros2 run vr_teleop_action vr_teleop_action_server --ros-args --params-file ./config/vr_teleop.yaml
-" C-m
+"source /opt/ros/noetic/setup.bash
+source ${ROSPKG_PATH}
+rosparam load ./Demos/1_TiagoDualInApartment/config/vr_teleop_noetic.yaml
+cd ./Demos/1_TiagoDualInApartment
+rosrun vr_teleop_action vr_teleop_action_server_node __name:=vr_teleop_action_server" C-m
 
 # Pane 6 - run vr_teleop_action_client
 tmux send-keys -t "$SESH":0.6 \
-"
-# source /opt/ros/jazzy/setup.bash
-# source ${ROSPKG_PATH}
-# ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \\\"timeout: {sec: -1}\\\"
-" C-m
+"source /opt/ros/noetic/setup.bash
+source ${ROSPKG_PATH}" C-m
 
 # Pane 7 - run joint_state_subscriber
 tmux send-keys -t "$SESH":0.7 \

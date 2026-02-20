@@ -1,6 +1,6 @@
 joint_state_controller:
   type: joint_state_controller/JointStateController
-  publish_rate: 150
+  publish_rate: 100 # Hz
 
 upper_body_position_controller: 
   type: position_controllers/JointGroupPositionController

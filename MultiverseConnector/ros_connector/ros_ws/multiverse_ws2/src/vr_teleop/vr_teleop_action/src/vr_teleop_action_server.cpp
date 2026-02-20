@@ -415,7 +415,7 @@ namespace vr_teleop_action
 
       if (!tf_buffer_)
       {
-        tf_buffer_ = std::make_unique<tf2_ros::Buffer>(this->get_clock());
+        tf_buffer_ = std::make_unique<tf2_ros::Buffer>(get_clock());
         tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
       }
 
