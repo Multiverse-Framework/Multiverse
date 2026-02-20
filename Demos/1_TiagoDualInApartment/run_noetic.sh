@@ -39,6 +39,8 @@ if [ ! -f "${ROSPKG_PATH}" ]; then
   cd ../../
 fi
 
+rosparam set /robot_description "$(xacro ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago.urdf)"
+
 tmux new-session -d -s "$SESH" -n server
 
 tmux set-option -t "$SESH" -g mouse on
@@ -62,7 +64,7 @@ tmux select-layout -t "$SESH":0 tiled
 
 # Pane 0 - Multiverse Server
 tmux send-keys -t "$SESH":0.0 \
-"./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000 --transport tcp --bind 192.168.0.101:8000" C-m
+"./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000 --transport tcp --bind 192.168.102.35:8000" C-m
 
 # Pane 1 - MuJoCo
 tmux send-keys -t "$SESH":0.1 \
@@ -74,24 +76,24 @@ export MUJOCO_VERSION=3.4.0
 # Pane 2 - robot_state_publisher
 tmux send-keys -t "$SESH":0.2 \
 "source /opt/ros/noetic/setup.bash
-source ${ROSPKG_PATH}
-rosparam set /robot_description \"$(xacro ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago.urdf)\"
-rosrun robot_state_publisher robot_state_publisher tf:=/tf
-" C-m
+source \"${ROSPKG_PATH}\"
+rosrun robot_state_publisher robot_state_publisher tf:=/tf" C-m
 
-# Pane 3 - ros2_control_node
-tmux send-keys -t "$SESH":0.3 \
-"source /opt/ros/noetic/setup.bash
+# Pane 3 - multiverse_control_node
+JSON_CONFIG="{\\\"host\\\":\\\"tcp://127.0.0.1\\\",\\\"server_port\\\":7000,\\\"client_port\\\":7601,\\\"meta_data\\\":{\\\"world_name\\\":\\\"world\\\",\\\"length_unit\\\":\\\"m\\\",\\\"angle_unit\\\":\\\"rad\\\",\\\"mass_unit\\\":\\\"kg\\\",\\\"time_unit\\\":\\\"s\\\",\\\"handedness\\\":\\\"rhs\\\"},\\\"controller_manager\\\":{\\\"robot\\\":\\\"iai_tiago\\\",\\\"robot_description\\\":\\\"/robot_description\\\",\\\"actuators\\\":{\\\"torso_lift_joint_position\\\":\\\"torso_lift_joint\\\",\\\"arm_left_1_joint_position\\\":\\\"arm_left_1_joint\\\",\\\"arm_left_2_joint_position\\\":\\\"arm_left_2_joint\\\",\\\"arm_left_3_joint_position\\\":\\\"arm_left_3_joint\\\",\\\"arm_left_4_joint_position\\\":\\\"arm_left_4_joint\\\",\\\"arm_left_5_joint_position\\\":\\\"arm_left_5_joint\\\",\\\"arm_left_6_joint_position\\\":\\\"arm_left_6_joint\\\",\\\"arm_left_7_joint_position\\\":\\\"arm_left_7_joint\\\",\\\"arm_right_1_joint_position\\\":\\\"arm_right_1_joint\\\",\\\"arm_right_2_joint_position\\\":\\\"arm_right_2_joint\\\",\\\"arm_right_3_joint_position\\\":\\\"arm_right_3_joint\\\",\\\"arm_right_4_joint_position\\\":\\\"arm_right_4_joint\\\",\\\"arm_right_5_joint_position\\\":\\\"arm_right_5_joint\\\",\\\"arm_right_6_joint_position\\\":\\\"arm_right_6_joint\\\",\\\"arm_right_7_joint_position\\\":\\\"arm_right_7_joint\\\",\\\"head_1_joint_position\\\":\\\"head_1_joint\\\",\\\"head_2_joint_position\\\":\\\"head_2_joint\\\"},\\\"init_joint_state\\\":{}}}"
+
+tmux send-keys -t "$SESH":0.3 "
+source /opt/ros/noetic/setup.bash
 source ${ROSPKG_PATH}
-rosrun multiverse_control multiverse_control_node robot_description:=\"$(xacro ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago.urdf)\"
+rosrun multiverse_control multiverse_control_node robot_description:=/robot_description \"$JSON_CONFIG\"
 " C-m
 
 # Pane 4 - spawn controllers + rviz2
 tmux send-keys -t "$SESH":0.4 \
-"
-# source /opt/ros/noetic/setup.bash
-# source ${ROSPKG_PATH}
-# ros2 run controller_manager spawner joint_state_broadcaster upper_body_position_controller --param-file ./Demos/1_TiagoDualInApartment/config/ros2_control.yaml
+"source /opt/ros/noetic/setup.bash
+source ${ROSPKG_PATH}
+rosparam load ./Demos/1_TiagoDualInApartment/config/ros_control.yaml /world/iai_tiago
+rosrun controller_manager spawner joint_state_controller upper_body_position_controller --namespace=/world/iai_tiago
 # cp ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago.urdf /tmp/iai_tiago.urdf
 # sed -i 's|file://\([^/]\)|file://'"'"'$PWD'"'"'/./Demos/1_TiagoDualInApartment/assets/urdf/\1|g' /tmp/iai_tiago.urdf
 # ros2 run rviz2 rviz2 --display-config ./Demos/1_TiagoDualInApartment/config/rviz2.rviz
@@ -111,7 +113,7 @@ tmux send-keys -t "$SESH":0.6 \
 "
 # source /opt/ros/jazzy/setup.bash
 # source ${ROSPKG_PATH}
-# ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \"timeout: {sec: -1}\"
+# ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \\\"timeout: {sec: -1}\\\"
 " C-m
 
 # Pane 7 - run joint_state_subscriber
@@ -120,7 +122,7 @@ tmux send-keys -t "$SESH":0.7 \
 # source ./Demos/1_TiagoDualInApartment/multiverse/bin/activate
 # source /opt/ros/jazzy/setup.bash
 # source ${ROSPKG_PATH}
-# multiverse_ros_connector --subscribers=\"{'joint_state': [{'meta_data': {'world_name': 'world', 'length_unit': 'm', 'angle_unit': 'rad', 'mass_unit': 'kg', 'time_unit': 's', 'handedness': 'rhs'}, 'port': 7300, 'topic': '/joint_states', 'rate': 60, 'joint_types': {'torso_lift_joint': 'prismatic'}}]}\"
+# multiverse_ros_connector --subscribers=\\\"{'joint_state': [{'meta_data': {'world_name': 'world', 'length_unit': 'm', 'angle_unit': 'rad', 'mass_unit': 'kg', 'time_unit': 's', 'handedness': 'rhs'}, 'port': 7300, 'topic': '/joint_states', 'rate': 60, 'joint_types': {'torso_lift_joint': 'prismatic'}}]}\\\"
 " C-m
 
 # Pane 8 - 
