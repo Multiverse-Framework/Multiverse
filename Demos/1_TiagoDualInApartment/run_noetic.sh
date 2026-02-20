@@ -83,7 +83,7 @@ rosrun robot_state_publisher robot_state_publisher tf:=/tf
 tmux send-keys -t "$SESH":0.3 \
 "source /opt/ros/noetic/setup.bash
 source ${ROSPKG_PATH}
-# ros2 run controller_manager ros2_control_node --ros-args --remap /robot_description:=/robot_description --params-file './Demos/1_TiagoDualInApartment/config/ros2_control.yaml'
+rosrun multiverse_control multiverse_control_node robot_description:=\"$(xacro ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago.urdf)\"
 " C-m
 
 # Pane 4 - spawn controllers + rviz2
