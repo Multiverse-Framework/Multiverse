@@ -18,7 +18,7 @@ if __name__ == "__main__":
         world=world,
         viewer=viewer,
         headless=headless,
-        step_size=0.01,
+        step_size=0.005,
         integrator="IMPLICITFAST",
         cone="PYRAMIDAL",
     )
