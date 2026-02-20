@@ -7,6 +7,7 @@
 #include <tf2/exceptions.h>
 #include <geometry_msgs/Transform.h>
 #include <std_msgs/Float64MultiArray.h>
+#include <trajectory_msgs/JointTrajectory.h>
 #include <sensor_msgs/JointState.h>
 #include <ros/ros.h>
 #include <ros/console.h>
@@ -144,13 +145,30 @@ namespace vr_teleop_action
     SignalRef filtered_position;
   };
 
+  enum class PubMsgType
+  {
+    Float64MultiArray,
+    JointTrajectoryCommand
+  };
+
   struct PublisherCfg
   {
     ros::Publisher publisher;
     std::string topic;
     int rate = 100;
     std::vector<std::string> actuators;
+
+    PubMsgType msg_type = PubMsgType::Float64MultiArray;
+
+    // Float64MultiArray mode
     std_msgs::Float64MultiArray msg;
+
+    // JointTrajectory mode
+    trajectory_msgs::JointTrajectory jt_msg;
+    trajectory_msgs::JointTrajectoryPoint jt_point;
+    std::vector<std::string> ordered_ros_joints;
+
+    uint64_t goal_seq = 0;
 
     // rate-guard state
     double period_s = 0.01;        // 1/rate
@@ -216,6 +234,38 @@ namespace vr_teleop_action
       out.push_back(static_cast<std::string>(v[i]));
     }
     return true;
+  }
+
+  static inline bool is_joint_traj_command_topic(const std::string &topic)
+  {
+    // most common: /<controller>/command
+    if (ends_with(topic, "/command"))
+      return true;
+
+    // optional: if you really have /follow_joint_trajectory/command in your system
+    if (ends_with(topic, "/follow_joint_trajectory/command"))
+      return true;
+
+    return false;
+  }
+
+  static inline std::string controller_ns_from_topic(const std::string &topic)
+  {
+    // Strip known suffixes to get controller ns for reading <ns>/joints
+    const std::string s_a = "/follow_joint_trajectory/command";
+    const std::string s_b = "/follow_joint_trajectory/goal";
+    const std::string s_c = "/follow_joint_trajectory";
+    const std::string s_d = "/command";
+
+    if (ends_with(topic, s_a))
+      return topic.substr(0, topic.size() - s_a.size());
+    if (ends_with(topic, s_b))
+      return topic.substr(0, topic.size() - s_b.size());
+    if (ends_with(topic, s_c))
+      return topic.substr(0, topic.size() - s_c.size());
+    if (ends_with(topic, s_d))
+      return topic.substr(0, topic.size() - s_d.size());
+    return topic;
   }
 
   class VrTeleopActionServer : public MultiverseClientJson
@@ -301,7 +351,7 @@ namespace vr_teleop_action
                            { return v.asString() == type; }))
             a.append(type);
         }
-        
+
         for (const auto &kv : config_.init_frames)
         {
           const std::string &frame = kv.first;
@@ -745,7 +795,16 @@ namespace vr_teleop_action
 
             PublisherCfg cfg;
             cfg.topic = topic;
-            cfg.publisher = nh_.advertise<std_msgs::Float64MultiArray>(topic, 10);
+            if (is_joint_traj_command_topic(topic))
+            {
+              cfg.msg_type = PubMsgType::JointTrajectoryCommand;
+              cfg.publisher = nh_.advertise<trajectory_msgs::JointTrajectory>(topic, 10);
+            }
+            else
+            {
+              cfg.msg_type = PubMsgType::Float64MultiArray;
+              cfg.publisher = nh_.advertise<std_msgs::Float64MultiArray>(topic, 10);
+            }
             cfg.rate = rate;
             cfg.period_s = (rate > 0) ? (1.0 / (double)rate) : 0.0;
             cfg.next_pub_time_s = 0.0;
@@ -787,9 +846,7 @@ namespace vr_teleop_action
             if (cfg.actuators.empty())
               continue;
 
-            std::string controller_ns = topic;
-            if (ends_with(controller_ns, "/command"))
-              controller_ns = controller_ns.substr(0, controller_ns.size() - 8);
+            const std::string controller_ns = controller_ns_from_topic(topic);
 
             std::vector<std::string> ordered_ros_joints;
             if (nh_.getParam(controller_ns + "/joints", ordered_ros_joints) && !ordered_ros_joints.empty())
@@ -810,13 +867,26 @@ namespace vr_teleop_action
 
               if (!ordered_act.empty())
                 cfg.actuators = std::move(ordered_act);
+
+              if (cfg.msg_type == PubMsgType::JointTrajectoryCommand)
+                cfg.ordered_ros_joints = ordered_ros_joints;
             }
             else
             {
               throw std::runtime_error("Missing required parameter: " + controller_ns + "/joints (list of ROS joints in order for this publisher)");
             }
 
-            cfg.msg.data.resize(cfg.actuators.size(), 0.0);
+            if (cfg.msg_type == PubMsgType::Float64MultiArray)
+            {
+              cfg.msg.data.resize(cfg.actuators.size(), 0.0);
+            }
+            else
+            {
+              cfg.jt_msg.joint_names = cfg.ordered_ros_joints;
+              cfg.jt_point.positions.resize(cfg.ordered_ros_joints.size(), 0.0);
+              // optionally fill velocities if you want; otherwise leave empty
+              cfg.jt_point.time_from_start = ros::Duration(std::max(0.02, cfg.period_s)); // horizon
+            }
             publishers_.push_back(std::move(cfg));
           }
         }
@@ -1101,7 +1171,6 @@ namespace vr_teleop_action
           continue;
 
         const double lag_s = now_s - pub_cfg.next_pub_time_s;
-
         if (lag_s > pub_cfg.max_lag_s)
         {
           if ((now_s - pub_cfg.last_warn_time_s) > 1.0)
@@ -1114,14 +1183,35 @@ namespace vr_teleop_action
           pub_cfg.next_pub_time_s = now_s;
         }
 
-        auto &data = pub_cfg.msg.data;
-        for (size_t i = 0; i < pub_cfg.actuators.size(); ++i)
+        if (pub_cfg.msg_type == PubMsgType::Float64MultiArray)
         {
-          const std::string &act = pub_cfg.actuators[i];
-          data[i] = joint_commands_[act].filtered_position.get();
+          auto &data = pub_cfg.msg.data;
+          for (size_t i = 0; i < pub_cfg.actuators.size(); ++i)
+          {
+            const std::string &act = pub_cfg.actuators[i];
+            data[i] = joint_commands_[act].filtered_position.get();
+          }
+          pub_cfg.publisher.publish(pub_cfg.msg);
         }
+        else // JointTrajectoryCommand
+        {
+          pub_cfg.jt_msg.header.stamp = ros::Time::now();
 
-        pub_cfg.publisher.publish(pub_cfg.msg);
+          // Fill one point in controller joint order.
+          // Your cfg.actuators is already reordered to match controller_ns/joints (same as before).
+          for (size_t i = 0; i < pub_cfg.actuators.size(); ++i)
+          {
+            const std::string &act = pub_cfg.actuators[i];
+            pub_cfg.jt_point.positions[i] = joint_commands_[act].filtered_position.get();
+          }
+
+          pub_cfg.jt_point.time_from_start = ros::Duration(std::max(0.02, pub_cfg.period_s));
+
+          pub_cfg.jt_msg.points.clear();
+          pub_cfg.jt_msg.points.push_back(pub_cfg.jt_point);
+
+          pub_cfg.publisher.publish(pub_cfg.jt_msg);
+        }
 
         pub_cfg.next_pub_time_s += pub_cfg.period_s;
         if (pub_cfg.next_pub_time_s < now_s - pub_cfg.period_s)
@@ -1446,7 +1536,7 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "vr_teleop_action_server_node");
   ros::NodeHandle nh;
-  ros::NodeHandle cfg_nh("/vr_teleop_action_server"); 
+  ros::NodeHandle cfg_nh("/vr_teleop_action_server");
 
   try
   {

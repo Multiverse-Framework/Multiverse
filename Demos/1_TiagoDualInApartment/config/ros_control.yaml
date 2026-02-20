@@ -22,3 +22,69 @@ upper_body_position_controller:
     - arm_right_5_joint
     - arm_right_6_joint
     - arm_right_7_joint
+
+arm_left_position_controller: 
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - arm_left_1_joint
+    - arm_left_2_joint
+    - arm_left_3_joint
+    - arm_left_4_joint
+    - arm_left_5_joint
+    - arm_left_6_joint
+    - arm_left_7_joint
+
+arm_right_position_controller: 
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - arm_right_1_joint
+    - arm_right_2_joint
+    - arm_right_3_joint
+    - arm_right_4_joint
+    - arm_right_5_joint
+    - arm_right_6_joint
+    - arm_right_7_joint
+
+torso_position_controller: 
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - torso_lift_joint
+
+head_position_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - head_1_joint
+    - head_2_joint
+
+arm_left_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - arm_left_1_joint
+    - arm_left_2_joint
+    - arm_left_3_joint
+    - arm_left_4_joint
+    - arm_left_5_joint
+    - arm_left_6_joint
+    - arm_left_7_joint
+
+arm_right_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - arm_right_1_joint
+    - arm_right_2_joint
+    - arm_right_3_joint   
+    - arm_right_4_joint
+    - arm_right_5_joint
+    - arm_right_6_joint
+    - arm_right_7_joint
+
+torso_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - torso_lift_joint
+
+head_trajectory_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - head_1_joint
+    - head_2_joint

@@ -164,7 +164,7 @@ source '${ROS_SETUP}'
 source '${ROSPKG_SETUP}'
 set -u
 rosparam load ./${DEMO_DIR}/config/ros_control.yaml
-rosrun controller_manager spawner joint_state_controller upper_body_position_controller
+rosrun controller_manager spawner joint_state_controller arm_left_trajectory_controller arm_right_trajectory_controller torso_trajectory_controller head_trajectory_controller
 "
 
 tmux_send "$SESH":0.5 \
