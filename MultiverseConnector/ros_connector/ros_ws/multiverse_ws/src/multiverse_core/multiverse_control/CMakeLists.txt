@@ -47,8 +47,8 @@ target_link_libraries(multiverse_hw_interface
 target_link_libraries(${PROJECT_NAME}_node
 	${catkin_LIBRARIES}
 	multiverse_hw_interface
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultiverse_client_json.a
-  	${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultiverse_client.a
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultiverse_client_json_all.a
+  	${CMAKE_CURRENT_SOURCE_DIR}/lib/libmultiverse_client_all.a
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/libjsoncpp.a
   	${CMAKE_CURRENT_SOURCE_DIR}/lib/libzmq.a
 	pthread

@@ -43,9 +43,10 @@ multiverse
 .ipynb_checkpoints
 
 # Additional workspaces
-cram_ws
-giskard_ws
-tutorial_ws
+**/multiverse_ws/.catkin_tools
+**/multiverse_ws/build
+**/multiverse_ws/devel
+**/multiverse_ws/logs
 **/multiverse_ws2/build
 **/multiverse_ws2/install
 **/multiverse_ws2/log

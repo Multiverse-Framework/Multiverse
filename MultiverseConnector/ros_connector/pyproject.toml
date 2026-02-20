@@ -10,7 +10,7 @@ authors = [
 ]
 description = "A ROS connector for the Multiverse framework, enabling seamless integration between ROS and Multiverse Server."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
