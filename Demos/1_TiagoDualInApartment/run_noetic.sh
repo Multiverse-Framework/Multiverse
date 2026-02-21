@@ -204,8 +204,12 @@ goal:
 
 tmux_send "$SESH":0.7 \
 "
-echo 'Pane 7: (placeholder)'
-bash
+source '${VENV_DIR}/bin/activate'
+set +u
+source '${ROS_SETUP}'
+source '${ROSPKG_SETUP}'
+set -u
+multiverse_ros_connector --subscribers=\"{'joint_state':[{'meta_data':{'world_name':'world','length_unit':'m','angle_unit':'rad','mass_unit':'kg','time_unit':'s','handedness':'rhs'},'port':7300,'topic':'/joint_states','rate':60,'joint_types':{'torso_lift_joint':'prismatic'}}]}\"
 "
 
 tmux_send "$SESH":0.8 \
