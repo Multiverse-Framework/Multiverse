@@ -1,121 +1,201 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
+# --------------------------
+# Config
+# --------------------------
 SESH="teleop_iai_tiago"
+MUJOCO_VERSION="${MUJOCO_VERSION:-3.5.0}"
 
-# If session exists, attach
+DEMO_DIR="Demos/1_TiagoDualInApartment"
+VENV_DIR="${DEMO_DIR}/multiverse"
+MUJOCO_DIR="${DEMO_DIR}/mujoco-${MUJOCO_VERSION}"
+URDF_ROS2="${DEMO_DIR}/assets/urdf/iai_tiago_with_ros2_control.urdf"
+MJCF_SCENE="${DEMO_DIR}/assets/mjcf/scene_position_with_multiverse.xml"
+
+ROS_DISTRO="${ROS_DISTRO:-jazzy}"
+ROS_SETUP="/opt/ros/${ROS_DISTRO}/setup.bash"
+
+COLCON_WS="MultiverseConnector/ros_connector/ros_ws/multiverse_ws2"
+ROSPKG_SETUP="${COLCON_WS}/install/setup.bash"
+
+REQ_LOCAL="${DEMO_DIR}/requirements.txt"
+REQ_ROOT="requirements.txt"
+
+# --------------------------
+# Helpers
+# --------------------------
+log()  { echo -e "\n\033[1;32m[+] $*\033[0m"; }
+warn() { echo -e "\n\033[1;33m[!] $*\033[0m"; }
+die()  { echo -e "\n\033[1;31m[✗] $*\033[0m" >&2; exit 1; }
+
+need_cmd() { command -v "$1" >/dev/null 2>&1 || die "Missing command: $1"; }
+
+tmux_send() {
+  local target="$1"; shift
+  tmux send-keys -t "$target" "$*" C-m
+}
+
+ros_source() {
+  local overlay="${1:-}"
+  set +u
+  # shellcheck disable=SC1090
+  source "$ROS_SETUP"
+  if [[ -n "$overlay" ]]; then
+    # shellcheck disable=SC1090
+    source "$overlay"
+  fi
+  set -u
+}
+
 if tmux has-session -t "$SESH" 2>/dev/null; then
-  tmux attach -t "$SESH"
-  exit 0
+  exec tmux attach -t "$SESH"
 fi
 
-cd "$(dirname "$0")" || exit 1
-
-if [ ! -d "multiverse" ]; then
-  echo "Environment folder not found. Creating it now..."
-  python3 -m venv multiverse
-  . multiverse/bin/activate
-  python -m pip install -U pip
-  pip install -r requirements.txt
-  (cd ../.. && pip install -r requirements.txt)
-fi
-
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 cd ../..
 
-MUJOCO_VERSION=3.5.0
-if [ ! -d "$PWD/Demos/1_TiagoDualInApartment/mujoco-${MUJOCO_VERSION}" ]; then
-  echo "MuJoCo not found. Downloading MuJoCo ${MUJOCO_VERSION}..."
-  wget -qO- https://github.com/google-deepmind/mujoco/releases/download/${MUJOCO_VERSION}/mujoco-${MUJOCO_VERSION}-linux-x86_64.tar.gz | tar -xz -C $PWD/Demos/1_TiagoDualInApartment/
-  cp -f ./MultiverseConnector/mujoco_connector/mujoco-${MUJOCO_VERSION}/*.so ./Demos/1_TiagoDualInApartment/mujoco-${MUJOCO_VERSION}/bin/mujoco_plugin/
+need_cmd tmux
+need_cmd python3
+need_cmd wget
+need_cmd tar
+
+[[ -f "$ROS_SETUP" ]] || die "ROS setup not found: $ROS_SETUP"
+
+if [[ ! -d "$VENV_DIR" ]]; then
+  log "Creating venv: $VENV_DIR"
+  mkdir -p "$(dirname "$VENV_DIR")"
+  python3 -m venv "$VENV_DIR"
+  # shellcheck disable=SC1090
+  source "$VENV_DIR/bin/activate"
+  python -m pip install -U pip
+  pip install -r "$REQ_LOCAL"
+  pip install -r "$REQ_ROOT"
+  pip install -e "MultiverseConnector/ros_connector"
+else
+  # shellcheck disable=SC1090
+  source "$VENV_DIR/bin/activate"
 fi
 
-ROSPKG_PATH="$PWD"/MultiverseConnector/ros_connector/ros_ws/multiverse_ws2/install/setup.bash
-if [ ! -f "${ROSPKG_PATH}" ]; then
-  echo "ROS package not found. Building it..."
-  source /opt/ros/jazzy/setup.bash
-  cd "$PWD"/MultiverseConnector/ros_connector/ros_ws/multiverse_ws2 || exit
+if [[ ! -d "$MUJOCO_DIR" ]]; then
+  log "Downloading MuJoCo ${MUJOCO_VERSION} -> ${MUJOCO_DIR}"
+  mkdir -p "$DEMO_DIR"
+  wget -qO- "https://github.com/google-deepmind/mujoco/releases/download/${MUJOCO_VERSION}/mujoco-${MUJOCO_VERSION}-linux-x86_64.tar.gz" \
+    | tar -xz -C "$DEMO_DIR"
+fi
+
+mkdir -p "${MUJOCO_DIR}/bin/mujoco_plugin"
+if compgen -G "MultiverseConnector/mujoco_connector/mujoco-${MUJOCO_VERSION}/*.so" >/dev/null; then
+  cp -f "MultiverseConnector/mujoco_connector/mujoco-${MUJOCO_VERSION}/"*.so "${MUJOCO_DIR}/bin/mujoco_plugin/" || true
+else
+  warn "No plugin .so found at MultiverseConnector/mujoco_connector/mujoco-${MUJOCO_VERSION}/*.so"
+fi
+
+ros_source ""
+
+if [[ ! -f "$ROSPKG_SETUP" ]]; then
+  log "Building colcon workspace: ${COLCON_WS}"
+  need_cmd colcon
+  pushd "$COLCON_WS" >/dev/null
   colcon build --symlink-install
-  cd ../../
-  pip install -e .
-  cd ../../
+  popd >/dev/null
 fi
 
-tmux new-session -d -s "$SESH" -n server
+ros_source "$ROSPKG_SETUP"
 
+log "Starting tmux session: ${SESH}"
+tmux new-session -d -s "$SESH" -n main
 tmux set-option -t "$SESH" -g mouse on
 tmux set-option -t "$SESH" -g history-limit 200000
 
-# --- 3 columns (make 3 panes horizontally) ---
 tmux split-window -t "$SESH":0 -h
 tmux split-window -t "$SESH":0 -h
 
 mapfile -t COLS < <(tmux list-panes -t "$SESH":0 -F '#{pane_id}' | head -n 3)
 
-# --- for each column, split twice vertically to make 3 rows ---
 for col in "${COLS[@]}"; do
-  tmux select-pane -t "$col"
-  tmux split-window -t "$col" -v             # add 2nd row
-  tmux select-pane -t "$col"
-  tmux split-window -t "$col" -v             # add 3rd row
+  tmux split-window -t "$col" -v
+  tmux split-window -t "$col" -v
 done
 
 tmux select-layout -t "$SESH":0 tiled
 
-# Pane 0 - Multiverse Server
-tmux send-keys -t "$SESH":0.0 \
-"./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000 --transport tcp --bind 192.168.0.101:8000" C-m
+tmux_send "$SESH":0.0 \
+"
+./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000 --transport tcp --bind 192.168.0.101:8000
+"
 
-# Pane 1 - MuJoCo
-tmux send-keys -t "$SESH":0.1 \
-"source ./Demos/1_TiagoDualInApartment/multiverse/bin/activate
-python ./MultiverseUtilities/multiverse_initializing.py --data_path=./Demos/1_TiagoDualInApartment/config/multiverse.yaml
-export MUJOCO_VERSION=3.5.0
-./Demos/1_TiagoDualInApartment/mujoco-\${MUJOCO_VERSION}/bin/simulate ./Demos/1_TiagoDualInApartment/assets/mjcf/scene_position_with_multiverse.xml" C-m
+tmux_send "$SESH":0.1 \
+"
+source '${VENV_DIR}/bin/activate'
+python ./MultiverseUtilities/multiverse_initializing.py --data_path=./${DEMO_DIR}/config/multiverse.yaml
+export MUJOCO_VERSION='${MUJOCO_VERSION}'
+./${MUJOCO_DIR}/bin/simulate ./${MJCF_SCENE}
+"
 
-# Pane 2 - robot_state_publisher
-tmux send-keys -t "$SESH":0.2 \
-"source /opt/ros/jazzy/setup.bash
-source ${ROSPKG_PATH}
-ros2 run robot_state_publisher robot_state_publisher --ros-args --remap /robot_description:=/robot_description -p robot_description:=\"\$(xacro ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago_with_ros2_control.urdf)\" -r tf:=/tf" C-m
+tmux_send "$SESH":0.2 \
+"
+set +u
+source '${ROS_SETUP}'
+source '${ROSPKG_SETUP}'
+set -u
+ros2 run robot_state_publisher robot_state_publisher --ros-args --remap /robot_description:=/robot_description -p robot_description:=\"\$(xacro ./${URDF_ROS2})\" -r tf:=/tf
+"
 
-# Pane 3 - ros2_control_node
-tmux send-keys -t "$SESH":0.3 \
-"source /opt/ros/jazzy/setup.bash
-source ${ROSPKG_PATH}
-ros2 run controller_manager ros2_control_node --ros-args --remap /robot_description:=/robot_description --params-file './Demos/1_TiagoDualInApartment/config/ros2_control.yaml'
-" C-m
+tmux_send "$SESH":0.3 \
+"
+set +u
+source '${ROS_SETUP}'
+source '${ROSPKG_SETUP}'
+set -u
+ros2 run controller_manager ros2_control_node --ros-args --remap /robot_description:=/robot_description --params-file './${DEMO_DIR}/config/ros2_control.yaml'
+"
 
-# Pane 4 - spawn controllers + rviz2
-tmux send-keys -t "$SESH":0.4 \
-"source /opt/ros/jazzy/setup.bash
-source ${ROSPKG_PATH}
-ros2 run controller_manager spawner joint_state_broadcaster upper_body_position_controller --param-file ./Demos/1_TiagoDualInApartment/config/ros2_control.yaml
-cp ./Demos/1_TiagoDualInApartment/assets/urdf/iai_tiago_with_ros2_control.urdf /tmp/iai_tiago.urdf
-sed -i 's|file://\([^/]\)|file://'"'"'$PWD'"'"'/./Demos/1_TiagoDualInApartment/assets/urdf/\1|g' /tmp/iai_tiago.urdf
-ros2 run rviz2 rviz2 --display-config ./Demos/1_TiagoDualInApartment/config/rviz2.rviz" C-m
+tmux_send "$SESH":0.4 \
+"
+set +u
+source '${ROS_SETUP}'
+source '${ROSPKG_SETUP}'
+set -u
+ros2 run controller_manager spawner joint_state_broadcaster arm_left_trajectory_controller arm_right_trajectory_controller torso_trajectory_controller head_trajectory_controller --param-file ./${DEMO_DIR}/config/ros2_control.yaml
+ros2 run rviz2 rviz2 --display-config ./${DEMO_DIR}/config/rviz2.rviz
+"
 
-# Pane 5 - vr_teleop_action_server
-tmux send-keys -t "$SESH":0.5 \
-"source /opt/ros/jazzy/setup.bash
-source ${ROSPKG_PATH}
-cd ./Demos/1_TiagoDualInApartment
-ros2 run vr_teleop_action vr_teleop_action_server --ros-args --params-file ./config/vr_teleop_jazzy.yaml" C-m
+tmux_send "$SESH":0.5 \
+"
+set +u
+source '${ROS_SETUP}'
+source '${ROSPKG_SETUP}'
+set -u
+cd ./${DEMO_DIR}
+ros2 run vr_teleop_action vr_teleop_action_server --ros-args --params-file ./config/vr_teleop_jazzy.yaml
+"
 
-# Pane 6 - run vr_teleop_action_client
-tmux send-keys -t "$SESH":0.6 \
-"source /opt/ros/jazzy/setup.bash
-source ${ROSPKG_PATH}
-ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \"timeout: {sec: -1}\"" C-m
+tmux_send "$SESH":0.6 \
+"
+set +u
+source '${ROS_SETUP}'
+source '${ROSPKG_SETUP}'
+set -u
+ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \"timeout: {sec: -1}\"
+"
 
-# Pane 7 - run joint_state_subscriber
-tmux send-keys -t "$SESH":0.7 \
-"source ./Demos/1_TiagoDualInApartment/multiverse/bin/activate
-source /opt/ros/jazzy/setup.bash
-source ${ROSPKG_PATH}
-multiverse_ros_connector --subscribers=\"{'joint_state': [{'meta_data': {'world_name': 'world', 'length_unit': 'm', 'angle_unit': 'rad', 'mass_unit': 'kg', 'time_unit': 's', 'handedness': 'rhs'}, 'port': 7300, 'topic': '/joint_states', 'rate': 60, 'joint_types': {'torso_lift_joint': 'prismatic'}}]}\"" C-m
+tmux_send "$SESH":0.7 \
+"
+source '${VENV_DIR}/bin/activate'
+set +u
+source '${ROS_SETUP}'
+source '${ROSPKG_SETUP}'
+set -u
+multiverse_ros_connector --subscribers=\"{'joint_state':[{'meta_data':{'world_name':'world','length_unit':'m','angle_unit':'rad','mass_unit':'kg','time_unit':'s','handedness':'rhs'},'port':7300,'topic':'/joint_states','rate':60,'joint_types':{'torso_lift_joint':'prismatic'}}]}\"
+"
 
-# Pane 8 - 
-tmux send-keys -t "$SESH":0.8 \
-"" C-m
+tmux_send "$SESH":0.8 \
+"
+echo 'Pane 8: (placeholder)'
+bash
+"
 
 tmux select-pane -t "$SESH":0.0
-tmux attach -t "$SESH"
+exec tmux attach -t "$SESH"

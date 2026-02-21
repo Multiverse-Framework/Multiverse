@@ -8,6 +8,7 @@
 #include <geometry_msgs/msg/transform.hpp>
 #include <std_msgs/msg/float64_multi_array.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
+#include <trajectory_msgs/msg/joint_trajectory.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <rclcpp_action/rclcpp_action.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
@@ -20,7 +21,8 @@ extern char **environ;
 
 namespace vr_teleop_action
 {
-  using Publisher = rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr;
+  using PublisherF64 = rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr;
+  using PublisherJT = rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr;
   using Subscriber = rclcpp::Subscription<sensor_msgs::msg::JointState>::SharedPtr;
 
   static inline bool starts_with(const std::string &s, const std::string &p) { return s.rfind(p, 0) == 0; }
@@ -147,12 +149,29 @@ namespace vr_teleop_action
     SignalRef filtered_position;
   };
 
+  enum class PubMsgType
+  {
+    Float64MultiArray,
+    JointTrajectory
+  };
+
   struct PublisherCfg
   {
-    Publisher publisher;
+    PubMsgType msg_type = PubMsgType::Float64MultiArray;
+
+    // one of these is used
+    PublisherF64 pub_f64;
+    PublisherJT pub_jt;
+
+    std::string topic;
     int rate = 100;
-    std::vector<std::string> actuators;
-    std_msgs::msg::Float64MultiArray msg;
+    std::vector<std::string> actuators;       // already reordered to controller joint order
+    std::vector<std::string> ros_joint_order; // controller "joints" (ROS joint names in order)
+
+    // messages
+    std_msgs::msg::Float64MultiArray f64_msg;
+    trajectory_msgs::msg::JointTrajectory jt_msg;
+    trajectory_msgs::msg::JointTrajectoryPoint jt_point;
 
     // rate-guard state
     double period_s = 0.01;        // 1/rate
@@ -167,6 +186,47 @@ namespace vr_teleop_action
     std::string topic;
     std::vector<std::string> joints;
   };
+
+  static inline bool is_joint_traj_stream_topic(const std::string &topic)
+  {
+    // Common ROS2 joint_trajectory_controller topic interface:
+    if (ends_with(topic, "/joint_trajectory"))
+      return true;
+
+    // Some people still use /command naming:
+    if (ends_with(topic, "/command") || ends_with(topic, "/commands"))
+      return true;
+
+    // Nonstandard but requested:
+    if (ends_with(topic, "/follow_joint_trajectory/command"))
+      return true;
+
+    return false;
+  }
+
+  static inline std::string controller_ns_from_topic(const std::string &topic)
+  {
+    const std::string s1 = "/follow_joint_trajectory/command";
+    const std::string s2 = "/follow_joint_trajectory/goal";
+    const std::string s3 = "/follow_joint_trajectory";
+    const std::string s4 = "/joint_trajectory";
+    const std::string s5 = "/commands";
+    const std::string s6 = "/command";
+
+    if (ends_with(topic, s1))
+      return topic.substr(0, topic.size() - s1.size());
+    if (ends_with(topic, s2))
+      return topic.substr(0, topic.size() - s2.size());
+    if (ends_with(topic, s3))
+      return topic.substr(0, topic.size() - s3.size());
+    if (ends_with(topic, s4))
+      return topic.substr(0, topic.size() - s4.size());
+    if (ends_with(topic, s5))
+      return topic.substr(0, topic.size() - s5.size());
+    if (ends_with(topic, s6))
+      return topic.substr(0, topic.size() - s6.size());
+    return topic;
+  }
 
   class VrTeleopActionServer : public rclcpp::Node, public MultiverseClientJson
   {
@@ -801,15 +861,20 @@ namespace vr_teleop_action
           if (t.topic.empty() || t.actuators.empty())
             continue;
 
-          std::string get_parameters_topic = t.topic;
-          if (ends_with(get_parameters_topic, "/commands"))
-            get_parameters_topic = get_parameters_topic.substr(0, get_parameters_topic.size() - 9);
-          get_parameters_topic += "/get_parameters";
+          const std::string controller_ns = controller_ns_from_topic(t.topic);
+          const std::string get_parameters_topic = controller_ns + "/get_parameters";
 
           PublisherCfg cfg;
-          cfg.publisher = this->create_publisher<std_msgs::msg::Float64MultiArray>(t.topic, 10);
+          cfg.topic = t.topic;
           cfg.rate = t.rate;
           cfg.actuators = t.actuators;
+
+          cfg.msg_type = is_joint_traj_stream_topic(t.topic) ? PubMsgType::JointTrajectory : PubMsgType::Float64MultiArray;
+
+          if (cfg.msg_type == PubMsgType::JointTrajectory)
+            cfg.pub_jt = this->create_publisher<trajectory_msgs::msg::JointTrajectory>(t.topic, 10);
+          else
+            cfg.pub_f64 = this->create_publisher<std_msgs::msg::Float64MultiArray>(t.topic, 10);
 
           // Try to reorder actuators according to controller's "joints" parameter order.
           auto client = create_client<rcl_interfaces::srv::GetParameters>(get_parameters_topic);
@@ -842,10 +907,11 @@ namespace vr_teleop_action
           if (!resp->values.empty() &&
               resp->values[0].type == rcl_interfaces::msg::ParameterType::PARAMETER_STRING_ARRAY)
           {
+            cfg.ros_joint_order = resp->values[0].string_array_value; // store controller order (ROS joint names)
             std::vector<std::string> ordered;
             ordered.reserve(t.actuators.size());
 
-            for (const auto &ros_joint : resp->values[0].string_array_value)
+            for (const auto &ros_joint : cfg.ros_joint_order)
             {
               auto it = ros_joint_to_mujoco_joint.find(ros_joint);
               if (it == ros_joint_to_mujoco_joint.end())
@@ -861,8 +927,23 @@ namespace vr_teleop_action
             cfg.actuators = std::move(ordered);
           }
 
-          cfg.msg.data.resize(cfg.actuators.size(), 0.0);
-          cfg.period_s = 1.0 / static_cast<double>(cfg.rate);
+          cfg.period_s = (cfg.rate > 0) ? (1.0 / static_cast<double>(cfg.rate)) : 0.0;
+          cfg.next_pub_time_s = 0.0;
+          cfg.last_warn_time_s = 0.0;
+          cfg.max_lag_s = 0.25;
+          if (cfg.msg_type == PubMsgType::Float64MultiArray)
+          {
+            cfg.f64_msg.data.resize(cfg.actuators.size(), 0.0);
+          }
+          else
+          {
+            // JointTrajectory stream: joint_names must be controller order.
+            // actuators vector is already reordered to match this order.
+            cfg.jt_msg.joint_names = cfg.ros_joint_order;
+
+            cfg.jt_point.positions.resize(cfg.ros_joint_order.size(), 0.0);
+            cfg.jt_point.time_from_start = rclcpp::Duration::from_seconds(std::max(0.02, cfg.period_s));
+          }
           cfg.next_pub_time_s = 0.0; // will be initialized on first publish tick
           cfg.last_warn_time_s = 0.0;
           cfg.max_lag_s = 0.25; // you can tune this (e.g. 0.1)
@@ -1180,7 +1261,7 @@ namespace vr_teleop_action
             const double eff_hz = (lag_s > 1e-9) ? (1.0 / lag_s) : 0.0;
             RCLCPP_WARN(get_logger(),
                         "Publisher '%s' cannot keep up: target=%d Hz (period=%.4fs), lag=%.4fs (effective ~%.1f Hz).",
-                        pub_cfg.publisher->get_topic_name(),
+                        pub_cfg.topic.c_str(),
                         pub_cfg.rate,
                         pub_cfg.period_s,
                         lag_s,
@@ -1193,14 +1274,35 @@ namespace vr_teleop_action
         }
 
         // Fill & publish once
-        auto &data = pub_cfg.msg.data;
-        for (size_t i = 0; i < pub_cfg.actuators.size(); ++i)
+        if (pub_cfg.msg_type == PubMsgType::Float64MultiArray)
         {
-          const std::string &act = pub_cfg.actuators[i];
-          data[i] = joint_commands[act].filtered_position.get();
+          auto &data = pub_cfg.f64_msg.data;
+          for (size_t i = 0; i < pub_cfg.actuators.size(); ++i)
+          {
+            const std::string &act = pub_cfg.actuators[i];
+            data[i] = joint_commands[act].filtered_position.get();
+          }
+          pub_cfg.pub_f64->publish(pub_cfg.f64_msg);
         }
+        else
+        {
+          // Fill one point in controller order.
+          // pub_cfg.actuators is already reordered to match pub_cfg.ros_joint_order.
+          for (size_t i = 0; i < pub_cfg.actuators.size(); ++i)
+          {
+            const std::string &act = pub_cfg.actuators[i];
+            pub_cfg.jt_point.positions[i] = joint_commands[act].filtered_position.get();
+          }
 
-        pub_cfg.publisher->publish(pub_cfg.msg);
+          pub_cfg.jt_point.time_from_start =
+              rclcpp::Duration::from_seconds(std::max(0.02, pub_cfg.period_s));
+
+          pub_cfg.jt_msg.header.stamp = now(); // node clock
+          pub_cfg.jt_msg.points.clear();
+          pub_cfg.jt_msg.points.push_back(pub_cfg.jt_point);
+
+          pub_cfg.pub_jt->publish(pub_cfg.jt_msg);
+        }
 
         // Advance schedule by exactly 1 period (no drift accumulation)
         pub_cfg.next_pub_time_s += pub_cfg.period_s;

@@ -54,40 +54,10 @@ vr_teleop_action_server:
           teleop_gripper_left_right_inner_knuckle_joint: gripper_left_right_inner_knuckle_joint
 
     publishers:
-      upper_body_publisher:
-        topic: /upper_body_position_controller/commands
+      left_arm_publisher:
+        topic: /arm_left_trajectory_controller/joint_trajectory
         rate: 100
         joints:
-          torso_lift_joint:
-            from: teleop_torso_lift_joint
-            type: joint_linear_position
-          arm_right_1_joint:
-            from: teleop_arm_right_1_joint
-            type: joint_angular_position
-          arm_right_2_joint:
-            from: teleop_arm_right_2_joint
-            type: joint_angular_position
-          arm_right_3_joint:
-            from: teleop_arm_right_3_joint
-            type: joint_angular_position
-          arm_right_4_joint:
-            from: teleop_arm_right_4_joint
-            type: joint_angular_position
-          arm_right_5_joint:
-            from: teleop_arm_right_5_joint
-            type: joint_angular_position
-          arm_right_6_joint:
-            from: teleop_arm_right_6_joint
-            type: joint_angular_position
-          arm_right_7_joint:
-            from: teleop_arm_right_7_joint
-            type: joint_angular_position
-          head_1_joint:
-            from: teleop_head_1_joint
-            type: joint_angular_position
-          head_2_joint:
-            from: teleop_head_2_joint
-            type: joint_angular_position
           arm_left_1_joint:
             from: teleop_arm_left_1_joint
             type: joint_angular_position
@@ -109,6 +79,49 @@ vr_teleop_action_server:
           arm_left_7_joint:
             from: teleop_arm_left_7_joint
             type: joint_angular_position
+      right_arm_publisher:
+        topic: /arm_right_trajectory_controller/joint_trajectory
+        rate: 100
+        joints:
+          arm_right_1_joint:
+            from: teleop_arm_right_1_joint
+            type: joint_angular_position
+          arm_right_2_joint:
+            from: teleop_arm_right_2_joint
+            type: joint_angular_position
+          arm_right_3_joint:
+            from: teleop_arm_right_3_joint
+            type: joint_angular_position
+          arm_right_4_joint:
+            from: teleop_arm_right_4_joint
+            type: joint_angular_position
+          arm_right_5_joint:
+            from: teleop_arm_right_5_joint
+            type: joint_angular_position
+          arm_right_6_joint:
+            from: teleop_arm_right_6_joint
+            type: joint_angular_position
+          arm_right_7_joint:
+            from: teleop_arm_right_7_joint
+            type: joint_angular_position
+      torso_publisher:
+        topic: /torso_trajectory_controller/joint_trajectory
+        rate: 100
+        joints:
+          torso_lift_joint:
+            from: teleop_torso_lift_joint
+            type: joint_linear_position
+      head_publisher:
+        topic: /head_trajectory_controller/joint_trajectory
+        rate: 100
+        joints:
+          head_1_joint:
+            from: teleop_head_1_joint
+            type: joint_angular_position
+          head_2_joint:
+            from: teleop_head_2_joint
+            type: joint_angular_position
+
     # subscribers:
     #   whole_body_subscriber:
     #     topic: /joint_states
