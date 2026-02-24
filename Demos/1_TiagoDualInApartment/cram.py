@@ -5,7 +5,7 @@ import time
 
 if __name__ == "__main__":
     scene_path = os.path.join(
-        os.path.dirname(__file__), "assets", "mjcf", "scene_position.xml"
+        os.path.dirname(__file__), "assets", "mjcf", "iai_tiago_position_in_apartment.xml"
     )
     image_dir = os.path.join(os.path.dirname(__file__), "..", "images")
     world = MJCFParser(scene_path).parse()
