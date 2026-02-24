@@ -421,6 +421,13 @@
     <key name="home" />
   </keyframe>
 
+  <contact>
+    <exclude body1="torso_fixed_link" body2="arm_left_2_link"/>
+    <exclude body1="torso_lift_link" body2="arm_left_2_link"/>
+    <exclude body1="torso_fixed_link" body2="arm_right_2_link"/>
+    <exclude body1="torso_lift_link" body2="arm_right_2_link"/>
+  </contact>
+
   <extension>
     <plugin plugin="mujoco.multiverse_connector">
       <instance name="mujoco_client">

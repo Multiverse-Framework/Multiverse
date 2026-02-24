@@ -94,3 +94,28 @@ gripper_right_fingers_actuator:
   scalar: [0.0]
 gripper_left_fingers_actuator:
   scalar: [0.0]
+
+gripper_left_left_driver_joint:
+  joint_angular_position: [0.0]
+gripper_left_left_inner_finger_joint:
+  joint_angular_position: [0.0]
+gripper_left_left_inner_knuckle_joint:
+  joint_angular_position: [0.0]
+gripper_left_right_driver_joint:
+  joint_angular_position: [0.0]
+gripper_left_right_inner_finger_joint:
+  joint_angular_position: [0.0]
+gripper_left_right_inner_knuckle_joint:
+  joint_angular_position: [0.0]
+gripper_right_left_driver_joint:
+  joint_angular_position: [0.0]
+gripper_right_left_inner_finger_joint:
+  joint_angular_position: [0.0]
+gripper_right_left_inner_knuckle_joint:
+  joint_angular_position: [0.0]
+gripper_right_right_driver_joint:
+  joint_angular_position: [0.0]
+gripper_right_right_inner_finger_joint:
+  joint_angular_position: [0.0]
+gripper_right_right_inner_knuckle_joint:
+  joint_angular_position: [0.0]

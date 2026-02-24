@@ -56,7 +56,7 @@ head_position_controller:
     - head_1_joint
     - head_2_joint
 
-arm_left_trajectory_controller:
+arm_left_controller:
   type: position_controllers/JointTrajectoryController
   joints:
     - arm_left_1_joint
@@ -67,7 +67,7 @@ arm_left_trajectory_controller:
     - arm_left_6_joint
     - arm_left_7_joint
 
-arm_right_trajectory_controller:
+arm_right_controller:
   type: position_controllers/JointTrajectoryController
   joints:
     - arm_right_1_joint
@@ -78,12 +78,12 @@ arm_right_trajectory_controller:
     - arm_right_6_joint
     - arm_right_7_joint
 
-torso_trajectory_controller:
+torso_controller:
   type: position_controllers/JointTrajectoryController
   joints:
     - torso_lift_joint
 
-head_trajectory_controller:
+head_controller:
   type: position_controllers/JointTrajectoryController
   joints:
     - head_1_joint

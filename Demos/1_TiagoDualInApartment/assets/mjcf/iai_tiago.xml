@@ -380,6 +380,13 @@
     </body>
   </worldbody>
 
+  <contact>
+    <exclude body1="torso_fixed_link" body2="arm_left_2_link"/>
+    <exclude body1="torso_lift_link" body2="arm_left_2_link"/>
+    <exclude body1="torso_fixed_link" body2="arm_right_2_link"/>
+    <exclude body1="torso_lift_link" body2="arm_right_2_link"/>
+  </contact>
+
   <tendon>
     <fixed name="gripper_right_split">
       <joint joint="gripper_right_right_driver_joint" coef="0.5"/>

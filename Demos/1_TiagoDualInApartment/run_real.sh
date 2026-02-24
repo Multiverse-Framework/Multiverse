@@ -133,38 +133,18 @@ tmux_send "$SESH":0.1 \
 "
 source '${VENV_DIR}/bin/activate'
 python ./MultiverseUtilities/multiverse_initializing.py --data_path=./${DEMO_DIR}/config/multiverse.yaml
-export MUJOCO_VERSION='${MUJOCO_VERSION}'
-./${MUJOCO_DIR}/bin/simulate ./${MJCF_SCENE}
 "
 
 tmux_send "$SESH":0.2 \
 "
-set +u
-source '${ROS_SETUP}'
-source '${ROSPKG_SETUP}'
-set -u
-rosrun robot_state_publisher robot_state_publisher tf:=/tf
 "
-
-JSON_CONFIG='{"host":"tcp://127.0.0.1","server_port":7000,"client_port":7601,"meta_data":{"world_name":"world","length_unit":"m","angle_unit":"rad","mass_unit":"kg","time_unit":"s","handedness":"rhs"},"controller_manager":{"robot":"iai_tiago","robot_description":"/robot_description","actuators":{"torso_lift_joint_position":"torso_lift_joint","arm_left_1_joint_position":"arm_left_1_joint","arm_left_2_joint_position":"arm_left_2_joint","arm_left_3_joint_position":"arm_left_3_joint","arm_left_4_joint_position":"arm_left_4_joint","arm_left_5_joint_position":"arm_left_5_joint","arm_left_6_joint_position":"arm_left_6_joint","arm_left_7_joint_position":"arm_left_7_joint","arm_right_1_joint_position":"arm_right_1_joint","arm_right_2_joint_position":"arm_right_2_joint","arm_right_3_joint_position":"arm_right_3_joint","arm_right_4_joint_position":"arm_right_4_joint","arm_right_5_joint_position":"arm_right_5_joint","arm_right_6_joint_position":"arm_right_6_joint","arm_right_7_joint_position":"arm_right_7_joint","head_1_joint_position":"head_1_joint","head_2_joint_position":"head_2_joint"},"init_joint_state":{"arm_left_1_joint":0.27,"arm_left_2_joint":-1.07,"arm_left_3_joint":1.5,"arm_left_4_joint":1.96,"arm_left_5_joint":-2.0,"arm_left_6_joint":1.2,"arm_left_7_joint":0.5,"arm_right_1_joint":0.27,"arm_right_2_joint":-1.07,"arm_right_3_joint":1.5,"arm_right_4_joint":1.96,"arm_right_5_joint":-2.0,"arm_right_6_joint":1.2,"arm_right_7_joint":0.5}}}'
 
 tmux_send "$SESH":0.3 \
 "
-set +u
-source '${ROS_SETUP}'
-source '${ROSPKG_SETUP}'
-set -u
-rosrun multiverse_control multiverse_control_node robot_description:=/robot_description '${JSON_CONFIG}'
 "
 
 tmux_send "$SESH":0.4 \
 "
-set +u
-source '${ROS_SETUP}'
-source '${ROSPKG_SETUP}'
-set -u
-rosparam load ./${DEMO_DIR}/config/ros_control.yaml
-rosrun controller_manager spawner joint_state_controller arm_left_controller arm_right_controller torso_controller head_controller
 "
 
 tmux_send "$SESH":0.5 \
