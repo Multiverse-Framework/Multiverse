@@ -55,7 +55,7 @@ vr_teleop_action_server:
 
     publishers:
       left_arm_publisher:
-        topic: /arm_left_trajectory_controller/joint_trajectory
+        topic: /arm_left_controller/joint_trajectory
         rate: 100
         joints:
           arm_left_1_joint:
@@ -80,7 +80,7 @@ vr_teleop_action_server:
             from: teleop_arm_left_7_joint
             type: joint_angular_position
       right_arm_publisher:
-        topic: /arm_right_trajectory_controller/joint_trajectory
+        topic: /arm_right_controller/joint_trajectory
         rate: 100
         joints:
           arm_right_1_joint:
@@ -105,14 +105,14 @@ vr_teleop_action_server:
             from: teleop_arm_right_7_joint
             type: joint_angular_position
       torso_publisher:
-        topic: /torso_trajectory_controller/joint_trajectory
+        topic: /torso_controller/joint_trajectory
         rate: 100
         joints:
           torso_lift_joint:
             from: teleop_torso_lift_joint
             type: joint_linear_position
       head_publisher:
-        topic: /head_trajectory_controller/joint_trajectory
+        topic: /head_controller/joint_trajectory
         rate: 100
         joints:
           head_1_joint:

@@ -6,7 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
-        - /Tiago1
+        - /Tiago1/Description Topic1
         - /TF1
       Splitter Ratio: 0.5
     Tree Height: 567
@@ -47,14 +47,14 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
       Collision Enabled: true
-      Description File: /tmp/iai_tiago.urdf
-      Description Source: File
+      Description File: ""
+      Description Source: Topic
       Description Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: ""
+        Value: /robot_description
       Enabled: true
       Links:
         All Links Enabled: true
@@ -66,32 +66,26 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_left_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_left_3_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_left_4_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_left_5_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_left_6_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_left_7_link:
           Alpha: 1
           Show Axes: false
@@ -105,32 +99,26 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_right_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_right_3_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_right_4_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_right_5_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_right_6_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         arm_right_7_link:
           Alpha: 1
           Show Axes: false
@@ -144,7 +132,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         base_antenna_right_link:
           Alpha: 1
           Show Axes: false
@@ -154,17 +141,14 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         base_dock_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         base_footprint:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         base_imu_link:
           Alpha: 1
           Show Axes: false
@@ -178,7 +162,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         base_mic_back_left_link:
           Alpha: 1
           Show Axes: false
@@ -199,62 +182,50 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         base_sonar_02_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         base_sonar_03_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         caster_back_left_1_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         caster_back_left_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         caster_back_right_1_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         caster_back_right_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         caster_front_left_1_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         caster_front_left_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         caster_front_right_1_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         caster_front_right_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_left_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_left_left_inner_finger:
           Alpha: 1
           Show Axes: false
@@ -264,12 +235,10 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_left_left_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_left_right_inner_finger:
           Alpha: 1
           Show Axes: false
@@ -279,17 +248,14 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_left_right_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_right_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_right_left_inner_finger:
           Alpha: 1
           Show Axes: false
@@ -299,12 +265,10 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_right_left_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_right_right_inner_finger:
           Alpha: 1
           Show Axes: false
@@ -314,22 +278,18 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         gripper_right_right_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         head_1_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         head_2_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         head_front_camera_color_frame:
           Alpha: 1
           Show Axes: false
@@ -376,17 +336,14 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         wheel_left_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
         wheel_right_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
       Mass Properties:
         Inertia: false
         Mass: false
@@ -706,10 +663,10 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.45520278811454773
+      Pitch: 0.4402028024196625
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.6785993576049805
+      Yaw: 5.643599033355713
     Saved: ~
 Window Geometry:
   Displays:

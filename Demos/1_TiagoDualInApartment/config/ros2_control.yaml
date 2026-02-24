@@ -65,7 +65,7 @@ head_position_controller:
       - head_1_joint
       - head_2_joint
 
-arm_left_trajectory_controller:
+arm_left_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
@@ -85,7 +85,7 @@ arm_left_trajectory_controller:
       - velocity
     open_loop_control: True
 
-arm_right_trajectory_controller:
+arm_right_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
@@ -105,7 +105,7 @@ arm_right_trajectory_controller:
       - velocity
     open_loop_control: True
 
-torso_trajectory_controller:
+torso_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:
@@ -119,7 +119,7 @@ torso_trajectory_controller:
       - velocity
     open_loop_control: True
 
-head_trajectory_controller:
+head_controller:
   ros__parameters:
     type: joint_trajectory_controller/JointTrajectoryController
     joints:

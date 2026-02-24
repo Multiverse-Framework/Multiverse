@@ -140,7 +140,7 @@ set +u
 source '${ROS_SETUP}'
 source '${ROSPKG_SETUP}'
 set -u
-ros2 run robot_state_publisher robot_state_publisher --ros-args --remap /robot_description:=/robot_description -p robot_description:=\"\$(xacro ./${URDF_ROS2})\" -r tf:=/tf
+ros2 run robot_state_publisher robot_state_publisher --ros-args --remap /robot_description:=/robot_description -p robot_description:=\"\$(xacro ./${URDF_ROS2} | sed 's|file://|file://${PWD}/Demos/1_TiagoDualInApartment/assets/urdf/|g')\" -r tf:=/tf
 "
 
 tmux_send "$SESH":0.3 \
@@ -158,7 +158,7 @@ set +u
 source '${ROS_SETUP}'
 source '${ROSPKG_SETUP}'
 set -u
-ros2 run controller_manager spawner joint_state_broadcaster arm_left_trajectory_controller arm_right_trajectory_controller torso_trajectory_controller head_trajectory_controller --param-file ./${DEMO_DIR}/config/ros2_control.yaml
+ros2 run controller_manager spawner joint_state_broadcaster arm_left_controller arm_right_controller torso_controller head_controller --param-file ./${DEMO_DIR}/config/ros2_control.yaml
 ros2 run rviz2 rviz2 --display-config ./${DEMO_DIR}/config/rviz2.rviz
 "
 
