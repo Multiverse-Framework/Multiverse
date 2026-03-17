@@ -123,7 +123,7 @@ tmux select-layout -t "$SESH":0 tiled
 
 tmux_send "$SESH":0.0 \
 "
-./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000 --transport tcp --bind 192.168.0.101:8000
+./MultiverseServer/bin/multiverse_server_cpp --transport zmq --bind tcp://127.0.0.1:7000 --transport tcp --bind 192.168.0.102:8000
 "
 
 tmux_send "$SESH":0.1 \
