@@ -11,7 +11,6 @@ DEMO_DIR="Demos/1_TiagoDualInApartment"
 VENV_DIR="${DEMO_DIR}/multiverse"
 MUJOCO_DIR="${DEMO_DIR}/mujoco-${MUJOCO_VERSION}"
 URDF_XACRO="${DEMO_DIR}/assets/urdf/iai_tiago.urdf"
-MJCF_SCENE="${DEMO_DIR}/assets/mjcf/scene_position_with_multiverse.xml"
 
 ROS_DISTRO="${ROS_DISTRO:-noetic}"
 ROS_SETUP="/opt/ros/${ROS_DISTRO}/setup.bash"
