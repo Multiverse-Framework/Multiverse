@@ -174,7 +174,7 @@
           <body name="torso_lift_link" pos="0 0 0.597">
             <inertial pos="0.039536 -0.002841 -0.190987" mass="7.33895" diaginertia="0.229088 0.245188 0.092397" />
             <joint name="teleop_torso_lift_joint" pos="0 0 0" axis="0 0 1" type="slide" range="0 0.35" actuatorfrcrange="-500 500" damping="1000" />
-            <geom material="white" mesh="torso_lift_dual_arm" />
+            <geom material="white" mesh="torso_lift_dual_arm" contype="0" conaffinity="0"/>
             <body name="arm_right_1_link" childclass="arm" pos="0.02556 -0.19 -0.171" quat="0.707107 0 0 -0.707107">
               <inertial pos="0.061191 -0.022397 -0.012835" mass="1.56343" diaginertia="0.0051023 0.0051023 0.0051023" />
               <joint name="teleop_arm_right_1_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40" />
