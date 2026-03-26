@@ -37,6 +37,7 @@ __pycache__
 *.pytest_cache
 mujoco-3.*.0
 multiverse
+install
 
 # VSC
 .vscode

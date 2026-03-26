@@ -1,0 +1,6 @@
+[submodule "Demos/2_UnitreeG1/unitree/unitree_sdk2"]
+	path = Demos/2_UnitreeG1/unitree/unitree_sdk2
+	url = git@github.com:unitreerobotics/unitree_sdk2.git
+[submodule "Demos/2_UnitreeG1/unitree/unitree_rl_mjlab"]
+	path = Demos/2_UnitreeG1/unitree/unitree_rl_mjlab
+	url = git@github.com:unitreerobotics/unitree_rl_mjlab.git
