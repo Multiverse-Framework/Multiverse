@@ -1,0 +1,12 @@
+#include "Vector3.idl"
+
+module geometry_msgs {
+  module msg {
+    module dds_ {
+      @final struct Twist_ {
+        geometry_msgs::msg::dds_::Vector3_ linear;
+        geometry_msgs::msg::dds_::Vector3_ angular;
+      };
+    };
+  };
+};
