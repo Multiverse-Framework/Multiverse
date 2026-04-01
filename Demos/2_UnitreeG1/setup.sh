@@ -143,8 +143,17 @@ else
     log "Overwriting keyboard.h..."
     cp -f "$SCRIPT_DIR/unitree/keyboard.h" deploy/include/isaaclab/devices/keyboard/keyboard.h
 
+    log "Overwriting CMakelists.txt..."
+    sed -i '/add_executable.*g1_ctrl/ s/main.cpp/& ${PROJECT_SOURCE_DIR}\/..\/..\/include\/FSM\/Twist.c ${PROJECT_SOURCE_DIR}\/..\/..\/include\/FSM\/Vector3.c/' deploy/robots/g1/CMakeLists.txt
+
     log "Disabling joystick input in config.yaml..."
     sed -i 's/use_joystick: 1/use_joystick: 0/' simulate/config.yaml
+
+    log "Copying Twist.c, Twist.h, Vector3.c, and Vector3.h to deploy/include/FSM..."
+    cp -f "$SCRIPT_DIR/dds/Twist.c" deploy/include/FSM/Twist.c
+    cp -f "$SCRIPT_DIR/dds/Twist.h" deploy/include/FSM/Twist.h
+    cp -f "$SCRIPT_DIR/dds/Vector3.c" deploy/include/FSM/Vector3.c
+    cp -f "$SCRIPT_DIR/dds/Vector3.h" deploy/include/FSM/Vector3.h
 
     # Build and install deployment on g1
     log "Building and installing deployment on g1..."

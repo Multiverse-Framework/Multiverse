@@ -3,6 +3,7 @@ set -euo pipefail
 
 SESH="unitree_g1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+NET_IF=$(ip route get 8.8.8.8 | awk '{print $5; exit}')
 cd "$SCRIPT_DIR"
 
 log()  { echo -e "\n\033[1;32m[+] $*\033[0m"; }
@@ -65,9 +66,9 @@ tmux set-option -t "$SESH" -g history-limit 200000
 tmux split-window -t "$SESH":0 -h
 tmux select-layout -t "$SESH":0 tiled
 
-tmux_send "$SESH":0.0 "./unitree/install/bin/unitree_mujoco"
+tmux_send "$SESH":0.0 "./unitree/install/bin/unitree_mujoco --network=$NET_IF"
 
-tmux_send "$SESH":0.1 "sudo KEYBOARD_EVENT_DEVICE=$KEYBOARD_EVENT_DEVICE ./unitree/install/bin/g1_ctrl --network=lo"
+tmux_send "$SESH":0.1 "sudo -E KEYBOARD_EVENT_DEVICE=$KEYBOARD_EVENT_DEVICE ./unitree/install/bin/g1_ctrl --network=$NET_IF"
 
 tmux select-pane -t "$SESH":0.0
 exec tmux attach -t "$SESH"
