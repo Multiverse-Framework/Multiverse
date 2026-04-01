@@ -117,7 +117,7 @@ else
     cmake .. -DCMAKE_PREFIX_PATH="${INSTALL_DIR}"/unitree_sdk2
     make -j$(nproc)
 
-    ln -s "${UNITREE_DIR}"/unitree_rl_mjlab/simulate/build/unitree_mujoco "${UNITREE_DIR}"/install/bin/unitree_mujoco
+    ln -sf "${UNITREE_DIR}"/unitree_rl_mjlab/simulate/build/unitree_mujoco "${UNITREE_DIR}"/install/bin/unitree_mujoco
 fi
 
 cd "$UNITREE_DIR"
@@ -168,7 +168,7 @@ else
         -DCMAKE_SHARED_LINKER_FLAGS="-L${INSTALL_DIR}/unitree_sdk2/lib -Wl,-rpath,${INSTALL_DIR}/unitree_sdk2/lib"
     make -j$(nproc)
 
-    ln -s "${UNITREE_DIR}"/unitree_rl_mjlab/deploy/robots/g1/build/g1_ctrl "${UNITREE_DIR}"/install/bin/g1_ctrl
+    ln -sf "${UNITREE_DIR}"/unitree_rl_mjlab/deploy/robots/g1/build/g1_ctrl "${UNITREE_DIR}"/install/bin/g1_ctrl
 fi
 
 log "Setup complete! To run the demo, execute: ${SCRIPT_DIR}/run.sh"
