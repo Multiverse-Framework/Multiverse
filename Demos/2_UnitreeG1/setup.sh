@@ -5,6 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="${SCRIPT_DIR}/multiverse"
 UNITREE_DIR="${SCRIPT_DIR}/unitree"
 INSTALL_DIR="${UNITREE_DIR}/install"
+MUJOCO_VERSION="${MUJOCO_VERSION:-3.6.0}"
 mkdir -p "$INSTALL_DIR"/bin
 
 cd "$UNITREE_DIR"
@@ -109,13 +110,30 @@ else
         sed -i '3i#include <cstdint>' simulate/src/joystick/jstest.cc
     fi
 
+    cd simulate
+
+    log "Downloading and replacing mujoco..."
+    rm -rf "./mujoco/*"
+    MUJOCO_TAR_FILE=mujoco-"${MUJOCO_VERSION}".tar.gz
+    curl -L -o ./"${MUJOCO_TAR_FILE}" https://github.com/google-deepmind/mujoco/releases/download/"${MUJOCO_VERSION}"/mujoco-"${MUJOCO_VERSION}"-linux-x86_64.tar.gz
+    tar xf ./"${MUJOCO_TAR_FILE}" -C ./mujoco/ --strip-components=1
+    rm -f  ./"${MUJOCO_TAR_FILE}"
+
     # Build and install unitree_rl_mjlab
     log "Building and installing unitree_rl_mjlab..."
-    cd simulate
     mkdir -p build
     cd build
     cmake .. -DCMAKE_PREFIX_PATH="${INSTALL_DIR}"/unitree_sdk2
     make -j$(nproc)
+
+    MUJOCO_PLUGIN_SRC_DIR="${SCRIPT_DIR}/../../MultiverseConnector/mujoco_connector/mujoco-${MUJOCO_VERSION}"
+    log "Copying mujoco_plugin from ${MUJOCO_PLUGIN_SRC_DIR} to ${PWD}/mujoco_plugin..."
+    mkdir -p "./mujoco_plugin"
+    if compgen -G "${MUJOCO_PLUGIN_SRC_DIR}"/libmultiverse_connector.so >/dev/null; then
+        cp -f "${MUJOCO_PLUGIN_SRC_DIR}"/libmultiverse_connector.so "./mujoco_plugin" || true
+    else
+        warn "${MUJOCO_PLUGIN_SRC_DIR}/libmultiverse_connector.so not found, skipping copy"
+    fi
 
     ln -sf "${UNITREE_DIR}"/unitree_rl_mjlab/simulate/build/unitree_mujoco "${UNITREE_DIR}"/install/bin/unitree_mujoco
 fi
@@ -138,10 +156,10 @@ else
     cd unitree_rl_mjlab
     
     log "Overwriting FSMState.h..."
-    cp -f "$SCRIPT_DIR/unitree/FSMState.h" deploy/include/FSM/FSMState.h
+    cp -f "${UNITREE_DIR}/FSMState.h" deploy/include/FSM/FSMState.h
 
     log "Overwriting keyboard.h..."
-    cp -f "$SCRIPT_DIR/unitree/keyboard.h" deploy/include/isaaclab/devices/keyboard/keyboard.h
+    cp -f "${UNITREE_DIR}/keyboard.h" deploy/include/isaaclab/devices/keyboard/keyboard.h
 
     log "Overwriting CMakelists.txt..."
     sed -i '/add_executable.*g1_ctrl/ s/main.cpp/& ${PROJECT_SOURCE_DIR}\/..\/..\/include\/FSM\/Twist.c ${PROJECT_SOURCE_DIR}\/..\/..\/include\/FSM\/Vector3.c/' deploy/robots/g1/CMakeLists.txt
