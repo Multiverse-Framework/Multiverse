@@ -1,0 +1,21 @@
+<mujoco model="milk_box">
+    <compiler angle="radian" autolimits="true" />
+    <default>
+        <default class="milk_box_collision">
+            <geom rgba="0.9 0.9 0.9 1.0" />
+        </default>
+    </default>
+    <asset>
+        <mesh name="UCX_MilkBox_001" file="./milk_box/meshes/stl/UCX_MilkBox_001.stl" />
+        <mesh name="UCX_MilkBox_002" file="./milk_box/meshes/stl/UCX_MilkBox_002.stl" />
+    </asset>
+
+    <worldbody>
+        <body name="milk_box" pos="2.4 2.8 1.04">
+            <freejoint />
+            <inertial mass="1.00762140750885" pos="0 0 0.008011753670871258" quat="0.9999994039535522 0.0 0.0010670736664906144 0.0" diaginertia="0.004000849090516567 0.003987141884863377 0.0008067898452281952"/>
+            <geom name="UCX_MilkBox_001" type="mesh" mesh="UCX_MilkBox_001" class="milk_box_collision"/>
+            <geom name="UCX_MilkBox_002" type="mesh" mesh="UCX_MilkBox_002" class="milk_box_collision"/>
+        </body>
+    </worldbody>
+</mujoco>

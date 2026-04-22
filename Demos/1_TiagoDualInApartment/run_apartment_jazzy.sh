@@ -11,7 +11,7 @@ DEMO_DIR="Demos/1_TiagoDualInApartment"
 VENV_DIR="${DEMO_DIR}/multiverse"
 MUJOCO_DIR="${DEMO_DIR}/mujoco-${MUJOCO_VERSION}"
 URDF_ROS2="${DEMO_DIR}/assets/urdf/iai_tiago_with_ros2_control.urdf"
-MJCF_SCENE="${DEMO_DIR}/assets/mjcf/scene_position_with_multiverse.xml"
+MJCF_SCENE="${DEMO_DIR}/assets/mjcf/iai_tiago_velocity_in_apartment_with_multiverse.xml"
 
 ROS_DISTRO="${ROS_DISTRO:-jazzy}"
 ROS_SETUP="/opt/ros/${ROS_DISTRO}/setup.bash"
@@ -158,18 +158,18 @@ set +u
 source '${ROS_SETUP}'
 source '${ROSPKG_SETUP}'
 set -u
-ros2 run controller_manager spawner joint_state_broadcaster arm_left_controller arm_right_controller torso_controller head_controller --param-file ./${DEMO_DIR}/config/ros2_control.yaml
+ros2 run controller_manager spawner joint_state_broadcaster upper_body_velocity_controller --param-file ./${DEMO_DIR}/config/ros2_control.yaml
 ros2 run rviz2 rviz2 --display-config ./${DEMO_DIR}/config/rviz2.rviz
 "
 
 tmux_send "$SESH":0.5 \
 "
+source '${VENV_DIR}/bin/activate'
 set +u
 source '${ROS_SETUP}'
 source '${ROSPKG_SETUP}'
 set -u
-cd ./${DEMO_DIR}
-ros2 run vr_teleop_action vr_teleop_action_server --ros-args --params-file ./config/vr_teleop_jazzy.yaml
+# multiverse_ros_connector --publishers=\"{'tf': [{'meta_data': {'world_name': 'world', 'length_unit': 'm', 'angle_unit': 'rad', 'mass_unit': 'kg', 'time_unit': 's', 'handedness': 'rhs'}, 'port': 7305, 'topic': '/tf', 'rate': 60, 'root_frame_id': 'map'}]}\"  --subscribers=\"{}\"
 "
 
 tmux_send "$SESH":0.6 \
@@ -178,7 +178,7 @@ set +u
 source '${ROS_SETUP}'
 source '${ROSPKG_SETUP}'
 set -u
-ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \"timeout: {sec: -1}\"
+# ros2 action send_goal /teleop vr_teleop_interfaces/action/Teleop \"timeout: {sec: -1}\"
 "
 
 tmux_send "$SESH":0.7 \
@@ -188,7 +188,7 @@ set +u
 source '${ROS_SETUP}'
 source '${ROSPKG_SETUP}'
 set -u
-multiverse_ros_connector --subscribers=\"{'joint_state':[{'meta_data':{'world_name':'world','length_unit':'m','angle_unit':'rad','mass_unit':'kg','time_unit':'s','handedness':'rhs'},'port':7300,'topic':'/joint_states','rate':60,'joint_types':{'torso_lift_joint':'prismatic'}}]}\"
+multiverse_ros_connector --publishers=\"{'tf': [{'meta_data': {'world_name': 'world', 'length_unit': 'm', 'angle_unit': 'rad', 'mass_unit': 'kg', 'time_unit': 's', 'handedness': 'rhs'}, 'port': 7305, 'topic': '/tf', 'rate': 60, 'root_frame_id': 'map'}], 'odom': [{'meta_data': {'world_name': 'world', 'length_unit': 'm', 'angle_unit': 'rad', 'mass_unit': 'kg', 'time_unit': 's', 'handedness': 'rhs'}, 'port': 7310, 'odom_topic': '/odom', 'tf_topic': '/tf', 'body': 'base_footprint', 'rate': 60}]}\" --subscribers=\"{'joint_state':[{'meta_data':{'world_name':'world','length_unit':'m','angle_unit':'rad','mass_unit':'kg','time_unit':'s','handedness':'rhs'},'port':7300,'topic':'/joint_states','rate':60,'joint_types':{'torso_lift_joint':'prismatic'}}], 'cmd_vel':[{'meta_data':{'world_name':'world','length_unit':'m','angle_unit':'rad','mass_unit':'kg','time_unit':'s','handedness':'rhs'},'port':7320,'topic':'/cmd_vel','body':'base_footprint'}]}\"
 "
 
 tmux_send "$SESH":0.8 \

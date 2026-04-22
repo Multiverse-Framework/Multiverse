@@ -1,10 +1,10 @@
 <mujoco model="iai_tiago">
   <actuator>
     <!-- Torso actuator -->
-    <position name="torso_lift_joint_position" joint="torso_lift_joint" kp="50000" inheritrange="1.0" />
+    <velocity name="torso_lift_joint_velocity" joint="torso_lift_joint" kv="50000" />
     <!-- Head actuators -->
-    <position name="head_1_joint_position" joint="head_1_joint" kp="20" inheritrange="1.0" />
-    <position name="head_2_joint_position" joint="head_2_joint" kp="20" inheritrange="1.0" />
+    <velocity name="head_1_joint_velocity" joint="head_1_joint" kv="5000" />
+    <velocity name="head_2_joint_velocity" joint="head_2_joint" kv="5000" />
 
     <!-- Left arm actuators -->
     <velocity name="arm_left_1_joint_velocity" joint="arm_left_1_joint" kv="5000" />

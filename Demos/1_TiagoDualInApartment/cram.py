@@ -2,6 +2,7 @@ from semantic_digital_twin.adapters.mjcf import MJCFParser
 from semantic_digital_twin.adapters.multi_sim import MujocoSim
 import os
 import time
+import mujoco
 
 if __name__ == "__main__":
     scene_path = os.path.join(
@@ -15,9 +16,9 @@ if __name__ == "__main__":
     multi_sim = MujocoSim(
         world=world,
         headless=headless,
-        step_size=0.005,
-        integrator="IMPLICITFAST",
-        cone="PYRAMIDAL",
+        step_size=0.002,
+        integrator=mujoco.mjtIntegrator.mjINT_EULER,
+        cone=mujoco.mjtCone.mjCONE_ELLIPTIC,
     )
     multi_sim.start_simulation()
 

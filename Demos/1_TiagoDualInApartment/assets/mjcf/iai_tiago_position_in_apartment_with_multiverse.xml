@@ -1,0 +1,26 @@
+<mujoco model="iai_tiago_scene">
+
+  <include file="scene_position.xml"/>
+
+  <include file="apartment.xml"/>
+
+  <extension>
+    <plugin plugin="mujoco.multiverse_connector">
+      <instance name="mujoco_client">
+        <config key="transport" value="zmq" />
+        <config key="host" value="tcp://127.0.0.1" />
+        <config key="server_port" value="7000" />
+        <config key="client_port" value="7500" />
+        <config key="world_name" value="world" />
+        <config key="simulation_name" value="scene_position" />
+        <config key="send" value="{'joint': ['joint_angular_position', 'joint_linear_position', 'joint_angular_velocity', 'joint_linear_velocity', 'joint_torque', 'joint_force']}" />
+        <config key="receive" value="{
+        'torso_lift_joint_position': ['cmd_joint_linear_position'], 'head_1_joint_position': ['cmd_joint_angular_position'], 'head_2_joint_position': ['cmd_joint_angular_position'],
+        'arm_left_1_joint_position': ['cmd_joint_angular_position'], 'arm_left_2_joint_position': ['cmd_joint_angular_position'], 'arm_left_3_joint_position': ['cmd_joint_angular_position'], 'arm_left_4_joint_position': ['cmd_joint_angular_position'], 'arm_left_5_joint_position': ['cmd_joint_angular_position'], 'arm_left_6_joint_position': ['cmd_joint_angular_position'], 'arm_left_7_joint_position': ['cmd_joint_angular_position'],
+        'arm_right_1_joint_position': ['cmd_joint_angular_position'], 'arm_right_2_joint_position': ['cmd_joint_angular_position'], 'arm_right_3_joint_position': ['cmd_joint_angular_position'], 'arm_right_4_joint_position': ['cmd_joint_angular_position'], 'arm_right_5_joint_position': ['cmd_joint_angular_position'], 'arm_right_6_joint_position': ['cmd_joint_angular_position'], 'arm_right_7_joint_position': ['cmd_joint_angular_position'],
+        'gripper_right_fingers_actuator': ['scalar'], 'gripper_left_fingers_actuator': ['scalar']}" />
+      </instance>
+    </plugin>
+  </extension>
+
+</mujoco>

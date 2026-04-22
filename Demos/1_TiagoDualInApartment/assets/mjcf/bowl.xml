@@ -1,0 +1,223 @@
+<mujoco model="bowl">
+  <compiler angle="radian"/>
+
+  <default>
+    <default class="bowl_visual">
+      <geom contype="0" conaffinity="0"/>
+    </default>
+    <default class="bowl_collision">
+      <geom rgba="0.9 0.9 0.9 1"/>
+    </default>
+  </default>
+
+  <asset>
+    <mesh name="bowl_bottom" content_type="model/stl" file="bowl/meshes/stl/bowl_bottom.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_1" content_type="model/stl" file="bowl/meshes/stl/bowl_side_1.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_2" content_type="model/stl" file="bowl/meshes/stl/bowl_side_2.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_3" content_type="model/stl" file="bowl/meshes/stl/bowl_side_3.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_4" content_type="model/stl" file="bowl/meshes/stl/bowl_side_4.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_5" content_type="model/stl" file="bowl/meshes/stl/bowl_side_5.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_6" content_type="model/stl" file="bowl/meshes/stl/bowl_side_6.stl" scale="0.25 0.25 0.7"/>
+  </asset>
+
+  <worldbody>
+    <body name="bowl" pos="2.4 2.5 0.97">
+      <joint type="free"/>
+      <body name="bowl_body" pos="0 0 -0.038">
+        <geom name="bowl_bottom" class="bowl_collision" type="mesh" mesh="bowl_bottom"/>
+        <geom name="bowl_side_1_1" class="bowl_collision" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_1_2" class="bowl_collision" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_1_3" class="bowl_collision" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_1_4" class="bowl_collision" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_1_5" class="bowl_collision" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_1_6" class="bowl_collision" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_2_1" class="bowl_collision" quat="0.995187 0 0 0.0979925" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_2_2" class="bowl_collision" quat="0.995187 0 0 0.0979925" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_2_3" class="bowl_collision" quat="0.995187 0 0 0.0979925" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_2_4" class="bowl_collision" quat="0.995187 0 0 0.0979925" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_2_5" class="bowl_collision" quat="0.995187 0 0 0.0979925" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_2_6" class="bowl_collision" quat="0.995187 0 0 0.0979925" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_3_1" class="bowl_collision" quat="0.980785 0 0 0.195091" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_3_2" class="bowl_collision" quat="0.980785 0 0 0.195091" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_3_3" class="bowl_collision" quat="0.980785 0 0 0.195091" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_3_4" class="bowl_collision" quat="0.980785 0 0 0.195091" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_3_5" class="bowl_collision" quat="0.980785 0 0 0.195091" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_3_6" class="bowl_collision" quat="0.980785 0 0 0.195091" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_4_1" class="bowl_collision" quat="0.956947 0 0 0.290261" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_4_2" class="bowl_collision" quat="0.956947 0 0 0.290261" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_4_3" class="bowl_collision" quat="0.956947 0 0 0.290261" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_4_4" class="bowl_collision" quat="0.956947 0 0 0.290261" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_4_5" class="bowl_collision" quat="0.956947 0 0 0.290261" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_4_6" class="bowl_collision" quat="0.956947 0 0 0.290261" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_5_1" class="bowl_collision" quat="0.923879 0 0 0.382684" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_5_2" class="bowl_collision" quat="0.923879 0 0 0.382684" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_5_3" class="bowl_collision" quat="0.923879 0 0 0.382684" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_5_4" class="bowl_collision" quat="0.923879 0 0 0.382684" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_5_5" class="bowl_collision" quat="0.923879 0 0 0.382684" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_5_6" class="bowl_collision" quat="0.923879 0 0 0.382684" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_6_1" class="bowl_collision" quat="0.881933 0 0 0.471376" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_6_2" class="bowl_collision" quat="0.881933 0 0 0.471376" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_6_3" class="bowl_collision" quat="0.881933 0 0 0.471376" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_6_4" class="bowl_collision" quat="0.881933 0 0 0.471376" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_6_5" class="bowl_collision" quat="0.881933 0 0 0.471376" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_6_6" class="bowl_collision" quat="0.881933 0 0 0.471376" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_7_1" class="bowl_collision" quat="0.831469 0 0 0.555571" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_7_2" class="bowl_collision" quat="0.831469 0 0 0.555571" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_7_3" class="bowl_collision" quat="0.831469 0 0 0.555571" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_7_4" class="bowl_collision" quat="0.831469 0 0 0.555571" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_7_5" class="bowl_collision" quat="0.831469 0 0 0.555571" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_7_6" class="bowl_collision" quat="0.831469 0 0 0.555571" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_8_1" class="bowl_collision" quat="0.773025 0 0 0.634375" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_8_2" class="bowl_collision" quat="0.773025 0 0 0.634375" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_8_3" class="bowl_collision" quat="0.773025 0 0 0.634375" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_8_4" class="bowl_collision" quat="0.773025 0 0 0.634375" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_8_5" class="bowl_collision" quat="0.773025 0 0 0.634375" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_8_6" class="bowl_collision" quat="0.773025 0 0 0.634375" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_9_1" class="bowl_collision" quat="0.707105 0 0 0.707108" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_9_2" class="bowl_collision" quat="0.707105 0 0 0.707108" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_9_3" class="bowl_collision" quat="0.707105 0 0 0.707108" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_9_4" class="bowl_collision" quat="0.707105 0 0 0.707108" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_9_5" class="bowl_collision" quat="0.707105 0 0 0.707108" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_9_6" class="bowl_collision" quat="0.707105 0 0 0.707108" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_10_1" class="bowl_collision" quat="0.634411 0 0 0.772996" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_10_2" class="bowl_collision" quat="0.634411 0 0 0.772996" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_10_3" class="bowl_collision" quat="0.634411 0 0 0.772996" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_10_4" class="bowl_collision" quat="0.634411 0 0 0.772996" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_10_5" class="bowl_collision" quat="0.634411 0 0 0.772996" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_10_6" class="bowl_collision" quat="0.634411 0 0 0.772996" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_11_1" class="bowl_collision" quat="0.555568 0 0 0.831471" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_11_2" class="bowl_collision" quat="0.555568 0 0 0.831471" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_11_3" class="bowl_collision" quat="0.555568 0 0 0.831471" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_11_4" class="bowl_collision" quat="0.555568 0 0 0.831471" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_11_5" class="bowl_collision" quat="0.555568 0 0 0.831471" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_11_6" class="bowl_collision" quat="0.555568 0 0 0.831471" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_12_1" class="bowl_collision" quat="0.471417 0 0 0.881911" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_12_2" class="bowl_collision" quat="0.471417 0 0 0.881911" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_12_3" class="bowl_collision" quat="0.471417 0 0 0.881911" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_12_4" class="bowl_collision" quat="0.471417 0 0 0.881911" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_12_5" class="bowl_collision" quat="0.471417 0 0 0.881911" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_12_6" class="bowl_collision" quat="0.471417 0 0 0.881911" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_13_1" class="bowl_collision" quat="0.382681 0 0 0.923881" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_13_2" class="bowl_collision" quat="0.382681 0 0 0.923881" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_13_3" class="bowl_collision" quat="0.382681 0 0 0.923881" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_13_4" class="bowl_collision" quat="0.382681 0 0 0.923881" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_13_5" class="bowl_collision" quat="0.382681 0 0 0.923881" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_13_6" class="bowl_collision" quat="0.382681 0 0 0.923881" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_14_1" class="bowl_collision" quat="0.290306 0 0 0.956934" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_14_2" class="bowl_collision" quat="0.290306 0 0 0.956934" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_14_3" class="bowl_collision" quat="0.290306 0 0 0.956934" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_14_4" class="bowl_collision" quat="0.290306 0 0 0.956934" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_14_5" class="bowl_collision" quat="0.290306 0 0 0.956934" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_14_6" class="bowl_collision" quat="0.290306 0 0 0.956934" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_15_1" class="bowl_collision" quat="0.195087 0 0 0.980786" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_15_2" class="bowl_collision" quat="0.195087 0 0 0.980786" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_15_3" class="bowl_collision" quat="0.195087 0 0 0.980786" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_15_4" class="bowl_collision" quat="0.195087 0 0 0.980786" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_15_5" class="bowl_collision" quat="0.195087 0 0 0.980786" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_15_6" class="bowl_collision" quat="0.195087 0 0 0.980786" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_16_1" class="bowl_collision" quat="0.0980386 0 0 0.995183" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_16_2" class="bowl_collision" quat="0.0980386 0 0 0.995183" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_16_3" class="bowl_collision" quat="0.0980386 0 0 0.995183" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_16_4" class="bowl_collision" quat="0.0980386 0 0 0.995183" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_16_5" class="bowl_collision" quat="0.0980386 0 0 0.995183" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_16_6" class="bowl_collision" quat="0.0980386 0 0 0.995183" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_17_1" class="bowl_collision" quat="-3.67321e-06 0 0 1" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_17_2" class="bowl_collision" quat="-3.67321e-06 0 0 1" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_17_3" class="bowl_collision" quat="-3.67321e-06 0 0 1" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_17_4" class="bowl_collision" quat="-3.67321e-06 0 0 1" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_17_5" class="bowl_collision" quat="-3.67321e-06 0 0 1" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_17_6" class="bowl_collision" quat="-3.67321e-06 0 0 1" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_18_1" class="bowl_collision" quat="-0.0979961 0 0 0.995187" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_18_2" class="bowl_collision" quat="-0.0979961 0 0 0.995187" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_18_3" class="bowl_collision" quat="-0.0979961 0 0 0.995187" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_18_4" class="bowl_collision" quat="-0.0979961 0 0 0.995187" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_18_5" class="bowl_collision" quat="-0.0979961 0 0 0.995187" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_18_6" class="bowl_collision" quat="-0.0979961 0 0 0.995187" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_19_1" class="bowl_collision" quat="-0.195094 0 0 0.980784" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_19_2" class="bowl_collision" quat="-0.195094 0 0 0.980784" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_19_3" class="bowl_collision" quat="-0.195094 0 0 0.980784" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_19_4" class="bowl_collision" quat="-0.195094 0 0 0.980784" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_19_5" class="bowl_collision" quat="-0.195094 0 0 0.980784" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_19_6" class="bowl_collision" quat="-0.195094 0 0 0.980784" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_20_1" class="bowl_collision" quat="-0.290265 0 0 0.956946" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_20_2" class="bowl_collision" quat="-0.290265 0 0 0.956946" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_20_3" class="bowl_collision" quat="-0.290265 0 0 0.956946" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_20_4" class="bowl_collision" quat="-0.290265 0 0 0.956946" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_20_5" class="bowl_collision" quat="-0.290265 0 0 0.956946" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_20_6" class="bowl_collision" quat="-0.290265 0 0 0.956946" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_21_1" class="bowl_collision" quat="-0.382688 0 0 0.923878" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_21_2" class="bowl_collision" quat="-0.382688 0 0 0.923878" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_21_3" class="bowl_collision" quat="-0.382688 0 0 0.923878" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_21_4" class="bowl_collision" quat="-0.382688 0 0 0.923878" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_21_5" class="bowl_collision" quat="-0.382688 0 0 0.923878" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_21_6" class="bowl_collision" quat="-0.382688 0 0 0.923878" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_22_1" class="bowl_collision" quat="-0.471379 0 0 0.881931" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_22_2" class="bowl_collision" quat="-0.471379 0 0 0.881931" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_22_3" class="bowl_collision" quat="-0.471379 0 0 0.881931" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_22_4" class="bowl_collision" quat="-0.471379 0 0 0.881931" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_22_5" class="bowl_collision" quat="-0.471379 0 0 0.881931" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_22_6" class="bowl_collision" quat="-0.471379 0 0 0.881931" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_23_1" class="bowl_collision" quat="-0.555574 0 0 0.831467" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_23_2" class="bowl_collision" quat="-0.555574 0 0 0.831467" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_23_3" class="bowl_collision" quat="-0.555574 0 0 0.831467" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_23_4" class="bowl_collision" quat="-0.555574 0 0 0.831467" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_23_5" class="bowl_collision" quat="-0.555574 0 0 0.831467" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_23_6" class="bowl_collision" quat="-0.555574 0 0 0.831467" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_24_1" class="bowl_collision" quat="-0.634378 0 0 0.773023" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_24_2" class="bowl_collision" quat="-0.634378 0 0 0.773023" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_24_3" class="bowl_collision" quat="-0.634378 0 0 0.773023" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_24_4" class="bowl_collision" quat="-0.634378 0 0 0.773023" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_24_5" class="bowl_collision" quat="-0.634378 0 0 0.773023" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_24_6" class="bowl_collision" quat="-0.634378 0 0 0.773023" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_25_1" class="bowl_collision" quat="-0.707111 0 0 0.707103" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_25_2" class="bowl_collision" quat="-0.707111 0 0 0.707103" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_25_3" class="bowl_collision" quat="-0.707111 0 0 0.707103" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_25_4" class="bowl_collision" quat="-0.707111 0 0 0.707103" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_25_5" class="bowl_collision" quat="-0.707111 0 0 0.707103" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_25_6" class="bowl_collision" quat="-0.707111 0 0 0.707103" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_26_1" class="bowl_collision" quat="-0.772998 0 0 0.634408" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_26_2" class="bowl_collision" quat="-0.772998 0 0 0.634408" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_26_3" class="bowl_collision" quat="-0.772998 0 0 0.634408" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_26_4" class="bowl_collision" quat="-0.772998 0 0 0.634408" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_26_5" class="bowl_collision" quat="-0.772998 0 0 0.634408" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_26_6" class="bowl_collision" quat="-0.772998 0 0 0.634408" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_27_1" class="bowl_collision" quat="-0.831473 0 0 0.555565" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_27_2" class="bowl_collision" quat="-0.831473 0 0 0.555565" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_27_3" class="bowl_collision" quat="-0.831473 0 0 0.555565" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_27_4" class="bowl_collision" quat="-0.831473 0 0 0.555565" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_27_5" class="bowl_collision" quat="-0.831473 0 0 0.555565" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_27_6" class="bowl_collision" quat="-0.831473 0 0 0.555565" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_28_1" class="bowl_collision" quat="-0.881912 0 0 0.471413" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_28_2" class="bowl_collision" quat="-0.881912 0 0 0.471413" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_28_3" class="bowl_collision" quat="-0.881912 0 0 0.471413" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_28_4" class="bowl_collision" quat="-0.881912 0 0 0.471413" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_28_5" class="bowl_collision" quat="-0.881912 0 0 0.471413" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_28_6" class="bowl_collision" quat="-0.881912 0 0 0.471413" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_29_1" class="bowl_collision" quat="-0.923882 0 0 0.382677" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_29_2" class="bowl_collision" quat="-0.923882 0 0 0.382677" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_29_3" class="bowl_collision" quat="-0.923882 0 0 0.382677" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_29_4" class="bowl_collision" quat="-0.923882 0 0 0.382677" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_29_5" class="bowl_collision" quat="-0.923882 0 0 0.382677" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_29_6" class="bowl_collision" quat="-0.923882 0 0 0.382677" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_30_1" class="bowl_collision" quat="-0.956935 0 0 0.290302" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_30_2" class="bowl_collision" quat="-0.956935 0 0 0.290302" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_30_3" class="bowl_collision" quat="-0.956935 0 0 0.290302" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_30_4" class="bowl_collision" quat="-0.956935 0 0 0.290302" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_30_5" class="bowl_collision" quat="-0.956935 0 0 0.290302" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_30_6" class="bowl_collision" quat="-0.956935 0 0 0.290302" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_31_1" class="bowl_collision" quat="-0.980787 0 0 0.195084" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_31_2" class="bowl_collision" quat="-0.980787 0 0 0.195084" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_31_3" class="bowl_collision" quat="-0.980787 0 0 0.195084" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_31_4" class="bowl_collision" quat="-0.980787 0 0 0.195084" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_31_5" class="bowl_collision" quat="-0.980787 0 0 0.195084" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_31_6" class="bowl_collision" quat="-0.980787 0 0 0.195084" type="mesh" mesh="bowl_side_6"/>
+        <geom name="bowl_side_32_1" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_1"/>
+        <geom name="bowl_side_32_2" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_2"/>
+        <geom name="bowl_side_32_3" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_3"/>
+        <geom name="bowl_side_32_4" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_4"/>
+        <geom name="bowl_side_32_5" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_5"/>
+        <geom name="bowl_side_32_6" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_6"/>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

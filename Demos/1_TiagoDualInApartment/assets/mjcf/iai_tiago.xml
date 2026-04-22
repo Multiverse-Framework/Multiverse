@@ -169,77 +169,77 @@
             <geom class="iai_tiago_visual" rgba="0.9 0.9 0.9 1" mesh="caster_2" />
           </body>
         </body>
-        <body name="torso_fixed_link" pos="-0.062 0 0.193">
+        <body gravcomp="1" name="torso_fixed_link" pos="-0.062 0 0.193">
           <geom class="iai_tiago_collision" size="0.2 0.1325 0.0285" pos="0.085 0 0.02" type="box" />
           <geom class="iai_tiago_collision" size="0.125 0.1325 0.026" pos="0 0 0.05" type="box" />
           <geom class="iai_tiago_visual" rgba="0.9 0.9 0.9 1" mesh="torso_fix" />
-          <body name="torso_lift_link" pos="0 0 0.597">
+          <body gravcomp="1" name="torso_lift_link" pos="0 0 0.597">
             <inertial pos="0.039536 -0.002841 -0.190987" mass="7.33895" diaginertia="0.229088 0.245188 0.092397" />
             <joint name="torso_lift_joint" pos="0 0 0" axis="0 0 1" type="slide" range="0 0.35" actuatorfrcrange="-500 500" damping="1000" />
             <geom material="white" mesh="torso_lift_dual_arm" />
-            <body name="arm_right_1_link" childclass="arm" pos="0.02556 -0.19 -0.171" quat="0.707107 0 0 -0.707107">
+            <body gravcomp="1" name="arm_right_1_link" childclass="arm" pos="0.02556 -0.19 -0.171" quat="0.707107 0 0 -0.707107">
               <inertial pos="0.061191 -0.022397 -0.012835" mass="1.56343" diaginertia="0.0051023 0.0051023 0.0051023" />
               <joint name="arm_right_1_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40" />
               <geom mass="0" material="white" mesh="arm_right_1" />
-              <body name="arm_right_2_link" pos="0.125 -0.0195 -0.031" quat="0.707107 -0.707107 0 0">
+              <body gravcomp="1" name="arm_right_2_link" pos="0.125 -0.0195 -0.031" quat="0.707107 -0.707107 0 0">
                 <inertial pos="0.030432 0.000229 -0.005942" mass="1.8004" diaginertia="0.0043723 0.004327 0.0017837" />
                 <joint name="arm_right_2_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40" />
                 <geom mass="0" material="gray10" mesh="arm_right_2" />
-                <body name="arm_right_3_link" pos="0.0895 0 -0.0015" quat="0.5 -0.5 -0.5 0.5">
+                <body gravcomp="1" name="arm_right_3_link" pos="0.0895 0 -0.0015" quat="0.5 -0.5 -0.5 0.5">
                   <inertial pos="0.007418 -0.004361 -0.134194" mass="1.8" diaginertia="0.0200771 0.0196154 0.0026485" />
                   <joint name="arm_right_3_joint" pos="0 0 0" axis="0 0 1" range="-3.53429 1.5708" actuatorfrcrange="-26 26" damping="40" />
                   <geom mass="0" material="gray10" mesh="arm_right_3" />
-                  <body name="arm_right_4_link" pos="-0.02 -0.027 -0.222" quat="0.5 -0.5 -0.5 -0.5">
+                  <body gravcomp="1" name="arm_right_4_link" pos="-0.02 -0.027 -0.222" quat="0.5 -0.5 -0.5 -0.5">
                     <inertial pos="-0.095658 0.014666 0.018133" mass="1.4327" diaginertia="0.00204 0.008424 0.008686" />
                     <joint name="arm_right_4_joint" pos="0 0 0" axis="0 0 1" range="-0.392699 2.35619" actuatorfrcrange="-26 26" damping="40" />
                     <geom mass="0" material="gray10" mesh="arm_right_4" />
-                    <body name="arm_right_5_link" pos="-0.162 0.02 0.027" quat="0.707107 0 -0.707107 0">
+                    <body gravcomp="1" name="arm_right_5_link" pos="-0.162 0.02 0.027" quat="0.707107 0 -0.707107 0">
                       <inertial pos="0.001078 -0.000151 -0.077173" mass="0.935914" diaginertia="0.0010362 0.0007945 0.0004398" />
                       <joint name="arm_right_5_joint" pos="0 0 0" axis="0 0 1" range="-2.0944 2.0944" actuatorfrcrange="-3 3" damping="1" />
                       <geom mass="0" material="mercury" mesh="arm_right_5" />
-                      <body name="arm_right_6_link" pos="0 0 0.15" quat="0.5 -0.5 -0.5 -0.5">
+                      <body gravcomp="1" name="arm_right_6_link" pos="0 0 0.15" quat="0.5 -0.5 -0.5 -0.5">
                         <inertial pos="-0.000153 -0.003122 0.000183" mass="0.302758" diaginertia="3.85e-05 3.33e-05 3.29e-05" />
                         <joint name="arm_right_6_joint" pos="0 0 0" axis="0 0 1" range="-1.41372 1.41372" actuatorfrcrange="-6.6 6.6" damping="1" />
                         <geom mass="0" material="mercury" mesh="arm_right_6" />
-                        <body name="arm_right_7_link" quat="0.5 0.5 0.5 0.5">
+                        <body gravcomp="1" name="arm_right_7_link" quat="0.5 0.5 0.5 0.5">
                           <inertial pos="-0.0001739 0.0001764 0.0817355" mass="1.00276" diaginertia="0.0025841 0.0022568 0.0007464" />
                           <joint name="arm_right_7_joint" pos="0 0 0" axis="0 0 1" range="-2.0944 2.0944" actuatorfrcrange="-6.6 6.6" damping="1" />
                           <geom size="0.005 0.0025" pos="0 0 0.047" quat="-0.707107 0 0 0.707107" type="cylinder" mass="0" material="mercury" />
                           <geom size="0.0225 0.00785" pos="0 0 0.05385" quat="-1 0 0 0" type="cylinder" mass="0" material="mercury" />
                           <geom size="0.025 0.004875" pos="0 0 0.066575" quat="-0.707107 0 0 0.707107" type="cylinder" mass="0" material="gray10" />
-                          <body name="arm_right_tool_link" pos="0 0 0.0615" quat="-0.5 0.5 0.5 0.5">
-                            <body name="gripper_right_base_link" pos="0.0312 0 0" quat="0.5 0.5 0.5 0.5" childclass="2f140">
+                          <body gravcomp="1" name="arm_right_tool_link" pos="0 0 0.0615" quat="-0.5 0.5 0.5 0.5">
+                            <body gravcomp="1" name="gripper_right_base_link" pos="0.0312 0 0" quat="0.5 0.5 0.5 0.5" childclass="2f140">
                               <geom quat="0.707107 0 0 0.707107" mesh="robotiq_2f_140_base_link" class="visual" />
-                              <body name="gripper_right_left_outer_knuckle" pos="0.030601 0 0.054905" quat="0.2902 0.644813 0.644813 0.2902">
+                              <body gravcomp="1" name="gripper_right_left_outer_knuckle" pos="0.030601 0 0.054905" quat="0.2902 0.644813 0.644813 0.2902">
                                 <inertial pos="-0.0130635 0.0169635 0.00346564" quat="0.94118 0.264213 0.145848 -0.151986" mass="0.0311462" diaginertia="2.7666e-05 2.01811e-05 1.09023e-05" />
                                 <joint name="gripper_right_left_driver_joint" class="driver" />
                                 <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="robotiq_2f_140_outer_knuckle" class="visual" />
                                 <geom pos="0 0.01822 0.0260018" quat="1 0 0 0" type="mesh" mesh="robotiq_2f_140_outer_finger" class="visual" />
-                                <body name="gripper_right_left_inner_finger" pos="0 0.0999754 -0.00221853" quat="0.935013 -0.354613 0 0">
+                                <body gravcomp="1" name="gripper_right_left_inner_finger" pos="0 0.0999754 -0.00221853" quat="0.935013 -0.354613 0 0">
                                   <inertial pos="0.000119314 0.0339244 -0.021841" quat="0.545437 0.430197 -0.442938 0.566776" mass="0.0261503" diaginertia="1.62408e-05 1.59131e-05 2.38936e-06" />
                                   <joint name="gripper_right_left_inner_finger_joint" class="follower" />
                                   <geom type="mesh" mesh="robotiq_2f_140_inner_finger" class="visual" />
                                   <geom class="pad_box" />
                                 </body>
                               </body>
-                              <body name="gripper_right_left_inner_knuckle" pos="0.0127 0 0.06142" quat="0.2902 0.644813 0.644813 0.2902">
+                              <body gravcomp="1" name="gripper_right_left_inner_knuckle" pos="0.0127 0 0.06142" quat="0.2902 0.644813 0.644813 0.2902">
                                 <inertial pos="0.000123012 0.0507851 0.00103969" quat="0.497203 0.502496 -0.507943 0.492221" mass="0.0271177" diaginertia="2.83809e-05 2.61936e-05 2.81319e-06" />
                                 <joint name="gripper_right_left_inner_knuckle_joint" class="follower" />
                                 <geom type="mesh" mesh="robotiq_2f_140_inner_knuckle" />
                               </body>
-                              <body name="gripper_right_right_outer_knuckle" pos="-0.030601 0 0.054905" quat="-0.2902 -0.644813 0.644813 0.2902">
+                              <body gravcomp="1" name="gripper_right_right_outer_knuckle" pos="-0.030601 0 0.054905" quat="-0.2902 -0.644813 0.644813 0.2902">
                                 <inertial pos="-0.0130635 0.0169635 0.00346564" quat="0.94118 0.264213 0.145848 -0.151986" mass="0.0311462" diaginertia="2.7666e-05 2.01811e-05 1.09023e-05" />
                                 <joint name="gripper_right_right_driver_joint" class="driver" />
                                 <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="robotiq_2f_140_outer_knuckle" class="visual" />
                                 <geom pos="0 0.01822 0.0260018" quat="1 0 0 0" type="mesh" mesh="robotiq_2f_140_outer_finger" class="visual" />
-                                <body name="gripper_right_right_inner_finger" pos="0 0.0999754 -0.00221853" quat="0.935013 -0.354613 0 0">
+                                <body gravcomp="1" name="gripper_right_right_inner_finger" pos="0 0.0999754 -0.00221853" quat="0.935013 -0.354613 0 0">
                                   <inertial pos="0.000119314 0.0339244 -0.021841" quat="0.545437 0.430197 -0.442938 0.566776" mass="0.0261503" diaginertia="1.62408e-05 1.59131e-05 2.38936e-06" />
                                   <joint name="gripper_right_right_inner_finger_joint" class="follower" />
                                   <geom type="mesh" mesh="robotiq_2f_140_inner_finger" class="visual" />
                                   <geom class="pad_box" />
                                 </body>
                               </body>
-                              <body name="gripper_right_right_inner_knuckle" pos="-0.0127 0 0.06142" quat="0.2902 0.644813 -0.644813 -0.2902">
+                              <body gravcomp="1" name="gripper_right_right_inner_knuckle" pos="-0.0127 0 0.06142" quat="0.2902 0.644813 -0.644813 -0.2902">
                                 <inertial pos="0.000123012 0.0507851 0.00103969" quat="0.497203 0.502496 -0.507943 0.492221" mass="0.0271177" diaginertia="2.83809e-05 2.61936e-05 2.81319e-06" />
                                 <joint name="gripper_right_right_inner_knuckle_joint" class="follower" />
                                 <geom type="mesh" mesh="robotiq_2f_140_inner_knuckle" />
@@ -253,89 +253,89 @@
                 </body>
               </body>
             </body>
-            <body name="head_1_link" pos="0.182 0 0">
+            <body gravcomp="1" name="head_1_link" pos="0.182 0 0">
               <inertial pos="-0.00508 0.00237 0.07229" mass="0.6222" diaginertia="0.0014022 0.0012197 0.0008611" />
               <joint name="head_1_joint" pos="0 0 0" axis="0 0 1" range="-1.309 1.309" actuatorfrcrange="-5.197 5.197" damping="0.5" />
               <geom material="white" mesh="head_1" />
-              <body name="head_2_link" pos="0.005 0 0.098" quat="0.707107 0.707107 0 0">
+              <body gravcomp="1" name="head_2_link" pos="0.005 0 0.098" quat="0.707107 0.707107 0 0">
                 <inertial pos="0.0558274 0.0609987 1.59e-05" mass="0.88693" diaginertia="0.0055418 0.0043626 0.0034759" />
                 <joint name="head_2_joint" pos="0 0 0" axis="0 0 1" range="-1.0472 0.785398" actuatorfrcrange="-5.197 5.197" damping="0.5" />
                 <geom material="white" mesh="head_2" />
-                <body name="head_front_camera_link" pos="0.0908 0.08 0" quat="0.707107 -0.707107 0 0">
+                <body gravcomp="1" name="head_front_camera_link" pos="0.0908 0.08 0" quat="0.707107 -0.707107 0 0">
                   <camera name="head_camera" quat="0.5 0.5 -0.5 -0.5" mode="fixed" fovy="45.5" resolution="640 480"/>
-                  <body name="head_front_camera_depth_frame" pos="0 0.049 0">
-                    <body name="head_front_camera_depth_optical_frame" quat="0.5 -0.5 0.5 -0.5" />
+                  <body gravcomp="1" name="head_front_camera_depth_frame" pos="0 0.049 0">
+                    <body gravcomp="1" name="head_front_camera_depth_optical_frame" quat="0.5 -0.5 0.5 -0.5" />
                   </body>
-                  <body name="head_front_camera_color_frame" pos="0 0.022 0">
-                    <body name="head_front_camera_color_optical_frame" quat="0.5 -0.5 0.5 -0.5" />
+                  <body gravcomp="1" name="head_front_camera_color_frame" pos="0 0.022 0">
+                    <body gravcomp="1" name="head_front_camera_color_optical_frame" quat="0.5 -0.5 0.5 -0.5" />
                   </body>
-                  <body name="head_front_camera_optical_frame" quat="0.5 -0.5 0.5 -0.5" />
+                  <body gravcomp="1" name="head_front_camera_optical_frame" quat="0.5 -0.5 0.5 -0.5" />
                 </body>
               </body>
             </body>
-            <body name="arm_left_1_link" childclass="arm" pos="0.02556 0.19 -0.171" quat="0 0.707107 0.707107 0">
+            <body gravcomp="1" name="arm_left_1_link" childclass="arm" pos="0.02556 0.19 -0.171" quat="0 0.707107 0.707107 0">
               <inertial pos="0.061191 -0.022397 0.012835" mass="1.56343" diaginertia="0.0051023 0.0051023 0.0051023" />
               <joint name="arm_left_1_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40" />
               <geom mass="0" material="white" mesh="arm_left_1" />
-              <body name="arm_left_2_link" pos="0.125 -0.0195 0.031" quat="0.707107 0.707107 0 0">
+              <body gravcomp="1" name="arm_left_2_link" pos="0.125 -0.0195 0.031" quat="0.707107 0.707107 0 0">
                 <inertial pos="0.030432 0.000229 0.005942" mass="1.8004" diaginertia="0.0043704 0.0043289 0.0017837" />
                 <joint name="arm_left_2_joint" pos="0 0 0" axis="0 0 1" range="-1.1781 1.5708" actuatorfrcrange="-43 43" damping="40" />
                 <geom mass="0" material="gray10" mesh="arm_left_2" />
-                <body name="arm_left_3_link" pos="0.0895 0 -0.0015" quat="0.5 0.5 0.5 0.5">
+                <body gravcomp="1" name="arm_left_3_link" pos="0.0895 0 -0.0015" quat="0.5 0.5 0.5 0.5">
                   <inertial pos="0.007418 -0.004361 0.134194" mass="1.8" diaginertia="0.0199798 0.0197147 0.0026465" />
                   <joint name="arm_left_3_joint" pos="0 0 0" axis="0 0 1" range="-0.785398 3.92699" actuatorfrcrange="-26 26" damping="40" />
                   <geom mass="0" material="gray10" mesh="arm_left_3" />
-                  <body name="arm_left_4_link" pos="-0.02 -0.027 0.222" quat="0.5 0.5 -0.5 0.5">
+                  <body gravcomp="1" name="arm_left_4_link" pos="-0.02 -0.027 0.222" quat="0.5 0.5 -0.5 0.5">
                     <inertial pos="0.095658 -0.014666 -0.018133" mass="1.4327" diaginertia="0.00204 0.008424 0.008686" />
                     <joint name="arm_left_4_joint" pos="0 0 0" axis="0 0 1" range="-0.392699 2.35619" actuatorfrcrange="-26 26" damping="40" />
                     <geom mass="0" material="gray10" mesh="arm_left_4" />
-                    <body name="arm_left_5_link" pos="0.162 -0.02 -0.027" quat="0.707107 0 -0.707107 0">
+                    <body gravcomp="1" name="arm_left_5_link" pos="0.162 -0.02 -0.027" quat="0.707107 0 -0.707107 0">
                       <inertial pos="0.001078 -0.000151 0.077173" mass="1.65582" diaginertia="0.0061436 0.00564 0.001797" />
                       <joint name="arm_left_5_joint" pos="0 0 0" axis="0 0 1" range="-2.0944 2.0944" actuatorfrcrange="-3 3" damping="1" />
                       <geom mass="0" material="mercury" mesh="arm_left_5" />
-                      <body name="arm_left_6_link" pos="0 0 -0.15" quat="0.5 -0.5 -0.5 -0.5">
+                      <body gravcomp="1" name="arm_left_6_link" pos="0 0 -0.15" quat="0.5 -0.5 -0.5 -0.5">
                         <inertial pos="-0.000153 -0.003122 0.000183" mass="0.370063" diaginertia="0.000215 0.0001748 0.0001692" />
                         <joint name="arm_left_6_joint" pos="0 0 0" axis="0 0 1" range="-1.41372 1.41372" actuatorfrcrange="-6.6 6.6" damping="1" />
                         <geom mass="0" material="mercury" mesh="arm_left_6" />
-                        <body name="arm_left_7_link" quat="0.5 0.5 0.5 0.5">
+                        <body gravcomp="1" name="arm_left_7_link" quat="0.5 0.5 0.5 0.5">
                           <inertial pos="0.0001563 0.0001552 -0.07437" mass="1.13701" diaginertia="0.0031327 0.0027774 0.0007782" />
                           <joint name="arm_left_7_joint" pos="0 0 0" axis="0 0 1" range="-2.0944 2.0944" actuatorfrcrange="-6.6 6.6" damping="1" />
                           <geom size="0.005 0.0025" pos="0 0 -0.047" quat="0 -0.707107 0.707107 0" type="cylinder" mass="0" material="mercury" />
                           <geom size="0.0225 0.00785" pos="0 0 -0.05385" quat="0 0 1 0" type="cylinder" mass="0" material="mercury" />
                           <geom size="0.025 0.004875" pos="0 0 -0.066575" quat="0 -0.707107 0.707107 0" type="cylinder" mass="0" material="gray10" />
-                          <body name="arm_left_tool_link" pos="0 0 -0.0615" quat="0.5 -0.5 0.5 0.5">
-                            <body name="gripper_left_base_link" pos="0.0312 0 0" quat="0.5 0.5 0.5 0.5" childclass="2f140">
+                          <body gravcomp="1" name="arm_left_tool_link" pos="0 0 -0.0615" quat="0.5 -0.5 0.5 0.5">
+                            <body gravcomp="1" name="gripper_left_base_link" pos="0.0312 0 0" quat="0.5 0.5 0.5 0.5" childclass="2f140">
                               <geom quat="0.707107 0 0 0.707107" mesh="robotiq_2f_140_base_link" class="visual" />
-                              <body name="gripper_left_left_outer_knuckle" pos="0.030601 0 0.054905" quat="0.2902 0.644813 0.644813 0.2902">
+                              <body gravcomp="1" name="gripper_left_left_outer_knuckle" pos="0.030601 0 0.054905" quat="0.2902 0.644813 0.644813 0.2902">
                                 <inertial pos="-0.0130635 0.0169635 0.00346564" quat="0.94118 0.264213 0.145848 -0.151986" mass="0.0311462" diaginertia="2.7666e-05 2.01811e-05 1.09023e-05" />
                                 <joint name="gripper_left_left_driver_joint" class="driver" />
                                 <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="robotiq_2f_140_outer_knuckle" class="visual" />
                                 <geom pos="0 0.01822 0.0260018" quat="1 0 0 0" type="mesh" mesh="robotiq_2f_140_outer_finger" class="visual" />
-                                <body name="gripper_left_left_inner_finger" pos="0 0.0999754 -0.00221853" quat="0.935013 -0.354613 0 0">
+                                <body gravcomp="1" name="gripper_left_left_inner_finger" pos="0 0.0999754 -0.00221853" quat="0.935013 -0.354613 0 0">
                                   <inertial pos="0.000119314 0.0339244 -0.021841" quat="0.545437 0.430197 -0.442938 0.566776" mass="0.0261503" diaginertia="1.62408e-05 1.59131e-05 2.38936e-06" />
                                   <joint name="gripper_left_left_inner_finger_joint" class="follower" />
                                   <geom type="mesh" mesh="robotiq_2f_140_inner_finger" class="visual" />
                                   <geom class="pad_box" />
                                 </body>
                               </body>
-                              <body name="gripper_left_left_inner_knuckle" pos="0.0127 0 0.06142" quat="0.2902 0.644813 0.644813 0.2902">
+                              <body gravcomp="1" name="gripper_left_left_inner_knuckle" pos="0.0127 0 0.06142" quat="0.2902 0.644813 0.644813 0.2902">
                                 <inertial pos="0.000123012 0.0507851 0.00103969" quat="0.497203 0.502496 -0.507943 0.492221" mass="0.0271177" diaginertia="2.83809e-05 2.61936e-05 2.81319e-06" />
                                 <joint name="gripper_left_left_inner_knuckle_joint" class="follower" />
                                 <geom type="mesh" mesh="robotiq_2f_140_inner_knuckle" />
                               </body>
-                              <body name="gripper_left_right_outer_knuckle" pos="-0.030601 0 0.054905" quat="-0.2902 -0.644813 0.644813 0.2902">
+                              <body gravcomp="1" name="gripper_left_right_outer_knuckle" pos="-0.030601 0 0.054905" quat="-0.2902 -0.644813 0.644813 0.2902">
                                 <inertial pos="-0.0130635 0.0169635 0.00346564" quat="0.94118 0.264213 0.145848 -0.151986" mass="0.0311462" diaginertia="2.7666e-05 2.01811e-05 1.09023e-05" />
                                 <joint name="gripper_left_right_driver_joint" class="driver" />
                                 <geom type="mesh" rgba="0.792157 0.819608 0.933333 1" mesh="robotiq_2f_140_outer_knuckle" class="visual" />
                                 <geom pos="0 0.01822 0.0260018" quat="1 0 0 0" type="mesh" mesh="robotiq_2f_140_outer_finger" class="visual" />
-                                <body name="gripper_left_right_inner_finger" pos="0 0.0999754 -0.00221853" quat="0.935013 -0.354613 0 0">
+                                <body gravcomp="1" name="gripper_left_right_inner_finger" pos="0 0.0999754 -0.00221853" quat="0.935013 -0.354613 0 0">
                                   <inertial pos="0.000119314 0.0339244 -0.021841" quat="0.545437 0.430197 -0.442938 0.566776" mass="0.0261503" diaginertia="1.62408e-05 1.59131e-05 2.38936e-06" />
                                   <joint name="gripper_left_right_inner_finger_joint" class="follower" />
                                   <geom type="mesh" mesh="robotiq_2f_140_inner_finger" class="visual" />
                                   <geom class="pad_box" />
                                 </body>
                               </body>
-                              <body name="gripper_left_right_inner_knuckle" pos="-0.0127 0 0.06142" quat="0.2902 0.644813 -0.644813 -0.2902">
+                              <body gravcomp="1" name="gripper_left_right_inner_knuckle" pos="-0.0127 0 0.06142" quat="0.2902 0.644813 -0.644813 -0.2902">
                                 <inertial pos="0.000123012 0.0507851 0.00103969" quat="0.497203 0.502496 -0.507943 0.492221" mass="0.0271177" diaginertia="2.83809e-05 2.61936e-05 2.81319e-06" />
                                 <joint name="gripper_left_right_inner_knuckle_joint" class="follower" />
                                 <geom type="mesh" mesh="robotiq_2f_140_inner_knuckle" />
@@ -351,30 +351,30 @@
             </body>
           </body>
         </body>
-        <body name="torso_fixed_column_link" pos="-0.062 0 0.193">
+        <body gravcomp="1" name="torso_fixed_column_link" pos="-0.062 0 0.193">
           <geom class="iai_tiago_visual" size="0.09 0.1 0.275" pos="0 0 0.275" type="box" rgba="0.9 0.9 0.9 1" />
         </body>
-        <body name="base_imu_link" pos="0.10171 0 0.11282" quat="0.707107 0 0 -0.707107" />
-        <body name="base_sonar_01_link" pos="-0.183 -0.183 0.173" quat="-0.382683 0 0 0.92388">
+        <body gravcomp="1" name="base_imu_link" pos="0.10171 0 0.11282" quat="0.707107 0 0 -0.707107" />
+        <body gravcomp="1" name="base_sonar_01_link" pos="-0.183 -0.183 0.173" quat="-0.382683 0 0 0.92388">
           <geom class="iai_tiago_visual" rgba="0.9 0.9 0.9 1" mesh="srf05" />
         </body>
-        <body name="base_mic_back_right_link" pos="-0.1082 -0.13789 0.195" />
-        <body name="suspension_right_link">
-          <body name="wheel_right_link" pos="0 -0.2022 0" quat="0.707107 -0.707107 0 0">
+        <body gravcomp="1" name="base_mic_back_right_link" pos="-0.1082 -0.13789 0.195" />
+        <body gravcomp="1" name="suspension_right_link">
+          <body gravcomp="1" name="wheel_right_link" pos="0 -0.2022 0" quat="0.707107 -0.707107 0 0">
             <inertial pos="0 0 -0.00207" quat="0.907869 0 0 -0.419253" mass="1.82362" diaginertia="0.0049974 0.0049975 0.0083924" />
             <joint name="wheel_right_joint" pos="0 0 0" axis="0 0 1" />
             <geom class="iai_tiago_visual" rgba="0.9 0.9 0.9 1" mesh="wheel" />
           </body>
         </body>
-        <body name="base_sonar_03_link" pos="-0.183 0.183 0.173" quat="0.382683 0 0 0.92388">
+        <body gravcomp="1" name="base_sonar_03_link" pos="-0.183 0.183 0.173" quat="0.382683 0 0 0.92388">
           <geom class="iai_tiago_visual" rgba="0.9 0.9 0.9 1" mesh="srf05" />
         </body>
-        <body name="base_antenna_left_link" pos="-0.201 0.1062 0.195">
+        <body gravcomp="1" name="base_antenna_left_link" pos="-0.201 0.1062 0.195">
           <geom class="iai_tiago_visual" rgba="0.9 0.9 0.9 1" mesh="antenna" />
         </body>
-        <body name="base_mic_front_right_link" pos="0.23182 -0.03902 0.195" />
+        <body gravcomp="1" name="base_mic_front_right_link" pos="0.23182 -0.03902 0.195" />
       </body>
-      <body name="base_cover_link" pos="0 0 0.13">
+      <body gravcomp="1" name="base_cover_link" pos="0 0 0.13">
         <geom class="iai_tiago_visual" rgba="0.9 0.9 0.9 1" mesh="base_ring" />
       </body>
     </body>
