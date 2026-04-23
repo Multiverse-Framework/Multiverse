@@ -32,9 +32,9 @@ upper_body_velocity_controller:
   ros__parameters:
     type: velocity_controllers/JointGroupVelocityController
     joints:
+      - torso_lift_joint
       - head_1_joint
       - head_2_joint
-      - torso_lift_joint
       - arm_left_1_joint
       - arm_left_2_joint
       - arm_left_3_joint

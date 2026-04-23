@@ -10,7 +10,7 @@ MUJOCO_VERSION="${MUJOCO_VERSION:-3.5.0}"
 DEMO_DIR="Demos/1_TiagoDualInApartment"
 VENV_DIR="${DEMO_DIR}/multiverse"
 MUJOCO_DIR="${DEMO_DIR}/mujoco-${MUJOCO_VERSION}"
-URDF_ROS2="${DEMO_DIR}/assets/urdf/iai_tiago_with_ros2_control.urdf"
+URDF_ROS2="${DEMO_DIR}/assets/urdf/iai_tiago_with_ros2_control_velocity.urdf"
 MJCF_SCENE="${DEMO_DIR}/assets/mjcf/iai_tiago_velocity_in_apartment_with_multiverse.xml"
 
 ROS_DISTRO="${ROS_DISTRO:-jazzy}"
