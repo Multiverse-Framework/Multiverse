@@ -6,8 +6,8 @@
         </default>
     </default>
     <asset>
-        <mesh name="UCX_MilkBox_001" file="./milk_box/meshes/stl/UCX_MilkBox_001.stl" />
-        <mesh name="UCX_MilkBox_002" file="./milk_box/meshes/stl/UCX_MilkBox_002.stl" />
+        <mesh name="UCX_MilkBox_001" file="./meshes/UCX_MilkBox_001.stl" />
+        <mesh name="UCX_MilkBox_002" file="./meshes/UCX_MilkBox_002.stl" />
     </asset>
 
     <worldbody>

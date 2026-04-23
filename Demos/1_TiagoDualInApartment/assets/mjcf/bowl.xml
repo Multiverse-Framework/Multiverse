@@ -11,13 +11,13 @@
   </default>
 
   <asset>
-    <mesh name="bowl_bottom" content_type="model/stl" file="bowl/meshes/stl/bowl_bottom.stl" scale="0.25 0.25 0.7"/>
-    <mesh name="bowl_side_1" content_type="model/stl" file="bowl/meshes/stl/bowl_side_1.stl" scale="0.25 0.25 0.7"/>
-    <mesh name="bowl_side_2" content_type="model/stl" file="bowl/meshes/stl/bowl_side_2.stl" scale="0.25 0.25 0.7"/>
-    <mesh name="bowl_side_3" content_type="model/stl" file="bowl/meshes/stl/bowl_side_3.stl" scale="0.25 0.25 0.7"/>
-    <mesh name="bowl_side_4" content_type="model/stl" file="bowl/meshes/stl/bowl_side_4.stl" scale="0.25 0.25 0.7"/>
-    <mesh name="bowl_side_5" content_type="model/stl" file="bowl/meshes/stl/bowl_side_5.stl" scale="0.25 0.25 0.7"/>
-    <mesh name="bowl_side_6" content_type="model/stl" file="bowl/meshes/stl/bowl_side_6.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_bottom" content_type="model/stl" file="meshes/bowl_bottom.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_1" content_type="model/stl" file="meshes/bowl_side_1.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_2" content_type="model/stl" file="meshes/bowl_side_2.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_3" content_type="model/stl" file="meshes/bowl_side_3.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_4" content_type="model/stl" file="meshes/bowl_side_4.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_5" content_type="model/stl" file="meshes/bowl_side_5.stl" scale="0.25 0.25 0.7"/>
+    <mesh name="bowl_side_6" content_type="model/stl" file="meshes/bowl_side_6.stl" scale="0.25 0.25 0.7"/>
   </asset>
 
   <worldbody>

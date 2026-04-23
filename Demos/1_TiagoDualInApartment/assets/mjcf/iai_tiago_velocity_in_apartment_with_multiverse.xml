@@ -4,6 +4,14 @@
 
   <include file="apartment.xml"/>
 
+  <include file="milk_box.xml"/>
+
+  <include file="bowl.xml"/>
+
+  <keyframe>
+    <key name="home" qpos="0 0 0 1 0 0 0 0 0 0.27 -1.07 1.5 1.96 -2 1.2 0.5 0 0 0 0 0 0 0 0 0.27 -1.07 1.5 1.96 -2 1.2 0.5 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1.0 0 1.04 1 0 0 0 1.0 0.3 1.04 1 0 0 0"/>
+  </keyframe>
+
   <extension>
     <plugin plugin="mujoco.multiverse_connector">
       <instance name="mujoco_client">
