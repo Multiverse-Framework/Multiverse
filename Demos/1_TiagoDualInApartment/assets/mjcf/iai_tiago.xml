@@ -1,7 +1,7 @@
 <mujoco model="base_footprint">
   <compiler angle="radian" meshdir="./" />
 
-  <option cone="elliptic" impratio="10"/>
+  <option cone="elliptic" impratio="10" integrator="implicitfast"/>
 
   <default>
     <geom type="mesh" />

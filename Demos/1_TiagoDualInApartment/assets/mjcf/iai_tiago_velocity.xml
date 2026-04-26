@@ -1,28 +1,28 @@
 <mujoco model="iai_tiago">
   <actuator>
     <!-- Torso actuator -->
-    <velocity name="torso_lift_joint_velocity" joint="torso_lift_joint" kv="50000" />
+    <velocity name="torso_lift_joint_velocity" joint="torso_lift_joint" kv="15000" />
     <!-- Head actuators -->
-    <velocity name="head_1_joint_velocity" joint="head_1_joint" kv="5000" />
-    <velocity name="head_2_joint_velocity" joint="head_2_joint" kv="5000" />
+    <velocity name="head_1_joint_velocity" joint="head_1_joint" kv="2000" />
+    <velocity name="head_2_joint_velocity" joint="head_2_joint" kv="2000" />
 
     <!-- Left arm actuators -->
     <velocity name="arm_left_1_joint_velocity" joint="arm_left_1_joint" kv="5000" />
-    <velocity name="arm_left_2_joint_velocity" joint="arm_left_2_joint" kv="100000" />
+    <velocity name="arm_left_2_joint_velocity" joint="arm_left_2_joint" kv="5000" />
     <velocity name="arm_left_3_joint_velocity" joint="arm_left_3_joint" kv="5000" />
-    <velocity name="arm_left_4_joint_velocity" joint="arm_left_4_joint" kv="50000" />
-    <velocity name="arm_left_5_joint_velocity" joint="arm_left_5_joint" kv="2000" />
-    <velocity name="arm_left_6_joint_velocity" joint="arm_left_6_joint" kv="2000" />
-    <velocity name="arm_left_7_joint_velocity" joint="arm_left_7_joint" kv="2000" />
+    <velocity name="arm_left_4_joint_velocity" joint="arm_left_4_joint" kv="5000" />
+    <velocity name="arm_left_5_joint_velocity" joint="arm_left_5_joint" kv="500" />
+    <velocity name="arm_left_6_joint_velocity" joint="arm_left_6_joint" kv="500" />
+    <velocity name="arm_left_7_joint_velocity" joint="arm_left_7_joint" kv="500" />
 
     <!-- Right arm actuators -->
     <velocity name="arm_right_1_joint_velocity" joint="arm_right_1_joint" kv="5000" />
-    <velocity name="arm_right_2_joint_velocity" joint="arm_right_2_joint" kv="100000" />
+    <velocity name="arm_right_2_joint_velocity" joint="arm_right_2_joint" kv="5000" />
     <velocity name="arm_right_3_joint_velocity" joint="arm_right_3_joint" kv="5000" />
-    <velocity name="arm_right_4_joint_velocity" joint="arm_right_4_joint" kv="50000" />
-    <velocity name="arm_right_5_joint_velocity" joint="arm_right_5_joint" kv="2000" />
-    <velocity name="arm_right_6_joint_velocity" joint="arm_right_6_joint" kv="2000" />
-    <velocity name="arm_right_7_joint_velocity" joint="arm_right_7_joint" kv="2000" />
+    <velocity name="arm_right_4_joint_velocity" joint="arm_right_4_joint" kv="5000" />
+    <velocity name="arm_right_5_joint_velocity" joint="arm_right_5_joint" kv="500" />
+    <velocity name="arm_right_6_joint_velocity" joint="arm_right_6_joint" kv="500" />
+    <velocity name="arm_right_7_joint_velocity" joint="arm_right_7_joint" kv="500" />
   </actuator>
 
   <include file="iai_tiago.xml"/>
