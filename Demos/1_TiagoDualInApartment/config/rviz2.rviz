@@ -7,7 +7,8 @@ Panels:
         - /Global Options1
         - /Status1
         - /Tiago1/Description Topic1
-        - /TF1
+        - /TF1/Frames1
+        - /MarkerArray1
       Splitter Ratio: 0.5
     Tree Height: 867
   - Class: rviz_common/Selection
@@ -284,6 +285,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        gripper_left_tool_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         gripper_right_base_link:
           Alpha: 1
           Show Axes: false
@@ -319,6 +324,10 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        gripper_right_tool_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
         head_1_link:
           Alpha: 1
           Show Axes: false
@@ -464,6 +473,8 @@ Visualization Manager:
         base_sonar_02_link:
           Value: true
         base_sonar_03_link:
+          Value: true
+        bowl:
           Value: true
         cabinet1:
           Value: true
@@ -673,6 +684,8 @@ Visualization Manager:
           Value: true
         gripper_left_right_outer_knuckle:
           Value: true
+        gripper_left_tool_frame:
+          Value: true
         gripper_right_base_link:
           Value: true
         gripper_right_left_inner_finger:
@@ -686,6 +699,8 @@ Visualization Manager:
         gripper_right_right_inner_knuckle:
           Value: true
         gripper_right_right_outer_knuckle:
+          Value: true
+        gripper_right_tool_frame:
           Value: true
         head_1_link:
           Value: true
@@ -723,6 +738,8 @@ Visualization Manager:
           Value: true
         map:
           Value: true
+        milk_box:
+          Value: true
         odom:
           Value: true
         oven:
@@ -757,7 +774,7 @@ Visualization Manager:
       Name: TF
       Show Arrows: false
       Show Axes: true
-      Show Names: false
+      Show Names: true
       Tree:
         map:
           apartment_root:
@@ -823,6 +840,8 @@ Visualization Manager:
           base_sonar_02_link:
             {}
           base_sonar_03_link:
+            {}
+          bowl:
             {}
           cabinet1:
             {}
@@ -1032,6 +1051,8 @@ Visualization Manager:
             {}
           gripper_left_right_outer_knuckle:
             {}
+          gripper_left_tool_frame:
+            {}
           gripper_right_base_link:
             {}
           gripper_right_left_inner_finger:
@@ -1045,6 +1066,8 @@ Visualization Manager:
           gripper_right_right_inner_knuckle:
             {}
           gripper_right_right_outer_knuckle:
+            {}
+          gripper_right_tool_frame:
             {}
           head_1_link:
             {}
@@ -1080,6 +1103,8 @@ Visualization Manager:
             {}
           kitchen_root:
             {}
+          milk_box:
+            {}
           odom:
             {}
           oven:
@@ -1111,6 +1136,144 @@ Visualization Manager:
           world:
             {}
       Update Interval: 0
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: MarkerArray
+      Namespaces:
+        arm_left_1_link: true
+        arm_left_2_link: true
+        arm_left_3_link: true
+        arm_left_4_link: true
+        arm_left_5_link: true
+        arm_left_6_link: true
+        arm_left_7_link: true
+        arm_right_1_link: true
+        arm_right_2_link: true
+        arm_right_3_link: true
+        arm_right_4_link: true
+        arm_right_5_link: true
+        arm_right_6_link: true
+        arm_right_7_link: true
+        base_antenna_left_link: true
+        base_antenna_right_link: true
+        base_cover_link: true
+        base_dock_link: true
+        base_laser_link: true
+        base_link: true
+        base_sonar_01_link: true
+        base_sonar_02_link: true
+        base_sonar_03_link: true
+        bowl: true
+        cabinet1: true
+        cabinet10_drawer1: true
+        cabinet10_drawer1_handle: true
+        cabinet10_drawer2: true
+        cabinet10_drawer2_handle: true
+        cabinet10_drawer3: true
+        cabinet10_drawer3_handle: true
+        cabinet11_drawer1: true
+        cabinet11_drawer1_handle: true
+        cabinet11_drawer2: true
+        cabinet11_drawer2_handle: true
+        cabinet11_drawer3: true
+        cabinet11_drawer3_handle: true
+        cabinet1_door: true
+        cabinet1_door_handle: true
+        cabinet1_drawer1: true
+        cabinet1_drawer1_handle: true
+        cabinet1_drawer2: true
+        cabinet1_drawer2_handle: true
+        cabinet1_shelf1: true
+        cabinet1_shelf2: true
+        cabinet2: true
+        cabinet2_door: true
+        cabinet2_door_handle: true
+        cabinet2_drawer1: true
+        cabinet2_drawer2: true
+        cabinet2_drawer3: true
+        cabinet2_drawer4: true
+        cabinet2_drawer5: true
+        cabinet2_drawer6: true
+        cabinet3: true
+        cabinet5_drawer1: true
+        cabinet5_drawer1_handle: true
+        cabinet5_drawer2: true
+        cabinet5_drawer2_handle: true
+        cabinet5_drawer3: true
+        cabinet5_drawer3_handle: true
+        cabinet6_drawer1: true
+        cabinet6_drawer1_handle: true
+        cabinet6_drawer2: true
+        cabinet6_drawer2_handle: true
+        cabinet6_drawer3: true
+        cabinet6_drawer3_handle: true
+        cabinet9_drawer1: true
+        cabinet9_drawer1_handle: true
+        cabinet9_drawer2: true
+        cabinet9_drawer2_handle: true
+        cabinet9_drawer3: true
+        cabinet9_drawer3_handle: true
+        caster_back_left_1_link: true
+        caster_back_left_2_link: true
+        caster_back_right_1_link: true
+        caster_back_right_2_link: true
+        caster_front_left_1_link: true
+        caster_front_left_2_link: true
+        caster_front_right_1_link: true
+        caster_front_right_2_link: true
+        counter_sink: true
+        counter_sink_stove: true
+        counter_sink_tap: true
+        counter_wall: true
+        counter_watertab: true
+        dishwasher_front: true
+        dishwasher_front_handle: true
+        dishwasher_tray1: true
+        dishwasher_tray2: true
+        dishwasher_tray3: true
+        fridge_base: true
+        fridge_door1: true
+        fridge_door1_handle: true
+        fridge_door2: true
+        fridge_door2_handle: true
+        fridge_door_tray1: true
+        fridge_door_tray2: true
+        fridge_drawer1: true
+        fridge_drawer2: true
+        fridge_drawer3: true
+        fridge_drawer4: true
+        gripper_left_base_link: true
+        gripper_left_left_inner_finger: true
+        gripper_left_left_inner_knuckle: true
+        gripper_left_left_outer_knuckle: true
+        gripper_left_right_inner_finger: true
+        gripper_left_right_inner_knuckle: true
+        gripper_left_right_outer_knuckle: true
+        gripper_right_base_link: true
+        gripper_right_left_inner_finger: true
+        gripper_right_left_inner_knuckle: true
+        gripper_right_left_outer_knuckle: true
+        gripper_right_right_inner_finger: true
+        gripper_right_right_inner_knuckle: true
+        gripper_right_right_outer_knuckle: true
+        head_1_link: true
+        head_2_link: true
+        milk_box: true
+        oven: true
+        sink_drawer1: true
+        sink_drawer1_handle: true
+        torso_fixed_column_link: true
+        torso_fixed_link: true
+        torso_lift_link: true
+        wheel_left_link: true
+        wheel_right_link: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /semworld/viz_marker
       Value: true
   Enabled: true
   Global Options:
@@ -1158,39 +1321,39 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 9.865099906921387
+      Distance: 3.751938819885254
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.02062852866947651
-        Y: 0.1328745186328888
-        Z: 0.3288505971431732
+        X: 0.47774413228034973
+        Y: 0.0953780859708786
+        Z: 0.381073921918869
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.525202751159668
+      Pitch: 1.1997967958450317
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.508596420288086
+      Yaw: 0.8104140758514404
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: false
+    collapsed: true
   Height: 1163
-  Hide Left Dock: false
+  Hide Left Dock: true
   Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd0000000400000000000002cb0000042dfc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005d00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003f0000042d000000cc00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d0061006700650200000812000000ca000006b4000005b1fb0000000a0049006d00610067006502000000a8000000d2000006f700000593000000010000015f00000431fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d00000431000000a900fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000004af0000042d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000002cb0000042dfc020000000afb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005d00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073000000003f0000042d000000cc00fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d0061006700650200000812000000ca000006b4000005b1fb0000000a0049006d00610067006502000000a8000000d2000006f700000593000000010000015f00000431fc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000003d00000431000000a900fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000004420000003efc0100000002fb0000000800540069006d00650100000000000004420000000000000000fb0000000800540069006d00650100000000000004500000000000000000000003c00000042d00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Tool Properties:
     collapsed: false
   Views:
     collapsed: true
-  Width: 1920
-  X: 1920
+  Width: 960
+  X: 2880
   Y: 0

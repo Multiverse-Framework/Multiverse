@@ -2,7 +2,7 @@
     <compiler angle="radian" autolimits="true" />
     <default>
         <default class="milk_box_collision">
-            <geom rgba="0.9 0.9 0.9 1.0" />
+            <geom rgba="0.9 0.9 0.9 1.0" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
         </default>
     </default>
     <asset>
@@ -11,9 +11,9 @@
     </asset>
 
     <worldbody>
-        <body name="milk_box" pos="2.4 2.8 1.04">
+        <body name="milk_box" pos="0.8 0 1.04">
             <freejoint />
-            <inertial mass="1.00762140750885" pos="0 0 0.008011753670871258" quat="0.9999994039535522 0.0 0.0010670736664906144 0.0" diaginertia="0.004000849090516567 0.003987141884863377 0.0008067898452281952"/>
+            <inertial mass="0.01" pos="0 0 0.008011753670871258" quat="0.9999994039535522 0.0 0.0010670736664906144 0.0" diaginertia="0.00004000849090516567 0.00003987141884863377 0.000008067898452281952"/>
             <geom name="UCX_MilkBox_001" type="mesh" mesh="UCX_MilkBox_001" class="milk_box_collision"/>
             <geom name="UCX_MilkBox_002" type="mesh" mesh="UCX_MilkBox_002" class="milk_box_collision"/>
         </body>

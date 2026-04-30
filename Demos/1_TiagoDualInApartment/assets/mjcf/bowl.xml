@@ -21,9 +21,9 @@
   </asset>
 
   <worldbody>
-    <body name="bowl" pos="2.4 2.5 0.97">
+    <body name="bowl" pos="0.8 0.3 1.04">
       <joint type="free"/>
-      <body name="bowl_body" pos="0 0 -0.038">
+      <frame pos="0 0 -0.038">
         <geom name="bowl_bottom" class="bowl_collision" type="mesh" mesh="bowl_bottom"/>
         <geom name="bowl_side_1_1" class="bowl_collision" type="mesh" mesh="bowl_side_1"/>
         <geom name="bowl_side_1_2" class="bowl_collision" type="mesh" mesh="bowl_side_2"/>
@@ -217,7 +217,7 @@
         <geom name="bowl_side_32_4" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_4"/>
         <geom name="bowl_side_32_5" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_5"/>
         <geom name="bowl_side_32_6" class="bowl_collision" quat="-0.995183 0 0 0.0980349" type="mesh" mesh="bowl_side_6"/>
-      </body>
+      </frame>
     </body>
   </worldbody>
 </mujoco>

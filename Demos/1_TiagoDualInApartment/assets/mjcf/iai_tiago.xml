@@ -209,6 +209,7 @@
                           <geom size="0.025 0.004875" pos="0 0 0.066575" quat="-0.707107 0 0 0.707107" type="cylinder" mass="0" material="gray10" />
                           <body gravcomp="1" name="arm_right_tool_link" pos="0 0 0.0615" quat="-0.5 0.5 0.5 0.5">
                             <body gravcomp="1" name="gripper_right_base_link" pos="0.0312 0 0" quat="0.5 0.5 0.5 0.5" childclass="2f140">
+                              <body name="gripper_right_tool_frame" pos="0 0 0.2"/>
                               <geom quat="0.707107 0 0 0.707107" mesh="robotiq_2f_140_base_link" class="visual" />
                               <body gravcomp="1" name="gripper_right_left_outer_knuckle" pos="0.030601 0 0.054905" quat="0.2902 0.644813 0.644813 0.2902">
                                 <inertial pos="-0.0130635 0.0169635 0.00346564" quat="0.94118 0.264213 0.145848 -0.151986" mass="0.0311462" diaginertia="2.7666e-05 2.01811e-05 1.09023e-05" />
@@ -305,6 +306,7 @@
                           <geom size="0.025 0.004875" pos="0 0 -0.066575" quat="0 -0.707107 0.707107 0" type="cylinder" mass="0" material="gray10" />
                           <body gravcomp="1" name="arm_left_tool_link" pos="0 0 -0.0615" quat="0.5 -0.5 0.5 0.5">
                             <body gravcomp="1" name="gripper_left_base_link" pos="0.0312 0 0" quat="0.5 0.5 0.5 0.5" childclass="2f140">
+                              <body name="gripper_left_tool_frame" pos="0 0 0.2"/>
                               <geom quat="0.707107 0 0 0.707107" mesh="robotiq_2f_140_base_link" class="visual" />
                               <body gravcomp="1" name="gripper_left_left_outer_knuckle" pos="0.030601 0 0.054905" quat="0.2902 0.644813 0.644813 0.2902">
                                 <inertial pos="-0.0130635 0.0169635 0.00346564" quat="0.94118 0.264213 0.145848 -0.151986" mass="0.0311462" diaginertia="2.7666e-05 2.01811e-05 1.09023e-05" />

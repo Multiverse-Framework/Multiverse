@@ -1,0 +1,7 @@
+<mujoco model="iai_tiago_scene">
+  <include file="apartment.xml"/>
+
+  <include file="milk_box.xml"/>
+
+  <include file="bowl.xml"/>
+</mujoco>

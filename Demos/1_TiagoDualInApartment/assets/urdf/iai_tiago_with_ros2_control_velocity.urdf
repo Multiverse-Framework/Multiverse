@@ -595,6 +595,12 @@
       </material>
     </visual>
   </link>
+  <joint name="gripper_right_tool_frame_joint" type="fixed">
+    <origin xyz="0 0 0.2"/>
+    <parent link="gripper_right_base_link"/>
+    <child link="gripper_right_tool_frame"/>
+  </joint>
+  <link name="gripper_right_tool_frame"/>
   <joint name="gripper_right_left_driver_joint" type="revolute">
     <origin xyz="0.030601000413298607 0.0 0.0549050010740757" rpy="2.2957966327667236 0.0 1.5707963705062866"/>
     <axis xyz="-1.0 0.0 0.0"/>
@@ -1054,6 +1060,12 @@
       </material>
     </visual>
   </link>
+  <joint name="gripper_left_tool_frame_joint" type="fixed">
+    <origin xyz="0 0 0.2"/>
+    <parent link="gripper_left_base_link"/>
+    <child link="gripper_left_tool_frame"/>
+  </joint>
+  <link name="gripper_left_tool_frame"/>
   <joint name="gripper_left_left_driver_joint" type="revolute">
     <origin xyz="0.030601000413298607 0.0 0.0549050010740757" rpy="2.2957966327667236 0.0 1.5707963705062866"/>
     <axis xyz="-1.0 0.0 0.0"/>
