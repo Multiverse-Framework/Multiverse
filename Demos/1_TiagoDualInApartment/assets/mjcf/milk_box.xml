@@ -15,7 +15,8 @@
             <freejoint />
             <inertial mass="0.01" pos="0 0 0.008011753670871258" quat="0.9999994039535522 0.0 0.0010670736664906144 0.0" diaginertia="0.00004000849090516567 0.00003987141884863377 0.000008067898452281952"/>
             <geom name="UCX_MilkBox_001" type="mesh" mesh="UCX_MilkBox_001" class="milk_box_collision"/>
-            <geom name="UCX_MilkBox_002" type="mesh" mesh="UCX_MilkBox_002" class="milk_box_collision"/>
+            <geom name="UCX_MilkBox_002" type="box" pos="0 0 0" size="0.036 0.036 0.095" class="milk_box_collision" rgba="1 0 0 0"/>
+            <geom name="UCX_MilkBox_003" type="mesh" mesh="UCX_MilkBox_002" class="milk_box_collision"/>
         </body>
     </worldbody>
 </mujoco>
