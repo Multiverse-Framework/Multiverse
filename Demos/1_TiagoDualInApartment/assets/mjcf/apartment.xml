@@ -1,7 +1,7 @@
 <mujoco model="apartment">
 	<default>
 		<default class="apartment_collision">
-			<geom rgba="0.9 0.9 0.9 1.0"/>
+			<geom rgba="0.9 0.9 0.9 1.0" friction="0.7" solimp="0.95 0.99 0.001" solref="0.004 1"/>
 		</default>
 	</default>
 	<asset/>
@@ -372,8 +372,8 @@
 						</body>
 						<body gravcomp="1" name="fridge_door1" pos="-0.29725900292396545 0.29914501309394836 0.256740003824234" quat="1.0 0.0 0.0 0.0">
 							<inertial mass="87.88379669189453" pos="0.02501540072262287 -0.29023200273513794 0.06354320049285889" quat="0.9999949336051941 0.0016694598598405719 -0.0027063998859375715 -0.00022872397676110268" diaginertia="12.108099937438965 9.650110244750977 2.5019099712371826"/>
-							<geom name="Geom_317" type="box" pos="0.006947999820113182 -0.2973249852657318 0.1397089958190918" quat="1.0 0.0 0.0 0.0" size="0.009277000091969967 0.29824599623680115 0.6683390140533447" class="apartment_collision"/>
-							<joint name="fridge_door1_joint" type="hinge" pos="0.0 0.0 0.0" armature="0.0" frictionloss="0.0" damping="1000.0" range="0.0 1.5707999467849731" limited="true" stiffness="100"  actuatorfrcrange="0.0 0.0" actuatorfrclimited="false" axis="0.0 0.0 -1.0"/>
+							<geom name="Geom_317" type="box" pos="0.006947999820113182 -0.2973249852657318 0.1397089958190918" quat="1.0 0.0 0.0 0.0" size="0.009277000091969967 0.29824599623680115 0.6683390140533447" class="apartment_collision" contype="0" conaffinity="0"/>
+							<joint name="fridge_door1_joint" type="hinge" pos="0.0 0.0 0.0" armature="0.1" frictionloss="0.0" damping="0" range="0.0 1.5707999467849731" limited="true" actuatorfrcrange="0.0 0.0" actuatorfrclimited="false" axis="0.0 0.0 -1.0"/>
 							<body gravcomp="1" name="fridge_door1_handle" pos="-0.027991000562906265 -0.46534299850463867 -0.30736039" quat="0.7071067690849304 0.7071067690849304 0.0 0.0">
 								<inertial mass="0.10141800343990326" pos="0.00608123978599906 7.626909791724756e-06 0.00021945299522485584" quat="0.7075346112251282 -0.0001653999206610024 -4.868747419095598e-05 0.7066786289215088" diaginertia="0.0003343459975440055 0.000326532986946404 1.0330300028726924e-05"/>
 								<geom name="Geom_325" type="box" pos="0.016498500481247902 0.0 0.07999999821186066" quat="1.0 0.0 0.0 0.0" size="0.009999999776482582 0.006500000134110451 0.006500000134110451" class="apartment_collision"/>

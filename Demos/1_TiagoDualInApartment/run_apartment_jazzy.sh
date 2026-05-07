@@ -180,6 +180,8 @@ source '${ROS_SETUP}'
 source '${ROSPKG_SETUP}'
 set -u
 # multiverse_ros_connector --publishers=\"{'tf': [{'meta_data': {'world_name': 'world', 'length_unit': 'm', 'angle_unit': 'rad', 'mass_unit': 'kg', 'time_unit': 's', 'handedness': 'rhs'}, 'port': 7305, 'topic': '/tf', 'rate': 60, 'root_frame_id': 'map'}]}\"  --subscribers=\"{}\"
+# python ./MultiverseUtilities/multiverse_initializing.py --data_path=./${DEMO_DIR}/config/multiverse.yaml
+# python ./MultiverseUtilities/multiverse_logging.py --time=-1
 "
 
 tmux_send "$SESH":0.7 \
